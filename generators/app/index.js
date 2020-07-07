@@ -357,7 +357,23 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Set app defaults
                 this.setConfigDefaults(appDefaultConfig);
             },
+        };
+    }
 
+    get configuring() {
+        if (useBlueprints) return;
+        return this._configuring();
+    }
+
+    _default() {
+        return {
+            /**
+             * Composing with others generators, must be runned after `configuring` priority to let blueprints
+             * `configuring` tasks to run.
+             * But must be the first task to run at `default` priority.
+             * When mixing blueprints with sbs-blueprints, sbs-blueprints must be called after, otherwise the
+             * priority will run before this `composing` task and the configuration will not be settled.
+             */
             composing() {
                 const options = this.options;
                 const configOptions = this.configOptions;
@@ -389,16 +405,7 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             askFori18n: prompts.askForI18n,
-        };
-    }
 
-    get configuring() {
-        if (useBlueprints) return;
-        return this._configuring();
-    }
-
-    _default() {
-        return {
             askForTestOpts: prompts.askForTestOpts,
 
             askForMoreModules: prompts.askForMoreModules,
