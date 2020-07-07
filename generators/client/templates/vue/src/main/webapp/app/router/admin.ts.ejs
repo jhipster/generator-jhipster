@@ -1,38 +1,27 @@
 import {Authority} from "@/shared/security/authority";
 
 <%_ if (!skipUserManagement) { _%>
-  const <%= jhiPrefixCapitalized %>UserManagementComponent = () => import('../admin/user-management/user-management.vue');
-  const <%= jhiPrefixCapitalized %>UserManagementViewComponent = () => import('../admin/user-management/user-management-view.vue');
-  const <%= jhiPrefixCapitalized %>UserManagementEditComponent = () => import('../admin/user-management/user-management-edit.vue');
+  const <%= jhiPrefixCapitalized %>UserManagementComponent = () => import('@/admin/user-management/user-management.vue');
+  const <%= jhiPrefixCapitalized %>UserManagementViewComponent = () => import('@/admin/user-management/user-management-view.vue');
+  const <%= jhiPrefixCapitalized %>UserManagementEditComponent = () => import('@/admin/user-management/user-management-edit.vue');
   <%_ } _%>
-  <%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
-  const Sessions = () => import('../account/sessions/sessions.vue');
-  <%_ } _%>
-  const <%= jhiPrefixCapitalized %>ConfigurationComponent = () => import('../admin/configuration/configuration.vue');
-  const <%= jhiPrefixCapitalized %>DocsComponent = () => import('../admin/docs/docs.vue');
-  const <%= jhiPrefixCapitalized %>HealthComponent = () => import('../admin/health/health.vue');
-  const <%= jhiPrefixCapitalized %>LogsComponent = () => import('../admin/logs/logs.vue');
+  const <%= jhiPrefixCapitalized %>ConfigurationComponent = () => import('@/admin/configuration/configuration.vue');
+  const <%= jhiPrefixCapitalized %>DocsComponent = () => import('@/admin/docs/docs.vue');
+  const <%= jhiPrefixCapitalized %>HealthComponent = () => import('@/admin/health/health.vue');
+  const <%= jhiPrefixCapitalized %>LogsComponent = () => import('@/admin/logs/logs.vue');
   <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-  const <%= jhiPrefixCapitalized %>AuditsComponent = () => import('../admin/audits/audits.vue');
+  const <%= jhiPrefixCapitalized %>AuditsComponent = () => import('@/admin/audits/audits.vue');
   <%_ } _%>
-  const <%= jhiPrefixCapitalized %>MetricsComponent = () => import('../admin/metrics/metrics.vue');
+  const <%= jhiPrefixCapitalized %>MetricsComponent = () => import('@/admin/metrics/metrics.vue');
   <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-  const <%= jhiPrefixCapitalized %>GatewayComponent = () => import('../admin/gateway/gateway.vue');
+  const <%= jhiPrefixCapitalized %>GatewayComponent = () => import('@/admin/gateway/gateway.vue');
   <%_ } _%>
   <%_ if (websocket === 'spring-websocket') { _%>
-  const <%= jhiPrefixCapitalized %>TrackerComponent = () => import('../admin/tracker/tracker.vue');
+  const <%= jhiPrefixCapitalized %>TrackerComponent = () => import('@/admin/tracker/tracker.vue');
   <%_ } _%>
 
 export default [
   <%_ if (!skipUserManagement) { _%>
-  <%_ if (authenticationType === 'session') { _%>
-    {
-    path: '/account/sessions',
-    name: 'Sessions',
-    component: Sessions,
-    meta: { authorities: [Authority.USER] }
-    },
-  <%_ } _%>
     {
       path: '/admin/user-management',
       name: '<%= jhiPrefixCapitalized %>User',

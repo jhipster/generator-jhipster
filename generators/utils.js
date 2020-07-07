@@ -203,11 +203,11 @@ function addEntityToRouterImport(generator, entityAngularName, fileName, folderN
                 splicable: [generator.stripMargin(
                     // prettier-ignore
                     `|// prettier-ignore
-                    |const ${entityAngularName} = () => import('../entities/${folderName}/${fileName}.vue');
+                    |const ${entityAngularName} = () => import('@/entities/${folderName}/${fileName}.vue');
                     |// prettier-ignore
-                    |const ${entityAngularName}Update = () => import('../entities/${folderName}/${fileName}-update.vue');
+                    |const ${entityAngularName}Update = () => import('@/entities/${folderName}/${fileName}-update.vue');
                     |// prettier-ignore
-                    |const ${entityAngularName}Details = () => import('../entities/${folderName}/${fileName}-details.vue');`
+                    |const ${entityAngularName}Details = () => import('@/entities/${folderName}/${fileName}-details.vue');`
                 )]
             },
             generator
@@ -220,9 +220,9 @@ function addEntityToRouterImport(generator, entityAngularName, fileName, folderN
                 splicable: [generator.stripMargin(
                     // prettier-ignore
                     `|// prettier-ignore
-                    |const ${entityAngularName} = () => import('../entities/${folderName}/${fileName}.vue');
+                    |const ${entityAngularName} = () => import('@/entities/${folderName}/${fileName}.vue');
                     |// prettier-ignore
-                    |const ${entityAngularName}Details = () => import('../entities/${folderName}/${fileName}-details.vue');`
+                    |const ${entityAngularName}Details = () => import('@/entities/${folderName}/${fileName}-details.vue');`
                 )]
             },
             generator
@@ -331,7 +331,7 @@ function addPageToRouterImport(generator, pageName, pageFolderName) {
             splicable: [generator.stripMargin(
                 // prettier-ignore
                 `|// prettier-ignore
-                |const ${pageName} = () => import('../pages/${pageFolderName}/${pageFolderName}.vue');`
+                |const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFolderName}.vue');`
             )]
         },
         generator
