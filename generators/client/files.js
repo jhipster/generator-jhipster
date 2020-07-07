@@ -136,7 +136,6 @@ const vueFiles = {
                 'shared/config/store/alert-store.ts',
                 'shared/security/authority.ts',
                 'router/index.ts',
-                'router/account.ts',
                 'router/admin.ts',
                 'router/entities.ts',
                 'router/pages.ts'
@@ -195,6 +194,7 @@ const vueFiles = {
                 'account/login-form/login-form.vue',
                 'account/login-form/login-form.component.ts',
                 'account/login.service.ts',
+                'router/account.ts',
             ]
         },
         {
