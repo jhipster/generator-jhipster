@@ -9,7 +9,9 @@ import Router from 'vue-router';
 import {Authority} from '@/shared/security/authority';
 const Home = () => import('@/core/home/home.vue');
 const Error = () => import('@/core/error/error.vue');
+<%_ if (!skipUserManagement) { _%>
 import account from "@/router/account.ts";
+<%_ } _%>
 import admin from "@/router/admin.ts";
 import entities from "@/router/entities.ts";
 import pages from "@/router/pages.ts";
@@ -37,7 +39,9 @@ export default new Router({
       component: Error,
       meta: { error404: true }
     },
+<%_ if (!skipUserManagement) { _%>
     ...account,
+<%_ } _%>
     ...admin,
     ...entities,
     ...pages
