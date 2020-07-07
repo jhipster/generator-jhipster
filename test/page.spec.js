@@ -45,7 +45,7 @@ describe('Subgenerator page of Vue.js JHipster blueprint', () => {
         it('add page path, service and protractor config', () => {
             assert.fileContent(
                 `${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
-                `const ${pageName} = () => import('../pages/${pageFolderName}/${pageFolderName}.vue');`
+                `const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFolderName}.vue');`
             );
             assert.fileContent(
                 `${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
