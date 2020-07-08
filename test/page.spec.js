@@ -11,7 +11,7 @@ const pageName = 'MyTestPage';
 const pageFolderName = 'mytestpage';
 const pageInstance = 'myTestPage';
 
-describe('Subgenerator page of Vue.js JHipster blueprint', () => {
+describe('Subgenerator page for Vue.js application', () => {
     describe('Create page', () => {
         before(done => {
             helpers

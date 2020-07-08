@@ -28,11 +28,14 @@ const Randexp = utils.RandexpWithFaker;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const ANGULAR_DIR = constants.ANGULAR_DIR;
 const REACT_DIR = constants.ANGULAR_DIR;
+const VUE_DIR = constants.VUE_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 const CLIENT_NG2_TEMPLATES_DIR = 'angular';
 const CLIENT_REACT_TEMPLATES_DIR = 'react';
+const CLIENT_VUE_TEMPLATES_DIR = 'vue';
 
 /**
  * The default is to use a file path string. It implies use of the template method.
@@ -261,10 +264,124 @@ const reactFiles = {
     ],
 };
 
+const vueFiles = {
+    client: [
+        {
+            path: VUE_DIR,
+            templates: [
+                {
+                    file: 'entities/entity.model.ts',
+                    // using entityModelFileName so that there is no conflict when generating microservice entities
+                    renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.embedded,
+            path: VUE_DIR,
+            templates: [
+                {
+                    file: 'entities/entity-details.vue',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-details.vue`
+                },
+                {
+                    file: 'entities/entity-details.component.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-details.component.ts`
+                },
+                {
+                    file: 'entities/entity.vue',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.vue`
+                },
+                {
+                    file: 'entities/entity.component.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.ts`
+                },
+                {
+                    file: 'entities/entity.service.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.service.ts`
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.readOnly && !generator.embedded,
+            path: VUE_DIR,
+            templates: [
+                {
+                    file: 'entities/entity-update.vue',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.vue`
+                },
+                {
+                    file: 'entities/entity-update.component.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.ts`
+                }
+            ]
+        }
+    ],
+    test: [
+        {
+            condition: generator => !generator.embedded,
+            path: CLIENT_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'spec/app/entities/entity-management.component.spec.ts',
+                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.component.spec.ts`
+                },
+                {
+                    file: 'spec/app/entities/entity-management-details.component.spec.ts',
+                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-details.component.spec.ts`
+                },
+                {
+                    file: 'spec/app/entities/entity-management.service.spec.ts',
+                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.service.spec.ts`
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.readOnly && !generator.embedded,
+            path: CLIENT_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'spec/app/entities/entity-management-update.component.spec.ts',
+                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.spec.ts`
+                }
+            ]
+        },
+        {
+            condition: generator => generator.protractorTests && !generator.embedded,
+            path: CLIENT_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'e2e/entities/entity-page-object.ts',
+                    renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.page-object.ts`
+                },
+                {
+                    file: 'e2e/entities/entity.spec.ts',
+                    renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.spec.ts`
+                },
+                {
+                    file: 'e2e/entities/entity-details-page-object.ts',
+                    renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}-details.page-object.ts`
+                }
+            ]
+        },
+        {
+            condition: generator => generator.protractorTests && !generator.readOnly && !generator.embedded,
+            path: CLIENT_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'e2e/entities/entity-update-page-object.ts',
+                    renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}-update.page-object.ts`
+                }
+            ]
+        }
+    ]
+};
+
 module.exports = {
     writeFiles,
     angularFiles,
     reactFiles,
+    vueFiles
 };
 
 function addEnumerationFiles(generator, templateDir, clientFolder) {
@@ -301,45 +418,62 @@ function addSampleRegexTestingStrings(generator) {
 }
 
 function writeFiles() {
-    if (this.skipClient) return;
+    return {
+        setupReproducibility() {
+            if (this.skipClient) return;
 
-    // generate correct values for pattern fields
-    if (this.protractorTests) {
-        addSampleRegexTestingStrings(this);
-    }
+            // In order to have consistent results with Faker, restart seed with current entity name hash.
+            faker.seed(utils.stringHashCode(this.name.toLowerCase()));
+        },
 
-    // write client side files for Vue.js
-    this.writeFilesToDisk(vueFiles, this, false, `${CLIENT_VUE_TEMPLATES_DIR}`);
+        writeClientFiles() {
+            if (this.skipClient) return;
+            if (this.protractorTests) {
+                addSampleRegexTestingStrings(this);
+            }
 
-    // Add entity to menu
-    const className = this.entityClass;
-    const entityName = this.entityInstance;
-    const entityAngularName = this.entityAngularName;
-    if (!this.embedded) {
-        utils.addEntityToMenu(this, this.entityFileName, this.entityTranslationKeyMenu, className);
+            let files;
+            let destDir;
+            let templatesDir;
+            let microserviceName = this.microserviceName;
 
-        // Add entity paths to routing system
-        utils.addEntityToRouterImport(this, entityAngularName, this.entityFileName, this.entityFolderName);
-        utils.addEntityToRouter(this, entityName, this.entityFileName, entityAngularName, firstEntityGenerate);
-        firstEntityGenerate = false;
+            if (this.clientFramework === ANGULAR) {
+                files = angularFiles;
+                destDir = ANGULAR_DIR;
+                templatesDir = CLIENT_NG2_TEMPLATES_DIR;
+                microserviceName = this.microserviceName;
+            } else if (this.clientFramework === REACT) {
+                files = reactFiles;
+                destDir = REACT_DIR;
+                templatesDir = CLIENT_REACT_TEMPLATES_DIR;
+            } else if (this.clientFramework === VUE) {
+                files = vueFiles;
+                destDir = VUE_DIR;
+                templatesDir = CLIENT_VUE_TEMPLATES_DIR;
+            } else {
+                if (!this.embedded) {
+                    this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
+                }
+                return;
+            }
 
-        // Add entity services to main
-        utils.addEntityServiceToMainImport(this, className, this.entityFileName, this.entityFolderName);
-        utils.addEntityServiceToMain(this, entityName, className);
-    }
+            const entityTemplatesDir = `entity-client/templates/${templatesDir}`;
+            this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster(entityTemplatesDir));
+            addEnumerationFiles(this, templatesDir, destDir);
 
-    if (!this.enableTranslation) {
-        if (!this.readOnly) {
-            utils.replaceTranslation(this, [
-                `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
-                `app/entities/${this.entityFolderName}/${this.entityFileName}-update.vue`,
-                `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`
-            ]);
-        } else {
-            utils.replaceTranslation(this, [
-                `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
-                `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`
-            ]);
-        }
-    }
+            if (!this.embedded) {
+                this.addEntityToModule(
+                    this.entityInstance,
+                    this.entityClass,
+                    this.entityAngularName,
+                    this.entityFolderName,
+                    this.entityFileName,
+                    this.entityUrl,
+                    this.clientFramework,
+                    microserviceName
+                );
+                this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
+            }
+        },
+    };
 }
