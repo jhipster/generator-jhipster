@@ -6,39 +6,15 @@ Component.registerHooks([
   'beforeRouteUpdate' // for vue-router 2.2+
 ])
 import Router from 'vue-router';
-import {Authority} from '@/shared/security/authority';
-const Home = () => import('../core/home/home.vue');
-const Error = () => import('../core/error/error.vue');
+
+const Home = () => import('@/core/home/home.vue');
+const Error = () => import('@/core/error/error.vue');
 <%_ if (!skipUserManagement) { _%>
-const Register = () => import('../account/register/register.vue');
-const Activate = () => import('../account/activate/activate.vue');
-const ResetPasswordInit = () => import('../account/reset-password/init/reset-password-init.vue');
-const ResetPasswordFinish = () => import('../account/reset-password/finish/reset-password-finish.vue');
-const ChangePassword = () => import('../account/change-password/change-password.vue');
-const Settings = () => import('../account/settings/settings.vue');
-const <%= jhiPrefixCapitalized %>UserManagementComponent = () => import('../admin/user-management/user-management.vue');
-const <%= jhiPrefixCapitalized %>UserManagementViewComponent = () => import('../admin/user-management/user-management-view.vue');
-const <%= jhiPrefixCapitalized %>UserManagementEditComponent = () => import('../admin/user-management/user-management-edit.vue');
+import account from "@/router/account.ts";
 <%_ } _%>
-<%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
-const Sessions = () => import('../account/sessions/sessions.vue');
-<%_ } _%>
-const <%= jhiPrefixCapitalized %>ConfigurationComponent = () => import('../admin/configuration/configuration.vue');
-const <%= jhiPrefixCapitalized %>DocsComponent = () => import('../admin/docs/docs.vue');
-const <%= jhiPrefixCapitalized %>HealthComponent = () => import('../admin/health/health.vue');
-const <%= jhiPrefixCapitalized %>LogsComponent = () => import('../admin/logs/logs.vue');
-<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-const <%= jhiPrefixCapitalized %>AuditsComponent = () => import('../admin/audits/audits.vue');
-<%_ } _%>
-const <%= jhiPrefixCapitalized %>MetricsComponent = () => import('../admin/metrics/metrics.vue');
-<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-const <%= jhiPrefixCapitalized %>GatewayComponent = () => import('../admin/gateway/gateway.vue');
-<%_ } _%>
-<%_ if (websocket === 'spring-websocket') { _%>
-const <%= jhiPrefixCapitalized %>TrackerComponent = () => import('../admin/tracker/tracker.vue');
-<%_ } _%>
-/* tslint:disable */
-// jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
+import admin from "@/router/admin.ts";
+import entities from "@/router/entities.ts";
+import pages from "@/router/pages.ts";
 
 Vue.use(Router);
 
@@ -62,124 +38,12 @@ export default new Router({
       name: 'NotFound',
       component: Error,
       meta: { error404: true }
-    }<%_ if (!skipUserManagement) { _%>,
-    {
-      path: '/register',
-      name: 'Register',
-      component: Register
     },
-    {
-      path: '/account/activate',
-      name: 'Activate',
-      component: Activate
-    },
-    {
-      path: '/account/reset/request',
-      name: 'ResetPasswordInit',
-      component: ResetPasswordInit
-    },
-    {
-      path: '/account/reset/finish',
-      name: 'ResetPasswordFinish',
-      component: ResetPasswordFinish
-    },
-    {
-      path: '/account/password',
-      name: 'ChangePassword',
-      component: ChangePassword,
-      meta: { authorities: [Authority.USER] }
-    },
-    <%_ if (authenticationType === 'session') { _%>
-    {
-      path: '/account/sessions',
-      name: 'Sessions',
-      component: Sessions,
-      meta: { authorities: [Authority.USER] }
-    },
-    <%_ } _%>
-    {
-      path: '/account/settings',
-      name: 'Settings',
-      component: Settings,
-      meta: { authorities: [Authority.USER] }
-    },
-    {
-      path: '/admin/user-management',
-      name: '<%= jhiPrefixCapitalized %>User',
-      component: <%= jhiPrefixCapitalized %>UserManagementComponent,
-      meta: { authorities: [Authority.ADMIN] }
-    },
-    {
-      path: '/admin/user-management/new',
-      name: '<%= jhiPrefixCapitalized %>UserCreate',
-      component: <%= jhiPrefixCapitalized %>UserManagementEditComponent,
-      meta: { authorities: [Authority.ADMIN] }
-    },
-    {
-      path: '/admin/user-management/:userId/edit',
-      name: '<%= jhiPrefixCapitalized %>UserEdit',
-      component: <%= jhiPrefixCapitalized %>UserManagementEditComponent,
-      meta: { authorities: [Authority.ADMIN] }
-    },
-    {
-      path: '/admin/user-management/:userId/view',
-      name: '<%= jhiPrefixCapitalized %>UserView',
-      component: <%= jhiPrefixCapitalized %>UserManagementViewComponent,
-      meta: { authorities: [Authority.ADMIN] }
-    }<% } %>,
-    {
-      path: '/admin/docs',
-      name: '<%= jhiPrefixCapitalized %>DocsComponent',
-      component: <%= jhiPrefixCapitalized %>DocsComponent,
-      meta: { authorities: [Authority.ADMIN] }
-    },
-    <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-    {
-      path: '/admin/audits',
-      name: '<%= jhiPrefixCapitalized %>AuditsComponent',
-      component: <%= jhiPrefixCapitalized %>AuditsComponent,
-      meta: { authorities: [Authority.ADMIN] }
-    },<% } %>
-    {
-      path: '/admin/<%= jhiPrefixDashed %>-health',
-      name: '<%= jhiPrefixCapitalized %>HealthComponent',
-      component: <%= jhiPrefixCapitalized %>HealthComponent,
-      meta: { authorities: [Authority.ADMIN] }
-    },
-    {
-      path: '/admin/logs',
-      name: '<%= jhiPrefixCapitalized %>LogsComponent',
-      component: <%= jhiPrefixCapitalized %>LogsComponent,
-      meta: { authorities: [Authority.ADMIN] }
-    },
-    {
-      path: '/admin/<%= jhiPrefixDashed %>-metrics',
-      name: '<%= jhiPrefixCapitalized %>MetricsComponent',
-      component: <%= jhiPrefixCapitalized %>MetricsComponent,
-      meta: { authorities: [Authority.ADMIN] }
-    },
-    {
-      path: '/admin/<%= jhiPrefixDashed %>-configuration',
-      name: '<%= jhiPrefixCapitalized %>ConfigurationComponent',
-      component: <%= jhiPrefixCapitalized %>ConfigurationComponent,
-      meta: { authorities: [Authority.ADMIN] }
-    }
-    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>,
-    {
-      path: '/admin/gateway',
-      name: '<%= jhiPrefixCapitalized %>GatewayComponent',
-      component: <%= jhiPrefixCapitalized %>GatewayComponent,
-      meta: { authorities: [Authority.ADMIN] }
-    }
-    <%_ } _%>
-    <%_ if (websocket === 'spring-websocket') { _%>,
-    {
-      path: '/admin/<%= jhiPrefixDashed %>-tracker',
-      name: '<%= jhiPrefixCapitalized %>TrackerComponent',
-      component: <%= jhiPrefixCapitalized %>TrackerComponent,
-      meta: { authorities: [Authority.ADMIN] }
-    }
-    <%_ } _%>
-    // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
+<%_ if (!skipUserManagement) { _%>
+    ...account,
+<%_ } _%>
+    ...admin,
+    ...entities,
+    ...pages
   ]
 });

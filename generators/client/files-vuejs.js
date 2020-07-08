@@ -134,8 +134,11 @@ const vueFiles = {
                 'shared/config/store/alert-store.ts',
                 'shared/security/authority.ts',
                 'router/index.ts',
-            ],
-        },
+                'router/admin.ts',
+                'router/entities.ts',
+                'router/pages.ts'
+            ]
+        }
     ],
     i18n: [
         {
@@ -179,7 +182,12 @@ const vueFiles = {
         {
             condition: generator => generator.authenticationType !== 'oauth2',
             path: VUE_DIR,
-            templates: ['account/login-form/login-form.vue', 'account/login-form/login-form.component.ts', 'account/login.service.ts'],
+            templates: [
+                'account/login-form/login-form.vue',
+                'account/login-form/login-form.component.ts',
+                'account/login.service.ts',
+                'router/account.ts',
+            ]
         },
         {
             condition: generator => !generator.skipUserManagement,

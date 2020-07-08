@@ -301,58 +301,45 @@ function addSampleRegexTestingStrings(generator) {
 }
 
 function writeFiles() {
-    return {
-        setupReproducibility() {
-            if (this.skipClient) return;
+    if (this.skipClient) return;
 
-            // In order to have consistent results with Faker, restart seed with current entity name hash.
-            faker.seed(utils.stringHashCode(this.name.toLowerCase()));
-        },
+    // generate correct values for pattern fields
+    if (this.protractorTests) {
+        addSampleRegexTestingStrings(this);
+    }
 
-        writeClientFiles() {
-            if (this.skipClient) return;
-            if (this.protractorTests) {
-                addSampleRegexTestingStrings(this);
-            }
+    // write client side files for Vue.js
+    this.writeFilesToDisk(vueFiles, this, false, `${CLIENT_VUE_TEMPLATES_DIR}`);
 
-            let files;
-            let destDir;
-            let templatesDir;
-            let microserviceName = this.microserviceName;
+    // Add entity to menu
+    const className = this.entityClass;
+    const entityName = this.entityInstance;
+    const entityAngularName = this.entityAngularName;
+    if (!this.embedded) {
+        utils.addEntityToMenu(this, this.entityFileName, this.entityTranslationKeyMenu, className);
 
-            if (this.clientFramework === ANGULAR) {
-                files = angularFiles;
-                destDir = ANGULAR_DIR;
-                templatesDir = CLIENT_NG2_TEMPLATES_DIR;
-                microserviceName = this.microserviceName;
-            } else if (this.clientFramework === REACT) {
-                files = reactFiles;
-                destDir = REACT_DIR;
-                templatesDir = CLIENT_REACT_TEMPLATES_DIR;
-            } else {
-                if (!this.embedded) {
-                    this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
-                }
-                return;
-            }
+        // Add entity paths to routing system
+        utils.addEntityToRouterImport(this, entityAngularName, this.entityFileName, this.entityFolderName);
+        utils.addEntityToRouter(this, entityName, this.entityFileName, entityAngularName, firstEntityGenerate);
+        firstEntityGenerate = false;
 
-            const entityTemplatesDir = `entity-client/templates/${templatesDir}`;
-            this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster(entityTemplatesDir));
-            addEnumerationFiles(this, templatesDir, destDir);
+        // Add entity services to main
+        utils.addEntityServiceToMainImport(this, className, this.entityFileName, this.entityFolderName);
+        utils.addEntityServiceToMain(this, entityName, className);
+    }
 
-            if (!this.embedded) {
-                this.addEntityToModule(
-                    this.entityInstance,
-                    this.entityClass,
-                    this.entityAngularName,
-                    this.entityFolderName,
-                    this.entityFileName,
-                    this.entityUrl,
-                    this.clientFramework,
-                    microserviceName
-                );
-                this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
-            }
-        },
-    };
+    if (!this.enableTranslation) {
+        if (!this.readOnly) {
+            utils.replaceTranslation(this, [
+                `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
+                `app/entities/${this.entityFolderName}/${this.entityFileName}-update.vue`,
+                `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`
+            ]);
+        } else {
+            utils.replaceTranslation(this, [
+                `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
+                `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`
+            ]);
+        }
+    }
 }
