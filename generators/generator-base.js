@@ -35,6 +35,7 @@ const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig } = require('./generator-defaults');
 const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
+const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -2128,6 +2129,9 @@ module.exports = class extends PrivateBase {
         if (options.skipClient) {
             this.skipClient = this.jhipsterConfig.skipClient = true;
         }
+        if (options.applicationType) {
+            this.jhipsterConfig.applicationType = options.applicationType;
+        }
         if (options.skipServer) {
             this.skipServer = this.jhipsterConfig.skipServer = true;
         }
@@ -2384,6 +2388,30 @@ module.exports = class extends PrivateBase {
                 value: matched[2],
             };
         });
+    }
+
+    /**
+     * Get default config based on applicationType
+     */
+    getDefaultConfigForApplicationType(applicationType = this.jhipsterConfig.applicationType) {
+        let defaultAppTypeConfig = {};
+        switch (applicationType) {
+            case 'monolith':
+                defaultAppTypeConfig = defaultApplicationOptions.getConfigForMonolithApplication();
+                break;
+            case 'gateway':
+                defaultAppTypeConfig = defaultApplicationOptions.getConfigForGatewayApplication();
+                break;
+            case 'microservice':
+                defaultAppTypeConfig = defaultApplicationOptions.getConfigForMicroserviceApplication();
+                break;
+            case 'uaa':
+                defaultAppTypeConfig = defaultApplicationOptions.getConfigForUAAApplication();
+                break;
+            default:
+                defaultAppTypeConfig = defaultApplicationOptions.getDefaultConfigForNewApplication();
+        }
+        return { ...defaultAppTypeConfig, ...defaultConfig };
     }
 
     setConfigDefaults(defaults = defaultConfig) {

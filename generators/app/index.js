@@ -25,7 +25,7 @@ const prompts = require('./prompts');
 const packagejs = require('../../package.json');
 const statistics = require('../statistics');
 const jhipsterUtils = require('../utils');
-const { appDefaultConfig, defaultConfig } = require('../generator-defaults');
+const { appDefaultConfig } = require('../generator-defaults');
 
 let useBlueprints;
 
@@ -45,18 +45,20 @@ module.exports = class extends BaseBlueprintGenerator {
             type: Boolean,
             defaults: false,
         });
+        this.option('application-type', {
+            desc: 'Application type to generate',
+            type: String,
+        });
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip the client-side application generation',
             type: Boolean,
-            defaults: defaultConfig.skipClient,
         });
 
         // This adds support for a `--skip-server` flag
         this.option('skip-server', {
             desc: 'Skip the server-side application generation',
             type: Boolean,
-            defaults: defaultConfig.skipServer,
         });
 
         // This adds support for a `--skip-git` flag
@@ -77,21 +79,18 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('skip-user-management', {
             desc: 'Skip the user management module during app generation',
             type: Boolean,
-            defaults: defaultConfig.skipUserManagement,
         });
 
         // This adds support for a `--skip-check-length-of-identifier` flag
         this.option('skip-check-length-of-identifier', {
             desc: 'Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
             type: Boolean,
-            defaults: defaultConfig.skipCheckLengthOfIdentifier,
         });
 
         // This adds support for a `--skip-fake-data` flag
         this.option('skip-fake-data', {
             desc: 'Skip generation of fake data for development',
             type: Boolean,
-            defaults: defaultConfig.skipFakeData,
         });
 
         // This adds support for a `--with-entities` flag
@@ -215,7 +214,7 @@ module.exports = class extends BaseBlueprintGenerator {
             if (!this.jhipsterConfig.baseName) {
                 this.jhipsterConfig.baseName = this.getDefaultAppName();
             }
-            this.setConfigDefaults();
+            this.setConfigDefaults(this.getDefaultConfigForApplicationType());
         }
 
         this.existingProject = this.jhipsterConfig.baseName !== undefined && this.jhipsterConfig.applicationType !== undefined;
@@ -359,7 +358,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.setConfigDefaults(appDefaultConfig);
             },
 
-            composeServer() {
+            composing() {
                 const options = this.options;
                 const configOptions = this.configOptions;
                 if (!this.skipServer && !this.configOptions.skipComposeServer) {
