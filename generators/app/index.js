@@ -375,7 +375,6 @@ module.exports = class extends BaseBlueprintGenerator {
                         debug: this.isDebugEnabled,
                     });
                 }
-
                 if (!this.skipClient && !this.configOptions.skipComposeClient) {
                     this.configOptions.skipComposeClient = true;
                     this.composeWith(require.resolve('../client'), {

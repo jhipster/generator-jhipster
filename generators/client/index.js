@@ -186,18 +186,18 @@ module.exports = class extends BaseBlueprintGenerator {
                     );
                 }
             },
-            loadConfig() {
+            loadSharedConfig() {
                 this.loadAppConfig();
                 this.loadClientConfig();
                 this.loadServerConfig();
                 this.loadTranslationConfig();
-
+            },
+            setupSharedOptions() {
                 this.enableI18nRTL = false;
                 if (this.languages !== undefined) {
                     this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
                 }
-            },
-            getSharedConfigOptions() {
+
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
 

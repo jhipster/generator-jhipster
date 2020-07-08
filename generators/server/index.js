@@ -231,14 +231,14 @@ module.exports = class extends BaseBlueprintGenerator {
                 });
             },
 
-            loadConfig() {
+            loadSharedConfig() {
                 this.loadAppConfig();
                 this.loadClientConfig();
                 this.loadServerConfig();
                 this.loadTranslationConfig();
             },
 
-            generatedConfigs() {
+            setupSharedOptions() {
                 // Application name modified, using each technology's conventions
                 this.angularAppName = this.getAngularAppName();
                 this.camelizedBaseName = _.camelCase(this.baseName);
