@@ -18,6 +18,7 @@ module.exports = {
     prepareTempDir,
     testInTempDir,
     revertTempDir,
+    copyTemplateBlueprints,
     copyBlueprint,
     copyFakeBlueprint,
     lnYeoman,
@@ -100,16 +101,22 @@ function revertTempDir(cwd) {
     console.log(`reverted to cwd: ${process.cwd()}`);
 }
 
-function copyBlueprint(sourceDir, packagePath, ...blueprintNames) {
-    const nodeModulesPath = `${packagePath}/node_modules`;
+function copyTemplateBlueprints(destDir, ...blueprintNames) {
+    blueprintNames.forEach(blueprintName =>
+        copyBlueprint(path.join(__dirname, `../templates/blueprints/generator-jhipster-${blueprintName}`), destDir, blueprintName)
+    );
+}
+
+function copyBlueprint(sourceDir, destDir, ...blueprintNames) {
+    const nodeModulesPath = `${destDir}/node_modules`;
     fse.ensureDirSync(nodeModulesPath);
     blueprintNames.forEach(blueprintName => {
         fse.copySync(sourceDir, `${nodeModulesPath}/generator-jhipster-${blueprintName}`);
     });
 }
 
-function copyFakeBlueprint(packagePath, ...blueprintName) {
-    copyBlueprint(FAKE_BLUEPRINT_DIR, packagePath, ...blueprintName);
+function copyFakeBlueprint(destDir, ...blueprintName) {
+    copyBlueprint(FAKE_BLUEPRINT_DIR, destDir, ...blueprintName);
 }
 
 function lnYeoman(packagePath) {
