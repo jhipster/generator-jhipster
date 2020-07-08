@@ -73,6 +73,7 @@ module.exports = {
     RandexpWithFaker,
     gitExec,
     isGitInstalled,
+    replaceTranslationVue
 };
 
 /**
@@ -777,4 +778,27 @@ function isGitInstalled(callback) {
     const code = gitExec('--version', { trace: false }).code;
     if (callback) callback(code);
     return code === 0;
+}
+
+/**
+ * Replace translation for Vue.js application
+ * @param {*} generator 
+ * @param {*} files 
+ */
+function replaceTranslationVue(generator, files) {
+    for (let i = 0; i < files.length; i++) {
+        const filePath = `${constants.CLIENT_MAIN_SRC_DIR}${files[i]}`;
+        // Match the below attributes and the $t() method
+        const regexp = ['v-text', 'v-bind:placeholder', 'v-html', 'v-bind:title', 'v-bind:label', 'v-bind:value', 'v-bind:html']
+            .map(s => `${s}="\\$t\\(.*?\\)"`)
+            .join(')|(');
+        this.replaceContent(
+            {
+                file: filePath,
+                pattern: new RegExp(` ?(${regexp})`, 'g'),
+                content: ''
+            },
+            generator
+        );
+    }
 }
