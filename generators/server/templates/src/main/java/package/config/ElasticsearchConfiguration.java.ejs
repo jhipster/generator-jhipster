@@ -127,8 +127,12 @@ public class ElasticsearchConfiguration extends ElasticsearchConfigurationSuppor
 <%_ if (databaseType === 'mongodb') { _%>
 
     @Bean
-    SimpleElasticsearchMappingContext mappingContext() {
-        return new CustomElasticsearchMappingContext();
+    @Override
+    public SimpleElasticsearchMappingContext elasticsearchMappingContext() {
+        CustomElasticsearchMappingContext mappingContext = new CustomElasticsearchMappingContext();
+        mappingContext.setInitialEntitySet(this.getInitialEntitySet());
+        mappingContext.setSimpleTypeHolder(this.elasticsearchCustomConversions().getSimpleTypeHolder());
+        return mappingContext;
     }
 <%_ } _%>
 }
