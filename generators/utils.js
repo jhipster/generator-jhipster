@@ -198,16 +198,16 @@ function addEntityToRouterImport(generator, entityAngularName, fileName, folderN
     if (!generator.readOnly) {
         jhipsterUtils.rewriteFile(
             {
-                file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
+                file: `${CLIENT_MAIN_SRC_DIR}/app/router/entities.ts`,
                 needle: 'jhipster-needle-add-entity-to-router-import',
                 splicable: [generator.stripMargin(
                     // prettier-ignore
                     `|// prettier-ignore
-                    |const ${entityAngularName} = () => import('../entities/${folderName}/${fileName}.vue');
+                    |const ${entityAngularName} = () => import('@/entities/${folderName}/${fileName}.vue');
                     |// prettier-ignore
-                    |const ${entityAngularName}Update = () => import('../entities/${folderName}/${fileName}-update.vue');
+                    |const ${entityAngularName}Update = () => import('@/entities/${folderName}/${fileName}-update.vue');
                     |// prettier-ignore
-                    |const ${entityAngularName}Details = () => import('../entities/${folderName}/${fileName}-details.vue');`
+                    |const ${entityAngularName}Details = () => import('@/entities/${folderName}/${fileName}-details.vue');`
                 )]
             },
             generator
@@ -215,14 +215,14 @@ function addEntityToRouterImport(generator, entityAngularName, fileName, folderN
     } else {
         jhipsterUtils.rewriteFile(
             {
-                file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
+                file: `${CLIENT_MAIN_SRC_DIR}/app/router/entities.ts`,
                 needle: 'jhipster-needle-add-entity-to-router-import',
                 splicable: [generator.stripMargin(
                     // prettier-ignore
                     `|// prettier-ignore
-                    |const ${entityAngularName} = () => import('../entities/${folderName}/${fileName}.vue');
+                    |const ${entityAngularName} = () => import('@/entities/${folderName}/${fileName}.vue');
                     |// prettier-ignore
-                    |const ${entityAngularName}Details = () => import('../entities/${folderName}/${fileName}-details.vue');`
+                    |const ${entityAngularName}Details = () => import('@/entities/${folderName}/${fileName}-details.vue');`
                 )]
             },
             generator
@@ -230,15 +230,16 @@ function addEntityToRouterImport(generator, entityAngularName, fileName, folderN
     }
 }
 
-function addEntityToRouter(generator, entityName, entityFileName, entityAngularName) {
+function addEntityToRouter(generator, entityName, entityFileName, entityAngularName, firstEntityGenerate) {
+    const comma = firstEntityGenerate ? '' : ',';
     if (!generator.readOnly) {
         jhipsterUtils.rewriteFile(
             {
-                file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
+                file: `${CLIENT_MAIN_SRC_DIR}/app/router/entities.ts`,
                 needle: 'jhipster-needle-add-entity-to-router',
                 splicable: [generator.stripMargin(
                     // prettier-ignore
-                    `|,
+                    `|${comma}
                         |    {
                         |      path: '/${entityFileName}',
                         |      name: '${entityAngularName}',
@@ -270,11 +271,11 @@ function addEntityToRouter(generator, entityName, entityFileName, entityAngularN
     } else {
         jhipsterUtils.rewriteFile(
             {
-                file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
+                file: `${CLIENT_MAIN_SRC_DIR}/app/router/entities.ts`,
                 needle: 'jhipster-needle-add-entity-to-router',
                 splicable: [generator.stripMargin(
                     // prettier-ignore
-                    `|,
+                    `|${comma}
                         |    {
                         |      path: '/${entityFileName}',
                         |      name: '${entityAngularName}',
@@ -325,12 +326,12 @@ function addEntityServiceToMain(generator, entityName, className) {
 function addPageToRouterImport(generator, pageName, pageFolderName) {
     jhipsterUtils.rewriteFile(
         {
-            file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
+            file: `${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
             needle: 'jhipster-needle-add-entity-to-router-import',
             splicable: [generator.stripMargin(
                 // prettier-ignore
                 `|// prettier-ignore
-                |const ${pageName} = () => import('../pages/${pageFolderName}/${pageFolderName}.vue');`
+                |const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFolderName}.vue');`
             )]
         },
         generator
@@ -340,17 +341,17 @@ function addPageToRouterImport(generator, pageName, pageFolderName) {
 function addPageToRouter(generator, pageName, pageFolderName) {
     jhipsterUtils.rewriteFile(
         {
-            file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
+            file: `${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
             needle: 'jhipster-needle-add-entity-to-router',
             splicable: [generator.stripMargin(
                 // prettier-ignore
-                `|,
+                `|
                 |    {
                 |      path: '/pages/${pageFolderName}',
                 |      name: '${pageName}',
                 |      component: ${pageName},
                 |      meta: { authorities: [Authority.USER] }
-                |    }`
+                |    },`
             )]
         },
         generator
