@@ -30,17 +30,8 @@
       "jhiPrefix": "jhi",
       "clientPackageManager": "npm",
       "nativeLanguage": "en",
-      "blueprint": "generator-jhipster-vuejs",
       "clientFramework": "vue",
       "useSass": false
-    },
-    "generator-jhipster-vuejs": {
-      "applicationType": "monolith",
-      "baseName": "jhipster",
-      "clientFramework": "vue",
-      "useSass": false,
-      "clientPackageManager": "npm",
-      "enableTranslation": true
     }
   }
   

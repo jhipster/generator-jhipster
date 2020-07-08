@@ -159,10 +159,10 @@ Example:
     openshift: {
         desc: 'Deploy the current application to OpenShift',
     },
-    // page: {
-    //     argument: ['name'],
-    //     desc: 'Create a new VueJS page.',
-    // },
+    page: {
+        argument: ['name'],
+        desc: 'Create a new VueJS page.',
+    },
     'spring-service': {
         alias: 'service',
         argument: ['name'],

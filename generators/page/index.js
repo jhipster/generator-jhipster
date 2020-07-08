@@ -17,30 +17,58 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const EntityClientGenerator = require('../entity-client');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const jhipsterUtils = require('../utils');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 
-module.exports = class extends EntityClientGenerator {
+let useBlueprints;
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
-        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
-        // Get missing configuration
-        const configuration = jhipsterUtils.getAllJhipsterConfig(null, true);
-        this.skipClient = configuration.skipClient;
-        this.clientPackageManager = configuration.clientPackageManager;
-        this.enableTranslation = configuration.enableTranslation;
-        this.protractorTests = configuration.testFrameworks && configuration.testFrameworks.includes('protractor');
+        super(args, opts);
+
+        if (this.options.help) {
+            return;
+        }
+
+        this.loadOptions();
+        this.loadRuntimeOptions();
+
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('common');
     }
 
-    get prompting() {
-        // The prompting phase is being overridden so that we can ask our own questions
+    _initializing() {
+        return {
+            validateFromCli() {
+                this.checkInvocationFromCLI();
+            },
+            setupConsts() {
+                const configuration = this.jhipsterConfig;
+                this.skipClient = configuration.skipClient;
+                this.clientPackageManager = configuration.clientPackageManager;
+                this.enableTranslation = configuration.enableTranslation;
+                this.protractorTests = configuration.testFrameworks && configuration.testFrameworks.includes('protractor');
+            }
+        }
+    }
+
+    get initializing() {
+        if (useBlueprints) return;
+        return this._initializing();
+    }
+
+    _prompting() {
         return {
             askForPage: prompts.askForPage,
         };
     }
 
-    get writing() {
+    get prompting() {
+        if (useBlueprints) return;
+        return this._prompting();
+    }
+
+    _writing() {
         return {
             writeAdditionalFile() {
                 writeFiles.call(this);
@@ -48,7 +76,12 @@ module.exports = class extends EntityClientGenerator {
         };
     }
 
-    get end() {
+    get writing() {
+        if (useBlueprints) return;
+        return this._writing();
+    }
+
+    _end() {
         return {
             end() {
                 if (!this.options['skip-install'] && !this.skipClient) {
@@ -57,5 +90,10 @@ module.exports = class extends EntityClientGenerator {
                 this.log(chalk.bold.green(`Page ${this.pageName} generated successfully.`));
             },
         };
+    }
+
+    get end() {
+        if (useBlueprints) return;
+        return this._end();
     }
 };

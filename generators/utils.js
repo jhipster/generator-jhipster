@@ -73,7 +73,12 @@ module.exports = {
     RandexpWithFaker,
     gitExec,
     isGitInstalled,
-    replaceTranslationVue
+    vueReplaceTranslation,
+    vueAddPageToRouterImport,
+    vueAddPageToRouter,
+    vueAddPageServiceToMainImport,
+    vueAddPageServiceToMain,
+    vueAddPageProtractorConf
 };
 
 /**
@@ -785,7 +790,7 @@ function isGitInstalled(callback) {
  * @param {*} generator 
  * @param {*} files 
  */
-function replaceTranslationVue(generator, files) {
+function vueReplaceTranslation(generator, files) {
     for (let i = 0; i < files.length; i++) {
         const filePath = `${constants.CLIENT_MAIN_SRC_DIR}${files[i]}`;
         // Match the below attributes and the $t() method
@@ -801,4 +806,78 @@ function replaceTranslationVue(generator, files) {
             generator
         );
     }
+}
+
+function vueAddPageToRouterImport(generator, pageName, pageFolderName) {
+    this.rewriteFile(
+        {
+            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
+            needle: 'jhipster-needle-add-entity-to-router-import',
+            splicable: [generator.stripMargin(
+                // prettier-ignore
+                `|// prettier-ignore
+                |const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFolderName}.vue');`
+            )]
+        },
+        generator
+    );
+}
+
+function vueAddPageToRouter(generator, pageName, pageFolderName) {
+    this.rewriteFile(
+        {
+            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
+            needle: 'jhipster-needle-add-entity-to-router',
+            splicable: [generator.stripMargin(
+                // prettier-ignore
+                `|
+                |    {
+                |      path: '/pages/${pageFolderName}',
+                |      name: '${pageName}',
+                |      component: ${pageName},
+                |      meta: { authorities: [Authority.USER] }
+                |    },`
+            )]
+        },
+        generator
+    );
+}
+
+function vueAddPageServiceToMainImport(generator, pageName, pageFolderName) {
+    this.rewriteFile(
+        {
+            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+            needle: 'jhipster-needle-add-entity-service-to-main-import',
+            splicable: [generator.stripMargin(
+                // prettier-ignore
+                `|import ${pageName}Service from '@/pages/${pageFolderName}/${pageFolderName}.service';`
+            )]
+        },
+        generator
+    );
+}
+
+function vueAddPageServiceToMain(generator, pageName, pageInstance) {
+    this.rewriteFile(
+        {
+            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+            needle: 'jhipster-needle-add-entity-service-to-main',
+            splicable: [generator.stripMargin(
+                // prettier-ignore
+                `|${pageInstance}Service: () => new ${pageName}Service(),`
+            )]
+        },
+        generator
+    );
+}
+
+function vueAddPageProtractorConf(generator, pageFolderName) {
+    this.rewriteFile(
+        {
+            file: `${constants.CLIENT_TEST_SRC_DIR}/protractor.conf.js`,
+            needle: 'jhipster-needle-add-protractor-tests',
+            splicable: [generator.stripMargin('\'./e2e/pages/**/*.spec.ts\',')]
+        },
+        generator
+    );
 }

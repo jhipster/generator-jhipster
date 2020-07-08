@@ -90,14 +90,14 @@ function writeFiles() {
     this.writeFilesToDisk(vueFiles, this, false, `${CLIENT_VUE_TEMPLATES_DIR}`);
 
     // Add page paths to routing system
-    utils.addPageToRouterImport(this, this.pageName, this.pageFolderName);
-    utils.addPageToRouter(this, this.pageName, this.pageFolderName);
+    utils.vueAddPageToRouterImport(this, this.pageName, this.pageFolderName);
+    utils.vueAddPageToRouter(this, this.pageName, this.pageFolderName);
     // Add page services to main
-    utils.addPageServiceToMainImport(this, this.pageName, this.pageFolderName);
-    utils.addPageServiceToMain(this, this.pageName, this.pageInstance);
+    utils.vueAddPageServiceToMainImport(this, this.pageName, this.pageFolderName);
+    utils.vueAddPageServiceToMain(this, this.pageName, this.pageInstance);
 
     // Add tests to protractor conf
     if (this.protractorTests) {
-        utils.addPageProtractorConf(this, this.pageFolderName);
+        utils.vueAddPageProtractorConf(this, this.pageFolderName);
     }
 }

@@ -22,7 +22,6 @@ describe('Subgenerator page of Vue.js JHipster blueprint', () => {
                 .withOptions({
                     'from-cli': true,
                     skipInstall: true,
-                    blueprint: 'vuejs',
                     skipChecks: true,
                 })
                 .withPrompts({
