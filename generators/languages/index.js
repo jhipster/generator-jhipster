@@ -60,9 +60,13 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false,
         });
 
-        this.authenticationType = this.config.get('authenticationType');
-        this.skipClient = this.options['skip-client'] || this.config.get('skipClient');
-        this.skipServer = this.options['skip-server'] || this.config.get('skipServer');
+        if (this.options.help) {
+            return;
+        }
+
+        this.loadOptions();
+        this.loadRuntimeOptions();
+
         // Validate languages passed as argument
         this.languages = this.options.languages;
         if (this.languages) {
@@ -92,8 +96,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.checkInvocationFromCLI();
             },
 
-            setupConsts() {
-                const configuration = this.config;
+            validate() {
+                this.currentLanguages = this.jhipsterConfig.languages || [];
                 if (this.languages) {
                     if (this.skipClient) {
                         this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for server`));
@@ -106,23 +110,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 } else {
                     this.log(chalk.bold('\nLanguages configuration is starting'));
                 }
-                this.applicationType = configuration.get('applicationType');
-                this.reactive = configuration.get('reactive') || this.configOptions.reactive;
-                this.baseName = configuration.get('baseName');
-                this.packageFolder = configuration.get('packageFolder');
-                this.capitalizedBaseName = _.upperFirst(this.baseName);
-                this.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
-                this.databaseType = configuration.get('databaseType');
-                this.searchEngine = configuration.get('searchEngine') === 'no' ? false : configuration.get('searchEngine');
-                this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
-                this.enableTranslation = configuration.get('enableTranslation');
-                this.currentLanguages = configuration.get('languages');
-                this.clientFramework = configuration.get('clientFramework');
-                this.serviceDiscoveryType =
-                    configuration.get('serviceDiscoveryType') === 'no' ? false : configuration.get('serviceDiscoveryType');
-                // Make dist dir available in templates
-                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(configuration.get('buildTool'));
-                this.skipUserManagement = configuration.get('skipUserManagement');
             },
         };
     }
@@ -148,10 +135,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _configuring() {
         return {
             saveConfig() {
-                if (this.enableTranslation) {
-                    this.languages = _.union(this.currentLanguages, this.languagesToApply);
-                    this.config.set('languages', this.languages);
-                }
+                this.jhipsterConfig.languages = _.union(this.currentLanguages, this.languagesToApply);
             },
         };
     }
@@ -168,39 +152,15 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             getSharedConfigOptions() {
-                if (this.configOptions.applicationType) {
-                    this.applicationType = this.configOptions.applicationType;
-                }
-                if (this.configOptions.baseName) {
-                    this.baseName = this.configOptions.baseName;
-                }
-                if (this.configOptions.websocket !== undefined) {
-                    this.websocket = this.configOptions.websocket;
-                }
-                if (this.configOptions.databaseType) {
-                    this.databaseType = this.configOptions.databaseType;
-                }
-                if (this.configOptions.searchEngine !== undefined) {
-                    this.searchEngine = this.configOptions.searchEngine;
-                }
-                if (this.configOptions.messageBroker !== undefined) {
-                    this.messageBroker = this.configOptions.messageBroker;
-                }
-                if (this.configOptions.enableTranslation) {
-                    this.enableTranslation = this.configOptions.enableTranslation;
-                }
-                if (this.configOptions.nativeLanguage) {
-                    this.nativeLanguage = this.configOptions.nativeLanguage;
-                }
-                if (this.configOptions.skipClient) {
-                    this.skipClient = this.configOptions.skipClient;
-                }
-                if (this.configOptions.skipServer) {
-                    this.skipServer = this.configOptions.skipServer;
-                }
-                if (this.configOptions.clientFramework) {
-                    this.clientFramework = this.configOptions.clientFramework;
-                }
+                this.loadAppConfig();
+                this.loadClientConfig();
+                this.loadServerConfig();
+                this.loadTranslationConfig();
+
+                // Make dist dir available in templates
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
+
+                this.capitalizedBaseName = _.upperFirst(this.baseName);
             },
         };
     }
@@ -227,16 +187,16 @@ module.exports = class extends BaseBlueprintGenerator {
             write() {
                 if (!this.skipClient) {
                     this.updateLanguagesInLanguagePipe(this.languages);
-                    this.updateLanguagesInLanguageConstantNG2(this.languages);
                     this.updateLanguagesInWebpack(this.languages);
                     if (this.clientFramework === ANGULAR) {
+                        this.updateLanguagesInLanguageConstantNG2(this.languages);
                         this.updateLanguagesInMomentWebpackNgx(this.languages);
                     }
                     if (this.clientFramework === REACT) {
                         this.updateLanguagesInMomentWebpackReact(this.languages);
                     }
                 }
-                if (!this.skipUserManagement) {
+                if (!this.skipUserManagement && !this.skipServer) {
                     this.updateLanguagesInLanguageMailServiceIT(this.languages, this.packageFolder);
                 }
             },

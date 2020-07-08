@@ -19,9 +19,9 @@
 const chalk = require('chalk');
 const path = require('path');
 const _ = require('lodash');
-const jhiCore = require('jhipster-core');
 const shelljs = require('shelljs');
 const constants = require('../generator-constants');
+const { isReservedFieldName, isReservedKeyword } = require('../../jdl/jhipster/reserved-keywords');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
@@ -467,10 +467,10 @@ function askForField() {
                 if (input === 'id' || fieldNamesUnderscored.includes(_.snakeCase(input))) {
                     return 'Your field name cannot use an already existing field name';
                 }
-                if ((clientFramework === undefined || clientFramework === ANGULAR) && jhiCore.isReservedFieldName(input, ANGULAR)) {
+                if ((clientFramework === undefined || clientFramework === ANGULAR) && isReservedFieldName(input, ANGULAR)) {
                     return 'Your field name cannot contain a Java or Angular reserved keyword';
                 }
-                if ((clientFramework !== undefined || clientFramework === REACT) && jhiCore.isReservedFieldName(input, REACT)) {
+                if ((clientFramework !== undefined || clientFramework === REACT) && isReservedFieldName(input, REACT)) {
                     return 'Your field name cannot contain a Java or React reserved keyword';
                 }
                 if (prodDatabaseType === 'oracle' && input.length > 30 && !skipCheckLengthOfIdentifier) {
@@ -560,7 +560,7 @@ function askForField() {
                 if (input === '') {
                     return 'Your class name cannot be empty.';
                 }
-                if (jhiCore.isReservedKeyword(input, 'JAVA')) {
+                if (isReservedKeyword(input, 'JAVA')) {
                     return 'Your enum name cannot contain a Java reserved keyword';
                 }
                 if (!/^[A-Za-z0-9_]*$/.test(input)) {
@@ -902,7 +902,7 @@ function askForRelationship() {
                 if (input === '') {
                     return 'Your other entity name cannot be empty';
                 }
-                if (jhiCore.isReservedKeyword(input, 'JAVA')) {
+                if (isReservedKeyword(input, 'JAVA')) {
                     return 'Your other entity name cannot contain a Java reserved keyword';
                 }
                 if (input.toLowerCase() === 'user' && context.applicationType === 'microservice') {
@@ -929,7 +929,7 @@ function askForRelationship() {
                 if (input === 'id' || fieldNamesUnderscored.includes(_.snakeCase(input))) {
                     return 'Your relationship cannot use an already existing field name';
                 }
-                if (jhiCore.isReservedKeyword(input, 'JAVA')) {
+                if (isReservedKeyword(input, 'JAVA')) {
                     return 'Your relationship cannot contain a Java reserved keyword';
                 }
                 return true;

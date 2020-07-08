@@ -20,11 +20,11 @@
 const chalk = require('chalk');
 const _ = require('lodash');
 const pluralize = require('pluralize');
-const jhiCore = require('jhipster-core');
 const prompts = require('./prompts');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
+const { isReservedClassName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
 
 /* constants used throughout */
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
@@ -152,7 +152,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.reactive = configuration.get('reactive');
                 context.packageFolder = configuration.get('packageFolder');
                 context.authenticationType = configuration.get('authenticationType');
-                context.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
+                context.cacheProvider = configuration.get('cacheProvider') || 'no';
                 context.enableHibernateCache =
                     configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(context.cacheProvider);
                 context.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
@@ -279,7 +279,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.error('The entity name cannot be empty');
                 } else if (entityName.indexOf('Detail', entityName.length - 'Detail'.length) !== -1) {
                     this.error("The entity name cannot end with 'Detail'");
-                } else if (!this.context.skipServer && jhiCore.isReservedClassName(entityName)) {
+                } else if (!this.context.skipServer && isReservedClassName(entityName)) {
                     this.error('The entity name cannot contain a Java or JHipster reserved keyword');
                 }
             },
@@ -320,7 +320,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.error(`The table name cannot contain special characters.\n${instructions}`);
                 } else if (entityTableName === '') {
                     this.error('The table name cannot be empty');
-                } else if (jhiCore.isReservedTableName(entityTableName, prodDatabaseType)) {
+                } else if (isReservedTableName(entityTableName, prodDatabaseType)) {
                     if (jhiTablePrefix) {
                         this.warning(
                             chalk.red(
@@ -795,7 +795,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     if (_.isUndefined(field.fieldNameAsDatabaseColumn)) {
                         const fieldNameUnderscored = _.snakeCase(field.fieldName);
                         const jhiFieldNamePrefix = this.getColumnName(context.jhiPrefix);
-                        if (jhiCore.isReservedTableName(fieldNameUnderscored, context.prodDatabaseType)) {
+                        if (isReservedTableName(fieldNameUnderscored, context.prodDatabaseType)) {
                             if (!jhiFieldNamePrefix) {
                                 this.warning(
                                     chalk.red(
@@ -1013,7 +1013,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         if (!relationship.otherEntityTableName) {
                             relationship.otherEntityTableName = this.getTableName(otherEntityName);
                         }
-                        if (jhiCore.isReservedTableName(relationship.otherEntityTableName, context.prodDatabaseType) && jhiTablePrefix) {
+                        if (isReservedTableName(relationship.otherEntityTableName, context.prodDatabaseType) && jhiTablePrefix) {
                             const otherEntityTableName = relationship.otherEntityTableName;
                             relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
                         }

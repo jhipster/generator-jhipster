@@ -22,7 +22,6 @@ const path = require('path');
 const shelljs = require('shelljs');
 const ejs = require('ejs');
 const _ = require('lodash');
-const jhiCore = require('jhipster-core');
 const fs = require('fs');
 const crypto = require('crypto');
 const randexp = require('randexp');
@@ -30,6 +29,7 @@ const faker = require('faker');
 const os = require('os');
 
 const constants = require('./generator-constants');
+const FileUtils = require('../jdl/utils/file-utils');
 
 const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
 
@@ -578,7 +578,7 @@ function decodeBase64(string, encoding = 'utf-8') {
 }
 
 function loadYoRc(filePath = '.yo-rc.json') {
-    if (!jhiCore.FileUtils.doesFileExist(filePath)) {
+    if (!FileUtils.doesFileExist(filePath)) {
         return undefined;
     }
     return JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }));

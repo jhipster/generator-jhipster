@@ -79,7 +79,7 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}admin/metrics/metrics-modal.component.ts`);
         generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics-modal.component.spec.ts`);
     }
-    if (generator.isJhipsterVersionLessThan('6.3.0') && generator.configOptions && generator.configOptions.clientFramework === ANGULAR) {
+    if (generator.isJhipsterVersionLessThan('6.3.0') && generator.jhipsterConfig.clientFramework === ANGULAR) {
         generator.removeFile(`${ANGULAR_DIR}account/index.ts`);
         generator.removeFile(`${ANGULAR_DIR}admin/index.ts`);
         generator.removeFile(`${ANGULAR_DIR}core/index.ts`);
@@ -89,20 +89,20 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}shared/shared-common.module.ts`);
     }
 
-    if (generator.isJhipsterVersionLessThan('6.3.0') && generator.configOptions && generator.configOptions.clientFramework === REACT) {
+    if (generator.isJhipsterVersionLessThan('6.3.0') && generator.jhipsterConfig.clientFramework === REACT) {
         generator.removeFile('tslint.json');
     }
 
-    if (generator.isJhipsterVersionLessThan('6.4.0') && generator.configOptions && generator.configOptions.clientFramework === ANGULAR) {
+    if (generator.isJhipsterVersionLessThan('6.4.0') && generator.jhipsterConfig.clientFramework === ANGULAR) {
         generator.removeFile(`${ANGULAR_DIR}admin/admin.route.ts`);
         generator.removeFile(`${ANGULAR_DIR}admin/admin.module.ts`);
     }
 
-    if (generator.isJhipsterVersionLessThan('6.6.1') && generator.configOptions && generator.configOptions.clientFramework === ANGULAR) {
+    if (generator.isJhipsterVersionLessThan('6.6.1') && generator.jhipsterConfig.clientFramework === ANGULAR) {
         generator.removeFile(`${ANGULAR_DIR}core/language/language.helper.ts`);
     }
 
-    if (generator.isJhipsterVersionLessThan('6.8.0') && generator.configOptions && generator.configOptions.clientFramework === 'angularX') {
+    if (generator.isJhipsterVersionLessThan('6.8.0') && generator.jhipsterConfig.clientFramework === 'angularX') {
         generator.removeFile(`${ANGULAR_DIR}tsconfig-aot.json`);
     }
 }

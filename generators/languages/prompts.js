@@ -24,6 +24,10 @@ module.exports = {
 
 function askForLanguages() {
     if (this.languages) return undefined;
+    if (!this.jhipsterConfig.enableTranslation) {
+        this.log(chalk.red('Translation is disabled for the project. Languages cannot be added.'));
+        return undefined;
+    }
     const languageOptions = this.getAllSupportedLanguageOptions();
     const prompts = [
         {
@@ -33,11 +37,7 @@ function askForLanguages() {
             choices: languageOptions,
         },
     ];
-    if (this.enableTranslation || this.configOptions.enableTranslation) {
-        return this.prompt(prompts).then(props => {
-            this.languagesToApply = props.languages || [];
-        });
-    }
-    this.log(chalk.red('Translation is disabled for the project. Languages cannot be added.'));
-    return undefined;
+    return this.prompt(prompts).then(props => {
+        this.languagesToApply = props.languages || [];
+    });
 }
