@@ -16,28 +16,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
 
 module.exports = {
     askForLanguages,
+    askI18n,
 };
 
+function askI18n() {
+    if (this.options.skipPrompts) return undefined;
+    return this.prompt(
+        [
+            {
+                type: 'confirm',
+                name: 'enableTranslation',
+                message: 'Would you like to enable internationalization support?',
+                default: true,
+            },
+            {
+                type: 'list',
+                name: 'nativeLanguage',
+                message: 'Please choose the native language of the application',
+                choices: () => this.getAllSupportedLanguageOptions(),
+                default: 'en',
+                store: true,
+            },
+        ],
+        this.config
+    );
+}
+
 function askForLanguages() {
-    if (this.languages) return undefined;
-    if (!this.jhipsterConfig.enableTranslation) {
-        this.log(chalk.red('Translation is disabled for the project. Languages cannot be added.'));
+    if (this.options.skipPrompts || this.languagesToApply || !this.jhipsterConfig.enableTranslation) {
         return undefined;
     }
-    const languageOptions = this.getAllSupportedLanguageOptions();
-    const prompts = [
+    return this.prompt([
         {
             type: 'checkbox',
             name: 'languages',
             message: 'Please choose additional languages to install',
-            choices: languageOptions,
+            choices: () => {
+                const languageOptions = this.getAllSupportedLanguageOptions();
+                const nativeLanguage = this.jhipsterConfig.nativeLanguage;
+                const currentLanguages = this.jhipsterConfig.languages || [];
+                return languageOptions.filter(l => l.value !== nativeLanguage && !currentLanguages.includes(l.value));
+            },
         },
-    ];
-    return this.prompt(prompts).then(props => {
-        this.languagesToApply = props.languages || [];
+    ]).then(answers => {
+        this.languagesToApply = answers.languages;
     });
 }

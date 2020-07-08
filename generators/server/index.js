@@ -187,7 +187,6 @@ module.exports = class extends BaseBlueprintGenerator {
             askForModuleName: prompts.askForModuleName,
             askForServerSideOpts: prompts.askForServerSideOpts,
             askForOptionalItems: prompts.askForOptionalItems,
-            askFori18n: prompts.askForI18n,
 
             setSharedConfigOptions() {
                 // Make dist dir available in templates
@@ -220,6 +219,18 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
+            composeLanguages() {
+                // We don't expose client/server to cli, composing with languages is used for test purposes.
+                if (this.configOptions.skipComposeLanguages || this.jhipsterConfig.enableTranslation === false) return;
+
+                this.configOptions.skipComposeLanguages = true;
+                this.composeWith(require.resolve('../languages'), {
+                    ...this.options,
+                    configOptions: this.configOptions,
+                    debug: this.isDebugEnabled,
+                });
+            },
+
             loadConfig() {
                 this.loadAppConfig();
                 this.loadClientConfig();
@@ -288,12 +299,6 @@ module.exports = class extends BaseBlueprintGenerator {
                         enableSwaggerCodegen: this.enableSwaggerCodegen,
                     },
                 });
-            },
-
-            composeLanguages() {
-                if (this.configOptions.skipI18nQuestion) return;
-
-                this.composeLanguagesSub(this, this.configOptions, 'server');
             },
         };
     }
