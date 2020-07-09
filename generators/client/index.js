@@ -112,7 +112,6 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
-            askFori18n: prompts.askForI18n,
             askForClientTheme: prompts.askForClientTheme,
             askForClientThemeVariant: prompts.askForClientThemeVariant,
         };
@@ -148,9 +147,15 @@ module.exports = class extends BaseBlueprintGenerator {
     _default() {
         return {
             composeLanguages() {
-                if (this.configOptions.skipI18nQuestion) return;
+                // We don't expose client/server to cli, composing with languages is used for test purposes.
+                if (this.configOptions.skipComposeLanguages || this.jhipsterConfig.enableTranslation === false) return;
 
-                this.composeLanguagesSub(this, this.configOptions, 'client');
+                this.configOptions.skipComposeLanguages = true;
+                this.composeWith(require.resolve('../languages'), {
+                    ...this.options,
+                    configOptions: this.configOptions,
+                    debug: this.isDebugEnabled,
+                });
             },
 
             validateSkipServer() {
@@ -181,18 +186,18 @@ module.exports = class extends BaseBlueprintGenerator {
                     );
                 }
             },
-            loadConfig() {
+            loadSharedConfig() {
                 this.loadAppConfig();
                 this.loadClientConfig();
                 this.loadServerConfig();
                 this.loadTranslationConfig();
-
+            },
+            setupSharedOptions() {
                 this.enableI18nRTL = false;
                 if (this.languages !== undefined) {
                     this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
                 }
-            },
-            getSharedConfigOptions() {
+
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
 

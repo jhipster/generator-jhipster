@@ -58,9 +58,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.TEST_DIR = constants.TEST_DIR;
                 this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
                 this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
-                this.CLIENT_DIST_DIR =
-                    this.getResourceBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool) + constants.CLIENT_DIST_DIR;
 
                 // Make documentation URL available in templates
                 this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
@@ -77,11 +74,15 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
-            loadConfig() {
+            loadSharedConfig() {
                 this.loadAppConfig();
                 this.loadClientConfig();
                 this.loadServerConfig();
                 this.loadTranslationConfig();
+            },
+            setupSharedOptions() {
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
+                this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.buildTool) + constants.CLIENT_DIST_DIR;
             },
             writePrettierConfig() {
                 // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work

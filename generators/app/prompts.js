@@ -25,8 +25,6 @@ module.exports = {
     askForInsightOptIn,
     askForApplicationType,
     askForModuleName,
-    askForI18n,
-    askFori18n,
     askForTestOpts,
     askForMoreModules,
 };
@@ -89,21 +87,6 @@ async function askForApplicationType() {
 function askForModuleName() {
     if (this.existingProject) return undefined;
     return this.askModuleName(this);
-}
-
-function askForI18n() {
-    if (this.skipI18n || this.existingProject) return;
-    this.aski18n(this);
-}
-
-/**
- * @deprecated Use askForI18n() instead.
- * This method will be removed in JHipster v7.
- */
-function askFori18n() {
-    // eslint-disable-next-line no-console
-    console.log(chalk.yellow('\nPlease use askForI18n() instead. This method will be removed in v7\n'));
-    this.askForI18n();
 }
 
 async function askForTestOpts() {

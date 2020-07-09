@@ -62,7 +62,7 @@ const clientDefaultConfig = {
 const translationDefaultConfig = {
     enableTranslation: true,
     nativeLanguage: 'en',
-    languages: ['en'],
+    languages: [],
 };
 
 const defaultConfig = {
