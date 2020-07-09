@@ -48,8 +48,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.clientPackageManager = configuration.clientPackageManager;
                 this.enableTranslation = configuration.enableTranslation;
                 this.protractorTests = configuration.testFrameworks && configuration.testFrameworks.includes('protractor');
-            }
-        }
+            },
+        };
     }
 
     get initializing() {

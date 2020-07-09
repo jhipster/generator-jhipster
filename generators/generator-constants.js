@@ -123,7 +123,7 @@ const SUPPORTED_VALIDATION_RULES = ['required', 'unique', 'max', 'min', 'maxleng
 const SUPPORTED_CLIENT_FRAMEWORKS = {
     ANGULAR: 'angularX',
     REACT: 'react',
-    VUE: 'vue'
+    VUE: 'vue',
 };
 
 // documentation constants

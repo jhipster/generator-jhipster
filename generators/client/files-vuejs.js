@@ -136,9 +136,9 @@ const vueFiles = {
                 'router/index.ts',
                 'router/admin.ts',
                 'router/entities.ts',
-                'router/pages.ts'
-            ]
-        }
+                'router/pages.ts',
+            ],
+        },
     ],
     i18n: [
         {
@@ -187,7 +187,7 @@ const vueFiles = {
                 'account/login-form/login-form.component.ts',
                 'account/login.service.ts',
                 'router/account.ts',
-            ]
+            ],
         },
         {
             condition: generator => !generator.skipUserManagement,

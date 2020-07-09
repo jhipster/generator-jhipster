@@ -55,7 +55,7 @@ function askForClient() {
         },
         {
             value: VUE,
-            name: 'Vue'
+            name: 'Vue',
         },
         {
             value: 'no',

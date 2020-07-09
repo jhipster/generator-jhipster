@@ -78,7 +78,7 @@ module.exports = {
     vueAddPageToRouter,
     vueAddPageServiceToMainImport,
     vueAddPageServiceToMain,
-    vueAddPageProtractorConf
+    vueAddPageProtractorConf,
 };
 
 /**
@@ -787,8 +787,8 @@ function isGitInstalled(callback) {
 
 /**
  * Replace translation for Vue.js application
- * @param {*} generator 
- * @param {*} files 
+ * @param {*} generator
+ * @param {*} files
  */
 function vueReplaceTranslation(generator, files) {
     for (let i = 0; i < files.length; i++) {
@@ -801,7 +801,7 @@ function vueReplaceTranslation(generator, files) {
             {
                 file: filePath,
                 pattern: new RegExp(` ?(${regexp})`, 'g'),
-                content: ''
+                content: '',
             },
             generator
         );
@@ -813,11 +813,13 @@ function vueAddPageToRouterImport(generator, pageName, pageFolderName) {
         {
             file: `${constants.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
             needle: 'jhipster-needle-add-entity-to-router-import',
-            splicable: [generator.stripMargin(
-                // prettier-ignore
-                `|// prettier-ignore
+            splicable: [
+                generator.stripMargin(
+                    // prettier-ignore
+                    `|// prettier-ignore
                 |const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFolderName}.vue');`
-            )]
+                ),
+            ],
         },
         generator
     );
@@ -828,16 +830,18 @@ function vueAddPageToRouter(generator, pageName, pageFolderName) {
         {
             file: `${constants.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
             needle: 'jhipster-needle-add-entity-to-router',
-            splicable: [generator.stripMargin(
-                // prettier-ignore
-                `|
+            splicable: [
+                generator.stripMargin(
+                    // prettier-ignore
+                    `|
                 |    {
                 |      path: '/pages/${pageFolderName}',
                 |      name: '${pageName}',
                 |      component: ${pageName},
                 |      meta: { authorities: [Authority.USER] }
                 |    },`
-            )]
+                ),
+            ],
         },
         generator
     );
@@ -848,10 +852,12 @@ function vueAddPageServiceToMainImport(generator, pageName, pageFolderName) {
         {
             file: `${constants.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
             needle: 'jhipster-needle-add-entity-service-to-main-import',
-            splicable: [generator.stripMargin(
-                // prettier-ignore
-                `|import ${pageName}Service from '@/pages/${pageFolderName}/${pageFolderName}.service';`
-            )]
+            splicable: [
+                generator.stripMargin(
+                    // prettier-ignore
+                    `|import ${pageName}Service from '@/pages/${pageFolderName}/${pageFolderName}.service';`
+                ),
+            ],
         },
         generator
     );
@@ -862,10 +868,12 @@ function vueAddPageServiceToMain(generator, pageName, pageInstance) {
         {
             file: `${constants.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
             needle: 'jhipster-needle-add-entity-service-to-main',
-            splicable: [generator.stripMargin(
-                // prettier-ignore
-                `|${pageInstance}Service: () => new ${pageName}Service(),`
-            )]
+            splicable: [
+                generator.stripMargin(
+                    // prettier-ignore
+                    `|${pageInstance}Service: () => new ${pageName}Service(),`
+                ),
+            ],
         },
         generator
     );
@@ -876,7 +884,7 @@ function vueAddPageProtractorConf(generator, pageFolderName) {
         {
             file: `${constants.CLIENT_TEST_SRC_DIR}/protractor.conf.js`,
             needle: 'jhipster-needle-add-protractor-tests',
-            splicable: [generator.stripMargin('\'./e2e/pages/**/*.spec.ts\',')]
+            splicable: [generator.stripMargin("'./e2e/pages/**/*.spec.ts',")],
         },
         generator
     );

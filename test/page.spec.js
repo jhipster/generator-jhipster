@@ -46,10 +46,7 @@ describe('Subgenerator page for Vue.js application', () => {
                 `${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
                 `const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFolderName}.vue');`
             );
-            assert.fileContent(
-                `${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
-                `path: '/pages/${pageFolderName}',`
-            );
+            assert.fileContent(`${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`, `path: '/pages/${pageFolderName}',`);
             assert.fileContent(
                 `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
                 `import ${pageName}Service from '@/pages/${pageFolderName}/${pageFolderName}.service';`
