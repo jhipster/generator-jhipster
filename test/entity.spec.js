@@ -572,7 +572,7 @@ describe('JHipster generator for entity', () => {
                         })
                         .withPrompts({
                             useMicroserviceJson: true,
-                            microservicePath: '../',
+                            microservicePath: 'microservice1',
                         })
                         .withArguments(['bar'])
                         .on('end', done);
@@ -604,7 +604,7 @@ describe('JHipster generator for entity', () => {
                         .withArguments(['foo'])
                         .withPrompts({
                             useMicroserviceJson: true,
-                            microservicePath: '../',
+                            microservicePath: 'microservice1',
                         })
                         .on('end', done);
                 });
@@ -630,7 +630,7 @@ describe('JHipster generator for entity', () => {
                         .withArguments(['baz'])
                         .withPrompts({
                             useMicroserviceJson: true,
-                            microservicePath: '../',
+                            microservicePath: 'microservice1',
                         })
                         .on('end', done);
                 });

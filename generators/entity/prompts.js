@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const path = require('path');
+const fs = require('fs');
 const _ = require('lodash');
-const shelljs = require('shelljs');
 const constants = require('../generator-constants');
 const { isReservedFieldName, isReservedKeyword } = require('../../jdl/jhipster/reserved-keywords');
 
@@ -64,14 +63,7 @@ function askForMicroserviceJson() {
             message: 'Enter the path to the microservice root directory:',
             store: true,
             validate: input => {
-                let fromPath;
-                if (path.isAbsolute(input)) {
-                    fromPath = `${input}/${context.filename}`;
-                } else {
-                    fromPath = this.destinationPath(`${input}/${context.filename}`);
-                }
-
-                if (shelljs.test('-f', fromPath)) {
+                if (fs.existsSync(this.destinationPath(input, context.filename))) {
                     return true;
                 }
                 return `${context.filename} not found in ${input}/`;
@@ -79,18 +71,10 @@ function askForMicroserviceJson() {
         },
     ];
 
-    return this.prompt(prompts).then(props => {
-        if (props.microservicePath) {
+    return this.prompt(prompts).then(answers => {
+        if (answers.microservicePath) {
             this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
-            if (path.isAbsolute(props.microservicePath)) {
-                context.microservicePath = props.microservicePath;
-            } else {
-                context.microservicePath = path.resolve(props.microservicePath);
-            }
-            context.useConfigurationFile = true;
-            context.useMicroserviceJson = true;
-            const fromPath = `${context.microservicePath}/${context.jhipsterConfigDirectory}/${context.entityNameCapitalized}.json`;
-            this.loadEntityJson(fromPath);
+            context.microservicePath = answers.microservicePath;
         }
     });
 }
