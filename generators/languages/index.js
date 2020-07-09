@@ -146,6 +146,10 @@ module.exports = class extends BaseBlueprintGenerator {
             },
             updateLanguages() {
                 if (this.jhipsterConfig.enableTranslation) {
+                    if (this.languagesToApply && !this.jhipsterConfig.languages.includes(this.jhipsterConfig.nativeLanguage)) {
+                        // First time we are generating the native language
+                        this.languagesToApply.unshift(this.jhipsterConfig.nativeLanguage);
+                    }
                     // Concatenate the native language, current languages, and the new languages.
                     this.jhipsterConfig.languages = _.union(
                         [this.jhipsterConfig.nativeLanguage],
