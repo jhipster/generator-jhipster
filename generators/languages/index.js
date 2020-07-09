@@ -26,6 +26,7 @@ const constants = require('../generator-constants');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 let useBlueprints;
 
@@ -194,6 +195,11 @@ module.exports = class extends BaseBlueprintGenerator {
                     }
                     if (this.clientFramework === REACT) {
                         this.updateLanguagesInMomentWebpackReact(this.languages);
+                    }
+                    if (this.clientFramework === VUE) {
+                        this.vueUpdateLanguagesInTranslationStore(this.languages);
+                        this.vueUpdateI18nConfig(this.languages);
+                        this.vueUpdateLanguagesInWebpack(this.languages);
                     }
                 }
                 if (!this.skipUserManagement && !this.skipServer) {

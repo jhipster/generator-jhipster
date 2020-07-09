@@ -1635,4 +1635,122 @@ module.exports = class extends Generator {
             );
         }
     }
+
+    vueUpdateLanguagesInTranslationStore(languages) {
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/shared/config/store/translation-store.ts`;
+        try {
+            let content = 'languages: {\n';
+            if (this.enableTranslation) {
+                this.generateLanguageOptions(languages, this.clientFramework).forEach((ln, i) => {
+                    content += `        ${ln}${i !== languages.length - 1 ? ',' : ''}\n`;
+                });
+            }
+            content += '        // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object\n      }';
+            jhipsterUtils.replaceContent(
+                {
+                    file: fullPath,
+                    pattern: /languages:.*\{([^\]]*jhipster-needle-i18n-language-key-pipe[^}]*)}/g,
+                    content
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ')
+                + fullPath
+                + chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ')
+                + languages
+                + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+    
+    vueUpdateI18nConfig(languages) {
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/shared/config/config.ts`;
+    
+        try {
+            // Add i18n config snippets for all languages
+            let i18nConfig = 'const dateTimeFormats = {\n';
+            if (this.enableTranslation) {
+                languages.forEach((ln, i) => {
+                    i18nConfig += this.generateDateTimeFormat(ln, i, languages.length);
+                });
+            }
+            i18nConfig += '  // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object\n';
+            i18nConfig += '}';
+    
+            jhipsterUtils.replaceContent(
+                {
+                    file: fullPath,
+                    pattern: /const dateTimeFormats.*\{([^\]]*jhipster-needle-i18n-language-date-time-format[^}]*)}/g,
+                    content: i18nConfig
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ')
+                + fullPath
+                + chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ')
+                + languages
+                + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    vueUpdateLanguagesInWebpack(languages) {
+        const fullPath = `${this.CLIENT_WEBPACK_DIR}webpack.common.js`;
+        try {
+            let content = 'groupBy: [\n';
+            languages.forEach((language, i) => {
+                content += `          { pattern: './src/main/webapp/i18n/${language}/*.json', fileName: './i18n/${language}.json' }${
+                    i !== languages.length - 1 ? ',' : ''
+                }\n`;
+            });
+            content += '          // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n'
+                + '        ]';
+    
+            jhipsterUtils.replaceContent(
+                {
+                    file: fullPath,
+                    pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
+                    content
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ')
+                    + fullPath
+                    + chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ')
+                    + languages
+                    + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    generateDateTimeFormat(language, index, length) {
+        let config = `  '${language}': {\n`;
+    
+        config += '    short: {\n';
+        config += '      year: \'numeric\', month: \'short\', day: \'numeric\', hour: \'numeric\', minute: \'numeric\'\n';
+        config += '    },\n';
+        config += '    medium: {\n';
+        config += '      year: \'numeric\', month: \'short\', day: \'numeric\',\n';
+        config += '      weekday: \'short\', hour: \'numeric\', minute: \'numeric\'\n';
+        config += '    },\n';
+        config += '    long: {\n';
+        config += '      year: \'numeric\', month: \'long\', day: \'numeric\',\n';
+        config += '      weekday: \'long\', hour: \'numeric\', minute: \'numeric\'\n';
+        config += '    }\n';
+        config += '  }';
+        if (index !== length - 1) {
+            config += ',';
+        }
+        config += '\n';
+        return config;
+    }
 };
