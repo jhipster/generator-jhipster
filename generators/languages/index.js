@@ -113,8 +113,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     } else {
                         this.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')}`));
                     }
-                } else {
-                    this.log(chalk.bold('\nLanguages configuration is starting'));
                 }
             },
         };
