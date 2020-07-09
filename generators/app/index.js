@@ -396,7 +396,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.composeWith(require.resolve('../languages'), {
                         ...options,
                         configOptions,
-                        skipPrompts: this.options.withEntities || this.options.defaults,
+                        skipPrompts: this.options.withEntities || this.options.existingProject || this.options.defaults,
                         debug: this.isDebugEnabled,
                     });
                 }
