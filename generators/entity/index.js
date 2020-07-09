@@ -33,6 +33,8 @@ const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 
+const stringify = data => JSON.stringify(data, null, 4);
+
 let useBlueprints;
 
 class EntityGenerator extends BaseBlueprintGenerator {
@@ -313,108 +315,62 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 // Validate entity json field content
                 context.fields.forEach(field => {
                     if (_.isUndefined(field.fieldName)) {
-                        this.error(
-                            `fieldName is missing in .jhipster/${entityName}.json for field ${JSON.stringify(field, null, 4)}`
-                        );
+                        this.error(`fieldName is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
                     }
 
                     if (_.isUndefined(field.fieldType)) {
-                        this.error(
-                            `fieldType is missing in .jhipster/${entityName}.json for field ${JSON.stringify(field, null, 4)}`
-                        );
+                        this.error(`fieldType is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
                     }
 
                     if (!_.isUndefined(field.fieldValidateRules)) {
                         if (!_.isArray(field.fieldValidateRules)) {
-                            this.error(
-                                    `fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )}`
-                            );
+                            this.error(`fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringify(field)}`);
                         }
                         field.fieldValidateRules.forEach(fieldValidateRule => {
                             if (!_.includes(SUPPORTED_VALIDATION_RULES, fieldValidateRule)) {
                                 this.error(
-                                        `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                            field,
-                                            null,
-                                            4
-                                        )} [supported validation rules ${SUPPORTED_VALIDATION_RULES}]`
+                                    `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${stringify(
+                                        field
+                                    )} [supported validation rules ${SUPPORTED_VALIDATION_RULES}]`
                                 );
                             }
                         });
                         if (_.includes(field.fieldValidateRules, 'max') && _.isUndefined(field.fieldValidateRulesMax)) {
-                            this.error(
-                                    `fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )}`
-                            );
+                            this.error(`fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
                         }
                         if (_.includes(field.fieldValidateRules, 'min') && _.isUndefined(field.fieldValidateRulesMin)) {
-                            this.error(
-                                    `fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )}`
-                            );
+                            this.error(`fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
                         }
                         if (_.includes(field.fieldValidateRules, 'maxlength') && _.isUndefined(field.fieldValidateRulesMaxlength)) {
                             this.error(
-                                    `fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )}`
+                                `fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
                             );
                         }
                         if (_.includes(field.fieldValidateRules, 'minlength') && _.isUndefined(field.fieldValidateRulesMinlength)) {
                             this.error(
-                                    `fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )}`
+                                `fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
                             );
                         }
                         if (_.includes(field.fieldValidateRules, 'maxbytes') && _.isUndefined(field.fieldValidateRulesMaxbytes)) {
                             this.error(
-                                    `fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )}`
+                                `fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
                             );
                         }
                         if (_.includes(field.fieldValidateRules, 'minbytes') && _.isUndefined(field.fieldValidateRulesMinbytes)) {
                             this.error(
-                                    `fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )}`
+                                `fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
                             );
                         }
                         if (_.includes(field.fieldValidateRules, 'pattern') && _.isUndefined(field.fieldValidateRulesPattern)) {
                             this.error(
-                                    `fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )}`
+                                `fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
                             );
                         }
                         if (field.fieldType === 'ByteBuffer') {
                             this.warning(
-                                    `Cannot use validation in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`
+                                `Cannot use validation in .jhipster/${entityName}.json for field ${stringify(
+                                    field
+                                )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`
                             );
                             field.validation = false;
                             field.fieldValidateRules = [];
@@ -427,21 +383,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     if (_.isUndefined(relationship.relationshipName)) {
                         relationship.relationshipName = relationship.otherEntityName;
                         this.warning(
-                            `relationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
-                                relationship,
-                                null,
-                                4
+                            `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringify(
+                                relationship
                             )}, using ${relationship.otherEntityName} as fallback`
                         );
                     }
 
                     if (_.isUndefined(relationship.otherEntityName)) {
                         this.error(
-                                `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
-                                    relationship,
-                                    null,
-                                    4
-                                )}`
+                            `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`
                         );
                     }
 
@@ -453,10 +403,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         relationship.otherEntityRelationshipName = _.lowerFirst(entityName);
                         if (relationship.otherEntityName !== 'user') {
                             this.warning(
-                                `otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
-                                    relationship,
-                                    null,
-                                    4
+                                `otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${stringify(
+                                    relationship
                                 )}, using ${_.lowerFirst(entityName)} as fallback`
                             );
                         }
@@ -469,10 +417,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true))
                     ) {
                         this.warning(
-                            `otherEntityField is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
-                                relationship,
-                                null,
-                                4
+                            `otherEntityField is missing in .jhipster/${entityName}.json for relationship ${stringify(
+                                relationship
                             )}, using id as fallback`
                         );
                         relationship.otherEntityField = 'id';
@@ -480,11 +426,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                     if (_.isUndefined(relationship.relationshipType)) {
                         this.error(
-                                `relationshipType is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
-                                    relationship,
-                                    null,
-                                    4
-                                )}`
+                            `relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`
                         );
                     }
 
@@ -492,13 +434,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         _.isUndefined(relationship.ownerSide) &&
                         (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-many')
                     ) {
-                        this.error(
-                                `ownerSide is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
-                                    relationship,
-                                    null,
-                                    4
-                                )}`
-                        );
+                        this.error(`ownerSide is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
                     }
                 });
 
@@ -698,7 +634,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         if (isReservedTableName(fieldNameUnderscored, context.prodDatabaseType)) {
                             if (!jhiFieldNamePrefix) {
                                 this.warning(
-                                        `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`
+                                    `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`
                                 );
                                 field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
                             } else {
@@ -812,10 +748,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                                 // otherEntityRelationshipName can be missing
                                 if (!otherRelationship.otherEntityRelationshipName) {
                                     this.warning(
-                                        `Cannot compare relationship reference: otherEntityRelationshipName is missing in .jhipster/${otherEntityName}.json for relationship ${JSON.stringify(
-                                            otherRelationship,
-                                            null,
-                                            4
+                                        `Cannot compare relationship reference: otherEntityRelationshipName is missing in .jhipster/${otherEntityName}.json for relationship ${stringify(
+                                            otherRelationship
                                         )}`
                                     );
                                     return;
@@ -896,7 +830,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             otherEntityName !== 'user'
                         ) {
                             this.warning(
-                                    `This entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
+                                `This entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
                             );
                         }
                     }
@@ -1205,12 +1139,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
         if (isReservedTableName(entityTableName, prodDatabaseType)) {
             if (jhiTablePrefix) {
                 this.warning(
-                        `The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`
+                    `The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`
                 );
                 context.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
             } else {
                 this.warning(
-                        `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.\n${instructions}`
+                    `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.\n${instructions}`
                 );
             }
         } else if (prodDatabaseType === 'oracle' && entityTableName.length > 26 && !skipCheckLengthOfIdentifier) {
