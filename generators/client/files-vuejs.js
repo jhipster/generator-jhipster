@@ -394,7 +394,7 @@ function writeFiles() {
     this.writeFilesToDisk(vueFiles, this, false, `${CLIENT_VUE_TEMPLATES_DIR}`);
 
     if (!this.enableTranslation) {
-        utils.vueReplaceTranslationVue(this, [
+        utils.vueReplaceTranslation(this, [
             'app/app.vue',
             'app/core/home/home.vue',
             'app/core/error/error.vue',
@@ -410,13 +410,13 @@ function writeFiles() {
             'app/admin/metrics/metrics-modal.vue',
         ]);
         if ((this.databaseType !== 'no' || this.authenticationType === 'uaa') && this.databaseType !== 'cassandra') {
-            utils.vueReplaceTranslationVue(this, ['app/admin/audits/audits.vue']);
+            utils.vueReplaceTranslation(this, ['app/admin/audits/audits.vue']);
         }
         if (this.authenticationType !== 'oauth2') {
-            utils.vueReplaceTranslationVue(this, ['app/account/login-form/login-form.vue']);
+            utils.vueReplaceTranslation(this, ['app/account/login-form/login-form.vue']);
         }
         if (!this.skipUserManagement) {
-            utils.vueReplaceTranslationVue(this, [
+            utils.vueReplaceTranslation(this, [
                 'app/account/change-password/change-password.vue',
                 'app/account/activate/activate.vue',
                 'app/account/register/register.vue',
@@ -429,13 +429,13 @@ function writeFiles() {
             ]);
         }
         if (this.authenticationType === 'session' && !this.skipUserManagement) {
-            utils.vueReplaceTranslationVue(this, ['app/account/sessions/sessions.vue']);
+            utils.vueReplaceTranslation(this, ['app/account/sessions/sessions.vue']);
         }
         if (this.applicationType === 'gateway' && this.serviceDiscoveryType) {
-            utils.vueReplaceTranslationVue(this, ['app/admin/gateway/gateway.vue']);
+            utils.vueReplaceTranslation(this, ['app/admin/gateway/gateway.vue']);
         }
         if (this.websocket === 'spring-websocket') {
-            utils.vueReplaceTranslationVue(this, ['app/admin/tracker/tracker.vue']);
+            utils.vueReplaceTranslation(this, ['app/admin/tracker/tracker.vue']);
         }
     }
 }
