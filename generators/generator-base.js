@@ -34,7 +34,6 @@ const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig } = require('./generator-defaults');
-const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;

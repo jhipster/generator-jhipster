@@ -95,10 +95,27 @@ const defaultConfig = {
     ...translationDefaultConfig,
 };
 
+const entityDefaultConfig = {
+    fields: [],
+    relationships: [],
+    pagination: 'no',
+    validation: false,
+    dto: 'no',
+    service: 'no',
+    jpaMetamodelFiltering: false,
+    readOnly: false,
+    embedded: false,
+    skipUiGrouping: false,
+    entityAngularJSSuffix: '',
+    fluentMethods: true,
+    clientRootFolder: '',
+};
+
 module.exports = {
     appDefaultConfig,
     serverDefaultConfig,
     clientDefaultConfig,
     defaultConfig,
     requiredDefaultConfig,
+    entityDefaultConfig,
 };

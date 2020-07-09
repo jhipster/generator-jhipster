@@ -68,14 +68,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.option('fluent-methods', {
             desc: 'Generate fluent methods in entity beans to allow chained object construction',
             type: Boolean,
-            defaults: true,
         });
 
         // This adds support for a `--angular-suffix` flag
         this.option('angular-suffix', {
             desc: 'Use a suffix to generate Angular routes and files, to avoid name clashes',
             type: String,
-            defaults: '',
         });
 
         // This adds support for a `--client-root-folder` flag
@@ -83,14 +81,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
             desc:
                 'Use a root folder name for entities on client side. By default its empty for monoliths and name of the microservice for gateways',
             type: String,
-            defaults: '',
         });
 
         // This adds support for a `--skip-ui-grouping` flag
         this.option('skip-ui-grouping', {
             desc: 'Disables the UI grouping behaviour for entity client side code',
             type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--skip-server` flag
@@ -132,7 +128,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
             return;
         }
 
-        const name = _.upperFirst(this.options.name);
+        const name = _.upperFirst(this.options.name).replace('.json', '');
         this.context = { name };
         this.entityStorage = this.getEntityConfig(name);
         this.entityConfig = this.entityStorage.createProxy();
@@ -172,7 +168,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
             },
             loadEntitySpecificOptions() {
                 const fileData = this.context.fileData || {};
-                context.skipClient = context.skipClient || fileData.skipClient;
+                this.context.skipClient = this.context.skipClient || fileData.skipClient;
             },
             setupSharedConfig() {
                 const context = this.context;
@@ -267,6 +263,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     jpaMetamodelFiltering: false,
                     readOnly: false,
                     embedded: false,
+                    // enum-specific consts
+                    enums: [],
+
+                    existingEnum: false,
+
+                    fieldNamesUnderscored: ['id'],
+                    // these variable hold field and relationship names for question options during update
+                    fieldNameChoices: [],
+                    relNameChoices: [],
                 });
             },
 
@@ -584,7 +589,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 storageData.entityTableName = context.entityTableName;
                 storageData.databaseType = context.databaseType;
                 storageData.readOnly = context.readOnly;
-                this.copyFilteringFlag(context, storageData, context);
+                this._copyFilteringFlag(context, storageData, context);
                 if (['sql', 'mongodb', 'couchbase', 'neo4j'].includes(context.databaseType)) {
                     storageData.pagination = context.pagination;
                 } else {
@@ -1019,7 +1024,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                     }
                     if (otherEntityData) {
-                        this.copyFilteringFlag(otherEntityData, relationship, { ...otherEntityData, databaseType: context.databaseType });
+                        this._copyFilteringFlag(otherEntityData, relationship, { ...otherEntityData, databaseType: context.databaseType });
                     }
                     // Load in-memory data for root
                     if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) {
@@ -1292,35 +1297,46 @@ class EntityGenerator extends BaseBlueprintGenerator {
      * @param {any} dest - destination context to use default is context
      */
     _setupEntityOptions(generator, context = generator, dest = context) {
-        dest.name = context.options.name;
-        // remove extension if feeding json files
-        if (dest.name !== undefined) {
-            dest.name = dest.name.replace('.json', '');
-        }
-
         dest.regenerate = context.options.regenerate;
-        dest.fluentMethods = context.options['fluent-methods'];
-        dest.skipCheckLengthOfIdentifier = context.options['skip-check-length-of-identifier'];
-        dest.entityTableName = generator.getTableName(context.options['table-name'] || dest.name);
-        dest.entityNameCapitalized = _.upperFirst(dest.name);
-        dest.entityAngularJSSuffix = context.options['angular-suffix'];
-        dest.skipUiGrouping = context.options['skip-ui-grouping'];
-        dest.clientRootFolder = context.options['skip-ui-grouping'] ? '' : context.options['client-root-folder'];
+
+        if (context.options.fluentMethods !== undefined) {
+            this.entityConfig.fluentMethods = context.options.fluentMethods;
+        }
+        if (context.options.fluentMethods !== undefined) {
+            this.entityConfig.skipCheckLengthOfIdentifier = context.options.skipCheckLengthOfIdentifier;
+        }
+        if (context.options.fluentMethods !== undefined) {
+            this.entityConfig.entityAngularJSSuffix = context.options.angularSuffix;
+        }
+        if (context.options.fluentMethods !== undefined) {
+            this.entityConfig.skipUiGrouping = context.options.skipUiGrouping;
+        }
+        if (context.options.fluentMethods !== undefined) {
+            this.entityConfig.clientRootFolder = context.options.skipUiGrouping ? '' : context.options.clientRootFolder;
+        }
         dest.isDebugEnabled = context.options.debug;
         dest.experimental = context.options.experimental;
+
+        dest.entityNameCapitalized = _.upperFirst(dest.name);
+        dest.entityTableName = generator.getTableName(context.options.tableName || dest.name);
         if (dest.entityAngularJSSuffix && !dest.entityAngularJSSuffix.startsWith('-')) {
             dest.entityAngularJSSuffix = `-${dest.entityAngularJSSuffix}`;
         }
-        dest.rootDir = generator.destinationRoot();
-        // enum-specific consts
-        dest.enums = [];
+    }
 
-        dest.existingEnum = false;
-
-        dest.fieldNamesUnderscored = ['id'];
-        // these variable hold field and relationship names for question options during update
-        dest.fieldNameChoices = [];
-        dest.relNameChoices = [];
+    /**
+     * Copy Filtering Flag
+     *
+     * @param {any} from - from
+     * @param {any} to - to
+     * @param {any} context - generator context
+     */
+    _copyFilteringFlag(from, to, context = this) {
+        if (context.databaseType === 'sql' && context.service !== 'no') {
+            to.jpaMetamodelFiltering = from.jpaMetamodelFiltering;
+        } else {
+            to.jpaMetamodelFiltering = false;
+        }
     }
 
     /**
@@ -1340,11 +1356,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
         context.relationships = context.fileData.relationships || [];
         context.fields = context.fileData.fields || [];
         context.haveFieldWithJavadoc = false;
-        context.fields.forEach(field => {
-            if (field.javadoc) {
-                context.haveFieldWithJavadoc = true;
-            }
-        });
         context.changelogDate = context.fileData.changelogDate;
         context.dto = context.fileData.dto;
         context.service = context.fileData.service;
@@ -1360,7 +1371,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
         context.skipClient = context.fileData.skipClient || context.skipClient;
         context.readOnly = context.fileData.readOnly || false;
         context.embedded = context.fileData.embedded || false;
-        this.copyFilteringFlag(context.fileData, context, context);
+
+        context.fields.forEach(field => {
+            if (field.javadoc) {
+                context.haveFieldWithJavadoc = true;
+            }
+        });
+        this._copyFilteringFlag(context.fileData, context, context);
         if (_.isUndefined(context.entityTableName)) {
             this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
             context.entityTableName = this.getTableName(context.name);
