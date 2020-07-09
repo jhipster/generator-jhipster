@@ -141,9 +141,9 @@ jobs:
               with:
                   java-version: '11.x'
             - name: 'TOOLS: configure tools installed by the system'
-              run: $VUEJS_JHI_SCRIPTS/03-system.sh
+              run: $JHI_SCRIPTS/03-system.sh
             - name: 'TOOLS: configure git'
-              run: $VUEJS_JHI_SCRIPTS/04-git-config.sh
+              run: $JHI_SCRIPTS/04-git-config.sh
             #----------------------------------------------------------------------
             # Install JHipster and generate project+entities
             #----------------------------------------------------------------------
