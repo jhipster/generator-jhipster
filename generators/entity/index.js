@@ -314,20 +314,20 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const entityName = context.name;
                 // Validate entity json field content
                 context.fields.forEach(field => {
-                    if (_.isUndefined(field.fieldName)) {
+                    if (field.fieldName === undefined) {
                         this.error(`fieldName is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
                     }
 
-                    if (_.isUndefined(field.fieldType)) {
+                    if (field.fieldType === undefined) {
                         this.error(`fieldType is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
                     }
 
-                    if (!_.isUndefined(field.fieldValidateRules)) {
-                        if (!_.isArray(field.fieldValidateRules)) {
+                    if (field.fieldValidateRules !== undefined) {
+                        if (!Array.isArray(field.fieldValidateRules)) {
                             this.error(`fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringify(field)}`);
                         }
                         field.fieldValidateRules.forEach(fieldValidateRule => {
-                            if (!_.includes(SUPPORTED_VALIDATION_RULES, fieldValidateRule)) {
+                            if (!SUPPORTED_VALIDATION_RULES.includes(fieldValidateRule)) {
                                 this.error(
                                     `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${stringify(
                                         field
@@ -335,33 +335,33 @@ class EntityGenerator extends BaseBlueprintGenerator {
                                 );
                             }
                         });
-                        if (_.includes(field.fieldValidateRules, 'max') && _.isUndefined(field.fieldValidateRulesMax)) {
+                        if (field.fieldValidateRules.includes('max') && field.fieldValidateRulesMax === undefined) {
                             this.error(`fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
                         }
-                        if (_.includes(field.fieldValidateRules, 'min') && _.isUndefined(field.fieldValidateRulesMin)) {
+                        if (field.fieldValidateRules.includes('min') && field.fieldValidateRulesMin === undefined) {
                             this.error(`fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
                         }
-                        if (_.includes(field.fieldValidateRules, 'maxlength') && _.isUndefined(field.fieldValidateRulesMaxlength)) {
+                        if (field.fieldValidateRules.includes('maxlength') && field.fieldValidateRulesMaxlength === undefined) {
                             this.error(
                                 `fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
                             );
                         }
-                        if (_.includes(field.fieldValidateRules, 'minlength') && _.isUndefined(field.fieldValidateRulesMinlength)) {
+                        if (field.fieldValidateRules.includes('minlength') && field.fieldValidateRulesMinlength === undefined) {
                             this.error(
                                 `fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
                             );
                         }
-                        if (_.includes(field.fieldValidateRules, 'maxbytes') && _.isUndefined(field.fieldValidateRulesMaxbytes)) {
+                        if (field.fieldValidateRules.includes('maxbytes') && field.fieldValidateRulesMaxbytes === undefined) {
                             this.error(
                                 `fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
                             );
                         }
-                        if (_.includes(field.fieldValidateRules, 'minbytes') && _.isUndefined(field.fieldValidateRulesMinbytes)) {
+                        if (field.fieldValidateRules.includes('minbytes') && field.fieldValidateRulesMinbytes === undefined) {
                             this.error(
                                 `fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
                             );
                         }
-                        if (_.includes(field.fieldValidateRules, 'pattern') && _.isUndefined(field.fieldValidateRulesPattern)) {
+                        if (field.fieldValidateRules.includes('pattern') && field.fieldValidateRulesPattern === undefined) {
                             this.error(
                                 `fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
                             );
@@ -380,7 +380,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                 // Validate entity json relationship content
                 context.relationships.forEach(relationship => {
-                    if (_.isUndefined(relationship.relationshipName)) {
+                    if (relationship.relationshipName === undefined) {
                         relationship.relationshipName = relationship.otherEntityName;
                         this.warning(
                             `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringify(
@@ -389,15 +389,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         );
                     }
 
-                    if (_.isUndefined(relationship.otherEntityName)) {
+                    if (relationship.otherEntityName === undefined) {
                         this.error(
                             `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`
                         );
                     }
 
                     if (
-                        _.isUndefined(relationship.otherEntityRelationshipName) &&
-                        _.isUndefined(relationship.relationshipType) === false &&
+                        relationship.otherEntityRelationshipName === undefined &&
+                        (relationship.relationshipType === undefined) === false &&
                         relationship.relationshipType !== ''
                     ) {
                         relationship.otherEntityRelationshipName = _.lowerFirst(entityName);
@@ -411,7 +411,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
 
                     if (
-                        _.isUndefined(relationship.otherEntityField) &&
+                        relationship.otherEntityField === undefined &&
                         (relationship.relationshipType === 'many-to-one' ||
                             (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === true) ||
                             (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true))
@@ -424,14 +424,14 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         relationship.otherEntityField = 'id';
                     }
 
-                    if (_.isUndefined(relationship.relationshipType)) {
+                    if (relationship.relationshipType === undefined) {
                         this.error(
                             `relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`
                         );
                     }
 
                     if (
-                        _.isUndefined(relationship.ownerSide) &&
+                        relationship.ownerSide === undefined &&
                         (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-many')
                     ) {
                         this.error(`ownerSide is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
@@ -439,24 +439,24 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 });
 
                 // Validate root entity json content
-                if (_.isUndefined(context.changelogDate) && ['sql', 'cassandra'].includes(context.databaseType)) {
+                if (context.changelogDate === undefined && ['sql', 'cassandra'].includes(context.databaseType)) {
                     const currentDate = this.dateFormatForLiquibase();
                     this.warning(`changelogDate is missing in .jhipster/${entityName}.json, using ${currentDate} as fallback`);
                     context.changelogDate = currentDate;
                 }
-                if (_.isUndefined(context.dto)) {
+                if (context.dto === undefined) {
                     this.warning(`dto is missing in .jhipster/${entityName}.json, using no as fallback`);
                     context.dto = 'no';
                 }
-                if (_.isUndefined(context.service)) {
+                if (context.service === undefined) {
                     this.warning(`service is missing in .jhipster/${entityName}.json, using no as fallback`);
                     context.service = 'no';
                 }
-                if (_.isUndefined(context.jpaMetamodelFiltering)) {
+                if (context.jpaMetamodelFiltering === undefined) {
                     this.warning(`jpaMetamodelFiltering is missing in .jhipster/${entityName}.json, using 'no' as fallback`);
                     context.jpaMetamodelFiltering = false;
                 }
-                if (_.isUndefined(context.pagination)) {
+                if (context.pagination === undefined) {
                     this.warning(`pagination is missing in .jhipster/${entityName}.json, using no as fallback`);
                     context.pagination = 'no';
                 }
@@ -474,7 +474,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     return; // do not update if regenerating entity
                 }
                 // store information in a file for further use.
-                if (_.isUndefined(context.changelogDate) && ['sql', 'cassandra', 'couchbase'].includes(context.databaseType)) {
+                if (context.changelogDate === undefined && ['sql', 'cassandra', 'couchbase'].includes(context.databaseType)) {
                     context.changelogDate = this.dateFormatForLiquibase();
                 }
 
@@ -620,15 +620,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         context.i18nToLoad.push(field.enumInstance);
                     }
 
-                    if (_.isUndefined(field.fieldNameCapitalized)) {
+                    if (field.fieldNameCapitalized === undefined) {
                         field.fieldNameCapitalized = _.upperFirst(field.fieldName);
                     }
 
-                    if (_.isUndefined(field.fieldNameUnderscored)) {
+                    if (field.fieldNameUnderscored === undefined) {
                         field.fieldNameUnderscored = _.snakeCase(field.fieldName);
                     }
 
-                    if (_.isUndefined(field.fieldNameAsDatabaseColumn)) {
+                    if (field.fieldNameAsDatabaseColumn === undefined) {
                         const fieldNameUnderscored = _.snakeCase(field.fieldName);
                         const jhiFieldNamePrefix = this.getColumnName(context.jhiPrefix);
                         if (isReservedTableName(fieldNameUnderscored, context.prodDatabaseType)) {
@@ -645,11 +645,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                     }
 
-                    if (_.isUndefined(field.fieldNameHumanized)) {
+                    if (field.fieldNameHumanized === undefined) {
                         field.fieldNameHumanized = fieldOptions.fieldNameHumanized || _.startCase(field.fieldName);
                     }
 
-                    if (_.isUndefined(field.fieldInJavaBeanMethod)) {
+                    if (field.fieldInJavaBeanMethod === undefined) {
                         // Handle the specific case when the second letter is capitalized
                         // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
                         if (field.fieldName.length > 1) {
@@ -665,25 +665,25 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                     }
 
-                    if (_.isUndefined(field.fieldValidateRulesPatternJava)) {
+                    if (field.fieldValidateRulesPatternJava === undefined) {
                         field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern
                             ? field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
                             : field.fieldValidateRulesPattern;
                     }
 
-                    if (_.isUndefined(field.fieldValidateRulesPatternAngular)) {
+                    if (field.fieldValidateRulesPatternAngular === undefined) {
                         field.fieldValidateRulesPatternAngular = field.fieldValidateRulesPattern
                             ? field.fieldValidateRulesPattern.replace(/"/g, '&#34;')
                             : field.fieldValidateRulesPattern;
                     }
 
-                    if (_.isUndefined(field.fieldValidateRulesPatternReact)) {
+                    if (field.fieldValidateRulesPatternReact === undefined) {
                         field.fieldValidateRulesPatternReact = field.fieldValidateRulesPattern
                             ? field.fieldValidateRulesPattern.replace(/'/g, "\\'")
                             : field.fieldValidateRulesPattern;
                     }
 
-                    field.fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
+                    field.fieldValidate = Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
 
                     if (fieldType === 'ZonedDateTime') {
                         context.fieldsContainZonedDateTime = true;
@@ -778,27 +778,27 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                     }
 
-                    if (!_.isUndefined(relationship.otherEntityRelationshipName)) {
-                        if (_.isUndefined(relationship.otherEntityRelationshipNamePlural)) {
+                    if (relationship.otherEntityRelationshipName !== undefined) {
+                        if (relationship.otherEntityRelationshipNamePlural === undefined) {
                             relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
                         }
 
-                        if (_.isUndefined(relationship.otherEntityRelationshipNameCapitalized)) {
+                        if (relationship.otherEntityRelationshipNameCapitalized === undefined) {
                             relationship.otherEntityRelationshipNameCapitalized = _.upperFirst(relationship.otherEntityRelationshipName);
                         }
 
-                        if (_.isUndefined(relationship.otherEntityRelationshipNameCapitalizedPlural)) {
+                        if (relationship.otherEntityRelationshipNameCapitalizedPlural === undefined) {
                             relationship.otherEntityRelationshipNameCapitalizedPlural = pluralize(
                                 _.upperFirst(relationship.otherEntityRelationshipName)
                             );
                         }
                     }
 
-                    if (_.isUndefined(relationship.relationshipNameCapitalized)) {
+                    if (relationship.relationshipNameCapitalized === undefined) {
                         relationship.relationshipNameCapitalized = _.upperFirst(relationship.relationshipName);
                     }
 
-                    if (_.isUndefined(relationship.relationshipNameCapitalizedPlural)) {
+                    if (relationship.relationshipNameCapitalizedPlural === undefined) {
                         if (relationship.relationshipName.length > 1) {
                             relationship.relationshipNameCapitalizedPlural = pluralize(_.upperFirst(relationship.relationshipName));
                         } else {
@@ -806,20 +806,20 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                     }
 
-                    if (_.isUndefined(relationship.relationshipNameHumanized)) {
+                    if (relationship.relationshipNameHumanized === undefined) {
                         relationship.relationshipNameHumanized =
                             relationshipOptions.relationshipNameHumanized || _.startCase(relationship.relationshipName);
                     }
 
-                    if (_.isUndefined(relationship.relationshipNamePlural)) {
+                    if (relationship.relationshipNamePlural === undefined) {
                         relationship.relationshipNamePlural = pluralize(relationship.relationshipName);
                     }
 
-                    if (_.isUndefined(relationship.relationshipFieldName)) {
+                    if (relationship.relationshipFieldName === undefined) {
                         relationship.relationshipFieldName = _.lowerFirst(relationship.relationshipName);
                     }
 
-                    if (_.isUndefined(relationship.relationshipFieldNamePlural)) {
+                    if (relationship.relationshipFieldNamePlural === undefined) {
                         relationship.relationshipFieldNamePlural = pluralize(_.lowerFirst(relationship.relationshipName));
                     }
 
@@ -849,15 +849,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                     }
 
-                    if (_.isUndefined(relationship.otherEntityNamePlural)) {
+                    if (relationship.otherEntityNamePlural === undefined) {
                         relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);
                     }
 
-                    if (_.isUndefined(relationship.otherEntityNameCapitalized)) {
+                    if (relationship.otherEntityNameCapitalized === undefined) {
                         relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
                     }
 
-                    if (_.isUndefined(relationship.otherEntityAngularName)) {
+                    if (relationship.otherEntityAngularName === undefined) {
                         if (relationship.otherEntityNameCapitalized !== 'User') {
                             const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
                             relationship.otherEntityAngularName =
@@ -867,18 +867,18 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                     }
 
-                    if (_.isUndefined(relationship.otherEntityNameCapitalizedPlural)) {
+                    if (relationship.otherEntityNameCapitalizedPlural === undefined) {
                         relationship.otherEntityNameCapitalizedPlural = pluralize(_.upperFirst(relationship.otherEntityName));
                     }
 
-                    if (_.isUndefined(relationship.otherEntityFieldCapitalized)) {
+                    if (relationship.otherEntityFieldCapitalized === undefined) {
                         relationship.otherEntityFieldCapitalized = _.upperFirst(relationship.otherEntityField);
                     }
 
-                    if (_.isUndefined(relationship.otherEntityStateName)) {
+                    if (relationship.otherEntityStateName === undefined) {
                         relationship.otherEntityStateName = _.kebabCase(relationship.otherEntityAngularName);
                     }
-                    if (_.isUndefined(relationship.otherEntityModuleName)) {
+                    if (relationship.otherEntityModuleName === undefined) {
                         if (relationship.otherEntityNameCapitalized !== 'User') {
                             relationship.otherEntityModuleName = `${
                                 context.angularXAppName + relationship.otherEntityNameCapitalized
@@ -1254,7 +1254,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         context.fluentMethods = context.fileData.fluentMethods;
         context.clientRootFolder = context.fileData.clientRootFolder;
         context.pagination = context.fileData.pagination;
-        context.searchEngine = _.isUndefined(context.fileData.searchEngine) ? context.searchEngine : context.fileData.searchEngine;
+        context.searchEngine = context.fileData.searchEngine === undefined ? context.searchEngine : context.fileData.searchEngine;
         context.javadoc = context.fileData.javadoc;
         context.entityTableName = context.fileData.entityTableName;
         context.jhiPrefix = context.fileData.jhiPrefix || context.jhiPrefix;
@@ -1270,7 +1270,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
             }
         });
         this._copyFilteringFlag(context.fileData, context, context);
-        if (_.isUndefined(context.entityTableName)) {
+        if (context.entityTableName === undefined) {
             this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
             context.entityTableName = this.getTableName(context.name);
         }
@@ -1290,7 +1290,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         if (context.fileData.angularJSSuffix !== undefined) {
             context.entityAngularJSSuffix = context.fileData.angularJSSuffix;
         }
-        context.useMicroserviceJson = context.useMicroserviceJson || !_.isUndefined(context.fileData.microserviceName);
+        context.useMicroserviceJson = context.useMicroserviceJson || context.fileData.microserviceName !== undefined;
         if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
             context.microserviceName = context.fileData.microserviceName;
             if (!context.microserviceName) {
