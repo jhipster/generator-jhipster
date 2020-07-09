@@ -202,9 +202,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
             validateReactiveCompatibility() {
                 if (this.context.reactive && !['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(this.context.databaseType)) {
                     this.error(
-                        chalk.red(
-                            `The entity generator doesn't support reactive apps with databases of type ${this.context.databaseType} at the moment`
-                        )
+                        `The entity generator doesn't support reactive apps with databases of type ${this.context.databaseType} at the moment`
                     );
                 }
             },
@@ -322,127 +320,107 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.fields.forEach(field => {
                     if (_.isUndefined(field.fieldName)) {
                         this.error(
-                            chalk.red(`fieldName is missing in .jhipster/${entityName}.json for field ${JSON.stringify(field, null, 4)}`)
+                            `fieldName is missing in .jhipster/${entityName}.json for field ${JSON.stringify(field, null, 4)}`
                         );
                     }
 
                     if (_.isUndefined(field.fieldType)) {
                         this.error(
-                            chalk.red(`fieldType is missing in .jhipster/${entityName}.json for field ${JSON.stringify(field, null, 4)}`)
+                            `fieldType is missing in .jhipster/${entityName}.json for field ${JSON.stringify(field, null, 4)}`
                         );
                     }
 
                     if (!_.isUndefined(field.fieldValidateRules)) {
                         if (!_.isArray(field.fieldValidateRules)) {
                             this.error(
-                                chalk.red(
                                     `fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${JSON.stringify(
                                         field,
                                         null,
                                         4
                                     )}`
-                                )
                             );
                         }
                         field.fieldValidateRules.forEach(fieldValidateRule => {
                             if (!_.includes(SUPPORTED_VALIDATION_RULES, fieldValidateRule)) {
                                 this.error(
-                                    chalk.red(
                                         `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${JSON.stringify(
                                             field,
                                             null,
                                             4
                                         )} [supported validation rules ${SUPPORTED_VALIDATION_RULES}]`
-                                    )
                                 );
                             }
                         });
                         if (_.includes(field.fieldValidateRules, 'max') && _.isUndefined(field.fieldValidateRulesMax)) {
                             this.error(
-                                chalk.red(
                                     `fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
                                         field,
                                         null,
                                         4
                                     )}`
-                                )
                             );
                         }
                         if (_.includes(field.fieldValidateRules, 'min') && _.isUndefined(field.fieldValidateRulesMin)) {
                             this.error(
-                                chalk.red(
                                     `fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
                                         field,
                                         null,
                                         4
                                     )}`
-                                )
                             );
                         }
                         if (_.includes(field.fieldValidateRules, 'maxlength') && _.isUndefined(field.fieldValidateRulesMaxlength)) {
                             this.error(
-                                chalk.red(
                                     `fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
                                         field,
                                         null,
                                         4
                                     )}`
-                                )
                             );
                         }
                         if (_.includes(field.fieldValidateRules, 'minlength') && _.isUndefined(field.fieldValidateRulesMinlength)) {
                             this.error(
-                                chalk.red(
                                     `fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
                                         field,
                                         null,
                                         4
                                     )}`
-                                )
                             );
                         }
                         if (_.includes(field.fieldValidateRules, 'maxbytes') && _.isUndefined(field.fieldValidateRulesMaxbytes)) {
                             this.error(
-                                chalk.red(
                                     `fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
                                         field,
                                         null,
                                         4
                                     )}`
-                                )
                             );
                         }
                         if (_.includes(field.fieldValidateRules, 'minbytes') && _.isUndefined(field.fieldValidateRulesMinbytes)) {
                             this.error(
-                                chalk.red(
                                     `fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
                                         field,
                                         null,
                                         4
                                     )}`
-                                )
                             );
                         }
                         if (_.includes(field.fieldValidateRules, 'pattern') && _.isUndefined(field.fieldValidateRulesPattern)) {
                             this.error(
-                                chalk.red(
                                     `fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
                                         field,
                                         null,
                                         4
                                     )}`
-                                )
                             );
                         }
                         if (field.fieldType === 'ByteBuffer') {
                             this.warning(
-                                chalk.red(
                                     `Cannot use validation in .jhipster/${entityName}.json for field ${JSON.stringify(
                                         field,
                                         null,
                                         4
                                     )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`
-                                )
                             );
                             field.validation = false;
                             field.fieldValidateRules = [];
@@ -465,13 +443,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                     if (_.isUndefined(relationship.otherEntityName)) {
                         this.error(
-                            chalk.red(
                                 `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
                                     relationship,
                                     null,
                                     4
                                 )}`
-                            )
                         );
                     }
 
@@ -510,13 +486,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                     if (_.isUndefined(relationship.relationshipType)) {
                         this.error(
-                            chalk.red(
                                 `relationshipType is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
                                     relationship,
                                     null,
                                     4
                                 )}`
-                            )
                         );
                     }
 
@@ -525,13 +499,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-many')
                     ) {
                         this.error(
-                            chalk.red(
                                 `ownerSide is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
                                     relationship,
                                     null,
                                     4
                                 )}`
-                            )
                         );
                     }
                 });
@@ -732,9 +704,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         if (isReservedTableName(fieldNameUnderscored, context.prodDatabaseType)) {
                             if (!jhiFieldNamePrefix) {
                                 this.warning(
-                                    chalk.red(
                                         `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`
-                                    )
                                 );
                                 field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
                             } else {
@@ -932,9 +902,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             otherEntityName !== 'user'
                         ) {
                             this.warning(
-                                chalk.red(
                                     `This entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
-                                )
                             );
                         }
                     }
@@ -1044,7 +1012,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                     if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes('required')) {
                         if (entityName.toLowerCase() === relationship.otherEntityName.toLowerCase()) {
-                            this.warning(chalk.red('Required relationships to the same entity are not supported.'));
+                            this.warning('Required relationships to the same entity are not supported.');
                         } else {
                             relationship.relationshipValidate = relationship.relationshipRequired = context.validation = true;
                         }
@@ -1243,16 +1211,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
         if (isReservedTableName(entityTableName, prodDatabaseType)) {
             if (jhiTablePrefix) {
                 this.warning(
-                    chalk.red(
                         `The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`
-                    )
                 );
                 context.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
             } else {
                 this.warning(
-                    chalk.red(
                         `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.\n${instructions}`
-                    )
                 );
             }
         } else if (prodDatabaseType === 'oracle' && entityTableName.length > 26 && !skipCheckLengthOfIdentifier) {
