@@ -26,6 +26,7 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { isReservedClassName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
+const { entityDefaultConfig } = require('../generator-defaults');
 
 /* constants used throughout */
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
@@ -241,26 +242,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
                 }
 
-                // Specific Entity sub-generator constants
-                if (!context.useConfigurationFile) {
-                    // no file present, new entity creation
-                    this.log(`\nThe entity ${entityName} is being created.\n`);
-                } else {
-                    // existing entity reading values from file
-                    this.log(`\nThe entity ${entityName} is being updated.\n`);
-                    this._loadEntityJson(context.microserviceFileName || context.filename);
-                }
                 _.defaults(context, {
-                    fields: [],
                     haveFieldWithJavadoc: false,
-                    relationships: [],
-                    pagination: 'no',
-                    validation: false,
-                    dto: 'no',
-                    service: 'no',
-                    jpaMetamodelFiltering: false,
-                    readOnly: false,
-                    embedded: false,
                     // enum-specific consts
                     enums: [],
 
@@ -271,6 +254,17 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     fieldNameChoices: [],
                     relNameChoices: [],
                 });
+
+                // Specific Entity sub-generator constants
+                if (!context.useConfigurationFile) {
+                    // no file present, new entity creation
+                    this.log(`\nThe entity ${entityName} is being created.\n`);
+                } else {
+                    // existing entity reading values from file
+                    this.log(`\nThe entity ${entityName} is being updated.\n`);
+                    this._loadEntityJson(context.microserviceFileName || context.filename);
+                }
+                _.defaults(context, entityDefaultConfig);
             },
 
             validateTableName() {
@@ -1266,16 +1260,16 @@ class EntityGenerator extends BaseBlueprintGenerator {
         if (context.options.fluentMethods !== undefined) {
             this.entityConfig.fluentMethods = context.options.fluentMethods;
         }
-        if (context.options.fluentMethods !== undefined) {
+        if (context.options.skipCheckLengthOfIdentifier !== undefined) {
             this.entityConfig.skipCheckLengthOfIdentifier = context.options.skipCheckLengthOfIdentifier;
         }
-        if (context.options.fluentMethods !== undefined) {
-            this.entityConfig.entityAngularJSSuffix = context.options.angularSuffix;
+        if (context.options.angularSuffix !== undefined) {
+            this.entityConfig.angularJSSuffix = context.options.angularSuffix;
         }
-        if (context.options.fluentMethods !== undefined) {
+        if (context.options.skipUiGrouping !== undefined) {
             this.entityConfig.skipUiGrouping = context.options.skipUiGrouping;
         }
-        if (context.options.fluentMethods !== undefined) {
+        if (context.options.clientRootFolder !== undefined) {
             this.entityConfig.clientRootFolder = context.options.skipUiGrouping ? '' : context.options.clientRootFolder;
         }
         dest.isDebugEnabled = context.options.debug;
@@ -1283,8 +1277,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
         dest.entityNameCapitalized = _.upperFirst(dest.name);
         dest.entityTableName = generator.getTableName(context.options.tableName || dest.name);
-        if (dest.entityAngularJSSuffix && !dest.entityAngularJSSuffix.startsWith('-')) {
-            dest.entityAngularJSSuffix = `-${dest.entityAngularJSSuffix}`;
+        if (this.entityConfig.angularJSSuffix && !this.entityConfig.angularJSSuffix.startsWith('-')) {
+            this.entityConfig.angularJSSuffix = `-${this.entityConfig.angularJSSuffix}`;
         }
     }
 

@@ -355,8 +355,7 @@ describe('JHipster generator for entity', () => {
                             fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                         })
                         .withArguments(['foo'])
-                        .withOptions({ clientRootFolder: 'test-root' })
-                        .withOptions({ 'angular-suffix': 'management' })
+                        .withOptions({ clientRootFolder: 'test-root', angularSuffix: 'management' })
                         .withPrompts({
                             fieldAdd: false,
                             relationshipAdd: false,
