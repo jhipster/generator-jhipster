@@ -132,14 +132,17 @@ class EntityGenerator extends BaseBlueprintGenerator {
         }
 
         const name = _.upperFirst(this.options.name).replace('.json', '');
-        this.context = { name };
         this.entityStorage = this.getEntityConfig(name);
         this.entityConfig = this.entityStorage.createProxy();
+
+        const entityExisted = this.options.entityExisted !== undefined ? this.options.entityExisted : this.entityStorage.existed;
+
+        this.context = { name, entityExisted };
 
         this._setupEntityOptions(this, this, this.context);
         this.registerPrettierTransform();
 
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity', { arguments: [name] });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity', { entityExisted, arguments: [name] });
     }
 
     // Public API method used by the getter and also by Blueprints

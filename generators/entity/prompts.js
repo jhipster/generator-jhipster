@@ -42,7 +42,7 @@ module.exports = {
 
 function askForMicroserviceJson() {
     const context = this.context;
-    if (context.applicationType !== 'gateway' || context.useConfigurationFile) {
+    if (context.applicationType !== 'gateway' || context.entityExisted) {
         return undefined;
     }
 
