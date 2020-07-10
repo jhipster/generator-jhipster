@@ -333,7 +333,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
                 this.jhipsterConfig.otherModules = this.otherModules;
 
-                this.configOptions.skipI18nQuestion = true;
                 this.configOptions.logo = false;
                 if (this.jhipsterConfig.applicationType === 'microservice') {
                     this.skipClient = this.jhipsterConfig.skipClient = true;
@@ -344,20 +343,27 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.jhipsterConfig.skipUserManagement = false;
                     this.jhipsterConfig.authenticationType = 'uaa';
                 }
-                this.generatorType = 'app';
-                if (this.skipClient) {
-                    // defaults to use when skipping client
-                    this.generatorType = 'server';
-                }
-                if (this.skipServer) {
-                    // defaults to use when skipping server
-                    this.generatorType = 'client';
-                }
 
                 // Set app defaults
                 this.setConfigDefaults(appDefaultConfig);
             },
+        };
+    }
 
+    get configuring() {
+        if (useBlueprints) return;
+        return this._configuring();
+    }
+
+    _default() {
+        return {
+            /**
+             * Composing with others generators, must be runned after `configuring` priority to let blueprints
+             * `configuring` tasks to run.
+             * But must be the first task to run at `default` priority.
+             * When mixing blueprints with sbs-blueprints, sbs-blueprints must be called after, otherwise the
+             * priority will run before this `composing` task and the configuration will not be settled.
+             */
             composing() {
                 const options = this.options;
                 const configOptions = this.configOptions;
@@ -369,7 +375,6 @@ module.exports = class extends BaseBlueprintGenerator {
                         debug: this.isDebugEnabled,
                     });
                 }
-
                 if (!this.skipClient && !this.configOptions.skipComposeClient) {
                     this.configOptions.skipComposeClient = true;
                     this.composeWith(require.resolve('../client'), {
@@ -386,28 +391,20 @@ module.exports = class extends BaseBlueprintGenerator {
                         debug: this.isDebugEnabled,
                     });
                 }
+                if (!this.configOptions.skipI18n && !this.configOptions.skipComposeLanguages) {
+                    this.configOptions.skipComposeLanguages = true;
+                    this.composeWith(require.resolve('../languages'), {
+                        ...options,
+                        configOptions,
+                        skipPrompts: this.options.withEntities || this.options.existingProject || this.options.defaults,
+                        debug: this.isDebugEnabled,
+                    });
+                }
             },
 
-            askFori18n: prompts.askForI18n,
-        };
-    }
-
-    get configuring() {
-        if (useBlueprints) return;
-        return this._configuring();
-    }
-
-    _default() {
-        return {
             askForTestOpts: prompts.askForTestOpts,
 
             askForMoreModules: prompts.askForMoreModules,
-
-            composeLanguages() {
-                if (this.skipI18n || this.configOptions.skipComposeLanguages) return;
-                this.configOptions.skipComposeLanguages = true;
-                this.composeLanguagesSub(this, this.configOptions, this.generatorType);
-            },
 
             saveConfig() {
                 this.setConfigDefaults();

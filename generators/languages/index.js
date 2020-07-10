@@ -23,6 +23,7 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
 const statistics = require('../statistics');
 const constants = require('../generator-constants');
+const { translationDefaultConfig } = require('../generator-defaults');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
@@ -38,6 +39,12 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
+            defaults: false,
+        });
+        this.option('skip-prompts', {
+            desc: 'Skip prompts',
+            type: Boolean,
+            hide: true,
             defaults: false,
         });
         // This makes it possible to pass `languages` by argument
@@ -68,10 +75,11 @@ module.exports = class extends BaseBlueprintGenerator {
         this.loadOptions();
         this.loadRuntimeOptions();
 
-        // Validate languages passed as argument
-        this.languages = this.options.languages;
-        if (this.languages) {
-            this.languages.forEach(language => {
+        // Validate languages passed as argument.
+        // Additional languages, will not replace current ones.
+        this.languagesToApply = this.options.languages;
+        if (this.languagesToApply) {
+            this.languagesToApply.forEach(language => {
                 if (!this.isSupportedLanguage(language)) {
                     this.log('\n');
                     this.error(
@@ -87,7 +95,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
         useBlueprints =
             !this.fromBlueprint &&
-            this.instantiateBlueprints('languages', { languages: this.languages, arguments: this.options.languages });
+            this.instantiateBlueprints('languages', { languages: this.languagesToApply, arguments: this.options.languages });
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -98,18 +106,14 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             validate() {
-                this.currentLanguages = this.jhipsterConfig.languages || [];
-                if (this.languages) {
+                if (this.languagesToApply) {
                     if (this.skipClient) {
-                        this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for server`));
+                        this.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for server`));
                     } else if (this.skipServer) {
-                        this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for client`));
+                        this.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for client`));
                     } else {
-                        this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')}`));
+                        this.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')}`));
                     }
-                    this.languagesToApply = this.languages || [];
-                } else {
-                    this.log(chalk.bold('\nLanguages configuration is starting'));
                 }
             },
         };
@@ -123,6 +127,7 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _prompting() {
         return {
+            askI18n: prompts.askI18n,
             askForLanguages: prompts.askForLanguages,
         };
     }
@@ -135,8 +140,25 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _configuring() {
         return {
-            saveConfig() {
-                this.jhipsterConfig.languages = _.union(this.currentLanguages, this.languagesToApply);
+            defaults() {
+                this.setConfigDefaults(translationDefaultConfig);
+            },
+            updateLanguages() {
+                if (this.jhipsterConfig.enableTranslation) {
+                    if (this.languagesToApply && !this.jhipsterConfig.languages.includes(this.jhipsterConfig.nativeLanguage)) {
+                        // First time we are generating the native language
+                        this.languagesToApply.unshift(this.jhipsterConfig.nativeLanguage);
+                    }
+                    // Concatenate the native language, current languages, and the new languages.
+                    this.jhipsterConfig.languages = _.union(
+                        [this.jhipsterConfig.nativeLanguage],
+                        this.jhipsterConfig.languages || [],
+                        this.languagesToApply || []
+                    );
+                } else {
+                    // Following tasks from this generator will be skipped.
+                    this.cancelCancellableTasks();
+                }
             },
         };
     }
@@ -157,6 +179,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.loadClientConfig();
                 this.loadServerConfig();
                 this.loadTranslationConfig();
+
+                this.languagesToApply = this.languagesToApply || this.languages || [];
 
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
