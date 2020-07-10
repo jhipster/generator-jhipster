@@ -829,32 +829,39 @@ module.exports = class extends Generator {
      * @param {string} subGen - sub generator
      * @param {any} options - options to pass to blueprint generator
      */
-    composeBlueprint(blueprint, subGen, options = {}) {
-        if (blueprint) {
-            blueprint = jhipsterUtils.normalizeBlueprintName(blueprint);
-            if (options.skipChecks === undefined || !options.skipChecks) {
-                this.checkBlueprint(blueprint);
-            }
-            try {
-                const finalOptions = {
-                    ...options,
-                    jhipsterContext: this,
-                };
-                this.useBlueprint = true;
-                const blueprintGenerator = this.composeExternalModule(blueprint, subGen, finalOptions);
-                this.info(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
-                return blueprintGenerator;
-            } catch (e) {
-                this.debug(
-                    `No blueprint found for blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(
-                        subGen
-                    )} subgenerator: falling back to default generator`
-                );
-                this.debug('Error', e);
-                return false;
-            }
+    composeBlueprint(blueprint, subGen, extraOptions = {}) {
+        blueprint = jhipsterUtils.normalizeBlueprintName(blueprint);
+        if (!this.configOptions.skipChecks && !this.options.skipChecks) {
+            this.checkBlueprint(blueprint);
         }
-        return false;
+
+        const generatorName = jhipsterUtils.packageNameToNamespace(blueprint);
+        const generatorNamespace = `${generatorName}:${subGen}`;
+        if (!this.env.isPackageRegistered(generatorName)) {
+            this.env.lookup({ filterPaths: true, packagePatterns: blueprint });
+        }
+        if (!this.env.get(generatorNamespace)) {
+            this.debug(
+                `No blueprint found for blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(
+                    subGen
+                )} subgenerator: falling back to default generator`
+            );
+            return false;
+        }
+
+        const finalOptions = {
+            ...this.options,
+            configOptions: this.configOptions,
+            ...extraOptions,
+            jhipsterContext: this,
+        };
+
+        const blueprintGenerator = this.composeWith(generatorNamespace, finalOptions, true);
+        if (blueprintGenerator instanceof Error) {
+            throw blueprintGenerator;
+        }
+        this.info(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
+        return blueprintGenerator;
     }
 
     /**

@@ -84,47 +84,58 @@ module.exports = class extends BaseGenerator {
         }
         let useBlueprints = false;
 
-        const blueprints = jhipsterUtils.parseBluePrints(
-            this.options.blueprints ||
-                this.configOptions.blueprints ||
-                this.config.get('blueprints') ||
-                this.options.blueprint ||
-                this.configOptions.blueprint ||
-                this.config.get('blueprint')
-        );
-
-        if (blueprints && blueprints.length > 0) {
-            // Verify blueprints, should be executed only once
-            if (!this.configOptions.blueprintsVerified) {
-                // Run a lookup to find blueprints.
-                const packagePatterns = blueprints
-                    .filter(bp => !this.env.isPackageRegistered(jhipsterUtils.packageNameToNamespace(bp.name)))
-                    .map(bp => bp.name);
-                this.env.lookup({ filterPaths: true, packagePatterns });
-
-                if (!this.options.skipChecks) {
-                    const namespaces = blueprints.map(bp => jhipsterUtils.packageNameToNamespace(bp.name));
-                    // Verify if the blueprints has been registered.
-                    const missing = namespaces.filter(namespace => !this.env.isPackageRegistered(namespace));
-                    if (missing && missing.length > 0) {
-                        this.error(`Some blueprints were not found ${missing}, you should install them manually`);
-                    }
+        // Load and verify blueprints, should be executed only once
+        if (!this.configOptions.blueprintConfigured) {
+            this.configOptions.blueprintConfigured = true;
+            let argvBlueprints = this.options.blueprints || '';
+            // check for old single blueprint declaration
+            const blueprint = this.options.blueprint;
+            if (blueprint) {
+                this.warning('--blueprint option is deprecated. Please use --blueprints instead');
+                if (!argvBlueprints.split(',').includes(blueprint)) {
+                    argvBlueprints = `${blueprint},${argvBlueprints}`;
                 }
+            }
+            const blueprints = jhipsterUtils.mergeBlueprints(
+                jhipsterUtils.parseBluePrints(argvBlueprints),
+                jhipsterUtils.loadBlueprintsFromConfiguration(this.config)
+            );
+            // Run a lookup to find blueprints.
+            const packagePatterns = blueprints
+                .filter(bp => !this.env.isPackageRegistered(jhipsterUtils.packageNameToNamespace(bp.name)))
+                .map(bp => bp.name);
+            this.env.lookup({ filterPaths: true, packagePatterns });
 
-                this.configOptions.blueprintsVerified = true;
+            let otherModules = this.jhipsterConfig.otherModules || [];
+            if (blueprints && blueprints.length > 0) {
+                blueprints.forEach(blueprint => {
+                    blueprint.version = this.findBlueprintVersion(blueprint.name) || blueprint.version;
+                });
+
+                // Remove potential previous value to avoid duplicates
+                otherModules = otherModules.filter(module => this.blueprints.findIndex(bp => bp.name === module.name) === -1);
+                otherModules.push(...blueprints);
             }
 
-            blueprints.forEach(blueprint => {
-                let bpOptions = {
-                    ...this.options,
-                    configOptions: this.configOptions,
-                };
-                if (extraOptions) {
-                    bpOptions = { ...bpOptions, ...extraOptions };
+            this.jhipsterConfig.blueprints = blueprints;
+            this.jhipsterConfig.otherModules = otherModules;
+
+            if (!this.options.skipChecks) {
+                const namespaces = blueprints.map(bp => jhipsterUtils.packageNameToNamespace(bp.name));
+                // Verify if the blueprints has been registered.
+                const missing = namespaces.filter(namespace => !this.env.isPackageRegistered(namespace));
+                if (missing && missing.length > 0) {
+                    this.error(`Some blueprints were not found ${missing}, you should install them manually`);
                 }
-                const blueprintGenerator = this.composeBlueprint(blueprint.name, subGen, bpOptions);
+            }
+        }
+
+        const blueprints = this.jhipsterConfig.blueprints;
+        if (blueprints && blueprints.length > 0) {
+            blueprints.forEach(blueprint => {
+                const blueprintGenerator = this.composeBlueprint(blueprint.name, subGen, extraOptions);
                 // If the blueprints sets sbsBlueprint property, then don't ignore the normal workflow.
-                if (!useBlueprints && blueprintGenerator && !blueprintGenerator.sbsBlueprint) {
+                if (blueprintGenerator && !blueprintGenerator.sbsBlueprint) {
                     useBlueprints = true;
                 }
             });
