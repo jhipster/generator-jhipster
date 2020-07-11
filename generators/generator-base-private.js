@@ -1642,10 +1642,10 @@ module.exports = class extends Generator {
             let content = 'languages: {\n';
             if (this.enableTranslation) {
                 this.generateLanguageOptions(languages, this.clientFramework).forEach((ln, i) => {
-                    content += `        ${ln}${i !== languages.length - 1 ? ',' : ''}\n`;
+                    content += `      ${ln}${i !== languages.length - 1 ? ',' : ''}\n`;
                 });
             }
-            content += '        // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object\n      }';
+            content += '      // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object\n    }';
             jhipsterUtils.replaceContent(
                 {
                     file: fullPath,
@@ -1701,7 +1701,7 @@ module.exports = class extends Generator {
     }
 
     vueUpdateLanguagesInWebpack(languages) {
-        const fullPath = `${this.CLIENT_WEBPACK_DIR}webpack.common.js`;
+        const fullPath = `webpack/webpack.common.js`;
         try {
             let content = 'groupBy: [\n';
             languages.forEach((language, i) => {

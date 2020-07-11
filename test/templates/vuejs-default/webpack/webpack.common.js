@@ -1,10 +1,10 @@
-/* eslint-disable */
 'use strict';
 const path = require('path');
 const vueLoaderConfig = require('./loader.conf');
 const { VueLoaderPlugin } = require('vue-loader');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir);
@@ -37,7 +37,8 @@ module.exports = {
             loader: 'ts-loader',
             options: {
               appendTsSuffixTo: ['\\.vue$'],
-              happyPackMode: false
+              happyPackMode: true,
+              transpileOnly: true
             }
           }
         ],
@@ -48,7 +49,8 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: 'content/[hash].[ext]'
+          name: 'content/[hash].[ext]',
+          publicPath: "../"
         }
       },
       {
@@ -56,7 +58,8 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: 'content/[hash].[ext]'
+          name: 'content/[hash].[ext]',
+          publicPath: "../"
         }
       },
       {
@@ -64,7 +67,8 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: 'content/[hash].[ext]'
+          name: 'content/[hash].[ext]',
+          publicPath: "../"
         }
       }
     ]
@@ -83,20 +87,29 @@ module.exports = {
   },
   plugins: [
     new VueLoaderPlugin(),
-    new CopyWebpackPlugin([
-      { from: './node_modules/swagger-ui/dist/css', to: 'swagger-ui/dist/css' },
-      { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
-      { from: './node_modules/swagger-ui/dist/swagger-ui.min.js', to: 'swagger-ui/dist/swagger-ui.min.js' },
-      { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
-      { from: './src/main/webapp/content/', to: 'content' },
-      { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },
-      {
-        from: './src/main/webapp/manifest.webapp',
-        to: 'manifest.webapp'
-      },
-      // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
-      { from: './src/main/webapp/robots.txt', to: 'robots.txt' }
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: './node_modules/swagger-ui-dist/*.{js,css,html,png}', to: 'swagger-ui', flatten: true, globOptions: { ignore: ['**/index.html'] } },
+        { from: './node_modules/axios/dist/axios.min.js', to: 'swagger-ui' },
+        { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
+        { from: './src/main/webapp/content/', to: 'content' },
+        { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },
+        {
+          from: './src/main/webapp/manifest.webapp',
+          to: 'manifest.webapp',
+        },
+        // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
+        { from: './src/main/webapp/robots.txt', to: 'robots.txt' },
+      ]
+    }),
+    // https://github.com/ampedandwired/html-webpack-plugin
+    new HtmlWebpackPlugin({
+      base: '/',
+      template: './src/main/webapp/index.html',
+      chunks: ['vendors', 'main', 'global'],
+      chunksSortMode: 'manual',
+      inject: true
+    }),
     new MergeJsonWebpackPlugin({
       output: {
         groupBy: [

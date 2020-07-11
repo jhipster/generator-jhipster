@@ -2164,6 +2164,7 @@ module.exports = class extends PrivateBase {
         dest.clientFramework = config.clientFramework;
         dest.clientFramework = config.clientFramework;
         dest.clientTheme = config.clientTheme;
+        dest.clientThemeVariant = config.clientThemeVariant;
     }
 
     loadTranslationConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
