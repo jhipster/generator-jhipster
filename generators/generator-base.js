@@ -201,6 +201,15 @@ module.exports = class extends PrivateBase {
         microServiceName,
         readOnly
     ) {
+        console.log('entityInstance=' + entityInstance);
+        console.log('entityClass=' + entityClass);
+        console.log('entityName=' + entityName);
+        console.log('entityFolderName=' + entityFolderName);
+        console.log('entityFileName=' + entityFileName);
+        console.log('entityUrl=' + entityUrl);
+        console.log('clientFramework=' + clientFramework);
+        console.log('microServiceName=' + microServiceName);
+        console.log('readOnly=' + readOnly);
         if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addEntityToModule(
                 entityInstance,
@@ -215,9 +224,9 @@ module.exports = class extends PrivateBase {
             this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName);
         } else if (clientFramework === VUE) {
             this.needleApi.clientVue.addEntityToRouterImport(entityName, entityFileName, entityFolderName, readOnly);
-            this.needleApi.clientVue.addEntityToRouter(entityName, entityFileName, readOnly);
-            this.needleApi.clientVue.addEntityServiceToMainImport(entityClass, entityFileName, entityFolderName);
-            this.needleApi.clientVue.addEntityServiceToMain(entityClass, entityFileName);
+            this.needleApi.clientVue.addEntityToRouter(entityInstance, entityName, entityFileName, readOnly);
+            this.needleApi.clientVue.addEntityServiceToMainImport(entityName, entityClass, entityFileName, entityFolderName);
+            this.needleApi.clientVue.addEntityServiceToMain(entityInstance, entityName);
         }
     }
 

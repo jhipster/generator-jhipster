@@ -461,7 +461,9 @@ function writeFiles() {
 
             const entityTemplatesDir = `entity-client/templates/${templatesDir}`;
             this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster(entityTemplatesDir));
-            addEnumerationFiles(this, templatesDir, destDir);
+            if (this.clientFramework != VUE) {
+                addEnumerationFiles(this, templatesDir, destDir);
+            }
 
             if (!this.embedded) {
                 this.addEntityToModule(

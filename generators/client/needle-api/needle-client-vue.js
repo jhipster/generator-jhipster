@@ -68,7 +68,7 @@ module.exports = class extends needleClientBase {
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
 
-    addEntityToRouter(entityName, entityFileName, readOnly) {
+    addEntityToRouter(entityInstance, entityName, entityFileName, readOnly) {
         const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities.\n')}`;
         const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/router/entities.ts`;
 
@@ -95,13 +95,13 @@ module.exports = class extends needleClientBase {
                 |      meta: { authorities: [Authority.USER] }
                 |    },
                 |    {
-                |      path: '/${entityFileName}/:${entityFileName}Id/edit',
+                |      path: '/${entityFileName}/:${entityInstance}Id/edit',
                 |      name: '${entityName}Edit',
                 |      component: ${entityName}Update,
                 |      meta: { authorities: [Authority.USER] }
                 |    },
                 |    {
-                |      path: '/${entityFileName}/:${entityFileName}Id/view',
+                |      path: '/${entityFileName}/:${entityInstance}Id/view',
                 |      name: '${entityName}View',
                 |      component: ${entityName}Details,
                 |      meta: { authorities: [Authority.USER] }
@@ -117,7 +117,7 @@ module.exports = class extends needleClientBase {
                 |      meta: { authorities: [Authority.USER] }
                 |    },
                 |    {
-                |      path: '/${entityFileName}/:${entityFileName}Id/view',
+                |      path: '/${entityFileName}/:${entityInstance}Id/view',
                 |      name: '${entityName}View',
                 |      component: ${entityName}Details,
                 |      meta: { authorities: [Authority.USER] }
@@ -129,26 +129,26 @@ module.exports = class extends needleClientBase {
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
 
-    addEntityServiceToMainImport(entityClass, entityFileName, entityFolderName) {
+    addEntityServiceToMainImport(entityName, entityClass, entityFileName, entityFolderName) {
         const errorMessage = `${chalk.yellow('Reference to entity ') + entityClass} ${chalk.yellow('not added to import in main.\n')}`;
         const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/main.ts`;
 
         // prettier-ignore
         const entityEntry = this.generator.stripMargin(
-            `|import ${entityClass}Service from '@/entities/${entityFolderName}/${entityFileName}.service';`
+            `|import ${entityName}Service from '@/entities/${entityFolderName}/${entityFileName}.service';`
         );
 
         const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-service-to-main-import', entityEntry);
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
 
-    addEntityServiceToMain(entityClass, entityFileName) {
-        const errorMessage = `${chalk.yellow('Reference to entity ') + entityClass} ${chalk.yellow('not added to service in main.\n')}`;
+    addEntityServiceToMain(entityInstance, entityName) {
+        const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to service in main.\n')}`;
         const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/main.ts`;
 
         // prettier-ignore
         const entityEntry = this.generator.stripMargin(
-            `|    ${entityFileName}Service: () => new ${entityClass}Service(),`
+            `|    ${entityInstance}Service: () => new ${entityName}Service(),`
         );
 
         const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-service-to-main', entityEntry);
