@@ -1,8 +1,8 @@
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const constants = require('../generators/generator-constants');
 const fse = require('fs-extra');
 const path = require('path');
+const constants = require('../generators/generator-constants');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
@@ -52,10 +52,7 @@ const containsLanguageFiles = languageValue => {
 const containsLanguageInVueStore = languageValue => {
     it('add language into translation-store.ts, webpack.common.js', () => {
         const langKey = languageValue.includes('-') ? `'${languageValue}'` : `${languageValue}`;
-        assert.fileContent(
-            `${CLIENT_MAIN_SRC_DIR}app/shared/config/store/translation-store.ts`,
-            `'${langKey}': { name:`,
-        );
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/config/store/translation-store.ts`, `'${langKey}': { name:`);
         assert.fileContent(
             `${CLIENT_WEBPACK_DIR}webpack.common.js`,
             `{ pattern: './src/main/webapp/i18n/${languageValue}/*.json', fileName: './i18n/${languageValue}.json' }`

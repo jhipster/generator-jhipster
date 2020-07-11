@@ -2,7 +2,6 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const constants = require('../generators/generator-constants');
-const blueprintPackagejs = require('../package.json');
 
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
@@ -229,7 +228,6 @@ describe('Vue.js applications', () => {
                 })
                 .withPrompts({
                     baseName: 'sampleMysql',
-                    clientFramework: VUE,
                     packageName: 'com.mycompany.myapp',
                     applicationType: 'monolith',
                     databaseType: 'sql',
@@ -378,73 +376,59 @@ describe('Vue.js applications', () => {
             assert.noFileContent('src/main/webapp/content/scss/vendor.scss', "@import '~bootswatch/dist/");
         });
     });
-    // describe('noi18n with OAuth2 Maven', () => {
-    //     before(done => {
-    //         helpers
-    //             .run(path.join(__dirname, '../generators/app'))
-    //             .withOptions({
-    //                 'from-cli': true,
-    //                 skipInstall: true,
-    //                 blueprint: 'vuejs',
-    //                 skipChecks: true,
-    //             })
-    //             .withGenerators([
-    //                 [
-    //                     require('../generators/client/index.js'), // eslint-disable-line global-require
-    //                     'jhipster-vuejs:client',
-    //                     path.join(__dirname, '../generators/client/index.js'),
-    //                 ],
-    //                 [
-    //                     require('../generators/common/index.js'), // eslint-disable-line global-require
-    //                     'jhipster-vuejs:common',
-    //                     path.join(__dirname, '../generators/common/index.js'),
-    //                 ],
-    //             ])
-    //             .withPrompts({
-    //                 baseName: 'sampleMysql',
-    //                 packageName: 'com.mycompany.myapp',
-    //                 applicationType: 'monolith',
-    //                 databaseType: 'sql',
-    //                 devDatabaseType: 'h2Disk',
-    //                 prodDatabaseType: 'mysql',
-    //                 cacheProvider: 'ehcache',
-    //                 authenticationType: 'oauth2',
-    //                 enableTranslation: false,
-    //                 nativeLanguage: 'en',
-    //                 buildTool: 'maven',
-    //                 clientFramework: 'vue',
-    //                 clientTheme: 'none',
-    //             })
-    //             .on('end', done);
-    //     });
-    //     it('creates expected files from jhipster vue.js generator', () => {
-    //         assert.noFile(expectedFiles.i18n);
-    //         assert.file(expectedFiles.common);
-    //         assert.file(expectedFiles.app);
-    //         assert.file(expectedFiles.test);
-    //         assert.file([`${CLIENT_SPEC_SRC_DIR}app/account/login.service.spec.ts`]);
-    //         assert.noFile(expectedFiles.protractor);
-    //         assert.noFile(expectedFiles.allAuthExceptOAuth2);
-    //         assert.noFile(expectedFiles.session);
-    //         assert.file(expectedFiles.webpack);
-    //     });
-    //     it('contains the specific change added by the blueprint', () => {
-    //         assert.fileContent('package.json', `"generator-jhipster-vuejs": "${blueprintPackagejs.version}"`);
-    //         assert.fileContent('package.json', '"vue"');
-    //         assert.fileContent('package.json', '"vuex"');
-    //         assert.fileContent('package.json', '"vuelidate"');
-    //         assert.fileContent('.prettierrc', 'tabWidth: 2');
-    //         assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\nindent_style = space\nindent_size = 2');
-    //     });
-    //     it('uses correct prettier formatting', () => {
-    //         // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
-    //         assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
-    //         assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
-    //     });
-    //     it('uses default JHipster theme', () => {
-    //         assert.noFileContent('src/main/webapp/content/scss/vendor.scss', "@import '~bootswatch/dist/");
-    //     });
-    // });
+    describe('noi18n with OAuth2 Maven', () => {
+        before(done => {
+            helpers
+                .run(path.join(__dirname, '../generators/app'))
+                .withOptions({
+                    'from-cli': true,
+                    skipInstall: true,
+                    skipChecks: true,
+                })
+                .withPrompts({
+                    baseName: 'sampleMysql',
+                    packageName: 'com.mycompany.myapp',
+                    applicationType: 'monolith',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Disk',
+                    prodDatabaseType: 'mysql',
+                    cacheProvider: 'ehcache',
+                    authenticationType: 'oauth2',
+                    enableTranslation: false,
+                    nativeLanguage: 'en',
+                    buildTool: 'maven',
+                    clientFramework: 'vue',
+                    clientTheme: 'none',
+                })
+                .on('end', done);
+        });
+        it('creates expected files from jhipster vue.js generator', () => {
+            assert.noFile(expectedFiles.i18n);
+            assert.file(expectedFiles.common);
+            assert.file(expectedFiles.app);
+            assert.file(expectedFiles.test);
+            assert.file([`${CLIENT_SPEC_SRC_DIR}app/account/login.service.spec.ts`]);
+            assert.noFile(expectedFiles.protractor);
+            assert.noFile(expectedFiles.allAuthExceptOAuth2);
+            assert.noFile(expectedFiles.session);
+            assert.file(expectedFiles.webpack);
+        });
+        it('contains the specific change added by the blueprint', () => {
+            assert.fileContent('package.json', '"vue"');
+            assert.fileContent('package.json', '"vuex"');
+            assert.fileContent('package.json', '"vuelidate"');
+            assert.fileContent('.prettierrc', 'tabWidth: 2');
+            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\nindent_style = space\nindent_size = 2');
+        });
+        it('uses correct prettier formatting', () => {
+            // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
+            assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
+            assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
+        });
+        it('uses default JHipster theme', () => {
+            assert.noFileContent('src/main/webapp/content/scss/vendor.scss', "@import '~bootswatch/dist/");
+        });
+    });
     describe('Elasticsearch and Protractor', () => {
         before(done => {
             helpers

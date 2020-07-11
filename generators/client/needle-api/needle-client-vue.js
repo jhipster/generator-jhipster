@@ -26,7 +26,7 @@ module.exports = class extends needleClientBase {
         const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
         const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/core/jhi-navbar/jhi-navbar.vue`;
         const menuI18nTitle = enableTranslation ? ` v-text="$t('global.menu.entities.${entityTranslationKeyMenu}')"` : '';
-        const entityEntry = 
+        const entityEntry =
             // prettier-ignore
             this.generator.stripMargin(
                 `<b-dropdown-item to="/${routerName}">
@@ -39,7 +39,9 @@ module.exports = class extends needleClientBase {
     }
 
     addEntityToRouterImport(entityName, fileName, folderName, readOnly) {
-        const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities import.\n')}`;
+        const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow(
+            'not added to router entities import.\n'
+        )}`;
         const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/router/entities.ts`;
         let entityEntry;
         if (!readOnly) {
@@ -61,7 +63,7 @@ module.exports = class extends needleClientBase {
                 |const ${entityName}Details = () => import('@/entities/${folderName}/${fileName}-details.vue');`
             );
         }
-        
+
         const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-to-router-import', entityEntry);
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
@@ -70,11 +72,7 @@ module.exports = class extends needleClientBase {
         const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities.\n')}`;
         const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/router/entities.ts`;
 
-        const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(
-            filePath,
-            `path: '/${entityFileName}'`,
-            this.generator
-        );
+        const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(filePath, `path: '/${entityFileName}'`, this.generator);
 
         if (isSpecificEntityAlreadyGenerated) {
             return;
@@ -126,11 +124,11 @@ module.exports = class extends needleClientBase {
                 |    },`
             );
         }
-        
+
         const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-to-router', entityEntry);
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
-    
+
     addEntityServiceToMainImport(entityClass, entityFileName, entityFolderName) {
         const errorMessage = `${chalk.yellow('Reference to entity ') + entityClass} ${chalk.yellow('not added to import in main.\n')}`;
         const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/main.ts`;
@@ -139,11 +137,11 @@ module.exports = class extends needleClientBase {
         const entityEntry = this.generator.stripMargin(
             `|import ${entityClass}Service from '@/entities/${entityFolderName}/${entityFileName}.service';`
         );
-    
+
         const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-service-to-main-import', entityEntry);
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
-    
+
     addEntityServiceToMain(entityClass, entityFileName) {
         const errorMessage = `${chalk.yellow('Reference to entity ') + entityClass} ${chalk.yellow('not added to service in main.\n')}`;
         const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/main.ts`;
@@ -152,7 +150,7 @@ module.exports = class extends needleClientBase {
         const entityEntry = this.generator.stripMargin(
             `|    ${entityFileName}Service: () => new ${entityClass}Service(),`
         );
-    
+
         const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-service-to-main', entityEntry);
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
