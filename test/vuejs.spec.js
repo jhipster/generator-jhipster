@@ -418,7 +418,6 @@ describe('Vue.js applications', () => {
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
             assert.fileContent('.prettierrc', 'tabWidth: 2');
-            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\nindent_style = space\nindent_size = 2');
         });
         it('uses correct prettier formatting', () => {
             // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
