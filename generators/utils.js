@@ -667,13 +667,16 @@ function loadBlueprintsFromConfiguration(config) {
  * @returns {Array} an array that contains the info for each blueprint
  */
 function parseBluePrints(blueprints) {
-    if (blueprints && !Array.isArray(blueprints)) {
+    if (Array.isArray(blueprints)) {
+        return blueprints;
+    }
+    if (typeof blueprints === 'string') {
         return blueprints
             .split(',')
             .filter(el => el != null && el.length > 0)
             .map(blueprint => parseBlueprintInfo(blueprint));
     }
-    return blueprints;
+    return [];
 }
 
 /**

@@ -212,6 +212,16 @@ describe('JHipster Utils', () => {
             const actual = utils.parseBluePrints(expected);
             assert.deepStrictEqual(actual, expected);
         });
+        it('returns a array if empty string', () => {
+            const expected = [];
+            const actual = utils.parseBluePrints('');
+            assert.deepStrictEqual(actual, expected);
+        });
+        it('returns a array if not string', () => {
+            assert.deepStrictEqual(utils.parseBluePrints(), []);
+            assert.deepStrictEqual(utils.parseBluePrints(1), []);
+            assert.deepStrictEqual(utils.parseBluePrints(1.1), []);
+        });
         it('adds generator-jhipster prefix if it is absent', () => {
             const expected = [{ name: 'generator-jhipster-foo', version: 'latest' }];
             const actual = utils.parseBluePrints('foo');
