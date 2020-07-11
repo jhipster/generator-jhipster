@@ -69,6 +69,7 @@ module.exports = {
     parseBluePrints,
     normalizeBlueprintName,
     packageNameToNamespace,
+    parseBlueprintInfo,
     stringHashCode,
     RandexpWithFaker,
     gitExec,
