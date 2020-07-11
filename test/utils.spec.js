@@ -247,6 +247,80 @@ describe('JHipster Utils', () => {
             assert.deepStrictEqual(actual, expected);
         });
     });
+    describe('::mergeBlueprints', () => {
+        describe('not passing arguments', () => {
+            it('returns a empty array', () => {
+                const expected = [];
+                const actual = utils.mergeBlueprints();
+                assert.deepStrictEqual(actual, expected);
+            });
+        });
+        describe('passing undefined', () => {
+            const argument = undefined;
+            it('throws an error', done => {
+                try {
+                    utils.mergeBlueprints(argument);
+                } catch (error) {
+                    assert.equal(error.message, 'Only arrays are supported.');
+                    done();
+                }
+            });
+        });
+        describe('passing array and undefined', () => {
+            const argumentsToPass = [[], undefined];
+            it('throws an error', done => {
+                try {
+                    utils.mergeBlueprints(...argumentsToPass);
+                } catch (error) {
+                    assert.equal(error.message, 'Only arrays are supported.');
+                    done();
+                }
+            });
+        });
+        describe('passing unique blueprints', () => {
+            const argumentsToPass = [
+                [{ name: 'generator-jhipster-foo', version: 'latest' }],
+                [{ name: 'generator-jhipster-bar', version: '1.0.1' }],
+            ];
+            it('returns them concatenated', () => {
+                const expected = [
+                    { name: 'generator-jhipster-foo', version: 'latest' },
+                    { name: 'generator-jhipster-bar', version: '1.0.1' },
+                ];
+                const actual = utils.mergeBlueprints(...argumentsToPass);
+                assert.deepStrictEqual(actual, expected);
+            });
+        });
+        describe('passing non unique blueprints', () => {
+            it('prefers prior version', () => {
+                const argumentsToPass = [
+                    [
+                        { name: 'generator-jhipster-foo', version: 'latest' },
+                        { name: 'generator-jhipster-bar', version: '1.0.1' },
+                    ],
+                    [{ name: 'generator-jhipster-foo', version: '1.0.1' }],
+                ];
+                const expected = [
+                    { name: 'generator-jhipster-foo', version: 'latest' },
+                    { name: 'generator-jhipster-bar', version: '1.0.1' },
+                ];
+                const actual = utils.mergeBlueprints(...argumentsToPass);
+                assert.deepStrictEqual(actual, expected);
+            });
+            it('uses later version when prior version is not defined', () => {
+                const argumentsToPass = [
+                    [{ name: 'generator-jhipster-foo' }, { name: 'generator-jhipster-bar', version: '1.0.1' }],
+                    [{ name: 'generator-jhipster-foo', version: '1.0.1' }],
+                ];
+                const expected = [
+                    { name: 'generator-jhipster-foo', version: '1.0.1' },
+                    { name: 'generator-jhipster-bar', version: '1.0.1' },
+                ];
+                const actual = utils.mergeBlueprints(...argumentsToPass);
+                assert.deepStrictEqual(actual, expected);
+            });
+        });
+    });
     describe('::normalizeBlueprintName', () => {
         it('adds generator-jhipster prefix if it is absent', () => {
             const generatorName = utils.normalizeBlueprintName('foo');

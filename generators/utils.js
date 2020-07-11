@@ -65,6 +65,7 @@ module.exports = {
     checkStringInFile,
     checkRegexInFile,
     loadYoRc,
+    mergeBlueprints,
     loadBlueprintsFromConfiguration,
     parseBluePrints,
     normalizeBlueprintName,
@@ -678,6 +679,31 @@ function parseBluePrints(blueprints) {
             .map(blueprint => parseBlueprintInfo(blueprint));
     }
     return [];
+}
+
+function mergeBlueprints(...blueprintsToMerge) {
+    if (!blueprintsToMerge || blueprintsToMerge.length === 0) {
+        return [];
+    }
+    blueprintsToMerge.forEach(blueprints => {
+        if (!Array.isArray(blueprints)) {
+            throw new Error('Only arrays are supported.');
+        }
+    });
+    const blueprints = blueprintsToMerge.shift().concat();
+    while (blueprintsToMerge.length > 0) {
+        blueprintsToMerge.shift().forEach(blueprintToAdd => {
+            const blueprint = blueprints.find(blueprint => blueprint.name === blueprintToAdd.name);
+            if (blueprint) {
+                if (!blueprint.version) {
+                    blueprint.version = blueprintToAdd.version;
+                }
+            } else {
+                blueprints.push(blueprintToAdd);
+            }
+        });
+    }
+    return blueprints;
 }
 
 /**
