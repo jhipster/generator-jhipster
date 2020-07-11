@@ -97,13 +97,13 @@ module.exports = class extends needleClientBase {
                 |      meta: { authorities: [Authority.USER] }
                 |    },
                 |    {
-                |      path: '/${entityFileName}/:${entityName}Id/edit',
+                |      path: '/${entityFileName}/:${entityFileName}Id/edit',
                 |      name: '${entityName}Edit',
                 |      component: ${entityName}Update,
                 |      meta: { authorities: [Authority.USER] }
                 |    },
                 |    {
-                |      path: '/${entityFileName}/:${entityName}Id/view',
+                |      path: '/${entityFileName}/:${entityFileName}Id/view',
                 |      name: '${entityName}View',
                 |      component: ${entityName}Details,
                 |      meta: { authorities: [Authority.USER] }
@@ -119,7 +119,7 @@ module.exports = class extends needleClientBase {
                 |      meta: { authorities: [Authority.USER] }
                 |    },
                 |    {
-                |      path: '/${entityFileName}/:${entityName}Id/view',
+                |      path: '/${entityFileName}/:${entityFileName}Id/view',
                 |      name: '${entityName}View',
                 |      component: ${entityName}Details,
                 |      meta: { authorities: [Authority.USER] }
@@ -144,30 +144,16 @@ module.exports = class extends needleClientBase {
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
     
-    addEntityServiceToMain(entityName, entityClass) {
+    addEntityServiceToMain(entityClass, entityFileName) {
         const errorMessage = `${chalk.yellow('Reference to entity ') + entityClass} ${chalk.yellow('not added to service in main.\n')}`;
         const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/main.ts`;
 
         // prettier-ignore
         const entityEntry = this.generator.stripMargin(
-            `|    ${entityName}Service: () => new ${entityClass}Service(),`
+            `|    ${entityFileName}Service: () => new ${entityClass}Service(),`
         );
     
         const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-service-to-main', entityEntry);
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
-    
-    // addEntityServiceToMain(generator, entityName, className) {
-    //     jhipsterUtils.rewriteFile(
-    //         {
-    //             file: `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
-    //             needle: 'jhipster-needle-add-entity-service-to-main',
-    //             splicable: [generator.stripMargin(
-    //                 // prettier-ignore
-    //                 `|    ${entityName}Service: () => new ${className}Service(),`
-    //             )]
-    //         },
-    //         generator
-    //     );
-    // }
 };

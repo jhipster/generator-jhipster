@@ -217,7 +217,7 @@ module.exports = class extends PrivateBase {
             this.needleApi.clientVue.addEntityToRouterImport(entityName, entityFileName, entityFolderName, readOnly);
             this.needleApi.clientVue.addEntityToRouter(entityName, entityFileName, readOnly);
             this.needleApi.clientVue.addEntityServiceToMainImport(entityClass, entityFileName, entityFolderName);
-            this.needleApi.clientVue.addEntityServiceToMain(entityName, entityClass);
+            this.needleApi.clientVue.addEntityServiceToMain(entityClass, entityFileName);
         }
     }
 
