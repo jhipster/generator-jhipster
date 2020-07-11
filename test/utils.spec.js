@@ -223,7 +223,7 @@ describe('JHipster Utils', () => {
             assert.deepStrictEqual(utils.parseBluePrints(1.1), []);
         });
         it('adds generator-jhipster prefix if it is absent', () => {
-            const expected = [{ name: 'generator-jhipster-foo', version: 'latest' }];
+            const expected = [{ name: 'generator-jhipster-foo' }];
             const actual = utils.parseBluePrints('foo');
             assert.deepStrictEqual(actual, expected);
         });
@@ -239,9 +239,9 @@ describe('JHipster Utils', () => {
         });
         it('parses comma separated list', () => {
             const expected = [
-                { name: 'generator-jhipster-foo', version: 'latest' },
+                { name: 'generator-jhipster-foo' },
                 { name: 'generator-jhipster-bar', version: '1.0.1' },
-                { name: '@corp/foo', version: 'latest' },
+                { name: '@corp/foo' },
             ];
             const actual = utils.parseBluePrints('foo,bar@1.0.1,@corp/foo');
             assert.deepStrictEqual(actual, expected);

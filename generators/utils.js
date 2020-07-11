@@ -687,15 +687,18 @@ function parseBluePrints(blueprints) {
  */
 function parseBlueprintInfo(blueprint) {
     let bpName = normalizeBlueprintName(blueprint);
-    let version = 'latest';
     const idx = bpName.lastIndexOf('@');
     if (idx > 0) {
-        version = bpName.slice(idx + 1);
+        // Not scope.
+        const version = bpName.slice(idx + 1);
         bpName = bpName.slice(0, idx);
+        return {
+            name: bpName,
+            version,
+        };
     }
     return {
         name: bpName,
-        version,
     };
 }
 
