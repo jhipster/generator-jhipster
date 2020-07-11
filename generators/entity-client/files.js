@@ -472,7 +472,8 @@ function writeFiles() {
                     this.entityFileName,
                     this.entityUrl,
                     this.clientFramework,
-                    microserviceName
+                    microserviceName,
+                    this.readOnly
                 );
                 this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
             }
