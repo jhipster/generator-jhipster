@@ -201,15 +201,6 @@ module.exports = class extends PrivateBase {
         microServiceName,
         readOnly
     ) {
-        console.log('entityInstance=' + entityInstance);
-        console.log('entityClass=' + entityClass);
-        console.log('entityName=' + entityName);
-        console.log('entityFolderName=' + entityFolderName);
-        console.log('entityFileName=' + entityFileName);
-        console.log('entityUrl=' + entityUrl);
-        console.log('clientFramework=' + clientFramework);
-        console.log('microServiceName=' + microServiceName);
-        console.log('readOnly=' + readOnly);
         if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addEntityToModule(
                 entityInstance,
