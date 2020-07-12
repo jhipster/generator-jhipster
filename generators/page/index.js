@@ -21,6 +21,9 @@ const chalk = require('chalk');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
+const constants = require('../generator-constants');
+
+const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 let useBlueprints;
 
@@ -69,6 +72,11 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.clientPackageManager = configuration.clientPackageManager;
                 this.enableTranslation = configuration.enableTranslation;
                 this.protractorTests = configuration.testFrameworks && configuration.testFrameworks.includes('protractor');
+                this.clientFramework = configuration.clientFramework;
+
+                if (this.clientFramework !== VUE) {
+                    this.error('This sub generator page is not supported for ' + this.clientFramework);
+                }
             },
         };
     }
