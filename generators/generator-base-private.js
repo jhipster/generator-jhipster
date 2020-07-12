@@ -21,7 +21,6 @@ const path = require('path');
 const _ = require('lodash');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
-const fs = require('fs');
 const shelljs = require('shelljs');
 const semver = require('semver');
 const exec = require('child_process').exec;
@@ -821,131 +820,6 @@ module.exports = class extends Generator {
             this._debug(formattedMsg);
             args.forEach(arg => this._debug(arg));
         }
-    }
-
-    /**
-     * Compose external blueprint module
-     * @param {string} blueprint - name of the blueprint
-     * @param {string} subGen - sub generator
-     * @param {any} options - options to pass to blueprint generator
-     */
-    composeBlueprint(blueprint, subGen, extraOptions = {}) {
-        blueprint = jhipsterUtils.normalizeBlueprintName(blueprint);
-        if (!this.configOptions.skipChecks && !this.options.skipChecks) {
-            this.checkBlueprint(blueprint);
-        }
-
-        const generatorName = jhipsterUtils.packageNameToNamespace(blueprint);
-        const generatorNamespace = `${generatorName}:${subGen}`;
-        if (!this.env.isPackageRegistered(generatorName)) {
-            this.env.lookup({ filterPaths: true, packagePatterns: blueprint });
-        }
-        if (!this.env.get(generatorNamespace)) {
-            this.debug(
-                `No blueprint found for blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(
-                    subGen
-                )} subgenerator: falling back to default generator`
-            );
-            return false;
-        }
-
-        const finalOptions = {
-            ...this.options,
-            configOptions: this.configOptions,
-            ...extraOptions,
-            jhipsterContext: this,
-        };
-
-        const blueprintGenerator = this.composeWith(generatorNamespace, finalOptions, true);
-        if (blueprintGenerator instanceof Error) {
-            throw blueprintGenerator;
-        }
-        this.info(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
-        return blueprintGenerator;
-    }
-
-    /**
-     * Try to retrieve the package.json of the blueprint used, as an object.
-     * @param {string} blueprintPkgName - generator name
-     * @return {object} packageJson - retrieved package.json as an object or undefined if not found
-     */
-    findBlueprintPackageJson(blueprintPkgName) {
-        const blueprintGeneratorName = jhipsterUtils.packageNameToNamespace(blueprintPkgName);
-        const blueprintPackagePath = this.env.getPackagePath(blueprintGeneratorName);
-        if (!blueprintPackagePath) {
-            const msg = `Could not retrieve packagePath of blueprint '${blueprintPkgName}'`;
-            this.warning(msg);
-            return undefined;
-        }
-        return JSON.parse(fs.readFileSync(path.join(blueprintPackagePath, 'package.json')));
-    }
-
-    /**
-     * Try to retrieve the version of the blueprint used.
-     * @param {string} blueprintPkgName - generator name
-     * @return {string} version - retrieved version or empty string if not found
-     */
-    findBlueprintVersion(blueprintPkgName) {
-        const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
-        if (!blueprintPackageJson || !blueprintPackageJson.version) {
-            this.warning(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
-            return undefined;
-        }
-        return blueprintPackageJson.version;
-    }
-
-    /**
-     * Check if the generator specified as blueprint is installed.
-     * @param {string} blueprint - generator name
-     */
-    checkBlueprint(blueprint) {
-        if (blueprint === 'generator-jhipster') {
-            this.error(`You cannot use ${chalk.yellow(blueprint)} as the blueprint.`);
-        }
-        if (!this.findBlueprintPackageJson(blueprint)) {
-            this.error(
-                `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
-                    `npm i -g ${blueprint}`
-                )}.`
-            );
-        }
-    }
-
-    /**
-     * Check if the generator specified as blueprint has a version compatible with current JHipster.
-     * @param {string} blueprintPkgName - generator name
-     */
-    checkJHipsterBlueprintVersion(blueprintPkgName) {
-        const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
-        if (!blueprintPackageJson) {
-            this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
-            return;
-        }
-        const mainGeneratorJhipsterVersion = packagejs.version;
-        const blueprintJhipsterVersion = blueprintPackageJson.dependencies && blueprintPackageJson.dependencies['generator-jhipster'];
-        if (blueprintJhipsterVersion) {
-            if (mainGeneratorJhipsterVersion !== blueprintJhipsterVersion) {
-                this.error(
-                    `The installed ${chalk.yellow(
-                        blueprintPkgName
-                    )} blueprint targets JHipster v${blueprintJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
-                );
-            }
-            return;
-        }
-        const blueprintPeerJhipsterVersion =
-            blueprintPackageJson.peerDependencies && blueprintPackageJson.peerDependencies['generator-jhipster'];
-        if (blueprintPeerJhipsterVersion) {
-            if (semver.satisfies(mainGeneratorJhipsterVersion, blueprintPeerJhipsterVersion)) {
-                return;
-            }
-            this.error(
-                `The installed ${chalk.yellow(
-                    blueprintPkgName
-                )} blueprint targets JHipster ${blueprintPeerJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
-            );
-        }
-        this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
     }
 
     /**
