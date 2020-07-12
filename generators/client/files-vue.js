@@ -23,7 +23,6 @@ const utils = require('../utils');
 const MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const VUE_DIR = constants.ANGULAR_DIR;
-const CLIENT_VUE_TEMPLATES_DIR = 'vue';
 
 module.exports = {
     writeFiles,
