@@ -86,7 +86,7 @@
         "shelljs": "0.8.4",
         "simple-git": "2.12.0",
         "sync-request": "6.1.0",
-        "tabtab": "2.2.2",
+        "tabtab": "3.0.2",
         "test": "^0.6.0",
         "through2": "4.0.2",
         "uuid": "7.0.3",
