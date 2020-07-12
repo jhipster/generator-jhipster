@@ -20,8 +20,13 @@ const constants = require('./generator-constants');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
-const appDefaultConfig = {
+/** Required config for prompts to be skipped */
+const appRequiredConfig = {
     applicationType: 'monolith',
+};
+
+const appDefaultConfig = {
+    ...appRequiredConfig,
     skipClient: false,
     skipServer: false,
     skipUserManagement: false,
@@ -37,23 +42,33 @@ const appDefaultConfig = {
     clientPackageManager: 'npm',
 };
 
-const serverDefaultConfig = {
-    serverPort: 8080,
+/** Required config for prompts to be skipped */
+const serverRequiredConfig = {
     packageName: 'com.mycompany.myapp',
-    authenticationType: 'jwt',
     cacheProvider: 'ehcache',
-    serviceDiscoveryType: false,
+    websocket: false,
     databaseType: 'sql',
     prodDatabaseType: 'mysql',
     devDatabaseType: 'h2Disk',
-    websocket: false,
     searchEngine: false,
     buildTool: 'maven',
+};
+
+const serverDefaultConfig = {
+    ...serverRequiredConfig,
+    serverPort: 8080,
+    authenticationType: 'jwt',
+    serviceDiscoveryType: false,
     enableHibernateCache: true,
 };
 
-const clientDefaultConfig = {
+/** Required config for prompts to be skipped */
+const clientRequiredConfig = {
     clientFramework: ANGULAR,
+};
+
+const clientDefaultConfig = {
+    ...clientRequiredConfig,
     clientTheme: 'none',
     clientThemeVariant: 'primary',
     useSass: true,
@@ -63,6 +78,13 @@ const translationDefaultConfig = {
     enableTranslation: true,
     nativeLanguage: 'en',
     languages: [],
+};
+
+/** Required config for prompts to be skipped, baseName is missing */
+const requiredDefaultConfig = {
+    ...appRequiredConfig,
+    ...serverRequiredConfig,
+    ...clientRequiredConfig,
 };
 
 const defaultConfig = {
@@ -77,4 +99,5 @@ module.exports = {
     serverDefaultConfig,
     clientDefaultConfig,
     defaultConfig,
+    requiredDefaultConfig,
 };
