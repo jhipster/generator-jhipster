@@ -462,7 +462,7 @@ function writeFiles() {
 
             const entityTemplatesDir = `entity-client/templates/${templatesDir}`;
             this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster(entityTemplatesDir));
-            if (this.clientFramework != VUE) {
+            if (this.clientFramework !== VUE) {
                 addEnumerationFiles(this, templatesDir, destDir);
             }
 
@@ -479,6 +479,21 @@ function writeFiles() {
                     this.readOnly
                 );
                 this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
+            }
+
+            if (this.clientFramework === VUE && !this.enableTranslation) {
+                if (!this.readOnly) {
+                    utils.vueReplaceTranslation(this, [
+                        `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
+                        `app/entities/${this.entityFolderName}/${this.entityFileName}-update.vue`,
+                        `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`
+                    ]);
+                } else {
+                    utils.vueReplaceTranslation(this, [
+                        `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
+                        `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`
+                    ]);
+                }
             }
         },
     };
