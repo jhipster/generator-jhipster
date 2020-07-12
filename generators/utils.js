@@ -786,7 +786,7 @@ function isGitInstalled(callback) {
 }
 
 /**
- * Replace translation for Vue.js application
+ * Replace translation for Vue application
  * @param {*} generator
  * @param {*} files
  */

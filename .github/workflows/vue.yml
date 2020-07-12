@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-name: Vue.js
+name: Vue
 on:
     push:
         branches-ignore:
@@ -58,63 +58,63 @@ jobs:
                 node_version: [12.16.1]
                 os: [ubuntu-latest]
                 app-type:
-                    - vuejs-default
-                    - vuejs-noi18n
-                    - vuejs-fulli18n-es
-                    - vuejs-gateway
-                    - vuejs-gradle-session
-                    - vuejs-ws-theme
-                    - vuejs-oauth2
-                    - vuejs-couchbase
-                    - vuejs-mongodb-kafka-cucumber
-                    - vuejs-session-cassandra-fr
+                    - vue-default
+                    - vue-noi18n
+                    - vue-fulli18n-es
+                    - vue-gateway
+                    - vue-gradle-session
+                    - vue-ws-theme
+                    - vue-oauth2
+                    - vue-couchbase
+                    - vue-mongodb-kafka-cucumber
+                    - vue-session-cassandra-fr
                 include:
-                    - app-type: vuejs-default
+                    - app-type: vue-default
                       entity: sql
                       profile: prod
                       war: 0
                       protractor: 1
-                    - app-type: vuejs-noi18n
+                    - app-type: vue-noi18n
                       entity: sql
                       profile: prod
                       war: 0
                       protractor: 1
-                    - app-type: vuejs-fulli18n-es
+                    - app-type: vue-fulli18n-es
                       entity: sql
                       profile: prod
                       war: 0
                       protractor: 1
-                    - app-type: vuejs-gateway
+                    - app-type: vue-gateway
                       entity: sql
                       profile: dev,webpack
                       war: 0
                       protractor: 1
-                    - app-type: vuejs-gradle-session
+                    - app-type: vue-gradle-session
                       entity: sql
                       profile: dev,webpack
                       war: 0
                       protractor: 1
-                    - app-type: vuejs-ws-theme
+                    - app-type: vue-ws-theme
                       entity: sql
                       profile: dev,webpack
                       war: 0
                       protractor: 1
-                    - app-type: vuejs-oauth2
+                    - app-type: vue-oauth2
                       entity: sql
                       profile: prod
                       war: 0
                       protractor: 1
-                    - app-type: vuejs-couchbase
+                    - app-type: vue-couchbase
                       entity: couchbase
                       profile: dev,webpack
                       war: 0
                       protractor: 1
-                    - app-type: vuejs-mongodb-kafka-cucumber
+                    - app-type: vue-mongodb-kafka-cucumber
                       entity: mongodb
                       profile: dev,webpack
                       war: 0
                       protractor: 1
-                    - app-type: vuejs-session-cassandra-fr
+                    - app-type: vue-session-cassandra-fr
                       entity: cassandra
                       profile: dev,webpack
                       war: 0

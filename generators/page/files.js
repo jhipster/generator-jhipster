@@ -86,7 +86,7 @@ function writeFiles() {
     this.pageFolderName = this.pageName.toLowerCase();
     this.pageInstance = _.lowerFirst(this.pageName);
 
-    // write client side files for Vue.js
+    // write client side files for Vue
     this.writeFilesToDisk(vueFiles, this, false, `${CLIENT_VUE_TEMPLATES_DIR}`);
 
     // Add page paths to routing system

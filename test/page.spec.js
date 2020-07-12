@@ -11,7 +11,7 @@ const pageName = 'MyTestPage';
 const pageFolderName = 'mytestpage';
 const pageInstance = 'myTestPage';
 
-describe('Subgenerator page for Vue.js application', () => {
+describe('Subgenerator page for Vue application', () => {
     describe('Create page', () => {
         before(done => {
             helpers

@@ -216,7 +216,7 @@ const expectedFiles = {
     ],
 };
 
-describe('Vue.js applications', () => {
+describe('Vue applications', () => {
     describe('Default with Maven', () => {
         before(done => {
             helpers
@@ -244,7 +244,7 @@ describe('Vue.js applications', () => {
                 })
                 .on('end', done);
         });
-        it('creates expected files from jhipster vue.js generator', () => {
+        it('creates expected files from jhipster Vue generator', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
@@ -297,7 +297,7 @@ describe('Vue.js applications', () => {
                 })
                 .on('end', done);
         });
-        it('creates expected files from jhipster vue.js generator', () => {
+        it('creates expected files from jhipster Vue generator', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
@@ -350,7 +350,7 @@ describe('Vue.js applications', () => {
                 })
                 .on('end', done);
         });
-        it('creates expected files from jhipster vue.js generator', () => {
+        it('creates expected files from jhipster Vue generator', () => {
             assert.noFile(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
@@ -402,7 +402,7 @@ describe('Vue.js applications', () => {
                 })
                 .on('end', done);
         });
-        it('creates expected files from jhipster vue.js generator', () => {
+        it('creates expected files from jhipster Vue generator', () => {
             assert.noFile(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
@@ -457,7 +457,7 @@ describe('Vue.js applications', () => {
                 })
                 .on('end', done);
         });
-        it('creates expected files from jhipster vue.js generator', () => {
+        it('creates expected files from jhipster Vue generator', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
@@ -512,7 +512,7 @@ describe('Vue.js applications', () => {
                 })
                 .on('end', done);
         });
-        it('creates expected files from jhipster vue.js generator', () => {
+        it('creates expected files from jhipster Vue generator', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
@@ -566,7 +566,7 @@ describe('Vue.js applications', () => {
                 })
                 .on('end', done);
         });
-        it('creates expected files from jhipster vue.js generator', () => {
+        it('creates expected files from jhipster Vue generator', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
@@ -620,7 +620,7 @@ describe('Vue.js applications', () => {
                 })
                 .on('end', done);
         });
-        it('creates expected files from jhipster vue.js generator', () => {
+        it('creates expected files from jhipster Vue generator', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
