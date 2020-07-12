@@ -52,7 +52,7 @@
         "jsdoc": "jsdoc --configure jsdoc-conf.json",
         "prepare": "npm run jdl:diagrams && npm run jdl:bundle && npm run jdl:commit-dist",
         "jdl:bundle": "node jdl/bundling/scripts/bundle.js && webpack --config jdl/bundling/webpack.config.js",
-        "jdl:commit-dist": "git add jdl/bundling/dist && git add jdl/parsing/generated && git commit --allow-empty -m \"Update dist\"",
+        "jdl:commit-dist": "git add jdl/bundling/dist && git add jdl/parsing/generated && node scripts/commit-changed-generated-jdl-files.js",
         "jdl:diagrams": "node jdl/bundling/scripts/serialize-grammar.js && eslint jdl/parsing/generated"
     },
     "dependencies": {
@@ -84,6 +84,7 @@
         "randexp": "0.5.3",
         "semver": "7.3.2",
         "shelljs": "0.8.4",
+        "simple-git": "2.12.0",
         "sync-request": "6.1.0",
         "tabtab": "2.2.2",
         "test": "^0.6.0",
