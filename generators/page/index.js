@@ -16,13 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable consistent-return */
 const chalk = require('chalk');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const jhipsterUtils = require('../utils');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 
 let useBlueprints;
+
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
@@ -54,9 +55,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.loadOptions();
         this.loadRuntimeOptions();
 
-        useBlueprints =
-            !this.fromBlueprint &&
-            this.instantiateBlueprints('page');
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('page');
     }
 
     _initializing() {

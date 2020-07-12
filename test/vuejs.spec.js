@@ -239,7 +239,7 @@ describe('Vue.js applications', () => {
                     nativeLanguage: 'en',
                     languages: ['en', 'fr'],
                     buildTool: 'maven',
-                    clientFramework: 'vue',
+                    clientFramework: VUE,
                     clientTheme: 'none',
                 })
                 .on('end', done);
@@ -292,7 +292,7 @@ describe('Vue.js applications', () => {
                     nativeLanguage: 'en',
                     languages: ['en', 'fr'],
                     buildTool: 'gradle',
-                    clientFramework: 'vue',
+                    clientFramework: VUE,
                     clientTheme: 'none',
                 })
                 .on('end', done);
@@ -345,7 +345,7 @@ describe('Vue.js applications', () => {
                     enableTranslation: false,
                     nativeLanguage: 'en',
                     buildTool: 'maven',
-                    clientFramework: 'vue',
+                    clientFramework: VUE,
                     clientTheme: 'none',
                 })
                 .on('end', done);
@@ -397,7 +397,7 @@ describe('Vue.js applications', () => {
                     enableTranslation: false,
                     nativeLanguage: 'en',
                     buildTool: 'maven',
-                    clientFramework: 'vue',
+                    clientFramework: VUE,
                     clientTheme: 'none',
                 })
                 .on('end', done);
@@ -451,7 +451,7 @@ describe('Vue.js applications', () => {
                     languages: ['en', 'fr'],
                     testFrameworks: ['protractor'],
                     buildTool: 'maven',
-                    clientFramework: 'vue',
+                    clientFramework: VUE,
                     serverSideOptions: ['searchEngine:elasticsearch'],
                     clientTheme: 'none',
                 })
@@ -506,7 +506,7 @@ describe('Vue.js applications', () => {
                     languages: ['en', 'fr'],
                     testFrameworks: ['protractor'],
                     buildTool: 'maven',
-                    clientFramework: 'vue',
+                    clientFramework: VUE,
                     serverSideOptions: ['websocket:spring-websocket'],
                     clientTheme: 'none',
                 })
@@ -561,7 +561,7 @@ describe('Vue.js applications', () => {
                     nativeLanguage: 'en',
                     languages: ['en', 'fr'],
                     buildTool: 'maven',
-                    clientFramework: 'vue',
+                    clientFramework: VUE,
                     clientTheme: 'none',
                 })
                 .on('end', done);
@@ -614,7 +614,7 @@ describe('Vue.js applications', () => {
                     nativeLanguage: 'en',
                     languages: ['en', 'fr'],
                     buildTool: 'maven',
-                    clientFramework: 'vue',
+                    clientFramework: VUE,
                     clientTheme: 'lux',
                     clientThemeVariant: 'primary',
                 })

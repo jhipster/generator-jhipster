@@ -486,12 +486,12 @@ function writeFiles() {
                     utils.vueReplaceTranslation(this, [
                         `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
                         `app/entities/${this.entityFolderName}/${this.entityFileName}-update.vue`,
-                        `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`
+                        `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`,
                     ]);
                 } else {
                     utils.vueReplaceTranslation(this, [
                         `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
-                        `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`
+                        `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`,
                     ]);
                 }
             }

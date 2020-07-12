@@ -14,11 +14,7 @@
         "skipFakeData": false,
         "entitySuffix": "",
         "dtoSuffix": "DTO",
-        "testFrameworks": [
-            "gatling",
-            "cucumber",
-            "protractor"
-        ],
+        "testFrameworks": ["gatling", "cucumber", "protractor"],
         "blueprints": [],
         "creationTimestamp": 1594541091665,
         "serviceDiscoveryType": false,
@@ -44,8 +40,6 @@
         "enableHibernateCache": false,
         "clientThemeVariant": "primary",
         "useSass": true,
-        "languages": [
-            "en"
-        ]
+        "languages": ["en"]
     }
 }
