@@ -16,13 +16,10 @@
         "testFrameworks": ["gatling", "protractor"],
         "blueprints": [],
         "creationTimestamp": 1594459281773,
-        "promptValues": {
-            "packageName": "com.mycompany.myapp",
-            "nativeLanguage": "en"
-        },
         "serviceDiscoveryType": false,
         "authenticationType": "jwt",
-        "packageName": "com.mycompany.myapp",
+        "packageName": "io.github.jhipster.sample",
+        "packageFolder": "io/github/jhipster/sample",
         "serverPort": "8080",
         "cacheProvider": "ehcache",
         "enableHibernateCache": true,
@@ -39,7 +36,6 @@
         "clientTheme": "none",
         "enableTranslation": true,
         "nativeLanguage": "en",
-        "packageFolder": "com/mycompany/myapp",
         "jwtSecretKey": "MzEwZWVjYWExMjg4ZjhhYjgxM2RkZGFlMmUxZGZkYjExMzkyOThmM2YxMTRkZmZmY2MzMzJlNmMxZjYzYzUxMGJlNGRkY2FlM2Q5MWQzODNkNmM5MDFjZTI2MWNkMzExMTFlNzU1YTczOGI5ZGI1MGI3NjI1OTYzMGViODdhOGU=",
         "clientThemeVariant": "primary",
         "useSass": true,
