@@ -391,7 +391,7 @@ const vueFiles = {
 function writeFiles() {
     mkdirp(MAIN_SRC_DIR);
     // write Vue.js files
-    this.writeFilesToDisk(vueFiles, this, false, `${CLIENT_VUE_TEMPLATES_DIR}`);
+    this.writeFilesToDisk(vueFiles, this, false, this.fetchFromInstalledJHipster('client/templates/vue'));
 
     if (!this.enableTranslation) {
         utils.vueReplaceTranslation(this, [

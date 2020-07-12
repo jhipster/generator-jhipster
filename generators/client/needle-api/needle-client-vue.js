@@ -82,46 +82,46 @@ module.exports = class extends needleClientBase {
         if (!readOnly) {
             // prettier-ignore
             entityEntry = this.generator.stripMargin(
-                `|    {
-                |      path: '/${entityFileName}',
-                |      name: '${entityName}',
-                |      component: ${entityName},
-                |      meta: { authorities: [Authority.USER] }
-                |    },
-                |    {
-                |      path: '/${entityFileName}/new',
-                |      name: '${entityName}Create',
-                |      component: ${entityName}Update,
-                |      meta: { authorities: [Authority.USER] }
-                |    },
-                |    {
-                |      path: '/${entityFileName}/:${entityInstance}Id/edit',
-                |      name: '${entityName}Edit',
-                |      component: ${entityName}Update,
-                |      meta: { authorities: [Authority.USER] }
-                |    },
-                |    {
-                |      path: '/${entityFileName}/:${entityInstance}Id/view',
-                |      name: '${entityName}View',
-                |      component: ${entityName}Details,
-                |      meta: { authorities: [Authority.USER] }
-                |    },`
+                `|{
+                |    path: '/${entityFileName}',
+                |    name: '${entityName}',
+                |    component: ${entityName},
+                |    meta: { authorities: [Authority.USER] }
+                |  },
+                |  {
+                |    path: '/${entityFileName}/new',
+                |    name: '${entityName}Create',
+                |    component: ${entityName}Update,
+                |    meta: { authorities: [Authority.USER] }
+                |  },
+                |  {
+                |    path: '/${entityFileName}/:${entityInstance}Id/edit',
+                |    name: '${entityName}Edit',
+                |    component: ${entityName}Update,
+                |    meta: { authorities: [Authority.USER] }
+                |  },
+                |  {
+                |    path: '/${entityFileName}/:${entityInstance}Id/view',
+                |    name: '${entityName}View',
+                |    component: ${entityName}Details,
+                |    meta: { authorities: [Authority.USER] }
+                |  },`
             );
         } else {
             // prettier-ignore
             entityEntry = this.generator.stripMargin(
-                `|    {
-                |      path: '/${entityFileName}',
-                |      name: '${entityName}',
-                |      component: ${entityName},
-                |      meta: { authorities: [Authority.USER] }
-                |    },
-                |    {
-                |      path: '/${entityFileName}/:${entityInstance}Id/view',
-                |      name: '${entityName}View',
-                |      component: ${entityName}Details,
-                |      meta: { authorities: [Authority.USER] }
-                |    },`
+                `|{
+                |    path: '/${entityFileName}',
+                |    name: '${entityName}',
+                |    component: ${entityName},
+                |    meta: { authorities: [Authority.USER] }
+                |  },
+                |  {
+                |    path: '/${entityFileName}/:${entityInstance}Id/view',
+                |    name: '${entityName}View',
+                |    component: ${entityName}Details,
+                |    meta: { authorities: [Authority.USER] }
+                |  },`
             );
         }
 
@@ -135,7 +135,7 @@ module.exports = class extends needleClientBase {
 
         // prettier-ignore
         const entityEntry = this.generator.stripMargin(
-            `|import ${entityName}Service from '@/entities/${entityFolderName}/${entityFileName}.service';`
+            `import ${entityName}Service from '@/entities/${entityFolderName}/${entityFileName}.service';`
         );
 
         const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-service-to-main-import', entityEntry);
@@ -148,7 +148,7 @@ module.exports = class extends needleClientBase {
 
         // prettier-ignore
         const entityEntry = this.generator.stripMargin(
-            `|    ${entityInstance}Service: () => new ${entityName}Service(),`
+            `${entityInstance}Service: () => new ${entityName}Service(),`
         );
 
         const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-service-to-main', entityEntry);
