@@ -316,8 +316,6 @@ module.exports = class extends BaseBlueprintGenerator {
     _configuring() {
         return {
             setup() {
-                this.jhipsterConfig.jhiPrefix = _.camelCase(this.jhipsterConfig.jhiPrefix);
-
                 // Update jhipsterVersion.
                 this.jhipsterConfig.jhipsterVersion = packagejs.version;
 
@@ -346,6 +344,9 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 // Set app defaults
                 this.setConfigDefaults(appDefaultConfig);
+            },
+            fixConfig() {
+                this.jhipsterConfig.jhiPrefix = _.camelCase(this.jhipsterConfig.jhiPrefix);
             },
         };
     }
