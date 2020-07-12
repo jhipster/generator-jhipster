@@ -13,7 +13,7 @@
     "skipFakeData": false,
     "entitySuffix": "",
     "dtoSuffix": "DTO",
-    "testFrameworks": [],
+    "testFrameworks": ["gatling", "protractor"],
     "blueprints": [],
     "creationTimestamp": 1594452153587,
     "promptValues": {

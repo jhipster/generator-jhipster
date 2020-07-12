@@ -27,6 +27,26 @@ module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false,
+        });
+        this.option('skip-prompts', {
+            desc: 'Skip prompts',
+            type: Boolean,
+            hide: true,
+            defaults: false,
+        });
+        // This makes it possible to pass `languages` by argument
+        this.argument('pageName', {
+            type: String,
+            required: false,
+            description: 'Page name',
+        });
+        this.pageName = this.options.pageName;
+
         if (this.options.help) {
             return;
         }
@@ -34,7 +54,9 @@ module.exports = class extends BaseBlueprintGenerator {
         this.loadOptions();
         this.loadRuntimeOptions();
 
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('common');
+        useBlueprints =
+            !this.fromBlueprint &&
+            this.instantiateBlueprints('page');
     }
 
     _initializing() {

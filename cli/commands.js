@@ -161,7 +161,7 @@ Example:
     },
     page: {
         argument: ['name'],
-        desc: 'Create a new VueJS page.',
+        desc: 'Create a new Vue page.',
     },
     'spring-service': {
         alias: 'service',

@@ -833,13 +833,12 @@ function vueAddPageToRouter(generator, pageName, pageFolderName) {
             splicable: [
                 generator.stripMargin(
                     // prettier-ignore
-                    `|
-                |    {
-                |      path: '/pages/${pageFolderName}',
-                |      name: '${pageName}',
-                |      component: ${pageName},
-                |      meta: { authorities: [Authority.USER] }
-                |    },`
+                    `|{
+                    |    path: '/pages/${pageFolderName}',
+                    |    name: '${pageName}',
+                    |    component: ${pageName},
+                    |    meta: { authorities: [Authority.USER] }
+                    |  },`
                 ),
             ],
         },
