@@ -246,12 +246,14 @@ module.exports = class extends BaseBlueprintGenerator {
             write() {
                 if (this.skipClient) return;
                 switch (this.clientFramework) {
+                    case ANGULAR:
+                        return writeAngularFiles.call(this, useBlueprints);
                     case REACT:
                         return writeReactFiles.call(this, useBlueprints);
                     case VUE:
                         return writeVueFiles.call(this, useBlueprints);
                     default:
-                        return writeAngularFiles.call(this, useBlueprints);
+                    // do nothing by default
                 }
             },
         };
