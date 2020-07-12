@@ -57,8 +57,29 @@ module.exports = class extends PrivateBase {
     constructor(args, opts) {
         super(args, opts);
 
-        // JHipster config using proxy mode (like a plain object)
-        this.jhipsterConfig = this._getStorage('generator-jhipster').createProxy();
+        /* Force config to use 'generator-jhipster' namespace. */
+        this.config = this._getStorage('generator-jhipster');
+        /* JHipster config using proxy mode used as a plain object instead of using get/set. */
+        this.jhipsterConfig = this.config.createProxy();
+
+        /*
+         * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the
+         * generator and then executes generator.config.defaults(localConfig).
+         * JHipster workflow does a lot of configuration at the constructor, sometimes this is required due to current
+         * blueprints support implementation, making it incompatible with yeoman-test's withLocalConfig.
+         * 'defaultLocalConfig' option is a replacement for yeoman-test's withLocalConfig method.
+         * 'defaults' function sets every key that has undefined value at current config.
+         */
+        if (this.options.defaultLocalConfig) {
+            this.config.defaults(this.options.defaultLocalConfig);
+        }
+        /*
+         * Option 'localConfig' uses set instead of defaults of 'defaultLocalConfig'.
+         * 'set' function sets every key from 'localConfig'.
+         */
+        if (this.options.localConfig) {
+            this.config.set(this.options.localConfig);
+        }
 
         // JHipster runtime config that should not be stored to .yo-rc.json.
         this.configOptions = this.options.configOptions || {};

@@ -44,6 +44,10 @@ module.exports = class extends BaseBlueprintGenerator {
             type: Boolean,
             defaults: false,
         });
+        this.option('base-name', {
+            desc: 'Application base name',
+            type: String,
+        });
         this.option('application-type', {
             desc: 'Application type to generate',
             type: String,
