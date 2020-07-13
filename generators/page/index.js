@@ -20,7 +20,7 @@
 const chalk = require('chalk');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
-const writeFiles = require('./files').writeFiles;
+const writeVueFiles = require('./files-vue').writeFiles;
 const constants = require('../generator-constants');
 
 const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
@@ -58,6 +58,8 @@ module.exports = class extends BaseBlueprintGenerator {
         this.loadOptions();
         this.loadRuntimeOptions();
 
+        this.rootGenerator = this.env.rootGenerator() === this;
+
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('page');
     }
 
@@ -66,13 +68,12 @@ module.exports = class extends BaseBlueprintGenerator {
             validateFromCli() {
                 this.checkInvocationFromCLI();
             },
-            setupConsts() {
-                const configuration = this.jhipsterConfig;
-                this.skipClient = configuration.skipClient;
-                this.clientPackageManager = configuration.clientPackageManager;
-                this.enableTranslation = configuration.enableTranslation;
-                this.protractorTests = configuration.testFrameworks && configuration.testFrameworks.includes('protractor');
-                this.clientFramework = configuration.clientFramework;
+            loadConfig() {
+                this.skipClient = this.jhipsterConfig.skipClient;
+                this.clientPackageManager = this.jhipsterConfig.clientPackageManager;
+                this.enableTranslation = this.jhipsterConfig.enableTranslation;
+                this.protractorTests = this.jhipsterConfig.testFrameworks && this.jhipsterConfig.testFrameworks.includes('protractor');
+                this.clientFramework = this.jhipsterConfig.clientFramework;
 
                 if (this.clientFramework !== VUE) {
                     this.error(`This sub generator page is not supported for ${this.clientFramework}`);
@@ -97,10 +98,28 @@ module.exports = class extends BaseBlueprintGenerator {
         return this._prompting();
     }
 
+    _configuring() {
+        return {
+            save() {
+                const pages = this.jhipsterConfig.pages || [];
+                const page = pages.find(page => page.name === this.pageName);
+                if (page) {
+                    return;
+                }
+                this.jhipsterConfig.pages = pages.concat({ name: this.pageName });
+            },
+        };
+    }
+
+    get configuring() {
+        if (useBlueprints) return;
+        return this._configuring();
+    }
+
     _writing() {
         return {
             writeAdditionalFile() {
-                writeFiles.call(this);
+                writeVueFiles.call(this);
             },
         };
     }
@@ -113,9 +132,11 @@ module.exports = class extends BaseBlueprintGenerator {
     _end() {
         return {
             end() {
-                if (!this.options['skip-install'] && !this.skipClient) {
-                    this.rebuildClient();
-                }
+                if (!this.rootGenerator || this.options.skipInstall || this.skipClient) return;
+                this.rebuildClient();
+            },
+            success() {
+                if (!this.rootGenerator) return;
                 this.log(chalk.bold.green(`Page ${this.pageName} generated successfully.`));
             },
         };

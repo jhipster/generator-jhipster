@@ -2137,6 +2137,13 @@ module.exports = class extends PrivateBase {
         if (options.dtoSuffix) {
             this.jhipsterConfig.dtoSuffix = options.dtoSuffix;
         }
+        if (options.clientFramework) {
+            this.jhipsterConfig.clientFramework = options.clientFramework;
+        }
+        if (options.testFrameworks) {
+            this.jhipsterConfig.testFrameworks = options.testFrameworks;
+        }
+
         this.configOptions.useYarn = this.options.yarn || this.jhipsterConfig.clientPackageManager === 'yarn';
         this.configOptions.useNpm = !this.configOptions.useYarn;
         this.jhipsterConfig.clientPackageManager = this.configOptions.useYarn ? 'yarn' : 'npm';
@@ -2194,7 +2201,6 @@ module.exports = class extends PrivateBase {
      */
     loadClientConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
         dest.clientPackageManager = config.clientPackageManager;
-        dest.clientFramework = config.clientFramework;
         dest.clientFramework = config.clientFramework;
         dest.clientTheme = config.clientTheme;
         dest.clientThemeVariant = config.clientThemeVariant;
