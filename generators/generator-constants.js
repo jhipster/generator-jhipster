@@ -20,7 +20,7 @@ const semver = require('semver');
 const packagejs = require('../package.json');
 
 // Version of Java
-const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
+const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the variable as it might be useful in the future.
 
 // Version of Node, Yarn, NPM
 const NODE_VERSION = '12.16.1';
