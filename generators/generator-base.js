@@ -2182,6 +2182,7 @@ module.exports = class extends PrivateBase {
         dest.otherModules = config.otherModules || [];
         dest.skipClient = config.skipClient;
         dest.prettierJava = config.prettierJava;
+        dest.pages = config.pages;
 
         dest.testFrameworks = config.testFrameworks || [];
         dest.gatlingTests = dest.testFrameworks.includes('gatling');

@@ -86,5 +86,15 @@ describe('Page subgenerator', () => {
 
             containsVueFiles();
         });
+
+        describe('regenerating a exiting page', () => {
+            before(() => {
+                return createClientProject({ localConfig: { clientFramework: 'vue', pages: [{ name: pageName }] } }).then(result1 => {
+                    runResult = result1;
+                });
+            });
+
+            containsVueFiles();
+        });
     });
 });

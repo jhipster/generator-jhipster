@@ -439,6 +439,21 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
             },
 
+            regeneratePages() {
+                if (!this.configOptions.skipComposePage) {
+                    this.configOptions.skipComposePage = true;
+                    const configOptions = this.configOptions;
+                    this.jhipsterConfig.pages.forEach(page => {
+                        this.composeWith(require.resolve('../page'), {
+                            configOptions,
+                            'skip-install': true,
+                            debug: this.isDebugEnabled,
+                            arguments: [page.name],
+                        });
+                    });
+                }
+            },
+
             initGitRepo() {
                 if (!this.options['skip-git']) {
                     if (this.gitInstalled || this.isGitInstalled()) {
