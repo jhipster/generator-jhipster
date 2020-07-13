@@ -1,4 +1,7 @@
+coverage
 generators/**/templates
+node_modules
 test-integration
 docs
+test/templates
 jdl/bundling

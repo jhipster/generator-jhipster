@@ -44,6 +44,7 @@ const GENERATOR_JHIPSTER = 'generator-jhipster';
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 /**
  * This is the Generator base class.
@@ -172,6 +173,8 @@ module.exports = class extends PrivateBase {
             this.needleApi.clientAngular.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
         } else if (this.clientFramework === REACT) {
             this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
+        } else if (this.clientFramework === VUE) {
+            this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
         }
     }
 
@@ -195,7 +198,8 @@ module.exports = class extends PrivateBase {
         entityFileName,
         entityUrl,
         clientFramework,
-        microServiceName
+        microServiceName,
+        readOnly
     ) {
         if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addEntityToModule(
@@ -209,6 +213,11 @@ module.exports = class extends PrivateBase {
             );
         } else if (clientFramework === REACT) {
             this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName);
+        } else if (clientFramework === VUE) {
+            this.needleApi.clientVue.addEntityToRouterImport(entityName, entityFileName, entityFolderName, readOnly);
+            this.needleApi.clientVue.addEntityToRouter(entityInstance, entityName, entityFileName, readOnly);
+            this.needleApi.clientVue.addEntityServiceToMainImport(entityName, entityClass, entityFileName, entityFolderName);
+            this.needleApi.clientVue.addEntityServiceToMain(entityInstance, entityName);
         }
     }
 
@@ -2164,6 +2173,7 @@ module.exports = class extends PrivateBase {
         dest.clientFramework = config.clientFramework;
         dest.clientFramework = config.clientFramework;
         dest.clientTheme = config.clientTheme;
+        dest.clientThemeVariant = config.clientThemeVariant;
     }
 
     loadTranslationConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {

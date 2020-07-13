@@ -27,6 +27,7 @@ const { translationDefaultConfig } = require('../generator-defaults');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 let useBlueprints;
 
@@ -211,13 +212,19 @@ module.exports = class extends BaseBlueprintGenerator {
             write() {
                 if (!this.skipClient) {
                     this.updateLanguagesInLanguagePipe(this.languages);
-                    this.updateLanguagesInWebpack(this.languages);
                     if (this.clientFramework === ANGULAR) {
                         this.updateLanguagesInLanguageConstantNG2(this.languages);
                         this.updateLanguagesInMomentWebpackNgx(this.languages);
+                        this.updateLanguagesInWebpack(this.languages);
                     }
                     if (this.clientFramework === REACT) {
                         this.updateLanguagesInMomentWebpackReact(this.languages);
+                        this.updateLanguagesInWebpack(this.languages);
+                    }
+                    if (this.clientFramework === VUE) {
+                        this.vueUpdateLanguagesInTranslationStore(this.languages);
+                        this.vueUpdateI18nConfig(this.languages);
+                        this.vueUpdateLanguagesInWebpack(this.languages);
                     }
                 }
                 if (!this.skipUserManagement && !this.skipServer) {

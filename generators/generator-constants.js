@@ -123,6 +123,7 @@ const SUPPORTED_VALIDATION_RULES = ['required', 'unique', 'max', 'min', 'maxleng
 const SUPPORTED_CLIENT_FRAMEWORKS = {
     ANGULAR: 'angularX',
     REACT: 'react',
+    VUE: 'vue',
 };
 
 // documentation constants
@@ -322,6 +323,7 @@ const constants = {
     CLIENT_DIST_DIR,
     ANGULAR_DIR: `${MAIN_DIR}webapp/app/`,
     REACT_DIR: `${MAIN_DIR}webapp/app/`,
+    VUE_DIR: `${MAIN_DIR}webapp/app/`,
 
     SERVER_MAIN_SRC_DIR: `${MAIN_DIR}java/`,
     SERVER_MAIN_RES_DIR: `${MAIN_DIR}resources/`,

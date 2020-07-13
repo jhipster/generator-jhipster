@@ -1,0 +1,133 @@
+import { createLocalVue, shallowMount, Wrapper } from '@vue/test-utils';
+import JhiNavbar from '@/core/jhi-navbar/jhi-navbar.vue';
+import JhiNavbarClass from '@/core/jhi-navbar/jhi-navbar.component';
+import * as config from '@/shared/config/config';
+import router from '@/router';
+
+const localVue = createLocalVue();
+config.initVueApp(localVue);
+<%_ if (enableTranslation) { _%>
+const i18n = config.initI18N(localVue);
+<%_ } _%>
+const store = config.initVueXStore(localVue);
+localVue.component('font-awesome-icon', {});
+localVue.component('b-navbar', {});
+localVue.component('b-navbar-nav', {});
+localVue.component('b-dropdown-item', {});
+localVue.component('b-collapse', {});
+localVue.component('b-nav-item', {});
+localVue.component('b-nav-item-dropdown', {});
+localVue.component('b-navbar-toggle', {});
+localVue.component('b-navbar-brand', {});
+localVue.component('b-navbar-nav', {});
+
+describe('JhiNavbar', () => {
+let jhiNavbar: JhiNavbarClass;
+let wrapper: Wrapper<JhiNavbarClass>;
+  <%_ if (authenticationType === 'jwt') { _%>
+  const loginService = { openLogin: jest.fn() };
+  <%_ } else if (authenticationType === 'session') { _%>
+  const loginService = { openLogin: jest.fn(), logout: jest.fn() };
+  <%_ } else if (authenticationType === 'oauth2') { _%>
+  const loginService = { login: jest.fn(), logout: jest.fn() };
+  <%_ } _%>
+  const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
+  <%_ if (enableTranslation) { _%>
+  const translationService = { refreshTranslation: jest.fn() };
+  <%_ } _%>
+
+  beforeEach(() => {
+    wrapper = shallowMount<JhiNavbarClass>(JhiNavbar, {
+      <%_ if (enableTranslation) { _%>
+      i18n,
+      <%_ } _%>
+      store,
+      router,
+      localVue,
+      provide: {
+        loginService: () => loginService,
+        <%_ if (enableTranslation) { _%>
+        translationService: () => translationService,
+        <%_ } _%>
+        accountService: () => accountService
+      }
+    });
+    jhiNavbar = wrapper.vm;
+  });
+  <%_ if (enableTranslation) { _%>
+  it('should refresh translations', () => {
+    expect(translationService.refreshTranslation).toHaveBeenCalled();
+  });
+  <%_ } _%>
+
+  it('should not have user data set', () => {
+    expect(jhiNavbar.authenticated).toBeFalsy();
+    expect(jhiNavbar.swaggerEnabled).toBeFalsy();
+    expect(jhiNavbar.inProduction).toBeFalsy();
+  });
+
+  it('should have user data set after authentication', () => {
+    store.commit('authenticated', { login: 'test' });
+
+    expect(jhiNavbar.authenticated).toBeTruthy();
+  });
+
+  it('should have profile info set after info retrieved', () => {
+    store.commit('setActiveProfiles', ['prod', 'swagger']);
+
+    expect(jhiNavbar.swaggerEnabled).toBeTruthy();
+    expect(jhiNavbar.inProduction).toBeTruthy();
+  });
+
+  it('should use login service', () => {
+    jhiNavbar.openLogin();
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    expect(loginService.openLogin).toHaveBeenCalled();
+    <%_ } else { _%>
+    expect(loginService.login).toHaveBeenCalled();
+    <%_ } _%>
+  });
+
+  it('should use account service', () => {
+    jhiNavbar.hasAnyAuthority('auth');
+
+    expect(accountService.hasAnyAuthorityAndCheckAuth).toHaveBeenCalled();
+  });
+
+  it('logout should clear credentials', () => {
+    store.commit('authenticated', { login: 'test' });
+    <%_ if (authenticationType !== 'jwt') { _%>
+    loginService.logout.mockReturnValue(Promise.resolve());
+    <%_ } _%>
+    jhiNavbar.logout();
+
+    <%_ if (authenticationType !== 'jwt') { _%>
+    expect(loginService.logout).toHaveBeenCalled();
+    <%_ } else { _%>
+    expect(jhiNavbar.authenticated).toBeFalsy();
+    <%_ } _%>
+  });
+
+  it('should determine active route', () => {
+    router.push('/toto');
+
+    expect(jhiNavbar.subIsActive('/titi')).toBeFalsy();
+    expect(jhiNavbar.subIsActive('/toto')).toBeTruthy();
+    expect(jhiNavbar.subIsActive(['/toto', 'toto'])).toBeTruthy();
+  });
+
+  <%_ if (enableTranslation) { _%>
+  it('should call translationService when changing language', () => {
+    jhiNavbar.changeLanguage('fr');
+
+    expect(translationService.refreshTranslation).toHaveBeenCalled();
+  });
+
+  it('should check for correct language', () => {
+    store.commit('currentLanguage', 'fr');
+
+    expect(jhiNavbar.isActiveLanguage('en')).toBeFalsy();
+    expect(jhiNavbar.isActiveLanguage('fr')).toBeTruthy();
+  });
+  <%_ } _%>
+});
