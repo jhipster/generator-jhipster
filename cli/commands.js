@@ -159,10 +159,6 @@ Example:
     openshift: {
         desc: 'Deploy the current application to OpenShift',
     },
-    page: {
-        argument: ['name'],
-        desc: 'Create a new Vue page.',
-    },
     'spring-service': {
         alias: 'service',
         argument: ['name'],
@@ -180,6 +176,10 @@ Example:
     },
     'upgrade-config': {
         desc: 'Upgrade the JHipster configuration',
+    },
+    'vue-page': {
+        argument: ['name'],
+        desc: 'Create a new Vue page.',
     },
 };
 

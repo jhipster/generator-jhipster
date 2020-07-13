@@ -11,11 +11,11 @@ const pageName = 'MyTestPage';
 const pageFolderName = 'mytestpage';
 const pageInstance = 'myTestPage';
 
-describe('Subgenerator page for Vue application', () => {
-    describe('Create page', () => {
+describe('Subgenerator vue-page for Vue application', () => {
+    describe('Create Vue page', () => {
         before(done => {
             helpers
-                .run(require.resolve('../generators/page'))
+                .run(require.resolve('../generators/vue-page'))
                 .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/vuejs-default'), dir);
                 })

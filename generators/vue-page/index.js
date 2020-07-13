@@ -75,7 +75,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.clientFramework = configuration.clientFramework;
 
                 if (this.clientFramework !== VUE) {
-                    this.error(`This sub generator page is not supported for ${this.clientFramework}`);
+                    this.error(`This sub generator vue-page is not supported for ${this.clientFramework}`);
                 }
             },
         };
