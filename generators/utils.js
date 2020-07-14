@@ -65,12 +65,7 @@ module.exports = {
     checkStringInFile,
     checkRegexInFile,
     loadYoRc,
-    mergeBlueprints,
-    loadBlueprintsFromConfiguration,
-    parseBluePrints,
-    normalizeBlueprintName,
     packageNameToNamespace,
-    parseBlueprintInfo,
     stringHashCode,
     RandexpWithFaker,
     gitExec,
@@ -644,113 +639,12 @@ function checkRegexInFile(path, regex, generator) {
 }
 
 /**
- * Loads the blueprint information from the configuration of the specified generator.
- * @param config - the generator's configuration object.
- * @returns {Array} an array that contains the info for each blueprint
- */
-function loadBlueprintsFromConfiguration(config) {
-    // handle both config based on yeoman's Storage object, and direct configuration loaded from .yo-rc.json
-    const configuration = config && config.getAll && typeof config.getAll === 'function' ? config.getAll() || {} : config;
-    // load blueprints from config file
-    const blueprints = configuration.blueprints || [];
-
-    const oldBlueprintName = configuration.blueprint;
-    if (oldBlueprintName && blueprints.findIndex(e => e.name === oldBlueprintName) === -1) {
-        const version = configuration.blueprintVersion || 'latest';
-        blueprints.push(parseBlueprintInfo(`${oldBlueprintName}@${version}`));
-    }
-    return blueprints;
-}
-
-/**
- * Splits and normalizes a comma separated list of blueprint names with optional versions.
- * @param {string} blueprints - comma separated list of blueprint names, e.g kotlin,vuewjs@1.0.1. If an array then
- * no processing is performed and it is returned as is.
- * @returns {Array} an array that contains the info for each blueprint
- */
-function parseBluePrints(blueprints) {
-    if (Array.isArray(blueprints)) {
-        return blueprints;
-    }
-    if (typeof blueprints === 'string') {
-        return blueprints
-            .split(',')
-            .filter(el => el != null && el.length > 0)
-            .map(blueprint => parseBlueprintInfo(blueprint));
-    }
-    return [];
-}
-
-function mergeBlueprints(...blueprintsToMerge) {
-    if (!blueprintsToMerge || blueprintsToMerge.length === 0) {
-        return [];
-    }
-    blueprintsToMerge.forEach(blueprints => {
-        if (!Array.isArray(blueprints)) {
-            throw new Error('Only arrays are supported.');
-        }
-    });
-    const blueprints = blueprintsToMerge.shift().concat();
-    while (blueprintsToMerge.length > 0) {
-        blueprintsToMerge.shift().forEach(blueprintToAdd => {
-            const blueprint = blueprints.find(blueprint => blueprint.name === blueprintToAdd.name);
-            if (blueprint) {
-                if (!blueprint.version) {
-                    blueprint.version = blueprintToAdd.version;
-                }
-            } else {
-                blueprints.push(blueprintToAdd);
-            }
-        });
-    }
-    return blueprints;
-}
-
-/**
- * Normalize blueprint name if needed and also extracts version if defined. If no version is defined then `latest`
- * is used by default.
- * @param {string} blueprint - name of the blueprint and optionally a version, e.g kotlin[@0.8.1]
- * @returns {object} containing the name and version of the blueprint
- */
-function parseBlueprintInfo(blueprint) {
-    let bpName = normalizeBlueprintName(blueprint);
-    const idx = bpName.lastIndexOf('@');
-    if (idx > 0) {
-        // Not scope.
-        const version = bpName.slice(idx + 1);
-        bpName = bpName.slice(0, idx);
-        return {
-            name: bpName,
-            version,
-        };
-    }
-    return {
-        name: bpName,
-    };
-}
-
-/**
  * Remove 'generator-' prefix from generators for compatibility with yeoman namespaces.
  * @param {string} packageName - name of the blueprint's package name
  * @returns {string} namespace of the blueprint
  */
 function packageNameToNamespace(packageName) {
     return packageName.replace('generator-', '');
-}
-
-/**
- * Normalize blueprint name: prepend 'generator-jhipster-' if needed
- * @param {string} blueprint - name of the blueprint
- * @returns {string} the normalized blueprint name
- */
-function normalizeBlueprintName(blueprint) {
-    if (blueprint && blueprint.startsWith('@')) {
-        return blueprint;
-    }
-    if (blueprint && !blueprint.startsWith('generator-jhipster')) {
-        return `generator-jhipster-${blueprint}`;
-    }
-    return blueprint;
 }
 
 /**

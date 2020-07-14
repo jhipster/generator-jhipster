@@ -22,13 +22,8 @@ const _ = require('lodash');
 const path = require('path');
 const Environment = require('yeoman-environment');
 const { CLI_NAME, logger } = require('./utils');
-const {
-    parseBlueprintInfo,
-    packageNameToNamespace,
-    loadYoRc,
-    loadBlueprintsFromConfiguration,
-    mergeBlueprints,
-} = require('../generators/utils');
+const { loadYoRc } = require('../generators/utils');
+const { parseBlueprintInfo, packageNameToNamespace, loadBlueprintsFromConfiguration, mergeBlueprints } = require('../utils/blueprint');
 
 module.exports = class EnvironmentBuilder {
     /**
@@ -179,7 +174,7 @@ module.exports = class EnvironmentBuilder {
         if (!blueprintNames.length) {
             return [];
         }
-        return blueprintNames.filter((v, i, a) => a.indexOf(v) === i).map(v => parseBlueprintInfo(v));
+        return blueprintNames.map(v => parseBlueprintInfo(v));
     }
 
     /**

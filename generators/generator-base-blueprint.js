@@ -22,8 +22,9 @@ const path = require('path');
 const semver = require('semver');
 
 const packagejs = require('../package.json');
-const jhipsterUtils = require('./utils');
+const { packageNameToNamespace } = require('./utils');
 const BaseGenerator = require('./generator-base');
+const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } = require('../utils/blueprint');
 
 /**
  * This is the base class for a generator that can be extended through a blueprint.
@@ -102,13 +103,10 @@ module.exports = class extends BaseGenerator {
                     argvBlueprints = `${blueprint},${argvBlueprints}`;
                 }
             }
-            const blueprints = jhipsterUtils.mergeBlueprints(
-                jhipsterUtils.parseBluePrints(argvBlueprints),
-                jhipsterUtils.loadBlueprintsFromConfiguration(this.config)
-            );
+            const blueprints = mergeBlueprints(parseBluePrints(argvBlueprints), loadBlueprintsFromConfiguration(this.config));
             // Run a lookup to find blueprints.
             const packagePatterns = blueprints
-                .filter(blueprint => !this.env.isPackageRegistered(jhipsterUtils.packageNameToNamespace(blueprint.name)))
+                .filter(blueprint => !this.env.isPackageRegistered(packageNameToNamespace(blueprint.name)))
                 .map(blueprint => blueprint.name);
             this.env.lookup({ filterPaths: true, packagePatterns });
 
@@ -127,7 +125,7 @@ module.exports = class extends BaseGenerator {
             this.jhipsterConfig.otherModules = otherModules;
 
             if (!this.options.skipChecks) {
-                const namespaces = blueprints.map(blueprint => jhipsterUtils.packageNameToNamespace(blueprint.name));
+                const namespaces = blueprints.map(blueprint => packageNameToNamespace(blueprint.name));
                 // Verify if the blueprints hava been registered.
                 const missing = namespaces.filter(namespace => !this.env.isPackageRegistered(namespace));
                 if (missing && missing.length > 0) {
@@ -158,12 +156,12 @@ module.exports = class extends BaseGenerator {
      * @return {Generator|undefined}
      */
     _composeBlueprint(blueprint, subGen, extraOptions = {}) {
-        blueprint = jhipsterUtils.normalizeBlueprintName(blueprint);
+        blueprint = normalizeBlueprintName(blueprint);
         if (!this.configOptions.skipChecks && !this.options.skipChecks) {
             this._checkBlueprint(blueprint);
         }
 
-        const generatorName = jhipsterUtils.packageNameToNamespace(blueprint);
+        const generatorName = packageNameToNamespace(blueprint);
         const generatorNamespace = `${generatorName}:${subGen}`;
         if (!this.env.isPackageRegistered(generatorName)) {
             this.env.lookup({ filterPaths: true, packagePatterns: blueprint });
@@ -199,7 +197,7 @@ module.exports = class extends BaseGenerator {
      * @return {object} packageJson - retrieved package.json as an object or undefined if not found
      */
     _findBlueprintPackageJson(blueprintPkgName) {
-        const blueprintGeneratorName = jhipsterUtils.packageNameToNamespace(blueprintPkgName);
+        const blueprintGeneratorName = packageNameToNamespace(blueprintPkgName);
         const blueprintPackagePath = this.env.getPackagePath(blueprintGeneratorName);
         if (!blueprintPackagePath) {
             this.warning(`Could not retrieve packagePath of blueprint '${blueprintPkgName}'`);
