@@ -108,8 +108,8 @@ module.exports = class extends BaseGenerator {
             );
             // Run a lookup to find blueprints.
             const packagePatterns = blueprints
-                .filter(bp => !this.env.isPackageRegistered(jhipsterUtils.packageNameToNamespace(bp.name)))
-                .map(bp => bp.name);
+                .filter(blueprint => !this.env.isPackageRegistered(jhipsterUtils.packageNameToNamespace(blueprint.name)))
+                .map(blueprint => blueprint.name);
             this.env.lookup({ filterPaths: true, packagePatterns });
 
             let otherModules = this.jhipsterConfig.otherModules || [];
@@ -119,7 +119,7 @@ module.exports = class extends BaseGenerator {
                 });
 
                 // Remove potential previous value to avoid duplicates
-                otherModules = otherModules.filter(module => this.blueprints.findIndex(bp => bp.name === module.name) === -1);
+                otherModules = otherModules.filter(module => this.blueprints.findIndex(blueprint => blueprint.name === module.name) === -1);
                 otherModules.push(...blueprints);
             }
 
@@ -127,8 +127,8 @@ module.exports = class extends BaseGenerator {
             this.jhipsterConfig.otherModules = otherModules;
 
             if (!this.options.skipChecks) {
-                const namespaces = blueprints.map(bp => jhipsterUtils.packageNameToNamespace(bp.name));
-                // Verify if the blueprints has been registered.
+                const namespaces = blueprints.map(blueprint => jhipsterUtils.packageNameToNamespace(blueprint.name));
+                // Verify if the blueprints hava been registered.
                 const missing = namespaces.filter(namespace => !this.env.isPackageRegistered(namespace));
                 if (missing && missing.length > 0) {
                     this.error(`Some blueprints were not found ${missing}, you should install them manually`);
@@ -155,6 +155,7 @@ module.exports = class extends BaseGenerator {
      * @param {string} blueprint - name of the blueprint
      * @param {string} subGen - sub generator
      * @param {any} options - options to pass to blueprint generator
+     * @return {Generator|undefined}
      */
     _composeBlueprint(blueprint, subGen, extraOptions = {}) {
         blueprint = jhipsterUtils.normalizeBlueprintName(blueprint);
@@ -173,7 +174,7 @@ module.exports = class extends BaseGenerator {
                     subGen
                 )} subgenerator: falling back to default generator`
             );
-            return false;
+            return undefined;
         }
 
         const finalOptions = {
@@ -201,8 +202,7 @@ module.exports = class extends BaseGenerator {
         const blueprintGeneratorName = jhipsterUtils.packageNameToNamespace(blueprintPkgName);
         const blueprintPackagePath = this.env.getPackagePath(blueprintGeneratorName);
         if (!blueprintPackagePath) {
-            const msg = `Could not retrieve packagePath of blueprint '${blueprintPkgName}'`;
-            this.warning(msg);
+            this.warning(`Could not retrieve packagePath of blueprint '${blueprintPkgName}'`);
             return undefined;
         }
         return JSON.parse(fs.readFileSync(path.join(blueprintPackagePath, 'package.json')));
