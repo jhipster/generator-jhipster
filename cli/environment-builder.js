@@ -22,8 +22,8 @@ const _ = require('lodash');
 const path = require('path');
 const Environment = require('yeoman-environment');
 const { CLI_NAME, logger } = require('./utils');
-const { loadYoRc } = require('../generators/utils');
-const { parseBlueprintInfo, packageNameToNamespace, loadBlueprintsFromConfiguration, mergeBlueprints } = require('../utils/blueprint');
+const { loadYoRc, packageNameToNamespace } = require('../generators/utils');
+const { parseBlueprintInfo, loadBlueprintsFromConfiguration, mergeBlueprints } = require('../utils/blueprint');
 
 module.exports = class EnvironmentBuilder {
     /**
