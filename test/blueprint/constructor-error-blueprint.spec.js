@@ -11,15 +11,18 @@ describe('JHipster application generator with blueprint with constructor error',
                 .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
                 .inTmpDir(dir => {
                     // Fake the presence of the blueprint in node_modules
-                    const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
+                    const fakeBlueprintModuleDir = path.join(dir, 'node_modules', 'generator-jhipster-throwing-constructor');
                     fse.ensureDirSync(fakeBlueprintModuleDir);
-                    fse.copySync(path.join(__dirname, '../../test/templates/throwing-blueprint'), fakeBlueprintModuleDir);
+                    fse.copySync(
+                        path.join(__dirname, '..', '..', 'test', 'templates', 'blueprints', 'generator-jhipster-throwing-constructor'),
+                        fakeBlueprintModuleDir
+                    );
                 })
                 .withOptions({
                     'from-cli': true,
                     skipInstall: true,
                     skipChecks: true,
-                    blueprints: 'generator-jhipster-myblueprint',
+                    blueprints: 'generator-jhipster-throwing-constructor',
                     baseName: 'jhipster',
                     defaults: true,
                 })
