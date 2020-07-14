@@ -115,7 +115,7 @@ module.exports = class extends BaseGenerator {
             let otherModules = this.jhipsterConfig.otherModules || [];
             if (blueprints && blueprints.length > 0) {
                 blueprints.forEach(blueprint => {
-                    blueprint.version = this.findBlueprintVersion(blueprint.name) || blueprint.version;
+                    blueprint.version = this._findBlueprintVersion(blueprint.name) || blueprint.version;
                 });
 
                 // Remove potential previous value to avoid duplicates
@@ -139,7 +139,7 @@ module.exports = class extends BaseGenerator {
         const blueprints = this.jhipsterConfig.blueprints;
         if (blueprints && blueprints.length > 0) {
             blueprints.forEach(blueprint => {
-                const blueprintGenerator = this.composeBlueprint(blueprint.name, subGen, extraOptions);
+                const blueprintGenerator = this._composeBlueprint(blueprint.name, subGen, extraOptions);
                 // If the blueprints sets sbsBlueprint property, then don't ignore the normal workflow.
                 if (blueprintGenerator && !blueprintGenerator.sbsBlueprint) {
                     useBlueprints = true;
@@ -150,15 +150,16 @@ module.exports = class extends BaseGenerator {
     }
 
     /**
+     * @private
      * Compose external blueprint module
      * @param {string} blueprint - name of the blueprint
      * @param {string} subGen - sub generator
      * @param {any} options - options to pass to blueprint generator
      */
-    composeBlueprint(blueprint, subGen, extraOptions = {}) {
+    _composeBlueprint(blueprint, subGen, extraOptions = {}) {
         blueprint = jhipsterUtils.normalizeBlueprintName(blueprint);
         if (!this.configOptions.skipChecks && !this.options.skipChecks) {
-            this.checkBlueprint(blueprint);
+            this._checkBlueprint(blueprint);
         }
 
         const generatorName = jhipsterUtils.packageNameToNamespace(blueprint);
@@ -191,11 +192,12 @@ module.exports = class extends BaseGenerator {
     }
 
     /**
+     * @private
      * Try to retrieve the package.json of the blueprint used, as an object.
      * @param {string} blueprintPkgName - generator name
      * @return {object} packageJson - retrieved package.json as an object or undefined if not found
      */
-    findBlueprintPackageJson(blueprintPkgName) {
+    _findBlueprintPackageJson(blueprintPkgName) {
         const blueprintGeneratorName = jhipsterUtils.packageNameToNamespace(blueprintPkgName);
         const blueprintPackagePath = this.env.getPackagePath(blueprintGeneratorName);
         if (!blueprintPackagePath) {
@@ -207,12 +209,13 @@ module.exports = class extends BaseGenerator {
     }
 
     /**
+     * @private
      * Try to retrieve the version of the blueprint used.
      * @param {string} blueprintPkgName - generator name
      * @return {string} version - retrieved version or empty string if not found
      */
-    findBlueprintVersion(blueprintPkgName) {
-        const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
+    _findBlueprintVersion(blueprintPkgName) {
+        const blueprintPackageJson = this._findBlueprintPackageJson(blueprintPkgName);
         if (!blueprintPackageJson || !blueprintPackageJson.version) {
             this.warning(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
             return undefined;
@@ -221,14 +224,15 @@ module.exports = class extends BaseGenerator {
     }
 
     /**
+     * @private
      * Check if the generator specified as blueprint is installed.
      * @param {string} blueprint - generator name
      */
-    checkBlueprint(blueprint) {
+    _checkBlueprint(blueprint) {
         if (blueprint === 'generator-jhipster') {
             this.error(`You cannot use ${chalk.yellow(blueprint)} as the blueprint.`);
         }
-        if (!this.findBlueprintPackageJson(blueprint)) {
+        if (!this._findBlueprintPackageJson(blueprint)) {
             this.error(
                 `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
                     `npm i -g ${blueprint}`
@@ -238,11 +242,12 @@ module.exports = class extends BaseGenerator {
     }
 
     /**
+     * @private
      * Check if the generator specified as blueprint has a version compatible with current JHipster.
      * @param {string} blueprintPkgName - generator name
      */
-    checkJHipsterBlueprintVersion(blueprintPkgName) {
-        const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
+    _checkJHipsterBlueprintVersion(blueprintPkgName) {
+        const blueprintPackageJson = this._findBlueprintPackageJson(blueprintPkgName);
         if (!blueprintPackageJson) {
             this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
             return;

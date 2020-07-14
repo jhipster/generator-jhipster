@@ -239,8 +239,8 @@ module.exports = class extends BaseBlueprintGenerator {
             validateBlueprint() {
                 if (this.jhipsterConfig.blueprints && !this.skipChecks) {
                     this.jhipsterConfig.blueprints.forEach(blueprint => {
-                        this.checkJHipsterBlueprintVersion(blueprint.name);
-                        this.checkBlueprint(blueprint.name);
+                        this._checkJHipsterBlueprintVersion(blueprint.name);
+                        this._checkBlueprint(blueprint.name);
                     });
                 }
             },
