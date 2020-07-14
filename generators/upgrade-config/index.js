@@ -18,7 +18,7 @@
  */
 
 const BaseGenerator = require('../generator-base');
-const utils = require('../utils');
+const { parseBluePrints } = require('../../utils/blueprint');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -45,9 +45,7 @@ module.exports = class extends BaseGenerator {
             validateFromCli: this.checkInvocationFromCLI,
 
             parseBlueprints() {
-                this.blueprints = utils.parseBluePrints(
-                    this.options.blueprints || this.config.get('blueprints') || this.config.get('blueprint')
-                );
+                this.blueprints = parseBluePrints(this.options.blueprints || this.config.get('blueprints') || this.config.get('blueprint'));
             },
 
             async unifyConfig() {
