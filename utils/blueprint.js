@@ -80,20 +80,28 @@ function mergeBlueprints(...blueprintsToMerge) {
             throw new Error('Only arrays are supported.');
         }
     });
-    const blueprints = blueprintsToMerge.shift().concat();
-    while (blueprintsToMerge.length > 0) {
-        blueprintsToMerge.shift().forEach(blueprintToAdd => {
-            const blueprint = blueprints.find(blueprint => blueprint.name === blueprintToAdd.name);
-            if (blueprint) {
-                if (!blueprint.version) {
-                    blueprint.version = blueprintToAdd.version;
-                }
-            } else {
-                blueprints.push(blueprintToAdd);
-            }
-        });
-    }
-    return blueprints;
+    return removeBlueprintDuplicates(blueprintsToMerge.flat());
+}
+
+/**
+ * @private
+ * Remove duplicate blueprints, keeping order and version priority.
+ * @param {Blueprint[]} blueprints - Blueprint arrays to be merged.
+ * @returns {Blueprint[]} an array that contains the info for each blueprint
+ */
+function removeBlueprintDuplicates(blueprints) {
+    const uniqueBlueprints = [];
+    blueprints.forEach(blueprintToAdd => {
+        const existingBlueprint = uniqueBlueprints.find(blueprint => blueprint.name === blueprintToAdd.name);
+        if (!existingBlueprint) {
+            uniqueBlueprints.push(blueprintToAdd);
+            return;
+        }
+        if (!existingBlueprint.version) {
+            existingBlueprint.version = blueprintToAdd.version;
+        }
+    });
+    return uniqueBlueprints;
 }
 
 /**
