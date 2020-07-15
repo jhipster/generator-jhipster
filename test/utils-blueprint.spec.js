@@ -117,6 +117,14 @@ describe('JHipster Blueprint Utils', () => {
             });
         });
     });
+    describe('::removeBlueprintDuplicates', () => {
+        it('keeps blueprints with undefined version', () => {
+            const argumentsToPass = [{ name: 'generator-jhipster-foo' }];
+            const expected = [{ name: 'generator-jhipster-foo' }];
+            const actual = utils.removeBlueprintDuplicates(argumentsToPass);
+            assert.deepStrictEqual(actual, expected);
+        });
+    });
     describe('::normalizeBlueprintName', () => {
         it('adds generator-jhipster prefix if it is absent', () => {
             const generatorName = utils.normalizeBlueprintName('foo');

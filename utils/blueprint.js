@@ -21,6 +21,7 @@ module.exports = {
     mergeBlueprints,
     loadBlueprintsFromConfiguration,
     parseBluePrints,
+    removeBlueprintDuplicates,
     normalizeBlueprintName,
     parseBlueprintInfo,
 };
@@ -90,18 +91,16 @@ function mergeBlueprints(...blueprintsToMerge) {
  * @returns {Blueprint[]} an array that contains the info for each blueprint
  */
 function removeBlueprintDuplicates(blueprints) {
-    const uniqueBlueprints = [];
+    const uniqueBlueprints = new Map();
     blueprints.forEach(blueprintToAdd => {
-        const existingBlueprint = uniqueBlueprints.find(blueprint => blueprint.name === blueprintToAdd.name);
-        if (!existingBlueprint) {
-            uniqueBlueprints.push(blueprintToAdd);
-            return;
-        }
-        if (!existingBlueprint.version) {
-            existingBlueprint.version = blueprintToAdd.version;
+        if (uniqueBlueprints.get(blueprintToAdd.name) === undefined) {
+            uniqueBlueprints.set(blueprintToAdd.name, blueprintToAdd.version);
         }
     });
-    return uniqueBlueprints;
+    return [...uniqueBlueprints].map(([name, version]) => {
+        if (version === undefined) return { name };
+        return { name, version };
+    });
 }
 
 /**
