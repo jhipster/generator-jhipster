@@ -15,7 +15,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/locale/translation.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/store/translation-store.ts`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/activate.json`,
-        `${CLIENT_MAIN_SRC_DIR}i18n/en/audits.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/configuration.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/error.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`,
@@ -31,7 +30,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/en/reset.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/user-management.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/activate.json`,
-        `${CLIENT_MAIN_SRC_DIR}i18n/fr/audits.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/configuration.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/error.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`,
@@ -104,9 +102,6 @@ const expectedFiles = {
 
     app: [
         `${CLIENT_MAIN_SRC_DIR}app/account/account.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audits.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audits.vue`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audits.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.service.ts`,
@@ -127,8 +122,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/account/login.service.ts`,
 
         `${CLIENT_SPEC_SRC_DIR}app/account/account.service.spec.ts`,
-        `${CLIENT_SPEC_SRC_DIR}app/admin/audits/audits.component.spec.ts`,
-        // `${CLIENT_SPEC_SRC_DIR}app/admin/audits/audits.service.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/configuration/configuration.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/health/health.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/health/health-modal.component.spec.ts`,

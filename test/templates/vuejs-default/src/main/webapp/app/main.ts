@@ -8,7 +8,6 @@ import router from './router';
 import * as config from './shared/config/config';
 import * as bootstrapVueConfig from './shared/config/config-bootstrap-vue';
 import JhiItemCountComponent from './shared/jhi-item-count.vue';
-import AuditsService from './admin/audits/audits.service';
 
 import HealthService from './admin/health/health.service';
 import MetricsService from './admin/metrics/metrics.service';
@@ -72,8 +71,6 @@ new Vue({
     activateService: () => new ActivateService(),
     registerService: () => new RegisterService(),
     userService: () => new UserManagementService(),
-
-    auditsService: () => new AuditsService(),
 
     healthService: () => new HealthService(),
 

@@ -7,7 +7,6 @@ const JhiConfigurationComponent = () => import('../admin/configuration/configura
 const JhiDocsComponent = () => import('../admin/docs/docs.vue');
 const JhiHealthComponent = () => import('../admin/health/health.vue');
 const JhiLogsComponent = () => import('../admin/logs/logs.vue');
-const JhiAuditsComponent = () => import('../admin/audits/audits.vue');
 const JhiMetricsComponent = () => import('../admin/metrics/metrics.vue');
 
 export default [
@@ -39,12 +38,6 @@ export default [
     path: '/admin/docs',
     name: 'JhiDocsComponent',
     component: JhiDocsComponent,
-    meta: { authorities: [Authority.ADMIN] },
-  },
-  {
-    path: '/admin/audits',
-    name: 'JhiAuditsComponent',
-    component: JhiAuditsComponent,
     meta: { authorities: [Authority.ADMIN] },
   },
   {
