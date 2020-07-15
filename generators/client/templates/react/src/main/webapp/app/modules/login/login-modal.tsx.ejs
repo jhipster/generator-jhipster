@@ -80,7 +80,7 @@ class LoginModal extends React.Component<ILoginModalProps> {
             <div className="mt-1">&nbsp;</div>
             <%_ if (!skipUserManagement) { _%>
             <Alert color="warning">
-              <Link to="/account/reset/request">
+              <Link to="/account/reset/request" data-cy="forgetYourPasswordSelector">
                 <Translate contentKey="login.password.forgot">Did you forget your password?</Translate>
               </Link>
             </Alert>
