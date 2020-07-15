@@ -7,9 +7,6 @@ import PasswordPage from './password-page';
 import SettingsPage from './settings-page';
 <%_ } _%>
 import {
-<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
-  AuditsPage,
-<%_ } _%>
   ConfigurationsPage,
 <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
   GatewayPage,
@@ -152,15 +149,6 @@ async getRegisterPage() {
     return configurationsPage;
   }
 
-<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
-  async getAuditsPage() {
-    await this.clickOnAdminMenuItem('audits');
-    const auditsPage = new AuditsPage();
-    await waitUntilDisplayed(auditsPage.title);
-    return auditsPage;
-  }
-
-<%_ } _%>
   async getLogsPage() {
     await this.clickOnAdminMenuItem('logs');
     const logsPage = new LogsPage();
