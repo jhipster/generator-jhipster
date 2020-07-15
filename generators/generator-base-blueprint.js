@@ -130,7 +130,9 @@ module.exports = class extends BaseGenerator {
         const missingBlueprints = blueprints
             .filter(blueprint => !this.env.isPackageRegistered(packageNameToNamespace(blueprint.name)))
             .map(blueprint => blueprint.name);
-        this.env.lookup({ filterPaths: true, packagePatterns: missingBlueprints });
+        if (missingBlueprints.length > 0) {
+            this.env.lookup({ filterPaths: true, packagePatterns: missingBlueprints });
+        }
 
         // OtherModules is used to create package.json dependencies.
         let otherModules = this.jhipsterConfig.otherModules || [];
