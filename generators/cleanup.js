@@ -109,8 +109,8 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}tsconfig-aot.json`);
     }
 
-    if (generator.isJhipsterVersionLessThan('7.0.0') && generator.configOptions) {
-        if (generator.configOptions.clientFramework === ANGULAR) {
+    if (generator.isJhipsterVersionLessThan('7.0.0') && generator.jhipsterConfig) {
+        if (generator.jhipsterConfig.clientFramework === ANGULAR) {
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audit-data.model.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audit.model.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.component.html`);
@@ -120,9 +120,9 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.service.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.service.spec.ts`);
-        } else if (generator.configOptions.clientFramework === REACT) {
+        } else if (generator.jhipsterConfig.clientFramework === REACT) {
             generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx.ejs`);
-        } else if (generator.configOptions.clientFramework === VUE) {
+        } else if (generator.jhipsterConfig.clientFramework === VUE) {
             generator.removeFile(`${VUE_DIR}admin/audits/audits.component.ts`);
             generator.removeFile(`${VUE_DIR}admin/audits/audits.service.ts`);
             generator.removeFile(`${VUE_DIR}admin/audits/audits.vue`);
