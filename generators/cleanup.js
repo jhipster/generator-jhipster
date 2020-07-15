@@ -123,6 +123,9 @@ function cleanupOldFiles(generator) {
         } else if (generator.configOptions.clientFramework === REACT) {
             generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx.ejs`);
         } else if (generator.configOptions.clientFramework === VUE) {
+            generator.removeFile(`${VUE_DIR}admin/audits/audits.component.ts`);
+            generator.removeFile(`${VUE_DIR}admin/audits/audits.service.ts`);
+            generator.removeFile(`${VUE_DIR}admin/audits/audits.vue`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
         }
     }
