@@ -303,12 +303,6 @@ const vueFiles = {
             ],
         },
         {
-            condition: generator =>
-                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
-            path: TEST_SRC_DIR,
-            templates: ['spec/app/admin/audits/audits.component.spec.ts'],
-        },
-        {
             condition: generator => generator.enableTranslation,
             path: TEST_SRC_DIR,
             templates: ['spec/app/shared/config/formatter.spec.ts'],
@@ -339,12 +333,6 @@ const vueFiles = {
                 'spec/app/account/settings/settings.component.spec.ts',
                 'spec/app/account/activate/activate.component.spec.ts',
             ],
-        },
-        {
-            condition: generator =>
-                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
-            path: TEST_SRC_DIR,
-            templates: ['spec/app/admin/audits/audits.component.spec.ts'],
         },
         {
             condition: generator => generator.websocket === 'spring-websocket',
