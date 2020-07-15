@@ -2084,6 +2084,9 @@ module.exports = class extends PrivateBase {
             this.jhipsterConfig.skipCommitHook = true;
         }
 
+        if (options.baseName) {
+            this.jhipsterConfig.baseName = this.options.baseName;
+        }
         if (options.db) {
             this.jhipsterConfig.databaseType = this.getDBTypeFromDBValue(this.options.db);
             this.jhipsterConfig.devDatabaseType = options.db;

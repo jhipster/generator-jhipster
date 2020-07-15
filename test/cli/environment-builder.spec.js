@@ -26,9 +26,15 @@ const helpers = require('yeoman-test');
 
 const EnvironmentBuilder = require('../../cli/environment-builder');
 
-const { revertTempDir, testInTempDir, copyBlueprint, lnYeoman } = require('../utils/utils');
+const { prepareTempDir, revertTempDir, testInTempDir, copyBlueprint, lnYeoman } = require('../utils/utils');
 
 describe('Environment builder', () => {
+    let cwd;
+    before(() => {
+        cwd = prepareTempDir();
+    });
+    after(() => revertTempDir(cwd));
+
     describe('create', () => {
         let envBuilder;
         before(() => {

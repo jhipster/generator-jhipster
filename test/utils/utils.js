@@ -15,6 +15,7 @@ module.exports = {
     getFilesForOptions,
     shouldBeV3DockerfileCompatible,
     getJHipsterCli,
+    prepareTempDir,
     testInTempDir,
     revertTempDir,
     copyBlueprint,
@@ -57,17 +58,28 @@ function getJHipsterCli() {
     return cmd;
 }
 
-function testInTempDir(cb, keepInTestDir) {
+function _prepareTempEnv() {
     const cwd = process.cwd();
     /* eslint-disable-next-line no-console */
     console.log(`current cwd: ${cwd}`);
     const tempDir = path.join(os.tmpdir(), 'jhitemp');
+    process.chdir(os.tmpdir());
     shelljs.rm('-rf', tempDir);
     shelljs.mkdir('-p', tempDir);
     process.chdir(tempDir);
     /* eslint-disable-next-line no-console */
     console.log(`New cwd: ${process.cwd()}`);
-    const cbReturn = cb(tempDir);
+    return { cwd, tempDir };
+}
+
+function prepareTempDir() {
+    return _prepareTempEnv().cwd;
+}
+
+function testInTempDir(cb, keepInTestDir) {
+    const preparedEnv = _prepareTempEnv();
+    const cwd = preparedEnv.cwd;
+    const cbReturn = cb(preparedEnv.tempDir);
     if (cbReturn instanceof Promise) {
         return cbReturn.then(() => {
             if (!keepInTestDir) {
