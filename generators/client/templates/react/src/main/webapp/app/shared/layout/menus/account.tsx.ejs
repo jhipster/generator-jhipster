@@ -33,7 +33,7 @@ const accountMenuItemsAuthenticated = (
   <>
   <%_ if (!skipUserManagement) { _%>
     <MenuItem icon="wrench" to="/account/settings" data-cy="settings"><Translate contentKey="global.menu.account.settings">Settings</Translate></MenuItem>
-    <MenuItem icon="lock" to="/account/password"><Translate contentKey="global.menu.account.password">Password</Translate></MenuItem>
+    <MenuItem icon="lock" to="/account/password" data-cy="password-item"><Translate contentKey="global.menu.account.password">Password</Translate></MenuItem>
     <%_ if (authenticationType === 'session') { _%>
     <MenuItem icon="cloud" to="/account/sessions"><Translate contentKey="global.menu.account.sessions">Sessions</Translate></MenuItem>
     <%_ } _%>
