@@ -245,12 +245,6 @@ const vueFiles = {
             ],
         },
         {
-            condition: generator =>
-                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
-            path: VUE_DIR,
-            templates: ['admin/audits/audits.vue', 'admin/audits/audits.component.ts', 'admin/audits/audits.service.ts'],
-        },
-        {
             condition: generator => generator.websocket === 'spring-websocket',
             path: VUE_DIR,
             templates: ['admin/tracker/tracker.vue', 'admin/tracker/tracker.component.ts', 'admin/tracker/tracker.service.ts'],
@@ -303,12 +297,6 @@ const vueFiles = {
             ],
         },
         {
-            condition: generator =>
-                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
-            path: TEST_SRC_DIR,
-            templates: ['spec/app/admin/audits/audits.component.spec.ts'],
-        },
-        {
             condition: generator => generator.enableTranslation,
             path: TEST_SRC_DIR,
             templates: ['spec/app/shared/config/formatter.spec.ts'],
@@ -339,12 +327,6 @@ const vueFiles = {
                 'spec/app/account/settings/settings.component.spec.ts',
                 'spec/app/account/activate/activate.component.spec.ts',
             ],
-        },
-        {
-            condition: generator =>
-                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
-            path: TEST_SRC_DIR,
-            templates: ['spec/app/admin/audits/audits.component.spec.ts'],
         },
         {
             condition: generator => generator.websocket === 'spring-websocket',
@@ -408,9 +390,6 @@ function writeFiles() {
             'app/admin/metrics/metrics.vue',
             'app/admin/metrics/metrics-modal.vue',
         ]);
-        if ((this.databaseType !== 'no' || this.authenticationType === 'uaa') && this.databaseType !== 'cassandra') {
-            utils.vueReplaceTranslation(this, ['app/admin/audits/audits.vue']);
-        }
         if (this.authenticationType !== 'oauth2') {
             utils.vueReplaceTranslation(this, ['app/account/login-form/login-form.vue']);
         }
