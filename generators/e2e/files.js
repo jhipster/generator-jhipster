@@ -53,6 +53,7 @@ const cypressFiles = {
             path: TEST_SRC_DIR,
             templates: [
                 'cypress/integration/account/password_page_spec.ts',
+                'cypress/integration/account/reset_password_page_spec.ts',
             ]
         },
     ],
