@@ -9,9 +9,6 @@ import {Authority} from "@/shared/security/authority";
   const <%= jhiPrefixCapitalized %>DocsComponent = () => import('@/admin/docs/docs.vue');
   const <%= jhiPrefixCapitalized %>HealthComponent = () => import('@/admin/health/health.vue');
   const <%= jhiPrefixCapitalized %>LogsComponent = () => import('@/admin/logs/logs.vue');
-  <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-  const <%= jhiPrefixCapitalized %>AuditsComponent = () => import('@/admin/audits/audits.vue');
-  <%_ } _%>
   const <%= jhiPrefixCapitalized %>MetricsComponent = () => import('@/admin/metrics/metrics.vue');
   <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
   const <%= jhiPrefixCapitalized %>GatewayComponent = () => import('@/admin/gateway/gateway.vue');
@@ -53,13 +50,6 @@ export default [
       component: <%= jhiPrefixCapitalized %>DocsComponent,
       meta: { authorities: [Authority.ADMIN] }
     },
-    <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-    {
-      path: '/admin/audits',
-      name: '<%= jhiPrefixCapitalized %>AuditsComponent',
-      component: <%= jhiPrefixCapitalized %>AuditsComponent,
-      meta: { authorities: [Authority.ADMIN] }
-    },<% } %>
     {
       path: '/admin/<%= jhiPrefixDashed %>-health',
       name: '<%= jhiPrefixCapitalized %>HealthComponent',
