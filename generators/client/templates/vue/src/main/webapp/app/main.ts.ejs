@@ -10,9 +10,6 @@ import * as bootstrapVueConfig from './shared/config/config-bootstrap-vue';
 import JhiItemCountComponent from './shared/jhi-item-count.vue';
 import JhiSortIndicatorComponent from "./shared/sort/jhi-sort-indicator.vue";
 import InfiniteLoading from 'vue-infinite-loading';
-<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-import AuditsService from './admin/audits/audits.service';
-<%_ } %>
 import HealthService from './admin/health/health.service';
 import MetricsService from './admin/metrics/metrics.service';
 import LogsService from './admin/logs/logs.service';
@@ -99,9 +96,6 @@ new Vue({
     activateService: () => new ActivateService(),
     registerService: () => new RegisterService(),
     userService: () => new UserManagementService(),
-    <%_ } %>
-    <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-    auditsService: () => new AuditsService(),
     <%_ } %>
     healthService: () => new HealthService(),
     <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { %>

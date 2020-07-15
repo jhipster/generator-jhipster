@@ -20,11 +20,14 @@
 const constants = require('./generator-constants');
 
 const ANGULAR_DIR = constants.ANGULAR_DIR;
+const REACT_DIR = constants.REACT_DIR;
+const VUE_DIR = constants.VUE_DIR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 module.exports = {
     cleanupOldFiles,
@@ -104,6 +107,27 @@ function cleanupOldFiles(generator) {
 
     if (generator.isJhipsterVersionLessThan('6.8.0') && generator.jhipsterConfig.clientFramework === 'angularX') {
         generator.removeFile(`${ANGULAR_DIR}tsconfig-aot.json`);
+    }
+
+    if (generator.isJhipsterVersionLessThan('7.0.0') && generator.configOptions) {
+        if (generator.configOptions.clientFramework === ANGULAR) {
+            generator.removeFile(`${ANGULAR_DIR}admin/audits/audit-data.model.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/audits/audit.model.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.component.html`);
+            generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.route.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.module.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.service.spec.ts`);
+        } else if (generator.configOptions.clientFramework === REACT) {
+            generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx.ejs`);
+        } else if (generator.configOptions.clientFramework === VUE) {
+            generator.removeFile(`${VUE_DIR}admin/audits/audits.component.ts`);
+            generator.removeFile(`${VUE_DIR}admin/audits/audits.service.ts`);
+            generator.removeFile(`${VUE_DIR}admin/audits/audits.vue`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
+        }
     }
 }
 
@@ -241,6 +265,18 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     if (generator.isJhipsterVersionLessThan('6.8.1')) {
         generator.removeFile(`${javaDir}config/ReactivePageableHandlerMethodArgumentResolver.java`);
         generator.removeFile(`${javaDir}config/ReactiveSortHandlerMethodArgumentResolver.java`);
+    }
+    if (generator.isJhipsterVersionLessThan('7.0.0')) {
+        generator.removeFile(`${javaDir}config/audit/package-info.java`);
+        generator.removeFile(`${javaDir}config/audit/AuditEventConverter.java`);
+        generator.removeFile(`${javaDir}domain/PersistentAuditEvent.java`);
+        generator.removeFile(`${javaDir}repository/PersistenceAuditEventRepository.java`);
+        generator.removeFile(`${javaDir}repository/CustomAuditEventRepository.java`);
+        generator.removeFile(`${javaDir}service/AuditEventService.java`);
+        generator.removeFile(`${javaDir}web/rest/AuditResource.java`);
+        generator.removeFile(`${testDir}service/AuditEventServiceIT.java`);
+        generator.removeFile(`${testDir}web/rest/AuditResourceIT.java`);
+        generator.removeFile(`${testDir}repository/CustomAuditEventRepositoryIT.java`);
     }
 }
 

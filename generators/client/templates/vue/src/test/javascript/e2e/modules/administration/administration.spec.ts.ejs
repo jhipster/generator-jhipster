@@ -54,14 +54,6 @@ describe('Administration', () => {
     expect(await configurationsPage.title.getText()).not.to.be.empty;
   });
 
-<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-  it('should load audits', async () => {
-    const auditsPage = await navBarPage.getAuditsPage();
-    expect(await auditsPage.title.isDisplayed()).to.be.true;
-    expect(await auditsPage.title.getText()).not.to.be.empty;
-  });
-
-<%_ } _%>
   it('should load logs', async () => {
     const logsPage = await navBarPage.getLogsPage();
     expect(await logsPage.title.isDisplayed()).to.be.true;
