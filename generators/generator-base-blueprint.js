@@ -127,11 +127,10 @@ module.exports = class extends BaseGenerator {
 
         // EnvironmentBuilder already looks for blueprint when running from cli, this is required for tests.
         // Can be removed once the tests uses EnvironmentBuilder.
-        const missingPackagePatterns = blueprints
+        const missingBlueprints = blueprints
             .filter(blueprint => !this.env.isPackageRegistered(packageNameToNamespace(blueprint.name)))
             .map(blueprint => blueprint.name);
-        // Run a lookup to find missing blueprints.
-        this.env.lookup({ filterPaths: true, missingPackagePatterns });
+        this.env.lookup({ filterPaths: true, packagePatterns: missingBlueprints });
 
         // OtherModules is used to create package.json dependencies.
         let otherModules = this.jhipsterConfig.otherModules || [];
