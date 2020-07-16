@@ -203,7 +203,7 @@ describe('JHipster generator languages', () => {
         });
     });
 
-    context.only('Creates default i18n files for Vue applications', () => {
+    context('Creates default i18n files for Vue applications', () => {
         describe('using prompts', () => {
             before(() =>
                 createClientProject({
