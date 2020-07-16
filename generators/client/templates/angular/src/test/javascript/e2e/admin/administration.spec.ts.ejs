@@ -97,20 +97,6 @@ describe('administration', () => {
         expect(value1).to.eq(expect1);
     });
 
-    <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-    it('should load audits', async () => {
-        await navBarPage.clickOnAdmin('audits');
-        await browser.sleep(500);
-        <%_ if (enableTranslation) { _%>
-        const expect1 = 'audits.title';
-        <%_ } else { _%>
-        const expect1 = 'Audits';
-        <%_ } _%>
-        const value1 = await element(by.id('audits-page-heading')).<%- elementGetter %>;
-        expect(value1).to.eq(expect1);
-    });
-    <%_ } _%>
-
     it('should load logs', async () => {
         await navBarPage.clickOnAdmin('logs');
         await browser.sleep(500);

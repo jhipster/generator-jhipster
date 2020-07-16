@@ -28,7 +28,7 @@ const BaseGenerator = require('../generator-base');
 const cleanup = require('../cleanup');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
-const utils = require('../utils');
+const { parseBluePrints } = require('../../utils/blueprint');
 const packagejs = require('../../package.json');
 
 /* Constants used throughout */
@@ -82,7 +82,7 @@ module.exports = class extends BaseGenerator {
         });
 
         this.targetJhipsterVersion = this.options['target-version'];
-        this.targetBlueprintVersions = utils.parseBluePrints(this.options['target-blueprint-versions']);
+        this.targetBlueprintVersions = parseBluePrints(this.options['target-blueprint-versions']);
         this.skipInstall = this.options['skip-install'];
         this.silent = this.options.silent;
         this.skipChecks = this.options['skip-checks'];
@@ -110,9 +110,7 @@ module.exports = class extends BaseGenerator {
             },
 
             parseBlueprints() {
-                this.blueprints = utils.parseBluePrints(
-                    this.options.blueprints || this.config.get('blueprints') || this.config.get('blueprint')
-                );
+                this.blueprints = parseBluePrints(this.options.blueprints || this.config.get('blueprints') || this.config.get('blueprint'));
             },
 
             loadConfig() {

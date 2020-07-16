@@ -113,7 +113,7 @@ const optionValues = {
         angularX: 'angularX',
         angular: 'angular',
         react: 'react',
-        vuejs: 'vuejs',
+        vue: 'vue',
     },
     [optionNames.CLIENT_PACKAGE_MANAGER]: {
         yarn: 'yarn',

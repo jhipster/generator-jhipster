@@ -5,15 +5,13 @@ const fse = require('fs-extra');
 const expectedFiles = require('../utils/expected-files');
 const getFilesForOptions = require('../utils/utils').getFilesForOptions;
 const angularFiles = require('../../generators/client/files-angular').files;
-const constants = require('../../generators/generator-constants');
-
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const EnvironmentBuilder = require('../../cli/environment-builder');
 
 describe('JHipster application generator with scoped blueprint', () => {
     describe('generate monolith application with scoped blueprint', () => {
-        before(done => {
-            helpers
-                .run(path.join(__dirname, '../../generators/app'))
+        before(() => {
+            return helpers
+                .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
                 .inTmpDir(dir => {
                     // Fake the presence of the blueprint in node_modules
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/@jhipster/generator-jhipster-scoped-blueprint');
@@ -25,24 +23,10 @@ describe('JHipster application generator with scoped blueprint', () => {
                     skipInstall: true,
                     skipChecks: true,
                     blueprints: '@jhipster/generator-jhipster-scoped-blueprint',
-                })
-                .withPrompts({
                     baseName: 'jhipster',
-                    clientFramework: ANGULAR,
-                    packageName: 'com.mycompany.myapp',
-                    packageFolder: 'com/mycompany/myapp',
-                    serviceDiscoveryType: false,
-                    authenticationType: 'jwt',
-                    cacheProvider: 'ehcache',
-                    enableHibernateCache: true,
-                    databaseType: 'sql',
-                    devDatabaseType: 'h2Memory',
-                    prodDatabaseType: 'mysql',
-                    enableTranslation: true,
-                    nativeLanguage: 'en',
-                    languages: ['fr'],
+                    defaults: true,
                 })
-                .on('end', done);
+                .run();
         });
 
         it('creates expected default files for server and angularX', () => {

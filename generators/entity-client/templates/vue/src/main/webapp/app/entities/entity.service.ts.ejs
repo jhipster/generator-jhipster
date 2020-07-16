@@ -1,0 +1,69 @@
+import axios from 'axios';
+<% if (pagination !== 'no') { %>
+import buildPaginationQueryOpts from '@/shared/sort/sorts';
+<% } %>
+import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
+
+<%_
+const baseApi = (applicationType === 'gateway' && locals.microserviceName) ? 'services/' + microserviceName.toLowerCase() + '/api/' : 'api/';
+_%>
+
+const baseApiUrl = '<%= baseApi + entityApiUrl %>';
+<%_ if (searchEngine === 'elasticsearch') { _%>
+const baseSearchApiUrl = '<%= baseApi %>_search/<%= entityApiUrl %>?query=';
+<%_ } _%>
+
+export default class <%= entityAngularName %>Service {
+  <%_ if (searchEngine === 'elasticsearch') { _%>
+  public search(query<% if (pagination !== 'no') { %>, paginationQuery<% } %>) : Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      axios.get(`${baseSearchApiUrl}${query}<% if (pagination !== 'no') { %>&${buildPaginationQueryOpts(paginationQuery)}<% } %>`).then(res => {
+        resolve(<% if (pagination !== 'no') { %>res<% } else { %>res.data<% } %>);
+      }).catch(err => { reject(err); });
+    });
+  }
+  <%_ } _%>
+
+  public find(id: <% if (pkType === 'String'  || pkType === 'UUID') { %>string<% } else { %>number<% } %>) : Promise<I<%= entityAngularName %>> {
+    return new Promise<I<%= entityAngularName %>>((resolve, reject) => {
+      axios.get(`${baseApiUrl}/${id}`).then(res => {
+        resolve(res.data);
+      }).catch(err => { reject(err); });
+    });
+  }
+
+  public retrieve(<% if (pagination !== 'no') { %>paginationQuery?: any<% } %>) : Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      axios.get(baseApiUrl<% if (pagination !== 'no') { %> + `?${buildPaginationQueryOpts(paginationQuery)}` <% } %>).then(res => {
+        resolve(res);
+      }).catch(err => { reject(err); });
+    });
+  }
+  <%_
+  if (!readOnly) { _%>
+
+  public delete(id: <% if (pkType === 'String'  || pkType === 'UUID') { %>string<% } else { %>number<% } %>) : Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      axios.delete(`${baseApiUrl}/${id}`).then(res => {
+        resolve(res);
+      }).catch(err => { reject(err); });
+    });
+  }
+
+  public create(entity: I<%= entityAngularName %>) : Promise<I<%= entityAngularName %>> {
+    return new Promise<I<%= entityAngularName %>>((resolve, reject) => {
+      axios.post(`${baseApiUrl}`, entity).then(res => {
+        resolve(res.data);
+      }).catch(err => { reject(err); });
+    });
+  }
+
+  public update(entity: I<%= entityAngularName %>) : Promise<I<%= entityAngularName %>> {
+    return new Promise<I<%= entityAngularName %>>((resolve, reject) => {
+      axios.put(`${baseApiUrl}`, entity).then(res => {
+        resolve(res.data);
+      }).catch(err => { reject(err); });
+    });
+  }
+  <%_ } _%>
+}
