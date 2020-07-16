@@ -7,8 +7,9 @@ describe('JHipster generator with required configuration', () => {
     before(() => {
         return helpers
             .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
-            .withLocalConfig(requiredDefaultConfig)
             .withOptions({
+                defaultLocalConfig: requiredDefaultConfig,
+                baseName: 'jhipster',
                 'from-cli': true,
                 skipInstall: true,
             })

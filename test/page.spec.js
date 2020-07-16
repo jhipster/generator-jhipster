@@ -1,58 +1,100 @@
-const path = require('path');
-const fse = require('fs-extra');
-const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
+
+const EnvironmentBuilder = require('../cli/environment-builder');
 const constants = require('../generators/generator-constants');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const CLIENT_SPEC_SRC_DIR = `${CLIENT_TEST_SRC_DIR}spec/`;
+
 const pageName = 'MyTestPage';
 const pageFolderName = 'mytestpage';
 const pageInstance = 'myTestPage';
 
-describe('Subgenerator page for Vue application', () => {
-    describe('Create page', () => {
-        before(done => {
-            helpers
-                .run(require.resolve('../generators/page'))
-                .inTmpDir(dir => {
-                    fse.copySync(path.join(__dirname, '../test/templates/vuejs-default'), dir);
-                })
-                .withOptions({
-                    'from-cli': true,
-                    skipInstall: true,
-                    skipChecks: true,
-                })
-                .withPrompts({
-                    pageName,
-                })
-                .on('end', done);
+const createClientProject = options =>
+    helpers
+        .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
+        .withOptions({
+            'from-cli': true,
+            skipInstall: true,
+            defaults: true,
+            skipServer: true, // We don't need server for this test
+            testFrameworks: ['protractor'],
+            ...options,
+        })
+        .run();
+
+const createPage = (cwd, options) =>
+    helpers
+        .create('jhipster:page', {}, { createEnv: EnvironmentBuilder.createEnv })
+        .setDir(cwd)
+        .withOptions({
+            'from-cli': true,
+            skipInstall: true,
+            ...options,
+        })
+        .withPrompts({
+            pageName,
+        })
+        .run();
+
+describe('Page subgenerator', () => {
+    it.skip('with angular client framework');
+
+    it.skip('with react client framework');
+
+    describe('with vue client framework', () => {
+        let runResult;
+        const containsVueFiles = () => {
+            it('creates expected files', () => {
+                runResult.assertFile([
+                    `${CLIENT_MAIN_SRC_DIR}app/pages/${pageFolderName}/${pageFolderName}.vue`,
+                    `${CLIENT_MAIN_SRC_DIR}app/pages/${pageFolderName}/${pageFolderName}.service.ts`,
+                    `${CLIENT_MAIN_SRC_DIR}app/pages/${pageFolderName}/${pageFolderName}.component.ts`,
+                    `${CLIENT_SPEC_SRC_DIR}app/pages/${pageFolderName}/${pageFolderName}.component.spec.ts`,
+                    `${CLIENT_SPEC_SRC_DIR}app/pages/${pageFolderName}/${pageFolderName}.service.spec.ts`,
+                    `${CLIENT_TEST_SRC_DIR}e2e/pages/${pageFolderName}/${pageFolderName}.page-object.ts`,
+                    `${CLIENT_TEST_SRC_DIR}e2e/pages/${pageFolderName}/${pageFolderName}.spec.ts`,
+                ]);
+            });
+            it('adds page path, service and protractor config', () => {
+                runResult.assertFileContent(
+                    `${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
+                    `const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFolderName}.vue');`
+                );
+                runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`, `path: '/pages/${pageFolderName}',`);
+                runResult.assertFileContent(
+                    `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+                    `import ${pageName}Service from '@/pages/${pageFolderName}/${pageFolderName}.service';`
+                );
+                runResult.assertFileContent(
+                    `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+                    `${pageInstance}Service: () => new ${pageName}Service(),`
+                );
+                runResult.assertFileContent(`${CLIENT_TEST_SRC_DIR}/protractor.conf.js`, "'./e2e/pages/**/*.spec.ts',");
+            });
+        };
+
+        describe('creating a new page', () => {
+            before(() => {
+                return createClientProject({ localConfig: { clientFramework: 'vue' } })
+                    .then(result1 => createPage(result1.cwd))
+                    .then(result1 => {
+                        runResult = result1;
+                    });
+            });
+
+            containsVueFiles();
         });
 
-        it('creates expected files', () => {
-            assert.file([
-                `${CLIENT_MAIN_SRC_DIR}app/pages/${pageFolderName}/${pageFolderName}.vue`,
-                `${CLIENT_MAIN_SRC_DIR}app/pages/${pageFolderName}/${pageFolderName}.service.ts`,
-                `${CLIENT_MAIN_SRC_DIR}app/pages/${pageFolderName}/${pageFolderName}.component.ts`,
-                `${CLIENT_SPEC_SRC_DIR}app/pages/${pageFolderName}/${pageFolderName}.component.spec.ts`,
-                `${CLIENT_SPEC_SRC_DIR}app/pages/${pageFolderName}/${pageFolderName}.service.spec.ts`,
-                `${CLIENT_TEST_SRC_DIR}e2e/pages/${pageFolderName}/${pageFolderName}.page-object.ts`,
-                `${CLIENT_TEST_SRC_DIR}e2e/pages/${pageFolderName}/${pageFolderName}.spec.ts`,
-            ]);
-        });
-        it('add page path, service and protractor config', () => {
-            assert.fileContent(
-                `${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
-                `const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFolderName}.vue');`
-            );
-            assert.fileContent(`${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`, `path: '/pages/${pageFolderName}',`);
-            assert.fileContent(
-                `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
-                `import ${pageName}Service from '@/pages/${pageFolderName}/${pageFolderName}.service';`
-            );
-            assert.fileContent(`${CLIENT_MAIN_SRC_DIR}/app/main.ts`, `${pageInstance}Service: () => new ${pageName}Service(),`);
-            assert.fileContent(`${CLIENT_TEST_SRC_DIR}/protractor.conf.js`, "'./e2e/pages/**/*.spec.ts',");
+        describe('regenerating a exiting page', () => {
+            before(() => {
+                return createClientProject({ localConfig: { clientFramework: 'vue', pages: [{ name: pageName }] } }).then(result1 => {
+                    runResult = result1;
+                });
+            });
+
+            containsVueFiles();
         });
     });
 });

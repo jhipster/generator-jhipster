@@ -57,8 +57,29 @@ module.exports = class extends PrivateBase {
     constructor(args, opts) {
         super(args, opts);
 
-        // JHipster config using proxy mode (like a plain object)
-        this.jhipsterConfig = this._getStorage('generator-jhipster').createProxy();
+        /* Force config to use 'generator-jhipster' namespace. */
+        this.config = this._getStorage('generator-jhipster');
+        /* JHipster config using proxy mode used as a plain object instead of using get/set. */
+        this.jhipsterConfig = this.config.createProxy();
+
+        /*
+         * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the
+         * generator and then executes generator.config.defaults(localConfig).
+         * JHipster workflow does a lot of configuration at the constructor, sometimes this is required due to current
+         * blueprints support implementation, making it incompatible with yeoman-test's withLocalConfig.
+         * 'defaultLocalConfig' option is a replacement for yeoman-test's withLocalConfig method.
+         * 'defaults' function sets every key that has undefined value at current config.
+         */
+        if (this.options.defaultLocalConfig) {
+            this.config.defaults(this.options.defaultLocalConfig);
+        }
+        /*
+         * Option 'localConfig' uses set instead of defaults of 'defaultLocalConfig'.
+         * 'set' function sets every key from 'localConfig'.
+         */
+        if (this.options.localConfig) {
+            this.config.set(this.options.localConfig);
+        }
 
         // JHipster runtime config that should not be stored to .yo-rc.json.
         this.configOptions = this.options.configOptions || {};
@@ -2116,6 +2137,13 @@ module.exports = class extends PrivateBase {
         if (options.dtoSuffix) {
             this.jhipsterConfig.dtoSuffix = options.dtoSuffix;
         }
+        if (options.clientFramework) {
+            this.jhipsterConfig.clientFramework = options.clientFramework;
+        }
+        if (options.testFrameworks) {
+            this.jhipsterConfig.testFrameworks = options.testFrameworks;
+        }
+
         this.configOptions.useYarn = this.options.yarn || this.jhipsterConfig.clientPackageManager === 'yarn';
         this.configOptions.useNpm = !this.configOptions.useYarn;
         this.jhipsterConfig.clientPackageManager = this.configOptions.useYarn ? 'yarn' : 'npm';
@@ -2154,6 +2182,7 @@ module.exports = class extends PrivateBase {
         dest.otherModules = config.otherModules || [];
         dest.skipClient = config.skipClient;
         dest.prettierJava = config.prettierJava;
+        dest.pages = config.pages;
 
         dest.testFrameworks = config.testFrameworks || [];
         dest.gatlingTests = dest.testFrameworks.includes('gatling');
@@ -2173,7 +2202,6 @@ module.exports = class extends PrivateBase {
      */
     loadClientConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
         dest.clientPackageManager = config.clientPackageManager;
-        dest.clientFramework = config.clientFramework;
         dest.clientFramework = config.clientFramework;
         dest.clientTheme = config.clientTheme;
         dest.clientThemeVariant = config.clientThemeVariant;

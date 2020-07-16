@@ -40,6 +40,7 @@ const appDefaultConfig = {
     blueprints: [],
     otherModules: [],
     clientPackageManager: 'npm',
+    pages: [],
 };
 
 /** Required config for prompts to be skipped */

@@ -44,6 +44,10 @@ module.exports = class extends BaseBlueprintGenerator {
             type: Boolean,
             defaults: false,
         });
+        this.option('base-name', {
+            desc: 'Application base name',
+            type: String,
+        });
         this.option('application-type', {
             desc: 'Application type to generate',
             type: String,
@@ -430,6 +434,21 @@ module.exports = class extends BaseBlueprintGenerator {
                             'skip-install': true,
                             debug: this.isDebugEnabled,
                             arguments: [entity.name],
+                        });
+                    });
+                }
+            },
+
+            regeneratePages() {
+                if (!this.configOptions.skipComposePage) {
+                    this.configOptions.skipComposePage = true;
+                    const configOptions = this.configOptions;
+                    this.jhipsterConfig.pages.forEach(page => {
+                        this.composeWith(require.resolve('../page'), {
+                            configOptions,
+                            'skip-install': true,
+                            debug: this.isDebugEnabled,
+                            arguments: [page.name],
                         });
                     });
                 }
