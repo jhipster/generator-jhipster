@@ -96,6 +96,7 @@ describe('jhipster cli test', () => {
             commands.mocked = { desc: 'Mocked command' };
             sinon.stub(Environment.prototype, 'run').callsFake((...args) => {
                 callback(...args);
+                return Promise.resolve();
             });
             sinon.stub(Environment.prototype, 'create').returns({ _options: {} });
         });

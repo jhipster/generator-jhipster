@@ -207,16 +207,13 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
         return Promise.all(baseNames.map(callGenerator));
     }
     /* Traditional entity only generation */
-    return env.run(
-        command,
-        {
+    return env
+        .run(command, {
             ...options,
             force: options.force || !options.interactive,
             'skip-install': !shouldTriggerInstall,
-        },
-        /* Create done with empty success message */
-        doneFactory()
-    );
+        })
+        .catch(doneFactory());
 };
 
 /**

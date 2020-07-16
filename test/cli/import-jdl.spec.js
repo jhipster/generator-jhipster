@@ -13,11 +13,11 @@ let subGenCallParams = {
 };
 
 const env = {
-    run(command, options, done) {
+    run(command, options) {
         subGenCallParams.count++;
         subGenCallParams.commands.push(command);
         subGenCallParams.options.push(options);
-        done();
+        return Promise.resolve();
     },
 };
 
