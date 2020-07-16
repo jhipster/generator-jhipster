@@ -19,13 +19,12 @@
 const chalk = require('chalk');
 const statistics = require('../statistics');
 const packagejs = require('../../package.json');
+const generatorDefaults = require('../generator-defaults').defaultConfig;
 
 module.exports = {
     askForInsightOptIn,
     askForApplicationType,
     askForModuleName,
-    askForI18n,
-    askFori18n,
     askForTestOpts,
     askForMoreModules,
 };
@@ -46,11 +45,9 @@ async function askForInsightOptIn() {
 async function askForApplicationType() {
     if (this.existingProject) return;
 
-    const DEFAULT_APPTYPE = 'monolith';
-
     const applicationTypeChoices = [
         {
-            value: DEFAULT_APPTYPE,
+            value: 'monolith',
             name: 'Monolithic application (recommended for simple projects)',
         },
         {
@@ -73,18 +70,18 @@ async function askForApplicationType() {
             name: 'applicationType',
             message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
             choices: applicationTypeChoices,
-            default: DEFAULT_APPTYPE,
+            default: generatorDefaults.applicationType,
         },
         {
             when: answers => ['gateway', 'monolith', 'microservice'].includes(answers.applicationType),
             type: 'confirm',
             name: 'reactive',
             message: '[Beta] Do you want to make it reactive with Spring WebFlux?',
-            default: false,
+            default: generatorDefaults.reactive,
         },
     ]);
-    this.applicationType = this.configOptions.applicationType = answers.applicationType;
-    this.reactive = this.configOptions.reactive = answers.reactive || false;
+    this.applicationType = this.jhipsterConfig.applicationType = answers.applicationType;
+    this.reactive = this.jhipsterConfig.reactive = answers.reactive;
 }
 
 function askForModuleName() {
@@ -92,26 +89,10 @@ function askForModuleName() {
     return this.askModuleName(this);
 }
 
-function askForI18n() {
-    if (this.skipI18n || this.existingProject) return;
-    this.aski18n(this);
-}
-
-/**
- * @deprecated Use askForI18n() instead.
- * This method will be removed in JHipster v7.
- */
-function askFori18n() {
-    // eslint-disable-next-line no-console
-    console.log(chalk.yellow('\nPlease use askForI18n() instead. This method will be removed in v7\n'));
-    this.askForI18n();
-}
-
 async function askForTestOpts() {
     if (this.existingProject) return undefined;
 
     const choices = [];
-    const defaultChoice = [];
     if (!this.skipServer) {
         // all server side test frameworks should be added here
         choices.push({ name: 'Gatling', value: 'gatling' }, { name: 'Cucumber', value: 'cucumber' });
@@ -125,11 +106,11 @@ async function askForTestOpts() {
         name: 'testFrameworks',
         message: 'Besides JUnit and Jest, which testing frameworks would you like to use?',
         choices,
-        default: defaultChoice,
+        default: generatorDefaults.testFrameworks,
     };
 
     const answers = await this.prompt(PROMPT);
-    this.testFrameworks = answers.testFrameworks;
+    this.testFrameworks = this.jhipsterConfig.testFrameworks = answers.testFrameworks;
     return answers;
 }
 
@@ -180,7 +161,7 @@ function askModulesToBeInstalled(done, generator) {
                             answers.otherModules.forEach(module => {
                                 generator.otherModules.push({ name: module.name, version: module.version });
                             });
-                            generator.configOptions.otherModules = generator.otherModules;
+                            generator.jhipsterConfig.otherModules = generator.otherModules;
                             done();
                         });
                 } else {

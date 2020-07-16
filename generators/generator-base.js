@@ -33,7 +33,9 @@ const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
+const { defaultConfig } = require('./generator-defaults');
 const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
+const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -42,6 +44,7 @@ const GENERATOR_JHIPSTER = 'generator-jhipster';
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 /**
  * This is the Generator base class.
@@ -170,6 +173,8 @@ module.exports = class extends PrivateBase {
             this.needleApi.clientAngular.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
         } else if (this.clientFramework === REACT) {
             this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
+        } else if (this.clientFramework === VUE) {
+            this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
         }
     }
 
@@ -193,7 +198,8 @@ module.exports = class extends PrivateBase {
         entityFileName,
         entityUrl,
         clientFramework,
-        microServiceName
+        microServiceName,
+        readOnly
     ) {
         if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addEntityToModule(
@@ -207,6 +213,11 @@ module.exports = class extends PrivateBase {
             );
         } else if (clientFramework === REACT) {
             this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName);
+        } else if (clientFramework === VUE) {
+            this.needleApi.clientVue.addEntityToRouterImport(entityName, entityFileName, entityFolderName, readOnly);
+            this.needleApi.clientVue.addEntityToRouter(entityInstance, entityName, entityFileName, readOnly);
+            this.needleApi.clientVue.addEntityServiceToMainImport(entityName, entityClass, entityFileName, entityFolderName);
+            this.needleApi.clientVue.addEntityServiceToMain(entityInstance, entityName);
         }
     }
 
@@ -1857,78 +1868,9 @@ module.exports = class extends PrivateBase {
                 default: defaultAppBaseName,
             })
             .then(prompt => {
-                generator.baseName = prompt.baseName;
+                generator.baseName = generator.jhipsterConfig.baseName = prompt.baseName;
                 done();
             });
-    }
-
-    /**
-     * ask a prompt for i18n option.
-     *
-     * @param {object} generator - generator instance to use
-     */
-    aski18n(generator) {
-        const languageOptions = this.getAllSupportedLanguageOptions();
-
-        const done = generator.async();
-        const prompts = [
-            {
-                type: 'confirm',
-                name: 'enableTranslation',
-                message: 'Would you like to enable internationalization support?',
-                default: true,
-            },
-            {
-                when: response => response.enableTranslation === true,
-                type: 'list',
-                name: 'nativeLanguage',
-                message: 'Please choose the native language of the application',
-                choices: languageOptions,
-                default: 'en',
-                store: true,
-            },
-            {
-                when: response => response.enableTranslation === true,
-                type: 'checkbox',
-                name: 'languages',
-                message: 'Please choose additional languages to install',
-                choices: response => _.filter(languageOptions, o => o.value !== response.nativeLanguage),
-            },
-        ];
-
-        generator.prompt(prompts).then(prompt => {
-            generator.enableTranslation = prompt.enableTranslation;
-            generator.nativeLanguage = prompt.nativeLanguage;
-            generator.languages = [prompt.nativeLanguage].concat(prompt.languages);
-            done();
-        });
-    }
-
-    /**
-     * compose using the language sub generator.
-     *
-     * @param {object} generator - generator instance to use
-     * @param {object} configOptions - options to pass to the generator
-     * @param {String} type - server | client
-     */
-    composeLanguagesSub(generator, configOptions, type) {
-        if (generator.enableTranslation) {
-            // skip server if app type is client
-            const skipServer = type && type === 'client';
-            // skip client if app type is server
-            const skipClient = type && type === 'server';
-            generator.composeWith(require.resolve('./languages'), {
-                configOptions,
-                'skip-install': true,
-                'skip-server': skipServer,
-                'skip-client': skipClient,
-                'from-cli': generator.options['from-cli'],
-                skipChecks: generator.options.skipChecks,
-                languages: generator.languages,
-                force: generator.options.force,
-                debug: generator.options.debug,
-            });
-        }
     }
 
     /**
@@ -2071,26 +2013,12 @@ module.exports = class extends PrivateBase {
      * @param {any} context - context to use default is generator instance
      * @param {any} dest - destination context to use default is context
      */
-    setupSharedOptions(generator, context = generator, dest = context) {
-        dest.skipClient = context.options['client-hook'] === false || context.configOptions.skipClient || context.config.get('skipClient');
-        dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
-        dest.skipUserManagement =
-            context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
-        dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
-        dest.otherModules = context.configOptions.otherModules || [];
-        dest.baseName = context.configOptions.baseName;
-        dest.logo = context.configOptions.logo;
-        dest.clientPackageManager = context.configOptions.clientPackageManager;
-        dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
-        dest.experimental = context.configOptions.experimental || context.options.experimental;
-        dest.embeddableLaunchScript = context.configOptions.embeddableLaunchScript || false;
-
-        const uaaBaseName = context.configOptions.uaaBaseName || context.options['uaa-base-name'] || context.config.get('uaaBaseName');
-        if (dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
-            generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
-        }
-        dest.uaaBaseName = uaaBaseName;
-        dest.prettierJava = context.options['prettier-java'] || context.config.get('prettierJava');
+    setupSharedOptions(generator = this, context = generator, dest = context) {
+        const config = _.defaults({}, context.jhipsterConfig, defaultConfig);
+        generator.loadAppConfig.call(generator, config, dest);
+        generator.loadClientConfig.call(generator, config, dest);
+        generator.loadServerConfig.call(generator, config, dest);
+        generator.loadTranslationConfig.call(generator, config, dest);
     }
 
     /**
@@ -2104,30 +2032,6 @@ module.exports = class extends PrivateBase {
      */
     setupClientOptions(generator, context = generator, dest = context) {
         this.setupSharedOptions(generator, context, dest);
-        dest.authenticationType =
-            context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
-        dest.serviceDiscoveryType = context.configOptions.serviceDiscoveryType || context.config.get('serviceDiscoveryType');
-
-        dest.buildTool = context.configOptions.buildTool;
-        dest.websocket = context.configOptions.websocket;
-        dest.devDatabaseType = context.configOptions.devDatabaseType || context.config.get('devDatabaseType');
-        dest.prodDatabaseType = context.configOptions.prodDatabaseType || context.config.get('prodDatabaseType');
-        dest.databaseType =
-            generator.getDBTypeFromDBValue(dest.prodDatabaseType) ||
-            context.configOptions.databaseType ||
-            context.config.get('databaseType');
-        if (dest.authenticationType === 'oauth2' || (dest.databaseType === 'no' && dest.authenticationType !== 'uaa')) {
-            dest.skipUserManagement = true;
-        }
-        dest.searchEngine = context.config.get('searchEngine');
-        dest.cacheProvider = context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
-        dest.enableHibernateCache = context.config.get('enableHibernateCache') && !['no', 'memcached'].includes(dest.cacheProvider);
-        dest.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix');
-        dest.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
-        dest.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
-        dest.testFrameworks = context.configOptions.testFrameworks || [];
-
-        dest.useYarn = context.configOptions.useYarn;
     }
 
     /**
@@ -2141,8 +2045,177 @@ module.exports = class extends PrivateBase {
      */
     setupServerOptions(generator, context = generator, dest = context) {
         this.setupSharedOptions(generator, context, dest);
-        dest.enableTranslation = context.configOptions.enableTranslation || context.config.get('enableTranslation');
-        dest.testFrameworks = context.configOptions.testFrameworks;
+    }
+
+    loadOptions(options = this.options) {
+        // Parse options only once.
+        if (this.configOptions.optionsParsed) return;
+        this.configOptions.optionsParsed = true;
+
+        // Load runtime only options
+        this.configOptions.withEntities = options.withEntities;
+        this.configOptions.skipChecks = options.skipChecks;
+        this.configOptions.isDebugEnabled = options.debug;
+        this.configOptions.experimental = options.experimental;
+
+        // Load stored options
+        if (options.skipClient) {
+            this.skipClient = this.jhipsterConfig.skipClient = true;
+        }
+        if (options.applicationType) {
+            this.jhipsterConfig.applicationType = options.applicationType;
+        }
+        if (options.skipServer) {
+            this.skipServer = this.jhipsterConfig.skipServer = true;
+        }
+        if (options.skipFakeData) {
+            this.jhipsterConfig.skipFakeData = true;
+        }
+        if (options.skipUserManagement) {
+            this.jhipsterConfig.skipUserManagement = true;
+        }
+        if (options.skipCheckLengthOfIdentifier) {
+            this.jhipsterConfig.skipCheckLengthOfIdentifier = true;
+        }
+        if (options.prettierJava) {
+            this.jhipsterConfig.prettierJava = true;
+        }
+        if (options.skipCommitHook) {
+            this.jhipsterConfig.skipCommitHook = true;
+        }
+
+        if (options.baseName) {
+            this.jhipsterConfig.baseName = this.options.baseName;
+        }
+        if (options.db) {
+            this.jhipsterConfig.databaseType = this.getDBTypeFromDBValue(this.options.db);
+            this.jhipsterConfig.devDatabaseType = options.db;
+            this.jhipsterConfig.prodDatabaseType = options.db;
+        }
+        if (options.auth) {
+            this.jhipsterConfig.authenticationType = options.auth;
+        }
+        if (options.uaaBaseName) {
+            this.jhipsterConfig.uaaBaseName = options.uaaBaseName;
+        }
+        if (options.searchEngine) {
+            this.jhipsterConfig.searchEngine = options.searchEngine;
+        }
+        if (options.build) {
+            this.jhipsterConfig.buildTool = options.build;
+        }
+        if (options.websocket) {
+            this.jhipsterConfig.websocket = options.websocket;
+        }
+        if (options.jhiPrefix) {
+            this.jhipsterConfig.jhiPrefix = options.jhiPrefix;
+        }
+        if (options.entitySuffix) {
+            this.jhipsterConfig.entitySuffix = options.entitySuffix;
+        }
+        if (options.dtoSuffix) {
+            this.jhipsterConfig.dtoSuffix = options.dtoSuffix;
+        }
+        this.configOptions.useYarn = this.options.yarn || this.jhipsterConfig.clientPackageManager === 'yarn';
+        this.configOptions.useNpm = !this.configOptions.useYarn;
+        this.jhipsterConfig.clientPackageManager = this.configOptions.useYarn ? 'yarn' : 'npm';
+
+        if (options.creationTimestamp) {
+            const creationTimestamp = this.parseCreationTimestamp(options.creationTimestamp);
+            if (creationTimestamp) {
+                this.jhipsterConfig.creationTimestamp = creationTimestamp;
+            }
+        }
+    }
+
+    loadRuntimeOptions(configOptions = this.configOptions, dest = this) {
+        dest.withEntities = configOptions.withEntities;
+        dest.skipChecks = configOptions.skipChecks;
+        dest.isDebugEnabled = configOptions.isDebugEnabled;
+        dest.experimental = configOptions.experimental;
+        dest.useYarn = configOptions.useYarn;
+        dest.useNpm = configOptions.useNpm;
+        dest.logo = configOptions.logo;
+    }
+
+    loadAppConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+        dest.jhipsterVersion = config.jhipsterVersion;
+        dest.baseName = config.baseName;
+        dest.applicationType = config.applicationType;
+        dest.reactive = config.reactive;
+        dest.jhiPrefix = config.jhiPrefix;
+        dest.skipFakeData = config.skipFakeData;
+        dest.entitySuffix = config.entitySuffix;
+        dest.dtoSuffix = config.dtoSuffix;
+        dest.skipUserManagement = config.skipUserManagement;
+
+        dest.skipServer = config.skipServer;
+        dest.skipCommitHook = config.skipCommitHook;
+        dest.otherModules = config.otherModules || [];
+        dest.skipClient = config.skipClient;
+        dest.prettierJava = config.prettierJava;
+
+        dest.testFrameworks = config.testFrameworks || [];
+        dest.gatlingTests = dest.testFrameworks.includes('gatling');
+        dest.cucumberTests = dest.testFrameworks.includes('cucumber');
+        dest.protractorTests = dest.testFrameworks.includes('protractor');
+
+        dest.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
+        dest.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);
+    }
+
+    /**
+     * Load client configs into dest.
+     * all variables should be set to dest,
+     * all variables should be referred from config,
+     * @param {any} config - config to load config from
+     * @param {any} dest - destination context to use default is context
+     */
+    loadClientConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+        dest.clientPackageManager = config.clientPackageManager;
+        dest.clientFramework = config.clientFramework;
+        dest.clientFramework = config.clientFramework;
+        dest.clientTheme = config.clientTheme;
+        dest.clientThemeVariant = config.clientThemeVariant;
+    }
+
+    loadTranslationConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+        dest.enableTranslation = config.enableTranslation;
+        dest.nativeLanguage = config.nativeLanguage;
+        dest.languages = config.languages;
+    }
+
+    /**
+     * Load server configs into dest.
+     * all variables should be set to dest,
+     * all variables should be referred from config,
+     * @param {any} config - config to load config from
+     * @param {any} dest - destination context to use default is context
+     */
+    loadServerConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+        dest.packageName = config.packageName;
+        dest.packageFolder = config.packageFolder;
+        dest.serverPort = config.serverPort;
+        dest.uaaBaseName = config.uaaBaseName;
+        dest.buildTool = config.buildTool;
+
+        dest.authenticationType = config.authenticationType;
+        dest.rememberMeKey = config.rememberMeKey;
+        dest.jwtSecretKey = config.jwtSecretKey;
+
+        dest.databaseType = config.databaseType;
+        dest.devDatabaseType = config.devDatabaseType;
+        dest.prodDatabaseType = config.prodDatabaseType;
+        dest.searchEngine = config.searchEngine;
+        dest.cacheProvider = config.cacheProvider;
+        dest.enableHibernateCache = config.enableHibernateCache;
+
+        dest.enableSwaggerCodegen = config.enableSwaggerCodegen;
+        dest.messageBroker = config.messageBroker;
+        dest.websocket = config.websocket;
+        dest.serviceDiscoveryType = config.serviceDiscoveryType;
+
+        dest.embeddableLaunchScript = config.embeddableLaunchScript;
     }
 
     /**
@@ -2251,6 +2324,43 @@ module.exports = class extends PrivateBase {
                 name: matched[1],
                 value: matched[2],
             };
+        });
+    }
+
+    /**
+     * Get default config based on applicationType
+     */
+    getDefaultConfigForApplicationType(applicationType = this.jhipsterConfig.applicationType) {
+        let defaultAppTypeConfig = {};
+        switch (applicationType) {
+            case 'monolith':
+                defaultAppTypeConfig = defaultApplicationOptions.getConfigForMonolithApplication();
+                break;
+            case 'gateway':
+                defaultAppTypeConfig = defaultApplicationOptions.getConfigForGatewayApplication();
+                break;
+            case 'microservice':
+                defaultAppTypeConfig = defaultApplicationOptions.getConfigForMicroserviceApplication();
+                break;
+            case 'uaa':
+                defaultAppTypeConfig = defaultApplicationOptions.getConfigForUAAApplication();
+                break;
+            default:
+                defaultAppTypeConfig = defaultApplicationOptions.getDefaultConfigForNewApplication();
+        }
+        return { ...defaultAppTypeConfig, ...defaultConfig };
+    }
+
+    setConfigDefaults(defaults = defaultConfig) {
+        const jhipsterVersion = packagejs.version;
+        const baseName = this.getDefaultAppName();
+        const creationTimestamp = new Date().getTime();
+
+        this.config.defaults({
+            ...defaults,
+            jhipsterVersion,
+            baseName,
+            creationTimestamp,
         });
     }
 };

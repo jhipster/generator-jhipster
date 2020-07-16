@@ -1,8 +1,8 @@
-const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files');
 const ServerGenerator = require('../../generators/server');
+const EnvironmentBuilder = require('../../cli/environment-builder');
 
 const mockBlueprintSubGen = class extends ServerGenerator {
     constructor(args, opts) {
@@ -56,9 +56,9 @@ describe('JHipster server generator with blueprint', () => {
 
     blueprintNames.forEach(blueprintName => {
         describe(`generate server with blueprint option '${blueprintName}'`, () => {
-            before(done => {
-                helpers
-                    .run(path.join(__dirname, '../../generators/server'))
+            before(() => {
+                return helpers
+                    .create('jhipster:server', {}, { createEnv: EnvironmentBuilder.createEnv })
                     .withOptions({
                         'from-cli': true,
                         skipInstall: true,
@@ -84,7 +84,7 @@ describe('JHipster server generator with blueprint', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         serverSideOptions: [],
                     })
-                    .on('end', done);
+                    .run();
             });
 
             it('creates expected files from jhipster server generator', () => {
@@ -102,9 +102,9 @@ describe('JHipster server generator with blueprint', () => {
     });
 
     describe('generate server with dummy blueprint overriding everything', () => {
-        before(done => {
-            helpers
-                .run(path.join(__dirname, '../../generators/server'))
+        before(() => {
+            return helpers
+                .create('jhipster:server', {}, { createEnv: EnvironmentBuilder.createEnv })
                 .withOptions({
                     'from-cli': true,
                     skipInstall: true,
@@ -130,7 +130,7 @@ describe('JHipster server generator with blueprint', () => {
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                     serverSideOptions: [],
                 })
-                .on('end', done);
+                .run();
         });
 
         it("doesn't create any expected files from jhipster server generator", () => {

@@ -18,21 +18,21 @@
  */
 const chalk = require('chalk');
 const constants = require('../generator-constants');
+const { clientDefaultConfig } = require('../generator-defaults');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 module.exports = {
     askForModuleName,
     askForClient,
-    askForI18n,
-    askFori18n,
     askForClientTheme,
     askForClientThemeVariant,
 };
 
 function askForModuleName() {
-    if (this.baseName) return undefined;
+    if (this.jhipsterConfig.baseName) return undefined;
 
     return this.askModuleName(this);
 }
@@ -52,6 +52,10 @@ function askForClient() {
             name: 'React',
         },
         {
+            value: VUE,
+            name: 'Vue',
+        },
+        {
             value: 'no',
             name: 'No client',
         },
@@ -63,31 +67,15 @@ function askForClient() {
         when: response => applicationType !== 'microservice' && applicationType !== 'uaa',
         message: `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
         choices,
-        default: ANGULAR,
+        default: clientDefaultConfig.clientFramework,
     };
 
     return this.prompt(PROMPT).then(prompt => {
-        this.clientFramework = prompt.clientFramework;
+        this.clientFramework = this.jhipsterConfig.clientFramework = prompt.clientFramework;
         if (this.clientFramework === 'no') {
-            this.skipClient = true;
+            this.skipClient = this.jhipsterConfig.skipClient = true;
         }
     });
-}
-
-function askForI18n() {
-    if (this.existingProject || this.configOptions.skipI18nQuestion) return undefined;
-
-    return this.aski18n(this);
-}
-
-/**
- * @deprecated Use askForI18n() instead.
- * This method will be removed in JHipster v7.
- */
-function askFori18n() {
-    // eslint-disable-next-line no-console
-    console.log(chalk.yellow('\nPlease use askForI18n() instead. This method will be removed in v7\n'));
-    this.askForI18n();
 }
 
 function askForClientTheme() {
@@ -130,13 +118,13 @@ function askForClientTheme() {
         when: () => !skipClient,
         message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
         choices: defaultChoices,
-        default: 'none',
+        default: clientDefaultConfig.clientTheme,
     };
 
     const self = this;
     const promptClientTheme = function (PROMPT) {
         return self.prompt(PROMPT).then(prompt => {
-            self.clientTheme = prompt.clientTheme;
+            self.clientTheme = self.jhipsterConfig.clientTheme = prompt.clientTheme;
         });
     };
 
@@ -193,10 +181,10 @@ function askForClientThemeVariant() {
         when: () => !skipClient,
         message: 'Choose a Bootswatch variant navbar theme (https://bootswatch.com/)?',
         choices,
-        default: 'primary',
+        default: clientDefaultConfig.clientThemeVariant,
     };
 
     return this.prompt(PROMPT).then(prompt => {
-        this.clientThemeVariant = prompt.clientThemeVariant;
+        this.clientThemeVariant = this.jhipsterConfig.clientThemeVariant = prompt.clientThemeVariant;
     });
 }

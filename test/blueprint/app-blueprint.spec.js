@@ -9,14 +9,15 @@ const getFilesForOptions = require('../utils/utils').getFilesForOptions;
 const angularFiles = require('../../generators/client/files-angular').files;
 const jhipsterVersion = require('../../package').version;
 const constants = require('../../generators/generator-constants');
+const EnvironmentBuilder = require('../../cli/environment-builder');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
 describe('JHipster application generator with blueprint', () => {
     describe('generate application with a version-compatible blueprint', () => {
-        before(done => {
-            helpers
-                .run(path.join(__dirname, '../../generators/app'))
+        before(() => {
+            return helpers
+                .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
                 .inTmpDir(dir => {
                     // Fake the presence of the blueprint in node_modules
                     const packagejs = {
@@ -36,24 +37,10 @@ describe('JHipster application generator with blueprint', () => {
                     skipInstall: true,
                     skipChecks: false,
                     blueprint: 'myblueprint',
-                })
-                .withPrompts({
                     baseName: 'jhipster',
-                    clientFramework: ANGULAR,
-                    packageName: 'com.mycompany.myapp',
-                    packageFolder: 'com/mycompany/myapp',
-                    serviceDiscoveryType: false,
-                    authenticationType: 'jwt',
-                    cacheProvider: 'ehcache',
-                    enableHibernateCache: true,
-                    databaseType: 'sql',
-                    devDatabaseType: 'h2Memory',
-                    prodDatabaseType: 'mysql',
-                    enableTranslation: true,
-                    nativeLanguage: 'en',
-                    languages: ['fr'],
+                    defaults: true,
                 })
-                .on('end', done);
+                .run();
         });
 
         it('creates expected default files for server and angularX', () => {
@@ -131,9 +118,9 @@ describe('JHipster application generator with blueprint', () => {
     });
 
     describe('generate application with a peer version-compatible blueprint', () => {
-        before(done => {
-            helpers
-                .run(path.join(__dirname, '../../generators/app'))
+        before(() => {
+            return helpers
+                .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
                 .inTmpDir(dir => {
                     // Fake the presence of the blueprint in node_modules
                     const packagejs = {
@@ -153,24 +140,10 @@ describe('JHipster application generator with blueprint', () => {
                     skipInstall: true,
                     skipChecks: false,
                     blueprint: 'myblueprint',
-                })
-                .withPrompts({
                     baseName: 'jhipster',
-                    clientFramework: ANGULAR,
-                    packageName: 'com.mycompany.myapp',
-                    packageFolder: 'com/mycompany/myapp',
-                    serviceDiscoveryType: false,
-                    authenticationType: 'jwt',
-                    cacheProvider: 'ehcache',
-                    enableHibernateCache: true,
-                    databaseType: 'sql',
-                    devDatabaseType: 'h2Memory',
-                    prodDatabaseType: 'mysql',
-                    enableTranslation: true,
-                    nativeLanguage: 'en',
-                    languages: ['fr'],
+                    defaults: true,
                 })
-                .on('end', done);
+                .run();
         });
 
         it('creates expected default files for server and angularX', () => {

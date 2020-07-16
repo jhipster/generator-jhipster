@@ -21,7 +21,6 @@ const path = require('path');
 const _ = require('lodash');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
-const fs = require('fs');
 const shelljs = require('shelljs');
 const semver = require('semver');
 const exec = require('child_process').exec;
@@ -85,9 +84,6 @@ module.exports = class extends Generator {
     installI18nClientFilesByLanguage(_this, webappDir, lang) {
         const generator = _this || this;
         const prefix = this.fetchFromInstalledJHipster('languages/templates');
-        if ((generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra') {
-            generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
-        }
         if (generator.applicationType === 'gateway' && generator.serviceDiscoveryType) {
             generator.copyI18nFilesByName(generator, webappDir, 'gateway.json', lang);
         }
@@ -577,14 +573,14 @@ module.exports = class extends Generator {
      * @returns {number} representing the milliseconds elapsed since January 1, 1970, 00:00:00 UTC
      *                   obtained by parsing the given string representation of the creationTimestamp.
      */
-    parseCreationTimestamp() {
+    parseCreationTimestamp(creationTimestampOption = this.options.creationTimestamp) {
         let creationTimestamp;
-        if (this.options.creationTimestamp) {
-            creationTimestamp = Date.parse(this.options.creationTimestamp);
+        if (creationTimestampOption) {
+            creationTimestamp = Date.parse(creationTimestampOption);
             if (!creationTimestamp) {
-                this.warning(`Error parsing creationTimestamp ${this.options.creationTimestamp}.`);
+                this.warning(`Error parsing creationTimestamp ${creationTimestampOption}.`);
             } else if (creationTimestamp > new Date().getTime()) {
-                this.error(`Creation timestamp should not be in the future: ${this.options.creationTimestamp}.`);
+                this.error(`Creation timestamp should not be in the future: ${creationTimestampOption}.`);
             }
         }
         return creationTimestamp;
@@ -821,124 +817,6 @@ module.exports = class extends Generator {
             this._debug(formattedMsg);
             args.forEach(arg => this._debug(arg));
         }
-    }
-
-    /**
-     * Compose external blueprint module
-     * @param {string} blueprint - name of the blueprint
-     * @param {string} subGen - sub generator
-     * @param {any} options - options to pass to blueprint generator
-     */
-    composeBlueprint(blueprint, subGen, options = {}) {
-        if (blueprint) {
-            blueprint = jhipsterUtils.normalizeBlueprintName(blueprint);
-            if (options.skipChecks === undefined || !options.skipChecks) {
-                this.checkBlueprint(blueprint);
-            }
-            try {
-                const finalOptions = {
-                    ...options,
-                    jhipsterContext: this,
-                };
-                this.useBlueprint = true;
-                const blueprintGenerator = this.composeExternalModule(blueprint, subGen, finalOptions);
-                this.info(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
-                return blueprintGenerator;
-            } catch (e) {
-                this.debug(
-                    `No blueprint found for blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(
-                        subGen
-                    )} subgenerator: falling back to default generator`
-                );
-                this.debug('Error', e);
-                return false;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Try to retrieve the package.json of the blueprint used, as an object.
-     * @param {string} blueprintPkgName - generator name
-     * @return {object} packageJson - retrieved package.json as an object or undefined if not found
-     */
-    findBlueprintPackageJson(blueprintPkgName) {
-        const blueprintGeneratorName = jhipsterUtils.packageNameToNamespace(blueprintPkgName);
-        const blueprintPackagePath = this.env.getPackagePath(blueprintGeneratorName);
-        if (!blueprintPackagePath) {
-            const msg = `Could not retrieve packagePath of blueprint '${blueprintPkgName}'`;
-            this.warning(msg);
-            return undefined;
-        }
-        return JSON.parse(fs.readFileSync(path.join(blueprintPackagePath, 'package.json')));
-    }
-
-    /**
-     * Try to retrieve the version of the blueprint used.
-     * @param {string} blueprintPkgName - generator name
-     * @return {string} version - retrieved version or empty string if not found
-     */
-    findBlueprintVersion(blueprintPkgName) {
-        const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
-        if (!blueprintPackageJson || !blueprintPackageJson.version) {
-            this.warning(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
-            return undefined;
-        }
-        return blueprintPackageJson.version;
-    }
-
-    /**
-     * Check if the generator specified as blueprint is installed.
-     * @param {string} blueprint - generator name
-     */
-    checkBlueprint(blueprint) {
-        if (blueprint === 'generator-jhipster') {
-            this.error(`You cannot use ${chalk.yellow(blueprint)} as the blueprint.`);
-        }
-        if (!this.findBlueprintPackageJson(blueprint)) {
-            this.error(
-                `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
-                    `npm i -g ${blueprint}`
-                )}.`
-            );
-        }
-    }
-
-    /**
-     * Check if the generator specified as blueprint has a version compatible with current JHipster.
-     * @param {string} blueprintPkgName - generator name
-     */
-    checkJHipsterBlueprintVersion(blueprintPkgName) {
-        const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
-        if (!blueprintPackageJson) {
-            this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
-            return;
-        }
-        const mainGeneratorJhipsterVersion = packagejs.version;
-        const blueprintJhipsterVersion = blueprintPackageJson.dependencies && blueprintPackageJson.dependencies['generator-jhipster'];
-        if (blueprintJhipsterVersion) {
-            if (mainGeneratorJhipsterVersion !== blueprintJhipsterVersion) {
-                this.error(
-                    `The installed ${chalk.yellow(
-                        blueprintPkgName
-                    )} blueprint targets JHipster v${blueprintJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
-                );
-            }
-            return;
-        }
-        const blueprintPeerJhipsterVersion =
-            blueprintPackageJson.peerDependencies && blueprintPackageJson.peerDependencies['generator-jhipster'];
-        if (blueprintPeerJhipsterVersion) {
-            if (semver.satisfies(mainGeneratorJhipsterVersion, blueprintPeerJhipsterVersion)) {
-                return;
-            }
-            this.error(
-                `The installed ${chalk.yellow(
-                    blueprintPkgName
-                )} blueprint targets JHipster ${blueprintPeerJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
-            );
-        }
-        this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
     }
 
     /**
@@ -1634,5 +1512,122 @@ module.exports = class extends Generator {
                 )} instead of ${chalk.red('yo jhipster:<command>')}`
             );
         }
+    }
+
+    vueUpdateLanguagesInTranslationStore(languages) {
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/shared/config/store/translation-store.ts`;
+        try {
+            let content = 'languages: {\n';
+            if (this.enableTranslation) {
+                this.generateLanguageOptions(languages, this.clientFramework).forEach((ln, i) => {
+                    content += `      ${ln}${i !== languages.length - 1 ? ',' : ''}\n`;
+                });
+            }
+            content += '      // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object\n    }';
+            jhipsterUtils.replaceContent(
+                {
+                    file: fullPath,
+                    pattern: /languages:.*\{([^\]]*jhipster-needle-i18n-language-key-pipe[^}]*)}/g,
+                    content,
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') +
+                    languages +
+                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    vueUpdateI18nConfig(languages) {
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/shared/config/config.ts`;
+
+        try {
+            // Add i18n config snippets for all languages
+            let i18nConfig = 'const dateTimeFormats = {\n';
+            if (this.enableTranslation) {
+                languages.forEach((ln, i) => {
+                    i18nConfig += this.generateDateTimeFormat(ln, i, languages.length);
+                });
+            }
+            i18nConfig += '  // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object\n';
+            i18nConfig += '}';
+
+            jhipsterUtils.replaceContent(
+                {
+                    file: fullPath,
+                    pattern: /const dateTimeFormats.*\{([^\]]*jhipster-needle-i18n-language-date-time-format[^}]*)}/g,
+                    content: i18nConfig,
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') +
+                    languages +
+                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    vueUpdateLanguagesInWebpack(languages) {
+        const fullPath = 'webpack/webpack.common.js';
+        try {
+            let content = 'groupBy: [\n';
+            languages.forEach((language, i) => {
+                content += `          { pattern: './src/main/webapp/i18n/${language}/*.json', fileName: './i18n/${language}.json' }${
+                    i !== languages.length - 1 ? ',' : ''
+                }\n`;
+            });
+            content += '          // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n        ]';
+
+            jhipsterUtils.replaceContent(
+                {
+                    file: fullPath,
+                    pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
+                    content,
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
+                    languages +
+                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    generateDateTimeFormat(language, index, length) {
+        let config = `  '${language}': {\n`;
+
+        config += '    short: {\n';
+        config += "      year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric'\n";
+        config += '    },\n';
+        config += '    medium: {\n';
+        config += "      year: 'numeric', month: 'short', day: 'numeric',\n";
+        config += "      weekday: 'short', hour: 'numeric', minute: 'numeric'\n";
+        config += '    },\n';
+        config += '    long: {\n';
+        config += "      year: 'numeric', month: 'long', day: 'numeric',\n";
+        config += "      weekday: 'long', hour: 'numeric', minute: 'numeric'\n";
+        config += '    }\n';
+        config += '  }';
+        if (index !== length - 1) {
+            config += ',';
+        }
+        config += '\n';
+        return config;
     }
 };

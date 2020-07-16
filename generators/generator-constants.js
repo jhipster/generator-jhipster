@@ -20,7 +20,7 @@ const semver = require('semver');
 const packagejs = require('../package.json');
 
 // Version of Java
-const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
+const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the variable as it might be useful in the future.
 
 // Version of Node, Yarn, NPM
 const NODE_VERSION = '12.16.1';
@@ -31,10 +31,10 @@ const GRADLE_VERSION = '6.5';
 const JIB_VERSION = '2.4.0';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '3.9.0';
+const JHIPSTER_DEPENDENCIES_VERSION = '3.10.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
 const SPRING_BOOT_VERSION = '2.2.7.RELEASE';
-const LIQUIBASE_VERSION = '3.9.0';
+const LIQUIBASE_VERSION = '3.10.1';
 const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
 const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;
 
@@ -123,6 +123,7 @@ const SUPPORTED_VALIDATION_RULES = ['required', 'unique', 'max', 'min', 'maxleng
 const SUPPORTED_CLIENT_FRAMEWORKS = {
     ANGULAR: 'angularX',
     REACT: 'react',
+    VUE: 'vue',
 };
 
 // documentation constants
@@ -322,6 +323,7 @@ const constants = {
     CLIENT_DIST_DIR,
     ANGULAR_DIR: `${MAIN_DIR}webapp/app/`,
     REACT_DIR: `${MAIN_DIR}webapp/app/`,
+    VUE_DIR: `${MAIN_DIR}webapp/app/`,
 
     SERVER_MAIN_SRC_DIR: `${MAIN_DIR}java/`,
     SERVER_MAIN_RES_DIR: `${MAIN_DIR}resources/`,
