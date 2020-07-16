@@ -42,7 +42,6 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-        this.force = this.options.force;
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
@@ -81,6 +80,11 @@ module.exports = class extends BaseGenerator {
             defaults: false,
         });
 
+        if (this.options.help) {
+            return;
+        }
+
+        this.force = this.options.force;
         this.targetJhipsterVersion = this.options['target-version'];
         this.targetBlueprintVersions = parseBluePrints(this.options['target-blueprint-versions']);
         this.skipInstall = this.options['skip-install'];

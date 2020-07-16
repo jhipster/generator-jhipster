@@ -25,14 +25,18 @@ const JSONToJDLConverter = require('../../jdl/converters/json-to-jdl-converter')
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-        this.baseName = this.config.get('baseName');
-        this.argument('jdlFile', { type: String, required: false, defaults: `${this.baseName}.jdl` });
+        this.argument('jdlFile', { type: String, required: false });
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
             defaults: false,
         });
+        if (this.options.help) {
+            return;
+        }
+        this.baseName = this.config.get('baseName');
+        this.jdlFile = this.options.jdlFile || `${this.baseName}.jdl`;
     }
 
     get default() {
@@ -47,7 +51,7 @@ module.exports = class extends BaseGenerator {
 
             convertToJDL() {
                 try {
-                    JSONToJDLConverter.convertToJDL('.', this.options.jdlFile);
+                    JSONToJDLConverter.convertToJDL('.', this.jdlFile);
                 } catch (error) {
                     this.error(`An error occurred while exporting to JDL: ${error.message}\n${error}`);
                 }
