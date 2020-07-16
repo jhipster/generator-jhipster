@@ -167,6 +167,29 @@ describe('Component Tests', () => {
         expect(comp.isSaving).toEqual(false);
       });
     });
-  });
 
+    describe('Before route enter', () => {
+      it('Should retrieve data', async () => {
+        // GIVEN
+        const found<%= entityAngularName %> = { id: <%- tsKeyId %> };
+        <%= entityInstance %>ServiceStub.find.resolves(found<%= entityAngularName %>);
+
+        // WHEN
+        comp.beforeRouteEnter({ params: { <%= entityInstance %>Id: <%- tsKeyId %> } }, null, cb => cb(comp));
+        await comp.$nextTick();
+
+        // THEN
+        expect(comp.<%= entityInstance %>).toBe(found<%= entityAngularName %>);
+      });
+    });
+
+    describe('Previous state', () => {
+      it('Should go previous state', async () => {
+        comp.previousState();
+        await comp.$nextTick();
+
+        expect(comp.$router.currentRoute.fullPath).toContain('/');
+      });
+    });
+  });
 });
