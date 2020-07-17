@@ -1,9 +1,9 @@
 const path = require('path');
+const proxyquire = require('proxyquire');
 const fse = require('fs-extra');
 const assert = require('yeoman-assert');
 const expect = require('chai').expect;
 
-const importJdl = require('../../cli/import-jdl');
 const { testInTempDir, revertTempDir } = require('../utils/utils');
 
 let subGenCallParams = {
@@ -14,31 +14,38 @@ let subGenCallParams = {
 
 const removeFieldsWithUndefinedValues = options => Object.fromEntries(Object.entries(options).filter(([_, value]) => value !== undefined));
 
-const env = {
-    run(command, options) {
-        subGenCallParams.count++;
-        subGenCallParams.commands.push(command);
-        subGenCallParams.options.push(removeFieldsWithUndefinedValues(options));
-        return Promise.resolve();
-    },
-};
-
-const mockFork = (done, tries) => (runYeomanProcess, argv, opts) => {
-    const command = argv[0];
-    let options = argv.slice(1);
+const pushCall = (command, options) => {
     subGenCallParams.count++;
     subGenCallParams.commands.push(command);
     if (!Array.isArray(options)) {
         options = removeFieldsWithUndefinedValues(options);
     }
     subGenCallParams.options.push(options);
-    return {
-        on(code, cb) {
-            cb(0);
-            if (done && subGenCallParams.count === tries) done();
-        },
-    };
 };
+
+const env = {
+    run(command, options) {
+        pushCall(command, options);
+        return Promise.resolve();
+    },
+};
+
+const loadImportJdl = (
+    options = {
+        child_process: {
+            fork: (runYeomanProcess, argv, opts) => {
+                const command = argv[0];
+                const options = argv.slice(1);
+                pushCall(command, options);
+                return {
+                    on(code, cb) {
+                        cb(0);
+                    },
+                };
+            },
+        },
+    }
+) => proxyquire('../../cli/import-jdl', options);
 
 function testDocumentsRelationships() {
     it('creates entity json files', () => {
@@ -86,16 +93,12 @@ describe('JHipster generator import jdl', () => {
     });
     // this test for some reason works only when put at the beginning.
     describe('runs in series with --interactive flag', () => {
+        const options = { skipInstall: true, noInsight: true, interactive: true };
         beforeEach(() => {
             return testInTempDir(dir => {
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
                 fse.removeSync(`${dir}/.yo-rc.json`);
-                return importJdl(
-                    ['apps-and-entities-and-deployments.jdl'],
-                    { skipInstall: true, noInsight: true, interactive: true },
-                    env,
-                    mockFork()
-                );
+                return loadImportJdl()(['apps-and-entities-and-deployments.jdl'], options, env);
             });
         });
         it('calls generator in order', () => {
@@ -120,10 +123,11 @@ describe('JHipster generator import jdl', () => {
 
     describe('imports a JDL entity model from single file with --json-only flag', () => {
         let oldCwd;
+        const options = { jsonOnly: true, skipInstall: true };
         beforeEach(() => {
             return testInTempDir(dir => {
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
-                return importJdl(['jdl.jdl'], { jsonOnly: true, skipInstall: true }, env);
+                return loadImportJdl()(['jdl.jdl'], options, env);
             }, true).then(cwd => {
                 oldCwd = cwd;
             });
@@ -150,10 +154,12 @@ describe('JHipster generator import jdl', () => {
 
     describe('imports a JDL entity model from single file with --skip-db-changelog', () => {
         let oldCwd;
-        beforeEach(done => {
-            oldCwd = testInTempDir(dir => {
+        const options = { skipDbChangelog: true, skipInstall: true };
+        beforeEach(() => {
+            return testInTempDir(dir => {
+                oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
-                importJdl(['jdl.jdl'], { skipDbChangelog: true, skipInstall: true }, env).then(() => done());
+                return loadImportJdl()(['jdl.jdl'], options, env);
             }, true);
         });
 
@@ -196,10 +202,11 @@ describe('JHipster generator import jdl', () => {
 
     describe('imports a JDL entity model from single file in interactive mode by default', () => {
         let oldCwd;
+        const options = { skipInstall: true };
         beforeEach(() => {
             return testInTempDir(dir => {
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
-                return importJdl(['jdl.jdl'], { skipInstall: true }, env);
+                return loadImportJdl()(['jdl.jdl'], options, env);
             }, true).then(cwd => {
                 oldCwd = cwd;
             });
@@ -243,10 +250,12 @@ describe('JHipster generator import jdl', () => {
 
     describe('imports a JDL entity model from multiple files', () => {
         let oldCwd;
-        beforeEach(done => {
-            oldCwd = testInTempDir(dir => {
+        const options = { skipInstall: true };
+        beforeEach(() => {
+            return testInTempDir(dir => {
+                oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
-                importJdl(['jdl.jdl', 'jdl2.jdl', 'jdl-ambiguous.jdl'], { skipInstall: true }, env).then(() => done());
+                return loadImportJdl()(['jdl.jdl', 'jdl2.jdl', 'jdl-ambiguous.jdl'], options, env);
             }, true);
         });
 
@@ -298,10 +307,12 @@ describe('JHipster generator import jdl', () => {
 
     describe('imports a JDL entity model which excludes Elasticsearch for a class', () => {
         let oldCwd;
-        beforeEach(done => {
-            oldCwd = testInTempDir(dir => {
+        const options = { skipInstall: true, interactive: false };
+        beforeEach(() => {
+            return testInTempDir(dir => {
+                oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
-                importJdl(['search.jdl'], { skipInstall: true, interactive: false }, env).then(() => done());
+                return loadImportJdl()(['search.jdl'], options, env);
             }, true);
         });
 
@@ -325,18 +336,18 @@ describe('JHipster generator import jdl', () => {
     });
 
     describe('imports single app and entities', () => {
+        let oldCwd;
+        const options = { skipInstall: true, noInsight: true, skipGit: false, creationTimestamp: '2019-01-01' };
         beforeEach(() => {
             return testInTempDir(dir => {
+                oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
                 fse.removeSync(`${dir}/.yo-rc.json`);
-                return importJdl(
-                    ['single-app-and-entities.jdl'],
-                    { skipInstall: true, noInsight: true, skipGit: false, creationTimestamp: '2019-01-01' },
-                    env,
-                    mockFork(() => {}, 1)
-                );
+                return loadImportJdl()(['single-app-and-entities.jdl'], options, env);
             }, true);
         });
+
+        afterEach(() => revertTempDir(oldCwd));
 
         it('creates the application', () => {
             assert.file(['.yo-rc.json']);
@@ -371,21 +382,21 @@ describe('JHipster generator import jdl', () => {
     });
 
     describe('imports single app and entities passed with --inline', () => {
+        let oldCwd;
+        const options = {
+            skipInstall: true,
+            noInsight: true,
+            skipGit: false,
+            inline: 'application { config { baseName jhapp } entities * } entity Customer',
+        };
         beforeEach(() => {
-            return testInTempDir(() => {
-                return importJdl(
-                    [],
-                    {
-                        skipInstall: true,
-                        noInsight: true,
-                        skipGit: false,
-                        inline: 'application { config { baseName jhapp } entities * } entity Customer',
-                    },
-                    env,
-                    mockFork(() => {}, 1)
-                );
+            return testInTempDir(dir => {
+                oldCwd = dir;
+                return loadImportJdl()([], options, env);
             }, true);
         });
+
+        afterEach(() => revertTempDir(oldCwd));
 
         it('creates the application', () => {
             assert.file(['.yo-rc.json']);
@@ -419,18 +430,18 @@ describe('JHipster generator import jdl', () => {
     });
 
     describe('imports single app only', () => {
+        let oldCwd;
+        const options = { skipInstall: true, noInsight: true, interactive: false, skipGit: false };
         beforeEach(() => {
             return testInTempDir(dir => {
+                oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
                 fse.removeSync(`${dir}/.yo-rc.json`);
-                return importJdl(
-                    ['single-app-only.jdl'],
-                    { skipInstall: true, noInsight: true, interactive: false, skipGit: false },
-                    env,
-                    mockFork(() => {}, 1)
-                );
+                return loadImportJdl()(['single-app-only.jdl'], options, env);
             }, true);
         });
+
+        afterEach(() => revertTempDir(oldCwd));
 
         it('creates the application', () => {
             assert.file(['.yo-rc.json']);
@@ -450,18 +461,18 @@ describe('JHipster generator import jdl', () => {
     });
 
     describe('imports multiple JDL apps and entities', () => {
+        let oldCwd;
+        const options = { skipInstall: true, noInsight: true, interactive: false, skipGit: false };
         beforeEach(() => {
             return testInTempDir(dir => {
+                oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
                 fse.removeSync(`${dir}/.yo-rc.json`);
-                return importJdl(
-                    ['apps-and-entities.jdl'],
-                    { skipInstall: true, noInsight: true, interactive: false, skipGit: false },
-                    env,
-                    mockFork(() => {}, 3)
-                );
+                return loadImportJdl()(['apps-and-entities.jdl'], options, env);
             }, true);
         });
+
+        afterEach(() => revertTempDir(oldCwd));
 
         it('creates the applications', () => {
             assert.file([
@@ -496,18 +507,18 @@ describe('JHipster generator import jdl', () => {
     });
 
     describe('skips JDL apps with --ignore-application', () => {
+        let oldCwd;
+        const options = { skipInstall: true, ignoreApplication: true, interactive: false, skipGit: false };
         beforeEach(() => {
             return testInTempDir(dir => {
+                oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
                 fse.removeSync(`${dir}/.yo-rc.json`);
-                return importJdl(
-                    ['apps-and-entities.jdl'],
-                    { skipInstall: true, ignoreApplication: true, interactive: false, skipGit: false },
-                    env,
-                    mockFork(() => {}, 6)
-                );
+                return loadImportJdl()(['apps-and-entities.jdl'], options, env);
             }, true);
         });
+
+        afterEach(() => revertTempDir(oldCwd));
 
         it('creates the application config', () => {
             assert.file([
@@ -549,12 +560,17 @@ describe('JHipster generator import jdl', () => {
     });
 
     describe('imports JDL deployments only', () => {
-        beforeEach(done => {
+        let oldCwd;
+        const options = { skipInstall: true, interactive: false, skipGit: false };
+        beforeEach(() => {
             return testInTempDir(dir => {
+                oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
-                importJdl(['deployments.jdl'], { skipInstall: true, interactive: false, skipGit: false }, env, mockFork(done, 3));
+                return loadImportJdl()(['deployments.jdl'], options, env);
             }, true);
         });
+
+        afterEach(() => revertTempDir(oldCwd));
 
         it('creates the deployments', () => {
             assert.file([
@@ -580,18 +596,19 @@ describe('JHipster generator import jdl', () => {
 
     describe('imports multiple JDL apps, deployments and entities', () => {
         describe('calls generators', () => {
+            let oldCwd;
+            const options = { skipInstall: true, noInsight: true, interactive: false, skipGit: false };
             beforeEach(() => {
                 return testInTempDir(dir => {
+                    oldCwd = dir;
                     fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
                     fse.removeSync(`${dir}/.yo-rc.json`);
-                    return importJdl(
-                        ['apps-and-entities-and-deployments.jdl'],
-                        { skipInstall: true, noInsight: true, interactive: false, skipGit: false },
-                        env,
-                        mockFork(() => {}, 5)
-                    );
+                    return loadImportJdl()(['apps-and-entities-and-deployments.jdl'], options, env);
                 }, true);
             });
+
+            afterEach(() => revertTempDir(oldCwd));
+
             it('calls generator in order', () => {
                 expect(subGenCallParams.count).to.equal(5);
                 expect(subGenCallParams.commands).to.eql([
@@ -622,13 +639,19 @@ describe('JHipster generator import jdl', () => {
             });
         });
         describe('creates config files', () => {
+            let oldCwd;
+            const options = { skipInstall: true };
             beforeEach(() => {
                 return testInTempDir(dir => {
+                    oldCwd = dir;
                     fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
                     fse.removeSync(`${dir}/.yo-rc.json`);
-                    return importJdl(['apps-and-entities-and-deployments.jdl'], { skipInstall: true }, env, mockFork());
+                    return loadImportJdl()(['apps-and-entities-and-deployments.jdl'], options, env);
                 }, true);
             });
+
+            afterEach(() => revertTempDir(oldCwd));
+
             it('creates the applications', () => {
                 assert.file([
                     path.join('myFirstApp', '.yo-rc.json'),
@@ -653,18 +676,19 @@ describe('JHipster generator import jdl', () => {
     });
 
     describe('skips JDL deployments with --ignore-deployments flag', () => {
+        let oldCwd;
+        const options = { skipInstall: true, noInsight: true, ignoreDeployments: true, interactive: false, skipGit: false };
         beforeEach(() => {
             return testInTempDir(dir => {
+                oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
                 fse.removeSync(`${dir}/.yo-rc.json`);
-                return importJdl(
-                    ['apps-and-entities-and-deployments.jdl'],
-                    { skipInstall: true, noInsight: true, ignoreDeployments: true, interactive: false, skipGit: false },
-                    env,
-                    mockFork(() => {}, 3)
-                );
+                return loadImportJdl()(['apps-and-entities-and-deployments.jdl'], options, env);
             }, true);
         });
+
+        afterEach(() => revertTempDir(oldCwd));
+
         it('calls generator in order', () => {
             expect(subGenCallParams.count).to.equal(3);
             expect(subGenCallParams.commands).to.eql(['jhipster:app', 'jhipster:app', 'jhipster:app']);
@@ -682,25 +706,33 @@ describe('JHipster generator import jdl', () => {
     });
 
     describe('imports a JDL entity model with relations for mongodb', () => {
+        let oldCwd;
         beforeEach(() => {
             return testInTempDir(dir => {
+                oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/documents-with-relations'), dir);
                 fse.copySync(path.join(__dirname, '../templates/mongodb-with-relations'), dir);
-                return importJdl(['orders-model.jdl'], {}, env);
+                return loadImportJdl()(['orders-model.jdl'], {}, env);
             }, true);
         });
+
+        afterEach(() => revertTempDir(oldCwd));
 
         testDocumentsRelationships();
     });
 
     describe('imports a JDL entity model with relations for couchbase', () => {
+        let oldCwd;
         beforeEach(() => {
             return testInTempDir(dir => {
+                oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/documents-with-relations'), dir);
                 fse.copySync(path.join(__dirname, '../templates/couchbase-with-relations'), dir);
-                return importJdl(['orders-model.jdl'], {}, env);
+                return loadImportJdl()(['orders-model.jdl'], {}, env);
             }, true);
         });
+
+        afterEach(() => revertTempDir(oldCwd));
 
         testDocumentsRelationships();
     });

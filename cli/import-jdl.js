@@ -93,10 +93,9 @@ const shouldGenerateDeployments = processor =>
 /**
  * Generate deployment source code for JDL deployments defined.
  * @param {any} config
- * @param {function} forkProcess
  * @returns Promise
  */
-const generateDeploymentFiles = ({ processor, deployment, inFolder }, forkProcess) => {
+const generateDeploymentFiles = ({ processor, deployment, inFolder }) => {
     const deploymentType = getDeploymentType(deployment);
     logger.info(`Generating deployment ${deploymentType} in a new parallel process`);
     logger.debug(`Generating deployment: ${pretty(deployment[GENERATOR_NAME])}`);
@@ -105,7 +104,7 @@ const generateDeploymentFiles = ({ processor, deployment, inFolder }, forkProces
     logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
 
     const command = `${CLI_NAME}:${deploymentType}`;
-    const childProc = forkProcess(
+    const childProc = fork(
         runYeomanProcess,
         [command, '--skip-prompts', ...getOptionAsArgs(processor.options, false, !processor.options.interactive)],
         {
@@ -126,19 +125,17 @@ const generateDeploymentFiles = ({ processor, deployment, inFolder }, forkProces
 /**
  * Generate application source code for JDL apps defined.
  * @param {any} config
- * @param {function} forkProcess
  * @returns Promise
  */
-const generateApplicationFiles = ({ processor, application, withEntities, inFolder }, forkProcess) => {
+const generateApplicationFiles = ({ processor, application, withEntities, inFolder }) => {
     const baseName = getBaseName(application);
-    logger.info(`Generating application ${baseName} in a new parallel process`);
     logger.debug(`Generating application: ${pretty(application[GENERATOR_NAME])}`);
 
     const cwd = inFolder ? path.join(processor.pwd, baseName) : processor.pwd;
     logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
 
     const command = `${CLI_NAME}:app`;
-    const childProc = forkProcess(
+    const childProc = fork(
         runYeomanProcess,
         [command, ...getOptionAsArgs(processor.options, withEntities, !processor.options.interactive)],
         {
@@ -163,10 +160,9 @@ const generateApplicationFiles = ({ processor, application, withEntities, inFold
  * @param {boolean} inFolder
  * @param {any} env
  * @param {boolean} shouldTriggerInstall
- * @param {function} forkProcess
  * @return Promise
  */
-const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInstall, forkProcess) => {
+const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInstall) => {
     const options = {
         ...processor.options,
         regenerate: true,
@@ -187,7 +183,7 @@ const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInst
             const cwd = path.join(processor.pwd, baseName);
             logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
 
-            const childProc = forkProcess(runYeomanProcess, [command, ...getOptionAsArgs(options, false, !options.interactive)], { cwd });
+            const childProc = fork(runYeomanProcess, [command, ...getOptionAsArgs(options, false, !options.interactive)], { cwd });
             return new Promise(resolve => {
                 childProc.on('exit', code => {
                     if (code !== 0) {
@@ -293,7 +289,7 @@ class JDLProcessor {
         statistics.sendSubGenEvent('generator', 'import-jdl');
     }
 
-    generateApplications(forkProcess) {
+    generateApplications() {
         if (!shouldGenerateApplications(this)) {
             logger.debug('Applications not generated');
             return Promise.resolve();
@@ -304,15 +300,12 @@ class JDLProcessor {
         );
         const callGenerator = application => {
             try {
-                return generateApplicationFiles(
-                    {
-                        processor: this,
-                        application,
-                        withEntities: this.importState.exportedEntities.length !== 0,
-                        inFolder: this.importState.exportedApplications.length > 1,
-                    },
-                    forkProcess
-                );
+                return generateApplicationFiles({
+                    processor: this,
+                    application,
+                    withEntities: this.importState.exportedEntities.length !== 0,
+                    inFolder: this.importState.exportedApplications.length > 1,
+                });
             } catch (error) {
                 logger.error(`Error while generating applications from the parsed JDL\n${error}`, error);
                 throw error;
@@ -326,7 +319,7 @@ class JDLProcessor {
         return Promise.all(this.importState.exportedApplications.map(callGenerator));
     }
 
-    generateDeployments(forkProcess) {
+    generateDeployments() {
         if (!shouldGenerateDeployments(this)) {
             logger.debug('Deployments not generated');
             return Promise.resolve();
@@ -339,14 +332,11 @@ class JDLProcessor {
         const callDeploymentGenerator = () => {
             const callGenerator = deployment => {
                 try {
-                    return generateDeploymentFiles(
-                        {
-                            processor: this,
-                            deployment,
-                            inFolder: true,
-                        },
-                        forkProcess
-                    );
+                    return generateDeploymentFiles({
+                        processor: this,
+                        deployment,
+                        inFolder: true,
+                    });
                 } catch (error) {
                     logger.error(`Error while generating deployments from the parsed JDL\n${error}`, error);
                     throw error;
@@ -364,7 +354,7 @@ class JDLProcessor {
         return callDeploymentGenerator();
     }
 
-    generateEntities(env, forkProcess) {
+    generateEntities(env) {
         if (this.importState.exportedEntities.length === 0 || shouldGenerateApplications(this)) {
             logger.debug('Entities not generated');
             return Promise.resolve();
@@ -385,8 +375,7 @@ class JDLProcessor {
                         exportedEntity,
                         this.importState.exportedApplications.length > 1,
                         env,
-                        shouldTriggerInstall(this, i),
-                        forkProcess
+                        shouldTriggerInstall(this, i)
                     );
                 })
             );
@@ -402,9 +391,8 @@ class JDLProcessor {
  * @param {any} args arguments passed for import-jdl
  * @param {any} options options passed from CLI
  * @param {any} env the yeoman environment
- * @param {function} forkProcess the method to use for process forking
  */
-module.exports = (jdlFiles, options = {}, env, forkProcess = fork) => {
+module.exports = (jdlFiles, options = {}, env) => {
     logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));
     logger.debug(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
     try {
@@ -413,12 +401,12 @@ module.exports = (jdlFiles, options = {}, env, forkProcess = fork) => {
         jdlImporter.importJDL();
         jdlImporter.sendInsight();
         return jdlImporter
-            .generateApplications(forkProcess)
+            .generateApplications()
             .then(() => {
-                return jdlImporter.generateEntities(env, forkProcess);
+                return jdlImporter.generateEntities(env);
             })
             .then(() => {
-                return jdlImporter.generateDeployments(forkProcess);
+                return jdlImporter.generateDeployments();
             })
             .then(() => {
                 printSuccess();
