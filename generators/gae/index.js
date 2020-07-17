@@ -221,15 +221,23 @@ module.exports = class extends BaseGenerator {
                                     message: 'In which Google App Engine location do you want to deploy ?',
                                     choices: [
                                         { value: 'northamerica-northeast1', name: 'northamerica-northeast1 - Montréal' },
-                                        { value: 'us-central', name: 'us-central - Iowa' },
+                                        { value: 'us-central', name: 'us-central1 - Iowa' },
                                         { value: 'us-east1', name: 'us-east1 - South Carolina' },
                                         { value: 'us-east4', name: 'us-east4 - Northern Virginia' },
+                                        { value: 'us-west2', name: 'us-west2 - Los Angeles' },
+                                        { value: 'us-west3', name: 'us-west3 - Salt Lake City' },
+                                        { value: 'us-west4', name: 'us-west4 - Las Vegas' },
                                         { value: 'southamerica-east1', name: 'southamerica-east1 - São Paulo' },
-                                        { value: 'europe-west', name: 'europe-west - Belgium' },
+                                        { value: 'europe-west', name: 'europe-west1 - Belgium' },
                                         { value: 'europe-west2', name: 'europe-west2 - London' },
                                         { value: 'europe-west3', name: 'europe-west3 - Frankfurt' },
+                                        { value: 'europe-west6', name: 'europe-west6 - Zürich' },
                                         { value: 'asia-northeast1', name: 'asia-northeast1 - Tokyo' },
+                                        { value: 'asia-northeast2', name: 'asia-northeast2 - Osaka' },
+                                        { value: 'asia-northeast3', name: 'asia-northeast3 - Seoul' },
                                         { value: 'asia-south1', name: 'asia-south1 - Mumbai' },
+                                        { value: 'asia-east2', name: 'asia-east2 - Hong Kong' },
+                                        { value: 'asia-southeast2', name: 'asia-southeast2 - Jakarta' },
                                         { value: 'australia-southeast1', name: 'australia-southeast1 - Sydney' },
                                     ],
                                     default: this.gaeLocation ? this.gaeLocation : 0,
@@ -642,8 +650,13 @@ module.exports = class extends BaseGenerator {
                 // for mysql keep default options, set specific option for pg
                 const dbVersionFlag =
                     this.prodDatabaseType === 'postgresql' ? ' --database-version="POSTGRES_9_6" --tier="db-g1-small"' : '';
-
-                const cmd = `gcloud sql instances create "${name}" --region='${this.gaeLocation}' --project=${this.gcpProjectId}${dbVersionFlag}`;
+                let gaeCloudSqlLocation = this.gaeLocation;
+                if (gaeCloudSqlLocation === 'us-central') {
+                    gaeCloudSqlLocation = 'us-central1';
+                } else if (gaeCloudSqlLocation === 'europe-west') {
+                    gaeCloudSqlLocation = 'europe-west1';
+                }
+                const cmd = `gcloud sql instances create "${name}" --region='${gaeCloudSqlLocation}' --project=${this.gcpProjectId}${dbVersionFlag}`;
                 this.log(chalk.bold(`\n... Running: ${cmd}`));
 
                 shelljs.exec(cmd, { silent: true }, (code, stdout, err) => {
