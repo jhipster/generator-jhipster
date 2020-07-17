@@ -31,16 +31,20 @@ module.exports = {
 /**
  * Exports JDL applications to JDL files in separate folders (based on application base names).
  * @param applications the applications to exporters (key: application name, value: a JDLApplication).
+ * @param {Object} configuration - the configuration object.
+ * @param {Boolean} configuration.skipYoRcGeneration - set true to skip writing .yo-rc.json.
  * @return object[] exported applications in their final form.
  */
-function exportApplications(applications) {
+function exportApplications(applications, configuration = {}) {
     if (!applications) {
         throw new Error('Applications have to be passed to be exported.');
     }
     return Object.values(applications).map(application => {
         checkForErrors(application);
         const exportableApplication = setUpApplicationStructure(application);
-        writeApplicationFileForMultipleApplications(exportableApplication);
+        if (!configuration.skipYoRcGeneration) {
+            writeApplicationFileForMultipleApplications(exportableApplication);
+        }
         return exportableApplication;
     });
 }

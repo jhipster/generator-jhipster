@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { uniqBy } = require('lodash');
+const { uniqBy, defaults } = require('lodash');
 const JDLReader = require('./readers/jdl-reader');
 const DocumentParser = require('./converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter');
 const JDLWithoutApplicationToJSONConverter = require('./converters/jdl-to-json/jdl-without-application-to-json-converter');
@@ -44,6 +44,7 @@ module.exports = {
  * @param {String} configuration.databaseType - deprecated, the database type, optional if parsing applications
  * @param {String} configuration.generatorVersion - deprecated, the generator's version, optional if parsing applications
  * @param {String} configuration.forceNoFiltering - whether to force filtering
+ * @param {Boolean} configuration.skipConfigFilesGeneration - whether not to generate the .yo-rc.json file
  * @param {Boolean} configuration.skipYoRcGeneration - whether not to generate the .yo-rc.json file
  * @param {Boolean} configuration.skipEntityFilesGeneration - whether not to generate the .jhipster folder along with the entity files
  * @param {Date} configuration.creationTimestamp - the creation timestamp to use when generating entities
@@ -72,6 +73,7 @@ function createImporterFromFiles(files, configuration) {
  * @param {String} configuration.databaseType - deprecated, the database type, optional if parsing applications
  * @param {String} configuration.generatorVersion - deprecated, the generator's version, optional if parsing applications
  * @param {String} configuration.forceNoFiltering - whether to force filtering
+ * @param {Boolean} configuration.skipConfigFilesGeneration - whether not to generate the .yo-rc.json file
  * @param {Boolean} configuration.skipYoRcGeneration - whether not to generate the .yo-rc.json file
  * @param {Boolean} configuration.skipEntityFilesGeneration - whether not to generate the .jhipster folder along with the entity files
  * @param {Date} configuration.creationTimestamp - the creation timestamp to use when generating entities
@@ -87,8 +89,12 @@ function createImporterFromContent(jdlString, configuration) {
 }
 
 function makeJDLImporter(content, configuration) {
+    if (configuration.skipConfigFilesGeneration) {
+        defaults(configuration, { skipYoRcGeneration: true, skipEntityFilesGeneration: true });
+    }
     let importState = {
         exportedApplications: [],
+        exportedApplicationsWithEntities: {},
         exportedEntities: [],
         exportedDeployments: [],
     };
@@ -205,12 +211,15 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
 
     const importState = {
         exportedApplications: [],
+        exportedApplicationsWithEntities: {},
         exportedEntities: [],
         exportedDeployments: [],
     };
-    importState.exportedApplications.push(
-        JHipsterApplicationExporter.exportApplicationInCurrentDirectory(jdlObject.getApplications()[0], configuration)
+    const exportedApplication = JHipsterApplicationExporter.exportApplicationInCurrentDirectory(
+        jdlObject.getApplications()[0],
+        configuration
     );
+    importState.exportedApplications.push(exportedApplication);
     const jdlApplication = jdlObject.getApplications()[0];
     const applicationName = jdlApplication.getConfigurationOptionValue('baseName');
     const entitiesPerApplicationMap = JDLWithApplicationsToJSONConverter.convert({
@@ -218,6 +227,10 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
         creationTimestamp,
     });
     const jsonEntities = entitiesPerApplicationMap.get(applicationName);
+    importState.exportedApplicationsWithEntities[applicationName] = {
+        config: exportedApplication['generator-jhipster'],
+        entities: [],
+    };
     if (jsonEntities.length !== 0) {
         const exportedJSONEntities = exportJSONEntities(jsonEntities, {
             applicationName,
@@ -225,6 +238,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
             forSeveralApplications: false,
             skipEntityFilesGeneration,
         });
+        importState.exportedApplicationsWithEntities[applicationName].entities = exportedJSONEntities;
         importState.exportedEntities = uniqBy([...importState.exportedEntities, ...exportedJSONEntities], 'name');
     }
     return importState;
@@ -235,24 +249,29 @@ function importApplicationsAndEntities(jdlObject, configuration) {
 
     const importState = {
         exportedApplications: [],
+        exportedApplicationsWithEntities: {},
         exportedEntities: [],
         exportedDeployments: [],
     };
 
-    importState.exportedApplications = JHipsterApplicationExporter.exportApplications(jdlObject.applications);
+    importState.exportedApplications = JHipsterApplicationExporter.exportApplications(jdlObject.applications, configuration);
     const entitiesPerApplicationMap = JDLWithApplicationsToJSONConverter.convert({
         jdlObject,
         creationTimestamp,
     });
-    entitiesPerApplicationMap.forEach((entities, applicationName) => {
+    entitiesPerApplicationMap.forEach((jsonEntities, applicationName) => {
         const jdlApplication = jdlObject.getApplication(applicationName);
-        const jsonEntities = entitiesPerApplicationMap.get(applicationName);
         const exportedJSONEntities = exportJSONEntities(jsonEntities, {
             applicationName,
             applicationType: jdlApplication.getConfigurationOptionValue('applicationType'),
             forSeveralApplications: true,
             skipEntityFilesGeneration,
         });
+        const exportedConfig = importState.exportedApplications.find(config => applicationName === config['generator-jhipster'].baseName);
+        importState.exportedApplicationsWithEntities[applicationName] = {
+            config: exportedConfig['generator-jhipster'],
+            entities: exportedJSONEntities,
+        };
         importState.exportedEntities = uniqBy([...importState.exportedEntities, ...exportedJSONEntities], 'name');
     });
     return importState;
