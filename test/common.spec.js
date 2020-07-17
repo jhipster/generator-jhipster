@@ -12,7 +12,7 @@ describe('JHipster generator common', () => {
                 fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
             })
             .withOptions({
-                'from-cli': true,
+                'fromCli': true,
                 skipInstall: true,
                 skipChecks: true,
             })

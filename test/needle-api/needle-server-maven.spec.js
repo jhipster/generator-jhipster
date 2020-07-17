@@ -118,7 +118,7 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
         helpers
             .run(path.join(__dirname, '../../generators/server'))
             .withOptions({
-                'from-cli': true,
+                'fromCli': true,
                 skipInstall: true,
                 blueprint: 'myblueprint',
                 skipChecks: true,

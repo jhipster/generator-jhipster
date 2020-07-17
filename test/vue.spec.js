@@ -215,7 +215,7 @@ describe('Vue applications', () => {
             helpers
                 .run(path.join(__dirname, '../generators/app'))
                 .withOptions({
-                    'from-cli': true,
+                    'fromCli': true,
                     skipInstall: true,
                     skipChecks: true,
                 })
@@ -268,7 +268,7 @@ describe('Vue applications', () => {
             helpers
                 .run(path.join(__dirname, '../generators/app'))
                 .withOptions({
-                    'from-cli': true,
+                    'fromCli': true,
                     skipInstall: true,
                     skipChecks: true,
                 })
@@ -322,7 +322,7 @@ describe('Vue applications', () => {
             helpers
                 .run(path.join(__dirname, '../generators/app'))
                 .withOptions({
-                    'from-cli': true,
+                    'fromCli': true,
                     skipInstall: true,
                     skipChecks: true,
                 })
@@ -374,7 +374,7 @@ describe('Vue applications', () => {
             helpers
                 .run(path.join(__dirname, '../generators/app'))
                 .withOptions({
-                    'from-cli': true,
+                    'fromCli': true,
                     skipInstall: true,
                     skipChecks: true,
                 })
@@ -426,7 +426,7 @@ describe('Vue applications', () => {
             helpers
                 .run(path.join(__dirname, '../generators/app'))
                 .withOptions({
-                    'from-cli': true,
+                    'fromCli': true,
                     skipInstall: true,
                     skipChecks: true,
                 })
@@ -481,7 +481,7 @@ describe('Vue applications', () => {
             helpers
                 .run(path.join(__dirname, '../generators/app'))
                 .withOptions({
-                    'from-cli': true,
+                    'fromCli': true,
                     skipInstall: true,
                     skipChecks: true,
                 })
@@ -537,7 +537,7 @@ describe('Vue applications', () => {
             helpers
                 .run(path.join(__dirname, '../generators/app'))
                 .withOptions({
-                    'from-cli': true,
+                    'fromCli': true,
                     skipInstall: true,
                     skipChecks: true,
                 })
@@ -590,7 +590,7 @@ describe('Vue applications', () => {
             helpers
                 .run(path.join(__dirname, '../generators/app'))
                 .withOptions({
-                    'from-cli': true,
+                    'fromCli': true,
                     skipInstall: true,
                     skipChecks: true,
                 })

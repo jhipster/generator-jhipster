@@ -67,7 +67,7 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
                 fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
             })
             .withOptions({
-                'from-cli': true,
+                'fromCli': true,
                 build: 'maven',
                 auth: 'jwt',
                 db: 'mysql',

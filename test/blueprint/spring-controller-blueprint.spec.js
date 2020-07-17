@@ -64,7 +64,7 @@ describe('JHipster spring controller generator with blueprint', () => {
                 helpers
                     .run(path.join(__dirname, '../../generators/spring-controller'))
                     .withOptions({
-                        'from-cli': true,
+                        'fromCli': true,
                         skipInstall: true,
                         blueprint: blueprintName,
                         skipChecks: true,
@@ -97,7 +97,7 @@ describe('JHipster spring controller generator with blueprint', () => {
             helpers
                 .run(path.join(__dirname, '../../generators/spring-controller'))
                 .withOptions({
-                    'from-cli': true,
+                    'fromCli': true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
                     skipChecks: true,
