@@ -53,7 +53,7 @@ describe('JHipster languages generator with blueprint', () => {
                         fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
                     })
                     .withOptions({
-                        'fromCli': true,
+                        fromCli: true,
                         skipInstall: true,
                         blueprint: blueprintName,
                         skipChecks: true,

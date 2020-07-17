@@ -58,7 +58,7 @@ describe('needle API server gradle: JHipster server generator with blueprint', (
         helpers
             .run(path.join(__dirname, '../../generators/server'))
             .withOptions({
-                'fromCli': true,
+                fromCli: true,
                 skipInstall: true,
                 blueprint: 'myblueprint',
                 skipChecks: true,

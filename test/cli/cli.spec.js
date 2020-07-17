@@ -109,7 +109,7 @@ describe('jhipster cli test', () => {
             it('should pass a truthy fromCli', done => {
                 callback = (_command, options) => {
                     expect(options.fromCli).to.be.true;
-                    expect(options['fromCli']).to.be.true;
+                    expect(options.fromCli).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands });
@@ -200,7 +200,7 @@ describe('jhipster cli test', () => {
             it('should pass a truthy fromCli', done => {
                 const cb = (_args, options, _env) => {
                     expect(options.fromCli).to.be.true;
-                    expect(options['fromCli']).to.be.true;
+                    expect(options.fromCli).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });

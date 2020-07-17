@@ -19,7 +19,7 @@ describe('JHipster application generator with blueprint with constructor error',
                     );
                 })
                 .withOptions({
-                    'fromCli': true,
+                    fromCli: true,
                     skipInstall: true,
                     skipChecks: true,
                     blueprints: 'generator-jhipster-throwing-constructor',

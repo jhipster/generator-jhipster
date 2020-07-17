@@ -64,7 +64,7 @@ module.exports = class extends BaseGenerator {
     }
 
     initializing() {
-        if (!this.options['fromCli']) {
+        if (!this.options.fromCli) {
             this.warning(
                 `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
                     'jhipster <command>'

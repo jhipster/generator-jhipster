@@ -53,7 +53,7 @@ describe('JHipster blueprint config migration with abort option', () => {
                         '#languages': 'abort (I will resolve it myself)',
                     })
                     .withOptions({
-                        'fromCli': true,
+                        fromCli: true,
                         skipChecks: true,
                         unifyConfigOnly: true,
                     })

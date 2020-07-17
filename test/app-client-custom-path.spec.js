@@ -23,7 +23,7 @@ describe('JHipster generator', () => {
                         return env;
                     })
                     .withOptions({
-                        'fromCli': true,
+                        fromCli: true,
                         skipInstall: true,
                         skipChecks: true,
                         jhiPrefix: 'test',
@@ -100,7 +100,7 @@ describe('JHipster generator', () => {
                         return env;
                     })
                     .withOptions({
-                        'fromCli': true,
+                        fromCli: true,
                         skipInstall: true,
                         skipChecks: true,
                         jhiPrefix: 'test',

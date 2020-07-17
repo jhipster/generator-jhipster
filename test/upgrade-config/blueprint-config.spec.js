@@ -38,7 +38,7 @@ describe('JHipster blueprint config migration', () => {
                         });
                     })
                     .withOptions({
-                        'fromCli': true,
+                        fromCli: true,
                         skipChecks: true,
                         unifyConfigOnly: true,
                     })

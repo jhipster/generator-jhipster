@@ -58,7 +58,7 @@ describe('JHipster common generator with blueprint', () => {
                 helpers
                     .run(path.join(__dirname, '../../generators/common'))
                     .withOptions({
-                        'fromCli': true,
+                        fromCli: true,
                         skipInstall: true,
                         blueprint: blueprintName,
                         skipChecks: true,
@@ -87,7 +87,7 @@ describe('JHipster common generator with blueprint', () => {
             helpers
                 .run(path.join(__dirname, '../../generators/common'))
                 .withOptions({
-                    'fromCli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
                     skipChecks: true,

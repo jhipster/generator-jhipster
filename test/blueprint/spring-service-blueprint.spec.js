@@ -63,7 +63,7 @@ describe('JHipster spring service generator with blueprint', () => {
                 helpers
                     .run(path.join(__dirname, '../../generators/spring-service'))
                     .withOptions({
-                        'fromCli': true,
+                        fromCli: true,
                         skipInstall: true,
                         blueprint: blueprintName,
                         skipChecks: true,
@@ -98,7 +98,7 @@ describe('JHipster spring service generator with blueprint', () => {
             helpers
                 .run(path.join(__dirname, '../../generators/spring-service'))
                 .withOptions({
-                    'fromCli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
                     skipChecks: true,

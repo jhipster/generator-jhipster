@@ -55,7 +55,7 @@ describe('needle API server log: JHipster server generator with blueprint', () =
         helpers
             .run(path.join(__dirname, '../../generators/server'))
             .withOptions({
-                'fromCli': true,
+                fromCli: true,
                 skipInstall: true,
                 blueprint: 'myblueprint',
                 skipChecks: true,

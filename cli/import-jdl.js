@@ -170,7 +170,7 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
     const options = {
         ...generator.options,
         regenerate: true,
-        'fromCli': true,
+        fromCli: true,
         'skip-install': true,
         'skip-client': entity.skipClient,
         'skip-server': entity.skipServer,
