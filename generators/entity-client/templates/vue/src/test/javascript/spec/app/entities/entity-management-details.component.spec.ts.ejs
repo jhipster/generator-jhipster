@@ -22,13 +22,16 @@ _%>
 /* tslint:disable max-line-length */
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
+import VueRouter from 'vue-router';
 
 import * as config from '@/shared/config/config';
 import <%= entityAngularName %>DetailComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-details.vue';
 import <%= entityAngularName %>Class from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-details.component';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import router from '@/router';
 
 const localVue = createLocalVue();
+localVue.use(VueRouter);
 
 config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
@@ -48,7 +51,7 @@ describe('Component Tests', () => {
     beforeEach(() => {
       <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
 
-      wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>DetailComponent, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, provide: { <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub } });
+      wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>DetailComponent, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, router, provide: { <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub } });
       comp = wrapper.vm;
     });
 
@@ -66,6 +69,29 @@ describe('Component Tests', () => {
         expect(comp.<%= entityInstance %>).toBe(found<%= entityAngularName %>);
       });
     });
-  });
 
+    describe('Before route enter', () => {
+      it('Should retrieve data', async () => {
+        // GIVEN
+        const found<%= entityAngularName %> = { id: <%- tsKeyId %> };
+        <%= entityInstance %>ServiceStub.find.resolves(found<%= entityAngularName %>);
+
+        // WHEN
+        comp.beforeRouteEnter({ params: { <%= entityInstance %>Id: <%- tsKeyId %> } }, null, cb => cb(comp));
+        await comp.$nextTick();
+
+        // THEN
+        expect(comp.<%= entityInstance %>).toBe(found<%= entityAngularName %>);
+      });
+    });
+
+    describe('Previous state', () => {
+      it('Should go previous state', async () => {
+        comp.previousState();
+        await comp.$nextTick();
+
+        expect(comp.$router.currentRoute.fullPath).toContain('/');
+      });
+    });
+  });
 });
