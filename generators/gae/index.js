@@ -737,7 +737,6 @@ module.exports = class extends BaseGenerator {
             copyFiles() {
                 if (this.abort) return;
 
-                const done = this.async();
                 this.log(chalk.bold('\nCreating Google App Engine deployment files'));
 
                 this.template('app.yaml.ejs', `${constants.MAIN_DIR}/appengine/app.yaml`);
@@ -748,10 +747,6 @@ module.exports = class extends BaseGenerator {
                 if (this.buildTool === 'gradle') {
                     this.template('gae.gradle.ejs', 'gradle/gae.gradle');
                 }
-
-                this.conflicter.resolve(err => {
-                    done();
-                });
             },
 
             addDependencies() {
