@@ -78,17 +78,17 @@ function importJDL(jdlImporter) {
 
 /**
  * Check if application needs to be generated
- * @param {any} generator
+ * @param {any} processor
  */
-const shouldGenerateApplications = generator =>
-    !generator.options.ignoreApplication && generator.importState.exportedApplications.length !== 0;
+const shouldGenerateApplications = processor =>
+    !processor.options.ignoreApplication && processor.importState.exportedApplications.length !== 0;
 
 /**
  * Check if deployments needs to be generated
- * @param {any} generator
+ * @param {any} processor
  */
-const shouldGenerateDeployments = generator =>
-    !generator.options.ignoreDeployments && generator.importState.exportedDeployments.length !== 0;
+const shouldGenerateDeployments = processor =>
+    !processor.options.ignoreDeployments && processor.importState.exportedDeployments.length !== 0;
 
 /**
  * Generate deployment source code for JDL deployments defined.
@@ -96,18 +96,18 @@ const shouldGenerateDeployments = generator =>
  * @param {function} forkProcess
  * @returns Promise
  */
-const generateDeploymentFiles = ({ generator, deployment, inFolder }, forkProcess) => {
+const generateDeploymentFiles = ({ processor, deployment, inFolder }, forkProcess) => {
     const deploymentType = getDeploymentType(deployment);
     logger.info(`Generating deployment ${deploymentType} in a new parallel process`);
     logger.debug(`Generating deployment: ${pretty(deployment[GENERATOR_NAME])}`);
 
-    const cwd = inFolder ? path.join(generator.pwd, deploymentType) : generator.pwd;
+    const cwd = inFolder ? path.join(processor.pwd, deploymentType) : processor.pwd;
     logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
 
     const command = `${CLI_NAME}:${deploymentType}`;
     const childProc = forkProcess(
         runYeomanProcess,
-        [command, '--skip-prompts', ...getOptionAsArgs(generator.options, false, !generator.options.interactive)],
+        [command, '--skip-prompts', ...getOptionAsArgs(processor.options, false, !processor.options.interactive)],
         {
             cwd,
         }
@@ -129,18 +129,18 @@ const generateDeploymentFiles = ({ generator, deployment, inFolder }, forkProces
  * @param {function} forkProcess
  * @returns Promise
  */
-const generateApplicationFiles = ({ generator, application, withEntities, inFolder }, forkProcess) => {
+const generateApplicationFiles = ({ processor, application, withEntities, inFolder }, forkProcess) => {
     const baseName = getBaseName(application);
     logger.info(`Generating application ${baseName} in a new parallel process`);
     logger.debug(`Generating application: ${pretty(application[GENERATOR_NAME])}`);
 
-    const cwd = inFolder ? path.join(generator.pwd, baseName) : generator.pwd;
+    const cwd = inFolder ? path.join(processor.pwd, baseName) : processor.pwd;
     logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
 
     const command = `${CLI_NAME}:app`;
     const childProc = forkProcess(
         runYeomanProcess,
-        [command, ...getOptionAsArgs(generator.options, withEntities, !generator.options.interactive)],
+        [command, ...getOptionAsArgs(processor.options, withEntities, !processor.options.interactive)],
         {
             cwd,
         }
@@ -158,7 +158,7 @@ const generateApplicationFiles = ({ generator, application, withEntities, inFold
 
 /**
  * Generate entities for the applications
- * @param {any} generator
+ * @param {any} processor
  * @param {any} entity
  * @param {boolean} inFolder
  * @param {any} env
@@ -166,9 +166,9 @@ const generateApplicationFiles = ({ generator, application, withEntities, inFold
  * @param {function} forkProcess
  * @return Promise
  */
-const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInstall, forkProcess) => {
+const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInstall, forkProcess) => {
     const options = {
-        ...generator.options,
+        ...processor.options,
         regenerate: true,
         fromCli: true,
         skipInstall: true,
@@ -176,15 +176,15 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
         skipServer: entity.skipServer,
         noFluentMethod: entity.noFluentMethod,
         skipUserManagement: entity.skipUserManagement,
-        skipDbChangelog: generator.options.skipDbChangelog,
-        skipUiGrouping: generator.options.skipUiGrouping,
+        skipDbChangelog: processor.options.skipDbChangelog,
+        skipUiGrouping: processor.options.skipUiGrouping,
     };
     const command = `${CLI_NAME}:entity ${entity.name}`;
     if (inFolder) {
         /* Generating entities inside multiple apps */
         const callGenerator = baseName => {
             logger.info(`Generating entity ${entity.name} for application ${baseName} in a new parallel process`);
-            const cwd = path.join(generator.pwd, baseName);
+            const cwd = path.join(processor.pwd, baseName);
             logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
 
             const childProc = forkProcess(runYeomanProcess, [command, ...getOptionAsArgs(options, false, !options.interactive)], { cwd });
@@ -199,7 +199,7 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
             });
         };
         const baseNames = entity.applications;
-        if (generator.options.interactive) {
+        if (processor.options.interactive) {
             return baseNames.reduce((promise, baseName) => {
                 return promise.then(() => callGenerator(baseName));
             }, Promise.resolve());
@@ -218,15 +218,15 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
 
 /**
  * Check if NPM/Yarn install needs to be triggered. This will be done for the last entity.
- * @param {any} generator
+ * @param {any} processor
  * @param {number} index
  */
-const shouldTriggerInstall = (generator, index) =>
-    index === generator.importState.exportedEntities.length - 1 &&
-    !generator.options.skipInstall &&
-    !generator.skipClient &&
-    !generator.options.jsonOnly &&
-    !shouldGenerateApplications(generator);
+const shouldTriggerInstall = (processor, index) =>
+    index === processor.importState.exportedEntities.length - 1 &&
+    !processor.options.skipInstall &&
+    !processor.skipClient &&
+    !processor.options.jsonOnly &&
+    !shouldGenerateApplications(processor);
 
 class JDLProcessor {
     constructor(jdlFiles, jdlContent, options) {
@@ -306,7 +306,7 @@ class JDLProcessor {
             try {
                 return generateApplicationFiles(
                     {
-                        generator: this,
+                        processor: this,
                         application,
                         withEntities: this.importState.exportedEntities.length !== 0,
                         inFolder: this.importState.exportedApplications.length > 1,
@@ -341,7 +341,7 @@ class JDLProcessor {
                 try {
                     return generateDeploymentFiles(
                         {
-                            generator: this,
+                            processor: this,
                             deployment,
                             inFolder: true,
                         },
