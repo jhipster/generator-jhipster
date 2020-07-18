@@ -175,7 +175,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 <%_ if (!embedded) { _%>
     @Id
     <%_ if (databaseType === 'sql' && isUsingMapsId === false) { _%>
-        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+        <%_ if (['mysql', 'mariadb', 'postgresql'].includes(prodDatabaseType)) { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
         <%_ }  else { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
