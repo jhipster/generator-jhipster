@@ -52,12 +52,13 @@ import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/
         const otherEntityFolderName = relationships[idx].otherEntityFileName;
         const otherEntityClientRootFolder = relationships[idx].otherEntityClientRootFolder;
         const otherEntityModelName = relationships[idx].otherEntityModelName;
+        if (!importEntitiesSeen.includes(otherEntityAngularName)) {
 _%>
   <% if (otherEntityAngularName === 'User' && authenticationType !== 'oauth2') { %>
 import UserService from '@/admin/user-management/user-management.service';
-  <% } else if (otherEntityAngularName !== 'User' && !importEntitiesSeen.includes(otherEntityAngularName)) { %>
+  <% } else if (otherEntityAngularName !== 'User') { %>
 import <%= otherEntityAngularName %>Service from '@/entities/<%= otherEntityClientRootFolder %><%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
-  <% } %>
+  <% } } %>
 <%_ importEntitiesSeen.push(otherEntityAngularName); } } _%>
 
 const localVue = createLocalVue();
