@@ -59,13 +59,13 @@ function testDocumentsRelationships() {
             force: false,
             interactive: true,
             fromCli: true,
-            'no-fluent-methods': undefined,
+            noFluentMethods: undefined,
             skipClient: undefined,
             skipInstall: true,
             skipServer: undefined,
-            'skip-ui-grouping': undefined,
-            'skip-db-changelog': undefined,
-            'skip-user-management': undefined,
+            skipUiGrouping: undefined,
+            skipDbChangelog: undefined,
+            skipUserManagement: undefined,
         });
     });
 }
@@ -154,7 +154,7 @@ describe('JHipster generator import jdl', () => {
         beforeEach(done => {
             oldCwd = testInTempDir(dir => {
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
-                importJdl(['jdl.jdl'], { 'skip-db-changelog': true, skipInstall: true }, env).then(() => done());
+                importJdl(['jdl.jdl'], { skipDbChangelog: true, skipInstall: true }, env).then(() => done());
             }, true);
         });
 
@@ -190,12 +190,12 @@ describe('JHipster generator import jdl', () => {
                 skipInstall: true,
                 fromCli: true,
                 interactive: true,
-                'no-fluent-methods': undefined,
+                noFluentMethods: undefined,
                 skipClient: undefined,
                 skipServer: undefined,
-                'skip-ui-grouping': undefined,
-                'skip-db-changelog': true,
-                'skip-user-management': undefined,
+                skipUiGrouping: undefined,
+                skipDbChangelog: true,
+                skipUserManagement: undefined,
             });
         });
     });
@@ -243,12 +243,12 @@ describe('JHipster generator import jdl', () => {
                 skipInstall: true,
                 fromCli: true,
                 interactive: true,
-                'no-fluent-methods': undefined,
+                noFluentMethods: undefined,
                 skipClient: undefined,
                 skipServer: undefined,
-                'skip-ui-grouping': undefined,
-                'skip-db-changelog': undefined,
-                'skip-user-management': undefined,
+                skipUiGrouping: undefined,
+                skipDbChangelog: undefined,
+                skipUserManagement: undefined,
             });
         });
     });
@@ -304,12 +304,12 @@ describe('JHipster generator import jdl', () => {
                 skipInstall: true,
                 fromCli: true,
                 interactive: true,
-                'no-fluent-methods': undefined,
+                noFluentMethods: undefined,
                 skipClient: undefined,
                 skipServer: undefined,
-                'skip-ui-grouping': undefined,
-                'skip-db-changelog': undefined,
-                'skip-user-management': undefined,
+                skipUiGrouping: undefined,
+                skipDbChangelog: undefined,
+                skipUserManagement: undefined,
             });
         });
     });
@@ -338,12 +338,12 @@ describe('JHipster generator import jdl', () => {
                 skipInstall: true,
                 fromCli: true,
                 interactive: false,
-                'no-fluent-methods': undefined,
+                noFluentMethods: undefined,
                 skipClient: undefined,
                 skipServer: undefined,
-                'skip-ui-grouping': undefined,
-                'skip-db-changelog': undefined,
-                'skip-user-management': undefined,
+                skipUiGrouping: undefined,
+                skipDbChangelog: undefined,
+                skipUserManagement: undefined,
             });
         });
     });

@@ -328,7 +328,7 @@ describe('JHipster generator for entity', () => {
                             fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                         })
                         .withArguments(['foo'])
-                        .withOptions({ 'client-root-folder': 'test-root' })
+                        .withOptions({ clientRootFolder: 'test-root' })
                         .withPrompts({
                             fieldAdd: false,
                             relationshipAdd: false,
@@ -355,7 +355,7 @@ describe('JHipster generator for entity', () => {
                             fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                         })
                         .withArguments(['foo'])
-                        .withOptions({ 'client-root-folder': 'test-root' })
+                        .withOptions({ clientRootFolder: 'test-root' })
                         .withOptions({ 'angular-suffix': 'management' })
                         .withPrompts({
                             fieldAdd: false,
@@ -463,7 +463,7 @@ describe('JHipster generator for entity', () => {
                             fse.copySync(path.join(__dirname, '../test/templates/all-languages'), dir);
                         })
                         .withArguments(['foo'])
-                        .withOptions({ 'client-root-folder': 'test-root' })
+                        .withOptions({ clientRootFolder: 'test-root' })
                         .withPrompts({
                             fieldAdd: false,
                             relationshipAdd: false,
@@ -492,7 +492,7 @@ describe('JHipster generator for entity', () => {
                             fse.copySync(path.join(__dirname, '../test/templates/default-microservice'), dir);
                         })
                         .withArguments(['foo'])
-                        .withOptions({ 'client-root-folder': 'test-root' })
+                        .withOptions({ clientRootFolder: 'test-root' })
                         .withPrompts({
                             fieldAdd: false,
                             relationshipAdd: false,
