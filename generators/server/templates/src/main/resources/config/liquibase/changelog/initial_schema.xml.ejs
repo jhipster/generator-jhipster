@@ -24,7 +24,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-<%= LIQUIBASE_DTD_VERSION %>.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <% const isAutoIncrementDB = reactive || ['mysql', 'mariadb'].includes(prodDatabaseType);
+    <% const isAutoIncrementDB = reactive || ['mysql', 'mariadb', 'postgresql'].includes(prodDatabaseType);
        const isSequenceDB = !reactive && ['postgresql', 'oracle', 'mssql'].includes(prodDatabaseType);
     _%>
     <%_ if (isAutoIncrementDB) { _%>
