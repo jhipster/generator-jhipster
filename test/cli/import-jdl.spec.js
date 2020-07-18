@@ -12,20 +12,25 @@ let subGenCallParams = {
     options: [],
 };
 
+const removeFieldsWithUndefinedValues = options => Object.fromEntries(Object.entries(options).filter(([_, value]) => value !== undefined));
+
 const env = {
     run(command, options) {
         subGenCallParams.count++;
         subGenCallParams.commands.push(command);
-        subGenCallParams.options.push(options);
+        subGenCallParams.options.push(removeFieldsWithUndefinedValues(options));
         return Promise.resolve();
     },
 };
 
 const mockFork = (done, tries) => (runYeomanProcess, argv, opts) => {
     const command = argv[0];
-    const options = argv.slice(1);
+    let options = argv.slice(1);
     subGenCallParams.count++;
     subGenCallParams.commands.push(command);
+    if (!Array.isArray(options)) {
+        options = removeFieldsWithUndefinedValues(options);
+    }
     subGenCallParams.options.push(options);
     return {
         on(code, cb) {
@@ -59,13 +64,7 @@ function testDocumentsRelationships() {
             force: false,
             interactive: true,
             fromCli: true,
-            noFluentMethods: undefined,
-            skipClient: undefined,
             skipInstall: true,
-            skipServer: undefined,
-            skipUiGrouping: undefined,
-            skipDbChangelog: undefined,
-            skipUserManagement: undefined,
         });
     });
 }
@@ -190,12 +189,7 @@ describe('JHipster generator import jdl', () => {
                 skipInstall: true,
                 fromCli: true,
                 interactive: true,
-                noFluentMethods: undefined,
-                skipClient: undefined,
-                skipServer: undefined,
-                skipUiGrouping: undefined,
                 skipDbChangelog: true,
-                skipUserManagement: undefined,
             });
         });
     });
@@ -243,12 +237,6 @@ describe('JHipster generator import jdl', () => {
                 skipInstall: true,
                 fromCli: true,
                 interactive: true,
-                noFluentMethods: undefined,
-                skipClient: undefined,
-                skipServer: undefined,
-                skipUiGrouping: undefined,
-                skipDbChangelog: undefined,
-                skipUserManagement: undefined,
             });
         });
     });
@@ -304,12 +292,6 @@ describe('JHipster generator import jdl', () => {
                 skipInstall: true,
                 fromCli: true,
                 interactive: true,
-                noFluentMethods: undefined,
-                skipClient: undefined,
-                skipServer: undefined,
-                skipUiGrouping: undefined,
-                skipDbChangelog: undefined,
-                skipUserManagement: undefined,
             });
         });
     });
@@ -338,12 +320,6 @@ describe('JHipster generator import jdl', () => {
                 skipInstall: true,
                 fromCli: true,
                 interactive: false,
-                noFluentMethods: undefined,
-                skipClient: undefined,
-                skipServer: undefined,
-                skipUiGrouping: undefined,
-                skipDbChangelog: undefined,
-                skipUserManagement: undefined,
             });
         });
     });
