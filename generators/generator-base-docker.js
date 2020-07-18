@@ -44,8 +44,8 @@ module.exports = class extends BaseGenerator {
             type: Boolean,
             defaults: false,
         });
-        this.regenerate = this.options['skip-prompts'];
-        this.skipChecks = this.options['skip-checks'];
+        this.regenerate = this.options['skipPrompts'];
+        this.skipChecks = this.options['skipChecks'];
         this.registerPrettierTransform();
     }
 

@@ -63,7 +63,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _end() {
         return {
             end() {
-                if (!this.options['skip-install'] && !this.skipClient) {
+                if (!this.options['skipInstall'] && !this.skipClient) {
                     this.rebuildClient();
                 }
                 this.log(chalk.bold.green(`Entity ${this.entityNameCapitalized} generated successfully.`));

@@ -57,9 +57,9 @@ module.exports = class extends BaseGenerator {
             defaults: false,
         });
 
-        this.azureSpringCloudSkipBuild = this.options['skip-build'];
-        this.azureSpringCloudSkipDeploy = this.options['skip-deploy'] || this.options['skip-build'];
-        this.azureSpringCloudSkipInsights = this.options['skip-insights'];
+        this.azureSpringCloudSkipBuild = this.options['skipBuild'];
+        this.azureSpringCloudSkipDeploy = this.options['skipDeploy'] || this.options['skipBuild'];
+        this.azureSpringCloudSkipInsights = this.options['skipInsights'];
         this.registerPrettierTransform();
     }
 

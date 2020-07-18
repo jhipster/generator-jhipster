@@ -96,9 +96,9 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold('This AWS generator will help you deploy your JHipster app as a Docker container on AWS.'));
             },
             option() {
-                this.deployNow = this.options['skip-install'];
-                this.skipUpload = this.options['skip-upload'];
-                this.skipBuild = this.options['skip-build'];
+                this.deployNow = this.options['skipInstall'];
+                this.skipUpload = this.options['skipUpload'];
+                this.skipBuild = this.options['skipBuild'];
             },
             getConfig() {
                 if (fileUtils.doesFileExist('awsConstants.json')) {

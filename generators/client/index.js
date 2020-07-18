@@ -277,7 +277,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     yarn: this.clientPackageManager === 'yarn',
                 };
 
-                if (this.options['skip-install']) {
+                if (this.options['skipInstall']) {
                     this.log(logMsg);
                 } else {
                     try {
@@ -306,7 +306,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 const logMsg = `Start your Webpack development server with:\n ${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
 
                 this.log(chalk.green(logMsg));
-                if (!this.options['skip-install']) {
+                if (!this.options['skipInstall']) {
                     this.spawnCommandSync(this.clientPackageManager, ['run', 'cleanup']);
                 }
             },

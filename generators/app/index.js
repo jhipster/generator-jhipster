@@ -431,7 +431,7 @@ module.exports = class extends BaseBlueprintGenerator {
                             ...options,
                             configOptions,
                             regenerate: true,
-                            'skip-install': true,
+                            'skipInstall': true,
                             debug: this.isDebugEnabled,
                             arguments: [entity.name],
                         });
@@ -446,7 +446,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.jhipsterConfig.pages.forEach(page => {
                         this.composeWith(require.resolve('../page'), {
                             configOptions,
-                            'skip-install': true,
+                            'skipInstall': true,
                             debug: this.isDebugEnabled,
                             arguments: [page.name],
                         });
@@ -455,7 +455,7 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             initGitRepo() {
-                if (!this.options['skip-git']) {
+                if (!this.options['skipGit']) {
                     if (this.gitInstalled || this.isGitInstalled()) {
                         const gitDir = this.gitExec('rev-parse --is-inside-work-tree', { trace: false }).stdout;
                         // gitDir has a line break to remove (at least on windows)
@@ -483,7 +483,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _end() {
         return {
             gitCommit() {
-                if (!this.options['skip-git'] && this.isGitInstalled()) {
+                if (!this.options['skipGit'] && this.isGitInstalled()) {
                     if (this.gitInitialized) {
                         this.debug('Committing files to git');
                         const done = this.async();

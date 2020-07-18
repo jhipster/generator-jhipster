@@ -108,12 +108,12 @@ module.exports = class extends BaseGenerator {
                 this.clientFramework = configuration.get('clientFramework');
                 this.testFrameworks = configuration.get('testFrameworks');
                 this.cacheProvider = configuration.get('cacheProvider');
-                this.autoconfigureTravis = this.options['autoconfigure-travis'];
-                this.autoconfigureJenkins = this.options['autoconfigure-jenkins'];
-                this.autoconfigureGitlab = this.options['autoconfigure-gitlab'];
-                this.autoconfigureAzure = this.options['autoconfigure-azure'];
-                this.autoconfigureGithub = this.options['autoconfigure-github'];
-                this.autoconfigureCircleCI = this.options['autoconfigure-circle'];
+                this.autoconfigureTravis = this.options['autoconfigureTravis'];
+                this.autoconfigureJenkins = this.options['autoconfigureJenkins'];
+                this.autoconfigureGitlab = this.options['autoconfigureGitlab'];
+                this.autoconfigureAzure = this.options['autoconfigureAzure'];
+                this.autoconfigureGithub = this.options['autoconfigureGithub'];
+                this.autoconfigureCircleCI = this.options['autoconfigureCircle'];
                 this.abort = false;
             },
             initConstants() {
