@@ -81,14 +81,14 @@ function importJDL(jdlImporter) {
  * @param {any} generator
  */
 const shouldGenerateApplications = generator =>
-    !generator.options['ignoreApplication'] && generator.importState.exportedApplications.length !== 0;
+    !generator.options.ignoreApplication && generator.importState.exportedApplications.length !== 0;
 
 /**
  * Check if deployments needs to be generated
  * @param {any} generator
  */
 const shouldGenerateDeployments = generator =>
-    !generator.options['ignoreDeployments'] && generator.importState.exportedDeployments.length !== 0;
+    !generator.options.ignoreDeployments && generator.importState.exportedDeployments.length !== 0;
 
 /**
  * Generate deployment source code for JDL deployments defined.
@@ -171,13 +171,13 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
         ...generator.options,
         regenerate: true,
         fromCli: true,
-        'skipInstall': true,
-        'skipClient': entity.skipClient,
-        'skipServer': entity.skipServer,
-        'noFluentMethod': entity.noFluentMethod,
-        'skipUserManagement': entity.skipUserManagement,
-        'skipDbChangelog': generator.options['skipDbChangelog'],
-        'skipUiGrouping': generator.options['skipUiGrouping'],
+        skipInstall: true,
+        skipClient: entity.skipClient,
+        skipServer: entity.skipServer,
+        noFluentMethod: entity.noFluentMethod,
+        skipUserManagement: entity.skipUserManagement,
+        skipDbChangelog: generator.options.skipDbChangelog,
+        skipUiGrouping: generator.options.skipUiGrouping,
     };
     const command = `${CLI_NAME}:entity ${entity.name}`;
     if (inFolder) {
@@ -211,7 +211,7 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
         .run(command, {
             ...options,
             force: options.force || !options.interactive,
-            'skipInstall': !shouldTriggerInstall,
+            skipInstall: !shouldTriggerInstall,
         })
         .catch(doneFactory());
 };
@@ -223,9 +223,9 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
  */
 const shouldTriggerInstall = (generator, index) =>
     index === generator.importState.exportedEntities.length - 1 &&
-    !generator.options['skipInstall'] &&
+    !generator.options.skipInstall &&
     !generator.skipClient &&
-    !generator.options['jsonOnly'] &&
+    !generator.options.jsonOnly &&
     !shouldGenerateApplications(generator);
 
 class JDLProcessor {
@@ -369,7 +369,7 @@ class JDLProcessor {
             logger.debug('Entities not generated');
             return Promise.resolve();
         }
-        if (this.options['jsonOnly']) {
+        if (this.options.jsonOnly) {
             logger.info('Entity JSON files created. Entity generation skipped.');
             return Promise.resolve();
         }

@@ -30,9 +30,9 @@ module.exports = class extends BaseGenerator {
 
         this.force = this.options.force;
 
-        this.skipInstall = this.options['skipInstall'];
+        this.skipInstall = this.options.skipInstall;
         this.silent = this.options.silent;
-        this.skipChecks = this.options['skipChecks'];
+        this.skipChecks = this.options.skipChecks;
 
         // Verify 6.6.0 app blueprint bug
         if (!this.config.existed && !this.options.blueprints && !this.options.help) {

@@ -322,7 +322,7 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             installing() {
                 if (this.skipClient) {
-                    if (!this.options['skipInstall']) {
+                    if (!this.options.skipInstall) {
                         if (this.clientPackageManager === 'yarn') {
                             this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));
                             this.yarnInstall();
