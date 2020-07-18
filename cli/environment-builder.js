@@ -33,6 +33,7 @@ module.exports = class EnvironmentBuilder {
      * @return {EnvironmentBuilder} envBuilder
      */
     static create(args, options = {}, adapter) {
+        // Remove after migration to environment 3.
         options.newErrorHandler = true;
         const env = Environment.createEnv(args, options, adapter);
         return new EnvironmentBuilder(env);
