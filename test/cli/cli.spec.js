@@ -135,7 +135,6 @@ describe('jhipster cli test', () => {
                     expect(command).to.be.equal('jhipster:mocked');
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands });
@@ -155,7 +154,6 @@ describe('jhipster cli test', () => {
                     expect(command).to.be.equal('jhipster:mocked Foo');
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands });
@@ -175,7 +173,6 @@ describe('jhipster cli test', () => {
                     expect(command).to.be.equal('jhipster:mocked Foo Bar');
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands });
@@ -229,7 +226,6 @@ describe('jhipster cli test', () => {
                     expect(args).to.eql(['Foo']);
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
@@ -251,7 +247,6 @@ describe('jhipster cli test', () => {
                     expect(args).to.eql(['Foo', 'Bar']);
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
@@ -272,7 +267,6 @@ describe('jhipster cli test', () => {
                     expect(args).to.eql([]);
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });

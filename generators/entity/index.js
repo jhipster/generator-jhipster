@@ -205,7 +205,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     configuration.get('skipClient') ||
                     fileData.skipClient;
                 context.skipServer = this.options.skipServer || configuration.get('skipServer');
-                context.skipDbChangelog = this.options['skipDbChangelog'] || configuration.get('skipDbChangelog');
+                context.skipDbChangelog = this.options.skipDbChangelog || configuration.get('skipDbChangelog');
 
                 context.angularAppName = this.getAngularAppName(context.baseName);
                 context.angularXAppName = this.getAngularXAppName(context.baseName);
@@ -1202,7 +1202,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.composeWith(require.resolve('../entity-client'), {
                     context,
                     configOptions,
-                    'skip-install': context.options.skipInstall,
+                    skipInstall: context.options.skipInstall,
                     force: context.options.force,
                     debug: context.isDebugEnabled,
                 });
@@ -1215,7 +1215,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.composeWith(require.resolve('../entity-i18n'), {
                     context,
                     configOptions,
-                    'skip-install': context.options.skipInstall,
+                    skipInstall: context.options.skipInstall,
                     force: context.options.force,
                     debug: context.isDebugEnabled,
                 });

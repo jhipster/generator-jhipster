@@ -60,9 +60,9 @@ function testDocumentsRelationships() {
             interactive: true,
             fromCli: true,
             'no-fluent-methods': undefined,
-            'skip-client': undefined,
-            'skip-install': true,
-            'skip-server': undefined,
+            skipClient: undefined,
+            skipInstall: true,
+            skipServer: undefined,
             'skip-ui-grouping': undefined,
             'skip-db-changelog': undefined,
             'skip-user-management': undefined,
@@ -124,7 +124,7 @@ describe('JHipster generator import jdl', () => {
         beforeEach(() => {
             return testInTempDir(dir => {
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
-                return importJdl(['jdl.jdl'], { 'json-only': true, skipInstall: true }, env);
+                return importJdl(['jdl.jdl'], { jsonOnly: true, skipInstall: true }, env);
             }, true).then(cwd => {
                 oldCwd = cwd;
             });
@@ -191,9 +191,8 @@ describe('JHipster generator import jdl', () => {
                 fromCli: true,
                 interactive: true,
                 'no-fluent-methods': undefined,
-                'skip-client': undefined,
-                'skip-install': true,
-                'skip-server': undefined,
+                skipClient: undefined,
+                skipServer: undefined,
                 'skip-ui-grouping': undefined,
                 'skip-db-changelog': true,
                 'skip-user-management': undefined,
@@ -245,9 +244,8 @@ describe('JHipster generator import jdl', () => {
                 fromCli: true,
                 interactive: true,
                 'no-fluent-methods': undefined,
-                'skip-client': undefined,
-                'skip-install': true,
-                'skip-server': undefined,
+                skipClient: undefined,
+                skipServer: undefined,
                 'skip-ui-grouping': undefined,
                 'skip-db-changelog': undefined,
                 'skip-user-management': undefined,
@@ -307,9 +305,8 @@ describe('JHipster generator import jdl', () => {
                 fromCli: true,
                 interactive: true,
                 'no-fluent-methods': undefined,
-                'skip-client': undefined,
-                'skip-install': true,
-                'skip-server': undefined,
+                skipClient: undefined,
+                skipServer: undefined,
                 'skip-ui-grouping': undefined,
                 'skip-db-changelog': undefined,
                 'skip-user-management': undefined,
@@ -342,9 +339,8 @@ describe('JHipster generator import jdl', () => {
                 fromCli: true,
                 interactive: false,
                 'no-fluent-methods': undefined,
-                'skip-client': undefined,
-                'skip-install': true,
-                'skip-server': undefined,
+                skipClient: undefined,
+                skipServer: undefined,
                 'skip-ui-grouping': undefined,
                 'skip-db-changelog': undefined,
                 'skip-user-management': undefined,
@@ -359,7 +355,7 @@ describe('JHipster generator import jdl', () => {
                 fse.removeSync(`${dir}/.yo-rc.json`);
                 return importJdl(
                     ['single-app-and-entities.jdl'],
-                    { skipInstall: true, noInsight: true, 'skip-git': false, creationTimestamp: '2019-01-01' },
+                    { skipInstall: true, noInsight: true, skipGit: false, creationTimestamp: '2019-01-01' },
                     env,
                     mockFork(() => {}, 1)
                 );
@@ -406,7 +402,7 @@ describe('JHipster generator import jdl', () => {
                     {
                         skipInstall: true,
                         noInsight: true,
-                        'skip-git': false,
+                        skipGit: false,
                         inline: 'application { config { baseName jhapp } entities * } entity Customer',
                     },
                     env,
@@ -453,7 +449,7 @@ describe('JHipster generator import jdl', () => {
                 fse.removeSync(`${dir}/.yo-rc.json`);
                 return importJdl(
                     ['single-app-only.jdl'],
-                    { skipInstall: true, noInsight: true, interactive: false, 'skip-git': false },
+                    { skipInstall: true, noInsight: true, interactive: false, skipGit: false },
                     env,
                     mockFork(() => {}, 1)
                 );
@@ -484,7 +480,7 @@ describe('JHipster generator import jdl', () => {
                 fse.removeSync(`${dir}/.yo-rc.json`);
                 return importJdl(
                     ['apps-and-entities.jdl'],
-                    { skipInstall: true, noInsight: true, interactive: false, 'skip-git': false },
+                    { skipInstall: true, noInsight: true, interactive: false, skipGit: false },
                     env,
                     mockFork(() => {}, 3)
                 );
@@ -530,7 +526,7 @@ describe('JHipster generator import jdl', () => {
                 fse.removeSync(`${dir}/.yo-rc.json`);
                 return importJdl(
                     ['apps-and-entities.jdl'],
-                    { skipInstall: true, 'ignore-application': true, interactive: false, 'skip-git': false },
+                    { skipInstall: true, ignoreApplication: true, interactive: false, skipGit: false },
                     env,
                     mockFork(() => {}, 6)
                 );
@@ -580,7 +576,7 @@ describe('JHipster generator import jdl', () => {
         beforeEach(done => {
             return testInTempDir(dir => {
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
-                importJdl(['deployments.jdl'], { skipInstall: true, interactive: false, 'skip-git': false }, env, mockFork(done, 3));
+                importJdl(['deployments.jdl'], { skipInstall: true, interactive: false, skipGit: false }, env, mockFork(done, 3));
             }, true);
         });
 
@@ -614,7 +610,7 @@ describe('JHipster generator import jdl', () => {
                     fse.removeSync(`${dir}/.yo-rc.json`);
                     return importJdl(
                         ['apps-and-entities-and-deployments.jdl'],
-                        { skipInstall: true, noInsight: true, interactive: false, 'skip-git': false },
+                        { skipInstall: true, noInsight: true, interactive: false, skipGit: false },
                         env,
                         mockFork(() => {}, 5)
                     );
@@ -687,7 +683,7 @@ describe('JHipster generator import jdl', () => {
                 fse.removeSync(`${dir}/.yo-rc.json`);
                 return importJdl(
                     ['apps-and-entities-and-deployments.jdl'],
-                    { skipInstall: true, noInsight: true, 'ignore-deployments': true, interactive: false, 'skip-git': false },
+                    { skipInstall: true, noInsight: true, ignoreDeployments: true, interactive: false, skipGit: false },
                     env,
                     mockFork(() => {}, 3)
                 );

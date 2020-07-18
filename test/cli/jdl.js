@@ -42,7 +42,7 @@ describe('jdl command test', () => {
             });
             it('should forward options to jdl.js', () => {
                 expect(jdlStub.getCall(0).args[1].downloadOnly).to.be.true;
-                expect(jdlStub.getCall(0).args[1]['download-only']).to.be.true;
+                expect(jdlStub.getCall(0).args[1].downloadOnly).to.be.true;
             });
         });
         describe('with 2 argument and options', () => {
@@ -62,7 +62,7 @@ describe('jdl command test', () => {
             });
             it('should forward options to jdl.js', () => {
                 expect(jdlStub.getCall(0).args[1].downloadOnly).to.be.true;
-                expect(jdlStub.getCall(0).args[1]['download-only']).to.be.true;
+                expect(jdlStub.getCall(0).args[1].downloadOnly).to.be.true;
             });
         });
         describe('using import-jdl alias', () => {
@@ -85,7 +85,7 @@ describe('jdl command test', () => {
             });
             it('should forward options to jdl.js', () => {
                 expect(jdlStub.getCall(0).args[1].downloadOnly).to.be.true;
-                expect(jdlStub.getCall(0).args[1]['download-only']).to.be.true;
+                expect(jdlStub.getCall(0).args[1].downloadOnly).to.be.true;
             });
         });
     });

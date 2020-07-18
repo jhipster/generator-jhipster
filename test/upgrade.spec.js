@@ -54,7 +54,7 @@ describe('JHipster upgrade generator', function () {
                             fromCli: true,
                             force: true,
                             silent: false,
-                            'target-version': packageJson.version,
+                            targetVersion: packageJson.version,
                         })
                         .inTmpDir(() => {
                             /* eslint-disable-next-line no-console */
@@ -141,8 +141,8 @@ describe('JHipster upgrade generator', function () {
                             fromCli: true,
                             force: true,
                             silent: false,
-                            'skip-checks': true,
-                            'target-version': packageJson.version,
+                            skipChecks: true,
+                            targetVersion: packageJson.version,
                         })
                         .inTmpDir(() => {
                             /* eslint-disable-next-line no-console */
