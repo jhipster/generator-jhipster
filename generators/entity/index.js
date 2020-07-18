@@ -262,10 +262,17 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (!context.useConfigurationFile) {
                     // no file present, new entity creation
                     this.log(`\nThe entity ${entityName} is being created.\n`);
-                } else {
+                } else if (context.useMicroserviceJson) {
                     // existing entity reading values from file
                     this.log(`\nThe entity ${entityName} is being updated.\n`);
-                    this._loadEntityJson(context.microserviceFileName || context.filename);
+                    try {
+                        this._loadEntityJson(this.fs.readJSON(context.microserviceFileName));
+                    } catch (err) {
+                        this.debug('Error:', err);
+                        throw new Error('\nThe entity configuration file could not be read!\n');
+                    }
+                } else {
+                    this._loadEntityJson(this.entityConfig);
                 }
 
                 _.defaults(context, entityDefaultConfig);
@@ -774,44 +781,36 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     if (relationship.otherEntityStateName === undefined) {
                         relationship.otherEntityStateName = _.kebabCase(relationship.otherEntityAngularName);
                     }
-                    if (relationship.otherEntityModuleName === undefined) {
-                        if (relationship.otherEntityNameCapitalized !== 'User') {
-                            relationship.otherEntityModuleName = `${
-                                context.angularXAppName + relationship.otherEntityNameCapitalized
-                            }Module`;
-                            relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
-                            if (relationship.otherEntityFolderName === undefined) {
-                                relationship.otherEntityFolderName = _.kebabCase(relationship.otherEntityAngularName);
-                            }
-                            if (
-                                context.skipUiGrouping ||
-                                otherEntityData.clientRootFolder === '' ||
-                                otherEntityData.clientRootFolder === undefined
-                            ) {
-                                relationship.otherEntityClientRootFolder = '';
-                            } else {
-                                relationship.otherEntityClientRootFolder = `${otherEntityData.clientRootFolder}/`;
-                            }
-                            if (otherEntityData.clientRootFolder) {
-                                if (context.clientRootFolder === otherEntityData.clientRootFolder) {
-                                    relationship.otherEntityModulePath = relationship.otherEntityFolderName;
-                                } else {
-                                    relationship.otherEntityModulePath = `${
-                                        context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''
-                                    }${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
-                                }
-                                relationship.otherEntityModelName = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
-                                relationship.otherEntityPath = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
+                    if (relationship.otherEntityNameCapitalized !== 'User') {
+                        relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
+                        if (relationship.otherEntityFolderName === undefined) {
+                            relationship.otherEntityFolderName = _.kebabCase(relationship.otherEntityAngularName);
+                        }
+                        if (
+                            context.skipUiGrouping ||
+                            otherEntityData.clientRootFolder === '' ||
+                            otherEntityData.clientRootFolder === undefined
+                        ) {
+                            relationship.otherEntityClientRootFolder = '';
+                        } else {
+                            relationship.otherEntityClientRootFolder = `${otherEntityData.clientRootFolder}/`;
+                        }
+                        if (otherEntityData.clientRootFolder) {
+                            if (context.clientRootFolder === otherEntityData.clientRootFolder) {
+                                relationship.otherEntityModulePath = relationship.otherEntityFolderName;
                             } else {
                                 relationship.otherEntityModulePath = `${
                                     context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''
-                                }${relationship.otherEntityFolderName}`;
-                                relationship.otherEntityModelName = relationship.otherEntityFileName;
-                                relationship.otherEntityPath = relationship.otherEntityFolderName;
+                                }${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
                             }
+                            relationship.otherEntityModelName = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
+                            relationship.otherEntityPath = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
                         } else {
-                            relationship.otherEntityModuleName = `${context.angularXAppName}SharedModule`;
-                            relationship.otherEntityModulePath = 'app/core';
+                            relationship.otherEntityModulePath = `${
+                                context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''
+                            }${relationship.otherEntityFolderName}`;
+                            relationship.otherEntityModelName = relationship.otherEntityFileName;
+                            relationship.otherEntityPath = relationship.otherEntityFolderName;
                         }
                     }
                     if (otherEntityData) {
@@ -1126,14 +1125,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
     /**
      * Load an entity configuration file into context.
      */
-    _loadEntityJson(fromPath = this.context.fromPath) {
+    _loadEntityJson(data) {
         const context = this.context;
-        try {
-            context.fileData = this.fs.readJSON(fromPath);
-        } catch (err) {
-            this.debug('Error:', err);
-            throw new Error('\nThe entity configuration file could not be read!\n');
-        }
         if (context.fileData.databaseType) {
             context.databaseType = context.fileData.databaseType;
         }
@@ -1184,7 +1177,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     _validateField(field) {
-        const entityName = context.name;
+        const entityName = this.context.name;
         if (field.fieldName === undefined) {
             throw new Error(`fieldName is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
         }
