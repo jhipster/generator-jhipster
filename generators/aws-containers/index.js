@@ -361,9 +361,9 @@ module.exports = class extends BaseGenerator {
                     app.dbType = appConfig.prodDatabaseType;
 
                     app.auroraEngine = appConfig.prodDatabaseType === postgresqlType ? 'aurora-postgresql' : 'aurora-mysql';
-                    app.auroraFamily = appConfig.prodDatabaseType === postgresqlType ? 'aurora-postgresql9.6' : 'aurora-mysql5.7';
+                    app.auroraFamily = appConfig.prodDatabaseType === postgresqlType ? 'aurora-postgresql10.4' : 'aurora-mysql5.7';
                     app.auroraClusterParameterGroupName =
-                        appConfig.prodDatabaseType === postgresqlType ? 'default.aurora-postgresql9.6' : 'default.aurora-mysql5.7';
+                        appConfig.prodDatabaseType === postgresqlType ? 'default.aurora-postgresql10.4' : 'default.aurora-mysql5.7';
                     app.auroraDbParam =
                         appConfig.prodDatabaseType === postgresqlType ? 'check_function_bodies: 0' : 'sql_mode: IGNORE_SPACE';
                 });
