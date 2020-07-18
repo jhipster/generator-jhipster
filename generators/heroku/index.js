@@ -563,8 +563,7 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             configureJHipsterRegistry() {
-                if (this.abort || this.herokuAppExists) return;
-                const done = this.async();
+                if (this.abort || this.herokuAppExists) return undefined;
 
                 if (this.serviceDiscoveryType === 'eureka') {
                     const prompts = [
@@ -587,7 +586,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     ];
 
                     this.log('');
-                    this.prompt(prompts).then(props => {
+                    return this.prompt(prompts).then(props => {
                         // Encode username/password to avoid errors caused by spaces
                         props.herokuJHipsterRegistryUsername = encodeURIComponent(props.herokuJHipsterRegistryUsername);
                         props.herokuJHipsterRegistryPassword = encodeURIComponent(props.herokuJHipsterRegistryPassword);
@@ -598,24 +597,19 @@ module.exports = class extends BaseBlueprintGenerator {
                                 this.abort = true;
                                 this.log.error(err);
                             }
-                            done();
                         });
 
                         child.stdout.on('data', data => {
                             this.log(data.toString());
                         });
                     });
-                } else {
-                    this.conflicter.resolve(err => {
-                        done();
-                    });
                 }
+                return undefined;
             },
 
             copyHerokuFiles() {
                 if (this.abort) return;
 
-                const done = this.async();
                 this.log(chalk.bold('\nCreating Heroku deployment files'));
 
                 this.template('bootstrap-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`);
@@ -631,10 +625,6 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.log(`${chalk.yellow.bold('WARNING!')}Failed to add 'provision-okta-addon.sh' to .gitignore.'`);
                     });
                 }
-
-                this.conflicter.resolve(err => {
-                    done();
-                });
             },
 
             addHerokuDependencies() {

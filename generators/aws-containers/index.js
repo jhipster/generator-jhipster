@@ -370,8 +370,6 @@ module.exports = class extends BaseGenerator {
             },
             springProjectChanges() {
                 if (this.abort) return;
-                const done = this.async();
-
                 this.appConfigs.forEach(config => {
                     const directory = `${this.directoryPath}${config.appFolder}`;
                     this.temp = {
@@ -382,23 +380,13 @@ module.exports = class extends BaseGenerator {
                     this.template(SPRING_FACTORIES_FILENAME, SPRING_FACTORIES_PATH(directory));
                     this.template(BOOTSTRAP_FILENAME, BOOTSTRAP_PATH(directory));
                 });
-
-                this.conflicter.resolve(() => {
-                    delete this.temp;
-                    done();
-                });
             },
             generateCloudFormationTemplate() {
                 if (this.abort) return;
-                const done = this.async();
-
                 this.template(BASE_TEMPLATE_FILENAME, BASE_TEMPLATE_PATH);
                 this.aws.apps.forEach(config =>
                     this.template(APP_TEMPLATE_FILENAME, APP_TEMPLATE_PATH(config.baseName), null, {}, { aws: this.aws, app: config })
                 );
-                this.conflicter.resolve(() => {
-                    done();
-                });
             },
         };
     }

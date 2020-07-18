@@ -291,27 +291,21 @@ ${chalk.red('az extension add --name spring-cloud')}`
 
             copyAzureSpringCloudFiles() {
                 if (this.abort) return;
-                const done = this.async();
                 this.log(chalk.bold('\nCreating Azure Spring Cloud deployment files'));
                 this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
                 this.template('bootstrap-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-azure.yml`);
                 if (this.azureSpringCloudDeploymentType === 'github-action') {
                     this.template('github/workflows/azure-spring-cloud.yml.ejs', '.github/workflows/azure-spring-cloud.yml');
                 }
-                this.conflicter.resolve(err => {
-                    done();
-                });
             },
 
             addAzureSpringCloudMavenProfile() {
                 if (this.abort) return;
-                const done = this.async();
                 if (this.buildTool === 'maven') {
                     this.render('pom-profile.xml.ejs', profile => {
                         this.addMavenProfile('azure', `            ${profile.toString().trim()}`);
                     });
                 }
-                done();
             },
         };
     }
