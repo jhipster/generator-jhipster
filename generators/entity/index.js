@@ -266,13 +266,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     // existing entity reading values from file
                     this.log(`\nThe entity ${entityName} is being updated.\n`);
                     try {
-                        this._loadEntityJson(this.fs.readJSON(context.microserviceFileName));
+                        this.context.fileData = this.fs.readJSON(context.microserviceFileName);
+                        this._loadEntityJson();
                     } catch (err) {
                         this.debug('Error:', err);
                         throw new Error('\nThe entity configuration file could not be read!\n');
                     }
                 } else {
-                    this._loadEntityJson(this.entityConfig);
+                    this.context.fileData = this.entityStorage.getAll();
+                    this._loadEntityJson();
                 }
 
                 _.defaults(context, entityDefaultConfig);
@@ -1125,7 +1127,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     /**
      * Load an entity configuration file into context.
      */
-    _loadEntityJson(data) {
+    _loadEntityJson() {
         const context = this.context;
         if (context.fileData.databaseType) {
             context.databaseType = context.fileData.databaseType;
