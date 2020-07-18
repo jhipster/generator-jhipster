@@ -23,6 +23,11 @@ const { parseBluePrints } = require('../../utils/blueprint');
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
+
+        if (this.options.help) {
+            return;
+        }
+
         this.force = this.options.force;
 
         this.skipInstall = this.options['skip-install'];

@@ -57,6 +57,10 @@ module.exports = class extends PrivateBase {
     constructor(args, opts) {
         super(args, opts);
 
+        if (this.options.help) {
+            return;
+        }
+
         /* Force config to use 'generator-jhipster' namespace. */
         this.config = this._getStorage('generator-jhipster');
         /* JHipster config using proxy mode used as a plain object instead of using get/set. */

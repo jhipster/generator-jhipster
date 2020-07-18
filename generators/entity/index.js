@@ -125,6 +125,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
             defaults: false,
         });
 
+        if (this.options.help) {
+            return;
+        }
+
         this.context = {};
 
         this.setupEntityOptions(this, this, this.context);

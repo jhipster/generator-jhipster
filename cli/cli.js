@@ -50,7 +50,7 @@ const runYoCommand = (cmd, args, options, opts) => {
     logger.info(chalk.yellow(`Executing ${command}`));
     logger.debug(chalk.yellow(`Options: ${toString(options)}`));
     try {
-        env.run(command, options, done);
+        env.run(command, options).then(done, done);
     } catch (e) {
         logger.error(e.message, e);
     }
