@@ -70,6 +70,13 @@ module.exports = class extends BaseGenerator {
             description: 'Automatically configure GitHub Actions',
         });
 
+        // Automatically configure CircleCI
+        this.argument('autoconfigure-circle', {
+            type: Boolean,
+            defaults: false,
+            description: 'Automatically configure CircleCI',
+        });
+
         this.registerPrettierTransform();
     }
 
@@ -106,6 +113,7 @@ module.exports = class extends BaseGenerator {
                 this.autoconfigureGitlab = this.options['autoconfigure-gitlab'];
                 this.autoconfigureAzure = this.options['autoconfigure-azure'];
                 this.autoconfigureGithub = this.options['autoconfigure-github'];
+                this.autoconfigureCircleCI = this.options['autoconfigure-circle'];
                 this.abort = false;
             },
             initConstants() {
