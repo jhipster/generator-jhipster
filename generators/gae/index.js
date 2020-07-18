@@ -649,7 +649,7 @@ module.exports = class extends BaseGenerator {
                 const name = this.gcpCloudSqlInstanceName;
                 // for mysql keep default options, set specific option for pg
                 const dbVersionFlag =
-                    this.prodDatabaseType === 'postgresql' ? ' --database-version="POSTGRES_9_6" --tier="db-g1-small"' : '';
+                    this.prodDatabaseType === 'postgresql' ? ' --database-version="POSTGRES_10" --tier="db-g1-small"' : '';
                 let gaeCloudSqlLocation = this.gaeLocation;
                 if (gaeCloudSqlLocation === 'us-central') {
                     gaeCloudSqlLocation = 'us-central1';
