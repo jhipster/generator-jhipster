@@ -249,12 +249,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                 _.defaults(context, {
                     haveFieldWithJavadoc: false,
-                    // enum-specific consts
                     enums: [],
-
                     existingEnum: false,
-
                     fieldNamesUnderscored: ['id'],
+
                     // these variable hold field and relationship names for question options during update
                     fieldNameChoices: [],
                     relNameChoices: [],
@@ -318,6 +316,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const entityName = context.name;
                 // Validate entity json field content
                 context.fields.forEach(field => {
+                    // Migration from JodaTime to Java Time
+                    if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
+                        field.fieldType = 'Instant';
+                    }
+
                     this._validateField(field);
 
                     if (field.fieldType === 'ByteBuffer') {
@@ -521,19 +524,17 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.differentRelationships = {};
                 context.i18nToLoad = [context.entityInstance];
                 context.i18nKeyPrefix = `${context.angularAppName}.${context.entityTranslationKey}`;
+                context.haveFieldWithJavadoc = false;
 
                 // Load in-memory data for fields
                 context.fields.forEach(field => {
                     const fieldOptions = field.options || {};
-                    // Migration from JodaTime to Java Time
-                    if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
-                        field.fieldType = 'Instant';
-                    }
+                    _.defaults(field, {
+                        fieldNameCapitalized: _.upperFirst(field.fieldName),
+                        fieldNameUnderscored: _.snakeCase(field.fieldName),
+                        fieldNameHumanized: fieldOptions.fieldNameHumanized || _.startCase(field.fieldName),
+                    });
                     const fieldType = field.fieldType;
-
-                    if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
-                        context.fieldsIsReactAvField = true;
-                    }
 
                     field.fieldIsEnum = ![
                         'String',
@@ -552,18 +553,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         'ByteBuffer',
                     ].includes(fieldType);
 
-                    if (field.fieldIsEnum === true) {
-                        context.i18nToLoad.push(field.enumInstance);
-                    }
-
-                    if (field.fieldNameCapitalized === undefined) {
-                        field.fieldNameCapitalized = _.upperFirst(field.fieldName);
-                    }
-
-                    if (field.fieldNameUnderscored === undefined) {
-                        field.fieldNameUnderscored = _.snakeCase(field.fieldName);
-                    }
-
                     if (field.fieldNameAsDatabaseColumn === undefined) {
                         const fieldNameUnderscored = _.snakeCase(field.fieldName);
                         const jhiFieldNamePrefix = this.getColumnName(context.jhiPrefix);
@@ -579,10 +568,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         } else {
                             field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
                         }
-                    }
-
-                    if (field.fieldNameHumanized === undefined) {
-                        field.fieldNameHumanized = fieldOptions.fieldNameHumanized || _.startCase(field.fieldName);
                     }
 
                     if (field.fieldInJavaBeanMethod === undefined) {
@@ -621,6 +606,18 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                     field.fieldValidate = Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
 
+                    if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
+                        context.fieldsIsReactAvField = true;
+                    }
+
+                    if (field.javadoc) {
+                        context.haveFieldWithJavadoc = true;
+                    }
+
+                    if (field.fieldIsEnum === true) {
+                        context.i18nToLoad.push(field.enumInstance);
+                    }
+
                     if (fieldType === 'ZonedDateTime') {
                         context.fieldsContainZonedDateTime = true;
                         context.fieldsContainDate = true;
@@ -649,25 +646,35 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                     }
 
+                    context.fields.forEach(field => {
+                        context.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
+                        context.fieldNameChoices.push({ name: field.fieldName, value: field.fieldName });
+                    });
+
                     if (field.fieldValidate) {
                         context.validation = true;
                     }
                 });
+
                 let hasUserField = false;
                 // Load in-memory data for relationships
                 context.relationships.forEach(relationship => {
                     const relationshipOptions = relationship.options || {};
                     const otherEntityName = relationship.otherEntityName;
-                    const otherEntityData = this._getEntityJson(otherEntityName);
-                    if (otherEntityData) {
-                        if (otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
-                            otherEntityData.clientRootFolder = otherEntityData.microserviceName;
-                        }
-                        if (otherEntityData.embedded) {
-                            relationship.otherEntityIsEmbedded = true;
-                        }
-                    }
+                    const otherEntityData = this._getEntityJson(otherEntityName) || {};
                     const jhiTablePrefix = context.jhiTablePrefix;
+
+                    if (otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
+                        otherEntityData.clientRootFolder = otherEntityData.microserviceName;
+                    }
+                    if (otherEntityData.embedded) {
+                        relationship.otherEntityIsEmbedded = true;
+                    }
+
+                    if (otherEntityName === 'user') {
+                        relationship.otherEntityTableName = `${jhiTablePrefix}_user`;
+                        hasUserField = true;
+                    }
 
                     relationship.otherEntityPrimaryKeyType =
                         relationship.otherEntityName === 'user' && context.authenticationType === 'oauth2'
@@ -675,7 +682,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             : this.getPkType(context.databaseType);
 
                     // Look for fields at the other other side of the relationship
-                    if (otherEntityData && otherEntityData.relationships) {
+                    if (otherEntityData.relationships) {
                         if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'many-to-many') {
                             otherEntityData.relationships.forEach(otherRelationship => {
                                 if (_.upperFirst(otherRelationship.otherEntityName) !== entityName) {
@@ -699,98 +706,59 @@ class EntityGenerator extends BaseBlueprintGenerator {
                                     (relationship.relationshipType === 'many-to-many' &&
                                         otherRelationship.relationshipType === 'many-to-many')
                                 ) {
-                                    relationship.otherEntityRelationshipName =
-                                        relationship.otherEntityRelationshipName || otherRelationship.relationshipName;
-                                    relationship.otherEntityRelationshipNamePlural =
-                                        relationship.otherEntityRelationshipNamePlural || pluralize(otherRelationship.relationshipName);
-                                    relationship.otherEntityRelationshipNameCapitalized =
-                                        relationship.otherEntityRelationshipNameCapitalized ||
-                                        _.upperFirst(otherRelationship.relationshipName);
-                                    relationship.otherEntityRelationshipNameCapitalizedPlural = relationship.otherEntityRelationshipNameCapitalizedPlural = pluralize(
-                                        relationship.otherEntityRelationshipNameCapitalized
-                                    );
+                                    _.defaults(relationship, {
+                                        otherEntityRelationshipName: otherRelationship.relationshipName,
+                                        otherEntityRelationshipNamePlural: otherRelationship.relationshipNamePlural,
+                                        otherEntityRelationshipNameCapitalized: otherRelationship.relationshipNameCapitalized,
+                                        otherEntityRelationshipNameCapitalizedPlural: relationship.relationshipNameCapitalizedPlural,
+                                    });
                                 }
                             });
                         }
                     }
 
                     if (relationship.otherEntityRelationshipName !== undefined) {
-                        if (relationship.otherEntityRelationshipNamePlural === undefined) {
-                            relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
-                        }
-
-                        if (relationship.otherEntityRelationshipNameCapitalized === undefined) {
-                            relationship.otherEntityRelationshipNameCapitalized = _.upperFirst(relationship.otherEntityRelationshipName);
-                        }
-
-                        if (relationship.otherEntityRelationshipNameCapitalizedPlural === undefined) {
-                            relationship.otherEntityRelationshipNameCapitalizedPlural = pluralize(
-                                _.upperFirst(relationship.otherEntityRelationshipName)
-                            );
-                        }
+                        _.defaults(relationship, {
+                            otherEntityRelationshipNamePlural: pluralize(relationship.otherEntityRelationshipName),
+                            otherEntityRelationshipNameCapitalized: _.upperFirst(relationship.otherEntityRelationshipName),
+                        });
+                        _.defaults(relationship, {
+                            otherEntityRelationshipNameCapitalizedPlural: pluralize(relationship.otherEntityRelationshipNameCapitalized),
+                        });
                     }
 
-                    if (relationship.relationshipNameCapitalized === undefined) {
-                        relationship.relationshipNameCapitalized = _.upperFirst(relationship.relationshipName);
-                    }
+                    const relationshipName = relationship.relationshipName;
+                    _.defaults(relationship, {
+                        relationshipNamePlural: pluralize(relationshipName),
+                        relationshipFieldName: _.lowerFirst(relationshipName),
+                        relationshipNameCapitalized: _.upperFirst(relationshipName),
+                        relationshipNameHumanized: relationshipOptions.relationshipNameHumanized || _.startCase(relationshipName),
+                        otherEntityNamePlural: pluralize(otherEntityName),
+                        otherEntityNameCapitalized: _.upperFirst(otherEntityName),
+                        otherEntityFieldCapitalized: _.upperFirst(relationship.otherEntityField),
+                        otherEntityTableName: otherEntityData.entityTableName || this.getTableName(otherEntityName),
+                    });
 
-                    if (relationship.relationshipNameCapitalizedPlural === undefined) {
-                        if (relationship.relationshipName.length > 1) {
-                            relationship.relationshipNameCapitalizedPlural = pluralize(_.upperFirst(relationship.relationshipName));
-                        } else {
-                            relationship.relationshipNameCapitalizedPlural = _.upperFirst(pluralize(relationship.relationshipName));
-                        }
-                    }
-
-                    if (relationship.relationshipNameHumanized === undefined) {
-                        relationship.relationshipNameHumanized =
-                            relationshipOptions.relationshipNameHumanized || _.startCase(relationship.relationshipName);
-                    }
-
-                    if (relationship.relationshipNamePlural === undefined) {
-                        relationship.relationshipNamePlural = pluralize(relationship.relationshipName);
-                    }
-
-                    if (relationship.relationshipFieldName === undefined) {
-                        relationship.relationshipFieldName = _.lowerFirst(relationship.relationshipName);
-                    }
-
-                    if (relationship.relationshipFieldNamePlural === undefined) {
-                        relationship.relationshipFieldNamePlural = pluralize(_.lowerFirst(relationship.relationshipName));
-                    }
+                    _.defaults(relationship, {
+                        relationshipFieldNamePlural: pluralize(relationship.relationshipFieldName),
+                        relationshipNameCapitalizedPlural:
+                            relationship.relationshipName.length > 1
+                                ? pluralize(relationship.relationshipNameCapitalized)
+                                : _.upperFirst(pluralize(relationship.relationshipName)),
+                        otherEntityNameCapitalizedPlural: pluralize(relationship.otherEntityNameCapitalized),
+                    });
 
                     if (context.dto && context.dto === 'mapstruct') {
-                        if (
-                            otherEntityData &&
-                            (!otherEntityData.dto || otherEntityData.dto !== 'mapstruct') &&
-                            otherEntityName !== 'user'
-                        ) {
+                        if ((!otherEntityData.dto || otherEntityData.dto !== 'mapstruct') && otherEntityName !== 'user') {
                             this.warning(
                                 `This entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
                             );
                         }
                     }
 
-                    if (otherEntityName === 'user') {
-                        relationship.otherEntityTableName = `${jhiTablePrefix}_user`;
-                        hasUserField = true;
-                    } else {
-                        relationship.otherEntityTableName = otherEntityData ? otherEntityData.entityTableName : null;
-                        if (!relationship.otherEntityTableName) {
-                            relationship.otherEntityTableName = this.getTableName(otherEntityName);
-                        }
-                        if (isReservedTableName(relationship.otherEntityTableName, context.prodDatabaseType) && jhiTablePrefix) {
-                            const otherEntityTableName = relationship.otherEntityTableName;
-                            relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
-                        }
-                    }
-
-                    if (relationship.otherEntityNamePlural === undefined) {
-                        relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);
-                    }
-
-                    if (relationship.otherEntityNameCapitalized === undefined) {
-                        relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
+                    if (isReservedTableName(relationship.otherEntityTableName, context.prodDatabaseType) && jhiTablePrefix) {
+                        const otherEntityTableName = relationship.otherEntityTableName;
+                        relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
                     }
 
                     if (relationship.otherEntityAngularName === undefined) {
@@ -801,14 +769,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         } else {
                             relationship.otherEntityAngularName = 'User';
                         }
-                    }
-
-                    if (relationship.otherEntityNameCapitalizedPlural === undefined) {
-                        relationship.otherEntityNameCapitalizedPlural = pluralize(_.upperFirst(relationship.otherEntityName));
-                    }
-
-                    if (relationship.otherEntityFieldCapitalized === undefined) {
-                        relationship.otherEntityFieldCapitalized = _.upperFirst(relationship.otherEntityField);
                     }
 
                     if (relationship.otherEntityStateName === undefined) {
@@ -825,7 +785,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             }
                             if (
                                 context.skipUiGrouping ||
-                                otherEntityData === undefined ||
                                 otherEntityData.clientRootFolder === '' ||
                                 otherEntityData.clientRootFolder === undefined
                             ) {
@@ -833,7 +792,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             } else {
                                 relationship.otherEntityClientRootFolder = `${otherEntityData.clientRootFolder}/`;
                             }
-                            if (otherEntityData !== undefined && otherEntityData.clientRootFolder) {
+                            if (otherEntityData.clientRootFolder) {
                                 if (context.clientRootFolder === otherEntityData.clientRootFolder) {
                                     relationship.otherEntityModulePath = relationship.otherEntityFolderName;
                                 } else {
@@ -1180,7 +1139,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
         }
         context.relationships = context.fileData.relationships || [];
         context.fields = context.fileData.fields || [];
-        context.haveFieldWithJavadoc = false;
         context.changelogDate = context.fileData.changelogDate;
         context.dto = context.fileData.dto;
         context.service = context.fileData.service;
@@ -1197,11 +1155,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
         context.readOnly = context.fileData.readOnly || false;
         context.embedded = context.fileData.embedded || false;
 
-        context.fields.forEach(field => {
-            if (field.javadoc) {
-                context.haveFieldWithJavadoc = true;
-            }
-        });
         this._copyFilteringFlag(context.fileData, context, context);
         if (context.entityTableName === undefined) {
             this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
@@ -1210,10 +1163,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
         if (isReservedTableName(context.entityTableName, context.prodDatabaseType) && context.jhiPrefix) {
             context.entityTableName = `${context.jhiTablePrefix}_${context.entityTableName}`;
         }
-        context.fields.forEach(field => {
-            context.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
-            context.fieldNameChoices.push({ name: field.fieldName, value: field.fieldName });
-        });
         context.relationships.forEach(rel => {
             context.relNameChoices.push({
                 name: `${rel.relationshipName}:${rel.relationshipType}`,
