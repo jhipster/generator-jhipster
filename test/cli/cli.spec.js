@@ -232,6 +232,27 @@ describe('jhipster cli test', () => {
             });
         });
 
+        describe('with negate argument', () => {
+            beforeEach(() => {
+                commands.mocked.desc = 'Mocked command';
+                commands.mocked.argument = ['name'];
+                commands.mocked.cliOnly = true;
+                process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--no-foo', '--no-foo-bar'];
+            });
+
+            commonTests();
+
+            it('should forward argument and options', done => {
+                const cb = (args, options) => {
+                    expect(args).to.eql(['Foo']);
+                    expect(options.foo).to.be.false;
+                    expect(options.fooBar).to.be.false;
+                    done();
+                };
+                proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
+            });
+        });
+
         describe('with variable arguments', () => {
             beforeEach(() => {
                 commands.mocked.desc = 'Mocked command';
