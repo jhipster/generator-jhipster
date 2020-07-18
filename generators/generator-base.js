@@ -2272,8 +2272,8 @@ module.exports = class extends PrivateBase {
         dest.entityTableName = generator.getTableName(context.options.tableName || dest.name);
         dest.entityNameCapitalized = _.upperFirst(dest.name);
         dest.entityAngularJSSuffix = context.options.angularSuffix;
-        dest.skipUiGrouping = context.options['skip-ui-grouping'];
-        dest.clientRootFolder = context.options['skip-ui-grouping'] ? '' : context.options['client-root-folder'];
+        dest.skipUiGrouping = context.options['skipUiGrouping'];
+        dest.clientRootFolder = context.options['skipUiGrouping'] ? '' : context.options['clientRootFolder'];
         dest.isDebugEnabled = context.options.debug;
         dest.experimental = context.options.experimental;
         if (dest.entityAngularJSSuffix && !dest.entityAngularJSSuffix.startsWith('-')) {

@@ -205,7 +205,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     configuration.get('skipClient') ||
                     fileData.skipClient;
                 context.skipServer = this.options.skipServer || configuration.get('skipServer');
-                context.skipDbChangelog = this.options['skip-db-changelog'] || configuration.get('skipDbChangelog');
+                context.skipDbChangelog = this.options['skipDbChangelog'] || configuration.get('skipDbChangelog');
 
                 context.angularAppName = this.getAngularAppName(context.baseName);
                 context.angularXAppName = this.getAngularXAppName(context.baseName);

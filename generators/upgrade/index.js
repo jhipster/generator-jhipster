@@ -86,7 +86,7 @@ module.exports = class extends BaseGenerator {
 
         this.force = this.options.force;
         this.targetJhipsterVersion = this.options.targetVersion;
-        this.targetBlueprintVersions = parseBluePrints(this.options['target-blueprint-versions']);
+        this.targetBlueprintVersions = parseBluePrints(this.options['targetBlueprintVersions']);
         this.skipInstall = this.options.skipInstall;
         this.silent = this.options.silent;
         this.skipChecks = this.options.skipChecks;
