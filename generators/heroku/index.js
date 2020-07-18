@@ -59,8 +59,8 @@ module.exports = class extends BaseBlueprintGenerator {
             return;
         }
 
-        this.herokuSkipBuild = this.options['skip-build'];
-        this.herokuSkipDeploy = this.options['skip-deploy'] || this.options['skip-build'];
+        this.herokuSkipBuild = this.options.skipBuild;
+        this.herokuSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
         this.registerPrettierTransform();
 
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('heroku');

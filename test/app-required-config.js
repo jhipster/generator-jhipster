@@ -10,7 +10,7 @@ describe('JHipster generator with required configuration', () => {
             .withOptions({
                 defaultLocalConfig: requiredDefaultConfig,
                 baseName: 'jhipster',
-                'from-cli': true,
+                fromCli: true,
                 skipInstall: true,
             })
             .run();

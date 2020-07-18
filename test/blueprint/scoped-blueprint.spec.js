@@ -19,7 +19,7 @@ describe('JHipster application generator with scoped blueprint', () => {
                     fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
                 })
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     skipChecks: true,
                     blueprints: '@jhipster/generator-jhipster-scoped-blueprint',

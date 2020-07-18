@@ -85,11 +85,11 @@ module.exports = class extends BaseGenerator {
         }
 
         this.force = this.options.force;
-        this.targetJhipsterVersion = this.options['target-version'];
-        this.targetBlueprintVersions = parseBluePrints(this.options['target-blueprint-versions']);
-        this.skipInstall = this.options['skip-install'];
+        this.targetJhipsterVersion = this.options.targetVersion;
+        this.targetBlueprintVersions = parseBluePrints(this.options.targetBlueprintVersions);
+        this.skipInstall = this.options.skipInstall;
         this.silent = this.options.silent;
-        this.skipChecks = this.options['skip-checks'];
+        this.skipChecks = this.options.skipChecks;
 
         // Used for isJhipsterVersionLessThan on cleanup.upgradeFiles
         this.jhipsterOldVersion = this.config.get('jhipsterVersion');
