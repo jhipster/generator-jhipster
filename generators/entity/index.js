@@ -269,6 +269,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.log(`\nThe entity ${entityName} is being updated.\n`);
                     this._loadEntityJson(context.microserviceFileName || context.filename);
                 }
+
                 _.defaults(context, entityDefaultConfig);
             },
 
@@ -317,90 +318,29 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const entityName = context.name;
                 // Validate entity json field content
                 context.fields.forEach(field => {
-                    if (field.fieldName === undefined) {
-                        throw new Error(`fieldName is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
-                    }
+                    this._validateField(field);
 
-                    if (field.fieldType === undefined) {
-                        throw new Error(`fieldType is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
-                    }
-
-                    if (field.fieldValidateRules !== undefined) {
-                        if (!Array.isArray(field.fieldValidateRules)) {
-                            throw new Error(
-                                `fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringify(field)}`
-                            );
-                        }
-                        field.fieldValidateRules.forEach(fieldValidateRule => {
-                            if (!SUPPORTED_VALIDATION_RULES.includes(fieldValidateRule)) {
-                                throw new Error(
-                                    `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${stringify(
-                                        field
-                                    )} [supported validation rules ${SUPPORTED_VALIDATION_RULES}]`
-                                );
-                            }
-                        });
-                        if (field.fieldValidateRules.includes('max') && field.fieldValidateRulesMax === undefined) {
-                            throw new Error(
-                                `fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
-                            );
-                        }
-                        if (field.fieldValidateRules.includes('min') && field.fieldValidateRulesMin === undefined) {
-                            throw new Error(
-                                `fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
-                            );
-                        }
-                        if (field.fieldValidateRules.includes('maxlength') && field.fieldValidateRulesMaxlength === undefined) {
-                            throw new Error(
-                                `fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
-                            );
-                        }
-                        if (field.fieldValidateRules.includes('minlength') && field.fieldValidateRulesMinlength === undefined) {
-                            throw new Error(
-                                `fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
-                            );
-                        }
-                        if (field.fieldValidateRules.includes('maxbytes') && field.fieldValidateRulesMaxbytes === undefined) {
-                            throw new Error(
-                                `fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
-                            );
-                        }
-                        if (field.fieldValidateRules.includes('minbytes') && field.fieldValidateRulesMinbytes === undefined) {
-                            throw new Error(
-                                `fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
-                            );
-                        }
-                        if (field.fieldValidateRules.includes('pattern') && field.fieldValidateRulesPattern === undefined) {
-                            throw new Error(
-                                `fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${stringify(field)}`
-                            );
-                        }
-                        if (field.fieldType === 'ByteBuffer') {
-                            this.warning(
-                                `Cannot use validation in .jhipster/${entityName}.json for field ${stringify(
-                                    field
-                                )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`
-                            );
-                            field.validation = false;
-                            field.fieldValidateRules = [];
-                        }
+                    if (field.fieldType === 'ByteBuffer') {
+                        this.warning(
+                            `Cannot use validation in .jhipster/${entityName}.json for field ${stringify(
+                                field
+                            )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`
+                        );
+                        field.validation = false;
+                        field.fieldValidateRules = [];
                     }
                 });
 
                 // Validate entity json relationship content
                 context.relationships.forEach(relationship => {
+                    this._validateRelationShip(relationship);
+
                     if (relationship.relationshipName === undefined) {
                         relationship.relationshipName = relationship.otherEntityName;
                         this.warning(
                             `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringify(
                                 relationship
                             )}, using ${relationship.otherEntityName} as fallback`
-                        );
-                    }
-
-                    if (relationship.otherEntityName === undefined) {
-                        throw new Error(
-                            `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`
                         );
                     }
 
@@ -431,19 +371,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             )}, using id as fallback`
                         );
                         relationship.otherEntityField = 'id';
-                    }
-
-                    if (relationship.relationshipType === undefined) {
-                        throw new Error(
-                            `relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`
-                        );
-                    }
-
-                    if (
-                        relationship.ownerSide === undefined &&
-                        (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-many')
-                    ) {
-                        throw new Error(`ownerSide is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
                     }
                 });
 
@@ -1075,9 +1002,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         // form the data to be passed to modules
                         const context = this.context;
 
-                        // Keep context.data for unexpected compatibility issue.
-                        context.data = context.data || this.storageData || context.fileData;
-
                         // run through all post entity creation module hooks
                         this.callHooks(
                             'entity',
@@ -1307,6 +1231,70 @@ class EntityGenerator extends BaseBlueprintGenerator {
             }
             context.microserviceAppName = this.getMicroserviceAppName(context.microserviceName);
             context.skipServer = true;
+        }
+    }
+
+    _validateField(field) {
+        const entityName = context.name;
+        if (field.fieldName === undefined) {
+            throw new Error(`fieldName is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+        }
+
+        if (field.fieldType === undefined) {
+            throw new Error(`fieldType is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+        }
+
+        if (field.fieldValidateRules !== undefined) {
+            if (!Array.isArray(field.fieldValidateRules)) {
+                throw new Error(`fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringify(field)}`);
+            }
+            field.fieldValidateRules.forEach(fieldValidateRule => {
+                if (!SUPPORTED_VALIDATION_RULES.includes(fieldValidateRule)) {
+                    throw new Error(
+                        `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${stringify(
+                            field
+                        )} [supported validation rules ${SUPPORTED_VALIDATION_RULES}]`
+                    );
+                }
+            });
+            if (field.fieldValidateRules.includes('max') && field.fieldValidateRulesMax === undefined) {
+                throw new Error(`fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+            }
+            if (field.fieldValidateRules.includes('min') && field.fieldValidateRulesMin === undefined) {
+                throw new Error(`fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+            }
+            if (field.fieldValidateRules.includes('maxlength') && field.fieldValidateRulesMaxlength === undefined) {
+                throw new Error(`fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+            }
+            if (field.fieldValidateRules.includes('minlength') && field.fieldValidateRulesMinlength === undefined) {
+                throw new Error(`fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+            }
+            if (field.fieldValidateRules.includes('maxbytes') && field.fieldValidateRulesMaxbytes === undefined) {
+                throw new Error(`fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+            }
+            if (field.fieldValidateRules.includes('minbytes') && field.fieldValidateRulesMinbytes === undefined) {
+                throw new Error(`fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+            }
+            if (field.fieldValidateRules.includes('pattern') && field.fieldValidateRulesPattern === undefined) {
+                throw new Error(`fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+            }
+        }
+    }
+
+    _validateRelationShip(relationship) {
+        const entityName = context.name;
+        if (relationship.otherEntityName === undefined) {
+            throw new Error(`otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
+        }
+        if (relationship.relationshipType === undefined) {
+            throw new Error(`relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
+        }
+
+        if (
+            relationship.ownerSide === undefined &&
+            (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-many')
+        ) {
+            throw new Error(`ownerSide is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
         }
     }
 }
