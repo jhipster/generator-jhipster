@@ -23,6 +23,7 @@ import { Subscription } from 'rxjs';
 import { LoginService } from 'app/core/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-login',
@@ -42,7 +43,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     rememberMe: [false]
   });
 
-  constructor(private accountService: AccountService, private loginService: LoginService, private router: Router, private fb: FormBuilder) {}
+  constructor(private accountService: AccountService, private loginService: LoginService, private router: Router, private fb: FormBuilder, private stateStorageService: StateStorageService) {}
 
   ngOnInit(): void {
     // try to log in automatically
@@ -60,7 +61,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  login(): void {
+  login(): void {          
+    const previousUrl = this.stateStorageService.getUrl();
     this.loginService
       .login({
         username: this.loginForm.get('username')!.value,
@@ -70,7 +72,12 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(
         () => {
           this.authenticationError = false;
-          this.router.navigate(['']);
+          if (previousUrl) {
+            this.stateStorageService.clearUrl();
+            this.router.navigateByUrl(previousUrl);
+          } else {
+            this.router.navigate(['']);
+          }
         },
         () => {
           (this.authenticationError = true);

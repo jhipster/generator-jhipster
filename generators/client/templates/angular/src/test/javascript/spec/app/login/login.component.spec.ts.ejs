@@ -27,6 +27,8 @@ import { MockRouter } from '../../helpers/mock-route.service';
 import { LoginComponent } from 'app/login/login.component';
 import { AccountService } from 'app/core/auth/account.service';
 import { MockAccountService } from '../../helpers/mock-account.service';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
+import { MockStateStorageService } from '../../helpers/mock-state-storage.service';
 
 describe('Component Tests', () => {
   describe('LoginComponent', () => {
@@ -35,6 +37,7 @@ describe('Component Tests', () => {
     let mockLoginService: MockLoginService;
     let mockRouter: MockRouter;
     let accountService: MockAccountService;
+    let storageService: MockStateStorageService;
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
@@ -45,6 +48,10 @@ describe('Component Tests', () => {
           {
             provide: LoginService,
             useClass: MockLoginService
+          },
+          {
+            provide: StateStorageService,
+            useClass: MockStateStorageService,
           }
         ]
       })
@@ -58,6 +65,7 @@ describe('Component Tests', () => {
       mockLoginService = TestBed.get(LoginService);
       mockRouter = TestBed.get(Router);
       accountService = TestBed.get(AccountService);
+      storageService = TestBed.get(StateStorageService);
     });
 
     it('Should call accountService.identity on Init', () => {
@@ -87,22 +95,23 @@ describe('Component Tests', () => {
       expect(mockRouter.navigateSpy).toHaveBeenCalledWith(['']);
     });
 
-    it('should authenticate the user', inject(
+    it('should authenticate the user and navigate to home page', inject(
       [],
       fakeAsync(() => {
         // GIVEN
         const credentials = {
           username: 'admin',
           password: 'admin',
-          rememberMe: true
+          rememberMe: true,
         };
 
         comp.loginForm.patchValue({
           username: 'admin',
           password: 'admin',
-          rememberMe: true
+          rememberMe: true,
         });
         mockLoginService.setResponse({});
+        storageService.setResponse(null);
 
         // WHEN/
         comp.login();
@@ -111,7 +120,42 @@ describe('Component Tests', () => {
         // THEN
         expect(comp.authenticationError).toEqual(false);
         expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentials);
+        expect(storageService.getUrlSpy).toHaveBeenCalledTimes(1);
+        expect(storageService.clearUrlSpy).not.toHaveBeenCalled();
+        expect(mockRouter.navigateByUrlSpy).not.toHaveBeenCalled();
       })
     ));
+
+    it('should authenticate the user and navigate to stored URL', inject(
+      [],
+      fakeAsync(() => {
+        // GIVEN
+        const credentials = {
+          username: 'admin',
+          password: 'admin',
+          rememberMe: true,
+        };
+
+        comp.loginForm.patchValue({
+          username: 'admin',
+          password: 'admin',
+          rememberMe: true,
+        });
+        mockLoginService.setResponse({});
+        storageService.setResponse('admin/users?page=0');
+
+        // WHEN/
+        comp.login();
+        tick(); // simulate async
+
+        // THEN
+        expect(comp.authenticationError).toEqual(false);
+        expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentials);
+        expect(storageService.getUrlSpy).toHaveBeenCalledTimes(1);
+        expect(storageService.clearUrlSpy).toHaveBeenCalledTimes(1);
+        expect(mockRouter.navigateByUrlSpy).toHaveBeenCalledWith('admin/users?page=0');
+      })
+    ));
+
   });
 });
