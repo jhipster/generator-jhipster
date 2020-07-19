@@ -323,16 +323,16 @@ const vueFiles = {
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
-                    file: 'spec/app/entities/entity-management.component.spec.ts',
+                    file: 'spec/app/entities/entity.component.spec.ts',
                     renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.component.spec.ts`,
                 },
                 {
-                    file: 'spec/app/entities/entity-management-details.component.spec.ts',
+                    file: 'spec/app/entities/entity-details.component.spec.ts',
                     renameTo: generator =>
                         `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-details.component.spec.ts`,
                 },
                 {
-                    file: 'spec/app/entities/entity-management.service.spec.ts',
+                    file: 'spec/app/entities/entity.service.spec.ts',
                     renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.service.spec.ts`,
                 },
             ],
@@ -342,7 +342,7 @@ const vueFiles = {
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
-                    file: 'spec/app/entities/entity-management-update.component.spec.ts',
+                    file: 'spec/app/entities/entity-update.component.spec.ts',
                     renameTo: generator =>
                         `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.spec.ts`,
                 },
