@@ -30,13 +30,14 @@ import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
         if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) {
           hasManyToMany = true;
         }
+        if (!importEntitiesSeen.includes(otherEntityAngularName)) {
 _%>
   <% if (otherEntityAngularName === 'User' && authenticationType !== 'oauth2') { %>
 import UserService from '@/admin/user-management/user-management.service';
-  <% } else if (otherEntityAngularName !== 'User' && !importEntitiesSeen.includes(otherEntityAngularName)) { %>
+  <% } else if (otherEntityAngularName !== 'User') { %>
 import <%= otherEntityAngularName %>Service from '../<%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
 import { I<%= otherEntityAngularName %> } from '@/shared/model/<%= otherEntityModelName %>.model';
-  <% } %>
+  <% } } %>
 <%_ importEntitiesSeen.push(otherEntityAngularName); } } _%>
 import AlertService from '@/shared/alert/alert.service';
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
