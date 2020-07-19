@@ -152,8 +152,6 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 | [![Microservices OAuth2][github-ms-oauth2]][github-actions]            |
 | [![Microservices UAA][github-ms-uaa]][github-actions]                  |
 | [![Docker Image][github-docker-image]][github-actions]                 |
-| [![Neo4j][github-neo4j]][github-actions]                               |
-| [![Couchbase][github-couchbase]][github-actions]                       |
 | [![Official Windows][github-official-windows]][github-actions]         |
 
 ## Analysis of the sample JHipster project
@@ -182,8 +180,6 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [github-ms-oauth2]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Microservices%20OAuth2/badge.svg
 [github-ms-uaa]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Microservices%20UAA/badge.svg
 [github-docker-image]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Docker%20Image/badge.svg
-[github-neo4j]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Neo4j/badge.svg
-[github-couchbase]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Couchbase/badge.svg
 [sonar-url]: https://sonarcloud.io/dashboard?id=jhipster-sample-application
 [sonar-quality-gate]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-sample-application&metric=alert_status
 [sonar-coverage]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-sample-application&metric=coverage
