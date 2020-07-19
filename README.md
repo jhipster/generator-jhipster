@@ -140,6 +140,10 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 | [![React Maven NoSQL][github-react-maven-nosql]][github-actions]       |
 | [![React Gradle][github-react-gradle]][github-actions]                 |
 | [![React Gradle NoSQL][github-react-gradle-nosql]][github-actions]     |
+| [![Vue Maven][github-vue-maven]][github-actions]                       |
+| [![Vue Maven NoSQL][github-vue-maven-nosql]][github-actions]           |
+| [![Vue Gradle][github-vue-gradle]][github-actions]                     |
+| [![Vue Gradle NoSQL][github-vue-gradle-nosql]][github-actions]         |
 | [![Elasticsearch][github-elasticsearch]][github-actions]               |
 | [![Monolith OAuth2][github-monolith-oauth2]][github-actions]           |
 | [![Yarn][github-yarn]][github-actions]                                 |
@@ -166,6 +170,10 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [github-react-maven-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/React%20Maven%20NoSQL/badge.svg
 [github-react-gradle]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/React%20Gradle/badge.svg
 [github-react-gradle-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/React%20Gradle%20NoSQL/badge.svg
+[github-vue-maven]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Maven/badge.svg
+[github-vue-maven-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Maven%20NoSQL/badge.svg
+[github-vue-gradle]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Gradle/badge.svg
+[github-vue-gradle-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Gradle%20NoSQL/badge.svg
 [github-elasticsearch]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Elasticsearch/badge.svg
 [github-monolith-oauth2]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Monolith%20OAuth2/badge.svg
 [github-yarn]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Yarn/badge.svg
