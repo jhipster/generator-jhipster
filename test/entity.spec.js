@@ -69,9 +69,9 @@ describe('JHipster generator for entity', () => {
 
         context('monolith with entity and dto suffixes', () => {
             describe('with entity and dto suffixes', () => {
-                beforeEach(done => {
+                before(() =>
                     helpers
-                        .run(require.resolve('../generators/entity'))
+                        .create(require.resolve('../generators/entity'))
                         .inTmpDir(dir => {
                             fse.copySync(path.join(__dirname, '../test/templates/entity-dto-suffixes'), dir);
                         })
@@ -82,8 +82,8 @@ describe('JHipster generator for entity', () => {
                             dto: 'mapstruct',
                             service: 'serviceImpl',
                         })
-                        .on('end', done);
-                });
+                        .run()
+                );
 
                 it('creates expected files with suffix', () => {
                     assert.file([
@@ -95,17 +95,23 @@ describe('JHipster generator for entity', () => {
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`,
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
                     ]);
+                });
 
+                it('correctly writes the repository', () => {
                     assert.fileContent(
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`,
                         'public interface FooRepository '
                     );
+                });
 
+                it('correctly writes the entity', () => {
                     assert.fileContent(
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/FooXXX.java`,
                         'public class FooXXX implements Serializable'
                     );
+                });
 
+                it('correctly writes the dto file', () => {
                     assert.fileContent(
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooYYY.java`,
                         'public class FooYYY implements Serializable'
@@ -537,7 +543,7 @@ describe('JHipster generator for entity', () => {
                 });
             });
 
-            describe('with mongodb microservice', () => {
+            describe('with mongodb database', () => {
                 before(done => {
                     helpers
                         .run(require.resolve('../generators/entity'))
@@ -951,9 +957,9 @@ describe('JHipster generator for entity', () => {
     });
     describe('regeneration from app generator', () => {
         describe('with creation timestamp', () => {
-            before(done => {
-                helpers
-                    .run(require.resolve('../generators/app'))
+            before(() => {
+                return helpers
+                    .create(require.resolve('../generators/app'))
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                         const jhipsterFolder = path.join(dir, '.jhipster');
@@ -961,7 +967,7 @@ describe('JHipster generator for entity', () => {
                         fse.writeJsonSync(path.join(jhipsterFolder, 'Foo.json'), {});
                     })
                     .withOptions({ creationTimestamp: '2016-01-20', withEntities: true })
-                    .on('end', done);
+                    .run();
             });
 
             it('creates expected default files', () => {

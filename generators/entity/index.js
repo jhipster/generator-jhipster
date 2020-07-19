@@ -96,21 +96,18 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.option('skip-server', {
             desc: 'Skip the server-side code generation',
             type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip the client-side code generation',
             type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--skip-db-changelog` flag
         this.option('skip-db-changelog', {
             desc: 'Skip the generation of database changelog (liquibase for sql databases)',
             type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--db` flag
@@ -151,13 +148,59 @@ class EntityGenerator extends BaseBlueprintGenerator {
             validateFromCli() {
                 this.checkInvocationFromCLI();
             },
+
+            setupRequiredConfigForMicroservicePrompt() {
+                this.context.filename = path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(this.context.name)}.json`);
+            },
+
+            /* Use need microservice path to load the entity file */
+            askForMicroserviceJson: prompts.askForMicroserviceJson,
+
+            setupMicroServiceEntity() {
+                const context = this.context;
+
+                if (this.jhipsterConfig.applicationType === 'uaa') {
+                    this.entityConfig.microserviceName = this.jhipsterConfig.baseName;
+                } else if (this.jhipsterConfig.applicationType === 'microservice') {
+                    context.skipClient = true;
+                    context.microserviceName = this.entityConfig.microserviceName = this.jhipsterConfig.baseName;
+                    if (!this.entityConfig.clientRootFolder) {
+                        context.clientRootFolder = this.entityConfig.clientRootFolder = this.entityConfig.microserviceName;
+                    }
+                } else if (this.jhipsterConfig.applicationType === 'gateway') {
+                    // If microservicePath is set we are loading the entity from the microservice side.
+                    context.useMicroserviceJson = !!this.entityConfig.microservicePath;
+                    if (context.useMicroserviceJson) {
+                        context.microserviceFileName = this.destinationPath(this.entityConfig.microservicePath, context.filename);
+                        context.useConfigurationFile = true;
+
+                        this.log(`\nThe entity ${context.name} is being updated.\n`);
+                        try {
+                            // We are generating a entity from a microservice.
+                            // Load it directly into our entity configuration.
+                            this.microserviceConfig = this.fs.readJSON(context.microserviceFileName);
+                            this.entityStorage.set(this.microserviceConfig);
+                        } catch (err) {
+                            this.debug('Error:', err);
+                            throw new Error('\nThe entity configuration file could not be read!\n');
+                        }
+                        if (!this.entityConfig.clientRootFolder === undefined) {
+                            context.clientRootFolder = this.entityConfig.clientRootFolder = context.skipUiGrouping
+                                ? ''
+                                : this.entityConfig.microserviceName;
+                        }
+                    }
+                }
+            },
+
             loadSharedConfig() {
-                // Load configuration into this.context
                 this.loadAppConfig(undefined, this.context);
                 this.loadClientConfig(undefined, this.context);
-                this.loadServerConfig(undefined, this.context);
                 this.loadTranslationConfig(undefined, this.context);
+                // Try to load server config from microservice side, falling back to the app config.
+                this.loadServerConfig(_.defaults({}, this.microserviceConfig, this.jhipsterConfig), this.context);
             },
+
             loadOptions() {
                 const context = this.context;
                 context.options = this.options;
@@ -172,10 +215,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.skipDbChangelog = context.skipDbChangelog || this.options.skipDbChangelog;
                 context.skipClient = context.skipClient || this.options.skipClient;
             },
+
             loadEntitySpecificOptions() {
-                const fileData = this.context.fileData || {};
-                this.context.skipClient = this.context.skipClient || fileData.skipClient;
+                this.context.skipClient = this.context.skipClient || this.entityConfig.skipClient;
             },
+
             setupSharedConfig() {
                 const context = this.context;
 
@@ -191,14 +235,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.angularXAppName = this.getAngularXAppName(context.baseName);
                 context.mainClass = this.getMainClassName(context.baseName);
                 context.microserviceAppName = '';
-
-                if (context.applicationType === 'microservice') {
-                    context.skipClient = true;
-                    context.microserviceName = context.baseName;
-                    if (!context.clientRootFolder) {
-                        context.clientRootFolder = context.microserviceName;
-                    }
-                }
 
                 if (context.entitySuffix === context.dtoSuffix) {
                     throw new Error('The entity cannot be generated as the entity suffix and DTO suffix are equals !');
@@ -220,23 +256,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 }
             },
 
-            fileName() {
-                // filename field is used by askForMicroserviceJson
-                this.context.filename = path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(this.context.name)}.json`);
-            },
-
-            /* Use need microservice path to load the entity file */
-            askForMicroserviceJson: prompts.askForMicroserviceJson,
-
-            setupMicroServiceEntity() {
-                const context = this.context;
-                context.useMicroserviceJson = !!context.microservicePath;
-                if (context.useMicroserviceJson) {
-                    context.microserviceFileName = this.destinationPath(context.microservicePath, context.filename);
-                    context.useConfigurationFile = true;
-                }
-            },
-
             setupEntityConfig() {
                 const context = this.context;
                 const entityName = context.name;
@@ -247,43 +266,21 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
                 }
 
+                // Structure for templates.
                 _.defaults(context, {
                     haveFieldWithJavadoc: false,
                     enums: [],
                     existingEnum: false,
-                    fieldNamesUnderscored: ['id'],
 
                     // these variable hold field and relationship names for question options during update
                     fieldNameChoices: [],
-                    relNameChoices: [],
                 });
 
-                // Specific Entity sub-generator constants
+                // Structure for prompts.
+                this.entityStorage.defaults({ fields: [], relationships: [], databaseType: context.databaseType });
+
                 if (!context.useConfigurationFile) {
-                    // no file present, new entity creation
                     this.log(`\nThe entity ${entityName} is being created.\n`);
-                } else if (context.useMicroserviceJson) {
-                    // existing entity reading values from file
-                    this.log(`\nThe entity ${entityName} is being updated.\n`);
-                    try {
-                        this.context.fileData = this.fs.readJSON(context.microserviceFileName);
-                        this._loadEntityJson();
-                    } catch (err) {
-                        this.debug('Error:', err);
-                        throw new Error('\nThe entity configuration file could not be read!\n');
-                    }
-                } else {
-                    this.context.fileData = this.entityStorage.getAll();
-                    this._loadEntityJson();
-                }
-
-                _.defaults(context, entityDefaultConfig);
-            },
-
-            validateTableName() {
-                const validation = this._validateTableName(this.context.entityTableName);
-                if (validation !== true) {
-                    throw new Error(validation);
                 }
             },
         };
@@ -320,11 +317,34 @@ class EntityGenerator extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _configuring() {
         return {
-            validateFile() {
+            configureEntity() {
+                const context = this.context;
+                if (this.entityConfig.entityTableName === undefined) {
+                    this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
+                    context.entityTableName = this.entityConfig.entityTableName = this.getTableName(context.name);
+                }
+                if (isReservedTableName(this.entityConfig.entityTableName, context.prodDatabaseType) && context.jhiTablePrefix) {
+                    context.entityTableName = this.entityConfig.entityTableName = `${context.jhiTablePrefix}_${this.entityConfig.entityTableName}`;
+                }
+
+                const validation = this._validateTableName(this.entityConfig.entityTableName);
+                if (validation !== true) {
+                    throw new Error(validation);
+                }
+
+                if (['sql', 'mongodb', 'couchbase', 'neo4j'].includes(context.databaseType)) {
+                    this.entityConfig.pagination = 'no';
+                }
+
+                this.entityStorage.defaults(entityDefaultConfig);
+            },
+
+            configureFields() {
                 const context = this.context;
                 const entityName = context.name;
                 // Validate entity json field content
-                context.fields.forEach(field => {
+                const fields = this.entityConfig.fields;
+                fields.forEach(field => {
                     // Migration from JodaTime to Java Time
                     if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
                         field.fieldType = 'Instant';
@@ -342,9 +362,16 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         field.fieldValidateRules = [];
                     }
                 });
+                this.entityConfig.fields = fields;
+            },
+
+            configureRelationships() {
+                const context = this.context;
+                const entityName = context.name;
 
                 // Validate entity json relationship content
-                context.relationships.forEach(relationship => {
+                const relationships = this.entityConfig.relationships;
+                relationships.forEach(relationship => {
                     this._validateRelationShip(relationship);
 
                     if (relationship.relationshipName === undefined) {
@@ -387,17 +414,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 });
 
                 // Validate root entity json content
-                if (context.changelogDate === undefined && ['sql', 'cassandra'].includes(context.databaseType)) {
+                if (this.entityConfig.changelogDate === undefined && ['sql', 'cassandra', 'couchbase'].includes(context.databaseType)) {
                     const currentDate = this.dateFormatForLiquibase();
                     this.warning(`changelogDate is missing in .jhipster/${entityName}.json, using ${currentDate} as fallback`);
-                    context.changelogDate = currentDate;
+                    context.changelogDate = this.entityConfig.changelogDate = currentDate;
                 }
-                if (!context.clientRootFolder && !context.skipUiGrouping) {
-                    // if it is a gateway generating from a microservice, or a microservice
-                    if (context.useMicroserviceJson || context.applicationType === 'microservice') {
-                        context.clientRootFolder = context.microserviceName;
-                    }
-                }
+                this.entityConfig.relationships = relationships;
             },
 
             writeEntityJson() {
@@ -405,39 +427,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (context.configurationFileExists && context.updateEntity === 'regenerate') {
                     return; // do not update if regenerating entity
                 }
-                // store information in a file for further use.
-                if (context.changelogDate === undefined && ['sql', 'cassandra', 'couchbase'].includes(context.databaseType)) {
-                    context.changelogDate = this.dateFormatForLiquibase();
-                }
 
                 // Keep existing config by cloning fileData
                 const storageData = this.context.fileData ? { ...this.context.fileData } : {};
-                storageData.fluentMethods = context.fluentMethods;
-                storageData.clientRootFolder = context.clientRootFolder;
-                storageData.relationships = context.relationships;
-                storageData.fields = context.fields;
-                storageData.changelogDate = context.changelogDate;
-                storageData.dto = context.dto;
-                storageData.searchEngine = context.searchEngine;
-                storageData.service = context.service;
-                storageData.entityTableName = context.entityTableName;
-                storageData.databaseType = context.databaseType;
-                storageData.readOnly = context.readOnly;
                 this._copyFilteringFlag(context, storageData, context);
-                if (['sql', 'mongodb', 'couchbase', 'neo4j'].includes(context.databaseType)) {
-                    storageData.pagination = context.pagination;
-                } else {
-                    storageData.pagination = 'no';
-                }
                 storageData.javadoc = context.javadoc;
                 if (context.entityAngularJSSuffix) {
                     storageData.angularJSSuffix = context.entityAngularJSSuffix;
-                }
-                if (context.applicationType === 'microservice' || context.applicationType === 'uaa') {
-                    storageData.microserviceName = context.baseName;
-                }
-                if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
-                    storageData.microserviceName = context.microserviceName;
                 }
 
                 if (this.storageData) {
@@ -456,6 +452,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const context = this.context;
                 const entityName = context.name;
                 const entityNamePluralizedAndSpinalCased = _.kebabCase(pluralize(entityName));
+
+                this._loadEntityJson(this.entityStorage.getAll());
 
                 context.entityClass = context.entityNameCapitalized;
                 context.entityClassPlural = pluralize(context.entityClass);
@@ -486,7 +484,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.entityTranslationKeyMenu = _.camelCase(
                     context.clientRootFolder ? `${context.clientRootFolder}-${context.entityStateName}` : context.entityStateName
                 );
-                context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
                 context.reactiveRepositories =
                     context.reactive && ['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(context.databaseType);
 
@@ -639,11 +636,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                     }
 
-                    context.fields.forEach(field => {
-                        context.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
-                        context.fieldNameChoices.push({ name: field.fieldName, value: field.fieldName });
-                    });
-
                     if (field.fieldValidate) {
                         context.validation = true;
                     }
@@ -657,11 +649,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     const otherEntityData = this._getEntityJson(otherEntityName) || {};
                     const jhiTablePrefix = context.jhiTablePrefix;
 
+                    relationship.otherEntityIsEmbedded = otherEntityData.embedded;
                     if (otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
                         otherEntityData.clientRootFolder = otherEntityData.microserviceName;
-                    }
-                    if (otherEntityData.embedded) {
-                        relationship.otherEntityIsEmbedded = true;
                     }
 
                     if (otherEntityName === 'user') {
@@ -1010,7 +1000,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         if (!/^([a-zA-Z0-9_]*)$/.test(entityTableName)) {
             return `The table name cannot contain special characters.\n${instructions}`;
         }
-        if (entityTableName === '') {
+        if (!entityTableName) {
             return 'The table name cannot be empty';
         }
         if (isReservedTableName(entityTableName, prodDatabaseType)) {
@@ -1081,7 +1071,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
             this.entityConfig.skipUiGrouping = context.options.skipUiGrouping;
         }
         if (context.options.clientRootFolder !== undefined) {
-            this.entityConfig.clientRootFolder = context.options.skipUiGrouping ? '' : context.options.clientRootFolder;
+            if (this.entityConfig.skipUiGrouping) {
+                this.warn('Ignoring client-root-folder due to skip-ui-grouping configuration');
+            } else {
+                this.entityConfig.clientRootFolder = context.options.clientRootFolder;
+            }
         }
         dest.isDebugEnabled = context.options.debug;
         dest.experimental = context.options.experimental;
@@ -1111,49 +1105,36 @@ class EntityGenerator extends BaseBlueprintGenerator {
     /**
      * Load an entity configuration file into context.
      */
-    _loadEntityJson() {
+    _loadEntityJson(data) {
         const context = this.context;
-        if (context.fileData.databaseType) {
-            context.databaseType = context.fileData.databaseType;
+        if (data.databaseType) {
+            context.databaseType = data.databaseType;
         }
-        context.relationships = context.fileData.relationships || [];
-        context.fields = context.fileData.fields || [];
-        context.changelogDate = context.fileData.changelogDate;
-        context.dto = context.fileData.dto;
-        context.service = context.fileData.service;
-        context.fluentMethods = context.fileData.fluentMethods;
-        context.clientRootFolder = context.fileData.clientRootFolder;
-        context.pagination = context.fileData.pagination;
-        context.searchEngine = context.fileData.searchEngine === undefined ? context.searchEngine : context.fileData.searchEngine;
-        context.javadoc = context.fileData.javadoc;
-        context.entityTableName = context.fileData.entityTableName;
-        context.jhiPrefix = context.fileData.jhiPrefix || context.jhiPrefix;
-        context.skipCheckLengthOfIdentifier = context.fileData.skipCheckLengthOfIdentifier || context.skipCheckLengthOfIdentifier;
-        context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
-        context.skipClient = context.fileData.skipClient || context.skipClient;
-        context.readOnly = context.fileData.readOnly || false;
-        context.embedded = context.fileData.embedded || false;
+        context.skipUiGrouping = context.skipUiGrouping || data.skipUiGrouping;
+        context.relationships = data.relationships || [];
+        context.fields = data.fields || [];
+        context.changelogDate = data.changelogDate;
+        context.dto = data.dto;
+        context.service = data.service;
+        context.fluentMethods = data.fluentMethods;
+        context.clientRootFolder = data.clientRootFolder;
+        context.pagination = data.pagination;
+        context.javadoc = data.javadoc;
+        context.entityTableName = data.entityTableName;
+        context.jhiPrefix = data.jhiPrefix || context.jhiPrefix;
+        context.skipCheckLengthOfIdentifier = data.skipCheckLengthOfIdentifier || context.skipCheckLengthOfIdentifier;
+        context.skipClient = data.skipClient || context.skipClient;
+        context.readOnly = data.readOnly || false;
+        context.embedded = data.embedded || false;
 
-        this._copyFilteringFlag(context.fileData, context, context);
-        if (context.entityTableName === undefined) {
-            this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
-            context.entityTableName = this.getTableName(context.name);
+        this._copyFilteringFlag(data, context, context);
+
+        if (data.angularJSSuffix !== undefined) {
+            context.entityAngularJSSuffix = data.angularJSSuffix;
         }
-        if (isReservedTableName(context.entityTableName, context.prodDatabaseType) && context.jhiPrefix) {
-            context.entityTableName = `${context.jhiTablePrefix}_${context.entityTableName}`;
-        }
-        context.relationships.forEach(rel => {
-            context.relNameChoices.push({
-                name: `${rel.relationshipName}:${rel.relationshipType}`,
-                value: `${rel.relationshipName}:${rel.relationshipType}`,
-            });
-        });
-        if (context.fileData.angularJSSuffix !== undefined) {
-            context.entityAngularJSSuffix = context.fileData.angularJSSuffix;
-        }
-        context.useMicroserviceJson = context.useMicroserviceJson || context.fileData.microserviceName !== undefined;
+        context.useMicroserviceJson = context.useMicroserviceJson || data.microserviceName !== undefined;
         if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
-            context.microserviceName = context.fileData.microserviceName;
+            context.microserviceName = data.microserviceName;
             if (!context.microserviceName) {
                 throw new Error('Microservice name for the entity is not found. Entity cannot be generated!');
             }
