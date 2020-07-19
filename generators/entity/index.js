@@ -392,22 +392,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.warning(`changelogDate is missing in .jhipster/${entityName}.json, using ${currentDate} as fallback`);
                     context.changelogDate = currentDate;
                 }
-                if (context.dto === undefined) {
-                    this.warning(`dto is missing in .jhipster/${entityName}.json, using no as fallback`);
-                    context.dto = 'no';
-                }
-                if (context.service === undefined) {
-                    this.warning(`service is missing in .jhipster/${entityName}.json, using no as fallback`);
-                    context.service = 'no';
-                }
-                if (context.jpaMetamodelFiltering === undefined) {
-                    this.warning(`jpaMetamodelFiltering is missing in .jhipster/${entityName}.json, using 'no' as fallback`);
-                    context.jpaMetamodelFiltering = false;
-                }
-                if (context.pagination === undefined) {
-                    this.warning(`pagination is missing in .jhipster/${entityName}.json, using no as fallback`);
-                    context.pagination = 'no';
-                }
                 if (!context.clientRootFolder && !context.skipUiGrouping) {
                     // if it is a gateway generating from a microservice, or a microservice
                     if (context.useMicroserviceJson || context.applicationType === 'microservice') {
@@ -1226,7 +1210,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     _validateRelationShip(relationship) {
-        const entityName = context.name;
+        const entityName = this.context.name;
         if (relationship.otherEntityName === undefined) {
             throw new Error(`otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
         }
