@@ -331,7 +331,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     throw new Error(validation);
                 }
 
-                if (['sql', 'mongodb', 'couchbase', 'neo4j'].includes(context.databaseType)) {
+                if (!['sql', 'mongodb', 'couchbase', 'neo4j'].includes(context.databaseType)) {
                     this.entityConfig.pagination = 'no';
                 }
 
