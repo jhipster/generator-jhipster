@@ -2113,9 +2113,7 @@ module.exports = class extends PrivateBase {
         if (options.skipCheckLengthOfIdentifier) {
             this.jhipsterConfig.skipCheckLengthOfIdentifier = true;
         }
-        if (options.prettierJava !== undefined) {
-            this.jhipsterConfig.prettierJava = options.prettierJava;
-        }
+
         if (options.skipCommitHook) {
             this.jhipsterConfig.skipCommitHook = true;
         }
