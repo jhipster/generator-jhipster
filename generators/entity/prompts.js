@@ -246,7 +246,7 @@ function askForRelationsToRemove() {
 function askForTableName() {
     const context = this.context;
     // don't prompt if there are no relationships
-    const entityTableName = this.entityConfig.entityTableName;
+    const entityTableName = context.entityTableName;
     const prodDatabaseType = context.prodDatabaseType;
     const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
     if (
@@ -283,7 +283,7 @@ function askForTableName() {
     return this.prompt(prompts).then(props => {
         /* overwrite the table name for the entity using name obtained from the user */
         if (props.entityTableName !== this.entityConfig.entityTableName) {
-            this.entityConfig.entityTableName = _.snakeCase(props.entityTableName).toLowerCase();
+            context.entityTableName = this.entityConfig.entityTableName = _.snakeCase(props.entityTableName).toLowerCase();
         }
     });
 }

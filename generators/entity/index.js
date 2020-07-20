@@ -312,11 +312,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (!context.useConfigurationFile) {
                     this.log(`\nThe entity ${entityName} is being created.\n`);
                 }
-                if (this.entityConfig.entityTableName === undefined) {
-                    this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
-                    context.entityTableName = this.entityConfig.entityTableName = this.getTableName(context.name);
+
+                context.entityTableName = this.entityConfig.entityTableName;
+                if (context.entityTableName === undefined) {
+                    context.entityTableName = this.getTableName(context.name);
                 }
-                if (isReservedTableName(this.entityConfig.entityTableName, context.prodDatabaseType) && context.jhiTablePrefix) {
+                if (isReservedTableName(context.entityTableName, context.prodDatabaseType) && context.jhiTablePrefix) {
                     context.entityTableName = this.entityConfig.entityTableName = `${context.jhiTablePrefix}_${this.entityConfig.entityTableName}`;
                 }
             },
@@ -356,7 +357,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         return {
             configureEntity() {
                 const context = this.context;
-                const validation = this._validateTableName(this.entityConfig.entityTableName);
+                const validation = this._validateTableName(context.entityTableName);
                 if (validation !== true) {
                     throw new Error(validation);
                 }
@@ -1110,7 +1111,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         context.clientRootFolder = data.clientRootFolder;
         context.pagination = data.pagination;
         context.javadoc = data.javadoc;
-        context.entityTableName = data.entityTableName;
+        context.entityTableName = data.entityTableName || context.entityTableName;
         context.jhiPrefix = data.jhiPrefix || context.jhiPrefix;
         context.skipCheckLengthOfIdentifier = data.skipCheckLengthOfIdentifier || context.skipCheckLengthOfIdentifier;
         context.skipClient = data.skipClient || context.skipClient;
