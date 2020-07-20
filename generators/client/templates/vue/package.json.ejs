@@ -111,7 +111,7 @@ limitations under the License.
     "postcss-loader": "3.0.0",
     "postcss-url": "8.0.0",
     "prettier": "2.0.5",
-    <%_ if (!skipServer && prettierJava) { _%>
+    <%_ if (!skipServer) { _%>
     "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
     <%_ } _%>
 <%_ if (protractorTests) { _%>

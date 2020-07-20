@@ -139,7 +139,7 @@ limitations under the License.
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "postcss-loader": "3.0.0",
     "prettier": "<%= PRETTIER_VERSION %>",
-    <%_ if (!skipServer && prettierJava) { _%>
+    <%_ if (!skipServer) { _%>
     "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
     <%_ } _%>
     <%_ if (protractorTests) { _%>
