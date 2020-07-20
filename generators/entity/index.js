@@ -282,6 +282,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (!context.useConfigurationFile) {
                     this.log(`\nThe entity ${entityName} is being created.\n`);
                 }
+                if (this.entityConfig.entityTableName === undefined) {
+                    this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
+                    context.entityTableName = this.entityConfig.entityTableName = this.getTableName(context.name);
+                }
+                if (isReservedTableName(this.entityConfig.entityTableName, context.prodDatabaseType) && context.jhiTablePrefix) {
+                    context.entityTableName = this.entityConfig.entityTableName = `${context.jhiTablePrefix}_${this.entityConfig.entityTableName}`;
+                }
             },
         };
     }
@@ -319,14 +326,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
         return {
             configureEntity() {
                 const context = this.context;
-                if (this.entityConfig.entityTableName === undefined) {
-                    this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
-                    context.entityTableName = this.entityConfig.entityTableName = this.getTableName(context.name);
-                }
-                if (isReservedTableName(this.entityConfig.entityTableName, context.prodDatabaseType) && context.jhiTablePrefix) {
-                    context.entityTableName = this.entityConfig.entityTableName = `${context.jhiTablePrefix}_${this.entityConfig.entityTableName}`;
-                }
-
                 const validation = this._validateTableName(this.entityConfig.entityTableName);
                 if (validation !== true) {
                     throw new Error(validation);

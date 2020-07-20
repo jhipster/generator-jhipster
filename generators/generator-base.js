@@ -2138,7 +2138,7 @@ module.exports = class extends PrivateBase {
      * @param {any} config - config to load config from
      * @param {any} dest - destination context to use default is context
      */
-    loadServerConfig(defaults, dest = this, config = _.defaults({}, defaults, defaultConfig)) {
+    loadServerConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
         dest.packageName = config.packageName;
         dest.packageFolder = config.packageFolder;
         dest.serverPort = config.serverPort;
