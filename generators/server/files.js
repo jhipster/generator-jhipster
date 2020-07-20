@@ -54,6 +54,7 @@ const serverFiles = {
             path: DOCKER_DIR,
             templates: [
                 'app.yml',
+                'jhipster-control-center.yml',
                 'sonar.yml',
                 'monitoring.yml',
                 'prometheus/prometheus.yml',

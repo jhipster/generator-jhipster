@@ -95,6 +95,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.PRETTIER_JAVA_VERSION = constants.PRETTIER_JAVA_VERSION;
 
                 this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
+                this.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
                 this.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;
                 this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
                 this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
