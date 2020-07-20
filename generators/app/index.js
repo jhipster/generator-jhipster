@@ -197,12 +197,6 @@ module.exports = class extends BaseBlueprintGenerator {
             type: String,
         });
 
-        // This adds support for a `--prettier-java` flag
-        this.option('prettier-java', {
-            desc: `Launch prettier-java pre-formatting at generation (default: ${appDefaultConfig.prettierJava})`,
-            type: Boolean,
-        });
-
         // Just constructing help, stop here
         if (this.options.help) {
             return;
