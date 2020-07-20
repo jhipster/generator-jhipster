@@ -65,7 +65,7 @@ describe('UserManagementEdit Component', () => {
     });
   });
 
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (databaseType !== 'cassandra') { _%>
   describe('initAuthorities', () => {
     it('Should load authorities', async () => {
       // GIVEN
