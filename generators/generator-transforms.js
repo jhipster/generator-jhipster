@@ -41,7 +41,8 @@ const prettierTransform = function (defaultOptions) {
                     const data = prettier.format(str, options);
                     file.contents = Buffer.from(data);
                 } catch (error) {
-                    throw new Error(`Error parsing file ${file.relative}: ${error.message}`);
+                    callback(new Error(`Error parsing file ${file.relative}: ${error}`));
+                    return;
                 }
             }
             callback(null, file);
