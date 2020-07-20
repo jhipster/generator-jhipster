@@ -17,5 +17,5 @@
  limitations under the License.
 -%>
 module.exports = {
-  '{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}': ['prettier --write', 'git add']
+  '{,src/**/<%= !skipClient ? ',webpack/' : '' %>}*.{<%= getPrettierExtensions() %>}': ['prettier --write', 'git add']
 };
