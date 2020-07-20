@@ -134,7 +134,41 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
         const entityExisted = this.options.entityExisted !== undefined ? this.options.entityExisted : this.entityStorage.existed;
 
-        this.context = { name, entityExisted };
+        this.context = {
+            name,
+            entityExisted,
+            haveFieldWithJavadoc: false,
+            enums: [],
+            existingEnum: false,
+
+            // these variable hold field and relationship names for question options during update
+            fieldNameChoices: [],
+
+            fieldsContainDate: false,
+            fieldsContainInstant: false,
+            fieldsContainUUID: false,
+            fieldsContainZonedDateTime: false,
+            fieldsContainDuration: false,
+            fieldsContainLocalDate: false,
+            fieldsContainBigDecimal: false,
+            fieldsContainBlob: false,
+            fieldsContainImageBlob: false,
+            fieldsContainTextBlob: false,
+            fieldsContainBlobOrImage: false,
+            validation: false,
+            fieldsContainOwnerManyToMany: false,
+            fieldsContainNoOwnerOneToOne: false,
+            fieldsContainOwnerOneToOne: false,
+            fieldsContainOneToMany: false,
+            fieldsContainManyToOne: false,
+            fieldsContainEmbedded: false,
+            fieldsIsReactAvField: false,
+
+            blobFields: [],
+            differentTypes: [],
+            differentRelationships: {},
+            i18nToLoad: [],
+        };
 
         this._setupEntityOptions(this, this, this.context);
         this.registerPrettierTransform();
@@ -271,16 +305,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (context.configurationFileExists) {
                     this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
                 }
-
-                // Structure for templates.
-                _.defaults(context, {
-                    haveFieldWithJavadoc: false,
-                    enums: [],
-                    existingEnum: false,
-
-                    // these variable hold field and relationship names for question options during update
-                    fieldNameChoices: [],
-                });
 
                 // Structure for prompts.
                 this.entityStorage.defaults({ fields: [], relationships: [] });
@@ -424,7 +448,17 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context.changelogDate = this.entityConfig.changelogDate = currentDate;
                 }
             },
+        };
+    }
 
+    get configuring() {
+        if (useBlueprints) return;
+        return this._configuring();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return {
             loadInMemoryData() {
                 const context = this.context;
                 const entityName = context.name;
@@ -435,63 +469,42 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.entityClass = context.entityNameCapitalized;
                 context.entityClassPlural = pluralize(context.entityClass);
 
-                const fileData = this.context.fileData || {};
                 // Used for i18n
-                context.entityClassHumanized = fileData.entityClassHumanized || _.startCase(context.entityNameCapitalized);
-                context.entityClassPluralHumanized = fileData.entityClassPluralHumanized || _.startCase(context.entityClassPlural);
+                context.entityClassHumanized = this.entityConfig.entityClassHumanized || _.startCase(context.entityNameCapitalized);
+                context.entityClassPluralHumanized = this.entityConfig.entityClassPluralHumanized || _.startCase(context.entityClassPlural);
                 // Implement i18n variant ex: 'male', 'female' when applied
-                context.entityI18nVariant = fileData.entityI18nVariant || 'default';
+                context.entityI18nVariant = this.entityConfig.entityI18nVariant || 'default';
 
                 context.entityInstance = _.lowerFirst(entityName);
                 context.entityInstancePlural = pluralize(context.entityInstance);
-                context.entityApiUrl = entityNamePluralizedAndSpinalCased;
+
                 context.entityFileName = _.kebabCase(context.entityNameCapitalized + _.upperFirst(context.entityAngularJSSuffix));
                 context.entityFolderName = this.getEntityFolderName(context.clientRootFolder, context.entityFileName);
                 context.entityModelFileName = context.entityFolderName;
                 context.entityParentPathAddition = this.getEntityParentPathAddition(context.clientRootFolder);
                 context.entityPluralFileName = entityNamePluralizedAndSpinalCased + context.entityAngularJSSuffix;
                 context.entityServiceFileName = context.entityFileName;
+
                 context.entityAngularName = context.entityClass + this.upperFirstCamelCase(context.entityAngularJSSuffix);
                 context.entityReactName = context.entityClass + this.upperFirstCamelCase(context.entityAngularJSSuffix);
+
+                context.entityApiUrl = entityNamePluralizedAndSpinalCased;
                 context.entityStateName = _.kebabCase(context.entityAngularName);
                 context.entityUrl = context.entityStateName;
+
                 context.entityTranslationKey = context.clientRootFolder
                     ? _.camelCase(`${context.clientRootFolder}-${context.entityInstance}`)
                     : context.entityInstance;
                 context.entityTranslationKeyMenu = _.camelCase(
                     context.clientRootFolder ? `${context.clientRootFolder}-${context.entityStateName}` : context.entityStateName
                 );
+
                 context.reactiveRepositories =
                     context.reactive && ['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(context.databaseType);
 
-                context.fieldsContainDate = false;
-                context.fieldsContainInstant = false;
-                context.fieldsContainUUID = false;
-                context.fieldsContainZonedDateTime = false;
-                context.fieldsContainDuration = false;
-                context.fieldsContainLocalDate = false;
-                context.fieldsContainBigDecimal = false;
-                context.fieldsContainBlob = false;
-                context.fieldsContainImageBlob = false;
-                context.fieldsContainTextBlob = false;
-                context.fieldsContainBlobOrImage = false;
-                context.validation = false;
-                context.fieldsContainOwnerManyToMany = false;
-                context.fieldsContainNoOwnerOneToOne = false;
-                context.fieldsContainOwnerOneToOne = false;
-                context.fieldsContainOneToMany = false;
-                context.fieldsContainManyToOne = false;
-                context.fieldsContainEmbedded = false;
-                context.fieldsIsReactAvField = false;
-                context.blobFields = [];
-                context.differentTypes = [context.entityClass];
-                if (!context.relationships) {
-                    context.relationships = [];
-                }
-                context.differentRelationships = {};
-                context.i18nToLoad = [context.entityInstance];
+                context.differentTypes.push(context.entityClass);
+                context.i18nToLoad.push(context.entityInstance);
                 context.i18nKeyPrefix = `${context.angularAppName}.${context.entityTranslationKey}`;
-                context.haveFieldWithJavadoc = false;
 
                 // Load in-memory data for fields
                 context.fields.forEach(field => {
@@ -835,9 +848,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
         };
     }
 
-    get configuring() {
+    get default() {
         if (useBlueprints) return;
-        return this._configuring();
+        return this._default();
     }
 
     // Public API method used by the getter and also by Blueprints
