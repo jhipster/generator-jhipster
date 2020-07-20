@@ -291,7 +291,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 }
             },
 
-            setupEntityConfig() {
+            bootstrapConfig() {
                 const context = this.context;
                 const entityName = context.name;
                 if (['microservice', 'gateway'].includes(this.jhipsterConfig.applicationType)) {
@@ -312,14 +312,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (!context.useConfigurationFile) {
                     this.log(`\nThe entity ${entityName} is being created.\n`);
                 }
-
-                context.entityTableName = this.entityConfig.entityTableName;
-                if (context.entityTableName === undefined) {
-                    context.entityTableName = this.getTableName(context.name);
-                }
-                if (isReservedTableName(context.entityTableName, context.prodDatabaseType) && context.jhiTablePrefix) {
-                    context.entityTableName = this.entityConfig.entityTableName = `${context.jhiTablePrefix}_${this.entityConfig.entityTableName}`;
-                }
             },
         };
     }
@@ -338,7 +330,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
             askForFieldsToRemove: prompts.askForFieldsToRemove,
             askForRelationships: prompts.askForRelationships,
             askForRelationsToRemove: prompts.askForRelationsToRemove,
-            askForTableName: prompts.askForTableName,
             askForService: prompts.askForService,
             askForDTO: prompts.askForDTO,
             askForFiltering: prompts.askForFiltering,
@@ -355,6 +346,23 @@ class EntityGenerator extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _configuring() {
         return {
+            configureEntityTable() {
+                const context = this.context;
+                context.entityTableName = this.entityConfig.entityTableName;
+                if (context.entityTableName === undefined) {
+                    context.entityTableName = this.getTableName(context.name);
+                }
+                if (isReservedTableName(context.entityTableName, context.prodDatabaseType) && context.jhiTablePrefix) {
+                    context.entityTableName = this.entityConfig.entityTableName = `${context.jhiTablePrefix}_${this.entityConfig.entityTableName}`;
+                }
+            },
+
+            /*
+             * Postpone entity table name prompt to wait entity table to be configured.
+             * It should be asked only when entity table name isn't valid.
+             */
+            askForTableName: prompts.askForTableName,
+
             configureEntity() {
                 const context = this.context;
                 const validation = this._validateTableName(context.entityTableName);
