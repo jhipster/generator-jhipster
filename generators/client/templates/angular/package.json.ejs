@@ -167,7 +167,7 @@
     "yarn": ">=1.19.0"<% } %>
   },
   "scripts": {
-    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,css,scss,yml<%= !skipServer && prettierJava ? ',java' : '' %>}\"",
+    "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "ngc": "ngc -p tsconfig.app.json",

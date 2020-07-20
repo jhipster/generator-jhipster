@@ -191,7 +191,7 @@ limitations under the License.
     "yarn": ">=1.19.0"<% } %>
   },
   "scripts": {
-    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,tsx,css,scss,yml<%= !skipServer && prettierJava ? ',java' : '' %>}\"",
+    "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "cleanup": "rimraf <%= DIST_DIR %>",
