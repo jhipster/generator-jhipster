@@ -189,9 +189,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                                 ? ''
                                 : this.entityConfig.microserviceName;
                         }
-                        if (this.entityConfig.databaseType === undefined) {
-                            this.entityConfig.databaseType = context.databaseType;
-                        }
                     }
                 }
             },
@@ -263,6 +260,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
             setupEntityConfig() {
                 const context = this.context;
                 const entityName = context.name;
+                if (['microservice', 'gateway'].includes(this.jhipsterConfig.applicationType)) {
+                    if (this.entityConfig.databaseType === undefined) {
+                        this.entityConfig.databaseType = context.databaseType;
+                    }
+                }
                 context.filename = this.destinationPath(context.filename);
                 context.configurationFileExists = this.fs.exists(context.filename);
                 context.useConfigurationFile = context.configurationFileExists || context.useConfigurationFile;
@@ -338,8 +340,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (!['sql', 'mongodb', 'couchbase', 'neo4j'].includes(context.databaseType)) {
                     this.entityConfig.pagination = 'no';
                 }
-
-                this.entityStorage.defaults(entityDefaultConfig);
             },
 
             configureFields() {
@@ -415,6 +415,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         relationship.otherEntityField = 'id';
                     }
                 });
+                this.entityConfig.relationships = relationships;
 
                 // Validate root entity json content
                 if (this.entityConfig.changelogDate === undefined && ['sql', 'cassandra', 'couchbase'].includes(context.databaseType)) {
@@ -422,33 +423,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.warning(`changelogDate is missing in .jhipster/${entityName}.json, using ${currentDate} as fallback`);
                     context.changelogDate = this.entityConfig.changelogDate = currentDate;
                 }
-                this.entityConfig.relationships = relationships;
-            },
-
-            writeEntityJson() {
-                const context = this.context;
-                if (context.configurationFileExists && context.updateEntity === 'regenerate') {
-                    return; // do not update if regenerating entity
-                }
-
-                // Keep existing config by cloning fileData
-                const storageData = this.context.fileData ? { ...this.context.fileData } : {};
-                this._copyFilteringFlag(context, storageData, context);
-                storageData.javadoc = context.javadoc;
-                if (context.entityAngularJSSuffix) {
-                    storageData.angularJSSuffix = context.entityAngularJSSuffix;
-                }
-
-                if (this.storageData) {
-                    // Override storageData configs with existing this.storageData
-                    // So that blueprints can create it and override fields.
-                    this.storageData = { ...storageData, ...this.storageData };
-                } else {
-                    this.storageData = storageData;
-                }
-
-                this.entityStorage.set(this.storageData);
-                this.data = this.storageData;
             },
 
             loadInMemoryData() {
@@ -456,12 +430,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const entityName = context.name;
                 const entityNamePluralizedAndSpinalCased = _.kebabCase(pluralize(entityName));
 
-                this._loadEntityJson(this.entityStorage.getAll());
+                this._loadEntityJson(_.defaults({}, this.entityStorage.getAll(), entityDefaultConfig));
 
                 context.entityClass = context.entityNameCapitalized;
                 context.entityClassPlural = pluralize(context.entityClass);
 
-                const fileData = this.data || this.context.fileData || {};
+                const fileData = this.context.fileData || {};
                 // Used for i18n
                 context.entityClassHumanized = fileData.entityClassHumanized || _.startCase(context.entityNameCapitalized);
                 context.entityClassPluralHumanized = fileData.entityClassPluralHumanized || _.startCase(context.entityClassPlural);
@@ -1129,12 +1103,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
         context.skipClient = data.skipClient || context.skipClient;
         context.readOnly = data.readOnly || false;
         context.embedded = data.embedded || false;
+        context.entityAngularJSSuffix = data.angularJSSuffix;
 
         this._copyFilteringFlag(data, context, context);
 
-        if (data.angularJSSuffix !== undefined) {
-            context.entityAngularJSSuffix = data.angularJSSuffix;
-        }
         context.useMicroserviceJson = context.useMicroserviceJson || data.microserviceName !== undefined;
         if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
             context.microserviceName = data.microserviceName;

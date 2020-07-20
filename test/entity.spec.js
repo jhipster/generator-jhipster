@@ -543,7 +543,7 @@ describe('JHipster generator for entity', () => {
                 });
             });
 
-            describe('with mongodb database', () => {
+            describe('with mongodb microservice', () => {
                 before(done => {
                     helpers
                         .run(require.resolve('../generators/entity'))
