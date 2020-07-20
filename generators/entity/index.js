@@ -365,6 +365,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (!['sql', 'mongodb', 'couchbase', 'neo4j'].includes(context.databaseType)) {
                     this.entityConfig.pagination = 'no';
                 }
+
+                if (this.entityConfig.jpaMetamodelFiltering && (context.databaseType !== 'sql' || context.service === 'no')) {
+                    this.warning('Not compatible with jpaMetamodelFiltering, disabling');
+                    this.entityConfig.jpaMetamodelFiltering = false;
+                }
             },
 
             configureFields() {
@@ -781,7 +786,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                     }
                     if (otherEntityData) {
-                        this._copyFilteringFlag(otherEntityData, relationship, { ...otherEntityData, databaseType: context.databaseType });
+                        if (relationship.jpaMetamodelFiltering === undefined) {
+                            relationship.jpaMetamodelFiltering = otherEntityData.jpaMetamodelFiltering;
+                        }
                     }
                     // Load in-memory data for root
                     if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) {
@@ -1079,21 +1086,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     /**
-     * Copy Filtering Flag
-     *
-     * @param {any} from - from
-     * @param {any} to - to
-     * @param {any} context - generator context
-     */
-    _copyFilteringFlag(from, to, context = this) {
-        if (context.databaseType === 'sql' && context.service !== 'no') {
-            to.jpaMetamodelFiltering = from.jpaMetamodelFiltering;
-        } else {
-            to.jpaMetamodelFiltering = false;
-        }
-    }
-
-    /**
      * Load an entity configuration file into context.
      */
     _loadEntityJson(data) {
@@ -1118,8 +1110,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         context.readOnly = data.readOnly || false;
         context.embedded = data.embedded || false;
         context.entityAngularJSSuffix = data.angularJSSuffix;
-
-        this._copyFilteringFlag(data, context, context);
+        context.jpaMetamodelFiltering = data.jpaMetamodelFiltering;
 
         context.useMicroserviceJson = context.useMicroserviceJson || data.microserviceName !== undefined;
         if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
