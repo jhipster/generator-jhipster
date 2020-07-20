@@ -1080,9 +1080,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
         dest.entityNameCapitalized = _.upperFirst(dest.name);
         dest.entityTableName = generator.getTableName(context.options.tableName || dest.name);
-        if (this.entityConfig.angularJSSuffix && !this.entityConfig.angularJSSuffix.startsWith('-')) {
-            this.entityConfig.angularJSSuffix = `-${this.entityConfig.angularJSSuffix}`;
-        }
     }
 
     /**
@@ -1109,8 +1106,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
         context.skipClient = data.skipClient || context.skipClient;
         context.readOnly = data.readOnly || false;
         context.embedded = data.embedded || false;
-        context.entityAngularJSSuffix = data.angularJSSuffix;
         context.jpaMetamodelFiltering = data.jpaMetamodelFiltering;
+
+        context.entityAngularJSSuffix = data.angularJSSuffix;
+        if (context.entityAngularJSSuffix && !context.entityAngularJSSuffix.startsWith('-')) {
+            context.entityAngularJSSuffix = `-${context.entityAngularJSSuffix}`;
+        }
 
         context.useMicroserviceJson = context.useMicroserviceJson || data.microserviceName !== undefined;
         if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
