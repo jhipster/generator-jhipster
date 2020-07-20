@@ -374,7 +374,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.entityConfig.pagination = 'no';
                 }
 
-                if (this.entityConfig.jpaMetamodelFiltering && (context.databaseType !== 'sql' || context.service === 'no')) {
+                if (this.entityConfig.jpaMetamodelFiltering && (context.databaseType !== 'sql' || this.entityConfig.service === 'no')) {
                     this.warning('Not compatible with jpaMetamodelFiltering, disabling');
                     this.entityConfig.jpaMetamodelFiltering = false;
                 }
