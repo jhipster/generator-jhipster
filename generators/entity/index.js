@@ -184,10 +184,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             this.debug('Error:', err);
                             throw new Error('\nThe entity configuration file could not be read!\n');
                         }
-                        if (!this.entityConfig.clientRootFolder === undefined) {
+                        if (this.entityConfig.clientRootFolder === undefined) {
                             context.clientRootFolder = this.entityConfig.clientRootFolder = context.skipUiGrouping
                                 ? ''
                                 : this.entityConfig.microserviceName;
+                        }
+                        if (this.entityConfig.databaseType === undefined) {
+                            this.entityConfig.databaseType = context.databaseType;
                         }
                     }
                 }
@@ -218,6 +221,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
             loadEntitySpecificOptions() {
                 this.context.skipClient = this.context.skipClient || this.entityConfig.skipClient;
+                this.context.databaseType = this.entityConfig.databaseType || this.context.databaseType;
             },
 
             setupSharedConfig() {
@@ -277,7 +281,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 });
 
                 // Structure for prompts.
-                this.entityStorage.defaults({ fields: [], relationships: [], databaseType: context.databaseType });
+                this.entityStorage.defaults({ fields: [], relationships: [] });
 
                 if (!context.useConfigurationFile) {
                     this.log(`\nThe entity ${entityName} is being created.\n`);
