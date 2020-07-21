@@ -151,7 +151,6 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 | [![Vue Gradle NoSQL][github-vue-gradle-nosql]][github-actions]         |
 | [![Elasticsearch][github-elasticsearch]][github-actions]               |
 | [![Monolith OAuth2][github-monolith-oauth2]][github-actions]           |
-| [![Yarn][github-yarn]][github-actions]                                 |
 | [![No Database][github-no-database]][github-actions]                   |
 | [![Microservices JWT][github-ms-jwt]][github-actions]                  |
 | [![Microservices OAuth2][github-ms-oauth2]][github-actions]            |
@@ -179,7 +178,6 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [github-vue-gradle-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Gradle%20NoSQL/badge.svg
 [github-elasticsearch]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Elasticsearch/badge.svg
 [github-monolith-oauth2]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Monolith%20OAuth2/badge.svg
-[github-yarn]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Yarn/badge.svg
 [github-no-database]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/No%20Database/badge.svg
 [github-ms-jwt]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Microservices%20JWT/badge.svg
 [github-ms-oauth2]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Microservices%20OAuth2/badge.svg
