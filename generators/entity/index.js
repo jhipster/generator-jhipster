@@ -413,7 +413,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 // Validate entity json relationship content
                 const relationships = this.entityConfig.relationships;
                 relationships.forEach(relationship => {
-                    this._validateRelationShip(relationship);
+                    this._validateRelationship(relationship);
 
                     if (relationship.relationshipName === undefined) {
                         relationship.relationshipName = relationship.otherEntityName;
@@ -422,21 +422,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                                 relationship
                             )}, using ${relationship.otherEntityName} as fallback`
                         );
-                    }
-
-                    if (
-                        relationship.otherEntityRelationshipName === undefined &&
-                        (relationship.relationshipType === undefined) === false &&
-                        relationship.relationshipType !== ''
-                    ) {
-                        relationship.otherEntityRelationshipName = _.lowerFirst(entityName);
-                        if (relationship.otherEntityName !== 'user') {
-                            this.warning(
-                                `otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${stringify(
-                                    relationship
-                                )}, using ${_.lowerFirst(entityName)} as fallback`
-                            );
-                        }
                     }
 
                     if (
@@ -659,7 +644,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
 
                     if (otherEntityName === 'user') {
-                        relationship.otherEntityTableName = `${jhiTablePrefix}_user`;
                         hasUserField = true;
                     }
 
@@ -670,36 +654,66 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                     // Look for fields at the other other side of the relationship
                     if (otherEntityData.relationships) {
-                        if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'many-to-many') {
-                            otherEntityData.relationships.forEach(otherRelationship => {
-                                if (_.upperFirst(otherRelationship.otherEntityName) !== entityName) {
-                                    return;
+                        let otherRelationship;
+                        if (relationship.relationshipType === 'many-to-one' || !relationship.ownerSide) {
+                            otherRelationship = otherEntityData.relationships.find(otherSideRelationship => {
+                                if (_.upperFirst(otherSideRelationship.otherEntityName) !== entityName) {
+                                    return false;
                                 }
-                                // otherEntityRelationshipName can be missing
-                                if (!otherRelationship.otherEntityRelationshipName) {
+                                if (!otherSideRelationship.otherEntityRelationshipName) {
                                     this.warning(
                                         `Cannot compare relationship reference: otherEntityRelationshipName is missing in .jhipster/${otherEntityName}.json for relationship ${stringify(
-                                            otherRelationship
+                                            otherSideRelationship
                                         )}`
                                     );
-                                    return;
+                                    return false;
                                 }
-                                if (otherRelationship.otherEntityRelationshipName !== relationship.relationshipName) {
-                                    return;
+                                return otherSideRelationship.otherEntityRelationshipName === relationship.relationshipName;
+                            });
+                        } else {
+                            otherRelationship = otherEntityData.relationships.find(otherSideRelationship => {
+                                if (_.upperFirst(otherSideRelationship.otherEntityName) !== entityName) {
+                                    return false;
                                 }
-                                if (
-                                    (relationship.relationshipType === 'many-to-one' &&
-                                        otherRelationship.relationshipType === 'one-to-many') ||
-                                    (relationship.relationshipType === 'many-to-many' &&
-                                        otherRelationship.relationshipType === 'many-to-many')
-                                ) {
-                                    _.defaults(relationship, {
-                                        otherEntityRelationshipName: otherRelationship.relationshipName,
-                                        otherEntityRelationshipNamePlural: otherRelationship.relationshipNamePlural,
-                                        otherEntityRelationshipNameCapitalized: otherRelationship.relationshipNameCapitalized,
-                                        otherEntityRelationshipNameCapitalizedPlural: relationship.relationshipNameCapitalizedPlural,
-                                    });
+                                if (!relationship.otherEntityRelationshipName) {
+                                    this.warning(
+                                        `Cannot compare relationship reference: otherEntityRelationshipName is missing in .jhipster/${otherEntityName}.json for relationship ${stringify(
+                                            otherSideRelationship
+                                        )}`
+                                    );
+                                    return false;
                                 }
+                                return relationship.otherEntityRelationshipName === otherSideRelationship.relationshipName;
+                            });
+                        }
+                        if (otherRelationship) {
+                            if (
+                                relationship.otherEntityRelationshipName &&
+                                relationship.otherEntityRelationshipName !== otherRelationship.relationshipName
+                            ) {
+                                throw new Error(
+                                    `Relationship name is not synchronized ${stringify(relationship)} with ${stringify(otherRelationship)}`
+                                );
+                            }
+                            if (
+                                !(relationship.relationshipType === 'one-to-one' && otherRelationship.relationshipType === 'one-to-one') &&
+                                !(
+                                    relationship.relationshipType === 'many-to-one' && otherRelationship.relationshipType === 'one-to-many'
+                                ) &&
+                                !(
+                                    relationship.relationshipType === 'one-to-many' && otherRelationship.relationshipType === 'many-to-one'
+                                ) &&
+                                !(relationship.relationshipType === 'many-to-many' && otherRelationship.relationshipType === 'many-to-many')
+                            ) {
+                                throw new Error(
+                                    `Relationship type is not synchronized ${stringify(relationship)} with ${stringify(otherRelationship)}`
+                                );
+                            }
+                            _.defaults(relationship, {
+                                otherEntityRelationshipName: otherRelationship.relationshipName,
+                                otherEntityRelationshipNamePlural: otherRelationship.relationshipNamePlural,
+                                otherEntityRelationshipNameCapitalized: otherRelationship.relationshipNameCapitalized,
+                                otherEntityRelationshipNameCapitalizedPlural: relationship.relationshipNameCapitalizedPlural,
                             });
                         }
                     }
@@ -723,7 +737,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         otherEntityNamePlural: pluralize(otherEntityName),
                         otherEntityNameCapitalized: _.upperFirst(otherEntityName),
                         otherEntityFieldCapitalized: _.upperFirst(relationship.otherEntityField),
-                        otherEntityTableName: otherEntityData.entityTableName || this.getTableName(otherEntityName),
+                        otherEntityTableName:
+                            otherEntityData.entityTableName || otherEntityName === 'user'
+                                ? `${jhiTablePrefix}_user`
+                                : this.getTableName(otherEntityName),
                     });
 
                     _.defaults(relationship, {
@@ -735,8 +752,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         otherEntityNameCapitalizedPlural: pluralize(relationship.otherEntityNameCapitalized),
                     });
 
-                    if (context.dto && context.dto === 'mapstruct') {
-                        if ((!otherEntityData.dto || otherEntityData.dto !== 'mapstruct') && otherEntityName !== 'user') {
+                    if (context.dto === 'mapstruct') {
+                        if (otherEntityData.dto !== 'mapstruct' && otherEntityName !== 'user') {
                             this.warning(
                                 `This entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
                             );
@@ -758,14 +775,17 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                     }
 
-                    if (relationship.otherEntityStateName === undefined) {
-                        relationship.otherEntityStateName = _.kebabCase(relationship.otherEntityAngularName);
-                    }
+                    _.defaults(relationship, {
+                        otherEntityStateName: _.kebabCase(relationship.otherEntityAngularName),
+                        jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering,
+                    });
+
                     if (relationship.otherEntityNameCapitalized !== 'User') {
-                        relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
-                        if (relationship.otherEntityFolderName === undefined) {
-                            relationship.otherEntityFolderName = _.kebabCase(relationship.otherEntityAngularName);
-                        }
+                        _.defaults(relationship, {
+                            otherEntityFileName: _.kebabCase(relationship.otherEntityAngularName),
+                            otherEntityFolderName: _.kebabCase(relationship.otherEntityAngularName),
+                        });
+
                         if (
                             context.skipUiGrouping ||
                             otherEntityData.clientRootFolder === '' ||
@@ -793,11 +813,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             relationship.otherEntityPath = relationship.otherEntityFolderName;
                         }
                     }
-                    if (otherEntityData) {
-                        if (relationship.jpaMetamodelFiltering === undefined) {
-                            relationship.jpaMetamodelFiltering = otherEntityData.jpaMetamodelFiltering;
-                        }
-                    }
+
                     // Load in-memory data for root
                     if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) {
                         context.fieldsContainOwnerManyToMany = true;
@@ -1179,7 +1195,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         }
     }
 
-    _validateRelationShip(relationship) {
+    _validateRelationship(relationship) {
         const entityName = this.context.name;
         if (relationship.otherEntityName === undefined) {
             throw new Error(`otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
