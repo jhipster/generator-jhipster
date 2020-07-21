@@ -51,7 +51,7 @@
         <run.addResources>false</run.addResources>
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase />
-        <profile.swagger />
+        <profile.api-docs />
 
         <!-- Dependency versions -->
         <jhipster-dependencies.version>2.0.8</jhipster-dependencies.version>
@@ -167,6 +167,10 @@
             <artifactId>json-path</artifactId>
             <scope>test</scope>
             <!-- parent POM declares this dependency in default (compile) scope -->
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-oas</artifactId>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
@@ -628,9 +632,9 @@
             </properties>
         </profile>
         <profile>
-            <id>swagger</id>
+            <id>api-docs</id>
             <properties>
-                <profile.swagger>,swagger</profile.swagger>
+                <profile.api-docs>,api-docs</profile.api-docs>
             </properties>
         </profile>
         <profile>
@@ -841,7 +845,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>prod${profile.swagger}${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>prod${profile.api-docs}${profile.no-liquibase}</spring.profiles.active>
             </properties>
         </profile>
         <profile>
@@ -939,7 +943,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev,swagger</spring.profiles.active>
+                <spring.profiles.active>dev,api-docs</spring.profiles.active>
             </properties>
         </profile>
         <profile>

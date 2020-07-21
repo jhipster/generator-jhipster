@@ -597,17 +597,6 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                generator.reactive && (generator.applicationType === 'gateway' || generator.applicationType === 'monolith'),
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/config/apidoc/SwaggerConfiguration.java',
-                    renameTo: generator => `${generator.javaDir}config/apidoc/SwaggerConfiguration.java`,
-                },
-            ],
-        },
-        {
-            condition: generator =>
                 generator.applicationType === 'gateway' && generator.serviceDiscoveryType && generator.cacheProvider === 'hazelcast',
             path: SERVER_MAIN_SRC_DIR,
             templates: [

@@ -28,15 +28,6 @@
     <name><%= humanizedBaseName %></name>
 
     <repositories>
-        <%_ if (reactive && (applicationType === 'gateway' || applicationType === 'monolith')) { _%>
-        <repository>
-            <id>springfox-snapshots</id>
-            <url>https://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <%_ } _%>
         <%_ if (reactive) { _%>
         <repository>
             <id>spring-milestone</id>
@@ -87,7 +78,7 @@
 <%_ if (databaseType === 'sql') { _%>
         <profile.no-liquibase />
 <%_ } _%>
-        <profile.swagger />
+        <profile.api-docs />
         <profile.tls />
 
         <!-- Dependency versions -->
@@ -148,9 +139,6 @@
 <%_ if (cacheProvider === 'caffeine') { _%>
         <caffeine.version>2.8.4</caffeine.version>
         <typesafe.version>1.4.0</typesafe.version>
-<%_ } _%>
-<%_ if (reactive && (applicationType === 'gateway' || applicationType === 'monolith')) { _%>
-        <springfox.version>3.0.0-SNAPSHOT</springfox.version>
 <%_ } _%>
         <!-- Plugin versions -->
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
@@ -333,7 +321,10 @@
             <scope>test</scope>
         </dependency>
 <%_ } _%>
-<%_ if (!reactive) { _%>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-oas</artifactId>
+        </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
@@ -342,23 +333,6 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-bean-validators</artifactId>
         </dependency>
-<%_ } else if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${springfox.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-spring-webflux</artifactId>
-            <version>${springfox.version}</version>
-        </dependency>
-<%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
         <dependency>
             <groupId>com.zaxxer</groupId>
@@ -1564,9 +1538,9 @@
         </profile>
 <%_ } _%>
         <profile>
-            <id>swagger</id>
+            <id>api-docs</id>
             <properties>
-                <profile.swagger>,swagger</profile.swagger>
+                <profile.api-docs>,api-docs</profile.api-docs>
             </properties>
         </profile>
         <profile>
@@ -1824,7 +1798,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>prod${profile.swagger}${profile.tls}<%_ if (databaseType === 'sql') { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
+                <spring.profiles.active>prod${profile.api-docs}${profile.tls}<%_ if (databaseType === 'sql') { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
             </properties>
         </profile>
         <profile>

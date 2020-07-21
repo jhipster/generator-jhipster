@@ -200,7 +200,7 @@ describe('Administration reducer tests', () => {
     });
 
     it('should update state according to a successful fetch env request', () => {
-      const payload = { data: { activeProfiles: ['swagger', 'dev'] } };
+      const payload = { data: { activeProfiles: ['api-docs', 'dev'] } };
       const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_ENV), payload });
 
       expect(toTest).toMatchObject({
