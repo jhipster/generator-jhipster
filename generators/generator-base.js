@@ -1729,8 +1729,6 @@ module.exports = class extends PrivateBase {
                         );
                         if (this.useNpm) {
                             this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
-                        } else {
-                            this.log(chalk.yellow(`  Run ${chalk.magenta(`yarn global upgrade ${GENERATOR_JHIPSTER}`)} to update.\n`));
                         }
                         this.log(chalk.yellow(' ______________________________________________________________________________\n'));
                     }
@@ -2085,9 +2083,8 @@ module.exports = class extends PrivateBase {
             this.jhipsterConfig.testFrameworks = options.testFrameworks;
         }
 
-        this.configOptions.useYarn = this.options.yarn || this.jhipsterConfig.clientPackageManager === 'yarn';
-        this.configOptions.useNpm = !this.configOptions.useYarn;
-        this.jhipsterConfig.clientPackageManager = this.configOptions.useYarn ? 'yarn' : 'npm';
+        this.configOptions.useNpm = this.options.npm || this.jhipsterConfig.clientPackageManager === 'npm';
+        this.jhipsterConfig.clientPackageManager = 'npm';
 
         if (options.creationTimestamp) {
             const creationTimestamp = this.parseCreationTimestamp(options.creationTimestamp);
@@ -2102,7 +2099,6 @@ module.exports = class extends PrivateBase {
         dest.skipChecks = configOptions.skipChecks;
         dest.isDebugEnabled = configOptions.isDebugEnabled;
         dest.experimental = configOptions.experimental;
-        dest.useYarn = configOptions.useYarn;
         dest.useNpm = configOptions.useNpm;
         dest.logo = configOptions.logo;
     }

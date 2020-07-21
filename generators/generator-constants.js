@@ -22,9 +22,8 @@ const packagejs = require('../package.json');
 // Version of Java
 const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the variable as it might be useful in the future.
 
-// Version of Node, Yarn, NPM
+// Version of Node, NPM
 const NODE_VERSION = '12.16.1';
-const YARN_VERSION = '1.22.4';
 const NPM_VERSION = '6.14.6';
 
 const GRADLE_VERSION = '6.5';
@@ -371,7 +370,6 @@ const constants = {
     DOCKER_GRAFANA,
     JAVA_VERSION,
     NODE_VERSION,
-    YARN_VERSION,
     NPM_VERSION,
     KAFKA_VERSION,
     GRADLE_VERSION,

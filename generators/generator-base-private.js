@@ -878,24 +878,6 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Check if Yarn is installed
-     */
-    checkYarn() {
-        if (this.skipChecks || !this.useYarn) return;
-        const done = this.async();
-        exec('yarn --version', err => {
-            if (err) {
-                this.warning('yarn is not found on your computer.\n', ' Using npm instead');
-                this.useYarn = false;
-            } else {
-                this.useYarn = true;
-            }
-            this.useNpm = !this.useYarn;
-            done();
-        });
-    }
-
-    /**
      * Generate Entity Queries
      *
      * @param {Array|Object} relationships - array of relationships
