@@ -30,7 +30,7 @@ const entityToDtoReference = mapper + '::' + 'toDto'; %>
         <%_ if (dto === 'mapstruct') { _%>
             .map(<%= entityToDtoReference %>)
         <%_ } _%>
-        <%_ if (dto === 'mapstruct' || searchEngine !== 'couchbase') { _%>
+        <%_ if (dto === 'mapstruct' || searchEngine === 'elasticsearch') { _%>
         .collect(Collectors.toList());
         <%_ } _%>
     <%_ } else { _%>

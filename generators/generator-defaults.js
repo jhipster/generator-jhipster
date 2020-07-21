@@ -41,7 +41,6 @@ const appDefaultConfig = {
     otherModules: [],
     clientPackageManager: 'npm',
     pages: [],
-    prettierJava: true,
 };
 
 /** Required config for prompts to be skipped */

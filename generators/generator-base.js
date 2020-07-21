@@ -132,7 +132,7 @@ module.exports = class extends PrivateBase {
         if (!this.skipClient && !this.jhipsterConfig.skipClient) {
             prettierExtensions = `${prettierExtensions},js,ts,tsx,css,scss`;
         }
-        if (!this.skipServer && !this.jhipsterConfig.skipServer && (this.jhipsterConfig.prettierJava || this.prettierJava)) {
+        if (!this.skipServer && !this.jhipsterConfig.skipServer) {
             prettierExtensions = `${prettierExtensions},java`;
         }
         return prettierExtensions;
@@ -2113,9 +2113,7 @@ module.exports = class extends PrivateBase {
         if (options.skipCheckLengthOfIdentifier) {
             this.jhipsterConfig.skipCheckLengthOfIdentifier = true;
         }
-        if (options.prettierJava !== undefined) {
-            this.jhipsterConfig.prettierJava = options.prettierJava;
-        }
+
         if (options.skipCommitHook) {
             this.jhipsterConfig.skipCommitHook = true;
         }

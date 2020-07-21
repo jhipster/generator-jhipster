@@ -16,7 +16,6 @@ describe('JHipster generator', () => {
                         skipInstall: true,
                         baseName: 'jhipster',
                         defaults: true,
-                        prettierJava: true,
                         blueprints: 'prettier-transform',
                     })
                     .run();

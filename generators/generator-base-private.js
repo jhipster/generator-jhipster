@@ -1484,7 +1484,7 @@ module.exports = class extends Generator {
         }
 
         let prettierOptions = {};
-        if (!this.skipServer && !this.jhipsterConfig.skipServer && (this.prettierJava || this.configOptions.prettierJava)) {
+        if (!this.skipServer && !this.jhipsterConfig.skipServer) {
             prettierOptions = prettierJavaOptions;
         }
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
