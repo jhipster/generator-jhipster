@@ -1,7 +1,7 @@
 {
     "generator-jhipster": {
         "applicationType": "monolith",
-        "baseName": "sampleYarnWebsocketNocache",
+        "baseName": "sampleNpmWebsocketNocache",
         "packageName": "io.github.jhipster.sample",
         "packageFolder": "io/github/jhipster/sample",
         "serverPort": "8080",
