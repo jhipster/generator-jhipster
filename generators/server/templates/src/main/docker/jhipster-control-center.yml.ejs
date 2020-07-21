@@ -25,16 +25,16 @@ limitations under the License.
 # please note that current properties are set to run JHCC with default values, personalize them if needed
 # and remove those from other modes. You can only have one mode active.
 #### Eureka
-#       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:admin@localhost:8761/eureka/
+#       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:admin@host.docker.internal:8761/eureka/
 #### Consul
-#       - SPRING_CLOUD_CONSUL_HOST=localhost
+#       - SPRING_CLOUD_CONSUL_HOST=host.docker.internal
 #       - SPRING_CLOUD_CONSUL_PORT=8500
 #### Static
 # Add instances to "MyApp"
-#       - SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_MYAPP_0_URI=http://localhost:8081
-#       - SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_MYAPP_1_URI=http://localhost:8082
+#       - SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_MYAPP_0_URI=http://host.docker.internal:8081
+#       - SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_MYAPP_1_URI=http://host.docker.internal:8082
 # Or add a new application named MyNewApp
-#       - SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_MYNEWAPP_0_URI=http://localhost:8080
+#       - SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_MYNEWAPP_0_URI=http://host.docker.internal:8080
 version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
   jhipster-control-center:
@@ -53,6 +53,6 @@ services:
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-control-center
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-control-center
       <%_ } _%>
-      - SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_MYAPP_0_URI=http://localhost:8081
+      - SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_MYAPP_0_URI=http://host.docker.internal:8081
     ports:
       - 7419:7419
