@@ -41,15 +41,10 @@ jobs:
   # Tests
   #----------------------------------------------------------------------
 <%_ if (!skipClient) { _%>
-  <%_ if (clientPackageManager === 'yarn') { _%>
-  - script: yarn install
-    displayName: 'INSTALL: launch yarn install'
-  <%_ } else if (clientPackageManager === 'npm') { _%>
   - task: Npm@1
     inputs:
       command: 'install'
     displayName: 'INSTALL: launch npm install'
-  <%_ } _%>
 <%_ } _%>
   <%_ if (!skipServer) { _%>
     <%_ if (buildTool === 'maven') { _%>
@@ -66,14 +61,10 @@ jobs:
     displayName: 'TESTS: backend'
   <%_ } _%>
 <%_ if (!skipClient) { _%>
-  <%_ if (clientPackageManager === 'yarn') { _%>
-  - script: yarn <%= frontTestCommand %>
-  <%_ } else if (clientPackageManager === 'npm') { _%>
   - task: Npm@1
     inputs:
       command: 'custom'
       customCommand: 'run <%= frontTestCommand %>'
-  <%_ } _%>
     displayName: 'TESTS: frontend'
 <%_ } _%>
 <%_ if (!skipServer) { _%>
