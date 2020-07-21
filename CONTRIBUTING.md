@@ -219,20 +219,20 @@ Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhi
 
 [Please read the GitHub forking documentation for more information](https://help.github.com/articles/fork-a-repo)
 
-### Set NPM/YARN to use the cloned project
+### Set NPM to use the cloned project
 
-In your cloned `generator-jhipster` project, type `npm link` or `yarn && yarn link` depending on the package manager you use.
+In your cloned `generator-jhipster` project, type `npm link`.
 
 This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `jhipster`, you will now use the development version of JHipster.
 
 For testing, you will want to generate an application, and there is a specific issue here: for each application, JHipster installs a local version of itself. This is made to enable several applications to each use a specific JHipster version (application A uses JHipster 3.1.0, and application B uses JHipster 3.2.0).
 
-To overcome this you need to run `npm link generator-jhipster` or `yarn link generator-jhipster` on the generated project folder as well, so that the local version has a symbolic link to the development version of JHipster.
+To overcome this you need to run `npm link generator-jhipster` on the generated project folder as well, so that the local version has a symbolic link to the development version of JHipster.
 
 To put it in a nutshell, you need to:
 
-1.  run `npm link` or `yarn link` on the `generator-jhipster` project
-2.  run `npm link generator-jhipster` or `yarn link generator-jhipster` on the generated application folder (you need to do this for each application you create)
+1.  run `npm link` on the `generator-jhipster` project
+2.  run `npm link generator-jhipster` on the generated application folder (you need to do this for each application you create)
 
 Now, running the 'jhipster' command should run your locally installed JHipster version directly from sources. Check that the symbolic link is correct with the following command :
 
