@@ -112,6 +112,18 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Verify if the entity is a built-in entity.
+     * @param {String} entityName - Entity name to verify.
+     * @return {boolean} true if the entity is built-in.
+     */
+    isBuiltInUserEntity(entityName) {
+        if (_.upperFirst(entityName) === 'User') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Apply output customizer.
      *
      * @param {string} outputPath - Path to customize.

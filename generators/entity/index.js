@@ -643,12 +643,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         otherEntityData.clientRootFolder = otherEntityData.microserviceName;
                     }
 
-                    if (otherEntityName === 'user') {
+                    if (this.isBuiltInUserEntity(otherEntityName)) {
                         hasUserField = true;
                     }
 
                     relationship.otherEntityPrimaryKeyType =
-                        relationship.otherEntityName === 'user' && context.authenticationType === 'oauth2'
+                        this.isBuiltInUserEntity(otherEntityName) && context.authenticationType === 'oauth2'
                             ? 'String'
                             : this.getPkType(context.databaseType);
 
@@ -661,11 +661,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                                     return false;
                                 }
                                 if (!otherSideRelationship.otherEntityRelationshipName) {
-                                    this.warning(
-                                        `Cannot compare relationship reference: otherEntityRelationshipName is missing in .jhipster/${otherEntityName}.json for relationship ${stringify(
-                                            otherSideRelationship
-                                        )}`
-                                    );
                                     return false;
                                 }
                                 return otherSideRelationship.otherEntityRelationshipName === relationship.relationshipName;
@@ -676,11 +671,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                                     return false;
                                 }
                                 if (!relationship.otherEntityRelationshipName) {
-                                    this.warning(
-                                        `Cannot compare relationship reference: otherEntityRelationshipName is missing in .jhipster/${otherEntityName}.json for relationship ${stringify(
-                                            otherSideRelationship
-                                        )}`
-                                    );
                                     return false;
                                 }
                                 return relationship.otherEntityRelationshipName === otherSideRelationship.relationshipName;
@@ -715,6 +705,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                                 otherEntityRelationshipNameCapitalized: otherRelationship.relationshipNameCapitalized,
                                 otherEntityRelationshipNameCapitalizedPlural: relationship.relationshipNameCapitalizedPlural,
                             });
+                        } else {
+                            this.warning(`Could not find the other side of the relationship ${stringify(relationship)}`);
                         }
                     }
 
@@ -738,9 +730,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         otherEntityNameCapitalized: _.upperFirst(otherEntityName),
                         otherEntityFieldCapitalized: _.upperFirst(relationship.otherEntityField),
                         otherEntityTableName:
-                            otherEntityData.entityTableName || otherEntityName === 'user'
-                                ? `${jhiTablePrefix}_user`
-                                : this.getTableName(otherEntityName),
+                            otherEntityData.entityTableName ||
+                            this.getTableName(
+                                this.isBuiltInUserEntity(otherEntityName) ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName
+                            ),
                     });
 
                     _.defaults(relationship, {
@@ -753,7 +746,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     });
 
                     if (context.dto === 'mapstruct') {
-                        if (otherEntityData.dto !== 'mapstruct' && otherEntityName !== 'user') {
+                        if (otherEntityData.dto !== 'mapstruct' && !this.isBuiltInUserEntity(otherEntityName)) {
                             this.warning(
                                 `This entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
                             );
@@ -766,12 +759,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
 
                     if (relationship.otherEntityAngularName === undefined) {
-                        if (relationship.otherEntityNameCapitalized !== 'User') {
+                        if (this.isBuiltInUserEntity(otherEntityName)) {
+                            relationship.otherEntityAngularName = 'User';
+                        } else {
                             const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
                             relationship.otherEntityAngularName =
                                 _.upperFirst(relationship.otherEntityName) + this.upperFirstCamelCase(otherEntityAngularSuffix);
-                        } else {
-                            relationship.otherEntityAngularName = 'User';
                         }
                     }
 
@@ -780,7 +773,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering,
                     });
 
-                    if (relationship.otherEntityNameCapitalized !== 'User') {
+                    if (!this.isBuiltInUserEntity(otherEntityName)) {
                         _.defaults(relationship, {
                             otherEntityFileName: _.kebabCase(relationship.otherEntityAngularName),
                             otherEntityFolderName: _.kebabCase(relationship.otherEntityAngularName),
