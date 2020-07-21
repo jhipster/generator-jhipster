@@ -35,9 +35,6 @@ RUN \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
   # upgrade npm
   npm install -g npm && \
-  # install yarn
-  npm install -g yarn && \
-  su -c "yarn config set prefix /home/jhipster/.yarn-global" jhipster && \
   # install yeoman
   npm install -g yo && \
   # cleanup
@@ -53,9 +50,7 @@ COPY . /home/jhipster/generator-jhipster
 
 RUN \
   # clean jhipster folder
-  rm -Rf /home/jhipster/generator-jhipster/node_modules \
-    /home/jhipster/generator-jhipster/yarn.lock \
-    /home/jhipster/generator-jhipster/yarn-error.log && \
+  rm -Rf /home/jhipster/generator-jhipster/node_modules && \
   # install jhipster
   npm install -g /home/jhipster/generator-jhipster && \
   # fix jhipster user permissions
@@ -71,7 +66,7 @@ RUN \
 
 # expose the working directory, the Tomcat port, the BrowserSync ports
 USER jhipster
-ENV PATH $PATH:/usr/bin:/home/jhipster/.yarn-global/bin:/home/jhipster/.yarn/bin:/home/jhipster/.config/yarn/global/node_modules/.bin
+ENV PATH $PATH:/usr/bin
 WORKDIR "/home/jhipster/app"
 VOLUME ["/home/jhipster/app"]
 EXPOSE 8080 9000 3001
