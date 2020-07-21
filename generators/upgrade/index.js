@@ -166,10 +166,7 @@ module.exports = class extends BaseGenerator {
             this._rmRf('node_modules');
             generatorCommand = 'jhipster';
         } else if (semver.gte(jhipsterVersion, FIRST_CLI_SUPPORTED_VERSION)) {
-            const generatorDir =
-                this.clientPackageManager === 'yarn'
-                    ? shelljs.exec('yarn bin', { silent: this.silent }).stdout
-                    : shelljs.exec('npm bin', { silent: this.silent }).stdout;
+            const generatorDir = shelljs.exec('npm bin', { silent: this.silent }).stdout;
             generatorCommand = `"${generatorDir.replace('\n', '')}/jhipster"`;
         }
         const skipChecksOption = this.skipChecks ? '--skip-checks' : '';
@@ -204,21 +201,21 @@ module.exports = class extends BaseGenerator {
 
     _retrieveLatestVersion(npmPackage) {
         this.log(`Looking for latest ${npmPackage} version...`);
-        const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn info' : 'npm show';
+        const commandPrefix = 'npm show';
         const pkgInfo = shelljs.exec(`${commandPrefix} ${npmPackage} version`, { silent: this.silent });
         if (pkgInfo.stderr) {
             this.warning(`Something went wrong fetching the latest ${npmPackage} version number...\n${pkgInfo.stderr}`);
             this.error('Exiting process');
         }
         const msg = pkgInfo.stdout;
-        return this.clientPackageManager === 'yarn' ? msg.split('\n')[1] : msg.replace('\n', '');
+        return msg.replace('\n', '');
     }
 
     _installNpmPackageLocally(npmPackage, version) {
         this.log(`Installing ${npmPackage} ${version} locally`);
-        const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
-        const devDependencyParam = this.clientPackageManager === 'yarn' ? '--dev' : '--save-dev';
-        const noPackageLockParam = this.clientPackageManager === 'yarn' ? '--no-lockfile' : '--no-package-lock';
+        const commandPrefix = 'npm install';
+        const devDependencyParam = '--save-dev';
+        const noPackageLockParam = '--no-package-lock';
         const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} ${noPackageLockParam} --ignore-scripts`;
         this.info(generatorCommand);
 
@@ -505,7 +502,7 @@ module.exports = class extends BaseGenerator {
                 const gitDiff = this.gitExec(['diff', '--name-only', '--diff-filter=U', 'package.json'], { silent: this.silent });
                 if (gitDiff.code !== 0) this.error(`Unable to check for conflicts in package.json:\n${gitDiff.stdout} ${gitDiff.stderr}`);
                 if (gitDiff.stdout) {
-                    const installCommand = this.clientPackageManager === 'yarn' ? 'yarn' : 'npm install';
+                    const installCommand = 'npm install';
                     this.warning(`There are conflicts in package.json, please fix them and then run ${installCommand}`);
                     this.skipInstall = true;
                 }
@@ -518,7 +515,7 @@ module.exports = class extends BaseGenerator {
             this.log('Installing dependencies, please wait...');
             this.info('Removing the node_modules directory');
             this._rmRf('node_modules');
-            const installCommand = this.clientPackageManager === 'yarn' ? 'yarn' : 'npm install';
+            const installCommand = 'npm install';
             this.info(installCommand);
 
             const pkgInstall = shelljs.exec(installCommand, { silent: this.silent });
