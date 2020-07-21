@@ -147,16 +147,8 @@ limitations under the License.
     "node": ">= 10.17.0",
     "npm": ">= 6.13.4"
   },
-  <%_ if (!skipCommitHook) { _%>
-  "lint-staged": {
-    "{,src/**/,webpack/}*.{md,json,js,ts,css,scss}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
-  <%_ } _%>
   "scripts": {
-    "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{md,json,js,ts,tsx,css,scss<%= !skipServer && prettierJava ? ',java' : '' %>}\"",
+    "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "cleanup": "rimraf <%= DIST_DIR %>",

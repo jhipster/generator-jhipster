@@ -1485,6 +1485,9 @@ describe('JHipster generator', () => {
         it('generates a README with no undefined value', () => {
             assert.noFileContent('README.md', /undefined/);
         });
+        it('generates a .prettierrc with no reference to java extension', () => {
+            assert.noFileContent('.prettierrc', ',java');
+        });
     });
 
     context('App with skip client', () => {
@@ -1542,6 +1545,16 @@ describe('JHipster generator', () => {
                 assert.noFileContent('pom.xml', 'node.version');
                 assert.noFileContent('pom.xml', 'npm.version');
                 assert.noFileContent('pom.xml', 'frontend-maven-plugin');
+            });
+            it('generates a .prettierrc with no reference to webpack', () => {
+                assert.noFileContent('.prettierrc', 'webpack');
+            });
+            it('generates a .prettierrc with no reference to client extensions', () => {
+                assert.noFileContent('.prettierrc', ',js');
+                assert.noFileContent('.prettierrc', ',ts');
+                assert.noFileContent('.prettierrc', ',tsx');
+                assert.noFileContent('.prettierrc', ',css');
+                assert.noFileContent('.prettierrc', ',scss');
             });
         });
 

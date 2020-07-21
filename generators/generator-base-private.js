@@ -31,7 +31,7 @@ const through = require('through2');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
-const { prettierTransform, prettierOptions } = require('./generator-transforms');
+const { prettierTransform, prettierJavaOptions } = require('./generator-transforms');
 const JSONToJDLEntityConverter = require('../jdl/converters/json-to-jdl-entity-converter');
 const JSONToJDLOptionConverter = require('../jdl/converters/json-to-jdl-option-converter');
 
@@ -1479,11 +1479,16 @@ module.exports = class extends Generator {
      * @param {any} generator
      */
     registerPrettierTransform(generator = this) {
-        // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        let filterPatternForPrettier = '{,**/,.jhipster/**/}*.{md,json,ts,tsx,scss,css,yml}';
-        if (!this.skipServer && this.prettierJava) {
-            filterPatternForPrettier = '{,**/,.jhipster/**/}*.{md,json,ts,tsx,scss,css,yml,java}';
+        if (this.options.help) {
+            return;
         }
+
+        let prettierOptions = {};
+        if (!this.skipServer && !this.jhipsterConfig.skipServer && (this.prettierJava || this.configOptions.prettierJava)) {
+            prettierOptions = prettierJavaOptions;
+        }
+        // Prettier is clever, it uses correct rules and correct parser according to file extension.
+        const filterPatternForPrettier = `{,.,**/,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
         const prettierFilter = filter(['.yo-rc.json', filterPatternForPrettier], { restore: true });
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter
         generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);

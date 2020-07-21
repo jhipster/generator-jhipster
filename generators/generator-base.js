@@ -127,6 +127,17 @@ module.exports = class extends PrivateBase {
         return outputPathCustomizer.call(this, outputPath);
     }
 
+    getPrettierExtensions() {
+        let prettierExtensions = 'md,json,yml';
+        if (!this.skipClient && !this.jhipsterConfig.skipClient) {
+            prettierExtensions = `${prettierExtensions},js,ts,tsx,css,scss`;
+        }
+        if (!this.skipServer && !this.jhipsterConfig.skipServer && (this.jhipsterConfig.prettierJava || this.prettierJava)) {
+            prettierExtensions = `${prettierExtensions},java`;
+        }
+        return prettierExtensions;
+    }
+
     /**
      * Add a new icon to icon imports.
      *
@@ -2102,8 +2113,8 @@ module.exports = class extends PrivateBase {
         if (options.skipCheckLengthOfIdentifier) {
             this.jhipsterConfig.skipCheckLengthOfIdentifier = true;
         }
-        if (options.prettierJava) {
-            this.jhipsterConfig.prettierJava = true;
+        if (options.prettierJava !== undefined) {
+            this.jhipsterConfig.prettierJava = options.prettierJava;
         }
         if (options.skipCommitHook) {
             this.jhipsterConfig.skipCommitHook = true;

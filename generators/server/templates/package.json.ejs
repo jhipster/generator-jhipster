@@ -42,6 +42,6 @@
     "node": ">=<%= NODE_VERSION %>"
   },
   "scripts": {
-    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,yml<%= prettierJava ? ',java' : '' %>}\""
+    "prettier:format": "prettier --write \"{,src/**/}*.{<%= getPrettierExtensions() %>}\""
   }
 }
