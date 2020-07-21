@@ -213,7 +213,7 @@ const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInst
 };
 
 /**
- * Check if NPM/Yarn install needs to be triggered. This will be done for the last entity.
+ * Check if NPM install needs to be triggered. This will be done for the last entity.
  * @param {any} processor
  * @param {number} index
  */
@@ -255,14 +255,7 @@ class JDLProcessor {
             this.skipClient = configuration.skipClient;
             this.clientFramework = configuration.clientFramework;
             this.clientFramework = this.clientFramework || ANGULAR;
-            this.clientPackageManager = configuration.clientPackageManager;
-            if (!this.clientPackageManager) {
-                if (this.useNpm) {
-                    this.clientPackageManager = 'npm';
-                } else {
-                    this.clientPackageManager = 'yarn';
-                }
-            }
+            this.clientPackageManager = configuration.clientPackageManager || 'npm';
         }
     }
 
