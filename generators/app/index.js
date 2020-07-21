@@ -128,13 +128,6 @@ module.exports = class extends BaseBlueprintGenerator {
             type: String,
         });
 
-        // This adds support for a `--yarn` flag
-        this.option('yarn', {
-            desc: 'Use yarn instead of npm',
-            type: Boolean,
-            defaults: false,
-        });
-
         // This adds support for a `--auth` flag
         this.option('auth', {
             desc: 'Provide authentication type for the application when skipping server side generation',
@@ -252,10 +245,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
             validateGit() {
                 this.checkGit();
-            },
-
-            validateYarn() {
-                this.checkYarn();
             },
 
             checkForNewJHVersion() {
