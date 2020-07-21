@@ -443,7 +443,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 // Validate root entity json content
                 if (this.entityConfig.changelogDate === undefined && ['sql', 'cassandra', 'couchbase'].includes(context.databaseType)) {
                     const currentDate = this.dateFormatForLiquibase();
-                    this.warning(`changelogDate is missing in .jhipster/${entityName}.json, using ${currentDate} as fallback`);
+                    this.info(`changelogDate is missing in .jhipster/${entityName}.json, using ${currentDate} as fallback`);
                     context.changelogDate = this.entityConfig.changelogDate = currentDate;
                 }
             },

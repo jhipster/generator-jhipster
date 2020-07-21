@@ -20,7 +20,7 @@ const chalk = require('chalk');
 const fs = require('fs');
 const _ = require('lodash');
 const constants = require('../generator-constants');
-const { isReservedFieldName, isReservedKeyword } = require('../../jdl/jhipster/reserved-keywords');
+const { isReservedFieldName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
@@ -467,7 +467,7 @@ function askForField() {
                 if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                     return 'Your field name cannot start with an upper case letter';
                 }
-                if (input === 'id' || getFieldNameUndercored(this.jhipsterEntity.fields).includes(_.snakeCase(input))) {
+                if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(_.snakeCase(input))) {
                     return 'Your field name cannot use an already existing field name';
                 }
                 if ((clientFramework === undefined || clientFramework === ANGULAR) && isReservedFieldName(input, ANGULAR)) {
@@ -563,7 +563,7 @@ function askForField() {
                 if (input === '') {
                     return 'Your class name cannot be empty.';
                 }
-                if (isReservedKeyword(input, 'JAVA')) {
+                if (isReservedTableName(input, 'JAVA')) {
                     return 'Your enum name cannot contain a Java reserved keyword';
                 }
                 if (!/^[A-Za-z0-9_]*$/.test(input)) {
@@ -903,7 +903,7 @@ function askForRelationship() {
                 if (input === '') {
                     return 'Your other entity name cannot be empty';
                 }
-                if (isReservedKeyword(input, 'JAVA')) {
+                if (isReservedTableName(input, 'JAVA')) {
                     return 'Your other entity name cannot contain a Java reserved keyword';
                 }
                 if (input.toLowerCase() === 'user' && context.applicationType === 'microservice') {
@@ -927,10 +927,10 @@ function askForRelationship() {
                 if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                     return 'Your relationship cannot start with an upper case letter';
                 }
-                if (input === 'id' || getFieldNameUndercored(this.jhipsterEntity.fields).includes(_.snakeCase(input))) {
+                if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(_.snakeCase(input))) {
                     return 'Your relationship cannot use an already existing field name';
                 }
-                if (isReservedKeyword(input, 'JAVA')) {
+                if (isReservedTableName(input, 'JAVA')) {
                     return 'Your relationship cannot contain a Java reserved keyword';
                 }
                 return true;
