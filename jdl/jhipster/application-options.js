@@ -116,7 +116,6 @@ const optionValues = {
         vue: 'vue',
     },
     [optionNames.CLIENT_PACKAGE_MANAGER]: {
-        yarn: 'yarn',
         npm: 'npm',
     },
     [optionNames.CLIENT_THEME]: 'none',
