@@ -70,12 +70,12 @@ jobs:
                     - vue-session-cassandra-fr
                 include:
                     - app-type: vue-default
-                      entity: sql
+                      entity: sqlfull
                       profile: prod
                       war: 0
                       protractor: 1
                     - app-type: vue-noi18n
-                      entity: sql
+                      entity: sqlfull
                       profile: prod
                       war: 0
                       protractor: 1

@@ -517,7 +517,7 @@ public class UserService {
                 user.setAuthorities(userDTO.getAuthorities());
                 <%_ } _%>
         <%_ if (!reactive) { _%>
-                <%_ if (['sql', 'mongodb'].includes(databaseType)) { _%>
+                <%_ if (['sql', 'mongodb', 'neo4j'].includes(databaseType)) { _%>
                 userDTO.getAuthorities().stream()
                     .map(authorityRepository::findById)
                     .filter(Optional::isPresent)
