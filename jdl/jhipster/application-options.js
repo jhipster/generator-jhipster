@@ -74,7 +74,6 @@ const optionNames = {
     SKIP_USER_MANAGEMENT: 'skipUserManagement',
     TEST_FRAMEWORKS: 'testFrameworks',
     UAA_BASE_NAME: 'uaaBaseName',
-    USE_NPM: 'useNpm',
     USE_SASS: 'useSass',
     WEBSOCKET: 'websocket',
     WITH_ENTITIES: 'withEntities',
