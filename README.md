@@ -118,6 +118,11 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/papersowl.png">	
         </a>
       </td>
+      <td align="center" valign="middle">	
+        <a href="https://raj.bet/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/rajbet.png">	
+        </a>
+      </td>
     </tr>
   </tbody>
 </table>
