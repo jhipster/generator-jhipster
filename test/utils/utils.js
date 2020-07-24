@@ -54,22 +54,16 @@ function getJHipsterCli() {
         // corrected test for windows user
         cmd = cmd.replace(/\\/g, '/');
     }
-    /* eslint-disable-next-line no-console */
-    console.log(cmd);
     return cmd;
 }
 
 function _prepareTempEnv() {
     const cwd = process.cwd();
-    /* eslint-disable-next-line no-console */
-    console.log(`current cwd: ${cwd}`);
     const tempDir = path.join(os.tmpdir(), 'jhitemp');
     process.chdir(os.tmpdir());
     shelljs.rm('-rf', tempDir);
     shelljs.mkdir('-p', tempDir);
     process.chdir(tempDir);
-    /* eslint-disable-next-line no-console */
-    console.log(`New cwd: ${process.cwd()}`);
     return { cwd, tempDir };
 }
 
@@ -97,8 +91,6 @@ function testInTempDir(cb, keepInTestDir) {
 
 function revertTempDir(cwd) {
     process.chdir(cwd);
-    /* eslint-disable-next-line no-console */
-    console.log(`reverted to cwd: ${process.cwd()}`);
 }
 
 function copyTemplateBlueprints(destDir, ...blueprintNames) {
