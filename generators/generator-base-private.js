@@ -1279,21 +1279,6 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Copy Filtering Flag
-     *
-     * @param {any} from - from
-     * @param {any} to - to
-     * @param {any} context - generator context
-     */
-    copyFilteringFlag(from, to, context = this) {
-        if (context.databaseType === 'sql' && context.service !== 'no') {
-            to.jpaMetamodelFiltering = from.jpaMetamodelFiltering;
-        } else {
-            to.jpaMetamodelFiltering = false;
-        }
-    }
-
-    /**
      * Rebuild client for Angular
      */
     rebuildClient() {

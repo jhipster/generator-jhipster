@@ -304,6 +304,7 @@ const LANGUAGES = [
 ];
 
 const constants = {
+    JHIPSTER_CONFIG_DIR: '.jhipster',
     INTERPOLATE_REGEX: /<%:([\s\S]+?)%>/g, // so that tags in templates do not get mistreated as _ templates
     DOCKER_DIR: `${MAIN_DIR}docker/`,
     LINE_LENGTH: 180,

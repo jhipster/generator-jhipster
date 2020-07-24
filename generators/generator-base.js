@@ -34,10 +34,9 @@ const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig } = require('./generator-defaults');
-const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 
-const JHIPSTER_CONFIG_DIR = '.jhipster';
+const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
@@ -87,6 +86,11 @@ module.exports = class extends PrivateBase {
 
         // JHipster runtime config that should not be stored to .yo-rc.json.
         this.configOptions = this.options.configOptions || {};
+
+        // Preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
+        if (this.configOptions.jhipsterOldVersion === undefined) {
+            this.configOptions.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion || null;
+        }
     }
 
     /**
@@ -105,6 +109,18 @@ module.exports = class extends PrivateBase {
         this._CLIENT_TEST_SRC_DIR =
             this._CLIENT_TEST_SRC_DIR || this.applyOutputPathCustomizer(constants.CLIENT_TEST_SRC_DIR) || constants.CLIENT_TEST_SRC_DIR;
         return this._CLIENT_TEST_SRC_DIR;
+    }
+
+    /**
+     * Verify if the entity is a built-in entity.
+     * @param {String} entityName - Entity name to verify.
+     * @return {boolean} true if the entity is built-in.
+     */
+    isBuiltInUserEntity(entityName) {
+        if (_.upperFirst(entityName) === 'User') {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -1311,97 +1327,6 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Load an entity configuration file into context.
-     */
-    loadEntityJson(fromPath = this.context.fromPath) {
-        const context = this.context;
-        try {
-            context.fileData = this.fs.readJSON(fromPath);
-        } catch (err) {
-            this.debug('Error:', err);
-            this.error('\nThe entity configuration file could not be read!\n');
-        }
-        if (context.fileData.databaseType) {
-            context.databaseType = context.fileData.databaseType;
-        }
-        context.relationships = context.fileData.relationships || [];
-        context.fields = context.fileData.fields || [];
-        context.haveFieldWithJavadoc = false;
-        context.fields.forEach(field => {
-            if (field.javadoc) {
-                context.haveFieldWithJavadoc = true;
-            }
-        });
-        context.changelogDate = context.fileData.changelogDate;
-        context.dto = context.fileData.dto;
-        context.service = context.fileData.service;
-        context.fluentMethods = context.fileData.fluentMethods;
-        context.clientRootFolder = context.fileData.clientRootFolder;
-        context.pagination = context.fileData.pagination;
-        context.searchEngine = _.isUndefined(context.fileData.searchEngine) ? context.searchEngine : context.fileData.searchEngine;
-        context.javadoc = context.fileData.javadoc;
-        context.entityTableName = context.fileData.entityTableName;
-        context.jhiPrefix = context.fileData.jhiPrefix || context.jhiPrefix;
-        context.skipCheckLengthOfIdentifier = context.fileData.skipCheckLengthOfIdentifier || context.skipCheckLengthOfIdentifier;
-        context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
-        context.skipClient = context.fileData.skipClient || context.skipClient;
-        context.readOnly = context.fileData.readOnly || false;
-        context.embedded = context.fileData.embedded || false;
-        this.copyFilteringFlag(context.fileData, context, context);
-        if (_.isUndefined(context.entityTableName)) {
-            this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
-            context.entityTableName = this.getTableName(context.name);
-        }
-        if (isReservedTableName(context.entityTableName, context.prodDatabaseType) && context.jhiPrefix) {
-            context.entityTableName = `${context.jhiTablePrefix}_${context.entityTableName}`;
-        }
-        context.fields.forEach(field => {
-            context.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
-            context.fieldNameChoices.push({ name: field.fieldName, value: field.fieldName });
-        });
-        context.relationships.forEach(rel => {
-            context.relNameChoices.push({
-                name: `${rel.relationshipName}:${rel.relationshipType}`,
-                value: `${rel.relationshipName}:${rel.relationshipType}`,
-            });
-        });
-        if (context.fileData.angularJSSuffix !== undefined) {
-            context.entityAngularJSSuffix = context.fileData.angularJSSuffix;
-        }
-        context.useMicroserviceJson = context.useMicroserviceJson || !_.isUndefined(context.fileData.microserviceName);
-        if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
-            context.microserviceName = context.fileData.microserviceName;
-            if (!context.microserviceName) {
-                this.error('Microservice name for the entity is not found. Entity cannot be generated!');
-            }
-            context.microserviceAppName = this.getMicroserviceAppName(context.microserviceName);
-            context.skipServer = true;
-        }
-    }
-
-    /**
-     * get an entity from the configuration file
-     * @param {string} file - configuration file name for the entity
-     */
-    getEntityJson(file) {
-        let entityJson = null;
-
-        try {
-            let filename = path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`);
-            if (this.context && this.context.microservicePath) {
-                filename = path.join(this.context.microservicePath, filename);
-            }
-            // TODO 7.0 filename = this.destinationPath(filename);
-            entityJson = this.fs.readJSON(filename);
-        } catch (err) {
-            this.log(chalk.red(`The JHipster entity configuration file could not be read for file ${file}!`) + err);
-            this.debug('Error:', err);
-        }
-
-        return entityJson;
-    }
-
-    /**
      * get sorted list of entities according to changelog date (i.e. the order in which they were added)
      */
     getExistingEntities() {
@@ -1455,11 +1380,12 @@ module.exports = class extends PrivateBase {
      * @param {string} version - A valid semver version string
      */
     isJhipsterVersionLessThan(version) {
-        if (!this.jhipsterOldVersion) {
+        const jhipsterOldVersion = this.jhipsterOldVersion || this.configOptions.jhipsterOldVersion;
+        if (!jhipsterOldVersion) {
             // if old version is unknown then can't compare and return false
             return false;
         }
-        return semver.lt(this.jhipsterOldVersion, version);
+        return semver.lt(jhipsterOldVersion, version);
     }
 
     /**
@@ -2260,49 +2186,8 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Setup Entity instance level options from context.
-     * all variables should be set to dest,
-     * all variables should be referred from context,
-     * all methods should be called on generator,
-     * @param {any} generator - generator instance
-     * @param {any} context - context to use default is generator instance
-     * @param {any} dest - destination context to use default is context
-     */
-    setupEntityOptions(generator, context = generator, dest = context) {
-        dest.name = context.options.name;
-        // remove extension if feeding json files
-        if (dest.name !== undefined) {
-            dest.name = dest.name.replace('.json', '');
-        }
-
-        dest.regenerate = context.options.regenerate;
-        dest.fluentMethods = context.options.fluentMethods;
-        dest.skipCheckLengthOfIdentifier = context.options['skip-check-length-of-identifier'];
-        dest.entityTableName = generator.getTableName(context.options.tableName || dest.name);
-        dest.entityNameCapitalized = _.upperFirst(dest.name);
-        dest.entityAngularJSSuffix = context.options.angularSuffix;
-        dest.skipUiGrouping = context.options.skipUiGrouping;
-        dest.clientRootFolder = context.options.skipUiGrouping ? '' : context.options.clientRootFolder;
-        dest.isDebugEnabled = context.options.debug;
-        dest.experimental = context.options.experimental;
-        if (dest.entityAngularJSSuffix && !dest.entityAngularJSSuffix.startsWith('-')) {
-            dest.entityAngularJSSuffix = `-${dest.entityAngularJSSuffix}`;
-        }
-        dest.rootDir = generator.destinationRoot();
-        // enum-specific consts
-        dest.enums = [];
-
-        dest.existingEnum = false;
-
-        dest.fieldNamesUnderscored = ['id'];
-        // these variable hold field and relationship names for question options during update
-        dest.fieldNameChoices = [];
-        dest.relNameChoices = [];
-    }
-
-    /**
      * Get all the generator configuration from the .yo-rc.json file
-     * @param {Generator} generator the generator instance to use
+     * @param {string} yoRcPath - .yo-rc.json folder.
      */
     getJhipsterConfig(yoRcPath) {
         if (yoRcPath === undefined) {
@@ -2313,6 +2198,14 @@ module.exports = class extends PrivateBase {
             yoRcPath = path.join(configRootPath || this.destinationPath(), '.yo-rc.json');
         }
         return this.createStorage(yoRcPath, 'generator-jhipster');
+    }
+
+    /**
+     * Get all the generator configuration from the .yo-rc.json file
+     * @param {string} entityName - Name of the entity to load.
+     */
+    getEntityConfig(entityName) {
+        return this.createStorage(this.destinationPath(JHIPSTER_CONFIG_DIR, `${_.upperFirst(entityName)}.json`));
     }
 
     /**

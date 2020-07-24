@@ -17,11 +17,10 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const path = require('path');
+const fs = require('fs');
 const _ = require('lodash');
-const shelljs = require('shelljs');
 const constants = require('../generator-constants');
-const { isReservedFieldName, isReservedKeyword } = require('../../jdl/jhipster/reserved-keywords');
+const { isReservedFieldName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
@@ -41,13 +40,20 @@ module.exports = {
     askForPagination,
 };
 
+const getFieldNameUndercored = fields =>
+    ['id'].concat(
+        fields.map(field => {
+            return _.snakeCase(field.fieldName);
+        })
+    );
+
 function askForMicroserviceJson() {
     const context = this.context;
-    if (context.applicationType !== 'gateway' || context.useConfigurationFile) {
+    if (this.jhipsterConfig.applicationType !== 'gateway' || context.entityExisted) {
         return undefined;
     }
 
-    const databaseType = context.databaseType;
+    const databaseType = this.jhipsterConfig.databaseType;
 
     const prompts = [
         {
@@ -63,15 +69,9 @@ function askForMicroserviceJson() {
             name: 'microservicePath',
             message: 'Enter the path to the microservice root directory:',
             store: true,
+            default: this.entityConfig.microservicePath,
             validate: input => {
-                let fromPath;
-                if (path.isAbsolute(input)) {
-                    fromPath = `${input}/${context.filename}`;
-                } else {
-                    fromPath = this.destinationPath(`${input}/${context.filename}`);
-                }
-
-                if (shelljs.test('-f', fromPath)) {
+                if (fs.existsSync(this.destinationPath(input, context.filename))) {
                     return true;
                 }
                 return `${context.filename} not found in ${input}/`;
@@ -79,18 +79,10 @@ function askForMicroserviceJson() {
         },
     ];
 
-    return this.prompt(prompts).then(props => {
-        if (props.microservicePath) {
+    return this.prompt(prompts).then(answers => {
+        if (answers.microservicePath) {
             this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
-            if (path.isAbsolute(props.microservicePath)) {
-                context.microservicePath = props.microservicePath;
-            } else {
-                context.microservicePath = path.resolve(props.microservicePath);
-            }
-            context.useConfigurationFile = true;
-            context.useMicroserviceJson = true;
-            const fromPath = `${context.microservicePath}/${context.jhipsterConfigDirectory}/${context.entityNameCapitalized}.json`;
-            this.loadEntityJson(fromPath);
+            context.microservicePath = this.entityConfig.microservicePath = answers.microservicePath;
         }
     });
 }
@@ -133,7 +125,7 @@ function askForUpdate() {
     return this.prompt(prompts).then(props => {
         context.updateEntity = props.updateEntity;
         if (context.updateEntity === 'none') {
-            this.error(chalk.green('Aborting entity update, no changes were made.'));
+            throw new Error(chalk.green('Aborting entity update, no changes were made.'));
         }
     });
 }
@@ -155,7 +147,7 @@ function askForFields() {
 function askForFieldsToRemove() {
     const context = this.context;
     // prompt only if data is imported from a file
-    if (!context.useConfigurationFile || context.updateEntity !== 'remove' || context.fieldNameChoices.length === 0) {
+    if (!context.useConfigurationFile || context.updateEntity !== 'remove' || this.entityConfig.fields.length === 0) {
         return undefined;
     }
 
@@ -164,7 +156,10 @@ function askForFieldsToRemove() {
             type: 'checkbox',
             name: 'fieldsToRemove',
             message: 'Please choose the fields you want to remove',
-            choices: context.fieldNameChoices,
+            choices: () =>
+                this.entityConfig.fields.map(field => {
+                    return { name: field.fieldName, value: field.fieldName };
+                }),
         },
         {
             when: response => response.fieldsToRemove.length !== 0,
@@ -177,12 +172,14 @@ function askForFieldsToRemove() {
     return this.prompt(prompts).then(props => {
         if (props.confirmRemove) {
             this.log(chalk.red(`\nRemoving fields: ${props.fieldsToRemove}\n`));
-            for (let i = context.fields.length - 1; i >= 0; i -= 1) {
-                const field = context.fields[i];
+            const fields = this.entityConfig.fields;
+            for (let i = fields.length - 1; i >= 0; i -= 1) {
+                const field = this.entityConfig.fields[i];
                 if (props.fieldsToRemove.filter(val => val === field.fieldName).length > 0) {
-                    context.fields.splice(i, 1);
+                    fields.splice(i, 1);
                 }
             }
+            this.entityConfig.fields = fields;
         }
     });
 }
@@ -203,7 +200,7 @@ function askForRelationships() {
 function askForRelationsToRemove() {
     const context = this.context;
     // prompt only if data is imported from a file
-    if (!context.useConfigurationFile || context.updateEntity !== 'remove' || context.relNameChoices.length === 0) {
+    if (!context.useConfigurationFile || context.updateEntity !== 'remove' || this.entityConfig.relationships.length === 0) {
         return undefined;
     }
     if (context.databaseType === 'cassandra') {
@@ -215,7 +212,13 @@ function askForRelationsToRemove() {
             type: 'checkbox',
             name: 'relsToRemove',
             message: 'Please choose the relationships you want to remove',
-            choices: context.relNameChoices,
+            choices: () =>
+                this.entityConfig.relationships.map(rel => {
+                    return {
+                        name: `${rel.relationshipName}:${rel.relationshipType}`,
+                        value: `${rel.relationshipName}:${rel.relationshipType}`,
+                    };
+                }),
         },
         {
             when: response => response.relsToRemove.length !== 0,
@@ -228,12 +231,14 @@ function askForRelationsToRemove() {
     return this.prompt(prompts).then(props => {
         if (props.confirmRemove) {
             this.log(chalk.red(`\nRemoving relationships: ${props.relsToRemove}\n`));
-            for (let i = context.relationships.length - 1; i >= 0; i -= 1) {
-                const rel = context.relationships[i];
+            const relationships = this.entityConfig.relationships;
+            for (let i = relationships.length - 1; i >= 0; i -= 1) {
+                const rel = relationships[i];
                 if (props.relsToRemove.filter(val => val === `${rel.relationshipName}:${rel.relationshipType}`).length > 0) {
-                    context.relationships.splice(i, 1);
+                    relationships.splice(i, 1);
                 }
             }
+            this.entityConfig.relationships = relationships;
         }
     });
 }
@@ -246,8 +251,8 @@ function askForTableName() {
     const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
     if (
         skipCheckLengthOfIdentifier ||
-        !context.relationships ||
-        context.relationships.length === 0 ||
+        !this.entityConfig.relationships ||
+        this.entityConfig.relationships.length === 0 ||
         !((prodDatabaseType === 'oracle' && entityTableName.length > 14) || entityTableName.length > 30)
     ) {
         return undefined;
@@ -277,8 +282,8 @@ function askForTableName() {
     ];
     return this.prompt(prompts).then(props => {
         /* overwrite the table name for the entity using name obtained from the user */
-        if (props.entityTableName !== context.entityTableName) {
-            context.entityTableName = _.snakeCase(props.entityTableName).toLowerCase();
+        if (props.entityTableName !== this.entityConfig.entityTableName) {
+            context.entityTableName = this.entityConfig.entityTableName = _.snakeCase(props.entityTableName).toLowerCase();
         }
     });
 }
@@ -286,7 +291,7 @@ function askForTableName() {
 function askForFiltering() {
     const context = this.context;
     // don't prompt if server is skipped, or the backend is not sql, or no service requested
-    if (context.useConfigurationFile || context.skipServer || context.databaseType !== 'sql' || context.service === 'no') {
+    if (context.useConfigurationFile || context.skipServer || context.databaseType !== 'sql' || this.entityConfig.service === 'no') {
         return undefined;
     }
     const prompts = [
@@ -308,7 +313,7 @@ function askForFiltering() {
         },
     ];
     return this.prompt(prompts).then(props => {
-        context.jpaMetamodelFiltering = props.filtering === 'jpaMetamodel';
+        this.entityConfig.jpaMetamodelFiltering = props.filtering === 'jpaMetamodel';
     });
 }
 
@@ -327,15 +332,14 @@ function askForReadOnly() {
         },
     ];
     return this.prompt(prompts).then(props => {
-        context.readOnly = props.readOnly;
+        this.entityConfig.readOnly = props.readOnly;
     });
 }
 
 function askForDTO() {
     const context = this.context;
     // don't prompt if data is imported from a file or server is skipped or if no service layer
-    if (context.useConfigurationFile || context.skipServer || context.service === 'no') {
-        context.dto = context.dto || 'no';
+    if (context.useConfigurationFile || context.skipServer || this.entityConfig.service === 'no') {
         return undefined;
     }
     const prompts = [
@@ -357,7 +361,7 @@ function askForDTO() {
         },
     ];
     return this.prompt(prompts).then(props => {
-        context.dto = props.dto;
+        this.entityConfig.dto = props.dto;
     });
 }
 
@@ -390,7 +394,7 @@ function askForService() {
         },
     ];
     return this.prompt(prompts).then(props => {
-        context.service = props.service;
+        this.entityConfig.service = props.service;
     });
 }
 
@@ -426,7 +430,7 @@ function askForPagination() {
         },
     ];
     return this.prompt(prompts).then(props => {
-        context.pagination = props.pagination;
+        this.entityConfig.pagination = props.pagination;
         this.log(chalk.green('\nEverything is configured, generating the entity...\n'));
     });
 }
@@ -436,12 +440,11 @@ function askForPagination() {
  */
 function askForField() {
     const context = this.context;
-    this.log(chalk.green(`\nGenerating field #${context.fields.length + 1}\n`));
+    this.log(chalk.green(`\nGenerating field #${this.entityConfig.fields.length + 1}\n`));
     const skipServer = context.skipServer;
     const prodDatabaseType = context.prodDatabaseType;
     const databaseType = context.databaseType;
     const clientFramework = context.clientFramework;
-    const fieldNamesUnderscored = context.fieldNamesUnderscored;
     const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
     const prompts = [
         {
@@ -464,7 +467,7 @@ function askForField() {
                 if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                     return 'Your field name cannot start with an upper case letter';
                 }
-                if (input === 'id' || fieldNamesUnderscored.includes(_.snakeCase(input))) {
+                if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(_.snakeCase(input))) {
                     return 'Your field name cannot use an already existing field name';
                 }
                 if ((clientFramework === undefined || clientFramework === ANGULAR) && isReservedFieldName(input, ANGULAR)) {
@@ -560,7 +563,7 @@ function askForField() {
                 if (input === '') {
                     return 'Your class name cannot be empty.';
                 }
-                if (isReservedKeyword(input, 'JAVA')) {
+                if (isReservedTableName(input, 'JAVA')) {
                     return 'Your enum name cannot contain a Java reserved keyword';
                 }
                 if (!/^[A-Za-z0-9_]*$/.test(input)) {
@@ -865,8 +868,7 @@ function askForField() {
                 fieldValidateRulesMaxbytes: props.fieldValidateRulesMaxbytes,
             };
 
-            fieldNamesUnderscored.push(_.snakeCase(props.fieldName));
-            context.fields.push(field);
+            this.entityConfig.fields = this.entityConfig.fields.concat(field);
         }
         logFieldsAndRelationships.call(this);
         if (props.fieldAdd) {
@@ -883,7 +885,6 @@ function askForRelationship() {
     const context = this.context;
     const name = context.name;
     this.log(chalk.green('\nGenerating relationships to other entities\n'));
-    const fieldNamesUnderscored = context.fieldNamesUnderscored;
     const prompts = [
         {
             type: 'confirm',
@@ -902,7 +903,7 @@ function askForRelationship() {
                 if (input === '') {
                     return 'Your other entity name cannot be empty';
                 }
-                if (isReservedKeyword(input, 'JAVA')) {
+                if (isReservedTableName(input, 'JAVA')) {
                     return 'Your other entity name cannot contain a Java reserved keyword';
                 }
                 if (input.toLowerCase() === 'user' && context.applicationType === 'microservice') {
@@ -926,10 +927,10 @@ function askForRelationship() {
                 if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                     return 'Your relationship cannot start with an upper case letter';
                 }
-                if (input === 'id' || fieldNamesUnderscored.includes(_.snakeCase(input))) {
+                if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(_.snakeCase(input))) {
                     return 'Your relationship cannot use an already existing field name';
                 }
-                if (isReservedKeyword(input, 'JAVA')) {
+                if (isReservedTableName(input, 'JAVA')) {
                     return 'Your relationship cannot contain a Java reserved keyword';
                 }
                 return true;
@@ -1058,8 +1059,7 @@ function askForRelationship() {
                 relationship.otherEntityRelationshipName = _.lowerFirst(name);
             }
 
-            fieldNamesUnderscored.push(_.snakeCase(props.relationshipName));
-            context.relationships.push(relationship);
+            this.entityConfig.relationships = this.entityConfig.relationships.concat(relationship);
         }
         logFieldsAndRelationships.call(this);
         if (props.relationshipAdd) {
@@ -1075,12 +1075,12 @@ function askForRelationship() {
  */
 function logFieldsAndRelationships() {
     const context = this.context;
-    if (context.fields.length > 0 || context.relationships.length > 0) {
+    if (this.entityConfig.fields.length > 0 || this.entityConfig.relationships.length > 0) {
         this.log(chalk.red(chalk.white('\n================= ') + context.entityNameCapitalized + chalk.white(' =================')));
     }
-    if (context.fields.length > 0) {
+    if (this.entityConfig.fields.length > 0) {
         this.log(chalk.white('Fields'));
-        context.fields.forEach(field => {
+        this.entityConfig.fields.forEach(field => {
             const validationDetails = [];
             const fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
             if (fieldValidate === true) {
@@ -1120,9 +1120,9 @@ function logFieldsAndRelationships() {
         });
         this.log();
     }
-    if (context.relationships.length > 0) {
+    if (this.entityConfig.relationships.length > 0) {
         this.log(chalk.white('Relationships'));
-        context.relationships.forEach(relationship => {
+        this.entityConfig.relationships.forEach(relationship => {
             const validationDetails = [];
             if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes('required')) {
                 validationDetails.push('required');
