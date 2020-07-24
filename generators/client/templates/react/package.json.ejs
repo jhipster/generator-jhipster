@@ -197,7 +197,8 @@ limitations under the License.
     "cleanup": "rimraf <%= DIST_DIR %>",
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
-    "postinstall": "node node_modules/protractor/bin/webdriver-manager update --gecko false",
+    "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
+    "e2e:update-webdriver": "webdriver-manager update --gecko false",
     <%_ } _%>
     <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
