@@ -1023,7 +1023,7 @@ describe('JHipster generator', () => {
                     .on('end', done);
             });
 
-            it('creates expected files with Swagger API first enabled', () => {
+            it('creates expected files with OpenAPI API first enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);
@@ -1071,7 +1071,7 @@ describe('JHipster generator', () => {
                     .on('end', done);
             });
 
-            it('creates expected files with Swagger API first enabled', () => {
+            it('creates expected files with OpenAPI API first enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);

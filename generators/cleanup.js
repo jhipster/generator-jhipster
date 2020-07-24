@@ -267,6 +267,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${javaDir}config/ReactiveSortHandlerMethodArgumentResolver.java`);
     }
     if (generator.isJhipsterVersionLessThan('7.0.0')) {
+        generator.removeFile(`${javaDir}config/apidoc/SwaggerConfiguration.java`);
         generator.removeFile(`${javaDir}config/audit/package-info.java`);
         generator.removeFile(`${javaDir}config/audit/AuditEventConverter.java`);
         generator.removeFile(`${javaDir}domain/PersistentAuditEvent.java`);

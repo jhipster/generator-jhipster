@@ -27,8 +27,8 @@ if (project.hasProperty("no-liquibase")) {
     profiles += ",no-liquibase"
 }
 
-if (project.hasProperty("swagger")) {
-    profiles += ",swagger"
+if (project.hasProperty("api-docs")) {
+    profiles += ",api-docs"
 }
 
 springBoot {

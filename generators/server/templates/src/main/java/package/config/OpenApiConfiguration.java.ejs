@@ -18,18 +18,9 @@ limitations under the License.
 -%>
 package <%= packageName %>.config;
 
-<%_
-  let springFox3 = false;
-  if (reactive && (applicationType === 'gateway' || applicationType === 'monolith')) {
-    springFox3 = true;
-  }
-_%>
-<%_ if (!springFox3) { _%>
-import com.google.common.base.Predicates;
-<%_ } _%>
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
-import io.github.jhipster.config.apidoc.customizer.SwaggerCustomizer;
+import io.github.jhipster.config.apidoc.customizer.SpringfoxCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -49,22 +40,18 @@ import java.util.HashSet;
 import static springfox.documentation.builders.PathSelectors.regex;
 
 @Configuration
-@Profile(JHipsterConstants.SPRING_PROFILE_SWAGGER)
+@Profile(JHipsterConstants.SPRING_PROFILE_API_DOCS)
 public class OpenApiConfiguration {
 
     @Bean
-    public SwaggerCustomizer noApiFirstCustomizer() {
+    public SpringfoxCustomizer noApiFirstCustomizer() {
         return docket -> docket.select()
-<%_ if (springFox3) { _%>
             .apis(RequestHandlerSelectors.basePackage("<%= packageName %>.web.api").negate());
-<%_ } else { _%>
-            .apis(Predicates.not(RequestHandlerSelectors.basePackage("<%= packageName %>.web.api")));
-<%_ } _%>
     }
 
     @Bean
     public Docket apiFirstDocket(JHipsterProperties jHipsterProperties) {
-        JHipsterProperties.Swagger properties = jHipsterProperties.getSwagger();
+        JHipsterProperties.ApiDocs properties = jHipsterProperties.getApiDocs();
         Contact contact = new Contact(
             properties.getContactName(),
             properties.getContactUrl(),
@@ -82,7 +69,7 @@ public class OpenApiConfiguration {
             new ArrayList<>()
         );
 
-        return new Docket(DocumentationType.SWAGGER_2)
+        return new Docket(DocumentationType.OAS_30)
             .groupName("openapi")
             .host(properties.getHost())
             .protocols(new HashSet<>(Arrays.asList(properties.getProtocols())))

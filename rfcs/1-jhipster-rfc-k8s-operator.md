@@ -165,7 +165,7 @@ The README.md file provides a glimpse of this first iteration, but after a lot o
 [future-possibilities]: #future-possibilities
 
 -   Define Operator Cloud Events
--   Add Swagger docs
+-   Add OpenAPI docs
 -   Istio integration
 -   KNative integration
 -   Jenkins X / Tekton Pipelines integration

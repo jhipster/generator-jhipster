@@ -757,7 +757,7 @@ describe('JHipster generator for entity', () => {
                     assert.file(expectedFiles.clientNg2);
                     assert.file(expectedFiles.gatling);
                 });
-                it('generates swagger annotations on domain model', () => {
+                it('generates OpenAPI annotations on domain model', () => {
                     assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`, /@ApiModelProperty/);
                 });
             });
@@ -845,7 +845,7 @@ describe('JHipster generator for entity', () => {
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
                     ]);
                 });
-                it('generates swagger annotations on DTO', () => {
+                it('generates OpenAPI annotations on DTO', () => {
                     assert.noFileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`, /@ApiModelProperty/);
                     assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooDTO.java`, /@ApiModelProperty/);
                 });
