@@ -44,6 +44,7 @@ import org.springframework.data.relational.core.sql.SqlIdentifier;
 import org.springframework.data.relational.core.sql.Table;
 import org.springframework.data.relational.core.sql.render.SqlRenderer;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -63,6 +64,9 @@ public class EntityManager {
         final String referenceColumn;
 
         public LinkTable(String tableName, String idColumn, String referenceColumn) {
+            Assert.notNull(tableName, "tableName is null");
+            Assert.notNull(idColumn, "idColumn is null");
+            Assert.notNull(referenceColumn, "referenceColumn is null");
             this.tableName = tableName;
             this.idColumn = idColumn;
             this.referenceColumn = referenceColumn;
@@ -157,6 +161,8 @@ public class EntityManager {
 
     /**
      * Inserts the given entity into the database - and sets the id, if it's an autoincrement field.
+     * @param <S> the type of the persisted entity.
+     * @param entity the entity to be inserted into the database.
      * @return the persisted entity.
      */
     public <S> Mono<S> insert(S entity) {
@@ -175,7 +181,15 @@ public class EntityManager {
             .defaultIfEmpty(entity);
     }
 
+    /**
+     * Updates the table, which links the entity with the referred entities.
+     * @param table describes the link table, it contains a table name, the column name for the id, and for the referred entity id.
+     * @param entityId the id of the entity, for which the links are created.
+     * @param referencedIds the id of the referred entities.
+     * @return the number of inserted rows.
+     */
     public Mono<Integer> updateLinkTable(LinkTable table, Long entityId, Stream<Long> referencedIds) {
+        Assert.notNull(entityId, "entityId is null");
         return db.delete()
                 .from(table.tableName)
                 .matching(Criteria.from(Criteria.where(table.idColumn).is(entityId)))

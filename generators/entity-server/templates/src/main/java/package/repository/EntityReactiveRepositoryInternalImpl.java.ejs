@@ -192,14 +192,14 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
             entity.setId(entity.get<%= mapsIdAssoc.relationshipNameCapitalized %>().getId());
             <%_ } _%>
             // TODO: implement many-to-many and one-to-many relationship persistence
-            return insert(entity)<% if (fieldsContainOwnerManyToMany) { %>.then(updateRelations(entity)).thenReturn(entity)<% } %>;
+            return insert(entity)<% if (fieldsContainOwnerManyToMany) { %>.flatMap(savedEntity -> updateRelations(savedEntity))<% } %>;
         } else {
             return update(entity).map(numberOfUpdates -> {
                 if (numberOfUpdates.intValue() <= 0) {
                     throw new IllegalStateException("Unable to update <%= entityClass %> with id = " + entity.getId());
                 }
                 return entity;
-            })<% if (fieldsContainOwnerManyToMany) { %>.then(updateRelations(entity)).thenReturn(entity)<% } %>;
+            })<% if (fieldsContainOwnerManyToMany) { %>.then(updateRelations(entity))<% } %>;
         }
     }
 
@@ -215,7 +215,7 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
     }
 
     <%_ if (fieldsContainOwnerManyToMany) { _%>
-    protected Mono<Void> updateRelations(<%= asEntity(entityClass) %> entity) {
+    protected <S extends <%= asEntity(entityClass) %>> Mono<S> updateRelations(S entity) {
         <%_ relationships.filter(function(rel) {
                 return (rel.relationshipType === 'many-to-many' && rel.ownerSide);
             }).forEach(function(rel, idx) {
@@ -226,7 +226,7 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
         <%_
                 }
             }); _%>
-        return result;
+        return result.thenReturn(entity);
     }
     <%_ } _%>
 }
