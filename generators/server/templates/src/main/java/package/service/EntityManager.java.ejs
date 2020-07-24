@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -32,6 +33,7 @@ import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
 import org.springframework.data.r2dbc.mapping.OutboundRow;
 import org.springframework.data.r2dbc.mapping.SettableValue;
 import org.springframework.data.r2dbc.query.UpdateMapper;
+import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
 import org.springframework.data.relational.core.sql.OrderByField;
 import org.springframework.data.relational.core.sql.Select;
@@ -43,6 +45,7 @@ import org.springframework.data.relational.core.sql.Table;
 import org.springframework.data.relational.core.sql.render.SqlRenderer;
 import org.springframework.stereotype.Service;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -53,6 +56,18 @@ import reactor.core.publisher.Mono;
 public class EntityManager {
     public final static String ENTITY_ALIAS = "e";
     public final static String ALIAS_PREFIX = "e_";
+
+    public static class LinkTable {
+        final String tableName;
+        final String idColumn;
+        final String referenceColumn;
+
+        public LinkTable(String tableName, String idColumn, String referenceColumn) {
+            this.tableName = tableName;
+            this.idColumn = idColumn;
+            this.referenceColumn = referenceColumn;
+        }
+    }
 
     private final ReactiveDataAccessStrategy dataAccessStrategy;
     private final SqlRenderer sqlRenderer;
@@ -160,6 +175,25 @@ public class EntityManager {
             .defaultIfEmpty(entity);
     }
 
+    public Mono<Integer> updateLinkTable(LinkTable table, Long entityId, Stream<Long> referencedIds) {
+        return db.delete()
+                .from(table.tableName)
+                .matching(Criteria.from(Criteria.where(table.idColumn).is(entityId)))
+                .fetch()
+                .rowsUpdated()
+                .then(
+                    Flux.fromStream(referencedIds)
+                        .flatMap((Long referenceId) ->
+                            db.insert()
+                                .into(table.tableName)
+                                .value(table.idColumn, entityId)
+                                .value(table.referenceColumn, referenceId)
+                                .fetch()
+                                .rowsUpdated()
+                                )
+                        .collectList()
+                        .map((List<Integer> updates) -> updates.stream().reduce(Integer::sum).orElse(0)));
+    }
 
     private static Collection<? extends OrderByField> createOrderByFields(Table table, Sort sortToUse) {
 
