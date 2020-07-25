@@ -189,12 +189,7 @@ public class EntityManager {
      * @return the number of inserted rows.
      */
     public Mono<Integer> updateLinkTable(LinkTable table, Long entityId, Stream<Long> referencedIds) {
-        Assert.notNull(entityId, "entityId is null");
-        return db.delete()
-                .from(table.tableName)
-                .matching(Criteria.from(Criteria.where(table.idColumn).is(entityId)))
-                .fetch()
-                .rowsUpdated()
+        return deleteFromLinkTable(table, entityId)
                 .then(
                     Flux.fromStream(referencedIds)
                         .flatMap((Long referenceId) ->
@@ -207,6 +202,14 @@ public class EntityManager {
                                 )
                         .collectList()
                         .map((List<Integer> updates) -> updates.stream().reduce(Integer::sum).orElse(0)));
+    }
+
+    public Mono<Void> deleteFromLinkTable(LinkTable table, Long entityId) {
+        Assert.notNull(entityId, "entityId is null");
+        return db.delete()
+                .from(table.tableName)
+                .matching(Criteria.from(Criteria.where(table.idColumn).is(entityId)))
+                .then();
     }
 
     private static Collection<? extends OrderByField> createOrderByFields(Table table, Sort sortToUse) {

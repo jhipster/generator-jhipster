@@ -215,6 +215,14 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
     }
 
     <%_ if (fieldsContainOwnerManyToMany) { _%>
+
+    @Override
+    public Mono<Void> deleteById(Long entityId) {
+        return deleteRelations(entityId).then(
+             db.delete().from(<%= asEntity(entityClass) %>.class).matching(Criteria.from(Criteria.where("id").is(entityId))).then()
+        );
+    }
+
     protected <S extends <%= asEntity(entityClass) %>> Mono<S> updateRelations(S entity) {
         <%_ relationships.filter(function(rel) {
                 return (rel.relationshipType === 'many-to-many' && rel.ownerSide);
@@ -228,6 +236,18 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
             }); _%>
         return result.thenReturn(entity);
     }
+
+    protected Mono<Void> deleteRelations(Long entityId) {
+        <%_ relationships.filter(function(rel) {
+                return (rel.relationshipType === 'many-to-many' && rel.ownerSide);
+            }).forEach(function(rel, idx) {
+                if (idx === 0) { _%>
+        return entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId)<% 
+                } else { %>
+                .and(entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId))<% } 
+            }); %>;
+    }
+
     <%_ } _%>
 }
 

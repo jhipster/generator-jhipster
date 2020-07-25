@@ -104,6 +104,10 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
 
     @Override
     Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable page);
+
+    @Override
+    Mono<Void> deleteById(Long id);
+
         <%_ } _%>
 
         <%_ for (idx in relationships) { 
@@ -164,6 +168,8 @@ interface <%= entityClass %>RepositoryInternal {
     Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
 
     Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable page);
+
+    Mono<Void> deleteById(Long id);
     <%_ } _%>
 
 }
