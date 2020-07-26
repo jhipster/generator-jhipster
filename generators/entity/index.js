@@ -218,11 +218,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             this.debug('Error:', err);
                             throw new Error('\nThe entity configuration file could not be read!\n');
                         }
-                        if (this.entityConfig.clientRootFolder === undefined) {
-                            context.clientRootFolder = this.entityConfig.clientRootFolder = context.skipUiGrouping
-                                ? ''
-                                : this.entityConfig.microserviceName;
-                        }
+                    }
+                    if (this.entityConfig.clientRootFolder === undefined) {
+                        context.clientRootFolder = this.entityConfig.clientRootFolder = context.skipUiGrouping
+                            ? ''
+                            : this.entityConfig.microserviceName;
                     }
                 }
             },
