@@ -223,10 +223,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%_ if (!hasDto && typeof fields[idx].javadoc != 'undefined') { _%>
     @ApiModelProperty(value = "<%- formatAsApiDescription(fields[idx].javadoc) %>"<% if (required) { %>, required = true<% } %>)
     <%_ } _%>
-    <%_ if (databaseType === 'sql' && reactive) {
-        if (fields[idx].fieldIsEnum) { _%>
-    //@Enumerated(EnumType.STRING)
-        <%_ } _%>
+    <%_ if (databaseType === 'sql' && reactive) { _%>
     @Column("<%- fieldNameAsDatabaseColumn %>")
     <%_ } _%>
     <%_ if (databaseType === 'sql' && !reactive) {
