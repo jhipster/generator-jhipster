@@ -19,8 +19,6 @@ const mockBlueprintSubGen = class extends EntityGenerator {
         }
 
         this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupEntityOptions(this, jhContext, this);
     }
 
     get initializing() {
@@ -28,15 +26,8 @@ const mockBlueprintSubGen = class extends EntityGenerator {
         const customPrePhaseSteps = {
             // Create a custom persistent entity config.
             createCustomConfig() {
-                // Simulate data loaded from file
-                this.context.fileData = this.context.fileData || {};
-                this.context.fileData.customPreConfigKey = 'customPreConfigValue';
-                this.context.fileData.customBlueprintConfigKey = 'customPreConfigValue';
-
                 // Override with new value
-                this.storageData = {
-                    customBlueprintConfigKey: 'customBlueprintConfigValue',
-                };
+                this.entityConfig.customBlueprintConfigKey = 'customBlueprintConfigValue';
             },
         };
         const customPostPhaseSteps = {
@@ -89,7 +80,7 @@ describe('JHipster entity generator with blueprint', () => {
                     })
                     .withArguments(['foo'])
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipInstall: true,
                         blueprint: blueprintName,
                         skipChecks: true,
@@ -116,9 +107,6 @@ describe('JHipster entity generator with blueprint', () => {
             });
 
             // Verify if the custom entity config is persisted.
-            it('contains the specific config added', () => {
-                assert.fileContent('.jhipster/Foo.json', /"customPreConfigKey": "customPreConfigValue"/);
-            });
             it('contains the specific config added by the blueprint', () => {
                 assert.fileContent('.jhipster/Foo.json', /"customBlueprintConfigKey": "customBlueprintConfigValue"/);
             });
@@ -133,7 +121,7 @@ describe('JHipster entity generator with blueprint', () => {
                     fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
                 })
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
                     skipChecks: true,

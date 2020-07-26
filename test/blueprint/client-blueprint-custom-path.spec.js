@@ -62,7 +62,7 @@ describe('JHipster client generator with blueprint with path customizer', () => 
                 helpers
                     .run(path.join(__dirname, '../../generators/client'))
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         build: 'maven',
                         auth: 'jwt',
                         db: 'mysql',
@@ -89,7 +89,13 @@ describe('JHipster client generator with blueprint with path customizer', () => 
                         return path;
                     })
                 );
-                assert.file(expectedFiles.i18nJson);
+                assert.file(
+                    expectedFiles.i18nJson.map(path => {
+                        path = path.replace(/^src\/main\/webapp([/$])/, 'src/main/webapp2$1');
+                        assert(!/^src\/main\/webapp([/$])/.test(path));
+                        return path;
+                    })
+                );
             });
 
             it('contains the specific change added by the blueprint', () => {

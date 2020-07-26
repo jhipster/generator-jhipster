@@ -597,17 +597,6 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                generator.reactive && (generator.applicationType === 'gateway' || generator.applicationType === 'monolith'),
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/config/apidoc/SwaggerConfiguration.java',
-                    renameTo: generator => `${generator.javaDir}config/apidoc/SwaggerConfiguration.java`,
-                },
-            ],
-        },
-        {
-            condition: generator =>
                 generator.applicationType === 'gateway' && generator.serviceDiscoveryType && generator.cacheProvider === 'hazelcast',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -932,7 +921,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => !generator.reactive,
+            condition: generator => !generator.skipClient && !generator.reactive,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1004,14 +993,6 @@ const serverFiles = {
                 {
                     file: 'package/config/DatabaseConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/DatabaseConfiguration.java`,
-                },
-                {
-                    file: 'package/config/audit/package-info.java',
-                    renameTo: generator => `${generator.javaDir}config/audit/package-info.java`,
-                },
-                {
-                    file: 'package/config/audit/AuditEventConverter.java',
-                    renameTo: generator => `${generator.javaDir}config/audit/AuditEventConverter.java`,
                 },
             ],
         },
@@ -1154,10 +1135,6 @@ const serverFiles = {
                 {
                     file: 'package/domain/AbstractAuditingEntity.java',
                     renameTo: generator => `${generator.javaDir}domain/AbstractAuditingEntity.java`,
-                },
-                {
-                    file: 'package/domain/PersistentAuditEvent.java',
-                    renameTo: generator => `${generator.javaDir}domain/PersistentAuditEvent.java`,
                 },
             ],
         },
@@ -1431,16 +1408,23 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
-                    file: 'package/config/StaticResourcesWebConfigurerTest.java',
-                    renameTo: generator => `${generator.testDir}config/StaticResourcesWebConfigurerTest.java`,
-                },
-                {
                     file: 'package/config/WebConfigurerTest.java',
                     renameTo: generator => `${generator.testDir}config/WebConfigurerTest.java`,
                 },
                 {
                     file: 'package/config/WebConfigurerTestController.java',
                     renameTo: generator => `${generator.testDir}config/WebConfigurerTestController.java`,
+                },
+            ],
+        },
+        {
+            // TODO : add these tests to reactive
+            condition: generator => !generator.skipClient && !generator.reactive,
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/StaticResourcesWebConfigurerTest.java',
+                    renameTo: generator => `${generator.testDir}config/StaticResourcesWebConfigurerTest.java`,
                 },
             ],
         },
@@ -1713,52 +1697,6 @@ const serverFiles = {
                     file: 'package/repository/AuthorityRepository.java',
                     renameTo: generator => `${generator.javaDir}repository/AuthorityRepository.java`,
                 },
-                {
-                    file: 'package/repository/PersistenceAuditEventRepository.java',
-                    renameTo: generator => `${generator.javaDir}repository/PersistenceAuditEventRepository.java`,
-                },
-                {
-                    file: 'package/service/AuditEventService.java',
-                    renameTo: generator => `${generator.javaDir}service/AuditEventService.java`,
-                },
-                { file: 'package/web/rest/AuditResource.java', renameTo: generator => `${generator.javaDir}web/rest/AuditResource.java` },
-            ],
-        },
-        {
-            condition: generator =>
-                !generator.reactive &&
-                generator.authenticationType === 'oauth2' &&
-                ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/repository/CustomAuditEventRepository.java',
-                    renameTo: generator => `${generator.javaDir}repository/CustomAuditEventRepository.java`,
-                },
-            ],
-        },
-        {
-            condition: generator =>
-                generator.authenticationType === 'oauth2' && ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
-            path: SERVER_TEST_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/web/rest/AuditResourceIT.java',
-                    renameTo: generator => `${generator.testDir}web/rest/AuditResourceIT.java`,
-                },
-            ],
-        },
-        {
-            condition: generator =>
-                !generator.reactive &&
-                generator.authenticationType === 'oauth2' &&
-                ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
-            path: SERVER_TEST_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/repository/CustomAuditEventRepositoryIT.java',
-                    renameTo: generator => `${generator.testDir}repository/CustomAuditEventRepositoryIT.java`,
-                },
             ],
         },
         {
@@ -1779,28 +1717,6 @@ const serverFiles = {
                 {
                     file: 'package/repository/AuthorityRepository.java',
                     renameTo: generator => `${generator.javaDir}repository/AuthorityRepository.java`,
-                },
-                {
-                    file: 'package/repository/PersistenceAuditEventRepository.java',
-                    renameTo: generator => `${generator.javaDir}repository/PersistenceAuditEventRepository.java`,
-                },
-                {
-                    file: 'package/service/AuditEventService.java',
-                    renameTo: generator => `${generator.javaDir}service/AuditEventService.java`,
-                },
-                { file: 'package/web/rest/AuditResource.java', renameTo: generator => `${generator.javaDir}web/rest/AuditResource.java` },
-            ],
-        },
-        {
-            condition: generator =>
-                !generator.reactive &&
-                !generator.skipUserManagement &&
-                ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/repository/CustomAuditEventRepository.java',
-                    renameTo: generator => `${generator.javaDir}repository/CustomAuditEventRepository.java`,
                 },
             ],
         },
@@ -1899,35 +1815,6 @@ const serverFiles = {
                 {
                     file: 'package/web/rest/UserJWTControllerIT.java',
                     renameTo: generator => `${generator.testDir}web/rest/UserJWTControllerIT.java`,
-                },
-            ],
-        },
-        {
-            // TODO : add tests for reactive
-            condition: generator =>
-                !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
-            path: SERVER_TEST_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/web/rest/AuditResourceIT.java',
-                    renameTo: generator => `${generator.testDir}web/rest/AuditResourceIT.java`,
-                },
-                {
-                    file: 'package/service/AuditEventServiceIT.java',
-                    renameTo: generator => `${generator.testDir}service/AuditEventServiceIT.java`,
-                },
-            ],
-        },
-        {
-            condition: generator =>
-                !generator.reactive &&
-                !generator.skipUserManagement &&
-                ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
-            path: SERVER_TEST_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/repository/CustomAuditEventRepositoryIT.java',
-                    renameTo: generator => `${generator.testDir}repository/CustomAuditEventRepositoryIT.java`,
                 },
             ],
         },

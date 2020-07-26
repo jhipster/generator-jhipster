@@ -16,9 +16,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+trigger:
+    branches:
+        exclude:
+            - dependabot/*
 jobs:
     - job: Test
+      condition: not(contains(variables['System.PullRequest.SourceBranch'], 'dependabot'))
       pool:
           vmImage: 'ubuntu-18.04'
       variables:

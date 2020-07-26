@@ -36,7 +36,7 @@ let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
-        this.configOptions = this.options.configOptions || {};
+
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
@@ -59,8 +59,8 @@ module.exports = class extends BaseBlueprintGenerator {
             return;
         }
 
-        this.herokuSkipBuild = this.options['skip-build'];
-        this.herokuSkipDeploy = this.options['skip-deploy'] || this.options['skip-build'];
+        this.herokuSkipBuild = this.options.skipBuild;
+        this.herokuSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
         this.registerPrettierTransform();
 
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('heroku');
@@ -74,12 +74,12 @@ module.exports = class extends BaseBlueprintGenerator {
 
             initializing() {
                 this.log(chalk.bold('Heroku configuration is starting'));
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
                 this.baseName = configuration.get('baseName');
                 this.packageName = configuration.get('packageName');
                 this.packageFolder = configuration.get('packageFolder');
-                this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
+                this.cacheProvider = configuration.get('cacheProvider') || 'no';
                 this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
                 this.databaseType = configuration.get('databaseType');
                 this.prodDatabaseType = configuration.get('prodDatabaseType');
@@ -501,7 +501,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.log(chalk.bold('\nProvisioning addons'));
                 if (this.searchEngine === 'elasticsearch') {
                     ChildProcess.exec(
-                        `heroku addons:create bonsai --as BONSAI --app ${this.herokuAppName}`,
+                        `heroku addons:create bonsai:sandbox --as BONSAI --app ${this.herokuAppName}`,
                         addonCreateCallback.bind(this, 'Elasticsearch')
                     );
                 }
@@ -521,7 +521,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     });
                 }
 
-                let dbAddOn = '';
+                let dbAddOn;
                 if (this.prodDatabaseType === 'postgresql') {
                     dbAddOn = 'heroku-postgresql --as DATABASE';
                 } else if (this.prodDatabaseType === 'mysql') {
@@ -532,20 +532,38 @@ module.exports = class extends BaseBlueprintGenerator {
                     dbAddOn = 'mongolab:sandbox --as MONGODB';
                 } else if (this.prodDatabaseType === 'neo4j') {
                     dbAddOn = 'graphenedb:dev-free --as GRAPHENEDB';
-                } else {
-                    done();
-                    return;
                 }
 
-                ChildProcess.exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
-                    addonCreateCallback('Database', err, stdout, stderr);
-                    done();
-                });
+                if (dbAddOn) {
+                    this.log(chalk.bold(`\nProvisioning database addon ${dbAddOn}`));
+                    ChildProcess.exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                        addonCreateCallback('Database', err, stdout, stderr);
+                    });
+                } else {
+                    this.log(chalk.bold(`\nNo suitable database addon for database ${this.prodDatabaseType} available.`));
+                }
+
+                let cacheAddOn;
+                if (this.cacheProvider === 'memcached') {
+                    cacheAddOn = 'memcachier:dev --as MEMCACHIER';
+                } else if (this.cacheProvider === 'redis') {
+                    cacheAddOn = 'heroku-redis:hobby-dev --as REDIS';
+                }
+
+                if (cacheAddOn) {
+                    this.log(chalk.bold(`\nProvisioning cache addon ${cacheAddOn}`));
+                    ChildProcess.exec(`heroku addons:create ${cacheAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                        addonCreateCallback('Cache', err, stdout, stderr);
+                    });
+                } else {
+                    this.log(chalk.bold(`\nNo suitable cache addon for cacheprovider ${this.cacheProvider} available.`));
+                }
+
+                done();
             },
 
             configureJHipsterRegistry() {
-                if (this.abort || this.herokuAppExists) return;
-                const done = this.async();
+                if (this.abort || this.herokuAppExists) return undefined;
 
                 if (this.serviceDiscoveryType === 'eureka') {
                     const prompts = [
@@ -568,7 +586,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     ];
 
                     this.log('');
-                    this.prompt(prompts).then(props => {
+                    return this.prompt(prompts).then(props => {
                         // Encode username/password to avoid errors caused by spaces
                         props.herokuJHipsterRegistryUsername = encodeURIComponent(props.herokuJHipsterRegistryUsername);
                         props.herokuJHipsterRegistryPassword = encodeURIComponent(props.herokuJHipsterRegistryPassword);
@@ -579,24 +597,19 @@ module.exports = class extends BaseBlueprintGenerator {
                                 this.abort = true;
                                 this.log.error(err);
                             }
-                            done();
                         });
 
                         child.stdout.on('data', data => {
                             this.log(data.toString());
                         });
                     });
-                } else {
-                    this.conflicter.resolve(err => {
-                        done();
-                    });
                 }
+                return undefined;
             },
 
             copyHerokuFiles() {
                 if (this.abort) return;
 
-                const done = this.async();
                 this.log(chalk.bold('\nCreating Heroku deployment files'));
 
                 this.template('bootstrap-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`);
@@ -612,10 +625,6 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.log(`${chalk.yellow.bold('WARNING!')}Failed to add 'provision-okta-addon.sh' to .gitignore.'`);
                     });
                 }
-
-                this.conflicter.resolve(err => {
-                    done();
-                });
             },
 
             addHerokuDependencies() {

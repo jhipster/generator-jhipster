@@ -19,8 +19,6 @@ const mockBlueprintSubGen = class extends LanguagesGenerator {
         }
 
         this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupEntityOptions(this, jhContext, this);
     }
 
     get initializing() {
@@ -67,7 +65,7 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
                 fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
             })
             .withOptions({
-                'from-cli': true,
+                fromCli: true,
                 build: 'maven',
                 auth: 'jwt',
                 db: 'mysql',

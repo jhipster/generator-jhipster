@@ -16,9 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-let withAudit = ((authenticationType === 'session' && !skipUserManagement) || authenticationType === 'oauth2') && ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(databaseType);
-_%>
 package <%= packageName %>.config;
 
 import <%= packageName %>.security.AuthoritiesConstants;
@@ -31,14 +28,8 @@ import <%= packageName %>.security.jwt.TokenProvider;
 import <%= packageName %>.security.SecurityUtils;
 import <%= packageName %>.security.oauth2.AudienceValidator;
 import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
-        <%_ if (withAudit) { _%>
-import <%= packageName %>.service.AuditEventService;
-        <%_ } _%>
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-    <%_ } _%>
-    <%_ if (!skipUserManagement && withAudit) { _%>
-import <%= packageName %>.service.AuditEventService;
     <%_ } _%>
 import io.github.jhipster.web.filter.reactive.CookieCsrfFilter;
 <%_ } _%>
@@ -74,9 +65,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
-    <%_ if (withAudit) { _%>
-import org.springframework.security.core.Authentication;
-    <%_ } _%>
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcReactiveOAuth2UserService;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
@@ -90,11 +78,6 @@ import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
-    <%_ if (withAudit) { _%>
-import org.springframework.security.web.server.WebFilterExchange;
-import org.springframework.security.web.server.authentication.RedirectServerAuthenticationSuccessHandler;
-import org.springframework.security.web.server.authentication.ServerAuthenticationSuccessHandler;
-    <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
     <%_ if (skipUserManagement) { _%>
@@ -156,10 +139,6 @@ public class SecurityConfiguration {
     private final TokenProvider tokenProvider;
 
     <%_ } _%>
-    <%_ if (withAudit) { _%>
-    private final AuditEventService auditEventService;
-
-    <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
@@ -169,15 +148,12 @@ public class SecurityConfiguration {
     <%_ } _%>
     private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(<% if (!skipUserManagement && authenticationType !== 'oauth2') { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (withAudit) { %>AuditEventService auditEventService, <% } %><% if (authenticationType === 'oauth2') { %>JHipsterProperties jHipsterProperties, <% } %>SecurityProblemSupport problemSupport) {
+    public SecurityConfiguration(<% if (!skipUserManagement && authenticationType !== 'oauth2') { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (authenticationType === 'oauth2') { %>JHipsterProperties jHipsterProperties, <% } %>SecurityProblemSupport problemSupport) {
         <%_ if (!skipUserManagement && authenticationType !== 'oauth2') { _%>
         this.userDetailsService = userDetailsService;
         <%_ } _%>
         <%_ if (authenticationType === 'jwt') { _%>
         this.tokenProvider = tokenProvider;
-        <%_ } _%>
-        <%_ if (withAudit) { _%>
-        this.auditEventService = auditEventService;
         <%_ } _%>
         <%_ if (authenticationType === 'oauth2') { _%>
         this.jHipsterProperties = jHipsterProperties;
@@ -221,7 +197,7 @@ public class SecurityConfiguration {
         // @formatter:off
         http
             .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
-                pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**", "/test/**"<% if (applicationType === 'gateway' || applicationType === 'monolith') { %>, "/webjars/**"<% } %>),
+                pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/index.html", "/v2/api-docs", "/v3/api-docs", "/test/**"),
                 pathMatchers(HttpMethod.OPTIONS, "/**")
             )))
             .csrf()
@@ -287,7 +263,7 @@ public class SecurityConfiguration {
             .pathMatchers("/api/auth-info").permitAll()
             .pathMatchers("/api/**").authenticated()
             <%_ if (applicationType === 'monolith' || applicationType === 'gateway') { _%>
-            .pathMatchers("/services/**", "/swagger-resources/**", "/v2/api-docs").authenticated()
+            .pathMatchers("/services/**", "/swagger-resources/**").authenticated()
             <%_ } _%>
             .pathMatchers("/management/health").permitAll()
             .pathMatchers("/management/info").permitAll()
@@ -296,9 +272,6 @@ public class SecurityConfiguration {
         <%_ if (authenticationType === 'oauth2') { _%>
 
         http<%_ if (['monolith', 'gateway'].includes(applicationType)) { _%>.oauth2Login()
-            <%_ if (withAudit) { _%>
-            .authenticationSuccessHandler(this::onAuthenticationSuccess)
-            <%_ } _%>
             .and()
             <% } %>.oauth2ResourceServer()
                 .jwt()
@@ -355,48 +328,17 @@ public class SecurityConfiguration {
         return jwtDecoder;
     }
 
-        <%_ if (withAudit) { _%>
-    private ServerAuthenticationSuccessHandler redirectServerAuthenticationSuccessHandler = new RedirectServerAuthenticationSuccessHandler();
-
-    private Mono<Void> onAuthenticationSuccess(WebFilterExchange exchange, Authentication authentication) {
-        return redirectServerAuthenticationSuccessHandler.onAuthenticationSuccess(exchange, authentication)
-            .thenReturn(authentication.getPrincipal())
-            .filter(principal -> principal instanceof OidcUser)
-            .map(principal -> ((OidcUser) principal).getPreferredUsername())
-            .filter(login -> !Constants.ANONYMOUS_USER.equals(login))
-            .flatMap(auditEventService::saveAuthenticationSuccess)
-            .then();
-    }
-        <%_ } _%>
     <%_ } _%>
     <%_ if (authenticationType === 'session') { _%>
 
     private Mono<Void> onAuthenticationError(WebFilterExchange exchange, AuthenticationException e) {
         exchange.getExchange().getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-        <%_ if (withAudit) { _%>
-        return exchange.getExchange()
-                .getFormData()
-                .map(data -> data.getFirst("username"))
-                .filter(login -> !Constants.ANONYMOUS_USER.equals(login))
-                .flatMap(login -> auditEventService.saveAuthenticationError(login, e))
-                .then();
-        <%_ } else { _%>
         return Mono.empty();
-        <%_ } _%>
     }
 
     private Mono<Void> onAuthenticationSuccess(WebFilterExchange exchange, Authentication authentication) {
         exchange.getExchange().getResponse().setStatusCode(HttpStatus.OK);
-        <%_ if (withAudit) { _%>
-        return Mono.just(authentication.getPrincipal())
-                .filter(principal -> principal instanceof User)
-                .map(principal -> ((User) principal).getUsername())
-                .filter(login -> !Constants.ANONYMOUS_USER.equals(login))
-                .flatMap(auditEventService::saveAuthenticationSuccess)
-                .then();
-        <%_ } else { _%>
         return Mono.empty();
-        <%_ } _%>
     }
     <%_ } _%>
     <%_ if(databaseType === 'couchbase') { _%>

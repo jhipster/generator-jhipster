@@ -44,7 +44,7 @@ export interface IHeaderProps {
   isAdmin: boolean;
   ribbonEnv: string;
   isInProduction: boolean;
-  isSwaggerEnabled: boolean;
+  isOpenAPIEnabled: boolean;
 <%_ if (enableTranslation) { _%>
   currentLocale: string;
   onLocaleChange: Function;
@@ -97,7 +97,7 @@ const Header = (props: IHeaderProps) => {
             <Home />
             {props.isAuthenticated && <EntitiesMenu />}
             {props.isAuthenticated && props.isAdmin &&
-              <AdminMenu showSwagger={props.isSwaggerEnabled} <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %> showDatabase={!props.isInProduction} <%_ } _%> />}
+              <AdminMenu showOpenAPI={props.isOpenAPIEnabled} <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %> showDatabase={!props.isInProduction} <%_ } _%> />}
           <%_ if (enableTranslation) { _%>
             <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />
           <%_ } _%>

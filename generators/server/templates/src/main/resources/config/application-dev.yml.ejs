@@ -81,7 +81,7 @@ spring:
     profiles:
         active: dev
         include:
-            - swagger
+            - api-docs
             # Uncomment to activate TLS for the dev profile
             #- tls
     devtools:
@@ -153,7 +153,7 @@ spring:
     jpa:
         <%_ if (devDatabaseType === 'postgresql') { _%>
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
-        <%_ } else if (devDatabaseType === 'h2disk' || devDatabaseType === 'h2Memory') { _%>
+        <%_ } else if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
         database-platform: io.github.jhipster.domain.util.FixedH2Dialect
         <%_ } _%>
         show-sql: true
@@ -275,7 +275,7 @@ jhipster:
             duration-in-seconds: 3600
         <%_ if (!reactive) { _%>
         authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
-            app1: /api,/v2/api-docs # recommended dev configuration
+            app1: /api,/v3/api-docs # recommended dev configuration
         <%_ } _%>
     <%_ } _%>
     <%_ if (cacheProvider !== 'no') { _%>
@@ -395,10 +395,6 @@ jhipster:
             host: localhost
             port: 5000
             queue-size: 512
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-    audit-events:
-        retention-period: 30 # Number of days before audit events are deleted.
-    <%_ } _%>
 <%_ if (applicationType === 'uaa') { _%>
 uaa:
     key-store:

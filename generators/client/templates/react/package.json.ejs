@@ -92,7 +92,6 @@ limitations under the License.
     "@typescript-eslint/eslint-plugin": "2.29.0",
     "@typescript-eslint/parser": "2.29.0",
     "autoprefixer": "9.7.6",
-    "base-href-webpack-plugin": "2.0.0",
     "browser-sync": "2.26.7",
     "browser-sync-webpack-plugin": "2.2.2",
     "cache-loader": "4.1.0",
@@ -100,7 +99,7 @@ limitations under the License.
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
     <%_ } _%>
-    "copy-webpack-plugin": "5.1.1",
+    "copy-webpack-plugin": "6.0.3",
     "core-js": "3.6.5",
     "cross-env": "7.0.2",
     "css-loader": "3.5.3",
@@ -117,7 +116,7 @@ limitations under the License.
     "fork-ts-checker-webpack-plugin": "4.1.3",
     "friendly-errors-webpack-plugin": "1.7.0",
     "generator-jhipster": "<%= packagejs.version %>",
-    "html-webpack-plugin": "3.2.0",
+    "html-webpack-plugin": "4.3.0",
     <%_ if (!skipCommitHook) { _%>
     "husky": "<%= HUSKY_VERSION %>",
     <%_ } _%>
@@ -140,7 +139,7 @@ limitations under the License.
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "postcss-loader": "3.0.0",
     "prettier": "<%= PRETTIER_VERSION %>",
-    <%_ if (!skipServer && prettierJava) { _%>
+    <%_ if (!skipServer) { _%>
     "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
     <%_ } _%>
     <%_ if (protractorTests) { _%>
@@ -192,7 +191,7 @@ limitations under the License.
     "yarn": ">=1.19.0"<% } %>
   },
   "scripts": {
-    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,tsx,css,scss,yml<%= !skipServer && prettierJava ? ',java' : '' %>}\"",
+    "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "cleanup": "rimraf <%= DIST_DIR %>",

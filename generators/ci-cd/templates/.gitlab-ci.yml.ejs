@@ -153,7 +153,7 @@ gradle-package:
 #    dependencies:
 #        - gradle-package
 #    script:
-#        - ./gradlew jib -Pprod -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username="gitlab-ci-token"  -Djib.to.auth.password=$CI_BUILD_TOKEN
+#        - ./gradlew jib -Pprod -PnodeInstall -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username="gitlab-ci-token"  -Djib.to.auth.password=$CI_BUILD_TOKEN
 
 <%_ if (cicdIntegrations.includes('heroku')) { _%>
 deploy-to-production:

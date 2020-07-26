@@ -41,7 +41,7 @@ describe('JHipster entity server generator with blueprint', () => {
                     })
                     .withArguments(['foo'])
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipInstall: true,
                         blueprint: blueprintName,
                         skipChecks: true,

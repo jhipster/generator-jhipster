@@ -60,7 +60,7 @@ description = ""
 
 sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
-assert System.properties["java.specification.version"] == "1.8" || "11" || "12" || "13" || "14"
+assert System.properties["java.specification.version"] == "1.8" || "1.9" || "10" || "11" || "12" || "13" || "14"
 
 apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
@@ -260,14 +260,6 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
-    <%_ if (reactive && (applicationType === 'gateway' || applicationType === 'monolith')) { _%>
-    maven {
-        url "https://oss.jfrog.org/artifactory/oss-snapshot-local/"
-        mavenContent {
-            snapshotsOnly()
-        }
-    }
-    <%_ } _%>
     <%_ if (reactive && databaseType === 'sql' || JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT')) { _%>
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots/"
@@ -520,16 +512,9 @@ dependencies {
     implementation "com.couchbase.client:java-client"
     implementation "com.couchbase.client:encryption"
     <%_ } _%>
-    <%_ if (!reactive) { _%>
-    implementation ("io.springfox:springfox-swagger2") {
-        exclude module: "mapstruct"
-    }
+    implementation ("io.springfox:springfox-oas")
+    implementation ("io.springfox:springfox-swagger2")
     implementation "io.springfox:springfox-bean-validators"
-    <%_ } else if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
-    implementation "io.springfox:springfox-swagger2:${springfox_version}"
-    implementation "io.springfox:springfox-swagger-ui:${springfox_version}"
-    implementation "io.springfox:springfox-spring-webflux:${springfox_version}"
-    <%_ } _%>
     <%_ if (prodDatabaseType === 'mysql') { _%>
     implementation "mysql:mysql-connector-java"
         <%_ if (!reactive) { _%>

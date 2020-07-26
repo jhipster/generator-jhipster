@@ -7,7 +7,6 @@ Example:
     This will create for each selected language:
         /webapp/i18n/{lang}/global.json
         /webapp/i18n/{lang}/activate.json
-        /webapp/i18n/{lang}/audits.json
         /webapp/i18n/{lang}/configuration.json
         /webapp/i18n/{lang}/error.json
         /webapp/i18n/{lang}/gateway.json

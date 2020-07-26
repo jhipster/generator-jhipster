@@ -28,7 +28,7 @@ const BaseGenerator = require('../generator-base');
 const cleanup = require('../cleanup');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
-const utils = require('../utils');
+const { parseBluePrints } = require('../../utils/blueprint');
 const packagejs = require('../../package.json');
 
 /* Constants used throughout */
@@ -42,7 +42,6 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-        this.force = this.options.force;
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
@@ -81,11 +80,16 @@ module.exports = class extends BaseGenerator {
             defaults: false,
         });
 
-        this.targetJhipsterVersion = this.options['target-version'];
-        this.targetBlueprintVersions = utils.parseBluePrints(this.options['target-blueprint-versions']);
-        this.skipInstall = this.options['skip-install'];
+        if (this.options.help) {
+            return;
+        }
+
+        this.force = this.options.force;
+        this.targetJhipsterVersion = this.options.targetVersion;
+        this.targetBlueprintVersions = parseBluePrints(this.options.targetBlueprintVersions);
+        this.skipInstall = this.options.skipInstall;
         this.silent = this.options.silent;
-        this.skipChecks = this.options['skip-checks'];
+        this.skipChecks = this.options.skipChecks;
 
         // Used for isJhipsterVersionLessThan on cleanup.upgradeFiles
         this.jhipsterOldVersion = this.config.get('jhipsterVersion');
@@ -110,9 +114,7 @@ module.exports = class extends BaseGenerator {
             },
 
             parseBlueprints() {
-                this.blueprints = utils.parseBluePrints(
-                    this.options.blueprints || this.config.get('blueprints') || this.config.get('blueprint')
-                );
+                this.blueprints = parseBluePrints(this.options.blueprints || this.config.get('blueprints') || this.config.get('blueprint'));
             },
 
             loadConfig() {

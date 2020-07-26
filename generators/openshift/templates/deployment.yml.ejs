@@ -140,7 +140,7 @@ objects:
             imagePullPolicy: IfNotPresent
             env:
             - name: SPRING_PROFILES_ACTIVE
-              value: prod,swagger
+              value: prod,api-docs
             <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
             - name: SPRING_CLOUD_CONFIG_URI
               value: http://admin:${jhipster.registry.password}@jhipster-registry:8761/config

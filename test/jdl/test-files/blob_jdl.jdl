@@ -1,0 +1,5 @@
+entity A {
+  anyBlob AnyBlob,
+  imageBlob ImageBlob,
+  textBlob TextBlob
+}

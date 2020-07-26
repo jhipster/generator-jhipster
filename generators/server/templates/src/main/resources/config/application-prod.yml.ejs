@@ -366,10 +366,6 @@ jhipster:
             host: localhost
             port: 5000
             queue-size: 512
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-    audit-events:
-        retention-period: 30 # Number of days before audit events are deleted.
-    <%_ } _%>
 <%_ if (applicationType === 'uaa') { _%>
 uaa:
     #be sure to to change to a different keystore in production!

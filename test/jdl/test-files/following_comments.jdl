@@ -1,0 +1,14 @@
+entity A {
+  name String              /** abc */
+  thing Integer /** def */
+  another Double /*ghi*/
+}
+
+entity B {
+  /** xyz */ name String /** abc */
+}
+
+entity C {
+  name String,             /** abc */
+  thing Integer
+}

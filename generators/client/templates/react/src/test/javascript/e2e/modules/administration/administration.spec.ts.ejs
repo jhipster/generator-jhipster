@@ -74,13 +74,6 @@ describe('Administration', () => {
     expect(await element(by.id('configuration-page-heading')).getText()).to.eq('Configuration');
   });
 
-<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-  it('should load audits', async () => {
-    await navBarPage.clickOnAdminMenuItem('audits');
-    expect(await element(by.id('audits-page-heading')).getText()).to.eq('Audits');
-  });
-
-<%_ } _%>
   it('should load logs', async () => {
     await navBarPage.clickOnAdminMenuItem('logs');
     expect(await element(by.id('logs-page-heading')).getText()).to.eq('Logs');

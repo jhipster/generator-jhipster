@@ -35,6 +35,7 @@ const files = {
                 'package.json',
                 'proxy.conf.json',
                 'tsconfig.json',
+                'tsconfig.base.json',
                 'tsconfig.app.json',
                 'tslint.json',
                 '.eslintrc.json',
@@ -90,7 +91,6 @@ const files = {
     ],
     swagger: [
         {
-            condition: generator => !generator.reactive,
             path: MAIN_SRC_DIR,
             templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }],
         },
@@ -254,20 +254,6 @@ const files = {
                 { file: 'admin/metrics/metrics.component.ts', method: 'processJs' },
                 { file: 'admin/metrics/metrics.component.html', method: 'processHtml', template: true },
                 'admin/metrics/metrics.service.ts',
-            ],
-        },
-        {
-            condition: generator =>
-                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
-            path: ANGULAR_DIR,
-            templates: [
-                { file: 'admin/audits/audits.route.ts', method: 'processJs' },
-                { file: 'admin/audits/audits.module.ts', method: 'processJs' },
-                'admin/audits/audit-data.model.ts',
-                'admin/audits/audit.model.ts',
-                { file: 'admin/audits/audits.component.ts', method: 'processJs' },
-                { file: 'admin/audits/audits.component.html', method: 'processHtml' },
-                'admin/audits/audits.service.ts',
             ],
         },
         {
@@ -458,12 +444,6 @@ const files = {
                 'spec/app/shared/alert/alert-error.component.spec.ts',
                 'spec/app/core/login/login-modal.service.spec.ts',
             ],
-        },
-        {
-            condition: generator =>
-                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
-            path: TEST_SRC_DIR,
-            templates: ['spec/app/admin/audits/audits.component.spec.ts', 'spec/app/admin/audits/audits.service.spec.ts'],
         },
         {
             condition: generator => !generator.skipUserManagement,

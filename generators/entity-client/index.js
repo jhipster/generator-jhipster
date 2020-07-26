@@ -29,7 +29,6 @@ module.exports = class extends BaseBlueprintGenerator {
         super(args, opts);
         utils.copyObjectProps(this, opts.context);
         this.jhipsterContext = opts.jhipsterContext || opts.context;
-        this.configOptions = opts.configOptions || {};
 
         useBlueprints =
             !this.fromBlueprint &&
@@ -64,7 +63,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _end() {
         return {
             end() {
-                if (!this.options['skip-install'] && !this.skipClient) {
+                if (!this.options.skipInstall && !this.skipClient) {
                     this.rebuildClient();
                 }
                 this.log(chalk.bold.green(`Entity ${this.entityNameCapitalized} generated successfully.`));

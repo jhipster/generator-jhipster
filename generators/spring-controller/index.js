@@ -32,7 +32,7 @@ let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
-        this.configOptions = this.options.configOptions || {};
+
         this.argument('name', { type: String, required: true });
         this.name = this.options.name;
         // This adds support for a `--from-cli` flag
@@ -60,13 +60,13 @@ module.exports = class extends BaseBlueprintGenerator {
 
             initializing() {
                 this.log(`The spring-controller ${this.name} is being created.`);
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 this.baseName = configuration.get('baseName');
                 this.packageName = configuration.get('packageName');
                 this.packageFolder = configuration.get('packageFolder');
                 this.databaseType = configuration.get('databaseType');
                 this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
-                this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
+                this.cacheProvider = configuration.get('cacheProvider') || 'no';
                 if (this.messageBroker === undefined) {
                     this.messageBroker = false;
                 }

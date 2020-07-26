@@ -63,7 +63,7 @@ describe('JHipster client generator with blueprint', () => {
                 helpers
                     .run(path.join(__dirname, '../../generators/client'))
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         build: 'maven',
                         auth: 'jwt',
                         db: 'mysql',
@@ -98,7 +98,7 @@ describe('JHipster client generator with blueprint', () => {
             helpers
                 .run(path.join(__dirname, '../../generators/client'))
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
                     skipChecks: true,

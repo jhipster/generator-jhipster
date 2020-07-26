@@ -321,16 +321,6 @@ module.exports = {
 
 function writeFiles() {
     return {
-        saveRemoteEntityPath() {
-            if (_.isUndefined(this.microservicePath)) {
-                return;
-            }
-            this.copy(
-                `${this.microservicePath}/${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`,
-                this.destinationPath(`${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`)
-            );
-        },
-
         setupReproducibility() {
             if (this.skipServer) return;
 
