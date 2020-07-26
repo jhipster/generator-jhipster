@@ -23,7 +23,6 @@ import { Subscription } from 'rxjs';
 import { LoginService } from 'app/core/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
-import { StateStorageService } from 'app/core/auth/state-storage.service';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-login',
@@ -43,7 +42,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     rememberMe: [false]
   });
 
-  constructor(private accountService: AccountService, private loginService: LoginService, private router: Router, private fb: FormBuilder, private stateStorageService: StateStorageService) {}
+  constructor(private accountService: AccountService, private loginService: LoginService, private router: Router, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     // try to log in automatically
@@ -61,8 +60,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  login(): void {          
-    const previousUrl = this.stateStorageService.getUrl();
+  login(): void {
     this.loginService
       .login({
         username: this.loginForm.get('username')!.value,
@@ -71,13 +69,11 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
       })
       .subscribe(
         () => {
-          this.authenticationError = false;
-          if (previousUrl) {
-            this.stateStorageService.clearUrl();
-            this.router.navigateByUrl(previousUrl);
-          } else {
+          this.authenticationError = false;          
+          if (!this.router.getCurrentNavigation()) {
+            // There were no routing during login (eg from navigationToStoredUrl)
             this.router.navigate(['']);
-          }
+         }
         },
         () => {
           (this.authenticationError = true);
