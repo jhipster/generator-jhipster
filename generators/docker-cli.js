@@ -29,7 +29,7 @@ module.exports = {
     getImageID,
     tagImage,
     loginToAws,
-    pushImage
+    pushImage,
 };
 
 let stdOut = data => console.log(data.toString().trim()); // eslint-disable-line
@@ -52,7 +52,7 @@ function command(cmd, cb, opts = {}) {
     const options = {
         silent: false,
         maxBuffer: 10240000,
-        ...opts
+        ...opts,
     };
     const command = exec(`${cmd}`, { maxBuffer: options.maxBuffer }, cb);
 

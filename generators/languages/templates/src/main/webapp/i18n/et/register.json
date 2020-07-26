@@ -10,7 +10,7 @@
                     "required": "Kasutajanimi on kohustuslik.",
                     "minlength": "Kasutajanime pikkus peab olema vähemalt 1 sümbol.",
                     "maxlength": "Kasutajanimi ei tohi olla pikem kui 50 sümbolit.",
-                    "pattern": "Kasutajanimi tohib sisaldada ainult väiketähti ja numbreid."
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>Registreering on salvestatud!</strong> Kinnituseks kontrollige oma e-posti.",

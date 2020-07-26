@@ -36,13 +36,13 @@ module.exports = class extends BaseGenerator {
 
     initializing() {
         this.log(chalk.bold('CloudFoundry configuration is starting'));
-        const configuration = this.getAllJhipsterConfig(this, true);
+        const configuration = this.config;
         this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
         this.baseName = configuration.get('baseName');
         this.buildTool = configuration.get('buildTool');
         this.packageName = configuration.get('packageName');
         this.packageFolder = configuration.get('packageFolder');
-        this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
+        this.cacheProvider = configuration.get('cacheProvider') || 'no';
         this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
         this.databaseType = configuration.get('databaseType');
         this.devDatabaseType = configuration.get('devDatabaseType');
@@ -81,7 +81,7 @@ module.exports = class extends BaseGenerator {
                     }
                     done();
                 });
-            }
+            },
         };
     }
 
@@ -143,7 +143,7 @@ module.exports = class extends BaseGenerator {
                 child.stdout.on('data', data => {
                     this.log(data.toString());
                 });
-            }
+            },
         };
     }
 
@@ -188,7 +188,7 @@ module.exports = class extends BaseGenerator {
                 exec(`cf restart ${this.cloudfoundryDeployedName}`, (err, stdout, stderr) => {
                     this.log(chalk.green('\nYour app should now be live'));
                 });
-            }
+            },
         };
     }
 };

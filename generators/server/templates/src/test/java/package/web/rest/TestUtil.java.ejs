@@ -18,6 +18,10 @@
 -%>
 package <%= packageName %>.web.rest;
 
+<%_ if (searchEngine === 'couchbase') { _%>
+import com.couchbase.client.core.time.Delay;
+import com.couchbase.client.java.util.retry.Retry;
+<%_ } _%>
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -32,10 +36,13 @@ import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 <%_ } _%>
-import org.springframework.http.MediaType;
 <%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.test.context.TestSecurityContextHolder;
+<%_ } _%>
+<%_ if (searchEngine === 'couchbase') { _%>
+import rx.Observable;
+import rx.internal.util.UtilityFunctions;
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import org.springframework.security.core.GrantedAuthority;
@@ -60,6 +67,11 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 <%_ } _%>
+<%_ if (searchEngine === 'couchbase') { _%>
+import java.util.NoSuchElementException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
+<%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -69,11 +81,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public final class TestUtil {
 
     private static final ObjectMapper mapper = createObjectMapper();
-
-    /**
-     * MediaType for JSON
-     */
-    public static final MediaType APPLICATION_JSON = MediaType.APPLICATION_JSON;
+<%_ if (searchEngine === 'couchbase') { _%>
+    private static final int MAX_ATTEMPTS = 3;
+    private static final Delay DEFAULT_DELAY = Delay.exponential(TimeUnit.SECONDS);
+<%_ } _%>
 
     private static ObjectMapper createObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
@@ -224,6 +235,18 @@ public final class TestUtil {
         Collection<GrantedAuthority> authorities = SecurityUtils.extractAuthorityFromClaims(idToken.getClaims());
         OidcUser user = new DefaultOidcUser(authorities, idToken);
         return new OAuth2AuthenticationToken(user, authorities, "oidc");
+    }
+<%_ } _%>
+<%_ if (searchEngine === 'couchbase') { _%>
+
+    public static <T> void retryUntilNotEmpty(Callable<Iterable<T>> iterableCallable) {
+        Retry.wrapForRetry(
+            Observable.fromCallable(iterableCallable)
+                .flatMapIterable(UtilityFunctions.identity())
+                .switchIfEmpty(Observable.error(new NoSuchElementException())),
+            MAX_ATTEMPTS, DEFAULT_DELAY)
+            .toBlocking()
+            .subscribe();
     }
 <%_ } _%>
 

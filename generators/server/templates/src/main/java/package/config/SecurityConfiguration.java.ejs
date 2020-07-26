@@ -92,7 +92,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
-import <%= packageName %>.security.oauth2.JwtAuthorityExtractor;
+import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
     <%_ } _%>
     <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -295,7 +295,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .oauth2ResourceServer()
                 .jwt()
-                .jwtAuthenticationConverter(grantedAuthoritiesExtractor())
+                .jwtAuthenticationConverter(authenticationConverter())
                 .and()
             .and()
                 .oauth2Client();
@@ -310,9 +310,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
 
-    Converter<Jwt, AbstractAuthenticationToken> grantedAuthoritiesExtractor() {
+    Converter<Jwt, AbstractAuthenticationToken> authenticationConverter() {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new JwtAuthorityExtractor());
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new JwtGrantedAuthorityConverter());
         return jwtAuthenticationConverter;
     }
         <%_ if (applicationType !== 'microservice') { _%>
@@ -372,6 +372,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -388,6 +389,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableResourceServer
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
     private final OAuth2Properties oAuth2Properties;
 
@@ -445,12 +447,6 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
         RestTemplate restTemplate = new RestTemplate();
         customizer.customize(restTemplate);
         return restTemplate;
-    }
-
-    @Bean
-    @Qualifier("vanillaRestTemplate")
-    public RestTemplate vanillaRestTemplate() {
-        return new RestTemplate();
     }
 }
 <%_ } _%>

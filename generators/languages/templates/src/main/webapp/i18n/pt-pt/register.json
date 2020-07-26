@@ -10,7 +10,7 @@
                     "required": "O utilizador é obrigatório.",
                     "minlength": "O utilizador deve ter pelo menos 1 caracter",
                     "maxlength": "O utilizador não pode ter mais de 50 caracteres",
-                    "pattern": "O utilizador apenas pode conter letras minúsculas e números"
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>Registo efetuado com sucesso!</strong> Por favor verifique o seu email para confirmar a conta.",

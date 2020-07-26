@@ -22,8 +22,8 @@ import InfiniteScroll from 'react-infinite-scroller';
 <%_ } _%>
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, <% if (searchEngine === 'elasticsearch') { %>InputGroup, <% } %>Col, Row, Table } from 'reactstrap';
-<%_ if (searchEngine === 'elasticsearch') { _%>
+import { Button, <% if (searchEngine !== false) { %>InputGroup, <% } %>Col, Row, Table } from 'reactstrap';
+<%_ if (searchEngine !== false) { _%>
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 <%_ } _%>
 import {
@@ -33,7 +33,7 @@ import {
     <%_ } _%>
   byteSize,
   <%_ } _%>
-  Translate<% if (searchEngine === 'elasticsearch') { %>, translate, ICrudSearchAction<% } %>,
+  Translate<% if (searchEngine !== false) { %>, translate, ICrudSearchAction<% } %>,
   ICrudGetAllAction<% if (fieldsContainDate) { %>, TextFormat<% } %>
   <%_ if (pagination !== 'no') { _%>
   , getSortState, IPaginationBaseState
@@ -45,7 +45,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
 import {
-  <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%_ if (searchEngine !== false) { _%>
   getSearchEntities,
   <%_ } _%>
   getEntities
@@ -57,26 +57,27 @@ import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileNam
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 <%_ if (pagination !== 'no') { _%>
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
+import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 <%_ } _%>
 
 export interface I<%= entityReactName %>Props extends StateProps, DispatchProps, RouteComponentProps<{url: string}> {}
 
 export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
-  <%_ if (searchEngine === 'elasticsearch' || pagination !== 'no') { _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%_ if (searchEngine !== false || pagination !== 'no') { _%>
+    <%_ if (searchEngine !== false) { _%>
   const [search, setSearch] = useState('');
     <%_ } _%>
     <%_ if (pagination !== 'no') { _%>
-  const [paginationState, setPaginationState] = useState(getSortState(props.location, ITEMS_PER_PAGE));
+  const [paginationState, setPaginationState] = useState(overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE), props.location.search));
     <%_ } _%>
   <%_ } _%>
   <%_ if (pagination === 'infinite-scroll') { _%>
   const [sorting, setSorting] = useState(false);
   <%_ } _%>
 
-  <%_ if (pagination === 'pagination' || pagination === 'pager' || pagination === 'infinite-scroll' || pagination !== 'no' && pagination !== 'infinite-scroll') { _%>
+  <%_ if (pagination === 'pagination' || pagination === 'infinite-scroll' || pagination !== 'no' && pagination !== 'infinite-scroll') { _%>
   const getAllEntities = () => {
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
     if (search) {
       props.getSearchEntities(search, paginationState.activePage - 1, paginationState.itemsPerPage, `${paginationState.sort},${paginationState.order}`);
     } else {
@@ -95,30 +96,21 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
       ...paginationState,
       activePage: 1
     });
+    props.getEntities();
   };
   <%_ } _%>
 
   <%_ if (pagination === 'no' || pagination === 'infinite-scroll') { _%>
   useEffect(() => {
     <%_ if (pagination !== 'no') { _%>
-      <%_ if (pagination === 'infinite-scroll') { _%>
     resetAll();
-      <%_ } _%>
     <%_ } else { _%>
     props.getEntities();
     <%_ } _%>
-  }, [<%_ if (searchEngine === 'elasticsearch' && pagination === 'no') { _%>search<%_ } _%>]);
+  }, []);
   <%_ } _%>
 
-  <%_ if (pagination === 'infinite-scroll') { _%>
-  useEffect(() => {
-    if (props.updateSuccess) {
-      getAllEntities();
-    }
-  });
-  <%_ } _%>
-
-  <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%_ if (searchEngine !== false) { _%>
   const startSearching = () => {
     if (search) {
       <%_ if (pagination === 'infinite-scroll') { _%>
@@ -129,6 +121,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
         ...paginationState,
         activePage: 1
       });
+      props.getSearchEntities(search, paginationState.activePage - 1, paginationState.itemsPerPage, `${paginationState.sort},${paginationState.order}`);
       <%_ } else { _%>
       props.getSearchEntities(search);
       <%_ } _%>
@@ -146,6 +139,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
       activePage: 1
     });
     <%_ } _%>
+    props.getEntities();
   };
 
   const handleSearch = event => setSearch(event.target.value);
@@ -153,11 +147,17 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 
   <%_ if (pagination === 'infinite-scroll') { _%>
   useEffect(() => {
+    if (props.updateSuccess) {
+      resetAll();
+    }
+  }, [props.updateSuccess]);
+  
+  useEffect(() => {
     getAllEntities()
   }, [paginationState.activePage]);
 
   const handleLoadMore = () => {
-    if (window.pageYOffset > 0) {
+    if ((window as any).pageYOffset > 0) {
       setPaginationState({
         ...paginationState,
         activePage: paginationState.activePage + 1
@@ -168,10 +168,13 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 
   <%_ if (pagination !== 'no') { _%>
 
-  <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
+  <%_ if (pagination === 'pagination') { _%>
   const sortEntities = () => {
     getAllEntities();
-    props.history.push(`${props.location.pathname}?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`);
+    const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
+    if (props.location.search !== endURL) {
+      props.history.push(`${props.location.pathname}${endURL}`);
+    }
   };
   <%_ } _%>
 
@@ -184,7 +187,24 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     <% } else { %>
     sortEntities();
     <% } %>
-  }, [<% if (pagination === 'infinite-scroll') { %>sorting<% } else { %>paginationState.activePage, paginationState.order, paginationState.sort<% } %><%_ if (searchEngine === 'elasticsearch') { _%>, search<% } %>]);
+  }, [<% if (pagination === 'infinite-scroll') { %>sorting<% } else { %>paginationState.activePage, paginationState.order, paginationState.sort<% } %><%_ if (searchEngine !== false) { _%>, search<% } %>]);
+
+  <%_ if (pagination === 'pagination') { _%>
+  useEffect(() => {
+    const params = new URLSearchParams(props.location.search);
+    const page = params.get('page');
+    const sort = params.get('sort');
+    if (page && sort) {
+      const sortSplit = sort.split(',');
+      setPaginationState({
+        ...paginationState,
+        activePage: +page,
+        sort: sortSplit[0],
+        order: sortSplit[1]
+      });
+    }
+  }, [props.location.search]);
+  <%_ } _%>
 
   const sort = p => () => {
     <% if (pagination === 'infinite-scroll') { %>
@@ -205,7 +225,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     <% } %>
   };
 
-  <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
+  <%_ if (pagination === 'pagination') { _%>
   const handlePagination = currentPage =>
     setPaginationState({
       ...paginationState,
@@ -214,19 +234,21 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   <%_ } _%>
   <%_ } _%>
 
-  const { <%= entityInstance %>List, match, loading<% if (pagination === 'pagination' || pagination === 'pager') { %>, totalItems<% } %>} = props;
+  const { <%= entityInstance %>List, match, loading<% if (pagination === 'pagination') { %>, totalItems<% } %>} = props;
   return (
     <div>
       <h2 id="<%= entityFileName %>-heading">
         <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
+        <%_ if (!readOnly) { _%>
         <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
           <FontAwesomeIcon icon="plus" />&nbsp;
           <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
             Create new <%= entityClassHumanized %>
           </Translate>
         </Link>
+        <%_ } _%>
       </h2>
-      <%_ if (searchEngine === 'elasticsearch') { _%>
+      <%_ if (searchEngine !== false) { _%>
       <Row>
         <Col sm="12">
           <AvForm onSubmit={startSearching}>
@@ -293,9 +315,9 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                     <%_ if (fieldType === 'Boolean') { _%>
                       {<%= entityInstance %>.<%= fields[idx].fieldName %> ? 'true' : 'false'}
                     <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
-                      <TextFormat type="date" value={<%= entityInstance %>.<%= fieldName %>} format={APP_DATE_FORMAT} />
+                      {<%= entityInstance %>.<%= fieldName %> ? <TextFormat type="date" value={<%= entityInstance %>.<%= fieldName %>} format={APP_DATE_FORMAT} />: null}
                     <%_ } else if (fieldType === 'LocalDate') { _%>
-                      <TextFormat type="date" value={<%= entityInstance %>.<%= fieldName %>} format={APP_LOCAL_DATE_FORMAT} />
+                      {<%= entityInstance %>.<%= fieldName %> ? <TextFormat type="date" value={<%= entityInstance %>.<%= fieldName %>} format={APP_LOCAL_DATE_FORMAT} />: null}
                     <%_ } else if (fieldIsEnum && enableTranslation) { _%>
                       <Translate contentKey={`<%= angularAppName %>.<%= fieldType %>.${<%= entityInstance %>.<%= fieldName %>}`} />
                     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
@@ -306,14 +328,16 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                       _%>
                         {<%= entityInstance %>.<%= fieldName %> ? (
                           <div>
+                            {<%= entityInstance %>.<%= fieldName %>ContentType ? (
                               <a onClick={openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)}>
-                              <%_ if (fieldBlobType === 'image') { _%>
-                                <img src={`data:${<%= entityInstance %>.<%= fieldName %>ContentType};base64,${<%= entityInstance %>.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
-                              <%_ } else { _%>
-                                <Translate contentKey="entity.action.open">Open</Translate>
-                              <%_ } _%>
-                              &nbsp;
-                            </a>
+                                <%_ if (fieldBlobType === 'image') { _%>
+                                  <img src={`data:${<%= entityInstance %>.<%= fieldName %>ContentType};base64,${<%= entityInstance %>.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
+                                <%_ } else { _%>
+                                  <Translate contentKey="entity.action.open">Open</Translate>
+                                <%_ } _%>
+                                &nbsp;
+                              </a>
+                            ) : null}
                             <span>{<%= entityInstance %>.<%= fieldName %>ContentType}, {byteSize(<%= entityInstance %>.<%= fieldName %>)}</span>
                           </div>
                         ) : null}
@@ -385,12 +409,14 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                           <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}`} color="info" size="sm">
                             <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                           </Button>
-                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/edit<%_ if (pagination === 'pagination' || pagination === 'pager') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="primary" size="sm">
+                          <%_ if (!readOnly) { _%>
+                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/edit<%_ if (pagination === 'pagination') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="primary" size="sm">
                             <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                           </Button>
-                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/delete<%_ if (pagination === 'pagination' || pagination === 'pager') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="danger" size="sm">
+                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/delete<%_ if (pagination === 'pagination') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="danger" size="sm">
                             <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                           </Button>
+                          <%_ } _%>
                         </div>
                       </td>
                     </tr>
@@ -411,8 +437,8 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
         <%_ } _%>
       </div>
       <%_ if (databaseType !== 'cassandra') { _%>
-        <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-        <div className={ <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ? '' : 'd-none' }>
+        <%_ if (pagination === 'pagination') { _%>
+        { props.totalItems ? (<div className={ <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ? '' : 'd-none' }>
           <Row className="justify-content-center">
             <JhiItemCount
               page={paginationState.activePage}
@@ -430,7 +456,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
               totalItems={props.totalItems}
             />
           </Row>
-        </div>
+        </div>) : '' }
         <% } _%>
       <%_ } _%>
     </div>
@@ -451,7 +477,7 @@ const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
 });
 
 const mapDispatchToProps = {
- <%_ if (searchEngine === 'elasticsearch') { _%>
+ <%_ if (searchEngine !== false) { _%>
  getSearchEntities,
  <%_ } _%>
  getEntities,

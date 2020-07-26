@@ -15,12 +15,10 @@ const mockBlueprintSubGen = class extends LanguagesGenerator {
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
         if (!jhContext) {
-            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprint myblueprint');
+            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
         }
 
         this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupEntityOptions(this, jhContext, this);
     }
 
     get initializing() {
@@ -53,7 +51,7 @@ const mockBlueprintSubGen = class extends LanguagesGenerator {
             addEntityTranslationKey() {
                 this.addEntityTranslationKey('my_entity_key', 'my entity value', 'en');
                 this.addEntityTranslationKey('ma_cle_entite', 'ma valeur entite', 'fr');
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -67,13 +65,13 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
                 fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
             })
             .withOptions({
-                'from-cli': true,
+                fromCli: true,
                 build: 'maven',
                 auth: 'jwt',
                 db: 'mysql',
                 skipInstall: true,
                 blueprint: 'myblueprint',
-                skipChecks: true
+                skipChecks: true,
             })
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:languages']])
             .withPrompts({
@@ -81,7 +79,7 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
                 clientFramework: ANGULAR,
                 enableTranslation: true,
                 nativeLanguage: 'en',
-                languages: ['en', 'fr']
+                languages: ['en', 'fr'],
             })
             .on('end', done);
     });

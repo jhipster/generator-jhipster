@@ -18,7 +18,7 @@
 -%>
     <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
     eventSubscriber?: Subscription;
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
     currentSearch: string;
     <%_ } _%>
     totalItems = 0;
@@ -40,23 +40,23 @@
         protected modalService: NgbModal
         <%_ } _%>
     ) {
-        <%_ if (searchEngine === 'elasticsearch') { _%>
+        <%_ if (searchEngine !== false) { _%>
         this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search'] ?
             this.activatedRoute.snapshot.queryParams['search'] : '';
         <%_ } _%>
     }
 
-    loadPage(page?: number): void {
-        const pageToLoad: number = page || this.page;
+    loadPage(page?: number, dontNavigate?: boolean): void {
+        const pageToLoad: number = page || this.page || 1;
 
-        <%_ if (searchEngine === 'elasticsearch') { _%>
+        <%_ if (searchEngine !== false) { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
                 page: pageToLoad - 1,
                 query: this.currentSearch,
                 size: this.itemsPerPage,
                 sort: this.sort()}).subscribe(
-                    (res: HttpResponse<I<%= entityAngularName %>[]>) => this.onSuccess(res.body, res.headers, pageToLoad),
+                    (res: HttpResponse<I<%= entityAngularName %>[]>) => this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate),
                     () => this.onError()
                 );
             return;
@@ -67,12 +67,12 @@
             page: pageToLoad - 1,
             size: this.itemsPerPage,
             sort: this.sort()}).subscribe(
-                (res: HttpResponse<I<%= entityAngularName %>[]>) => this.onSuccess(res.body, res.headers, pageToLoad),
+                (res: HttpResponse<I<%= entityAngularName %>[]>) => this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate),
                 () => this.onError()
             );
     }
 
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
     search(query: string): void {
         this.currentSearch = query;
         this.loadPage(1);
@@ -80,12 +80,21 @@
     <%_ } _%>
 
     ngOnInit(): void {
-        this.activatedRoute.data.subscribe(data => {
-            this.page = data.pagingParams.page;
-            this.ascending = data.pagingParams.ascending;
-            this.predicate = data.pagingParams.predicate;
-            this.ngbPaginationPage = data.pagingParams.page;
-            this.loadPage();
-        });
+        this.handleNavigation();
         this.registerChangeIn<%= entityClassPlural %>();
+    }
+
+    protected handleNavigation(): void {
+        combineLatest(this.activatedRoute.data, this.activatedRoute.queryParamMap, (data: Data, params: ParamMap) => {
+            const page = params.get('page');
+            const pageNumber = page !== null ? +page : 1;
+            const sort = (params.get('sort') ?? data['defaultSort']).split(',');
+            const predicate = sort[0];
+            const ascending = sort[1] === 'asc';
+            if (pageNumber !== this.page || predicate !== this.predicate || ascending !== this.ascending) {
+              this.predicate = predicate;
+              this.ascending = ascending;
+              this.loadPage(pageNumber, true);
+            }
+        }).subscribe();
     }

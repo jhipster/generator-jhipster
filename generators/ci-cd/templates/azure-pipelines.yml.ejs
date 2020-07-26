@@ -28,38 +28,36 @@ jobs:
     NG_CLI_ANALYTICS: "false"
 
   steps:
+<%_ if (!skipClient) { _%>
   #----------------------------------------------------------------------
   # Install all tools and check configuration
   #----------------------------------------------------------------------
   - task: NodeTool@0
     inputs:
-      versionSpec: '<%= NODE_VERSION %>'
+      versionSpec: $(NODE_VERSION)
     displayName: 'TOOLS: install Node.js'
-  <%_ if (clientPackageManager === 'npm') { _%>
-  - script: sudo npm install -g npm
-    displayName: 'TOOLS: update NPM'
-  - script: sudo chown -R vsts:docker /home/vsts/.npm/
-    displayName: 'BUGS-FIX: change /home/vsts/.npm/ permission'
-  <%_ } else if (clientPackageManager === 'yarn') { _%>
-  - script: |
-      curl -o- -L https://yarnpkg.com/install.sh | bash
-      export PATH=$HOME/.yarn/bin:$PATH
-    displayName: 'TOOLS: install Yarn'
-  <%_ } _%>
-  - script: sudo /etc/init.d/mysql stop
-    displayName: 'TOOLS: stop MySQL'
+<%_ } _%>
   #----------------------------------------------------------------------
   # Tests
   #----------------------------------------------------------------------
-  - script: <%= clientPackageManager %> install
-    displayName: 'INSTALL: launch <%= clientPackageManager %> install'
+<%_ if (!skipClient) { _%>
+  <%_ if (clientPackageManager === 'yarn') { _%>
+  - script: yarn install
+    displayName: 'INSTALL: launch yarn install'
+  <%_ } else if (clientPackageManager === 'npm') { _%>
+  - task: Npm@1
+    inputs:
+      command: 'install'
+    displayName: 'INSTALL: launch npm install'
+  <%_ } _%>
+<%_ } _%>
   <%_ if (!skipServer) { _%>
     <%_ if (buildTool === 'maven') { _%>
   - script: |
       chmod +x mvnw
       ./mvnw -ntp checkstyle:check
-      ./mvnw -ntp clean verify
-    <%_ } else if (buildTool === 'gradle') { _%>
+      ./mvnw -ntp clean verify -P-webpack
+  <%_ } else if (buildTool === 'gradle') { _%>
   - script: |
       chmod +x gradlew
       ./gradlew checkstyleNohttp
@@ -68,14 +66,13 @@ jobs:
     displayName: 'TESTS: backend'
   <%_ } _%>
 <%_ if (!skipClient) { _%>
-  <%_ if (!skipServer) { _%>
-    <%_ if (buildTool === 'maven') { _%>
-  - script: ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>'
-    <%_ } else if (buildTool === 'gradle') { _%>
-  - script: ./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon
-    <%_ } _%>
-  <%_ } else { _%>
-  - script: <%= clientPackageManager %> test
+  <%_ if (clientPackageManager === 'yarn') { _%>
+  - script: yarn <%= frontTestCommand %>
+  <%_ } else if (clientPackageManager === 'npm') { _%>
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: 'run <%= frontTestCommand %>'
   <%_ } _%>
     displayName: 'TESTS: frontend'
 <%_ } _%>

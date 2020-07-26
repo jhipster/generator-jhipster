@@ -23,10 +23,6 @@ for (const idx in fields) {
         i18nToLoad.push(fields[idx].enumInstance);
     }
 }
-// const query = generateEntityQueries(relationships, entityInstance, dto);
-// const queries = query.queries;
-// const variables = query.variables;
-// let hasManyToMany = query.hasManyToMany;
 _%>
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -152,7 +148,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
   <%_ } _%>
 
   const handleClose = () => {
-    props.history.push('/<%= entityFileName %>'<%_ if (pagination === 'pagination' || pagination === 'pager') { _%> + props.location.search<%_ } _%>);
+    props.history.push('/<%= entityFileName %>'<%_ if (pagination === 'pagination') { _%> + props.location.search<%_ } _%>);
   }
 
   useEffect(() => {
@@ -207,8 +203,10 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
         , <%= rel.relationshipFieldNamePlural %>: mapIdList(values.<%= rel.relationshipFieldNamePlural %>)
         <%_ }) _%>
       }
-      <%_ if (uniqueRelationFields.has('users')) { _%>
-      entity.user = users[values.user];
+      <%_ if (uniqueRelationFields.has('users') && authenticationType === 'oauth2' && applicationType === 'gateway' && dto !== 'mapstruct') { _%>
+        <%_ relationships.filter(rel => rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName === 'user').forEach(rel => { _%>
+      entity.<%= rel.relationshipFieldName %> = users.find(user => user.id.toString() === values.<%= rel.relationshipFieldName %>.id.toString());
+        <%_ }) _%>
       <%_ } _%>
 
       if (isNew) {
@@ -265,7 +263,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               name="<%= fieldName %>"
               placeholder={"YYYY-MM-DD HH:mm"}
               value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.<%= entityInstance %>Entity.<%= fieldName %>)}
-              <%- include react_validators %>
+              <%- include('react_validators'); %>
             />
           <%_ } else if (fieldType === 'LocalDate') { _%>
             <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
@@ -278,11 +276,11 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               type="date"
               className="form-control"
               name="<%= fieldName %>"
-              <%- include react_validators %>
+              <%- include('react_validators'); %>
             />
           <%_
             } else if (fields[idx].fieldIsEnum) {
-              const values = fields[idx].fieldValues.replace(/\s/g, '').split(',');
+              const enumValues = getEnumValuesWithCustomValues(fields[idx].fieldValues);
           _%>
             <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
               <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
@@ -294,21 +292,20 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               type="select"
               className="form-control"
               name="<%= fieldName %>"
-              value={(!isNew && <%= entityInstance %>Entity.<%= fieldName %>) || '<%= values[0] %>'}
+              value={(!isNew && <%= entityInstance %>Entity.<%= fieldName %>) || '<%= enumValues[0].name %>'}
             >
             <%_
               const enumPrefix = angularAppName + '.'+ fieldType;
-              for (key in values) {
-                  const value = values[key];
+              enumValues.forEach(enumValue => {
             _%>
-              <option value="<%= value %>">
+              <option value="<%= enumValue.name %>">
               <%_ if (enableTranslation) { _%>
-                {translate("<%= enumPrefix %>.<%= value %>")}
+                {translate("<%= enumPrefix %>.<%= enumValue.name %>")}
               <%_ } else { _%>
-                <%= value %>
+                <%= enumValue.value %>
               <%_ } _%>
               </option>
-            <%_ } _%>
+            <%_ }); _%>
             </AvInput>
           <%_ } else if (['Integer', 'Long', 'Float', 'Double'].includes(fieldType)) { _%>
             <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
@@ -316,7 +313,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                 <%= fieldNameHumanized %>
               </Translate>
             </Label>
-            <AvField id="<%= entityFileName %>-<%= fieldName %>" type="string" className="form-control" name="<%= fieldName %>" <%- include react_validators %> />
+            <AvField id="<%= entityFileName %>-<%= fieldName %>" type="string" className="form-control" name="<%= fieldName %>" <%- include('react_validators'); %> />
           <%_
           } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
 
@@ -336,13 +333,15 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             <br />
             {<%= fieldName %> ? (
               <div>
-                <a onClick={openFile(<%= fieldName %>ContentType, <%= fieldName %>)}>
-                <%_ if (isAnImage) { _%>
-                  <img src={`data:${<%= fieldName %>ContentType};base64,${<%= fieldName %>}`} style={{ maxHeight: '100px' }} />
-                <%_ } else { _%>
-                  <Translate contentKey="entity.action.open">Open</Translate>
-                <%_ } _%>
-                </a>
+                {<%= fieldName %>ContentType ? (
+                  <a onClick={openFile(<%= fieldName %>ContentType, <%= fieldName %>)}>
+                  <%_ if (isAnImage) { _%>
+                    <img src={`data:${<%= fieldName %>ContentType};base64,${<%= fieldName %>}`} style={{ maxHeight: '100px' }} />
+                  <%_ } else { _%>
+                    <Translate contentKey="entity.action.open">Open</Translate>
+                  <%_ } _%>
+                  </a>
+                ) : null}
                 <br />
                 <Row>
                   <Col md="11">
@@ -355,7 +354,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               </div>
             ) : null}
             <input id="file_<%= fieldName %>" type="file" onChange={onBlobChange(<%= isAnImage %>, '<%= fieldName %>')} <% if (isAnImage) { %>accept="image/*"<% } %> />
-            <AvInput type="hidden" name="<%= fieldName %>" value={<%= fieldName %>} <%- include react_validators %>/>
+            <AvInput type="hidden" name="<%= fieldName %>" value={<%= fieldName %>} <%- include('react_validators'); %>/>
           </AvGroup>
 
           <%_ } else { _%>
@@ -364,7 +363,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                 <%= fieldNameHumanized %>
               </Translate>
             </Label>
-            <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="textarea" name="<%= fieldName %>" <%- include react_validators %>/>
+            <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="textarea" name="<%= fieldName %>" <%- include('react_validators'); %>/>
             <%_ } _%>
           <%_ } else { _%>
           <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
@@ -372,7 +371,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               <%= fieldNameHumanized %>
             </Translate>
           </Label>
-          <AvField id="<%= entityFileName %>-<%= fieldName %>" type="text" name="<%= fieldName %>" <%- include react_validators %>/>
+          <AvField id="<%= entityFileName %>-<%= fieldName %>" type="text" name="<%= fieldName %>" <%- include('react_validators'); %>/>
         <%_ } _%>
           <%_ if (fields[idx].javadoc) { _%>
           <UncontrolledTooltip target="<%= fieldName %>Label">
@@ -410,10 +409,9 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               id="<%= entityFileName %>-<%= relationshipName %>"
               type="select"
               className="form-control"
-              name="<%= relationshipFieldName %><% if (relationshipFieldName !== 'user') { %>.id<% } %>"
+              name="<%= relationshipFieldName %>.id"
             >
               <option value="" key="0" />
-              <%_ if (relationshipFieldName !== 'user') { _%>
               {
                 <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                   <option
@@ -423,17 +421,6 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                   </option>
                 ) : null
               }
-              <%_ } else { _%>
-              {
-                <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((otherEntity, index) =>
-                  <option
-                    value={index}
-                    key={otherEntity.id}>
-                    {otherEntity.<%= otherEntityField %>}
-                  </option>
-                ) : null
-              }
-              <%_ } _%>
             </AvInput>
               <%_ } else { _%>
             <AvInput
@@ -441,7 +428,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               type="select"
               className="form-control"
               name="<%= relationshipFieldName %>.id"
-              value={isNew ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : <%= entityInstance %>Entity.<%= relationshipName %>.id}
+              value={isNew ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : <%= entityInstance %>Entity.<%= relationshipName %>?.id}
               required
             >
               {

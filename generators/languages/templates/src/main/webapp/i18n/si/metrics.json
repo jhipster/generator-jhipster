@@ -1,0 +1,102 @@
+{
+    "metrics": {
+        "title": "යෙදුම් ප්\u200Dරමිතික",
+        "refresh.button": "නැවුම් කරන්න",
+        "updating": "යාවත්කාලීන කිරීම...",
+        "jvm": {
+            "title": "JVM මිනුම්",
+            "memory": {
+                "title": "Memory",
+                "total": "Total Memory",
+                "heap": "Heap Memory",
+                "nonheap": "Non-Heap Memory"
+            },
+            "threads": {
+                "title": "Threads",
+                "all": "All",
+                "runnable": "Runnable",
+                "timedwaiting": "Timed waiting",
+                "waiting": "Waiting",
+                "blocked": "Blocked",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id: ",
+                    "blockedtime": "Blocked Time",
+                    "blockedcount": "Blocked Count",
+                    "waitedtime": "Waited Time",
+                    "waitedcount": "Waited Count",
+                    "lockname": "Lock name",
+                    "stacktrace": "Stacktrace",
+                    "show": "Show Stacktrace",
+                    "hide": "Hide Stacktrace"
+                }
+            },
+            "gc": {
+                "title": "Garbage collections",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "HTTP requests (time in millisecond)",
+                "active": "සක්\u200Dරීය ඉල්ලීම්:",
+                "total": "මුළු ඉල්ලීම්:",
+                "table": {
+                    "code": "කේතය",
+                    "count": "ගණන්",
+                    "mean": "මධ්යන්ය",
+                    "average": "සාමාන්\u200Dයය",
+                    "max": "උපරිම"
+                },
+                "code": {
+                    "ok": "හරි",
+                    "notfound": "සොයා ගත නොහැක",
+                    "servererror": "සේවාදායක දෝෂයකි"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "සේවා සංඛ්‍යාලේඛන (කාලය මිලි තත්පර වලින්)",
+            "table": {
+                "name": "සේවා නම",
+                "count": "ගණන්",
+                "mean": "මධ්යන්ය",
+                "min": "අවම",
+                "max": "උපරිම",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "cache": {
+            "title": "Cache statistics",
+            "cachename": "Cache name",
+            "hits": "Cache Hits",
+            "misses": "Cache Misses",
+            "gets": "Cache Gets",
+            "puts": "Cache Puts",
+            "removals": "Cache Removals",
+            "evictions": "Cache Evictions",
+            "hitPercent": "Cache Hit %",
+            "missPercent": "Cache Miss %",
+            "averageGetTime": "Average get time (µs)",
+            "averagePutTime": "Average put time (µs)",
+            "averageRemoveTime": "Average remove time (µs)"
+        },
+        "datasource": {
+            "usage": "Connection Pool Usage",
+            "title": "DataSource statistics (time in millisecond)",
+            "name": "Pool usage",
+            "count": "ගණන්",
+            "mean": "මධ්යන්ය",
+            "min": "අවම",
+            "max": "උපරිම",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

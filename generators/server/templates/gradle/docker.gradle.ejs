@@ -24,7 +24,7 @@ jib {
         image = "<%= baseName.toLowerCase() %>:latest"
     }
     container {
-        entrypoint = ["bash", "-c", "chmod +x /entrypoint.sh && sync && /entrypoint.sh"]
+        entrypoint = ["bash", "-c", "/entrypoint.sh"]
         ports = ["<%= serverPort %>"<% if (cacheProvider === 'hazelcast') { %>, "5701/udp" <% } %>]
         environment = [
             <%_ if (cacheProvider === 'infinispan') { _%>
@@ -34,6 +34,10 @@ jib {
             JHIPSTER_SLEEP: "0"
         ]
         creationTime = "USE_CURRENT_TIMESTAMP"
+    }
+    extraDirectories {
+      paths = file("<%= MAIN_DIR %>jib")
+      permissions = ["/entrypoint.sh": "755"]
     }
 }
 

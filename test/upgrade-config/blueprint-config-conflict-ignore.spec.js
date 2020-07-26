@@ -10,13 +10,13 @@ const yoRc = {
         applicationType: 'monolith',
         languages: ['fr'],
         baseName: 'myblueprint',
-        nativeLang: 'en'
+        nativeLang: 'en',
     },
     'generator-jhipster-myblueprint2': {
         applicationType: 'monolith',
         languages: ['en'],
         baseName: 'myblueprint2',
-        nativeLang: 'en'
+        nativeLang: 'en',
     },
     'generator-jhipster': {
         applicationType: 'monolith',
@@ -25,14 +25,14 @@ const yoRc = {
         blueprints: [
             {
                 name: 'generator-jhipster-myblueprint',
-                version: '0.0.1'
+                version: '0.0.1',
             },
             {
                 name: 'generator-jhipster-myblueprint2',
-                version: '0.0.1'
-            }
-        ]
-    }
+                version: '0.0.1',
+            },
+        ],
+    },
 };
 
 describe('JHipster blueprint config migration with ignore option', () => {
@@ -50,14 +50,14 @@ describe('JHipster blueprint config migration with ignore option', () => {
                         fse.writeJsonSync(path.join(dir, '.yo-rc.json'), yoRc);
                     })
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipChecks: true,
-                        unifyConfigOnly: true
+                        unifyConfigOnly: true,
                     })
                     .withPrompts({
                         '#languages': 'ignore (I will take the risk)',
                         '#baseName': 'ignore (I will take the risk)',
-                        '#nativeLang': 'en'
+                        '#nativeLang': 'en',
                     })
                     .on('end', done);
             });
@@ -66,11 +66,11 @@ describe('JHipster blueprint config migration with ignore option', () => {
                 assert.JSONFileContent('.yo-rc.json', {
                     'generator-jhipster-myblueprint': {
                         languages: ['fr'],
-                        baseName: 'myblueprint'
+                        baseName: 'myblueprint',
                     },
                     'generator-jhipster-myblueprint2': {
                         languages: ['en'],
-                        baseName: 'myblueprint2'
+                        baseName: 'myblueprint2',
                     },
                     'generator-jhipster': {
                         applicationType: 'monolith',
@@ -80,14 +80,14 @@ describe('JHipster blueprint config migration with ignore option', () => {
                         blueprints: [
                             {
                                 name: 'generator-jhipster-myblueprint',
-                                version: '0.0.1'
+                                version: '0.0.1',
                             },
                             {
                                 name: 'generator-jhipster-myblueprint2',
-                                version: '0.0.1'
-                            }
-                        ]
-                    }
+                                version: '0.0.1',
+                            },
+                        ],
+                    },
                 });
             });
         });

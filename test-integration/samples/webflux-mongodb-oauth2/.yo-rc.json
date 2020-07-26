@@ -2,7 +2,7 @@
     "generator-jhipster": {
         "applicationType": "monolith",
         "reactive": true,
-        "baseName": "sampleWebflux",
+        "baseName": "sampleWebfluxMongodbOauth2",
         "packageName": "io.github.jhipster.sample",
         "packageFolder": "io/github/jhipster/sample",
         "authenticationType": "oauth2",

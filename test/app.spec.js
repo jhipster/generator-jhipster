@@ -22,7 +22,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true, jhiPrefix: 'test' })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true, jhiPrefix: 'test' })
                     .withPrompts({
                         baseName: 'jhipster',
                         clientFramework: ANGULAR,
@@ -42,7 +42,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -61,7 +61,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });
@@ -77,7 +77,15 @@ describe('JHipster generator', () => {
             it('uses correct prettier formatting', () => {
                 // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
                 assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
-                assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
+                assert.fileContent('tsconfig.base.json', / {2}"compilerOptions":/);
+            });
+            it('uses correct prettier formatting for Java file', () => {
+                // tabWidth = 4 (see generators/common/templates/.prettierrc.ejs)
+                assert.fileContent('src/main/java/com/mycompany/myapp/JhipsterApp.java', / {4}public static void main/);
+                assert.fileContent(
+                    'src/main/java/com/mycompany/myapp/JhipsterApp.java',
+                    / {8}SpringApplication app = new SpringApplication/
+                );
             });
         });
 
@@ -86,11 +94,11 @@ describe('JHipster generator', () => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipInstall: true,
                         skipChecks: true,
                         jhiPrefix: 'test',
-                        experimental: true
+                        experimental: true,
                     })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -111,7 +119,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -130,7 +138,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });
@@ -148,7 +156,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true, npm: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true, npm: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -168,7 +176,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -187,7 +195,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });
@@ -203,7 +211,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -221,7 +229,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'gradle',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -240,7 +248,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });
@@ -252,7 +260,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -272,7 +280,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -291,7 +299,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });
@@ -302,7 +310,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -322,7 +330,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -341,7 +349,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -361,7 +369,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -380,7 +388,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -400,7 +408,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -419,7 +427,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -439,7 +447,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -460,7 +468,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -480,7 +488,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -499,7 +507,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -517,7 +525,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -533,7 +541,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -553,7 +561,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: ['searchEngine:elasticsearch']
+                        serverSideOptions: ['searchEngine:elasticsearch'],
                     })
                     .on('end', done);
             });
@@ -566,11 +574,47 @@ describe('JHipster generator', () => {
             shouldBeV3DockerfileCompatible('postgresql');
         });
 
+        describe('couchbase FTS', () => {
+            before(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        clientFramework: 'angularX',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        cacheProvider: 'no',
+                        enableHibernateCache: false,
+                        databaseType: 'couchbase',
+                        devDatabaseType: 'couchbase',
+                        prodDatabaseType: 'couchbase',
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        skipClient: false,
+                        skipUserManagement: false,
+                        serverSideOptions: ['searchEngine:couchbase'],
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with "Couchbbase FTS"', () => {
+                assert.file(expectedFiles.couchbase);
+                assert.file(expectedFiles.couchbaseSearch);
+            });
+            shouldBeV3DockerfileCompatible('couchbase');
+        });
+
         describe('no database', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'microservice',
                         baseName: 'jhipster',
@@ -588,7 +632,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -612,7 +656,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -630,7 +674,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -650,7 +694,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -668,7 +712,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: ['searchEngine:elasticsearch']
+                        serverSideOptions: ['searchEngine:elasticsearch'],
                     })
                     .on('end', done);
             });
@@ -686,7 +730,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -704,7 +748,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -720,7 +764,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -738,7 +782,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -756,12 +800,12 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angular1',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'infinispan',
@@ -774,7 +818,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -793,13 +837,13 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
                         serviceDiscoveryType: 'eureka',
-                        clientFramework: 'angular1',
+                        clientFramework: ANGULAR,
                         authenticationType: 'jwt',
                         cacheProvider: 'infinispan',
                         enableHibernateCache: true,
@@ -811,7 +855,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -831,7 +875,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -849,7 +893,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -868,7 +912,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -886,7 +930,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -905,7 +949,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -929,7 +973,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['en'],
-                        serverSideOptions: ['messageBroker:kafka']
+                        serverSideOptions: ['messageBroker:kafka'],
                     })
                     .on('end', done);
             });
@@ -950,7 +994,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -974,12 +1018,12 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['en'],
-                        serverSideOptions: ['enableSwaggerCodegen:true']
+                        serverSideOptions: ['enableSwaggerCodegen:true'],
                     })
                     .on('end', done);
             });
 
-            it('creates expected files with Swagger API first enabled', () => {
+            it('creates expected files with OpenAPI API first enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);
@@ -998,7 +1042,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -1022,12 +1066,12 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['en'],
-                        serverSideOptions: ['enableSwaggerCodegen:true']
+                        serverSideOptions: ['enableSwaggerCodegen:true'],
                     })
                     .on('end', done);
             });
 
-            it('creates expected files with Swagger API first enabled', () => {
+            it('creates expected files with OpenAPI API first enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);
@@ -1047,7 +1091,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.otherpackage',
@@ -1065,7 +1109,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1081,7 +1125,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: '21Points',
                         packageName: 'com.otherpackage',
@@ -1099,7 +1143,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1107,7 +1151,7 @@ describe('JHipster generator', () => {
             it('creates expected files with default application name', () => {
                 assert.file([
                     `${SERVER_MAIN_SRC_DIR}com/otherpackage/Application.java`,
-                    `${SERVER_MAIN_SRC_DIR}com/otherpackage/ApplicationWebXml.java`
+                    `${SERVER_MAIN_SRC_DIR}com/otherpackage/ApplicationWebXml.java`,
                 ]);
                 assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/otherpackage/Application.java`, /public class Application/);
             });
@@ -1117,7 +1161,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'myapplication',
                         packageName: 'com.mycompany.myapp',
@@ -1135,7 +1179,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1152,7 +1196,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -1168,7 +1212,7 @@ describe('JHipster generator', () => {
                         enableTranslation: false,
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1183,7 +1227,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         clientFramework: ANGULAR,
@@ -1203,7 +1247,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1215,7 +1259,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });
@@ -1230,7 +1274,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -1248,7 +1292,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1260,7 +1304,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });
@@ -1270,7 +1314,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -1288,7 +1332,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1300,7 +1344,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'session',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });
@@ -1312,7 +1356,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -1335,7 +1379,7 @@ describe('JHipster generator', () => {
                         jhiPrefix: 'jhi',
                         enableTranslation: true,
                         nativeLanguage: 'en',
-                        languages: ['en']
+                        languages: ['en'],
                     })
                     .on('end', done);
             });
@@ -1351,7 +1395,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: ['protractor']
+                        testFrameworks: ['protractor'],
                     })
                 );
                 assert.noFile([`${TEST_DIR}gatling/conf/gatling.conf`, `${TEST_DIR}gatling/conf/logback.xml`]);
@@ -1362,7 +1406,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -1385,7 +1429,7 @@ describe('JHipster generator', () => {
                         jhiPrefix: 'jhi',
                         enableTranslation: true,
                         nativeLanguage: 'en',
-                        languages: ['en']
+                        languages: ['en'],
                     })
                     .on('end', done);
             });
@@ -1406,7 +1450,7 @@ describe('JHipster generator', () => {
         before(done => {
             helpers
                 .run(path.join(__dirname, '../generators/app'))
-                .withOptions({ 'from-cli': true, skipInstall: true, skipServer: true, db: 'mysql', auth: 'jwt', skipChecks: true })
+                .withOptions({ fromCli: true, skipInstall: true, skipServer: true, db: 'mysql', auth: 'jwt', skipChecks: true })
                 .withPrompts({
                     baseName: 'jhipster',
                     clientFramework: ANGULAR,
@@ -1417,7 +1461,7 @@ describe('JHipster generator', () => {
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
-                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277'
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                 })
                 .on('end', done);
         });
@@ -1434,12 +1478,15 @@ describe('JHipster generator', () => {
                     enableTranslation: true,
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
-                    testFrameworks: []
+                    testFrameworks: [],
                 })
             );
         });
         it('generates a README with no undefined value', () => {
             assert.noFileContent('README.md', /undefined/);
+        });
+        it('generates a .prettierrc with no reference to java extension', () => {
+            assert.noFileContent('.prettierrc', ',java');
         });
     });
 
@@ -1448,7 +1495,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipClient: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipClient: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -1465,7 +1512,7 @@ describe('JHipster generator', () => {
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1484,7 +1531,7 @@ describe('JHipster generator', () => {
                             enableTranslation: true,
                             serviceDiscoveryType: false,
                             authenticationType: 'session',
-                            testFrameworks: []
+                            testFrameworks: [],
                         },
                         '',
                         ['package.json']
@@ -1499,13 +1546,23 @@ describe('JHipster generator', () => {
                 assert.noFileContent('pom.xml', 'npm.version');
                 assert.noFileContent('pom.xml', 'frontend-maven-plugin');
             });
+            it('generates a .prettierrc with no reference to webpack', () => {
+                assert.noFileContent('.prettierrc', 'webpack');
+            });
+            it('generates a .prettierrc with no reference to client extensions', () => {
+                assert.noFileContent('.prettierrc', ',js');
+                assert.noFileContent('.prettierrc', ',ts');
+                assert.noFileContent('.prettierrc', ',tsx');
+                assert.noFileContent('.prettierrc', ',css');
+                assert.noFileContent('.prettierrc', ',scss');
+            });
         });
 
         describe('Gradle', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipClient: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipClient: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -1522,7 +1579,7 @@ describe('JHipster generator', () => {
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1541,7 +1598,7 @@ describe('JHipster generator', () => {
                             enableTranslation: true,
                             serviceDiscoveryType: false,
                             authenticationType: 'jwt',
-                            testFrameworks: []
+                            testFrameworks: [],
                         },
                         '',
                         ['package.json']
@@ -1560,11 +1617,11 @@ describe('JHipster generator', () => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipInstall: true,
                         skipClient: true,
                         skipUserManagement: true,
-                        skipChecks: true
+                        skipChecks: true,
                     })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -1583,7 +1640,7 @@ describe('JHipster generator', () => {
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1603,7 +1660,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'gateway',
                         baseName: 'jhipster',
@@ -1622,7 +1679,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1641,7 +1698,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'gateway',
                         baseName: 'jhipster',
@@ -1660,7 +1717,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1679,7 +1736,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'microservice',
                         baseName: 'jhipster',
@@ -1697,7 +1754,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1716,7 +1773,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'monolith',
                         baseName: 'jhipster',
@@ -1734,7 +1791,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: ['serviceDiscoveryType:eureka']
+                        serverSideOptions: ['serviceDiscoveryType:eureka'],
                     })
                     .on('end', done);
             });
@@ -1755,7 +1812,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'microservice',
                         baseName: 'jhipster',
@@ -1775,7 +1832,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         serverSideOptions: [],
                         skipClient: true,
-                        skipUserManagement: true
+                        skipUserManagement: true,
                     })
                     .on('end', done);
             });
@@ -1795,7 +1852,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'uaa',
                         baseName: 'jhipster-uaa',
@@ -1814,7 +1871,7 @@ describe('JHipster generator', () => {
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         serverSideOptions: [],
-                        serviceDiscoveryType: 'eureka'
+                        serviceDiscoveryType: 'eureka',
                     })
                     .on('end', done);
             });
@@ -1830,7 +1887,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/uaaserver/'), dir);
                     })
@@ -1841,7 +1898,7 @@ describe('JHipster generator', () => {
                         packageFolder: 'com/mycompany/myapp',
                         serverPort: '8080',
                         authenticationType: 'uaa',
-                        uaaBaseName: './uaa/',
+                        uaaBaseName: 'uaaBaseName',
                         cacheProvider: 'hazelcast',
                         enableHibernateCache: true,
                         databaseType: 'sql',
@@ -1853,7 +1910,7 @@ describe('JHipster generator', () => {
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         serverSideOptions: [],
-                        serviceDiscoveryType: 'eureka'
+                        serviceDiscoveryType: 'eureka',
                     })
                     .on('end', done);
             });
@@ -1874,7 +1931,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'gateway',
                         baseName: 'jhipster',
@@ -1893,7 +1950,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1911,7 +1968,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'gateway',
                         baseName: 'jhipster',
@@ -1930,7 +1987,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1948,7 +2005,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'microservice',
                         baseName: 'jhipster',
@@ -1966,7 +2023,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1986,7 +2043,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'gateway',
                         baseName: 'jhipster',
@@ -2005,7 +2062,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -2023,7 +2080,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true, 'uaa-base-name': 'jhipsterApp' })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true, uaaBaseName: 'jhipsterApp' })
                     .withPrompts({
                         applicationType: 'gateway',
                         baseName: 'jhipster',
@@ -2032,7 +2089,6 @@ describe('JHipster generator', () => {
                         clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'uaa',
-                        uaaBaseName: 'jhipsterApp',
                         cacheProvider: 'ehcache',
                         enableHibernateCache: true,
                         databaseType: 'sql',
@@ -2043,7 +2099,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -2061,7 +2117,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'microservice',
                         baseName: 'jhipster',
@@ -2079,7 +2135,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });

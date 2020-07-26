@@ -75,11 +75,9 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 @Entity
 @Table(name = "<%= jhiTablePrefix %>_persistent_token")
 <%_ } _%>
-<%_ if (enableHibernateCache) { if (cacheProvider === 'infinispan') { _%>
+<%_ if (enableHibernateCache) { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-<%_ } else { _%>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-<%_ } } _%>
+<%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= jhiTablePrefix %>_persistent_token")
 <%_ } _%>
@@ -251,6 +249,7 @@ public class PersistentToken implements Serializable {
         return Objects.hashCode(series);
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "PersistentToken{" +

@@ -35,11 +35,12 @@ import administration, {
   getLoggers,
   changeLogLevel,
   getConfigurations,
-  getEnv<% if (!['no', 'cassandra'].includes(databaseType)) { %>,
-  getAudits<% } %>
+  getEnv
 } from 'app/modules/administration/administration.reducer';
 
 describe('Administration reducer tests', () => {
+  const username = process.env.E2E_USERNAME || 'admin';
+
   function isEmpty(element): boolean {
     if (element instanceof Array) {
       return element.length === 0;
@@ -59,9 +60,6 @@ describe('Administration reducer tests', () => {
     <%_ } _%>
     expect(isEmpty(state.logs.loggers));
     expect(isEmpty(state.threadDump));
-    <%_ if (!['no', 'cassandra'].includes(databaseType)) { _%>
-    expect(isEmpty(state.audits));
-    <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
     expect(isEmpty(state.tracker.activities));
     <%_ } _%>
@@ -91,8 +89,7 @@ describe('Administration reducer tests', () => {
           REQUEST(ACTION_TYPES.FETCH_METRICS),
           REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP),
           REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS),
-          REQUEST(ACTION_TYPES.FETCH_ENV)<% if (!['no', 'cassandra'].includes(databaseType)) { %>,
-          REQUEST(ACTION_TYPES.FETCH_AUDITS)<% } %>
+          REQUEST(ACTION_TYPES.FETCH_ENV)
         ],
         {},
         state => {
@@ -117,8 +114,7 @@ describe('Administration reducer tests', () => {
           FAILURE(ACTION_TYPES.FETCH_METRICS),
           FAILURE(ACTION_TYPES.FETCH_THREAD_DUMP),
           FAILURE(ACTION_TYPES.FETCH_CONFIGURATIONS),
-          FAILURE(ACTION_TYPES.FETCH_ENV)<% if (!['no', 'cassandra'].includes(databaseType)) { %>,
-          FAILURE(ACTION_TYPES.FETCH_AUDITS)<% } %>
+          FAILURE(ACTION_TYPES.FETCH_ENV)
         ],
         'something happened',
         state => {
@@ -204,7 +200,7 @@ describe('Administration reducer tests', () => {
     });
 
     it('should update state according to a successful fetch env request', () => {
-      const payload = { data: { activeProfiles: ['swagger', 'dev'] } };
+      const payload = { data: { activeProfiles: ['api-docs', 'dev'] } };
       const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_ENV), payload });
 
       expect(toTest).toMatchObject({
@@ -216,24 +212,11 @@ describe('Administration reducer tests', () => {
       });
     });
 
-<%_ if (!['no', 'cassandra'].includes(databaseType)) { _%>
-    it('should update state according to a successful fetch audits request', () => {
-      const headers = { ['x-total-count']: 1 };
-      const payload = { data: [{ id: 1, userLogin: 'admin' }], headers };
-      const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_AUDITS), payload });
-
-      expect(toTest).toMatchObject({
-        loading: false,
-        audits: payload.data,
-        totalItems: headers['x-total-count']
-      });
-    });
-<%_ } _%>
   });
 <%_ if (websocket === 'spring-websocket') { _%>
   describe('Websocket Message Handling', () => {
     it('should update state according to a successful websocket message receipt', () => {
-      const payload = { id: 1, userLogin: 'admin', page: 'home', sessionId: 'abc123' };
+      const payload = { id: 1, userLogin: username, page: 'home', sessionId: 'abc123' };
       const toTest = administration(undefined, { type: ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE, payload });
 
       expect(toTest).toMatchObject({
@@ -242,8 +225,8 @@ describe('Administration reducer tests', () => {
     });
 
     it('should update state according to a successful websocket message receipt - only one activity per session', () => {
-      const firstPayload = { id: 1, userLogin: 'admin', page: 'home', sessionId: 'abc123' };
-      const secondPayload = { id: 1, userLogin: 'admin', page: 'user-management', sessionId: 'abc123' };
+      const firstPayload = { id: 1, userLogin: username, page: 'home', sessionId: 'abc123' };
+      const secondPayload = { id: 1, userLogin: username, page: 'user-management', sessionId: 'abc123' };
       const firstState = administration(undefined, { type: ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE, payload: firstPayload });
       const secondState = administration(firstState, { type: ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE, payload: secondPayload });
 
@@ -253,8 +236,8 @@ describe('Administration reducer tests', () => {
     });
 
     it('should update state according to a successful websocket message receipt - remove logged out sessions', () => {
-      const firstPayload = { id: 1, userLogin: 'admin', page: 'home', sessionId: 'abc123' };
-      const secondPayload = { id: 1, userLogin: 'admin', page: 'logout', sessionId: 'abc123' };
+      const firstPayload = { id: 1, userLogin: username, page: 'home', sessionId: 'abc123' };
+      const secondPayload = { id: 1, userLogin: username, page: 'logout', sessionId: 'abc123' };
       const firstState = administration(undefined, { type: ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE, payload: firstPayload });
       const secondState = administration(firstState, { type: ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE, payload: secondPayload });
 
@@ -379,31 +362,5 @@ describe('Administration reducer tests', () => {
       ];
       await store.dispatch(getEnv()).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
-    <%_ if (!['no', 'cassandra'].includes(databaseType)) { _%>
-    it('dispatches FETCH_AUDITS_PENDING and FETCH_AUDITS_FULFILLED actions with pagination variables - no sort', async () => {
-      const expectedActions = [
-        {
-          type: REQUEST(ACTION_TYPES.FETCH_AUDITS)
-        },
-        {
-          type: SUCCESS(ACTION_TYPES.FETCH_AUDITS),
-          payload: resolvedObject
-        }
-      ];
-      await store.dispatch(getAudits(1, 10, null, Date.now(), Date.now())).then(() => expect(store.getActions()).toEqual(expectedActions));
-    });
-    it('dispatches FETCH_AUDITS_PENDING and FETCH_AUDITS_FULFILLED actions with pagination variables - no dates', async () => {
-      const expectedActions = [
-        {
-          type: REQUEST(ACTION_TYPES.FETCH_AUDITS)
-        },
-        {
-          type: SUCCESS(ACTION_TYPES.FETCH_AUDITS),
-          payload: resolvedObject
-        }
-      ];
-      await store.dispatch(getAudits(1, 10, 'id,desc', null, null)).then(() => expect(store.getActions()).toEqual(expectedActions));
-    });
-    <%_ } _%>
   });
 });

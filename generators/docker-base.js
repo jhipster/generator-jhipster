@@ -19,7 +19,7 @@
 const shelljs = require('shelljs');
 const chalk = require('chalk');
 const dockerUtils = require('./docker-utils');
-const { getBase64Secret, getAllJhipsterConfig } = require('./utils');
+const { getBase64Secret } = require('./utils');
 
 module.exports = {
     checkDocker: dockerUtils.checkDocker,
@@ -29,7 +29,7 @@ module.exports = {
     setAppsFolderPaths,
     loadConfigs,
     loadFromYoRc,
-    setClusteredApps
+    setClusteredApps,
 };
 
 /**
@@ -105,7 +105,7 @@ function loadConfigs() {
     this.appsFolders.forEach(appFolder => {
         const path = this.destinationPath(`${this.directoryPath + appFolder}`);
         if (this.fs.exists(`${path}/.yo-rc.json`)) {
-            const config = getAllJhipsterConfig(this, true, path);
+            const config = this.getJhipsterConfig(`${path}/.yo-rc.json`).createProxy();
 
             if (config.applicationType === 'monolith') {
                 this.monolithicNb++;

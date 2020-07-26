@@ -1,0 +1,34 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "userOneToMany",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "otherEntityField": "login"
+        },
+        {
+            "relationshipName": "userManyToMany",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "login",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "userOneToOne",
+            "otherEntityName": "user",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "login",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "parent"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20160208210109",
+    "dto": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": true,
+    "angularJSSuffix": "mySuffixAlt",
+    "pagination": "no"
+}

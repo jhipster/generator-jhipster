@@ -23,7 +23,7 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "createLabel": "Lisa uus <%= entityClassHumanized %>",
-                "createOrEditLabel": "Lisa või muuda <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "createOrEditLabel": "Lisa või muuda <%= entityClassHumanized %>"<% if (searchEngine !== false) { %>,
                 "search": "Otsi <%= entityClassHumanized %>"<% } %>,
                 "notFound": "No <%= entityClassPluralHumanized %> found"
             },<% if (!microserviceAppName) { %>

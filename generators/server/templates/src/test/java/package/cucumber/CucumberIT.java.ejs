@@ -31,6 +31,7 @@ import io.cucumber.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(plugin = "pretty", features = "<%= TEST_DIR %>features")
-public class CucumberIT <% if (databaseType === 'neo4j') { %>extends AbstractNeo4jIT <% } %><% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest<% } %> {
+<% if (databaseType === 'neo4j') { %>@ExtendWith(AbstractNeo4jIT) <% } %>
+public class CucumberIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest<% } %> {
 
 }

@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "පුරන්න",
+        "form": {
+            "password": "මුරපදය",
+            "password.placeholder": "ඔබගේ මුරපදය",
+            "rememberme": "මාව මතක තබා ගන්න",
+            "button": "පුරන්න"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong> පුරනය වීමට අපොහොසත් විය! </ strong> කරුණාකර ඔබේ අක්තපත්\u200Dර පරීක්ෂා කර නැවත උත්සාහ කරන්න."
+            }
+        },
+        "password": {
+            "forgot": "ඔබගේ මුරපදය ඔබට අමතකද?"
+        }
+    }
+}

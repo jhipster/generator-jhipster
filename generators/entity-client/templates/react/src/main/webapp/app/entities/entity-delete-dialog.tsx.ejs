@@ -35,7 +35,7 @@ export const <%= entityReactName %>DeleteDialog = (props: I<%= entityReactName %
   }, []);
 
   const handleClose = () => {
-    props.history.push('/<%= entityFileName %>'<%_ if (pagination === 'pagination' || pagination === 'pager') { _%> + props.location.search<%_ } _%>);
+    props.history.push('/<%= entityFileName %>'<%_ if (pagination === 'pagination') { _%> + props.location.search<%_ } _%>);
   };
 
   useEffect(() => {

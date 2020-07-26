@@ -18,7 +18,7 @@
  */
 const _ = require('lodash');
 const chalk = require('chalk');
-const databaseTypes = require('jhipster-core').JHipsterDatabaseTypes;
+const databaseTypes = require('../../jdl/jhipster/database-types');
 
 const AURORA_DB_PASSWORD_REGEX = /^[^@"/]{8,42}$/;
 const CLOUDFORMATION_STACK_NAME = /[a-zA-Z][-a-zA-Z0-9]*/;
@@ -26,60 +26,60 @@ const CLOUDFORMATION_STACK_NAME = /[a-zA-Z][-a-zA-Z0-9]*/;
 const SCALING_TO_CONFIG = {
     low: {
         fargate: {
-            taskCount: 1
+            taskCount: 1,
         },
         database: {
-            instances: 1
-        }
+            instances: 1,
+        },
     },
     medium: {
         fargate: {
-            taskCount: 2
+            taskCount: 2,
         },
         database: {
-            instances: 1
-        }
+            instances: 1,
+        },
     },
     high: {
         fargate: {
-            taskCount: 4
+            taskCount: 4,
         },
         database: {
-            instances: 2
-        }
-    }
+            instances: 2,
+        },
+    },
 };
 const PERF_TO_CONFIG = {
     low: {
         fargate: {
             CPU: '1024',
-            memory: '2GB'
+            memory: '2GB',
         },
         database: {
             size: 'db.t2.small',
-            supportedEngines: [databaseTypes.MARIADB, databaseTypes.MYSQL]
-        }
+            supportedEngines: [databaseTypes.MARIADB, databaseTypes.MYSQL],
+        },
     },
     medium: {
         fargate: {
             CPU: '2048',
-            memory: '4GB'
+            memory: '4GB',
         },
         database: {
             size: 'db.t2.medium',
-            supportedEngines: [databaseTypes.MARIADB, databaseTypes.MYSQL]
-        }
+            supportedEngines: [databaseTypes.MARIADB, databaseTypes.MYSQL],
+        },
     },
     high: {
         fargate: {
             CPU: '4096',
-            memory: '16GB'
+            memory: '16GB',
         },
         database: {
             size: 'db.r4.large',
-            supportedEngines: [databaseTypes.MARIADB, databaseTypes.MYSQL, databaseTypes.POSTGRESQL]
-        }
-    }
+            supportedEngines: [databaseTypes.MARIADB, databaseTypes.MYSQL, databaseTypes.POSTGRESQL],
+        },
+    },
 };
 
 let regionList;
@@ -100,7 +100,7 @@ module.exports = {
     askForDBPasswords,
     askForSubnets,
     promptEKSClusterCreation,
-    askDeployNow
+    askDeployNow,
 };
 
 function setRegionList(regions) {
@@ -116,7 +116,6 @@ function _getFriendlyNameFromTag(awsObject) {
  */
 function askTypeOfApplication() {
     if (this.abort) return null;
-    const done = this.async();
 
     const prompts = [
         {
@@ -126,15 +125,15 @@ function askTypeOfApplication() {
             choices: [
                 {
                     value: 'monolith',
-                    name: 'Monolithic application'
+                    name: 'Monolithic application',
                 },
                 {
                     value: 'microservice',
-                    name: 'Microservice application'
-                }
+                    name: 'Microservice application',
+                },
             ],
-            default: 'monolith'
-        }
+            default: 'monolith',
+        },
     ];
 
     return this.prompt(prompts).then(props => {
@@ -142,10 +141,8 @@ function askTypeOfApplication() {
         this.deploymentApplicationType = props.applicationType;
         if (applicationType) {
             this.log(applicationType);
-            done();
         } else {
             this.abort = true;
-            done();
         }
     });
 }
@@ -155,25 +152,22 @@ function askTypeOfApplication() {
  */
 function askRegion() {
     if (this.abort) return null;
-    const done = this.async();
     const prompts = [
         {
             type: 'list',
             name: 'region',
             message: 'Which region?',
             choices: regionList,
-            default: this.aws.region ? _.indexOf(regionList, this.aws.region) : this.awsFacts.defaultRegion
-        }
+            default: this.aws.region ? _.indexOf(regionList, this.aws.region) : this.awsFacts.defaultRegion,
+        },
     ];
 
     return this.prompt(prompts).then(props => {
         const region = props.region;
         if (region) {
             this.aws.region = region;
-            done();
         } else {
             this.abort = true;
-            done();
         }
     });
 }
@@ -183,7 +177,6 @@ function askRegion() {
  */
 function askCloudFormation() {
     if (this.abort) return null;
-    const done = this.async();
     const prompts = [
         {
             type: 'input',
@@ -195,8 +188,8 @@ function askCloudFormation() {
                     return 'Stack name must contain letters, digits, or hyphens ';
                 }
                 return true;
-            }
-        }
+            },
+        },
     ];
 
     return this.prompt(prompts).then(props => {
@@ -207,10 +200,8 @@ function askCloudFormation() {
                 this.aws.cloudFormationName = _.replace(this.aws.cloudFormationName, '_', '');
             }
             this.log(`CloudFormation Stack name will be ${this.aws.cloudFormationName}`);
-            done();
         } else {
             this.abort = true;
-            done();
         }
     });
 }
@@ -220,10 +211,8 @@ function askCloudFormation() {
  */
 function askPerformances() {
     if (this.abort || this.deploymentApplicationType === 'microservice') return null;
-    const done = this.async();
     const chainPromises = index => {
         if (index === this.appConfigs.length) {
-            done();
             return null;
         }
         const config = this.appConfigs[index];
@@ -263,7 +252,7 @@ function promptPerformance(config, awsConfig = { performance: 'low' }) {
                         `Task: ${perf.fargate.CPU} CPU Units, ${perf.fargate.memory} Ram`
                     )}\t ${chalk.yellow(`DB: Size: ${perf.database.size}`)}`,
                     value: key,
-                    short: key
+                    short: key,
                 };
             }
             return null;
@@ -276,13 +265,12 @@ function promptPerformance(config, awsConfig = { performance: 'low' }) {
             name: 'performance',
             message: `${chalk.red(config.baseName)} Please select your performance level`,
             choices: performanceLevels,
-            default: awsConfig.performance
-        }
+            default: awsConfig.performance,
+        },
     ];
 
     return this.prompt(prompts).then(props => {
-        const performance = props.performance;
-        return performance;
+        return props.performance;
     });
 }
 
@@ -291,10 +279,8 @@ function promptPerformance(config, awsConfig = { performance: 'low' }) {
  */
 function askScaling() {
     if (this.abort || this.deploymentApplicationType === 'microservice') return null;
-    const done = this.async();
     const chainPromises = index => {
         if (index === this.appConfigs.length) {
-            done();
             return null;
         }
         const config = this.appConfigs[index];
@@ -325,7 +311,7 @@ function promptScaling(config, awsConfig = { scaling: 'low' }) {
                     `DB Instances: ${scale.database.instances}`
                 )}`,
                 value: key,
-                short: key
+                short: key,
             };
         })
         .value();
@@ -335,8 +321,8 @@ function promptScaling(config, awsConfig = { scaling: 'low' }) {
             name: 'scaling',
             message: `${chalk.red(config.baseName)} Please select your scaling level`,
             choices: scalingLevels,
-            default: awsConfig.scaling
-        }
+            default: awsConfig.scaling,
+        },
     ];
 
     return this.prompt(prompts).then(props => props.scaling);
@@ -347,14 +333,13 @@ function promptScaling(config, awsConfig = { scaling: 'low' }) {
  */
 function askVPC() {
     if (this.abort) return null;
-    const done = this.async();
 
     const vpcList = this.awsFacts.availableVpcs.map(vpc => {
         const friendlyName = _getFriendlyNameFromTag(vpc);
         return {
             name: `ID: ${vpc.VpcId} (${friendlyName ? `name: '${friendlyName}', ` : ''}default: ${vpc.IsDefault}, state: ${vpc.State})`,
             value: vpc.VpcId,
-            short: vpc.VpcId
+            short: vpc.VpcId,
         };
     });
 
@@ -364,8 +349,8 @@ function askVPC() {
             name: 'targetVPC',
             message: 'Please select your target Virtual Private Network.',
             choices: vpcList,
-            default: this.aws.vpc.id
-        }
+            default: this.aws.vpc.id,
+        },
     ];
 
     return this.prompt(prompts).then(props => {
@@ -373,10 +358,8 @@ function askVPC() {
         if (targetVPC) {
             this.aws.vpc.id = targetVPC;
             this.aws.vpc.cidr = _.find(this.awsFacts.availableVpcs, ['VpcId', targetVPC]).CidrBlock;
-            done();
         } else {
             this.abort = true;
-            done();
         }
     });
 }
@@ -386,7 +369,6 @@ function askVPC() {
  */
 function askForSubnets() {
     if (this.abort) return null;
-    const done = this.async();
 
     const subnetList = _.map(this.awsFacts.availableSubnets, sn => {
         const friendlyName = _getFriendlyNameFromTag(sn);
@@ -396,7 +378,7 @@ function askForSubnets() {
                 sn.MapPublicIpOnLaunch ? 'yes' : 'no'
             })`,
             value: sn.SubnetId,
-            short: sn.SubnetId
+            short: sn.SubnetId,
         };
     });
 
@@ -412,7 +394,7 @@ function askForSubnets() {
             message: `Which subnets should we deploy the ${chalk.yellow('Network Load Balancer (ELB)')} to?`,
             choices: subnetList,
             default: defaultSubnetValue(this.aws.vpc.elbSubnets),
-            validate: validateSubnet
+            validate: validateSubnet,
         },
         {
             type: 'checkbox',
@@ -420,8 +402,8 @@ function askForSubnets() {
             message: `Which subnets should we deploy the ${chalk.yellow('Application & Database')} to?`,
             choices: subnetList,
             default: defaultSubnetValue(this.aws.vpc.appSubnets),
-            validate: validateSubnet
-        }
+            validate: validateSubnet,
+        },
     ];
 
     return this.prompt(prompts).then(props => {
@@ -445,16 +427,13 @@ function askForSubnets() {
         this.aws.vpc.elbSubnets = props.elbSubnets;
         this.aws.vpc.appSubnets = props.appSubnets;
         this.aws.vpc.appSubnetsLaunchWithPublicIP = shouldAppHavePublicIP;
-        done();
     });
 }
 
 function askForDBPasswords() {
     if (this.abort) return null;
-    const done = this.async();
     const chainPromises = index => {
         if (index === this.appConfigs.length) {
-            done();
             return null;
         }
         const config = this.appConfigs[index];
@@ -483,8 +462,8 @@ function promptDBPassword(config) {
             validate: input =>
                 _.isEmpty(input) || !input.match(AURORA_DB_PASSWORD_REGEX)
                     ? 'Password must be between 8 - 42 characters, and not contain a """, "/" or "@"'
-                    : true
-        }
+                    : true,
+        },
     ];
 
     return this.prompt(prompts).then(props => props.database_Password);
@@ -495,13 +474,12 @@ function promptDBPassword(config) {
  */
 function promptEKSClusterCreation() {
     if (this.abort || this.deploymentApplicationType === 'monolith') return null;
-    const done = this.async();
     const prompts = [
         {
             type: 'input',
             name: 'clusterName',
             message: 'Name of the EKS Cluster?',
-            default: this.aws.clusterName || 'jhipster'
+            default: this.aws.clusterName || 'jhipster',
         },
         {
             type: 'list',
@@ -510,24 +488,24 @@ function promptEKSClusterCreation() {
             choices: [
                 {
                     value: '1.12',
-                    name: '1.12'
+                    name: '1.12',
                 },
                 {
                     value: '1.13',
-                    name: '1.13'
+                    name: '1.13',
                 },
                 {
                     value: '1.14',
-                    name: '1.14'
-                }
+                    name: '1.14',
+                },
             ],
-            default: this.aws.kubernetesVersion || 1
+            default: this.aws.kubernetesVersion || 1,
         },
         {
             type: 'input',
             name: 'nodegroupName',
             message: 'Name of the Node Group?',
-            default: 'standard-workers'
+            default: 'standard-workers',
         },
         {
             type: 'list',
@@ -549,9 +527,9 @@ function promptEKSClusterCreation() {
                 'us-east-1',
                 'us-east-2',
                 'us-west-1',
-                'us-west-2'
+                'us-west-2',
             ],
-            default: this.aws.clusterRegion || 15
+            default: this.aws.clusterRegion || 15,
         },
         {
             type: 'input',
@@ -567,8 +545,8 @@ function promptEKSClusterCreation() {
                     return 'Please enter an integer greater than 0';
                 }
                 return true;
-            }
-        }
+            },
+        },
     ];
 
     return this.prompt(prompts).then(props => {
@@ -582,7 +560,6 @@ function promptEKSClusterCreation() {
         this.aws.clusterRegion = props.clusterRegion;
         this.totalNumberOfNodes = props.totalNumberOfNodes;
         this.aws.totalNumberOfNodes = props.totalNumberOfNodes;
-        done();
     });
 }
 
@@ -591,18 +568,16 @@ function promptEKSClusterCreation() {
  */
 function askDeployNow() {
     if (this.abort) return null;
-    const done = this.async();
     const prompts = [
         {
             type: 'confirm',
             name: 'deployNow',
-            message: 'Would you like to deploy now?.',
-            default: true
-        }
+            message: 'Would you like to deploy now?',
+            default: true,
+        },
     ];
 
     return this.prompt(prompts).then(props => {
         this.deployNow = props.deployNow;
-        done();
     });
 }

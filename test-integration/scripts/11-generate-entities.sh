@@ -30,17 +30,30 @@ fi
 if [[ ("$JHI_ENTITY" == "mongodb") || ("$JHI_ENTITY" == "couchbase") ]]; then
     moveEntity DocumentBankAccount
     moveEntity EmbeddedOperation
+    moveEntity Place
+    moveEntity Division
 
     moveEntity FieldTestEntity
-    moveEntity FieldTestMapstructEntity
-    moveEntity FieldTestServiceClassEntity
+    moveEntity FieldTestMapstructAndServiceClassEntity
+    moveEntity FieldTestServiceClassAndJpaFilteringEntity
     moveEntity FieldTestServiceImplEntity
     moveEntity FieldTestInfiniteScrollEntity
     moveEntity FieldTestPaginationEntity
+
+    moveEntity EntityWithDTO
+    moveEntity EntityWithPaginationAndDTO
+    moveEntity EntityWithServiceClassAndPagination
+    moveEntity EntityWithServiceClassPaginationAndDTO
+    moveEntity EntityWithServiceImplAndDTO
+    moveEntity EntityWithServiceImplAndPagination
+    moveEntity EntityWithServiceImplPaginationAndDTO
+
 elif [[ "$JHI_ENTITY" == "neo4j" ]]; then
-    moveEntity BankAccount
-    moveEntity Label
-    moveEntity Operation
+    moveEntity Album
+    moveEntity Track
+    moveEntity Genre
+    moveEntity Artist
+
 elif [[ "$JHI_ENTITY" == "cassandra" ]]; then
     moveEntity CassBankAccount
 
@@ -55,16 +68,16 @@ elif [[ "$JHI_ENTITY" == "micro" ]]; then
     moveEntity MicroserviceLabel
 
     moveEntity FieldTestEntity
-    moveEntity FieldTestMapstructEntity
-    moveEntity FieldTestServiceClassEntity
+    moveEntity FieldTestMapstructAndServiceClassEntity
+    moveEntity FieldTestServiceClassAndJpaFilteringEntity
     moveEntity FieldTestServiceImplEntity
     moveEntity FieldTestInfiniteScrollEntity
     moveEntity FieldTestPaginationEntity
 
 elif [[ "$JHI_ENTITY" == "uaa" ]]; then
     moveEntity FieldTestEntity
-    moveEntity FieldTestMapstructEntity
-    moveEntity FieldTestServiceClassEntity
+    moveEntity FieldTestMapstructAndServiceClassEntity
+    moveEntity FieldTestServiceClassAndJpaFilteringEntity
     moveEntity FieldTestServiceImplEntity
     moveEntity FieldTestInfiniteScrollEntity
     moveEntity FieldTestPaginationEntity
@@ -82,11 +95,12 @@ elif [[ "$JHI_ENTITY" == "sqlfull" ]]; then
     moveEntity Division
 
     moveEntity FieldTestEntity
-    moveEntity FieldTestMapstructEntity
-    moveEntity FieldTestServiceClassEntity
+    moveEntity FieldTestMapstructAndServiceClassEntity
+    moveEntity FieldTestServiceClassAndJpaFilteringEntity
     moveEntity FieldTestServiceImplEntity
     moveEntity FieldTestInfiniteScrollEntity
     moveEntity FieldTestPaginationEntity
+    moveEntity FieldTestEnumWithValue
 
     moveEntity TestEntity
     moveEntity TestMapstruct
@@ -103,13 +117,9 @@ elif [[ "$JHI_ENTITY" == "sqlfull" ]]; then
     moveEntity SuperMegaLargeTestEntity
 
     moveEntity EntityWithDTO
-    moveEntity EntityWithPagination
     moveEntity EntityWithPaginationAndDTO
-    moveEntity EntityWithServiceClass
-    moveEntity EntityWithServiceClassAndDTO
     moveEntity EntityWithServiceClassAndPagination
     moveEntity EntityWithServiceClassPaginationAndDTO
-    moveEntity EntityWithServiceImpl
     moveEntity EntityWithServiceImplAndDTO
     moveEntity EntityWithServiceImplAndPagination
     moveEntity EntityWithServiceImplPaginationAndDTO
@@ -126,20 +136,17 @@ elif [[ "$JHI_ENTITY" == "sql" ]]; then
     moveEntity Operation
 
     moveEntity FieldTestEntity
-    moveEntity FieldTestMapstructEntity
-    moveEntity FieldTestServiceClassEntity
+    moveEntity FieldTestMapstructAndServiceClassEntity
+    moveEntity FieldTestServiceClassAndJpaFilteringEntity
     moveEntity FieldTestServiceImplEntity
     moveEntity FieldTestInfiniteScrollEntity
     moveEntity FieldTestPaginationEntity
+    moveEntity FieldTestEnumWithValue
 
     moveEntity EntityWithDTO
-    moveEntity EntityWithPagination
     moveEntity EntityWithPaginationAndDTO
-    moveEntity EntityWithServiceClass
-    moveEntity EntityWithServiceClassAndDTO
     moveEntity EntityWithServiceClassAndPagination
     moveEntity EntityWithServiceClassPaginationAndDTO
-    moveEntity EntityWithServiceImpl
     moveEntity EntityWithServiceImplAndDTO
     moveEntity EntityWithServiceImplAndPagination
     moveEntity EntityWithServiceImplPaginationAndDTO

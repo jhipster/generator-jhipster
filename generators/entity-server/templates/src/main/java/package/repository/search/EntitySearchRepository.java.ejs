@@ -18,16 +18,53 @@
 -%>
 package <%= packageName %>.repository.search;
 
-<%_
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
-_%>
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;<% if (databaseType === 'cassandra') { %>
+<%_ if (reactive) { _%>
+    <%_ if (pagination !== 'no') { _%>
+import org.springframework.data.domain.Pageable;
+    <%_ } _%>
+import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+<%_ } _%>
+import org.springframework.data.elasticsearch.repository.<% if (reactive) {%>Reactive<% } %>ElasticsearchRepository;
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Flux;
+<%_ } _%>
+<%_ if (primaryKeyType === 'UUID') { _%>
 
-import java.util.UUID;<% } %>
+import java.util.UUID;
+<% } %>
+<%_ if (reactive) { _%>
+
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+<%_ } _%>
 
 /**
  * Spring Data Elasticsearch repository for the {@link <%= asEntity(entityClass) %>} entity.
  */
-public interface <%= entityClass %>SearchRepository extends ElasticsearchRepository<<%= asEntity(entityClass) %>, <% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %>> {
+public interface <%= entityClass %>SearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= asEntity(entityClass) %>, <%= primaryKeyType %>><% if (reactive) {%>, <%= entityClass %>SearchRepositoryInternal<% } %> {
 }
+<%_ if (reactive) { _%>
+
+interface <%= entityClass %>SearchRepositoryInternal {
+    Flux<<%= entityClass %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>);
+}
+
+class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass %>SearchRepositoryInternal {
+
+    private final ReactiveElasticsearchTemplate reactiveElasticsearchTemplate;
+
+    <%= entityClass %>SearchRepositoryInternalImpl(ReactiveElasticsearchTemplate reactiveElasticsearchTemplate) {
+        this.reactiveElasticsearchTemplate = reactiveElasticsearchTemplate;
+    }
+
+    @Override
+    public Flux<<%= entityClass %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>) {
+        NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
+        <%_ if (pagination !== 'no') { _%>
+        nativeSearchQuery.setPageable(pageable);
+        <%_ } _%>
+        return reactiveElasticsearchTemplate.find(nativeSearchQuery, <%= entityClass %>.class);
+    }
+}
+<%_ } _%>

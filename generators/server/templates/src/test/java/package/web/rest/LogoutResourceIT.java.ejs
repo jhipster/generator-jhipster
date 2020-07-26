@@ -31,6 +31,9 @@ import org.junit.jupiter.api.Test;
 <%_ if (cacheProvider === 'redis') { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (reactive) { _%>
@@ -70,7 +73,10 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 <%_ if (cacheProvider === 'redis') { _%>
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
-public class LogoutResourceIT <% if (databaseType === 'neo4j') { %>extends AbstractNeo4jIT <% } %>{
+<%_ if (databaseType === 'neo4j') { _%>
+@ExtendWith(AbstractNeo4jIT.class)
+<%_ } _%>
+public class LogoutResourceIT {
 
     @Autowired
     private <% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository registrations;

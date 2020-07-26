@@ -30,44 +30,51 @@ module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
         // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
+        this.option('fromCli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         // Automatically configure Travis
         this.argument('autoconfigure-travis', {
             type: Boolean,
             defaults: false,
-            description: 'Automatically configure Travis'
+            description: 'Automatically configure Travis',
         });
 
         // Automatically configure Jenkins
         this.argument('autoconfigure-jenkins', {
             type: Boolean,
             defaults: false,
-            description: 'Automatically configure Jenkins'
+            description: 'Automatically configure Jenkins',
         });
 
         // Automatically configure Gitlab
         this.argument('autoconfigure-gitlab', {
             type: Boolean,
             defaults: false,
-            description: 'Automatically configure Gitlab'
+            description: 'Automatically configure Gitlab',
         });
 
         // Automatically configure Azure
         this.argument('autoconfigure-azure', {
             type: Boolean,
             defaults: false,
-            description: 'Automatically configure Azure'
+            description: 'Automatically configure Azure',
         });
 
         // Automatically configure GitHub Actions
         this.argument('autoconfigure-github', {
             type: Boolean,
             defaults: false,
-            description: 'Automatically configure GitHub Actions'
+            description: 'Automatically configure GitHub Actions',
+        });
+
+        // Automatically configure CircleCI
+        this.argument('autoconfigure-circle', {
+            type: Boolean,
+            defaults: false,
+            description: 'Automatically configure CircleCI',
         });
 
         this.registerPrettierTransform();
@@ -83,7 +90,7 @@ module.exports = class extends BaseGenerator {
             },
             getConfig() {
                 this.jhipsterVersion = packagejs.version;
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 this.baseName = configuration.get('baseName');
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.applicationType = configuration.get('applicationType');
@@ -93,17 +100,20 @@ module.exports = class extends BaseGenerator {
                 this.skipServer = configuration.get('skipServer');
                 this.clientPackageManager = configuration.get('clientPackageManager');
                 this.buildTool = configuration.get('buildTool');
+                this.reactive = configuration.get('reactive');
                 this.herokuAppName = configuration.get('herokuAppName');
                 if (this.herokuAppName === undefined) {
                     this.herokuAppName = _.kebabCase(this.baseName);
                 }
                 this.clientFramework = configuration.get('clientFramework');
                 this.testFrameworks = configuration.get('testFrameworks');
-                this.autoconfigureTravis = this.options['autoconfigure-travis'];
-                this.autoconfigureJenkins = this.options['autoconfigure-jenkins'];
-                this.autoconfigureGitlab = this.options['autoconfigure-gitlab'];
-                this.autoconfigureAzure = this.options['autoconfigure-azure'];
-                this.autoconfigureGithub = this.options['autoconfigure-github'];
+                this.cacheProvider = configuration.get('cacheProvider');
+                this.autoconfigureTravis = this.options.autoconfigureTravis;
+                this.autoconfigureJenkins = this.options.autoconfigureJenkins;
+                this.autoconfigureGitlab = this.options.autoconfigureGitlab;
+                this.autoconfigureAzure = this.options.autoconfigureAzure;
+                this.autoconfigureGithub = this.options.autoconfigureGithub;
+                this.autoconfigureCircleCI = this.options.autoconfigureCircle;
                 this.abort = false;
             },
             initConstants() {
@@ -115,14 +125,15 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_DIR = constants.DOCKER_DIR;
                 this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
                 this.DOCKER_JENKINS = constants.DOCKER_JENKINS;
-            }
+                this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+            },
         };
     }
 
     get prompting() {
         return {
             askPipeline: prompts.askPipeline,
-            askIntegrations: prompts.askIntegrations
+            askIntegrations: prompts.askIntegrations,
         };
     }
 
@@ -145,7 +156,7 @@ module.exports = class extends BaseGenerator {
                 } else {
                     this.frontTestCommand = 'test';
                 }
-            }
+            },
         };
     }
 
@@ -159,7 +170,7 @@ module.exports = class extends BaseGenerator {
             this.template('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
         }
         if (this.pipeline === 'circle') {
-            this.template('circle.yml.ejs', 'circle.yml');
+            this.template('circle.yml.ejs', '.circleci/config.yml');
         }
         if (this.pipeline === 'travis') {
             this.template('travis.yml.ejs', '.travis.yml');

@@ -18,44 +18,39 @@
  */
 const through = require('through2');
 const prettier = require('prettier');
+const prettierJava = require('prettier-plugin-java');
 
-const prettierOptions = {
-    printWidth: 140,
-    singleQuote: true,
-    useTabs: false,
-    tabWidth: 2,
-    // js and ts rules:
-    arrowParens: 'avoid',
-    // jsx and tsx rules:
-    jsxBracketSameLine: false
+const prettierJavaOptions = {
+    plugins: [prettierJava],
 };
 
-const prettierTransform = function(defaultOptions) {
-    const transform = (file, encoding, callback) => {
+const prettierTransform = function (defaultOptions) {
+    return through.obj((file, encoding, callback) => {
         /* resolve from the projects config */
-        prettier.resolveConfig(file.relative).then(options => {
+        prettier.resolveConfig(file.relative).then(resolvedDestinationFileOptions => {
             if (file.state !== 'deleted') {
-                const str = file.contents.toString('utf8');
-                if (!options || Object.keys(options).length === 0) {
-                    options = defaultOptions;
+                const options = {
+                    ...defaultOptions,
+                    // Config from disk
+                    ...resolvedDestinationFileOptions,
+                    // for better errors
+                    filepath: file.relative,
+                };
+                try {
+                    const str = file.contents.toString('utf8');
+                    const data = prettier.format(str, options);
+                    file.contents = Buffer.from(data);
+                } catch (error) {
+                    callback(new Error(`Error parsing file ${file.relative}: ${error}`));
+                    return;
                 }
-                // for better errors
-                options.filepath = file.relative;
-                const data = prettier.format(str, options);
-                file.contents = Buffer.from(data);
             }
             callback(null, file);
         });
-    };
-    return through.obj(transform);
-};
-
-const prettierFormat = function(str, options = {}) {
-    return prettier.format(str, { ...prettierOptions, ...options });
+    });
 };
 
 module.exports = {
     prettierTransform,
-    prettierFormat,
-    prettierOptions
+    prettierJavaOptions,
 };

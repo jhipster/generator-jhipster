@@ -1,11 +1,9 @@
-const ServerGenerator = require('../../../../../generators/server');
-
-module.exports = class extends ServerGenerator {
+const createGenerator = env => class extends env.requireGenerator('jhipster:server') {
     constructor(args, opts) {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
         if (!jhContext) {
-            this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprint myblueprint')}");
+            this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
         }
         this.configOptions = jhContext.configOptions || {};
         // This sets up options for this sub generator and is being reused from JHipster
@@ -41,3 +39,4 @@ module.exports = class extends ServerGenerator {
     }
 };
 
+module.exports = { createGenerator };

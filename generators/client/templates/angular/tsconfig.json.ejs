@@ -17,36 +17,13 @@
  limitations under the License.
 -%>
 {
-    "compilerOptions": {
-        "target": "es6",
-        "module": "esnext",
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "removeComments": false,
-        "strict": true,
-        "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true,
-        "skipLibCheck": true,
-        "suppressImplicitAnyIndexErrors": true,
-        "outDir": "<%= DIST_DIR %>app",
-        "lib": ["es7", "dom"],
-        "typeRoots": [
-            "node_modules/@types"
-        ],
-        "baseUrl": "./",
-        "paths": {
-            "app/*": ["<%= MAIN_SRC_DIR %>app/*"]
-        },
-        "importHelpers": true,
-        "allowJs": true
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
     },
-    "include": [
-        "<%= MAIN_SRC_DIR %>app",
-        "<%= TEST_SRC_DIR %>"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+    {
+      "path": "./tsconfig.e2e.json"
+    }
+  ]
 }

@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyType = getTypescriptKeyType(getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships));
 let searchType = 'Search';
 if (pagination === 'pagination' || pagination === 'infinite-scroll') {
     searchType = 'SearchWithPagination';
@@ -35,7 +34,7 @@ import * as moment from 'moment';
 import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 <%_ } _%>
 import { SERVER_API_URL } from 'app/app.constants';
-import { createRequestOption<% if (searchEngine === 'elasticsearch') { %>, <%= searchType %><% } %> } from 'app/shared/util/request-util';
+import { createRequestOption<% if (searchEngine !== false) { %>, <%= searchType %><% } %> } from 'app/shared/util/request-util';
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 type EntityResponseType = HttpResponse<I<%= entityAngularName %>>;
@@ -44,7 +43,7 @@ type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
 @Injectable({ providedIn: 'root' })
 export class <%= entityAngularName %>Service {
     public resourceUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
     public resourceSearchUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
     <%_ } _%>
 
@@ -89,7 +88,7 @@ export class <%= entityAngularName %>Service {
     }
     <%_ } _%>
 
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
     search(req: <%= searchType %>): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http.get<I<%= entityAngularName %>[]>(this.resourceSearchUrl, { params: options, observe: 'response' })

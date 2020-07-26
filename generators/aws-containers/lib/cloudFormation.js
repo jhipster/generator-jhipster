@@ -25,15 +25,13 @@ const PHYSICAL_RESOURCE_SEPARATOR = ':';
 const STACK_EVENT_STATUS_DISPLAY_LENGTH = 35;
 
 let stdOut = message => console.error(message.trim()); // eslint-disable-line
-let stdErr = message => console.error(message.trim()); // eslint-disable-line
 module.exports = class CloudFormation {
     constructor(region) {
         this.cf = new AWS.CloudFormation({ region });
     }
 
-    setOutputs(stdout, stderr) {
+    setOutputs(stdout) {
         stdOut = stdout;
-        stdErr = stderr;
     }
 
     /**
@@ -60,7 +58,7 @@ module.exports = class CloudFormation {
                 Capabilities: ['CAPABILITY_IAM'],
                 OnFailure: 'DELETE',
                 Parameters: [this.cfParameter('shouldDeployService', 'false')].concat(additionalParams),
-                TemplateURL: templateUrl
+                TemplateURL: templateUrl,
             })
             .promise()
             .then(() => this._stackCreationEventListener(stackName));
@@ -75,7 +73,7 @@ module.exports = class CloudFormation {
         return this.cf
             .describeStackResource({
                 StackName: stackId,
-                LogicalResourceId: 'JHipsterContainerRegistry'
+                LogicalResourceId: 'JHipsterContainerRegistry',
             })
             .promise()
             .then(data => data.StackResourceDetail.PhysicalResourceId);
@@ -116,8 +114,8 @@ module.exports = class CloudFormation {
                     ...result.Stacks[0],
                     nestedStacks: _.map(nestedStacks, (stack, key) => ({
                         appName: stack.appName,
-                        stackId: key
-                    }))
+                        stackId: key,
+                    })),
                 });
             };
 
@@ -150,7 +148,7 @@ module.exports = class CloudFormation {
                                     appName: stack.LogicalResourceId,
                                     listenerInterval: null,
                                     events: {},
-                                    previousEventId: null
+                                    previousEventId: null,
                                 };
                                 nestedStacks[nestedStackId].listenerInterval = setInterval(
                                     () =>
@@ -185,11 +183,7 @@ module.exports = class CloudFormation {
                 STACK_LISTENER_INTERVAL
             );
 
-            return this.cf
-                .waitFor('stackCreateComplete', params)
-                .promise()
-                .then(complete)
-                .catch(cancel);
+            return this.cf.waitFor('stackCreateComplete', params).promise().then(complete).catch(cancel);
         });
     }
 
@@ -209,7 +203,7 @@ module.exports = class CloudFormation {
                     StackName: stackName,
                     Capabilities: ['CAPABILITY_IAM'],
                     Parameters: [this.cfParameter('shouldDeployService', deployService)].concat(additionalParams),
-                    TemplateURL: templateUrl
+                    TemplateURL: templateUrl,
                 })
                 .promise()
                 .catch(reject)
@@ -247,11 +241,7 @@ module.exports = class CloudFormation {
                         );
                     });
 
-                    return this.cf
-                        .waitFor('stackUpdateComplete', { StackName: stackName })
-                        .promise()
-                        .then(success)
-                        .catch(failure);
+                    return this.cf.waitFor('stackUpdateComplete', { StackName: stackName }).promise().then(success).catch(failure);
                 })
         );
     }
@@ -325,10 +315,7 @@ function _getStackLogLine(stack, indentation = 0) {
  * @private
  */
 function _hasLabelNestedStackName(physicalResource) {
-    return _(physicalResource)
-        .split(PHYSICAL_RESOURCE_SEPARATOR)
-        .last()
-        .startsWith('stack/');
+    return _(physicalResource).split(PHYSICAL_RESOURCE_SEPARATOR).last().startsWith('stack/');
 }
 
 function _isStackEventError(stack) {

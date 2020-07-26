@@ -140,7 +140,7 @@ objects:
             imagePullPolicy: IfNotPresent
             env:
             - name: SPRING_PROFILES_ACTIVE
-              value: prod,swagger
+              value: prod,api-docs
             <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
             - name: SPRING_CLOUD_CONFIG_URI
               value: http://admin:${jhipster.registry.password}@jhipster-registry:8761/config
@@ -158,37 +158,15 @@ objects:
             - name: SPRING_CLOUD_CONSUL_PORT
               value: 8500
             <%_ } _%>
-            <%_ if (app.prodDatabaseType === 'mysql') { _%>
+            <%_ if (['mysql', 'mariadb', 'postgresql'].includes(app.prodDatabaseType)) { _%>
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://${APPLICATION_NAME}-mysqldb/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
-            - name: SPRING_DATASOURCE_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: ${SECRET_REF}
-                  key: database-user
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ${SECRET_REF}
-                  key: database-password
-            <%_ } _%>
-            <%_ if (app.prodDatabaseType === 'mariadb') { _%>
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mariadb://${APPLICATION_NAME}-mariadb/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
-            - name: SPRING_DATASOURCE_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: ${SECRET_REF}
-                  key: database-user
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ${SECRET_REF}
-                  key: database-password
-            <%_ } _%>
-            <%_ if (app.prodDatabaseType === 'postgresql') { _%>
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://${APPLICATION_NAME}-postgresqldb/${APPLICATION_NAME}
+              <%_ if (app.prodDatabaseType === 'mysql') { _%>
+              value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}db`, databaseName: app.baseName.toLowerCase() }) %>
+              <%_ } else if (app.prodDatabaseType === 'mariadb') { _%>
+              value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}`, databaseName: app.baseName.toLowerCase() }) %>
+              <%_ } else if (app.prodDatabaseType === 'postgresql') { _%>
+              value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}db`, databaseName: '${APPLICATION_NAME}' }) %>
+              <%_ } _%>
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:

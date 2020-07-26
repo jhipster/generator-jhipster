@@ -20,26 +20,26 @@
 const chalk = require('chalk');
 
 const constants = require('../generator-constants');
-const { getBase64Secret, getRandomHex } = require('../utils');
+const { serverDefaultConfig } = require('../generator-defaults');
 
 module.exports = {
     askForModuleName,
     askForServerSideOpts,
     askForOptionalItems,
-    askFori18n
 };
 
 function askForModuleName() {
-    if (this.baseName) return;
+    if (this.jhipsterConfig.baseName) return undefined;
 
-    this.askModuleName(this);
+    return this.askModuleName(this);
 }
 
-function askForServerSideOpts(meta) {
-    if (!meta && this.existingProject) return;
+function askForServerSideOpts() {
+    if (this.existingProject) return undefined;
 
-    const applicationType = this.applicationType;
-    const reactive = this.reactive;
+    const applicationType = this.jhipsterConfig.applicationType;
+    const reactive = this.jhipsterConfig.reactive;
+    const uaaBaseName = this.jhipsterConfig.uaaBaseName;
     let defaultPort = applicationType === 'gateway' ? '8080' : '8081';
     if (applicationType === 'uaa') {
         defaultPort = '9999';
@@ -52,7 +52,7 @@ function askForServerSideOpts(meta) {
             validate: input => (/^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.'),
             message:
                 'As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
-            default: defaultPort
+            default: defaultPort,
         },
         {
             type: 'input',
@@ -62,8 +62,8 @@ function askForServerSideOpts(meta) {
                     ? true
                     : 'The package name you have provided is not a valid Java package name.',
             message: 'What is your default Java package name?',
-            default: 'com.mycompany.myapp',
-            store: true
+            default: serverDefaultConfig.packageName,
+            store: true,
         },
         {
             when: response => applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa',
@@ -73,18 +73,18 @@ function askForServerSideOpts(meta) {
             choices: [
                 {
                     value: 'eureka',
-                    name: 'JHipster Registry (uses Eureka, provides Spring Cloud Config support and monitoring dashboards)'
+                    name: 'JHipster Registry (uses Eureka, provides Spring Cloud Config support and monitoring dashboards)',
                 },
                 {
                     value: 'consul',
-                    name: 'Consul'
+                    name: 'Consul',
                 },
                 {
                     value: false,
-                    name: 'No service discovery'
-                }
+                    name: 'No service discovery',
+                },
             ],
-            default: 'eureka'
+            default: 'eureka',
         },
         {
             when: applicationType === 'monolith',
@@ -94,14 +94,14 @@ function askForServerSideOpts(meta) {
             choices: [
                 {
                     value: false,
-                    name: 'No'
+                    name: 'No',
                 },
                 {
                     value: 'eureka',
-                    name: 'Yes'
-                }
+                    name: 'Yes',
+                },
             ],
-            default: false
+            default: serverDefaultConfig.serviceDiscoveryType,
         },
         {
             when: response =>
@@ -114,34 +114,36 @@ function askForServerSideOpts(meta) {
                 const opts = [
                     {
                         value: 'jwt',
-                        name: 'JWT authentication (stateless, with a token)'
-                    }
+                        name: 'JWT authentication (stateless, with a token)',
+                    },
                 ];
                 if (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka') {
                     opts.push({
                         value: 'session',
-                        name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
+                        name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)',
                     });
                 }
                 opts.push({
                     value: 'oauth2',
-                    name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
+                    name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)',
                 });
                 if (!reactive) {
                     if (['gateway', 'microservice'].includes(applicationType)) {
                         opts.push({
                             value: 'uaa',
-                            name: 'Authentication with JHipster UAA server (the server must be generated separately)'
+                            name: 'Authentication with JHipster UAA server (the server must be generated separately)',
                         });
                     }
                 }
                 return opts;
             },
-            default: 0
+            default: serverDefaultConfig.authenticationType,
         },
         {
             when: response =>
-                (applicationType === 'gateway' || applicationType === 'microservice') && response.authenticationType === 'uaa',
+                (applicationType === 'gateway' || applicationType === 'microservice') &&
+                response.authenticationType === 'uaa' &&
+                uaaBaseName === undefined,
             type: 'input',
             name: 'uaaBaseName',
             message: 'What is the folder path of your UAA application?',
@@ -153,7 +155,14 @@ function askForServerSideOpts(meta) {
                     return true;
                 }
                 return `Could not find a valid JHipster UAA server in path "${input}"`;
-            }
+            },
+            filter: input => {
+                const uaaAppData = this.getUaaAppName(input);
+                if (uaaAppData) {
+                    return uaaAppData.baseName;
+                }
+                return uaaBaseName;
+            },
         },
         {
             type: 'list',
@@ -164,44 +173,49 @@ function askForServerSideOpts(meta) {
                 if (!reactive) {
                     opts.push({
                         value: 'sql',
-                        name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle, MSSQL)'
+                        name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle, MSSQL)',
+                    });
+                } else {
+                    opts.push({
+                        value: 'sql',
+                        name: 'SQL (H2, MySQL, PostgreSQL, MSSQL)',
                     });
                 }
                 opts.push({
                     value: 'mongodb',
-                    name: 'MongoDB'
+                    name: 'MongoDB',
                 });
                 if (response.authenticationType !== 'oauth2') {
                     opts.push({
                         value: 'cassandra',
-                        name: 'Cassandra'
+                        name: 'Cassandra',
                     });
                 }
                 opts.push({
                     value: 'couchbase',
-                    name: 'Couchbase'
+                    name: 'Couchbase',
                 });
                 opts.push({
                     value: 'neo4j',
-                    name: '[BETA] Neo4j'
+                    name: '[BETA] Neo4j',
                 });
                 if (applicationType !== 'uaa') {
                     opts.push({
                         value: 'no',
-                        name: 'No database'
+                        name: 'No database',
                     });
                 }
                 return opts;
             },
-            default: 0
+            default: serverDefaultConfig.databaseType,
         },
         {
             when: response => response.databaseType === 'sql',
             type: 'list',
             name: 'prodDatabaseType',
             message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
-            choices: constants.SQL_DB_OPTIONS,
-            default: 0
+            choices: reactive ? constants.R2DBC_DB_OPTIONS : constants.SQL_DB_OPTIONS,
+            default: serverDefaultConfig.prodDatabaseType,
         },
         {
             when: response => response.databaseType === 'sql',
@@ -212,14 +226,14 @@ function askForServerSideOpts(meta) {
                 [
                     {
                         value: 'h2Disk',
-                        name: 'H2 with disk-based persistence'
+                        name: 'H2 with disk-based persistence',
                     },
                     {
                         value: 'h2Memory',
-                        name: 'H2 with in-memory persistence'
-                    }
+                        name: 'H2 with in-memory persistence',
+                    },
                 ].concat(constants.SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)),
-            default: 0
+            default: serverDefaultConfig.devDatabaseType,
         },
         {
             when: () => !reactive,
@@ -229,45 +243,46 @@ function askForServerSideOpts(meta) {
             choices: [
                 {
                     value: 'ehcache',
-                    name: 'Yes, with the Ehcache implementation (local cache, for a single node)'
+                    name: 'Yes, with the Ehcache implementation (local cache, for a single node)',
                 },
                 {
                     value: 'caffeine',
-                    name: 'Yes, with the Caffeine implementation (local cache, for a single node)'
+                    name: 'Yes, with the Caffeine implementation (local cache, for a single node)',
                 },
                 {
                     value: 'hazelcast',
                     name:
-                        'Yes, with the Hazelcast implementation (distributed cache, for multiple nodes, supports rate-limiting for gateway applications)'
+                        'Yes, with the Hazelcast implementation (distributed cache, for multiple nodes, supports rate-limiting for gateway applications)',
                 },
                 {
                     value: 'infinispan',
-                    name: '[BETA] Yes, with the Infinispan implementation (hybrid cache, for multiple nodes)'
+                    name: '[BETA] Yes, with the Infinispan implementation (hybrid cache, for multiple nodes)',
                 },
                 {
                     value: 'memcached',
                     name:
-                        'Yes, with Memcached (distributed cache) - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!'
+                        'Yes, with Memcached (distributed cache) - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
                 },
                 {
                     value: 'redis',
-                    name: 'Yes, with the Redis implementation'
+                    name: 'Yes, with the Redis implementation',
                 },
                 {
                     value: 'no',
-                    name: 'No - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!'
-                }
+                    name: 'No - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
+                },
             ],
-            default: applicationType === 'microservice' || applicationType === 'uaa' ? 2 : 0
+            default: applicationType === 'microservice' || applicationType === 'uaa' ? 2 : serverDefaultConfig.cacheProvider,
         },
         {
             when: response =>
                 ((response.cacheProvider !== 'no' && response.cacheProvider !== 'memcached') || applicationType === 'gateway') &&
-                response.databaseType === 'sql',
+                response.databaseType === 'sql' &&
+                !reactive,
             type: 'confirm',
             name: 'enableHibernateCache',
             message: 'Do you want to use Hibernate 2nd level cache?',
-            default: true
+            default: serverDefaultConfig.enableHibernateCache,
         },
         {
             type: 'list',
@@ -276,105 +291,70 @@ function askForServerSideOpts(meta) {
             choices: [
                 {
                     value: 'maven',
-                    name: 'Maven'
+                    name: 'Maven',
                 },
                 {
                     value: 'gradle',
-                    name: 'Gradle'
-                }
+                    name: 'Gradle',
+                },
             ],
-            default: 'maven'
-        }
+            default: serverDefaultConfig.buildTool,
+        },
     ];
 
-    if (meta) return prompts; // eslint-disable-line consistent-return
+    return this.prompt(prompts).then(props => {
+        this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = props.serviceDiscoveryType;
+        this.authenticationType = this.jhipsterConfig.authenticationType = props.authenticationType;
 
-    const done = this.async();
-
-    this.prompt(prompts).then(props => {
-        this.serviceDiscoveryType = props.serviceDiscoveryType;
-        this.authenticationType = props.authenticationType;
-
-        // JWT authentication is mandatory with Eureka, so the JHipster Registry
-        // can control the applications
-        if (this.serviceDiscoveryType === 'eureka' && this.authenticationType !== 'uaa' && this.authenticationType !== 'oauth2') {
-            this.authenticationType = 'jwt';
-        }
-
-        if (this.authenticationType === 'session') {
-            this.rememberMeKey = getRandomHex();
-        }
-
-        if (this.authenticationType === 'jwt' || this.applicationType === 'microservice') {
-            this.jwtSecretKey = getBase64Secret(null, 64);
-        }
-
-        // user-management will be handled by UAA app, oauth expects users to be managed in IpP
-        if ((this.applicationType === 'gateway' && this.authenticationType === 'uaa') || this.authenticationType === 'oauth2') {
-            this.skipUserManagement = true;
-        }
-
-        if (this.applicationType === 'uaa') {
-            this.authenticationType = 'uaa';
-        }
-
-        this.packageName = props.packageName;
-        this.serverPort = props.serverPort;
-        if (this.serverPort === undefined) {
-            this.serverPort = '8080';
-        }
-        this.cacheProvider = !reactive ? props.cacheProvider : 'no';
-        this.enableHibernateCache = props.enableHibernateCache;
-        this.databaseType = props.databaseType;
-        this.devDatabaseType = props.devDatabaseType;
-        this.prodDatabaseType = props.prodDatabaseType;
-        this.searchEngine = props.searchEngine;
-        this.buildTool = props.buildTool;
-        this.uaaBaseName = this.getUaaAppName(props.uaaBaseName).baseName;
-
-        if (this.databaseType === 'no') {
-            this.devDatabaseType = 'no';
-            this.prodDatabaseType = 'no';
-            this.enableHibernateCache = false;
-            if (this.authenticationType !== 'uaa') {
-                this.skipUserManagement = true;
-            }
-        } else if (['mongodb', 'neo4j', 'couchbase', 'cassandra'].includes(this.databaseType)) {
-            this.devDatabaseType = this.databaseType;
-            this.prodDatabaseType = this.databaseType;
-            this.enableHibernateCache = false;
-        }
-        done();
+        this.packageName = this.jhipsterConfig.packageName = props.packageName;
+        this.serverPort = this.jhipsterConfig.serverPort = props.serverPort || '8080';
+        this.cacheProvider = this.jhipsterConfig.cacheProvider = !reactive ? props.cacheProvider : 'no';
+        this.enableHibernateCache = this.jhipsterConfig.enableHibernateCache = props.enableHibernateCache;
+        this.databaseType = this.jhipsterConfig.databaseType = props.databaseType;
+        this.devDatabaseType = this.jhipsterConfig.devDatabaseType = props.devDatabaseType;
+        this.prodDatabaseType = this.jhipsterConfig.prodDatabaseType = props.prodDatabaseType;
+        this.searchEngine = this.jhipsterConfig.searchEngine = props.searchEngine;
+        this.buildTool = this.jhipsterConfig.buildTool = props.buildTool;
+        this.uaaBaseName = this.jhipsterConfig.uaaBaseName = props.uaaBaseName || uaaBaseName;
     });
 }
 
-function askForOptionalItems(meta) {
-    if (!meta && this.existingProject) return;
+function askForOptionalItems() {
+    if (this.existingProject) return undefined;
 
-    const applicationType = this.applicationType;
+    const applicationType = this.jhipsterConfig.applicationType;
+    const reactive = this.jhipsterConfig.reactive;
+    const databaseType = this.jhipsterConfig.databaseType;
+
     const choices = [];
     const defaultChoice = [];
-    if (!this.reactive) {
-        if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
-            choices.push({
-                name: 'Search engine using Elasticsearch',
-                value: 'searchEngine:elasticsearch'
-            });
-        }
+    if (['sql', 'mongodb', 'neo4j'].includes(databaseType)) {
+        choices.push({
+            name: 'Search engine using Elasticsearch',
+            value: 'searchEngine:elasticsearch',
+        });
+    }
+    if (databaseType === 'couchbase') {
+        choices.push({
+            name: 'Search engine using Couchbase FTS',
+            value: 'searchEngine:couchbase',
+        });
+    }
+    if (!reactive) {
         if (applicationType === 'monolith' || applicationType === 'gateway') {
             choices.push({
                 name: 'WebSockets using Spring Websocket',
-                value: 'websocket:spring-websocket'
+                value: 'websocket:spring-websocket',
             });
         }
     }
     choices.push({
         name: 'Asynchronous messages using Apache Kafka',
-        value: 'messageBroker:kafka'
+        value: 'messageBroker:kafka',
     });
     choices.push({
         name: 'API first development using OpenAPI-generator',
-        value: 'enableSwaggerCodegen:true'
+        value: 'enableSwaggerCodegen:true',
     });
 
     const PROMPTS = {
@@ -382,32 +362,27 @@ function askForOptionalItems(meta) {
         name: 'serverSideOptions',
         message: 'Which other technologies would you like to use?',
         choices,
-        default: defaultChoice
+        default: defaultChoice,
     };
 
-    if (meta) return PROMPTS; // eslint-disable-line consistent-return
-
-    const done = this.async();
     if (choices.length > 0) {
-        this.prompt(PROMPTS).then(prompt => {
-            this.serverSideOptions = prompt.serverSideOptions;
-            this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
-            this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
-            this.messageBroker = this.getOptionFromArray(this.serverSideOptions, 'messageBroker');
-            this.enableSwaggerCodegen = this.getOptionFromArray(this.serverSideOptions, 'enableSwaggerCodegen');
+        return this.prompt(PROMPTS).then(prompt => {
+            this.serverSideOptions = this.jhipsterConfig.serverSideOptions = prompt.serverSideOptions;
+            this.websocket = this.jhipsterConfig.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
+            this.searchEngine = this.jhipsterConfig.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
+            this.messageBroker = this.jhipsterConfig.messageBroker = this.getOptionFromArray(this.serverSideOptions, 'messageBroker');
+            this.enableSwaggerCodegen = this.jhipsterConfig.enableSwaggerCodegen = this.getOptionFromArray(
+                this.serverSideOptions,
+                'enableSwaggerCodegen'
+            );
             // Only set this option if it hasn't been set in a previous question, as it's only optional for monoliths
-            if (!this.serviceDiscoveryType) {
-                this.serviceDiscoveryType = this.getOptionFromArray(this.serverSideOptions, 'serviceDiscoveryType');
+            if (!this.jhipsterConfig.serviceDiscoveryType) {
+                this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = this.getOptionFromArray(
+                    this.serverSideOptions,
+                    'serviceDiscoveryType'
+                );
             }
-            done();
         });
-    } else {
-        done();
     }
-}
-
-function askFori18n() {
-    if (this.existingProject || this.configOptions.skipI18nQuestion) return;
-
-    this.aski18n(this);
+    return undefined;
 }

@@ -48,12 +48,23 @@ if [[ "$JHI_APP" == *"uaa"* ]]; then
 fi
 
 #-------------------------------------------------------------------------------
+# Enable testcontainers profiles
+#-------------------------------------------------------------------------------
+JHI_GRADLE_ENABLE_TESTCONTAINERS=""
+JHI_MAVEN_ENABLE_TESTCONTAINERS=""
+if [ "$JHI_TESTCONTAINERS" == 1 ]; then
+    JHI_GRADLE_ENABLE_TESTCONTAINERS="-Ptestcontainers"
+    JHI_MAVEN_ENABLE_TESTCONTAINERS="-Dspring.profiles.active=testcontainers"
+fi
+
+#-------------------------------------------------------------------------------
 # Launch tests
 #-------------------------------------------------------------------------------
 cd "$JHI_FOLDER_APP"
 if [ -f "mvnw" ]; then
-    ./mvnw -ntp -P-webpack verify --batch-mode \
+    ./mvnw -ntp -P-webpack verify $JHI_MAVEN_ENABLE_TESTCONTAINERS --batch-mode \
         -Dlogging.level.ROOT=OFF \
+        -Dlogging.level.org.testcontainers=INFO \
         -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.io.github.jhipster=OFF \
         -Dlogging.level.io.github.jhipster.sample=OFF \
@@ -62,8 +73,9 @@ if [ -f "mvnw" ]; then
         -Dlogging.level.org.springframework.security=OFF
 
 elif [ -f "gradlew" ]; then
-    ./gradlew test integrationTest $JHI_GRADLE_EXCLUDE_WEBPACK \
+    ./gradlew test integrationTest $JHI_GRADLE_EXCLUDE_WEBPACK $JHI_GRADLE_ENABLE_TESTCONTAINERS \
         -Dlogging.level.ROOT=OFF \
+        -Dlogging.level.org.testcontainers=INFO \
         -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.io.github.jhipster=OFF \
         -Dlogging.level.io.github.jhipster.sample=OFF \

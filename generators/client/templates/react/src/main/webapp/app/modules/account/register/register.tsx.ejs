@@ -35,7 +35,12 @@ export type IRegisterProps = DispatchProps;
 export const RegisterPage = (props: IRegisterProps) => {
   const [password, setPassword] = useState('');
 
-  useEffect(() => () => props.reset(), []);
+  useEffect(
+    () => () => {
+      props.reset();
+    },
+    []
+  );
 
   const handleValidSubmit = (event, values) => {
     <%_ if (enableTranslation) { _%>
@@ -66,7 +71,7 @@ export const RegisterPage = (props: IRegisterProps) => {
               placeholder={translate('global.form.username.placeholder')}
               validate={{
                 required: { value: true, errorMessage: translate('register.messages.validate.login.required') },
-                pattern: { value: '^[_.@A-Za-z0-9-]*$', errorMessage: translate('register.messages.validate.login.pattern') },
+                pattern: { value: "<%- LOGIN_REGEX %>", errorMessage: translate('register.messages.validate.login.pattern') },
                 minLength: { value: 1, errorMessage: translate('register.messages.validate.login.minlength') },
                 maxLength: { value: 50, errorMessage: translate('register.messages.validate.login.maxlength') }
               }}

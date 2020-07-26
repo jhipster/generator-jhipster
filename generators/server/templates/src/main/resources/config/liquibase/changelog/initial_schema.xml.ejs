@@ -21,11 +21,11 @@
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-<%= LIQUIBASE_DTD_VERSION %>.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <% const isAutoIncrementDB = prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb';
-       const isSequenceDB = prodDatabaseType === 'postgresql' || prodDatabaseType === 'oracle' || prodDatabaseType === 'mssql';
+    <% const isAutoIncrementDB = reactive || ['mysql', 'mariadb'].includes(prodDatabaseType);
+       const isSequenceDB = !reactive && ['postgresql', 'oracle', 'mssql'].includes(prodDatabaseType);
     _%>
     <%_ if (isAutoIncrementDB) { _%>
     <property name="autoIncrement" value="true"/>
@@ -48,7 +48,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <%_ } else { _%>
-            <column name="id" type="bigint" <% if (isAutoIncrementDB) { _%> autoIncrement="${autoIncrement}" <%_ } _%>>
+            <column name="id" type="bigint"<% if (isAutoIncrementDB) { %> autoIncrement="${autoIncrement}"<% } %><% if (reactive) { %> startWith="1050"<% } %> >
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <%_ } _%>
@@ -178,46 +178,6 @@
         </<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
     <%_ } _%>
 <%_ } _%>
-        <createTable tableName="<%= jhiTablePrefix %>_persistent_audit_event">
-            <column name="event_id" type="bigint" <% if (isAutoIncrementDB) { _%> autoIncrement="${autoIncrement}" <%_ } _%>>
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="principal" type="varchar(50)">
-                <constraints nullable="false" />
-            </column>
-            <column name="event_date" type="timestamp"/>
-            <column name="event_type" type="varchar(255)"/>
-        </createTable>
-
-        <createTable tableName="<%= jhiTablePrefix %>_persistent_audit_evt_data">
-            <column name="event_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="name" type="varchar(150)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="value" type="varchar(255)"/>
-        </createTable>
-        <addPrimaryKey columnNames="event_id, name" tableName="<%= jhiTablePrefix %>_persistent_audit_evt_data"/>
-
-        <createIndex indexName="idx_persistent_audit_event"
-                     tableName="<%= jhiTablePrefix %>_persistent_audit_event"
-                     unique="false">
-            <column name="principal" type="varchar(50)"/>
-            <column name="event_date" type="timestamp"/>
-        </createIndex>
-
-        <createIndex indexName="idx_persistent_audit_evt_data"
-                     tableName="<%= jhiTablePrefix %>_persistent_audit_evt_data"
-                     unique="false">
-            <column name="event_id" type="bigint"/>
-        </createIndex>
-
-        <addForeignKeyConstraint baseColumnNames="event_id"
-                                 baseTableName="<%= jhiTablePrefix %>_persistent_audit_evt_data"
-                                 constraintName="fk_evt_pers_audit_evt_data"
-                                 referencedColumnNames="event_id"
-                                 referencedTableName="<%= jhiTablePrefix %>_persistent_audit_event"/>
     </changeSet>
 
     <changeSet author="jhipster" id="00000000000002" context="test">

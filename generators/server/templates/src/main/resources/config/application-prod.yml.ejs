@@ -87,27 +87,23 @@ spring:
             host: localhost
             port: 8500
     <%_ } _%>
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        <%_ if (prodDatabaseType === 'mysql') { _%>
-        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-        username: root
-        password:
-        <%_ } else if (prodDatabaseType === 'mariadb') { _%>
-        url: jdbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC
+        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: root
         password:
         <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-        url: jdbc:postgresql://localhost:5432/<%= baseName %>
+        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: <%= baseName %>
         password:
         <%_ } else if (prodDatabaseType === 'mssql') { _%>
-        url: jdbc:sqlserver://localhost:1433;database=<%= baseName %>
+        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: SA
         password: yourStrong(!)Password
         <%_ } else if (prodDatabaseType === 'oracle') { _%>
-        url: jdbc:oracle:thin:@localhost:1521:xe
+        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
         username: system
         password: oracle
         <%_ } _%>
@@ -126,39 +122,6 @@ spring:
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
         <%_ } _%>
         show-sql: false
-        properties:
-            hibernate.id.new_generator_mappings: true
-            hibernate.connection.provider_disables_autocommit: true
-            hibernate.cache.use_second_level_cache: <% if (enableHibernateCache) { %>true<% } else { %>false<% } %>
-            hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: false
-            # modify batch size as necessary
-            hibernate.jdbc.batch_size: 25
-            hibernate.order_inserts: true
-            hibernate.order_updates: true
-            <%_ if (prodDatabaseType === 'mssql' || prodDatabaseType === 'oracle') { _%>
-            # modify fetch size as necessary
-            hibernate.jdbc.fetch_size: 150
-            hibernate.criteria.literal_handling_mode: BIND
-            <%_ } _%>
-            hibernate.query.fail_on_pagination_over_collection_fetch: true
-            hibernate.query.in_clause_parameter_padding: true
-            <%_ if (enableHibernateCache) { _%>
-                <%_ if (cacheProvider === 'hazelcast') { _%>
-            hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
-            hibernate.cache.hazelcast.instance_name: <%= baseName %>
-                <%_ } else if (cacheProvider === 'infinispan') { _%>
-            hibernate.cache.infinispan.statistics: true
-            hibernate.cache.use_minimal_puts: true
-            hibernate.cache.infinispan.entity.expiration.lifespan: 3600000
-            hibernate.cache.infinispan.entity.memory.size: 1000
-            hibernate.cache.infinispan.jgroups_cfg: default-configs/default-jgroups-tcp.xml
-                <%_ } _%>
-                <%_ if (cacheProvider === 'hazelcast') { _%>
-            hibernate.cache.use_minimal_puts: true
-            hibernate.cache.hazelcast.use_lite_member: true
-                <%_ } _%>
-            <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || searchEngine === 'elasticsearch') { _%>
     data:
@@ -176,12 +139,19 @@ spring:
             keyspaceName: <%= baseName %>
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
+        <%_ if (!reactive) { _%>
         jest:
             uri: http://localhost:9200
     # see https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-nosql.html#boot-features-connecting-to-elasticsearch-jest
     elasticsearch:
         rest:
             uris: http://localhost:9200
+        <%_ } else { _%>
+        elasticsearch:
+          client:
+            reactive:
+              endpoints: localhost:9200
+        <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
@@ -194,12 +164,43 @@ spring:
     # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
     liquibase:
         contexts: prod
+        <%_ if (reactive) { _%>
+            <%_ if (['mysql', 'mariadb', 'postgresql', 'mssql'].includes(prodDatabaseType)) { _%>
+        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+            <%_ } else if (prodDatabaseType === 'oracle') { _%>
+        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
+            <%_ } _%>
+        <%_ } _%>
     <%_ } _%>
     mail:
         host: localhost
         port: 25
         username:
         password:
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+    r2dbc:
+        <%_ if (prodDatabaseType === 'mysql') { _%>
+        url: r2dbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+        username: root
+        password:
+        <%_ } else if (prodDatabaseType === 'mariadb') { _%>
+        url: r2dbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC
+        username: root
+        password:
+        <%_ } else if (prodDatabaseType === 'postgresql') { _%>
+        url: r2dbc:postgresql://localhost:5432/<%= baseName %>
+        username: <%= baseName %>
+        password:
+        <%_ } else if (prodDatabaseType === 'mssql') { _%>
+        url: r2dbc:sqlserver://localhost:1433/<%= baseName %>
+        username: SA
+        password: yourStrong(!)Password
+        <%_ } else if (prodDatabaseType === 'oracle') { _%>
+        url: r2dbc:oracle:thin:@localhost:1521:xe
+        username: system
+        password: oracle
+        <%_ } _%>
+    <%_ } _%>
     thymeleaf:
         cache: true
 <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
@@ -224,14 +225,14 @@ spring:
 # Then, modify the server.ssl properties so your "server" configuration looks like:
 #
 # server:
-#    port: 443
-#    ssl:
-#        key-store: classpath:config/tls/keystore.p12
-#        key-store-password: password
-#        key-store-type: PKCS12
-#        key-alias: <%= baseName.toLowerCase() %>
-#        # The ciphers suite enforce the security by deactivating some old and deprecated SSL cipher, this list was tested against SSL Labs (https://www.ssllabs.com/ssltest/)
-#        ciphers: TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 ,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA,TLS_RSA_WITH_CAMELLIA_128_CBC_SHA
+#   port: 443
+#   ssl:
+#     key-store: classpath:config/tls/keystore.p12
+#     key-store-password: password
+#     key-store-type: PKCS12
+#     key-alias: selfsigned
+#     # The ciphers suite enforce the security by deactivating some old and deprecated SSL cipher, this list was tested against SSL Labs (https://www.ssllabs.com/ssltest/)
+#     ciphers: TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 ,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA,TLS_RSA_WITH_CAMELLIA_128_CBC_SHA
 # ===================================================================
 server:
     port: <%= serverPort %>
@@ -251,8 +252,10 @@ jhipster:
     gateway:
         rate-limiting:
             enabled: false
+        <%_ if (!reactive) { _%>
         authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
             app1: /api # recommended prod configuration
+        <%_ } _%>
     <%_ } _%>
     http:
         cache: # Used by the CachingHttpHeadersFilter
@@ -275,7 +278,7 @@ jhipster:
         <%_ } _%>
         <%_ if (cacheProvider === 'caffeine') { _%>
         caffeine: # Caffeine configuration
-            time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
+            time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache. This sets expireAfterWrite in Caffeine (https://github.com/ben-manes/caffeine/wiki/Eviction#time-based)
             max-entries: 1000 # Number of objects in each cache entry
         <%_ } _%>
         <%_ if (cacheProvider === 'infinispan') { _%>
@@ -363,10 +366,6 @@ jhipster:
             host: localhost
             port: 5000
             queue-size: 512
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-    audit-events:
-        retention-period: 30 # Number of days before audit events are deleted.
-    <%_ } _%>
 <%_ if (applicationType === 'uaa') { _%>
 uaa:
     #be sure to to change to a different keystore in production!

@@ -35,7 +35,7 @@ module.exports = class extends BaseDockerGenerator {
             ...super.initializing,
             checkKubernetes,
             loadConfig,
-            setupKubernetesConstants
+            setupKubernetesConstants,
         };
     }
 
@@ -56,7 +56,7 @@ module.exports = class extends BaseDockerGenerator {
             askForIngressType: prompts.askForIngressType,
             askForIngressDomain: prompts.askForIngressDomain,
             askForPersistentStorage: prompts.askForPersistentStorage,
-            askForStorageClassName: prompts.askForStorageClassName
+            askForStorageClassName: prompts.askForStorageClassName,
         };
     }
 
@@ -79,7 +79,7 @@ module.exports = class extends BaseDockerGenerator {
                     }
                 });
             },
-            saveConfig
+            saveConfig,
         };
     }
 

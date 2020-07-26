@@ -10,7 +10,7 @@
                     "required": "A felhasználói azonosító kötelezően kitöltendő.",
                     "minlength": "A felhasználói azonosító legalább 1 betűböl kell, hogy álljon",
                     "maxlength": "A felhasználói azonosító nem lehet több, mint 50 betü",
-                    "pattern": "A felhasználói azonosító csak kisbetükből és számokból állhat."
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>A regisztrációt elmentettük!</strong> Kérjük ellenörizze emailjét, ahova a megerősítő emailt küldtük.",

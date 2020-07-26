@@ -37,34 +37,34 @@ module.exports = class extends BaseGenerator {
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         this.option('skip-build', {
             desc: 'Skips building the application',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         this.option('skip-deploy', {
             desc: 'Skips deployment to Azure App Service',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         this.option('skip-insights', {
             desc: 'Skips configuration of Azure Application Insights',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
-        this.azureSpringCloudSkipBuild = this.options['skip-build'];
-        this.azureSpringCloudSkipDeploy = this.options['skip-deploy'] || this.options['skip-build'];
-        this.azureSpringCloudSkipInsights = this.options['skip-insights'];
+        this.azureSpringCloudSkipBuild = this.options.skipBuild;
+        this.azureSpringCloudSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
+        this.azureSpringCloudSkipInsights = this.options.skipInsights;
         this.registerPrettierTransform();
     }
 
     initializing() {
-        if (!this.options['from-cli']) {
+        if (!this.options.fromCli) {
             this.warning(
                 `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
                     'jhipster <command>'
@@ -131,7 +131,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                 exec('az configure --list-defaults true', (err, stdout) => {
                     if (err) {
                         this.config.set({
-                            azureAppServiceResourceGroupName: null
+                            azureAppServiceResourceGroupName: null,
                         });
                         this.abort = true;
                         this.error('Could not retrieve your Azure default configuration.');
@@ -163,26 +163,26 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                         type: 'input',
                         name: 'azureAppServiceResourceGroupName',
                         message: 'Azure resource group name:',
-                        default: this.azureAppServiceResourceGroupName
+                        default: this.azureAppServiceResourceGroupName,
                     },
                     {
                         type: 'input',
                         name: 'azureAppServicePlan',
                         message: 'Azure App Service plan name:',
-                        default: this.azureAppServicePlan || `${this.baseName}-plan`
+                        default: this.azureAppServicePlan || `${this.baseName}-plan`,
                     },
                     {
                         type: 'input',
                         name: 'azureApplicationInsightsName',
                         message: 'Azure Application Insights instance name:',
-                        default: this.azureApplicationInsightsName || `${this.baseName}-insights`
+                        default: this.azureApplicationInsightsName || `${this.baseName}-insights`,
                     },
                     {
                         type: 'input',
                         name: 'azureAppServiceName',
                         message: 'Azure App Service application name:',
-                        default: this.azureAppServiceName || this.baseName
-                    }
+                        default: this.azureAppServiceName || this.baseName,
+                    },
                 ];
 
                 this.prompt(prompts).then(props => {
@@ -205,22 +205,22 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                         choices: [
                             {
                                 value: 'local',
-                                name: 'Build and deploy locally'
+                                name: 'Build and deploy locally',
                             },
                             {
                                 value: 'github-action',
-                                name: 'Build and deploy using GitHub Actions'
-                            }
+                                name: 'Build and deploy using GitHub Actions',
+                            },
                         ],
-                        default: 0
-                    }
+                        default: 0,
+                    },
                 ];
 
                 this.prompt(prompts).then(props => {
                     this.azureAppServiceDeploymentType = props.azureAppServiceDeploymentType;
                     done();
                 });
-            }
+            },
         };
     }
 
@@ -232,9 +232,9 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                     azureAppServicePlan: this.azureAppServicePlan,
                     azureApplicationInsightsName: this.azureApplicationInsightsName,
                     azureAppServiceName: this.azureAppServiceName,
-                    azureAppServiceDeploymentType: this.azureAppServiceDeploymentType
+                    azureAppServiceDeploymentType: this.azureAppServiceDeploymentType,
                 });
-            }
+            },
         };
     }
 
@@ -462,16 +462,12 @@ which is free for the first 30 days`);
 
             copyAzureAppServiceFiles() {
                 if (this.abort) return;
-                const done = this.async();
                 this.log(chalk.bold('\nCreating Azure App Service deployment files'));
                 this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
                 if (this.azureAppServiceDeploymentType === 'github-action') {
                     this.template('github/workflows/azure-app-service.yml.ejs', '.github/workflows/azure-app-service.yml');
                 }
-                this.conflicter.resolve(err => {
-                    done();
-                });
-            }
+            },
         };
     }
 
@@ -593,7 +589,7 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
                 child.stdout.on('data', data => {
                     process.stdout.write(data.toString());
                 });
-            }
+            },
         };
     }
 };

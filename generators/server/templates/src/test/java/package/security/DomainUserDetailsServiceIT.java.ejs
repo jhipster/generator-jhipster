@@ -28,6 +28,9 @@ import <%= packageName %>.AbstractNeo4jIT;
 import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import <%= packageName %>.config.Constants;
+<%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 import <%= packageName %>.repository.UserRepository;
 
@@ -35,6 +38,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 <%_ if (cacheProvider === 'redis') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +55,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 <%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.security.test.context.support.WithMockUser;
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 
@@ -68,13 +74,16 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 <%_ if (cacheProvider === 'redis') { _%>
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'neo4j') { _%>
+@ExtendWith(AbstractNeo4jIT.class)
+<%_ } _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 @Transactional
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 @WithMockUser("test-user-one")
 <%_ } _%>
-public class DomainUserDetailsServiceIT <% if (databaseType === 'neo4j') { %>extends AbstractNeo4jIT <% } %><% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+public class DomainUserDetailsServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     private static final String USER_ONE_LOGIN = "test-user-one";
     private static final String USER_ONE_EMAIL = "test-user-one@localhost";
@@ -89,17 +98,16 @@ public class DomainUserDetailsServiceIT <% if (databaseType === 'neo4j') { %>ext
     @Autowired
     private <% if (reactive) { %>Reactive<% } %>UserDetailsService domainUserDetailsService;
 
-    private <%= asEntity('User') %> userOne;
-    private <%= asEntity('User') %> userTwo;
-    private <%= asEntity('User') %> userThree;
-
     @BeforeEach
     public void init() {
-        <%_ if (databaseType !== 'sql') { _%>
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        userRepository.deleteAllUserAuthorities().block();
+        <%_ } _%>
+        <%_ if (databaseType !== 'sql' || reactive) { _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
 
         <%_ } _%>
-        userOne = new <%= asEntity('User') %>();
+        <%= asEntity('User') %> userOne = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         userOne.setId(UUID.randomUUID().toString());
         <%_ } _%>
@@ -110,9 +118,12 @@ public class DomainUserDetailsServiceIT <% if (databaseType === 'neo4j') { %>ext
         userOne.setFirstName("userOne");
         userOne.setLastName("doe");
         userOne.setLangKey("en");
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        userOne.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
         userRepository.save(userOne)<% if (reactive) { %>.block()<% } %>;
 
-        userTwo = new <%= asEntity('User') %>();
+        <%= asEntity('User') %> userTwo = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         userTwo.setId(UUID.randomUUID().toString());
         <%_ } _%>
@@ -123,9 +134,12 @@ public class DomainUserDetailsServiceIT <% if (databaseType === 'neo4j') { %>ext
         userTwo.setFirstName("userTwo");
         userTwo.setLastName("doe");
         userTwo.setLangKey("en");
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        userTwo.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
         userRepository.save(userTwo)<% if (reactive) { %>.block()<% } %>;
 
-        userThree = new <%= asEntity('User') %>();
+        <%= asEntity('User') %> userThree = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         userThree.setId(UUID.randomUUID().toString());
         <%_ } _%>
@@ -136,13 +150,13 @@ public class DomainUserDetailsServiceIT <% if (databaseType === 'neo4j') { %>ext
         userThree.setFirstName("userThree");
         userThree.setLastName("doe");
         userThree.setLangKey("en");
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        userThree.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
         userRepository.save(userThree)<% if (reactive) { %>.block()<% } %>;
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
-    @Transactional
-    <%_ } _%>
     public void assertThatUserCanBeFoundByLogin() {
         UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_ONE_LOGIN)<% if (reactive) { %>.block()<% } %>;
         assertThat(userDetails).isNotNull();
@@ -150,9 +164,6 @@ public class DomainUserDetailsServiceIT <% if (databaseType === 'neo4j') { %>ext
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
-    @Transactional
-    <%_ } _%>
     public void assertThatUserCanBeFoundByLoginIgnoreCase() {
         UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_ONE_LOGIN.toUpperCase(Locale.ENGLISH))<% if (reactive) { %>.block()<% } %>;
         assertThat(userDetails).isNotNull();
@@ -160,36 +171,20 @@ public class DomainUserDetailsServiceIT <% if (databaseType === 'neo4j') { %>ext
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
-    @Transactional
-    <%_ } _%>
     public void assertThatUserCanBeFoundByEmail() {
         UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_TWO_EMAIL)<% if (reactive) { %>.block()<% } %>;
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getUsername()).isEqualTo(USER_TWO_LOGIN);
     }
 
-    <%_ if (databaseType === 'sql') { _%>
-    @Test
-    @Transactional
-    public void assertThatUserCanBeFoundByEmailIgnoreCase() {
-        UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_TWO_EMAIL.toUpperCase(Locale.ENGLISH))<% if (reactive) { %>.block()<% } %>;
-        assertThat(userDetails).isNotNull();
-        assertThat(userDetails.getUsername()).isEqualTo(USER_TWO_LOGIN);
-    }
-    <%_ } else { // MongoDB and Cassandra _%>
     @Test
     public void assertThatUserCanBeFoundByEmailIgnoreCase() {
         UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_TWO_EMAIL.toUpperCase(Locale.ENGLISH))<% if (reactive) { %>.block()<% } %>;
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getUsername()).isEqualTo(USER_TWO_LOGIN);
     }
-    <%_ } _%>
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
-    @Transactional
-    <%_ } _%>
     public void assertThatEmailIsPrioritizedOverLogin() {
         UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_ONE_EMAIL)<% if (reactive) { %>.block()<% } %>;
         assertThat(userDetails).isNotNull();
@@ -197,9 +192,6 @@ public class DomainUserDetailsServiceIT <% if (databaseType === 'neo4j') { %>ext
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
-    @Transactional
-    <%_ } _%>
     public void assertThatUserNotActivatedExceptionIsThrownForNotActivatedUsers() {
         assertThatExceptionOfType(UserNotActivatedException.class).isThrownBy(
             () -> domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_THREE_LOGIN)<% if (reactive) { %>.block()<% } %>);

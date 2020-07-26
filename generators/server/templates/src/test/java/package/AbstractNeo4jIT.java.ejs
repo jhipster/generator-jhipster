@@ -18,19 +18,26 @@
 -%>
 package <%= packageName %>;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.testcontainers.containers.Neo4jContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@Testcontainers
-public class AbstractNeo4jIT {
+import java.util.concurrent.atomic.AtomicBoolean;
 
-    @Container
-    private static Neo4jContainer neo4jContainer = new Neo4jContainer().withoutAuthentication();
+public class AbstractNeo4jIT implements BeforeAllCallback {
 
-    @BeforeAll
-    public static void beforeAll() {
-        System.setProperty("org.neo4j.driver.uri", "bolt://" + neo4jContainer.getContainerIpAddress() + ":" + neo4jContainer.getMappedPort(7687));
+    private static AtomicBoolean started = new AtomicBoolean(false);
+
+    private static Neo4jContainer neo4jContainer = new Neo4jContainer("<%= DOCKER_NEO4J %>").withoutAuthentication();
+
+    public void beforeAll(ExtensionContext extensionContext) {
+        if (!started.get()) {
+            neo4jContainer.start();
+            System.setProperty(
+                "org.neo4j.driver.uri",
+                neo4jContainer.getBoltUrl()
+            );
+            started.set(true);
+        }
     }
 }

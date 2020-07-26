@@ -26,7 +26,7 @@
 
 [summary]: #summary
 
-As of JHipster 6.5, the JHipster administrator's management and monitoring UI is spread out to various places (JHipster Registry, angular/react/vue.js pages) which causes code duplication and slows down their evolution. This RFC proposes to move this functionality to an external application that can be used in different development and production scenarios. In the following, this application will be referred to as the **JHipster Control Center**.
+As of JHipster 6.5, the JHipster administrator's management and monitoring UI is spread out to various places (JHipster Registry, angular/react/vue pages) which causes code duplication and slows down their evolution. This RFC proposes to move this functionality to an external application that can be used in different development and production scenarios. In the following, this application will be referred to as the **JHipster Control Center**.
 
 ## Motivation
 
@@ -89,7 +89,7 @@ Implementation details will be left to the discretion of the **JHipster Control 
 -   A separate **JHipster Control Center** GitHub repository will host the application and allow collaboration.
 -   The **JHipster Control Center** application will be based on a Java reactive Spring Boot application using Spring Cloud Gateway as embedded proxy technology.
 -   The application will include Spring Cloud dependencies to allow it to plug into Eureka, Consul and Kubernetes service discovery mechanism.
--   The Management UI will be developed using Vue.js and can reuse some the existing code that currently lives in the "Admin pages" of a JHipster application.
+-   The Management UI will be developed using Vue and can reuse some the existing code that currently lives in the "Admin pages" of a JHipster application.
 -   The application will be packaged as a docker image and a jar file which will be published on Docker Hub and Maven Central.
 -   After the initial **JHipster Control Center** 1.0 release, it will be expected to keep backward compatibility with JHipster applications generated with JHipster version 7.0 or higher.
 -   The **JHipster Control Center** will be an optional part of JHipster so that users will not have to use it. However, we think that it will provide sufficient improvements to the development and operational experience to convince users to adopt it.
@@ -109,7 +109,7 @@ Compared to today's situation, the proposed solution would have the following ad
 
 -   Reduce the generated code as code related to management screens will no longer be generated
 -   Faster build times for the front end resulting from less front-end code to compile
--   Stop developing the same management UI with 3 different frontend framework (Angular, React and Vue.js)
+-   Stop developing the same management UI with 3 different frontend framework (Angular, React and Vue)
 -   Improve security as management endpoint will no longer be exposed to the outside but only internally on a separate port. Also the **JHipster Control Center** can have proper authentication (JWT, OAuth) rather than the basic authentication scheme that is present on the JHipster registry (which is the only scheme supported by the Eureka server).
 
 ## Prior art

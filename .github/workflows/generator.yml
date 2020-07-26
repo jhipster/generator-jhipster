@@ -18,21 +18,26 @@
 #
 
 name: Generator
-on: [push, pull_request]
+on:
+    push:
+        branches-ignore:
+            - 'dependabot/**'
+    pull_request:
+        branches:
+            - '*'
 jobs:
     generator-jhipster:
         name: npm test
         runs-on: ${{ matrix.os }}
-        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
         timeout-minutes: 20
         strategy:
             fail-fast: false
             matrix:
-                node_version: [12.16.0]
+                node_version: [12.16.1]
                 os: [ubuntu-latest]
         steps:
             - uses: actions/checkout@v2
-            - uses: actions/setup-node@v1
+            - uses: actions/setup-node@v2.1.0
               with:
                   node-version: ${{ matrix.node_version }}
             - run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
@@ -43,4 +48,11 @@ jobs:
               run: $JHI_SCRIPTS/04-git-config.sh
               shell: bash
             - run: npm ci
+            - run: npm run prettier:check
             - run: npm test
+              if: >-
+                  !contains(github.event.head_commit.message, '[ci skip]') &&
+                  !contains(github.event.head_commit.message, '[skip ci]') &&
+                  !contains(github.event.pull_request.title, '[skip ci]') &&
+                  !contains(github.event.pull_request.title, '[ci skip]') &&
+                  (github.event.pull_request.draft == false || !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci'))

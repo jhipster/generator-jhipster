@@ -23,7 +23,7 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassHumanized %>",
                 "createLabel": "Dodaj <%= entityClassHumanized %>",
-                "createOrEditLabel": "Dodaj lub edytuj: <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "createOrEditLabel": "Dodaj lub edytuj: <%= entityClassHumanized %>"<% if (searchEngine !== false) { %>,
                 "search": "Szukaj <%= entityClassHumanized %>"<% } %>,
                 "notFound": "No <%= entityClassPluralHumanized %> found"
             },<% if (!microserviceAppName) { %>

@@ -349,7 +349,7 @@ public class AccountResource {
             throw new AccountResourceException("User could not be found");
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-            userDTO.getLangKey()<% if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { %>, userDTO.getImageUrl()<% } %>);
+            userDTO.getLangKey()<% if (['sql', 'mongodb', 'couchbase', 'neo4j'].includes(databaseType)) { %>, userDTO.getImageUrl()<% } %>);
     <%_ } else { _%>
     public Mono<Void> saveAccount(@Valid @RequestBody <%= asDto('User') %> userDTO) {
         return SecurityUtils.getCurrentUserLogin()
@@ -365,7 +365,7 @@ public class AccountResource {
                 }))
                 .switchIfEmpty(Mono.error(new AccountResourceException("User could not be found")))
                 .flatMap(user -> userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-                    userDTO.getLangKey()<% if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { %>, userDTO.getImageUrl()<% } %>));
+                    userDTO.getLangKey()<% if (['sql', 'mongodb', 'couchbase', 'neo4j'].includes(databaseType)) { %>, userDTO.getImageUrl()<% } %>));
     <%_ } _%>
     }
 
@@ -445,7 +445,7 @@ public class AccountResource {
         } else {
             // Pretend the request has been successful to prevent checking which emails really exist
             // but log that an invalid attempt has been made
-            log.warn("Password reset requested for non existing mail '{}'", mail);
+            log.warn("Password reset requested for non existing mail");
         }
     <%_ } else { _%>
     public Mono<Void> requestPasswordReset(@RequestBody String mail) {
@@ -456,7 +456,7 @@ public class AccountResource {
                 } else {
                     // Pretend the request has been successful to prevent checking which emails really exist
                     // but log that an invalid attempt has been made
-                    log.warn("Password reset requested for non existing mail '{}'", mail);
+                    log.warn("Password reset requested for non existing mail");
                 }
             })
             .then();

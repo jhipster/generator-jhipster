@@ -51,7 +51,7 @@ module.exports = class {
         return {
             file: aFile,
             needle: needleTag,
-            splicable: content
+            splicable: content,
         };
     }
 };

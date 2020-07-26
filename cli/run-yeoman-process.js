@@ -19,16 +19,17 @@
 const chalk = require('chalk');
 
 const packageJson = require('../package.json');
-const { logger, createYeomanEnv, toString, getCommandOptions, done } = require('./utils');
+const { logger, toString, getCommandOptions, doneFactory } = require('./utils');
+const EnvironmentBuilder = require('./environment-builder');
 
-const env = createYeomanEnv();
+const env = EnvironmentBuilder.createDefaultBuilder().getEnvironment();
 
 const command = process.argv[2];
 const options = getCommandOptions(packageJson, process.argv.slice(3));
 logger.info(chalk.yellow(`Executing ${command} on ${process.cwd()}`));
-logger.info(chalk.yellow(`Options: ${toString(options)}`));
+logger.debug(chalk.yellow(`Options: ${toString(options)}`));
 try {
-    env.run(command, options, done);
+    env.run(command, options).catch(doneFactory());
 } catch (e) {
     logger.error(e.message, e);
     process.exitCode = 1;

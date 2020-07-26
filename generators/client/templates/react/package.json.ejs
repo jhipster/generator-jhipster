@@ -27,11 +27,11 @@ limitations under the License.
     "node_modules"
   ],
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "1.2.26",
-    "@fortawesome/free-solid-svg-icons": "5.12.0",
-    "@fortawesome/react-fontawesome": "0.1.8",
-    "availity-reactstrap-validation": "2.5.1",
-    "axios": "0.19.0",
+    "@fortawesome/fontawesome-svg-core": "1.2.28",
+    "@fortawesome/free-solid-svg-icons": "5.13.0",
+    "@fortawesome/react-fontawesome": "0.1.9",
+    "availity-reactstrap-validation": "2.6.1",
+    "axios": "0.19.2",
     "bootstrap": "4.4.1",
     <%_ if (clientTheme !== 'none') { _%>
     "bootswatch": "4.3.1",
@@ -39,18 +39,18 @@ limitations under the License.
     "loaders.css": "0.1.2",
     "lodash": "4.17.15",
     "moment": "2.24.0",
-    "react": "16.12.0",
-    "react-dom": "16.12.0",
-    "react-hot-loader": "4.12.18",
-    "react-jhipster": "0.9.1",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-hot-loader": "4.12.20",
+    "react-jhipster": "0.11.0",
     "react-loadable": "5.5.0",
-    "react-redux": "7.1.3",
-    "react-redux-loading-bar": "4.5.0",
+    "react-redux": "7.2.0",
+    "react-redux-loading-bar": "4.6.0",
     "react-router-dom": "5.1.2",
-    "react-toastify": "4.5.2",
-    "react-transition-group": "2.7.0",
-    "reactstrap": "7.1.0",
-    "redux": "4.0.4",
+    "react-toastify": "5.5.0",
+    "react-transition-group": "4.3.0",
+    "reactstrap": "8.4.1",
+    "redux": "4.0.5",
     "redux-devtools": "3.5.0",
     "redux-devtools-dock-monitor": "1.1.3",
     "redux-devtools-log-monitor": "1.4.0",
@@ -60,35 +60,38 @@ limitations under the License.
     "rxjs": "6.4.0",
     "sockjs-client": "1.3.0",
     <%_ } _%>
-    "tslib": "1.10.0",
-    "uuid": "3.3.3"<% if (websocket === 'spring-websocket') { %>,
+    <%_ if (skipServer) { _%>
+    "sonar-scanner": "3.1.0",
+    <%_ } _%>
+    "tslib": "1.11.1",
+    "uuid": "7.0.3"<% if (websocket === 'spring-websocket') { %>,
     "webstomp-client": "1.2.6"
     <%_ } _%>
   },
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "1.0.13-4.3.1",
     <%_ if (protractorTests) { _%>
-    "@types/chai": "4.1.7",
+    "@types/chai": "4.2.11",
     <%_ } _%>
-    "@types/enzyme": "3.9.1",
-    "@types/jest": "24.0.23",
-    "@types/lodash": "4.14.149",
+    "@types/enzyme": "3.10.5",
+    "@types/jest": "25.2.1",
+    "@types/lodash": "4.14.150",
     <%_ if (protractorTests) { _%>
-    "@types/mocha": "5.2.7",
+    "@types/mocha": "7.0.2",
     <%_ } _%>
-    "@types/node": "12.12.17",
-    "@types/react": "16.9.16",
-    "@types/react-dom": "16.9.4",
-    "@types/react-redux": "6.0.6",
-    "@types/react-router-dom": "5.1.3",
+    "@types/node": "13.13.4",
+    "@types/react": "16.9.34",
+    "@types/react-dom": "16.9.6",
+    "@types/react-redux": "7.1.7",
+    "@types/react-router-dom": "5.1.5",
     "@types/redux": "3.6.31",
     <%_ if (protractorTests) { _%>
-    "@types/selenium-webdriver": "4.0.2",
+    "@types/selenium-webdriver": "4.0.9",
     <%_ } _%>
-    "@types/webpack-env": "1.14.1",
-    "@typescript-eslint/eslint-plugin": "2.11.0",
-    "@typescript-eslint/parser": "2.11.0",
-    "autoprefixer": "9.7.3",
-    "base-href-webpack-plugin": "2.0.0",
+    "@types/webpack-env": "1.15.2",
+    "@typescript-eslint/eslint-plugin": "2.29.0",
+    "@typescript-eslint/parser": "2.29.0",
+    "autoprefixer": "9.7.6",
     "browser-sync": "2.26.7",
     "browser-sync-webpack-plugin": "2.2.2",
     "cache-loader": "4.1.0",
@@ -96,104 +99,108 @@ limitations under the License.
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
     <%_ } _%>
-    "copy-webpack-plugin": "5.1.0",
-    "core-js": "3.4.8",
-    "cross-env": "6.0.3",
-    "css-loader": "3.3.0",
-    "enzyme": "3.10.0",
-    "enzyme-adapter-react-16": "1.15.1",
-    "enzyme-to-json": "3.4.3",
-    "eslint": "6.7.2",
+    "copy-webpack-plugin": "6.0.3",
+    "core-js": "3.6.5",
+    "cross-env": "7.0.2",
+    "css-loader": "3.5.3",
+    "enzyme": "3.11.0",
+    "enzyme-adapter-react-16": "1.15.2",
+    "enzyme-to-json": "3.4.4",
+    "eslint": "6.8.0",
     "eslint-config-jhipster": "0.0.1",
     "eslint-config-jhipster-react": "0.0.1",
-    "eslint-config-prettier": "6.7.0",
-    "eslint-loader": "3.0.3",
-    "eslint-plugin-react": "7.17.0",
-    "file-loader": "5.0.2",
-    "fork-ts-checker-webpack-plugin": "3.1.1",
+    "eslint-config-prettier": "6.11.0",
+    "eslint-loader": "4.0.2",
+    "eslint-plugin-react": "7.19.0",
+    "file-loader": "6.0.0",
+    "fork-ts-checker-webpack-plugin": "4.1.3",
     "friendly-errors-webpack-plugin": "1.7.0",
     "generator-jhipster": "<%= packagejs.version %>",
-    "html-webpack-plugin": "3.2.0",
+    "html-webpack-plugin": "4.3.0",
     <%_ if (!skipCommitHook) { _%>
-    "husky": "3.1.0",
+    "husky": "<%= HUSKY_VERSION %>",
     <%_ } _%>
     "identity-obj-proxy": "3.0.0",
-    "jest": "24.9.0",
+    "jest": "25.4.0",
     "jest-junit": "10.0.0",
     "jest-sonar-reporter": "2.0.0",
     "json-loader": "0.5.7",
     <%_ if (!skipCommitHook) { _%>
-    <%# Not using the latest version because of https://github.com/jhipster/generator-jhipster/issues/11131 -%>
-    "lint-staged": "8.2.1",
+    "lint-staged": "<%= LINT_STAGED_VERSION %>",
     <%_ } _%>
     <%_ if (enableTranslation) { _%>
-    "merge-jsons-webpack-plugin": "1.0.20",
+    "merge-jsons-webpack-plugin": "1.0.21",
     <%_ } _%>
-    "mini-css-extract-plugin": "0.8.0",
+    "mini-css-extract-plugin": "0.9.0",
     <%_ if (protractorTests) { _%>
-    "mocha": "6.1.4",
+    "mocha": "7.1.2",
     <%_ } _%>
-    "moment-locales-webpack-plugin": "1.1.2",
+    "moment-locales-webpack-plugin": "1.2.0",
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "postcss-loader": "3.0.0",
-    "prettier": "1.19.1",
+    "prettier": "<%= PRETTIER_VERSION %>",
+    <%_ if (!skipServer) { _%>
+    "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
+    <%_ } _%>
     <%_ if (protractorTests) { _%>
-    "protractor": "5.4.2",
+    "protractor": "5.4.4",
     <%_ } _%>
     "react-infinite-scroller": "1.2.4",
     "redux-mock-store": "1.5.4",
-    "rimraf": "3.0.0",
-    "sass": "1.23.7",
-    "sass-loader": "8.0.0",
+    "rimraf": "3.0.2",
+    "sass": "1.26.5",
+    "sass-loader": "8.0.2",
     "simple-progress-webpack-plugin": "1.1.2",
-    "sinon": "7.5.0",
+    "sinon": "9.0.2",
     "source-map-loader": "0.2.4",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "stripcomment-loader": "0.1.0",
-    "style-loader": "1.0.1",
-    "swagger-ui-dist": "3.24.3",
+    "style-loader": "1.2.0",
+    "swagger-ui-dist": "3.25.1",
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
-    "terser-webpack-plugin": "2.2.3",
+    "terser-webpack-plugin": "2.3.6",
     "thread-loader": "2.1.3",
     "to-string-loader": "1.1.6",
-    "ts-jest": "24.2.0",
-    "ts-loader": "6.2.1",
+    "ts-jest": "25.4.0",
+    "ts-loader": "7.0.1",
     <%_ if (protractorTests) { _%>
-    "ts-node": "8.5.4",
+    "ts-node": "8.9.1",
     <%_ } _%>
-    "typescript": "3.7.3",
+    "typescript": "3.8.3",
     <%_ if (protractorTests) { _%>
     "webdriver-manager": "12.1.7",
     <%_ } _%>
-    "@openapitools/openapi-generator-cli": "1.0.10-4.2.3",
-    "webpack": "4.41.2",
-    "webpack-cli": "3.3.10",
-    "webpack-dev-server": "3.9.0",
+    "webpack": "4.43.0",
+    "webpack-cli": "3.3.11",
+    "webpack-dev-server": "3.10.3",
     "webpack-merge": "4.2.2",
     "webpack-notifier": "1.8.0",
-    "workbox-webpack-plugin": "4.3.1",
+    "workbox-webpack-plugin": "5.1.3",
     "write-file-webpack-plugin": "4.5.1"
   },
 <%_ if (clientPackageManager === 'yarn') { _%>
   "resolutions": {
-    "@types/react": "16.9.16",
-    "redux": "4.0.4"
+    "@types/react": "16.9.34",
+    "redux": "4.0.5"
   },
 <%_ } _%>
   "engines": {
-    "node": ">=8.9.0"<% if (clientPackageManager === 'yarn') { %>,
+    "node": ">=<%= NODE_VERSION %>"<% if (clientPackageManager === 'yarn') { %>,
     "yarn": ">=1.19.0"<% } %>
   },
   "scripts": {
-    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,tsx,css,scss,yml}\"",
+    "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "cleanup": "rimraf <%= DIST_DIR %>",
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
     "postinstall": "node node_modules/protractor/bin/webdriver-manager update --gecko false",
+    <%_ } _%>
+    <%_ if (skipServer) { _%>
+    "sonar": "sonar-scanner",
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
     "start-tls": "<%= clientPackageManager %> run webpack:dev <%= optionsForwarder %>--env.tls",

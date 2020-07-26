@@ -16,13 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%  const instanceType = (dto === 'mapstruct') ? 'Optional<' + asDto(entityClass) + '>' : 'Optional<' + asEntity(entityClass) + '>';
+<%  const optionalOrMono = (reactive === true) ? 'Mono' : 'Optional';
+    const instanceType = (dto === 'mapstruct') ? `${optionalOrMono}<${asDto(entityClass)}>` : `${optionalOrMono}<${asEntity(entityClass)}>`;
     const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
-    const mapper = entityInstance  + 'Mapper';
-    const entityToDtoReference = mapper + '::' + 'toDto';
-    const returnPrefix = returnDirectly ? 'return' : instanceType + ' ' + instanceName + ' =';
-    if (!viaService) {
+    const mapper = `${entityInstance}Mapper`;
+    const entityToDtoReference = `${mapper}::toDto`;
+    const returnPrefix = returnDirectly ? 'return' : `${instanceType} ${instanceName} =`;
 %>
+<%_ if (!viaService) { _%>
         <%- returnPrefix %> <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany === true) { %>findOneWithEagerRelationships(id)<% } else { %>findById(id)<% } %><% if (dto !== 'mapstruct') { %>;<% } else { %>
-            .map(<%= entityToDtoReference %>);<% } } else { %>
-        <%- returnPrefix %> <%= entityInstance %>Service.findOne(id);<% } %>
+            .map(<%= entityToDtoReference %>);<% } %>
+<%_ } else { _%>
+        <%- returnPrefix %> <%= entityInstance %>Service.findOne(id);
+<%_ } _%>

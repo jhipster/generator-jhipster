@@ -19,117 +19,168 @@
 
 const defaultCommands = {
     app: {
-        default: true,
-        desc: '[Default] Create a new JHipster application based on the selected options'
+        desc: '[Default] Create a new JHipster application based on the selected options',
+        help: `
+Example:
+    jhipster
+
+This will compose jhipster:client, jhipster:server and jhipster:languages to scaffold a full application
+`,
     },
     aws: {
-        desc: 'Deploy the current application to Amazon Web Services'
+        desc: 'Deploy the current application to Amazon Web Services',
     },
     'aws-containers': {
-        desc: 'Deploy the current application to Amazon Web Services using ECS'
+        desc: 'Deploy the current application to Amazon Web Services using ECS',
     },
     'azure-app-service': {
-        desc: 'Deploy the current application to Azure App Service'
+        desc: 'Deploy the current application to Azure App Service',
     },
     'azure-spring-cloud': {
-        desc: 'Deploy the current application to Azure Spring Cloud'
+        desc: 'Deploy the current application to Azure Spring Cloud',
     },
     'ci-cd': {
-        desc: 'Create pipeline scripts for popular Continuous Integration/Continuous Deployment tools'
+        desc: 'Create pipeline scripts for popular Continuous Integration/Continuous Deployment tools',
     },
     cloudfoundry: {
-        desc: 'Generate a `deploy/cloudfoundry` folder with a specific manifest.yml to deploy to Cloud Foundry'
+        desc: 'Generate a `deploy/cloudfoundry` folder with a specific manifest.yml to deploy to Cloud Foundry',
     },
     'docker-compose': {
-        desc: 'Create all required Docker deployment configuration for the selected applications'
+        desc: 'Create all required Docker deployment configuration for the selected applications',
     },
     entity: {
         argument: ['name'],
-        desc: 'Create a new JHipster entity: JPA entity, Spring server-side components and Angular client-side components'
+        desc: 'Create a new JHipster entity: JPA entity, Spring server-side components and Angular client-side components',
     },
     'export-jdl': {
         argument: ['jdlFile'],
-        desc: 'Create a JDL file from the existing entities'
+        desc: 'Create a JDL file from the existing entities',
     },
     gae: {
-        desc: 'Deploy the current application to Google App Engine'
+        desc: 'Deploy the current application to Google App Engine',
     },
     heroku: {
-        desc: 'Deploy the current application to Heroku'
+        desc: 'Deploy the current application to Heroku',
     },
-    'import-jdl': {
+    info: {
+        desc: 'Display information about your current project and system',
+    },
+    jdl: {
+        alias: 'import-jdl',
         argument: ['jdlFiles...'],
         cliOnly: true,
+        options: [
+            {
+                option: '--skip-install',
+                desc: 'Do not automatically install dependencies',
+                default: false,
+            },
+            {
+                option: '--interactive',
+                desc: 'Run generation in series so that questions can be interacted with',
+                default: false,
+            },
+            {
+                option: '--db <value>',
+                desc: 'Provide DB option for the application when using skip-server flag',
+            },
+            {
+                option: '--json-only',
+                desc: 'Generate only the JSON files and skip entity regeneration',
+                default: false,
+            },
+            {
+                option: '--ignore-application',
+                desc: 'Ignores application generation',
+                default: false,
+            },
+            {
+                option: '--ignore-deployments',
+                desc: 'Ignores deployments generation',
+                default: false,
+            },
+            {
+                option: '--skip-ui-grouping',
+                desc: 'Disable the UI grouping behavior for entity client side code',
+                default: false,
+            },
+            {
+                option: '--skip-db-changelog',
+                desc: 'Disable generation of database changelogs',
+                default: false,
+            },
+            {
+                option: '--skip-sample-repository',
+                desc: 'Disable fetching sample files when the file is not a URL',
+                default: false,
+            },
+            {
+                option: '--inline <value>',
+                desc: 'Pass JDL content inline. Argument can be skipped when passing this',
+            },
+        ],
         desc: `Create entities from the JDL file/content passed in argument.
-  By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.`,
+  By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.
+Note: jhipster import-jdl is the same as 'jhipster jdl --skip-sample-repository'`,
         help: `
-    --skip-install        # Do not automatically install dependencies                              Default: false
-    --interactive         # Run generation in series so that questions can be interacted with      Default: false
-    --db                  # Provide DB option for the application when using skip-server flag
-    --json-only           # Generate only the JSON files and skip entity regeneration              Default: false
-    --ignore-application  # Ignores application generation                                         Default: false
-    --ignore-deployments  # Ignores deployments generation                                         Default: false
-    --skip-ui-grouping    # Disable the UI grouping behavior for entity client side code           Default: false
-    --skip-db-changelog   # Disable generation of database changelogs                              Default: false
-    --inline              # Pass JDL content inline. Argument can be skipped when passing this
-
 Arguments:
     jdlFiles # The JDL file names Type: String[] Required: true if --inline is not set
 
 Example:
-    jhipster import-jdl myfile.jdl
-    jhipster import-jdl myfile.jdl --interactive
-    jhipster import-jdl myfile1.jdl myfile2.jdl
-    jhipster import-jdl --inline "application { config { baseName jhapp, testFrameworks [protractor] }}"
-    jhipster import-jdl --inline \\
+    jhipster jdl myfile.jdl
+    jhipster jdl myfile.jdl --interactive
+    jhipster jdl myfile1.jdl myfile2.jdl
+    jhipster jdl --inline "application { config { baseName jhapp, testFrameworks [protractor] }}"
+    jhipster jdl --inline \\
         "application {
             config {
                 baseName jhapp,
                 testFrameworks [protractor]
             }
         }"
-        `
-    },
-    info: {
-        desc: 'Display information about your current project and system'
+        `,
     },
     kubernetes: {
         alias: 'k8s',
-        desc: 'Deploy the current application to Kubernetes'
+        desc: 'Deploy the current application to Kubernetes',
     },
     'kubernetes-helm': {
-        alias: 'k8s-helm',
-        desc: 'Deploy the current application to Kubernetes using Helm package manager'
+        alias: 'helm',
+        desc: 'Deploy the current application to Kubernetes using Helm package manager',
     },
     'kubernetes-knative': {
         alias: 'knative',
-        desc: 'Deploy the current application to Kubernetes using knative constructs'
+        desc: 'Deploy the current application to Kubernetes using knative constructs',
     },
     languages: {
         argument: ['languages...'],
-        desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder'
+        desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder',
     },
     openshift: {
-        desc: 'Deploy the current application to OpenShift'
+        desc: 'Deploy the current application to OpenShift',
+    },
+    page: {
+        argument: ['pageName'],
+        desc: 'Create a new page. (Supports vue clients)',
     },
     'spring-service': {
         alias: 'service',
         argument: ['name'],
-        desc: 'Create a new Spring service bean'
+        desc: 'Create a new Spring service bean',
     },
     'spring-controller': {
         argument: ['name'],
-        desc: 'Create a new Spring controller'
+        desc: 'Create a new Spring controller',
     },
     'openapi-client': {
-        desc: 'Generates java client code from an OpenAPI/Swagger definition'
+        desc: 'Generates java client code from an OpenAPI/Swagger definition',
     },
     upgrade: {
-        desc: 'Upgrade the JHipster version, and upgrade the generated application'
+        desc: 'Upgrade the JHipster version, and upgrade the generated application',
     },
     'upgrade-config': {
-        desc: 'Upgrade the JHipster configuration'
-    }
+        desc: 'Upgrade the JHipster configuration',
+    },
 };
 
 module.exports = defaultCommands;

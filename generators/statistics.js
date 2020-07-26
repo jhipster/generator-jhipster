@@ -16,7 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
+const chalk = require('chalk');
 const Config = require('conf');
 const osLocale = require('os-locale');
 const axios = require('axios');
@@ -35,8 +36,8 @@ class Statistics {
             defaults: {
                 clientId: uuid(),
                 doNotAskCounter: 0,
-                isLinked: false
-            }
+                isLinked: false,
+            },
         });
         this.jhipsterOnlineUrl = process.env.JHIPSTER_ONLINE_URL || DEFAULT_JHIPSTER_ONLINE_URL;
         this.statisticsAPIPath = `${this.jhipsterOnlineUrl}/api`;
@@ -59,7 +60,7 @@ class Statistics {
         const insight = new Insight({
             trackingCode,
             packageName,
-            packageVersion
+            packageVersion,
         });
 
         insight.trackWithEvent = (category, action) => {
@@ -68,7 +69,7 @@ class Statistics {
                 category,
                 action,
                 label: `${category} ${action}`,
-                value: 1
+                value: 1,
             });
         };
         insight.optOut = this.optOut;
@@ -104,7 +105,7 @@ class Statistics {
 
     configProxy() {
         this.axiosClient = axios.create({
-            baseURL: this.statisticsAPIPath
+            baseURL: this.statisticsAPIPath,
         });
 
         const npmHttpsProxy = process.env.npm_config_https_proxy || process.env.npm_config_proxy;
@@ -115,7 +116,7 @@ class Statistics {
             const splitted = proxySettings.split(':');
             this.axiosProxyClient = axios.create({
                 baseURL: this.statisticsAPI,
-                proxy: { host: splitted[0], port: splitted[1] }
+                proxy: { host: splitted[0], port: splitted[1] },
             });
         }
     }
@@ -141,8 +142,18 @@ class Statistics {
         this.config.delete(key);
     }
 
-    setOptoutStatus(status) {
+    setOptOutStatus(status) {
         this.setConfig('optOut', status);
+    }
+
+    /**
+     * @deprecated Use setOptOutStatus(status) instead.
+     * This method will be removed in JHipster v7.
+     */
+    setOptoutStatus(status) {
+        // eslint-disable-next-line no-console
+        console.log(chalk.yellow('\nPlease use setOptOutStatus() instead. This method will be removed in v7\n'));
+        this.setOptOutStatus(status);
     }
 
     setLinkedStatus(status) {
@@ -165,7 +176,7 @@ class Statistics {
                 cores: os.cpus().length,
                 memory: os.totalmem(),
                 'user-language': osLocale.sync(),
-                isARegeneration
+                isARegeneration,
             },
             this.forceInsight
         );
@@ -224,7 +235,7 @@ class Statistics {
                 pagination,
                 dto,
                 service,
-                fluentMethods
+                fluentMethods,
             },
             this.forceInsight
         );

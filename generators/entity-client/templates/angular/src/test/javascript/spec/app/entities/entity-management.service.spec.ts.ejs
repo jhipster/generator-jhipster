@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 <%_
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 const tsKeyId = generateTestEntityId(primaryKeyType);
 const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto, undefined, embedded);
 const enumImports = generateEntityClientEnumImports(fields);
@@ -60,7 +59,7 @@ describe('Service Tests', () => {
             <%_ } _%>
 
             elemDefault = new <%= entityAngularName %>(
-                <%_ if (primaryKeyType === 'String' || primaryKeyType === 'UUID') { _%>
+                <%_ if (tsKeyType === 'string') { _%>
                 'ID',
                 <%_ } else { _%>
                 0,
@@ -69,7 +68,7 @@ describe('Service Tests', () => {
                 const fieldType = field.fieldType;
             _%>
                 <%_ if (field.fieldIsEnum) { _%>
-                <%= fieldType + '.' + field.fieldValues.split(',')[0].replace(/(.+?)\(.*/, (match, firstGroup) => firstGroup) %>,
+                <%= fieldType + '.' + getEnumValuesWithCustomValues(field.fieldValues)[0].name %>,
                 <%_ } else if (fieldType === 'Boolean') { _%>
                 false,
                 <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
@@ -112,7 +111,7 @@ describe('Service Tests', () => {
         <%_ if (!readOnly) { _%>
             it('should create a <%= entityAngularName %>', () => {
                 const returnedFromService = Object.assign({
-                    <%_ if (pkType === 'String' || pkType === 'UUID') { _%>
+                    <%_ if (tsKeyType === 'string') { _%>
                     id: 'ID',
                     <%_ } else { _%>
                     id: 0,

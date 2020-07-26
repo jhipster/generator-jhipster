@@ -1,0 +1,65 @@
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+
+import { <%= angularXAppName %>TestModule } from '../../test.module';
+import { HomeComponent } from 'app/home/home.component';
+import { AccountService } from 'app/core/auth/account.service';
+<%_ if (authenticationType !== 'oauth2') { _%>
+import { LoginModalService } from 'app/core/login/login-modal.service';
+<%_ } _%>
+
+describe('Component Tests', () => {
+    describe('Home Component', () => {
+        let comp: HomeComponent;
+        let fixture: ComponentFixture<HomeComponent>;
+        let accountService: AccountService;
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        let loginModalService: LoginModalService;
+        <%_ } _%>
+
+        beforeEach(async(() => {
+            TestBed.configureTestingModule({
+                imports: [<%= angularXAppName %>TestModule],
+                declarations: [HomeComponent]
+            })
+            .overrideTemplate(HomeComponent, '')
+            .compileComponents();
+        }));
+
+        beforeEach(() => {
+            fixture = TestBed.createComponent(HomeComponent);
+            comp = fixture.componentInstance;
+            accountService = TestBed.get(AccountService);
+            <%_ if (authenticationType !== 'oauth2') { _%>
+            loginModalService = TestBed.get(LoginModalService);
+            <%_ } _%>
+        });
+
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        it('Should call accountService.getAuthenticationState on init', () => {
+            // WHEN
+            comp.ngOnInit();
+
+            // THEN
+            expect(accountService.getAuthenticationState).toHaveBeenCalled();
+        });
+        <%_ } _%>
+
+        it('Should call accountService.isAuthenticated when it checks authentication', () => {
+            // WHEN
+            comp.isAuthenticated();
+
+            // THEN
+            expect(accountService.isAuthenticated).toHaveBeenCalled();
+        });
+
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        it('Should call loginModalService.open on login', () => {
+            // WHEN
+            comp.login();
+
+            // THEN
+            expect(loginModalService.open).toHaveBeenCalled();
+        });
+        <%_ } _%>
+    });
+});

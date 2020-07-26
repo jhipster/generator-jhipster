@@ -1,7 +1,12 @@
+/* eslint-disable no-unused-expressions */
 const expect = require('chai').expect;
-const jhiCore = require('jhipster-core');
+const assert = require('yeoman-assert');
 const expectedFiles = require('./utils/expected-files');
-const BaseGenerator = require('../generators/generator-base').prototype;
+const Base = require('../generators/generator-base');
+const { testInTempDir, revertTempDir } = require('./utils/utils');
+const { parseLiquibaseChangelogDate } = require('../utils/liquibase');
+
+const BaseGenerator = Base.prototype;
 
 BaseGenerator.log = msg => {
     // eslint-disable-next-line no-console
@@ -32,48 +37,6 @@ describe('Generator Base', () => {
         describe('when called', () => {
             it('returns an array', () => {
                 expect(BaseGenerator.getAllSupportedLanguages()).to.not.have.length(0);
-            });
-        });
-    });
-    describe('getExistingEntities', () => {
-        describe('when entities change on-disk', () => {
-            before(() => {
-                const entities = {
-                    Region: {
-                        fluentMethods: true,
-                        relationships: [],
-                        fields: [
-                            {
-                                fieldName: 'regionName',
-                                fieldType: 'String'
-                            }
-                        ],
-                        changelogDate: '20170623093902',
-                        entityTableName: 'region',
-                        dto: 'mapstruct',
-                        pagination: 'no',
-                        service: 'serviceImpl',
-                        angularJSSuffix: 'mySuffix'
-                    }
-                };
-                jhiCore.exportEntities({
-                    entities,
-                    forceNoFiltering: true,
-                    application: {}
-                });
-                BaseGenerator.getExistingEntities();
-                entities.Region.fields.push({ fieldName: 'regionDesc', fieldType: 'String' });
-                jhiCore.exportEntities({
-                    entities,
-                    forceNoFiltering: true,
-                    application: {}
-                });
-            });
-            it('returns an up-to-date state', () => {
-                expect(BaseGenerator.getExistingEntities().find(it => it.name === 'Region').definition.fields[1]).to.eql({
-                    fieldName: 'regionDesc',
-                    fieldType: 'String'
-                });
             });
         });
     });
@@ -311,7 +274,6 @@ describe('Generator Base', () => {
             });
         });
     });
-
     describe('writeFilesToDisk', () => {
         describe('when called with default angular client options', () => {
             it('should produce correct files', () => {
@@ -320,7 +282,7 @@ describe('Generator Base', () => {
                     enableTranslation: true,
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
-                    testFrameworks: []
+                    testFrameworks: [],
                 };
                 let filesToAssert = expectedFiles.client;
                 filesToAssert = filesToAssert.concat(expectedFiles.jwtClient);
@@ -337,13 +299,185 @@ describe('Generator Base', () => {
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     skipUserManagement: true,
-                    testFrameworks: []
+                    testFrameworks: [],
                 };
                 let filesToAssert = expectedFiles.client;
                 filesToAssert = filesToAssert.concat(expectedFiles.jwtClient);
                 filesToAssert = filesToAssert.sort();
                 const out = BaseGenerator.writeFilesToDisk(files, generator, true).sort();
                 expect(out).to.eql(filesToAssert);
+            });
+        });
+    });
+    describe('getEnumValuesWithCustomValues', () => {
+        describe('when not passing anything', () => {
+            it('should fail', () => {
+                expect(() => BaseGenerator.getEnumValuesWithCustomValues()).to.throw(
+                    /^Enumeration values must be passed to get the formatted values\.$/
+                );
+            });
+        });
+        describe('when passing an empty string', () => {
+            it('should fail', () => {
+                expect(() => BaseGenerator.getEnumValuesWithCustomValues('')).to.throw(
+                    /^Enumeration values must be passed to get the formatted values\.$/
+                );
+            });
+        });
+        describe('when passing a string without custom enum values', () => {
+            it('should return a formatted list', () => {
+                expect(BaseGenerator.getEnumValuesWithCustomValues('FRANCE, ENGLAND, ICELAND')).to.deep.equal([
+                    { name: 'FRANCE', value: 'FRANCE' },
+                    { name: 'ENGLAND', value: 'ENGLAND' },
+                    { name: 'ICELAND', value: 'ICELAND' },
+                ]);
+            });
+        });
+        describe('when passing a string with some custom enum values', () => {
+            it('should return a formatted list', () => {
+                expect(BaseGenerator.getEnumValuesWithCustomValues('FRANCE(france), ENGLAND, ICELAND (viking_country)')).to.deep.equal([
+                    { name: 'FRANCE', value: 'france' },
+                    { name: 'ENGLAND', value: 'ENGLAND' },
+                    { name: 'ICELAND', value: 'viking_country' },
+                ]);
+            });
+        });
+        describe('when passing a string custom enum values for each value', () => {
+            it('should return a formatted list', () => {
+                expect(BaseGenerator.getEnumValuesWithCustomValues('FRANCE(france), ENGLAND(england), ICELAND (iceland)')).to.deep.equal([
+                    { name: 'FRANCE', value: 'france' },
+                    { name: 'ENGLAND', value: 'england' },
+                    { name: 'ICELAND', value: 'iceland' },
+                ]);
+            });
+        });
+    });
+    describe('dateFormatForLiquibase', () => {
+        let base;
+        let oldCwd;
+        before(() => {
+            oldCwd = testInTempDir(() => {}, true);
+            base = new Base();
+            base.configOptions = base.configOptions || {};
+        });
+        after(() => {
+            revertTempDir(oldCwd);
+        });
+        afterEach(() => {
+            base.config.delete('lastLiquibaseTimestamp');
+            base.config.delete('creationTimestamp');
+            delete base.options.withEntities;
+            delete base.options.creationTimestamp;
+            delete base.configOptions.reproducibleLiquibaseTimestamp;
+        });
+        describe('when there is no configured lastLiquibaseTimestamp', () => {
+            let firstChangelogDate;
+            beforeEach(() => {
+                assert.noFile('.yo-rc.json');
+                firstChangelogDate = base.dateFormatForLiquibase();
+            });
+            it('should return a valid changelog date', () => {
+                expect(/^\d{14}$/.test(firstChangelogDate)).to.be.true;
+            });
+            it('should save lastLiquibaseTimestamp', () => {
+                expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseLiquibaseChangelogDate(firstChangelogDate).getTime());
+            });
+        });
+        describe('when a past lastLiquibaseTimestamp is configured', () => {
+            let firstChangelogDate;
+            beforeEach(() => {
+                const lastLiquibaseTimestamp = new Date(2000, 1, 1);
+                base.config.set('lastLiquibaseTimestamp', lastLiquibaseTimestamp.getTime());
+                expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(lastLiquibaseTimestamp.getTime());
+                firstChangelogDate = base.dateFormatForLiquibase();
+            });
+            it('should return a valid changelog date', () => {
+                expect(/^\d{14}$/.test(firstChangelogDate)).to.be.true;
+            });
+            it('should not return a past changelog date', () => {
+                expect(firstChangelogDate.startsWith('2000')).to.be.false;
+            });
+            it('should save lastLiquibaseTimestamp', () => {
+                expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseLiquibaseChangelogDate(firstChangelogDate).getTime());
+            });
+        });
+        describe('when a future lastLiquibaseTimestamp is configured', () => {
+            let firstChangelogDate;
+            let secondChangelogDate;
+            beforeEach(() => {
+                const lastLiquibaseTimestamp = new Date(Date.parse('2030-01-01'));
+                base.config.set('lastLiquibaseTimestamp', lastLiquibaseTimestamp.getTime());
+                expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(lastLiquibaseTimestamp.getTime());
+                firstChangelogDate = base.dateFormatForLiquibase();
+                secondChangelogDate = base.dateFormatForLiquibase();
+            });
+            it('should return a valid changelog date', () => {
+                expect(/^\d{14}$/.test(firstChangelogDate)).to.be.true;
+            });
+            it('should return a future changelog date', () => {
+                expect(firstChangelogDate.startsWith('2030')).to.be.true;
+            });
+            it('should return a reproducible changelog date', () => {
+                expect(firstChangelogDate).to.be.equal('20300101000001');
+                expect(secondChangelogDate).to.be.equal('20300101000002');
+            });
+            it('should save lastLiquibaseTimestamp', () => {
+                expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseLiquibaseChangelogDate('20300101000002').getTime());
+            });
+        });
+        describe('with withEntities option', () => {
+            beforeEach(() => {
+                base.options.withEntities = true;
+            });
+            describe('with reproducible=false argument', () => {
+                let firstChangelogDate;
+                let secondChangelogDate;
+                beforeEach(() => {
+                    firstChangelogDate = base.dateFormatForLiquibase(false);
+                    secondChangelogDate = base.dateFormatForLiquibase(false);
+                });
+                it('should return a valid changelog date', () => {
+                    expect(/^\d{14}$/.test(firstChangelogDate)).to.be.true;
+                    expect(/^\d{14}$/.test(secondChangelogDate)).to.be.true;
+                });
+                it('should return a reproducible changelog date incremental to lastLiquibaseTimestamp', () => {
+                    expect(firstChangelogDate).to.not.be.equal(secondChangelogDate);
+                });
+                it('should save lastLiquibaseTimestamp', () => {
+                    expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(
+                        parseLiquibaseChangelogDate(secondChangelogDate).getTime()
+                    );
+                });
+            });
+            describe('with a past creationTimestamp option', () => {
+                let firstChangelogDate;
+                let secondChangelogDate;
+                beforeEach(() => {
+                    base.options.creationTimestamp = '2000-01-01';
+                    firstChangelogDate = base.dateFormatForLiquibase();
+                    secondChangelogDate = base.dateFormatForLiquibase();
+                });
+                it('should return a valid changelog date', () => {
+                    expect(/^\d{14}$/.test(firstChangelogDate)).to.be.true;
+                });
+                it('should return a past changelog date', () => {
+                    expect(firstChangelogDate.startsWith('2000')).to.be.true;
+                });
+                it('should return a reproducible changelog date', () => {
+                    expect(firstChangelogDate).to.be.equal('20000101000100');
+                    expect(secondChangelogDate).to.be.equal('20000101000200');
+                });
+                it('should save lastLiquibaseTimestamp', () => {
+                    expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseLiquibaseChangelogDate('20000101000200').getTime());
+                });
+            });
+            describe('with a future creationTimestamp option', () => {
+                beforeEach(() => {
+                    base.options.creationTimestamp = '2030-01-01';
+                });
+                it('should return a valid changelog date', () => {
+                    expect(() => base.dateFormatForLiquibase()).to.throw(/^Creation timestamp should not be in the future: 2030-01-01\.$/);
+                });
             });
         });
     });

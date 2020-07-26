@@ -19,7 +19,6 @@
 <%_
 let entityActionName = entityInstance.toUpperCase();
 let entityActionNamePlural = entityInstancePlural.toUpperCase();
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 _%>
 import axios from 'axios';
 
@@ -38,7 +37,7 @@ import reducer, {
   deleteEntity,
   <%_ } _%>
   getEntities,
-  <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%_ if (searchEngine !== false) { _%>
   getSearchEntities,
   <%_ } _%>
   getEntity,
@@ -105,7 +104,7 @@ describe('Entities reducer tests', () => {
       testMultipleTypes(
         [
           REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
-          <%_ if (searchEngine === 'elasticsearch') { _%>
+          <%_ if (searchEngine !== false) { _%>
           REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>),
           <%_ } _%>
           REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>)
@@ -157,7 +156,7 @@ describe('Entities reducer tests', () => {
       testMultipleTypes(
         [
           FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
-          <%_ if (searchEngine === 'elasticsearch') { _%>
+          <%_ if (searchEngine !== false) { _%>
           FAILURE(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>),
           <%_ } _%>
           FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>),
@@ -200,7 +199,7 @@ describe('Entities reducer tests', () => {
       entities: payload.data
       });
     });
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
     it('should search all entities', () => {
       const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }]<% if (pagination !== 'no') { %>, headers: { 'x-total-count': 123<% if (pagination === 'infinite-scroll') { %>, link: ';'<% } %> }<% } %> };
       <%_ if (pagination === 'infinite-scroll') { _%>
@@ -291,7 +290,7 @@ describe('Entities reducer tests', () => {
       ];
       await store.dispatch(getEntities()).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
     it('dispatches ACTION_TYPES.SEARCH_<%= entityActionNamePlural %> actions', async () => {
       const expectedActions = [
         {
@@ -349,15 +348,7 @@ describe('Entities reducer tests', () => {
         {
           type: SUCCESS(ACTION_TYPES.UPDATE_<%= entityActionName %>),
           payload: resolvedObject
-        }<%_ if (pagination !== 'infinite-scroll') { _%>,
-        {
-          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
-        },
-        {
-          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
-          payload: resolvedObject
         }
-        <%_ } _%>
       ];
       await store.dispatch(updateEntity({ id: <% if (primaryKeyType === 'Long') { %>1<% } else { %>'1'<% } %> })).then(() => expect(store.getActions()).toEqual(expectedActions));
     });

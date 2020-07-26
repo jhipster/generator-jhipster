@@ -21,18 +21,11 @@
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-<%= LIQUIBASE_DTD_VERSION %>.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <% let autoIncrementValue = true;
-        let primaryKeyType = 'bigint';
-        for (idx in relationships) {
-            if (relationships[idx].useJPADerivedIdentifier === true) {
-                primaryKeyType = (relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2') ? 'varchar(100)' : primaryKeyType;
-                autoIncrementValue = false;
-                break;
-            }
-        }
+    <% let autoIncrementValue = primaryKeyType !== 'String';
+        let databasePKType = primaryKeyType !== 'String' ? 'bigint' : 'varchar(100)';
         const isAutoIncrementDB = prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb';
     _%>
     <%_ if (isAutoIncrementDB) { _%>
@@ -48,7 +41,7 @@
         <%_ } else { _%>
         <createTable tableName="<%= entityTableName %>" remarks="<%- formatAsLiquibaseRemarks(javadoc) %>">
         <%_ } _%>
-            <column name="id" type="<%= primaryKeyType %>" <%_ if (primaryKeyType === 'varchar(100)' ) { _%> <% } else if (isAutoIncrementDB) { %> autoIncrement="${autoIncrement}" <%_ } %>>
+            <column name="id" type="<%= databasePKType %>" <%_ if (primaryKeyType === 'String' ) { _%> <% } else if (isAutoIncrementDB) { %> autoIncrement="${autoIncrement}" <%_ } %>>
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <%_ for (idx in fields) {
@@ -128,7 +121,7 @@
                 let nullable_relation = true,
                 relationshipType = relationships[idx].relationshipType,
                 relationshipName = relationships[idx].relationshipName,
-                relationshipColumnType = relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2' ? 'varchar(100)' : 'bigint';
+                relationshipColumnType = relationships[idx].otherEntityPrimaryKeyType === 'String' ? 'varchar(100)' : 'bigint';
                 if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
                     nullable_relation = false;
                 }
@@ -145,7 +138,7 @@
             </column>
             <%_ }
             } _%>
-            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
         <%_ for (const idx in fields) {
             if (fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'Instant') { _%>
@@ -160,7 +153,7 @@
             relationshipName = relationships[idx].relationshipName,
             ownerSide = relationships[idx].ownerSide,
             otherEntityName = relationships[idx].otherEntityName;
-            const relationshipColumnType = otherEntityName === 'user' && authenticationType === 'oauth2' ? 'varchar(100)' : 'bigint';
+            const relationshipColumnType = relationships[idx].otherEntityPrimaryKeyType === 'String' ? 'varchar(100)' : 'bigint';
             if (relationshipType === 'many-to-many' && ownerSide) {
                 const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
           _%>
@@ -177,7 +170,7 @@
         <addPrimaryKey columnNames="<%= getColumnName(name) %>_id, <%= getColumnName(relationshipName) %>_id" tableName="<%= joinTableName %>"/>
         <% } %><% } %>
     </changeSet>
-    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
     <%_ if (!skipFakeData) { _%>
 
     <!--
@@ -221,20 +214,18 @@
                 <%_ } _%>
             <%_ } _%>
             <%_ for (idx in relationships) {
-                    let loadColumnType = 'numeric';
+                    let loadColumnType = relationships[idx].otherEntityPrimaryKeyType === 'String' ? 'string' : 'numeric';
                     if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired
                         && (relationships[idx].relationshipType === "many-to-one"
                             || (relationships[idx].relationshipType === "one-to-one" && relationships[idx].ownerSide === true
                                 && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false))
                     )) {
                         let baseColumnName = getColumnName(relationships[idx].relationshipName) + '_id';
-                        if (relationships[idx].otherEntityNameCapitalized === 'User' && authenticationType === 'oauth2') {
-                            loadColumnType = 'varchar(100)';
-                        } _%>
+                        _%>
             <column name="<%= baseColumnName %>" type="<%= loadColumnType %>"/>
-                <%_ } _%>
+                    <%_ } _%>
             <%_  } _%>
-            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
     <%_ } _%>

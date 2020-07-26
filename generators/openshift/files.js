@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 module.exports = {
-    writeFiles
+    writeFiles,
 };
 
 function writeFiles() {
@@ -77,6 +77,6 @@ function writeFiles() {
 
         writeConfigRunFile() {
             this.template('apply.sh.ejs', `${this.directoryPath}/ocp/ocp-apply.sh`);
-        }
+        },
     };
 }

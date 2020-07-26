@@ -16,17 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const tsKeyType = getTypescriptKeyType(getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships));
-_%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { <%_ if (pagination !== 'no') { _%>HttpHeaders, <% } %>HttpResponse } from '@angular/common/http';
 <%_ if (pagination === 'pagination') { _%>
-import { ActivatedRoute, Router } from '@angular/router';
-<%_ } else if (searchEngine === 'elasticsearch') { _%>
+import { ActivatedRoute, ParamMap, Router, Data } from '@angular/router';
+<%_ } else if (searchEngine !== false) { _%>
 import { ActivatedRoute } from '@angular/router';
 <%_ } _%>
-import { Subscription } from 'rxjs';
+import { Subscription<% if (pagination === 'pagination') { %>, combineLatest<% } %> } from 'rxjs';
 import { JhiEventManager <% if (pagination === 'infinite-scroll') { %>, JhiParseLinks <% } %><% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -70,7 +67,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
         return this.dataUtils.byteSize(base64String);
     }
 
-    openFile(contentType: string, base64String: string): void {
+    openFile(contentType = '', base64String: string): void {
         return this.dataUtils.openFile(contentType, base64String);
     }
     <%_ } _%>
@@ -106,27 +103,30 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
 
     <%_ if (pagination === 'pagination') { _%>
 
-    protected onSuccess(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders, page: number): void {
+    protected onSuccess(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
         this.totalItems = Number(headers.get('X-Total-Count'));
         this.page = page;
-        <%_ if (searchEngine === 'elasticsearch') { _%>
+        <%_ if (searchEngine !== false) { _%>
         this.ngbPaginationPage = this.page;
         <%_ } _%>
-        this.router.navigate(['/<%= entityUrl %>'], {
-            queryParams: {
-                page: this.page,
-                size: this.itemsPerPage,
-                <%_ if (searchEngine === 'elasticsearch') { _%>
-                search: this.currentSearch,
-                <%_ } _%>
-                sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
-            }
-        });
+        if (navigate) {
+            this.router.navigate(['/<%= entityUrl %>'], {
+                queryParams: {
+                    page: this.page,
+                    size: this.itemsPerPage,
+                    <%_ if (searchEngine !== false) { _%>
+                    search: this.currentSearch,
+                    <%_ } _%>
+                    sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
+                }
+            });
+        }
         this.<%= entityInstancePlural %> = data || [];
+        this.ngbPaginationPage = this.page;
     }
 
     protected onError(): void {
-        this.ngbPaginationPage = this.page;
+        this.ngbPaginationPage = this.page ?? 1;
     }
 
     <%_ } else if (pagination === 'infinite-scroll') { _%>

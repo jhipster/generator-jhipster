@@ -1,0 +1,20 @@
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import Ribbon from '@/core/ribbon/ribbon.vue';
+import JhiFooter from '@/core/jhi-footer/jhi-footer.vue';
+import JhiNavbar from '@/core/jhi-navbar/jhi-navbar.vue';
+<%_ if (authenticationType !== 'oauth2') { _%>
+import LoginForm from '@/account/login-form/login-form.vue';
+<%_ } %>
+
+@Component({
+  components: {
+    'ribbon': Ribbon,
+    'jhi-navbar': JhiNavbar,
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    'login-form': LoginForm,
+    <%_ } %>
+    'jhi-footer': JhiFooter
+  }
+})
+export default class App extends Vue {}

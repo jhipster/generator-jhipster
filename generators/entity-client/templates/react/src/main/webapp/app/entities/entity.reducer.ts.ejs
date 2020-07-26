@@ -22,7 +22,7 @@
 _%>
 import axios from 'axios';
 import {
-  <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%_ if (searchEngine !== false) { _%>
   ICrudSearchAction,
   <%_ } _%>
   <%_ if (pagination === 'infinite-scroll') { _%>
@@ -42,7 +42,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 export const ACTION_TYPES = {
-  <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%_ if (searchEngine !== false) { _%>
   SEARCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/SEARCH_<%= entityActionNamePlural %>',
   <%_ } _%>
   FETCH_<%= entityActionName %>_LIST: '<%= entityInstance %>/FETCH_<%= entityActionName %>_LIST',
@@ -79,7 +79,7 @@ export type <%= entityReactName %>State =  Readonly<typeof initialState>;
 
 export default (state: <%= entityReactName %>State = initialState, action): <%= entityReactName %>State => {
   switch (action.type) {
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
     case REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
     <%_ } _%>
     case REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
@@ -101,7 +101,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         updating: true
       };
     <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
     case FAILURE(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
     <%_ } _%>
     case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
@@ -118,7 +118,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         updateSuccess: false,
         errorMessage: action.payload
       };
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
     case SUCCESS(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
     <%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
@@ -193,13 +193,13 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
 };
 
 const apiUrl = '<% if (applicationType === 'gateway' && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngine !== false) { _%>
 const apiSearchUrl = '<% if (applicationType === 'gateway' && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
 <%_ } _%>
 
 // Actions
 
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngine !== false) { _%>
 export const getSearchEntities: ICrudSearchAction<I<%= entityReactName %>> = (query, page, size, sort) => ({
   type: ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>,
 <%_ if (pagination !== 'no') { _%>
@@ -251,9 +251,6 @@ export const updateEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
     payload: axios.put(apiUrl, cleanEntity(entity))
   });
-  <%_ if (pagination !== 'infinite-scroll') { _%>
-  dispatch(getEntities());
-  <%_ } _%>
   return result;
 };
 

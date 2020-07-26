@@ -36,7 +36,7 @@
     <properties>
         <!-- Build properties -->
         <maven.version>3.0.0</maven.version>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <scala.version>2.12.1</scala.version>
         <node.version>v8.11.2</node.version>
         <yarn.version>v1.6.0</yarn.version>
@@ -51,7 +51,7 @@
         <run.addResources>false</run.addResources>
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase />
-        <profile.swagger />
+        <profile.api-docs />
 
         <!-- Dependency versions -->
         <jhipster-dependencies.version>2.0.8</jhipster-dependencies.version>
@@ -167,6 +167,10 @@
             <artifactId>json-path</artifactId>
             <scope>test</scope>
             <!-- parent POM declares this dependency in default (compile) scope -->
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-oas</artifactId>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
@@ -375,7 +379,7 @@
                         <requireJavaVersion>
                             <!-- Until JHipster supports JDK 9 -->
                             <message>You are running an incompatible version of Java. JHipster requires JDK ${java.version}</message>
-                            <version>[1.8,1.9)</version>
+                            <version>[1.8,15)</version>
                         </requireJavaVersion>
                     </rules>
                 </configuration>
@@ -628,9 +632,9 @@
             </properties>
         </profile>
         <profile>
-            <id>swagger</id>
+            <id>api-docs</id>
             <properties>
-                <profile.swagger>,swagger</profile.swagger>
+                <profile.api-docs>,api-docs</profile.api-docs>
             </properties>
         </profile>
         <profile>
@@ -841,7 +845,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>prod${profile.swagger}${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>prod${profile.api-docs}${profile.no-liquibase}</spring.profiles.active>
             </properties>
         </profile>
         <profile>
@@ -939,7 +943,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev,swagger</spring.profiles.active>
+                <spring.profiles.active>dev,api-docs</spring.profiles.active>
             </properties>
         </profile>
         <profile>

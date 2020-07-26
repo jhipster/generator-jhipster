@@ -211,7 +211,7 @@
             "fieldType": "ByteBuffer"
         }
     ],
-    "changelogDate": "20160208184031",
+    "changelogDate": "20160208184032",
     "dto": "mapstruct",
     "service": "serviceImpl",
     "pagination": "no"

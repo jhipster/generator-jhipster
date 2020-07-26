@@ -16,9 +16,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+trigger:
+    branches:
+        exclude:
+            - dependabot/*
 jobs:
     - job: Test
+      condition: not(contains(variables['System.PullRequest.SourceBranch'], 'dependabot'))
       pool:
           vmImage: 'ubuntu-18.04'
       variables:
@@ -58,6 +62,9 @@ jobs:
               ms-micro-eureka-jwt:
                   JHI_APP: ms-micro-eureka-jwt
                   JHI_ENTITY: micro
+              ms-micro-eureka-infinispan:
+                  JHI_APP: ms-micro-eureka-infinispan
+                  JHI_ENTITY: micro
               ms-react-gateway-consul-jwt:
                   JHI_APP: ms-react-gateway-consul-jwt
                   JHI_ENTITY: sqllight
@@ -73,18 +80,7 @@ jobs:
                   JHI_ENTITY: jdl
                   JHI_PROFILE: prod
                   JHI_PROTRACTOR: 1
-              webflux-mongodb:
-                  JHI_APP: webflux-mongodb
-                  JHI_ENTITY: none
-                  JHI_PROTRACTOR: 1
-              webflux-mongodb-session:
-                  JHI_APP: webflux-mongodb-session
-                  JHI_ENTITY: none
-                  JHI_PROTRACTOR: 1
-              webflux-mongodb-oauth2:
-                  JHI_APP: webflux-mongodb-oauth2
-                  JHI_ENTITY: none
-                  JHI_PROTRACTOR: 1
+                  JHI_TESTCONTAINERS: 1
       steps:
           #----------------------------------------------------------------------
           # Set checkout path.
@@ -98,7 +94,7 @@ jobs:
           #----------------------------------------------------------------------
           - task: NodeTool@0
             inputs:
-                versionSpec: '12.16.0'
+                versionSpec: '12.16.1'
             displayName: 'TOOLS: install Node.js'
           - script: |
                 if [[ $JHI_JDK = '11' ]]; then

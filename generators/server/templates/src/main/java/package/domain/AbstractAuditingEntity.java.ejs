@@ -36,7 +36,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 <%_ if (databaseType === 'neo4j') { _%>
 import org.neo4j.springframework.data.core.schema.Property;
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 <%_ } _%>
 
@@ -44,6 +44,8 @@ import java.io.Serializable;
 import java.time.Instant;
 <%_ if (databaseType === 'sql') { _%>
 import javax.persistence.Column;
+<%_ } _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 <%_ } _%>
@@ -52,7 +54,7 @@ import javax.persistence.MappedSuperclass;
  * Base abstract class for entities which will hold definitions for created, last modified, created by,
  * last modified by attributes.
  */
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 <%_ } _%>

@@ -10,7 +10,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
         if (!jhContext) {
-            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprint myblueprint');
+            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
         }
 
         this.configOptions = jhContext.configOptions || {};
@@ -47,7 +47,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                 this.addGradleDependencyInDirectory('.', 'scope6', 'group6', 'name6');
                 this.applyFromGradleScript('name');
                 this.addGradleMavenRepository('url', 'username', 'password');
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -58,10 +58,10 @@ describe('needle API server gradle: JHipster server generator with blueprint', (
         helpers
             .run(path.join(__dirname, '../../generators/server'))
             .withOptions({
-                'from-cli': true,
+                fromCli: true,
                 skipInstall: true,
                 blueprint: 'myblueprint',
-                skipChecks: true
+                skipChecks: true,
             })
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
             .withPrompts({
@@ -80,7 +80,7 @@ describe('needle API server gradle: JHipster server generator with blueprint', (
                 languages: ['fr'],
                 buildTool: 'gradle',
                 rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                serverSideOptions: []
+                serverSideOptions: [],
             })
             .on('end', done);
     });

@@ -18,7 +18,7 @@
  */
 
 const tabtab = require('tabtab')({
-    name: 'jhipster'
+    name: 'jhipster',
 });
 
 module.exports.init = (program, binName) => {

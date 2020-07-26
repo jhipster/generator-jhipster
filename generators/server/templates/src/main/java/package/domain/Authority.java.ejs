@@ -31,10 +31,17 @@ import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
+    <%_ if (!reactive) { _%>
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
+    <%_ } else { _%>
+import org.springframework.data.annotation.Id;
+import org.springframework.data.domain.Persistable;
+import org.springframework.data.relational.core.mapping.Table;
+
+    <%_ } _%>
 <%_ } _%>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -44,7 +51,7 @@ import java.util.Objects;
 /**
  * An authority (a security role) used by Spring Security.
  */
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 @Entity
 @Table(name = "<%= jhiTablePrefix %>_authority")
     <%_ if (enableHibernateCache) { _%>
@@ -55,6 +62,9 @@ import java.util.Objects;
         <%_ } _%>
     <%_ } _%>
 <%_ } _%>
+<%_ if (databaseType === 'sql' && reactive) { _%>
+@Table("<%= jhiTablePrefix %>_authority")
+<%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= jhiTablePrefix %>_authority")
 <%_ } _%>
@@ -64,14 +74,16 @@ import java.util.Objects;
 <%_ if (databaseType === 'couchbase') { _%>
 @Document
 <%_ } _%>
-public class Authority implements Serializable {
+public class Authority implements Serializable<% if (databaseType === 'sql' && reactive) { %>, Persistable<String><% } %> {
 
     private static final long serialVersionUID = 1L;
 
     @NotNull
     @Size(max = 50)
-    @Id<% if (databaseType === 'sql') { %>
-    @Column(length = 50)<% } %>
+    @Id
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
+    @Column(length = 50)
+    <%_ } _%>
     private String name;
 
     public String getName() {
@@ -98,10 +110,23 @@ public class Authority implements Serializable {
         return Objects.hashCode(name);
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "Authority{" +
             "name='" + name + '\'' +
             "}";
     }
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+
+    @Override
+    public String getId() {
+        return name;
+    }
+
+    @Override
+    public boolean isNew() {
+        return true;
+    }
+    <%_ } _%>
 }

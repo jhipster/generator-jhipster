@@ -31,27 +31,27 @@ module.exports = class extends BaseGenerator {
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         this.option('skip-build', {
             desc: 'Skips building the application',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         this.option('skip-deploy', {
             desc: 'Skips deployment to Azure Spring Cloud',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
-        this.azureSpringCloudSkipBuild = this.options['skip-build'];
-        this.azureSpringCloudSkipDeploy = this.options['skip-deploy'] || this.options['skip-build'];
+        this.azureSpringCloudSkipBuild = this.options.skipBuild;
+        this.azureSpringCloudSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
         this.registerPrettierTransform();
     }
 
     initializing() {
-        if (!this.options['from-cli']) {
+        if (!this.options.fromCli) {
             this.warning(
                 `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
                     'jhipster <command>'
@@ -65,7 +65,7 @@ module.exports = class extends BaseGenerator {
         this.packageFolder = this.config.get('packageFolder');
         this.authenticationType = this.config.get('authenticationType');
         this.jwtSecretKey = this.config.get('jwtSecretKey');
-        this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
+        this.cacheProvider = this.config.get('cacheProvider') || 'no';
         this.enableHibernateCache = this.config.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
         this.databaseType = this.config.get('databaseType');
         this.prodDatabaseType = this.config.get('prodDatabaseType');
@@ -145,7 +145,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
                 exec('az configure --list-defaults true', (err, stdout) => {
                     if (err) {
                         this.config.set({
-                            azureSpringCloudResourceGroupName: null
+                            azureSpringCloudResourceGroupName: null,
                         });
                         this.abort = true;
                         this.log.error('Could not retrieve your Azure default configuration.');
@@ -187,20 +187,20 @@ ${chalk.red('az extension add --name spring-cloud')}`
                         type: 'input',
                         name: 'azureSpringCloudResourceGroupName',
                         message: 'Azure resource group name:',
-                        default: this.azureSpringCloudResourceGroupName
+                        default: this.azureSpringCloudResourceGroupName,
                     },
                     {
                         type: 'input',
                         name: 'azureSpringCloudServiceName',
                         message: 'Azure Spring Cloud service name (the name of your cluster):',
-                        default: this.azureSpringCloudServiceName
+                        default: this.azureSpringCloudServiceName,
                     },
                     {
                         type: 'input',
                         name: 'azureSpringCloudAppName',
                         message: 'Azure Spring Cloud application name:',
-                        default: this.azureSpringCloudAppName || this.baseName
-                    }
+                        default: this.azureSpringCloudAppName || this.baseName,
+                    },
                 ];
 
                 this.prompt(prompts).then(props => {
@@ -222,22 +222,22 @@ ${chalk.red('az extension add --name spring-cloud')}`
                         choices: [
                             {
                                 value: 'local',
-                                name: 'Build and deploy locally'
+                                name: 'Build and deploy locally',
                             },
                             {
                                 value: 'github-action',
-                                name: 'Build and deploy using GitHub Actions'
-                            }
+                                name: 'Build and deploy using GitHub Actions',
+                            },
                         ],
-                        default: 0
-                    }
+                        default: 0,
+                    },
                 ];
 
                 this.prompt(prompts).then(props => {
                     this.azureSpringCloudDeploymentType = props.azureSpringCloudDeploymentType;
                     done();
                 });
-            }
+            },
         };
     }
 
@@ -247,9 +247,9 @@ ${chalk.red('az extension add --name spring-cloud')}`
                 if (this.abort) return;
                 this.config.set({
                     azureSpringCloudAppName: this.azureSpringCloudAppName,
-                    azureSpringCloudDeploymentType: this.azureSpringCloudDeploymentType
+                    azureSpringCloudDeploymentType: this.azureSpringCloudDeploymentType,
                 });
-            }
+            },
         };
     }
 
@@ -291,28 +291,22 @@ ${chalk.red('az extension add --name spring-cloud')}`
 
             copyAzureSpringCloudFiles() {
                 if (this.abort) return;
-                const done = this.async();
                 this.log(chalk.bold('\nCreating Azure Spring Cloud deployment files'));
                 this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
                 this.template('bootstrap-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-azure.yml`);
                 if (this.azureSpringCloudDeploymentType === 'github-action') {
                     this.template('github/workflows/azure-spring-cloud.yml.ejs', '.github/workflows/azure-spring-cloud.yml');
                 }
-                this.conflicter.resolve(err => {
-                    done();
-                });
             },
 
             addAzureSpringCloudMavenProfile() {
                 if (this.abort) return;
-                const done = this.async();
                 if (this.buildTool === 'maven') {
                     this.render('pom-profile.xml.ejs', profile => {
                         this.addMavenProfile('azure', `            ${profile.toString().trim()}`);
                     });
                 }
-                done();
-            }
+            },
         };
     }
 
@@ -417,11 +411,14 @@ for more detailed information.`
 
                 const done = this.async();
                 this.log(chalk.bold('\nDeploying application...'));
-
+                let buildDir = 'target';
+                if (this.buildTool === 'gradle') {
+                    buildDir = 'build/libs';
+                }
                 exec(
                     `az spring-cloud app deploy --resource-group ${this.azureSpringCloudResourceGroupName} \
 --service ${this.azureSpringCloudServiceName} --name ${this.azureSpringCloudAppName} \
---jar-path target/*.jar`,
+--jar-path ${buildDir}/*.jar`,
                     (err, stdout) => {
                         if (err) {
                             this.abort = true;
@@ -429,13 +426,13 @@ for more detailed information.`
                         } else {
                             const json = JSON.parse(stdout);
                             this.log(`${chalk.green(chalk.bold('Success!'))} Your application has been deployed.`);
-                            this.log(`Provisitioning state: ${chalk.bold(json.properties.provisioningState)}`);
+                            this.log(`Provisioning state: ${chalk.bold(json.properties.provisioningState)}`);
                             this.log(`Application status  : ${chalk.bold(json.properties.status)}`);
                         }
                         done();
                     }
                 );
-            }
+            },
         };
     }
 };

@@ -9,7 +9,7 @@ const mockBlueprintSubGen = class extends CommonGenerator {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
         if (!jhContext) {
-            this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprint myblueprint')}");
+            this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
         }
         this.configOptions = jhContext.configOptions || {};
     }
@@ -27,7 +27,7 @@ const mockBlueprintSubGen = class extends CommonGenerator {
         const customPhaseSteps = {
             overridesDocumentationUrl() {
                 this.DOCUMENTATION_URL = 'https://myenterprise.intranet';
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -58,14 +58,14 @@ describe('JHipster common generator with blueprint', () => {
                 helpers
                     .run(path.join(__dirname, '../../generators/common'))
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipInstall: true,
                         blueprint: blueprintName,
-                        skipChecks: true
+                        skipChecks: true,
                     })
                     .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:common']])
                     .withPrompts({
-                        baseName: 'jhipster'
+                        baseName: 'jhipster',
                     })
                     .on('end', done);
             });
@@ -87,14 +87,14 @@ describe('JHipster common generator with blueprint', () => {
             helpers
                 .run(path.join(__dirname, '../../generators/common'))
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
-                    skipChecks: true
+                    skipChecks: true,
                 })
                 .withGenerators([[helpers.createDummyGenerator(), 'jhipster-myblueprint:common']])
                 .withPrompts({
-                    baseName: 'jhipster'
+                    baseName: 'jhipster',
                 })
                 .on('end', done);
         });

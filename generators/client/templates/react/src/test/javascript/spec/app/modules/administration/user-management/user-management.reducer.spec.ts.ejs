@@ -38,6 +38,8 @@ import { defaultValue } from 'app/shared/model/user.model';
 import { AUTHORITIES } from 'app/config/constants';
 
 describe('User management reducer tests', () => {
+  const username = process.env.E2E_USERNAME || 'admin';
+
   function isEmpty(element): boolean {
     if (element instanceof Array) {
       return element.length === 0;
@@ -271,7 +273,7 @@ describe('User management reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(getUser('admin')).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getUser(username)).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
     it('dispatches CREATE_USER_PENDING and CREATE_USER_FULFILLED actions', async () => {
       const expectedActions = [
@@ -309,7 +311,7 @@ describe('User management reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(updateUser({ login: 'admin' })).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(updateUser({ login: username })).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
     it('dispatches DELETE_USER_PENDING and DELETE_USER_FULFILLED actions', async () => {
       const expectedActions = [
@@ -328,7 +330,7 @@ describe('User management reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(deleteUser('admin')).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(deleteUser(username)).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
     it('dispatches ACTION_TYPES.RESET actions', async () => {
       const expectedActions = [

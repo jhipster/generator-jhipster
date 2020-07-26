@@ -16,12 +16,10 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
         if (!jhContext) {
-            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprint myblueprint');
+            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
         }
 
         this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupEntityOptions(this, jhContext, this);
     }
 
     get initializing() {
@@ -45,7 +43,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         const customPhaseSteps = {
             webpackPhase() {
                 this.copyExternalAssetsInWebpack(assetFrom, assetTo);
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -56,13 +54,13 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
         helpers
             .run(path.join(__dirname, '../../generators/client'))
             .withOptions({
-                'from-cli': true,
+                fromCli: true,
                 build: 'maven',
                 auth: 'jwt',
                 db: 'mysql',
                 skipInstall: true,
                 blueprint: 'myblueprint',
-                skipChecks: true
+                skipChecks: true,
             })
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
             .withPrompts({
@@ -70,7 +68,7 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
                 clientFramework: ANGULAR,
                 enableTranslation: true,
                 nativeLanguage: 'en',
-                languages: ['en', 'fr']
+                languages: ['en', 'fr'],
             })
             .on('end', done);
     });

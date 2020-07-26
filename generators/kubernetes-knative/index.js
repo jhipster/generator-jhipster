@@ -59,7 +59,7 @@ module.exports = class extends BaseDockerGenerator {
                 this.istio = true;
             },
             setupKubernetesConstants,
-            setupHelmConstants
+            setupHelmConstants,
         };
     }
 
@@ -75,7 +75,7 @@ module.exports = class extends BaseDockerGenerator {
             askForKubernetesNamespace: prompts.askForKubernetesNamespace,
             askForDockerRepositoryName: prompts.askForDockerRepositoryName,
             askForDockerPushCommand: prompts.askForDockerPushCommand,
-            askForIngressDomain: prompts.askForIngressDomain
+            askForIngressDomain: prompts.askForIngressDomain,
         };
     }
 
@@ -98,7 +98,7 @@ module.exports = class extends BaseDockerGenerator {
                     }
                 });
             },
-            saveConfig
+            saveConfig,
         };
     }
 

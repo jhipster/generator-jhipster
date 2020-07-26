@@ -34,7 +34,7 @@ module.exports = class AwSSM {
             this.ssm
                 .getParameters({
                     Names: [parameterName],
-                    WithDecryption: true
+                    WithDecryption: true,
                 })
                 .promise()
                 .then(resultParams => _.get(resultParams, 'Parameters[0].Value'))
@@ -60,7 +60,7 @@ module.exports = class AwSSM {
                     Type: parameterType,
                     Description: description,
                     Value: parameterValue,
-                    Overwrite: true
+                    Overwrite: true,
                 })
                 .promise()
         );

@@ -138,8 +138,8 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         }
         if (fields[idx].fieldIsEnum) {
             if (fields[idx].fieldValues.length !== 0) {
-                const enums = fields[idx].fieldValues.split(',');
-                data = enums[this.faker.random.number(enums.length-1)];
+                const enumValues = getEnumValuesWithCustomValues(fields[idx].fieldValues);
+                data = enumValues[this.faker.random.number(enumValues.length-1)].name;
             } else {
                 data = '';
             }

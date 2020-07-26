@@ -10,7 +10,7 @@
                     "required": "Kërkohet përdoruesi.",
                     "minlength": "Përdoruesi duhet të jetë të paktën 1 gërmë.",
                     "maxlength": "Përdoruesi nuk mund të jetë më i gjatë se 50 gërma.",
-                    "pattern": "Përdoruesi mund të ketë vetëm gërma dhe numra."
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>Regjistrimi u ruajt!</strong> Ju lutem kontrolloni E-mailin.",

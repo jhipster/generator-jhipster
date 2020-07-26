@@ -18,14 +18,8 @@
 -%>
 package <%= packageName %>.web.rest;
 
-<%_ if (reactive && ! skipUserManagement) { _%>
-import <%= packageName %>.config.Constants;
-<%_ } _%>
 import <%= packageName %>.security.jwt.JWTFilter;
 import <%= packageName %>.security.jwt.TokenProvider;
-<%_ if (reactive && !skipUserManagement) { _%>
-import <%= packageName %>.service.AuditEventService;
-<%_ } _%>
 import <%= packageName %>.web.rest.vm.LoginVM;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -37,9 +31,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 <%_ } _%>
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-<%_ if (reactive && !skipUserManagement) { _%>
-import org.springframework.security.core.Authentication;
-<%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -48,6 +39,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 <%_ } _%>
 
 import javax.validation.Valid;
@@ -88,16 +80,9 @@ public class UserJWTController {
 
     private final ReactiveAuthenticationManager authenticationManager;
 
-        <%_ if (!skipUserManagement) { _%>
-    private final AuditEventService auditEventService;
-
-        <%_ } _%>
-    public UserJWTController(TokenProvider tokenProvider, ReactiveAuthenticationManager authenticationManager<% if (!skipUserManagement) { %>, AuditEventService auditEventService<% } %>) {
+    public UserJWTController(TokenProvider tokenProvider, ReactiveAuthenticationManager authenticationManager) {
         this.tokenProvider = tokenProvider;
         this.authenticationManager = authenticationManager;
-        <%_ if (!skipUserManagement) { _%>
-        this.auditEventService = auditEventService;
-        <%_ } _%>
     }
 
     @PostMapping("/authenticate")
@@ -105,11 +90,7 @@ public class UserJWTController {
         return loginVM
             .flatMap(login -> authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()))
-                <%_ if (!skipUserManagement) { _%>
-                .onErrorResume(throwable -> onAuthenticationError(login, throwable))
-                .flatMap(auth -> onAuthenticationSuccess(login, auth))
-                <%_ } _%>
-                .map(auth -> tokenProvider.createToken(auth, Boolean.TRUE.equals(login.isRememberMe())))
+                .flatMap(auth -> Mono.fromCallable(() -> tokenProvider.createToken(auth, Boolean.TRUE.equals(login.isRememberMe()))))
             )
             .map(jwt -> {
                 HttpHeaders httpHeaders = new HttpHeaders();
@@ -118,24 +99,6 @@ public class UserJWTController {
             });
     }
 
-        <%_ if (!skipUserManagement) { _%>
-    private Mono<? extends Authentication> onAuthenticationSuccess(LoginVM login, Authentication auth) {
-        return Mono.just(login)
-            .map(LoginVM::getUsername)
-            .filter(username -> !Constants.ANONYMOUS_USER.equals(username))
-            .flatMap(auditEventService::saveAuthenticationSuccess)
-            .thenReturn(auth);
-    }
-
-    private Mono<? extends Authentication> onAuthenticationError(LoginVM login, Throwable throwable) {
-        return Mono.just(login)
-                .map(LoginVM::getUsername)
-                .filter(username -> !Constants.ANONYMOUS_USER.equals(username))
-                .flatMap(username -> auditEventService.saveAuthenticationError(username, throwable))
-                .then(Mono.error(throwable));
-    }
-
-        <%_ } _%>
     <%_ } _%>
     /**
      * Object to return as body in JWT Authentication.

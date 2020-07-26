@@ -19,9 +19,6 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
-<%_ if (pagination === 'pagination') { _%>
-import { JhiResolvePagingParams } from 'ng-jhipster';
-<%_ } _%>
 import { Observable, of, EMPTY } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
@@ -61,11 +58,6 @@ export const <%= entityInstance %>Route: Routes = [
     {
         path: '',
         component: <%= entityAngularName %>Component,
-        <%_ if (pagination === 'pagination') { _%>
-        resolve: {
-            pagingParams: JhiResolvePagingParams
-        },
-        <%_ } _%>
         data: {
             authorities: [Authority.USER],
             <%_ if (pagination === 'pagination') { _%>

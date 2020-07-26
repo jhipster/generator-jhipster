@@ -91,7 +91,7 @@ import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngine === 'elasticsearch' && !reactive) { _%>
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -170,7 +170,7 @@ public class UserResource {
      * @throws BadRequestAlertException {@code 400 (Bad Request)} if the login or email is already in use.
      */
     @PostMapping("/users")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public <% if (reactive) { %>Mono<ResponseEntity<<%= asEntity('User') %>>><% } else { %>ResponseEntity<<%= asEntity('User') %>><% } %> createUser(@Valid @RequestBody <%= asDto('User') %> userDTO)<% if (!reactive) { %> throws URISyntaxException<% } %> {
         log.debug("REST request to save User : {}", userDTO);
 
@@ -228,7 +228,7 @@ public class UserResource {
      * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already in use.
      */
     @PutMapping("/users")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     <%_ if (!reactive) { _%>
     public ResponseEntity<<%= asDto('User') %>> updateUser(@Valid @RequestBody <%= asDto('User') %> userDTO) {
         log.debug("REST request to update User : {}", userDTO);
@@ -303,7 +303,7 @@ public class UserResource {
      * @return a string list of all roles.
      */
     @GetMapping("/users/authorities")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public <% if (reactive) { %>Mono<List<String>><% } else { %>List<String><% } %> getAuthorities() {
         return userService.getAuthorities()<% if (reactive) { %>.collectList()<% } %>;
     }
@@ -343,7 +343,7 @@ public class UserResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     <%_ if (!reactive) { _%>
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);
@@ -358,7 +358,7 @@ public class UserResource {
     <%_ } _%>
     }
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngine !== false) { _%>
 
     /**
      * {@code SEARCH /_search/users/:query} : search for the User corresponding to the query.
@@ -367,10 +367,18 @@ public class UserResource {
      * @return the result of the search.
      */
     @GetMapping("/_search/users/{query}")
-    public List<<%= asEntity('User') %>> search(@PathVariable String query) {
+    public <% if(reactive) { %>Mono<<% } %>List<<%= asEntity('User') %>><% if(reactive) { %>><% } %> search(@PathVariable String query) {
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+        <%_ if (!reactive) { _%>
         return StreamSupport
             .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
+        <%_ } else { _%>
+        return userSearchRepository.search(query).collectList();
+        <%_ } _%>
+    <%_ } else { _%>
+        return userRepository.search(User.PREFIX, query)<% if (reactive) { %>.collectList()<% } %>;
+    <%_ } _%>
     }
 <%_ } _%>
 }

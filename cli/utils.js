@@ -18,32 +18,29 @@
  */
 /* eslint-disable no-console */
 const chalk = require('chalk');
-const didYouMean = require('didyoumean');
 const meow = require('meow');
-const yeoman = require('yeoman-environment');
 const _ = require('lodash');
-const path = require('path');
-
-const { normalizeBlueprintName, packageNameToNamespace } = require('../generators/utils');
 
 const CLI_NAME = 'jhipster';
 const GENERATOR_NAME = 'generator-jhipster';
 
-const debug = function(msg) {
+const SUCCESS_MESSAGE = 'Congratulations, JHipster execution is complete!';
+
+const debug = function (msg) {
     if (this.debugEnabled) {
         console.log(`${chalk.blue('DEBUG!')}  ${msg}`);
     }
 };
 
-const info = function(msg) {
+const info = function (msg) {
     console.info(`${chalk.green.bold('INFO!')} ${msg}`);
 };
 
-const log = function(msg) {
+const log = function (msg) {
     console.log(msg);
 };
 
-const error = function(msg, trace) {
+const error = function (msg, trace) {
     console.error(`${chalk.red(msg)}`);
     if (trace) {
         console.log(trace);
@@ -56,7 +53,7 @@ const error = function(msg, trace) {
  *  process.exit is not recommended by Node.js.
  *  Refer to https://nodejs.org/api/process.html#process_process_exit_code.
  */
-const fatal = function(msg, trace) {
+const fatal = function (msg, trace) {
     console.error(`${chalk.red(msg)}`);
     if (trace) {
         console.log(trace);
@@ -64,15 +61,22 @@ const fatal = function(msg, trace) {
     process.exit(1);
 };
 
-const init = function(program) {
+const init = function (program) {
     program.option('-d, --debug', 'enable debugger');
 
-    const argv = program.normalize(process.argv);
-    this.debugEnabled = program.debug = argv.includes('-d') || argv.includes('--debug'); // Need this early
+    this.debugEnabled = process.argv.includes('-d') || process.argv.includes('--debug'); // Need this early
 
-    if (this.debugEnabled) {
-        info('Debug logging is on');
-    }
+    const self = this;
+    // Option event fallback.
+    program.on('option:debug', function () {
+        if (self.debugEnabled) {
+            return;
+        }
+        self.debugEnabled = this.debug;
+        if (self.debugEnabled) {
+            info('Debug logging is on');
+        }
+    });
 };
 
 const logger = {
@@ -81,7 +85,7 @@ const logger = {
     info,
     log,
     error,
-    fatal
+    fatal,
 };
 
 const toString = item => {
@@ -102,20 +106,6 @@ const initHelp = (program, cliName) => {
         logger.info(`  For more info visit ${chalk.blue('https://www.jhipster.tech')}`);
         logger.info('');
     });
-
-    program.on('command:*', name => {
-        console.error(chalk.red(`${chalk.yellow(name)} is not a known command. See '${chalk.white(`${cliName} --help`)}'.`));
-
-        const cmd = Object.values(name).join('');
-        const availableCommands = program.commands.map(c => c._name);
-
-        const suggestion = didYouMean(cmd, availableCommands);
-        if (suggestion) {
-            logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
-        }
-
-        process.exit(1);
-    });
 };
 
 /**
@@ -131,7 +121,7 @@ const getArgs = opts => {
 /**
  * Get options from arguments
  */
-const getOptionsFromArgs = args => {
+const getOptionsFromArgs = (args = []) => {
     const options = [];
     args.forEach(item => {
         if (typeof item == 'string') {
@@ -181,83 +171,38 @@ const getCommand = (cmd, args, opts) => {
     return `${cmd}${cmdArgs ? ` ${cmdArgs}` : ''}`;
 };
 
-const getCommandOptions = (pkg, argv) => {
+const addKebabCase = (options = {}) => {
+    const kebabCase = Object.keys(options).reduce((acc, key) => {
+        acc[_.kebabCase(key)] = options[key];
+        return acc;
+    }, {});
+    return { ...kebabCase, ...options };
+};
+
+const getCommandOptions = (pkg, argv = []) => {
     const options = meow({ help: false, pkg, argv });
-    const flags = options ? options.flags : null;
-    if (flags) {
-        flags['from-cli'] = true;
-        // Add un-camelized options too, for legacy
-        Object.keys(flags).forEach(key => {
-            const legacyKey = key.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`);
-            flags[legacyKey] = flags[key];
-        });
-        return flags;
-    }
-    return { 'from-cli': true };
+    const flags = options ? options.flags : undefined;
+    return addKebabCase({ ...flags });
 };
 
-const done = errorMsg => {
-    if (errorMsg) {
-        logger.error(`${chalk.red.bold('ERROR!')} ${errorMsg}`);
+const doneFactory = successMsg => {
+    return errorOrMsg => {
+        if (errorOrMsg instanceof Error) {
+            logger.error(`ERROR! ${errorOrMsg.message}`, errorOrMsg);
+        } else if (errorOrMsg) {
+            logger.error(`ERROR! ${errorOrMsg}`);
+        } else if (successMsg) {
+            logger.info(chalk.green.bold(successMsg));
+        }
+    };
+};
+
+const printSuccess = () => {
+    if (process.exitCode === undefined || process.exitCode === 0) {
+        logger.info(chalk.green.bold(SUCCESS_MESSAGE));
     } else {
-        logger.info(chalk.green.bold('Congratulations, JHipster execution is complete!'));
+        logger.error(`ERROR! JHipster finished with code ${process.exitCode}`);
     }
-};
-
-const createYeomanEnv = packagePatterns => {
-    const env = yeoman.createEnv();
-    // Register jhipster generators.
-    env.lookup({ packagePaths: [path.join(__dirname, '..')] });
-    if (packagePatterns) {
-        // Lookup for blueprints.
-        env.lookup({ packagePatterns });
-    }
-    return env;
-};
-
-const loadBlueprints = () => {
-    const blueprintNames = [];
-    const indexOfBlueprintArgv = process.argv.indexOf('--blueprint');
-    if (indexOfBlueprintArgv > -1) {
-        blueprintNames.push(process.argv[indexOfBlueprintArgv + 1]);
-    }
-    const indexOfBlueprintsArgv = process.argv.indexOf('--blueprints');
-    if (indexOfBlueprintsArgv > -1) {
-        blueprintNames.push(...process.argv[indexOfBlueprintsArgv + 1].split(','));
-    }
-    if (!blueprintNames.length) {
-        return undefined;
-    }
-    return blueprintNames.filter((v, i, a) => a.indexOf(v) === i).map(v => normalizeBlueprintName(v));
-};
-
-const loadBlueprintCommands = (env, blueprints) => {
-    if (!blueprints) {
-        return undefined;
-    }
-    let result;
-    blueprints.forEach(blueprint => {
-        const namespace = packageNameToNamespace(blueprint);
-        const packagePath = env.getPackagePath(namespace);
-        if (!packagePath) {
-            logger.fatal(
-                `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
-                    `npm i -g ${blueprint}`
-                )}`
-            );
-        }
-        /* eslint-disable import/no-dynamic-require */
-        /* eslint-disable global-require */
-        try {
-            const blueprintCommands = require(`${packagePath}/cli/commands`);
-            result = { ...result, ...blueprintCommands };
-        } catch (e) {
-            const msg = `No custom commands found within blueprint: ${blueprint} at ${packagePath}`;
-            /* eslint-disable no-console */
-            console.info(`${chalk.green.bold('INFO!')} ${msg}`);
-        }
-    });
-    return result;
 };
 
 module.exports = {
@@ -270,9 +215,9 @@ module.exports = {
     getOptionsFromArgs,
     getCommand,
     getCommandOptions,
-    done,
-    createYeomanEnv,
-    loadBlueprints,
-    loadBlueprintCommands,
-    getOptionAsArgs
+    addKebabCase,
+    doneFactory,
+    done: doneFactory(SUCCESS_MESSAGE),
+    printSuccess,
+    getOptionAsArgs,
 };

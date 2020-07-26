@@ -10,7 +10,7 @@
                     "required": "Ihr Benutzername wird benötigt.",
                     "minlength": "Ihr Benutzername muss mindestens 1 Zeichen lang sein",
                     "maxlength": "Ihr Benutzername darf nicht länger als 50 Zeichen sein",
-                    "pattern": "Ihr Benutzername darf nur Kleinbuchstaben und Ziffern enthalten"
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>Registrierung gespeichert!</strong> Bitte überprüfen Sie Ihre Emails für die Bestätigung.",

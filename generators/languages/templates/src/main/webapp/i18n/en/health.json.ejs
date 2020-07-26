@@ -37,7 +37,8 @@
             "refreshScope": "Microservice Refresh Scope",
             "clientConfigServer": "Microservice Config Server",
             "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
-            "consul": "Consul",<% } %>
+            "consul": "Consul",<% } else if (reactive) { %>
+            "reactiveDiscoveryClients": "Microservice Discovery Clients",<% } %>
             <%_ } _%>
             "diskSpace": "Disk space",
             "mail": "Email",

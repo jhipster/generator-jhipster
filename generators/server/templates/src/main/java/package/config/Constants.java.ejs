@@ -25,7 +25,7 @@ public final class Constants {
 
     <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
     // Regex for acceptable logins
-    public static final String LOGIN_REGEX = "^[_.@A-Za-z0-9-]*$";
+    public static final String LOGIN_REGEX = "<%- LOGIN_REGEX %>";
 
     <%_ } _%>
     <%_ if (!skipUserManagement || authenticationType === 'oauth2' || ['sql','mongodb','couchbase'].includes(databaseType)) { _%>

@@ -16,10 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const jhiCore = require('jhipster-core');
+
+const { isReservedFieldName } = require('../../jdl/jhipster/reserved-keywords');
 
 module.exports = {
-    askForControllerActions
+    askForControllerActions,
 };
 
 function askForControllerActions() {
@@ -29,7 +30,7 @@ function askForControllerActions() {
                 type: 'confirm',
                 name: 'actionAdd',
                 message: 'Do you want to add an action to your controller?',
-                default: true
+                default: true,
             },
             {
                 when: response => response.actionAdd === true,
@@ -45,13 +46,13 @@ function askForControllerActions() {
                     if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                         return 'Your action name cannot start with an upper case letter';
                     }
-                    if (jhiCore.isReservedFieldName(input)) {
+                    if (isReservedFieldName(input)) {
                         return 'Your action name cannot contain a Java, Angular or React reserved keyword';
                     }
 
                     return true;
                 },
-                message: 'What is the name of your action?'
+                message: 'What is the name of your action?',
             },
             {
                 when: response => response.actionAdd === true,
@@ -61,23 +62,23 @@ function askForControllerActions() {
                 choices: [
                     {
                         name: 'POST',
-                        value: 'Post'
+                        value: 'Post',
                     },
                     {
                         name: 'GET',
-                        value: 'Get'
+                        value: 'Get',
                     },
                     {
                         name: 'PUT',
-                        value: 'Put'
+                        value: 'Put',
                     },
                     {
                         name: 'DELETE',
-                        value: 'Delete'
-                    }
+                        value: 'Delete',
+                    },
                 ],
-                default: 1
-            }
+                default: 1,
+            },
         ];
 
         if (!this.defaultOption) {
@@ -85,7 +86,7 @@ function askForControllerActions() {
                 if (props.actionAdd) {
                     const controllerAction = {
                         actionName: props.actionName,
-                        actionMethod: props.actionMethod
+                        actionMethod: props.actionMethod,
                     };
 
                     this.controllerActions.push(controllerAction);

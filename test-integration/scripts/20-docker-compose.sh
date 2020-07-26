@@ -27,6 +27,9 @@ fi
 if [ -a src/main/docker/mongodb.yml ]; then
     docker-compose -f src/main/docker/mongodb.yml up -d
 fi
+if [ -a src/main/docker/neo4j.yml ]; then
+    docker-compose -f src/main/docker/neo4j.yml up -d
+fi
 if [ -a src/main/docker/couchbase.yml ]; then
     # this container can't be started otherwise, it will be conflict with tests
     # so here, only prepare the image

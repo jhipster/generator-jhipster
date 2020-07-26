@@ -23,7 +23,7 @@ const request = require('sync-request');
 module.exports = {
     askActionType,
     askExistingAvailableDocs,
-    askGenerationInfos
+    askGenerationInfos,
 };
 
 function fetchSwaggerResources(input) {
@@ -33,14 +33,14 @@ function fetchSwaggerResources(input) {
     const swaggerResources = request('GET', `${baseUrl}/swagger-resources`, {
         // This header is needed to use the custom /swagger-resources controller
         // and not the default one that has only the gateway's swagger resource
-        headers: { Accept: 'application/json, text/javascript;' }
+        headers: { Accept: 'application/json, text/javascript;' },
     });
 
     JSON.parse(swaggerResources.getBody()).forEach(swaggerResource => {
         const specPath = swaggerResource.location.replace(/^\/+/g, '');
         availableDocs.push({
             value: { url: `${baseUrl}/${specPath}`, name: swaggerResource.name },
-            name: `${swaggerResource.name} (${swaggerResource.location})`
+            name: `${swaggerResource.name} (${swaggerResource.location})`,
         });
     });
 
@@ -59,8 +59,8 @@ function askActionType() {
     const actionList = [
         {
             value: 'new',
-            name: 'Generate a new API client'
-        }
+            name: 'Generate a new API client',
+        },
     ];
 
     if (hasExistingApis) {
@@ -76,7 +76,7 @@ function askActionType() {
             type: 'list',
             name: 'action',
             message: 'What do you want to do ?',
-            choices: actionList
+            choices: actionList,
         },
         {
             when: response => response.action === 'new' || newClient,
@@ -86,8 +86,8 @@ function askActionType() {
             choices: [
                 { value: 'jhipster-endpoint', name: 'From a Jhipster /swagger-resources live doc endpoint' },
                 { value: 'jhipster-directory', name: 'From the api.yml spec of an existing Jhipster project' },
-                { value: 'custom-endpoint', name: 'From a custom specification file or endpoint' }
-            ]
+                { value: 'custom-endpoint', name: 'From a custom specification file or endpoint' },
+            ],
         },
         {
             when: response => response.specOrigin === 'jhipster-endpoint',
@@ -106,7 +106,7 @@ function askActionType() {
                 } catch (err) {
                     return `Error while fetching live doc from '${input}'. "${err.message}"`;
                 }
-            }
+            },
         },
         {
             when: response => response.specOrigin === 'jhipster-directory',
@@ -126,7 +126,7 @@ function askActionType() {
                     return true;
                 }
                 return `api.yml not found in ${input}/`;
-            }
+            },
         },
         {
             when: response => response.specOrigin === 'custom-endpoint',
@@ -148,8 +148,8 @@ function askActionType() {
                 } catch (err) {
                     return `Cannot read from ${input}. ${err.message}`;
                 }
-            }
-        }
+            },
+        },
     ];
 
     this.prompt(prompts).then(props => {
@@ -165,7 +165,7 @@ function askActionType() {
             props.action = 'new';
         }
 
-        props.generatorName = 'spring';
+        props.generatorName = this.config.get('reactive') ? 'java' : 'spring';
 
         this.props = props;
         done();
@@ -184,8 +184,8 @@ function askExistingAvailableDocs() {
             type: 'list',
             name: 'availableDoc',
             message: 'Select the doc for which you want to create a client',
-            choices: this.props.availableDocs
-        }
+            choices: this.props.availableDocs,
+        },
     ];
 
     this.prompt(prompts).then(props => {
@@ -212,7 +212,7 @@ function askGenerationInfos() {
             type: 'confirm',
             name: 'useServiceDiscovery',
             message: 'Do you want to use Eureka service discovery ?',
-            default: true
+            default: true,
         },
         {
             when: response => this.props.action === 'new' && !response.useServiceDiscovery,
@@ -228,14 +228,14 @@ function askGenerationInfos() {
                     return 'Your API client name cannot be empty';
                 }
                 return true;
-            }
+            },
         },
         {
             when: this.props.action === 'new',
             type: 'confirm',
             name: 'saveConfig',
             message: 'Do you want to save this config for future reuse ?',
-            default: false
+            default: false,
         },
         {
             when: this.props.action === 'select',
@@ -247,12 +247,12 @@ function askGenerationInfos() {
                 Object.keys(this.openApiClients).forEach(cliName => {
                     choices.push({
                         name: `${cliName} (${this.openApiClients[cliName].spec})`,
-                        value: { cliName, spec: this.openApiClients[cliName] }
+                        value: { cliName, spec: this.openApiClients[cliName] },
                     });
                 });
                 return choices;
-            }
-        }
+            },
+        },
     ];
 
     this.prompt(prompts).then(props => {

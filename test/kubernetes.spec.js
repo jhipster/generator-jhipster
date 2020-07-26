@@ -4,48 +4,60 @@ const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 
 const expectedFiles = {
-    eurekaregistry: ['./registry/jhipster-registry.yml', './registry/application-configmap.yml'],
-    consulregistry: ['./registry/consul.yml', './registry/consul-config-loader.yml', './registry/application-configmap.yml'],
-    jhgate: ['./jhgate/jhgate-deployment.yml', './jhgate/jhgate-mysql.yml', './jhgate/jhgate-service.yml'],
-    jhgateingress: ['./jhgate/jhgate-ingress.yml'],
+    eurekaregistry: ['./registry-k8s/jhipster-registry.yml', './registry-k8s/application-configmap.yml'],
+    consulregistry: ['./registry-k8s/consul.yml', './registry-k8s/consul-config-loader.yml', './registry-k8s/application-configmap.yml'],
+    jhgate: ['./jhgate-k8s/jhgate-deployment.yml', './jhgate-k8s/jhgate-mysql.yml', './jhgate-k8s/jhgate-service.yml'],
+    jhgateingress: ['./jhgate-k8s/jhgate-ingress.yml'],
     customnamespace: ['./namespace.yml'],
     jhconsole: [
-        './console/jhipster-console.yml',
-        './console/jhipster-elasticsearch.yml',
-        './console/jhipster-logstash.yml',
-        './console/jhipster-dashboard-console.yml',
-        './console/jhipster-zipkin.yml'
+        './console-k8s/jhipster-console.yml',
+        './console-k8s/jhipster-elasticsearch.yml',
+        './console-k8s/jhipster-logstash.yml',
+        './console-k8s/jhipster-dashboard-console.yml',
+        './console-k8s/jhipster-zipkin.yml',
     ],
-    msmysql: ['./msmysql/msmysql-deployment.yml', './msmysql/msmysql-mysql.yml', './msmysql/msmysql-service.yml'],
+    msmysql: ['./msmysql-k8s/msmysql-deployment.yml', './msmysql-k8s/msmysql-mysql.yml', './msmysql-k8s/msmysql-service.yml'],
     mspsql: [
-        './mspsql/mspsql-deployment.yml',
-        './mspsql/mspsql-postgresql.yml',
-        './mspsql/mspsql-service.yml',
-        './mspsql/mspsql-elasticsearch.yml'
+        './mspsql-k8s/mspsql-deployment.yml',
+        './mspsql-k8s/mspsql-postgresql.yml',
+        './mspsql-k8s/mspsql-service.yml',
+        './mspsql-k8s/mspsql-elasticsearch.yml',
     ],
-    msmongodb: ['./msmongodb/msmongodb-deployment.yml', './msmongodb/msmongodb-mongodb.yml', './msmongodb/msmongodb-service.yml'],
-    msmariadb: ['./msmariadb/msmariadb-deployment.yml', './msmariadb/msmariadb-mariadb.yml', './msmariadb/msmariadb-service.yml'],
-    msmssqldb: ['./msmssqldb/msmssqldb-deployment.yml', './msmssqldb/msmssqldb-mssql.yml', './msmssqldb/msmssqldb-service.yml'],
+    msmongodb: [
+        './msmongodb-k8s/msmongodb-deployment.yml',
+        './msmongodb-k8s/msmongodb-mongodb.yml',
+        './msmongodb-k8s/msmongodb-service.yml',
+    ],
+    msmariadb: [
+        './msmariadb-k8s/msmariadb-deployment.yml',
+        './msmariadb-k8s/msmariadb-mariadb.yml',
+        './msmariadb-k8s/msmariadb-service.yml',
+    ],
+    msmssqldb: ['./msmssqldb-k8s/msmssqldb-deployment.yml', './msmssqldb-k8s/msmssqldb-mssql.yml', './msmssqldb-k8s/msmssqldb-service.yml'],
     monolith: [
-        './samplemysql/samplemysql-deployment.yml',
-        './samplemysql/samplemysql-mysql.yml',
-        './samplemysql/samplemysql-service.yml',
-        './samplemysql/samplemysql-elasticsearch.yml'
+        './samplemysql-k8s/samplemysql-deployment.yml',
+        './samplemysql-k8s/samplemysql-mysql.yml',
+        './samplemysql-k8s/samplemysql-service.yml',
+        './samplemysql-k8s/samplemysql-elasticsearch.yml',
     ],
     kafka: [
-        './samplekafka/samplekafka-deployment.yml',
-        './samplekafka/samplekafka-mysql.yml',
-        './samplekafka/samplekafka-service.yml',
-        './messagebroker/kafka.yml'
+        './samplekafka-k8s/samplekafka-deployment.yml',
+        './samplekafka-k8s/samplekafka-mysql.yml',
+        './samplekafka-k8s/samplekafka-service.yml',
+        './messagebroker-k8s/kafka.yml',
     ],
     prometheusmonit: [
-        './monitoring/jhipster-prometheus-crd.yml',
-        './monitoring/jhipster-prometheus-cr.yml',
-        './monitoring/jhipster-grafana.yml',
-        './monitoring/jhipster-grafana-dashboard.yml'
+        './monitoring-k8s/jhipster-prometheus-crd.yml',
+        './monitoring-k8s/jhipster-prometheus-cr.yml',
+        './monitoring-k8s/jhipster-grafana.yml',
+        './monitoring-k8s/jhipster-grafana-dashboard.yml',
     ],
-    jhgategateway: ['./jhgate/jhgate-gateway.yml', './jhgate/jhgate-destination-rule.yml', './jhgate/jhgate-virtual-service.yml'],
-    applyScript: ['./kubectl-apply.sh']
+    jhgategateway: [
+        './jhgate-k8s/jhgate-gateway.yml',
+        './jhgate-k8s/jhgate-destination-rule.yml',
+        './jhgate-k8s/jhgate-virtual-service.yml',
+    ],
+    applyScript: ['./kubectl-apply.sh'],
 };
 
 describe('JHipster Kubernetes Sub Generator', () => {
@@ -69,18 +81,18 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
         it('creates expected registry files and content', () => {
             assert.file(expectedFiles.eurekaregistry);
-            assert.fileContent('./registry/jhipster-registry.yml', /# base64 encoded "meetup"/);
+            assert.fileContent('./registry-k8s/jhipster-registry.yml', /# base64 encoded "meetup"/);
         });
         it('creates expected gateway files and content', () => {
             assert.file(expectedFiles.jhgate);
-            assert.fileContent('./jhgate/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
-            assert.fileContent('./jhgate/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
+            assert.fileContent('./jhgate-k8s/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
+            assert.fileContent('./jhgate-k8s/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -106,7 +118,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -144,7 +156,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -184,7 +196,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     ingressDomain: 'example.com',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -218,7 +230,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -258,7 +270,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -307,7 +319,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -341,7 +353,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -374,7 +386,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     monitoring: 'prometheus',
                     kubernetesServiceType: 'LoadBalancer',
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -414,7 +426,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     clusteredDbApps: [],
                     istio: true,
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -451,7 +463,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });

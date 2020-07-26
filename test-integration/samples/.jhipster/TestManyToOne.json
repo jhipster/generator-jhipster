@@ -55,7 +55,7 @@
             "otherEntityName": "superMegaLargeTestEntity",
             "relationshipType": "many-to-one",
             "otherEntityField": "id",
-            "otherEntityRelationshipName": "testManyToOne"
+            "otherEntityRelationshipName": "superMegaLargeTestManyToOne"
         }
     ],
     "fields": [],

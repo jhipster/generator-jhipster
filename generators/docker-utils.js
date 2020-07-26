@@ -29,7 +29,7 @@ const dockerCLI = require('./docker-cli');
 module.exports = {
     checkDocker,
     checkImageExist,
-    checkAndBuildImages
+    checkAndBuildImages,
 };
 
 /**
@@ -56,9 +56,9 @@ function checkDocker() {
             if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {
                 this.log(
                     chalk.red(
-                        `${'Docker version 1.10.0 or later is not installed on your computer.\n' +
-                            '         Docker version found: '}${dockerVersion}\n` +
-                            '         Read http://docs.docker.com/engine/installation/#installation\n'
+                        `Docker version 1.10.0 or later is not installed on your computer.
+                                 Docker version found: ${dockerVersion}
+                                 Read http://docs.docker.com/engine/installation/#installation`
                     )
                 );
                 this.abort = true;

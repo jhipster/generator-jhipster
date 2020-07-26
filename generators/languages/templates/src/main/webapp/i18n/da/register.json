@@ -10,7 +10,7 @@
                     "required": "Dit login er påkrævet.",
                     "minlength": "Dit login skal være på mindst 1 karakter",
                     "maxlength": "Dit login kan ikke være længere end 50 karakterer",
-                    "pattern": "Dit login kan kun indeholde små bogstaver og tal"
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>Registreringen er gemt!</strong> Check venligst din mail for bekræftelse.",

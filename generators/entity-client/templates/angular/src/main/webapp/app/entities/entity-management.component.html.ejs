@@ -23,7 +23,7 @@
 
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityUrl %>/new']">
             <fa-icon icon="plus"></fa-icon>
-            <span <% if (searchEngine === 'elasticsearch') { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= i18nKeyPrefix %>.home.createLabel">
+            <span <% if (searchEngine !== false) { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= i18nKeyPrefix %>.home.createLabel">
             Create a new <%= entityClassHumanized %>
             </span>
         </button>
@@ -33,7 +33,7 @@
     <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 
     <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
 
     <div class="row">
         <div class="col-sm-12">
@@ -58,7 +58,7 @@
         <span jhiTranslate="<%= i18nKeyPrefix %>.home.notFound">No <%= entityInstancePlural %> found</span>
     </div>
 
-    <div class="table-responsive" id="entities" *ngIf="<%= entityInstancePlural %>?.length > 0">
+    <div class="table-responsive" id="entities" *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
                 <tr<% if (pagination !== 'no') { %> jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="<%= pagination !== 'infinite-scroll' ? 'loadPage.bind(this)' : 'reset.bind(this)'%>"<% } %>>
@@ -187,7 +187,7 @@
     </div>
     <%_ if (pagination === 'pagination') { _%>
 
-    <div *ngIf="<%= entityInstancePlural %>?.length > 0">
+    <div *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
         <div class="row justify-content-center">
             <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
         </div>

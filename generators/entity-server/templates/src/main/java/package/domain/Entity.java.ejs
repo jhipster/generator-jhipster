@@ -19,26 +19,20 @@
 package <%= packageName %>.domain;
 
 <%_
-let importApiModelProperty = false;
-let importJsonIgnore = false;
-let importJsonIgnoreProperties = false;
-let importSet = false;
+
+let { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums } = _processJavaEntityImports(fields, relationships);
+
 let hasDto = dto === 'mapstruct';
 let isUsingMapsId = false;
-let primaryKeyType = pkType;
 let hasTextBlob = false;
 let hasRelationship = relationships.length !== 0;
-const uniqueEnums = {};
 _%>
-<%- include imports -%>
 <%_
 for (idx in relationships) {
-    isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
-    if ( isUsingMapsId === true) {
-        primaryKeyType = (relationships[idx].otherEntityName === 'user'  && authenticationType === 'oauth2') ? 'String' : pkType;
+    isUsingMapsId = relationships[idx].useJPADerivedIdentifier === true;
+    if (isUsingMapsId) {
         break;
     }
-    isUsingMapsId = false;
 }
 for (idx in fields) {
     if (prodDatabaseType === 'postgresql' && fields[idx].fieldTypeBlobContent === 'text') {
@@ -107,7 +101,6 @@ import javax.validation.constraints.*;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 <%_ } _%>
 import java.io.Serializable;
-import java.util.Objects;
 <%_ if (fieldsContainBigDecimal === true) { _%>
 import java.math.BigDecimal;
 <%_ } if (fieldsContainBlob && databaseType === 'cassandra') { _%>
@@ -152,13 +145,9 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ if (databaseType === 'sql') { _%>
 @Entity
 @Table(name = "<%= entityTableName %>")
-<%_     if (enableHibernateCache) {
-            if (cacheProvider === 'infinispan') { _%>
+<%_     if (enableHibernateCache) { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-<%_         } else { _%>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-<%_         }
-        }
+<%_     }
 } if (!embedded) {
     if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= entityTableName %>")
@@ -223,7 +212,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         if (fieldValidateRules.includes('unique')) {
             unique = true;
         } _%>
-    <%- include ../common/field_validators -%>
+    <%- include('../common/field_validators'); -%>
     <%_ } _%>
     <%_ if (!hasDto && typeof fields[idx].javadoc != 'undefined') { _%>
     @ApiModelProperty(value = "<%- formatAsApiDescription(fields[idx].javadoc) %>"<% if (required) { %>, required = true<% } %>)
@@ -291,11 +280,17 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         const relationshipValidate = relationships[idx].relationshipValidate;
         const relationshipRequired = relationships[idx].relationshipRequired;
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-        const ownerSide = relationships[idx].ownerSide;
+        const ownerSide = relationships[idx].ownerSide || false;
         const isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
         if (otherEntityRelationshipName) {
             mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
         }
+
+        // An embedded entity should not reference entities that embeds it, unless the other entity is also embedded
+        if (embedded && !otherEntityIsEmbedded && ownerSide === false) {
+          continue;
+        }
+
         if (typeof relationships[idx].javadoc != 'undefined') { _%>
 <%- formatAsFieldJavadoc(relationships[idx].javadoc) %>
             <%_ if (!hasDto) { _%>
@@ -306,19 +301,15 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             if (databaseType === 'sql') {
     _%>
     @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
-            <%_ if (enableHibernateCache) {
-                    if (cacheProvider === 'infinispan') { _%>
+            <%_ if (enableHibernateCache) { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-                <%_ } else { _%>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-                <%_ }
-            }
+            <%_ }
         } else if (databaseType === 'mongodb' || databaseType === 'couchbase') {
             if (databaseType === 'mongodb' && !otherEntityIsEmbedded) { _%>
     @DBRef
         <%_ } _%>
     @Field("<%= relationshipFieldName %>")
-        <%_ if (databaseType === 'couchbase'&& !otherEntityIsEmbedded) { _%>
+        <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
     private Set<String> <%= relationshipFieldName %>Ids = new HashSet<>();
 
     @N1qlJoin(on = "lks.<%= relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
@@ -333,7 +324,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     _%>
     @ManyToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
         <%_ if (relationshipValidate) { _%>
-    <%- include relationship_validators -%>
+    <%- include('relationship_validators'); -%>
         <%_ }
     } else if ((databaseType === 'mongodb' || databaseType === 'couchbase') && !otherEntityIsEmbedded) {
         if (databaseType === 'mongodb') { _%>
@@ -349,22 +340,18 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     @Relationship("<%= relationshipFieldName %>")
     <%_ } _%>
     <%_ if (otherEntityRelationshipNamePlural !== undefined && otherEntityRelationshipNamePlural !== '') { _%>
-    @JsonIgnoreProperties("<%= otherEntityRelationshipNamePlural %>")
+    @JsonIgnoreProperties(value = "<%= otherEntityRelationshipNamePlural %>", allowSetters = true)
     <%_ } _%>
     private <%= asEntity(otherEntityNameCapitalized) %> <%= relationshipFieldName %>;
 
     <%_ } else if (relationshipType === 'many-to-many') {
         if (databaseType === 'sql') { _%>
     @ManyToMany<% if (ownerSide === false) { %>(mappedBy = "<%= otherEntityRelationshipNamePlural %>")<% } %>
-        <%_ if (enableHibernateCache) {
-                if (cacheProvider === 'infinispan') { _%>
+        <%_ if (enableHibernateCache) {_%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-            <%_ } else { _%>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-            <%_ }
-        } if (ownerSide === true) {
+        <%_ } if (ownerSide === true) {
             if (relationshipValidate) { _%>
-    <%- include relationship_validators -%>
+    <%- include('relationship_validators'); -%>
         <%_ } _%>
     @JoinTable(name = "<%= joinTableName %>",
                joinColumns = @JoinColumn(name = "<%= getColumnName(name) %>_id", referencedColumnName = "id"),
@@ -390,7 +377,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             if (ownerSide) { _%>
     @OneToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
             <%_ if (relationshipValidate) { _%>
-    <%- include relationship_validators -%>
+    <%- include('relationship_validators'); -%>
             <%_ } _%>
             <%_ if (isUsingMapsId === true) { %>
     @MapsId
@@ -420,7 +407,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 
     <%_ }
     } _%>
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    // jhipster-needle-entity-add-field - JHipster will add fields here
     <%_ if (!embedded) { _%>
     public <% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'neo4j') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> getId() {
         return id;
@@ -429,6 +416,13 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     public void setId(<% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> id) {
         this.id = id;
     }
+
+        <%_ if (fluentMethods) { _%>
+    public <%= asEntity(entityClass) %> id(<% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> id) {
+        this.id = id;
+        return this;
+    }
+        <%_ } _%>
     <%_ } _%>
 <%_ for (idx in fields) {
         const fieldType = fields[idx].fieldType;
@@ -493,6 +487,12 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         const otherEntityRelationshipNameCapitalized = relationships[idx].otherEntityRelationshipNameCapitalized;
         const otherEntityRelationshipNameCapitalizedPlural = relationships[idx].otherEntityRelationshipNameCapitalizedPlural;
         const otherEntityIsEmbedded = relationships[idx].otherEntityIsEmbedded;
+        const ownerSide = relationships[idx].ownerSide || false;
+
+        // An embedded entity should not reference entities that embeds it, unless the other entity is also embedded
+        if (embedded && !otherEntityIsEmbedded && ownerSide === false) {
+            continue;
+        }
     _%>
     <%_ if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') { _%>
 
@@ -513,6 +513,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 
     public <%= asEntity(entityClass) %> add<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
         this.<%= relationshipFieldNamePlural %>.add(<%= otherEntityName %>);
+        <%_ if (!otherEntityIsEmbedded || embedded && ownerSide === true) { _%>
             <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
         this.<%= relationshipFieldName %>Ids.add(<%= otherEntityName %>.getId());
             <%_ } _%>
@@ -522,11 +523,13 @@ public class <%= asEntity(entityClass) %> implements Serializable {
                 // JHipster version < 3.6.0 didn't ask for this relationship name _%>
         <%= otherEntityName %>.get<%= otherEntityRelationshipNameCapitalizedPlural %>().add(this);
             <%_ } _%>
+        <%_ } _%>
         return this;
     }
 
     public <%= asEntity(entityClass) %> remove<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
         this.<%= relationshipFieldNamePlural %>.remove(<%= otherEntityName %>);
+        <%_ if (!otherEntityIsEmbedded || embedded && ownerSide === true) { _%>
             <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
         this.<%= relationshipFieldName %>Ids.remove(<%= otherEntityName %>.getId());
             <%_ } _%>
@@ -536,6 +539,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
                 // JHipster version < 3.6.0 didn't ask for this relationship name _%>
         <%= otherEntityName %>.get<%= otherEntityRelationshipNameCapitalizedPlural %>().remove(this);
             <%_ } _%>
+        <%_ } _%>
         return this;
     }
         <%_ } _%>
@@ -572,7 +576,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     }
     <%_ } _%>
 <%_ } _%>
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -594,6 +598,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "<%= asEntity(entityClass) %>{" +

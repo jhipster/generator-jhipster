@@ -37,7 +37,7 @@ module.exports = class extends BaseDockerGenerator {
             checkHelm,
             loadConfig,
             setupKubernetesConstants,
-            setupHelmConstants
+            setupHelmConstants,
         };
     }
 
@@ -56,7 +56,7 @@ module.exports = class extends BaseDockerGenerator {
             askForIstioSupport: prompts.askForIstioSupport,
             askForKubernetesServiceType: prompts.askForKubernetesServiceType,
             askForIngressType: prompts.askForIngressType,
-            askForIngressDomain: prompts.askForIngressDomain
+            askForIngressDomain: prompts.askForIngressDomain,
         };
     }
 
@@ -79,7 +79,7 @@ module.exports = class extends BaseDockerGenerator {
                     }
                 });
             },
-            saveConfig
+            saveConfig,
         };
     }
 

@@ -22,12 +22,13 @@ const shelljs = require('shelljs');
 const semver = require('semver');
 const fs = require('fs');
 const gitignore = require('parse-gitignore');
+const path = require('path');
 const childProcess = require('child_process');
 const BaseGenerator = require('../generator-base');
 const cleanup = require('../cleanup');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
-const utils = require('../utils');
+const { parseBluePrints } = require('../../utils/blueprint');
 const packagejs = require('../../package.json');
 
 /* Constants used throughout */
@@ -41,56 +42,60 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-        this.force = this.options.force;
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         // This adds support for a `--target-version` flag
         this.option('target-version', {
             desc: 'Upgrade to a specific version instead of the latest',
-            type: String
+            type: String,
         });
         // This adds support for a `--target-blueprint-versions` flag
         this.option('target-blueprint-versions', {
             desc: 'Upgrade to specific blueprint versions instead of the latest, e.g. --target-blueprint-versions foo@0.0.1,bar@1.0.2',
-            type: String
+            type: String,
         });
 
         // This adds support for a `--skip-install` flag
         this.option('skip-install', {
             desc: 'Skips installing dependencies during the upgrade process',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--silent` flag
         this.option('silent', {
             desc: 'Hides output of the generation process',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--skip-checks` flag
         this.option('skip-checks', {
             desc: 'Disable checks during project regeneration',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
-        this.targetJhipsterVersion = this.options['target-version'];
-        this.targetBlueprintVersions = utils.parseBluePrints(this.options['target-blueprint-versions']);
-        this.skipInstall = this.options['skip-install'];
+        if (this.options.help) {
+            return;
+        }
+
+        this.force = this.options.force;
+        this.targetJhipsterVersion = this.options.targetVersion;
+        this.targetBlueprintVersions = parseBluePrints(this.options.targetBlueprintVersions);
+        this.skipInstall = this.options.skipInstall;
         this.silent = this.options.silent;
-        this.skipChecks = this.options['skip-checks'];
+        this.skipChecks = this.options.skipChecks;
 
         // Used for isJhipsterVersionLessThan on cleanup.upgradeFiles
         this.jhipsterOldVersion = this.config.get('jhipsterVersion');
 
         // Verify 6.6.0 app blueprint bug
-        if (!this.config.existed && !this.options.blueprints) {
+        if (!this.config.existed && !this.options.blueprints && !this.options.help) {
             this.error(
                 'This seems to be an app blueprinted project with jhipster 6.6.0 bug (https://github.com/jhipster/generator-jhipster/issues/11045), you should pass --blueprints to jhipster upgrade commmand.'
             );
@@ -109,16 +114,20 @@ module.exports = class extends BaseGenerator {
             },
 
             parseBlueprints() {
-                this.blueprints = utils.parseBluePrints(
-                    this.options.blueprints || this.config.get('blueprints') || this.config.get('blueprint')
-                );
+                this.blueprints = parseBluePrints(this.options.blueprints || this.config.get('blueprints') || this.config.get('blueprint'));
             },
 
             loadConfig() {
                 this.currentJhipsterVersion = this.config.get('jhipsterVersion');
                 this.clientPackageManager = this.config.get('clientPackageManager');
-            }
+            },
         };
+    }
+
+    _rmRf(file) {
+        const absolutePath = path.resolve(file);
+        this.info(`Removing ${absolutePath}`);
+        shelljs.rm('-rf', absolutePath);
     }
 
     _gitCheckout(branch, options = {}) {
@@ -144,8 +153,7 @@ module.exports = class extends BaseGenerator {
         const filesToKeep = ['.yo-rc.json', '.jhipster', 'node_modules', '.git', '.idea', '.mvn', ...ignoredFiles];
         shelljs.ls('-A').forEach(file => {
             if (!filesToKeep.includes(file)) {
-                this.info(`Removing ${file}`);
-                shelljs.rm('-rf', file);
+                this._rmRf(file);
             }
         });
         this.success('Cleaned up project directory');
@@ -155,7 +163,7 @@ module.exports = class extends BaseGenerator {
         this.log(`Regenerating application with JHipster ${jhipsterVersion}${blueprintInfo}...`);
         let generatorCommand = 'yo jhipster';
         if (jhipsterVersion.startsWith(GLOBAL_VERSION)) {
-            shelljs.rm('-rf', 'node_modules');
+            this._rmRf('node_modules');
             generatorCommand = 'jhipster';
         } else if (semver.gte(jhipsterVersion, FIRST_CLI_SUPPORTED_VERSION)) {
             const generatorDir =
@@ -180,7 +188,7 @@ module.exports = class extends BaseGenerator {
         if (gitAdd.code !== 0) this.error(`Unable to add resources in git:\n${gitAdd.stderr}`);
 
         const gitCommit = this.gitExec(['commit', '-q', '-m', `"${commitMsg}"`, '-a', '--allow-empty', '--no-verify'], {
-            silent: this.silent
+            silent: this.silent,
         });
         if (gitCommit.code !== 0) this.error(`Unable to commit in git:\n${gitCommit.stderr}`);
         this.success(`Committed with message "${commitMsg}"`);
@@ -190,7 +198,7 @@ module.exports = class extends BaseGenerator {
         this._generate(jhipsterVersion, blueprintInfo);
         const keystore = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
         this.info(`Removing ${keystore}`);
-        shelljs.rm('-Rf', keystore);
+        this._rmRf(keystore);
         this._gitCommitAll(`Generated with JHipster ${jhipsterVersion}${blueprintInfo}`);
     }
 
@@ -339,9 +347,9 @@ module.exports = class extends BaseGenerator {
                 return this.prompt({
                     type: 'confirm',
                     name: 'upgradeConfig',
-                    message: 'Unify blueprints configurations?'
+                    message: 'Unify blueprints configurations?',
                 }).then(
-                    function(answer) {
+                    function (answer) {
                         if (answer.upgradeConfig) {
                             this.composeWith(require.resolve('../upgrade-config'), this.options);
                         }
@@ -425,7 +433,7 @@ module.exports = class extends BaseGenerator {
                     // Register reference for merging
                     recordCodeHasBeenGenerated();
                 }
-            }
+            },
         };
     }
 
@@ -501,7 +509,7 @@ module.exports = class extends BaseGenerator {
                     this.warning(`There are conflicts in package.json, please fix them and then run ${installCommand}`);
                     this.skipInstall = true;
                 }
-            }
+            },
         };
     }
 
@@ -509,7 +517,7 @@ module.exports = class extends BaseGenerator {
         if (!this.skipInstall) {
             this.log('Installing dependencies, please wait...');
             this.info('Removing the node_modules directory');
-            shelljs.rm('-rf', 'node_modules');
+            this._rmRf('node_modules');
             const installCommand = this.clientPackageManager === 'yarn' ? 'yarn' : 'npm install';
             this.info(installCommand);
 

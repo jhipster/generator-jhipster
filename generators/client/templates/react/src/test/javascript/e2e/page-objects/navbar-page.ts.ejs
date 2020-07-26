@@ -71,7 +71,7 @@ export default class NavBarPage extends BasePage {
 
   async clickOnAccountMenuItem(item: string) {
     await this.accountMenu.click();
-    await this.selector.$(`.dropdown-item[href="/account/${item}"`).click();
+    await this.selector.$(`.dropdown-item[href="/account/${item}"]`).click();
   }
 
   async clickOnAdminMenuItem(item: string) {
@@ -89,15 +89,17 @@ export default class NavBarPage extends BasePage {
 
   async autoSignIn() {
     await this.signInPage.get();
+    const username = process.env.E2E_USERNAME || 'admin';
+    const password = process.env.E2E_PASSWORD || 'admin';
     <%_ if (authenticationType !== 'oauth2') { _%>
-    await this.signInPage.autoSignInUsing('admin', 'admin');
+    await this.signInPage.autoSignInUsing(username, password);
     <%_ } else { _%>
-    this.signInPage.loginWithOAuth('admin', 'admin');
+    this.signInPage.loginWithOAuth(username, password);
     <%_ } _%>
   }
 
   async autoSignOut() {
     await this.accountMenu.click();
-    await this.selector.$(`.dropdown-item[href="/logout"`).click();
+    await this.selector.$(`.dropdown-item[href="/logout"]`).click();
   }
 }

@@ -211,7 +211,7 @@
             "fieldType": "ByteBuffer"
         }
     ],
-    "changelogDate": "20160208184031",
+    "changelogDate": "20160208184033",
     "dto": "no",
     "service": "serviceClass",
     "jpaMetamodelFiltering": true,

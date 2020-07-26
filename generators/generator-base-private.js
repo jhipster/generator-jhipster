@@ -25,15 +25,16 @@ const shelljs = require('shelljs');
 const semver = require('semver');
 const exec = require('child_process').exec;
 const https = require('https');
-const jhiCore = require('jhipster-core');
 const filter = require('gulp-filter');
+const through = require('through2');
 
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
-const { prettierTransform, prettierOptions } = require('./generator-transforms');
+const { prettierTransform, prettierJavaOptions } = require('./generator-transforms');
+const JSONToJDLEntityConverter = require('../jdl/converters/json-to-jdl-entity-converter');
+const JSONToJDLOptionConverter = require('../jdl/converters/json-to-jdl-option-converter');
 
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
@@ -49,7 +50,6 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 module.exports = class extends Generator {
     constructor(args, opts) {
         super(args, opts);
-        this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
         // expose lodash to templates
         this._ = _;
     }
@@ -66,6 +66,15 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Override yeoman generator's destinationPath to apply custom output dir.
+     */
+    destinationPath(...paths) {
+        paths = path.join(...paths);
+        paths = this.applyOutputPathCustomizer(paths);
+        return paths ? super.destinationPath(paths) : paths;
+    }
+
+    /**
      * Install I18N Client Files By Language
      *
      * @param {any} _this reference to generator
@@ -75,9 +84,6 @@ module.exports = class extends Generator {
     installI18nClientFilesByLanguage(_this, webappDir, lang) {
         const generator = _this || this;
         const prefix = this.fetchFromInstalledJHipster('languages/templates');
-        if ((generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra') {
-            generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
-        }
         if (generator.applicationType === 'gateway' && generator.serviceDiscoveryType) {
             generator.copyI18nFilesByName(generator, webappDir, 'gateway.json', lang);
         }
@@ -140,7 +146,7 @@ module.exports = class extends Generator {
             const fileName = this.entityTranslationKey;
             this.template(
                 `${prefix ? `${prefix}/` : ''}i18n/entity_${language}.json.ejs`,
-                `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${fileName}.json`
+                `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/${fileName}.json`
             );
             this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
         } catch (e) {
@@ -161,7 +167,7 @@ module.exports = class extends Generator {
         try {
             this.template(
                 `${prefix ? `${prefix}/` : ''}i18n/enum.json.ejs`,
-                `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.clientRootFolder}${enumInfo.enumInstance}.json`,
+                `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.clientRootFolder}${enumInfo.enumInstance}.json`,
                 this,
                 {},
                 enumInfo
@@ -179,7 +185,7 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguageConstant(languages) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/components/language/language.constants.js`;
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/components/language/language.constants.js`;
         try {
             let content = ".constant('LANGUAGES', [\n";
             languages.forEach((language, i) => {
@@ -192,7 +198,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /\.constant.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\]/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -217,7 +223,7 @@ module.exports = class extends Generator {
         if (this.clientFramework !== ANGULAR) {
             return;
         }
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`;
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`;
         try {
             let content = 'export const LANGUAGES: string[] = [\n';
             languages.forEach((language, i) => {
@@ -229,7 +235,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /export.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\];/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -263,7 +269,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /private.*static.*String.*languages.*\{([^}]*jhipster-needle-i18n-language-constant[^}]*)\};/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -287,8 +293,8 @@ module.exports = class extends Generator {
     updateLanguagesInLanguagePipe(languages) {
         const fullPath =
             this.clientFramework === ANGULAR
-                ? `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
-                : `${CLIENT_MAIN_SRC_DIR}/app/config/translation.ts`;
+                ? `${this.CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
+                : `${this.CLIENT_MAIN_SRC_DIR}/app/config/translation.ts`;
         try {
             let content = '{\n';
             this.generateLanguageOptions(languages, this.clientFramework).forEach((ln, i) => {
@@ -300,7 +306,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /{\s*('[a-z-]*':)?([^=]*jhipster-needle-i18n-language-key-pipe[^;]*)\};/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -338,7 +344,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -374,7 +380,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -409,7 +415,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -431,7 +437,8 @@ module.exports = class extends Generator {
      * @param file
      */
     removeFile(file) {
-        if (shelljs.test('-f', file)) {
+        file = this.destinationPath(file);
+        if (file && shelljs.test('-f', file)) {
             this.log(`Removing the file - ${file}`);
             shelljs.rm(file);
         }
@@ -443,7 +450,8 @@ module.exports = class extends Generator {
      * @param folder
      */
     removeFolder(folder) {
-        if (shelljs.test('-d', folder)) {
+        folder = this.destinationPath(folder);
+        if (folder && shelljs.test('-d', folder)) {
             this.log(`Removing the folder - ${folder}`);
             shelljs.rm('-rf', folder);
         }
@@ -457,7 +465,9 @@ module.exports = class extends Generator {
      * @returns {boolean} true if success; false otherwise
      */
     renameFile(source, dest) {
-        if (shelljs.test('-f', source)) {
+        source = this.destinationPath(source);
+        dest = this.destinationPath(dest);
+        if (source && dest && shelljs.test('-f', source)) {
             this.info(`Renaming the file - ${source} to ${dest}`);
             return !shelljs.exec(`git mv -f ${source} ${dest}`).code;
         }
@@ -563,12 +573,14 @@ module.exports = class extends Generator {
      * @returns {number} representing the milliseconds elapsed since January 1, 1970, 00:00:00 UTC
      *                   obtained by parsing the given string representation of the creationTimestamp.
      */
-    parseCreationTimestamp() {
+    parseCreationTimestamp(creationTimestampOption = this.options.creationTimestamp) {
         let creationTimestamp;
-        if (this.options.creationTimestamp) {
-            creationTimestamp = Date.parse(this.options.creationTimestamp);
+        if (creationTimestampOption) {
+            creationTimestamp = Date.parse(creationTimestampOption);
             if (!creationTimestamp) {
-                this.warning(`Error parsing creationTimestamp ${this.options.creationTimestamp}`);
+                this.warning(`Error parsing creationTimestamp ${creationTimestampOption}.`);
+            } else if (creationTimestamp > new Date().getTime()) {
+                this.error(`Creation timestamp should not be in the future: ${creationTimestampOption}.`);
             }
         }
         return creationTimestamp;
@@ -747,8 +759,13 @@ module.exports = class extends Generator {
     template(source, destination, generator, options = {}, context) {
         const _this = generator || this;
         const _context = context || _this;
+        const customDestination = _this.destinationPath(destination);
+        if (!customDestination) {
+            this.debug(`File ${destination} ignored`);
+            return;
+        }
         jhipsterUtils.renderContent(source, _this, _context, options, res => {
-            _this.fs.write(_this.destinationPath(destination), res);
+            _this.fs.write(customDestination, res);
         });
     }
 
@@ -776,7 +793,12 @@ module.exports = class extends Generator {
      * @param {string} destination - The resulting file.
      */
     copy(source, destination) {
-        this.fs.copy(this.templatePath(source), this.destinationPath(destination));
+        const customDestination = this.destinationPath(destination);
+        if (!customDestination) {
+            this.debug(`File ${destination} ignored`);
+            return;
+        }
+        this.fs.copy(this.templatePath(source), customDestination);
     }
 
     /**
@@ -795,118 +817,6 @@ module.exports = class extends Generator {
             this._debug(formattedMsg);
             args.forEach(arg => this._debug(arg));
         }
-    }
-
-    /**
-     * Compose external blueprint module
-     * @param {string} blueprint - name of the blueprint
-     * @param {string} subGen - sub generator
-     * @param {any} options - options to pass to blueprint generator
-     */
-    composeBlueprint(blueprint, subGen, options = {}) {
-        if (blueprint) {
-            blueprint = jhipsterUtils.normalizeBlueprintName(blueprint);
-            if (options.skipChecks === undefined || !options.skipChecks) {
-                this.checkBlueprint(blueprint);
-            }
-            try {
-                const finalOptions = {
-                    ...options,
-                    jhipsterContext: this
-                };
-                this.useBlueprint = true;
-                this.composeExternalModule(blueprint, subGen, finalOptions);
-                this.info(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
-                return true;
-            } catch (e) {
-                this.debug(`No blueprint found for ${chalk.yellow(subGen)} subgenerator: falling back to default generator`);
-                this.debug('Error', e);
-                return false;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Try to retrieve the package.json of the blueprint used, as an object.
-     * @param {string} blueprintPkgName - generator name
-     * @return {object} packageJson - retrieved package.json as an object or undefined if not found
-     */
-    findBlueprintPackageJson(blueprintPkgName) {
-        const blueprintGeneratorName = jhipsterUtils.packageNameToNamespace(blueprintPkgName);
-        const blueprintPackagePath = this.env.getPackagePath(blueprintGeneratorName);
-        if (!blueprintPackagePath) {
-            const msg = `Could not retrieve packagePath of blueprint '${blueprintPkgName}'`;
-            this.warning(msg);
-            return undefined;
-        }
-        // eslint-disable-next-line global-require,import/no-dynamic-require
-        return require(path.join(blueprintPackagePath, 'package.json'));
-    }
-
-    /**
-     * Try to retrieve the version of the blueprint used.
-     * @param {string} blueprintPkgName - generator name
-     * @return {string} version - retrieved version or empty string if not found
-     */
-    findBlueprintVersion(blueprintPkgName) {
-        const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
-        if (!blueprintPackageJson || !blueprintPackageJson.version) {
-            this.warning(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
-            return undefined;
-        }
-        return blueprintPackageJson.version;
-    }
-
-    /**
-     * Check if the generator specified as blueprint is installed.
-     * @param {string} blueprint - generator name
-     */
-    checkBlueprint(blueprint) {
-        if (blueprint === 'generator-jhipster') {
-            this.error(`You cannot use ${chalk.yellow(blueprint)} as the blueprint.`);
-        }
-        if (!this.findBlueprintPackageJson(blueprint)) {
-            this.error(
-                `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
-                    `npm i -g ${blueprint}`
-                )}.`
-            );
-        }
-    }
-
-    /**
-     * Check if the generator specified as blueprint has a version compatible with current JHipster.
-     * @param {string} blueprintPkgName - generator name
-     */
-    checkJHipsterBlueprintVersion(blueprintPkgName) {
-        const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
-        if (!blueprintPackageJson) {
-            this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
-            return;
-        }
-        const mainGeneratorJhipsterVersion = packagejs.version;
-        const blueprintJhipsterVersion = blueprintPackageJson.dependencies && blueprintPackageJson.dependencies['generator-jhipster'];
-        if (blueprintJhipsterVersion && mainGeneratorJhipsterVersion !== blueprintJhipsterVersion) {
-            this.error(
-                `The installed ${chalk.yellow(
-                    blueprintPkgName
-                )} blueprint targets JHipster v${blueprintJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
-            );
-        }
-        const blueprintPeerJhipsterVersion =
-            blueprintPackageJson.peerDependencies && blueprintPackageJson.peerDependencies['generator-jhipster'];
-        if (blueprintPeerJhipsterVersion) {
-            if (semver.satisfies(mainGeneratorJhipsterVersion, blueprintPeerJhipsterVersion)) {
-                return;
-            }
-            this.error(
-                `The installed ${chalk.yellow(
-                    blueprintPkgName
-                )} blueprint targets JHipster ${blueprintPeerJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
-            );
-        }
-        this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
     }
 
     /**
@@ -1075,7 +985,7 @@ module.exports = class extends Generator {
             variables,
             rxjsMapIsUsed,
             selectableEntities,
-            selectableManyToManyEntities
+            selectableManyToManyEntities,
         };
     }
 
@@ -1289,8 +1199,8 @@ module.exports = class extends Generator {
             this.getExistingEntities().forEach(entity => {
                 entities.set(entity.name, entity.definition);
             });
-            jdlObject = jhiCore.convertJsonEntitiesToJDL({ entities });
-            jhiCore.convertJsonServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
+            jdlObject = JSONToJDLEntityConverter.convertEntitiesToJDL({ entities });
+            JSONToJDLOptionConverter.convertServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
         } catch (error) {
             this.log(error.message || error);
             this.error('\nError while parsing entities to JDL\n');
@@ -1369,21 +1279,6 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Copy Filtering Flag
-     *
-     * @param {any} from - from
-     * @param {any} to - to
-     * @param {any} context - generator context
-     */
-    copyFilteringFlag(from, to, context = this) {
-        if (context.databaseType === 'sql' && context.service !== 'no') {
-            to.jpaMetamodelFiltering = from.jpaMetamodelFiltering;
-        } else {
-            to.jpaMetamodelFiltering = false;
-        }
-    }
-
-    /**
      * Rebuild client for Angular
      */
     rebuildClient() {
@@ -1437,7 +1332,7 @@ module.exports = class extends Generator {
      *
      * @param {string} authenticationType - the auth type
      * @param {string} databaseType - the database type
-     * @param {any} relationships - relationships
+     * @param {T[]} relationships - relationships
      */
     getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships) {
         let hasFound = false;
@@ -1449,6 +1344,53 @@ module.exports = class extends Generator {
             }
         });
         return primaryKeyType;
+    }
+
+    /**
+     * Returns the JDBC URL for a databaseType
+     *
+     * @param {string} databaseType
+     * @param {*} options
+     */
+    getJDBCUrl(databaseType, options = {}) {
+        if (!options.databaseName) {
+            throw new Error("option 'databaseName' is required");
+        }
+        if (['mysql', 'mariadb', 'postgresql', 'oracle', 'mssql'].includes(databaseType) && !options.hostname) {
+            throw new Error(`option 'hostname' is required for ${databaseType} databaseType`);
+        }
+        let jdbcUrl;
+        let extraOptions;
+        if (databaseType === 'mysql') {
+            jdbcUrl = `jdbc:mysql://${options.hostname}:3306/${options.databaseName}`;
+            extraOptions =
+                '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true';
+        } else if (databaseType === 'mariadb') {
+            jdbcUrl = `jdbc:mariadb://${options.hostname}:3306/${options.databaseName}`;
+            extraOptions = '?useLegacyDatetimeCode=false&serverTimezone=UTC';
+        } else if (databaseType === 'postgresql') {
+            jdbcUrl = `jdbc:postgresql://${options.hostname}:5432/${options.databaseName}`;
+        } else if (databaseType === 'oracle') {
+            jdbcUrl = `jdbc:oracle:thin:@${options.hostname}:1521:${options.databaseName}`;
+        } else if (databaseType === 'mssql') {
+            jdbcUrl = `jdbc:sqlserver://${options.hostname}:1433;database=${options.databaseName}`;
+        } else if (databaseType === 'h2Disk') {
+            if (!options.localDirectory) {
+                throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
+            }
+            jdbcUrl = `jdbc:h2:file:${options.localDirectory}/${options.databaseName}`;
+            extraOptions = ';DB_CLOSE_DELAY=-1';
+        } else if (databaseType === 'h2Memory') {
+            jdbcUrl = `jdbc:h2:mem:${options.databaseName}`;
+            extraOptions = ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE';
+        } else {
+            throw new Error(`${databaseType} databaseType is not supported`);
+        }
+
+        if (!options.skipExtraOptions && extraOptions) {
+            jdbcUrl += extraOptions;
+        }
+        return jdbcUrl;
     }
 
     /**
@@ -1522,22 +1464,160 @@ module.exports = class extends Generator {
      * @param {any} generator
      */
     registerPrettierTransform(generator = this) {
+        if (this.options.help) {
+            return;
+        }
+
+        let prettierOptions = {};
+        if (!this.skipServer && !this.jhipsterConfig.skipServer) {
+            prettierOptions = prettierJavaOptions;
+        }
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        const prettierFilter = filter(['.yo-rc.json', '{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
+        const filterPatternForPrettier = `{,.,**/,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
+        const prettierFilter = filter(['.yo-rc.json', filterPatternForPrettier], { restore: true });
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter
         generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
+    }
+
+    registerForceEntitiesTransform() {
+        this.registerTransformStream(
+            through.obj(function (file, enc, cb) {
+                if (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster') {
+                    file.conflicter = 'force';
+                }
+                this.push(file);
+                cb();
+            })
+        );
     }
 
     /**
      * Check if the subgenerator has been invoked from JHipster CLI or from Yeoman (yo jhipster:subgenerator)
      */
     checkInvocationFromCLI() {
-        if (!this.options['from-cli']) {
+        if (!this.options.fromCli) {
             this.warning(
                 `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
                     'jhipster <command>'
                 )} instead of ${chalk.red('yo jhipster:<command>')}`
             );
         }
+    }
+
+    vueUpdateLanguagesInTranslationStore(languages) {
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/shared/config/store/translation-store.ts`;
+        try {
+            let content = 'languages: {\n';
+            if (this.enableTranslation) {
+                this.generateLanguageOptions(languages, this.clientFramework).forEach((ln, i) => {
+                    content += `      ${ln}${i !== languages.length - 1 ? ',' : ''}\n`;
+                });
+            }
+            content += '      // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object\n    }';
+            jhipsterUtils.replaceContent(
+                {
+                    file: fullPath,
+                    pattern: /languages:.*\{([^\]]*jhipster-needle-i18n-language-key-pipe[^}]*)}/g,
+                    content,
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') +
+                    languages +
+                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    vueUpdateI18nConfig(languages) {
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/shared/config/config.ts`;
+
+        try {
+            // Add i18n config snippets for all languages
+            let i18nConfig = 'const dateTimeFormats = {\n';
+            if (this.enableTranslation) {
+                languages.forEach((ln, i) => {
+                    i18nConfig += this.generateDateTimeFormat(ln, i, languages.length);
+                });
+            }
+            i18nConfig += '  // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object\n';
+            i18nConfig += '}';
+
+            jhipsterUtils.replaceContent(
+                {
+                    file: fullPath,
+                    pattern: /const dateTimeFormats.*\{([^\]]*jhipster-needle-i18n-language-date-time-format[^}]*)}/g,
+                    content: i18nConfig,
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') +
+                    languages +
+                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    vueUpdateLanguagesInWebpack(languages) {
+        const fullPath = 'webpack/webpack.common.js';
+        try {
+            let content = 'groupBy: [\n';
+            languages.forEach((language, i) => {
+                content += `          { pattern: './src/main/webapp/i18n/${language}/*.json', fileName: './i18n/${language}.json' }${
+                    i !== languages.length - 1 ? ',' : ''
+                }\n`;
+            });
+            content += '          // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n        ]';
+
+            jhipsterUtils.replaceContent(
+                {
+                    file: fullPath,
+                    pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
+                    content,
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
+                    languages +
+                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    generateDateTimeFormat(language, index, length) {
+        let config = `  '${language}': {\n`;
+
+        config += '    short: {\n';
+        config += "      year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric'\n";
+        config += '    },\n';
+        config += '    medium: {\n';
+        config += "      year: 'numeric', month: 'short', day: 'numeric',\n";
+        config += "      weekday: 'short', hour: 'numeric', minute: 'numeric'\n";
+        config += '    },\n';
+        config += '    long: {\n';
+        config += "      year: 'numeric', month: 'long', day: 'numeric',\n";
+        config += "      weekday: 'long', hour: 'numeric', minute: 'numeric'\n";
+        config += '    }\n';
+        config += '  }';
+        if (index !== length - 1) {
+            config += ',';
+        }
+        config += '\n';
+        return config;
     }
 };

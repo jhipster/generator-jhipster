@@ -17,17 +17,16 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
-const shelljs = require('shelljs');
-const jhiCore = require('jhipster-core');
 const pretty = require('js-object-pretty-print').pretty;
 const pluralize = require('pluralize');
 const { fork } = require('child_process');
 
-const waitUntil = require('./wait-until');
-const { CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, done, getOptionAsArgs } = require('./utils');
-const jhipsterUtils = require('../generators/utils');
+const { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, doneFactory, getOptionAsArgs } = require('./utils');
+const { getDBTypeFromDBValue, loadYoRc } = require('../generators/utils');
+const { createImporterFromContent, createImporterFromFiles } = require('../jdl/jdl-importer');
 
 const packagejs = require('../package.json');
 const statistics = require('../generators/statistics');
@@ -37,25 +36,8 @@ const runYeomanProcess = require.resolve('./run-yeoman-process.js');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
-// holds the state of generation for interactive mode
-const generationCompletionState = {
-    exportedEntities: {},
-    exportedApplications: {},
-    exportedDeployments: {}
-};
-
 const getBaseName = application => application && application[GENERATOR_NAME] && application[GENERATOR_NAME].baseName;
 const getDeploymentType = deployment => deployment && deployment[GENERATOR_NAME] && deployment[GENERATOR_NAME].deploymentType;
-
-/**
- * update the initial state
- */
-const updateDeploymentState = importState =>
-    Object.entries(importState).forEach(([key, val]) => {
-        val.forEach(it => {
-            generationCompletionState[key][getBaseName(it) || getDeploymentType(it) || it.name] = false;
-        });
-    });
 
 /**
  * Imports the Applications and Entities defined in JDL
@@ -67,14 +49,13 @@ function importJDL(jdlImporter) {
     let importState = {
         exportedEntities: [],
         exportedApplications: [],
-        exportedDeployments: []
+        exportedDeployments: [],
     };
     try {
         importState = jdlImporter.import();
         logger.debug(`importState exportedEntities: ${importState.exportedEntities.length}`);
         logger.debug(`importState exportedApplications: ${importState.exportedApplications.length}`);
         logger.debug(`importState exportedDeployments: ${importState.exportedDeployments.length}`);
-        updateDeploymentState(importState);
         if (importState.exportedEntities.length > 0) {
             const entityNames = _.uniq(importState.exportedEntities.map(exportedEntity => exportedEntity.name)).join(', ');
             logger.info(`Found entities: ${chalk.yellow(entityNames)}.`);
@@ -97,163 +78,151 @@ function importJDL(jdlImporter) {
 
 /**
  * Check if application needs to be generated
- * @param {any} generator
+ * @param {any} processor
  */
-const shouldGenerateApplications = generator =>
-    !generator.options['ignore-application'] && generator.importState.exportedApplications.length !== 0;
+const shouldGenerateApplications = processor =>
+    !processor.options.ignoreApplication && processor.importState.exportedApplications.length !== 0;
 
 /**
  * Check if deployments needs to be generated
- * @param {any} generator
+ * @param {any} processor
  */
-const shouldGenerateDeployments = generator =>
-    !generator.options['ignore-deployments'] && generator.importState.exportedDeployments.length !== 0;
+const shouldGenerateDeployments = processor =>
+    !processor.options.ignoreDeployments && processor.importState.exportedDeployments.length !== 0;
 
 /**
  * Generate deployment source code for JDL deployments defined.
  * @param {any} config
- * @param {function} forkProcess
- * @returns {obj} Nodejs ChildProcess: https://nodejs.org/api/child_process.html#child_process_child_process
+ * @returns Promise
  */
-const generateDeploymentFiles = ({ generator, deployment, inFolder }, forkProcess) => {
+const generateDeploymentFiles = ({ processor, deployment, inFolder }) => {
     const deploymentType = getDeploymentType(deployment);
     logger.info(`Generating deployment ${deploymentType} in a new parallel process`);
     logger.debug(`Generating deployment: ${pretty(deployment[GENERATOR_NAME])}`);
 
-    const cwd = inFolder ? path.join(generator.pwd, deploymentType) : generator.pwd;
+    const cwd = inFolder ? path.join(processor.pwd, deploymentType) : processor.pwd;
     logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
 
     const command = `${CLI_NAME}:${deploymentType}`;
-    const childProc = forkProcess(
+    const childProc = fork(
         runYeomanProcess,
-        [command, '--skip-prompts', ...getOptionAsArgs(generator.options, false, !generator.options.interactive)],
+        [command, '--skip-prompts', ...getOptionAsArgs(processor.options, false, !processor.options.interactive)],
         {
-            cwd
+            cwd,
         }
     );
-    childProc.on('exit', code => {
-        if (code !== 0) {
-            process.exitCode = code;
-        }
-        logger.info(`Deployment: child process exited with code ${code}`);
-        generationCompletionState.exportedDeployments[deploymentType] = true;
+    return new Promise(resolve => {
+        childProc.on('exit', code => {
+            if (code !== 0) {
+                process.exitCode = code;
+            }
+            logger.info(`Deployment: child process exited with code ${code}`);
+            resolve();
+        });
     });
 };
 
 /**
  * Generate application source code for JDL apps defined.
  * @param {any} config
- * @param {function} forkProcess
- * @returns {obj} Nodejs ChildProcess: https://nodejs.org/api/child_process.html#child_process_child_process
+ * @returns Promise
  */
-const generateApplicationFiles = ({ generator, application, withEntities, inFolder }, forkProcess) => {
+const generateApplicationFiles = ({ processor, application, withEntities, inFolder }) => {
     const baseName = getBaseName(application);
-    logger.info(`Generating application ${baseName} in a new parallel process`);
     logger.debug(`Generating application: ${pretty(application[GENERATOR_NAME])}`);
 
-    const cwd = inFolder ? path.join(generator.pwd, baseName) : generator.pwd;
+    const cwd = inFolder ? path.join(processor.pwd, baseName) : processor.pwd;
     logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
 
     const command = `${CLI_NAME}:app`;
-    const childProc = forkProcess(
+    const childProc = fork(
         runYeomanProcess,
-        [command, ...getOptionAsArgs(generator.options, withEntities, !generator.options.interactive)],
+        [command, ...getOptionAsArgs(processor.options, withEntities, !processor.options.interactive)],
         {
-            cwd
+            cwd,
         }
     );
-    childProc.on('exit', code => {
-        if (code !== 0) {
-            process.exitCode = code;
-        }
-        logger.info(`App: child process exited with code ${code}`);
-        generationCompletionState.exportedApplications[baseName] = true;
+    return new Promise(resolve => {
+        childProc.on('exit', code => {
+            if (code !== 0) {
+                process.exitCode = code;
+            }
+            logger.info(`App: child process exited with code ${code}`);
+            resolve();
+        });
     });
 };
 
 /**
  * Generate entities for the applications
- * @param {any} generator
+ * @param {any} processor
  * @param {any} entity
  * @param {boolean} inFolder
  * @param {any} env
  * @param {boolean} shouldTriggerInstall
- * @param {function} forkProcess
+ * @return Promise
  */
-const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInstall, forkProcess) => {
+const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInstall) => {
     const options = {
-        ...generator.options,
+        ...processor.options,
         regenerate: true,
-        'from-cli': true,
-        'skip-install': true,
-        'skip-client': entity.skipClient,
-        'skip-server': entity.skipServer,
-        'no-fluent-methods': entity.noFluentMethod,
-        'skip-user-management': entity.skipUserManagement,
-        'skip-db-changelog': generator.options['skip-db-changelog'],
-        'skip-ui-grouping': generator.options['skip-ui-grouping']
+        fromCli: true,
+        skipInstall: true,
+        skipClient: entity.skipClient,
+        skipServer: entity.skipServer,
+        noFluentMethod: entity.noFluentMethod,
+        skipUserManagement: entity.skipUserManagement,
+        skipDbChangelog: processor.options.skipDbChangelog,
+        skipUiGrouping: processor.options.skipUiGrouping,
     };
     const command = `${CLI_NAME}:entity ${entity.name}`;
     if (inFolder) {
         /* Generating entities inside multiple apps */
-        let previousEntity;
         const callGenerator = baseName => {
-            logger.info(`Generating entities for application ${baseName} in a new parallel process`);
-            const cwd = path.join(generator.pwd, baseName);
+            logger.info(`Generating entity ${entity.name} for application ${baseName} in a new parallel process`);
+            const cwd = path.join(processor.pwd, baseName);
             logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
 
-            const childProc = forkProcess(runYeomanProcess, [command, ...getOptionAsArgs(options, false, !options.interactive)], { cwd });
-            childProc.on('exit', code => {
-                if (code !== 0) {
-                    process.exitCode = code;
-                }
-                logger.info(`Entity: child process exited with code ${code}`);
-                generationCompletionState.exportedEntities[entity.name] = true;
+            const childProc = fork(runYeomanProcess, [command, ...getOptionAsArgs(options, false, !options.interactive)], { cwd });
+            return new Promise(resolve => {
+                childProc.on('exit', code => {
+                    if (code !== 0) {
+                        process.exitCode = code;
+                    }
+                    logger.info(`Entity: child process exited with code ${code}`);
+                    resolve();
+                });
             });
-            previousEntity = entity.name;
         };
         const baseNames = entity.applications;
-        baseNames.forEach(baseName => {
-            if (generator.options.interactive) {
-                waitUntil()
-                    .interval(500)
-                    .times(200) // approximate 2 minutes
-                    .condition(() => generationCompletionState.exportedEntities[previousEntity] || !previousEntity)
-                    .done(result => {
-                        logger.debug(`Result from waitUntil for application ${previousEntity} to finish: ${result}`);
-                        callGenerator(baseName);
-                    });
-            } else {
-                callGenerator(baseName);
-            }
-        });
-    } else {
-        /* Traditional entity only generation */
-        env.run(
-            command,
-            {
-                ...options,
-                force: options.force || !options.interactive,
-                'skip-install': !shouldTriggerInstall
-            },
-            done
-        );
+        if (processor.options.interactive) {
+            return baseNames.reduce((promise, baseName) => {
+                return promise.then(() => callGenerator(baseName));
+            }, Promise.resolve());
+        }
+        return Promise.all(baseNames.map(callGenerator));
     }
+    /* Traditional entity only generation */
+    return env
+        .run(command, {
+            ...options,
+            force: options.force || !options.interactive,
+            skipInstall: !shouldTriggerInstall,
+        })
+        .catch(doneFactory());
 };
 
 /**
  * Check if NPM/Yarn install needs to be triggered. This will be done for the last entity.
- * @param {any} generator
+ * @param {any} processor
  * @param {number} index
  */
-const shouldTriggerInstall = (generator, index) =>
-    index === generator.importState.exportedEntities.length - 1 &&
-    !generator.options['skip-install'] &&
-    !generator.skipClient &&
-    !generator.options['json-only'] &&
-    !shouldGenerateApplications(generator);
-
-const isAllCompleted = items => Object.values(items).every(it => it);
+const shouldTriggerInstall = (processor, index) =>
+    index === processor.importState.exportedEntities.length - 1 &&
+    !processor.options.skipInstall &&
+    !processor.skipClient &&
+    !processor.options.jsonOnly &&
+    !shouldGenerateApplications(processor);
 
 class JDLProcessor {
     constructor(jdlFiles, jdlContent, options) {
@@ -267,16 +236,20 @@ class JDLProcessor {
     }
 
     getConfig() {
-        if (jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
+        if (fs.existsSync('.yo-rc.json')) {
+            const yoRC = loadYoRc('.yo-rc.json');
+            const configuration = yoRC['generator-jhipster'];
+            if (!configuration) {
+                return;
+            }
             logger.info('Found .yo-rc.json on path. This is an existing app');
-            const configuration = jhipsterUtils.getAllJhipsterConfig(null, true);
             if (_.isUndefined(this.options.interactive)) {
                 logger.debug('Setting interactive true for existing apps');
                 this.options.interactive = true;
             }
             this.applicationType = configuration.applicationType;
             this.baseName = configuration.baseName;
-            this.databaseType = configuration.databaseType || jhipsterUtils.getDBTypeFromDBValue(this.options.db);
+            this.databaseType = configuration.databaseType || getDBTypeFromDBValue(this.options.db);
             this.prodDatabaseType = configuration.prodDatabaseType || this.options.db;
             this.devDatabaseType = configuration.devDatabaseType || this.options.db;
             this.skipClient = configuration.skipClient;
@@ -300,15 +273,14 @@ class JDLProcessor {
             applicationName: this.baseName,
             generatorVersion: packagejs.version,
             forceNoFiltering: this.options.force,
-            creationTimestamp: this.options.creationTimestamp
+            creationTimestamp: this.options.creationTimestamp,
         };
 
-        const JDLImporter = jhiCore.JDLImporter;
         let importer;
         if (this.jdlContent) {
-            importer = JDLImporter.createImporterFromContent(this.jdlContent, configuration);
+            importer = createImporterFromContent(this.jdlContent, configuration);
         } else {
-            importer = JDLImporter.createImporterFromFiles(this.jdlFiles, configuration);
+            importer = createImporterFromFiles(this.jdlFiles, configuration);
         }
         this.importState = importJDL.call(this, importer);
     }
@@ -317,53 +289,40 @@ class JDLProcessor {
         statistics.sendSubGenEvent('generator', 'import-jdl');
     }
 
-    generateApplications(forkProcess) {
+    generateApplications() {
         if (!shouldGenerateApplications(this)) {
             logger.debug('Applications not generated');
-            return;
+            return Promise.resolve();
         }
         logger.info(
             `Generating ${this.importState.exportedApplications.length} ` +
                 `${pluralize('application', this.importState.exportedApplications.length)}.`
         );
-        let previousApp;
         const callGenerator = application => {
             try {
-                generateApplicationFiles(
-                    {
-                        generator: this,
-                        application,
-                        withEntities: this.importState.exportedEntities.length !== 0,
-                        inFolder: this.importState.exportedApplications.length > 1
-                    },
-                    forkProcess
-                );
-                previousApp = getBaseName(application);
+                return generateApplicationFiles({
+                    processor: this,
+                    application,
+                    withEntities: this.importState.exportedEntities.length !== 0,
+                    inFolder: this.importState.exportedApplications.length > 1,
+                });
             } catch (error) {
                 logger.error(`Error while generating applications from the parsed JDL\n${error}`, error);
                 throw error;
             }
         };
-        this.importState.exportedApplications.forEach(application => {
-            if (this.options.interactive) {
-                waitUntil()
-                    .interval(500)
-                    .times(500) // approximate 5 minutes
-                    .condition(() => generationCompletionState.exportedApplications[previousApp] || !previousApp)
-                    .done(result => {
-                        logger.debug(`Result from waitUntil for application ${previousApp} to finish: ${result}`);
-                        callGenerator(application);
-                    });
-            } else {
-                callGenerator(application);
-            }
-        });
+        if (this.options.interactive) {
+            return this.importState.exportedApplications.reduce((promise, application) => {
+                return promise.then(() => callGenerator(application));
+            }, Promise.resolve());
+        }
+        return Promise.all(this.importState.exportedApplications.map(callGenerator));
     }
 
-    generateDeployments(forkProcess) {
+    generateDeployments() {
         if (!shouldGenerateDeployments(this)) {
             logger.debug('Deployments not generated');
-            return;
+            return Promise.resolve();
         }
         logger.info(
             `Generating ${this.importState.exportedDeployments.length} ` +
@@ -371,78 +330,55 @@ class JDLProcessor {
         );
 
         const callDeploymentGenerator = () => {
-            let previousDeployment;
             const callGenerator = deployment => {
                 try {
-                    generateDeploymentFiles(
-                        {
-                            generator: this,
-                            deployment,
-                            inFolder: true
-                        },
-                        forkProcess
-                    );
-                    previousDeployment = getDeploymentType(deployment);
+                    return generateDeploymentFiles({
+                        processor: this,
+                        deployment,
+                        inFolder: true,
+                    });
                 } catch (error) {
                     logger.error(`Error while generating deployments from the parsed JDL\n${error}`, error);
                     throw error;
                 }
             };
-            this.importState.exportedDeployments.forEach(deployment => {
-                if (this.options.interactive) {
-                    waitUntil()
-                        .interval(500)
-                        .times(200) // approximate 2 minutes
-                        .condition(() => generationCompletionState.exportedDeployments[previousDeployment] || !previousDeployment)
-                        .done(result => {
-                            logger.debug(`Result from waitUntil for deployment ${previousDeployment} to finish: ${result}`);
-                            callGenerator(deployment);
-                        });
-                } else {
-                    callGenerator(deployment);
-                }
-            });
+            if (this.options.interactive) {
+                // Queue callGenerator in chain
+                return this.importState.exportedDeployments.reduce((promise, deployment) => {
+                    return promise.then(() => callGenerator(deployment));
+                }, Promise.resolve());
+            }
+            return Promise.all(this.importState.exportedDeployments.map(callGenerator));
         };
 
-        if (shouldGenerateApplications(this)) {
-            waitUntil()
-                .interval(500)
-                .times(1000) // approximate 10 minutes
-                .condition(() => isAllCompleted(generationCompletionState.exportedApplications))
-                .done(result => {
-                    logger.info('Done waiting for application generation');
-                    logger.debug(`Result from waitUntil for all applications to finish: ${result}`);
-                    callDeploymentGenerator();
-                });
-        } else {
-            callDeploymentGenerator();
-        }
+        return callDeploymentGenerator();
     }
 
-    generateEntities(env, forkProcess) {
+    generateEntities(env) {
         if (this.importState.exportedEntities.length === 0 || shouldGenerateApplications(this)) {
             logger.debug('Entities not generated');
-            return;
+            return Promise.resolve();
         }
-        if (this.options['json-only']) {
+        if (this.options.jsonOnly) {
             logger.info('Entity JSON files created. Entity generation skipped.');
-            return;
+            return Promise.resolve();
         }
         try {
             logger.info(
                 `Generating ${this.importState.exportedEntities.length} ` +
                     `${pluralize('entity', this.importState.exportedEntities.length)}.`
             );
-            this.importState.exportedEntities.forEach((exportedEntity, i) => {
-                generateEntityFiles(
-                    this,
-                    exportedEntity,
-                    this.importState.exportedApplications.length > 1,
-                    env,
-                    shouldTriggerInstall(this, i),
-                    forkProcess
-                );
-            });
+            return Promise.all(
+                this.importState.exportedEntities.map((exportedEntity, i) => {
+                    return generateEntityFiles(
+                        this,
+                        exportedEntity,
+                        this.importState.exportedApplications.length > 1,
+                        env,
+                        shouldTriggerInstall(this, i)
+                    );
+                })
+            );
         } catch (error) {
             logger.error(`Error while generating entities from the parsed JDL\n${error}`, error);
             throw error;
@@ -450,42 +386,34 @@ class JDLProcessor {
     }
 }
 
-const validateFiles = jdlFiles => {
-    if (jdlFiles) {
-        jdlFiles.forEach(key => {
-            if (!shelljs.test('-f', key)) {
-                logger.fatal(chalk.red(`\nCould not find ${key}, make sure the path is correct.\n`));
-            }
-        });
-    }
-};
-
 /**
  * Import-JDL sub generator
  * @param {any} args arguments passed for import-jdl
  * @param {any} options options passed from CLI
  * @param {any} env the yeoman environment
- * @param {function} forkProcess the method to use for process forking
  */
-module.exports = (args, options, env, forkProcess = fork) => {
-    logger.debug('cmd: import-jdl from ./import-jdl');
-    logger.debug(`args: ${toString(args)}`);
-    let jdlFiles = [];
-    if (!options.inline) {
-        jdlFiles = getOptionsFromArgs(args);
-        validateFiles(jdlFiles);
-    }
+module.exports = (jdlFiles, options = {}, env) => {
     logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));
-    logger.info(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
+    logger.debug(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
     try {
         const jdlImporter = new JDLProcessor(jdlFiles, options.inline, options);
         jdlImporter.getConfig();
         jdlImporter.importJDL();
         jdlImporter.sendInsight();
-        jdlImporter.generateApplications(forkProcess);
-        jdlImporter.generateEntities(env, forkProcess);
-        jdlImporter.generateDeployments(forkProcess);
+        return jdlImporter
+            .generateApplications()
+            .then(() => {
+                return jdlImporter.generateEntities(env);
+            })
+            .then(() => {
+                return jdlImporter.generateDeployments();
+            })
+            .then(() => {
+                printSuccess();
+                return jdlFiles;
+            });
     } catch (e) {
         logger.error(`Error during import-jdl: ${e.message}`, e);
+        return Promise.reject(new Error(`Error during import-jdl: ${e.message}`));
     }
 };

@@ -31,6 +31,8 @@ const expect = chai.expect;
 describe('account', () => {
     let navBarPage: NavBarPage;
     let signInPage: SignInPage;
+    const username = process.env.E2E_USERNAME || 'admin';
+    const password = process.env.E2E_PASSWORD || 'admin';
     <%_ if (!skipUserManagement) { _%>
     let passwordPage: PasswordPage;
     let settingsPage: SettingsPage;
@@ -51,7 +53,7 @@ describe('account', () => {
         expect(value1).to.eq(expect1);
     <%_ if (authenticationType !== 'oauth2') { _%>
         signInPage = await navBarPage.getSignInPage();
-        await signInPage.autoSignInUsing('admin', 'foo');
+        await signInPage.autoSignInUsing(username, 'foo');
 
         <%_ if (enableTranslation) { _%>
         const expect2 = 'login.messages.error.authentication';
@@ -62,7 +64,7 @@ describe('account', () => {
         expect(value2).to.eq(expect2);
     <%_ } else { _%>
         signInPage = await navBarPage.getSignInPage();
-        await signInPage.loginWithOAuth('admin', 'foo');
+        await signInPage.loginWithOAuth(username, 'foo');
 
         // Keycloak
         const alert = element(by.css('.alert-error'));
@@ -88,9 +90,9 @@ describe('account', () => {
         <%_ } _%>
         const value1 = await element(by.className('username-label')).<%- elementGetter %>;
         expect(value1).to.eq(expect1);
-        await signInPage.autoSignInUsing('admin', 'admin');
+        await signInPage.autoSignInUsing(username, password);
     <%_ } else { _%>
-        await signInPage.loginWithOAuth('', 'admin');
+        await signInPage.loginWithOAuth('', password);
     <%_ } _%>
 
         <%_ if (enableTranslation) { _%>
@@ -110,7 +112,7 @@ describe('account', () => {
         <%_ if (enableTranslation) { _%>
         const expect1 = 'settings.title';
         <%_ } else { _%>
-        const expect1 = 'User settings for [admin]';
+        const expect1 = `User settings for [${username}]`;
         <%_ } _%>
         const value1 = await settingsPage.getTitle();
         expect(value1).to.eq(expect1);
@@ -132,7 +134,7 @@ describe('account', () => {
         <%_ if (enableTranslation) { _%>
         expect(await passwordPage.getTitle()).to.eq('password.title');
         <%_ } else { _%>
-        expect(await passwordPage.getTitle()).to.eq('Password for [admin]');
+        expect(await passwordPage.getTitle()).to.eq(`Password for [${username}]`);
         <%_ } _%>
 
         await passwordPage.setCurrentPassword('wrong_current_password');
@@ -157,10 +159,10 @@ describe('account', () => {
         <%_ if (enableTranslation) { _%>
         expect(await passwordPage.getTitle()).to.eq('password.title');
         <%_ } else { _%>
-        expect(await passwordPage.getTitle()).to.eq('Password for [admin]');
+        expect(await passwordPage.getTitle()).to.eq(`Password for [${username}]`);
         <%_ } _%>
 
-        await passwordPage.setCurrentPassword('admin');
+        await passwordPage.setCurrentPassword(password);
         await passwordPage.setPassword('newpassword');
         await passwordPage.setConfirmPassword('newpassword');
         await passwordPage.save();
@@ -175,13 +177,13 @@ describe('account', () => {
         expect(alertValue).to.eq(successMsg);
         await navBarPage.autoSignOut();
         await navBarPage.goToSignInPage();
-        await signInPage.autoSignInUsing('admin', 'newpassword');
+        await signInPage.autoSignInUsing(username, 'newpassword');
 
         // change back to default
         await navBarPage.goToPasswordMenu();
         await passwordPage.setCurrentPassword('newpassword');
-        await passwordPage.setPassword('admin');
-        await passwordPage.setConfirmPassword('admin');
+        await passwordPage.setPassword(password);
+        await passwordPage.setConfirmPassword(password);
         await passwordPage.save();
 
         // wait for success message

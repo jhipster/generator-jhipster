@@ -35,10 +35,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 <%_ } _%>
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-<%_ if (serviceDiscoveryType) { _%>
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-<%_ } _%>
-<%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationType === 'gateway' && !reactive) { _%>
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 <%_ } _%>
 <%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
@@ -52,6 +49,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 
 <%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
 @ComponentScan(
@@ -60,10 +58,7 @@ import java.util.Collection;
 <%_ } _%>
 @SpringBootApplication
 @EnableConfigurationProperties({<% if (databaseType === 'sql') { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
-<%_ if (serviceDiscoveryType) { _%>
-@EnableDiscoveryClient
-<%_ } _%>
-<%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationType === 'gateway' && !reactive) { _%>
 @EnableZuulProxy
 <%_ } _%>
 public class <%= mainClass %> {
@@ -109,15 +104,9 @@ public class <%= mainClass %> {
     }
 
     private static void logApplicationStartup(Environment env) {
-        String protocol = "http";
-        if (env.getProperty("server.ssl.key-store") != null) {
-            protocol = "https";
-        }
+        String protocol = Optional.ofNullable(env.getProperty("server.ssl.key-store")).map(key -> "https").orElse("http");
         String serverPort = env.getProperty("server.port");
-        String contextPath = env.getProperty("server.servlet.context-path");
-        if (StringUtils.isBlank(contextPath)) {
-            contextPath = "/";
-        }
+        String contextPath = Optional.ofNullable(env.getProperty("server.servlet.context-path")).filter(StringUtils::isNotBlank).orElse("/");
         String hostAddress = "localhost";
         try {
             hostAddress = InetAddress.getLocalHost().getHostAddress();

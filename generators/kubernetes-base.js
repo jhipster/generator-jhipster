@@ -28,7 +28,7 @@ module.exports = {
     loadConfig,
     saveConfig,
     setupKubernetesConstants,
-    setupHelmConstants
+    setupHelmConstants,
 };
 
 function checkKubernetes() {
@@ -95,7 +95,7 @@ function saveConfig() {
         ingressType: this.ingressType,
         ingressDomain: this.ingressDomain,
         monitoring: this.monitoring,
-        istio: this.istio
+        istio: this.istio,
     });
 }
 

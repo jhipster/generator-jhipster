@@ -46,9 +46,11 @@ This application is configured for Service Discovery and Configuration with <% i
 <%_ if (skipClient) { _%>
 To start your application in the dev profile, run:
 
-    <% if (buildTool === 'maven') { %>./mvnw<% } %><% if (buildTool === 'gradle') { %>./gradlew<% } %>
-
+```
+<% if (buildTool === 'maven') { %>./mvnw<% } %><% if (buildTool === 'gradle') { %>./gradlew<% } %>
+```
 <%_ } _%>
+
 <%_ if (!skipClient) { _%>
 Before you can build this project, you must install and configure the following dependencies on your machine:
 
@@ -62,16 +64,20 @@ Before you can build this project, you must install and configure the following 
 After installing Node, you should be able to run the following command to install development tools.
 You will only need to run this command when dependencies change in [package.json](package.json).
 
-    <%= clientPackageManager %> install
+```
+<%= clientPackageManager %> install
+```
 
 We use <%= clientPackageManager %> scripts and [Webpack][] as our build system.
 
 <%_ if (['hazelcast', 'memcached', 'redis'].includes(cacheProvider)) { _%>
 If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.
 To start your cache server, run:
+
 ```
 docker-compose -f src/main/docker/<%= cacheProvider==='hazelcast'?'hazelcast-management-center':cacheProvider %>.yml up -d
 ```
+
 <%_ if (cacheProvider === 'redis') { _%>
 
 The cache can also be turned off by adding to the application yaml:
@@ -89,10 +95,16 @@ the same CacheManager.
 
 Run the following commands in two separate terminals to create a blissful development experience where your browser
 auto-refreshes when files change on your hard drive.
+
+```
 <% if (buildTool === 'maven') { %>
-    ./mvnw<% } %><% if (buildTool === 'gradle') { %>
-    ./gradlew -x webpack<% } %>
-    <%= clientPackageManager %> start
+./mvnw
+<% } %>
+<% if (buildTool === 'gradle') { %>
+./gradlew -x webpack
+<% } %>
+<%= clientPackageManager %> start
+```
 
 <%= clientPackageMngrName %> is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
 specifying a newer version in [package.json](package.json). You can also run `<%= clientPackageManager %> update` and `<%= clientPackageManager %> install` to manage dependencies.
@@ -181,14 +193,18 @@ Note: [Workbox](https://developers.google.com/web/tools/workbox/) powers JHipste
 
 For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
 
-    <%= clientPackageManager %> <%= clientPackageMngrAdd %> leaflet
+```
+<%= clientPackageManager %> <%= clientPackageMngrAdd %> leaflet
+```
 
 To benefit from TypeScript type definitions from [DefinitelyTyped][] repository in development, you would run following command:
 
-    <%= clientPackageManager %> <%= clientPackageMngrAddDev %> @types/leaflet
+```
+<%= clientPackageManager %> <%= clientPackageMngrAddDev %> @types/leaflet
+```
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
-<%_ if (clientFramework === 'angularX') { _%>
+<%_ if (clientFramework === ANGULAR) { _%>
 Edit [<%= CLIENT_MAIN_SRC_DIR %>app/vendor.ts](<%= CLIENT_MAIN_SRC_DIR %>app/vendor.ts) file:
 ~~~
 import 'leaflet/dist/leaflet.js';
@@ -204,20 +220,25 @@ Note: There are still a few other things remaining to do for Leaflet that we won
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
-<%_ if (clientFramework === 'angularX' && applicationType !== 'microservice') { _%>
+<%_ if (clientFramework === ANGULAR && applicationType !== 'microservice') { _%>
 ### Using Angular CLI
 
 You can also use [Angular CLI][] to generate some custom client code.
 
 For example, the following command:
 
-    ng generate component my-component
+```
+ng generate component my-component
+```
 
 will generate few files:
 
-    create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.html
-    create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.ts
-    update <%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts
+```
+create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.html
+create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.ts
+update <%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts
+```
+
 <%_ } _%>
 <%_ if (enableSwaggerCodegen) { _%>
 ### Doing API-First development using openapi-generator
@@ -245,17 +266,29 @@ Refer to [Doing API-First development][] for more details.
 ### Packaging as jar
 
 To build the final jar and optimize the <%= baseName %> application for production, run:
+
+```
 <% if (buildTool === 'maven') { %>
-    ./mvnw -Pprod clean verify<% } %><% if (buildTool === 'gradle') { %>
-    ./gradlew -Pprod clean bootJar<% } %>
+./mvnw -Pprod clean verify
+<% } %>
+<% if (buildTool === 'gradle') { %>
+./gradlew -Pprod clean bootJar
+<% } %>
+```
 
 <%_ if (!skipClient) { _%>
 This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
 <%_ } _%>
 To ensure everything worked, run:
+
+```
 <% if (buildTool === 'maven') { %>
-    java -jar target/*.jar<% } %><% if (buildTool === 'gradle') { %>
-    java -jar build/libs/*.jar<% } %>
+java -jar target/*.jar
+<% } %>
+<% if (buildTool === 'gradle') { %>
+java -jar build/libs/*.jar
+<% } %>
+```
 
 <% if (!skipClient) { %>Then navigate to [http://localhost:<%= serverPort %>](http://localhost:<%= serverPort %>) in your browser.
 <% } %>
@@ -264,25 +297,36 @@ Refer to [Using JHipster in production][] for more details.
 ### Packaging as war
 
 To package your application as a war in order to deploy it to an application server, run:
+
+```
 <% if (buildTool === 'maven') { %>
-    ./mvnw -Pprod,war clean verify<% } %><% if (buildTool === 'gradle') { %>
-    ./gradlew -Pprod -Pwar clean bootWar<% } %>
+./mvnw -Pprod,war clean verify
+<% } %>
+<% if (buildTool === 'gradle') { %>
+./gradlew -Pprod -Pwar clean bootWar
+<% } %>
+```
 
 ## Testing
 
 To launch your application's tests, run:
 
-    <%_ if (buildTool === 'maven') { _%>
-    ./mvnw verify
-    <%_ } else { _%>
-    ./gradlew test integrationTest jacocoTestReport
-    <%_ } _%>
+```
+<%_ if (buildTool === 'maven') { _%>
+./mvnw verify
+<%_ } else { _%>
+./gradlew test integrationTest jacocoTestReport
+<%_ } _%>
+```
+
 <% if (!skipClient) { %>
 ### Client tests
 
 Unit tests are run by [Jest][] and written with [Jasmine][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](<%= CLIENT_TEST_SRC_DIR %>) and can be run with:
 
-    <%= clientPackageManager %> test
+```
+<%= clientPackageManager %> test
+```
 
 <% if (protractorTests) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [<%= CLIENT_TEST_SRC_DIR %>e2e](<%= CLIENT_TEST_SRC_DIR %>e2e)
 and can be run by starting Spring Boot in one terminal (`<% if (buildTool === 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<%= clientPackageManager %> run e2e`) in a second one.<% } %>
@@ -316,7 +360,6 @@ If you need to re-run the Sonar phase, please be sure to specify at least the `i
 ```
 ./mvnw initialize sonar:sonar
 ```
-or
 <%_ } else if (buildTool === 'gradle') { _%>
 ```
 ./gradlew -Pprod clean check jacocoTestReport sonarqube
@@ -331,20 +374,29 @@ You can use Docker to improve your JHipster development experience. A number of 
 <% if (databaseType !== 'no') { %>
 For example, to start a <%= prodDatabaseType %> database in a docker container, run:
 
-    docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml up -d
+```
+docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml up -d
+```
 
 To stop it and remove the container, run:
 
-    docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml down
+```
+docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml down
+```
+
 <% } %>
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
-    <% if (buildTool === 'maven') { %>./mvnw -Pprod verify jib:dockerBuild<% } %><% if (buildTool === 'gradle') { %>./gradlew bootJar -Pprod jibDockerBuild<% } %>
+```
+<% if (buildTool === 'maven') { %>./mvnw -Pprod verify jib:dockerBuild<% } %><% if (buildTool === 'gradle') { %>./gradlew bootJar -Pprod jibDockerBuild<% } %>
+```
 
 Then run:
 
-    docker-compose -f src/main/docker/app.yml up -d
+```
+docker-compose -f src/main/docker/app.yml up -d
+```
 
 For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
 

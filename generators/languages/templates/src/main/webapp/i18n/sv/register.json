@@ -10,7 +10,7 @@
                     "required": "Du måste fylla i ett användarnamn",
                     "minlength": "Ditt användarnamn måste vara minst ett tecken",
                     "maxlength": "Ditt användarnamn kan inte vara längre än 50 tecken",
-                    "pattern": "Ditt användarnamn kan endast innehålla små bokstäver och siffror"
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>Användarnamn sparat!</strong> Kontrollera din e-post för konfirmation.",

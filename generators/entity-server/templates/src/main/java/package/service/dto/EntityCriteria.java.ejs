@@ -33,7 +33,6 @@ import io.github.jhipster.service.filter.ZonedDateTimeFilter;
 <%_ } _%>
 
 <%_
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 const referenceFilterType = '' + primaryKeyType + 'Filter';
 var filterVariables = [{name:'id', type: primaryKeyType, filterType:referenceFilterType,fieldInJavaBeanMethod:'Id' } ];
 var extraFilters = {};
@@ -163,6 +162,7 @@ public class <%= entityClass %>Criteria implements Serializable, Criteria {
         );
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "<%= entityClass %>Criteria{" +

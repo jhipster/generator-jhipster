@@ -17,8 +17,8 @@ const expectedFiles = {
     monolith: [
         './ocp/samplemysql/samplemysql-deployment.yml',
         './ocp/samplemysql/samplemysql-mysql.yml',
-        './ocp/samplemysql/samplemysql-elasticsearch.yml'
-    ]
+        './ocp/samplemysql/samplemysql-elasticsearch.yml',
+    ],
 };
 
 describe('JHipster OpenShift Sub Generator', () => {
@@ -38,7 +38,7 @@ describe('JHipster OpenShift Sub Generator', () => {
                     dockerRepositoryName: 'ocrepo',
                     dockerPushCommand: 'docker push',
                     openshiftNamespace: 'default',
-                    monitoring: 'no'
+                    monitoring: 'no',
                 })
                 .on('end', done);
         });
@@ -70,7 +70,7 @@ describe('JHipster OpenShift Sub Generator', () => {
                     dockerRepositoryName: 'ocrepo',
                     dockerPushCommand: 'docker push',
                     openshiftNamespace: 'default',
-                    monitoring: 'no'
+                    monitoring: 'no',
                 })
                 .on('end', done);
         });
@@ -103,7 +103,7 @@ describe('JHipster OpenShift Sub Generator', () => {
                     dockerRepositoryName: 'ocrepo',
                     dockerPushCommand: 'docker push',
                     openshiftNamespace: 'default',
-                    monitoring: 'elk'
+                    monitoring: 'elk',
                 })
                 .on('end', done);
         });
@@ -139,7 +139,7 @@ describe('JHipster OpenShift Sub Generator', () => {
                     dockerRepositoryName: 'ocrepo',
                     dockerPushCommand: 'docker push',
                     openshiftNamespace: 'default',
-                    monitoring: 'no'
+                    monitoring: 'no',
                 })
                 .on('end', done);
         });
@@ -174,7 +174,7 @@ describe('JHipster OpenShift Sub Generator', () => {
                     chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '05-cassandra', '07-mariadb'],
                     dockerRepositoryName: 'ocrepo',
                     dockerPushCommand: 'docker push',
-                    openshiftNamespace: 'default'
+                    openshiftNamespace: 'default',
                 })
                 .on('end', done);
         });
@@ -218,7 +218,7 @@ describe('JHipster OpenShift Sub Generator', () => {
                     chosenApps: ['08-monolith'],
                     dockerRepositoryName: 'ocrepo',
                     dockerPushCommand: 'docker push',
-                    openshiftNamespace: 'default'
+                    openshiftNamespace: 'default',
                 })
                 .on('end', done);
         });
@@ -245,7 +245,7 @@ describe('JHipster OpenShift Sub Generator', () => {
                     dockerRepositoryName: 'ocrepo',
                     dockerPushCommand: 'docker push',
                     openshiftNamespace: 'default',
-                    monitoring: 'elk'
+                    monitoring: 'elk',
                 })
                 .on('end', done);
         });

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 module.exports = {
-    writeFiles
+    writeFiles,
 };
 
 function writeFiles() {
@@ -60,6 +60,16 @@ function writeFiles() {
             }
         },
 
+        writeGatewayConfig() {
+            if (this.serviceDiscoveryType) {
+                this.appConfigs.forEach(appConfig => {
+                    if (appConfig.applicationType === 'gateway') {
+                        this.template('central-server-config/gateway.yml.ejs', `central-server-config/${appConfig.baseName}.yml`);
+                    }
+                });
+            }
+        },
+
         writeElkFiles() {
             if (this.monitoring !== 'elk') return;
 
@@ -84,6 +94,6 @@ function writeFiles() {
             this.template('prometheus-conf/prometheus.yml.ejs', 'prometheus-conf/prometheus.yml');
             this.template('prometheus-conf/alert_rules.yml.ejs', 'prometheus-conf/alert_rules.yml');
             this.template('alertmanager-conf/config.yml.ejs', 'alertmanager-conf/config.yml');
-        }
+        },
     };
 }

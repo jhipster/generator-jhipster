@@ -129,10 +129,22 @@ describe('jhipster cli utils test', () => {
             });
         });
     });
+    describe('addKebabCase', () => {
+        describe('when called with undefined', () => {
+            it('returns empty object', () => {
+                expect(cliUtil.addKebabCase()).to.eql({});
+            });
+        });
+        describe('when called with object', () => {
+            it('returns object with a kebabCase option', () => {
+                expect(cliUtil.addKebabCase({ foo: 'bar', fooBar: true })).to.eql({ 'foo-bar': true, fooBar: true, foo: 'bar' });
+            });
+        });
+    });
     describe('getCommandOptions', () => {
         describe('when called with empty argv', () => {
             it('returns the default object', () => {
-                expect(cliUtil.getCommandOptions(packageJson, [])).to.eql({ 'from-cli': true });
+                expect(cliUtil.getCommandOptions(packageJson, [])).to.eql({});
             });
         });
         describe('when called with argv flags', () => {
@@ -142,7 +154,6 @@ describe('jhipster cli utils test', () => {
                     force: true,
                     'skip-install': true,
                     skipInstall: true,
-                    'from-cli': true
                 });
             });
         });
@@ -154,7 +165,6 @@ describe('jhipster cli utils test', () => {
                     'skip-install': true,
                     skipInstall: true,
                     foo: 'bar',
-                    'from-cli': true
                 });
             });
         });
@@ -166,7 +176,6 @@ describe('jhipster cli utils test', () => {
                     'skip-install': true,
                     skipInstall: true,
                     foo: 'bar,who',
-                    'from-cli': true
                 });
             });
         });

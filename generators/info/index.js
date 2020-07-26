@@ -50,7 +50,7 @@ module.exports = class extends BaseGenerator {
                 );
                 result = result.replace(
                     /"jwtSecretKey": ".*"/g,
-                    '"jwtSecretKey": "bXktc2VjcmV0LXRva2VuLXRvLWNoYW5nZS1pbi1wcm9kdWN0aW9uLWFuZC10by1rZWVwLWluLWEtc2VjdXJlLXBsYWNl"'
+                    '"jwtSecretKey": "YourJWTSecretKeyWasReplacedByThisMeaninglessTextByTheJHipsterInfoCommandForObviousSecurityReasons"'
                 );
                 console.log('\n##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n');
                 console.log(`\n<details>\n<summary>.yo-rc.json file</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
@@ -147,7 +147,7 @@ module.exports = class extends BaseGenerator {
                     }
                     done();
                 });
-            }
+            },
         };
     }
 };

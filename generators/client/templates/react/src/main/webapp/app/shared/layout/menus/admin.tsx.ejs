@@ -40,15 +40,12 @@ const adminMenuItems = (
     <MenuItem icon="tachometer-alt" to="/admin/metrics"><Translate contentKey="global.menu.admin.metrics">Metrics</Translate></MenuItem>
     <MenuItem icon="heart" to="/admin/health"><Translate contentKey="global.menu.admin.health">Health</Translate></MenuItem>
     <MenuItem icon="list" to="/admin/configuration"><Translate contentKey="global.menu.admin.configuration">Configuration</Translate></MenuItem>
-    <%_ if (!['no', 'cassandra'].includes(databaseType)) { _%>
-    <MenuItem icon="bell" to="/admin/audits"><Translate contentKey="global.menu.admin.audits">Audits</Translate></MenuItem>
-    <%_ } _%>
   {/* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */}
     <MenuItem icon="tasks" to="/admin/logs"><Translate contentKey="global.menu.admin.logs">Logs</Translate></MenuItem>
   </>
 );
 
-const swaggerItem = (
+const openAPIItem = (
   <MenuItem icon="book" to="/admin/docs"><Translate contentKey="global.menu.admin.apidocs">API</Translate></MenuItem>
 );
 
@@ -60,10 +57,10 @@ const databaseItem = (
 );
 <%_ } _%>
 
-export const AdminMenu = ({ showSwagger <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>, showDatabase <%_ } _%>}) => (
+export const AdminMenu = ({ showOpenAPI <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>, showDatabase <%_ } _%>}) => (
   <NavDropdown icon="user-plus" name={translate('global.menu.admin.main')} style={{ width: '140%' }} id="admin-menu">
       {adminMenuItems}
-      {showSwagger && swaggerItem}
+      {showOpenAPI && openAPIItem}
       <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
       {showDatabase && databaseItem}
       <%_ } _%>

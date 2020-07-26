@@ -1,0 +1,25 @@
+{
+    "generator-jhipster": {
+        "applicationType": "gateway",
+        "reactive": true,
+        "baseName": "reactiveGateway",
+        "packageName": "io.github.jhipster.gateway",
+        "packageFolder": "io/github/jhipster/gateway",
+        "authenticationType": "jwt",
+        "cacheProvider": "no",
+        "enableHibernateCache": false,
+        "websocket": false,
+        "databaseType": "mongodb",
+        "devDatabaseType": "mongodb",
+        "prodDatabaseType": "mongodb",
+        "searchEngine": false,
+        "serviceDiscoveryType": "eureka",
+        "buildTool": "maven",
+        "enableTranslation": true,
+        "nativeLanguage": "en",
+        "languages": ["en", "es"],
+        "testFrameworks": ["protractor"],
+        "serverPort": "8080",
+        "jhiPrefix": "jhi"
+    }
+}

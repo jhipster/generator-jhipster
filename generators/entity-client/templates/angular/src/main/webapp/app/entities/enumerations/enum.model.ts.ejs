@@ -17,11 +17,7 @@
  limitations under the License.
 -%>
 export const enum <%= enumName %> {
-<% enumsWithCustomValue.forEach((enumWithCustomValue, index) => { %>
-  <% if (!enumWithCustomValue.value) { %>
-  <%= enumWithCustomValue.name %>
-  <% } else { %>
-  <%= enumWithCustomValue.name %> = '<%= enumWithCustomValue.value %>'
-  <% } %><% if (index < enumsWithCustomValue.length - 1) { %>,<% } %>
+<% enumValues.forEach((enumValue, index) => { %>
+  <%= enumValue.name %> = '<%= enumValue.value %>'<% if (index < enumValues.length - 1) { %>,<% } %>
 <% }); %>
 }

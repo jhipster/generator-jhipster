@@ -22,5 +22,29 @@ package <%= packageName %>.domain.enumeration;
  * The <%= enumName %> enumeration.
  */
 public enum <%= enumName %> {
-    <%= enumValues %>
+<%_ if (withoutCustomValues) { _%>
+    <%= enumValues.map(enumValue => enumValue.name).join(', ') %>
+<%_ } else {
+    enumValues.forEach((enumWithCustomValue, index) => {
+        if (enumWithCustomValue.name === enumWithCustomValue.value) { _%>
+    <%= enumWithCustomValue.name %><% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
+        <%_ } else { _%>
+    <%= enumWithCustomValue.name %>("<%= enumWithCustomValue.value %>")<% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
+        <%_ }
+    }); _%>
+
+    private<% if (withCustomValues) { %> final<% } %> String value;
+
+<%_ if (withSomeCustomValues) { _%>
+    <%= enumName %>() {}
+<%_ } _%>
+
+    <%= enumName %>(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+<%_ } _%>
 }

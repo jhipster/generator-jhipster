@@ -5,3 +5,5 @@ docs
 .jhipster
 .vscode
 **/templates/**/
+**/jdl-core.min.js
+**/generated-serialized-grammar.js

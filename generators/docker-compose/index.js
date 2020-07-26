@@ -53,16 +53,16 @@ module.exports = class extends BaseDockerGenerator {
                         if (composeVersionMajor < 1 || (composeVersionMajor === 1 && composeVersionMinor < 6)) {
                             this.log(
                                 chalk.red(
-                                    `${'Docker Compose version 1.6.0 or later is not installed on your computer.\n' +
-                                        '         Docker Compose version found: '}${composeVersion}\n` +
-                                        '         Read https://docs.docker.com/compose/install/\n'
+                                    `$Docker Compose version 1.6.0 or later is not installed on your computer.
+                                             Docker Compose version found: ${composeVersion}
+                                             Read https://docs.docker.com/compose/install`
                                 )
                             );
                         }
                     }
                     done();
                 });
-            }
+            },
         };
     }
 
@@ -110,6 +110,13 @@ module.exports = class extends BaseDockerGenerator {
                         yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash');
                         yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=true');
                         yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_REPORT_FREQUENCY=60');
+                        yamlConfig.environment.push('MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=false');
+                    }
+
+                    if (appConfig.applicationType === 'monolith' && this.monitoring === 'prometheus') {
+                        yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=false');
+                        yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=false');
+                        yamlConfig.environment.push('MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true');
                     }
 
                     if (this.serviceDiscoveryType === 'eureka') {
@@ -233,9 +240,9 @@ module.exports = class extends BaseDockerGenerator {
                     monitoring: this.monitoring,
                     consoleOptions: this.consoleOptions,
                     serviceDiscoveryType: this.serviceDiscoveryType,
-                    jwtSecretKey: this.jwtSecretKey
+                    jwtSecretKey: this.jwtSecretKey,
                 });
-            }
+            },
         };
     }
 

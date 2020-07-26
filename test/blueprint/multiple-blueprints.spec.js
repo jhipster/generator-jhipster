@@ -39,11 +39,11 @@ const mockClientBlueprintSubGen = class extends ClientGenerator {
         const customPhaseSteps = {
             addDummyProperty() {
                 this.addNpmDependency('dummy-blueprint-property', '2.0');
-            }
+            },
         };
         return {
             ...phaseFromJHipster,
-            ...customPhaseSteps
+            ...customPhaseSteps,
         };
     }
 
@@ -73,11 +73,11 @@ const mockServerBlueprintSubGen = class extends ServerGenerator {
         const customPhaseSteps = {
             addDummyProperty() {
                 this.addMavenProperty('dummy-blueprint-property', 'foo');
-            }
+            },
         };
         return {
             ...phaseFromJHipster,
-            ...customPhaseSteps
+            ...customPhaseSteps,
         };
     }
 
@@ -110,7 +110,7 @@ const mockServerBlueprintSubGen = class extends ServerGenerator {
 describe('JHipster entity generator with multiple blueprints', () => {
     const blueprintNames = [
         'generator-jhipster-my-client-blueprint,generator-jhipster-my-server-blueprint',
-        'my-client-blueprint,my-server-blueprint'
+        'my-client-blueprint,my-server-blueprint',
     ];
 
     blueprintNames.forEach(blueprints => {
@@ -119,14 +119,14 @@ describe('JHipster entity generator with multiple blueprints', () => {
                 helpers
                     .run(path.join(__dirname, '../../generators/app'))
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipInstall: true,
                         skipChecks: true,
-                        blueprints
+                        blueprints,
                     })
                     .withGenerators([
                         [mockClientBlueprintSubGen, 'jhipster-my-client-blueprint:client'],
-                        [mockServerBlueprintSubGen, 'jhipster-my-server-blueprint:server']
+                        [mockServerBlueprintSubGen, 'jhipster-my-server-blueprint:server'],
                     ])
                     .withPrompts({
                         baseName: 'jhipster',
@@ -142,7 +142,7 @@ describe('JHipster entity generator with multiple blueprints', () => {
                         prodDatabaseType: 'mysql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
-                        languages: ['fr']
+                        languages: ['fr'],
                     })
                     .on('end', done);
             });

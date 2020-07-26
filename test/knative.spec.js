@@ -4,97 +4,110 @@ const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 
 const expectedFiles = {
-    eurekaregistry: ['./registry/jhipster-registry.yml', './registry/application-configmap.yml'],
-    consulregistry: ['./registry/consul.yml', './registry/consul-config-loader.yml', './registry/application-configmap.yml'],
-    jhgate: ['./jhgate/jhgate-mysql.yml', './jhgate/jhgate-service.yml'],
-    jhgateingress: ['./jhgate/jhgate-ingress.yml'],
+    eurekaregistry: ['./registry-knative/jhipster-registry.yml', './registry-knative/application-configmap.yml'],
+    consulregistry: [
+        './registry-knative/consul.yml',
+        './registry-knative/consul-config-loader.yml',
+        './registry-knative/application-configmap.yml',
+    ],
+    jhgate: ['./jhgate-knative/jhgate-mysql.yml', './jhgate-knative/jhgate-service.yml'],
+    jhgateingress: ['./jhgate-knative/jhgate-ingress.yml'],
     customnamespace: ['./namespace.yml'],
     jhconsole: [
-        './console/jhipster-console.yml',
-        './console/jhipster-elasticsearch.yml',
-        './console/jhipster-logstash.yml',
-        './console/jhipster-dashboard-console.yml',
-        './console/jhipster-zipkin.yml'
+        './console-knative/jhipster-console.yml',
+        './console-knative/jhipster-elasticsearch.yml',
+        './console-knative/jhipster-logstash.yml',
+        './console-knative/jhipster-dashboard-console.yml',
+        './console-knative/jhipster-zipkin.yml',
     ],
-    msmysql: ['./msmysql/msmysql-service.yml', './msmysql/msmysql-mysql.yml'],
+    msmysql: ['./msmysql-knative/msmysql-service.yml', './msmysql-knative/msmysql-mysql.yml'],
     mspsql: [
-        './mspsql/mspsql-service.yml',
-        './mspsql/mspsql-postgresql.yml',
-        './mspsql/mspsql-service.yml',
-        './mspsql/mspsql-elasticsearch.yml'
+        './mspsql-knative/mspsql-service.yml',
+        './mspsql-knative/mspsql-postgresql.yml',
+        './mspsql-knative/mspsql-service.yml',
+        './mspsql-knative/mspsql-elasticsearch.yml',
     ],
-    msmongodb: ['./msmongodb/msmongodb-service.yml', './msmongodb/msmongodb-mongodb.yml'],
-    msmariadb: ['./msmariadb/msmariadb-service.yml', './msmariadb/msmariadb-mariadb.yml'],
-    msmssqldb: ['./msmssqldb/msmssqldb-service.yml', './msmssqldb/msmssqldb-mssql.yml'],
+    msmongodb: ['./msmongodb-knative/msmongodb-service.yml', './msmongodb-knative/msmongodb-mongodb.yml'],
+    msmariadb: ['./msmariadb-knative/msmariadb-service.yml', './msmariadb-knative/msmariadb-mariadb.yml'],
+    msmssqldb: ['./msmssqldb-knative/msmssqldb-service.yml', './msmssqldb-knative/msmssqldb-mssql.yml'],
     prometheusmonit: [
-        './monitoring/jhipster-prometheus-crd.yml',
-        './monitoring/jhipster-prometheus-cr.yml',
-        './monitoring/jhipster-grafana.yml',
-        './monitoring/jhipster-grafana-dashboard.yml'
+        './monitoring-knative/jhipster-prometheus-crd.yml',
+        './monitoring-knative/jhipster-prometheus-cr.yml',
+        './monitoring-knative/jhipster-grafana.yml',
+        './monitoring-knative/jhipster-grafana-dashboard.yml',
     ],
-    jhgategateway: ['./jhgate/jhgate-gateway.yml', './jhgate/jhgate-destination-rule.yml', './jhgate/jhgate-virtual-service.yml'],
-    applyScript: ['./kubectl-knative-apply.sh']
+    jhgategateway: [
+        './jhgate-knative/jhgate-gateway.yml',
+        './jhgate-knative/jhgate-destination-rule.yml',
+        './jhgate-knative/jhgate-virtual-service.yml',
+    ],
+    applyScript: ['./kubectl-knative-apply.sh'],
 };
 
 const helmExpectedFiles = {
-    csvcfiles: ['./csvc/Chart.yml', './csvc/requirements.yml', './csvc/values.yml', './csvc/templates/_helpers.tpl'],
-    eurekaregistry: ['./csvc/templates/jhipster-registry.yml', './csvc/templates/application-configmap.yml'],
+    csvcfiles: [
+        './csvc-knative/Chart.yaml',
+        './csvc-knative/requirements.yml',
+        './csvc-knative/values.yml',
+        './csvc-knative/templates/_helpers.tpl',
+    ],
+    eurekaregistry: ['./csvc-knative/templates/jhipster-registry.yml', './csvc-knative/templates/application-configmap.yml'],
     consulregistry: [
-        './csvc/templates/consul.yml',
-        './csvc/templates/consul-config-loader.yml',
-        './csvc/templates/application-configmap.yml'
+        './csvc-knative/templates/consul.yml',
+        './csvc-knative/templates/consul-config-loader.yml',
+        './csvc-knative/templates/application-configmap.yml',
     ],
     jhgate: [
-        './jhgate/templates/jhgate-service.yml',
-        './jhgate/Chart.yml',
-        './jhgate/requirements.yml',
-        './jhgate/values.yml',
-        './jhgate/templates/_helpers.tpl'
+        './jhgate-knative/templates/jhgate-service.yml',
+        './jhgate-knative/Chart.yaml',
+        './jhgate-knative/requirements.yml',
+        './jhgate-knative/values.yml',
+        './jhgate-knative/templates/_helpers.tpl',
     ],
     customnamespace: ['./namespace.yml'],
     jhconsole: [
-        './csvc/templates/jhipster-console.yml',
-        './csvc/templates/jhipster-logstash.yml',
-        './csvc/templates/jhipster-dashboard-console.yml',
-        './csvc/templates/jhipster-zipkin.yml'
+        './csvc-knative/templates/jhipster-console.yml',
+        './csvc-knative/templates/jhipster-logstash.yml',
+        './csvc-knative/templates/jhipster-dashboard-console.yml',
+        './csvc-knative/templates/jhipster-zipkin.yml',
     ],
     msmysql: [
-        './msmysql/Chart.yml',
-        './msmysql/requirements.yml',
-        './msmysql/values.yml',
-        './msmysql/templates/_helpers.tpl',
-        './msmysql/templates/msmysql-service.yml'
+        './msmysql-knative/Chart.yaml',
+        './msmysql-knative/requirements.yml',
+        './msmysql-knative/values.yml',
+        './msmysql-knative/templates/_helpers.tpl',
+        './msmysql-knative/templates/msmysql-service.yml',
     ],
     mspsql: [
-        './mspsql/Chart.yml',
-        './mspsql/requirements.yml',
-        './mspsql/values.yml',
-        './mspsql/templates/_helpers.tpl',
-        './mspsql/templates/mspsql-service.yml'
+        './mspsql-knative/Chart.yaml',
+        './mspsql-knative/requirements.yml',
+        './mspsql-knative/values.yml',
+        './mspsql-knative/templates/_helpers.tpl',
+        './mspsql-knative/templates/mspsql-service.yml',
     ],
     msmongodb: [
-        './msmongodb/Chart.yml',
-        './msmongodb/requirements.yml',
-        './msmongodb/values.yml',
-        './msmongodb/templates/_helpers.tpl',
-        './msmongodb/templates/msmongodb-service.yml',
-        './msmongodb/templates/msmongodb-service.yml'
+        './msmongodb-knative/Chart.yaml',
+        './msmongodb-knative/requirements.yml',
+        './msmongodb-knative/values.yml',
+        './msmongodb-knative/templates/_helpers.tpl',
+        './msmongodb-knative/templates/msmongodb-service.yml',
+        './msmongodb-knative/templates/msmongodb-service.yml',
     ],
     msmariadb: [
-        './msmariadb/Chart.yml',
-        './msmariadb/requirements.yml',
-        './msmariadb/values.yml',
-        './msmariadb/templates/_helpers.tpl',
-        './msmariadb/templates/msmariadb-service.yml',
-        './msmariadb/templates/msmariadb-service.yml'
+        './msmariadb-knative/Chart.yaml',
+        './msmariadb-knative/requirements.yml',
+        './msmariadb-knative/values.yml',
+        './msmariadb-knative/templates/_helpers.tpl',
+        './msmariadb-knative/templates/msmariadb-service.yml',
+        './msmariadb-knative/templates/msmariadb-service.yml',
     ],
-    kafka: ['./samplekafka/templates/samplekafka-service.yml', './samplekafka/templates/samplekafka-service.yml'],
+    kafka: ['./samplekafka-knative/templates/samplekafka-service.yml', './samplekafka-knative/templates/samplekafka-service.yml'],
     jhgategateway: [
-        './jhgate/templates/jhgate-gateway.yml',
-        './jhgate/templates/jhgate-destination-rule.yml',
-        './jhgate/templates/jhgate-virtual-service.yml'
+        './jhgate-knative/templates/jhgate-gateway.yml',
+        './jhgate-knative/templates/jhgate-destination-rule.yml',
+        './jhgate-knative/templates/jhgate-virtual-service.yml',
     ],
-    applyScript: ['./helm-knative-apply.sh', './helm-knative-upgrade.sh']
+    applyScript: ['./helm-knative-apply.sh', './helm-knative-upgrade.sh'],
 };
 
 describe('JHipster Knative Sub Generator', () => {
@@ -118,17 +131,17 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: false,
                         clusteredDbApps: [],
                         generatorType: 'k8s',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
             it('creates expected registry files and content', () => {
                 assert.file(expectedFiles.eurekaregistry);
-                assert.fileContent('./registry/jhipster-registry.yml', /# base64 encoded "meetup"/);
+                assert.fileContent('./registry-knative/jhipster-registry.yml', /# base64 encoded "meetup"/);
             });
             it('creates expected gateway files and content', () => {
                 assert.file(expectedFiles.jhgate);
-                // assert.fileContent('./jhgate/jhgate-service.yml', /image: jhipsterrepository\/jhgate/);
+                // assert.fileContent('./jhgate-knative/jhgate-service.yml', /image: jhipsterrepository\/jhgate/);
             });
             it('create the apply script', () => {
                 assert.file(expectedFiles.applyScript);
@@ -153,7 +166,7 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: false,
                         clusteredDbApps: [],
                         generatorType: 'k8s',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -190,7 +203,7 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: true,
                         clusteredDbApps: [],
                         generatorType: 'k8s',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -230,7 +243,7 @@ describe('JHipster Knative Sub Generator', () => {
                         ingressDomain: 'example.com',
                         clusteredDbApps: [],
                         generatorType: 'k8s',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -263,7 +276,7 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: false,
                         clusteredDbApps: [],
                         generatorType: 'k8s',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -302,7 +315,7 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: false,
                         clusteredDbApps: [],
                         generatorType: 'k8s',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -349,7 +362,7 @@ describe('JHipster Knative Sub Generator', () => {
                         kubernetesNamespace: 'mynamespace',
                         monitoring: 'prometheus',
                         generatorType: 'k8s',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -388,7 +401,7 @@ describe('JHipster Knative Sub Generator', () => {
                         ingressDomain: 'example.com',
                         clusteredDbApps: [],
                         generatorType: 'k8s',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -427,7 +440,7 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: false,
                         clusteredDbApps: [],
                         generatorType: 'helm',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -437,7 +450,7 @@ describe('JHipster Knative Sub Generator', () => {
             });
             it('creates expected gateway files and content', () => {
                 assert.file(helmExpectedFiles.jhgate);
-                assert.fileContent('./jhgate/requirements.yml', /name: mysql/);
+                assert.fileContent('./jhgate-knative/requirements.yml', /name: mysql/);
             });
             it('create the apply script', () => {
                 assert.file(helmExpectedFiles.applyScript);
@@ -462,7 +475,7 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: false,
                         clusteredDbApps: [],
                         generatorType: 'helm',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -475,7 +488,7 @@ describe('JHipster Knative Sub Generator', () => {
             });
             it('creates expected mysql files', () => {
                 assert.file(helmExpectedFiles.msmysql);
-                assert.fileContent('./msmysql/requirements.yml', /name: mysql/);
+                assert.fileContent('./msmysql-knative/requirements.yml', /name: mysql/);
             });
             it('create the apply script', () => {
                 assert.file(helmExpectedFiles.applyScript);
@@ -501,7 +514,7 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: true,
                         clusteredDbApps: [],
                         generatorType: 'helm',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -511,12 +524,12 @@ describe('JHipster Knative Sub Generator', () => {
             });
             it('creates expected mysql files', () => {
                 assert.file(helmExpectedFiles.msmysql);
-                assert.fileContent('./msmysql/requirements.yml', /name: mysql/);
+                assert.fileContent('./msmysql-knative/requirements.yml', /name: mysql/);
             });
             it('creates expected jhipster-console files', () => {
                 assert.file(helmExpectedFiles.csvcfiles);
                 assert.file(helmExpectedFiles.jhconsole);
-                assert.fileContent('./csvc/requirements.yml', /name: elasticsearch/);
+                assert.fileContent('./csvc-knative/requirements.yml', /name: elasticsearch/);
             });
             it('creates expected namespace file', () => {
                 assert.file(helmExpectedFiles.customnamespace);
@@ -545,7 +558,7 @@ describe('JHipster Knative Sub Generator', () => {
                         ingressDomain: 'example.com',
                         clusteredDbApps: [],
                         generatorType: 'helm',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -560,7 +573,7 @@ describe('JHipster Knative Sub Generator', () => {
             it('creates expected ingress files', () => {
                 assert.file(helmExpectedFiles.jhgate);
                 assert.file(helmExpectedFiles.csvcfiles);
-                assert.fileContent('./jhgate/requirements.yml', /name: mysql/);
+                assert.fileContent('./jhgate-knative/requirements.yml', /name: mysql/);
             });
             it('create the apply script', () => {
                 assert.file(helmExpectedFiles.applyScript);
@@ -585,7 +598,7 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: false,
                         clusteredDbApps: [],
                         generatorType: 'helm',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -599,11 +612,11 @@ describe('JHipster Knative Sub Generator', () => {
             });
             it('creates expected mysql files', () => {
                 assert.file(helmExpectedFiles.msmysql);
-                assert.fileContent('./msmysql/requirements.yml', /name: mysql/);
+                assert.fileContent('./msmysql-knative/requirements.yml', /name: mysql/);
             });
             it('creates expected psql files', () => {
                 assert.file(helmExpectedFiles.mspsql);
-                assert.fileContent('./mspsql/requirements.yml', /name: postgresql/);
+                assert.fileContent('./mspsql-knative/requirements.yml', /name: postgresql/);
             });
             it('create the apply script', () => {
                 assert.file(helmExpectedFiles.applyScript);
@@ -629,7 +642,7 @@ describe('JHipster Knative Sub Generator', () => {
                         kubernetesServiceType: 'LoadBalancer',
                         clusteredDbApps: [],
                         generatorType: 'helm',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -643,19 +656,19 @@ describe('JHipster Knative Sub Generator', () => {
             });
             it('creates expected mysql files', () => {
                 assert.file(helmExpectedFiles.msmysql);
-                assert.fileContent('./msmysql/requirements.yml', /name: mysql/);
+                assert.fileContent('./msmysql-knative/requirements.yml', /name: mysql/);
             });
             it('creates expected psql files', () => {
                 assert.file(helmExpectedFiles.mspsql);
-                assert.fileContent('./mspsql/requirements.yml', /name: postgresql/);
+                assert.fileContent('./mspsql-knative/requirements.yml', /name: postgresql/);
             });
             it('creates expected mongodb files', () => {
                 assert.file(helmExpectedFiles.msmongodb);
-                assert.fileContent('./msmongodb/requirements.yml', /name: mongodb-replicaset/);
+                assert.fileContent('./msmongodb-knative/requirements.yml', /name: mongodb-replicaset/);
             });
             it('creates expected mariadb files', () => {
                 assert.file(helmExpectedFiles.msmariadb);
-                assert.fileContent('./msmariadb/requirements.yml', /name: mariadb/);
+                assert.fileContent('./msmariadb-knative/requirements.yml', /name: mariadb/);
             });
             it('create the apply script', () => {
                 assert.file(helmExpectedFiles.applyScript);
@@ -679,7 +692,7 @@ describe('JHipster Knative Sub Generator', () => {
                         kubernetesNamespace: 'mynamespace',
                         monitoring: 'prometheus',
                         generatorType: 'helm',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -688,12 +701,12 @@ describe('JHipster Knative Sub Generator', () => {
             });
             it('creates expected mysql files', () => {
                 assert.file(helmExpectedFiles.msmysql);
-                assert.fileContent('./msmysql/requirements.yml', /name: mysql/);
+                assert.fileContent('./msmysql-knative/requirements.yml', /name: mysql/);
             });
             it('creates expected prometheus files', () => {
                 assert.file(helmExpectedFiles.csvcfiles);
-                assert.fileContent('./csvc/requirements.yml', /name: prometheus/);
-                assert.fileContent('./csvc/requirements.yml', /name: grafana/);
+                assert.fileContent('./csvc-knative/requirements.yml', /name: prometheus/);
+                assert.fileContent('./csvc-knative/requirements.yml', /name: grafana/);
             });
             it('creates expected namespace file', () => {
                 assert.file(helmExpectedFiles.customnamespace);
@@ -721,7 +734,7 @@ describe('JHipster Knative Sub Generator', () => {
                         ingressDomain: 'example.com',
                         clusteredDbApps: [],
                         generatorType: 'helm',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });

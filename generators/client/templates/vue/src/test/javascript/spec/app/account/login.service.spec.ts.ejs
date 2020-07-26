@@ -1,0 +1,43 @@
+import LoginService from '@/account/login.service';
+<%_ if (authenticationType !== 'jwt') { _%>
+import axios from 'axios';
+
+const mockedAxios: any = axios;
+jest.mock('axios', () => ({
+  post: jest.fn()
+}));
+<%_ } _%>
+
+describe('Login Service test suite', () => {
+  let loginService;
+
+  beforeEach(() => {
+    loginService = new LoginService();
+  });
+
+  <%_ if (authenticationType === 'oauth2') { _%>
+  it('should build url for login', () => {
+    const loc = {href: '', hostname: 'localhost', pathname: '/'};
+
+    loginService.login(loc);
+
+    expect(loc.href).toBe('//localhost/oauth2/authorization/oidc');
+  });
+
+  it('should build url for login behind client proxy', () => {
+    const loc = {href: '', port: '<%= serverPort %>', hostname: 'localhost', pathname: '/'};
+
+    loginService.login(loc);
+
+    expect(loc.href).toBe('//localhost:<%= serverPort %>/oauth2/authorization/oidc');
+  });
+  <%_ } _%>
+
+  <%_ if (authenticationType !== 'jwt') { _%>
+  it('should call global logout when asked to', () => {
+    loginService.logout();
+
+    expect(mockedAxios.post).toHaveBeenCalledWith('api/logout');
+  });
+  <%_ } _%>
+});

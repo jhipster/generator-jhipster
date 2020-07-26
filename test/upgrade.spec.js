@@ -10,7 +10,7 @@ const constants = require('../generators/generator-constants');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
-describe('JHipster upgrade generator', function() {
+describe('JHipster upgrade generator', function () {
     this.timeout(400000);
     describe('default application', () => {
         const cwd = process.cwd();
@@ -18,7 +18,7 @@ describe('JHipster upgrade generator', function() {
             let workingDirectory;
             helpers
                 .run(path.join(__dirname, '../generators/app'))
-                .withOptions({ skipInstall: true, skipChecks: true, 'from-cli': true })
+                .withOptions({ skipInstall: true, skipChecks: true, fromCli: true })
                 .inTmpDir(dir => {
                     /* eslint-disable-next-line no-console */
                     console.log(`Generating JHipster application in directory: ${dir}`);
@@ -44,16 +44,17 @@ describe('JHipster upgrade generator', function() {
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                     skipClient: false,
                     skipUserManagement: false,
-                    serverSideOptions: []
+                    serverSideOptions: [],
+                    upgradeConfig: false,
                 })
                 .on('end', () => {
                     helpers
                         .run(path.join(__dirname, '../generators/upgrade'))
                         .withOptions({
-                            'from-cli': true,
+                            fromCli: true,
                             force: true,
                             silent: false,
-                            'target-version': packageJson.version
+                            targetVersion: packageJson.version,
                         })
                         .inTmpDir(() => {
                             /* eslint-disable-next-line no-console */
@@ -94,7 +95,7 @@ describe('JHipster upgrade generator', function() {
             let workingDirectory;
             helpers
                 .run(path.join(__dirname, '../generators/app'))
-                .withOptions({ skipInstall: true, skipChecks: true, 'from-cli': true, blueprints: blueprintName })
+                .withOptions({ skipInstall: true, skipChecks: true, fromCli: true, blueprints: blueprintName })
                 .inTmpDir(dir => {
                     /* eslint-disable-next-line no-console */
                     console.log(`Generating JHipster application in directory: ${dir}`);
@@ -103,7 +104,7 @@ describe('JHipster upgrade generator', function() {
                     // Fake the presence of the blueprint in node_modules: we don't install it, but we need its version
                     const packagejs = {
                         name: blueprintName,
-                        version: blueprintVersion
+                        version: blueprintVersion,
                     };
                     const fakeBlueprintModuleDir = path.join(dir, `node_modules/${blueprintName}`);
                     fse.ensureDirSync(path.join(fakeBlueprintModuleDir, 'generators', 'fake'));
@@ -130,17 +131,18 @@ describe('JHipster upgrade generator', function() {
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                     skipClient: false,
                     skipUserManagement: false,
-                    serverSideOptions: []
+                    serverSideOptions: [],
+                    upgradeConfig: false,
                 })
                 .on('end', () => {
                     helpers
                         .run(path.join(__dirname, '../generators/upgrade'))
                         .withOptions({
-                            'from-cli': true,
+                            fromCli: true,
                             force: true,
                             silent: false,
-                            'skip-checks': true,
-                            'target-version': packageJson.version
+                            skipChecks: true,
+                            targetVersion: packageJson.version,
                         })
                         .inTmpDir(() => {
                             /* eslint-disable-next-line no-console */
@@ -171,7 +173,7 @@ describe('JHipster upgrade generator', function() {
 
         it('still contains blueprint information', () => {
             assert.JSONFileContent('.yo-rc.json', {
-                'generator-jhipster': { blueprints: [{ name: blueprintName, version: blueprintVersion }] }
+                'generator-jhipster': { blueprints: [{ name: blueprintName, version: blueprintVersion }] },
             });
             assert.fileContent('package.json', new RegExp(`"${blueprintName}": "${blueprintVersion}"`));
         });

@@ -19,63 +19,64 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
-const shelljs = require('shelljs');
 const pluralize = require('pluralize');
-const jhiCore = require('jhipster-core');
+const path = require('path');
 const prompts = require('./prompts');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
+const { isReservedClassName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
+const { entityDefaultConfig } = require('../generator-defaults');
 
 /* constants used throughout */
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
+
+const stringify = data => JSON.stringify(data, null, 4);
+
 let useBlueprints;
 
 class EntityGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        this.configOptions = this.options.configOptions || {};
-
         // This makes `name` a required argument.
         this.argument('name', {
             type: String,
             required: true,
-            description: 'Entity name'
+            description: 'Entity name',
         });
 
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This method adds support for a `--[no-]regenerate` flag
         this.option('regenerate', {
             desc: 'Regenerate the entity without presenting an option to update it',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         this.option('table-name', {
             desc: 'Specify table name that will be used by the entity',
-            type: String
+            type: String,
         });
 
         // This method adds support for a `--[no-]fluent-methods` flag
         this.option('fluent-methods', {
             desc: 'Generate fluent methods in entity beans to allow chained object construction',
             type: Boolean,
-            defaults: true
         });
 
         // This adds support for a `--angular-suffix` flag
         this.option('angular-suffix', {
             desc: 'Use a suffix to generate Angular routes and files, to avoid name clashes',
             type: String,
-            defaults: ''
         });
 
         // This adds support for a `--client-root-folder` flag
@@ -83,41 +84,36 @@ class EntityGenerator extends BaseBlueprintGenerator {
             desc:
                 'Use a root folder name for entities on client side. By default its empty for monoliths and name of the microservice for gateways',
             type: String,
-            defaults: ''
         });
 
         // This adds support for a `--skip-ui-grouping` flag
         this.option('skip-ui-grouping', {
             desc: 'Disables the UI grouping behaviour for entity client side code',
             type: Boolean,
-            defaults: false
         });
 
         // This adds support for a `--skip-server` flag
         this.option('skip-server', {
             desc: 'Skip the server-side code generation',
             type: Boolean,
-            defaults: false
         });
 
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip the client-side code generation',
             type: Boolean,
-            defaults: false
         });
 
         // This adds support for a `--skip-db-changelog` flag
         this.option('skip-db-changelog', {
             desc: 'Skip the generation of database changelog (liquibase for sql databases)',
             type: Boolean,
-            defaults: false
         });
 
         // This adds support for a `--db` flag
         this.option('db', {
             desc: 'Provide DB option for the application when using skip-server flag',
-            type: String
+            type: String,
         });
 
         // This adds support for a `--experimental` flag which can be used to enable experimental features
@@ -125,15 +121,59 @@ class EntityGenerator extends BaseBlueprintGenerator {
             desc:
                 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
-        this.context = {};
+        if (this.options.help) {
+            return;
+        }
 
-        this.setupEntityOptions(this, this, this.context);
+        const name = _.upperFirst(this.options.name).replace('.json', '');
+        this.entityStorage = this.getEntityConfig(name);
+        this.entityConfig = this.entityStorage.createProxy();
+
+        const entityExisted = this.options.entityExisted !== undefined ? this.options.entityExisted : this.entityStorage.existed;
+
+        this.context = {
+            name,
+            entityExisted,
+            haveFieldWithJavadoc: false,
+            enums: [],
+            existingEnum: false,
+
+            // these variable hold field and relationship names for question options during update
+            fieldNameChoices: [],
+
+            fieldsContainDate: false,
+            fieldsContainInstant: false,
+            fieldsContainUUID: false,
+            fieldsContainZonedDateTime: false,
+            fieldsContainDuration: false,
+            fieldsContainLocalDate: false,
+            fieldsContainBigDecimal: false,
+            fieldsContainBlob: false,
+            fieldsContainImageBlob: false,
+            fieldsContainTextBlob: false,
+            fieldsContainBlobOrImage: false,
+            validation: false,
+            fieldsContainOwnerManyToMany: false,
+            fieldsContainNoOwnerOneToOne: false,
+            fieldsContainOwnerOneToOne: false,
+            fieldsContainOneToMany: false,
+            fieldsContainManyToOne: false,
+            fieldsContainEmbedded: false,
+            fieldsIsReactAvField: false,
+
+            blobFields: [],
+            differentTypes: [],
+            differentRelationships: {},
+            i18nToLoad: [],
+        };
+
+        this._setupEntityOptions(this, this, this.context);
         this.registerPrettierTransform();
 
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity', { arguments: [this.context.name] });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity', { entityExisted, arguments: [name] });
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -143,213 +183,136 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.checkInvocationFromCLI();
             },
 
-            getConfig() {
+            setupRequiredConfigForMicroservicePrompt() {
+                this.context.filename = path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(this.context.name)}.json`);
+            },
+
+            /* Use need microservice path to load the entity file */
+            askForMicroserviceJson: prompts.askForMicroserviceJson,
+
+            setupMicroServiceEntity() {
                 const context = this.context;
-                const configuration = this.getAllJhipsterConfig(this, true);
-                context.useConfigurationFile = false;
-                this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-                context.options = this.options;
-                context.baseName = configuration.get('baseName');
-                context.capitalizedBaseName = _.upperFirst(context.baseName);
-                context.packageName = configuration.get('packageName');
-                context.applicationType = configuration.get('applicationType');
-                context.reactive = configuration.get('reactive');
-                context.packageFolder = configuration.get('packageFolder');
-                context.authenticationType = configuration.get('authenticationType');
-                context.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
-                context.enableHibernateCache =
-                    configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(context.cacheProvider);
-                context.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
-                context.databaseType = configuration.get('databaseType') || this.getDBTypeFromDBValue(this.options.db);
-                context.prodDatabaseType = configuration.get('prodDatabaseType') || this.options.db;
-                context.devDatabaseType = configuration.get('devDatabaseType') || this.options.db;
-                context.skipFakeData = configuration.get('skipFakeData');
-                context.searchEngine = configuration.get('searchEngine');
-                context.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
-                context.enableTranslation = configuration.get('enableTranslation');
-                context.nativeLanguage = configuration.get('nativeLanguage');
-                context.languages = configuration.get('languages');
-                context.buildTool = configuration.get('buildTool');
-                context.jhiPrefix = configuration.get('jhiPrefix');
-                context.skipCheckLengthOfIdentifier = configuration.get('skipCheckLengthOfIdentifier');
-                context.jhiPrefixDashed = _.kebabCase(context.jhiPrefix);
-                context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
-                context.testFrameworks = configuration.get('testFrameworks');
-                // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
-                this.jhipsterOldVersion = configuration.get('jhipsterVersion');
-                // backward compatibility on testing frameworks
-                if (context.testFrameworks === undefined) {
-                    context.testFrameworks = ['gatling'];
+
+                if (this.jhipsterConfig.applicationType === 'uaa') {
+                    this.entityConfig.microserviceName = this.jhipsterConfig.baseName;
+                } else if (this.jhipsterConfig.applicationType === 'microservice') {
+                    context.skipClient = true;
+                    context.microserviceName = this.entityConfig.microserviceName = this.jhipsterConfig.baseName;
+                    if (!this.entityConfig.clientRootFolder) {
+                        context.clientRootFolder = this.entityConfig.clientRootFolder = this.entityConfig.microserviceName;
+                    }
+                } else if (this.jhipsterConfig.applicationType === 'gateway') {
+                    // If microservicePath is set we are loading the entity from the microservice side.
+                    context.useMicroserviceJson = !!this.entityConfig.microservicePath;
+                    if (context.useMicroserviceJson) {
+                        context.microserviceFileName = this.destinationPath(this.entityConfig.microservicePath, context.filename);
+                        context.useConfigurationFile = true;
+
+                        this.log(`\nThe entity ${context.name} is being updated.\n`);
+                        try {
+                            // We are generating a entity from a microservice.
+                            // Load it directly into our entity configuration.
+                            this.microserviceConfig = this.fs.readJSON(context.microserviceFileName);
+                            this.entityStorage.set(this.microserviceConfig);
+                        } catch (err) {
+                            this.debug('Error:', err);
+                            throw new Error('\nThe entity configuration file could not be read!\n');
+                        }
+                    }
+                    if (this.entityConfig.clientRootFolder === undefined) {
+                        context.clientRootFolder = this.entityConfig.clientRootFolder = context.skipUiGrouping
+                            ? ''
+                            : this.entityConfig.microserviceName;
+                    }
                 }
+            },
+
+            loadSharedConfig() {
+                this.loadAppConfig(undefined, this.context);
+                this.loadClientConfig(undefined, this.context);
+                this.loadTranslationConfig(undefined, this.context);
+                // Try to load server config from microservice side, falling back to the app config.
+                this.loadServerConfig(_.defaults({}, this.microserviceConfig, this.jhipsterConfig), this.context);
+            },
+
+            loadOptions() {
+                const context = this.context;
+                context.options = this.options;
+
+                if (this.options.db) {
+                    context.databaseType = this.getDBTypeFromDBValue(this.options.db);
+                    context.prodDatabaseType = this.options.db;
+                    context.devDatabaseType = this.options.db;
+                }
+
+                context.skipServer = context.skipServer || this.options.skipServer;
+                context.skipDbChangelog = context.skipDbChangelog || this.options.skipDbChangelog;
+                context.skipClient = context.skipClient || this.options.skipClient;
+            },
+
+            loadEntitySpecificOptions() {
+                this.context.skipClient = this.context.skipClient || this.entityConfig.skipClient;
+                this.context.databaseType = this.entityConfig.databaseType || this.context.databaseType;
+            },
+
+            setupSharedConfig() {
+                const context = this.context;
+
                 context.protractorTests = context.testFrameworks.includes('protractor');
                 context.gatlingTests = context.testFrameworks.includes('gatling');
                 context.cucumberTests = context.testFrameworks.includes('cucumber');
 
-                context.clientFramework = configuration.get('clientFramework');
-                if (!context.clientFramework) {
-                    context.clientFramework = ANGULAR;
-                }
-                context.clientPackageManager = configuration.get('clientPackageManager');
-                if (!context.clientPackageManager) {
-                    if (context.useYarn) {
-                        context.clientPackageManager = 'yarn';
-                    } else {
-                        context.clientPackageManager = 'npm';
-                    }
-                }
-
-                context.skipClient =
-                    context.applicationType === 'microservice' || this.options['skip-client'] || configuration.get('skipClient');
-                context.skipServer = this.options['skip-server'] || configuration.get('skipServer');
-                context.skipDbChangelog = this.options['skip-db-changelog'] || configuration.get('skipDbChangelog');
+                context.jhiPrefixDashed = _.kebabCase(context.jhiPrefix);
+                context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
+                context.capitalizedBaseName = _.upperFirst(context.baseName);
 
                 context.angularAppName = this.getAngularAppName(context.baseName);
                 context.angularXAppName = this.getAngularXAppName(context.baseName);
-                context.jhipsterConfigDirectory = '.jhipster';
                 context.mainClass = this.getMainClassName(context.baseName);
                 context.microserviceAppName = '';
 
-                if (context.applicationType === 'microservice') {
-                    context.microserviceName = context.baseName;
-                    if (!context.clientRootFolder) {
-                        context.clientRootFolder = context.microserviceName;
-                    }
-                }
-                context.filename = `${context.jhipsterConfigDirectory}/${context.entityNameCapitalized}.json`;
-                if (shelljs.test('-f', context.filename)) {
-                    this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
-                    context.useConfigurationFile = true;
-                }
-
-                context.filenamePreviousState = `${context.jhipsterConfigDirectory}/${context.entityNameCapitalized}-previous.json`;
-                if (shelljs.test('-f', context.filenamePreviousState)) {
-                    this.log(
-                        chalk.green(
-                            `\nFound the ${context.filenamePreviousState} configuration file for previous entity state, entity can be automatically updated!\n`
-                        )
-                    );
-                    context.useConfigurationFile = true;
-                }
-
-                context.entitySuffix = configuration.get('entitySuffix');
-                if (_.isNil(context.entitySuffix)) {
-                    context.entitySuffix = '';
-                }
-
-                context.dtoSuffix = configuration.get('dtoSuffix');
-                if (_.isNil(context.dtoSuffix)) {
-                    context.dtoSuffix = 'DTO';
-                }
-
                 if (context.entitySuffix === context.dtoSuffix) {
-                    this.error('The entity cannot be generated as the entity suffix and DTO suffix are equals !');
-                }
-
-                context.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-            },
-
-            validateMvcApp() {
-                if (this.context.reactive) {
-                    this.error(chalk.red("The entity generator doesn't support reactive apps at the moment"));
+                    throw new Error('The entity cannot be generated as the entity suffix and DTO suffix are equals !');
                 }
             },
 
-            validateDbExistence() {
-                const context = this.context;
-                if (
-                    !context.databaseType ||
-                    (context.databaseType === 'no' &&
-                        !(
-                            (context.authenticationType === 'uaa' || context.authenticationType === 'oauth2') &&
-                            context.applicationType === 'gateway'
-                        ))
-                ) {
-                    if (context.skipServer) {
-                        this.error(
-                            chalk.red(
-                                'The entity cannot be generated as the database type is not known! Pass the --db <type> & --prod-db <db> flag in command line'
-                            )
-                        );
-                    } else {
-                        this.error('The entity cannot be generated as the application does not have a database configured!');
-                    }
+            validateReactiveCompatibility() {
+                if (this.context.reactive && !['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(this.context.databaseType)) {
+                    throw new Error(
+                        `The entity generator doesn't support reactive apps with databases of type ${this.context.databaseType} at the moment`
+                    );
                 }
             },
 
             validateEntityName() {
-                const entityName = this.context.name;
-                if (!/^([a-zA-Z0-9_]*)$/.test(entityName)) {
-                    this.error('The entity name cannot contain special characters');
-                } else if (/^[0-9].*$/.test(entityName)) {
-                    this.error('The entity name cannot start with a number');
-                } else if (entityName === '') {
-                    this.error('The entity name cannot be empty');
-                } else if (entityName.indexOf('Detail', entityName.length - 'Detail'.length) !== -1) {
-                    this.error("The entity name cannot end with 'Detail'");
-                } else if (!this.context.skipServer && jhiCore.isReservedClassName(entityName)) {
-                    this.error('The entity name cannot contain a Java or JHipster reserved keyword');
+                const validation = this._validateEntityName(this.context.name);
+                if (validation !== true) {
+                    throw new Error(validation);
                 }
             },
 
-            setupconsts() {
+            bootstrapConfig() {
                 const context = this.context;
                 const entityName = context.name;
-                // Specific Entity sub-generator constants
+                if (['microservice', 'gateway'].includes(this.jhipsterConfig.applicationType)) {
+                    if (this.entityConfig.databaseType === undefined) {
+                        this.entityConfig.databaseType = context.databaseType;
+                    }
+                }
+                context.filename = this.destinationPath(context.filename);
+                context.configurationFileExists = this.fs.exists(context.filename);
+                context.useConfigurationFile = context.configurationFileExists || context.useConfigurationFile;
+                if (context.configurationFileExists) {
+                    this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
+                }
+
+                // Structure for prompts.
+                this.entityStorage.defaults({ fields: [], relationships: [] });
+
                 if (!context.useConfigurationFile) {
-                    // no file present, new entity creation
                     this.log(`\nThe entity ${entityName} is being created.\n`);
-                    context.fields = [];
-                    context.haveFieldWithJavadoc = false;
-                    context.relationships = [];
-                    context.pagination = 'no';
-                    context.validation = false;
-                    context.dto = 'no';
-                    context.service = 'no';
-                    context.jpaMetamodelFiltering = false;
-                    context.readOnly = false;
-                    context.embedded = false;
-                } else {
-                    // existing entity reading values from file
-                    this.log(`\nThe entity ${entityName} is being updated.\n`);
-                    this.loadEntityJson(context.filename, context.filenamePreviousState);
                 }
             },
-
-            validateTableName() {
-                const context = this.context;
-                const prodDatabaseType = context.prodDatabaseType;
-                const entityTableName = context.entityTableName;
-                const jhiTablePrefix = context.jhiTablePrefix;
-                const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
-                const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${context.name}.json file and then run again 'jhipster entity ${context.name}.'`;
-
-                if (!/^([a-zA-Z0-9_]*)$/.test(entityTableName)) {
-                    this.error(`The table name cannot contain special characters.\n${instructions}`);
-                } else if (entityTableName === '') {
-                    this.error('The table name cannot be empty');
-                } else if (jhiCore.isReservedTableName(entityTableName, prodDatabaseType)) {
-                    if (jhiTablePrefix) {
-                        this.warning(
-                            chalk.red(
-                                `The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`
-                            )
-                        );
-                        context.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
-                    } else {
-                        this.warning(
-                            chalk.red(
-                                `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.\n${instructions}`
-                            )
-                        );
-                    }
-                } else if (prodDatabaseType === 'oracle' && entityTableName.length > 26 && !skipCheckLengthOfIdentifier) {
-                    this.error(`The table name is too long for Oracle, try a shorter name.\n${instructions}`);
-                } else if (prodDatabaseType === 'oracle' && entityTableName.length > 14 && !skipCheckLengthOfIdentifier) {
-                    this.warning(
-                        `The table name is long for Oracle, long table names can cause issues when used to create constraint names and join table names.\n${instructions}`
-                    );
-                }
-            }
         };
     }
 
@@ -361,20 +324,17 @@ class EntityGenerator extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _prompting() {
         return {
-            /* pre entity hook needs to be written here */
-            askForMicroserviceJson: prompts.askForMicroserviceJson,
             /* ask question to user if s/he wants to update entity */
             askForUpdate: prompts.askForUpdate,
             askForFields: prompts.askForFields,
             askForFieldsToRemove: prompts.askForFieldsToRemove,
             askForRelationships: prompts.askForRelationships,
             askForRelationsToRemove: prompts.askForRelationsToRemove,
-            askForTableName: prompts.askForTableName,
             askForService: prompts.askForService,
             askForDTO: prompts.askForDTO,
             askForFiltering: prompts.askForFiltering,
             askForReadOnly: prompts.askForReadOnly,
-            askForPagination: prompts.askForPagination
+            askForPagination: prompts.askForPagination,
         };
     }
 
@@ -386,384 +346,174 @@ class EntityGenerator extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _configuring() {
         return {
-            validateFile() {
+            configureEntityTable() {
                 const context = this.context;
-                if (!context.useConfigurationFile) {
-                    return;
+                context.entityTableName = this.entityConfig.entityTableName;
+                if (context.entityTableName === undefined) {
+                    context.entityTableName = this.getTableName(context.name);
                 }
+                if (isReservedTableName(context.entityTableName, context.prodDatabaseType) && context.jhiTablePrefix) {
+                    context.entityTableName = this.entityConfig.entityTableName = `${context.jhiTablePrefix}_${this.entityConfig.entityTableName}`;
+                }
+            },
+
+            /*
+             * Postpone entity table name prompt to wait entity table to be configured.
+             * It should be asked only when entity table name isn't valid.
+             */
+            askForTableName: prompts.askForTableName,
+
+            configureEntity() {
+                const context = this.context;
+                const validation = this._validateTableName(context.entityTableName);
+                if (validation !== true) {
+                    throw new Error(validation);
+                }
+
+                if (!['sql', 'mongodb', 'couchbase', 'neo4j'].includes(context.databaseType)) {
+                    this.entityConfig.pagination = 'no';
+                }
+
+                if (this.entityConfig.jpaMetamodelFiltering && (context.databaseType !== 'sql' || this.entityConfig.service === 'no')) {
+                    this.warning('Not compatible with jpaMetamodelFiltering, disabling');
+                    this.entityConfig.jpaMetamodelFiltering = false;
+                }
+            },
+
+            configureFields() {
+                const context = this.context;
                 const entityName = context.name;
                 // Validate entity json field content
-                context.fields.forEach(field => {
-                    if (_.isUndefined(field.fieldName)) {
-                        this.error(
-                            chalk.red(`fieldName is missing in .jhipster/${entityName}.json for field ${JSON.stringify(field, null, 4)}`)
-                        );
+                const fields = this.entityConfig.fields;
+                fields.forEach(field => {
+                    // Migration from JodaTime to Java Time
+                    if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
+                        field.fieldType = 'Instant';
                     }
 
-                    if (_.isUndefined(field.fieldType)) {
-                        this.error(
-                            chalk.red(`fieldType is missing in .jhipster/${entityName}.json for field ${JSON.stringify(field, null, 4)}`)
-                        );
-                    }
+                    this._validateField(field);
 
-                    if (!_.isUndefined(field.fieldValidateRules)) {
-                        if (!_.isArray(field.fieldValidateRules)) {
-                            this.error(
-                                chalk.red(
-                                    `fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )}`
-                                )
-                            );
-                        }
-                        field.fieldValidateRules.forEach(fieldValidateRule => {
-                            if (!_.includes(SUPPORTED_VALIDATION_RULES, fieldValidateRule)) {
-                                this.error(
-                                    chalk.red(
-                                        `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                            field,
-                                            null,
-                                            4
-                                        )} [supported validation rules ${SUPPORTED_VALIDATION_RULES}]`
-                                    )
-                                );
-                            }
-                        });
-                        if (_.includes(field.fieldValidateRules, 'max') && _.isUndefined(field.fieldValidateRulesMax)) {
-                            this.error(
-                                chalk.red(
-                                    `fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )}`
-                                )
-                            );
-                        }
-                        if (_.includes(field.fieldValidateRules, 'min') && _.isUndefined(field.fieldValidateRulesMin)) {
-                            this.error(
-                                chalk.red(
-                                    `fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )}`
-                                )
-                            );
-                        }
-                        if (_.includes(field.fieldValidateRules, 'maxlength') && _.isUndefined(field.fieldValidateRulesMaxlength)) {
-                            this.error(
-                                chalk.red(
-                                    `fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )}`
-                                )
-                            );
-                        }
-                        if (_.includes(field.fieldValidateRules, 'minlength') && _.isUndefined(field.fieldValidateRulesMinlength)) {
-                            this.error(
-                                chalk.red(
-                                    `fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )}`
-                                )
-                            );
-                        }
-                        if (_.includes(field.fieldValidateRules, 'maxbytes') && _.isUndefined(field.fieldValidateRulesMaxbytes)) {
-                            this.error(
-                                chalk.red(
-                                    `fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )}`
-                                )
-                            );
-                        }
-                        if (_.includes(field.fieldValidateRules, 'minbytes') && _.isUndefined(field.fieldValidateRulesMinbytes)) {
-                            this.error(
-                                chalk.red(
-                                    `fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )}`
-                                )
-                            );
-                        }
-                        if (_.includes(field.fieldValidateRules, 'pattern') && _.isUndefined(field.fieldValidateRulesPattern)) {
-                            this.error(
-                                chalk.red(
-                                    `fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )}`
-                                )
-                            );
-                        }
-                        if (field.fieldType === 'ByteBuffer') {
-                            this.warning(
-                                chalk.red(
-                                    `Cannot use validation in .jhipster/${entityName}.json for field ${JSON.stringify(
-                                        field,
-                                        null,
-                                        4
-                                    )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`
-                                )
-                            );
-                            field.validation = false;
-                            field.fieldValidateRules = [];
-                        }
+                    if (field.fieldType === 'ByteBuffer') {
+                        this.warning(
+                            `Cannot use validation in .jhipster/${entityName}.json for field ${stringify(
+                                field
+                            )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`
+                        );
+                        field.validation = false;
+                        field.fieldValidateRules = [];
                     }
                 });
+                this.entityConfig.fields = fields;
+            },
+
+            configureRelationships() {
+                const context = this.context;
+                const entityName = context.name;
 
                 // Validate entity json relationship content
-                context.relationships.forEach(relationship => {
-                    if (_.isUndefined(relationship.relationshipName)) {
+                const relationships = this.entityConfig.relationships;
+                relationships.forEach(relationship => {
+                    this._validateRelationship(relationship);
+
+                    if (relationship.relationshipName === undefined) {
                         relationship.relationshipName = relationship.otherEntityName;
                         this.warning(
-                            `relationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
-                                relationship,
-                                null,
-                                4
+                            `relationshipName is missing in .jhipster/${entityName}.json for relationship ${stringify(
+                                relationship
                             )}, using ${relationship.otherEntityName} as fallback`
                         );
                     }
 
-                    if (_.isUndefined(relationship.otherEntityName)) {
-                        this.error(
-                            chalk.red(
-                                `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
-                                    relationship,
-                                    null,
-                                    4
-                                )}`
-                            )
-                        );
-                    }
-
                     if (
-                        _.isUndefined(relationship.otherEntityRelationshipName) &&
-                        _.isUndefined(relationship.relationshipType) === false &&
-                        relationship.relationshipType !== ''
-                    ) {
-                        relationship.otherEntityRelationshipName = _.lowerFirst(entityName);
-                        if (relationship.otherEntityName !== 'user') {
-                            this.warning(
-                                `otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
-                                    relationship,
-                                    null,
-                                    4
-                                )}, using ${_.lowerFirst(entityName)} as fallback`
-                            );
-                        }
-                    }
-
-                    if (
-                        _.isUndefined(relationship.otherEntityField) &&
+                        relationship.otherEntityField === undefined &&
                         (relationship.relationshipType === 'many-to-one' ||
                             (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === true) ||
                             (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true))
                     ) {
                         this.warning(
-                            `otherEntityField is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
-                                relationship,
-                                null,
-                                4
+                            `otherEntityField is missing in .jhipster/${entityName}.json for relationship ${stringify(
+                                relationship
                             )}, using id as fallback`
                         );
                         relationship.otherEntityField = 'id';
                     }
-
-                    if (_.isUndefined(relationship.relationshipType)) {
-                        this.error(
-                            chalk.red(
-                                `relationshipType is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
-                                    relationship,
-                                    null,
-                                    4
-                                )}`
-                            )
-                        );
-                    }
-
-                    if (
-                        _.isUndefined(relationship.ownerSide) &&
-                        (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-many')
-                    ) {
-                        this.error(
-                            chalk.red(
-                                `ownerSide is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
-                                    relationship,
-                                    null,
-                                    4
-                                )}`
-                            )
-                        );
-                    }
                 });
+                this.entityConfig.relationships = relationships;
 
                 // Validate root entity json content
-                if (_.isUndefined(context.changelogDate) && ['sql', 'cassandra'].includes(context.databaseType)) {
+                if (this.entityConfig.changelogDate === undefined && ['sql', 'cassandra', 'couchbase'].includes(context.databaseType)) {
                     const currentDate = this.dateFormatForLiquibase();
-                    this.warning(`changelogDate is missing in .jhipster/${entityName}.json, using ${currentDate} as fallback`);
-                    context.changelogDate = currentDate;
-                }
-                if (_.isUndefined(context.dto)) {
-                    this.warning(`dto is missing in .jhipster/${entityName}.json, using no as fallback`);
-                    context.dto = 'no';
-                }
-                if (_.isUndefined(context.service)) {
-                    this.warning(`service is missing in .jhipster/${entityName}.json, using no as fallback`);
-                    context.service = 'no';
-                }
-                if (_.isUndefined(context.jpaMetamodelFiltering)) {
-                    this.warning(`jpaMetamodelFiltering is missing in .jhipster/${entityName}.json, using 'no' as fallback`);
-                    context.jpaMetamodelFiltering = false;
-                }
-                if (_.isUndefined(context.pagination)) {
-                    this.warning(`pagination is missing in .jhipster/${entityName}.json, using no as fallback`);
-                    context.pagination = 'no';
-                }
-                if (!context.clientRootFolder && !context.skipUiGrouping) {
-                    // if it is a gateway generating from a microservice, or a microservice
-                    if (context.useMicroserviceJson || context.applicationType === 'microservice') {
-                        context.clientRootFolder = context.microserviceName;
-                    }
+                    this.info(`changelogDate is missing in .jhipster/${entityName}.json, using ${currentDate} as fallback`);
+                    context.changelogDate = this.entityConfig.changelogDate = currentDate;
                 }
             },
+        };
+    }
 
-            writeEntityJson() {
-                const context = this.context;
-                if (context.useConfigurationFile && context.updateEntity === 'regenerate') {
-                    return; // do not update if regenerating entity
-                }
-                // store information in a file for further use.
-                if (_.isUndefined(context.changelogDate) && ['sql', 'cassandra'].includes(context.databaseType)) {
-                    context.changelogDate = this.dateFormatForLiquibase();
-                }
+    get configuring() {
+        if (useBlueprints) return;
+        return this._configuring();
+    }
 
-                // Keep existing config by cloning fileData
-                const storageData = this.context.fileData ? { ...this.context.fileData } : {};
-                storageData.fluentMethods = context.fluentMethods;
-                storageData.clientRootFolder = context.clientRootFolder;
-                storageData.relationships = context.relationships;
-                storageData.fields = context.fields;
-                storageData.changelogDate = context.changelogDate;
-                storageData.dto = context.dto;
-                storageData.searchEngine = context.searchEngine;
-                storageData.service = context.service;
-                storageData.entityTableName = context.entityTableName;
-                storageData.databaseType = context.databaseType;
-                storageData.readOnly = context.readOnly;
-                this.copyFilteringFlag(context, storageData, context);
-                if (['sql', 'mongodb', 'couchbase'].includes(context.databaseType)) {
-                    storageData.pagination = context.pagination;
-                } else {
-                    storageData.pagination = 'no';
-                }
-                storageData.javadoc = context.javadoc;
-                if (context.entityAngularJSSuffix) {
-                    storageData.angularJSSuffix = context.entityAngularJSSuffix;
-                }
-                if (context.applicationType === 'microservice' || context.applicationType === 'uaa') {
-                    storageData.microserviceName = context.baseName;
-                }
-                if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
-                    storageData.microserviceName = context.microserviceName;
-                }
-
-                if (this.storageData) {
-                    // Override storageData configs with existing this.storageData
-                    // So that blueprints can create it and override fields.
-                    this.storageData = { ...storageData, ...this.storageData };
-                } else {
-                    this.storageData = storageData;
-                }
-
-                this.fs.writeJSON(context.filename, this.storageData, null, 4);
-
-                // Keep this.data for compatibility with existing blueprints
-                this.data = this.storageData;
-            },
-
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return {
             loadInMemoryData() {
                 const context = this.context;
                 const entityName = context.name;
                 const entityNamePluralizedAndSpinalCased = _.kebabCase(pluralize(entityName));
 
+                this._loadEntityJson(_.defaults({}, this.entityStorage.getAll(), entityDefaultConfig));
+
                 context.entityClass = context.entityNameCapitalized;
-                context.entityClassHumanized = _.startCase(context.entityNameCapitalized);
                 context.entityClassPlural = pluralize(context.entityClass);
-                context.entityClassPluralHumanized = _.startCase(context.entityClassPlural);
+
+                // Used for i18n
+                context.entityClassHumanized = this.entityConfig.entityClassHumanized || _.startCase(context.entityNameCapitalized);
+                context.entityClassPluralHumanized = this.entityConfig.entityClassPluralHumanized || _.startCase(context.entityClassPlural);
+                // Implement i18n variant ex: 'male', 'female' when applied
+                context.entityI18nVariant = this.entityConfig.entityI18nVariant || 'default';
+
                 context.entityInstance = _.lowerFirst(entityName);
                 context.entityInstancePlural = pluralize(context.entityInstance);
-                context.entityApiUrl = entityNamePluralizedAndSpinalCased;
+
                 context.entityFileName = _.kebabCase(context.entityNameCapitalized + _.upperFirst(context.entityAngularJSSuffix));
                 context.entityFolderName = this.getEntityFolderName(context.clientRootFolder, context.entityFileName);
                 context.entityModelFileName = context.entityFolderName;
                 context.entityParentPathAddition = this.getEntityParentPathAddition(context.clientRootFolder);
                 context.entityPluralFileName = entityNamePluralizedAndSpinalCased + context.entityAngularJSSuffix;
                 context.entityServiceFileName = context.entityFileName;
+
                 context.entityAngularName = context.entityClass + this.upperFirstCamelCase(context.entityAngularJSSuffix);
                 context.entityReactName = context.entityClass + this.upperFirstCamelCase(context.entityAngularJSSuffix);
+
+                context.entityApiUrl = entityNamePluralizedAndSpinalCased;
                 context.entityStateName = _.kebabCase(context.entityAngularName);
                 context.entityUrl = context.entityStateName;
+
                 context.entityTranslationKey = context.clientRootFolder
                     ? _.camelCase(`${context.clientRootFolder}-${context.entityInstance}`)
                     : context.entityInstance;
                 context.entityTranslationKeyMenu = _.camelCase(
                     context.clientRootFolder ? `${context.clientRootFolder}-${context.entityStateName}` : context.entityStateName
                 );
-                context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
-                context.reactiveRepositories = context.reactive && ['mongodb', 'cassandra', 'couchbase'].includes(context.databaseType);
 
-                context.fieldsContainDate = false;
-                context.fieldsContainInstant = false;
-                context.fieldsContainUUID = false;
-                context.fieldsContainZonedDateTime = false;
-                context.fieldsContainDuration = false;
-                context.fieldsContainLocalDate = false;
-                context.fieldsContainBigDecimal = false;
-                context.fieldsContainBlob = false;
-                context.fieldsContainImageBlob = false;
-                context.fieldsContainTextBlob = false;
-                context.fieldsContainBlobOrImage = false;
-                context.validation = false;
-                context.fieldsContainOwnerManyToMany = false;
-                context.fieldsContainNoOwnerOneToOne = false;
-                context.fieldsContainOwnerOneToOne = false;
-                context.fieldsContainOneToMany = false;
-                context.fieldsContainManyToOne = false;
-                context.fieldsContainEmbedded = false;
-                context.fieldsIsReactAvField = false;
-                context.blobFields = [];
-                context.differentTypes = [context.entityClass];
-                if (!context.relationships) {
-                    context.relationships = [];
-                }
-                context.differentRelationships = {};
-                context.i18nToLoad = [context.entityInstance];
+                context.reactiveRepositories =
+                    context.reactive && ['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(context.databaseType);
+
+                context.differentTypes.push(context.entityClass);
+                context.i18nToLoad.push(context.entityInstance);
                 context.i18nKeyPrefix = `${context.angularAppName}.${context.entityTranslationKey}`;
 
                 // Load in-memory data for fields
                 context.fields.forEach(field => {
-                    // Migration from JodaTime to Java Time
-                    if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
-                        field.fieldType = 'Instant';
-                    }
+                    const fieldOptions = field.options || {};
+                    _.defaults(field, {
+                        fieldNameCapitalized: _.upperFirst(field.fieldName),
+                        fieldNameUnderscored: _.snakeCase(field.fieldName),
+                        fieldNameHumanized: fieldOptions.fieldNameHumanized || _.startCase(field.fieldName),
+                    });
                     const fieldType = field.fieldType;
-
-                    if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
-                        context.fieldsIsReactAvField = true;
-                    }
 
                     field.fieldIsEnum = ![
                         'String',
@@ -779,30 +529,16 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         'UUID',
                         'Boolean',
                         'byte[]',
-                        'ByteBuffer'
+                        'ByteBuffer',
                     ].includes(fieldType);
 
-                    if (field.fieldIsEnum === true) {
-                        context.i18nToLoad.push(field.enumInstance);
-                    }
-
-                    if (_.isUndefined(field.fieldNameCapitalized)) {
-                        field.fieldNameCapitalized = _.upperFirst(field.fieldName);
-                    }
-
-                    if (_.isUndefined(field.fieldNameUnderscored)) {
-                        field.fieldNameUnderscored = _.snakeCase(field.fieldName);
-                    }
-
-                    if (_.isUndefined(field.fieldNameAsDatabaseColumn)) {
+                    if (field.fieldNameAsDatabaseColumn === undefined) {
                         const fieldNameUnderscored = _.snakeCase(field.fieldName);
                         const jhiFieldNamePrefix = this.getColumnName(context.jhiPrefix);
-                        if (jhiCore.isReservedTableName(fieldNameUnderscored, context.prodDatabaseType)) {
+                        if (isReservedTableName(fieldNameUnderscored, context.prodDatabaseType)) {
                             if (!jhiFieldNamePrefix) {
                                 this.warning(
-                                    chalk.red(
-                                        `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`
-                                    )
+                                    `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`
                                 );
                                 field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
                             } else {
@@ -813,11 +549,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                     }
 
-                    if (_.isUndefined(field.fieldNameHumanized)) {
-                        field.fieldNameHumanized = _.startCase(field.fieldName);
-                    }
-
-                    if (_.isUndefined(field.fieldInJavaBeanMethod)) {
+                    if (field.fieldInJavaBeanMethod === undefined) {
                         // Handle the specific case when the second letter is capitalized
                         // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
                         if (field.fieldName.length > 1) {
@@ -833,25 +565,37 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                     }
 
-                    if (_.isUndefined(field.fieldValidateRulesPatternJava)) {
+                    if (field.fieldValidateRulesPatternJava === undefined) {
                         field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern
                             ? field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
                             : field.fieldValidateRulesPattern;
                     }
 
-                    if (_.isUndefined(field.fieldValidateRulesPatternAngular)) {
+                    if (field.fieldValidateRulesPatternAngular === undefined) {
                         field.fieldValidateRulesPatternAngular = field.fieldValidateRulesPattern
                             ? field.fieldValidateRulesPattern.replace(/"/g, '&#34;')
                             : field.fieldValidateRulesPattern;
                     }
 
-                    if (_.isUndefined(field.fieldValidateRulesPatternReact)) {
+                    if (field.fieldValidateRulesPatternReact === undefined) {
                         field.fieldValidateRulesPatternReact = field.fieldValidateRulesPattern
                             ? field.fieldValidateRulesPattern.replace(/'/g, "\\'")
                             : field.fieldValidateRulesPattern;
                     }
 
-                    field.fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
+                    field.fieldValidate = Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
+
+                    if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
+                        context.fieldsIsReactAvField = true;
+                    }
+
+                    if (field.javadoc) {
+                        context.haveFieldWithJavadoc = true;
+                    }
+
+                    if (field.fieldIsEnum === true) {
+                        context.i18nToLoad.push(field.enumInstance);
+                    }
 
                     if (fieldType === 'ZonedDateTime') {
                         context.fieldsContainZonedDateTime = true;
@@ -885,210 +629,184 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         context.validation = true;
                     }
                 });
-                context.hasUserField = context.saveUserSnapshot = false;
+
+                let hasUserField = false;
                 // Load in-memory data for relationships
                 context.relationships.forEach(relationship => {
+                    const relationshipOptions = relationship.options || {};
                     const otherEntityName = relationship.otherEntityName;
-                    const otherEntityData = this.getEntityJson(otherEntityName);
-                    if (otherEntityData) {
-                        if (otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
-                            otherEntityData.clientRootFolder = otherEntityData.microserviceName;
-                        }
-                        if (otherEntityData.embedded) {
-                            relationship.otherEntityIsEmbedded = true;
-                        }
-                    }
+                    const otherEntityData = this._getEntityJson(otherEntityName) || {};
                     const jhiTablePrefix = context.jhiTablePrefix;
 
+                    relationship.otherEntityIsEmbedded = otherEntityData.embedded;
+                    if (otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
+                        otherEntityData.clientRootFolder = otherEntityData.microserviceName;
+                    }
+
+                    if (this.isBuiltInUserEntity(otherEntityName)) {
+                        hasUserField = true;
+                    }
+
+                    relationship.otherEntityPrimaryKeyType =
+                        this.isBuiltInUserEntity(otherEntityName) && context.authenticationType === 'oauth2'
+                            ? 'String'
+                            : this.getPkType(context.databaseType);
+
                     // Look for fields at the other other side of the relationship
-                    if (otherEntityData && otherEntityData.relationships) {
-                        if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'many-to-many') {
-                            otherEntityData.relationships.forEach(otherRelationship => {
-                                if (_.upperFirst(otherRelationship.otherEntityName) !== entityName) {
-                                    return;
+                    if (otherEntityData.relationships) {
+                        let otherRelationship;
+                        if (relationship.relationshipType === 'many-to-one' || !relationship.ownerSide) {
+                            otherRelationship = otherEntityData.relationships.find(otherSideRelationship => {
+                                if (_.upperFirst(otherSideRelationship.otherEntityName) !== entityName) {
+                                    return false;
                                 }
-                                // otherEntityRelationshipName can be missing
-                                if (!otherRelationship.otherEntityRelationshipName) {
-                                    this.warning(
-                                        `Cannot compare relationship reference: otherEntityRelationshipName is missing in .jhipster/${otherEntityName}.json for relationship ${JSON.stringify(
-                                            otherRelationship,
-                                            null,
-                                            4
-                                        )}`
-                                    );
-                                    return;
+                                if (!otherSideRelationship.otherEntityRelationshipName) {
+                                    return false;
                                 }
-                                if (otherRelationship.otherEntityRelationshipName !== relationship.relationshipName) {
-                                    return;
+                                return otherSideRelationship.otherEntityRelationshipName === relationship.relationshipName;
+                            });
+                        } else {
+                            otherRelationship = otherEntityData.relationships.find(otherSideRelationship => {
+                                if (_.upperFirst(otherSideRelationship.otherEntityName) !== entityName) {
+                                    return false;
                                 }
-                                if (
-                                    (relationship.relationshipType === 'many-to-one' &&
-                                        otherRelationship.relationshipType === 'one-to-many') ||
-                                    (relationship.relationshipType === 'many-to-many' &&
-                                        otherRelationship.relationshipType === 'many-to-many')
-                                ) {
-                                    relationship.otherEntityRelationshipName =
-                                        relationship.otherEntityRelationshipName || otherRelationship.relationshipName;
-                                    relationship.otherEntityRelationshipNamePlural =
-                                        relationship.otherEntityRelationshipNamePlural || pluralize(otherRelationship.relationshipName);
-                                    relationship.otherEntityRelationshipNameCapitalized =
-                                        relationship.otherEntityRelationshipNameCapitalized ||
-                                        _.upperFirst(otherRelationship.relationshipName);
-                                    relationship.otherEntityRelationshipNameCapitalizedPlural = relationship.otherEntityRelationshipNameCapitalizedPlural = pluralize(
-                                        relationship.otherEntityRelationshipNameCapitalized
-                                    );
+                                if (!relationship.otherEntityRelationshipName) {
+                                    return false;
                                 }
+                                return relationship.otherEntityRelationshipName === otherSideRelationship.relationshipName;
                             });
                         }
-                    }
-
-                    if (_.isUndefined(relationship.otherEntityRelationshipNamePlural)) {
-                        relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
-                    }
-
-                    if (_.isUndefined(relationship.otherEntityRelationshipNameCapitalized)) {
-                        relationship.otherEntityRelationshipNameCapitalized = _.upperFirst(relationship.otherEntityRelationshipName);
-                    }
-
-                    if (_.isUndefined(relationship.otherEntityRelationshipNameCapitalizedPlural)) {
-                        relationship.otherEntityRelationshipNameCapitalizedPlural = pluralize(
-                            _.upperFirst(relationship.otherEntityRelationshipName)
-                        );
-                    }
-
-                    if (_.isUndefined(relationship.relationshipNameCapitalized)) {
-                        relationship.relationshipNameCapitalized = _.upperFirst(relationship.relationshipName);
-                    }
-
-                    if (_.isUndefined(relationship.relationshipNameCapitalizedPlural)) {
-                        if (relationship.relationshipName.length > 1) {
-                            relationship.relationshipNameCapitalizedPlural = pluralize(_.upperFirst(relationship.relationshipName));
+                        if (otherRelationship) {
+                            if (
+                                relationship.otherEntityRelationshipName &&
+                                relationship.otherEntityRelationshipName !== otherRelationship.relationshipName
+                            ) {
+                                throw new Error(
+                                    `Relationship name is not synchronized ${stringify(relationship)} with ${stringify(otherRelationship)}`
+                                );
+                            }
+                            if (
+                                !(relationship.relationshipType === 'one-to-one' && otherRelationship.relationshipType === 'one-to-one') &&
+                                !(
+                                    relationship.relationshipType === 'many-to-one' && otherRelationship.relationshipType === 'one-to-many'
+                                ) &&
+                                !(
+                                    relationship.relationshipType === 'one-to-many' && otherRelationship.relationshipType === 'many-to-one'
+                                ) &&
+                                !(relationship.relationshipType === 'many-to-many' && otherRelationship.relationshipType === 'many-to-many')
+                            ) {
+                                throw new Error(
+                                    `Relationship type is not synchronized ${stringify(relationship)} with ${stringify(otherRelationship)}`
+                                );
+                            }
+                            _.defaults(relationship, {
+                                otherEntityRelationshipName: otherRelationship.relationshipName,
+                                otherEntityRelationshipNamePlural: otherRelationship.relationshipNamePlural,
+                                otherEntityRelationshipNameCapitalized: otherRelationship.relationshipNameCapitalized,
+                                otherEntityRelationshipNameCapitalizedPlural: relationship.relationshipNameCapitalizedPlural,
+                            });
                         } else {
-                            relationship.relationshipNameCapitalizedPlural = _.upperFirst(pluralize(relationship.relationshipName));
+                            this.warning(`Could not find the other side of the relationship ${stringify(relationship)}`);
                         }
                     }
 
-                    if (_.isUndefined(relationship.relationshipNameHumanized)) {
-                        relationship.relationshipNameHumanized = _.startCase(relationship.relationshipName);
+                    if (relationship.otherEntityRelationshipName !== undefined) {
+                        _.defaults(relationship, {
+                            otherEntityRelationshipNamePlural: pluralize(relationship.otherEntityRelationshipName),
+                            otherEntityRelationshipNameCapitalized: _.upperFirst(relationship.otherEntityRelationshipName),
+                        });
+                        _.defaults(relationship, {
+                            otherEntityRelationshipNameCapitalizedPlural: pluralize(relationship.otherEntityRelationshipNameCapitalized),
+                        });
                     }
 
-                    if (_.isUndefined(relationship.relationshipNamePlural)) {
-                        relationship.relationshipNamePlural = pluralize(relationship.relationshipName);
-                    }
+                    const relationshipName = relationship.relationshipName;
+                    _.defaults(relationship, {
+                        relationshipNamePlural: pluralize(relationshipName),
+                        relationshipFieldName: _.lowerFirst(relationshipName),
+                        relationshipNameCapitalized: _.upperFirst(relationshipName),
+                        relationshipNameHumanized: relationshipOptions.relationshipNameHumanized || _.startCase(relationshipName),
+                        otherEntityNamePlural: pluralize(otherEntityName),
+                        otherEntityNameCapitalized: _.upperFirst(otherEntityName),
+                        otherEntityFieldCapitalized: _.upperFirst(relationship.otherEntityField),
+                        otherEntityTableName:
+                            otherEntityData.entityTableName ||
+                            this.getTableName(
+                                this.isBuiltInUserEntity(otherEntityName) ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName
+                            ),
+                    });
 
-                    if (_.isUndefined(relationship.relationshipFieldName)) {
-                        relationship.relationshipFieldName = _.lowerFirst(relationship.relationshipName);
-                    }
+                    _.defaults(relationship, {
+                        relationshipFieldNamePlural: pluralize(relationship.relationshipFieldName),
+                        relationshipNameCapitalizedPlural:
+                            relationship.relationshipName.length > 1
+                                ? pluralize(relationship.relationshipNameCapitalized)
+                                : _.upperFirst(pluralize(relationship.relationshipName)),
+                        otherEntityNameCapitalizedPlural: pluralize(relationship.otherEntityNameCapitalized),
+                    });
 
-                    if (_.isUndefined(relationship.relationshipFieldNamePlural)) {
-                        relationship.relationshipFieldNamePlural = pluralize(_.lowerFirst(relationship.relationshipName));
-                    }
-
-                    if (context.dto && context.dto === 'mapstruct') {
-                        if (
-                            otherEntityData &&
-                            (!otherEntityData.dto || otherEntityData.dto !== 'mapstruct') &&
-                            otherEntityName !== 'user'
-                        ) {
+                    if (context.dto === 'mapstruct') {
+                        if (otherEntityData.dto !== 'mapstruct' && !this.isBuiltInUserEntity(otherEntityName)) {
                             this.warning(
-                                chalk.red(
-                                    `This entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
-                                )
+                                `This entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
                             );
                         }
                     }
 
-                    if (otherEntityName === 'user') {
-                        relationship.otherEntityTableName = `${jhiTablePrefix}_user`;
-                        context.hasUserField = true;
-                    } else {
-                        relationship.otherEntityTableName = otherEntityData ? otherEntityData.entityTableName : null;
-                        if (!relationship.otherEntityTableName) {
-                            relationship.otherEntityTableName = this.getTableName(otherEntityName);
-                        }
-                        if (jhiCore.isReservedTableName(relationship.otherEntityTableName, context.prodDatabaseType) && jhiTablePrefix) {
-                            const otherEntityTableName = relationship.otherEntityTableName;
-                            relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
-                        }
-                    }
-                    context.saveUserSnapshot =
-                        context.applicationType === 'microservice' &&
-                        context.authenticationType === 'oauth2' &&
-                        context.hasUserField &&
-                        context.dto === 'no';
-
-                    if (_.isUndefined(relationship.otherEntityNamePlural)) {
-                        relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);
+                    if (isReservedTableName(relationship.otherEntityTableName, context.prodDatabaseType) && jhiTablePrefix) {
+                        const otherEntityTableName = relationship.otherEntityTableName;
+                        relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
                     }
 
-                    if (_.isUndefined(relationship.otherEntityNameCapitalized)) {
-                        relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
-                    }
-
-                    if (_.isUndefined(relationship.otherEntityAngularName)) {
-                        if (relationship.otherEntityNameCapitalized !== 'User') {
+                    if (relationship.otherEntityAngularName === undefined) {
+                        if (this.isBuiltInUserEntity(otherEntityName)) {
+                            relationship.otherEntityAngularName = 'User';
+                        } else {
                             const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
                             relationship.otherEntityAngularName =
                                 _.upperFirst(relationship.otherEntityName) + this.upperFirstCamelCase(otherEntityAngularSuffix);
-                        } else {
-                            relationship.otherEntityAngularName = 'User';
                         }
                     }
 
-                    if (_.isUndefined(relationship.otherEntityNameCapitalizedPlural)) {
-                        relationship.otherEntityNameCapitalizedPlural = pluralize(_.upperFirst(relationship.otherEntityName));
-                    }
+                    _.defaults(relationship, {
+                        otherEntityStateName: _.kebabCase(relationship.otherEntityAngularName),
+                        jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering,
+                    });
 
-                    if (_.isUndefined(relationship.otherEntityFieldCapitalized)) {
-                        relationship.otherEntityFieldCapitalized = _.upperFirst(relationship.otherEntityField);
-                    }
+                    if (!this.isBuiltInUserEntity(otherEntityName)) {
+                        _.defaults(relationship, {
+                            otherEntityFileName: _.kebabCase(relationship.otherEntityAngularName),
+                            otherEntityFolderName: _.kebabCase(relationship.otherEntityAngularName),
+                        });
 
-                    if (_.isUndefined(relationship.otherEntityStateName)) {
-                        relationship.otherEntityStateName = _.kebabCase(relationship.otherEntityAngularName);
-                    }
-                    if (_.isUndefined(relationship.otherEntityModuleName)) {
-                        if (relationship.otherEntityNameCapitalized !== 'User') {
-                            relationship.otherEntityModuleName = `${context.angularXAppName +
-                                relationship.otherEntityNameCapitalized}Module`;
-                            relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
-                            if (relationship.otherEntityFolderName === undefined) {
-                                relationship.otherEntityFolderName = _.kebabCase(relationship.otherEntityAngularName);
-                            }
-                            if (
-                                context.skipUiGrouping ||
-                                otherEntityData === undefined ||
-                                otherEntityData.clientRootFolder === '' ||
-                                otherEntityData.clientRootFolder === undefined
-                            ) {
-                                relationship.otherEntityClientRootFolder = '';
-                            } else {
-                                relationship.otherEntityClientRootFolder = `${otherEntityData.clientRootFolder}/`;
-                            }
-                            if (otherEntityData !== undefined && otherEntityData.clientRootFolder) {
-                                if (context.clientRootFolder === otherEntityData.clientRootFolder) {
-                                    relationship.otherEntityModulePath = relationship.otherEntityFolderName;
-                                } else {
-                                    relationship.otherEntityModulePath = `${
-                                        context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''
-                                    }${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
-                                }
-                                relationship.otherEntityModelName = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
-                                relationship.otherEntityPath = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
+                        if (
+                            context.skipUiGrouping ||
+                            otherEntityData.clientRootFolder === '' ||
+                            otherEntityData.clientRootFolder === undefined
+                        ) {
+                            relationship.otherEntityClientRootFolder = '';
+                        } else {
+                            relationship.otherEntityClientRootFolder = `${otherEntityData.clientRootFolder}/`;
+                        }
+                        if (otherEntityData.clientRootFolder) {
+                            if (context.clientRootFolder === otherEntityData.clientRootFolder) {
+                                relationship.otherEntityModulePath = relationship.otherEntityFolderName;
                             } else {
                                 relationship.otherEntityModulePath = `${
                                     context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''
-                                }${relationship.otherEntityFolderName}`;
-                                relationship.otherEntityModelName = relationship.otherEntityFileName;
-                                relationship.otherEntityPath = relationship.otherEntityFolderName;
+                                }${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
                             }
+                            relationship.otherEntityModelName = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
+                            relationship.otherEntityPath = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
                         } else {
-                            relationship.otherEntityModuleName = `${context.angularXAppName}SharedModule`;
-                            relationship.otherEntityModulePath = 'app/core';
+                            relationship.otherEntityModulePath = `${
+                                context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''
+                            }${relationship.otherEntityFolderName}`;
+                            relationship.otherEntityModelName = relationship.otherEntityFileName;
+                            relationship.otherEntityPath = relationship.otherEntityFolderName;
                         }
                     }
-                    if (otherEntityData) {
-                        this.copyFilteringFlag(otherEntityData, relationship, { ...otherEntityData, databaseType: context.databaseType });
-                    }
+
                     // Load in-memory data for root
                     if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) {
                         context.fieldsContainOwnerManyToMany = true;
@@ -1107,7 +825,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                     if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes('required')) {
                         if (entityName.toLowerCase() === relationship.otherEntityName.toLowerCase()) {
-                            this.warning(chalk.red('Required relationships to the same entity are not supported.'));
+                            this.warning('Required relationships to the same entity are not supported.');
                         } else {
                             relationship.relationshipValidate = relationship.relationshipRequired = context.validation = true;
                         }
@@ -1123,7 +841,20 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context.differentRelationships[entityType].push(relationship);
                 });
 
-                context.pkType = this.getPkType(context.databaseType);
+                context.saveUserSnapshot =
+                    context.applicationType === 'microservice' &&
+                    context.authenticationType === 'oauth2' &&
+                    hasUserField &&
+                    context.dto === 'no';
+
+                context.primaryKeyType = this.getPkTypeBasedOnDBAndAssociation(
+                    context.authenticationType,
+                    context.databaseType,
+                    context.relationships
+                );
+                // Deprecated: kept for compatibility, should be removed in next major release
+                context.pkType = context.primaryKeyType;
+                context.hasUserField = hasUserField;
             },
 
             insight() {
@@ -1138,13 +869,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context.service,
                     context.fluentMethods
                 );
-            }
+            },
         };
     }
 
-    get configuring() {
+    get default() {
         if (useBlueprints) return;
-        return this._configuring();
+        return this._default();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -1170,7 +901,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context,
                     configOptions,
                     force: context.options.force,
-                    debug: context.isDebugEnabled
+                    debug: context.isDebugEnabled,
                 });
             },
 
@@ -1182,9 +913,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.composeWith(require.resolve('../entity-client'), {
                     context,
                     configOptions,
-                    'skip-install': context.options['skip-install'],
+                    skipInstall: context.options.skipInstall,
                     force: context.options.force,
-                    debug: context.isDebugEnabled
+                    debug: context.isDebugEnabled,
                 });
             },
 
@@ -1195,11 +926,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.composeWith(require.resolve('../entity-i18n'), {
                     context,
                     configOptions,
-                    'skip-install': context.options['skip-install'],
+                    skipInstall: context.options.skipInstall,
                     force: context.options.force,
-                    debug: context.isDebugEnabled
+                    debug: context.isDebugEnabled,
                 });
-            }
+            },
         };
     }
 
@@ -1220,16 +951,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         // form the data to be passed to modules
                         const context = this.context;
 
-                        // Keep context.data for unexpected compatibility issue.
-                        context.data = context.data || this.storageData || context.fileData;
-
                         // run through all post entity creation module hooks
                         this.callHooks(
                             'entity',
                             'post',
                             {
                                 entityConfig: context,
-                                force: context.options.force
+                                force: context.options.force,
                             },
                             done
                         );
@@ -1241,13 +969,240 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.debug('Error:', err);
                     done();
                 }
-            }
+            },
         };
     }
 
     get install() {
         if (useBlueprints) return;
         return this._install();
+    }
+
+    /**
+     * Validate the entityName
+     * @return {true|string} true for a valid value or error message.
+     */
+    _validateEntityName(entityName) {
+        if (!/^([a-zA-Z0-9]*)$/.test(entityName)) {
+            return 'The entity name must be alphanumeric only';
+        }
+        if (/^[0-9].*$/.test(entityName)) {
+            return 'The entity name cannot start with a number';
+        }
+        if (entityName === '') {
+            return 'The entity name cannot be empty';
+        }
+        if (entityName.indexOf('Detail', entityName.length - 'Detail'.length) !== -1) {
+            return "The entity name cannot end with 'Detail'";
+        }
+        if (!this.context.skipServer && isReservedClassName(entityName)) {
+            return 'The entity name cannot contain a Java or JHipster reserved keyword';
+        }
+        return true;
+    }
+
+    /**
+     * Validate the entityTableName
+     * @return {true|string} true for a valid value or error message.
+     */
+    _validateTableName(entityTableName) {
+        const context = this.context;
+        const prodDatabaseType = context.prodDatabaseType;
+        const jhiTablePrefix = context.jhiTablePrefix;
+        const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
+        const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${context.name}.json file and then run again 'jhipster entity ${context.name}.'`;
+
+        if (!/^([a-zA-Z0-9_]*)$/.test(entityTableName)) {
+            return `The table name cannot contain special characters.\n${instructions}`;
+        }
+        if (!entityTableName) {
+            return 'The table name cannot be empty';
+        }
+        if (isReservedTableName(entityTableName, prodDatabaseType)) {
+            if (jhiTablePrefix) {
+                this.warning(
+                    `The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`
+                );
+                context.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
+            } else {
+                this.warning(
+                    `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.\n${instructions}`
+                );
+            }
+        } else if (prodDatabaseType === 'oracle' && entityTableName.length > 26 && !skipCheckLengthOfIdentifier) {
+            return `The table name is too long for Oracle, try a shorter name.\n${instructions}`;
+        } else if (prodDatabaseType === 'oracle' && entityTableName.length > 14 && !skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The table name is long for Oracle, long table names can cause issues when used to create constraint names and join table names.\n${instructions}`
+            );
+        }
+        return true;
+    }
+
+    /**
+     * get an entity from the configuration file
+     * @param {string} file - configuration file name for the entity
+     */
+    _getEntityJson(file) {
+        let entityJson = null;
+
+        try {
+            let filename = path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`);
+            if (this.context && this.context.microservicePath) {
+                filename = path.join(this.context.microservicePath, filename);
+            }
+            // TODO 7.0 filename = this.destinationPath(filename);
+            entityJson = this.fs.readJSON(filename);
+        } catch (err) {
+            this.log(chalk.red(`The JHipster entity configuration file could not be read for file ${file}!`) + err);
+            this.debug('Error:', err);
+        }
+
+        return entityJson;
+    }
+
+    /**
+     * Setup Entity instance level options from context.
+     * all variables should be set to dest,
+     * all variables should be referred from context,
+     * all methods should be called on generator,
+     * @param {any} generator - generator instance
+     * @param {any} context - context to use default is generator instance
+     * @param {any} dest - destination context to use default is context
+     */
+    _setupEntityOptions(generator, context = generator, dest = context) {
+        dest.regenerate = context.options.regenerate;
+
+        if (context.options.fluentMethods !== undefined) {
+            this.entityConfig.fluentMethods = context.options.fluentMethods;
+        }
+        if (context.options.skipCheckLengthOfIdentifier !== undefined) {
+            this.entityConfig.skipCheckLengthOfIdentifier = context.options.skipCheckLengthOfIdentifier;
+        }
+        if (context.options.angularSuffix !== undefined) {
+            this.entityConfig.angularJSSuffix = context.options.angularSuffix;
+        }
+        if (context.options.skipUiGrouping !== undefined) {
+            this.entityConfig.skipUiGrouping = context.options.skipUiGrouping;
+        }
+        if (context.options.clientRootFolder !== undefined) {
+            if (this.entityConfig.skipUiGrouping) {
+                this.warn('Ignoring client-root-folder due to skip-ui-grouping configuration');
+            } else {
+                this.entityConfig.clientRootFolder = context.options.clientRootFolder;
+            }
+        }
+        dest.isDebugEnabled = context.options.debug;
+        dest.experimental = context.options.experimental;
+
+        dest.entityNameCapitalized = _.upperFirst(dest.name);
+        dest.entityTableName = generator.getTableName(context.options.tableName || dest.name);
+    }
+
+    /**
+     * Load an entity configuration file into context.
+     */
+    _loadEntityJson(data) {
+        const context = this.context;
+        if (data.databaseType) {
+            context.databaseType = data.databaseType;
+        }
+        context.skipUiGrouping = context.skipUiGrouping || data.skipUiGrouping;
+        context.relationships = data.relationships || [];
+        context.fields = data.fields || [];
+        context.changelogDate = data.changelogDate;
+        context.dto = data.dto;
+        context.service = data.service;
+        context.fluentMethods = data.fluentMethods;
+        context.clientRootFolder = data.clientRootFolder;
+        context.pagination = data.pagination;
+        context.javadoc = data.javadoc;
+        context.entityTableName = data.entityTableName || context.entityTableName;
+        context.jhiPrefix = data.jhiPrefix || context.jhiPrefix;
+        context.skipCheckLengthOfIdentifier = data.skipCheckLengthOfIdentifier || context.skipCheckLengthOfIdentifier;
+        context.skipClient = data.skipClient || context.skipClient;
+        context.readOnly = data.readOnly || false;
+        context.embedded = data.embedded || false;
+        context.jpaMetamodelFiltering = data.jpaMetamodelFiltering;
+
+        context.entityAngularJSSuffix = data.angularJSSuffix;
+        if (context.entityAngularJSSuffix && !context.entityAngularJSSuffix.startsWith('-')) {
+            context.entityAngularJSSuffix = `-${context.entityAngularJSSuffix}`;
+        }
+
+        context.useMicroserviceJson = context.useMicroserviceJson || data.microserviceName !== undefined;
+        if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
+            context.microserviceName = data.microserviceName;
+            if (!context.microserviceName) {
+                throw new Error('Microservice name for the entity is not found. Entity cannot be generated!');
+            }
+            context.microserviceAppName = this.getMicroserviceAppName(context.microserviceName);
+            context.skipServer = true;
+        }
+    }
+
+    _validateField(field) {
+        const entityName = this.context.name;
+        if (field.fieldName === undefined) {
+            throw new Error(`fieldName is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+        }
+
+        if (field.fieldType === undefined) {
+            throw new Error(`fieldType is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+        }
+
+        if (field.fieldValidateRules !== undefined) {
+            if (!Array.isArray(field.fieldValidateRules)) {
+                throw new Error(`fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringify(field)}`);
+            }
+            field.fieldValidateRules.forEach(fieldValidateRule => {
+                if (!SUPPORTED_VALIDATION_RULES.includes(fieldValidateRule)) {
+                    throw new Error(
+                        `fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${entityName}.json for field ${stringify(
+                            field
+                        )} [supported validation rules ${SUPPORTED_VALIDATION_RULES}]`
+                    );
+                }
+            });
+            if (field.fieldValidateRules.includes('max') && field.fieldValidateRulesMax === undefined) {
+                throw new Error(`fieldValidateRulesMax is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+            }
+            if (field.fieldValidateRules.includes('min') && field.fieldValidateRulesMin === undefined) {
+                throw new Error(`fieldValidateRulesMin is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+            }
+            if (field.fieldValidateRules.includes('maxlength') && field.fieldValidateRulesMaxlength === undefined) {
+                throw new Error(`fieldValidateRulesMaxlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+            }
+            if (field.fieldValidateRules.includes('minlength') && field.fieldValidateRulesMinlength === undefined) {
+                throw new Error(`fieldValidateRulesMinlength is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+            }
+            if (field.fieldValidateRules.includes('maxbytes') && field.fieldValidateRulesMaxbytes === undefined) {
+                throw new Error(`fieldValidateRulesMaxbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+            }
+            if (field.fieldValidateRules.includes('minbytes') && field.fieldValidateRulesMinbytes === undefined) {
+                throw new Error(`fieldValidateRulesMinbytes is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+            }
+            if (field.fieldValidateRules.includes('pattern') && field.fieldValidateRulesPattern === undefined) {
+                throw new Error(`fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${stringify(field)}`);
+            }
+        }
+    }
+
+    _validateRelationship(relationship) {
+        const entityName = this.context.name;
+        if (relationship.otherEntityName === undefined) {
+            throw new Error(`otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
+        }
+        if (relationship.relationshipType === undefined) {
+            throw new Error(`relationshipType is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
+        }
+
+        if (
+            relationship.ownerSide === undefined &&
+            (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-many')
+        ) {
+            throw new Error(`ownerSide is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
+        }
     }
 }
 

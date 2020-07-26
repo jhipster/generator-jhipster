@@ -11,7 +11,7 @@ const constants = require('../../generators/generator-constants');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
-const createMockBlueprint = function(parent, spy) {
+const createMockBlueprint = function (parent, spy) {
     return class extends parent {
         constructor(args, opts) {
             super(args, { ...opts });
@@ -64,10 +64,10 @@ const mockAppBlueprintSubGen = class extends AppGenerator {
 };
 
 const options = {
-    'from-cli': true,
+    fromCli: true,
     skipInstall: true,
     skipChecks: true,
-    blueprints: 'my-blueprint'
+    blueprints: 'my-blueprint',
 };
 
 const prompts = {
@@ -84,7 +84,7 @@ const prompts = {
     prodDatabaseType: 'mysql',
     enableTranslation: true,
     nativeLanguage: 'en',
-    languages: ['fr']
+    languages: ['fr'],
 };
 
 describe('JHipster with app blueprints', () => {
@@ -102,7 +102,7 @@ describe('JHipster with app blueprints', () => {
                     [createMockBlueprint(ServerGenerator, this.spyServer1), 'jhipster-my-blueprint:server'],
                     [createMockBlueprint(LanguagesGenerator, this.spyLanguages1), 'jhipster-my-blueprint:languages'],
                     [createMockBlueprint(CommonGenerator, this.spyCommon1), 'jhipster-my-blueprint:common'],
-                    [mockAppBlueprintSubGen, 'jhipster-my-blueprint:app']
+                    [mockAppBlueprintSubGen, 'jhipster-my-blueprint:app'],
                 ])
                 .withPrompts(prompts)
                 .on('end', done);
@@ -141,7 +141,7 @@ describe('JHipster with app blueprints', () => {
                     [createMockBlueprint(ServerGenerator, this.spyServer2), 'jhipster-my-blueprint-2:server'],
                     [createMockBlueprint(LanguagesGenerator, this.spyLanguages2), 'jhipster-my-blueprint-2:languages'],
                     [createMockBlueprint(CommonGenerator, this.spyCommon2), 'jhipster-my-blueprint-2:common'],
-                    [mockAppBlueprintSubGen, 'jhipster-my-blueprint-2:app']
+                    [mockAppBlueprintSubGen, 'jhipster-my-blueprint-2:app'],
                 ])
                 .withPrompts(prompts)
                 .on('end', done);
@@ -186,7 +186,7 @@ describe('JHipster with app blueprints', () => {
                     [createMockBlueprint(LanguagesGenerator, this.spyLanguages2), 'jhipster-my-blueprint-2:languages'],
                     [createMockBlueprint(CommonGenerator, this.spyCommon2), 'jhipster-my-blueprint-2:common'],
                     [mockAppBlueprintSubGen, 'jhipster-my-blueprint-2:app'],
-                    [mockAppBlueprintSubGen, 'jhipster-my-blueprint-3:app']
+                    [mockAppBlueprintSubGen, 'jhipster-my-blueprint-3:app'],
                 ])
                 .withPrompts(prompts)
                 .on('end', done);

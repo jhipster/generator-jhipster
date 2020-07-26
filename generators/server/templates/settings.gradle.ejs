@@ -28,7 +28,7 @@ pluginManagement {
           <%_ if (!skipClient) { _%>
           id 'com.github.node-gradle.node' version "${gradle_node_plugin_version}"
           <%_ } _%>
-          <%_ if (databaseType === 'sql') { _%>
+          <%_ if (databaseType === 'sql' && !reactive) { _%>
           id 'org.liquibase.gradle' version "${liquibase_plugin_version}"
           <%_ } _%>
           id 'org.sonarqube' version "${sonarqube_plugin_version}"

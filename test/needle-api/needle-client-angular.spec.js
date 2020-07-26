@@ -13,7 +13,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
         if (!jhContext) {
-            this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprint myblueprint')}");
+            this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
         }
         this.configOptions = jhContext.configOptions || {};
         // This sets up options for this sub generator and is being reused from JHipster
@@ -64,7 +64,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                 this.addAdminToModule('appName', 'adminAngularName', 'adminFolderName', 'adminFileName', true, ANGULAR);
                 this.addAngularModule('appName', 'angularName', 'folderName', 'fileName', true, ANGULAR);
                 this.addAdminRoute('entity-audit', './entity-audit/entity-audit.module', 'EntityAuditModule');
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -83,13 +83,13 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
         helpers
             .run(path.join(__dirname, '../../generators/client'))
             .withOptions({
-                'from-cli': true,
+                fromCli: true,
                 build: 'maven',
                 auth: 'jwt',
                 db: 'mysql',
                 skipInstall: true,
                 blueprint: 'myblueprint',
-                skipChecks: true
+                skipChecks: true,
             })
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
             .withPrompts({
@@ -97,7 +97,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
                 clientFramework: ANGULAR,
                 enableTranslation: true,
                 nativeLanguage: 'en',
-                languages: ['fr']
+                languages: ['fr'],
             })
             .on('end', done);
     });
@@ -135,7 +135,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
             `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
             '            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">\n' +
                 '                                <a class="nav-link" routerLink="routerName1" (click)="collapseNavbar()">\n' +
-                '                                    <fa-icon icon="iconName1" fixedWidth="true"></fa-icon>\n' +
+                '                                    <fa-icon icon="iconName1" [fixedWidth]="true"></fa-icon>\n' +
                 '                                    <span jhiTranslate="global.menu.routerName1">Router Name 1</span>\n' +
                 '                                </a>\n' +
                 '                            </li>'
@@ -151,7 +151,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
             `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
             '                    <li>\n' +
                 '                        <a class="dropdown-item" routerLink="routerName2" routerLinkActive="active" (click)="collapseNavbar()">\n' +
-                '                            <fa-icon icon="iconName2" fixedWidth="true"></fa-icon>\n' +
+                '                            <fa-icon icon="iconName2" [fixedWidth]="true"></fa-icon>\n' +
                 '                            <span jhiTranslate="global.menu.admin.routerName2">Router Name 2</span>\n' +
                 '                        </a>\n' +
                 '                    </li>'
@@ -167,7 +167,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
             `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
             '                    <li>\n' +
                 '                        <a class="dropdown-item" routerLink="routerName3" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">\n' +
-                '                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>\n' +
+                '                            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>\n' +
                 '                            <span jhiTranslate="global.menu.entities.routerName3">Router Name 3</span>\n' +
                 '                        </a>\n' +
                 '                    </li>'
@@ -195,11 +195,11 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
     it('admin module contains the routing added by needle api', () => {
         assert.fileContent(
             `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
-            ',\n' +
-                '      {\n' +
+            '        },\n' +
+                '        {\n' +
                 "        path: 'entity-audit',\n" +
                 "        loadChildren: () => import('./entity-audit/entity-audit.module').then(m => m.EntityAuditModule)\n" +
-                '      }'
+                '      },'
         );
     });
 

@@ -16,14 +16,14 @@ describe('JHipster blueprint config migration', () => {
                         fse.writeJsonSync(path.join(dir, '.yo-rc.json'), {
                             'generator-jhipster-myblueprint': {
                                 promptValues: {
-                                    nativeLanguage: 'en'
+                                    nativeLanguage: 'en',
                                 },
                                 applicationType: 'monolith',
-                                baseName: 'myblueprint'
+                                baseName: 'myblueprint',
                             },
                             'generator-jhipster': {
                                 promptValues: {
-                                    nativeLanguage: 'en'
+                                    nativeLanguage: 'en',
                                 },
                                 jhipsterVersion: '6.6.0',
                                 applicationType: 'monolith',
@@ -31,16 +31,16 @@ describe('JHipster blueprint config migration', () => {
                                 blueprints: [
                                     {
                                         name: 'generator-jhipster-myblueprint',
-                                        version: '0.0.1'
-                                    }
-                                ]
-                            }
+                                        version: '0.0.1',
+                                    },
+                                ],
+                            },
                         });
                     })
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipChecks: true,
-                        unifyConfigOnly: true
+                        unifyConfigOnly: true,
                     })
                     .on('end', done);
             });
@@ -50,7 +50,7 @@ describe('JHipster blueprint config migration', () => {
                     'generator-jhipster-myblueprint': {},
                     'generator-jhipster': {
                         promptValues: {
-                            nativeLanguage: 'en'
+                            nativeLanguage: 'en',
                         },
                         jhipsterVersion: '6.6.0',
                         applicationType: 'monolith',
@@ -58,10 +58,10 @@ describe('JHipster blueprint config migration', () => {
                         blueprints: [
                             {
                                 name: 'generator-jhipster-myblueprint',
-                                version: '0.0.1'
-                            }
-                        ]
-                    }
+                                version: '0.0.1',
+                            },
+                        ],
+                    },
                 });
             });
         });

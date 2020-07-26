@@ -13,7 +13,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
         if (!jhContext) {
-            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprint myblueprint');
+            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
         }
 
         this.configOptions = jhContext.configOptions || {};
@@ -47,7 +47,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                         'entityClass',
                         [
                             { relationshipType: 'one-to-many', relationshipFieldNamePlural: 'entitiesOneToMany' },
-                            { relationshipType: 'many-to-many', relationshipFieldNamePlural: 'entitiesManoToMany' }
+                            { relationshipType: 'many-to-many', relationshipFieldNamePlural: 'entitiesManoToMany' },
                         ],
                         'com.mycompany.myapp',
                         'com/mycompany/myapp'
@@ -61,7 +61,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                         'entityClass',
                         [
                             { relationshipType: 'one-to-many', relationshipFieldNamePlural: 'entitiesOneToMany' },
-                            { relationshipType: 'many-to-many', relationshipFieldNamePlural: 'entitiesManoToMany' }
+                            { relationshipType: 'many-to-many', relationshipFieldNamePlural: 'entitiesManoToMany' },
                         ],
                         'com.mycompany.myapp',
                         'com/mycompany/myapp',
@@ -76,7 +76,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                         'entityClass',
                         [
                             { relationshipType: 'one-to-many', relationshipFieldNamePlural: 'entitiesOneToMany' },
-                            { relationshipType: 'many-to-many', relationshipFieldNamePlural: 'entitiesManoToMany' }
+                            { relationshipType: 'many-to-many', relationshipFieldNamePlural: 'entitiesManoToMany' },
                         ],
                         'com.mycompany.myapp',
                         'com/mycompany/myapp',
@@ -91,14 +91,14 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                         'entityClass',
                         [
                             { relationshipType: 'one-to-many', relationshipFieldNamePlural: 'entitiesOneToMany' },
-                            { relationshipType: 'many-to-many', relationshipFieldNamePlural: 'entitiesManoToMany' }
+                            { relationshipType: 'many-to-many', relationshipFieldNamePlural: 'entitiesManoToMany' },
                         ],
                         'com.mycompany.myapp',
                         'com/mycompany/myapp',
                         'redis'
                     );
                 }
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -110,10 +110,10 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
             helpers
                 .run(path.join(__dirname, '../../generators/server'))
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
-                    skipChecks: true
+                    skipChecks: true,
                 })
                 .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
                 .withPrompts({
@@ -132,7 +132,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
                     languages: ['fr'],
                     buildTool: 'maven',
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    serverSideOptions: []
+                    serverSideOptions: [],
                 })
                 .on('end', done);
         });
@@ -148,11 +148,19 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
             );
             assert.fileContent(
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesOneToMany");'
+                '      createCache(\n' +
+                    '        cm,\n' +
+                    '        com.mycompany.myapp.domain.entityClass.class.getName() +\n' +
+                    '        ".entitiesOneToMany"\n' +
+                    '      );'
             );
             assert.fileContent(
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesManoToMany");'
+                '      createCache(\n' +
+                    '        cm,\n' +
+                    '        com.mycompany.myapp.domain.entityClass.class.getName() +\n' +
+                    '        ".entitiesManoToMany"\n' +
+                    '      );'
             );
         });
     });
@@ -162,10 +170,10 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
             helpers
                 .run(path.join(__dirname, '../../generators/server'))
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
-                    skipChecks: true
+                    skipChecks: true,
                 })
                 .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
                 .withPrompts({
@@ -184,7 +192,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
                     languages: ['fr'],
                     buildTool: 'maven',
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    serverSideOptions: []
+                    serverSideOptions: [],
                 })
                 .on('end', done);
         });
@@ -200,11 +208,19 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
             );
             assert.fileContent(
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesOneToMany");'
+                '      createCache(\n' +
+                    '        cm,\n' +
+                    '        com.mycompany.myapp.domain.entityClass.class.getName() +\n' +
+                    '        ".entitiesOneToMany"\n' +
+                    '      );'
             );
             assert.fileContent(
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesManoToMany");'
+                '      createCache(\n' +
+                    '        cm,\n' +
+                    '        com.mycompany.myapp.domain.entityClass.class.getName() +\n' +
+                    '        ".entitiesManoToMany"\n' +
+                    '      );'
             );
         });
     });
@@ -214,10 +230,10 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
             helpers
                 .run(path.join(__dirname, '../../generators/server'))
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
-                    skipChecks: true
+                    skipChecks: true,
                 })
                 .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
                 .withPrompts({
@@ -236,7 +252,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
                     languages: ['fr'],
                     buildTool: 'maven',
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    serverSideOptions: []
+                    serverSideOptions: [],
                 })
                 .on('end', done);
         });
@@ -247,10 +263,10 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
             helpers
                 .run(path.join(__dirname, '../../generators/server'))
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
-                    skipChecks: true
+                    skipChecks: true,
                 })
                 .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
                 .withPrompts({
@@ -269,7 +285,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
                     languages: ['fr'],
                     buildTool: 'maven',
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    serverSideOptions: []
+                    serverSideOptions: [],
                 })
                 .on('end', done);
         });
@@ -284,15 +300,29 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
         it('Assert redis configuration has entity added', () => {
             assert.fileContent(
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName(), jcacheConfiguration);'
+                '      createCache(\n' +
+                    '        cm,\n' +
+                    '        com.mycompany.myapp.domain.User.class.getName(),\n' +
+                    '        jcacheConfiguration\n' +
+                    '      );'
             );
             assert.fileContent(
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesOneToMany", jcacheConfiguration);'
+                '      createCache(\n' +
+                    '        cm,\n' +
+                    '        com.mycompany.myapp.domain.entityClass.class.getName() +\n' +
+                    '        ".entitiesOneToMany",\n' +
+                    '        jcacheConfiguration\n' +
+                    '      );'
             );
             assert.fileContent(
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesManoToMany", jcacheConfiguration);'
+                '      createCache(\n' +
+                    '        cm,\n' +
+                    '        com.mycompany.myapp.domain.entityClass.class.getName() +\n' +
+                    '        ".entitiesManoToMany",\n' +
+                    '        jcacheConfiguration\n' +
+                    '      );'
             );
         });
     });

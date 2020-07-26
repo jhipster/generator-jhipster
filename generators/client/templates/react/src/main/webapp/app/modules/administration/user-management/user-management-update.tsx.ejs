@@ -42,7 +42,9 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
       props.getUser(props.match.params.login);
     }
     props.getRoles();
-    return () => props.reset();
+    return () => {
+      props.reset();
+    };
   }, []);
 
   const handleClose = () => {
@@ -96,7 +98,7 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
                   errorMessage: translate('register.messages.validate.login.required')
                 },
                 pattern: {
-                  value: '^[_.@A-Za-z0-9-]*$',
+                  value: "<%- LOGIN_REGEX %>",
                   errorMessage: translate('register.messages.validate.login.pattern')
                 },
                 minLength: {

@@ -1,0 +1,11 @@
+{
+    "logs": {
+        "title": "සටහන්",
+        "nbloggers": "{{ total }} සටහන් ඇත.",
+        "filter": "පෙරහන",
+        "table": {
+            "name": "නම",
+            "level": "මට්ටමින්"
+        }
+    }
+}

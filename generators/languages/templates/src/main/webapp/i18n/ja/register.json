@@ -10,7 +10,7 @@
                     "required": "ユーザー名が必要です。",
                     "minlength": "ユーザー名は1文字以上で入力してください",
                     "maxlength": "ユーザー名は50文字以下で入力してください",
-                    "pattern": "ユーザー名は小文字あるいは数字で入力してください"
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>登録が完了しました!</strong> 送られたメールを確認して下さい。",

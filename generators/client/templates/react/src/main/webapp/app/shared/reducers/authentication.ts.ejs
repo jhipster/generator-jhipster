@@ -47,11 +47,11 @@ const initialState = {
   showModalLogin: false,
   <%_ } _%>
   account: {} as any,
-  errorMessage: null as string, // Errors returned from server side
-  redirectMessage: null as string,
+  errorMessage: null as unknown as string, // Errors returned from server side
+  redirectMessage: null as unknown as string,
   sessionHasBeenFetched: false,
-  idToken: null as string,
-  logoutUrl: null as string
+  idToken: null as unknown as string,
+  logoutUrl: null as unknown as string,
 };
 
 export type AuthenticationState =  Readonly<typeof initialState>;
@@ -147,7 +147,7 @@ export default (state: AuthenticationState = initialState, action): Authenticati
 
 export const displayAuthError = message => ({ type: ACTION_TYPES.ERROR_MESSAGE, message });
 
-export const getSession = () => <%_ if (enableTranslation) { _%>async<%_ } _%> (dispatch, getState) => {
+export const getSession: () => void = () => <%_ if (enableTranslation) { _%>async<%_ } _%> (dispatch, getState) => {
     <%_ if (enableTranslation) { _%>
     await dispatch({
       type: ACTION_TYPES.GET_SESSION,
@@ -168,7 +168,7 @@ export const getSession = () => <%_ if (enableTranslation) { _%>async<%_ } _%> (
 }
 
 <%_ if (authenticationType === 'session') { _%>
-export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
+export const login: (username: string, password: string, rememberMe?: boolean) => void = (username, password, rememberMe = false) => async (dispatch, getState) => {
   const data = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&remember-me=${rememberMe}&submit=Login`;
   await dispatch({
     type: ACTION_TYPES.LOGIN,
@@ -177,7 +177,7 @@ export const login = (username, password, rememberMe = false) => async (dispatch
   await dispatch(getSession());
 };
 <%_ } else if (authenticationType === 'jwt') { _%>
-export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
+export const login: (username: string, password: string, rememberMe?: boolean) => void = (username, password, rememberMe = false) => async (dispatch, getState) => {
   const result = await dispatch({
     type: ACTION_TYPES.LOGIN,
     payload: axios.post('api/authenticate', { username, password, rememberMe })
@@ -194,7 +194,7 @@ export const login = (username, password, rememberMe = false) => async (dispatch
   await dispatch(getSession());
 };
 <%_ } else if (authenticationType === 'uaa') { _%>
-export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
+export const login: (username: string, password: string, rememberMe?: boolean) => void = (username, password, rememberMe = false) => async (dispatch, getState) => {
   const result = await dispatch({
     type: ACTION_TYPES.LOGIN,
     payload: axios.post('auth/login', { username, password })
@@ -213,14 +213,14 @@ export const clearAuthToken = () => {
   }
 };
 
-export const logout = () => dispatch => {
+export const logout: () => void = () => dispatch => {
   clearAuthToken();
   dispatch({
     type: ACTION_TYPES.LOGOUT
   });
 };
 <%_ } else { _%>
-export const logout = () => async dispatch => {
+export const logout: () => void = () => async dispatch => {
   await dispatch({
     type: ACTION_TYPES.LOGOUT,
     payload: axios.post(<%_ if (authenticationType === 'uaa') { _%>'auth/logout'<%_ } else { _%>'api/logout'<%_ } _%>, {})

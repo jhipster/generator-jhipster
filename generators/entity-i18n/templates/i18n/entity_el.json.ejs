@@ -23,7 +23,7 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "createLabel": "Δημιουργήστε ένα νέο <%= entityClassHumanized %>",
-                "createOrEditLabel": "Δημιουργήστε η επεξεργαστείτε ένα <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "createOrEditLabel": "Δημιουργήστε η επεξεργαστείτε ένα <%= entityClassHumanized %>"<% if (searchEngine !== false) { %>,
                 "search": "Αναζήτηση για <%= entityClassHumanized %>"<% } %>,
                 "notFound": "No <%= entityClassPluralHumanized %> found"
             },<% if (!microserviceAppName) { %>
