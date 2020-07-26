@@ -1,7 +1,7 @@
 import { email, maxLength, minLength, required } from 'vuelidate/lib/validators';
 import axios from 'axios';
 import { EMAIL_ALREADY_USED_TYPE } from '@/constants';
-import { Vue, Component, Inject } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 
 const validations = {
   settingsAccount: {
