@@ -44,6 +44,7 @@ services:
     image: '<%= DOCKER_JHIPSTER_CONTROL_CENTER %>'
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      # TODO change 'swagger' to 'api-docs' when JHCC will be migrated to 7.x JHipster version. https://github.com/jhipster/jhipster/pull/764
       - SPRING_PROFILES_ACTIVE=prod,swagger,<%= discoveryProfile %><% if (authenticationType === 'oauth2') { %>,oauth2<% } %>
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
       <%_ if (authenticationType === 'jwt') { _%>
