@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2019 the original author or authors from the JHipster project.
+# Copyright 2013-2020 the original author or authors from the JHipster project.
 #
 # This file is part of the JHipster project, see https://www.jhipster.tech/
 # for more information.
@@ -133,13 +133,15 @@ jobs:
             - uses: actions/setup-node@v2.1.0
               with:
                   node-version: ${{ matrix.node_version }}
-            - name: Download latest chrome binary
-              run: |
-                  sudo apt update
-                  sudo apt install google-chrome-stable
             - uses: actions/setup-java@v1
               with:
                   java-version: '11.x'
+            - name: Get chrome/chromedriver version
+              id: chromedriver-version
+              run: |
+                  CHROME_VERSION=$(google-chrome --version | cut -f 3 -d ' ' | cut -d '.' -f 1) \
+                  && CHROMEDRIVER_VERSION=$(curl --location --fail --retry 3 http://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}) \
+                  && echo "::set-output name=version::$CHROMEDRIVER_VERSION"
             - name: 'TOOLS: configure tools installed by the system'
               run: $JHI_SCRIPTS/03-system.sh
             - name: 'TOOLS: configure git'
@@ -168,5 +170,9 @@ jobs:
               run: $JHI_SCRIPTS/22-tests-frontend.sh
             - name: 'TESTS: packaging'
               run: $JHI_SCRIPTS/23-package.sh
+            - name: 'Synchronize chromedriver version'
+              if: ${{ matrix.protractor == 1 }}
+              run: npm run e2e:update-webdriver --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
+              working-directory: /home/runner/app
             - name: 'TESTS: End-to-End'
               run: $JHI_SCRIPTS/24-tests-e2e.sh
