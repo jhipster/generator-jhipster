@@ -42,6 +42,11 @@ version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
   jhipster-control-center:
     image: '<%= DOCKER_JHIPSTER_CONTROL_CENTER %>'
+    command:
+      - /bin/sh
+      - -c
+      # Patch /etc/hosts to support resolving host.docker.internal to the internal IP address used by the host in all OSes
+      - echo "`ip route | grep default | cut -d ' ' -f3` host.docker.internal" | tee -a /etc/hosts > /dev/null && java -jar /jhipster-control-center.jar
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       # TODO change 'swagger' to 'api-docs' when JHCC will be migrated to 7.x JHipster version. https://github.com/jhipster/jhipster/pull/764
