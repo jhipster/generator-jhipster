@@ -56,7 +56,7 @@
         "jdl:diagrams": "node jdl/bundling/scripts/serialize-grammar.js && eslint jdl/parsing/generated"
     },
     "dependencies": {
-        "aws-sdk": "2.715.0",
+        "aws-sdk": "2.720.0",
         "axios": "0.19.2",
         "chalk": "4.1.0",
         "chevrotain": "7.0.1",
