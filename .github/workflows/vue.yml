@@ -45,6 +45,10 @@ jobs:
         name: ${{ matrix.app-type }}
         runs-on: ${{ matrix.os }}
         if: >-
+            !contains(github.event.head_commit.message, '[angular]') &&
+            !contains(github.event.head_commit.message, '[react]') &&
+            !contains(github.event.pull_request.title, '[angular]') &&
+            !contains(github.event.pull_request.title, '[react]') &&
             !contains(github.event.head_commit.message, '[ci skip]') &&
             !contains(github.event.head_commit.message, '[skip ci]') &&
             !contains(github.event.pull_request.title, '[skip ci]') &&
