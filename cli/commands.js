@@ -78,7 +78,6 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
             {
                 option: '--interactive',
                 desc: 'Run generation in series so that questions can be interacted with',
-                default: false,
             },
             {
                 option: '--db <value>',
