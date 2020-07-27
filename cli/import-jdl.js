@@ -106,7 +106,7 @@ const generateDeploymentFiles = ({ processor, deployment, inFolder }) => {
     const command = `${CLI_NAME}:${deploymentType}`;
     const childProc = fork(
         runYeomanProcess,
-        [command, '--skip-prompts', ...getOptionAsArgs(processor.options, false, !processor.options.interactive)],
+        [command, '--skip-prompts', ...getOptionAsArgs({ ...processor.options, force: !processor.options.interactive })],
         {
             cwd,
         }
@@ -137,7 +137,7 @@ const generateApplicationFiles = ({ processor, application, withEntities, inFold
     const command = `${CLI_NAME}:app`;
     const childProc = fork(
         runYeomanProcess,
-        [command, ...getOptionAsArgs(processor.options, withEntities, !processor.options.interactive)],
+        [command, ...getOptionAsArgs({ ...processor.options, withEntities, force: !processor.options.interactive })],
         {
             cwd,
         }
@@ -183,7 +183,7 @@ const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInst
             const cwd = path.join(processor.pwd, baseName);
             logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
 
-            const childProc = fork(runYeomanProcess, [command, ...getOptionAsArgs(options, false, !options.interactive)], { cwd });
+            const childProc = fork(runYeomanProcess, [command, ...getOptionAsArgs({ ...options, force: !options.interactive })], { cwd });
             return new Promise(resolve => {
                 childProc.on('exit', code => {
                     if (code !== 0) {
