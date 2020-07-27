@@ -3,6 +3,7 @@ const proxyquire = require('proxyquire');
 const fse = require('fs-extra');
 const assert = require('yeoman-assert');
 const expect = require('chai').expect;
+const utils = require('../../cli/utils');
 
 const { testInTempDir, revertTempDir } = require('../utils/utils');
 
@@ -32,6 +33,14 @@ const env = {
 
 const loadImportJdl = (
     options = {
+        './utils': {
+            ...utils,
+            logger: {
+                ...utils.logger,
+                info: () => {},
+            },
+            printSuccess: () => {},
+        },
         child_process: {
             fork: (runYeomanProcess, argv, opts) => {
                 const command = argv[0];
