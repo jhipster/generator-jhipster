@@ -121,6 +121,12 @@ describe('jhipster cli utils test', () => {
                 expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '']);
             });
         });
+        describe('when called with empty string', () => {
+            const argument = { foo: true, bar: '' };
+            it('returns an array of string args', () => {
+                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '', '--from-cli']);
+            });
+        });
     });
     describe('getCommand', () => {
         describe('when called with only cmd', () => {
