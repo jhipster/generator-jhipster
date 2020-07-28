@@ -62,7 +62,9 @@ class JSONEntity {
         this.fluentMethods = merged.fluentMethods;
         this.readOnly = merged.readOnly;
         this.embedded = merged.embedded;
-        this.clientRootFolder = merged.clientRootFolder;
+        if (merged.clientRootFolder) {
+            this.clientRootFolder = merged.clientRootFolder;
+        }
         if (merged.microserviceName) {
             this.microserviceName = merged.microserviceName;
         }
@@ -128,7 +130,6 @@ function defaults(entityName) {
         readOnly: false,
         embedded: false,
         jpaMetamodelFiltering: false,
-        clientRootFolder: '',
         applications: [],
     };
 }

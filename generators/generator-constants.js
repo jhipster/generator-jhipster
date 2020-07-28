@@ -52,6 +52,7 @@ const PRETTIER_JAVA_VERSION = packagejs.dependencies['prettier-plugin-java'];
 
 // Version of docker images
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.3.0';
+const DOCKER_JHIPSTER_CONTROL_CENTER = 'jhipster/jhipster-control-center';
 const DOCKER_JAVA_JRE = 'adoptopenjdk:11-jre-hotspot';
 const DOCKER_MYSQL = 'mysql:8.0.20';
 const DOCKER_MARIADB = 'mariadb:10.5.4';
@@ -338,6 +339,7 @@ const constants = {
     JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,
 
     DOCKER_JHIPSTER_REGISTRY,
+    DOCKER_JHIPSTER_CONTROL_CENTER,
     DOCKER_JAVA_JRE,
     DOCKER_MYSQL,
     DOCKER_MARIADB,
