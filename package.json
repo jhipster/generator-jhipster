@@ -84,7 +84,7 @@
         "randexp": "0.5.3",
         "semver": "7.3.2",
         "shelljs": "0.8.4",
-        "simple-git": "2.13.2",
+        "simple-git": "2.15.0",
         "sync-request": "6.1.0",
         "tabtab": "2.2.2",
         "test": "^0.6.0",
