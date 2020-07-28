@@ -197,6 +197,7 @@ function importOnlyEntities(jdlObject, configuration) {
         databaseType,
     });
     const jsonEntities = entitiesPerApplicationMap.get(applicationName);
+
     return exportJSONEntities(jsonEntities, configuration);
 }
 

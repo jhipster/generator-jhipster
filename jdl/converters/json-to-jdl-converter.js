@@ -30,6 +30,7 @@ const { SKIP_USER_MANAGEMENT } = require('../jhipster/unary-options');
 
 module.exports = {
     convertToJDL,
+    getJSONEntityFiles,
 };
 
 /**
@@ -90,13 +91,19 @@ function cleanYoRcFileContent(yoRcFileContent) {
 
 function getJSONEntityFiles(applicationDirectory) {
     const entities = new Map();
-    fs.readdirSync(path.join(applicationDirectory, '.jhipster')).forEach(file => {
-        const jsonFilePath = path.join(applicationDirectory, '.jhipster', file);
-        if (fs.statSync(jsonFilePath).isFile() && file.endsWith('.json')) {
-            const entityName = file.slice(0, file.indexOf('.json'));
-            entities.set(entityName, readJSONFile(jsonFilePath));
-        }
-    });
+
+    const jhipsterFolderPath = path.join(applicationDirectory, '.jhipster');
+
+    if (fs.existsSync(jhipsterFolderPath)) {
+        fs.readdirSync(jhipsterFolderPath).forEach(file => {
+            const jsonFilePath = path.join(applicationDirectory, '.jhipster', file);
+            if (fs.statSync(jsonFilePath).isFile() && file.endsWith('.json')) {
+                const entityName = file.slice(0, file.indexOf('.json'));
+                entities.set(entityName, readJSONFile(jsonFilePath));
+            }
+        });
+    }
+
     return entities;
 }
 

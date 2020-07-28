@@ -89,6 +89,9 @@ function askForMicroserviceJson() {
 
 function askForUpdate() {
     const context = this.context;
+
+    console.log({ context });
+
     // ask only if running an existing entity without arg option --force or --regenerate
     const isForce = context.options.force || context.regenerate;
     context.updateEntity = 'regenerate'; // default if skipping questions by --force
@@ -126,8 +129,8 @@ function askForUpdate() {
             type: 'confirm',
             name: 'newChangelog',
             message: 'Do you want to generate a separated new changelog file ?',
-            default: false
-        }
+            default: false,
+        },
     ];
     return this.prompt(prompts).then(props => {
         context.updateEntity = props.updateEntity;
@@ -181,13 +184,16 @@ function askForFieldsToRemove() {
         if (props.confirmRemove) {
             this.log(chalk.red(`\nRemoving fields: ${props.fieldsToRemove}\n`));
             const fields = this.entityConfig.fields;
+            const removedFields = context.removedFields;
             for (let i = fields.length - 1; i >= 0; i -= 1) {
                 const field = this.entityConfig.fields[i];
                 if (props.fieldsToRemove.filter(val => val === field.fieldName).length > 0) {
+                    removedFields.push(field);
                     fields.splice(i, 1);
                 }
             }
             this.entityConfig.fields = fields;
+            context.removedFields = removedFields;
         }
     });
 }
@@ -240,13 +246,16 @@ function askForRelationsToRemove() {
         if (props.confirmRemove) {
             this.log(chalk.red(`\nRemoving relationships: ${props.relsToRemove}\n`));
             const relationships = this.entityConfig.relationships;
+            const removedRelationships = context.removedRelationships;
             for (let i = relationships.length - 1; i >= 0; i -= 1) {
                 const rel = relationships[i];
                 if (props.relsToRemove.filter(val => val === `${rel.relationshipName}:${rel.relationshipType}`).length > 0) {
+                    removedRelationships.push(rel);
                     relationships.splice(i, 1);
                 }
             }
             this.entityConfig.relationships = relationships;
+            context.removedRelationships = removedRelationships;
         }
     });
 }
@@ -854,6 +863,7 @@ function askForField() {
             default: '^[a-zA-Z0-9]*$',
         },
     ];
+
     return this.prompt(prompts).then(props => {
         if (props.fieldAdd) {
             if (props.fieldIsEnum) {
@@ -875,6 +885,15 @@ function askForField() {
                 fieldValidateRulesMinbytes: props.fieldValidateRulesMinbytes,
                 fieldValidateRulesMaxbytes: props.fieldValidateRulesMaxbytes,
             };
+
+            console.log(context.newFields);
+
+            if (context.newChangelog) {
+                console.log('NEW CHNAGE');
+                context.newFields = context.newFields.concat(field);
+            }
+
+            console.log(context.newFields);
 
             this.entityConfig.fields = this.entityConfig.fields.concat(field);
         }
@@ -1067,6 +1086,10 @@ function askForRelationship() {
                 relationship.otherEntityRelationshipName = _.lowerFirst(name);
             }
 
+            if (context.newChangelog) {
+                context.newRelationships = context.newRelationships.concat(relationship);
+            }
+
             this.entityConfig.relationships = this.entityConfig.relationships.concat(relationship);
         }
         logFieldsAndRelationships.call(this);
@@ -1124,7 +1147,7 @@ function logFieldsAndRelationships() {
                 chalk.red(field.fieldName) +
                     chalk.white(` (${field.fieldType}${field.fieldTypeBlobContent ? ` ${field.fieldTypeBlobContent}` : ''}) `) +
                     chalk.cyan(validationDetails.join(' ')) +
-                    (context.newFields && context.newFields.includes(field) ? chalk.blue('NEW') : '')
+                    (this.entityConfig.newFields && this.entityConfig.newFields.includes(field) ? chalk.blue('NEW') : '')
             );
         });
         this.log();
@@ -1140,7 +1163,7 @@ function logFieldsAndRelationships() {
                 `${chalk.red(relationship.relationshipName)} ${chalk.white(`(${_.upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(
                     relationship.relationshipType
                 )} ${chalk.cyan(validationDetails.join(' '))}${
-                    context.newRelationships && context.newRelationships.includes(relationship) ? chalk.blue('NEW') : ''
+                    this.entityConfig.newRelationships && this.entityConfig.newRelationships.includes(relationship) ? chalk.blue('NEW') : ''
                 }`
             );
         });

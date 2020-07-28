@@ -37,6 +37,16 @@ const stringify = data => JSON.stringify(data, null, 4);
 
 let useBlueprints;
 
+const getNewElements = (currentElements, previousElements) =>
+    currentElements.filter(
+        currentElement => !previousElements.find(previousElement => JSON.stringify(previousElement) === JSON.stringify(currentElement))
+    );
+
+const getRemovedElements = (currentElements, previousElements) =>
+    previousElements.filter(
+        previousElement => !currentElements.find(currentElement => JSON.stringify(currentElement) === JSON.stringify(previousElement))
+    );
+
 class EntityGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
@@ -168,6 +178,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
             differentTypes: [],
             differentRelationships: {},
             i18nToLoad: [],
+
+            newFields: [],
+            removedFields: [],
+            newRelationships: [],
+            removedRelationships: [],
         };
 
         this._setupEntityOptions(this, this, this.context);
@@ -248,6 +263,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.skipServer = context.skipServer || this.options.skipServer;
                 context.skipDbChangelog = context.skipDbChangelog || this.options.skipDbChangelog;
                 context.skipClient = context.skipClient || this.options.skipClient;
+                context.currentEntityState = context.currentEntityState || this.options.currentEntityState;
             },
 
             loadEntitySpecificOptions() {
@@ -504,6 +520,36 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.differentTypes.push(context.entityClass);
                 context.i18nToLoad.push(context.entityInstance);
                 context.i18nKeyPrefix = `${context.angularAppName}.${context.entityTranslationKey}`;
+
+                context.newChangelogDate = this.dateFormatForLiquibase();
+
+                if (context.currentEntityState && context.currentEntityState.fields && context.currentEntityState.fields.length > 0) {
+                    context.newFields = getNewElements(context.fields, context.currentEntityState.fields);
+                    context.removedFields = getRemovedElements(context.fields, context.currentEntityState.fields);
+
+                    if (
+                        (context.newFields && context.newFields.length > 0) ||
+                        (context.removedFields && context.removedFields.length > 0)
+                    ) {
+                        context.newChangelog = true;
+                    }
+                }
+
+                if (
+                    context.currentEntityState &&
+                    context.currentEntityState.relationships &&
+                    context.currentEntityState.relationships.length > 0
+                ) {
+                    context.newRelationships = getNewElements(context.relationships, context.currentEntityState.relationships);
+                    context.removedRelationships = getRemovedElements(context.relationships, context.currentEntityState.relationships);
+
+                    if (
+                        (context.newRelationships && context.newRelationships.length > 0) ||
+                        (context.removedRelationships && context.removedRelationships.length > 0)
+                    ) {
+                        context.newChangelog = true;
+                    }
+                }
 
                 // Load in-memory data for fields
                 context.fields.forEach(field => {

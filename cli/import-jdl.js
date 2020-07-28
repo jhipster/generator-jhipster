@@ -27,6 +27,7 @@ const { fork } = require('child_process');
 const { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, doneFactory, getOptionAsArgs } = require('./utils');
 const { getDBTypeFromDBValue, loadYoRc } = require('../generators/utils');
 const { createImporterFromContent, createImporterFromFiles } = require('../jdl/jdl-importer');
+const { getJSONEntityFiles } = require('../jdl/converters/json-to-jdl-converter');
 
 const packagejs = require('../package.json');
 const statistics = require('../generators/statistics');
@@ -174,6 +175,7 @@ const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInst
         skipUserManagement: entity.skipUserManagement,
         skipDbChangelog: processor.options.skipDbChangelog,
         skipUiGrouping: processor.options.skipUiGrouping,
+        currentEntityState: entity.currentState,
     };
     const command = `${CLI_NAME}:entity ${entity.name}`;
     if (inFolder) {
@@ -354,7 +356,7 @@ class JDLProcessor {
         return callDeploymentGenerator();
     }
 
-    generateEntities(env) {
+    generateEntities(env, currentEntities) {
         if (this.importState.exportedEntities.length === 0 || shouldGenerateApplications(this)) {
             logger.debug('Entities not generated');
             return Promise.resolve();
@@ -370,9 +372,14 @@ class JDLProcessor {
             );
             return Promise.all(
                 this.importState.exportedEntities.map((exportedEntity, i) => {
+                    const exportedEntityCurrentState = currentEntities.find(currentEntity => currentEntity.name === exportedEntity.name);
+
                     return generateEntityFiles(
                         this,
-                        exportedEntity,
+                        {
+                            ...exportedEntity,
+                            currentState: exportedEntityCurrentState,
+                        },
                         this.importState.exportedApplications.length > 1,
                         env,
                         shouldTriggerInstall(this, i)
@@ -396,6 +403,12 @@ module.exports = (jdlFiles, options = {}, env) => {
     logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));
     logger.debug(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
     try {
+        logger.info('Getting entities current states');
+
+        const currentEntities = getJSONEntityFiles('.');
+
+        const currentEntitiesArray = Array.from(currentEntities.values());
+
         const jdlImporter = new JDLProcessor(jdlFiles, options.inline, options);
         jdlImporter.getConfig();
         jdlImporter.importJDL();
@@ -403,7 +416,7 @@ module.exports = (jdlFiles, options = {}, env) => {
         return jdlImporter
             .generateApplications()
             .then(() => {
-                return jdlImporter.generateEntities(env);
+                return jdlImporter.generateEntities(env, currentEntitiesArray);
             })
             .then(() => {
                 return jdlImporter.generateDeployments();
