@@ -385,35 +385,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this._validateAppConfiguration();
             },
 
-            insight() {
-                const yorc = {
-                    ..._.omit(this.jhipsterConfig, [
-                        'jhiPrefix',
-                        'baseName',
-                        'jwtSecretKey',
-                        'packageName',
-                        'packagefolder',
-                        'rememberMeKey',
-                    ]),
-                };
-                yorc.applicationType = this.jhipsterConfig.applicationType;
-                statistics.sendYoRc(yorc, this.existingProject, this.jhipsterConfig.jhipsterVersion);
-            },
-        };
-    }
-
-    get default() {
-        if (useBlueprints) return;
-        return this._default();
-    }
-
-    _writing() {
-        return {
-            cleanup() {
-                cleanup.cleanupOldFiles(this);
-                cleanup.upgradeFiles(this);
-            },
-
             regenerateEntities() {
                 if (this.withEntities && !this.configOptions.skipComposeEntity) {
                     this.configOptions.skipComposeEntity = true;
@@ -445,6 +416,35 @@ module.exports = class extends BaseBlueprintGenerator {
                         });
                     });
                 }
+            },
+
+            insight() {
+                const yorc = {
+                    ..._.omit(this.jhipsterConfig, [
+                        'jhiPrefix',
+                        'baseName',
+                        'jwtSecretKey',
+                        'packageName',
+                        'packagefolder',
+                        'rememberMeKey',
+                    ]),
+                };
+                yorc.applicationType = this.jhipsterConfig.applicationType;
+                statistics.sendYoRc(yorc, this.existingProject, this.jhipsterConfig.jhipsterVersion);
+            },
+        };
+    }
+
+    get default() {
+        if (useBlueprints) return;
+        return this._default();
+    }
+
+    _writing() {
+        return {
+            cleanup() {
+                cleanup.cleanupOldFiles(this);
+                cleanup.upgradeFiles(this);
             },
 
             initGitRepo() {
