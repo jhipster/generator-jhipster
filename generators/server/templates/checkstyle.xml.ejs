@@ -28,7 +28,7 @@
     <!-- For detailed checkstyle configuration, see https://github.com/spring-io/nohttp/tree/master/nohttp-checkstyle -->
     <module name="io.spring.nohttp.checkstyle.check.NoHttpCheck">
         <%_ if (buildTool === 'maven') { _%>
-        <property name="whitelist" value="http://maven.apache.org/POM/4.0.0&#10;
+        <property name="allowlist" value="http://maven.apache.org/POM/4.0.0&#10;
             http://www.w3.org/2001/XMLSchema-instance&#10;http://maven.apache.org/xsd/maven-4.0.0.xsd"/>
         <%_ } _%>
     </module>
