@@ -1347,9 +1347,11 @@ module.exports = class extends PrivateBase {
             .reduce((acc, file) => {
                 try {
                     const definition = this.fs.readJSON(file);
-                    // Execute a write operation to set the file as modified on mem-fs to trigger prettier.
-                    this.fs.append(file, '', { trimEnd: false, separator: '' });
-                    acc.push({ name: path.basename(file, '.json'), definition });
+                    if (this.options.namespace !== 'jhipster:info') {
+                        // Execute a write operation to set the file as modified on mem-fs to trigger prettier.
+                        this.fs.append(file, '', { trimEnd: false, separator: '' });
+                        acc.push({ name: path.basename(file, '.json'), definition });
+                    }
                 } catch (error) {
                     // not an entity file / malformed?
                     this.warning(`Unable to parse entity file ${file}`);
