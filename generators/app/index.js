@@ -25,6 +25,7 @@ const prompts = require('./prompts');
 const packagejs = require('../../package.json');
 const statistics = require('../statistics');
 const { appDefaultConfig } = require('../generator-defaults');
+const { JHIPSTER_CONFIG_DIR } = require('../generator-constants');
 
 let useBlueprints;
 
@@ -203,6 +204,21 @@ module.exports = class extends BaseBlueprintGenerator {
         // Just constructing help, stop here
         if (this.options.help) {
             return;
+        }
+
+        // Write new definitions to memfs
+        if (this.options.applicationWithEntities) {
+            this.config.set({
+                ...this.config.getAll(),
+                ...this.options.applicationWithEntities.config,
+            });
+            const entities = this.options.applicationWithEntities.entities.map(entity => {
+                const entityName = _.upperFirst(entity.name);
+                const file = this.destinationPath(JHIPSTER_CONFIG_DIR, `${entityName}.json`);
+                this.fs.writeJSON(file, { ...this.fs.readJSON(file), ...entity });
+                return entityName;
+            });
+            this.jhipsterConfig.entities = [...new Set((this.jhipsterConfig.entities || []).concat(entities))];
         }
 
         this.loadOptions();
