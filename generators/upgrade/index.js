@@ -199,12 +199,12 @@ module.exports = class extends BaseGenerator {
         this._gitCommitAll(`Generated with JHipster ${jhipsterVersion}${blueprintInfo}`);
     }
 
-    _retrieveLatestVersion(npmPackage) {
-        this.log(`Looking for latest ${npmPackage} version...`);
+    _retrieveLatestVersion(packageName) {
+        this.log(`Looking for latest ${packageName} version...`);
         const commandPrefix = 'npm show';
-        const pkgInfo = shelljs.exec(`${commandPrefix} ${npmPackage} version`, { silent: this.silent });
+        const pkgInfo = shelljs.exec(`${commandPrefix} ${packageName} version`, { silent: this.silent });
         if (pkgInfo.stderr) {
-            this.warning(`Something went wrong fetching the latest ${npmPackage} version number...\n${pkgInfo.stderr}`);
+            this.warning(`Something went wrong fetching the latest ${packageName} version number...\n${pkgInfo.stderr}`);
             this.error('Exiting process');
         }
         const msg = pkgInfo.stdout;
