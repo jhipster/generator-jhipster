@@ -80,7 +80,6 @@ import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 import org.springframework.security.test.context.support.WithMockUser;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print; // debug
 <%_ if (reactive) { _%>
 import static <%= packageName %>.web.rest.TestUtil.ID_TOKEN;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.*;
@@ -212,7 +211,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print; // debug
 <%_ } else { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
@@ -358,7 +356,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
     <%_ } _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print; // debug
 <%_ } else if (testsNeedCsrf) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 <%_ } _%>
@@ -1473,9 +1470,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         token.setUserAgent("Test agent");
         persistentTokenRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(token);
 
-// debug
         restAccountMockMvc.perform(get("/api/account/sessions"))
-            .andDo(print())
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.[*].series").value(hasItem(token.getSeries())))
             .andExpect(jsonPath("$.[*].ipAddress").value(hasItem(token.getIpAddress())))
