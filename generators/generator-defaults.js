@@ -105,7 +105,6 @@ const entityDefaultConfig = {
     jpaMetamodelFiltering: false,
     readOnly: false,
     embedded: false,
-    skipUiGrouping: false,
     entityAngularJSSuffix: '',
     fluentMethods: true,
     clientRootFolder: '',
