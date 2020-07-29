@@ -355,20 +355,13 @@ describe('Generator Base', () => {
     describe('dateFormatForLiquibase', () => {
         let base;
         let oldCwd;
-        before(() => {
+        let options;
+        beforeEach(() => {
             oldCwd = testInTempDir(() => {}, true);
-            base = new Base();
-            base.configOptions = base.configOptions || {};
-        });
-        after(() => {
-            revertTempDir(oldCwd);
+            base = new Base({ ...options });
         });
         afterEach(() => {
-            base.config.delete('lastLiquibaseTimestamp');
-            base.config.delete('creationTimestamp');
-            delete base.options.withEntities;
-            delete base.options.creationTimestamp;
-            delete base.configOptions.reproducibleLiquibaseTimestamp;
+            revertTempDir(oldCwd);
         });
         describe('when there is no configured lastLiquibaseTimestamp', () => {
             let firstChangelogDate;
@@ -426,8 +419,11 @@ describe('Generator Base', () => {
             });
         });
         describe('with withEntities option', () => {
-            beforeEach(() => {
-                base.options.withEntities = true;
+            before(() => {
+                options = { withEntities: true };
+            });
+            after(() => {
+                options = undefined;
             });
             describe('with reproducible=false argument', () => {
                 let firstChangelogDate;
@@ -452,8 +448,10 @@ describe('Generator Base', () => {
             describe('with a past creationTimestamp option', () => {
                 let firstChangelogDate;
                 let secondChangelogDate;
+                before(() => {
+                    options.creationTimestamp = '2000-01-01';
+                });
                 beforeEach(() => {
-                    base.options.creationTimestamp = '2000-01-01';
                     firstChangelogDate = base.dateFormatForLiquibase();
                     secondChangelogDate = base.dateFormatForLiquibase();
                 });
@@ -472,11 +470,9 @@ describe('Generator Base', () => {
                 });
             });
             describe('with a future creationTimestamp option', () => {
-                beforeEach(() => {
-                    base.options.creationTimestamp = '2030-01-01';
-                });
-                it('should return a valid changelog date', () => {
-                    expect(() => base.dateFormatForLiquibase()).to.throw(/^Creation timestamp should not be in the future: 2030-01-01\.$/);
+                it('should throw', () => {
+                    options.creationTimestamp = '2030-01-01';
+                    expect(() => new Base({ ...options })).to.throw(/^Creation timestamp should not be in the future: 2030-01-01\.$/);
                 });
             });
         });

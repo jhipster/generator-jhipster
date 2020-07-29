@@ -47,14 +47,13 @@ module.exports = class extends BaseBlueprintGenerator {
             desc:
                 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
-            defaults: false,
         });
 
         if (this.options.help) {
             return;
         }
 
-        this.loadOptions();
+        this.loadStoredAppOptions();
         this.loadRuntimeOptions();
 
         // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk

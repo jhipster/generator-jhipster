@@ -76,7 +76,6 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('skip-commit-hook', {
             desc: 'Skip adding husky commit hooks',
             type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--skip-user-management` flag
@@ -101,14 +100,12 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('with-entities', {
             desc: 'Regenerate the existing entities if any',
             type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--skip-checks` flag
         this.option('skip-checks', {
             desc: 'Check the status of the required tools',
             type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--jhi-prefix` flag
@@ -182,7 +179,6 @@ module.exports = class extends BaseBlueprintGenerator {
             desc:
                 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--creation-timestamp` flag which can be used create reproducible builds
@@ -221,7 +217,7 @@ module.exports = class extends BaseBlueprintGenerator {
             this.jhipsterConfig.entities = [...new Set((this.jhipsterConfig.entities || []).concat(entities))];
         }
 
-        this.loadOptions();
+        this.loadStoredAppOptions();
         this.loadRuntimeOptions();
 
         // Use jhipster defaults
