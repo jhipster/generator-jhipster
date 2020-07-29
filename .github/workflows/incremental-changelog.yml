@@ -1,0 +1,141 @@
+#
+# Copyright 2013-2020 the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: incremental-changelog
+on:
+    push:
+        branches-ignore:
+            - 'dependabot/**'
+            - 'skip_ci*'
+    pull_request:
+        branches:
+            - '*'
+env:
+    JHI_RUN_APP: 1
+    JHI_JDK: 11
+    JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
+    JHI_LIB_BRANCH: master
+    JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
+    JHI_GEN_BRANCH: master
+    SPRING_OUTPUT_ANSI_ENABLED: ALWAYS
+    SPRING_JPA_SHOW_SQL: false
+    JHI_DISABLE_WEBPACK_LOGS: true
+    JHI_E2E_HEADLESS: true
+    JHI_SCRIPTS: ${{ github.workspace }}/test-integration/scripts
+    NG_CLI_ANALYTICS: 'false'
+    JHI_GITHUB_CI: true
+    FORCE_COLOR: 1
+jobs:
+    applications:
+        name: ${{ matrix.app-type }}
+        runs-on: ${{ matrix.os }}
+        if: >-
+            !contains(github.event.head_commit.message, '[ci skip]') &&
+            !contains(github.event.head_commit.message, '[skip ci]') &&
+            !contains(github.event.pull_request.title, '[skip ci]') &&
+            !contains(github.event.pull_request.title, '[ci skip]') &&
+            (github.event.pull_request.draft == false || !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci')) &&
+            !contains(github.event.pull_request.user.login, 'dependabot')
+        timeout-minutes: 40
+        strategy:
+            fail-fast: false
+            matrix:
+                node_version: [12.16.1]
+                os: [ubuntu-latest]
+                app-type:
+                    - liquibase-jdl-rename-field
+                include:
+                    - app-type: liquibase-jdl-rename-field
+                      entity: jdl
+                      liquibase: jdl
+                      profile: prod
+                      war: 0
+                      protractor: 1
+        env:
+            JHI_ENTITY: ${{ matrix.entity }}
+            JHI_APP: ${{ matrix.app-type }}
+            JHI_LIQUIBASE: ${{ matrix.liquibase }}
+            JHI_PROFILE: ${{ matrix.profile }}
+            JHI_WAR: ${{ matrix.war }}
+            JHI_PROTRACTOR: ${{ matrix.protractor }}
+            JHI_TESTCONTAINERS: ${{ matrix.testcontainers }}
+        steps:
+            #----------------------------------------------------------------------
+            # Install all tools and check configuration
+            #----------------------------------------------------------------------
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v2.1.1
+              with:
+                  node-version: ${{ matrix.node_version }}
+            - uses: actions/setup-java@v1
+              with:
+                  java-version: '11.x'
+            - name: Get chrome/chromedriver version
+              id: chromedriver-version
+              run: |
+                  CHROME_VERSION=$(google-chrome --version | cut -f 3 -d ' ' | cut -d '.' -f 1) \
+                  && CHROMEDRIVER_VERSION=$(curl --location --fail --retry 3 http://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}) \
+                  && echo "::set-output name=version::$CHROMEDRIVER_VERSION"
+            - name: 'ENV: display variables'
+              run: $JHI_SCRIPTS/01-display-configuration.sh
+            - name: 'TOOLS: configure tools installed by the system'
+              run: $JHI_SCRIPTS/03-system.sh
+            - name: 'TOOLS: configure git'
+              run: $JHI_SCRIPTS/04-git-config.sh
+            #----------------------------------------------------------------------
+            # Install JHipster and generate project+entities
+            #----------------------------------------------------------------------
+            - name: 'GENERATION: install JHipster'
+              run: $JHI_SCRIPTS/10-install-jhipster.sh
+            - name: 'GENERATION: entities'
+              run: $JHI_SCRIPTS/11-generate-entities.sh
+            - name: Dump GitHub context
+              env:
+                  GITHUB_CONTEXT: ${{ toJson(github) }}
+              run: echo "$GITHUB_CONTEXT"
+            - name: 'GENERATION: project'
+              run: |
+                  $JHI_SCRIPTS/12-generate-project.sh --with-entities --force --skip-jhipster-dependencies --creation-timestamp '2020-01-01'
+                  JHI_APP=$JHI_APP-post $JHI_SCRIPTS/12-generate-project.sh --incremental-changelog --with-entities --force
+            - name: 'GENERATION: replace version in generated project'
+              run: $JHI_SCRIPTS/13-replace-version-generated-project.sh
+            - name: 'GENERATION: jhipster info'
+              run: $JHI_SCRIPTS/14-jhipster-info.sh
+            #----------------------------------------------------------------------
+            # Launch tests
+            #----------------------------------------------------------------------
+            - name: 'TESTS: Start docker-compose containers'
+              run: $JHI_SCRIPTS/20-docker-compose.sh
+            - name: 'TESTS: backend'
+              run: $JHI_SCRIPTS/21-tests-backend.sh
+            - name: 'TESTS: frontend'
+              run: $JHI_SCRIPTS/22-tests-frontend.sh
+            - name: 'TESTS: packaging'
+              run: $JHI_SCRIPTS/23-package.sh
+            - name: 'Synchronize chromedriver version'
+              if: ${{ matrix.protractor == 1 }}
+              run: npm run e2e:update-webdriver --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
+              working-directory: /home/runner/app
+            - name: 'TESTS: End-to-End'
+              run: $JHI_SCRIPTS/24-tests-e2e.sh
+            - name: 'TESTS: Sonar analysis'
+              run: $JHI_SCRIPTS/25-sonar-analyze.sh
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

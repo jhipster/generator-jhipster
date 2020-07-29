@@ -18,8 +18,10 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
+const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
+
 const prompts = require('./prompts');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
@@ -356,6 +358,17 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.info(`changelogDate is missing in .jhipster/${this.entityConfig.name}.json, using ${currentDate} as fallback`);
                     context.changelogDate = this.entityConfig.changelogDate = currentDate;
                 }
+
+                if (this.entityConfig.incrementalChangelog === undefined) {
+                    // Keep entity's original incrementalChangelog option.
+                    this.entityConfig.incrementalChangelog =
+                        this.jhipsterConfig.incrementalChangelog &&
+                        !fs.existsSync(
+                            this.destinationPath(
+                                `src/main/resources/config/liquibase/changelog/${this.entityConfig.changelogDate}_added_entity_${this.entityConfig.name}.xml`
+                            )
+                        );
+                }
             },
 
             configureFields() {
@@ -502,6 +515,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (this.isJhipsterVersionLessThan('6.3.0') && context.clientFramework === ANGULAR) {
                     this.removeFile(`${constants.ANGULAR_DIR}entities/${context.entityFolderName}/index.ts`);
                 }
+            },
+
+            databaseChangelog() {
+                if (this.options.skipDbChangelog) {
+                    return;
+                }
+                this.composeWithJHipster('database-changelog', {
+                    arguments: [this.context.name],
+                });
             },
         };
     }
