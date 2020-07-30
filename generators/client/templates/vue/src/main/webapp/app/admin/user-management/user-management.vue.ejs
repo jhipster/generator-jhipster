@@ -15,22 +15,23 @@
     </b-alert>
     <div class="table-responsive" v-if="users">
       <table class="table table-striped">
+        <caption>Users</caption>
         <thead>
         <tr>
-          <th<% if (databaseType !== 'cassandra') { %> v-on:click="changeOrder('id')"<% } %>><span v-text="$t('global.field.id')">ID</span><% if (databaseType !== 'cassandra') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
-          <th<% if (databaseType !== 'cassandra') { %> v-on:click="changeOrder('login')"<% } %>><span v-text="$t('userManagement.login')">Login</span><% if (databaseType !== 'cassandra') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'login'"></jhi-sort-indicator><% } %></th>
-          <th<% if (databaseType !== 'cassandra') { %> v-on:click="changeOrder('email')"<% } %>><span v-text="$t('userManagement.email')">Email</span><% if (databaseType !== 'cassandra') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'email'"></jhi-sort-indicator><% } %></th>
-          <th></th>
+          <th scope="col"<% if (databaseType !== 'cassandra') { %> v-on:click="changeOrder('id')"<% } %>><span v-text="$t('global.field.id')">ID</span><% if (databaseType !== 'cassandra') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
+          <th scope="col"<% if (databaseType !== 'cassandra') { %> v-on:click="changeOrder('login')"<% } %>><span v-text="$t('userManagement.login')">Login</span><% if (databaseType !== 'cassandra') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'login'"></jhi-sort-indicator><% } %></th>
+          <th scope="col"<% if (databaseType !== 'cassandra') { %> v-on:click="changeOrder('email')"<% } %>><span v-text="$t('userManagement.email')">Email</span><% if (databaseType !== 'cassandra') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'email'"></jhi-sort-indicator><% } %></th>
+          <th scope="col"></th>
           <%_ if (enableTranslation) { _%>
-          <th<% if (databaseType !== 'cassandra') { %> v-on:click="changeOrder('langKey')"<% } %>> <span v-text="$t('userManagement.langKey')">Lang Key</span><% if (databaseType !== 'cassandra') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'langKey'"></jhi-sort-indicator><% } %></th>
+          <th scope="col"<% if (databaseType !== 'cassandra') { %> v-on:click="changeOrder('langKey')"<% } %>> <span v-text="$t('userManagement.langKey')">Lang Key</span><% if (databaseType !== 'cassandra') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'langKey'"></jhi-sort-indicator><% } %></th>
           <%_ } _%>
-          <th><span v-text="$t('userManagement.profiles')">Profiles</span></th>
+          <th scope="col"><span v-text="$t('userManagement.profiles')">Profiles</span></th>
           <%_ if (databaseType !== 'cassandra') { _%>
-          <th v-on:click="changeOrder('createdDate')"><span v-text="$t('userManagement.createdDate')">Created Date</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'createdDate'"></jhi-sort-indicator></th>
-          <th v-on:click="changeOrder('lastModifiedBy')"><span v-text="$t('userManagement.lastModifiedBy')">Last Modified By</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'lastModifiedBy'"></jhi-sort-indicator></th>
-          <th id="modified-date-sort" v-on:click="changeOrder('lastModifiedDate')"><span v-text="$t('userManagement.lastModifiedDate')">Last Modified Date</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'lastModifiedDate'"></jhi-sort-indicator></th>
+          <th scope="col" v-on:click="changeOrder('createdDate')"><span v-text="$t('userManagement.createdDate')">Created Date</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'createdDate'"></jhi-sort-indicator></th>
+          <th scope="col" v-on:click="changeOrder('lastModifiedBy')"><span v-text="$t('userManagement.lastModifiedBy')">Last Modified By</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'lastModifiedBy'"></jhi-sort-indicator></th>
+          <th scope="col" id="modified-date-sort" v-on:click="changeOrder('lastModifiedDate')"><span v-text="$t('userManagement.lastModifiedDate')">Last Modified Date</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'lastModifiedDate'"></jhi-sort-indicator></th>
           <%_ } _%>
-          <th></th>
+          <th scope="col"></th>
         </tr>
         </thead>
         <tbody v-if ="users">
