@@ -51,7 +51,6 @@ describe('JSONEntity', () => {
                 delete entity.changelogDate;
                 expect(entity).to.deep.equal({
                     name: 'Toto',
-                    clientRootFolder: '',
                     dto: 'no',
                     entityTableName: 'toto',
                     fields: [],
@@ -269,7 +268,6 @@ describe('JSONEntity', () => {
                 expect(jsonEntity).to.deep.equal({
                     applications: [],
                     changelogDate: 42,
-                    clientRootFolder: '',
                     dto: 'mapstruct',
                     embedded: false,
                     entityTableName: 'toto',
