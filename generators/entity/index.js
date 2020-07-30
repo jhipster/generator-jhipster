@@ -849,10 +849,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
         let hasUserField = entity.relationships.some(relationship => this.isBuiltInUserEntity(relationship.otherEntityName));
         entity.saveUserSnapshot =
-            entity.applicationType === 'microservice' &&
-            entity.authenticationType === 'oauth2' &&
-            hasUserField &&
-            entity.dto === 'no';
+            entity.applicationType === 'microservice' && entity.authenticationType === 'oauth2' && hasUserField && entity.dto === 'no';
 
         entity.primaryKeyType = this.getPkTypeBasedOnDBAndAssociation(entity.authenticationType, entity.databaseType, entity.relationships);
 
