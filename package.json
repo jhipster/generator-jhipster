@@ -44,7 +44,7 @@
         "lint": "npm run eslint && npm run ejs-lint",
         "lint-fix": "npm run prettier:format && npm run eslint -- --fix",
         "eslint": "eslint .",
-        "ejs-lint": "npm run test:unit -- test/ejslint.js",
+        "ejs-lint": "mocha test/ejslint.js",
         "ejslint": "ejslint",
         "pretest": "npm run lint",
         "test": "mocha --no-insight",
