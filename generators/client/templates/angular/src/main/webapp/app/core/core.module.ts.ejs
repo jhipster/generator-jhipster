@@ -98,7 +98,7 @@ import { fontAwesomeIcons } from './icons/font-awesome-icons';
         }
     ]
 })
-export class <%= angularXAppName %>CoreModule {
+export class CoreModule {
     constructor(iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig<% if (enableTranslation) { %>, languageService: JhiLanguageService<% } %>) {
         registerLocaleData(locale);
         iconLibrary.addIcons(...fontAwesomeIcons);
