@@ -22,9 +22,17 @@ on:
     push:
         branches-ignore:
             - 'dependabot/**'
+        paths:
+            - '!generators/client/**react.js'
+            - '!generators/client/**vue.js'
+            - 'generators/client/templates/angular/**'
     pull_request:
         branches:
             - '*'
+        paths:
+            - '!generators/client/**react.js'
+            - '!generators/client/**vue.js'
+            - 'generators/client/templates/angular/**'
 env:
     JHI_RUN_APP: 1
     JHI_JDK: 11
