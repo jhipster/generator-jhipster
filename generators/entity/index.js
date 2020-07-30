@@ -41,7 +41,6 @@ const BASE_TEMPLATE_DATA = {
     existingEnum: false,
     searchEngine: false,
 
-    hasUserField: false,
     fieldsContainDate: false,
     fieldsContainInstant: false,
     fieldsContainUUID: false,
@@ -848,11 +847,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
         entity.i18nToLoad.push(entity.entityInstance);
         entity.i18nKeyPrefix = `${entity.angularAppName}.${entity.entityTranslationKey}`;
 
-        entity.hasUserField = !!entity.relationships.find(relationship => this.isBuiltInUserEntity(relationship.otherEntityName));
+        let hasUserField = !!entity.relationships.find(relationship => this.isBuiltInUserEntity(relationship.otherEntityName));
         entity.saveUserSnapshot =
             entity.applicationType === 'microservice' &&
             entity.authenticationType === 'oauth2' &&
-            entity.hasUserField &&
+            hasUserField &&
             entity.dto === 'no';
 
         entity.primaryKeyType = this.getPkTypeBasedOnDBAndAssociation(entity.authenticationType, entity.databaseType, entity.relationships);
