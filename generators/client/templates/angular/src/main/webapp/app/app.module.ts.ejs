@@ -24,7 +24,7 @@ import { <%= angularXAppName %>SharedModule } from 'app/shared/shared.module';
 import { <%= angularXAppName %>CoreModule } from 'app/core/core.module';
 import { <%= angularXAppName %>AppRoutingModule } from './app-routing.module';
 import { <%= angularXAppName %>HomeModule } from './home/home.module';
-import { <%= angularXAppName %>EntityModule } from './entities/entity.module';
+import { <%= angularXAppName %>EntityRoutingModule } from './entities/entity-routing.module';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { MainComponent } from './layouts/main/main.component';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
@@ -42,7 +42,7 @@ import { ErrorComponent } from './layouts/error/error.component';
         <%= angularXAppName %>CoreModule,
         <%= angularXAppName %>HomeModule,
         // jhipster-needle-angular-add-module JHipster will add new module here
-        <%= angularXAppName %>EntityModule,
+        <%= angularXAppName %>EntityRoutingModule,
         <%= angularXAppName %>AppRoutingModule
     ],
     declarations: [

@@ -22,14 +22,14 @@ import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { LoginService } from 'app/core/login/login.service';
-import { LoginModalComponent } from 'app/shared/login/login.component';
+import { LoginModalComponent } from 'app/core/login/login-modal.component';
 import { <%= angularXAppName %>TestModule } from '../../../test.module';
 import { MockLoginService } from '../../../helpers/mock-login.service';
 import { MockRouter } from '../../../helpers/mock-route.service';
 import { MockActiveModal } from '../../../helpers/mock-active-modal.service';
 
 describe('Component Tests', () => {
-    describe('LoginComponent', () => {
+    describe('LoginModalComponent', () => {
         let comp: LoginModalComponent;
         let fixture: ComponentFixture<LoginModalComponent>;
         let mockLoginService: MockLoginService;
