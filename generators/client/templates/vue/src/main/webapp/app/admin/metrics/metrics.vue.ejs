@@ -166,17 +166,18 @@
       </div>
       <div class="table-responsive">
         <table class="table table-striped">
+          <caption>Jvm gc</caption>
           <thead>
             <tr>
-              <th></th>
-              <th class="text-right" v-text="$t('metrics.servicesstats.table.count')">Count</th>
-              <th class="text-right" v-text="$t('metrics.servicesstats.table.mean')">Mean</th>
-              <th class="text-right" v-text="$t('metrics.servicesstats.table.min')">Min</th>
-              <th class="text-right" v-text="$t('metrics.servicesstats.table.p50')">p50</th>
-              <th class="text-right" v-text="$t('metrics.servicesstats.table.p75')">p75</th>
-              <th class="text-right" v-text="$t('metrics.servicesstats.table.p95')">p95</th>
-              <th class="text-right" v-text="$t('metrics.servicesstats.table.p99')">p99</th>
-              <th class="text-right" v-text="$t('metrics.servicesstats.table.max')">Max</th>
+              <th scope="col"></th>
+              <th scope="col" class="text-right" v-text="$t('metrics.servicesstats.table.count')">Count</th>
+              <th scope="col" class="text-right" v-text="$t('metrics.servicesstats.table.mean')">Mean</th>
+              <th scope="col" class="text-right" v-text="$t('metrics.servicesstats.table.min')">Min</th>
+              <th scope="col" class="text-right" v-text="$t('metrics.servicesstats.table.p50')">p50</th>
+              <th scope="col" class="text-right" v-text="$t('metrics.servicesstats.table.p75')">p75</th>
+              <th scope="col" class="text-right" v-text="$t('metrics.servicesstats.table.p95')">p95</th>
+              <th scope="col" class="text-right" v-text="$t('metrics.servicesstats.table.p99')">p99</th>
+              <th scope="col" class="text-right" v-text="$t('metrics.servicesstats.table.max')">Max</th>
             </tr>
           </thead>
           <tbody>
@@ -198,12 +199,13 @@
 
     <h3 v-text="$t('metrics.jvm.http.title')">HTTP requests (time in millisecond)</h3>
     <table class="table table-striped" v-if="!updatingMetrics && isObjectExisting(metrics, 'http.server.requests')">
+      <caption>Jvm http</caption>
       <thead>
         <tr>
-          <th v-text="$t('metrics.jvm.http.table.code')">Code</th>
-          <th v-text="$t('metrics.jvm.http.table.count')">Count</th>
-          <th class="text-right" v-text="$t('metrics.jvm.http.table.mean')">Mean</th>
-          <th class="text-right" v-text="$t('metrics.jvm.http.table.max')">Max</th>
+          <th scope="col" v-text="$t('metrics.jvm.http.table.code')">Code</th>
+          <th scope="col" v-text="$t('metrics.jvm.http.table.count')">Count</th>
+          <th scope="col" class="text-right" v-text="$t('metrics.jvm.http.table.mean')">Mean</th>
+          <th scope="col" class="text-right" v-text="$t('metrics.jvm.http.table.max')">Max</th>
         </tr>
       </thead>
       <tbody>
@@ -225,12 +227,13 @@
     <h3>Endpoints requests (time in millisecond)</h3>
     <div class="table-responsive" v-if="!updatingMetrics">
       <table class="table table-striped">
+        <caption>Endpoint</caption>
         <thead>
           <tr>
-            <th>Method</th>
-            <th>Endpoint url</th>
-            <th class="text-right">Count</th>
-            <th class="text-right">Mean</th>
+            <th scope="col">Method</th>
+            <th scope="col">Endpoint url</th>
+            <th scope="col" class="text-right">Count</th>
+            <th scope="col" class="text-right">Mean</th>
           </tr>
         </thead>
         <tbody>
@@ -249,17 +252,18 @@
     <h3 v-text="$t('metrics.cache.title')">Cache statistics</h3>
     <div class="table-responsive" v-if="!updatingMetrics && isObjectExisting(metrics, 'cache')">
       <table class="table table-striped">
+        <caption>Cache</caption>
         <thead>
           <tr>
-            <th v-text="$t('metrics.cache.cachename')">Cache name</th>
-            <th class="text-right" data-translate="metrics.cache.hits">Cache Hits</th>
-            <th class="text-right" data-translate="metrics.cache.misses">Cache Misses</th>
-            <th class="text-right" data-translate="metrics.cache.gets">Cache Gets</th>
-            <th class="text-right" data-translate="metrics.cache.puts">Cache Puts</th>
-            <th class="text-right" data-translate="metrics.cache.removals">Cache Removals</th>
-            <th class="text-right" data-translate="metrics.cache.evictions">Cache Evictions</th>
-            <th class="text-right" data-translate="metrics.cache.hitPercent">Cache Hit %</th>
-            <th class="text-right" data-translate="metrics.cache.missPercent">Cache Miss %</th>
+            <th scope="col" v-text="$t('metrics.cache.cachename')">Cache name</th>
+            <th scope="col" class="text-right" data-translate="metrics.cache.hits">Cache Hits</th>
+            <th scope="col" class="text-right" data-translate="metrics.cache.misses">Cache Misses</th>
+            <th scope="col" class="text-right" data-translate="metrics.cache.gets">Cache Gets</th>
+            <th scope="col" class="text-right" data-translate="metrics.cache.puts">Cache Puts</th>
+            <th scope="col" class="text-right" data-translate="metrics.cache.removals">Cache Removals</th>
+            <th scope="col" class="text-right" data-translate="metrics.cache.evictions">Cache Evictions</th>
+            <th scope="col" class="text-right" data-translate="metrics.cache.hitPercent">Cache Hit %</th>
+            <th scope="col" class="text-right" data-translate="metrics.cache.missPercent">Cache Miss %</th>
           </tr>
         </thead>
         <tbody>
@@ -285,22 +289,23 @@
     <h3 v-text="$t('metrics.datasource.title')">DataSource statistics (time in millisecond)</h3>
     <div class="table-responsive" v-if="!updatingMetrics && isObjectExistingAndNotEmpty(metrics, 'databases')">
       <table class="table table-striped">
+        <caption>Connection pool</caption>
         <thead>
           <tr>
-            <th>
+            <th scope="col">
               <span v-text="$t('metrics.datasource.usage')">Connection Pool Usage</span> (active:
               {{ metrics.databases.active.value }}, min:
               {{ metrics.databases.min.value }}, max: {{ metrics.databases.max.value }}, idle:
               {{ metrics.databases.idle.value }})
             </th>
-            <th class="text-right" v-text="$t('metrics.datasource.count')">Count</th>
-            <th class="text-right" v-text="$t('metrics.datasource.mean')">Mean</th>
-            <th class="text-right" v-text="$t('metrics.servicesstats.table.min')">Min</th>
-            <th class="text-right" v-text="$t('metrics.servicesstats.table.p50')">p50</th>
-            <th class="text-right" v-text="$t('metrics.servicesstats.table.p75')">p75</th>
-            <th class="text-right" v-text="$t('metrics.servicesstats.table.p95')">p95</th>
-            <th class="text-right" v-text="$t('metrics.servicesstats.table.p99')">p99</th>
-            <th class="text-right" v-text="$t('metrics.datasource.max')">Max</th>
+            <th scope="col" class="text-right" v-text="$t('metrics.datasource.count')">Count</th>
+            <th scope="col" class="text-right" v-text="$t('metrics.datasource.mean')">Mean</th>
+            <th scope="col" class="text-right" v-text="$t('metrics.servicesstats.table.min')">Min</th>
+            <th scope="col" class="text-right" v-text="$t('metrics.servicesstats.table.p50')">p50</th>
+            <th scope="col" class="text-right" v-text="$t('metrics.servicesstats.table.p75')">p75</th>
+            <th scope="col" class="text-right" v-text="$t('metrics.servicesstats.table.p95')">p95</th>
+            <th scope="col" class="text-right" v-text="$t('metrics.servicesstats.table.p99')">p99</th>
+            <th scope="col" class="text-right" v-text="$t('metrics.datasource.max')">Max</th>
           </tr>
         </thead>
         <tbody>

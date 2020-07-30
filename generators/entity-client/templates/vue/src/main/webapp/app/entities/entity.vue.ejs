@@ -44,21 +44,22 @@
         </div>
         <div class="table-responsive" v-if="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
             <table class="table table-striped">
+                <caption><%= entityInstancePlural %></caption>
                 <thead>
                 <tr>
-                    <th<% if (pagination !== 'no') { %> v-on:click="changeOrder('id')"<% } %>><span v-text="$t('global.field.id')">ID</span><% if (pagination !== 'no') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
+                    <th scope="row"<% if (pagination !== 'no') { %> v-on:click="changeOrder('id')"<% } %>><span v-text="$t('global.field.id')">ID</span><% if (pagination !== 'no') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
                     <%_ for (idx in fields) { _%>
-                    <th<% if (pagination !== 'no') { %> v-on:click="changeOrder('<%= fields[idx].fieldName%>')"<% } %>><span v-text="$t('<%=`${i18nKeyPrefix}.${fields[idx].fieldName}` %>')"><%= fields[idx].fieldNameHumanized %></span><% if (pagination !== 'no') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%= fields[idx].fieldName%>'"></jhi-sort-indicator><% } %></th>
+                    <th scope="row"<% if (pagination !== 'no') { %> v-on:click="changeOrder('<%= fields[idx].fieldName%>')"<% } %>><span v-text="$t('<%=`${i18nKeyPrefix}.${fields[idx].fieldName}` %>')"><%= fields[idx].fieldNameHumanized %></span><% if (pagination !== 'no') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%= fields[idx].fieldName%>'"></jhi-sort-indicator><% } %></th>
                     <%_ } _%>
                     <%_ for (idx in relationships) { _%>
                         <%_ if (relationships[idx].relationshipType === 'many-to-one'
                         || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
                         || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
                             const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
-                    <th<% if (pagination !== 'no') { %> v-on:click="changeOrder('<%=relationships[idx].relationshipName + (fieldName)%>')"<% } %>><span v-text="$t('<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>')"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%=relationships[idx].relationshipName + (fieldName)%>'"></jhi-sort-indicator><% } %></th>
+                    <th scope="row"<% if (pagination !== 'no') { %> v-on:click="changeOrder('<%=relationships[idx].relationshipName + (fieldName)%>')"<% } %>><span v-text="$t('<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>')"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%=relationships[idx].relationshipName + (fieldName)%>'"></jhi-sort-indicator><% } %></th>
                         <%_ } _%>
                     <%_ } _%>
-                    <th></th>
+                    <th scope="row"></th>
                 </tr>
                 </thead>
                 <tbody>

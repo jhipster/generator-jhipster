@@ -32,13 +32,14 @@
         </div>
       </div>
       <table class="table table-sm table-responsive">
+        <caption>Metrics</caption>
         <thead>
           <tr>
-            <th v-text="$t('metrics.jvm.threads.dump.blockedtime')">Blocked Time</th>
-            <th v-text="$t('metrics.jvm.threads.dump.blockedcount')">Blocked Count</th>
-            <th v-text="$t('metrics.jvm.threads.dump.waitedtime')">Waited Time</th>
-            <th v-text="$t('metrics.jvm.threads.dump.waitedcount')">Waited Count</th>
-            <th v-text="$t('metrics.jvm.threads.dump.lockname')">Lock Name</th>
+            <th v-text="$t('metrics.jvm.threads.dump.blockedtime')" scope="col">Blocked Time</th>
+            <th v-text="$t('metrics.jvm.threads.dump.blockedcount')" scope="col">Blocked Count</th>
+            <th v-text="$t('metrics.jvm.threads.dump.waitedtime')" scope="col">Waited Time</th>
+            <th v-text="$t('metrics.jvm.threads.dump.waitedcount')" scope="col">Waited Count</th>
+            <th v-text="$t('metrics.jvm.threads.dump.lockname')" scope="col">Lock Name</th>
           </tr>
         </thead>
         <tbody>
