@@ -847,7 +847,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         entity.i18nToLoad.push(entity.entityInstance);
         entity.i18nKeyPrefix = `${entity.angularAppName}.${entity.entityTranslationKey}`;
 
-        let hasUserField = !!entity.relationships.find(relationship => this.isBuiltInUserEntity(relationship.otherEntityName));
+        let hasUserField = entity.relationships.some(relationship => this.isBuiltInUserEntity(relationship.otherEntityName));
         entity.saveUserSnapshot =
             entity.applicationType === 'microservice' &&
             entity.authenticationType === 'oauth2' &&
