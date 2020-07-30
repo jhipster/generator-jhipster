@@ -129,6 +129,7 @@ const expectedFiles = {
         ],
         fakeData: [`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/foo.csv`],
         serverLiquibase: [`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160120000100_added_entity_Foo.xml`],
+        serverLiquibaseUpdate: [`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160120000100_updated_entity_Foo.xml`],
         gatling: [`${TEST_DIR}gatling/user-files/simulations/FooGatlingTest.scala`],
     },
 

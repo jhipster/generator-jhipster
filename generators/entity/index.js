@@ -37,10 +37,13 @@ const stringify = data => JSON.stringify(data, null, 4);
 
 let useBlueprints;
 
-const getNewElements = (currentElements, previousElements) =>
-    currentElements.filter(
+const getNewElements = (currentElements, previousElements) => {
+    console.log({ currentElements });
+    console.log({ previousElements });
+    return currentElements.filter(
         currentElement => !previousElements.find(previousElement => JSON.stringify(previousElement) === JSON.stringify(currentElement))
     );
+};
 
 const getRemovedElements = (currentElements, previousElements) =>
     previousElements.filter(
@@ -264,6 +267,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.skipDbChangelog = context.skipDbChangelog || this.options.skipDbChangelog;
                 context.skipClient = context.skipClient || this.options.skipClient;
                 context.currentEntityState = context.currentEntityState || this.options.currentEntityState;
+                context.testMode = context.testMode || this.options.testMode;
             },
 
             loadEntitySpecificOptions() {
@@ -551,85 +555,17 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
                 }
 
+                console.log(context.newFields);
+                console.log(context.fields);
+
+                context.newFields = context.newFields.map(field => this._formatField(field));
+                context.removedFields = context.removedFields.map(field => this._formatField(field));
+
                 // Load in-memory data for fields
                 context.fields.forEach(field => {
-                    const fieldOptions = field.options || {};
-                    _.defaults(field, {
-                        fieldNameCapitalized: _.upperFirst(field.fieldName),
-                        fieldNameUnderscored: _.snakeCase(field.fieldName),
-                        fieldNameHumanized: fieldOptions.fieldNameHumanized || _.startCase(field.fieldName),
-                    });
+                    field = this._formatField(field);
+
                     const fieldType = field.fieldType;
-
-                    field.fieldIsEnum = ![
-                        'String',
-                        'Integer',
-                        'Long',
-                        'Float',
-                        'Double',
-                        'BigDecimal',
-                        'LocalDate',
-                        'Instant',
-                        'ZonedDateTime',
-                        'Duration',
-                        'UUID',
-                        'Boolean',
-                        'byte[]',
-                        'ByteBuffer',
-                    ].includes(fieldType);
-
-                    if (field.fieldNameAsDatabaseColumn === undefined) {
-                        const fieldNameUnderscored = _.snakeCase(field.fieldName);
-                        const jhiFieldNamePrefix = this.getColumnName(context.jhiPrefix);
-                        if (isReservedTableName(fieldNameUnderscored, context.prodDatabaseType)) {
-                            if (!jhiFieldNamePrefix) {
-                                this.warning(
-                                    `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`
-                                );
-                                field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
-                            } else {
-                                field.fieldNameAsDatabaseColumn = `${jhiFieldNamePrefix}_${fieldNameUnderscored}`;
-                            }
-                        } else {
-                            field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
-                        }
-                    }
-
-                    if (field.fieldInJavaBeanMethod === undefined) {
-                        // Handle the specific case when the second letter is capitalized
-                        // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
-                        if (field.fieldName.length > 1) {
-                            const firstLetter = field.fieldName.charAt(0);
-                            const secondLetter = field.fieldName.charAt(1);
-                            if (firstLetter === firstLetter.toLowerCase() && secondLetter === secondLetter.toUpperCase()) {
-                                field.fieldInJavaBeanMethod = firstLetter.toLowerCase() + field.fieldName.slice(1);
-                            } else {
-                                field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
-                            }
-                        } else {
-                            field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
-                        }
-                    }
-
-                    if (field.fieldValidateRulesPatternJava === undefined) {
-                        field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern
-                            ? field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
-                            : field.fieldValidateRulesPattern;
-                    }
-
-                    if (field.fieldValidateRulesPatternAngular === undefined) {
-                        field.fieldValidateRulesPatternAngular = field.fieldValidateRulesPattern
-                            ? field.fieldValidateRulesPattern.replace(/"/g, '&#34;')
-                            : field.fieldValidateRulesPattern;
-                    }
-
-                    if (field.fieldValidateRulesPatternReact === undefined) {
-                        field.fieldValidateRulesPatternReact = field.fieldValidateRulesPattern
-                            ? field.fieldValidateRulesPattern.replace(/'/g, "\\'")
-                            : field.fieldValidateRulesPattern;
-                    }
-
-                    field.fieldValidate = Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
 
                     if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
                         context.fieldsIsReactAvField = true;
@@ -676,181 +612,19 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
                 });
 
+                context.newRelationships = context.newRelationships.map(relationship => this._formatRelationship(relationship));
+                context.removedRelationships = context.removedRelationships.map(relationship => this._formatRelationship(relationship));
+
                 let hasUserField = false;
+
                 // Load in-memory data for relationships
                 context.relationships.forEach(relationship => {
-                    const relationshipOptions = relationship.options || {};
                     const otherEntityName = relationship.otherEntityName;
-                    const otherEntityData = this._getEntityJson(otherEntityName) || {};
-                    const jhiTablePrefix = context.jhiTablePrefix;
 
-                    relationship.otherEntityIsEmbedded = otherEntityData.embedded;
-                    if (otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
-                        otherEntityData.clientRootFolder = otherEntityData.microserviceName;
-                    }
+                    relationship = this._formatRelationship(relationship);
 
                     if (this.isBuiltInUserEntity(otherEntityName)) {
                         hasUserField = true;
-                    }
-
-                    relationship.otherEntityPrimaryKeyType =
-                        this.isBuiltInUserEntity(otherEntityName) && context.authenticationType === 'oauth2'
-                            ? 'String'
-                            : this.getPkType(context.databaseType);
-
-                    // Look for fields at the other other side of the relationship
-                    if (otherEntityData.relationships) {
-                        let otherRelationship;
-                        if (relationship.relationshipType === 'many-to-one' || !relationship.ownerSide) {
-                            otherRelationship = otherEntityData.relationships.find(otherSideRelationship => {
-                                if (_.upperFirst(otherSideRelationship.otherEntityName) !== entityName) {
-                                    return false;
-                                }
-                                if (!otherSideRelationship.otherEntityRelationshipName) {
-                                    return false;
-                                }
-                                return otherSideRelationship.otherEntityRelationshipName === relationship.relationshipName;
-                            });
-                        } else {
-                            otherRelationship = otherEntityData.relationships.find(otherSideRelationship => {
-                                if (_.upperFirst(otherSideRelationship.otherEntityName) !== entityName) {
-                                    return false;
-                                }
-                                if (!relationship.otherEntityRelationshipName) {
-                                    return false;
-                                }
-                                return relationship.otherEntityRelationshipName === otherSideRelationship.relationshipName;
-                            });
-                        }
-                        if (otherRelationship) {
-                            if (
-                                relationship.otherEntityRelationshipName &&
-                                relationship.otherEntityRelationshipName !== otherRelationship.relationshipName
-                            ) {
-                                throw new Error(
-                                    `Relationship name is not synchronized ${stringify(relationship)} with ${stringify(otherRelationship)}`
-                                );
-                            }
-                            if (
-                                !(relationship.relationshipType === 'one-to-one' && otherRelationship.relationshipType === 'one-to-one') &&
-                                !(
-                                    relationship.relationshipType === 'many-to-one' && otherRelationship.relationshipType === 'one-to-many'
-                                ) &&
-                                !(
-                                    relationship.relationshipType === 'one-to-many' && otherRelationship.relationshipType === 'many-to-one'
-                                ) &&
-                                !(relationship.relationshipType === 'many-to-many' && otherRelationship.relationshipType === 'many-to-many')
-                            ) {
-                                throw new Error(
-                                    `Relationship type is not synchronized ${stringify(relationship)} with ${stringify(otherRelationship)}`
-                                );
-                            }
-                            _.defaults(relationship, {
-                                otherEntityRelationshipName: otherRelationship.relationshipName,
-                                otherEntityRelationshipNamePlural: otherRelationship.relationshipNamePlural,
-                                otherEntityRelationshipNameCapitalized: otherRelationship.relationshipNameCapitalized,
-                                otherEntityRelationshipNameCapitalizedPlural: relationship.relationshipNameCapitalizedPlural,
-                            });
-                        } else {
-                            this.warning(`Could not find the other side of the relationship ${stringify(relationship)}`);
-                        }
-                    }
-
-                    if (relationship.otherEntityRelationshipName !== undefined) {
-                        _.defaults(relationship, {
-                            otherEntityRelationshipNamePlural: pluralize(relationship.otherEntityRelationshipName),
-                            otherEntityRelationshipNameCapitalized: _.upperFirst(relationship.otherEntityRelationshipName),
-                        });
-                        _.defaults(relationship, {
-                            otherEntityRelationshipNameCapitalizedPlural: pluralize(relationship.otherEntityRelationshipNameCapitalized),
-                        });
-                    }
-
-                    const relationshipName = relationship.relationshipName;
-                    _.defaults(relationship, {
-                        relationshipNamePlural: pluralize(relationshipName),
-                        relationshipFieldName: _.lowerFirst(relationshipName),
-                        relationshipNameCapitalized: _.upperFirst(relationshipName),
-                        relationshipNameHumanized: relationshipOptions.relationshipNameHumanized || _.startCase(relationshipName),
-                        otherEntityNamePlural: pluralize(otherEntityName),
-                        otherEntityNameCapitalized: _.upperFirst(otherEntityName),
-                        otherEntityFieldCapitalized: _.upperFirst(relationship.otherEntityField),
-                        otherEntityTableName:
-                            otherEntityData.entityTableName ||
-                            this.getTableName(
-                                this.isBuiltInUserEntity(otherEntityName) ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName
-                            ),
-                    });
-
-                    _.defaults(relationship, {
-                        relationshipFieldNamePlural: pluralize(relationship.relationshipFieldName),
-                        relationshipNameCapitalizedPlural:
-                            relationship.relationshipName.length > 1
-                                ? pluralize(relationship.relationshipNameCapitalized)
-                                : _.upperFirst(pluralize(relationship.relationshipName)),
-                        otherEntityNameCapitalizedPlural: pluralize(relationship.otherEntityNameCapitalized),
-                    });
-
-                    if (context.dto === 'mapstruct') {
-                        if (otherEntityData.dto !== 'mapstruct' && !this.isBuiltInUserEntity(otherEntityName)) {
-                            this.warning(
-                                `This entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
-                            );
-                        }
-                    }
-
-                    if (isReservedTableName(relationship.otherEntityTableName, context.prodDatabaseType) && jhiTablePrefix) {
-                        const otherEntityTableName = relationship.otherEntityTableName;
-                        relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
-                    }
-
-                    if (relationship.otherEntityAngularName === undefined) {
-                        if (this.isBuiltInUserEntity(otherEntityName)) {
-                            relationship.otherEntityAngularName = 'User';
-                        } else {
-                            const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
-                            relationship.otherEntityAngularName =
-                                _.upperFirst(relationship.otherEntityName) + this.upperFirstCamelCase(otherEntityAngularSuffix);
-                        }
-                    }
-
-                    _.defaults(relationship, {
-                        otherEntityStateName: _.kebabCase(relationship.otherEntityAngularName),
-                        jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering,
-                    });
-
-                    if (!this.isBuiltInUserEntity(otherEntityName)) {
-                        _.defaults(relationship, {
-                            otherEntityFileName: _.kebabCase(relationship.otherEntityAngularName),
-                            otherEntityFolderName: _.kebabCase(relationship.otherEntityAngularName),
-                        });
-
-                        if (
-                            context.skipUiGrouping ||
-                            otherEntityData.clientRootFolder === '' ||
-                            otherEntityData.clientRootFolder === undefined
-                        ) {
-                            relationship.otherEntityClientRootFolder = '';
-                        } else {
-                            relationship.otherEntityClientRootFolder = `${otherEntityData.clientRootFolder}/`;
-                        }
-                        if (otherEntityData.clientRootFolder) {
-                            if (context.clientRootFolder === otherEntityData.clientRootFolder) {
-                                relationship.otherEntityModulePath = relationship.otherEntityFolderName;
-                            } else {
-                                relationship.otherEntityModulePath = `${
-                                    context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''
-                                }${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
-                            }
-                            relationship.otherEntityModelName = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
-                            relationship.otherEntityPath = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
-                        } else {
-                            relationship.otherEntityModulePath = `${
-                                context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''
-                            }${relationship.otherEntityFolderName}`;
-                            relationship.otherEntityModelName = relationship.otherEntityFileName;
-                            relationship.otherEntityPath = relationship.otherEntityFolderName;
-                        }
                     }
 
                     // Load in-memory data for root
@@ -1105,6 +879,267 @@ class EntityGenerator extends BaseBlueprintGenerator {
         }
 
         return entityJson;
+    }
+
+    /**
+     * formart the field object
+     * @param {any} field - field object to format
+     */
+    _formatField(field) {
+        console.log({ field });
+
+        const context = this.context;
+
+        const fieldOptions = field.options || {};
+        _.defaults(field, {
+            fieldNameCapitalized: _.upperFirst(field.fieldName),
+            fieldNameUnderscored: _.snakeCase(field.fieldName),
+            fieldNameHumanized: fieldOptions.fieldNameHumanized || _.startCase(field.fieldName),
+        });
+        const fieldType = field.fieldType;
+
+        field.fieldIsEnum = ![
+            'String',
+            'Integer',
+            'Long',
+            'Float',
+            'Double',
+            'BigDecimal',
+            'LocalDate',
+            'Instant',
+            'ZonedDateTime',
+            'Duration',
+            'UUID',
+            'Boolean',
+            'byte[]',
+            'ByteBuffer',
+        ].includes(fieldType);
+
+        if (field.fieldNameAsDatabaseColumn === undefined) {
+            const fieldNameUnderscored = _.snakeCase(field.fieldName);
+            const jhiFieldNamePrefix = this.getColumnName(context.jhiPrefix);
+            if (isReservedTableName(fieldNameUnderscored, context.prodDatabaseType)) {
+                if (!jhiFieldNamePrefix) {
+                    this.warning(
+                        `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`
+                    );
+                    field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
+                } else {
+                    field.fieldNameAsDatabaseColumn = `${jhiFieldNamePrefix}_${fieldNameUnderscored}`;
+                }
+            } else {
+                field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
+            }
+        }
+
+        if (field.fieldInJavaBeanMethod === undefined) {
+            // Handle the specific case when the second letter is capitalized
+            // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
+            if (field.fieldName.length > 1) {
+                const firstLetter = field.fieldName.charAt(0);
+                const secondLetter = field.fieldName.charAt(1);
+                if (firstLetter === firstLetter.toLowerCase() && secondLetter === secondLetter.toUpperCase()) {
+                    field.fieldInJavaBeanMethod = firstLetter.toLowerCase() + field.fieldName.slice(1);
+                } else {
+                    field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
+                }
+            } else {
+                field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
+            }
+        }
+
+        if (field.fieldValidateRulesPatternJava === undefined) {
+            field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern
+                ? field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+                : field.fieldValidateRulesPattern;
+        }
+
+        if (field.fieldValidateRulesPatternAngular === undefined) {
+            field.fieldValidateRulesPatternAngular = field.fieldValidateRulesPattern
+                ? field.fieldValidateRulesPattern.replace(/"/g, '&#34;')
+                : field.fieldValidateRulesPattern;
+        }
+
+        if (field.fieldValidateRulesPatternReact === undefined) {
+            field.fieldValidateRulesPatternReact = field.fieldValidateRulesPattern
+                ? field.fieldValidateRulesPattern.replace(/'/g, "\\'")
+                : field.fieldValidateRulesPattern;
+        }
+
+        field.fieldValidate = Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
+
+        return field;
+    }
+
+    /**
+     * formart the relationship object
+     * @param {any} relationship - relationship object to format
+     */
+    _formatRelationship(relationship) {
+        const context = this.context;
+        const entityName = context.name;
+
+        const relationshipOptions = relationship.options || {};
+        const otherEntityName = relationship.otherEntityName;
+        const otherEntityData = this._getEntityJson(otherEntityName) || {};
+        const jhiTablePrefix = context.jhiTablePrefix;
+
+        relationship.otherEntityIsEmbedded = otherEntityData.embedded;
+        if (otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
+            otherEntityData.clientRootFolder = otherEntityData.microserviceName;
+        }
+
+        relationship.otherEntityPrimaryKeyType =
+            this.isBuiltInUserEntity(otherEntityName) && context.authenticationType === 'oauth2'
+                ? 'String'
+                : this.getPkType(context.databaseType);
+
+        // Look for fields at the other other side of the relationship
+        if (otherEntityData.relationships) {
+            let otherRelationship;
+            if (relationship.relationshipType === 'many-to-one' || !relationship.ownerSide) {
+                otherRelationship = otherEntityData.relationships.find(otherSideRelationship => {
+                    if (_.upperFirst(otherSideRelationship.otherEntityName) !== entityName) {
+                        return false;
+                    }
+                    if (!otherSideRelationship.otherEntityRelationshipName) {
+                        return false;
+                    }
+                    return otherSideRelationship.otherEntityRelationshipName === relationship.relationshipName;
+                });
+            } else {
+                otherRelationship = otherEntityData.relationships.find(otherSideRelationship => {
+                    if (_.upperFirst(otherSideRelationship.otherEntityName) !== entityName) {
+                        return false;
+                    }
+                    if (!relationship.otherEntityRelationshipName) {
+                        return false;
+                    }
+                    return relationship.otherEntityRelationshipName === otherSideRelationship.relationshipName;
+                });
+            }
+            if (otherRelationship) {
+                if (
+                    relationship.otherEntityRelationshipName &&
+                    relationship.otherEntityRelationshipName !== otherRelationship.relationshipName
+                ) {
+                    throw new Error(
+                        `Relationship name is not synchronized ${stringify(relationship)} with ${stringify(otherRelationship)}`
+                    );
+                }
+                if (
+                    !(relationship.relationshipType === 'one-to-one' && otherRelationship.relationshipType === 'one-to-one') &&
+                    !(relationship.relationshipType === 'many-to-one' && otherRelationship.relationshipType === 'one-to-many') &&
+                    !(relationship.relationshipType === 'one-to-many' && otherRelationship.relationshipType === 'many-to-one') &&
+                    !(relationship.relationshipType === 'many-to-many' && otherRelationship.relationshipType === 'many-to-many')
+                ) {
+                    throw new Error(
+                        `Relationship type is not synchronized ${stringify(relationship)} with ${stringify(otherRelationship)}`
+                    );
+                }
+                _.defaults(relationship, {
+                    otherEntityRelationshipName: otherRelationship.relationshipName,
+                    otherEntityRelationshipNamePlural: otherRelationship.relationshipNamePlural,
+                    otherEntityRelationshipNameCapitalized: otherRelationship.relationshipNameCapitalized,
+                    otherEntityRelationshipNameCapitalizedPlural: relationship.relationshipNameCapitalizedPlural,
+                });
+            } else {
+                this.warning(`Could not find the other side of the relationship ${stringify(relationship)}`);
+            }
+        }
+
+        if (relationship.otherEntityRelationshipName !== undefined) {
+            _.defaults(relationship, {
+                otherEntityRelationshipNamePlural: pluralize(relationship.otherEntityRelationshipName),
+                otherEntityRelationshipNameCapitalized: _.upperFirst(relationship.otherEntityRelationshipName),
+            });
+            _.defaults(relationship, {
+                otherEntityRelationshipNameCapitalizedPlural: pluralize(relationship.otherEntityRelationshipNameCapitalized),
+            });
+        }
+
+        const relationshipName = relationship.relationshipName;
+        _.defaults(relationship, {
+            relationshipNamePlural: pluralize(relationshipName),
+            relationshipFieldName: _.lowerFirst(relationshipName),
+            relationshipNameCapitalized: _.upperFirst(relationshipName),
+            relationshipNameHumanized: relationshipOptions.relationshipNameHumanized || _.startCase(relationshipName),
+            otherEntityNamePlural: pluralize(otherEntityName),
+            otherEntityNameCapitalized: _.upperFirst(otherEntityName),
+            otherEntityFieldCapitalized: _.upperFirst(relationship.otherEntityField),
+            otherEntityTableName:
+                otherEntityData.entityTableName ||
+                this.getTableName(this.isBuiltInUserEntity(otherEntityName) ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName),
+        });
+
+        _.defaults(relationship, {
+            relationshipFieldNamePlural: pluralize(relationship.relationshipFieldName),
+            relationshipNameCapitalizedPlural:
+                relationship.relationshipName.length > 1
+                    ? pluralize(relationship.relationshipNameCapitalized)
+                    : _.upperFirst(pluralize(relationship.relationshipName)),
+            otherEntityNameCapitalizedPlural: pluralize(relationship.otherEntityNameCapitalized),
+        });
+
+        if (context.dto === 'mapstruct') {
+            if (otherEntityData.dto !== 'mapstruct' && !this.isBuiltInUserEntity(otherEntityName)) {
+                this.warning(
+                    `This entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
+                );
+            }
+        }
+
+        if (isReservedTableName(relationship.otherEntityTableName, context.prodDatabaseType) && jhiTablePrefix) {
+            const otherEntityTableName = relationship.otherEntityTableName;
+            relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
+        }
+
+        if (relationship.otherEntityAngularName === undefined) {
+            if (this.isBuiltInUserEntity(otherEntityName)) {
+                relationship.otherEntityAngularName = 'User';
+            } else {
+                const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
+                relationship.otherEntityAngularName =
+                    _.upperFirst(relationship.otherEntityName) + this.upperFirstCamelCase(otherEntityAngularSuffix);
+            }
+        }
+
+        _.defaults(relationship, {
+            otherEntityStateName: _.kebabCase(relationship.otherEntityAngularName),
+            jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering,
+        });
+
+        if (!this.isBuiltInUserEntity(otherEntityName)) {
+            _.defaults(relationship, {
+                otherEntityFileName: _.kebabCase(relationship.otherEntityAngularName),
+                otherEntityFolderName: _.kebabCase(relationship.otherEntityAngularName),
+            });
+
+            if (context.skipUiGrouping || otherEntityData.clientRootFolder === '' || otherEntityData.clientRootFolder === undefined) {
+                relationship.otherEntityClientRootFolder = '';
+            } else {
+                relationship.otherEntityClientRootFolder = `${otherEntityData.clientRootFolder}/`;
+            }
+            if (otherEntityData.clientRootFolder) {
+                if (context.clientRootFolder === otherEntityData.clientRootFolder) {
+                    relationship.otherEntityModulePath = relationship.otherEntityFolderName;
+                } else {
+                    relationship.otherEntityModulePath = `${
+                        context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''
+                    }${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
+                }
+                relationship.otherEntityModelName = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
+                relationship.otherEntityPath = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
+            } else {
+                relationship.otherEntityModulePath = `${context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''}${
+                    relationship.otherEntityFolderName
+                }`;
+                relationship.otherEntityModelName = relationship.otherEntityFileName;
+                relationship.otherEntityPath = relationship.otherEntityFolderName;
+            }
+        }
+
+        return relationship;
     }
 
     /**

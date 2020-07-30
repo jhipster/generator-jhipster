@@ -90,8 +90,6 @@ function askForMicroserviceJson() {
 function askForUpdate() {
     const context = this.context;
 
-    console.log({ context });
-
     // ask only if running an existing entity without arg option --force or --regenerate
     const isForce = context.options.force || context.regenerate;
     context.updateEntity = 'regenerate'; // default if skipping questions by --force
@@ -886,19 +884,14 @@ function askForField() {
                 fieldValidateRulesMaxbytes: props.fieldValidateRulesMaxbytes,
             };
 
-            console.log(context.newFields);
-
             if (context.newChangelog) {
-                console.log('NEW CHNAGE');
                 context.newFields = context.newFields.concat(field);
             }
-
-            console.log(context.newFields);
 
             this.entityConfig.fields = this.entityConfig.fields.concat(field);
         }
         logFieldsAndRelationships.call(this);
-        if (props.fieldAdd) {
+        if (props.fieldAdd && !context.testMode) {
             return askForField.call(this);
         }
         return undefined;

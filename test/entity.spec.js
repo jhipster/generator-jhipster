@@ -584,7 +584,7 @@ describe('JHipster generator for entity', () => {
                 });
 
                 it('sets expected default clientRootFolder', () => {
-                    assert.jsonFileContent('.jhipster/Bar.json', { clientRootFolder: 'sampleMicroservice' });
+                    assert.jsonFileContent('.jhipster/Foo.json', { clientRootFolder: 'sampleMicroservice' });
                 });
                 it('generates expected files', () => {
                     assert.file(`${CLIENT_MAIN_SRC_DIR}i18n/en/sampleMicroserviceBar.json`);
@@ -649,6 +649,45 @@ describe('JHipster generator for entity', () => {
                 it('generates a string id for the mongodb entity', () => {
                     assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/model/sampleMicroservice/baz.model.ts`, 'id?: string');
                 });
+            });
+        });
+
+        describe('update : add field to entity', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/default-ng2-with-entities'), dir);
+                    })
+                    .withArguments(['foo'])
+                    .withOptions({ testMode: true, creationTimestamp: '2016-01-20', force: false })
+                    .withPrompts({
+                        updateEntity: 'add',
+                        newChangelog: true,
+                        fieldAdd: true,
+                        fieldName: 'description',
+                        fieldType: 'String',
+                        fieldValidate: false,
+                        relationshipAdd: false,
+                        dto: 'no',
+                        service: 'no',
+                        pagination: 'pagination',
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected default files', () => {
+                assert.file(expectedFiles.serverLiquibaseUpdate);
+                assert.fileContent(
+                    expectedFiles.serverLiquibaseUpdate,
+                    '    <changeSet id="20160120000100-1" author="jhipster">\n' +
+                        '        <addColumn tableName="foo">\n' +
+                        '            <column name="description" type="varchar(255)">\n' +
+                        '                <constraints nullable="true" />\n' +
+                        '            </column>\n' +
+                        '        </addColumn>\n\n\n' +
+                        '    </changeSet>'
+                );
             });
         });
 
