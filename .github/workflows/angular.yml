@@ -71,6 +71,7 @@ jobs:
                     - ngx-gradle-psql-es-noi18n-mapsid
                     - ngx-gradle-mariadb-oauth2-infinispan
                     - ngx-gradle-mongodb-kafka-cucumber
+                    - ngx-gradle-h2disk-ws-nocache
                 include:
                     - app-type: ngx-default
                       entity: sql
@@ -124,6 +125,12 @@ jobs:
                       entity: mongodb
                       profile: prod
                       war: 0
+                      protractor: 1
+                      testcontainers: 0
+                    - app-type: ngx-gradle-h2disk-ws-nocache
+                      entity: sql
+                      profile: dev,webpack
+                      war: 1
                       protractor: 1
                       testcontainers: 0
         env:
