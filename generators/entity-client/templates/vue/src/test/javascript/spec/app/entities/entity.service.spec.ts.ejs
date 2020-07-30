@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = generateTestEntityId(pkType);
+const tsKeyId = generateTestEntityId(primaryKeyType);
 _%>
 /* tslint:disable max-line-length */
 import axios from 'axios';
@@ -69,7 +69,7 @@ describe('Service Tests', () => {
       <%_ } _%>
 
       elemDefault = new <%= entityAngularName %>(
-        <%_ if (pkType === 'String'  || pkType === 'UUID') { _%>
+        <%_ if (primaryKeyType === 'String'  || primaryKeyType === 'UUID') { _%>
         'ID',
         <%_ } else { _%>
         0,
@@ -128,7 +128,7 @@ describe('Service Tests', () => {
 <%_ if (!readOnly) { _%>
       it('should create a <%= entityAngularName %>', async () => {
         const returnedFromService = Object.assign({
-  <%_ if (pkType === 'String'  || pkType === 'UUID') { _%>
+  <%_ if (primaryKeyType === 'String'  || primaryKeyType === 'UUID') { _%>
           id: 'ID',
   <%_ } else { _%>
           id: 0,
