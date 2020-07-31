@@ -353,6 +353,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 <%_ } _%>
 <%_ if (authenticationType === 'session' && !reactive) { _%>
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItem;
 <%_ } _%>
 import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
@@ -1484,7 +1485,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .andExpect(jsonPath("$.[*].series").value(hasItem(token.getSeries())))
             .andExpect(jsonPath("$.[*].ipAddress").value(hasItem(token.getIpAddress())))
             .andExpect(jsonPath("$.[*].userAgent").value(hasItem(token.getUserAgent())))
-            .andExpect(jsonPath("$.[*].tokenDate").value(hasItem(<% if (databaseType === 'cassandra') { %>"2017-03-28T15:25:57.123+0000"<% } else { %>token.getTokenDate().toString()<% } %>)));
+            .andExpect(jsonPath("$.[*].tokenDate").value(hasItem(containsString(<% if (databaseType === 'cassandra') { %>"2017-03-28T15:25:57.123+00"<% } else { %>token.getTokenDate().toString()<% } %>))));
     }
 
     @Test<% if (databaseType === 'sql' && !reactive) { %>
