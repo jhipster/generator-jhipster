@@ -38,7 +38,7 @@ module.exports = {
  * @param passedConfiguration the object having the keys:
  *        - entities: the entities to exporters,
  *        - forceNoFiltering: whether to filter out unchanged entities,
- *        - skipEntityFilesGeneration: whether to skip file write to disk,
+ *        - skipConfigFilesGeneration: whether to skip file write to disk,
  *        - applications: the application iterable containing some or all the entities
  * @return the exported entities per application name.
  */
@@ -53,7 +53,7 @@ function exportEntitiesInApplications(passedConfiguration) {
         exportedEntities = exportedEntities.concat(
             exportEntities({
                 entities: entitiesToExport,
-                skipEntityFilesGeneration: passedConfiguration.skipEntityFilesGeneration,
+                skipConfigFilesGeneration: passedConfiguration.skipConfigFilesGeneration,
                 forceNoFiltering: passedConfiguration.forceNoFiltering,
                 application: {
                     forSeveralApplications: Object.keys(passedConfiguration.applications).length !== 1,
@@ -79,7 +79,7 @@ function getEntitiesToExport(entityNamesToExport, entities) {
  * @param {Object} passedConfiguration - the object having the keys:
  * @param {Array<JSONEntity>} passedConfiguration.entities - the entity objects to export.
  * @param {Boolean} passedConfiguration.forceNoFiltering - whether to filter out unchanged entities.
- * @param {Boolean} passedConfiguration.skipEntityFilesGeneration - whether to skip file write to disk.
+ * @param {Boolean} passedConfiguration.skipConfigFilesGeneration - whether to skip file write to disk.
  * @param {Object} passedConfiguration.application - the application where the entities should be exported.
  * @param {Boolean} passedConfiguration.application.forSeveralApplications - whether to create the .jhipster folder
  *          inside a specific application's folder.
@@ -100,7 +100,7 @@ function exportEntities(passedConfiguration) {
     if (shouldFilterOutEntitiesBasedOnMicroservice()) {
         configuration.entities = filterOutEntitiesByMicroservice();
     }
-    if (!passedConfiguration.skipEntityFilesGeneration) {
+    if (!passedConfiguration.skipConfigFilesGeneration) {
         createJHipsterJSONFolder(subFolder);
         writeEntities(subFolder);
     }

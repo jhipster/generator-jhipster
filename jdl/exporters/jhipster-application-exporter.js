@@ -32,7 +32,7 @@ module.exports = {
  * Exports JDL applications to JDL files in separate folders (based on application base names).
  * @param applications the applications to exporters (key: application name, value: a JDLApplication).
  * @param {Object} configuration - the configuration object.
- * @param {Boolean} configuration.skipYoRcGeneration - set true to skip writing .yo-rc.json.
+ * @param {Boolean} configuration.skipConfigFilesGeneration - set true to skip writing .yo-rc.json.
  * @return object[] exported applications in their final form.
  */
 function exportApplications(applications, configuration = {}) {
@@ -42,7 +42,7 @@ function exportApplications(applications, configuration = {}) {
     return Object.values(applications).map(application => {
         checkForErrors(application);
         const exportableApplication = setUpApplicationStructure(application);
-        if (!configuration.skipYoRcGeneration) {
+        if (!configuration.skipConfigFilesGeneration) {
             writeApplicationFileForMultipleApplications(exportableApplication);
         }
         return exportableApplication;
@@ -60,14 +60,14 @@ function exportApplicationInCurrentDirectory(application, configuration = {}) {
  * Exports JDL a application to a JDL file in the current directory.
  * @param {Object} application - the JDL application to export.
  * @param {Object} configuration - the configuration object.
- * @param {Boolean} configuration.skipYoRcGeneration - set true to skip writing .yo-rc.json.
+ * @param {Boolean} configuration.skipConfigFilesGeneration - set true to skip writing .yo-rc.json.
  * @param {Integer} configuration.creationTimestampConfig - date representation to be written to creationTimestamp at .yo-rc.json.
  * @return {Object} the exported application in its final form.
  */
 function exportApplication(application, configuration = {}) {
     checkForErrors(application);
     const exportableApplication = setUpApplicationStructure(application, configuration);
-    if (!configuration.skipYoRcGeneration) {
+    if (!configuration.skipConfigFilesGeneration) {
         writeConfigFile(exportableApplication);
     }
     return exportableApplication;

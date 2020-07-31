@@ -1829,7 +1829,7 @@ paginate * with infinite-scroll
                 expect(entityF).to.be.false;
             });
         });
-        context('when passing skipYoRcGeneration and skipEntityFilesGeneration options', () => {
+        context('when passing skipConfigFilesGeneration options', () => {
             before(() => {
                 expect(fse.existsSync('.yo-rc.json')).to.be.false;
                 expect(fse.existsSync('.jhipster')).to.be.false;
@@ -1851,8 +1851,7 @@ paginate * with infinite-scroll
                     {
                         creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
                         generatorVersion: '7.0.0',
-                        skipYoRcGeneration: true,
-                        skipEntityFilesGeneration: true,
+                        skipConfigFilesGeneration: true,
                     }
                 );
                 importer.import();

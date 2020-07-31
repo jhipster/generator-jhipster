@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { uniqBy, defaults } = require('lodash');
+const { uniqBy } = require('lodash');
 const JDLReader = require('./readers/jdl-reader');
 const DocumentParser = require('./converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter');
 const JDLWithoutApplicationToJSONConverter = require('./converters/jdl-to-json/jdl-without-application-to-json-converter');
@@ -45,8 +45,6 @@ module.exports = {
  * @param {String} configuration.generatorVersion - deprecated, the generator's version, optional if parsing applications
  * @param {String} configuration.forceNoFiltering - whether to force filtering
  * @param {Boolean} configuration.skipConfigFilesGeneration - whether not to generate the .yo-rc.json file
- * @param {Boolean} configuration.skipYoRcGeneration - whether not to generate the .yo-rc.json file
- * @param {Boolean} configuration.skipEntityFilesGeneration - whether not to generate the .jhipster folder along with the entity files
  * @param {Date} configuration.creationTimestamp - the creation timestamp to use when generating entities
  * @returns {Object} a JDL importer.
  * @throws {Error} if files aren't passed.
@@ -74,8 +72,6 @@ function createImporterFromFiles(files, configuration) {
  * @param {String} configuration.generatorVersion - deprecated, the generator's version, optional if parsing applications
  * @param {String} configuration.forceNoFiltering - whether to force filtering
  * @param {Boolean} configuration.skipConfigFilesGeneration - whether not to generate the .yo-rc.json file
- * @param {Boolean} configuration.skipYoRcGeneration - whether not to generate the .yo-rc.json file
- * @param {Boolean} configuration.skipEntityFilesGeneration - whether not to generate the .jhipster folder along with the entity files
  * @param {Date} configuration.creationTimestamp - the creation timestamp to use when generating entities
  * @returns {Object} a JDL importer.
  * @throws {Error} if the content isn't passed.
@@ -89,9 +85,6 @@ function createImporterFromContent(jdlString, configuration) {
 }
 
 function makeJDLImporter(content, configuration) {
-    if (configuration.skipConfigFilesGeneration) {
-        defaults(configuration, { skipYoRcGeneration: true, skipEntityFilesGeneration: true });
-    }
     let importState = {
         exportedApplications: [],
         exportedApplicationsWithEntities: {},
@@ -207,7 +200,7 @@ function importOnlyEntities(jdlObject, configuration) {
 }
 
 function importOneApplicationAndEntities(jdlObject, configuration) {
-    const { creationTimestamp, skipEntityFilesGeneration } = configuration;
+    const { creationTimestamp, skipConfigFilesGeneration } = configuration;
 
     const importState = {
         exportedApplications: [],
@@ -236,7 +229,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
             applicationName,
             applicationType: jdlApplication.getConfigurationOptionValue('applicationType'),
             forSeveralApplications: false,
-            skipEntityFilesGeneration,
+            skipConfigFilesGeneration,
         });
         importState.exportedApplicationsWithEntities[applicationName].entities = exportedJSONEntities;
         importState.exportedEntities = uniqBy([...importState.exportedEntities, ...exportedJSONEntities], 'name');
@@ -245,7 +238,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
 }
 
 function importApplicationsAndEntities(jdlObject, configuration) {
-    const { creationTimestamp, skipEntityFilesGeneration } = configuration;
+    const { creationTimestamp, skipConfigFilesGeneration } = configuration;
 
     const importState = {
         exportedApplications: [],
@@ -265,7 +258,7 @@ function importApplicationsAndEntities(jdlObject, configuration) {
             applicationName,
             applicationType: jdlApplication.getConfigurationOptionValue('applicationType'),
             forSeveralApplications: true,
-            skipEntityFilesGeneration,
+            skipConfigFilesGeneration,
         });
         const exportedConfig = importState.exportedApplications.find(config => applicationName === config['generator-jhipster'].baseName);
         importState.exportedApplicationsWithEntities[applicationName] = {
@@ -282,7 +275,7 @@ function importDeployments(deployments) {
 }
 
 function exportJSONEntities(entities, configuration) {
-    const { forceNoFiltering, skipEntityFilesGeneration } = configuration;
+    const { forceNoFiltering, skipConfigFilesGeneration } = configuration;
     let baseName = configuration.applicationName;
     let applicationType = configuration.applicationType;
 
@@ -294,7 +287,7 @@ function exportJSONEntities(entities, configuration) {
     return JHipsterEntityExporter.exportEntities({
         entities,
         forceNoFiltering,
-        skipEntityFilesGeneration,
+        skipConfigFilesGeneration,
         application: {
             name: baseName,
             type: applicationType,
