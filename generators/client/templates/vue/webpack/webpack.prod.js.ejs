@@ -2,7 +2,7 @@
 const utils = require('./vue.utils');
 const webpack = require('webpack');
 const config = require('../config');
-const merge = require('webpack-merge');
+const webpackMerge = require('webpack-merge').merge;
 const baseWebpackConfig = require('./webpack.common');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -13,7 +13,7 @@ const jhiUtils = require('./utils.js');
 
 const env = require('../config/prod.env');
 
-const webpackConfig = merge(baseWebpackConfig, {
+const webpackConfig = webpackMerge(baseWebpackConfig, {
   mode: 'production',
   module: {
     rules: utils.styleLoaders({
