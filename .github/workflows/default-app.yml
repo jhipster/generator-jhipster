@@ -68,17 +68,17 @@ jobs:
                       war: 0
                       protractor: 1
                       testcontainers: 1
-                    -   app-type: react-default
-                        entity: sql
-                        profile: prod
-                        war: 0
-                        protractor: 1
-                        testcontainers: 0
-                    -   app-type: vue-default
-                        entity: sqlfull
-                        profile: prod
-                        war: 0
-                        protractor: 1
+                    - app-type: react-default
+                      entity: sql
+                      profile: prod
+                      war: 0
+                      protractor: 1
+                      testcontainers: 0
+                    - app-type: vue-default
+                      entity: sqlfull
+                      profile: prod
+                      war: 0
+                      protractor: 1
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
