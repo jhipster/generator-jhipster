@@ -30,19 +30,33 @@ const { createImporterFromContent, createImporterFromFiles } = require('../jdl/j
 
 const packagejs = require('../package.json');
 const statistics = require('../generators/statistics');
-const constants = require('../generators/generator-constants');
+const { JHIPSTER_CONFIG_DIR, SUPPORTED_CLIENT_FRAMEWORKS } = require('../generators/generator-constants');
 
 const runYeomanProcess = require.resolve('./run-yeoman-process.js');
+const { writeConfigFile } = require('../jdl/exporters/export-utils');
+const { createFolderIfItDoesNotExist } = require('../jdl/utils/file-utils');
 
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const ANGULAR = SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
-const getBaseName = application => application && application[GENERATOR_NAME] && application[GENERATOR_NAME].baseName;
 const getDeploymentType = deployment => deployment && deployment[GENERATOR_NAME] && deployment[GENERATOR_NAME].deploymentType;
 
-function runGenerator(command, cwd, options = {}) {
-    options = { ...options, fromCli: true };
+function writeEntityConfig(entity, basePath) {
+    const entitiesPath = path.join(basePath, JHIPSTER_CONFIG_DIR);
+    createFolderIfItDoesNotExist(entitiesPath);
+    const filePath = path.join(entitiesPath, `${_.upperFirst(entity.name)}.json`);
+    fs.writeFileSync(filePath, JSON.stringify(entity, null, 2).concat('\n'));
+}
+
+function writeApplicationConfig(applicationWithEntities, basePath) {
+    createFolderIfItDoesNotExist(basePath);
+    writeConfigFile({ 'generator-jhipster': applicationWithEntities.config }, path.join(basePath, '.yo-rc.json'));
+    applicationWithEntities.entities.forEach(entity => writeEntityConfig(entity, basePath));
+}
+
+function runGenerator(command, cwd, generatorOptions = {}) {
+    generatorOptions = { ...generatorOptions, fromCli: true };
     logger.debug(`Child process will be triggered for ${command} with cwd: ${cwd}`);
-    const args = [command, ...getOptionAsArgs(options)];
+    const args = [command, ...getOptionAsArgs(generatorOptions)];
     const childProc = fork(runYeomanProcess, args, {
         cwd,
     });
@@ -127,14 +141,21 @@ const generateDeploymentFiles = ({ processor, deployment, inFolder }) => {
  * @param {any} config
  * @returns Promise
  */
-const generateApplicationFiles = ({ processor, application, withEntities, inFolder }) => {
-    const baseName = getBaseName(application);
-    logger.debug(`Generating application: ${pretty(application[GENERATOR_NAME])}`);
+const generateApplicationFiles = ({ processor, applicationWithEntities, inFolder }) => {
+    const baseName = applicationWithEntities.config.baseName;
+    logger.debug(`Generating application: ${pretty(applicationWithEntities.config)}`);
 
     const cwd = inFolder ? path.join(processor.pwd, baseName) : processor.pwd;
+    writeApplicationConfig(applicationWithEntities, cwd);
+
+    if (!shouldGenerateApplications(processor)) {
+        logger.debug('Applications not generated');
+        return Promise.resolve();
+    }
 
     const command = `${CLI_NAME}:app`;
     const force = !processor.options.interactive ? true : undefined;
+    const withEntities = applicationWithEntities.entities.length > 0 ? true : undefined;
     return runGenerator(command, cwd, { force, withEntities, ...processor.options });
 };
 
@@ -161,6 +182,13 @@ const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInst
         const callGenerator = baseName => {
             logger.info(`Generating entity ${entity.name} for application ${baseName} in a new parallel process`);
             const cwd = path.join(processor.pwd, baseName);
+            writeEntityConfig(entity, cwd);
+
+            if (processor.options.jsonOnly) {
+                logger.info('Entity JSON files created. Entity generation skipped.');
+                return Promise.resolve();
+            }
+
             logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
             return runGenerator(command, cwd, options);
         };
@@ -172,6 +200,14 @@ const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInst
         }
         return Promise.all(baseNames.map(callGenerator));
     }
+
+    writeEntityConfig(entity, processor.pwd);
+
+    if (processor.options.jsonOnly) {
+        logger.info('Entity JSON files created. Entity generation skipped.');
+        return Promise.resolve();
+    }
+
     /* Traditional entity only generation */
     return env.run(command, options).catch(doneFactory());
 };
@@ -231,6 +267,7 @@ class JDLProcessor {
             generatorVersion: packagejs.version,
             forceNoFiltering: this.options.force,
             creationTimestamp: this.options.creationTimestamp,
+            skipFileGeneration: true,
         };
 
         let importer;
@@ -247,21 +284,14 @@ class JDLProcessor {
     }
 
     generateApplications() {
-        if (!shouldGenerateApplications(this)) {
-            logger.debug('Applications not generated');
-            return Promise.resolve();
-        }
-        logger.info(
-            `Generating ${this.importState.exportedApplications.length} ` +
-                `${pluralize('application', this.importState.exportedApplications.length)}.`
-        );
-        const callGenerator = application => {
+        const applicationsWithEntities = Object.values(this.importState.exportedApplicationsWithEntities);
+        logger.info(`Generating ${applicationsWithEntities.length} ${pluralize('application', applicationsWithEntities.length)}.`);
+        const callGenerator = applicationWithEntities => {
             try {
                 return generateApplicationFiles({
                     processor: this,
-                    application,
-                    withEntities: this.importState.exportedEntities.length === 0 ? undefined : true,
-                    inFolder: this.importState.exportedApplications.length > 1,
+                    applicationWithEntities,
+                    inFolder: applicationsWithEntities.length > 1,
                 });
             } catch (error) {
                 logger.error(`Error while generating applications from the parsed JDL\n${error}`, error);
@@ -269,11 +299,11 @@ class JDLProcessor {
             }
         };
         if (this.options.interactive) {
-            return this.importState.exportedApplications.reduce((promise, application) => {
-                return promise.then(() => callGenerator(application));
+            return applicationsWithEntities.reduce((promise, applicationWithEntities) => {
+                return promise.then(() => callGenerator(applicationWithEntities));
             }, Promise.resolve());
         }
-        return Promise.all(this.importState.exportedApplications.map(callGenerator));
+        return Promise.all(applicationsWithEntities.map(callGenerator));
     }
 
     generateDeployments() {
@@ -314,10 +344,6 @@ class JDLProcessor {
     generateEntities(env) {
         if (this.importState.exportedEntities.length === 0 || shouldGenerateApplications(this)) {
             logger.debug('Entities not generated');
-            return Promise.resolve();
-        }
-        if (this.options.jsonOnly) {
-            logger.info('Entity JSON files created. Entity generation skipped.');
             return Promise.resolve();
         }
         try {
