@@ -22,10 +22,13 @@ on:
     push:
         branches-ignore:
             - 'dependabot/**'
+        paths:
+            - 'generators/server/gradle/wrapper/**'
     pull_request:
         branches:
             - '*'
-
+        paths:
+            - 'generators/server/gradle/wrapper/**'
 jobs:
     validation:
         name: 'Validation'
