@@ -1353,44 +1353,69 @@ module.exports = class extends Generator {
      * @param {*} options
      */
     getJDBCUrl(databaseType, options = {}) {
+        if (options.protocol) {
+            throw new Error("option 'protocol' is not accepted when asking for a jdbc url, use getDBCUrl() instead");
+        }
+        options.protocol = 'jdbc';
+        return this.getDBCUrl(databaseType, options);
+    }
+
+    /**
+     * Returns the R2DBC URL for a databaseType
+     *
+     * @param {string} databaseType
+     * @param {*} options
+     */
+    getR2DBCUrl(databaseType, options = {}) {
+        if (options.protocol) {
+            throw new Error("option 'protocol' is not accepted when asking for an r2dbc url, use getDBCUrl() instead");
+        }
+        options.protocol = 'r2dbc';
+        return this.getDBCUrl(databaseType, options);
+    }
+
+    getDBCUrl(databaseType, options = {}) {
         if (!options.databaseName) {
             throw new Error("option 'databaseName' is required");
+        }
+        if (!options.protocol) {
+            throw new Error("option 'protocol' is required");
         }
         if (['mysql', 'mariadb', 'postgresql', 'oracle', 'mssql'].includes(databaseType) && !options.hostname) {
             throw new Error(`option 'hostname' is required for ${databaseType} databaseType`);
         }
-        let jdbcUrl;
+        let dbcUrl;
         let extraOptions;
         if (databaseType === 'mysql') {
-            jdbcUrl = `jdbc:mysql://${options.hostname}:3306/${options.databaseName}`;
+            dbcUrl = `${options.protocol}:mysql://${options.hostname}:3306/${options.databaseName}`;
             extraOptions =
                 '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true';
         } else if (databaseType === 'mariadb') {
-            jdbcUrl = `jdbc:mariadb://${options.hostname}:3306/${options.databaseName}`;
+            dbcUrl = `${options.protocol}:mariadb://${options.hostname}:3306/${options.databaseName}`;
             extraOptions = '?useLegacyDatetimeCode=false&serverTimezone=UTC';
         } else if (databaseType === 'postgresql') {
-            jdbcUrl = `jdbc:postgresql://${options.hostname}:5432/${options.databaseName}`;
+            dbcUrl = `${options.protocol}:postgresql://${options.hostname}:5432/${options.databaseName}`;
         } else if (databaseType === 'oracle') {
-            jdbcUrl = `jdbc:oracle:thin:@${options.hostname}:1521:${options.databaseName}`;
+            dbcUrl = `${options.protocol}:oracle:thin:@${options.hostname}:1521:${options.databaseName}`;
         } else if (databaseType === 'mssql') {
-            jdbcUrl = `jdbc:sqlserver://${options.hostname}:1433;database=${options.databaseName}`;
+            dbcUrl = `${options.protocol}:sqlserver://${options.hostname}:1433;database=${options.databaseName}`;
         } else if (databaseType === 'h2Disk') {
             if (!options.localDirectory) {
                 throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
             }
-            jdbcUrl = `jdbc:h2:file:${options.localDirectory}/${options.databaseName}`;
+            dbcUrl = `${options.protocol}:h2:file:${options.localDirectory}/${options.databaseName}`;
             extraOptions = ';DB_CLOSE_DELAY=-1';
         } else if (databaseType === 'h2Memory') {
-            jdbcUrl = `jdbc:h2:mem:${options.databaseName}`;
+            dbcUrl = `${options.protocol}:h2:mem:${options.databaseName}`;
             extraOptions = ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE';
         } else {
             throw new Error(`${databaseType} databaseType is not supported`);
         }
 
         if (!options.skipExtraOptions && extraOptions) {
-            jdbcUrl += extraOptions;
+            dbcUrl += extraOptions;
         }
-        return jdbcUrl;
+        return dbcUrl;
     }
 
     /**
