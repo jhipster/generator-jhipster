@@ -321,6 +321,7 @@ describe('JHipsterApplicationExporter', () => {
         context('when passing valid arguments', () => {
             context('when exporting applications to JSON with skipFileGeneration', () => {
                 let returned;
+                let baseNames;
 
                 before('common setup for both applications', () => {
                     returned = exportApplications(
@@ -344,13 +345,13 @@ describe('JHipsterApplicationExporter', () => {
                         },
                         { skipFileGeneration: true }
                     );
+                    baseNames = returned.map(application => application['generator-jhipster'].baseName);
                 });
 
                 it('should return the exported applications', () => {
                     expect(returned).to.have.lengthOf(2);
                 });
                 it('should not save config files', () => {
-                    const baseNames = returned.map(application => application['generator-jhipster'].baseName);
                     expect(baseNames).to.be.eql(['toto', 'titi']);
                     baseNames.forEach(baseName => {
                         expect(fs.existsSync(path.join(baseName, '.yo-rc.json'))).to.be.false;
