@@ -127,7 +127,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.JAVA_VERSION = constants.JAVA_VERSION;
 
                 this.NODE_VERSION = constants.NODE_VERSION;
-                this.YARN_VERSION = constants.YARN_VERSION;
                 this.NPM_VERSION = constants.NPM_VERSION;
                 this.GRADLE_VERSION = constants.GRADLE_VERSION;
 
@@ -324,13 +323,8 @@ module.exports = class extends BaseBlueprintGenerator {
             installing() {
                 if (this.skipClient) {
                     if (!this.options.skipInstall) {
-                        if (this.clientPackageManager === 'yarn') {
-                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));
-                            this.yarnInstall();
-                        } else if (this.clientPackageManager === 'npm') {
-                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
-                            this.npmInstall();
-                        }
+                        this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
+                        this.npmInstall();
                     }
                 }
             },

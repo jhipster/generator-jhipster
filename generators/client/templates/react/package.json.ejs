@@ -16,7 +16,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -%>
-<%_ var optionsForwarder = clientPackageManager == 'yarn' ? '' : '-- ' _%>
 {
   "name": "<%= dasherizedBaseName %>",
   "version": "0.0.1-SNAPSHOT",
@@ -180,20 +179,13 @@ limitations under the License.
     "workbox-webpack-plugin": "5.1.3",
     "write-file-webpack-plugin": "4.5.1"
   },
-<%_ if (clientPackageManager === 'yarn') { _%>
-  "resolutions": {
-    "@types/react": "16.9.34",
-    "redux": "4.0.5"
-  },
-<%_ } _%>
   "engines": {
-    "node": ">=<%= NODE_VERSION %>"<% if (clientPackageManager === 'yarn') { %>,
-    "yarn": ">=1.19.0"<% } %>
+    "node": ">=<%= NODE_VERSION %>"
   },
   "scripts": {
     "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
-    "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
+    "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= DIST_DIR %>",
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
@@ -204,17 +196,17 @@ limitations under the License.
     "sonar": "sonar-scanner",
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
-    "start-tls": "<%= clientPackageManager %> run webpack:dev <%= optionsForwarder %>--env.tls",
+    "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config src/test/javascript/jest.conf.js",
-    "jest:update": "<%= clientPackageManager %> run jest <%= optionsForwarder %>--updateSnapshot",
+    "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
     "test": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest",
     "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",
-    "test:watch": "<%= clientPackageManager %> test <%= optionsForwarder %>--watch",
-    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
-    "webpack:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
-    "webpack:build:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.dev.js --env.stats=minimal",
+    "test:watch": "<%= clientPackageManager %> test -- --watch",
+    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
+    "webpack:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
+    "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
     "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
-    "webpack:prod:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.prod.js --profile",
+    "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
     "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main",
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",

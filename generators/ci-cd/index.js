@@ -118,7 +118,6 @@ module.exports = class extends BaseGenerator {
             },
             initConstants() {
                 this.NODE_VERSION = constants.NODE_VERSION;
-                this.YARN_VERSION = constants.YARN_VERSION;
                 this.NPM_VERSION = constants.NPM_VERSION;
             },
             getConstants() {

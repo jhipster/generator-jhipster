@@ -273,8 +273,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 const installConfig = {
                     bower: false,
-                    npm: this.clientPackageManager !== 'yarn',
-                    yarn: this.clientPackageManager === 'yarn',
+                    npm: true,
                 };
 
                 if (this.options.skipInstall) {
