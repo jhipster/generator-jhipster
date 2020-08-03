@@ -3,6 +3,7 @@ const proxyquire = require('proxyquire');
 const fse = require('fs-extra');
 const assert = require('yeoman-assert');
 const expect = require('chai').expect;
+const utils = require('../../cli/utils');
 
 const { testInTempDir, revertTempDir } = require('../utils/utils');
 
@@ -32,6 +33,14 @@ const env = {
 
 const loadImportJdl = (
     options = {
+        './utils': {
+            ...utils,
+            logger: {
+                ...utils.logger,
+                info: () => {},
+            },
+            printSuccess: () => {},
+        },
         child_process: {
             fork: (runYeomanProcess, argv, opts) => {
                 const command = argv[0];
@@ -68,7 +77,6 @@ function testDocumentsRelationships() {
         ]);
         expect(subGenCallParams.options[0]).to.eql({
             regenerate: true,
-            force: false,
             interactive: true,
             fromCli: true,
             skipInstall: true,
@@ -111,13 +119,13 @@ describe('JHipster generator import jdl', () => {
                 'jhipster:kubernetes',
             ]);
             expect(subGenCallParams.options[0]).to.eql([
+                '--with-entities',
                 '--skip-install',
                 '--no-insight',
                 '--interactive',
-                '--with-entities',
                 '--from-cli',
             ]);
-            expect(subGenCallParams.options[3]).to.eql(['--skip-prompts', '--skip-install', '--no-insight', '--interactive', '--from-cli']);
+            expect(subGenCallParams.options[3]).to.eql(['--skip-install', '--no-insight', '--interactive', '--skip-prompts', '--from-cli']);
         });
     });
 
@@ -190,12 +198,10 @@ describe('JHipster generator import jdl', () => {
                 'jhipster:entity JobHistory',
             ]);
             expect(subGenCallParams.options[0]).to.eql({
-                regenerate: true,
-                force: false,
-                skipInstall: true,
+                ...options,
                 fromCli: true,
+                regenerate: true,
                 interactive: true,
-                skipDbChangelog: true,
             });
         });
     });
@@ -239,10 +245,9 @@ describe('JHipster generator import jdl', () => {
                 'jhipster:entity JobHistory',
             ]);
             expect(subGenCallParams.options[0]).to.eql({
-                regenerate: true,
-                force: false,
-                skipInstall: true,
+                ...options,
                 fromCli: true,
+                regenerate: true,
                 interactive: true,
             });
         });
@@ -296,10 +301,9 @@ describe('JHipster generator import jdl', () => {
                 'jhipster:entity Listing',
             ]);
             expect(subGenCallParams.options[0]).to.eql({
-                regenerate: true,
-                force: false,
-                skipInstall: true,
+                ...options,
                 fromCli: true,
+                regenerate: true,
                 interactive: true,
             });
         });
@@ -326,11 +330,10 @@ describe('JHipster generator import jdl', () => {
             expect(subGenCallParams.count).to.equal(2);
             expect(subGenCallParams.commands).to.eql(['jhipster:entity WithSearch', 'jhipster:entity WithoutSearch']);
             expect(subGenCallParams.options[0]).to.eql({
+                ...options,
+                fromCli: true,
                 regenerate: true,
                 force: true,
-                skipInstall: true,
-                fromCli: true,
-                interactive: false,
             });
         });
     });
@@ -369,13 +372,13 @@ describe('JHipster generator import jdl', () => {
             expect(subGenCallParams.count).to.equal(1);
             expect(subGenCallParams.commands).to.eql(['jhipster:app']);
             expect(subGenCallParams.options[0]).to.eql([
+                '--force',
+                '--with-entities',
                 '--skip-install',
                 '--no-insight',
                 '--no-skip-git',
                 '--creation-timestamp',
                 '2019-01-01',
-                '--with-entities',
-                '--force',
                 '--from-cli',
             ]);
         });
@@ -408,22 +411,13 @@ describe('JHipster generator import jdl', () => {
             expect(subGenCallParams.count).to.equal(1);
             expect(subGenCallParams.commands).to.eql(['jhipster:app']);
             expect(subGenCallParams.options[0]).to.eql([
+                '--force',
+                '--with-entities',
                 '--skip-install',
                 '--no-insight',
                 '--no-skip-git',
                 '--inline',
-                'application',
-                '{',
-                'config',
-                'baseName',
-                'jhapp',
-                '}',
-                'entities',
-                '*',
-                'entity',
-                'Customer',
-                '--with-entities',
-                '--force',
+                'application { config { baseName jhapp } entities * } entity Customer',
                 '--from-cli',
             ]);
         });
@@ -450,11 +444,11 @@ describe('JHipster generator import jdl', () => {
             expect(subGenCallParams.count).to.equal(1);
             expect(subGenCallParams.commands).to.eql(['jhipster:app']);
             expect(subGenCallParams.options[0]).to.eql([
+                '--force',
                 '--skip-install',
                 '--no-insight',
                 '--no-interactive',
                 '--no-skip-git',
-                '--force',
                 '--from-cli',
             ]);
         });
@@ -495,12 +489,12 @@ describe('JHipster generator import jdl', () => {
             expect(subGenCallParams.count).to.equal(3);
             expect(subGenCallParams.commands).to.eql(['jhipster:app', 'jhipster:app', 'jhipster:app']);
             expect(subGenCallParams.options[0]).to.eql([
+                '--force',
+                '--with-entities',
                 '--skip-install',
                 '--no-insight',
                 '--no-interactive',
                 '--no-skip-git',
-                '--with-entities',
-                '--force',
                 '--from-cli',
             ]);
         });
@@ -549,12 +543,12 @@ describe('JHipster generator import jdl', () => {
             ]);
             expect(subGenCallParams.options[0]).to.eql([
                 '--skip-install',
+                '--force',
                 '--ignore-application',
                 '--no-interactive',
                 '--no-skip-git',
                 '--regenerate',
                 '--from-cli',
-                '--force',
             ]);
         });
     });
@@ -584,11 +578,11 @@ describe('JHipster generator import jdl', () => {
             expect(subGenCallParams.commands).to.eql(invokedSubgens);
             expect(subGenCallParams.count).to.equal(invokedSubgens.length);
             expect(subGenCallParams.options[0]).to.eql([
-                '--skip-prompts',
+                '--force',
                 '--skip-install',
                 '--no-interactive',
                 '--no-skip-git',
-                '--force',
+                '--skip-prompts',
                 '--from-cli',
             ]);
         });
@@ -619,21 +613,21 @@ describe('JHipster generator import jdl', () => {
                     'jhipster:kubernetes',
                 ]);
                 expect(subGenCallParams.options[0]).to.eql([
+                    '--force',
+                    '--with-entities',
                     '--skip-install',
                     '--no-insight',
                     '--no-interactive',
                     '--no-skip-git',
-                    '--with-entities',
-                    '--force',
                     '--from-cli',
                 ]);
                 expect(subGenCallParams.options[3]).to.eql([
-                    '--skip-prompts',
+                    '--force',
                     '--skip-install',
                     '--no-insight',
                     '--no-interactive',
                     '--no-skip-git',
-                    '--force',
+                    '--skip-prompts',
                     '--from-cli',
                 ]);
             });
@@ -693,13 +687,13 @@ describe('JHipster generator import jdl', () => {
             expect(subGenCallParams.count).to.equal(3);
             expect(subGenCallParams.commands).to.eql(['jhipster:app', 'jhipster:app', 'jhipster:app']);
             expect(subGenCallParams.options[0]).to.eql([
+                '--force',
+                '--with-entities',
                 '--skip-install',
                 '--no-insight',
                 '--ignore-deployments',
                 '--no-interactive',
                 '--no-skip-git',
-                '--with-entities',
-                '--force',
                 '--from-cli',
             ]);
         });

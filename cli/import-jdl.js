@@ -39,6 +39,25 @@ const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const getBaseName = application => application && application[GENERATOR_NAME] && application[GENERATOR_NAME].baseName;
 const getDeploymentType = deployment => deployment && deployment[GENERATOR_NAME] && deployment[GENERATOR_NAME].deploymentType;
 
+function runGenerator(command, cwd, options = {}) {
+    options = { ...options, fromCli: true };
+    logger.debug(`Child process will be triggered for ${command} with cwd: ${cwd}`);
+    const args = [command, ...getOptionAsArgs(options)];
+    const childProc = fork(runYeomanProcess, args, {
+        cwd,
+    });
+    return new Promise(resolve => {
+        childProc.on('exit', code => {
+            if (code !== 0) {
+                process.exitCode = code;
+            }
+            logger.debug(`Process ${args} exited with code ${code}`);
+            logger.info(`Generator ${command} child process exited with code ${code}`);
+            resolve();
+        });
+    });
+}
+
 /**
  * Imports the Applications and Entities defined in JDL
  * The app .yo-rc.json files and entity json files are written to disk
@@ -46,13 +65,8 @@ const getDeploymentType = deployment => deployment && deployment[GENERATOR_NAME]
 function importJDL(jdlImporter) {
     logger.info('The JDL is being parsed.');
 
-    let importState = {
-        exportedEntities: [],
-        exportedApplications: [],
-        exportedDeployments: [],
-    };
     try {
-        importState = jdlImporter.import();
+        const importState = jdlImporter.import();
         logger.debug(`importState exportedEntities: ${importState.exportedEntities.length}`);
         logger.debug(`importState exportedApplications: ${importState.exportedApplications.length}`);
         logger.debug(`importState exportedDeployments: ${importState.exportedDeployments.length}`);
@@ -63,6 +77,7 @@ function importJDL(jdlImporter) {
             logger.info(chalk.yellow('No change in entity configurations, no entities were updated.'));
         }
         logger.info('The JDL has been successfully parsed');
+        return importState;
     } catch (error) {
         logger.debug('Error:', error);
         if (error) {
@@ -73,7 +88,6 @@ function importJDL(jdlImporter) {
         logger.error(`Error while parsing applications and entities from the JDL ${error}`, error);
         throw error;
     }
-    return importState;
 }
 
 /**
@@ -104,22 +118,8 @@ const generateDeploymentFiles = ({ processor, deployment, inFolder }) => {
     logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
 
     const command = `${CLI_NAME}:${deploymentType}`;
-    const childProc = fork(
-        runYeomanProcess,
-        [command, '--skip-prompts', ...getOptionAsArgs(processor.options, false, !processor.options.interactive)],
-        {
-            cwd,
-        }
-    );
-    return new Promise(resolve => {
-        childProc.on('exit', code => {
-            if (code !== 0) {
-                process.exitCode = code;
-            }
-            logger.info(`Deployment: child process exited with code ${code}`);
-            resolve();
-        });
-    });
+    const force = !processor.options.interactive ? true : undefined;
+    return runGenerator(command, cwd, { force, ...processor.options, skipPrompts: true });
 };
 
 /**
@@ -132,25 +132,10 @@ const generateApplicationFiles = ({ processor, application, withEntities, inFold
     logger.debug(`Generating application: ${pretty(application[GENERATOR_NAME])}`);
 
     const cwd = inFolder ? path.join(processor.pwd, baseName) : processor.pwd;
-    logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
 
     const command = `${CLI_NAME}:app`;
-    const childProc = fork(
-        runYeomanProcess,
-        [command, ...getOptionAsArgs(processor.options, withEntities, !processor.options.interactive)],
-        {
-            cwd,
-        }
-    );
-    return new Promise(resolve => {
-        childProc.on('exit', code => {
-            if (code !== 0) {
-                process.exitCode = code;
-            }
-            logger.info(`App: child process exited with code ${code}`);
-            resolve();
-        });
-    });
+    const force = !processor.options.interactive ? true : undefined;
+    return runGenerator(command, cwd, { force, withEntities, ...processor.options });
 };
 
 /**
@@ -164,16 +149,11 @@ const generateApplicationFiles = ({ processor, application, withEntities, inFold
  */
 const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInstall) => {
     const options = {
+        skipInstall: !shouldTriggerInstall,
+        force: !processor.options.interactive ? true : undefined,
         ...processor.options,
         regenerate: true,
         fromCli: true,
-        skipInstall: true,
-        skipClient: entity.skipClient,
-        skipServer: entity.skipServer,
-        noFluentMethod: entity.noFluentMethod,
-        skipUserManagement: entity.skipUserManagement,
-        skipDbChangelog: processor.options.skipDbChangelog,
-        skipUiGrouping: processor.options.skipUiGrouping,
     };
     const command = `${CLI_NAME}:entity ${entity.name}`;
     if (inFolder) {
@@ -182,17 +162,7 @@ const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInst
             logger.info(`Generating entity ${entity.name} for application ${baseName} in a new parallel process`);
             const cwd = path.join(processor.pwd, baseName);
             logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
-
-            const childProc = fork(runYeomanProcess, [command, ...getOptionAsArgs(options, false, !options.interactive)], { cwd });
-            return new Promise(resolve => {
-                childProc.on('exit', code => {
-                    if (code !== 0) {
-                        process.exitCode = code;
-                    }
-                    logger.info(`Entity: child process exited with code ${code}`);
-                    resolve();
-                });
-            });
+            return runGenerator(command, cwd, options);
         };
         const baseNames = entity.applications;
         if (processor.options.interactive) {
@@ -203,13 +173,7 @@ const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInst
         return Promise.all(baseNames.map(callGenerator));
     }
     /* Traditional entity only generation */
-    return env
-        .run(command, {
-            ...options,
-            force: options.force || !options.interactive,
-            skipInstall: !shouldTriggerInstall,
-        })
-        .catch(doneFactory());
+    return env.run(command, options).catch(doneFactory());
 };
 
 /**
@@ -243,7 +207,7 @@ class JDLProcessor {
                 return;
             }
             logger.info('Found .yo-rc.json on path. This is an existing app');
-            if (_.isUndefined(this.options.interactive)) {
+            if (this.options.interactive === undefined) {
                 logger.debug('Setting interactive true for existing apps');
                 this.options.interactive = true;
             }
@@ -303,7 +267,7 @@ class JDLProcessor {
                 return generateApplicationFiles({
                     processor: this,
                     application,
-                    withEntities: this.importState.exportedEntities.length !== 0,
+                    withEntities: this.importState.exportedEntities.length === 0 ? undefined : true,
                     inFolder: this.importState.exportedApplications.length > 1,
                 });
             } catch (error) {
