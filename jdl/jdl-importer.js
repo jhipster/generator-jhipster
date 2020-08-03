@@ -44,7 +44,7 @@ module.exports = {
  * @param {String} configuration.databaseType - deprecated, the database type, optional if parsing applications
  * @param {String} configuration.generatorVersion - deprecated, the generator's version, optional if parsing applications
  * @param {String} configuration.forceNoFiltering - whether to force filtering
- * @param {Boolean} configuration.skipConfigFilesGeneration - whether not to generate the .yo-rc.json file
+ * @param {Boolean} configuration.skipFileGeneration - whether not to generate the .yo-rc.json file
  * @param {Date} configuration.creationTimestamp - the creation timestamp to use when generating entities
  * @returns {Object} a JDL importer.
  * @throws {Error} if files aren't passed.
@@ -71,7 +71,7 @@ function createImporterFromFiles(files, configuration) {
  * @param {String} configuration.databaseType - deprecated, the database type, optional if parsing applications
  * @param {String} configuration.generatorVersion - deprecated, the generator's version, optional if parsing applications
  * @param {String} configuration.forceNoFiltering - whether to force filtering
- * @param {Boolean} configuration.skipConfigFilesGeneration - whether not to generate the .yo-rc.json file
+ * @param {Boolean} configuration.skipFileGeneration - whether not to generate the .yo-rc.json file
  * @param {Date} configuration.creationTimestamp - the creation timestamp to use when generating entities
  * @returns {Object} a JDL importer.
  * @throws {Error} if the content isn't passed.
@@ -200,7 +200,7 @@ function importOnlyEntities(jdlObject, configuration) {
 }
 
 function importOneApplicationAndEntities(jdlObject, configuration) {
-    const { creationTimestamp, skipConfigFilesGeneration } = configuration;
+    const { creationTimestamp, skipFileGeneration } = configuration;
 
     const importState = {
         exportedApplications: [],
@@ -229,7 +229,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
             applicationName,
             applicationType: jdlApplication.getConfigurationOptionValue('applicationType'),
             forSeveralApplications: false,
-            skipConfigFilesGeneration,
+            skipFileGeneration,
         });
         importState.exportedApplicationsWithEntities[applicationName].entities = exportedJSONEntities;
         importState.exportedEntities = uniqBy([...importState.exportedEntities, ...exportedJSONEntities], 'name');
@@ -238,7 +238,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
 }
 
 function importApplicationsAndEntities(jdlObject, configuration) {
-    const { creationTimestamp, skipConfigFilesGeneration } = configuration;
+    const { creationTimestamp, skipFileGeneration } = configuration;
 
     const importState = {
         exportedApplications: [],
@@ -258,7 +258,7 @@ function importApplicationsAndEntities(jdlObject, configuration) {
             applicationName,
             applicationType: jdlApplication.getConfigurationOptionValue('applicationType'),
             forSeveralApplications: true,
-            skipConfigFilesGeneration,
+            skipFileGeneration,
         });
         const exportedConfig = importState.exportedApplications.find(config => applicationName === config['generator-jhipster'].baseName);
         importState.exportedApplicationsWithEntities[applicationName] = {
@@ -275,7 +275,7 @@ function importDeployments(deployments) {
 }
 
 function exportJSONEntities(entities, configuration) {
-    const { forceNoFiltering, skipConfigFilesGeneration } = configuration;
+    const { forceNoFiltering, skipFileGeneration } = configuration;
     let baseName = configuration.applicationName;
     let applicationType = configuration.applicationType;
 
@@ -287,7 +287,7 @@ function exportJSONEntities(entities, configuration) {
     return JHipsterEntityExporter.exportEntities({
         entities,
         forceNoFiltering,
-        skipConfigFilesGeneration,
+        skipFileGeneration,
         application: {
             name: baseName,
             type: applicationType,

@@ -151,7 +151,7 @@ describe('JHipsterApplicationExporter', () => {
                     });
                 });
             });
-            context('when exporting an application to JSON with skipConfigFilesGeneration', () => {
+            context('when exporting an application to JSON with skipFileGeneration', () => {
                 before(() => {
                     exportApplication(
                         createJDLApplication({
@@ -163,7 +163,7 @@ describe('JHipsterApplicationExporter', () => {
                             jhipsterVersion: '4.9.0',
                             otherModules: ['MyModule'],
                         }),
-                        { skipConfigFilesGeneration: true }
+                        { skipFileGeneration: true }
                     );
                 });
 
@@ -319,7 +319,7 @@ describe('JHipsterApplicationExporter', () => {
             });
         });
         context('when passing valid arguments', () => {
-            context('when exporting applications to JSON with skipConfigFilesGeneration', () => {
+            context('when exporting applications to JSON with skipFileGeneration', () => {
                 let returned;
 
                 before('common setup for both applications', () => {
@@ -342,7 +342,7 @@ describe('JHipsterApplicationExporter', () => {
                                 jhipsterVersion: '4.9.0',
                             }),
                         },
-                        { skipConfigFilesGeneration: true }
+                        { skipFileGeneration: true }
                     );
                 });
 
