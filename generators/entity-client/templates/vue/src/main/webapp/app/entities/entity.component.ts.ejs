@@ -24,7 +24,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
   public page = 1;
   public previousPage = 1;
   public propOrder = 'id';
-  public reverse = <%_ if (pagination === 'infinite-scroll') { _%>true<%_ } else { _%>false<%_ } _%>;
+  public reverse = false;
   public totalItems = 0;
   <%_ } _%>
   <%_ if (pagination === 'infinite-scroll') { _%>
@@ -188,7 +188,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
   <%_ } _%>
   <%_ if (pagination !== 'no') { _%>
   public sort() : Array<any> {
-    const result = [this.propOrder + ',' + (this.reverse ? 'asc' : 'desc')];
+    const result = [this.propOrder + ',' + (this.reverse ? 'desc' : 'asc')];
     if (this.propOrder !== 'id') {
       result.push('id');
     }
