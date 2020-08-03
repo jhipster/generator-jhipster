@@ -333,36 +333,31 @@ module.exports = class extends BaseBlueprintGenerator {
              */
             composing() {
                 const options = this.options;
-                const configOptions = this.configOptions;
                 if (!this.skipServer && !this.configOptions.skipComposeServer) {
                     this.configOptions.skipComposeServer = true;
-                    this.composeWith(require.resolve('../server'), {
+                    this.composeWithJHipster('server', {
                         ...options,
-                        configOptions,
                         debug: this.isDebugEnabled,
                     });
                 }
                 if (!this.skipClient && !this.configOptions.skipComposeClient) {
                     this.configOptions.skipComposeClient = true;
-                    this.composeWith(require.resolve('../client'), {
+                    this.composeWithJHipster('client', {
                         ...options,
-                        configOptions,
                         debug: this.isDebugEnabled,
                     });
                 }
                 if (!this.configOptions.skipComposeCommon) {
                     this.configOptions.skipComposeCommon = true;
-                    this.composeWith(require.resolve('../common'), {
+                    this.composeWithJHipster('common', {
                         ...options,
-                        configOptions,
                         debug: this.isDebugEnabled,
                     });
                 }
                 if (!this.configOptions.skipI18n && !this.configOptions.skipComposeLanguages) {
                     this.configOptions.skipComposeLanguages = true;
-                    this.composeWith(require.resolve('../languages'), {
+                    this.composeWithJHipster('languages', {
                         ...options,
-                        configOptions,
                         skipPrompts: this.options.withEntities || this.existingProject || this.options.defaults,
                         debug: this.isDebugEnabled,
                     });
@@ -417,11 +412,9 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.withEntities && !this.configOptions.skipComposeEntity) {
                     this.configOptions.skipComposeEntity = true;
                     const options = this.options;
-                    const configOptions = this.configOptions;
                     this.getExistingEntities().forEach(entity => {
-                        this.composeWith(require.resolve('../entity'), {
+                        this.composeWithJHipster('entity', {
                             ...options,
-                            configOptions,
                             regenerate: true,
                             skipInstall: true,
                             debug: this.isDebugEnabled,
@@ -434,10 +427,8 @@ module.exports = class extends BaseBlueprintGenerator {
             regeneratePages() {
                 if (!this.configOptions.skipComposePage) {
                     this.configOptions.skipComposePage = true;
-                    const configOptions = this.configOptions;
                     this.jhipsterConfig.pages.forEach(page => {
-                        this.composeWith(require.resolve('../page'), {
-                            configOptions,
+                        this.composeWithJHipster('page', {
                             skipInstall: true,
                             debug: this.isDebugEnabled,
                             arguments: [page.name],

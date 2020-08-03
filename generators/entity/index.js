@@ -527,11 +527,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
             composeServer() {
                 const context = this.context;
                 if (context.skipServer) return;
-                const configOptions = this.configOptions;
 
-                this.composeWith(require.resolve('../entity-server'), {
+                this.composeWithJHipster('entity-server', {
                     context,
-                    configOptions,
                     force: context.options.force,
                     debug: context.isDebugEnabled,
                 });
@@ -540,11 +538,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
             composeClient() {
                 const context = this.context;
                 if (context.skipClient) return;
-                const configOptions = this.configOptions;
 
-                this.composeWith(require.resolve('../entity-client'), {
+                this.composeWithJHipster('entity-client', {
                     context,
-                    configOptions,
                     skipInstall: context.options.skipInstall,
                     force: context.options.force,
                     debug: context.isDebugEnabled,
@@ -554,10 +550,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
             composeI18n() {
                 const context = this.context;
                 if (context.skipClient) return;
-                const configOptions = this.configOptions;
-                this.composeWith(require.resolve('../entity-i18n'), {
+                this.composeWithJHipster('entity-i18n', {
                     context,
-                    configOptions,
                     skipInstall: context.options.skipInstall,
                     force: context.options.force,
                     debug: context.isDebugEnabled,

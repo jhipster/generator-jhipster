@@ -1270,6 +1270,30 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Compose with a jhipster generator using default jhipster config.
+     * @param {string} generator - jhipster generator.
+     * @param {object} options - options to pass
+     * @return {object} the composed generator
+     */
+    composeWithJHipster(generator, options = {}) {
+        if (this.env.get(`jhipster:${generator}`)) {
+            generator = `jhipster:${generator}`;
+        } else {
+            // Keep test compatibily were jhipster lookup does not run.
+            generator = require.resolve(`./${generator}`);
+        }
+
+        return this.composeWith(
+            generator,
+            {
+                configOptions: this.configOptions,
+                ...options,
+            },
+            true
+        );
+    }
+
+    /**
      * Compose an external generator with Yeoman.
      * @param {string} npmPackageName - package name
      * @param {string} subGen - sub generator name
