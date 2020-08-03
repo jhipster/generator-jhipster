@@ -537,11 +537,12 @@ module.exports = class extends Generator {
      * Format As Liquibase Remarks
      *
      * @param {string} text - text to format
+     * @param {boolean} addRemarksTag - add remarks tag
      * @returns formatted liquibase remarks
      */
-    formatAsLiquibaseRemarks(text) {
+    formatAsLiquibaseRemarks(text, addRemarksTag = false) {
         if (!text) {
-            return text;
+            return addRemarksTag ? '' : text;
         }
         const rows = text.split('\n');
         let description = rows[0];
@@ -565,7 +566,7 @@ module.exports = class extends Generator {
         description = description.replace(/</g, '&lt;');
         // escape > to &gt;
         description = description.replace(/>/g, '&gt;');
-        return description;
+        return addRemarksTag ? ` remarks="${description}"` : description;
     }
 
     /**
@@ -1335,15 +1336,29 @@ module.exports = class extends Generator {
      * @param {T[]} relationships - relationships
      */
     getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships) {
-        let hasFound = false;
-        let primaryKeyType = this.getPkType(databaseType);
-        relationships.forEach(relationship => {
-            if (relationship.useJPADerivedIdentifier === true && !hasFound) {
-                primaryKeyType = relationship.otherEntityName === 'user' && authenticationType === 'oauth2' ? 'String' : primaryKeyType;
-                hasFound = true;
-            }
-        });
-        return primaryKeyType;
+        const derivedRelationship = relationships.find(relationship => relationship.useJPADerivedIdentifier === true);
+        return derivedRelationship && derivedRelationship.otherEntityName === 'user' && authenticationType === 'oauth2'
+            ? 'String'
+            : this.getPkType(databaseType);
+    }
+
+    fieldIsEnum(fieldType) {
+        return ![
+            'String',
+            'Integer',
+            'Long',
+            'Float',
+            'Double',
+            'BigDecimal',
+            'LocalDate',
+            'Instant',
+            'ZonedDateTime',
+            'Duration',
+            'UUID',
+            'Boolean',
+            'byte[]',
+            'ByteBuffer',
+        ].includes(fieldType);
     }
 
     /**
