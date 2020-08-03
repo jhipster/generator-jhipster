@@ -188,7 +188,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
   <%_ } _%>
   <%_ if (pagination !== 'no') { _%>
   public sort() : Array<any> {
-    const result = [this.propOrder + ',' + (this.reverse ? 'asc' : 'desc')];
+    const result = [this.propOrder + ',' + (this.reverse ? 'desc' : 'asc')];
     if (this.propOrder !== 'id') {
       result.push('id');
     }
