@@ -118,24 +118,15 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.route.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.module.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.service.ts`);
+            generator.removeFile(`${ANGULAR_DIR}blocks/interceptor/errorhandler.interceptor.ts`);
+            generator.removeFile(`${ANGULAR_DIR}entities/entity.module.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/util/datepicker-adapter.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.html`);
+            generator.removeFile(`${ANGULAR_DIR}core/auth/user-route-access-service.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.service.spec.ts`);
-            generator.renameFile(
-                `${ANGULAR_DIR}blocks/interceptor/errorhandler.interceptor.ts`,
-                `${ANGULAR_DIR}blocks/interceptor/error-handler.interceptor.ts`
-            );
-            generator.renameFile(`${ANGULAR_DIR}entities/entity.module.ts`, `${ANGULAR_DIR}entities/entity-routing.module.ts`);
-            generator.renameFile(`${ANGULAR_DIR}shared/util/datepicker-adapter.ts`, `${ANGULAR_DIR}core/date/datepicker-adapter.ts`);
-            generator.renameFile(`${ANGULAR_DIR}shared/login/login.component.ts`, `${ANGULAR_DIR}core/login/login-modal.component.ts`);
-            generator.renameFile(`${ANGULAR_DIR}shared/login/login.component.html`, `${ANGULAR_DIR}core/login/login-modal.component.html`);
-            generator.renameFile(
-                `${ANGULAR_DIR}core/auth/user-route-access-service.ts`,
-                `${ANGULAR_DIR}core/auth/user-route-access.service.ts`
-            );
-            generator.renameFile(
-                `${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`,
-                `${CLIENT_TEST_SRC_DIR}spec/app/core/login/login-modal.component.spec.ts`
-            );
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`);
         } else if (generator.jhipsterConfig.clientFramework === REACT) {
             generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx.ejs`);
         } else if (generator.jhipsterConfig.clientFramework === VUE) {
