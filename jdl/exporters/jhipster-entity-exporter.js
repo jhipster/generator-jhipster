@@ -38,7 +38,7 @@ module.exports = {
  * @param passedConfiguration the object having the keys:
  *        - entities: the entities to exporters,
  *        - forceNoFiltering: whether to filter out unchanged entities,
- *        - skipFileGeneration: whether to skip file write to disk,
+ *        - skipEntityFilesGeneration: whether to skip file write to disk,
  *        - applications: the application iterable containing some or all the entities
  * @return the exported entities per application name.
  */

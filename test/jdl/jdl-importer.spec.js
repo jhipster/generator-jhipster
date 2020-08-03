@@ -568,7 +568,7 @@ relationship OneToOne {
                 expect(fse.statSync('.jhipster').isDirectory()).to.be.true;
                 expect(fse.statSync(path.join('.jhipster', 'BankAccount.json')).isFile()).to.be.true;
             });
-            it('returns corresponding exportedApplicationsWithEntities', () => {
+            it('should return the corresponding exportedApplicationsWithEntities', () => {
                 returned.exportedApplications.forEach(application => {
                     const applicationConfig = application['generator-jhipster'];
                     const entityNames = application.entities || [];
@@ -620,7 +620,7 @@ relationship OneToOne {
                 expect(fse.statSync('.jhipster').isDirectory()).to.be.true;
                 expect(fse.statSync(path.join('.jhipster', 'BankAccount.json')).isFile()).to.be.true;
             });
-            it('returns corresponding exportedApplicationsWithEntities', () => {
+            it('should return the corresponding exportedApplicationsWithEntities', () => {
                 returned.exportedApplications.forEach(application => {
                     const applicationConfig = application['generator-jhipster'];
                     const entityNames = application.entities || [];
@@ -658,7 +658,7 @@ relationship OneToOne {
                 expect(content['generator-jhipster'].entitySuffix).to.equal('Entity');
                 expect(content['generator-jhipster'].dtoSuffix).to.equal('DTO');
             });
-            it('returns corresponding exportedApplicationsWithEntities', () => {
+            it('should return the corresponding exportedApplicationsWithEntities', () => {
                 returned.exportedApplications.forEach(application => {
                     const applicationConfig = application['generator-jhipster'];
                     const entityNames = application.entities || [];
@@ -1071,7 +1071,7 @@ relationship OneToOne {
                     }
                 });
             });
-            it('returns corresponding exportedApplicationsWithEntities', () => {
+            it('should return the corresponding exportedApplicationsWithEntities', () => {
                 importState.exportedApplications.forEach(application => {
                     const applicationConfig = application['generator-jhipster'];
                     const entityNames = application.entities || [];
@@ -1829,7 +1829,7 @@ paginate * with infinite-scroll
                 expect(entityF).to.be.false;
             });
         });
-        context('when passing skipFileGeneration options', () => {
+        context('when passing the skipFileGeneration option', () => {
             before(() => {
                 expect(fse.existsSync('.yo-rc.json')).to.be.false;
                 expect(fse.existsSync('.jhipster')).to.be.false;
