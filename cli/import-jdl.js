@@ -24,7 +24,8 @@ const pretty = require('js-object-pretty-print').pretty;
 const pluralize = require('pluralize');
 const { fork } = require('child_process');
 
-const { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, doneFactory, getOptionAsArgs } = require('./utils');
+const EnvironmentBuilder = require('./environment-builder');
+const { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, getOptionAsArgs } = require('./utils');
 const { getDBTypeFromDBValue, loadYoRc } = require('../generators/utils');
 const { createImporterFromContent, createImporterFromFiles } = require('../jdl/jdl-importer');
 
@@ -53,8 +54,21 @@ function writeApplicationConfig(applicationWithEntities, basePath) {
     applicationWithEntities.entities.forEach(entity => writeEntityConfig(entity, basePath));
 }
 
-function runGenerator(command, cwd, generatorOptions = {}) {
-    generatorOptions = { ...generatorOptions, fromCli: true };
+function runGenerator(command, cwd, generatorOptions = {}, options = {}) {
+    generatorOptions = { ...generatorOptions, fromCli: true, localConfigOnly: true };
+    delete generatorOptions.fork;
+
+    if (options.fork === false) {
+        const env = options.env || EnvironmentBuilder.createDefaultBuilder(undefined, { cwd }).getEnvironment();
+        return env.run(command, generatorOptions).then(
+            () => {
+                logger.info(`Generator ${command} succeed`);
+            },
+            error => {
+                logger.error(`Error running generator ${command}: ${error}`);
+            }
+        );
+    }
     logger.debug(`Child process will be triggered for ${command} with cwd: ${cwd}`);
     const args = [command, ...getOptionAsArgs(generatorOptions)];
     const childProc = fork(runYeomanProcess, args, {
@@ -84,6 +98,7 @@ function importJDL(jdlImporter) {
         logger.debug(`importState exportedEntities: ${importState.exportedEntities.length}`);
         logger.debug(`importState exportedApplications: ${importState.exportedApplications.length}`);
         logger.debug(`importState exportedDeployments: ${importState.exportedDeployments.length}`);
+
         if (importState.exportedEntities.length > 0) {
             const entityNames = _.uniq(importState.exportedEntities.map(exportedEntity => exportedEntity.name)).join(', ');
             logger.info(`Found entities: ${chalk.yellow(entityNames)}.`);
@@ -109,14 +124,14 @@ function importJDL(jdlImporter) {
  * @param {any} processor
  */
 const shouldGenerateApplications = processor =>
-    !processor.options.ignoreApplication && processor.importState.exportedApplications.length !== 0;
+    !processor.options.ignoreApplication && !processor.options.jsonOnly && processor.importState.exportedApplications.length !== 0;
 
 /**
  * Check if deployments needs to be generated
  * @param {any} processor
  */
 const shouldGenerateDeployments = processor =>
-    !processor.options.ignoreDeployments && processor.importState.exportedDeployments.length !== 0;
+    !processor.options.ignoreDeployments && !processor.options.jsonOnly && processor.importState.exportedDeployments.length !== 0;
 
 /**
  * Generate deployment source code for JDL deployments defined.
@@ -146,17 +161,25 @@ const generateApplicationFiles = ({ processor, applicationWithEntities, inFolder
     logger.debug(`Generating application: ${pretty(applicationWithEntities.config)}`);
 
     const cwd = inFolder ? path.join(processor.pwd, baseName) : processor.pwd;
-    writeApplicationConfig(applicationWithEntities, cwd);
-
-    if (!shouldGenerateApplications(processor)) {
-        logger.debug('Applications not generated');
-        return Promise.resolve();
+    const { fork = true } = processor.options;
+    const skipApplication = !shouldGenerateApplications(processor);
+    if (fork || skipApplication) {
+        writeApplicationConfig(applicationWithEntities, cwd);
+        if (skipApplication) {
+            logger.debug('Applications not generated');
+            return Promise.resolve();
+        }
     }
 
     const command = `${CLI_NAME}:app`;
-    const force = !processor.options.interactive ? true : undefined;
     const withEntities = applicationWithEntities.entities.length > 0 ? true : undefined;
-    return runGenerator(command, cwd, { force, withEntities, ...processor.options });
+    const force = !processor.options.interactive ? true : undefined;
+    const generatorOptions = { force, withEntities, ...processor.options };
+    if (!fork) {
+        generatorOptions.applicationWithEntities = applicationWithEntities;
+    }
+
+    return runGenerator(command, cwd, generatorOptions, { fork });
 };
 
 /**
@@ -177,21 +200,24 @@ const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInst
         fromCli: true,
     };
     const command = `${CLI_NAME}:entity ${entity.name}`;
+    const { fork = inFolder } = processor.options;
+
+    const callGenerator = baseName => {
+        const cwd = inFolder && baseName ? path.join(processor.pwd, baseName) : processor.pwd;
+        logger.info(`Generating entity ${entity.name} for application ${baseName} in a new parallel process`);
+        writeEntityConfig(entity, cwd);
+
+        if (processor.options.jsonOnly) {
+            logger.info('Entity JSON files created. Entity generation skipped.');
+            return Promise.resolve();
+        }
+
+        logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
+        return runGenerator(command, cwd, options, { env, fork });
+    };
+
     if (inFolder) {
         /* Generating entities inside multiple apps */
-        const callGenerator = baseName => {
-            logger.info(`Generating entity ${entity.name} for application ${baseName} in a new parallel process`);
-            const cwd = path.join(processor.pwd, baseName);
-            writeEntityConfig(entity, cwd);
-
-            if (processor.options.jsonOnly) {
-                logger.info('Entity JSON files created. Entity generation skipped.');
-                return Promise.resolve();
-            }
-
-            logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
-            return runGenerator(command, cwd, options);
-        };
         const baseNames = entity.applications;
         if (processor.options.interactive) {
             return baseNames.reduce((promise, baseName) => {
@@ -201,15 +227,7 @@ const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInst
         return Promise.all(baseNames.map(callGenerator));
     }
 
-    writeEntityConfig(entity, processor.pwd);
-
-    if (processor.options.jsonOnly) {
-        logger.info('Entity JSON files created. Entity generation skipped.');
-        return Promise.resolve();
-    }
-
-    /* Traditional entity only generation */
-    return env.run(command, options).catch(doneFactory());
+    return callGenerator();
 };
 
 /**
@@ -396,7 +414,7 @@ module.exports = (jdlFiles, options = {}, env) => {
                 return jdlFiles;
             });
     } catch (e) {
-        logger.error(`Error during import-jdl: ${e.message}`, e);
+        logger.error(`Error during import-jdl: ${e}`, e);
         return Promise.reject(new Error(`Error during import-jdl: ${e.message}`));
     }
 };

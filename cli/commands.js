@@ -76,6 +76,10 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
                 default: false,
             },
             {
+                option: '--fork',
+                desc: 'Run generators using fork',
+            },
+            {
                 option: '--interactive',
                 desc: 'Run generation in series so that questions can be interacted with',
             },
