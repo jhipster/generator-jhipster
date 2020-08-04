@@ -84,7 +84,14 @@ describe('UserManagementEdit Component', () => {
   describe('save', () => {
     it('Should call update service on save for existing user', async () => {
       // GIVEN
-      mockedAxios.put.mockReturnValue(Promise.resolve({ headers: {} }));
+      mockedAxios.put.mockReturnValue(
+        Promise.resolve({
+          headers: {
+            'x-jhipsterapp-alert': '',
+            'x-jhipsterapp-params': '',
+          },
+        })
+      );
       userManagementEdit.userAccount = { id: <%- tsKeyId %>, authorities: [] };
 
       // WHEN
@@ -98,7 +105,14 @@ describe('UserManagementEdit Component', () => {
 
     it('Should call create service on save for new user', async () => {
       // GIVEN
-      mockedAxios.post.mockReturnValue(Promise.resolve({ headers: {} }));
+      mockedAxios.post.mockReturnValue(
+        Promise.resolve({
+          headers: {
+            'x-jhipsterapp-alert': '',
+            'x-jhipsterapp-params': '',
+          },
+        })
+      );
       userManagementEdit.userAccount = { authorities: [] };
 
       // WHEN
