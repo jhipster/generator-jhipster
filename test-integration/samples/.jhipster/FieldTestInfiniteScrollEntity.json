@@ -9,32 +9,24 @@
         {
             "fieldName": "stringRequiredHugo",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "stringMinlengthHugo",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "minlength"
-            ],
+            "fieldValidateRules": ["minlength"],
             "fieldValidateRulesMinlength": 0
         },
         {
             "fieldName": "stringMaxlengthHugo",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
+            "fieldValidateRules": ["maxlength"],
             "fieldValidateRulesMaxlength": 20
         },
         {
             "fieldName": "stringPatternHugo",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "pattern"
-            ],
+            "fieldValidateRules": ["pattern"],
             "fieldValidateRulesPattern": "^[a-zA-Z0-9]*$",
             "fieldValidateRulesPatternJava": "^[a-zA-Z0-9]*$"
         },
@@ -45,24 +37,18 @@
         {
             "fieldName": "integerRequiredHugo",
             "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "integerMinHugo",
             "fieldType": "Integer",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "integerMaxHugo",
             "fieldType": "Integer",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
@@ -72,24 +58,18 @@
         {
             "fieldName": "longRequiredHugo",
             "fieldType": "Long",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "longMinHugo",
             "fieldType": "Long",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "longMaxHugo",
             "fieldType": "Long",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
@@ -99,70 +79,52 @@
         {
             "fieldName": "floatRequiredHugo",
             "fieldType": "Float",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "floatMinHugo",
             "fieldType": "Float",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "floatMaxHugo",
             "fieldType": "Float",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
             "fieldName": "doubleRequiredHugo",
             "fieldType": "Double",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "doubleMinHugo",
             "fieldType": "Double",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "doubleMaxHugo",
             "fieldType": "Double",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
             "fieldName": "bigDecimalRequiredHugo",
             "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "bigDecimalMinHugo",
             "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "bigDecimalMaxHugo",
             "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
@@ -172,9 +134,7 @@
         {
             "fieldName": "localDateRequiredHugo",
             "fieldType": "LocalDate",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "instantHugo",
@@ -183,9 +143,7 @@
         {
             "fieldName": "instanteRequiredHugo",
             "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "zonedDateTimeHugo",
@@ -194,9 +152,7 @@
         {
             "fieldName": "zonedDateTimeRequiredHugo",
             "fieldType": "ZonedDateTime",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "durationHugo",
@@ -205,9 +161,7 @@
         {
             "fieldName": "durationRequiredHugo",
             "fieldType": "Duration",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "booleanHugo",
@@ -216,9 +170,7 @@
         {
             "fieldName": "booleanRequiredHugo",
             "fieldType": "Boolean",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "enumHugo",
@@ -229,9 +181,7 @@
             "fieldName": "enumRequiredHugo",
             "fieldType": "EnumRequiredFieldClass",
             "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "uuidHugo",
@@ -240,9 +190,7 @@
         {
             "fieldName": "uuidRequiredHugo",
             "fieldType": "UUID",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "byteImageHugo",
@@ -253,26 +201,20 @@
             "fieldName": "byteImageRequiredHugo",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "byteImageMinbytesHugo",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image",
-            "fieldValidateRules": [
-                "minbytes"
-            ],
+            "fieldValidateRules": ["minbytes"],
             "fieldValidateRulesMinbytes": 0
         },
         {
             "fieldName": "byteImageMaxbytesHugo",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image",
-            "fieldValidateRules": [
-                "maxbytes"
-            ],
+            "fieldValidateRules": ["maxbytes"],
             "fieldValidateRulesMaxbytes": 10000
         },
         {
@@ -284,26 +226,20 @@
             "fieldName": "byteAnyRequiredHugo",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "byteAnyMinbytesHugo",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any",
-            "fieldValidateRules": [
-                "minbytes"
-            ],
+            "fieldValidateRules": ["minbytes"],
             "fieldValidateRulesMinbytes": 0
         },
         {
             "fieldName": "byteAnyMaxbytesHugo",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any",
-            "fieldValidateRules": [
-                "maxbytes"
-            ],
+            "fieldValidateRules": ["maxbytes"],
             "fieldValidateRulesMaxbytes": 10000
         },
         {
@@ -315,9 +251,7 @@
             "fieldName": "byteTextRequiredHugo",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         }
     ],
     "changelogDate": "20160208184036",
