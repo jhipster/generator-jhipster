@@ -1,5 +1,7 @@
 import {
+    <%_ if (!skipUserManagement) { _%>
     userManagementPageHeadingSelector,
+    <%_ } _%>
     metricsPageHeadingSelector,
     healthPageHeadingSelector,
     auditsPageHeadingSelector,
@@ -7,25 +9,40 @@ import {
     configurationPageHeadingSelector,
 } from '../../support/commands';
 
-<%# Add OAuth2 login feature %>
 describe('/admin', () => {
 
+    <%_ if (authenticationType === 'oauth2') { _%>
+    beforeEach(() => {
+        cy.clearCache();
+        cy.kcLogout();
+        cy.visit('/');
+        cy.kcLogin('user');
+        cy.clickOnLoginItem();
+    });
+
+    after(() => {
+        cy.kcLogout();
+    });
+    <%_ } else { _%>
     before(() => {
         cy.visit('');
+        cy.kcLogin('admin','admin');
         cy.login('admin','admin');
     });
 
     after(() => {
         cy.clickOnLogoutItem();
     });
-<%_ if (!skipUserManagement) { _%>
+    <%_ } _%>
+
+    <%_ if (!skipUserManagement) { _%>
     describe('/user-management', () => {
         it('should load the page', () => {
           cy.clickOnAdminMenuItem('user-management');
           cy.get(userManagementPageHeadingSelector).should('be.visible');
         });
     });
-<%_ } _%>
+    <%_ } _%>
 
     describe('/metrics', () => {
         it('should load the page', () => {
@@ -40,15 +57,6 @@ describe('/admin', () => {
         cy.get(healthPageHeadingSelector).should('be.visible');
         });
     });
-
-<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-    describe('/audits', () => {
-        it('should load the page', () => {
-          cy.clickOnAdminMenuItem('audits');
-          cy.get(auditsPageHeadingSelector).should('be.visible');
-        });
-    });
-<%_ } _%>
 
     describe('/logs', () => {
         it('should load the page', () => {

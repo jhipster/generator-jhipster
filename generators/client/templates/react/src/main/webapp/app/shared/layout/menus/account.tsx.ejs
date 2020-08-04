@@ -47,7 +47,7 @@ const accountMenuItems = (
   <%_ if (authenticationType !== 'oauth2') { _%>
     <MenuItem id="login-item" icon="sign-in-alt" to="/login" data-cy="login"><Translate contentKey="global.menu.account.login">Sign in</Translate></MenuItem>
   <%_ } else { _%>
-    <DropdownItem id="login-item" tag="a" href={getLoginUrl()}><FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.login">Sign in</Translate></DropdownItem>
+    <DropdownItem id="login-item" tag="a" href={getLoginUrl()} data-cy="login"><FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.login">Sign in</Translate></DropdownItem>
   <%_ } _%>
   <%_ if (!skipUserManagement) { _%>
     <MenuItem icon="sign-in-alt" to="/account/register" data-cy="register"><Translate contentKey="global.menu.account.register">Register</Translate></MenuItem>

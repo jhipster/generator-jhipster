@@ -37,24 +37,35 @@ const cypressFiles = {
             condition: generator => generator.cypressTests,
             path: TEST_SRC_DIR,
             templates: [
+                'cypress/fixtures/users/user.json',
                 'cypress/plugins/index.ts',
-                'cypress/integration/account/login_page_spec.ts',
-                'cypress/integration/account/register_page_spec.ts',
-                'cypress/integration/account/settings_page_spec.ts',
                 'cypress/integration/administration/administration_spec.ts',
                 'cypress/support/commands.ts',
                 'cypress/support/navbar.ts',
                 'cypress/support/index.ts',
+                'cypress/support/utils.ts',
                 'cypress/tsconfig.json',
             ],
         },
         {
-            condition: generator => generator.databaseType !== 'no',
+            condition: generator => generator.cypressTests && generator.authenticationType !== 'oauth2',
+            path: TEST_SRC_DIR,
+            templates: ['cypress/integration/account/login_page_spec.ts'],
+        },
+        {
+            condition: generator => generator.cypressTests && generator.authenticationType !== 'oauth2' && generator.databaseType !== 'no',
             path: TEST_SRC_DIR,
             templates: [
+                'cypress/integration/account/register_page_spec.ts',
+                'cypress/integration/account/settings_page_spec.ts',
                 'cypress/integration/account/password_page_spec.ts',
                 'cypress/integration/account/reset_password_page_spec.ts',
-            ]
+            ],
+        },
+        {
+            condition: generator => generator.cypressTests && generator.authenticationType === 'oauth2',
+            path: TEST_SRC_DIR,
+            templates: ['cypress/support/keycloak-oauth2.ts'],
         },
     ],
 };
