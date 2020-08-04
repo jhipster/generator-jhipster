@@ -161,7 +161,7 @@ const generateApplicationFiles = ({ processor, applicationWithEntities, inFolder
     logger.debug(`Generating application: ${pretty(applicationWithEntities.config)}`);
 
     const cwd = inFolder ? path.join(processor.pwd, baseName) : processor.pwd;
-    const { fork = true } = processor.options;
+    const { fork = inFolder } = processor.options;
     const skipApplication = !shouldGenerateApplications(processor);
     if (fork || skipApplication) {
         writeApplicationConfig(applicationWithEntities, cwd);
