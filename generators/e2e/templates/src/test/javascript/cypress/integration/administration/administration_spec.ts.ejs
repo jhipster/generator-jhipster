@@ -25,7 +25,6 @@ describe('/admin', () => {
     <%_ } else { _%>
     before(() => {
         cy.visit('');
-        cy.kcLogin('admin','admin');
         cy.login('admin','admin');
     });
 
