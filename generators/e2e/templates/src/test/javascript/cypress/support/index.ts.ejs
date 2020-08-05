@@ -16,4 +16,6 @@
 // Import commands.ts using ES2015 syntax:
 import './commands';
 import './navbar';
+<%_ if (authenticationType === 'oauth2') { _%>
 import './keycloak-oauth2';
+<%_ } _%>
