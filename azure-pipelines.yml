@@ -154,5 +154,5 @@ jobs:
             displayName: 'TESTS: frontend'
           - bash: $(JHI_SCRIPTS)/23-package.sh
             displayName: 'TESTS: packaging'
-          - bash: $(JHI_SCRIPTS)/24-tests-cypress.sh
+          - bash: $(JHI_SCRIPTS)/24-tests-e2e.sh
             displayName: 'TESTS: End-to-End'

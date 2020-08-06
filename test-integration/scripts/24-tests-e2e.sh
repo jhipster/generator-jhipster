@@ -20,7 +20,7 @@ fi
 #-------------------------------------------------------------------------------
 # Functions
 #-------------------------------------------------------------------------------
-launchCurlOrProtractor() {
+launchCurlOrCypress() {
     retryCount=1
     maxRetry=10
     httpUrl="http://localhost:8080"
@@ -43,7 +43,7 @@ launchCurlOrProtractor() {
         return 1
     fi
 
-    if [ "$JHI_PROTRACTOR" != 1 ]; then
+    if [ "$JHI_CYPRESS" != 1 ]; then
         return 0
     fi
 
@@ -53,7 +53,7 @@ launchCurlOrProtractor() {
     do
         result=0
         if [[ -f "tsconfig.json" ]]; then
-            npm run e2e
+            npm run cypress:run
         fi
         result=$?
         [ $result -eq 0 ] && break
@@ -105,7 +105,7 @@ if [ "$JHI_RUN_APP" == 1 ]; then
     fi
     sleep 40
 
-    launchCurlOrProtractor
+    launchCurlOrCypress
     resultRunApp=$?
     kill $(cat .pidRunApp)
 
