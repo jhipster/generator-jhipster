@@ -31,7 +31,7 @@ const env = {
     },
 };
 
-const loadImportJdl = (
+const loadImportJdl = options => {
     options = {
         './utils': {
             ...utils,
@@ -53,8 +53,29 @@ const loadImportJdl = (
                 };
             },
         },
-    }
-) => proxyquire('../../cli/import-jdl', options);
+        './environment-builder': {
+            createDefaultBuilder: () => {
+                return {
+                    getEnvironment: () => {
+                        return {
+                            run: (generatorArgs, generatorOptions) => {
+                                pushCall(generatorArgs, generatorOptions);
+                                return Promise.resolve();
+                            },
+                        };
+                    },
+                };
+            },
+        },
+        ...options,
+    };
+    return proxyquire('../../cli/import-jdl', options);
+};
+
+const defaultAddedOptions = {
+    fromCli: true,
+    localConfigOnly: true,
+};
 
 function testDocumentsRelationships() {
     it('creates entity json files', () => {
@@ -76,9 +97,9 @@ function testDocumentsRelationships() {
             'jhipster:entity ShippingDetails',
         ]);
         expect(subGenCallParams.options[0]).to.eql({
+            ...defaultAddedOptions,
             regenerate: true,
             interactive: true,
-            fromCli: true,
             skipInstall: true,
         });
     });
@@ -124,8 +145,16 @@ describe('JHipster generator import jdl', () => {
                 '--no-insight',
                 '--interactive',
                 '--from-cli',
+                '--local-config-only',
             ]);
-            expect(subGenCallParams.options[3]).to.eql(['--skip-install', '--no-insight', '--interactive', '--skip-prompts', '--from-cli']);
+            expect(subGenCallParams.options[3]).to.eql([
+                '--skip-install',
+                '--no-insight',
+                '--interactive',
+                '--skip-prompts',
+                '--from-cli',
+                '--local-config-only',
+            ]);
         });
     });
 
@@ -199,7 +228,7 @@ describe('JHipster generator import jdl', () => {
             ]);
             expect(subGenCallParams.options[0]).to.eql({
                 ...options,
-                fromCli: true,
+                ...defaultAddedOptions,
                 regenerate: true,
                 interactive: true,
             });
@@ -246,7 +275,7 @@ describe('JHipster generator import jdl', () => {
             ]);
             expect(subGenCallParams.options[0]).to.eql({
                 ...options,
-                fromCli: true,
+                ...defaultAddedOptions,
                 regenerate: true,
                 interactive: true,
             });
@@ -302,7 +331,7 @@ describe('JHipster generator import jdl', () => {
             ]);
             expect(subGenCallParams.options[0]).to.eql({
                 ...options,
-                fromCli: true,
+                ...defaultAddedOptions,
                 regenerate: true,
                 interactive: true,
             });
@@ -331,7 +360,7 @@ describe('JHipster generator import jdl', () => {
             expect(subGenCallParams.commands).to.eql(['jhipster:entity WithSearch', 'jhipster:entity WithoutSearch']);
             expect(subGenCallParams.options[0]).to.eql({
                 ...options,
-                fromCli: true,
+                ...defaultAddedOptions,
                 regenerate: true,
                 force: true,
             });
@@ -380,7 +409,44 @@ describe('JHipster generator import jdl', () => {
                 '--creation-timestamp',
                 '2019-01-01',
                 '--from-cli',
+                '--local-config-only',
             ]);
+        });
+    });
+
+    describe('imports single app and entities with --no-fork', () => {
+        let oldCwd;
+        const options = { skipInstall: true, noInsight: true, skipGit: false, creationTimestamp: '2019-01-01' };
+        beforeEach(() => {
+            return testInTempDir(dir => {
+                oldCwd = dir;
+                fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
+                fse.removeSync(`${dir}/.yo-rc.json`);
+                return loadImportJdl()(['single-app-and-entities.jdl'], { ...options, fork: false }, env);
+            }, true);
+        });
+
+        afterEach(() => revertTempDir(oldCwd));
+
+        it('should not create .yo-rc.json', () => {
+            assert.noFile(['.yo-rc.json']);
+        });
+        it('should not create entity files', () => {
+            const aFile = path.join('.jhipster', 'A.json');
+            assert.noFile([aFile, path.join('.jhipster', 'B.json')]);
+        });
+        it('calls application generator', () => {
+            expect(subGenCallParams.count).to.equal(1);
+            expect(subGenCallParams.commands).to.eql(['jhipster:app']);
+            expect(subGenCallParams.options[0].applicationWithEntities).to.not.be.undefined;
+            expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).to.eql({
+                ...options,
+                ...defaultAddedOptions,
+                withEntities: true,
+                force: true,
+                localConfigOnly: true,
+                applicationWithEntities: undefined,
+            });
         });
     });
 
@@ -419,7 +485,46 @@ describe('JHipster generator import jdl', () => {
                 '--inline',
                 'application { config { baseName jhapp } entities * } entity Customer',
                 '--from-cli',
+                '--local-config-only',
             ]);
+        });
+    });
+
+    describe('imports single app and entities passed with --inline and --no-fork', () => {
+        let oldCwd;
+        const options = {
+            skipInstall: true,
+            noInsight: true,
+            skipGit: false,
+            inline: 'application { config { baseName jhapp } entities * } entity Customer',
+        };
+        beforeEach(() => {
+            return testInTempDir(dir => {
+                oldCwd = dir;
+                return loadImportJdl()([], { ...options, fork: false }, env);
+            }, true);
+        });
+
+        afterEach(() => revertTempDir(oldCwd));
+
+        it('should not create .yo-rc.json', () => {
+            assert.noFile(['.yo-rc.json']);
+        });
+        it('should not create entity files', () => {
+            assert.noFile([path.join('.jhipster', 'Customer.json')]);
+        });
+        it('calls application generator', () => {
+            expect(subGenCallParams.count).to.equal(1);
+            expect(subGenCallParams.commands).to.eql(['jhipster:app']);
+            expect(subGenCallParams.options[0].applicationWithEntities).to.not.be.undefined;
+            expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).to.eql({
+                ...options,
+                ...defaultAddedOptions,
+                withEntities: true,
+                force: true,
+                localConfigOnly: true,
+                applicationWithEntities: undefined,
+            });
         });
     });
 
@@ -450,7 +555,39 @@ describe('JHipster generator import jdl', () => {
                 '--no-interactive',
                 '--no-skip-git',
                 '--from-cli',
+                '--local-config-only',
             ]);
+        });
+    });
+
+    describe('imports single app only with --no-fork', () => {
+        let oldCwd;
+        const options = { skipInstall: true, noInsight: true, interactive: false, skipGit: false };
+        beforeEach(() => {
+            return testInTempDir(dir => {
+                oldCwd = dir;
+                fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
+                fse.removeSync(`${dir}/.yo-rc.json`);
+                return loadImportJdl()(['single-app-only.jdl'], { ...options, fork: false }, env);
+            }, true);
+        });
+
+        afterEach(() => revertTempDir(oldCwd));
+
+        it('should not create .yo-rc.json', () => {
+            assert.noFile(['.yo-rc.json']);
+        });
+        it('calls application generator', () => {
+            expect(subGenCallParams.count).to.equal(1);
+            expect(subGenCallParams.commands).to.eql(['jhipster:app']);
+            expect(subGenCallParams.options[0].applicationWithEntities).to.not.be.undefined;
+            expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).to.eql({
+                ...options,
+                ...defaultAddedOptions,
+                force: true,
+                localConfigOnly: true,
+                applicationWithEntities: undefined,
+            });
         });
     });
 
@@ -496,6 +633,7 @@ describe('JHipster generator import jdl', () => {
                 '--no-interactive',
                 '--no-skip-git',
                 '--from-cli',
+                '--local-config-only',
             ]);
         });
     });
@@ -549,6 +687,7 @@ describe('JHipster generator import jdl', () => {
                 '--no-skip-git',
                 '--regenerate',
                 '--from-cli',
+                '--local-config-only',
             ]);
         });
     });
@@ -584,6 +723,7 @@ describe('JHipster generator import jdl', () => {
                 '--no-skip-git',
                 '--skip-prompts',
                 '--from-cli',
+                '--local-config-only',
             ]);
         });
     });
@@ -620,6 +760,7 @@ describe('JHipster generator import jdl', () => {
                     '--no-interactive',
                     '--no-skip-git',
                     '--from-cli',
+                    '--local-config-only',
                 ]);
                 expect(subGenCallParams.options[3]).to.eql([
                     '--force',
@@ -629,6 +770,7 @@ describe('JHipster generator import jdl', () => {
                     '--no-skip-git',
                     '--skip-prompts',
                     '--from-cli',
+                    '--local-config-only',
                 ]);
             });
         });
@@ -695,6 +837,7 @@ describe('JHipster generator import jdl', () => {
                 '--no-interactive',
                 '--no-skip-git',
                 '--from-cli',
+                '--local-config-only',
             ]);
         });
     });
