@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="md" type="<%_ if (clientTheme === 'none' || clientThemeVariant !== 'light') { _%>dark<%_ } else { _%>light<%_ } _%>" class="<%_ if (clientTheme === 'none') { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
+  <b-navbar data-cy="navbar" toggleable="md" type="<%_ if (clientTheme === 'none' || clientThemeVariant !== 'light') { _%>dark<%_ } else { _%>light<%_ } _%>" class="<%_ if (clientTheme === 'none') { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
     <b-navbar-brand class="logo" b-link to="/">
         <span class="logo-img"></span>
         <span v-text="$t('global.title')" class="navbar-title"><%= baseName %></span> <span class="navbar-version">{{version}}</span>
@@ -40,7 +40,8 @@
           v-if="hasAnyAuthority('ROLE_ADMIN') && authenticated"
           :class="{'router-link-active': subIsActive('/admin')}"
           active-class="active"
-          class="pointer">
+          class="pointer"
+          data-cy="admin-menu">
           <span slot="button-content" class="navbar-dropdown-menu">
             <font-awesome-icon icon="cogs" />
             <span v-text="$t('global.menu.admin.main')">Administration</span>
@@ -108,7 +109,8 @@
           id="account-menu"
           :class="{'router-link-active': subIsActive('/account')}"
           active-class="active"
-          class="pointer">
+          class="pointer"
+          data-cy="account-menu">
           <span slot="button-content" class="navbar-dropdown-menu">
             <font-awesome-icon icon="user" />
             <span v-text="$t('global.menu.account.main')">
@@ -116,11 +118,11 @@
             </span>
           </span>
           <%_ if (!skipUserManagement) { _%>
-          <b-dropdown-item to="/account/settings" tag="b-dropdown-item" v-if="authenticated" active-class="active">
+          <b-dropdown-item data-cy="settings" to="/account/settings" tag="b-dropdown-item" v-if="authenticated" active-class="active">
             <font-awesome-icon icon="wrench" />
             <span v-text="$t('global.menu.account.settings')">Settings</span>
           </b-dropdown-item>
-          <b-dropdown-item to="/account/password" tag="b-dropdown-item" v-if="authenticated" active-class="active">
+          <b-dropdown-item data-cy="password-item" to="/account/password" tag="b-dropdown-item" v-if="authenticated" active-class="active">
             <font-awesome-icon icon="lock" />
             <span v-text="$t('global.menu.account.password')">Password</span>
           </b-dropdown-item>
@@ -131,16 +133,16 @@
             <span v-text="$t('global.menu.account.sessions')">Sessions</span>
           </b-dropdown-item>
           <%_ } _%>
-          <b-dropdown-item v-if="authenticated"  v-on:click="logout()" id="logout" active-class="active">
+          <b-dropdown-item data-cy="logout" v-if="authenticated"  v-on:click="logout()" id="logout" active-class="active">
             <font-awesome-icon icon="sign-out-alt" />
             <span v-text="$t('global.menu.account.logout')">Sign out</span>
           </b-dropdown-item>
-          <b-dropdown-item v-if="!authenticated"  v-on:click="openLogin()" id="login" active-class="active">
+          <b-dropdown-item data-cy="login" v-if="!authenticated"  v-on:click="openLogin()" id="login" active-class="active">
             <font-awesome-icon icon="sign-in-alt" />
             <span v-text="$t('global.menu.account.login')">Sign in</span>
           </b-dropdown-item>
           <%_ if (!skipUserManagement) { _%>
-          <b-dropdown-item to="/register" tag="b-dropdown-item" id="register" v-if="!authenticated" active-class="active">
+          <b-dropdown-item data-cy="register" to="/register" tag="b-dropdown-item" id="register" v-if="!authenticated" active-class="active">
             <font-awesome-icon icon="user-plus" />
             <span v-text="$t('global.menu.account.register')">Register</span>
           </b-dropdown-item>

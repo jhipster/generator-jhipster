@@ -117,6 +117,9 @@ limitations under the License.
 <%_ if (protractorTests) { _%>
     "protractor": "5.4.4",
 <%_ } _%>
+    <%_ if (cypressTests) { _%>
+      "cypress": "4.11.0",
+    <%_ } _%>
     "rimraf": "3.0.2",
     "sass": "1.26.5",
     "sass-loader": "8.0.2",
@@ -162,6 +165,10 @@ limitations under the License.
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
 <%_ } _%>
+    <%_ if (cypressTests) { _%>
+    "cypress": "cypress open",
+    "cypress:run": "cypress run",
+    <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --no-cache --config src/test/javascript/jest.conf.js",
     "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
     "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",

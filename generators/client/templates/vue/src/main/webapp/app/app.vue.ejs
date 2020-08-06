@@ -10,7 +10,7 @@
       </div>
       <%_ if (authenticationType !== 'oauth2') { _%>
       <b-modal id="login-page" hide-footer lazy>
-        <span slot="modal-title" id="login-title" v-text="$t('login.title')">Sign in</span>
+        <span data-cy="login-title" slot="modal-title" id="login-title" v-text="$t('login.title')">Sign in</span>
         <login-form></login-form>
       </b-modal>
       <%_ } %>

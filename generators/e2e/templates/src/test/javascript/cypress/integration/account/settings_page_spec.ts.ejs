@@ -19,12 +19,16 @@ import {
 
     it("should be able to change 'user' firstname settings", () => {
       cy.get(firstNameSettingsSelector).clear().type('jhipster');
+      // need to modify email because default email does not match regex in vue
+      cy.get(emailSettingsSelector).clear().type('user@localhost.fr');
       cy.get(submitSettingsSelector).click();
       cy.wait('@settingsSave').its('status').should('equal', 200);
     });
 
     it("should be able to change 'user' lastname settings", () => {
       cy.get(lastNameSettingsSelector).clear().type('retspihj');
+      // need to modify email because default email does not match regex in vue
+      cy.get(emailSettingsSelector).clear().type('user@localhost.fr');
       cy.get(submitSettingsSelector).click();
       cy.wait('@settingsSave').its('status').should('equal', 200);
     });

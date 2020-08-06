@@ -44,14 +44,22 @@ describe('/admin', () => {
 
     describe('/metrics', () => {
         it('should load the page', () => {
+        <%_ if (clientFramework === "vue") { _%>
+        cy.clickOnAdminMenuItem('jhi-metrics');
+        <%_ } else { _%>
         cy.clickOnAdminMenuItem('metrics');
+        <%_ } _%>
         cy.get(metricsPageHeadingSelector).should('be.visible');
         });
     });
 
     describe('/health', () => {
         it('should load the page', () => {
+        <%_ if (clientFramework === "vue") { _%>
+        cy.clickOnAdminMenuItem('jhi-health');
+        <%_ } else { _%>
         cy.clickOnAdminMenuItem('health');
+        <%_ } _%>
         cy.get(healthPageHeadingSelector).should('be.visible');
         });
     });
@@ -65,7 +73,11 @@ describe('/admin', () => {
 
     describe('/configuration', () => {
         it('should load the page', () => {
+        <%_ if (clientFramework === "vue") { _%>
+        cy.clickOnAdminMenuItem('jhi-configuration');
+        <%_ } else { _%>
         cy.clickOnAdminMenuItem('configuration');
+        <%_ } _%>
         cy.get(configurationPageHeadingSelector).should('be.visible');
         });
     });
