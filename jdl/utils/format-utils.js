@@ -22,7 +22,6 @@ const { merge } = require('./object-utils');
 module.exports = {
     formatComment,
     formatDateForLiquibase,
-    dateFormatForLiquibase,
 };
 
 /**
@@ -58,20 +57,6 @@ function formatComment(comment) {
  * @return {string} the formatted Date.
  */
 function formatDateForLiquibase(args) {
-    return dateFormatForLiquibase(args);
-}
-
-/**
- * Formats an optional date to be used by Liquibase.
- *
- * This function is deprecated, use formatDateForLiquibase instead.
- * @param {Object} args - the function's arguments.
- * @param {Date} args.date - the date to format.
- * @param {Number} args.increment - an increment to be used to set minutes, optional.
- * @return {String} the formatted Date.
- * @deprecated
- */
-function dateFormatForLiquibase(args) {
     if (args && args.date) {
         // to safely handle the date, we create a copy of the date
         args.date = new Date(args.date.getTime());

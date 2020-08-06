@@ -49,6 +49,13 @@ function exportApplications(applications, configuration = {}) {
     });
 }
 
+function formatApplicationsToExport(applications) {
+    return Object.values(applications).map(application => {
+        checkForErrors(application);
+        return setUpApplicationStructure(application);
+    });
+}
+
 /**
  * Alias of exportApplication.
  */
