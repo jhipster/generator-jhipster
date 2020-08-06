@@ -18,7 +18,11 @@
 -%>
 node_modules/
 src/main/docker/
+<%_ if (cypressTests) { _%>
+src/test/javascript/cypress/
+<%_ } else if(protractorTests) { _%>
 src/test/javascript/protractor.conf.js
+<%_ } _%>
 src/test/javascript/jest.conf.js
 webpack/
 target/
