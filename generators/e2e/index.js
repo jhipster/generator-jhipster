@@ -68,21 +68,11 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
-            getSharedConfigOptions() {
-                this.jhipsterVersion = this.config.get('jhipsterVersion');
-                this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
-                this.serverPort = this.configOptions.serverPort;
-                this.clientFramework = this.configOptions.clientFramework;
-                this.authenticationType = this.config.get('authenticationType') || this.configOptions.authenticationType;
-                this.databaseType = this.config.get('databaseType') || this.configOptions.databaseType;
-                const baseName = this.config.get('baseName');
-                if (baseName) {
-                    this.baseName = baseName;
-                }
-                if (this.configOptions.testFrameworks) {
-                    this.testFrameworks = this.configOptions.testFrameworks;
-                }
-                this.cypressTests = this.testFrameworks.includes('cypress');
+            loadSharedConfig() {
+                this.loadAppConfig();
+                this.loadClientConfig();
+                this.loadServerConfig();
+                this.loadTranslationConfig();
             },
         };
     }
