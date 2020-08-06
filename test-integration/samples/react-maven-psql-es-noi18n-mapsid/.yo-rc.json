@@ -19,7 +19,7 @@
         "clientFramework": "react",
         "useSass": true,
         "clientPackageManager": "npm",
-        "testFrameworks": ["gatling", "protractor"],
+        "testFrameworks": ["gatling", "cypress"],
         "jhiPrefix": "jhi",
         "otherModules": [],
         "enableTranslation": false,
