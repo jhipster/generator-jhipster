@@ -1936,6 +1936,23 @@ module.exports = class extends PrivateBase {
                             // remove the .ejs suffix
                             templatePathTo = templatePath.replace('.ejs', '');
                         }
+
+                        if (_this.destinationPath) {
+                            templatePathTo = _this.destinationPath(templatePathTo);
+                        }
+
+                        if (templateObj.override !== undefined && _this.fs && _this.fs.exists(templatePathTo)) {
+                            if (typeof templateObj.override === 'function') {
+                                if (!templateObj.override(_this)) {
+                                    this.debug(`skipping file ${templatePathTo}`);
+                                    return;
+                                }
+                            } else if (!templateObj.override) {
+                                this.debug(`skipping file ${templatePathTo}`);
+                                return;
+                            }
+                        }
+
                         filesOut.push(templatePathTo);
                         if (!returnFiles) {
                             let templatePathFrom = prefix ? `${prefix}/${templatePath}` : templatePath;
@@ -2019,6 +2036,12 @@ module.exports = class extends PrivateBase {
         this.configOptions.experimental = options.experimental;
 
         // Load stored options
+        if (options.incrementalChangelog !== undefined) {
+            this.jhipsterConfig.incrementalChangelog = options.incrementalChangelog;
+        }
+        if (options.recreateInitialChangelog) {
+            this.configOptions.recreateInitialChangelog = options.recreateInitialChangelog;
+        }
         if (options.skipClient) {
             this.skipClient = this.jhipsterConfig.skipClient = true;
         }

@@ -247,11 +247,17 @@ const serverFiles = {
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 {
+                    override: generator =>
+                        !generator.jhipsterConfig.incrementalChangelog || generator.configOptions.recreateInitialChangelog,
                     file: 'config/liquibase/changelog/initial_schema.xml',
                     renameTo: () => 'config/liquibase/changelog/00000000000000_initial_schema.xml',
                     options: { interpolate: INTERPOLATE_REGEX },
                 },
-                'config/liquibase/master.xml',
+                {
+                    override: generator =>
+                        !generator.jhipsterConfig.incrementalChangelog || generator.configOptions.recreateInitialChangelog,
+                    file: 'config/liquibase/master.xml',
+                },
             ],
         },
         {

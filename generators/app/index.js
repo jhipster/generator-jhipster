@@ -190,6 +190,16 @@ module.exports = class extends BaseBlueprintGenerator {
             type: String,
         });
 
+        this.option('incremental-changelog', {
+            desc: 'Creates incremental database changelogs',
+            type: Boolean,
+        });
+
+        this.option('recreate-initial-changelog', {
+            desc: 'Recreate the initial database changelog based on the current config',
+            type: Boolean,
+        });
+
         // Just constructing help, stop here
         if (this.options.help) {
             return;
