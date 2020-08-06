@@ -18,9 +18,9 @@
  */
 
 const path = require('path');
-const ApplicationValidator = require('../validators/application-validator');
-const { createFolderIfItDoesNotExist, doesFileExist } = require('../utils/file-utils');
-const { GENERATOR_NAME, writeConfigFile } = require('./export-utils');
+const ApplicationValidator = require('../../validators/application-validator');
+const { createFolderIfItDoesNotExist, doesFileExist } = require('../../utils/file-utils');
+const { GENERATOR_NAME, writeConfigFile } = require('../export-utils');
 
 module.exports = {
     exportApplications,
@@ -46,13 +46,6 @@ function exportApplications(applications, configuration = {}) {
             writeApplicationFileForMultipleApplications(exportableApplication);
         }
         return exportableApplication;
-    });
-}
-
-function formatApplicationsToExport(applications) {
-    return Object.values(applications).map(application => {
-        checkForErrors(application);
-        return setUpApplicationStructure(application);
     });
 }
 
