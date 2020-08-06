@@ -184,6 +184,7 @@ const optionValues = {
     [optionNames.SKIP_USER_MANAGEMENT]: false,
     [optionNames.TEST_FRAMEWORKS]: {
         protractor: 'protractor',
+        cypress: 'cypress',
         cucumber: 'cucumber',
         gatling: 'gatling',
     },
