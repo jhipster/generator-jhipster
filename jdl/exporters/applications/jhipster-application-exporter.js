@@ -18,7 +18,7 @@
  */
 
 const path = require('path');
-const ApplicationValidator = require('../../validators/application-validator');
+const { formatApplicationToExport, formatApplicationsToExport } = require('./jhipster-application-formatter');
 const { createFolderIfItDoesNotExist, doesFileExist } = require('../../utils/file-utils');
 const { GENERATOR_NAME, writeConfigFile } = require('../export-utils');
 
@@ -39,14 +39,13 @@ function exportApplications(applications, configuration = {}) {
     if (!applications) {
         throw new Error('Applications have to be passed to be exported.');
     }
-    return Object.values(applications).map(application => {
-        checkForErrors(application);
-        const exportableApplication = setUpApplicationStructure(application);
+    const formattedApplications = formatApplicationsToExport(applications, configuration);
+    formattedApplications.forEach(formattedApplication => {
         if (!configuration.skipFileGeneration) {
-            writeApplicationFileForMultipleApplications(exportableApplication);
+            writeApplicationFileForMultipleApplications(formattedApplication);
         }
-        return exportableApplication;
     });
+    return formattedApplications;
 }
 
 /**
@@ -65,61 +64,11 @@ function exportApplicationInCurrentDirectory(application, configuration = {}) {
  * @return {Object} the exported application in its final form.
  */
 function exportApplication(application, configuration = {}) {
-    checkForErrors(application);
-    const exportableApplication = setUpApplicationStructure(application, configuration);
+    const exportableApplication = formatApplicationToExport(application, configuration);
     if (!configuration.skipFileGeneration) {
         writeConfigFile(exportableApplication);
     }
     return exportableApplication;
-}
-
-function checkForErrors(application) {
-    if (!application) {
-        throw new Error('An application has to be passed to be exported.');
-    }
-    const validator = new ApplicationValidator();
-    try {
-        validator.validate(application);
-    } catch (error) {
-        throw new Error(`Can't export invalid application. ${error}`);
-    }
-}
-
-function setUpApplicationStructure(application, configuration = {}) {
-    let applicationToExport = {
-        [GENERATOR_NAME]: {},
-    };
-    applicationToExport[GENERATOR_NAME] = getApplicationConfig(application);
-    applicationToExport.entities = application.getEntityNames();
-    if (application.hasConfigurationOption('creationTimestamp')) {
-        applicationToExport[GENERATOR_NAME].creationTimestamp = application.getConfigurationOptionValue('creationTimestamp');
-    } else if (configuration.creationTimestampConfig) {
-        applicationToExport[GENERATOR_NAME].creationTimestamp = configuration.creationTimestampConfig;
-    }
-    applicationToExport = cleanUpOptions(applicationToExport);
-    return applicationToExport;
-}
-
-function getApplicationConfig(application) {
-    const result = {};
-    application.forEachConfigurationOption(option => {
-        result[option.name] = option.getValue();
-    });
-    return result;
-}
-
-function cleanUpOptions(application) {
-    if (!application[GENERATOR_NAME].frontEndBuilder) {
-        delete application[GENERATOR_NAME].frontEndBuilder;
-    }
-    delete application.entityNames;
-    if (application[GENERATOR_NAME].blueprints) {
-        application[GENERATOR_NAME].blueprints = application[GENERATOR_NAME].blueprints.map(blueprintName => ({
-            name: blueprintName,
-        }));
-    }
-
-    return application;
 }
 
 /**

@@ -28,15 +28,6 @@ const { createJDLApplication } = require('../../../jdl/models/jdl-application-fa
 
 describe('JHipsterApplicationExporter', () => {
     describe('exportApplication', () => {
-        context('when passing invalid parameters', () => {
-            context('such as undefined', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        exportApplication();
-                    }).to.throw('An application has to be passed to be exported.');
-                });
-            });
-        });
         context('when passing valid arguments', () => {
             context('when exporting an application to JSON', () => {
                 let content;
