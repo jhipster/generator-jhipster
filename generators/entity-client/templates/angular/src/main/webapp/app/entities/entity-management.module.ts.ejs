@@ -19,7 +19,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { <%= angularXAppName %>SharedModule } from 'app/shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
 import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>-detail.component';
 <%_ if (!readOnly) { _%>
@@ -30,7 +30,7 @@ import { <%= entityInstance %>Route } from './<%= entityFileName %>.route';
 
 @NgModule({
     imports: [
-        <%= angularXAppName %>SharedModule,
+        SharedModule,
         RouterModule.forChild(<%= entityInstance %>Route)
     ],
     declarations: [
@@ -47,4 +47,4 @@ import { <%= entityInstance %>Route } from './<%= entityFileName %>.route';
     ]
     <%_ } _%>
 })
-export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : angularXAppName %><%= entityAngularName %>Module {}
+export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : '' %><%= entityAngularName %>Module {}

@@ -17,20 +17,20 @@
  limitations under the License.
 -%>
 import { NgModule } from '@angular/core';
-import { <%= angularXAppName %>SharedLibsModule } from './shared-libs.module';
+import { SharedLibsModule } from './shared-libs.module';
 <%_ if (enableTranslation) { _%>
 import { FindLanguageFromKeyPipe } from './language/find-language-from-key.pipe';
 <%_ } _%>
 import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
 <%_ if (authenticationType !== 'oauth2') { _%>
-import { LoginModalComponent } from './login/login.component';
+import { LoginModalComponent } from '../core/login/login-modal.component';
 <%_ } _%>
 import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
 
 @NgModule({
     imports: [
-        <%= angularXAppName %>SharedLibsModule
+        SharedLibsModule
     ],
     declarations: [
         <%_ if (enableTranslation) { _%>
@@ -47,7 +47,7 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
     entryComponents: [LoginModalComponent],
     <%_ } _%>
     exports: [
-        <%= angularXAppName %>SharedLibsModule,
+        SharedLibsModule,
         <%_ if (enableTranslation) { _%>
         FindLanguageFromKeyPipe,
         <%_ } _%>
@@ -59,4 +59,4 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
         HasAnyAuthorityDirective
     ]
 })
-export class <%= angularXAppName %>SharedModule {}
+export class SharedModule {}

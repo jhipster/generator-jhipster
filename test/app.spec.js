@@ -1186,7 +1186,7 @@ describe('JHipster generator', () => {
 
             it('creates expected files with correct application name', () => {
                 assert.file([`${CLIENT_MAIN_SRC_DIR}app/home/home.route.ts`]);
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/app.module.ts`, /MyapplicationAppModule/);
+                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/app.module.ts`, /AppModule/);
             });
         });
     });
