@@ -187,11 +187,17 @@ limitations under the License.
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= DIST_DIR %>",
-    <%_ if (protractorTests) { _%>
+<%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
+<%_ } _%>
+<%_ if (cypressTests) { _%>
+    "cypress": "cypress open",
+    "cypress:run": "cypress run",
+<%_ } _%>
+<%_ if (protractorTests || cypressTests) { _%>
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
-    <%_ } _%>
+<%_ } _%>
     <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
     <%_ } _%>
