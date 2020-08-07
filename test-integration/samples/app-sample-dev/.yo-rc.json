@@ -23,6 +23,7 @@
         "serviceDiscoveryType": false,
         "clientPackageManager": "npm",
         "clientFramework": "angularX",
-        "embeddableLaunchScript": false
+        "embeddableLaunchScript": false,
+        "creationTimestamp": 1596513172471
     }
 }

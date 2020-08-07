@@ -18,7 +18,7 @@
  */
 const faker = require('faker');
 
-module.exports = { getRecentDateForLiquibase, parseLiquibaseChangelogDate };
+module.exports = { getRecentDateForLiquibase, parseLiquibaseChangelogDate, formatDateForChangelog };
 
 /*
  * Current faker version is 4.1.0 and was release in 2017
@@ -56,4 +56,37 @@ function getRecentDateForLiquibase(days, changelogDate) {
         refDate = parseLiquibaseChangelogDate(changelogDate);
     }
     return getRecentDate(days, refDate);
+}
+
+function formatDateForChangelog(now) {
+    const nowUTC = new Date(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate(),
+        now.getUTCHours(),
+        now.getUTCMinutes(),
+        now.getUTCSeconds()
+    );
+    const year = `${nowUTC.getFullYear()}`;
+    let month = `${nowUTC.getMonth() + 1}`;
+    if (month.length === 1) {
+        month = `0${month}`;
+    }
+    let day = `${nowUTC.getDate()}`;
+    if (day.length === 1) {
+        day = `0${day}`;
+    }
+    let hour = `${nowUTC.getHours()}`;
+    if (hour.length === 1) {
+        hour = `0${hour}`;
+    }
+    let minute = `${nowUTC.getMinutes()}`;
+    if (minute.length === 1) {
+        minute = `0${minute}`;
+    }
+    let second = `${nowUTC.getSeconds()}`;
+    if (second.length === 1) {
+        second = `0${second}`;
+    }
+    return `${year}${month}${day}${hour}${minute}${second}`;
 }
