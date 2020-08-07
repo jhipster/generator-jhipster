@@ -146,6 +146,21 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
+            loadSharedConfig() {
+                this.loadAppConfig();
+                this.loadClientConfig();
+                this.loadServerConfig();
+                this.loadTranslationConfig();
+            },
+            composeCypress() {
+                if (this.configOptions.skipComposeCypress || !this.cypressTests) return;
+                this.configOptions.skipComposeCypress = true;
+                this.composeWith(require.resolve('../cypress'), {
+                    ...this.options,
+                    configOptions: this.configOptions,
+                    debug: this.isDebugEnabled,
+                });
+            },
             composeLanguages() {
                 // We don't expose client/server to cli, composing with languages is used for test purposes.
                 if (this.jhipsterConfig.enableTranslation === false) return;
@@ -180,12 +195,6 @@ module.exports = class extends BaseBlueprintGenerator {
                         )} flag`
                     );
                 }
-            },
-            loadSharedConfig() {
-                this.loadAppConfig();
-                this.loadClientConfig();
-                this.loadServerConfig();
-                this.loadTranslationConfig();
             },
             setupSharedOptions() {
                 this.enableI18nRTL = false;

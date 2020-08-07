@@ -76,7 +76,7 @@ module.exports = {
 function writeFiles() {
     return {
         writeFiles() {
-            this.writeFilesToDisk(cypressFiles, this, false, this.fetchFromInstalledJHipster('e2e/templates'));
+            this.writeFilesToDisk(cypressFiles, this, false, this.fetchFromInstalledJHipster('cypress/templates'));
         },
     };
 }

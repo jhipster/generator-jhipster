@@ -360,14 +360,6 @@ module.exports = class extends BaseBlueprintGenerator {
                         true
                     );
                 }
-                if (!this.configOptions.skipComposeE2E) {
-                    this.configOptions.skipComposeE2E = true;
-                    this.composeWith(require.resolve('../e2e'), {
-                        ...options,
-                        configOptions,
-                        debug: this.isDebugEnabled,
-                    });
-                }
             },
 
             askForTestOpts: prompts.askForTestOpts,
