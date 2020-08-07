@@ -13,7 +13,7 @@
         "skipFakeData": false,
         "entitySuffix": "",
         "dtoSuffix": "DTO",
-        "testFrameworks": ["gatling", "protractor"],
+        "testFrameworks": ["gatling", "cypress"],
         "blueprints": [],
         "creationTimestamp": 1594459281773,
         "serviceDiscoveryType": false,
