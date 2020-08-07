@@ -24,6 +24,7 @@ const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
 const writeVueFiles = require('./files-vue').writeFiles;
+const writeCommonFiles = require('./files-common').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
@@ -257,6 +258,10 @@ module.exports = class extends BaseBlueprintGenerator {
                     default:
                     // do nothing by default
                 }
+            },
+            writeCommonFiles() {
+                if (this.skipClient) return;
+                return writeCommonFiles.call(this, useBlueprints);
             },
         };
     }

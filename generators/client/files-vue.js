@@ -46,7 +46,6 @@ const vueFiles = {
                 'webpack/vue.utils.js',
                 'webpack/loader.conf.js',
                 'webpack/utils.js',
-                '.eslintignore',
             ],
         },
         {
