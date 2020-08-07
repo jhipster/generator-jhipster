@@ -27,7 +27,7 @@ const NODE_VERSION = '12.16.1';
 const NPM_VERSION = '6.14.6';
 
 const GRADLE_VERSION = '6.5';
-const JIB_VERSION = '2.4.0';
+const JIB_VERSION = '2.5.0';
 
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '3.10.0-SNAPSHOT';
