@@ -18,9 +18,9 @@
 -%>
 import React from 'react';
 import MenuItem from 'app/shared/layout/menus/menu-item';
-import {
-  DropdownItem
-} from 'reactstrap';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { DropdownItem } from 'reactstrap';
+<%_ } _%>
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Translate, translate } from 'react-jhipster';
 <%_ if (authenticationType === 'oauth2') { _%>

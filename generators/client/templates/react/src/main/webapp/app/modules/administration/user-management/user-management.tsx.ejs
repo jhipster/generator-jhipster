@@ -51,9 +51,9 @@ export const UserManagement = (props: IUserManagementProps) => {
   useEffect(() => {
     const params = new URLSearchParams(props.location.search);
     const page = params.get('page');
-    const sort = params.get('sort');
-    if (page && sort) {
-      const sortSplit = sort.split(',');
+    const getSort = params.get('sort');
+    if (page && getSort) {
+      const sortSplit = getSort.split(',');
       setPagination({
         ...pagination,
         activePage: +page,
