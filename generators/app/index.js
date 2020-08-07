@@ -360,20 +360,14 @@ module.exports = class extends BaseBlueprintGenerator {
                         true
                     );
                 }
-            },
-
-            composeE2E() {
-                if (this.configOptions.skipComposeE2E) return;
-                this.configOptions.skipComposeE2E = true;
-                const options = this.options;
-                const configOptions = this.configOptions;
-
-                this.composeWith(require.resolve('../e2e'), {
-                    ...options,
-                    'client-hook': !this.skipClient,
-                    configOptions,
-                    debug: this.isDebugEnabled,
-                });
+                if (!this.configOptions.skipComposeE2E) {
+                    this.configOptions.skipComposeE2E = true;
+                    this.composeWith(require.resolve('../e2e'), {
+                        ...options,
+                        configOptions,
+                        debug: this.isDebugEnabled,
+                    });
+                }
             },
 
             askForTestOpts: prompts.askForTestOpts,

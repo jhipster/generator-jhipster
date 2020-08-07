@@ -35,9 +35,6 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false,
         });
 
-        this.setupServerOptions(this);
-        this.setupClientOptions(this);
-
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('e2e', { 'client-hook': !this.skipClient });
     }
 
@@ -48,13 +45,12 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.checkInvocationFromCLI();
             },
 
-            setupConsts() {
+            setupConstants() {
                 // Make constants available in templates
                 this.MAIN_DIR = constants.MAIN_DIR;
                 this.TEST_DIR = constants.TEST_DIR;
                 this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
                 this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
                 this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
             },
         };
@@ -68,6 +64,9 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
+            setupConstants() {
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
+            },
             loadSharedConfig() {
                 this.loadAppConfig();
                 this.loadClientConfig();
