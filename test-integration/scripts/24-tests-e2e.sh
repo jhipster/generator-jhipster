@@ -53,7 +53,7 @@ launchCurlOrCypress() {
     do
         result=0
         if [[ -f "tsconfig.json" ]]; then
-            npm run cypress:run
+            npm run cypress:run --browser chrome
         fi
         result=$?
         [ $result -eq 0 ] && break
