@@ -1353,11 +1353,7 @@ module.exports = class extends Generator {
      * @param {*} options
      */
     getJDBCUrl(databaseType, options = {}) {
-        if (options.protocol) {
-            throw new Error("option 'protocol' is not accepted when asking for a jdbc url, use getDBCUrl() instead");
-        }
-        options.protocol = 'jdbc';
-        return this.getDBCUrl(databaseType, options);
+        return this.getDBCUrl(databaseType, 'jdbc', options);
     }
 
     /**
@@ -1367,19 +1363,15 @@ module.exports = class extends Generator {
      * @param {*} options
      */
     getR2DBCUrl(databaseType, options = {}) {
-        if (options.protocol) {
-            throw new Error("option 'protocol' is not accepted when asking for an r2dbc url, use getDBCUrl() instead");
-        }
-        options.protocol = 'r2dbc';
-        return this.getDBCUrl(databaseType, options);
+        return this.getDBCUrl(databaseType, 'r2dbc', options);
     }
 
-    getDBCUrl(databaseType, options = {}) {
+    getDBCUrl(databaseType, protocol, options = {}) {
+        if (!protocol) {
+            throw new Error("protocol is required");
+        }
         if (!options.databaseName) {
             throw new Error("option 'databaseName' is required");
-        }
-        if (!options.protocol) {
-            throw new Error("option 'protocol' is required");
         }
         if (['mysql', 'mariadb', 'postgresql', 'oracle', 'mssql'].includes(databaseType) && !options.hostname) {
             throw new Error(`option 'hostname' is required for ${databaseType} databaseType`);
