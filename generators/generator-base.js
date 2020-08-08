@@ -1273,12 +1273,22 @@ module.exports = class extends PrivateBase {
     /**
      * Compose with a jhipster generator using default jhipster config.
      * @param {string} generator - jhipster generator.
-     * @param {object} options - options to pass
+     * @param {object} [options] - options to pass
+     * @param {boolean} [once] - compose once with the generator
      * @return {object} the composed generator
      */
-    composeWithJHipster(generator, options = {}) {
-        if (this.env.get(`jhipster:${generator}`)) {
-            generator = `jhipster:${generator}`;
+    composeWithJHipster(generator, options = {}, once = false) {
+        if (options === true || once) {
+            this.configOptions.composedWith = this.configOptions.composedWith || [];
+            if (this.configOptions.composedWith.includes(generator)) {
+                return undefined;
+            }
+            this.configOptions.composedWith.push(generator);
+        }
+
+        const namespace = `jhipster:${generator}`;
+        if (this.env.get(namespace)) {
+            generator = namespace;
         } else {
             // Keep test compatibily were jhipster lookup does not run.
             generator = require.resolve(`./${generator}`);

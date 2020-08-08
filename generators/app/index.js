@@ -344,23 +344,21 @@ module.exports = class extends BaseBlueprintGenerator {
              * priority will run before this `composing` task and the configuration will not be settled.
              */
             composing() {
-                if (!this.skipServer && !this.configOptions.skipComposeServer) {
-                    this.configOptions.skipComposeServer = true;
-                    this.composeWithJHipster('server');
+                if (!this.skipServer) {
+                    this.composeWithJHipster('server', true);
                 }
-                if (!this.skipClient && !this.configOptions.skipComposeClient) {
-                    this.configOptions.skipComposeClient = true;
-                    this.composeWithJHipster('client');
+                if (!this.skipClient) {
+                    this.composeWithJHipster('client', true);
                 }
-                if (!this.configOptions.skipComposeCommon) {
-                    this.configOptions.skipComposeCommon = true;
-                    this.composeWithJHipster('common');
-                }
-                if (!this.configOptions.skipI18n && !this.configOptions.skipComposeLanguages) {
-                    this.configOptions.skipComposeLanguages = true;
-                    this.composeWithJHipster('languages', {
-                        skipPrompts: this.options.withEntities || this.existingProject || this.options.defaults,
-                    });
+                this.composeWithJHipster('common', true);
+                if (!this.configOptions.skipI18n) {
+                    this.composeWithJHipster(
+                        'languages',
+                        {
+                            skipPrompts: this.options.withEntities || this.existingProject || this.options.defaults,
+                        },
+                        true
+                    );
                 }
             },
 

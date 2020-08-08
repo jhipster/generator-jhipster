@@ -220,10 +220,8 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             composeLanguages() {
                 // We don't expose client/server to cli, composing with languages is used for test purposes.
-                if (this.configOptions.skipComposeLanguages || this.jhipsterConfig.enableTranslation === false) return;
-
-                this.configOptions.skipComposeLanguages = true;
-                this.composeWithJHipster('languages');
+                if (this.jhipsterConfig.enableTranslation === false) return;
+                this.composeWithJHipster('languages', true);
             },
 
             loadSharedConfig() {
