@@ -530,7 +530,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.composeWithJHipster('entity-server', {
                     context,
                     force: context.options.force,
-                    debug: context.isDebugEnabled,
                 });
             },
 
@@ -542,7 +541,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context,
                     skipInstall: context.options.skipInstall,
                     force: context.options.force,
-                    debug: context.isDebugEnabled,
                 });
             },
 
@@ -553,7 +551,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context,
                     skipInstall: context.options.skipInstall,
                     force: context.options.force,
-                    debug: context.isDebugEnabled,
                 });
             },
         };
@@ -695,7 +692,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.entityConfig.clientRootFolder = context.options.clientRootFolder;
             }
         }
-        dest.isDebugEnabled = context.options.debug;
         dest.experimental = context.options.experimental;
 
         dest.entityTableName = generator.getTableName(context.options.tableName || dest.name);

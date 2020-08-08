@@ -810,7 +810,7 @@ module.exports = class extends Generator {
      */
     debug(msg, ...args) {
         const formattedMsg = `${chalk.yellow.bold('DEBUG!')} ${msg}`;
-        if (this.isDebugEnabled || (this.options && this.options.debug)) {
+        if ((this.configOptions && this.configOptions.isDebugEnabled) || (this.options && this.options.debug)) {
             this.log(formattedMsg);
             args.forEach(arg => this.log(arg));
         }

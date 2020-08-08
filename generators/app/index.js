@@ -346,27 +346,20 @@ module.exports = class extends BaseBlueprintGenerator {
             composing() {
                 if (!this.skipServer && !this.configOptions.skipComposeServer) {
                     this.configOptions.skipComposeServer = true;
-                    this.composeWithJHipster('server', {
-                        debug: this.isDebugEnabled,
-                    });
+                    this.composeWithJHipster('server');
                 }
                 if (!this.skipClient && !this.configOptions.skipComposeClient) {
                     this.configOptions.skipComposeClient = true;
-                    this.composeWithJHipster('client', {
-                        debug: this.isDebugEnabled,
-                    });
+                    this.composeWithJHipster('client');
                 }
                 if (!this.configOptions.skipComposeCommon) {
                     this.configOptions.skipComposeCommon = true;
-                    this.composeWithJHipster('common', {
-                        debug: this.isDebugEnabled,
-                    });
+                    this.composeWithJHipster('common');
                 }
                 if (!this.configOptions.skipI18n && !this.configOptions.skipComposeLanguages) {
                     this.configOptions.skipComposeLanguages = true;
                     this.composeWithJHipster('languages', {
                         skipPrompts: this.options.withEntities || this.existingProject || this.options.defaults,
-                        debug: this.isDebugEnabled,
                     });
                 }
             },
@@ -422,7 +415,6 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.composeWithJHipster('entity', {
                             regenerate: true,
                             skipInstall: true,
-                            debug: this.isDebugEnabled,
                             arguments: [entity.name],
                         });
                     });
@@ -435,7 +427,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.jhipsterConfig.pages.forEach(page => {
                         this.composeWithJHipster('page', {
                             skipInstall: true,
-                            debug: this.isDebugEnabled,
                             arguments: [page.name],
                         });
                     });
