@@ -27,6 +27,7 @@ const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { isReservedClassName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
 const { entityDefaultConfig } = require('../generator-defaults');
+const { prepareEntityForTemplates } = require('../../utils/entity');
 
 /* constants used throughout */
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
@@ -479,7 +480,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
     _default() {
         return {
             loadInMemoryData() {
-                this._prepareEntityForTemplates();
+                this._loadEntityWithConfig();
+                const entity = this.context;
+                prepareEntityForTemplates(entity, this);
 
                 // Load in-memory data for fields
                 this.context.fields.forEach(field => {
@@ -769,10 +772,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         }
     }
 
-    _prepareEntityForTemplates(entity = this.context, entityConfig = this.entityStorage.getAll()) {
-        const entityName = entity.name;
-        const entityNamePluralizedAndSpinalCased = _.kebabCase(pluralize(entityName));
-
+    _loadEntityWithConfig(entity = this.context, entityConfig = this.entityStorage.getAll()) {
         Object.assign(
             entity,
             _.defaults(
@@ -790,116 +790,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 BASE_TEMPLATE_DATA
             )
         );
-
-        entity.entityTableName = entity.entityTableName || entityConfig.entityTableName || this.getTableName(entityName);
-        entity.entityAngularJSSuffix = entity.angularJSSuffix;
-        if (entity.entityAngularJSSuffix && !entity.entityAngularJSSuffix.startsWith('-')) {
-            entity.entityAngularJSSuffix = `-${entity.entityAngularJSSuffix}`;
-        }
-
-        entity.useMicroserviceJson = entity.useMicroserviceJson || entity.microserviceName !== undefined;
-        if (entity.applicationType === 'gateway' && entity.useMicroserviceJson) {
-            if (!entity.microserviceName) {
-                throw new Error('Microservice name for the entity is not found. Entity cannot be generated!');
-            }
-            entity.microserviceAppName = this.getMicroserviceAppName(entity.microserviceName);
-            entity.skipServer = true;
-        }
-
-        entity.entityNameCapitalized = _.upperFirst(entity.name);
-        entity.entityClass = entity.entityNameCapitalized;
-        entity.entityClassPlural = pluralize(entity.entityClass);
-
-        // Used for i18n
-        entity.entityClassHumanized = entityConfig.entityClassHumanized || _.startCase(entity.entityNameCapitalized);
-        entity.entityClassPluralHumanized = entityConfig.entityClassPluralHumanized || _.startCase(entity.entityClassPlural);
-        // Implement i18n variant ex: 'male', 'female' when applied
-        entity.entityI18nVariant = entityConfig.entityI18nVariant || 'default';
-
-        entity.entityInstance = _.lowerFirst(entityName);
-        entity.entityInstancePlural = pluralize(entity.entityInstance);
-
-        entity.entityFileName = _.kebabCase(entity.entityNameCapitalized + _.upperFirst(entity.entityAngularJSSuffix));
-        entity.entityFolderName = this.getEntityFolderName(entity.clientRootFolder, entity.entityFileName);
-        entity.entityModelFileName = entity.entityFolderName;
-        entity.entityParentPathAddition = this.getEntityParentPathAddition(entity.clientRootFolder);
-        entity.entityPluralFileName = entityNamePluralizedAndSpinalCased + entity.entityAngularJSSuffix;
-        entity.entityServiceFileName = entity.entityFileName;
-
-        entity.entityAngularName = entity.entityClass + this.upperFirstCamelCase(entity.entityAngularJSSuffix);
-        entity.entityReactName = entity.entityClass + this.upperFirstCamelCase(entity.entityAngularJSSuffix);
-
-        entity.entityApiUrl = entityNamePluralizedAndSpinalCased;
-        entity.entityStateName = _.kebabCase(entity.entityAngularName);
-        entity.entityUrl = entity.entityStateName;
-
-        entity.entityTranslationKey = entity.clientRootFolder
-            ? _.camelCase(`${entity.clientRootFolder}-${entity.entityInstance}`)
-            : entity.entityInstance;
-        entity.entityTranslationKeyMenu = _.camelCase(
-            entity.clientRootFolder ? `${entity.clientRootFolder}-${entity.entityStateName}` : entity.entityStateName
-        );
-
-        entity.reactiveRepositories = entity.reactive && ['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(entity.databaseType);
-
-        entity.differentTypes.push(entity.entityClass);
-        entity.i18nToLoad.push(entity.entityInstance);
-        entity.i18nKeyPrefix = `${entity.angularAppName}.${entity.entityTranslationKey}`;
-
-        const hasUserField = entity.relationships.some(relationship => this.isBuiltInUserEntity(relationship.otherEntityName));
-        entity.saveUserSnapshot =
-            entity.applicationType === 'microservice' && entity.authenticationType === 'oauth2' && hasUserField && entity.dto === 'no';
-
-        entity.primaryKeyType = this.getPkTypeBasedOnDBAndAssociation(entity.authenticationType, entity.databaseType, entity.relationships);
-
-        entity.fields.forEach(field => {
-            const fieldType = field.fieldType;
-            if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
-                entity.fieldsIsReactAvField = true;
-            }
-
-            if (field.javadoc) {
-                entity.haveFieldWithJavadoc = true;
-            }
-
-            if (this.fieldIsEnum(fieldType)) {
-                entity.i18nToLoad.push(field.enumInstance);
-            }
-
-            if (fieldType === 'ZonedDateTime') {
-                entity.fieldsContainZonedDateTime = true;
-                entity.fieldsContainDate = true;
-            } else if (fieldType === 'Instant') {
-                entity.fieldsContainInstant = true;
-                entity.fieldsContainDate = true;
-            } else if (fieldType === 'Duration') {
-                entity.fieldsContainDuration = true;
-            } else if (fieldType === 'LocalDate') {
-                entity.fieldsContainLocalDate = true;
-                entity.fieldsContainDate = true;
-            } else if (fieldType === 'BigDecimal') {
-                entity.fieldsContainBigDecimal = true;
-            } else if (fieldType === 'UUID') {
-                entity.fieldsContainUUID = true;
-            } else if (fieldType === 'byte[]' || fieldType === 'ByteBuffer') {
-                entity.blobFields.push(field);
-                entity.fieldsContainBlob = true;
-                if (field.fieldTypeBlobContent === 'image') {
-                    entity.fieldsContainImageBlob = true;
-                }
-                if (field.fieldTypeBlobContent !== 'text') {
-                    entity.fieldsContainBlobOrImage = true;
-                } else {
-                    entity.fieldsContainTextBlob = true;
-                }
-            }
-
-            if (Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1) {
-                entity.validation = true;
-            }
-        });
-
-        return entity;
     }
 
     _prepareFieldForTemplates(field, entity = this.context) {
