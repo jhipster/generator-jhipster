@@ -529,7 +529,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                 this.composeWithJHipster('entity-server', {
                     context,
-                    force: context.options.force,
                 });
             },
 
@@ -539,8 +538,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                 this.composeWithJHipster('entity-client', {
                     context,
-                    skipInstall: context.options.skipInstall,
-                    force: context.options.force,
+                    skipInstall: this.options.skipInstall,
                 });
             },
 
@@ -549,8 +547,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (context.skipClient) return;
                 this.composeWithJHipster('entity-i18n', {
                     context,
-                    skipInstall: context.options.skipInstall,
-                    force: context.options.force,
+                    skipInstall: this.options.skipInstall,
                 });
             },
         };
@@ -579,7 +576,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             'post',
                             {
                                 entityConfig: context,
-                                force: context.options.force,
+                                force: this.options.force,
                             },
                             done
                         );
