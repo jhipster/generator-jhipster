@@ -344,32 +344,27 @@ module.exports = class extends BaseBlueprintGenerator {
              * priority will run before this `composing` task and the configuration will not be settled.
              */
             composing() {
-                const options = this.options;
                 if (!this.skipServer && !this.configOptions.skipComposeServer) {
                     this.configOptions.skipComposeServer = true;
                     this.composeWithJHipster('server', {
-                        ...options,
                         debug: this.isDebugEnabled,
                     });
                 }
                 if (!this.skipClient && !this.configOptions.skipComposeClient) {
                     this.configOptions.skipComposeClient = true;
                     this.composeWithJHipster('client', {
-                        ...options,
                         debug: this.isDebugEnabled,
                     });
                 }
                 if (!this.configOptions.skipComposeCommon) {
                     this.configOptions.skipComposeCommon = true;
                     this.composeWithJHipster('common', {
-                        ...options,
                         debug: this.isDebugEnabled,
                     });
                 }
                 if (!this.configOptions.skipI18n && !this.configOptions.skipComposeLanguages) {
                     this.configOptions.skipComposeLanguages = true;
                     this.composeWithJHipster('languages', {
-                        ...options,
                         skipPrompts: this.options.withEntities || this.existingProject || this.options.defaults,
                         debug: this.isDebugEnabled,
                     });
@@ -423,10 +418,8 @@ module.exports = class extends BaseBlueprintGenerator {
             regenerateEntities() {
                 if (this.withEntities && !this.configOptions.skipComposeEntity) {
                     this.configOptions.skipComposeEntity = true;
-                    const options = this.options;
                     this.getExistingEntities().forEach(entity => {
                         this.composeWithJHipster('entity', {
-                            ...options,
                             regenerate: true,
                             skipInstall: true,
                             debug: this.isDebugEnabled,
