@@ -25,7 +25,7 @@ module.exports = {
     writeFiles,
 };
 
-const vueFiles = {
+const commonFiles = {
     common: [
         {
             templates: ['.eslintignore'],
@@ -35,5 +35,5 @@ const vueFiles = {
 
 function writeFiles() {
     mkdirp(MAIN_SRC_DIR);
-    this.writeFilesToDisk(vueFiles, this, false, this.fetchFromInstalledJHipster('client/templates/common'));
+    this.writeFilesToDisk(commonFiles, this, false, this.fetchFromInstalledJHipster('client/templates/common'));
 }
