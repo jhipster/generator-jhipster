@@ -1319,7 +1319,7 @@ module.exports = class extends Generator {
      */
     getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships) {
         const derivedRelationship = relationships.find(relationship => relationship.useJPADerivedIdentifier === true);
-        return derivedRelationship && derivedRelationship.otherEntityName === 'user' && authenticationType === 'oauth2'
+        return derivedRelationship && this.isBuiltInUserEntity(derivedRelationship.otherEntityName) && authenticationType === 'oauth2'
             ? 'String'
             : this.getPkType(databaseType);
     }
