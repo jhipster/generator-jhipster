@@ -268,7 +268,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
             loadEntitySpecificOptions() {
                 this.context.skipClient = this.context.skipClient || this.entityConfig.skipClient;
-                this.context.databaseType = this.entityConfig.databaseType || this.context.databaseType;
+                this.context.databaseType = this.context.databaseType || this.entityConfig.databaseType || this.jhipsterConfig.databaseType;
             },
 
             setupSharedConfig() {
@@ -364,12 +364,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
         return {
             configureEntityTable() {
                 const context = this.context;
-                context.entityTableName = this.entityConfig.entityTableName;
-                if (context.entityTableName === undefined) {
-                    context.entityTableName = this.getTableName(context.name);
-                }
-                if (isReservedTableName(context.entityTableName, context.prodDatabaseType) && context.jhiTablePrefix) {
-                    context.entityTableName = this.entityConfig.entityTableName = `${context.jhiTablePrefix}_${this.entityConfig.entityTableName}`;
+                context.entityTableName = this.entityConfig.entityTableName || this.getTableName(context.name);
+
+                const fixedEntityTableName = this._fixEntityTableName(
+                    context.entityTableName,
+                    context.prodDatabaseType,
+                    context.jhiTablePrefix
+                );
+                if (fixedEntityTableName !== context.entityTableName) {
+                    context.entityTableName = this.entityConfig.entityTableName = fixedEntityTableName;
                 }
             },
 
@@ -781,12 +784,14 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     skipUiGrouping: this.jhipsterConfig.skipUiGrouping,
                     searchEngine: this.jhipsterConfig.searchEngine,
                     jhiPrefix: this.jhipsterConfig.jhiPrefix,
+                    authenticationType: this.jhipsterConfig.authenticationType,
                 },
                 entityDefaultConfig,
                 BASE_TEMPLATE_DATA
             )
         );
 
+        entity.entityTableName = entity.entityTableName || entityConfig.entityTableName || this.getTableName(entityName);
         entity.entityAngularJSSuffix = entity.angularJSSuffix;
         if (entity.entityAngularJSSuffix && !entity.entityAngularJSSuffix.startsWith('-')) {
             entity.entityAngularJSSuffix = `-${entity.entityAngularJSSuffix}`;
@@ -961,6 +966,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
         }
 
         field.fieldValidate = Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
+        field.nullable = !(field.fieldValidate === true && field.fieldValidateRules.includes('required'));
+        field.unique = field.fieldValidate === true && field.fieldValidateRules.includes('unique');
+        if (field.unique) {
+            field.uniqueConstraintName = this.getUXConstraintName(entity.entityTableName, field.columnName, entity.prodDatabaseType);
+        }
+        if (field.fieldValidate === true && field.fieldValidateRules.includes('maxlength')) {
+            field.maxlength = field.fieldValidateRulesMaxlength || 255;
+        }
+
         return field;
     }
 
@@ -969,7 +983,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         const relationshipOptions = relationship.options || {};
         const otherEntityName = relationship.otherEntityName;
         const otherEntityData = this.getEntityConfig(otherEntityName).getAll();
-        const jhiTablePrefix = entity.jhiTablePrefix;
+        const jhiTablePrefix = entity.jhiTablePrefix || this.getTableName(entity.jhiPrefix);
 
         relationship.otherEntityIsEmbedded = otherEntityData.embedded;
         if (otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
@@ -1051,6 +1065,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
             relationshipFieldName: _.lowerFirst(relationshipName),
             relationshipNameCapitalized: _.upperFirst(relationshipName),
             relationshipNameHumanized: relationshipOptions.relationshipNameHumanized || _.startCase(relationshipName),
+            columnName: this.getColumnName(relationshipName),
             otherEntityNamePlural: pluralize(otherEntityName),
             otherEntityNameCapitalized: _.upperFirst(otherEntityName),
             otherEntityFieldCapitalized: _.upperFirst(relationship.otherEntityField),
@@ -1149,6 +1164,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 relationship.relationshipValidate = relationship.relationshipRequired = entity.validation = true;
             }
         }
+        relationship.nullable = !(relationship.relationshipValidate === true && relationship.relationshipRequired);
 
         const entityType = relationship.otherEntityNameCapitalized;
         if (!entity.differentTypes.includes(entityType)) {
@@ -1159,6 +1175,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
         }
         entity.differentRelationships[entityType].push(relationship);
         return relationship;
+    }
+
+    _fixEntityTableName(entityTableName, prodDatabaseType, jhiTablePrefix) {
+        if (isReservedTableName(entityTableName, prodDatabaseType) && jhiTablePrefix) {
+            entityTableName = `${jhiTablePrefix}_${entityTableName}`;
+        }
+        return entityTableName;
     }
 }
 
