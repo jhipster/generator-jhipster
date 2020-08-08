@@ -1270,6 +1270,30 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Compose with a jhipster generator using default jhipster config.
+     * @param {string} generator - jhipster generator.
+     * @param {object} options - options to pass
+     * @return {object} the composed generator
+     */
+    composeWithJHipster(generator, options = {}) {
+        if (this.env.get(`jhipster:${generator}`)) {
+            generator = `jhipster:${generator}`;
+        } else {
+            // Keep test compatibily were jhipster lookup does not run.
+            generator = require.resolve(`./${generator}`);
+        }
+
+        return this.composeWith(
+            generator,
+            {
+                configOptions: this.configOptions,
+                ...options,
+            },
+            true
+        );
+    }
+
+    /**
      * Compose an external generator with Yeoman.
      * @param {string} npmPackageName - package name
      * @param {string} subGen - sub generator name
@@ -1301,35 +1325,44 @@ module.exports = class extends PrivateBase {
      * get sorted list of entities according to changelog date (i.e. the order in which they were added)
      */
     getExistingEntities() {
-        const entities = [];
-
         function isBefore(e1, e2) {
             return e1.definition.changelogDate - e2.definition.changelogDate;
         }
 
-        // TODO 7.0 this.destinationPath(JHIPSTER_CONFIG_DIR);
-        if (!shelljs.test('-d', JHIPSTER_CONFIG_DIR)) {
-            return entities;
+        const configDir = this.destinationPath(JHIPSTER_CONFIG_DIR);
+        if (!fs.existsSync(configDir)) {
+            fs.mkdirSync(configDir);
         }
+        const dir = fs.opendirSync(configDir);
+        const entityNames = [];
+        let dirent = dir.readSync();
+        while (dirent !== null) {
+            const extname = path.extname(dirent.name);
+            if (dirent.isFile() && extname === '.json') {
+                entityNames.push(path.basename(dirent.name, extname));
+            }
+            dirent = dir.readSync();
+        }
+        dir.closeSync();
 
-        // TODO 7.0 this.destinationPath(JHIPSTER_CONFIG_DIR);
-        return shelljs
-            .ls(path.join(JHIPSTER_CONFIG_DIR, '*.json'))
-            .reduce((acc, file) => {
+        return [...new Set((this.jhipsterConfig.entities || []).concat(entityNames))]
+            .map(entityName => {
+                const file = this.destinationPath(configDir, `${entityName}.json`);
                 try {
                     const definition = this.fs.readJSON(file);
                     if (this.options.namespace !== 'jhipster:info') {
                         // Execute a write operation to set the file as modified on mem-fs to trigger prettier.
                         this.fs.append(file, '', { trimEnd: false, separator: '' });
-                        acc.push({ name: path.basename(file, '.json'), definition });
                     }
+                    return { name: path.basename(file, '.json'), definition };
                 } catch (error) {
                     // not an entity file / malformed?
                     this.warning(`Unable to parse entity file ${file}`);
                     this.debug('Error:', error);
+                    return undefined;
                 }
-                return acc;
-            }, entities)
+            })
+            .filter(entity => entity)
             .sort(isBefore);
     }
 

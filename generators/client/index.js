@@ -153,9 +153,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.configOptions.skipComposeLanguages || this.jhipsterConfig.enableTranslation === false) return;
 
                 this.configOptions.skipComposeLanguages = true;
-                this.composeWith(require.resolve('../languages'), {
+                this.composeWithJHipster('languages', {
                     ...this.options,
-                    configOptions: this.configOptions,
                     debug: this.isDebugEnabled,
                 });
             },
