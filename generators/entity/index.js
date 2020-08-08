@@ -19,7 +19,6 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
-const pluralize = require('pluralize');
 const path = require('path');
 const prompts = require('./prompts');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
@@ -29,13 +28,13 @@ const { isReservedClassName, isReservedTableName } = require('../../jdl/jhipster
 const { entityDefaultConfig } = require('../generator-defaults');
 const { prepareEntityForTemplates } = require('../../utils/entity');
 const { prepareFieldForTemplates } = require('../../utils/field');
+const { prepareRelationshipForTemplates } = require('../../utils/relationship');
+const { stringify } = require('../../utils');
 
 /* constants used throughout */
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
-
-const stringify = data => JSON.stringify(data, null, 4);
 
 const BASE_TEMPLATE_DATA = {
     skipUiGrouping: false,
@@ -487,12 +486,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                 // Load in-memory data for fields
                 this.context.fields.forEach(field => {
-                    prepareFieldForTemplates(entity, field, generator);
+                    prepareFieldForTemplates(entity, field, this);
                 });
 
                 // Load in-memory data for relationships
                 this.context.relationships.forEach(relationship => {
-                    prepareRelationshipForTemplates(relationship);
+                    prepareRelationshipForTemplates(entity, relationship, this);
                 });
             },
 
@@ -791,205 +790,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 BASE_TEMPLATE_DATA
             )
         );
-    }
-
-    _prepareRelationshipForTemplates(relationship, entity = this.context) {
-        const entityName = entity.name;
-        const relationshipOptions = relationship.options || {};
-        const otherEntityName = relationship.otherEntityName;
-        const otherEntityData = this.getEntityConfig(otherEntityName).getAll();
-        const jhiTablePrefix = entity.jhiTablePrefix || this.getTableName(entity.jhiPrefix);
-
-        relationship.otherEntityIsEmbedded = otherEntityData.embedded;
-        if (otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
-            otherEntityData.clientRootFolder = otherEntityData.microserviceName;
-        }
-
-        relationship.otherEntityPrimaryKeyType =
-            this.isBuiltInUserEntity(otherEntityName) && entity.authenticationType === 'oauth2'
-                ? 'String'
-                : this.getPkType(entity.databaseType);
-
-        // Look for fields at the other other side of the relationship
-        if (otherEntityData.relationships) {
-            let otherRelationship;
-            if (relationship.relationshipType === 'many-to-one' || !relationship.ownerSide) {
-                otherRelationship = otherEntityData.relationships.find(otherSideRelationship => {
-                    if (_.upperFirst(otherSideRelationship.otherEntityName) !== entityName) {
-                        return false;
-                    }
-                    if (!otherSideRelationship.otherEntityRelationshipName) {
-                        return false;
-                    }
-                    return otherSideRelationship.otherEntityRelationshipName === relationship.relationshipName;
-                });
-            } else {
-                otherRelationship = otherEntityData.relationships.find(otherSideRelationship => {
-                    if (_.upperFirst(otherSideRelationship.otherEntityName) !== entityName) {
-                        return false;
-                    }
-                    if (!relationship.otherEntityRelationshipName) {
-                        return false;
-                    }
-                    return relationship.otherEntityRelationshipName === otherSideRelationship.relationshipName;
-                });
-            }
-            if (otherRelationship) {
-                if (
-                    relationship.otherEntityRelationshipName &&
-                    relationship.otherEntityRelationshipName !== otherRelationship.relationshipName
-                ) {
-                    throw new Error(
-                        `Relationship name is not synchronized ${stringify(relationship)} with ${stringify(otherRelationship)}`
-                    );
-                }
-                if (
-                    !(relationship.relationshipType === 'one-to-one' && otherRelationship.relationshipType === 'one-to-one') &&
-                    !(relationship.relationshipType === 'many-to-one' && otherRelationship.relationshipType === 'one-to-many') &&
-                    !(relationship.relationshipType === 'one-to-many' && otherRelationship.relationshipType === 'many-to-one') &&
-                    !(relationship.relationshipType === 'many-to-many' && otherRelationship.relationshipType === 'many-to-many')
-                ) {
-                    throw new Error(
-                        `Relationship type is not synchronized ${stringify(relationship)} with ${stringify(otherRelationship)}`
-                    );
-                }
-                _.defaults(relationship, {
-                    otherEntityRelationshipName: otherRelationship.relationshipName,
-                    otherEntityRelationshipNamePlural: otherRelationship.relationshipNamePlural,
-                    otherEntityRelationshipNameCapitalized: otherRelationship.relationshipNameCapitalized,
-                    otherEntityRelationshipNameCapitalizedPlural: relationship.relationshipNameCapitalizedPlural,
-                });
-            } else {
-                this.warning(`Could not find the other side of the relationship ${stringify(relationship)}`);
-            }
-        }
-
-        if (relationship.otherEntityRelationshipName !== undefined) {
-            _.defaults(relationship, {
-                otherEntityRelationshipNamePlural: pluralize(relationship.otherEntityRelationshipName),
-                otherEntityRelationshipNameCapitalized: _.upperFirst(relationship.otherEntityRelationshipName),
-            });
-            _.defaults(relationship, {
-                otherEntityRelationshipNameCapitalizedPlural: pluralize(relationship.otherEntityRelationshipNameCapitalized),
-            });
-        }
-
-        const relationshipName = relationship.relationshipName;
-        _.defaults(relationship, {
-            relationshipNamePlural: pluralize(relationshipName),
-            relationshipFieldName: _.lowerFirst(relationshipName),
-            relationshipNameCapitalized: _.upperFirst(relationshipName),
-            relationshipNameHumanized: relationshipOptions.relationshipNameHumanized || _.startCase(relationshipName),
-            columnName: this.getColumnName(relationshipName),
-            otherEntityNamePlural: pluralize(otherEntityName),
-            otherEntityNameCapitalized: _.upperFirst(otherEntityName),
-            otherEntityFieldCapitalized: _.upperFirst(relationship.otherEntityField),
-            otherEntityTableName:
-                otherEntityData.entityTableName ||
-                this.getTableName(this.isBuiltInUserEntity(otherEntityName) ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName),
-        });
-
-        _.defaults(relationship, {
-            relationshipFieldNamePlural: pluralize(relationship.relationshipFieldName),
-            relationshipNameCapitalizedPlural:
-                relationship.relationshipName.length > 1
-                    ? pluralize(relationship.relationshipNameCapitalized)
-                    : _.upperFirst(pluralize(relationship.relationshipName)),
-            otherEntityNameCapitalizedPlural: pluralize(relationship.otherEntityNameCapitalized),
-        });
-
-        if (entity.dto === 'mapstruct') {
-            if (otherEntityData.dto !== 'mapstruct' && !this.isBuiltInUserEntity(otherEntityName)) {
-                this.warning(
-                    `This entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
-                );
-            }
-        }
-
-        if (isReservedTableName(relationship.otherEntityTableName, entity.prodDatabaseType) && jhiTablePrefix) {
-            const otherEntityTableName = relationship.otherEntityTableName;
-            relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
-        }
-
-        if (relationship.otherEntityAngularName === undefined) {
-            if (this.isBuiltInUserEntity(otherEntityName)) {
-                relationship.otherEntityAngularName = 'User';
-            } else {
-                const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
-                relationship.otherEntityAngularName =
-                    _.upperFirst(relationship.otherEntityName) + this.upperFirstCamelCase(otherEntityAngularSuffix);
-            }
-        }
-
-        _.defaults(relationship, {
-            otherEntityStateName: _.kebabCase(relationship.otherEntityAngularName),
-            jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering,
-        });
-
-        if (!this.isBuiltInUserEntity(otherEntityName)) {
-            _.defaults(relationship, {
-                otherEntityFileName: _.kebabCase(relationship.otherEntityAngularName),
-                otherEntityFolderName: _.kebabCase(relationship.otherEntityAngularName),
-            });
-
-            if (entity.skipUiGrouping || otherEntityData.clientRootFolder === '' || otherEntityData.clientRootFolder === undefined) {
-                relationship.otherEntityClientRootFolder = '';
-            } else {
-                relationship.otherEntityClientRootFolder = `${otherEntityData.clientRootFolder}/`;
-            }
-            if (otherEntityData.clientRootFolder) {
-                if (entity.clientRootFolder === otherEntityData.clientRootFolder) {
-                    relationship.otherEntityModulePath = relationship.otherEntityFolderName;
-                } else {
-                    relationship.otherEntityModulePath = `${entity.entityParentPathAddition ? `${entity.entityParentPathAddition}/` : ''}${
-                        otherEntityData.clientRootFolder
-                    }/${relationship.otherEntityFolderName}`;
-                }
-                relationship.otherEntityModelName = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
-                relationship.otherEntityPath = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
-            } else {
-                relationship.otherEntityModulePath = `${entity.entityParentPathAddition ? `${entity.entityParentPathAddition}/` : ''}${
-                    relationship.otherEntityFolderName
-                }`;
-                relationship.otherEntityModelName = relationship.otherEntityFileName;
-                relationship.otherEntityPath = relationship.otherEntityFolderName;
-            }
-        }
-
-        // Load in-memory data for root
-        if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) {
-            entity.fieldsContainOwnerManyToMany = true;
-        } else if (relationship.relationshipType === 'one-to-one' && !relationship.ownerSide) {
-            entity.fieldsContainNoOwnerOneToOne = true;
-        } else if (relationship.relationshipType === 'one-to-one' && relationship.ownerSide) {
-            entity.fieldsContainOwnerOneToOne = true;
-        } else if (relationship.relationshipType === 'one-to-many') {
-            entity.fieldsContainOneToMany = true;
-        } else if (relationship.relationshipType === 'many-to-one') {
-            entity.fieldsContainManyToOne = true;
-        }
-        if (relationship.otherEntityIsEmbedded) {
-            entity.fieldsContainEmbedded = true;
-        }
-
-        if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes('required')) {
-            if (entityName.toLowerCase() === relationship.otherEntityName.toLowerCase()) {
-                this.warning('Required relationships to the same entity are not supported.');
-            } else {
-                relationship.relationshipValidate = relationship.relationshipRequired = entity.validation = true;
-            }
-        }
-        relationship.nullable = !(relationship.relationshipValidate === true && relationship.relationshipRequired);
-
-        const entityType = relationship.otherEntityNameCapitalized;
-        if (!entity.differentTypes.includes(entityType)) {
-            entity.differentTypes.push(entityType);
-        }
-        if (!entity.differentRelationships[entityType]) {
-            entity.differentRelationships[entityType] = [];
-        }
-        entity.differentRelationships[entityType].push(relationship);
-        return relationship;
     }
 
     _fixEntityTableName(entityTableName, prodDatabaseType, jhiTablePrefix) {
