@@ -33,6 +33,7 @@ module.exports = {
  * @param applications the applications to exporters (key: application name, value: a JDLApplication).
  * @param {Object} configuration - the configuration object.
  * @param {Boolean} configuration.skipFileGeneration - set true to skip writing .yo-rc.json.
+ * @param {Integer} configuration.creationTimestampConfig - date representation to be written to creationTimestamp at .yo-rc.json.
  * @return object[] exported applications in their final form.
  */
 function exportApplications(applications, configuration = {}) {
