@@ -18,58 +18,33 @@
  */
 
 const path = require('path');
-const { formatApplicationToExport, formatApplicationsToExport } = require('./jhipster-application-formatter');
 const { createFolderIfItDoesNotExist, doesFileExist } = require('../../utils/file-utils');
 const { GENERATOR_NAME, writeConfigFile } = require('../export-utils');
 
 module.exports = {
     exportApplications,
     exportApplication,
-    exportApplicationInCurrentDirectory,
 };
 
 /**
  * Exports JDL applications to JDL files in separate folders (based on application base names).
- * @param applications the applications to exporters (key: application name, value: a JDLApplication).
- * @param {Object} configuration - the configuration object.
- * @param {Boolean} configuration.skipFileGeneration - set true to skip writing .yo-rc.json.
- * @param {Integer} configuration.creationTimestampConfig - date representation to be written to creationTimestamp at .yo-rc.json.
- * @return object[] exported applications in their final form.
+ * @param {Array<Object>} applications -  the formatted applications to export
  */
-function exportApplications(applications, configuration = {}) {
+function exportApplications(applications) {
     if (!applications) {
         throw new Error('Applications have to be passed to be exported.');
     }
-    const formattedApplications = formatApplicationsToExport(applications, configuration);
-    formattedApplications.forEach(formattedApplication => {
-        if (!configuration.skipFileGeneration) {
-            writeApplicationFileForMultipleApplications(formattedApplication);
-        }
+    applications.forEach(application => {
+        writeApplicationFileForMultipleApplications(application);
     });
-    return formattedApplications;
-}
-
-/**
- * Alias of exportApplication.
- */
-function exportApplicationInCurrentDirectory(application, configuration = {}) {
-    return exportApplication(application, configuration);
 }
 
 /**
  * Exports JDL a application to a JDL file in the current directory.
- * @param {Object} application - the JDL application to export.
- * @param {Object} configuration - the configuration object.
- * @param {Boolean} configuration.skipFileGeneration - set true to skip writing .yo-rc.json.
- * @param {Integer} configuration.creationTimestampConfig - date representation to be written to creationTimestamp at .yo-rc.json.
- * @return {Object} the exported application in its final form.
+ * @param {Object} application - the formatted JHipster application to export.
  */
-function exportApplication(application, configuration = {}) {
-    const exportableApplication = formatApplicationToExport(application, configuration);
-    if (!configuration.skipFileGeneration) {
-        writeConfigFile(exportableApplication);
-    }
-    return exportableApplication;
+function exportApplication(application) {
+    writeConfigFile(application);
 }
 
 /**
