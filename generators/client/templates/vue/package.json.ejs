@@ -140,6 +140,9 @@ limitations under the License.
     "vue-jest": "3.0.5",
     "vue-loader": "15.9.2",
     "vue-template-compiler": "2.6.11",
+    <%_ if (protractorTests || cypressTests) { _%>
+    "webdriver-manager": "12.1.7",
+    <%_ } _%>
     "webpack": "4.43.0",
     "webpack-bundle-analyzer": "3.8.0",
     "webpack-cli": "3.3.11",
