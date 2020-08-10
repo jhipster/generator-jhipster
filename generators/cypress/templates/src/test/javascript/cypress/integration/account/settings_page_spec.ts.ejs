@@ -40,7 +40,7 @@ import {
 
       // need to add a validation email with the same pattern in react and angular
       cy.clickOnLogoutItem();
-      cy.login("admin","admin");
+      cy.login("admin", "admin");
       cy.clickOnSettingsItem();
       cy.get(emailSettingsSelector).clear().type('admin@localhost.fr');
       cy.get(submitSettingsSelector).click();
