@@ -79,8 +79,9 @@ public class UserMapperTest {
 
         List<<%= asDto('User') %>> userDTOS = userMapper.usersToUserDTOs(users);
 
-        assertThat(userDTOS).isNotEmpty();
-        assertThat(userDTOS).size().isEqualTo(1);
+        assertThat(userDTOS)
+          .isNotEmpty()
+          .size().isEqualTo(1);
     }
 
     @Test
@@ -91,8 +92,9 @@ public class UserMapperTest {
 
         List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
 
-        assertThat(users).isNotEmpty();
-        assertThat(users).size().isEqualTo(1);
+        assertThat(users)
+          .isNotEmpty()
+          .size().isEqualTo(1);
     }
 
     @Test
@@ -106,8 +108,9 @@ public class UserMapperTest {
 
         List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
 
-        assertThat(users).isNotEmpty();
-        assertThat(users).size().isEqualTo(1);
+        assertThat(users)
+          .isNotEmpty()
+          .size().isEqualTo(1);
         assertThat(users.get(0).getAuthorities()).isNotNull();
         assertThat(users.get(0).getAuthorities()).isNotEmpty();
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
@@ -127,8 +130,9 @@ public class UserMapperTest {
 
         List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
 
-        assertThat(users).isNotEmpty();
-        assertThat(users).size().isEqualTo(1);
+        assertThat(users)
+          .isNotEmpty()
+          .size().isEqualTo(1);
         assertThat(users.get(0).getAuthorities()).isNotNull();
         assertThat(users.get(0).getAuthorities()).isEmpty();
     }

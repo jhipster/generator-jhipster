@@ -970,7 +970,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         assertThat(user.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(user.getLastName()).isEqualTo(DEFAULT_LASTNAME);
         assertThat(user.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        assertThat(user.getActivated()).isEqualTo(true);
+        assertThat(user.getActivated()).isTrue();
         <%_ if (databaseType !== 'cassandra') { _%>
         assertThat(user.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         <%_ } _%>
@@ -1010,7 +1010,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         assertThat(userDTO.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(userDTO.getLastName()).isEqualTo(DEFAULT_LASTNAME);
         assertThat(userDTO.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        assertThat(userDTO.isActivated()).isEqualTo(true);
+        assertThat(userDTO.isActivated()).isTrue();
         <%_ if (databaseType !== 'cassandra') { _%>
         assertThat(userDTO.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         <%_ } _%>
@@ -1029,10 +1029,10 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     @Test
     public void testAuthorityEquals() {
         Authority authorityA = new Authority();
-        assertThat(authorityA).isEqualTo(authorityA);
-        assertThat(authorityA).isNotEqualTo(null);
-        assertThat(authorityA).isNotEqualTo(new Object());
-        assertThat(authorityA.hashCode()).isEqualTo(0);
+        assertThat(authorityA)
+          .isNotEqualTo(null)
+          .isNotEqualTo(new Object());
+        assertThat(authorityA.hashCode()).isZero();
         assertThat(authorityA.toString()).isNotNull();
 
         Authority authorityB = new Authority();
@@ -1045,8 +1045,9 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         assertThat(authorityA).isNotEqualTo(authorityB);
 
         authorityB.setName(AuthoritiesConstants.USER);
-        assertThat(authorityA).isEqualTo(authorityB);
-        assertThat(authorityA.hashCode()).isEqualTo(authorityB.hashCode());
+        assertThat(authorityA)
+          .isEqualTo(authorityB)
+          .hasSameHashCodeAs(authorityB);
     }
     <%_ } _%>
 

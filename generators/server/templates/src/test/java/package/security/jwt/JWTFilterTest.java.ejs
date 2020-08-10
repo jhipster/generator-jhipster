@@ -90,7 +90,7 @@ public class JWTFilterTest {
         jwtFilter.doFilter(request, response, filterChain);
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(SecurityContextHolder.getContext().getAuthentication().getName()).isEqualTo("test-user");
-        assertThat(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString()).isEqualTo(jwt);
+        assertThat(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString()).hasToString(jwt);
         <%_ } else { _%>
         MockServerHttpRequest.BaseBuilder request = MockServerHttpRequest
             .get("/api/test")
@@ -102,7 +102,7 @@ public class JWTFilterTest {
                 .flatMap(c -> ReactiveSecurityContextHolder.getContext())
                 .map(SecurityContext::getAuthentication)
                 .doOnSuccess(auth -> assertThat(auth.getName()).isEqualTo("test-user"))
-                .doOnSuccess(auth -> assertThat(auth.getCredentials().toString()).isEqualTo(jwt))
+                .doOnSuccess(auth -> assertThat(auth.getCredentials().toString()).hasToString(jwt))
                 .then()
         ).block();
         <%_ } _%>

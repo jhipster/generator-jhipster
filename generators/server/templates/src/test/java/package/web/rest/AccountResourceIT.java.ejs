@@ -562,7 +562,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } _%>
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-        assertThat(userRepository.findOneByLogin("test-register-valid")<% if (reactive) { %>.blockOptional()<% } %>.isPresent()).isFalse();
+        assertThat(userRepository.findOneByLogin("test-register-valid")<% if (reactive) { %>.blockOptional()<% } %>).isEmpty();
 
         <%_ if (!reactive) { _%>
         restAccountMockMvc.perform(
@@ -579,7 +579,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .expectStatus().isCreated();
         <%_ } _%>
 
-        assertThat(userRepository.findOneByLogin("test-register-valid")<% if (reactive) { %>.blockOptional()<% } %>.isPresent()).isTrue();
+        assertThat(userRepository.findOneByLogin("test-register-valid")<% if (reactive) { %>.blockOptional()<% } %>).isPresent();
     }
 
     @Test<% if (databaseType === 'sql' && !reactive) { %>
@@ -614,7 +614,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } _%>
 
         Optional<<%= asEntity('User') %>> user = userRepository.findOneByEmailIgnoreCase("funky@example.com")<% if (reactive) { %>.blockOptional()<% } %>;
-        assertThat(user.isPresent()).isFalse();
+        assertThat(user).isEmpty();
     }
 
     @Test<% if (databaseType === 'sql' && !reactive) { %>
@@ -649,7 +649,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } _%>
 
         Optional<<%= asEntity('User') %>> user = userRepository.findOneByLogin("bob")<% if (reactive) { %>.blockOptional()<% } %>;
-        assertThat(user.isPresent()).isFalse();
+        assertThat(user).isEmpty();
     }
 
     @Test<% if (databaseType === 'sql' && !reactive) { %>
@@ -684,7 +684,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } _%>
 
         Optional<<%= asEntity('User') %>> user = userRepository.findOneByLogin("bob")<% if (reactive) { %>.blockOptional()<% } %>;
-        assertThat(user.isPresent()).isFalse();
+        assertThat(user).isEmpty();
     }
 
     @Test<% if (databaseType === 'sql' && !reactive) { %>
@@ -719,7 +719,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } _%>
 
         Optional<<%= asEntity('User') %>> user = userRepository.findOneByLogin("bob")<% if (reactive) { %>.blockOptional()<% } %>;
-        assertThat(user.isPresent()).isFalse();
+        assertThat(user).isEmpty();
     }
 
     @Test<% if (databaseType === 'sql' && !reactive) { %>
@@ -796,7 +796,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } _%>
 
         Optional<<%= asEntity('User') %>> testUser = userRepository.findOneByEmailIgnoreCase("alice2@example.com")<% if (reactive) { %>.blockOptional()<% } %>;
-        assertThat(testUser.isPresent()).isTrue();
+        assertThat(testUser).isPresent();
         testUser.get().setActivated(true);
         userRepository.save(testUser.get())<% if (reactive) { %>.block()<% } %>;
 
@@ -856,7 +856,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } _%>
 
         Optional<<%= asEntity('User') %>> testUser1 = userRepository.findOneByLogin("test-register-duplicate-email")<% if (reactive) { %>.blockOptional()<% } %>;
-        assertThat(testUser1.isPresent()).isTrue();
+        assertThat(testUser1).isPresent();
 
         // Duplicate email, different login
         ManagedUserVM secondUser = new ManagedUserVM();
@@ -888,10 +888,10 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } _%>
 
         Optional<<%= asEntity('User') %>> testUser2 = userRepository.findOneByLogin("test-register-duplicate-email")<% if (reactive) { %>.blockOptional()<% } %>;
-        assertThat(testUser2.isPresent()).isFalse();
+        assertThat(testUser2).isEmpty();
 
         Optional<<%= asEntity('User') %>> testUser3 = userRepository.findOneByLogin("test-register-duplicate-email-2")<% if (reactive) { %>.blockOptional()<% } %>;
-        assertThat(testUser3.isPresent()).isTrue();
+        assertThat(testUser3).isPresent();
 
         // Duplicate email - with uppercase email address
         ManagedUserVM userWithUpperCaseEmail = new ManagedUserVM();
@@ -924,7 +924,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } _%>
 
         Optional<<%= asEntity('User') %>> testUser4 = userRepository.findOneByLogin("test-register-duplicate-email-3")<% if (reactive) { %>.blockOptional()<% } %>;
-        assertThat(testUser4.isPresent()).isTrue();
+        assertThat(testUser4).isPresent();
         assertThat(testUser4.get().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
 
         testUser4.get().setActivated(true);
@@ -985,7 +985,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } _%>
 
         Optional<<%= asEntity('User') %>> userDup = userRepository.findOne<% if (databaseType === 'sql') { %>WithAuthorities<% } %>ByLogin("badguy")<% if (reactive) { %>.blockOptional()<% } %>;
-        assertThat(userDup.isPresent()).isTrue();
+        assertThat(userDup).isPresent();
         assertThat(userDup.get().getAuthorities()).hasSize(1)
             .containsExactly(<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { %>authorityRepository.findById(AuthoritiesConstants.USER).<% if (reactive) { %>block<% } else { %>get<% } %>()<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>AuthoritiesConstants.USER<% } %>);
     }
@@ -1098,7 +1098,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         assertThat(updatedUser.getLangKey()).isEqualTo(userDTO.getLangKey());
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql' || databaseType === 'neo4j') { %>
         assertThat(updatedUser.getImageUrl()).isEqualTo(userDTO.getImageUrl());<% } %>
-        assertThat(updatedUser.getActivated()).isEqualTo(true);
+        assertThat(updatedUser.getActivated()).isTrue();
         assertThat(updatedUser.getAuthorities()).isEmpty();
     }
 
