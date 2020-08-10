@@ -59,20 +59,20 @@
           </b-dropdown-item>
           <%_ } _%>
           <%_ if (websocket === 'spring-websocket') { _%>
-          <b-dropdown-item to="/admin/<%= jhiPrefixDashed %>-tracker" active-class="active">
+          <b-dropdown-item to="/admin/tracker" active-class="active">
             <font-awesome-icon icon="eye" />
             <span v-text="$t('global.menu.admin.tracker')">User tracker</span>
           </b-dropdown-item>
           <%_ } _%>
-          <b-dropdown-item  to="/admin/<%= jhiPrefixDashed %>-metrics" active-class="active">
+          <b-dropdown-item  to="/admin/metrics" active-class="active">
             <font-awesome-icon icon="tachometer-alt" />
             <span v-text="$t('global.menu.admin.metrics')">Metrics</span>
           </b-dropdown-item>
-          <b-dropdown-item to="/admin/<%= jhiPrefixDashed %>-health" active-class="active">
+          <b-dropdown-item to="/admin/health" active-class="active">
             <font-awesome-icon icon="heart" />
             <span v-text="$t('global.menu.admin.health')">Health</span>
           </b-dropdown-item>
-          <b-dropdown-item  to="/admin/<%= jhiPrefixDashed %>-configuration" active-class="active">
+          <b-dropdown-item  to="/admin/configuration" active-class="active">
             <font-awesome-icon icon="list" />
             <span v-text="$t('global.menu.admin.configuration')">Configuration</span>
           </b-dropdown-item>
