@@ -112,7 +112,7 @@ export const SettingsPage = (props: IUserSettingsProps) => {
               className="form-control"
               label={translate('settings.form.language')}
               value={props.account.langKey}
-              data-cy="langkey"
+              data-cy="langKey"
             >
               {locales.map(locale => (
                 <option value={locale} key={locale}>

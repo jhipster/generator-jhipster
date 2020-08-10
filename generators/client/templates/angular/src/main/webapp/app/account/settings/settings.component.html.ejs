@@ -115,7 +115,7 @@
 
                 <div class="form-group" *ngIf="languages && languages.length > 0">
                     <label for="langKey" jhiTranslate="settings.form.language">Language</label>
-                    <select class="form-control" id="langKey" name="langKey" formControlName="langKey" data-cy="langkey">
+                    <select class="form-control" id="langKey" name="langKey" formControlName="langKey" data-cy="langKey">
                         <option *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
                     </select>
                 </div>

@@ -85,7 +85,7 @@
           </div>
           <div class="form-group" v-if="languages && Object.keys(languages).length > 1">
             <label for="langKey" v-text="$t('settings.form.language')">Language</label>
-            <select class="form-control" id="langKey" name="langKey" v-model="settingsAccount.langKey" data-cy="langkey">
+            <select class="form-control" id="langKey" name="langKey" v-model="settingsAccount.langKey" data-cy="langKey">
               <option v-for="(language, key) in languages" :value="key" :key="`lang-${key}`">{{ language.name }}
               </option>
             </select>
