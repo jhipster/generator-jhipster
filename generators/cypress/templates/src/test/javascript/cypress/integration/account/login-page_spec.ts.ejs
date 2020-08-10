@@ -57,5 +57,6 @@ describe('login modal', () => {
     cy.get(submitLoginSelector).click();
     cy.wait('@authentication').its('status').should('equal', 200);
     cy.hash().should('eq', '');
+    cy.wait('@getAccount').its('status').should('equal', 200);
   });
 });

@@ -71,6 +71,15 @@ export const submitInitResetPasswordSelector = '[data-cy="submit"]';
 // End Specific Selector Attributes for Cypress
 // ***********************************************
 
+export const classInvalid = <%_ if (clientFramework === 'angularX') { _%>'ng-invalid';
+<%_ } else if (clientFramework === 'react') { _%>'av-invalid';
+<%_ } else { _%>'invalid';<%_ } _%>
+
+export const classValid = <%_ if (clientFramework === 'angularX') { _%>'ng-valid';
+<%_ } else if (clientFramework === 'react') { _%>'av-valid';
+<%_ } else { _%>'valid';<%_ } _%>
+
+
 Cypress.Commands.add('login', (username: string, password: string) => {
   cy.clickOnLoginItem();
   cy.get(usernameLoginSelector).type(username);

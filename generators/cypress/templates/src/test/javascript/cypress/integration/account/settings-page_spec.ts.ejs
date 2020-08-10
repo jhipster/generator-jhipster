@@ -24,7 +24,7 @@ import {
       cy.get(firstNameSettingsSelector).clear().type('jhipster');
       // need to modify email because default email does not match regex in vue
       cy.get(emailSettingsSelector).clear().type('user@localhost.fr');
-      cy.get(submitSettingsSelector).click();
+      cy.get(submitSettingsSelector).click({force: true});
       cy.wait('@settingsSave').its('status').should('equal', 200);
     });
 
@@ -32,29 +32,32 @@ import {
       cy.get(lastNameSettingsSelector).clear().type('retspihj');
       // need to modify email because default email does not match regex in vue
       cy.get(emailSettingsSelector).clear().type('user@localhost.fr');
-      cy.get(submitSettingsSelector).click();
+      cy.get(submitSettingsSelector).click({force: true});
       cy.wait('@settingsSave').its('status').should('equal', 200);
     });
 
     it("should be able to change 'user' email settings", () => {
       cy.get(emailSettingsSelector).clear().type('user@localhost.fr');
-      cy.get(submitSettingsSelector).click();
+      cy.get(submitSettingsSelector).click({force: true});
       cy.wait('@settingsSave').its('status').should('equal', 200);
+    });
 
-      // need to add a validation email with the same pattern in react and angular
+    it("should not be able to change 'user' settings if email already exists", () => {
+      // add an email for admin account
       cy.clickOnLogoutItem();
       cy.login('admin', 'admin');
       cy.clickOnSettingsItem();
       cy.get(emailSettingsSelector).clear().type('admin@localhost.fr');
-      cy.get(submitSettingsSelector).click();
-    });
-
-    it("should not be able to change 'user' settings if email already exists", () => {
+      cy.get(submitSettingsSelector).click({force: true});
       cy.clickOnLogoutItem();
+
+      // try to reuse email used in admin account
+      cy.server();
+      cy.route('POST', '/api/account').as('settingsNotSave');
       cy.login('user', 'user');
       cy.clickOnSettingsItem();
       cy.get(emailSettingsSelector).clear().type('admin@localhost.fr');
-      cy.get(submitSettingsSelector).click();
-      cy.wait('@settingsSave').its('status').should('equal', 400);
+      cy.get(submitSettingsSelector).click({force: true});
+      cy.wait('@settingsNotSave').its('status').should('equal', 400);
     });
   })

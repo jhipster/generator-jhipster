@@ -3,7 +3,9 @@ import {
     emailRegisterSelector,
     firstPasswordRegisterSelector,
     secondPasswordRegisterSelector,
-    submitRegisterSelector } from '../../support/commands';
+    submitRegisterSelector,
+    classInvalid,
+    classValid } from '../../support/commands';
 
   describe('/account/register', () => {
     beforeEach(() => {
@@ -25,62 +27,65 @@ import {
 
     it('requires username', () => {
       cy.get(usernameRegisterSelector)
-        .should('have.class', 'invalid')
+        .should('have.class', classInvalid)
         .type('test')
-        .should('have.class', 'valid')
+        .should('have.class', classValid)
         .clear();
     });
 
     it('requires email', () => {
       cy.get(emailRegisterSelector)
-        .should('have.class', 'invalid')
+        .should('have.class', classInvalid)
         .type('testtest.fr')
-        .should('have.class', 'invalid')
+        .should('have.class', classInvalid)
         .clear();
     });
 
     it('requires email in correct format', () => {
       cy.get(emailRegisterSelector)
-        .should('have.class', 'invalid')
+        .should('have.class', classInvalid)
         .type('test@test.fr')
-        .should('have.class', 'valid')
+        .should('have.class', classValid)
         .clear();
     });
 
     it('requires first password', () => {
       cy.get(firstPasswordRegisterSelector)
-        .should('have.class', 'invalid')
+        .should('have.class', classInvalid)
         .type('test@test.fr')
-        .should('have.class', 'valid')
+        .should('have.class', classValid)
         .clear();
     });
 
     it('requires password and confirm password to be same', () => {
       cy.get(firstPasswordRegisterSelector)
-        .should('have.class', 'invalid')
+        .should('have.class', classInvalid)
         .type('test')
-        .should('have.class', 'valid');
-
+        .should('have.class', classValid);
       cy.get(secondPasswordRegisterSelector)
-        .should('have.class', 'invalid')
+        .should('have.class', classInvalid)
         .type('test')
-        .should('have.class', 'valid');
-
+        .should('have.class', classValid);
       cy.get(firstPasswordRegisterSelector).clear();
       cy.get(secondPasswordRegisterSelector).clear();
     });
 
     it('requires password and confirm password have not the same value', () => {
       cy.get(firstPasswordRegisterSelector)
-        .should('have.class', 'invalid')
+        .should('have.class', classInvalid)
         .type('test')
-        .should('have.class', 'valid');
-
+        .should('have.class', classValid);
+      <%_ if (clientFramework === 'angularX') { _%>
       cy.get(secondPasswordRegisterSelector)
-        .should('have.class', 'invalid')
+        .should('have.class', classInvalid)
+        .type('otherPassword');
+      cy.get(submitRegisterSelector).should('be.disabled');
+      <%_ } else { _%>
+      cy.get(secondPasswordRegisterSelector)
+        .should('have.class', classInvalid)
         .type('otherPassword')
-        .should('have.class', 'invalid');
-
+        .should('have.class', classInvalid);
+      <%_ } _%>
       cy.get(firstPasswordRegisterSelector).clear();
       cy.get(secondPasswordRegisterSelector).clear();
     });
@@ -90,18 +95,7 @@ import {
       cy.get(emailRegisterSelector).type('jondoe@localhost.com');
       cy.get(firstPasswordRegisterSelector).type('jondoe');
       cy.get(secondPasswordRegisterSelector).type('jondoe');
-      cy.get(submitRegisterSelector).click();
+      cy.get(submitRegisterSelector).click({force: true});
       cy.wait('@registerSave').its('status').should('equal', 201);
-    });
-
-    it('error for existing user', () => {
-      cy.visit('');
-      cy.clickOnRegisterItem();
-      cy.get(usernameRegisterSelector).type('admin');
-      cy.get(emailRegisterSelector).type('admin@localhost.com');
-      cy.get(firstPasswordRegisterSelector).type('admin');
-      cy.get(secondPasswordRegisterSelector).type('admin');
-      cy.get(submitRegisterSelector).click();
-      cy.wait('@registerSave').its('status').should('equal', 400);
     });
   });
