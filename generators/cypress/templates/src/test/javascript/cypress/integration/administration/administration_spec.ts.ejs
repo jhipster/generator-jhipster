@@ -12,24 +12,24 @@ describe('/admin', () => {
 
     <%_ if (authenticationType === 'oauth2') { _%>
     beforeEach(() => {
-        cy.clearCache();
-        cy.kcLogout();
-        cy.visit('/');
-        cy.kcLogin('user');
-        cy.clickOnLoginItem();
+      cy.clearCache();
+      cy.kcLogout();
+      cy.visit('/');
+      cy.kcLogin('user');
+      cy.clickOnLoginItem();
     });
 
     after(() => {
-        cy.kcLogout();
+      cy.kcLogout();
     });
     <%_ } else { _%>
     before(() => {
-        cy.visit('');
-        cy.login('admin','admin');
+      cy.visit('');
+      cy.login('admin','admin');
     });
 
     after(() => {
-        cy.clickOnLogoutItem();
+      cy.clickOnLogoutItem();
     });
     <%_ } _%>
 
@@ -45,40 +45,40 @@ describe('/admin', () => {
     describe('/metrics', () => {
         it('should load the page', () => {
         <%_ if (clientFramework === "vue") { _%>
-        cy.clickOnAdminMenuItem('jhi-metrics');
+          cy.clickOnAdminMenuItem('jhi-metrics');
         <%_ } else { _%>
-        cy.clickOnAdminMenuItem('metrics');
+          cy.clickOnAdminMenuItem('metrics');
         <%_ } _%>
-        cy.get(metricsPageHeadingSelector).should('be.visible');
+          cy.get(metricsPageHeadingSelector).should('be.visible');
         });
     });
 
     describe('/health', () => {
         it('should load the page', () => {
         <%_ if (clientFramework === "vue") { _%>
-        cy.clickOnAdminMenuItem('jhi-health');
+          cy.clickOnAdminMenuItem('jhi-health');
         <%_ } else { _%>
-        cy.clickOnAdminMenuItem('health');
+          cy.clickOnAdminMenuItem('health');
         <%_ } _%>
-        cy.get(healthPageHeadingSelector).should('be.visible');
+          cy.get(healthPageHeadingSelector).should('be.visible');
         });
     });
 
     describe('/logs', () => {
         it('should load the page', () => {
-        cy.clickOnAdminMenuItem('logs');
-        cy.get(logsPageHeadingSelector).should('be.visible');
+          cy.clickOnAdminMenuItem('logs');
+          cy.get(logsPageHeadingSelector).should('be.visible');
         });
     });
 
     describe('/configuration', () => {
         it('should load the page', () => {
         <%_ if (clientFramework === "vue") { _%>
-        cy.clickOnAdminMenuItem('jhi-configuration');
+          cy.clickOnAdminMenuItem('jhi-configuration');
         <%_ } else { _%>
-        cy.clickOnAdminMenuItem('configuration');
+          cy.clickOnAdminMenuItem('configuration');
         <%_ } _%>
-        cy.get(configurationPageHeadingSelector).should('be.visible');
+          cy.get(configurationPageHeadingSelector).should('be.visible');
         });
     });
 
