@@ -102,7 +102,7 @@
         "eslint-config-prettier": "6.11.0",
         "eslint-plugin-chai-friendly": "^0.6.0",
         "eslint-plugin-import": "2.22.0",
-        "eslint-plugin-mocha": "7.0.1",
+        "eslint-plugin-mocha": "8.0.0",
         "eslint-plugin-prettier": "3.1.4",
         "fs-extra": "9.0.1",
         "jsdoc": "3.6.5",
