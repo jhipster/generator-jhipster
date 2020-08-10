@@ -28,6 +28,7 @@ describe('JHipster client generator', () => {
         });
         it('creates expected files for react configuration for client generator', () => {
             assert.noFile(expectedFiles.maven);
+            assert.file(expectedFiles.clientCommon);
             assert.file(
                 getFilesForOptions(reactFiles, {
                     enableTranslation: true,
@@ -63,6 +64,7 @@ describe('JHipster client generator', () => {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.i18nJson);
+            assert.file(expectedFiles.clientCommon);
             assert.file(
                 getFilesForOptions(angularFiles, {
                     enableTranslation: true,

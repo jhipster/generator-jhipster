@@ -367,7 +367,6 @@ const expectedFiles = {
     client: [
         'angular.json',
         '.eslintrc.json',
-        '.eslintignore',
         'package.json',
         'postcss.config.js',
         'proxy.conf.json',
@@ -531,6 +530,8 @@ const expectedFiles = {
         'webpack/webpack.dev.js',
         'webpack/webpack.prod.js',
     ],
+
+    clientCommon: ['.eslintignore'],
 
     i18n: [
         `${SERVER_MAIN_RES_DIR}i18n/messages_en.properties`,
