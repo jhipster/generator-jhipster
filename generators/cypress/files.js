@@ -50,16 +50,16 @@ const cypressFiles = {
         {
             condition: generator => generator.cypressTests && generator.authenticationType !== 'oauth2',
             path: TEST_SRC_DIR,
-            templates: ['cypress/integration/account/login_page_spec.ts'],
+            templates: ['cypress/integration/account/login-page_spec.ts'],
         },
         {
             condition: generator => generator.cypressTests && generator.authenticationType !== 'oauth2' && generator.databaseType !== 'no',
             path: TEST_SRC_DIR,
             templates: [
-                'cypress/integration/account/register_page_spec.ts',
-                'cypress/integration/account/settings_page_spec.ts',
-                'cypress/integration/account/password_page_spec.ts',
-                'cypress/integration/account/reset_password_page_spec.ts',
+                'cypress/integration/account/register-page_spec.ts',
+                'cypress/integration/account/settings-page_spec.ts',
+                'cypress/integration/account/password-page_spec.ts',
+                'cypress/integration/account/reset-password-page_spec.ts',
             ],
         },
         {
