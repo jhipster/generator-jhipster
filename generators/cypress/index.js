@@ -44,14 +44,6 @@ module.exports = class extends BaseBlueprintGenerator {
             validateFromCli() {
                 this.checkInvocationFromCLI();
             },
-
-            setupConstants() {
-                // Make constants available in templates
-                this.MAIN_DIR = constants.MAIN_DIR;
-                this.TEST_DIR = constants.TEST_DIR;
-                this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-                this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-            },
         };
     }
 
