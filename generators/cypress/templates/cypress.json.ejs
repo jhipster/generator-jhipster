@@ -7,7 +7,7 @@
   "fixturesFolder": "src/test/javascript/cypress/fixtures",
   "pluginsFile": "src/test/javascript/cypress/plugins/index.ts",
   "screenshotsFolder": "src/test/javascript/cypress/screenshots",
-  "chromeWebSecurity": false,
+  "chromeWebSecurity": <% if(authenticationType === 'oauth2') { %>false<% } else { %>true<% } %>,
   "viewportWidth": 1200,
   "viewportHeight": 720,
   "env": {

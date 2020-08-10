@@ -43,7 +43,6 @@ const cypressFiles = {
                 'cypress/support/commands.ts',
                 'cypress/support/navbar.ts',
                 'cypress/support/index.ts',
-                'cypress/support/utils.ts',
                 'cypress/tsconfig.json',
             ],
         },
@@ -65,7 +64,7 @@ const cypressFiles = {
         {
             condition: generator => generator.cypressTests && generator.authenticationType === 'oauth2',
             path: TEST_SRC_DIR,
-            templates: ['cypress/support/keycloak-oauth2.ts'],
+            templates: ['cypress/support/keycloak-oauth2.ts', 'cypress/support/utils.ts'],
         },
     ],
 };
