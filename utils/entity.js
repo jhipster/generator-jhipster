@@ -19,10 +19,59 @@
 
 const _ = require('lodash');
 const pluralize = require('pluralize');
+const { entityDefaultConfig } = require('../generators/generator-defaults');
+
+const BASE_TEMPLATE_DATA = {
+    skipUiGrouping: false,
+    haveFieldWithJavadoc: false,
+    existingEnum: false,
+    searchEngine: false,
+
+    fieldsContainDate: false,
+    fieldsContainInstant: false,
+    fieldsContainUUID: false,
+    fieldsContainZonedDateTime: false,
+    fieldsContainDuration: false,
+    fieldsContainLocalDate: false,
+    fieldsContainBigDecimal: false,
+    fieldsContainBlob: false,
+    fieldsContainImageBlob: false,
+    fieldsContainTextBlob: false,
+    fieldsContainBlobOrImage: false,
+    validation: false,
+    fieldsContainOwnerManyToMany: false,
+    fieldsContainNoOwnerOneToOne: false,
+    fieldsContainOwnerOneToOne: false,
+    fieldsContainOneToMany: false,
+    fieldsContainManyToOne: false,
+    fieldsContainEmbedded: false,
+    fieldsIsReactAvField: false,
+
+    get enums() {
+        return [];
+    },
+    // these variable hold field and relationship names for question options during update
+    get fieldNameChoices() {
+        return [];
+    },
+    get blobFields() {
+        return [];
+    },
+    get differentTypes() {
+        return [];
+    },
+    get differentRelationships() {
+        return [];
+    },
+    get i18nToLoad() {
+        return [];
+    },
+};
 
 function prepareEntityForTemplates(entityWithConfig, generator) {
     const entityName = entityWithConfig.name;
     const entityNamePluralizedAndSpinalCased = _.kebabCase(pluralize(entityName));
+    _.defaults(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
 
     entityWithConfig.entityTableName = entityWithConfig.entityTableName || generator.getTableName(entityName);
     entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix;
@@ -148,4 +197,25 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     return entityWithConfig;
 }
 
-module.exports = { prepareEntityForTemplates };
+/**
+ * Copy required application config into entity.
+ * Some entity features are related to the backend instead of the current app.
+ * This allows to entities files based on the backend features.
+ *
+ * @param {Object} entity - entity to copy the config into.
+ * @param {Object} config - config object.
+ * @returns {Object} the entity parameter for chaining.
+ */
+function loadRequiredConfigIntoEntity(entity, config) {
+    _.defaults(entity, {
+        databaseType: config.databaseType,
+        prodDatabaseType: config.prodDatabaseType,
+        skipUiGrouping: config.skipUiGrouping,
+        searchEngine: config.searchEngine,
+        jhiPrefix: config.jhiPrefix,
+        authenticationType: config.authenticationType,
+    });
+    return entity;
+}
+
+module.exports = { prepareEntityForTemplates, loadRequiredConfigIntoEntity };

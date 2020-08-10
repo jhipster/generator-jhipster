@@ -25,8 +25,7 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { isReservedClassName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
-const { entityDefaultConfig } = require('../generator-defaults');
-const { prepareEntityForTemplates } = require('../../utils/entity');
+const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../../utils/entity');
 const { prepareFieldForTemplates } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
 const { stringify } = require('../../utils');
@@ -35,53 +34,6 @@ const { stringify } = require('../../utils');
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
-
-const BASE_TEMPLATE_DATA = {
-    skipUiGrouping: false,
-    haveFieldWithJavadoc: false,
-    existingEnum: false,
-    searchEngine: false,
-
-    fieldsContainDate: false,
-    fieldsContainInstant: false,
-    fieldsContainUUID: false,
-    fieldsContainZonedDateTime: false,
-    fieldsContainDuration: false,
-    fieldsContainLocalDate: false,
-    fieldsContainBigDecimal: false,
-    fieldsContainBlob: false,
-    fieldsContainImageBlob: false,
-    fieldsContainTextBlob: false,
-    fieldsContainBlobOrImage: false,
-    validation: false,
-    fieldsContainOwnerManyToMany: false,
-    fieldsContainNoOwnerOneToOne: false,
-    fieldsContainOwnerOneToOne: false,
-    fieldsContainOneToMany: false,
-    fieldsContainManyToOne: false,
-    fieldsContainEmbedded: false,
-    fieldsIsReactAvField: false,
-
-    get enums() {
-        return [];
-    },
-    // these variable hold field and relationship names for question options during update
-    get fieldNameChoices() {
-        return [];
-    },
-    get blobFields() {
-        return [];
-    },
-    get differentTypes() {
-        return [];
-    },
-    get differentRelationships() {
-        return [];
-    },
-    get i18nToLoad() {
-        return [];
-    },
-};
 
 let useBlueprints;
 
@@ -479,17 +431,19 @@ class EntityGenerator extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
-            loadInMemoryData() {
-                this._loadEntityWithConfig();
+            loadConfig() {
+                // Update current context with config from file.
+                Object.assign(this.context, this.entityStorage.getAll());
+                loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
+            },
+            prepareForTemplates() {
                 const entity = this.context;
                 prepareEntityForTemplates(entity, this);
 
-                // Load in-memory data for fields
                 this.context.fields.forEach(field => {
                     prepareFieldForTemplates(entity, field, this);
                 });
 
-                // Load in-memory data for relationships
                 this.context.relationships.forEach(relationship => {
                     prepareRelationshipForTemplates(entity, relationship, this);
                 });
@@ -770,26 +724,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
         ) {
             throw new Error(`ownerSide is missing in .jhipster/${entityName}.json for relationship ${stringify(relationship)}`);
         }
-    }
-
-    _loadEntityWithConfig(entity = this.context, entityConfig = this.entityStorage.getAll()) {
-        Object.assign(
-            entity,
-            _.defaults(
-                {},
-                entityConfig,
-                {
-                    databaseType: this.jhipsterConfig.databaseType,
-                    prodDatabaseType: this.jhipsterConfig.prodDatabaseType,
-                    skipUiGrouping: this.jhipsterConfig.skipUiGrouping,
-                    searchEngine: this.jhipsterConfig.searchEngine,
-                    jhiPrefix: this.jhipsterConfig.jhiPrefix,
-                    authenticationType: this.jhipsterConfig.authenticationType,
-                },
-                entityDefaultConfig,
-                BASE_TEMPLATE_DATA
-            )
-        );
     }
 
     _fixEntityTableName(entityTableName, prodDatabaseType, jhiTablePrefix) {
