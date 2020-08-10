@@ -52,7 +52,7 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JWTFilterTest {
+class JWTFilterTest {
 
     private TokenProvider tokenProvider;
 
@@ -74,7 +74,7 @@ public class JWTFilterTest {
     }
 
     @Test
-    public void testJWTFilter()<% if (!reactive) { %> throws Exception<% } %> {
+    void testJWTFilter()<% if (!reactive) { %> throws Exception<% } %> {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
             "test-user",
             "test-password",
@@ -109,7 +109,7 @@ public class JWTFilterTest {
     }
 
     @Test
-    public void testJWTFilterInvalidToken()<% if (!reactive) { %> throws Exception<% } %> {
+    void testJWTFilterInvalidToken()<% if (!reactive) { %> throws Exception<% } %> {
         String jwt = "wrong_jwt";
         <%_ if (!reactive) { _%>
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -137,7 +137,7 @@ public class JWTFilterTest {
     }
 
     @Test
-    public void testJWTFilterMissingAuthorization()<% if (!reactive) { %> throws Exception<% } %> {
+    void testJWTFilterMissingAuthorization()<% if (!reactive) { %> throws Exception<% } %> {
         <%_ if (!reactive) { _%>
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setRequestURI("/api/test");
@@ -162,7 +162,7 @@ public class JWTFilterTest {
     }
 
     @Test
-    public void testJWTFilterMissingToken()<% if (!reactive) { %> throws Exception<% } %> {
+    void testJWTFilterMissingToken()<% if (!reactive) { %> throws Exception<% } %> {
         <%_ if (!reactive) { _%>
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Bearer ");
@@ -189,7 +189,7 @@ public class JWTFilterTest {
     }
 
     @Test
-    public void testJWTFilterWrongScheme()<% if (!reactive) { %> throws Exception<% } %> {
+    void testJWTFilterWrongScheme()<% if (!reactive) { %> throws Exception<% } %> {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
             "test-user",
             "test-password",
