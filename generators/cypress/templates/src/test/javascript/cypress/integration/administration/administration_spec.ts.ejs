@@ -18,12 +18,11 @@ describe('/admin', () => {
       cy.keycloackLogin('user');
       cy.clickOnLoginItem();
     });
-
-    after(() => {
-      cy.keycloackLogout();
-    });
     <%_ } else { _%>
     before(() => {
+      cy.window().then((win) => {
+        win.sessionStorage.clear()
+      });
       cy.visit('');
       cy.login('admin','admin');
     });

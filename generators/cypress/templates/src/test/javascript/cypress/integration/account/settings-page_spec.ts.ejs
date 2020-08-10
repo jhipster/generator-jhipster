@@ -6,16 +6,19 @@ import {
   } from '../../support/commands'
 
   describe('/account/settings', () => {
-    beforeEach(() => {
-      cy.server();
-      cy.route('POST', '/api/account').as('settingsSave');
-    });
-
     before(() => {
+      cy.window().then((win) => {
+        win.sessionStorage.clear()
+      });
       cy.visit('');
       cy.login("user","user");
       cy.clickOnSettingsItem();
     })
+
+    beforeEach(() => {
+      cy.server();
+      cy.route('POST', '/api/account').as('settingsSave');
+    });
 
     it("should be able to change 'user' firstname settings", () => {
       cy.get(firstNameSettingsSelector).clear().type('jhipster');
@@ -54,8 +57,4 @@ import {
       cy.get(submitSettingsSelector).click();
       cy.wait('@settingsSave').its('status').should('equal', 400);
     });
-
-    after(() => {
-      cy.clickOnLogoutItem();
-    })
   })

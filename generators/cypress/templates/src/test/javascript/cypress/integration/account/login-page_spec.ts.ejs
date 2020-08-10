@@ -2,12 +2,11 @@ import { titleLoginSelector, errorLoginSelector, usernameLoginSelector, password
 
 describe('login modal', () => {
   before(() => {
+    cy.window().then((win) => {
+      win.sessionStorage.clear()
+    });
     cy.visit('');
     cy.clickOnLoginItem();
-  });
-
-  after(() => {
-    cy.clickOnLogoutItem();
   });
 
   it('greets with signin', () => {

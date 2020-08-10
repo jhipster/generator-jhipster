@@ -41,12 +41,12 @@ class LoginModal extends React.Component<ILoginModalProps> {
     return (
       <Modal isOpen={this.props.showModal} toggle={handleClose} backdrop="static" id="login-page" autoFocus={false}>
         <AvForm onSubmit={this.handleSubmit}>
-          <ModalHeader id="login-title" data-cy="login-title" toggle={handleClose}><Translate contentKey="login.title">Sign in</Translate></ModalHeader>
+          <ModalHeader id="login-title" data-cy="loginTitle" toggle={handleClose}><Translate contentKey="login.title">Sign in</Translate></ModalHeader>
           <ModalBody>
             <Row>
               <Col md="12">
                 { loginError ?
-                  <Alert color="danger" data-cy="login-error">
+                  <Alert color="danger" data-cy="loginError">
                     <Translate contentKey="login.messages.error.authentication">
                       <strong>Failed to sign in!</strong> Please check your credentials and try again.
                     </Translate>

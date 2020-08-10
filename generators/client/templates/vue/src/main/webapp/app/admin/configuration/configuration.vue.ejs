@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 id="configuration-page-heading" v-text="$t('configuration.title')" data-cy="configuration-page-heading">Configuration</h2>
+    <h2 id="configuration-page-heading" v-text="$t('configuration.title')" data-cy="configurationPageHeading">Configuration</h2>
 
     <div v-if="allConfiguration && configuration">
       <span v-text="$t('configuration.filter')">Filter (by prefix)</span> <input type="text" v-model="filtered"

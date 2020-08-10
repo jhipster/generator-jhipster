@@ -12,6 +12,9 @@ import {
     });
 
     before(() => {
+      cy.window().then((win) => {
+        win.sessionStorage.clear()
+      });
       cy.visit('');
       cy.clickOnRegisterItem();
     });

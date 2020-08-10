@@ -74,10 +74,12 @@ Cypress.Commands.add('keycloackLogout', () => {
   });
 });
 
-
 Cypress.Commands.add('clearCache', () => {
   cy.clearCookies();
   cy.clearLocalStorage();
+  cy.window().then((win) => {
+    win.sessionStorage.clear()
+  });
 });
 
 declare global {

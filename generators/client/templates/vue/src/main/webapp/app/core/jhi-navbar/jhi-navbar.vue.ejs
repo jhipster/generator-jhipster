@@ -41,7 +41,7 @@
           :class="{'router-link-active': subIsActive('/admin')}"
           active-class="active"
           class="pointer"
-          data-cy="admin-menu">
+          data-cy="adminMenu">
           <span slot="button-content" class="navbar-dropdown-menu">
             <font-awesome-icon icon="cogs" />
             <span v-text="$t('global.menu.admin.main')">Administration</span>
@@ -110,7 +110,7 @@
           :class="{'router-link-active': subIsActive('/account')}"
           active-class="active"
           class="pointer"
-          data-cy="account-menu">
+          data-cy="accountMenu">
           <span slot="button-content" class="navbar-dropdown-menu">
             <font-awesome-icon icon="user" />
             <span v-text="$t('global.menu.account.main')">
@@ -122,7 +122,7 @@
             <font-awesome-icon icon="wrench" />
             <span v-text="$t('global.menu.account.settings')">Settings</span>
           </b-dropdown-item>
-          <b-dropdown-item data-cy="password-item" to="/account/password" tag="b-dropdown-item" v-if="authenticated" active-class="active">
+          <b-dropdown-item data-cy="passwordItem" to="/account/password" tag="b-dropdown-item" v-if="authenticated" active-class="active">
             <font-awesome-icon icon="lock" />
             <span v-text="$t('global.menu.account.password')">Password</span>
           </b-dropdown-item>
