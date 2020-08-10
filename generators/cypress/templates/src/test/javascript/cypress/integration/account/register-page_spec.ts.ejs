@@ -24,41 +24,72 @@ import {
     });
 
     it('requires username', () => {
-      cy.get(submitRegisterSelector).click({force: true});
-      // Should stay in the same page when register fails
-      cy.get(submitRegisterSelector).should('be.visible');
-      cy.get(usernameRegisterSelector).type('test');
+      cy.get(usernameRegisterSelector)
+        .should('have.class', 'invalid')
+        .type('test')
+        .should('have.class', 'valid')
+        .clear();
     });
 
     it('requires email', () => {
-      cy.get(submitRegisterSelector).click({force: true});
-      // Should stay in the same page when register fails
-      cy.get(submitRegisterSelector).should('be.visible');
-      cy.get(emailRegisterSelector).type('testtest.fr');
+      cy.get(emailRegisterSelector)
+        .should('have.class', 'invalid')
+        .type('testtest.fr')
+        .should('have.class', 'invalid')
+        .clear();
     });
 
     it('requires email in correct format', () => {
-      cy.get(submitRegisterSelector).click({force: true});
-      // Should stay in the same page when register fails
-      cy.get(submitRegisterSelector).should('be.visible');
-      cy.get(emailRegisterSelector).type('test@test.fr');
+      cy.get(emailRegisterSelector)
+        .should('have.class', 'invalid')
+        .type('test@test.fr')
+        .should('have.class', 'valid')
+        .clear();
     });
 
     it('requires first password', () => {
-      cy.get(submitRegisterSelector).click({force: true});
-      // Should stay in the same page when register fails
-      cy.get(submitRegisterSelector).should('be.visible');
-      cy.get(firstPasswordRegisterSelector).type('test');
+      cy.get(firstPasswordRegisterSelector)
+        .should('have.class', 'invalid')
+        .type('test@test.fr')
+        .should('have.class', 'valid')
+        .clear();
     });
 
     it('requires password and confirm password to be same', () => {
-      cy.get(submitRegisterSelector).click({force: true});
-      // Should stay in the same page when register fails
-      cy.get(submitRegisterSelector).should('be.visible');
-      cy.get(secondPasswordRegisterSelector).type('test');
+      cy.get(firstPasswordRegisterSelector)
+        .should('have.class', 'invalid')
+        .type('test')
+        .should('have.class', 'valid');
+
+      cy.get(secondPasswordRegisterSelector)
+        .should('have.class', 'invalid')
+        .type('test')
+        .should('have.class', 'valid');
+
+      cy.get(firstPasswordRegisterSelector).clear();
+      cy.get(secondPasswordRegisterSelector).clear();
+    });
+
+    it('requires password and confirm password have not the same value', () => {
+      cy.get(firstPasswordRegisterSelector)
+        .should('have.class', 'invalid')
+        .type('test')
+        .should('have.class', 'valid');
+
+      cy.get(secondPasswordRegisterSelector)
+        .should('have.class', 'invalid')
+        .type('otherPassword')
+        .should('have.class', 'invalid');
+
+      cy.get(firstPasswordRegisterSelector).clear();
+      cy.get(secondPasswordRegisterSelector).clear();
     });
 
     it('register a valid user', () => {
+      cy.get(usernameRegisterSelector).type('jon_doe');
+      cy.get(emailRegisterSelector).type('jondoe@localhost.com');
+      cy.get(firstPasswordRegisterSelector).type('jondoe');
+      cy.get(secondPasswordRegisterSelector).type('jondoe');
       cy.get(submitRegisterSelector).click();
       cy.wait('@registerSave').its('status').should('equal', 201);
     });
