@@ -52,6 +52,10 @@ import {
       cy.clickOnLogoutItem();
 
       // try to reuse email used in admin account
+      cy.window().then((win) => {
+        win.sessionStorage.clear()
+      });
+      cy.visit('');
       cy.server();
       cy.route('POST', '/api/account').as('settingsNotSave');
       cy.login('user', 'user');
