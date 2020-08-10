@@ -6,7 +6,7 @@
 
 import { getAuthCodeFromLocation } from './utils';
 
-Cypress.Commands.add("kcLogin", (user: string) => {
+Cypress.Commands.add("keycloackLogin", (user: string) => {
   Cypress.log({name: "Login"});
 
   cy.fixture(`users/${user}`).then((userData) => {
@@ -62,14 +62,14 @@ Cypress.Commands.add("kcLogin", (user: string) => {
   });
 });
 
-Cypress.Commands.add('kcLogout', () => {
-  const kcRoot: string = Cypress.env("auth_base_url");
-  const kcRealm: string = Cypress.env("auth_realm");
-  const kcRedirectUri: string = Cypress.env("redirect_uri");
+Cypress.Commands.add('keycloackLogout', () => {
+  const keycloackRoot: string = Cypress.env("auth_base_url");
+  const keycloackRealm: string = Cypress.env("auth_realm");
+  const keycloackRedirectUri: string = Cypress.env("redirect_uri");
   return cy.request({
-      url: `${kcRoot}/realms/${kcRealm}/protocol/openid-connect/logout`,
+      url: `${keycloackRoot}/realms/${keycloackRealm}/protocol/openid-connect/logout`,
       qs: {
-          redirect_uri: kcRedirectUri
+          redirect_uri: keycloackRedirectUri
       }
   });
 });
@@ -83,8 +83,8 @@ Cypress.Commands.add('clearCache', () => {
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
-      kcLogin(user: string): Cypress.Chainable;
-      kcLogout(): Cypress.Chainable;
+      keycloackLogin(user: string): Cypress.Chainable;
+      keycloackLogout(): Cypress.Chainable;
       clearCache(): Cypress.Chainable;
     }
   }

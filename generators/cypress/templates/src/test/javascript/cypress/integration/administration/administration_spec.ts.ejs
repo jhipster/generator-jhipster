@@ -13,14 +13,14 @@ describe('/admin', () => {
     <%_ if (authenticationType === 'oauth2') { _%>
     beforeEach(() => {
       cy.clearCache();
-      cy.kcLogout();
+      cy.keycloackLogout();
       cy.visit('/');
-      cy.kcLogin('user');
+      cy.keycloackLogin('user');
       cy.clickOnLoginItem();
     });
 
     after(() => {
-      cy.kcLogout();
+      cy.keycloackLogout();
     });
     <%_ } else { _%>
     before(() => {
