@@ -168,7 +168,7 @@ limitations under the License.
 <%_ } _%>
 <%_ if (cypressTests) { _%>
     "cypress": "cypress open",
-    "cypress:run": "cypress run --browser chrome",
+    "cypress:run": "cypress run --browser chrome --headless",
 <%_ } _%>
 <%_ if (protractorTests || cypressTests) { _%>
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
