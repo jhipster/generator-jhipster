@@ -16,6 +16,7 @@ import {
     })
 
     beforeEach(() => {
+      <%_ if (authenticationType === 'session') { _%>Cypress.Cookies.preserveOnce('JSESSIONID', 'XSRF-TOKEN')<% } %>
       cy.server();
       cy.route('POST', '/api/account').as('settingsSave');
     });
@@ -45,6 +46,7 @@ import {
     it("should not be able to change 'user' settings if email already exists", () => {
       // add an email for admin account
       cy.clickOnLogoutItem();
+      cy.visit('');
       cy.login('admin', 'admin');
       cy.clickOnSettingsItem();
       cy.get(emailSettingsSelector).clear().type('admin@localhost.fr');

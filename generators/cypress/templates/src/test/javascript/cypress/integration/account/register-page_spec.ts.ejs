@@ -9,6 +9,7 @@ import {
 
   describe('/account/register', () => {
     beforeEach(() => {
+      <%_ if (authenticationType === 'session') { _%>Cypress.Cookies.preserveOnce('JSESSIONID', 'XSRF-TOKEN')<% } %>
       cy.server();
       cy.route('POST', '/api/register').as('registerSave');
     });

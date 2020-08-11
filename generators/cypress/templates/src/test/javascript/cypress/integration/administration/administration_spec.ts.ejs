@@ -26,10 +26,6 @@ describe('/admin', () => {
       cy.visit('');
       cy.login('admin', 'admin');
     });
-
-    after(() => {
-      cy.clickOnLogoutItem();
-    });
     <%_ } _%>
 
     <%_ if (!skipUserManagement) { _%>
