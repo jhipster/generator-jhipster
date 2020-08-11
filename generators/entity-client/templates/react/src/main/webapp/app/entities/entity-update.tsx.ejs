@@ -35,16 +35,13 @@ import {
   <% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput<% if (fieldsIsReactAvField) { %>, AvField <% } %> } from 'availity-reactstrap-validation';
 import {
-  Translate,
-  translate,
-  ICrudGetAction,
-  ICrudGetAllAction,
   <%_ if (fieldsContainBlob) { _%>
   setFileData,
   <% if (fieldsContainBlobOrImage) { %> openFile,<% } %>
   byteSize,
   <%_ } _%>
-  ICrudPutAction
+  Translate,
+  translate
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
@@ -123,7 +120,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
   <%_ relFieldNames.forEach(val => { _%>
   const [<%= val.relationshipFieldName %>Id, set<%= upperFirstCamelCase(val.relationshipFieldName) %>Id] = useState('0');
   <%_ }) _%>
-  const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
+  const [isNew] = useState(!props.match.params || !props.match.params.id);
 
   const { <%= entityInstance %>Entity,<%
   uniqueRelationFields.forEach(rel => {

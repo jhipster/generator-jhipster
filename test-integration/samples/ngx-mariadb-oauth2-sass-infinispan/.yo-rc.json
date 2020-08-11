@@ -21,6 +21,7 @@
         "serviceDiscoveryType": false,
         "enableTranslation": false,
         "clientPackageManager": "npm",
-        "clientFramework": "angularX"
+        "clientFramework": "angularX",
+        "creationTimestamp": 1596513172471
     }
 }

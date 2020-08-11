@@ -21,6 +21,7 @@
         "jhiPrefix": "myPrefix",
         "serviceDiscoveryType": false,
         "clientPackageManager": "npm",
-        "clientFramework": "react"
+        "clientFramework": "react",
+        "creationTimestamp": 1596513172471
     }
 }

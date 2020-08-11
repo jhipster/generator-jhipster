@@ -5,7 +5,7 @@ import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
-import { <%= angularXAppName %>TestModule } from '../../../test.module';
+import { TestModule } from '../../../test.module';
 import { AlertErrorComponent } from 'app/shared/alert/alert-error.component';
 import { MockAlertService } from '../../../helpers/mock-alert.service';
 
@@ -17,7 +17,7 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [<%= angularXAppName %>TestModule<% if (enableTranslation) { %>, TranslateModule.forRoot()<% } %>],
+                imports: [TestModule<% if (enableTranslation) { %>, TranslateModule.forRoot()<% } %>],
                 declarations: [AlertErrorComponent],
                 providers: [
                     JhiEventManager,

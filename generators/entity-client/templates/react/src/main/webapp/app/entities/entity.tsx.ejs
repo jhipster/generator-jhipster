@@ -33,8 +33,8 @@ import {
     <%_ } _%>
   byteSize,
   <%_ } _%>
-  Translate<% if (searchEngine !== false) { %>, translate, ICrudSearchAction<% } %>,
-  ICrudGetAllAction<% if (fieldsContainDate) { %>, TextFormat<% } %>
+  Translate<% if (searchEngine !== false) { %>, translate, ICrudSearchAction<% } %>
+  <% if (fieldsContainDate) { %>, TextFormat<% } %>
   <%_ if (pagination !== 'no') { _%>
   , getSortState, IPaginationBaseState
   <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>

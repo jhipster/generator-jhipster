@@ -211,7 +211,7 @@ module.exports = class extends needleClientBase {
     }
 
     addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, entityUrl, microServiceName) {
-        const entityModulePath = `${this.CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`;
+        const entityModulePath = `${this.CLIENT_MAIN_SRC_DIR}app/entities/entity-routing.module.ts`;
         try {
             const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(
                 entityModulePath,
@@ -220,11 +220,10 @@ module.exports = class extends needleClientBase {
             );
 
             if (!isSpecificEntityAlreadyGenerated) {
-                const appName = this.generator.getAngularXAppName();
                 const modulePath = `./${entityFolderName}/${entityFileName}.module`;
                 const moduleName = microServiceName
                     ? `${this.generator.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`
-                    : `${appName}${entityAngularName}Module`;
+                    : `${entityAngularName}Module`;
 
                 this._addRoute(entityUrl, modulePath, moduleName, 'jhipster-needle-add-entity-route', entityModulePath);
             }
