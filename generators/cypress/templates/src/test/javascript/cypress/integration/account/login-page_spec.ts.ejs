@@ -46,7 +46,7 @@ describe('login modal', () => {
     cy.get(usernameLoginSelector).type('admin');
     cy.get(passwordLoginSelector).type('bad-password');
     cy.get(submitLoginSelector).click();
-    cy.wait('@authenticate').its('status').should('equal', <%_ if (authenticationType === 'session') { _%>401<% } else { %>400<% } %>);
+    cy.wait('@authenticate').its('status').should('equal', 401);
     cy.get(errorLoginSelector).should('be.visible');
     cy.get(usernameLoginSelector).clear();
     cy.get(passwordLoginSelector).clear();
