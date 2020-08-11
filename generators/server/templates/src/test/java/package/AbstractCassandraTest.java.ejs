@@ -27,7 +27,11 @@ import org.apache.thrift.transport.TTransportException;
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
 import org.junit.jupiter.api.BeforeAll;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.support.TestPropertySourceUtils;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
@@ -48,12 +52,20 @@ import java.util.List;
  * Base class for starting/stopping Cassandra during tests.
  */
 @ActiveProfiles(JHipsterConstants.SPRING_PROFILE_TEST)
+@ContextConfiguration(initializers = AbstractCassandraTest.CassandraPortInitializer.class)
 public class AbstractCassandraTest {
 
     public static final String CASSANDRA_UNIT_KEYSPACE = "cassandra_unit_keyspace";
-    public static GenericContainer CASSANDRA_CONTAINER = null;
+    public static final GenericContainer CASSANDRA_CONTAINER;
     public static final int CASSANDRA_TEST_PORT = 9042;
     private static boolean started = false;
+
+    static {
+        CASSANDRA_CONTAINER =
+            new GenericContainer("<%= DOCKER_CASSANDRA %>")
+                .waitingFor(Wait.forListeningPort().withStartupTimeout(Duration.ofSeconds(30)))
+                .withExposedPorts(CASSANDRA_TEST_PORT);
+    }
 
     @BeforeAll
     public static void startServer() throws TTransportException, ConfigurationException, IOException, URISyntaxException {
@@ -75,11 +87,6 @@ public class AbstractCassandraTest {
     }
 
     private static void startTestcontainer() throws TTransportException, IOException {
-        CASSANDRA_CONTAINER =
-            new GenericContainer("<%= DOCKER_CASSANDRA %>")
-                .waitingFor(Wait.forListeningPort().withStartupTimeout(Duration.ofSeconds(30)))
-                .withExposedPorts(CASSANDRA_TEST_PORT);
-
         CASSANDRA_CONTAINER.start();
     }
 
@@ -106,6 +113,15 @@ public class AbstractCassandraTest {
 
         for (String fileName : scripts) {
             dataLoader.load(new ClassPathCQLDataSet(cqlDir + fileName, false, false, CASSANDRA_UNIT_KEYSPACE));
+        }
+    }
+
+    public static class CassandraPortInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+        @Override
+        public void initialize(ConfigurableApplicationContext applicationContext) {
+            TestPropertySourceUtils.addInlinedPropertiesToEnvironment(applicationContext,
+                "spring.data.cassandra.port=" + AbstractCassandraTest.CASSANDRA_CONTAINER.getMappedPort(AbstractCassandraTest.CASSANDRA_TEST_PORT)
+            );
         }
     }
 }

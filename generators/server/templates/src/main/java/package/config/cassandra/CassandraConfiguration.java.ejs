@@ -35,6 +35,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.cassandra.core.convert.CassandraCustomConversions;
@@ -51,13 +52,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Configuration<% if (applicationType === 'gateway' && databaseType !== 'cassandra') { %>
-@ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")<% } %>
+@Configuration
+<%_ if (applicationType === 'gateway' && databaseType !== 'cassandra') { %>
+@ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")
+<%_ } %>
 @Profile({JHipsterConstants.SPRING_PROFILE_DEVELOPMENT, JHipsterConstants.SPRING_PROFILE_PRODUCTION})
+@Import(CassandraConfiguration.ClusterBuilderCustomizerConfiguration.class)
 public class CassandraConfiguration {
-
-    @Value("${spring.data.cassandra.protocolVersion:V4}")
-    private ProtocolVersion protocolVersion;
 
     @Autowired(required = false)
     MetricRegistry metricRegistry;
@@ -81,7 +82,7 @@ public class CassandraConfiguration {
     }
 
     @Bean
-    public CassandraCustomConversions cassandraCustomConversions(Cluster cluster) {
+    public CassandraCustomConversions cassandraCustomConversions(@Value("${spring.data.cassandra.protocolVersion:V4}") ProtocolVersion protocolVersion) {
         List<Converter<?, ?>> converters = new ArrayList<>();
         converters.add(TupleToZonedDateTimeConverter.INSTANCE);
         converters.add(new ZonedDateTimeToTupleConverter(protocolVersion, cluster.getConfiguration().getCodecRegistry()));
@@ -118,22 +119,19 @@ public class CassandraConfiguration {
         }
     }
 
-    @Bean
-    ClusterBuilderCustomizer clusterBuilderCustomizer(CassandraProperties properties) {
-        return builder -> builder
-            .withProtocolVersion(protocolVersion)
-            .withPort(getPort(properties))
-            .withoutJMXReporting()
-            .withoutMetrics();
-    }
-
-    protected int getPort(CassandraProperties properties) {
-        return properties.getPort();
-    }
-
     @Bean(destroyMethod = "close")
-    public Session session(CassandraProperties properties, Cluster cluster) {
+    public Session session(CassandraProperties properties) {
         log.debug("Configuring Cassandra session");
         return StringUtils.hasText(properties.getKeyspaceName()) ? cluster.connect(properties.getKeyspaceName()) : cluster.connect();
+    }
+
+    public static class ClusterBuilderCustomizerConfiguration {
+        @Bean
+        ClusterBuilderCustomizer clusterBuilderCustomizer(@Value("${spring.data.cassandra.protocolVersion:V4}") ProtocolVersion protocolVersion) {
+            return builder -> builder
+                .withProtocolVersion(protocolVersion)
+                .withoutJMXReporting()
+                .withoutMetrics();
+        }
     }
 }
