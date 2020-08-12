@@ -24,26 +24,12 @@ const ejs = require('ejs');
 const _ = require('lodash');
 const fs = require('fs');
 const crypto = require('crypto');
-const randexp = require('randexp');
-const faker = require('faker');
 const os = require('os');
 
 const constants = require('./generator-constants');
 const FileUtils = require('../jdl/utils/file-utils');
 
 const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
-
-class RandexpWithFaker extends randexp {
-    constructor(regexp, m) {
-        super(regexp, m);
-        this.max = 5;
-    }
-
-    // In order to have consistent results with RandExp, the RNG is seeded.
-    randInt(min, max) {
-        return faker.random.number({ min, max });
-    }
-}
 
 module.exports = {
     rewrite,
@@ -67,7 +53,6 @@ module.exports = {
     loadYoRc,
     packageNameToNamespace,
     stringHashCode,
-    RandexpWithFaker,
     gitExec,
     isGitInstalled,
     vueReplaceTranslation,
