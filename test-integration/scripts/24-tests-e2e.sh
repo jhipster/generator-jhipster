@@ -43,8 +43,23 @@ launchCurlOrE2e() {
         return 1
     fi
 
-    if [ "$JHI_CYPRESS" != 1 ] || [ "$JHI_PROTRACTOR" != 1 ]; then
-        return 0
+    runE2e "CYPRESS"
+    runE2e "PROTRACTOR"
+
+    return $?
+}
+
+runE2e() {
+    testFramework=$1
+
+    if [ "$testFramework" == "CYPRESS" ]; then
+        if [ "$JHI_CYPRESS" != 1 ]; then
+            return 0
+        fi
+    elif [ "$testFramework" == "PROTRACTOR" ]; then
+        if [ "$JHI_PROTRACTOR" != 1 ]; then
+            return 0
+        fi
     fi
 
     retryCount=0
@@ -53,10 +68,10 @@ launchCurlOrE2e() {
     do
         result=0
         if [[ -f "tsconfig.json" ]]; then
-            if [ -z "$JHI_CYPRESS" ]; then
-                npm run e2e
-            else
+            if [ "$testFramework" == "CYPRESS" ]; then
                 npm run cypress:run
+            elif [ "$testFramework" == "PROTRACTOR" ]; then
+                npm run e2e
             fi
         fi
         result=$?
