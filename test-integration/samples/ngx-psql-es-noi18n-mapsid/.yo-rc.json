@@ -19,7 +19,7 @@
         "clientFramework": "angularX",
         "useSass": true,
         "clientPackageManager": "npm",
-        "testFrameworks": ["gatling", "cypress"],
+        "testFrameworks": ["gatling", "protractor"],
         "jhiPrefix": "jhi",
         "otherModules": [],
         "enableTranslation": false,

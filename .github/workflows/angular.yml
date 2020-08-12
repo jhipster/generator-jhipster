@@ -83,7 +83,7 @@ jobs:
                       entity: sqlfull
                       profile: prod
                       war: 0
-                      cypress: 1
+                      protractor: 1
                       testcontainers: 0
                     - app-type: ngx-mariadb-oauth2-infinispan
                       entity: sqlfull
@@ -139,6 +139,7 @@ jobs:
             JHI_PROFILE: ${{ matrix.profile }}
             JHI_WAR: ${{ matrix.war }}
             JHI_CYPRESS: ${{ matrix.cypress }}
+            JHI_PROTRACTOR: ${{ matrix.protractor }}
             JHI_TESTCONTAINERS: ${{ matrix.testcontainers }}
         steps:
             #----------------------------------------------------------------------
