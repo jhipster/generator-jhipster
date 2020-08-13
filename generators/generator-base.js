@@ -25,7 +25,6 @@ const shelljs = require('shelljs');
 const semver = require('semver');
 const exec = require('child_process').exec;
 const os = require('os');
-const pluralize = require('pluralize');
 const normalize = require('normalize-path');
 
 const packagejs = require('../package.json');
@@ -1435,15 +1434,6 @@ module.exports = class extends PrivateBase {
      */
     getColumnName(value) {
         return this.hibernateSnakeCase(value);
-    }
-
-    /**
-     * get a table column names plural form in JHipster preferred style.
-     *
-     * @param {string} value - table column name string
-     */
-    getPluralColumnName(value) {
-        return this.getColumnName(pluralize(value));
     }
 
     /**
