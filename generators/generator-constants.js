@@ -37,7 +37,7 @@ const SPRING_BOOT_VERSION = '2.3.3.RELEASE';
 const LIQUIBASE_VERSION = '3.9.0';
 const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
 const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;
-const HIBERNATE_VERSION = '5.4.17.Final';
+const HIBERNATE_VERSION = '5.4.20.Final';
 
 const JACOCO_VERSION = '0.8.5';
 const KAFKA_VERSION = '5.5.0';
