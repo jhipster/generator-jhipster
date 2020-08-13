@@ -17,7 +17,9 @@
  limitations under the License.
 -%>
 import React from 'react';
-import { shallow } from 'enzyme';
+import { render } from '@testing-library/react';
+import { Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 
 
 <%_ if (authenticationType === 'oauth2') { _%>
@@ -31,19 +33,25 @@ describe('AccountMenu', () => {
 
   const authenticatedWrapper = () => {
     if (!mountedWrapper) {
-      mountedWrapper = shallow(
-        <AccountMenu
-          isAuthenticated
-        />
+      const history = createMemoryHistory();
+      const { container } = render(
+        <Router history={history}>
+          <AccountMenu isAuthenticated />
+        </Router>
       );
+      mountedWrapper = container.innerHTML;
     }
     return mountedWrapper;
   };
   const guestWrapper = () => {
     if (!mountedWrapper) {
-      mountedWrapper = shallow(
-        <AccountMenu/>
-      );
+      const history = createMemoryHistory();
+      const { container } = (mountedWrapper = render(
+        <Router history={history}>
+          <AccountMenu />
+        </Router>
+      ));
+      mountedWrapper = container.innerHTML;
     }
     return mountedWrapper;
   };
@@ -55,21 +63,27 @@ describe('AccountMenu', () => {
   // All tests will go here
 
   it('Renders a authenticated AccountMenu component', () => {
-    const dropdown = authenticatedWrapper().find(NavDropdown);
-    expect(dropdown).toHaveLength(1);
-    expect(dropdown.find({ to: '/login' })).toHaveLength(0);
-    expect(dropdown.find({ to: '/logout' })).toHaveLength(1);
+    <%_ if (enableTranslation) { _%>
+    expect(guestWrapper()).toEqual(
+      '<li id="account-menu" class="dropdown nav-item"><a aria-haspopup="true" href="#" class="d-flex align-items-center dropdown-toggle nav-link" aria-expanded="false"><span></span></a><div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" id="login-item" tabindex="0" role="menuitem" href="/login"> <span></span></a><a class="dropdown-item" tabindex="0" role="menuitem" href="/account/register"> <span></span></a></div></li>'
+    );
+    <%_ } else { _%>
+    expect(guestWrapper()).toEqual(
+      '<li id=\"account-menu\" class=\"dropdown nav-item\"><a aria-haspopup=\"true\" href=\"#\" class=\"d-flex align-items-center dropdown-toggle nav-link\" aria-expanded=\"false\"><span>Account</span></a><div tabindex=\"-1\" role=\"menu\" aria-hidden=\"true\" class=\"dropdown-menu dropdown-menu-right\"><a class=\"dropdown-item\" id=\"login-item\" tabindex=\"0\" role=\"menuitem\" href=\"/login\"> Sign in</a><a class=\"dropdown-item\" tabindex=\"0\" role=\"menuitem\" href=\"/account/register\"> Register</a></div></li>'
+    );
+    <%_ } _%>
   });
 
   it('Renders a guest AccountMenu component', () => {
-    const dropdown = guestWrapper().find(NavDropdown);
-    expect(dropdown).toHaveLength(1);
-    <%_ if (authenticationType === 'oauth2') { _%>
-    expect(dropdown.find({ href: getLoginUrl() })).toHaveLength(1);
+    <%_ if (enableTranslation) { _%>
+    expect(guestWrapper()).toEqual(
+      `<li id="account-menu" class="dropdown nav-item"><a aria-haspopup="true" href="#" class="d-flex align-items-center dropdown-toggle nav-link" aria-expanded="false"><span></span></a><div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" id="login-item" tabindex="0" role="menuitem" href="/login"> <span></span></a><a class="dropdown-item" tabindex="0" role="menuitem" href="/account/register"> <span></span></a></div></li>`
+    );
     <%_ } else { _%>
-    expect(dropdown.find({ to: '/login' })).toHaveLength(1);
+    expect(guestWrapper()).toEqual(
+      `<li id="account-menu" class="dropdown nav-item"><a aria-haspopup="true" href="#" class="d-flex align-items-center dropdown-toggle nav-link" aria-expanded="false"><span>Account</span></a><div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" id="login-item" tabindex="0" role="menuitem" href="/login"> Sign in</a><a class="dropdown-item" tabindex="0" role="menuitem" href="/account/register"> Register</a></div></li>`
+    );
     <%_ } _%>
-    expect(dropdown.find({ to: '/logout' })).toHaveLength(0);
   });
 
 });
