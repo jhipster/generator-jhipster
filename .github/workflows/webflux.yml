@@ -72,48 +72,48 @@ jobs:
                       entity: mongodb
                       profile: prod
                       war: 0
-                      cypress: 1
+                      e2e: 1
                     - app-type: webflux-mongodb-es-session
                       entity: mongodb
                       profile: prod
                       war: 0
-                      cypress: 1
+                      e2e: 1
                     - app-type: webflux-mongodb-oauth2
                       entity: mongodb
                       profile: prod
                       war: 0
-                      cypress: 1
+                      e2e: 1
                     - app-type: webflux-gateway-jwt
                       entity: none
                       profile: prod
                       war: 0
-                      cypress: 1
+                      e2e: 1
                     - app-type: webflux-gateway-oauth2
                       entity: none
                       profile: prod
                       war: 0
-                      cypress: 1
+                      e2e: 1
                     - app-type: webflux-couchbase
                       entity: couchbase
                       profile: prod
                       war: 0
-                      cypress: 1
+                      e2e: 1
                     - app-type: webflux-couchbase-es-oauth2
                       entity: couchbase
                       profile: prod
                       war: 0
-                      cypress: 1
+                      e2e: 1
                     - app-type: webflux-psql
                       entity: none
                       profile: prod
                       war: 0
-                      cypress: 1
+                      e2e: 1
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
             JHI_PROFILE: ${{ matrix.profile }}
             JHI_WAR: ${{ matrix.war }}
-            JHI_CYPRESS: ${{ matrix.cypress }}
+            JHI_E2E: ${{ matrix.e2e }}
         steps:
             #----------------------------------------------------------------------
             # Install all tools and check configuration

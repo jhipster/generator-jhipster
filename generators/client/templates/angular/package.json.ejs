@@ -174,12 +174,17 @@
     "ngc": "ngc -p tsconfig.app.json",
     "cleanup": "rimraf <%= DIST_DIR %>",
     "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
+<%_ if (protractorTests && !cypressTests) { _%>
+    "e2e": "<%= clientPackageManager %> run e2e:protractor",
+<%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
+    "e2e": "<%= clientPackageManager %> run e2e:cypress",
+<%_ } _%>
 <%_ if (protractorTests) { _%>
-    "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
+    "e2e:protractor": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
 <%_ } _%>
 <%_ if (cypressTests) { _%>
+    "e2e:cypress": "cypress run --browser chrome --headless",
     "cypress": "cypress open",
-    "cypress:run": "cypress run --browser chrome --headless",
 <%_ } _%>
 <%_ if (protractorTests || cypressTests) { _%>
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",

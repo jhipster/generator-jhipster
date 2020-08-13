@@ -76,62 +76,62 @@ jobs:
                       entity: sql
                       profile: prod
                       war: 0
-                      cypress: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: react-maven-psql-es-noi18n-mapsid
                       entity: sqlfull
                       profile: prod
                       war: 0
-                      cypress: 1
+                      e2e: 1
                       testcontainers: 1
                     - app-type: react-maven-h2mem-memcached
                       entity: sql
                       profile: dev,webpack
                       war: 0 # TODO: need change to 1, when maven+war is fixed
-                      cypress: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: react-maven-cassandra-session-redis
                       entity: cassandra
                       profile: prod
                       war: 0
-                      cypress: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: react-maven-couchbase-caffeine
                       entity: couchbase
                       profile: prod
                       war: 0
-                      cypress: 0
+                      e2e: 0
                       testcontainers: 0
                     - app-type: react-gradle-psql-es-noi18n-mapsid
                       entity: sqlfull
                       profile: prod
                       war: 0
-                      cypress: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: react-gradle-h2mem-memcached
                       entity: sql
                       profile: dev,webpack
                       war: 1
-                      cypress: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: react-gradle-cassandra-session-redis
                       entity: cassandra
                       profile: prod
                       war: 0
-                      cypress: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: react-gradle-couchbase-caffeine
                       entity: couchbase
                       profile: prod
                       war: 0
-                      cypress: 1
+                      e2e: 1
                       testcontainers: 0
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
             JHI_PROFILE: ${{ matrix.profile }}
             JHI_WAR: ${{ matrix.war }}
-            JHI_CYPRESS: ${{ matrix.cypress }}
+            JHI_E2E: ${{ matrix.e2e }}
             JHI_TESTCONTAINERS: ${{ matrix.testcontainers }}
         steps:
             #----------------------------------------------------------------------
