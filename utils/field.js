@@ -65,6 +65,10 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
         }
     }
 
+    if (field.fieldIsEnum) {
+        field.enumValues = getEnumValuesWithCustomValues(field.fieldValues);
+    }
+
     if (field.fieldValidateRulesPatternJava === undefined) {
         field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern
             ? field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
@@ -118,4 +122,25 @@ function fieldIsEnum(fieldType) {
     ].includes(fieldType);
 }
 
-module.exports = { prepareFieldForTemplates, fieldIsEnum };
+/**
+ * From an enum's values (with or without custom values), returns the enum's values without custom values.
+ * @param {String} enumValues - an enum's values.
+ * @return {Array<String>} the formatted enum's values.
+ */
+function getEnumValuesWithCustomValues(enumValues) {
+    if (!enumValues || enumValues === '') {
+        throw new Error('Enumeration values must be passed to get the formatted values.');
+    }
+    return enumValues.split(',').map(enumValue => {
+        if (!enumValue.includes('(')) {
+            return { name: enumValue.trim(), value: enumValue.trim() };
+        }
+        const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
+        return {
+            name: matched[1],
+            value: matched[2],
+        };
+    });
+}
+
+module.exports = { prepareFieldForTemplates, fieldIsEnum, getEnumValuesWithCustomValues };

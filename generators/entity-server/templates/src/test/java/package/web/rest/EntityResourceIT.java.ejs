@@ -260,7 +260,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     let enumValue1;
     let enumValue2;
     if (isEnum) {
-        const enumValues = getEnumValuesWithCustomValues(fields[idx].fieldValues);
+        const enumValues = fields[idx].enumValues;
         enumValue1 = enumValues[0];
         if (enumValues.length > 1) {
             enumValue2 = enumValues[1];
