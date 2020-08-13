@@ -701,15 +701,6 @@ module.exports = class extends Generator {
     }
 
     /**
-     * @param {Array} array - array to search in
-     * @param {any} item - item to search for
-     * @return {boolean} true if array contains item; false otherwise
-     */
-    contains(array, item) {
-        return _.includes(array, item);
-    }
-
-    /**
      * Function to issue a https get request, and process the result
      *
      *  @param {string} url - the url to fetch
@@ -958,7 +949,7 @@ module.exports = class extends Generator {
                             .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body || []);`;
                 }
             }
-            if (variableName && !this.contains(queries, query)) {
+            if (variableName && !queries.includes(query)) {
                 queries.push(query);
                 variables.push(`${variableName}: I${relationship.otherEntityAngularName}[] = [];`);
             }
