@@ -458,13 +458,13 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Rename File
+     * Execute a git mv.
      *
      * @param {string} source
      * @param {string} dest
      * @returns {boolean} true if success; false otherwise
      */
-    renameFile(source, dest) {
+    gitMove(source, dest) {
         source = this.destinationPath(source);
         dest = this.destinationPath(dest);
         if (source && dest && shelljs.test('-f', source)) {
