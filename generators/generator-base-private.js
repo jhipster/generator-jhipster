@@ -1324,25 +1324,6 @@ module.exports = class extends Generator {
             : this.getPkType(databaseType);
     }
 
-    fieldIsEnum(fieldType) {
-        return ![
-            'String',
-            'Integer',
-            'Long',
-            'Float',
-            'Double',
-            'BigDecimal',
-            'LocalDate',
-            'Instant',
-            'ZonedDateTime',
-            'Duration',
-            'UUID',
-            'Boolean',
-            'byte[]',
-            'ByteBuffer',
-        ].includes(fieldType);
-    }
-
     /**
      * Returns the JDBC URL for a databaseType
      *

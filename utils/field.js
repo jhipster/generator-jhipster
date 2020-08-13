@@ -29,7 +29,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     });
     const fieldType = field.fieldType;
 
-    field.fieldIsEnum = generator.fieldIsEnum(fieldType);
+    field.fieldIsEnum = fieldIsEnum(fieldType);
 
     if (field.fieldNameAsDatabaseColumn === undefined) {
         const fieldNameUnderscored = _.snakeCase(field.fieldName);
@@ -99,4 +99,23 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     return field;
 }
 
-module.exports = { prepareFieldForTemplates };
+function fieldIsEnum(fieldType) {
+    return ![
+        'String',
+        'Integer',
+        'Long',
+        'Float',
+        'Double',
+        'BigDecimal',
+        'LocalDate',
+        'Instant',
+        'ZonedDateTime',
+        'Duration',
+        'UUID',
+        'Boolean',
+        'byte[]',
+        'ByteBuffer',
+    ].includes(fieldType);
+}
+
+module.exports = { prepareFieldForTemplates, fieldIsEnum };

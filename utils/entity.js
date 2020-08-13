@@ -19,6 +19,7 @@
 
 const _ = require('lodash');
 const pluralize = require('pluralize');
+const { fieldIsEnum } = require('./field');
 const { entityDefaultConfig } = require('../generators/generator-defaults');
 
 const BASE_TEMPLATE_DATA = {
@@ -158,7 +159,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
             entityWithConfig.haveFieldWithJavadoc = true;
         }
 
-        if (generator.fieldIsEnum(fieldType)) {
+        if (fieldIsEnum(fieldType)) {
             entityWithConfig.i18nToLoad.push(field.enumInstance);
         }
 
