@@ -36,7 +36,7 @@ module.exports = class extends BaseBlueprintGenerator {
         if (this.options.help) {
             return;
         }
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('e2e');
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('cypress');
     }
 
     // Public API method used by the getter and also by Blueprints
