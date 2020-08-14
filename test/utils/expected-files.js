@@ -791,20 +791,20 @@ const expectedFiles = {
         'cypress.json',
         `${CLIENT_TEST_SRC_DIR}cypress/fixtures/users/user.json`,
         `${CLIENT_TEST_SRC_DIR}cypress/plugins/index.ts`,
-        `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration_spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}cypress/support/commands.ts`,
         `${CLIENT_TEST_SRC_DIR}cypress/support/navbar.ts`,
         `${CLIENT_TEST_SRC_DIR}cypress/support/index.ts`,
         `${CLIENT_TEST_SRC_DIR}cypress/tsconfig.json`,
     ],
 
-    cypressNoOAuth2: [`${CLIENT_TEST_SRC_DIR}cypress/integration/account/login-page_spec.ts`],
+    cypressNoOAuth2: [`${CLIENT_TEST_SRC_DIR}cypress/integration/account/login-page.spec.ts`],
 
     cypressWithDatabaseAndNoOAuth2: [
-        `${CLIENT_TEST_SRC_DIR}cypress/integration/account/register-page_spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}cypress/integration/account/settings-page_spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}cypress/integration/account/password-page_spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}cypress/integration/account/reset-password-page_spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/integration/account/register-page.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/integration/account/settings-page.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/integration/account/password-page.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/integration/account/reset-password-page.spec.ts`,
     ],
 
     cypressWithOauth2: [`${CLIENT_TEST_SRC_DIR}cypress/support/keycloak-oauth2.ts`, `${CLIENT_TEST_SRC_DIR}cypress/support/utils.ts`],

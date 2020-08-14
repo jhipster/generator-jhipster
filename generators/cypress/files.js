@@ -39,7 +39,7 @@ const cypressFiles = {
             templates: [
                 'cypress/fixtures/users/user.json',
                 'cypress/plugins/index.ts',
-                'cypress/integration/administration/administration_spec.ts',
+                'cypress/integration/administration/administration.spec.ts',
                 'cypress/support/commands.ts',
                 'cypress/support/navbar.ts',
                 'cypress/support/index.ts',
@@ -49,16 +49,16 @@ const cypressFiles = {
         {
             condition: generator => generator.cypressTests && generator.authenticationType !== 'oauth2',
             path: TEST_SRC_DIR,
-            templates: ['cypress/integration/account/login-page_spec.ts'],
+            templates: ['cypress/integration/account/login-page.spec.ts'],
         },
         {
             condition: generator => generator.cypressTests && generator.authenticationType !== 'oauth2' && generator.databaseType !== 'no',
             path: TEST_SRC_DIR,
             templates: [
-                'cypress/integration/account/register-page_spec.ts',
-                'cypress/integration/account/settings-page_spec.ts',
-                'cypress/integration/account/password-page_spec.ts',
-                'cypress/integration/account/reset-password-page_spec.ts',
+                'cypress/integration/account/register-page.spec.ts',
+                'cypress/integration/account/settings-page.spec.ts',
+                'cypress/integration/account/password-page.spec.ts',
+                'cypress/integration/account/reset-password-page.spec.ts',
             ],
         },
         {

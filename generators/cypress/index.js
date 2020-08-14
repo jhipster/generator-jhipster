@@ -26,7 +26,6 @@ let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
-
         this.configOptions = this.options.configOptions || {};
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
@@ -34,8 +33,10 @@ module.exports = class extends BaseBlueprintGenerator {
             type: Boolean,
             defaults: false,
         });
-
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('e2e', { 'client-hook': !this.skipClient });
+        if (this.options.help) {
+            return;
+        }
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('e2e');
     }
 
     // Public API method used by the getter and also by Blueprints
