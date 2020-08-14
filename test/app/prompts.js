@@ -44,7 +44,7 @@ describe('jhipster:app prompts', () => {
 
             after(() => runResult.cleanup());
 
-            it('contains testFrameworks with cypress value', () => {
+            it('should write testFrameworks with cypress value to .yo-rc.json', () => {
                 assert.jsonFileContent('.yo-rc.json', { 'generator-jhipster': { testFrameworks: ['cypress'] } });
             });
         });

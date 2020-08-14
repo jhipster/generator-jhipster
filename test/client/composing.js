@@ -7,7 +7,7 @@ const mockedComposedGenerators = ['jhipster:common', 'jhipster:client', 'jhipste
 describe('jhipster:client composing', () => {
     describe('with translation disabled', () => {
         let runResult;
-        let options = { enableTranslation: false };
+        const options = { enableTranslation: false };
         before(() => {
             return helpers
                 .create(require.resolve('../../generators/client'))
@@ -35,7 +35,7 @@ describe('jhipster:client composing', () => {
 
     describe('with translation enabled', () => {
         let runResult;
-        let options = { enableTranslation: true };
+        const options = { enableTranslation: true };
         before(() => {
             return helpers
                 .create(require.resolve('../../generators/client'))
@@ -63,7 +63,7 @@ describe('jhipster:client composing', () => {
 
     describe('without cypress', () => {
         let runResult;
-        let options = { testFrameworks: [] };
+        const options = { testFrameworks: [] };
         before(() => {
             return helpers
                 .create(require.resolve('../../generators/client'))
@@ -94,7 +94,7 @@ describe('jhipster:client composing', () => {
 
     describe('with cypress', () => {
         let runResult;
-        let options = { testFrameworks: ['cypress'] };
+        const options = { testFrameworks: ['cypress'] };
         before(() => {
             return helpers
                 .create(require.resolve('../../generators/client'))
