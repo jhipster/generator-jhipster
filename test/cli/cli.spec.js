@@ -7,23 +7,15 @@ const proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 const sinon = require('sinon');
 const Environment = require('yeoman-environment');
 
-const {
-    getJHipsterCli,
-    testInTempDir,
-    prepareTempDir,
-    revertTempDir,
-    copyFakeBlueprint,
-    copyBlueprint,
-    lnYeoman,
-} = require('../utils/utils');
+const { getJHipsterCli, testInTempDir, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('../utils/utils');
 const { logger } = require('../../cli/utils');
 
 describe('jhipster cli test', () => {
-    let cwd;
+    let cleanup;
     before(() => {
-        cwd = prepareTempDir();
+        cleanup = prepareTempDir();
     });
-    after(() => revertTempDir(cwd));
+    after(() => cleanup());
 
     const cmd = getJHipsterCli();
 
