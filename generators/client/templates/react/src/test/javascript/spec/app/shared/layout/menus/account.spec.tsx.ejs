@@ -63,27 +63,21 @@ describe('AccountMenu', () => {
   // All tests will go here
 
   it('Renders a authenticated AccountMenu component', () => {
-    <%_ if (enableTranslation) { _%>
-    expect(guestWrapper()).toEqual(
-      '<li id="account-menu" class="dropdown nav-item"><a aria-haspopup="true" href="#" class="d-flex align-items-center dropdown-toggle nav-link" aria-expanded="false"><span></span></a><div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" id="login-item" tabindex="0" role="menuitem" href="/login"> <span></span></a><a class="dropdown-item" tabindex="0" role="menuitem" href="/account/register"> <span></span></a></div></li>'
-    );
-    <%_ } else { _%>
-    expect(guestWrapper()).toEqual(
-      '<li id=\"account-menu\" class=\"dropdown nav-item\"><a aria-haspopup=\"true\" href=\"#\" class=\"d-flex align-items-center dropdown-toggle nav-link\" aria-expanded=\"false\"><span>Account</span></a><div tabindex=\"-1\" role=\"menu\" aria-hidden=\"true\" class=\"dropdown-menu dropdown-menu-right\"><a class=\"dropdown-item\" id=\"login-item\" tabindex=\"0\" role=\"menuitem\" href=\"/login\"> Sign in</a><a class=\"dropdown-item\" tabindex=\"0\" role=\"menuitem\" href=\"/account/register\"> Register</a></div></li>'
-    );
-    <%_ } _%>
+    const html = authenticatedWrapper();
+
+    expect(html).not.toContain('/login');
+    expect(html).toContain('/logout');
   });
 
   it('Renders a guest AccountMenu component', () => {
-    <%_ if (enableTranslation) { _%>
-    expect(guestWrapper()).toEqual(
-      `<li id="account-menu" class="dropdown nav-item"><a aria-haspopup="true" href="#" class="d-flex align-items-center dropdown-toggle nav-link" aria-expanded="false"><span></span></a><div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" id="login-item" tabindex="0" role="menuitem" href="/login"> <span></span></a><a class="dropdown-item" tabindex="0" role="menuitem" href="/account/register"> <span></span></a></div></li>`
-    );
+    const html = guestWrapper();
+
+    <%_ if (authenticationType === 'oauth2') { _%>
+    expect(html).toContain(getLoginUrl());
     <%_ } else { _%>
-    expect(guestWrapper()).toEqual(
-      `<li id="account-menu" class="dropdown nav-item"><a aria-haspopup="true" href="#" class="d-flex align-items-center dropdown-toggle nav-link" aria-expanded="false"><span>Account</span></a><div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" id="login-item" tabindex="0" role="menuitem" href="/login"> Sign in</a><a class="dropdown-item" tabindex="0" role="menuitem" href="/account/register"> Register</a></div></li>`
-    );
+    expect(html).toContain('/login');
     <%_ } _%>
+    expect(html).not.toContain('/logout');
   });
 
 });
