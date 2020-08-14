@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const path = require('path');
 const os = require('os');
 const assert = require('yeoman-assert');
@@ -58,7 +59,7 @@ function getJHipsterCli() {
 
 function _prepareTempEnv() {
     const cwd = process.cwd();
-    const tempDir = path.join(os.tmpdir(), 'jhitemp');
+    const tempDir = path.join(os.tmpdir(), crypto.randomBytes(20).toString('hex'));
     process.chdir(os.tmpdir());
     if (fs.existsSync(tempDir)) {
         fs.rmdirSync(tempDir, { recursive: true });
