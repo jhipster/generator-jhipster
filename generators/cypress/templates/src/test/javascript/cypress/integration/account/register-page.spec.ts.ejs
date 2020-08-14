@@ -9,18 +9,19 @@ import {
 } from '../../support/commands';
 
 describe('/account/register', () => {
-  beforeEach(() => {
-    <%_ if (authenticationType === 'session') { _%>Cypress.Cookies.preserveOnce('JSESSIONID', 'XSRF-TOKEN')<% } %>
-    cy.server();
-    cy.route('POST', '/api/register').as('registerSave');
-  });
-
   before(() => {
     cy.window().then((win) => {
       win.sessionStorage.clear()
     });
+    cy.clearCookies();
     cy.visit('');
     cy.clickOnRegisterItem();
+  });
+
+  beforeEach(() => {
+    <%_ if (authenticationType === 'session') { _%>Cypress.Cookies.preserveOnce('JSESSIONID', 'XSRF-TOKEN')<% } %>
+    cy.server();
+    cy.route('POST', '/api/register').as('registerSave');
   });
 
   it('should load the register page', () => {
