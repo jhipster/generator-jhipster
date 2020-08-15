@@ -29,7 +29,7 @@ env:
     JHI_RUN_APP: 1
     JHI_JDK: 11
     JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
-    JHI_LIB_BRANCH: master
+    JHI_LIB_BRANCH: release
     JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
     JHI_GEN_BRANCH: master
     SPRING_OUTPUT_ANSI_ENABLED: ALWAYS
@@ -154,10 +154,14 @@ jobs:
             - name: 'TESTS: Start docker-compose containers'
               run: $JHI_SCRIPTS/20-docker-compose.sh
             - name: 'TESTS: backend'
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: $JHI_SCRIPTS/21-tests-backend.sh
             - name: 'TESTS: frontend'
               run: $JHI_SCRIPTS/22-tests-frontend.sh
             - name: 'TESTS: packaging'
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: $JHI_SCRIPTS/23-package.sh
             - name: 'Synchronize chromedriver version'
               if: ${{ matrix.protractor == 1 }}

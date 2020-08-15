@@ -262,7 +262,15 @@ repositories {
     jcenter()
     <%_ if (reactive && databaseType === 'sql' || JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT')) { _%>
     maven {
+        <%_ if (process.env.JHI_GITHUB_CI === 'true') { _%>
+        credentials {
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
+        }
+        url "https://maven.pkg.github.com/jhipster/jhipster/"
+        <%_ } else { _%>
         url "https://oss.sonatype.org/content/repositories/snapshots/"
+        <%_ } _%>
         mavenContent {
             snapshotsOnly()
         }

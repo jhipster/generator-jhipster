@@ -38,8 +38,13 @@
         <%_ } _%>
         <%_ if (JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT')) { _%>
         <repository>
+            <%_ if (process.env.JHI_GITHUB_CI === 'true') { _%>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/jhipster/jhipster</url>
+            <%_ } else { _%>
             <id>ossrh-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <%_ } _%>
             <releases>
                 <enabled>false</enabled>
             </releases>

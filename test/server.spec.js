@@ -105,4 +105,80 @@ describe('JHipster server generator', () => {
             );
         });
     });
+
+    describe('java repositories', () => {
+        describe('when JHI_GITHUB_CI env variable is set', () => {
+            let githubCiBackup;
+            before(() => {
+                githubCiBackup = process.env.JHI_GITHUB_CI;
+                process.env.JHI_GITHUB_CI = 'true';
+                return helpers
+                    .create(path.join(__dirname, '../generators/server'))
+                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        cacheProvider: 'caffeine',
+                        enableHibernateCache: true,
+                        databaseType: 'sql',
+                        devDatabaseType: 'h2Memory',
+                        prodDatabaseType: 'mysql',
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        serverSideOptions: [],
+                    })
+                    .run();
+            });
+            after(() => {
+                process.env.JHI_GITHUB_CI = githubCiBackup;
+            });
+
+            it('generates pom.xml with github repository', () => {
+                assert.fileContent('pom.xml', '<id>github</id>');
+            });
+        });
+
+        describe('when JHI_GITHUB_CI env variable is not set', () => {
+            let githubCiBackup;
+            before(() => {
+                githubCiBackup = process.env.JHI_GITHUB_CI;
+                delete process.env.JHI_GITHUB_CI;
+                return helpers
+                    .create(path.join(__dirname, '../generators/server'))
+                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        cacheProvider: 'caffeine',
+                        enableHibernateCache: true,
+                        databaseType: 'sql',
+                        devDatabaseType: 'h2Memory',
+                        prodDatabaseType: 'mysql',
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        serverSideOptions: [],
+                    })
+                    .run();
+            });
+            after(() => {
+                process.env.JHI_GITHUB_CI = githubCiBackup;
+            });
+
+            it('generates pom.xml without github repository', () => {
+                assert.noFileContent('pom.xml', '<id>github</id>');
+            });
+        });
+    });
 });
