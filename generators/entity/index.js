@@ -350,6 +350,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.warning('Not compatible with jpaMetamodelFiltering, disabling');
                     this.entityConfig.jpaMetamodelFiltering = false;
                 }
+
+                // Validate root entity json content
+                if (this.entityConfig.changelogDate === undefined) {
+                    const currentDate = this.dateFormatForLiquibase();
+                    this.info(`changelogDate is missing in .jhipster/${this.entityConfig.name}.json, using ${currentDate} as fallback`);
+                    context.changelogDate = this.entityConfig.changelogDate = currentDate;
+                }
             },
 
             configureFields() {
@@ -411,13 +418,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
                 });
                 this.entityConfig.relationships = relationships;
-
-                // Validate root entity json content
-                if (this.entityConfig.changelogDate === undefined && ['sql', 'cassandra', 'couchbase'].includes(context.databaseType)) {
-                    const currentDate = this.dateFormatForLiquibase();
-                    this.info(`changelogDate is missing in .jhipster/${entityName}.json, using ${currentDate} as fallback`);
-                    context.changelogDate = this.entityConfig.changelogDate = currentDate;
-                }
             },
         };
     }

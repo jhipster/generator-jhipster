@@ -19,7 +19,7 @@
 const Faker = require('faker/lib');
 const Randexp = require('randexp');
 
-const { parseLiquibaseChangelogDate } = require('./liquibase');
+const { languageToJavaLanguage } = require('../generators/utils');
 
 class RandexpWithFaker extends Randexp {
     constructor(regexp, m, faker) {
@@ -43,14 +43,23 @@ class RandexpWithFaker extends Randexp {
  * @returns {object} Faker instance
  */
 function createFaker(nativeLanguage = 'en') {
+    nativeLanguage = languageToJavaLanguage(nativeLanguage);
+    // Fallback language
     // eslint-disable-next-line global-require
     const locales = { en: require('faker/lib/locales/en') };
     if (nativeLanguage !== 'en') {
-        // eslint-disable-next-line global-require, import/no-dynamic-require
-        locales[nativeLanguage] = require(`faker/lib/locales/${nativeLanguage}`);
+        try {
+            // eslint-disable-next-line global-require, import/no-dynamic-require
+            const nativeLanguageLocale = require(`faker/lib/locales/${nativeLanguage}`);
+            locales[nativeLanguage] = nativeLanguageLocale;
+        } catch (error) {
+            // Faker not implemented for the native language, fallback to en.
+            nativeLanguage = 'en';
+        }
     }
-    const faker = new Faker({ locales, locale: nativeLanguage });
-    faker.getRecentDateForLiquibase = getRecentDateForLiquibase.bind(undefined, faker);
+    const faker = new Faker({ locales, locale: nativeLanguage, localeFallback: 'en' });
+    faker.getRecentDate = getRecentDate.bind(undefined, faker);
+    faker.createRandexp = (pattern, m) => new RandexpWithFaker(pattern, m, faker);
     return faker;
 }
 
@@ -73,12 +82,4 @@ function getRecentDate(faker, days = 1, date = new Date()) {
     return date;
 }
 
-function getRecentDateForLiquibase(faker, days, changelogDate) {
-    let refDate;
-    if (changelogDate) {
-        refDate = parseLiquibaseChangelogDate(changelogDate);
-    }
-    return getRecentDate(faker, days, refDate);
-}
-
-module.exports = { createFaker, RandexpWithFaker, getRecentDateForLiquibase };
+module.exports = { createFaker, getRecentDate };

@@ -19,7 +19,6 @@
 
 const _ = require('lodash');
 const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
-const { RandexpWithFaker } = require('./faker');
 
 const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => {
     let data;
@@ -46,11 +45,11 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
             min: field.fieldValidateRulesMin ? parseInt(field.fieldValidateRulesMin, 10) : undefined,
         });
     } else if (field.fieldType === 'LocalDate') {
-        data = faker.getRecentDateForLiquibase(1, changelogDate).toISOString().split('T')[0];
+        data = faker.getRecentDate(1, changelogDate).toISOString().split('T')[0];
     } else if (['Instant', 'ZonedDateTime'].includes(field.fieldType)) {
         // Write the date without milliseconds so Java can parse it
         // See https://stackoverflow.com/a/34053802/150868
-        data = faker.getRecentDateForLiquibase(1, changelogDate).toISOString().split('.')[0];
+        data = faker.getRecentDate(1, changelogDate).toISOString().split('.')[0];
     } else if (field.fieldType === 'UUID') {
         data = faker.random.uuid();
     } else if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') {
@@ -212,12 +211,14 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     if (field.fieldValidate === true && field.fieldValidateRules.includes('maxlength')) {
         field.maxlength = field.fieldValidateRulesMaxlength || 255;
     }
-    field.createRandexp = faker => new RandexpWithFaker(field.fieldValidateRulesPattern, undefined, faker || entityWithConfig.faker);
+
+    const faker = entityWithConfig.faker;
+    field.createRandexp = () => faker.createRandexp(field.fieldValidateRulesPattern);
 
     field.uniqueValue = [];
 
     field.generateFakeData = (type = 'csv') => {
-        let data = generateFakeDataForField(field, entityWithConfig.faker, entityWithConfig.changelogDate, type);
+        let data = generateFakeDataForField(field, faker, entityWithConfig.changelogDateForRecent, type);
         // manage uniqueness
         if (field.fieldValidate === true && field.fieldValidateRules.includes('unique')) {
             let i = 0;
@@ -226,7 +227,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
                     data = undefined;
                     break;
                 }
-                data = generateFakeDataForField(field, entityWithConfig.faker, entityWithConfig.changelogDate, type);
+                data = generateFakeDataForField(field, faker, entityWithConfig.changelogDateForRecent, type);
             }
             if (data !== undefined) {
                 field.uniqueValue.push(data);
