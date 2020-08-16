@@ -38,7 +38,7 @@ async function askForInsightOptIn() {
         default: true,
     });
     if (answers.insight !== undefined) {
-        statistics.setOptoutStatus(!answers.insight);
+        statistics.setOptOutStatus(!answers.insight);
     }
 }
 

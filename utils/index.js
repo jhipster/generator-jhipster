@@ -17,23 +17,6 @@
  * limitations under the License.
  */
 
-const jhipster6Compatibility = {};
-
-/**
- * Provides a replacement for jhipster 6 getAllJhipsterConfig.
- * - Removed force parameter.
- * - Set will write to config file.
- */
-jhipster6Compatibility.getAllJhipsterConfig = function (generator = this) {
-    const proxy = generator.getJhipsterConfig().createProxy();
-    return {
-        ...proxy,
-        getAll: () => proxy,
-        get: key => proxy[key],
-        set: (key, value) => {
-            proxy[key] = value;
-        },
-    };
+module.exports = {
+    stringify: data => JSON.stringify(data, null, 4),
 };
-
-module.exports = jhipster6Compatibility;

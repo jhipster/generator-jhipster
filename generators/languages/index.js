@@ -58,21 +58,19 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('skip-client', {
             desc: 'Skip installing client files',
             type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--skip-server` flag
         this.option('skip-server', {
             desc: 'Skip installing server files',
             type: Boolean,
-            defaults: false,
         });
 
         if (this.options.help) {
             return;
         }
 
-        this.loadOptions();
+        this.loadStoredAppOptions();
         this.loadRuntimeOptions();
 
         // Validate languages passed as argument.

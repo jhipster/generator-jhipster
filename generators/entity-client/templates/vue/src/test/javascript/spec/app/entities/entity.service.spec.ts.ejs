@@ -77,7 +77,7 @@ describe('Service Tests', () => {
         <%_ fields.forEach((field) => {
             const fieldType = field.fieldType; _%>
             <%_ if (field.fieldIsEnum) { _%>
-        <%= fieldType + '.' + getEnumValuesWithCustomValues(field.fieldValues)[0].name %>,
+        <%= fieldType + '.' + field.enumValues[0].name %>,
             <%_ } else if (fieldType === 'Boolean') { _%>
         false,
             <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>

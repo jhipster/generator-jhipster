@@ -55,7 +55,6 @@ module.exports = class extends BaseBlueprintGenerator {
             return;
         }
 
-        this.loadOptions();
         this.loadRuntimeOptions();
 
         this.rootGenerator = this.env.rootGenerator() === this;

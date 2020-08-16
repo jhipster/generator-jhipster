@@ -61,7 +61,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (cacheProvider === 'redis') { _%>
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
-public class HibernateTimeZoneIT {
+class HibernateTimeZoneIT {
 
     @Autowired
     private DateTimeWrapperRepository dateTimeWrapperRepository;
@@ -101,7 +101,7 @@ public class HibernateTimeZoneIT {
 
     @Test
     @Transactional
-    public void storeInstantWithZoneIdConfigShouldBeStoredOnGMTTimeZone() {
+    void storeInstantWithZoneIdConfigShouldBeStoredOnGMTTimeZone() {
         dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
 
         String request = generateSqlRequest("instant", dateTimeWrapper.getId());
@@ -113,7 +113,7 @@ public class HibernateTimeZoneIT {
 
     @Test
     @Transactional
-    public void storeLocalDateTimeWithZoneIdConfigShouldBeStoredOnGMTTimeZone() {
+    void storeLocalDateTimeWithZoneIdConfigShouldBeStoredOnGMTTimeZone() {
         dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
 
         String request = generateSqlRequest("local_date_time", dateTimeWrapper.getId());
@@ -128,7 +128,7 @@ public class HibernateTimeZoneIT {
 
     @Test
     @Transactional
-    public void storeOffsetDateTimeWithZoneIdConfigShouldBeStoredOnGMTTimeZone() {
+    void storeOffsetDateTimeWithZoneIdConfigShouldBeStoredOnGMTTimeZone() {
         dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
 
         String request = generateSqlRequest("offset_date_time", dateTimeWrapper.getId());
@@ -142,7 +142,7 @@ public class HibernateTimeZoneIT {
 
     @Test
     @Transactional
-    public void storeZoneDateTimeWithZoneIdConfigShouldBeStoredOnGMTTimeZone() {
+    void storeZoneDateTimeWithZoneIdConfigShouldBeStoredOnGMTTimeZone() {
         dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
 
         String request = generateSqlRequest("zoned_date_time", dateTimeWrapper.getId());
@@ -156,7 +156,7 @@ public class HibernateTimeZoneIT {
 
     @Test
     @Transactional
-    public void storeLocalTimeWithZoneIdConfigShouldBeStoredOnGMTTimeZoneAccordingToHis1stJan1970Value() {
+    void storeLocalTimeWithZoneIdConfigShouldBeStoredOnGMTTimeZoneAccordingToHis1stJan1970Value() {
         dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
 
         String request = generateSqlRequest("local_time", dateTimeWrapper.getId());
@@ -172,7 +172,7 @@ public class HibernateTimeZoneIT {
 
     @Test
     @Transactional
-    public void storeOffsetTimeWithZoneIdConfigShouldBeStoredOnGMTTimeZoneAccordingToHis1stJan1970Value() {
+    void storeOffsetTimeWithZoneIdConfigShouldBeStoredOnGMTTimeZoneAccordingToHis1stJan1970Value() {
         dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
 
         String request = generateSqlRequest("offset_time", dateTimeWrapper.getId());
@@ -189,7 +189,7 @@ public class HibernateTimeZoneIT {
 
     @Test
     @Transactional
-    public void storeLocalDateWithZoneIdConfigShouldBeStoredWithoutTransformation() {
+    void storeLocalDateWithZoneIdConfigShouldBeStoredWithoutTransformation() {
         dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
 
         String request = generateSqlRequest("local_date", dateTimeWrapper.getId());
