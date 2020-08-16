@@ -2261,28 +2261,6 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * From an enum's values (with or without custom values), returns the enum's values without custom values.
-     * @param {String} enumValues - an enum's values.
-     * @return {Array<String>} the formatted enum's values.
-     */
-    getEnumValuesWithCustomValues(enumValues) {
-        if (!enumValues || enumValues === '') {
-            throw new Error('Enumeration values must be passed to get the formatted values.');
-        }
-        return enumValues.split(',').map(enumValue => {
-            if (!enumValue.includes('(')) {
-                return { name: enumValue.trim(), value: enumValue.trim() };
-            }
-            // eslint-disable-next-line no-unused-vars
-            const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
-            return {
-                name: matched[1],
-                value: matched[2],
-            };
-        });
-    }
-
-    /**
      * Get default config based on applicationType
      */
     getDefaultConfigForApplicationType(applicationType = this.jhipsterConfig.applicationType) {
