@@ -121,7 +121,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
             desc:
                 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
-            defaults: false,
         });
 
         if (this.options.help) {
@@ -490,8 +489,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                 this.composeWithJHipster('entity-server', {
                     context,
-                    force: context.options.force,
-                    debug: context.isDebugEnabled,
                 });
             },
 
@@ -501,9 +498,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                 this.composeWithJHipster('entity-client', {
                     context,
-                    skipInstall: context.options.skipInstall,
-                    force: context.options.force,
-                    debug: context.isDebugEnabled,
+                    skipInstall: this.options.skipInstall,
                 });
             },
 
@@ -512,9 +507,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (context.skipClient) return;
                 this.composeWithJHipster('entity-i18n', {
                     context,
-                    skipInstall: context.options.skipInstall,
-                    force: context.options.force,
-                    debug: context.isDebugEnabled,
+                    skipInstall: this.options.skipInstall,
                 });
             },
         };
@@ -543,7 +536,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             'post',
                             {
                                 entityConfig: context,
-                                force: context.options.force,
+                                force: this.options.force,
                             },
                             done
                         );
@@ -656,7 +649,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.entityConfig.clientRootFolder = context.options.clientRootFolder;
             }
         }
-        dest.isDebugEnabled = context.options.debug;
         dest.experimental = context.options.experimental;
 
         dest.entityTableName = generator.getTableName(context.options.tableName || dest.name);

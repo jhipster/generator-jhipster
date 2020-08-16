@@ -39,7 +39,7 @@ module.exports = class extends BaseBlueprintGenerator {
             return;
         }
 
-        this.loadOptions();
+        this.loadStoredAppOptions();
         this.loadRuntimeOptions();
 
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('common');
