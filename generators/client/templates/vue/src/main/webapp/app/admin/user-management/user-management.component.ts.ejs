@@ -107,7 +107,9 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mi
   }
 
   public closeDialog() : void {
-    (<any>this.$refs.removeUser).hide();
+    if (<any>this.$refs.removeUser) {
+      (<any>this.$refs.removeUser).hide();
+    }
   }
 
   public get username(): string {

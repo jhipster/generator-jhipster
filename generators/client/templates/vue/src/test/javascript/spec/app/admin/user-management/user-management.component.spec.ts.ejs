@@ -95,7 +95,14 @@ describe('UserManagement Component', () => {
   describe('confirmDelete', () => {
     it('Should call delete service on confirmDelete', async () => {
       // GIVEN
-      mockedAxios.delete.mockReturnValue(Promise.resolve({ headers: {} }));
+      mockedAxios.delete.mockReturnValue(
+        Promise.resolve({
+          headers: {
+            'x-jhipsterapp-alert': '',
+            'x-jhipsterapp-params': '',
+          },
+        })
+      );
 
       // WHEN
       userManagement.prepareRemove({ login: <%- tsKeyId %> });
