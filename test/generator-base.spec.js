@@ -55,13 +55,6 @@ describe('Generator Base', () => {
             });
         });
     });
-    describe('getPluralColumnName', () => {
-        describe('when called with a value', () => {
-            it('returns a plural column name', () => {
-                expect(BaseGenerator.getPluralColumnName('colName')).to.equal('col_names');
-            });
-        });
-    });
     describe('getJoinTableName', () => {
         describe('when called with a value', () => {
             it('returns a join table name', () => {
