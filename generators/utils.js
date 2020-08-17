@@ -255,7 +255,8 @@ function renderContent(source, generator, context, options, cb) {
         if (!err) {
             cb(res);
         } else {
-            generator.error(`Copying template ${source} failed. [${err}]`);
+            generator.warning(`Copying template ${source} failed. [${err}]`);
+            throw err;
         }
     });
 }

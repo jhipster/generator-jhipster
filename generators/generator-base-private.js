@@ -810,7 +810,7 @@ module.exports = class extends Generator {
      */
     debug(msg, ...args) {
         const formattedMsg = `${chalk.yellow.bold('DEBUG!')} ${msg}`;
-        if (this.isDebugEnabled || (this.options && this.options.debug)) {
+        if ((this.configOptions && this.configOptions.isDebugEnabled) || (this.options && this.options.debug)) {
             this.log(formattedMsg);
             args.forEach(arg => this.log(arg));
         }
@@ -1319,28 +1319,9 @@ module.exports = class extends Generator {
      */
     getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships) {
         const derivedRelationship = relationships.find(relationship => relationship.useJPADerivedIdentifier === true);
-        return derivedRelationship && derivedRelationship.otherEntityName === 'user' && authenticationType === 'oauth2'
+        return derivedRelationship && this.isBuiltInUserEntity(derivedRelationship.otherEntityName) && authenticationType === 'oauth2'
             ? 'String'
             : this.getPkType(databaseType);
-    }
-
-    fieldIsEnum(fieldType) {
-        return ![
-            'String',
-            'Integer',
-            'Long',
-            'Float',
-            'Double',
-            'BigDecimal',
-            'LocalDate',
-            'Instant',
-            'ZonedDateTime',
-            'Duration',
-            'UUID',
-            'Boolean',
-            'byte[]',
-            'ByteBuffer',
-        ].includes(fieldType);
     }
 
     /**

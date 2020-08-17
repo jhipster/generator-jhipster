@@ -277,7 +277,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             />
           <%_
             } else if (fields[idx].fieldIsEnum) {
-              const enumValues = getEnumValuesWithCustomValues(fields[idx].fieldValues);
+              const enumValues = fields[idx].enumValues;
           _%>
             <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
               <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">

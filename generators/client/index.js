@@ -55,7 +55,6 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('skip-commit-hook', {
             desc: 'Skip adding husky commit hooks',
             type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--experimental` flag which can be used to enable experimental features
@@ -63,14 +62,13 @@ module.exports = class extends BaseBlueprintGenerator {
             desc:
                 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
-            defaults: false,
         });
 
         if (this.options.help) {
             return;
         }
 
-        this.loadOptions();
+        this.loadStoredAppOptions();
         this.loadRuntimeOptions();
 
         this.existingProject = !!this.jhipsterConfig.clientFramework;
@@ -150,13 +148,9 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             composeLanguages() {
                 // We don't expose client/server to cli, composing with languages is used for test purposes.
-                if (this.configOptions.skipComposeLanguages || this.jhipsterConfig.enableTranslation === false) return;
+                if (this.jhipsterConfig.enableTranslation === false) return;
 
-                this.configOptions.skipComposeLanguages = true;
-                this.composeWithJHipster('languages', {
-                    ...this.options,
-                    debug: this.isDebugEnabled,
-                });
+                this.composeWithJHipster('languages', true);
             },
 
             validateSkipServer() {
