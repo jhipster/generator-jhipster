@@ -1368,7 +1368,7 @@ module.exports = class extends Generator {
 
     getDBCUrl(databaseType, protocol, options = {}) {
         if (!protocol) {
-            throw new Error("protocol is required");
+            throw new Error('protocol is required');
         }
         if (!options.databaseName) {
             throw new Error("option 'databaseName' is required");
