@@ -20,6 +20,52 @@
 const _ = require('lodash');
 const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
 
+const fakeStringTemplateForFieldName = columnName => {
+    let fakeTemplate;
+    if (columnName === 'first_name') {
+        fakeTemplate = 'name.firstName';
+    } else if (columnName === 'last_name') {
+        fakeTemplate = 'name.lastName';
+    } else if (columnName === 'job_title') {
+        fakeTemplate = 'name.jobTitle';
+    } else if (columnName === 'telephone' || columnName === 'phone') {
+        fakeTemplate = 'phone.phoneNumber';
+    } else if (columnName === 'zip_code' || columnName === 'post_code') {
+        fakeTemplate = 'address.zipCode';
+    } else if (columnName === 'city') {
+        fakeTemplate = 'address.city';
+    } else if (columnName === 'street_name' || columnName === 'street') {
+        fakeTemplate = 'address.streetName';
+    } else if (columnName === 'country') {
+        fakeTemplate = 'address.country';
+    } else if (columnName === 'country_code') {
+        fakeTemplate = 'address.countryCode';
+    } else if (columnName === 'color') {
+        fakeTemplate = 'commerce.color';
+    } else if (columnName === 'account') {
+        fakeTemplate = 'finance.account';
+    } else if (columnName === 'account_name') {
+        fakeTemplate = 'finance.accountName';
+    } else if (columnName === 'currency_code') {
+        fakeTemplate = 'finance.currencyCode';
+    } else if (columnName === 'currency_name') {
+        fakeTemplate = 'finance.currencyName';
+    } else if (columnName === 'currency_symbol') {
+        fakeTemplate = 'finance.currencySymbol';
+    } else if (columnName === 'iban') {
+        fakeTemplate = 'finance.iban';
+    } else if (columnName === 'bic') {
+        fakeTemplate = 'finance.bic';
+    } else if (columnName === 'email') {
+        fakeTemplate = 'internet.email';
+    } else if (columnName === 'url') {
+        fakeTemplate = 'internet.url';
+    } else {
+        fakeTemplate = 'random.words';
+    }
+    return `{{${fakeTemplate}}}`;
+};
+
 const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => {
     let data;
     if (field.options && field.options.fakerTemplate) {
@@ -50,61 +96,21 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
         // Write the date without milliseconds so Java can parse it
         // See https://stackoverflow.com/a/34053802/150868
         data = faker.getRecentDate(1, changelogDate).toISOString().split('.')[0];
-    } else if (field.fieldType === 'UUID') {
-        data = faker.random.uuid();
     } else if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') {
         data = '../fake-data/blob/hipster.png';
     } else if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent === 'text') {
         data = '../fake-data/blob/hipster.txt';
+    } else if (field.fieldType === 'String') {
+        data = faker.fake(fakeStringTemplateForFieldName(field.columnName));
+    } else if (field.fieldType === 'UUID') {
+        data = faker.random.uuid();
     } else if (field.fieldType === 'Boolean') {
         data = faker.random.boolean();
-    } else if (field.fieldType === 'String') {
-        const columnName = field.columnName;
-        if (columnName === 'first_name') {
-            data = faker.name.firstName();
-        } else if (columnName === 'last_name') {
-            data = faker.name.lastName();
-        } else if (columnName === 'job_title') {
-            data = faker.name.jobTitle();
-        } else if (columnName === 'telephone' || columnName === 'phone') {
-            data = faker.phone.phoneNumber();
-        } else if (columnName === 'zip_code' || columnName === 'post_code') {
-            data = faker.address.zipCode();
-        } else if (columnName === 'city') {
-            data = faker.address.city();
-        } else if (columnName === 'street_name' || columnName === 'street') {
-            data = faker.address.streetName();
-        } else if (columnName === 'country') {
-            data = faker.address.country();
-        } else if (columnName === 'country_code') {
-            data = faker.address.countryCode();
-        } else if (columnName === 'color') {
-            data = faker.commerce.color();
-        } else if (columnName === 'account') {
-            data = faker.finance.account();
-        } else if (columnName === 'account_name') {
-            data = faker.finance.accountName();
-        } else if (columnName === 'currency_code') {
-            data = faker.finance.currencyCode();
-        } else if (columnName === 'currency_name') {
-            data = faker.finance.currencyName();
-        } else if (columnName === 'currency_symbol') {
-            data = faker.finance.currencySymbol();
-        } else if (columnName === 'iban') {
-            data = faker.finance.iban();
-        } else if (columnName === 'bic') {
-            data = faker.finance.bic();
-        } else if (columnName === 'email') {
-            data = faker.internet.email();
-        } else if (columnName === 'url') {
-            data = faker.internet.url();
-        } else {
-            data = faker.random.words();
-        }
     } else {
         // eslint-disable-next-line no-console
         console.warn(`Field type ${field.fieldType} not supported for fake data`);
     }
+
     // Validation rules
     if (field.fieldValidate === true) {
         // manage String max length
