@@ -313,6 +313,7 @@ const files = {
             path: TEST_SRC_DIR,
             templates: [
                 'jest.conf.js',
+                'spec/icons-mock.ts',
                 'spec/storage-mock.ts',
                 'spec/app/utils.ts',
                 'spec/app/config/axios-interceptor.spec.ts',
