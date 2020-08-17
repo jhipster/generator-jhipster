@@ -221,6 +221,7 @@ const LANGUAGES = [
         value: 'zh-tw',
         localeId: 'zh-Hant',
     },
+    { name: 'Croatian', dispName: 'Hrvatski', value: 'hr' },
     { name: 'Czech', dispName: 'Český', value: 'cs' },
     { name: 'Danish', dispName: 'Dansk', value: 'da' },
     { name: 'Dutch', dispName: 'Nederlands', value: 'nl' },

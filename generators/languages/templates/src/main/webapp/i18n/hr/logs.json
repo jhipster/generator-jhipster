@@ -1,0 +1,11 @@
+{
+    "logs": {
+        "title": "Logovi",
+        "nbloggers": "Postoji {{ total }} logera.",
+        "filter": "Filter",
+        "table": {
+            "name": "Naziv",
+            "level": "Razina"
+        }
+    }
+}

@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "Korisničke postavke za [<strong>{{username}}</strong>]",
+        "form": {
+            "firstname": "Ime",
+            "firstname.placeholder": "Vaše ime",
+            "lastname": "Prezime",
+            "lastname.placeholder": "Vaše prezime",
+            "language": "Jezik",
+            "button": "Spremi"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>Dogodila se pogreška!</strong> Postavke nisu mogle biti spremljene.",
+                "emailexists": "<strong>Adresa e-pošte se već koristi!</strong> Molimo koristite drugu adresu e-pošte."
+            },
+            "success": "<strong>Postavke spremljene!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "Potrebno je vaše ime.",
+                    "minlength": "Ime mora imati barem jedan znak",
+                    "maxlength": "Ime ne može biti dulje od 50 znakova"
+                },
+                "lastname": {
+                    "required": "Potrebno je vaše prezime.",
+                    "minlength": "Prezime mora imati barem jedan znak",
+                    "maxlength": "Prezime ne može imati više od 50 znakova"
+                }
+            }
+        }
+    }
+}
