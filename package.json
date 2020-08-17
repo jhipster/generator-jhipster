@@ -69,7 +69,7 @@
         "insight": "0.10.3",
         "js-object-pretty-print": "0.3.0",
         "js-yaml": "3.14.0",
-        "lodash": "4.17.19",
+        "lodash": "4.17.20",
         "meow": "7.1.0",
         "mkdirp": "1.0.4",
         "normalize-path": "3.0.0",
