@@ -1366,6 +1366,13 @@ module.exports = class extends Generator {
         return this.getDBCUrl(databaseType, 'r2dbc', options);
     }
 
+    /**
+     * Returns the URL for a particular databaseType and protocol
+     *
+     * @param {string} databaseType
+     * @param {string} protocol
+     * @param {*} options
+     */
     getDBCUrl(databaseType, protocol, options = {}) {
         if (!protocol) {
             throw new Error('protocol is required');
