@@ -31,6 +31,7 @@ const through = require('through2');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
+const { languageToJavaLanguage } = require('./utils');
 const { prettierTransform, prettierJavaOptions } = require('./generator-transforms');
 const JSONToJDLEntityConverter = require('../jdl/converters/json-to-jdl-entity-converter');
 const JSONToJDLOptionConverter = require('../jdl/converters/json-to-jdl-option-converter');
@@ -121,10 +122,7 @@ module.exports = class extends Generator {
     installI18nServerFilesByLanguage(_this, resourceDir, lang, testResourceDir) {
         const generator = _this || this;
         const prefix = this.fetchFromInstalledJHipster('languages/templates');
-        // Template the message server side properties
-        const langProp = lang.replace(/-/g, '_');
-        // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
-        const langJavaProp = langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
+        const langJavaProp = languageToJavaLanguage(lang);
         generator.template(
             `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
             `${resourceDir}i18n/messages_${langJavaProp}.properties`
