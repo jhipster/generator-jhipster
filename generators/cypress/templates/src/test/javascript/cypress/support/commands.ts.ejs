@@ -27,6 +27,7 @@ export const passwordItemSelector = '[data-cy="passwordItem"]';
 export const loginItemSelector = '[data-cy="login"]';
 export const logoutItemSelector = '[data-cy="logout"]';
 
+<%_ if (authenticationType !== 'oauth2') { _%>
 // Login
 export const titleLoginSelector = '[data-cy="loginTitle"]';
 export const errorLoginSelector = '[data-cy="loginError"]';
@@ -42,13 +43,6 @@ export const emailRegisterSelector = '[data-cy="email"]';
 export const firstPasswordRegisterSelector = '[data-cy="firstPassword"]';
 export const secondPasswordRegisterSelector = '[data-cy="secondPassword"]';
 export const submitRegisterSelector = '[data-cy="submit"]';
-
-// Administration
-export const userManagementPageHeadingSelector = '[data-cy="userManagementPageHeading"]';
-export const metricsPageHeadingSelector = '[data-cy="metricsPageHeading"]';
-export const healthPageHeadingSelector = '[data-cy="healthPageHeading"]';
-export const logsPageHeadingSelector = '[data-cy="logsPageHeading"]';
-export const configurationPageHeadingSelector = '[data-cy="configurationPageHeading"]';
 
 // Settings
 export const firstNameSettingsSelector = '[data-cy="firstname"]';
@@ -66,6 +60,14 @@ export const submitPasswordSelector = '[data-cy="submit"]';
 // Reset Password
 export const emailResetPasswordSelector = '[data-cy="emailResetPassword"]';
 export const submitInitResetPasswordSelector = '[data-cy="submit"]';
+<%_ } _%>
+
+// Administration
+export const userManagementPageHeadingSelector = '[data-cy="userManagementPageHeading"]';
+export const metricsPageHeadingSelector = '[data-cy="metricsPageHeading"]';
+export const healthPageHeadingSelector = '[data-cy="healthPageHeading"]';
+export const logsPageHeadingSelector = '[data-cy="logsPageHeading"]';
+export const configurationPageHeadingSelector = '[data-cy="configurationPageHeading"]';
 
 // ***********************************************
 // End Specific Selector Attributes for Cypress
@@ -79,7 +81,7 @@ export const classValid = <%_ if (clientFramework === 'angularX') { _%>'ng-valid
 <%_ } else if (clientFramework === 'react') { _%>'av-valid';
 <%_ } else { _%>'valid';<%_ } _%>
 
-
+<%_ if (authenticationType !== 'oauth2') { _%>
 Cypress.Commands.add('login', (username: string, password: string) => {
   cy.clickOnLoginItem();
   cy.get(usernameLoginSelector).type(username);
@@ -94,6 +96,7 @@ declare global {
     }
   }
 }
+<%_ } _%>
 
 // Convert this to a module instead of script (allows import/export)
 export {};
