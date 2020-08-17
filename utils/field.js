@@ -22,8 +22,8 @@ const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
 
 const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => {
     let data;
-    if (field.options && field.options.faker) {
-        data = faker.faker(field.options.faker);
+    if (field.options && field.options.fakerTemplate) {
+        data = faker.faker(field.options.fakerTemplate);
     } else if (field.fieldValidate && field.fieldValidateRules.includes('pattern')) {
         const generated = field.createRandexp().gen();
         if (type === 'csv') {
