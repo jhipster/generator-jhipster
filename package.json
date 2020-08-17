@@ -70,7 +70,7 @@
         "js-object-pretty-print": "0.3.0",
         "js-yaml": "3.14.0",
         "lodash": "4.17.19",
-        "meow": "7.0.1",
+        "meow": "7.1.0",
         "mkdirp": "1.0.4",
         "normalize-path": "3.0.0",
         "ora": "5.0.0",
