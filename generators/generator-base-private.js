@@ -1379,26 +1379,26 @@ module.exports = class extends Generator {
         let dbcUrl;
         let extraOptions;
         if (databaseType === 'mysql') {
-            dbcUrl = `${options.protocol}:mysql://${options.hostname}:3306/${options.databaseName}`;
+            dbcUrl = `${protocol}:mysql://${options.hostname}:3306/${options.databaseName}`;
             extraOptions =
                 '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true';
         } else if (databaseType === 'mariadb') {
-            dbcUrl = `${options.protocol}:mariadb://${options.hostname}:3306/${options.databaseName}`;
+            dbcUrl = `${protocol}:mariadb://${options.hostname}:3306/${options.databaseName}`;
             extraOptions = '?useLegacyDatetimeCode=false&serverTimezone=UTC';
         } else if (databaseType === 'postgresql') {
-            dbcUrl = `${options.protocol}:postgresql://${options.hostname}:5432/${options.databaseName}`;
+            dbcUrl = `${protocol}:postgresql://${options.hostname}:5432/${options.databaseName}`;
         } else if (databaseType === 'oracle') {
-            dbcUrl = `${options.protocol}:oracle:thin:@${options.hostname}:1521:${options.databaseName}`;
+            dbcUrl = `${protocol}:oracle:thin:@${options.hostname}:1521:${options.databaseName}`;
         } else if (databaseType === 'mssql') {
-            dbcUrl = `${options.protocol}:sqlserver://${options.hostname}:1433;database=${options.databaseName}`;
+            dbcUrl = `${protocol}:sqlserver://${options.hostname}:1433;database=${options.databaseName}`;
         } else if (databaseType === 'h2Disk') {
             if (!options.localDirectory) {
                 throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
             }
-            dbcUrl = `${options.protocol}:h2:file:${options.localDirectory}/${options.databaseName}`;
+            dbcUrl = `${protocol}:h2:file:${options.localDirectory}/${options.databaseName}`;
             extraOptions = ';DB_CLOSE_DELAY=-1';
         } else if (databaseType === 'h2Memory') {
-            dbcUrl = `${options.protocol}:h2:mem:${options.databaseName}`;
+            dbcUrl = `${protocol}:h2:mem:${options.databaseName}`;
             extraOptions = ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE';
         } else {
             throw new Error(`${databaseType} databaseType is not supported`);
