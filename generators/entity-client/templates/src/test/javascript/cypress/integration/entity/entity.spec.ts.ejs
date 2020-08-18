@@ -1,0 +1,114 @@
+import {
+  entityTableSelector,
+  entityTableColumnIdSelector,
+  entityCreateButtonSelector,
+  entityCreateSaveButtonSelector,
+  entityDetailsButtonSelector,
+  entityDetailsBackButtonSelector,
+  entityEditButtonSelector,
+} from '../../support/entity';
+<%_
+const baseApi = (applicationType === 'gateway' && locals.microserviceName) ? microserviceName.toLowerCase() + '/api/' : 'api/';
+_%>
+
+describe('<%= entityClass %> e2e test', () => {
+  let startingEntitiesCount = 0;
+
+  <%_ if (authenticationType === 'oauth2') { _%>
+  before(() => {
+    cy.clearCache();
+    cy.keycloackLogout();
+    cy.visit('/');
+    cy.keycloackLogin('user');
+    cy.clickOnLoginItem();
+    cy.server();
+    cy.route('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
+    cy.visit('');
+    cy.clickOnEntityMenuItem('<%= entityStateName %>');
+    cy.wait('@entitiesRequest').its('responseBody').then(array => {
+      startingEntitiesCount = array.length;
+    });
+    cy.visit('/');
+  });
+  <%_ } else { _%>
+  before(() => {
+    cy.window().then((win) => {
+      win.sessionStorage.clear()
+    });
+    cy.clearCookies();
+    cy.server();
+    cy.route('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
+    cy.visit('');
+    cy.login('admin', 'admin');
+    cy.clickOnEntityMenuItem('<%= entityStateName %>');
+    cy.wait('@entitiesRequest').its('responseBody').then(array => {
+      startingEntitiesCount = array.length;
+    });
+    cy.visit('/');
+  });
+  <%_ } _%>
+
+  <%_ if (authenticationType === 'session') { _%>
+  beforeEach(() => {
+    Cypress.Cookies.preserveOnce('JSESSIONID', 'XSRF-TOKEN');
+  });
+  <%_ } _%>
+
+  it('should load <%= entityClassPlural %>', () => {
+    cy.server();
+    cy.route('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
+    cy.visit('/');
+    cy.clickOnEntityMenuItem('<%= entityStateName %>');
+    cy.wait('@entitiesRequest');
+    cy.getEntityHeading('<%= entityClass %>').should('exist');
+    if (startingEntitiesCount === 0) {
+      cy.get(entityTableSelector).should('not.exist');
+    } else {
+      cy.get(entityTableSelector).should('have.lengthOf', startingEntitiesCount);
+    }
+    cy.visit('/');
+  });
+
+  it('should load create <%= entityClass %> page', () => {
+    cy.server();
+    cy.route('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
+    cy.visit('/');
+    cy.clickOnEntityMenuItem('<%= entityStateName %>');
+    cy.wait('@entitiesRequest');
+    cy.get(entityCreateButtonSelector).click({force: true});
+    cy.getEntityCreateUpdateHeading('<%= entityClass %>');
+    cy.get(entityCreateSaveButtonSelector).should('exist');
+    cy.visit('/');
+  });
+
+  it('should load details <%= entityClass %> page', () => {
+    cy.server();
+    cy.route('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
+    cy.visit('/');
+    cy.clickOnEntityMenuItem('<%= entityStateName %>');
+    cy.wait('@entitiesRequest');
+    if (startingEntitiesCount > 0) {
+      <%_ if (pagination !== 'no' && pagination !== 'infinite-scroll') { _%>
+      cy.get(entityTableColumnIdSelector).click({force: true});
+      <%_ } _%>
+      cy.get(entityDetailsButtonSelector).last().click({force: true});
+      cy.getEntityDetailsHeading('<%= entityInstance %>');
+      cy.get(entityDetailsBackButtonSelector).should('exist');
+    }
+    cy.visit('/');
+  });
+
+  it('should load edit <%= entityClass %> page', () => {
+    cy.server();
+    cy.route('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
+    cy.visit('/');
+    cy.clickOnEntityMenuItem('<%= entityStateName %>');
+    cy.wait('@entitiesRequest');
+    <%_ if (pagination !== 'no' && pagination !== 'infinite-scroll') { _%>
+    cy.get(entityTableColumnIdSelector).click({force: true});
+    <%_ } _%>
+    cy.get(entityEditButtonSelector).last().click({force: true});
+    cy.getEntityCreateUpdateHeading('<%= entityClass %>');
+    cy.get(entityCreateSaveButtonSelector).should('exist');
+  });
+});

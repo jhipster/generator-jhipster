@@ -10,6 +10,7 @@ import {
   logoutItemSelector,
   settingsItemSelector,
   passwordItemSelector,
+  entityItemSelector,
 } from './commands';
 
 Cypress.Commands.add('clickOnLoginItem', () => {
@@ -36,6 +37,10 @@ Cypress.Commands.add('clickOnAdminMenuItem', (item: string) => {
   return cy.get(navbarSelector).get(adminMenuSelector).click({force: true}).get(`.dropdown-item[href="/admin/${item}"]`).click({force: true});
 });
 
+Cypress.Commands.add('clickOnEntityMenuItem', (entityName: string) => {
+  return cy.get(navbarSelector).get(entityItemSelector).click({force: true}).get(`.dropdown-item[href="/${entityName}"]`).click({force: true});
+});
+
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
@@ -45,6 +50,7 @@ declare global {
       clickOnSettingsItem(): Cypress.Chainable;
       clickOnPasswordItem(): Cypress.Chainable;
       clickOnAdminMenuItem(item: string): Cypress.Chainable;
+      clickOnEntityMenuItem(entityName: string): Cypress.Chainable;
     }
   }
 }

@@ -218,7 +218,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
     <div>
     <Row className="justify-content-center">
       <Col md="8">
-        <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel">
+        <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%= entityClass %>CreateUpdateHeading">
           <Translate contentKey="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%= entityClass %></Translate>
         </h2>
       </Col>
@@ -554,7 +554,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
           </Button>
           &nbsp;
-          <Button color="primary" id="save-entity" type="submit" disabled={updating}>
+          <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
             <FontAwesomeIcon icon="save" />&nbsp;
             <Translate contentKey="entity.action.save">Save</Translate>
           </Button>

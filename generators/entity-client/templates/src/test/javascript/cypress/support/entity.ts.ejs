@@ -1,0 +1,46 @@
+/* eslint-disable @typescript-eslint/no-namespace */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress" />
+
+// ***********************************************
+// Begin Specific Selector Attributes for Cypress
+// ***********************************************
+
+// Entity
+export const entityTableSelector = '[data-cy="entityTable"]';
+export const entityTableColumnIdSelector = '[data-cy="entityTableColumnId"]';
+export const entityCreateButtonSelector = '[data-cy="entityCreateButton"]';
+export const entityCreateSaveButtonSelector = '[data-cy="entityCreateSaveButton"]';
+export const entityDetailsButtonSelector = '[data-cy="entityDetailsButton"]'; // can return multiple elements
+export const entityDetailsBackButtonSelector = '[data-cy="entityDetailsBackButton"]';
+export const entityEditButtonSelector = '[data-cy="entityEditButton"]';
+
+// ***********************************************
+// End Specific Selector Attributes for Cypress
+// ***********************************************
+
+Cypress.Commands.add('getEntityHeading', (entityName: string) => {
+  return cy.get(`[data-cy="${entityName}Heading"]`);
+});
+
+Cypress.Commands.add('getEntityCreateUpdateHeading', (entityName: string) => {
+  return cy.get(`[data-cy="${entityName}CreateUpdateHeading"]`);
+});
+
+Cypress.Commands.add('getEntityDetailsHeading', (entityInstanceName: string) => {
+  return cy.get(`[data-cy="${entityInstanceName}DetailsHeading"]`);
+});
+
+declare global {
+  namespace Cypress {
+    interface Chainable<Subject> {
+      getEntityHeading(entityName: string): Cypress.Chainable;
+      getEntityCreateUpdateHeading(entityName: string): Cypress.Chainable;
+      getEntityDetailsHeading(entityInstanceName: string): Cypress.Chainable;
+    }
+  }
+}
+
+// Convert this to a module instead of script (allows import/export)
+export {};
