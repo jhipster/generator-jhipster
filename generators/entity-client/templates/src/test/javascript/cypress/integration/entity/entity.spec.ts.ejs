@@ -68,18 +68,6 @@ describe('<%= entityClass %> e2e test', () => {
     cy.visit('/');
   });
 
-  it('should load create <%= entityClass %> page', () => {
-    cy.server();
-    cy.route('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
-    cy.visit('/');
-    cy.clickOnEntityMenuItem('<%= entityStateName %>');
-    cy.wait('@entitiesRequest');
-    cy.get(entityCreateButtonSelector).click({force: true});
-    cy.getEntityCreateUpdateHeading('<%= entityClass %>');
-    cy.get(entityCreateSaveButtonSelector).should('exist');
-    cy.visit('/');
-  });
-
   it('should load details <%= entityClass %> page', () => {
     cy.server();
     cy.route('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
@@ -91,6 +79,19 @@ describe('<%= entityClass %> e2e test', () => {
       cy.getEntityDetailsHeading('<%= entityInstance %>');
       cy.get(entityDetailsBackButtonSelector).should('exist');
     }
+    cy.visit('/');
+  });
+
+  <%_ if (!readOnly) { _%>
+  it('should load create <%= entityClass %> page', () => {
+    cy.server();
+    cy.route('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
+    cy.visit('/');
+    cy.clickOnEntityMenuItem('<%= entityStateName %>');
+    cy.wait('@entitiesRequest');
+    cy.get(entityCreateButtonSelector).click({force: true});
+    cy.getEntityCreateUpdateHeading('<%= entityClass %>');
+    cy.get(entityCreateSaveButtonSelector).should('exist');
     cy.visit('/');
   });
 
@@ -107,4 +108,5 @@ describe('<%= entityClass %> e2e test', () => {
     }
     cy.visit('/');
   });
+  <%_ } _%>
 });
