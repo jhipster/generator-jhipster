@@ -14,7 +14,7 @@ describe('<%= entityClass %> e2e test', () => {
   let startingEntitiesCount = 0;
 
   <%_ if (authenticationType === 'oauth2') { _%>
-  before(() => {
+  beforeEach(() => {
     cy.clearCache();
     cy.keycloackLogout();
     cy.visit('/');
