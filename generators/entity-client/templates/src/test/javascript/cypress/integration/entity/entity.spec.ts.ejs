@@ -88,10 +88,7 @@ describe('<%= entityClass %> e2e test', () => {
     cy.clickOnEntityMenuItem('<%= entityStateName %>');
     cy.wait('@entitiesRequest');
     if (startingEntitiesCount > 0) {
-      <%_ if (pagination !== 'no' && pagination !== 'infinite-scroll') { _%>
-      cy.get(entityTableColumnIdSelector).click({force: true});
-      <%_ } _%>
-      cy.get(entityDetailsButtonSelector).last().click({force: true});
+      cy.get(entityDetailsButtonSelector).first().click({force: true});
       cy.getEntityDetailsHeading('<%= entityInstance %>');
       cy.get(entityDetailsBackButtonSelector).should('exist');
     }
@@ -104,11 +101,11 @@ describe('<%= entityClass %> e2e test', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('<%= entityStateName %>');
     cy.wait('@entitiesRequest');
-    <%_ if (pagination !== 'no' && pagination !== 'infinite-scroll') { _%>
-    cy.get(entityTableColumnIdSelector).click({force: true});
-    <%_ } _%>
-    cy.get(entityEditButtonSelector).last().click({force: true});
-    cy.getEntityCreateUpdateHeading('<%= entityClass %>');
-    cy.get(entityCreateSaveButtonSelector).should('exist');
+    if (startingEntitiesCount > 0) {
+      cy.get(entityEditButtonSelector).first().click({force: true});
+      cy.getEntityCreateUpdateHeading('<%= entityClass %>');
+      cy.get(entityCreateSaveButtonSelector).should('exist');
+    }
+    cy.visit('/');
   });
 });
