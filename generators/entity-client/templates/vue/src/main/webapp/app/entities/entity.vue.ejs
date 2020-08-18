@@ -47,7 +47,7 @@
                 <caption><%= entityInstancePlural %></caption>
                 <thead>
                 <tr>
-                    <th data-cy="entityTableColumnId" scope="row"<% if (pagination !== 'no') { %> v-on:click="changeOrder('id')"<% } %>><span v-text="$t('global.field.id')">ID</span><% if (pagination !== 'no') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
+                    <th scope="row"<% if (pagination !== 'no') { %> v-on:click="changeOrder('id')"<% } %>><span v-text="$t('global.field.id')">ID</span><% if (pagination !== 'no') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
                     <%_ for (idx in fields) { _%>
                     <th scope="row"<% if (pagination !== 'no') { %> v-on:click="changeOrder('<%= fields[idx].fieldName%>')"<% } %>><span v-text="$t('<%=`${i18nKeyPrefix}.${fields[idx].fieldName}` %>')"><%= fields[idx].fieldNameHumanized %></span><% if (pagination !== 'no') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%= fields[idx].fieldName%>'"></jhi-sort-indicator><% } %></th>
                     <%_ } _%>

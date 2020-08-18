@@ -282,7 +282,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
             <Table responsive>
               <thead>
                 <tr>
-                  <th data-cy="entityTableColumnId"<% if (pagination !== 'no') { %> className="hand" onClick={sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
+                  <th <% if (pagination !== 'no') { %> className="hand" onClick={sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
                   <%_ for (idx in fields) { _%>
                   <th<% if (pagination !== 'no') { %> className="hand" onClick={sort('<%= fields[idx].fieldName %>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${fields[idx].fieldName}` %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
                   <%_ } _%>

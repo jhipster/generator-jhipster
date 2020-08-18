@@ -62,7 +62,7 @@
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
                 <tr<% if (pagination !== 'no') { %> jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="<%= pagination !== 'infinite-scroll' ? 'loadPage.bind(this)' : 'reset.bind(this)'%>"<% } %>>
-                    <th data-cy="entityTableColumnId" scope="col" <% if (pagination !== 'no') { %> jhiSortBy="id"<% } %>><span jhiTranslate="global.field.id">ID</span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                    <th scope="col" <% if (pagination !== 'no') { %> jhiSortBy="id"<% } %>><span jhiTranslate="global.field.id">ID</span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
                     <%_ for (idx in fields) { _%>
                     <th scope="col" <% if (pagination !== 'no') { %> jhiSortBy="<%= fields[idx].fieldName %>"<% } %>><span jhiTranslate="<%= `${i18nKeyPrefix}.${fields[idx].fieldName}` %>"><%= fields[idx].fieldNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
                     <%_ } _%>
