@@ -1291,12 +1291,16 @@ module.exports = class extends PrivateBase {
             this.configOptions.composedWith.push(generator);
         }
 
-        const namespace = `jhipster:${generator}`;
+        const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
         if (this.env.get(namespace)) {
             generator = namespace;
         } else {
             // Keep test compatibily were jhipster lookup does not run.
-            generator = require.resolve(`./${generator}`);
+            try {
+                generator = require.resolve(`./${generator}`);
+            } catch (e) {
+                throw new Error(`Generator ${generator} was not found`);
+            }
         }
 
         return this.composeWith(
