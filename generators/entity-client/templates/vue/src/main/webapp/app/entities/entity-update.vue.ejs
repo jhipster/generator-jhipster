@@ -40,7 +40,7 @@
                             const values = fields[idx].enumValues;
                             for (key in values) {
                                 const enumValue = values[key]; _%>
-                            <option value="<%= enumValue.name %>" v-bind:label="$t('<%=enumPrefix%>.<%= enumValue.value %>')"><%= enumValue.value %></option>
+                            <option value="<%= enumValue.name %>" v-bind:label="$t('<%=enumPrefix%>.<%= enumValue.name %>')"><%= enumValue.value %></option>
                             <%_ } _%>
                         </select>
                         <%_ } else { _%>
