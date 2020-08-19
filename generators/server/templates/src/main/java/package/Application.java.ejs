@@ -113,12 +113,26 @@ public class <%= mainClass %> {
         } catch (UnknownHostException e) {
             log.warn("The host name could not be determined, using `localhost` as fallback");
         }
+
+        String jhipsterLibVersion = Optional
+            .ofNullable(env.getProperty("jhipster-lib.git.build.version"))
+            .orElse("unknown");
+        if (jhipsterLibVersion.endsWith("-SNAPSHOT")) {
+            String commitId = Optional
+                .ofNullable(env.getProperty("jhipster-lib.git.commit.id.full"))
+                .map(key -> " (" + key + ")")
+                .orElse("");
+            jhipsterLibVersion = jhipsterLibVersion + commitId;
+        }
+
         log.info("\n----------------------------------------------------------\n\t" +
                 "Application '{}' is running! Access URLs:\n\t" +
+                "JHipster Lib: \t{}\n\t" +
                 "Local: \t\t{}://localhost:{}{}\n\t" +
                 "External: \t{}://{}:{}{}\n\t" +
                 "Profile(s): \t{}\n----------------------------------------------------------",
             env.getProperty("spring.application.name"),
+            jhipsterLibVersion,
             protocol,
             serverPort,
             contextPath,
