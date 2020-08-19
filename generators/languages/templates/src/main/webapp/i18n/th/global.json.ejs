@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "สถานะระบบ",
                 "configuration": "องค์ประกอบ",
                 "logs": "บันทึกการทำงาน",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "การตรวจสอบ",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "ฐานข้อมูล",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -142,7 +139,11 @@
         "userexists": "ชื่อผู้ใช้นี้ถูกใช้ไปแล้ว!",
         "emailexists": "อีเมลนี้ถูกใช้ไปแล้ว!",
         "idexists": "{{ entityName }} ไม่สามารถใช้ ID ที่ถูกใช้ไปแล้ว",
-        "idnull": "Invalid ID"
+        "idnull": "Invalid ID",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "นี่คือส่วนท้าย"
 }

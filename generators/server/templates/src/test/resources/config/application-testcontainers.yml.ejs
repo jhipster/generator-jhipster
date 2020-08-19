@@ -1,0 +1,87 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+# ===================================================================
+# Spring Boot configuration.
+#
+# This configuration is used for unit/integration tests with testcontainers database containers.
+#
+# To activate this configuration launch integration tests with the 'testcontainers' profile
+#
+# More information on database containers: https://www.testcontainers.org/modules/databases/
+<%_ if (prodDatabaseType === 'mssql') { _%>
+#
+# You are required to accept EULA license for SQL server containers.
+# Follow the instructions at https://www.testcontainers.org/modules/databases/mssqlserver/
+<%_ } _%>
+<%_ if (prodDatabaseType === 'oracle') { _%>
+#
+# You have to specify an Oracle image name in a classpath file named testcontainers.properties.
+# Follow the instructions at https://www.testcontainers.org/modules/databases/oraclexe/
+<%_ } _%>
+# ===================================================================
+
+spring:
+    datasource:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+        <%_ if (prodDatabaseType === 'mysql') { _%>
+        url: jdbc:tc:mysql:<%= containerVersion %>:///<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=${user.timezone}&TC_TMPFS=/testtmpfs:rw
+        username: root
+        password:
+        <%_ } else if (prodDatabaseType === 'mariadb') { _%>
+        url: jdbc:tc:mariadb:<%= containerVersion %>:///<%= baseName %>?TC_MY_CNF=testcontainers/mariadb&useLegacyDatetimeCode=false&serverTimezone=${user.timezone}&TC_TMPFS=/testtmpfs:rw
+        username: root
+        password:
+        <%_ } else if (prodDatabaseType === 'postgresql') { _%>
+        url: jdbc:tc:postgresql:<%= containerVersion %>:///<%= baseName %>?TC_TMPFS=/testtmpfs:rw
+        username: <%= baseName %>
+        password:
+        <%_ } else if (prodDatabaseType === 'mssql') { _%>
+        url: jdbc:tc:sqlserver:<%= containerVersion %>://;database=<%= baseName %>?TC_TMPFS=/testtmpfs:rw
+        username: SA
+        password: yourStrong(!)Password
+        <%_ } else if (prodDatabaseType === 'oracle') { _%>
+        url: jdbc:tc:oracle:thin:@///ORCL?TC_TMPFS=/testtmpfs:rw
+        username: system
+        password: oracle
+        <%_ } _%>
+        hikari:
+            poolName: Hikari
+            auto-commit: false
+        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb' || prodDatabaseType === 'mssql') { _%>
+            data-source-properties:
+                cachePrepStmts: true
+                prepStmtCacheSize: 250
+                prepStmtCacheSqlLimit: 2048
+                useServerPrepStmts: true
+        <%_ } _%>
+    jpa:
+        <%_ if (prodDatabaseType === 'mysql') { _%>
+        database-platform: org.hibernate.dialect.MySQL8Dialect
+        <%_ } else if (prodDatabaseType === 'mariadb') { _%>
+        database-platform: org.hibernate.dialect.MariaDB103Dialect
+        <%_ } else if (prodDatabaseType === 'postgresql') { _%>
+        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
+        <%_ } else if (prodDatabaseType === 'oracle') { _%>
+        database-platform: org.hibernate.dialect.Oracle12cDialect
+        <%_ } else if (prodDatabaseType === 'mssql') { _%>
+        database-platform: org.hibernate.dialect.SQLServer2012Dialect
+        <%_ } else { _%>
+        database-platform: io.github.jhipster.domain.util.FixedH2Dialect
+        <%_ } _%>

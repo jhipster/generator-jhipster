@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -62,6 +62,8 @@ metadata:
   name: jhipster-registry
   namespace: <%= kubernetesNamespace %>
 spec:
+  # added to circumvent kustomize bug
+  volumeClaimTemplates: []
   serviceName: jhipster-registry
   replicas: 2
   selector:

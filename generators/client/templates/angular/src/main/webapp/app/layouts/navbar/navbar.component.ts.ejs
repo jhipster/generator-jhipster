@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,17 +18,14 @@
 -%>
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-<%_ if (authenticationType !== 'oauth2') { _%>
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-<%_ } _%>
-import { JhiLanguageService } from 'ng-jhipster';
 <%_ if (enableTranslation) { _%>
+import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
 
 import { VERSION } from 'app/app.constants';
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageHelper } from 'app/core/language/language.helper';
+import { LANGUAGES } from 'app/core/language/language.constants';
 <%_ } _%>
 import { AccountService } from 'app/core/auth/account.service';
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -45,20 +42,18 @@ import { ProfileService } from 'app/layouts/profiles/profile.service';
     ]
 })
 export class NavbarComponent implements OnInit {
-    inProduction: boolean;
-    isNavbarCollapsed: boolean;
-    languages: any[];
-    swaggerEnabled: boolean;
-    <%_ if (authenticationType !== 'oauth2') { _%>
-    modalRef: NgbModalRef;
+    inProduction?: boolean;
+    isNavbarCollapsed = true;
+    <%_ if (enableTranslation) { _%>
+    languages = LANGUAGES;
     <%_ } _%>
+    openAPIEnabled?: boolean;
     version: string;
 
     constructor(
         private loginService: LoginService,
         <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
-        private languageHelper: JhiLanguageHelper,
         private sessionStorage: SessionStorageService,
         <%_ } _%>
         private accountService: AccountService,
@@ -68,57 +63,50 @@ export class NavbarComponent implements OnInit {
         private profileService: ProfileService,
         private router: Router
     ) {
-        this.version = VERSION ? 'v' + VERSION : '';
-        this.isNavbarCollapsed = true;
+        this.version = VERSION ? (VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION) : '';
     }
 
-    ngOnInit() {
-        <%_ if (enableTranslation) { _%>
-        this.languageHelper.getAll().then((languages) => {
-            this.languages = languages;
-        });
-
-        <%_ } _%>
-        this.profileService.getProfileInfo().then((profileInfo) => {
+    ngOnInit(): void {
+        this.profileService.getProfileInfo().subscribe((profileInfo) => {
             this.inProduction = profileInfo.inProduction;
-            this.swaggerEnabled = profileInfo.swaggerEnabled;
+            this.openAPIEnabled = profileInfo.openAPIEnabled;
         });
     }
 
     <%_ if (enableTranslation) { _%>
-    changeLanguage(languageKey: string) {
+    changeLanguage(languageKey: string): void {
         this.sessionStorage.store('locale', languageKey);
         this.languageService.changeLanguage(languageKey);
     }
-
     <%_ } _%>
-    collapseNavbar() {
+
+    collapseNavbar(): void {
         this.isNavbarCollapsed = true;
     }
 
-    isAuthenticated() {
+    isAuthenticated(): boolean {
         return this.accountService.isAuthenticated();
     }
 
-    login() {
+    login(): void {
         <%_ if (authenticationType !== 'oauth2') { _%>
-        this.modalRef = this.loginModalService.open();
+        this.loginModalService.open();
         <%_ } else { _%>
         this.loginService.login();
         <%_ } _%>
     }
 
-    logout() {
+    logout(): void {
         this.collapseNavbar();
         this.loginService.logout();
         this.router.navigate(['']);
     }
 
-    toggleNavbar() {
+    toggleNavbar(): void {
         this.isNavbarCollapsed = !this.isNavbarCollapsed;
     }
 
-    getImageUrl() {
-        return this.isAuthenticated() ? this.accountService.getImageUrl() : null;
+    getImageUrl(): string {
+        return this.isAuthenticated() ? this.accountService.getImageUrl() : '';
     }
 }

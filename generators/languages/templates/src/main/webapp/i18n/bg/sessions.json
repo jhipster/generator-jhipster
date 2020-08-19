@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "Активни сесии на [<strong>{{username}}</strong>]",
+        "table": {
+            "ipaddress": "IP Адрес",
+            "useragent": "Клиентско приложение",
+            "date": "Датa",
+            "button": "Прекратяване"
+        },
+        "messages": {
+            "success": "<strong>Сесията е прекратена!</strong>",
+            "error": "<strong>Получи се грешка!</strong> Сесията не може да бъде прекратена."
+        }
+    }
+}

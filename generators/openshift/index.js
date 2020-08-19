@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -64,7 +64,7 @@ module.exports = class extends BaseDockerGenerator {
                 this.registryReplicas = this.config.get('registryReplicas');
             },
 
-            setupKubernetesConstants
+            setupKubernetesConstants,
         };
     }
 
@@ -79,7 +79,7 @@ module.exports = class extends BaseDockerGenerator {
             askForOpenShiftNamespace: prompts.askForOpenShiftNamespace,
             askForStorageType: prompts.askForStorageType,
             askForDockerRepositoryName: prompts.askForDockerRepositoryName,
-            askForDockerPushCommand: prompts.askForDockerPushCommand
+            askForDockerPushCommand: prompts.askForDockerPushCommand,
         };
     }
 
@@ -121,9 +121,9 @@ module.exports = class extends BaseDockerGenerator {
                     dockerPushCommand: this.dockerPushCommand,
                     openshiftNamespace: this.openshiftNamespace,
                     storageType: this.storageType,
-                    registryReplicas: this.registryReplicas
+                    registryReplicas: this.registryReplicas,
                 });
-            }
+            },
         };
     }
 

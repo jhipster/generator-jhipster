@@ -4,77 +4,77 @@ const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 
 const expectedFiles = {
-    csvcfiles: ['./csvc/Chart.yaml', './csvc/requirements.yaml', './csvc/values.yaml', './csvc/templates/_helpers.tpl'],
-    eurekaregistry: ['./csvc/templates/jhipster-registry.yaml', './csvc/templates/application-configmap.yaml'],
+    csvcfiles: ['./csvc-helm/Chart.yaml', './csvc-helm/requirements.yaml', './csvc-helm/values.yaml', './csvc-helm/templates/_helpers.tpl'],
+    eurekaregistry: ['./csvc-helm/templates/jhipster-registry.yml', './csvc-helm/templates/application-configmap.yml'],
     consulregistry: [
-        './csvc/templates/consul.yaml',
-        './csvc/templates/consul-config-loader.yaml',
-        './csvc/templates/application-configmap.yaml'
+        './csvc-helm/templates/consul.yml',
+        './csvc-helm/templates/consul-config-loader.yml',
+        './csvc-helm/templates/application-configmap.yml',
     ],
     jhgate: [
-        './jhgate/templates/jhgate-deployment.yaml',
-        './jhgate/templates/jhgate-service.yaml',
-        './jhgate/Chart.yaml',
-        './jhgate/requirements.yaml',
-        './jhgate/values.yaml',
-        './jhgate/templates/_helpers.tpl'
+        './jhgate-helm/templates/jhgate-deployment.yml',
+        './jhgate-helm/templates/jhgate-service.yml',
+        './jhgate-helm/Chart.yaml',
+        './jhgate-helm/requirements.yaml',
+        './jhgate-helm/values.yaml',
+        './jhgate-helm/templates/_helpers.tpl',
     ],
-    jhgateingress: ['./jhgate/templates/jhgate-ingress.yaml'],
-    customnamespace: ['./namespace.yaml'],
+    jhgateingress: ['./jhgate-helm/templates/jhgate-ingress.yml'],
+    customnamespace: ['./namespace.yml'],
     jhconsole: [
-        './csvc/templates/jhipster-console.yaml',
-        './csvc/templates/jhipster-logstash.yaml',
-        './csvc/templates/jhipster-dashboard-console.yaml',
-        './csvc/templates/jhipster-zipkin.yaml'
+        './csvc-helm/templates/jhipster-console.yml',
+        './csvc-helm/templates/jhipster-logstash.yml',
+        './csvc-helm/templates/jhipster-dashboard-console.yml',
+        './csvc-helm/templates/jhipster-zipkin.yml',
     ],
     msmysql: [
-        './msmysql/Chart.yaml',
-        './msmysql/requirements.yaml',
-        './msmysql/values.yaml',
-        './msmysql/templates/_helpers.tpl',
-        './msmysql/templates/msmysql-deployment.yaml',
-        './msmysql/templates/msmysql-service.yaml'
+        './msmysql-helm/Chart.yaml',
+        './msmysql-helm/requirements.yaml',
+        './msmysql-helm/values.yaml',
+        './msmysql-helm/templates/_helpers.tpl',
+        './msmysql-helm/templates/msmysql-deployment.yml',
+        './msmysql-helm/templates/msmysql-service.yml',
     ],
     mspsql: [
-        './mspsql/Chart.yaml',
-        './mspsql/requirements.yaml',
-        './mspsql/values.yaml',
-        './mspsql/templates/_helpers.tpl',
-        './mspsql/templates/mspsql-deployment.yaml',
-        './mspsql/templates/mspsql-service.yaml'
+        './mspsql-helm/Chart.yaml',
+        './mspsql-helm/requirements.yaml',
+        './mspsql-helm/values.yaml',
+        './mspsql-helm/templates/_helpers.tpl',
+        './mspsql-helm/templates/mspsql-deployment.yml',
+        './mspsql-helm/templates/mspsql-service.yml',
     ],
     msmongodb: [
-        './msmongodb/Chart.yaml',
-        './msmongodb/requirements.yaml',
-        './msmongodb/values.yaml',
-        './msmongodb/templates/_helpers.tpl',
-        './msmongodb/templates/msmongodb-deployment.yaml',
-        './msmongodb/templates/msmongodb-service.yaml'
+        './msmongodb-helm/Chart.yaml',
+        './msmongodb-helm/requirements.yaml',
+        './msmongodb-helm/values.yaml',
+        './msmongodb-helm/templates/_helpers.tpl',
+        './msmongodb-helm/templates/msmongodb-deployment.yml',
+        './msmongodb-helm/templates/msmongodb-service.yml',
     ],
     msmariadb: [
-        './msmariadb/Chart.yaml',
-        './msmariadb/requirements.yaml',
-        './msmariadb/values.yaml',
-        './msmariadb/templates/_helpers.tpl',
-        './msmariadb/templates/msmariadb-deployment.yaml',
-        './msmariadb/templates/msmariadb-service.yaml'
+        './msmariadb-helm/Chart.yaml',
+        './msmariadb-helm/requirements.yaml',
+        './msmariadb-helm/values.yaml',
+        './msmariadb-helm/templates/_helpers.tpl',
+        './msmariadb-helm/templates/msmariadb-deployment.yml',
+        './msmariadb-helm/templates/msmariadb-service.yml',
     ],
     monolith: [
-        './samplemysql/Chart.yaml',
-        './samplemysql/requirements.yaml',
-        './samplemysql/values.yaml',
-        './samplemysql/templates/_helpers.tpl',
-        './samplemysql/templates/samplemysql-deployment.yaml',
-        './samplemysql/templates/samplemysql-service.yaml',
-        './samplemysql/templates/samplemysql-elasticsearch.yaml'
+        './samplemysql-helm/Chart.yaml',
+        './samplemysql-helm/requirements.yaml',
+        './samplemysql-helm/values.yaml',
+        './samplemysql-helm/templates/_helpers.tpl',
+        './samplemysql-helm/templates/samplemysql-deployment.yml',
+        './samplemysql-helm/templates/samplemysql-service.yml',
+        './samplemysql-helm/templates/samplemysql-elasticsearch.yml',
     ],
-    kafka: ['./samplekafka/templates/samplekafka-deployment.yaml', './samplekafka/templates/samplekafka-service.yaml'],
+    kafka: ['./samplekafka-helm/templates/samplekafka-deployment.yml', './samplekafka-helm/templates/samplekafka-service.yml'],
     jhgategateway: [
-        './jhgate/templates/jhgate-gateway.yaml',
-        './jhgate/templates/jhgate-destination-rule.yaml',
-        './jhgate/templates/jhgate-virtual-service.yaml'
+        './jhgate-helm/templates/jhgate-gateway.yml',
+        './jhgate-helm/templates/jhgate-destination-rule.yml',
+        './jhgate-helm/templates/jhgate-virtual-service.yml',
     ],
-    applyScript: ['./helm-apply.sh', './helm-upgrade.sh']
+    applyScript: ['./helm-apply.sh', './helm-upgrade.sh'],
 };
 
 describe('JHipster Kubernetes Helm Sub Generator', () => {
@@ -96,7 +96,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     kubernetesNamespace: 'jhipsternamespace',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
                 })
                 .on('end', done);
         });
@@ -106,7 +106,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected gateway files and content', () => {
             assert.file(expectedFiles.jhgate);
-            assert.fileContent('./jhgate/requirements.yaml', /name: mysql/);
+            assert.fileContent('./jhgate-helm/requirements.yaml', /name: mysql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -130,7 +130,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
                 })
                 .on('end', done);
         });
@@ -143,7 +143,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
-            assert.fileContent('./msmysql/requirements.yaml', /name: mysql/);
+            assert.fileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -168,7 +168,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     monitoring: 'elk',
                     jhipsterConsole: true,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
                 })
                 .on('end', done);
         });
@@ -178,12 +178,12 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
-            assert.fileContent('./msmysql/requirements.yaml', /name: mysql/);
+            assert.fileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
         });
         it('creates expected jhipster-console files', () => {
             assert.file(expectedFiles.csvcfiles);
             assert.file(expectedFiles.jhconsole);
-            assert.fileContent('./csvc/requirements.yaml', /name: elasticsearch/);
+            assert.fileContent('./csvc-helm/requirements.yaml', /name: elasticsearch/);
         });
         it('creates expected namespace file', () => {
             assert.file(expectedFiles.customnamespace);
@@ -208,9 +208,11 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
+                    istio: false,
                     kubernetesServiceType: 'Ingress',
+                    ingressType: 'gke',
                     ingressDomain: 'example.com',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
                 })
                 .on('end', done);
         });
@@ -226,7 +228,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
             assert.file(expectedFiles.jhgate);
             assert.file(expectedFiles.csvcfiles);
             assert.file(expectedFiles.jhgateingress);
-            assert.fileContent('./jhgate/requirements.yaml', /name: mysql/);
+            assert.fileContent('./jhgate-helm/requirements.yaml', /name: mysql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -250,7 +252,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
                 })
                 .on('end', done);
         });
@@ -264,11 +266,11 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
-            assert.fileContent('./msmysql/requirements.yaml', /name: mysql/);
+            assert.fileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
         });
         it('creates expected psql files', () => {
             assert.file(expectedFiles.mspsql);
-            assert.fileContent('./mspsql/requirements.yaml', /name: postgresql/);
+            assert.fileContent('./mspsql-helm/requirements.yaml', /name: postgresql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -292,7 +294,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
                 })
                 .on('end', done);
         });
@@ -306,19 +308,19 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
-            assert.fileContent('./msmysql/requirements.yaml', /name: mysql/);
+            assert.fileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
         });
         it('creates expected psql files', () => {
             assert.file(expectedFiles.mspsql);
-            assert.fileContent('./mspsql/requirements.yaml', /name: postgresql/);
+            assert.fileContent('./mspsql-helm/requirements.yaml', /name: postgresql/);
         });
         it('creates expected mongodb files', () => {
             assert.file(expectedFiles.msmongodb);
-            assert.fileContent('./msmongodb/requirements.yaml', /name: mongodb-replicaset/);
+            assert.fileContent('./msmongodb-helm/requirements.yaml', /name: mongodb-replicaset/);
         });
         it('creates expected mariadb files', () => {
             assert.file(expectedFiles.msmariadb);
-            assert.fileContent('./msmariadb/requirements.yaml', /name: mariadb/);
+            assert.fileContent('./msmariadb-helm/requirements.yaml', /name: mariadb/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -342,7 +344,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
                 })
                 .on('end', done);
         });
@@ -351,7 +353,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected default files', () => {
             assert.file(expectedFiles.monolith);
-            assert.fileContent('./samplemysql/requirements.yaml', /name: mysql/);
+            assert.fileContent('./samplemysql-helm/requirements.yaml', /name: mysql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -375,15 +377,15 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
                 })
                 .on('end', done);
         });
         it('creates expected default files', () => {
             assert.file(expectedFiles.csvcfiles);
             assert.file(expectedFiles.kafka);
-            assert.fileContent('./csvc/requirements.yaml', /name: kafka/);
-            assert.fileContent('./samplekafka/requirements.yaml', /name: mysql/);
+            assert.fileContent('./csvc-helm/requirements.yaml', /name: kafka/);
+            assert.fileContent('./samplekafka-helm/requirements.yaml', /name: mysql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -406,7 +408,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'mynamespace',
                     monitoring: 'prometheus',
-                    kubernetesServiceType: 'LoadBalancer'
+                    kubernetesServiceType: 'LoadBalancer',
                 })
                 .on('end', done);
         });
@@ -415,12 +417,12 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
-            assert.fileContent('./msmysql/requirements.yaml', /name: mysql/);
+            assert.fileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
         });
         it('creates expected prometheus files', () => {
             assert.file(expectedFiles.csvcfiles);
-            assert.fileContent('./csvc/requirements.yaml', /name: prometheus/);
-            assert.fileContent('./csvc/requirements.yaml', /name: grafana/);
+            assert.fileContent('./csvc-helm/requirements.yaml', /name: prometheus/);
+            assert.fileContent('./csvc-helm/requirements.yaml', /name: grafana/);
         });
         it('creates expected namespace file', () => {
             assert.file(expectedFiles.customnamespace);
@@ -445,10 +447,9 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
-                    kubernetesServiceType: 'Ingress',
                     ingressDomain: 'example.com',
                     clusteredDbApps: [],
-                    istio: true
+                    istio: true,
                 })
                 .on('end', done);
         });

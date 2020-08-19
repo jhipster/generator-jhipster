@@ -1,0 +1,14 @@
+apiVersion: skaffold/v1
+kind: Config
+build:
+  artifacts:
+<%_appConfigs.forEach((appConfig) =>  { _%>
+  - image: <%= appConfig.targetImageName %>
+    context: <%= `${directoryPath + appConfig.appFolder}` %>
+    jib: {}
+<%_ }) _%>
+  tagPolicy:
+    envTemplate:
+      template: "{{.IMAGE_NAME}}:latest"
+deploy:
+  kustomize: {}

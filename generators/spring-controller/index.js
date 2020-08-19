@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -32,23 +32,23 @@ let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
-        this.configOptions = this.options.configOptions || {};
+
         this.argument('name', { type: String, required: true });
         this.name = this.options.name;
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         this.option('default', {
             type: Boolean,
             default: false,
-            description: 'default option'
+            description: 'default option',
         });
         this.defaultOption = this.options.default;
 
-        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('spring-controller', { arguments: [this.name] });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('spring-controller', { arguments: [this.name] });
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -60,21 +60,23 @@ module.exports = class extends BaseBlueprintGenerator {
 
             initializing() {
                 this.log(`The spring-controller ${this.name} is being created.`);
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 this.baseName = configuration.get('baseName');
                 this.packageName = configuration.get('packageName');
                 this.packageFolder = configuration.get('packageFolder');
                 this.databaseType = configuration.get('databaseType');
                 this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
+                this.cacheProvider = configuration.get('cacheProvider') || 'no';
                 if (this.messageBroker === undefined) {
                     this.messageBroker = false;
                 }
                 this.reactiveController = false;
                 this.applicationType = configuration.get('applicationType');
+                this.authenticationType = configuration.get('authenticationType');
                 this.reactive = configuration.get('reactive');
                 this.reactiveController = this.reactive;
                 this.controllerActions = [];
-            }
+            },
         };
     }
 
@@ -86,7 +88,7 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _prompting() {
         return {
-            askForControllerActions: prompts.askForControllerActions
+            askForControllerActions: prompts.askForControllerActions,
         };
     }
 
@@ -100,7 +102,7 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             insight() {
                 statistics.sendSubGenEvent('generator', 'spring-controller');
-            }
+            },
         };
     }
 
@@ -121,7 +123,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.log(chalk.green('No controller actions found, adding a default action'));
                     this.controllerActions.push({
                         actionName: 'defaultAction',
-                        actionMethod: 'Get'
+                        actionMethod: 'Get',
                     });
                 }
 
@@ -163,7 +165,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     )}/${SERVER_TEST_SRC_DIR}package/web/rest/ResourceIT.java.ejs`,
                     `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}IT.java`
                 );
-            }
+            },
         };
     }
 

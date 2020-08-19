@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,16 +21,12 @@
         <div class="col-md-4">
             <span class="hipster img-fluid rounded"></span>
         </div>
+
         <div class="col-md-8">
             <h1 jhiTranslate="error.title">Error Page!</h1>
 
-            <div [hidden]="!errorMessage">
-                <div class="alert alert-danger">{{errorMessage}}
-                </div>
-            </div>
-            <div [hidden]="!error403" class="alert alert-danger" jhiTranslate="error.http.403">You are not authorized to access this page.
-            </div>
-            <div [hidden]="!error404" class="alert alert-danger" jhiTranslate="error.http.404">The page does not exist.
+            <div *ngIf="errorMessage">
+                <div class="alert alert-danger">{{ errorMessage }}</div>
             </div>
         </div>
     </div>

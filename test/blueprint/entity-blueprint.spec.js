@@ -15,24 +15,30 @@ const mockBlueprintSubGen = class extends EntityGenerator {
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
         if (!jhContext) {
-            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprint myblueprint');
+            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
         }
 
         this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupEntityOptions(this, jhContext, this);
     }
 
     get initializing() {
         const phaseFromJHipster = super._initializing();
-        const customPhaseSteps = {
+        const customPrePhaseSteps = {
+            // Create a custom persistent entity config.
+            createCustomConfig() {
+                // Override with new value
+                this.entityConfig.customBlueprintConfigKey = 'customBlueprintConfigValue';
+            },
+        };
+        const customPostPhaseSteps = {
             changeProperty() {
                 this.context.angularAppName = 'awesomeAngularAppName';
-            }
+            },
         };
         return {
+            ...customPrePhaseSteps,
             ...phaseFromJHipster,
-            ...customPhaseSteps
+            ...customPostPhaseSteps,
         };
     }
 
@@ -74,10 +80,10 @@ describe('JHipster entity generator with blueprint', () => {
                     })
                     .withArguments(['foo'])
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipInstall: true,
                         blueprint: blueprintName,
-                        skipChecks: true
+                        skipChecks: true,
                     })
                     .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:entity']])
                     .withPrompts({
@@ -85,7 +91,7 @@ describe('JHipster entity generator with blueprint', () => {
                         relationshipAdd: false,
                         dto: 'no',
                         service: 'no',
-                        pagination: 'no'
+                        pagination: 'no',
                     })
                     .on('end', done);
             });
@@ -99,6 +105,11 @@ describe('JHipster entity generator with blueprint', () => {
             it('contains the specific change added by the blueprint', () => {
                 assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/en/foo.json`, /awesomeAngularAppName/);
             });
+
+            // Verify if the custom entity config is persisted.
+            it('contains the specific config added by the blueprint', () => {
+                assert.fileContent('.jhipster/Foo.json', /"customBlueprintConfigKey": "customBlueprintConfigValue"/);
+            });
         });
     });
 
@@ -110,10 +121,10 @@ describe('JHipster entity generator with blueprint', () => {
                     fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
                 })
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
-                    skipChecks: true
+                    skipChecks: true,
                 })
                 .withGenerators([[helpers.createDummyGenerator(), 'jhipster-myblueprint:entity']])
                 .withArguments(['foo'])
@@ -122,7 +133,7 @@ describe('JHipster entity generator with blueprint', () => {
                     relationshipAdd: false,
                     dto: 'no',
                     service: 'no',
-                    pagination: 'no'
+                    pagination: 'no',
                 })
                 .on('end', done);
         });

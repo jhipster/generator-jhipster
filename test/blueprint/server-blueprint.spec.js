@@ -1,15 +1,15 @@
-const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files');
 const ServerGenerator = require('../../generators/server');
+const EnvironmentBuilder = require('../../cli/environment-builder');
 
 const mockBlueprintSubGen = class extends ServerGenerator {
     constructor(args, opts) {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
         if (!jhContext) {
-            this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprint myblueprint')}");
+            this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
         }
         this.configOptions = jhContext.configOptions || {};
         // This sets up options for this sub generator and is being reused from JHipster
@@ -37,7 +37,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
         const customPhaseSteps = {
             addDummyMavenProperty() {
                 this.addMavenProperty('dummy-blueprint-property', 'foo');
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -56,14 +56,14 @@ describe('JHipster server generator with blueprint', () => {
 
     blueprintNames.forEach(blueprintName => {
         describe(`generate server with blueprint option '${blueprintName}'`, () => {
-            before(done => {
-                helpers
-                    .run(path.join(__dirname, '../../generators/server'))
+            before(() => {
+                return helpers
+                    .create('jhipster:server', {}, { createEnv: EnvironmentBuilder.createEnv })
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipInstall: true,
                         blueprint: blueprintName,
-                        skipChecks: true
+                        skipChecks: true,
                     })
                     .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
                     .withPrompts({
@@ -82,9 +82,9 @@ describe('JHipster server generator with blueprint', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
-                    .on('end', done);
+                    .run();
             });
 
             it('creates expected files from jhipster server generator', () => {
@@ -102,14 +102,14 @@ describe('JHipster server generator with blueprint', () => {
     });
 
     describe('generate server with dummy blueprint overriding everything', () => {
-        before(done => {
-            helpers
-                .run(path.join(__dirname, '../../generators/server'))
+        before(() => {
+            return helpers
+                .create('jhipster:server', {}, { createEnv: EnvironmentBuilder.createEnv })
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
-                    skipChecks: true
+                    skipChecks: true,
                 })
                 .withGenerators([[helpers.createDummyGenerator(), 'jhipster-myblueprint:server']])
                 .withPrompts({
@@ -128,9 +128,9 @@ describe('JHipster server generator with blueprint', () => {
                     languages: ['fr'],
                     buildTool: 'maven',
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    serverSideOptions: []
+                    serverSideOptions: [],
                 })
-                .on('end', done);
+                .run();
         });
 
         it("doesn't create any expected files from jhipster server generator", () => {

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "စနစ်အခြေအနေ",
                 "configuration": "Configuration များ",
                 "logs": "Log များ",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "စာရင်းစစ်ဆေးခြင်း",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "ဒေတာဘေ့စ်",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -92,7 +89,7 @@
                 },
                 "confirmpassword": {
                     "required": "သင်၏ အတည်ပြုမည့်လျှို့ဝှက်ကုဒ် လိုအပ်ပါသည်။",
-                    "minlength": "သင်၏ အတည်ပြုမည့်လျှို့ဝှက်ကုဒ်သည် အနည်းဆုံးအက္ခရာ ၅ လုံးပါရှိရမည်။ ",
+                    "minlength": "သင်၏ အတည်ပြုမည့်လျှို့ဝှက်ကုဒ်သည် အနည်းဆုံးအက္ခရာ ၄ လုံးပါရှိရမည်။ ",
                     "maxlength": "သင်၏ အတည်ပြုမည့်လျှို့ဝှက်ကုဒ်သည် အက္ခရာအလုံး ၅၀ ထက်မပိုရပါ။"
                 },
                 "email": {
@@ -153,7 +150,11 @@
         "userexists": "အသုံးပြုသူအိုင်ဒီသည် မှတ်ပုံတင်ပြီးသားဖြစ်နေပါသည်။",
         "emailexists": "အီးမေးလ်လိပ်စာသည်အသုံးပြုပြီးသားဖြစ်နေပါသည်။",
         "idexists": "{{ entityName }} အသစ်တွင် အိုင်ဒီ မပါရှိရပါ။",
-        "idnull": "အိုင်ဒီမှားနေပါသည်။"
+        "idnull": "အိုင်ဒီမှားနေပါသည်။",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "စာမျက်နှာ၏ အောက်ခြေဖြစ်ပါသည်။"
 }

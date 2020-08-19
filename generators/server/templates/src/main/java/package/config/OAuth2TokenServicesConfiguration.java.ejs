@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.config;
+package <%= packageName %>.config;
 
 import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
@@ -28,10 +28,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 <%_ if (applicationType === 'microservice' && cacheProvider !== 'no') { _%>
-import <%=packageName%>.security.oauth2.CachedUserInfoTokenServices;
+import <%= packageName %>.security.oauth2.CachedUserInfoTokenServices;
 <%_ } _%>
-import <%=packageName%>.security.oauth2.SimpleAuthoritiesExtractor;
-import <%=packageName%>.security.oauth2.SimplePrincipalExtractor;
+import <%= packageName %>.security.oauth2.SimpleAuthoritiesExtractor;
+import <%= packageName %>.security.oauth2.SimplePrincipalExtractor;
 
 @Configuration
 public class OAuth2TokenServicesConfiguration {
@@ -42,9 +42,9 @@ public class OAuth2TokenServicesConfiguration {
 <%_ if (applicationType === 'microservice' && cacheProvider !== 'no') { _%>
     private final ResourceServerProperties resourceServerProperties;
 
-	public OAuth2TokenServicesConfiguration(ResourceServerProperties resourceServerProperties) {
-		this.resourceServerProperties = resourceServerProperties;
-	}
+    public OAuth2TokenServicesConfiguration(ResourceServerProperties resourceServerProperties) {
+        this.resourceServerProperties = resourceServerProperties;
+    }
 
     @Bean
     public UserInfoTokenServices userInfoTokenServices(PrincipalExtractor principalExtractor, AuthoritiesExtractor authoritiesExtractor) {

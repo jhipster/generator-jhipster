@@ -10,7 +10,7 @@
                     "required": "Il nome utente è obbligatorio.",
                     "minlength": "Il nome utente deve essere di almeno 1 carattere",
                     "maxlength": "Il nome utente non può contenere più di 50 caratteri",
-                    "pattern": "Il nome utente può contenere solo lettere minuscole e cifre."
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>La registrazione account è stata salvata!</strong> Controlla la tua email per confermare.",

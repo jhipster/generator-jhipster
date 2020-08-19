@@ -30,13 +30,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - kiali.istio-system<%= ingressDomain %>
+    - kiali.istio-system.<%= ingressDomain %>
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - kiali.istio-system<%= ingressDomain %>
+    - kiali.istio-system.<%= ingressDomain %>
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -45,7 +45,7 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - kiali.istio-system<%= ingressDomain %>
+  - kiali.istio-system.<%= ingressDomain %>
   gateways:
   - kiali-observability-gateway
   http:

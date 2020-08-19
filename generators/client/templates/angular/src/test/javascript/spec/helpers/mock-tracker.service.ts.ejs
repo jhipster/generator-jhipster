@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,14 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import Spy = jasmine.Spy;
+
 import { SpyObject } from './spyobject';
-import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/core/tracker/tracker.service';
+import { TrackerService } from 'app/core/tracker/tracker.service';
 
 export class MockTrackerService extends SpyObject {
+    connectSpy: Spy;
+    disconnectSpy: Spy;
 
     constructor() {
-        super(<%=jhiPrefixCapitalized%>TrackerService);
-    }
+        super(TrackerService);
 
-    connect() {}
+        this.connectSpy = this.spy('connect').andReturn(this);
+        this.disconnectSpy = this.spy('disconnect').andReturn(this);
+    }
 }

@@ -1,0 +1,18 @@
+pom.xml
+README.md
+.travis.yml
+build.sbt
+git_push.sh
+.gitignore
+src/main/AndroidManifest.xml
+
+# Ignore default generator Gradle files
+build.gradle
+gradle.properties
+settings.gradle
+gradlew
+gradlew.bat
+gradle/**
+
+# Ignore test files while they are generated with JUnit 4
+/src/test/***

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,20 +16,28 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>;
+package <%= packageName %>.repository;
 
-import <%=packageName%>.domain.Authority;
+import <%= packageName %>.domain.Authority;
+
 <%_ if (databaseType === 'sql') { _%>
-
+    <%_ if (!reactive) { _%>
 import org.springframework.data.jpa.repository.JpaRepository;
+    <%_ } else { _%>
+import org.springframework.data.r2dbc.repository.R2dbcRepository;
+    <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
+<% if (reactive) { %>import reactor.core.publisher.Flux;<% } else { %>import java.util.List;<% } %>
+<%_ } _%>
 
 <%_ if (databaseType === 'sql') { _%>
 /**
- * Spring Data JPA repository for the {@link Authority} entity.
+ * Spring Data <% if (reactive) { %>R2DBC<% } else { %>JPA<% } %> repository for the {@link Authority} entity.
  */
  <%_ } _%>
  <%_ if (databaseType === 'mongodb') { _%>
@@ -37,10 +45,19 @@ import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive
  * Spring Data MongoDB repository for the {@link Authority} entity.
  */
 <%_ } _%>
+ <%_ if (databaseType === 'neo4j') { _%>
+/**
+ * Spring Data Neo4j RX repository for the {@link Authority} entity.
+ */
+<%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 /**
  * Spring Data Couchbase repository for the {@link Authority} entity.
  */
 <%_ } _%>
-public interface AuthorityRepository extends <% if (reactive) { %>Reactive<% } %><% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><Authority, String> {
+public interface AuthorityRepository extends <% if (databaseType === 'sql') { %><% if (reactive) { %>R2dbc<% } else { %>Jpa<% } %>Repository<% } else { %><% if (reactive) { %>Reactive<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><% } %><Authority, String> {
+    <%_ if (databaseType === 'neo4j') { _%>
+    <% if (!reactive) { %>// See https://github.com/neo4j/sdn-rx/issues/51<%_ } _%>
+    <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asEntity('Authority') %>> findAll();
+    <%_ } _%>
 }

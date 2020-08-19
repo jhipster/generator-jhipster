@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 <%_
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 const tsKeyId = generateTestEntityId(primaryKeyType);
 _%>
 import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
@@ -25,22 +24,23 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { of } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
+import { TestModule } from '../../../<%= entityParentPathAddition %>test.module';
+import { MockEventManager } from '../../../<%= entityParentPathAddition %>helpers/mock-event-manager.service';
+import { MockActiveModal } from '../../../<%= entityParentPathAddition %>helpers/mock-active-modal.service';
 import { <%= entityAngularName %>DeleteDialogComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-delete-dialog.component';
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 
 describe('Component Tests', () => {
-
     describe('<%= entityAngularName %> Management Delete Component', () => {
         let comp: <%= entityAngularName %>DeleteDialogComponent;
         let fixture: ComponentFixture<<%= entityAngularName %>DeleteDialogComponent>;
         let service: <%= entityAngularName %>Service;
-        let mockEventManager: any;
-        let mockActiveModal: any;
+        let mockEventManager: MockEventManager;
+        let mockActiveModal: MockActiveModal;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
-                imports: [<%=angularXAppName%>TestModule],
+                imports: [TestModule],
                 declarations: [<%= entityAngularName %>DeleteDialogComponent]
             })
             .overrideTemplate(<%= entityAngularName %>DeleteDialogComponent, '')
@@ -48,8 +48,8 @@ describe('Component Tests', () => {
             fixture = TestBed.createComponent(<%= entityAngularName %>DeleteDialogComponent);
             comp = fixture.componentInstance;
             service = fixture.debugElement.injector.get(<%= entityAngularName %>Service);
-            mockEventManager = fixture.debugElement.injector.get(JhiEventManager);
-            mockActiveModal = fixture.debugElement.injector.get(NgbActiveModal);
+            mockEventManager = TestBed.get(JhiEventManager);
+            mockActiveModal = TestBed.get(NgbActiveModal);
         });
 
         describe('confirmDelete', () => {
@@ -65,12 +65,23 @@ describe('Component Tests', () => {
 
                         // THEN
                         expect(service.delete).toHaveBeenCalledWith(<%- tsKeyId %>);
-                        expect(mockActiveModal.dismissSpy).toHaveBeenCalled();
+                        expect(mockActiveModal.closeSpy).toHaveBeenCalled();
                         expect(mockEventManager.broadcastSpy).toHaveBeenCalled();
                     })
                 )
             );
+
+            it('Should not call delete service on clear', () => {
+                // GIVEN
+                spyOn(service, 'delete');
+
+                // WHEN
+                comp.cancel();
+
+                // THEN
+                expect(service.delete).not.toHaveBeenCalled();
+                expect(mockActiveModal.dismissSpy).toHaveBeenCalled();
+            });
         });
     });
-
 });

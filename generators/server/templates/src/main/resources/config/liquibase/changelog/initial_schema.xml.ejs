@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,13 +21,16 @@
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-<%= LIQUIBASE_DTD_VERSION %>.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+    <% const isAutoIncrementDB = reactive || ['mysql', 'mariadb'].includes(prodDatabaseType);
+       const isSequenceDB = !reactive && ['postgresql', 'oracle', 'mssql'].includes(prodDatabaseType);
+    _%>
+    <%_ if (isAutoIncrementDB) { _%>
     <property name="autoIncrement" value="true"/>
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'postgresql' || prodDatabaseType === 'oracle' || prodDatabaseType === 'mssql') { _%>
+    <%_ if (isSequenceDB) { _%>
     <changeSet id="00000000000000" author="jhipster">
         <createSequence sequenceName="sequence_generator" startValue="1050" incrementBy="50"/>
     </changeSet>
@@ -45,7 +48,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <%_ } else { _%>
-            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+            <column name="id" type="bigint"<% if (isAutoIncrementDB) { %> autoIncrement="${autoIncrement}"<% } %><% if (reactive) { %> startWith="1050"<% } %> >
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <%_ } _%>
@@ -140,10 +143,10 @@
                                  referencedTableName="<%= jhiTablePrefix %>_user"/>
     <%_ } _%>
     <%_ if (authenticationType !== 'oauth2' || (authenticationType === 'oauth2' && applicationType !== 'microservice')) { _%>
-        <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
+        <<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
                   file="config/liquibase/data/user.csv"
                   separator=";"
-                  <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
+                  <%_ if (prodDatabaseType === 'mssql') { _%>
                   identityInsertEnabled="true"
                   <%_ } _%>
                   tableName="<%= jhiTablePrefix %>_user">
@@ -152,70 +155,34 @@
             <%_ } _%>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
-        </<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
+        </<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
         <dropDefaultValue tableName="<%= jhiTablePrefix %>_user" columnName="created_date" columnDataType="datetime"/>
-        <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
+        <<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
                   file="config/liquibase/data/authority.csv"
                   separator=";"
-                  <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
+                  <%_ if (prodDatabaseType === 'mssql') { _%>
                   identityInsertEnabled="true"
                   <%_ } _%>
-                  tableName="<%= jhiTablePrefix %>_authority"/>
+                  tableName="<%= jhiTablePrefix %>_authority">
+            <column name="name" type="string"/>
+        </<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
 
-        <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
+        <<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
                   file="config/liquibase/data/user_authority.csv"
                   separator=";"
-                  <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
+                  <%_ if (prodDatabaseType === 'mssql') { _%>
                   identityInsertEnabled="true"
                   <%_ } _%>
-                  tableName="<%= jhiTablePrefix %>_user_authority"/>
+                  tableName="<%= jhiTablePrefix %>_user_authority">
+            <column name="user_id" type="numeric"/>
+        </<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
     <%_ } _%>
 <%_ } _%>
-        <createTable tableName="<%= jhiTablePrefix %>_persistent_audit_event">
-            <column name="event_id" type="bigint" autoIncrement="${autoIncrement}">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="principal" type="varchar(50)">
-                <constraints nullable="false" />
-            </column>
-            <column name="event_date" type="timestamp"/>
-            <column name="event_type" type="varchar(255)"/>
-        </createTable>
-
-        <createTable tableName="<%= jhiTablePrefix %>_persistent_audit_evt_data">
-            <column name="event_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="name" type="varchar(150)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="value" type="varchar(255)"/>
-        </createTable>
-        <addPrimaryKey columnNames="event_id, name" tableName="<%= jhiTablePrefix %>_persistent_audit_evt_data"/>
-
-        <createIndex indexName="idx_persistent_audit_event"
-                     tableName="<%= jhiTablePrefix %>_persistent_audit_event"
-                     unique="false">
-            <column name="principal" type="varchar(50)"/>
-            <column name="event_date" type="timestamp"/>
-        </createIndex>
-
-        <createIndex indexName="idx_persistent_audit_evt_data"
-                     tableName="<%= jhiTablePrefix %>_persistent_audit_evt_data"
-                     unique="false">
-            <column name="event_id" type="bigint"/>
-        </createIndex>
-
-        <addForeignKeyConstraint baseColumnNames="event_id"
-                                 baseTableName="<%= jhiTablePrefix %>_persistent_audit_evt_data"
-                                 constraintName="fk_evt_pers_audit_evt_data"
-                                 referencedColumnNames="event_id"
-                                 referencedTableName="<%= jhiTablePrefix %>_persistent_audit_event"/>
     </changeSet>
 
     <changeSet author="jhipster" id="00000000000002" context="test">
         <createTable tableName="<%= jhiTablePrefix %>_date_time_wrapper">
-            <column autoIncrement="${autoIncrement}" name="id" type="BIGINT">
+            <column <% if (isAutoIncrementDB) { _%> autoIncrement="${autoIncrement}" <%_ } %> name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="<%= jhiTablePrefix %>_date_time_wrapperPK"/>
             </column>
             <column name="instant" type="timestamp"/>

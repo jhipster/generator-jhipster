@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,7 +19,6 @@
 <!doctype html>
 <html class="no-js" lang="<% if (enableTranslation) { %><%= nativeLanguage %><% } else { %>en<% } %>" dir="ltr">
 <head>
-    <base href="/" />
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title><%= baseName %></title>
@@ -27,7 +26,7 @@
     <meta name="google" content="notranslate"><% } %>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="theme-color" content="#000000">
-    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="icon" href="favicon.ico" />
     <link rel="manifest" href="manifest.webapp" />
     <link rel="stylesheet" href="content/css/loading.css">
     <!-- jhipster-needle-add-resources-to-root - JHipster will add new resources here -->
@@ -56,32 +55,32 @@
                     <li>You installed a Node.js version that doesn't work with JHipster: please use an LTS (long-term support) version, as it's the only version we support.</li>
                 </ol>
                 <h2>Building the client side code again</h2>
-                <p>If you want to go fast, run <code style="color:red"><% if (buildTool === 'maven') { %>./mvnw<% } else if (buildTool === 'gradle'){ %>./gradlew<% } %></code> to build and run everything.</p>
+                <p>If you want to go fast, run <code style="color:red"><% if (buildTool === 'maven') { %>./mvnw<% } else if (buildTool === 'gradle') { %>./gradlew<% } %></code> to build and run everything.</p>
                 <p>If you want to have more control, so you can debug your issue more easily, you should follow the following steps:</p>
                 <ol>
                     <li>Install npm dependencies with the command <code style="color:red"><%= clientPackageManager %> install</code></li>
                     <li>Build the client with the command <code style="color:red"><%= clientPackageManager %> run webpack:build</code> or <code style="color:red"><%= clientPackageManager %> start</code></li>
-                    <li>Start the server with <code style="color:red"><% if (buildTool === 'maven') { %>./mvnw<% } else if (buildTool === 'gradle'){ %>./gradlew<% } %></code> or using your IDE</li>
+                    <li>Start the server with <code style="color:red"><% if (buildTool === 'maven') { %>./mvnw<% } else if (buildTool === 'gradle') { %>./gradlew<% } %></code> or using your IDE</li>
                 </ol>
 
                 <h2>Getting more help</h2>
 
                 <h3>If you have a question on how to use JHipster</h3>
                 <p>
-                    Go to Stack Overflow with the <a href="http://stackoverflow.com/tags/jhipster" target="_blank">"jhipster"</a> tag.
+                    Go to Stack Overflow with the <a href="http://stackoverflow.com/tags/jhipster" target="_blank" rel="noopener noreferrer">"jhipster"</a> tag.
                 </p>
 
                 <h3>If you have a bug or a feature request</h3>
                 <p>
-                    First read our <a href="https://github.com/jhipster/generator-jhipster/blob/master/CONTRIBUTING.md" target="_blank">contributing guidelines</a>.
+                    First read our <a href="https://github.com/jhipster/generator-jhipster/blob/master/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">contributing guidelines</a>.
                 </p>
                 <p>
-                    Then, fill a ticket on our <a href="https://github.com/jhipster/generator-jhipster/issues/new/choose" target="_blank">bug tracker</a>, we'll be happy to resolve your issue!
+                    Then, fill a ticket on our <a href="https://github.com/jhipster/generator-jhipster/issues/new/choose" target="_blank" rel="noopener noreferrer">bug tracker</a>, we'll be happy to resolve your issue!
                 </p>
 
                 <h3>If you want to chat with contributors and other users</h3>
                 <p>
-                    Join our chat room on <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank">Gitter.im</a>. Please note that this is a public chat room, and that we expect you to respect other people and write in a correct English language!
+                    Join our chat room on <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">Gitter.im</a>. Please note that this is a public chat room, and that we expect you to respect other people and write in a correct English language!
                 </p>
                 <!-- end of troubleshooting content -->
             </div>

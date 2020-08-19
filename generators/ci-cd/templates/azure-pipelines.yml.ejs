@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -28,52 +28,50 @@ jobs:
     NG_CLI_ANALYTICS: "false"
 
   steps:
+<%_ if (!skipClient) { _%>
   #----------------------------------------------------------------------
   # Install all tools and check configuration
   #----------------------------------------------------------------------
   - task: NodeTool@0
     inputs:
-      versionSpec: '<%= NODE_VERSION %>'
+      versionSpec: $(NODE_VERSION)
     displayName: 'TOOLS: install Node.js'
-  <%_ if (clientPackageManager === 'npm') { _%>
-  - script: sudo npm install -g npm
-    displayName: 'TOOLS: update NPM'
-  - script: sudo chown -R vsts:docker /home/vsts/.npm/
-    displayName: 'BUGS-FIX: change /home/vsts/.npm/ permission'
-  <%_ } else if (clientPackageManager === 'yarn') { _%>
-  - script: |
-      curl -o- -L https://yarnpkg.com/install.sh | bash
-      export PATH=$HOME/.yarn/bin:$PATH
-    displayName: 'TOOLS: install Yarn'
-  <%_ } _%>
-  - script: sudo /etc/init.d/mysql stop
-    displayName: 'TOOLS: stop MySQL'
+<%_ } _%>
   #----------------------------------------------------------------------
   # Tests
   #----------------------------------------------------------------------
-  - script: <%= clientPackageManager %> install
-    displayName: 'INSTALL: launch <%= clientPackageManager %> install'
-  <%_ if (buildTool === 'maven') { _%>
+<%_ if (!skipClient) { _%>
+  - task: Npm@1
+    inputs:
+      command: 'install'
+    displayName: 'INSTALL: launch npm install'
+<%_ } _%>
+  <%_ if (!skipServer) { _%>
+    <%_ if (buildTool === 'maven') { _%>
   - script: |
       chmod +x mvnw
-      ./mvnw clean verify
+      ./mvnw -ntp checkstyle:check
+      ./mvnw -ntp clean verify -P-webpack
   <%_ } else if (buildTool === 'gradle') { _%>
   - script: |
       chmod +x gradlew
+      ./gradlew checkstyleNohttp
       ./gradlew clean test integrationTest
-  <%_ } _%>
+    <%_ } _%>
     displayName: 'TESTS: backend'
-<%_ if (!skipClient) { _%>
-  <%_ if (buildTool === 'maven') { _%>
-  - script: ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>'
-  <%_ } else if (buildTool === 'gradle') { _%>
-  - script: ./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon
   <%_ } _%>
+<%_ if (!skipClient) { _%>
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: 'run <%= frontTestCommand %>'
     displayName: 'TESTS: frontend'
 <%_ } _%>
-<%_ if (buildTool === 'maven') { _%>
-  - script: ./mvnw verify -Pprod -DskipTests
-<%_ } else if (buildTool === 'gradle') { _%>
+<%_ if (!skipServer) { _%>
+  <%_ if (buildTool === 'maven') { _%>
+  - script: ./mvnw -ntp verify -Pprod -DskipTests
+  <%_ } else if (buildTool === 'gradle') { _%>
   - script: ./gradlew bootJar -Pprod -x test
-<%_ } _%>
+  <%_ } _%>
     displayName: 'TESTS: packaging'
+<%_ } _%>

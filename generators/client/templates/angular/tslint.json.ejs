@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,12 +21,7 @@
         "node_modules/codelyzer"
     ],
     "rules": {
-        "member-ordering": [
-            true,
-            "static-before-instance",
-            "variables-before-functions"
-        ],
-        "directive-selector": [true, "attribute", "<%=jhiPrefix%>", "camelCase"],
+        "directive-selector": [true, "attribute", "<%= jhiPrefix %>", "camelCase"],
         "component-selector": [true, "element", "<%= jhiPrefixDashed %>", "kebab-case"],
         "no-inputs-metadata-property": true,
         "no-outputs-metadata-property": true,
@@ -36,6 +31,7 @@
         "use-lifecycle-interface": true,
         "use-pipe-transform-interface": false,
         "component-class-suffix": true,
-        "directive-class-suffix": true
+        "directive-class-suffix": true,
+        "typedef": [true, "call-signature"]
     }
 }

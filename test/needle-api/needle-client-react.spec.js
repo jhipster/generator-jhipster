@@ -4,6 +4,7 @@ const helpers = require('yeoman-test');
 const ClientGenerator = require('../../generators/client');
 const constants = require('../../generators/generator-constants');
 
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
 const mockBlueprintSubGen = class extends ClientGenerator {
@@ -13,12 +14,10 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
         if (!jhContext) {
-            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprint myblueprint');
+            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
         }
 
         this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupEntityOptions(this, jhContext, this);
     }
 
     get initializing() {
@@ -46,7 +45,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                 this.addAppSCSSStyle('@import with-comment', 'my comment');
             },
             addEntityToMenuStep() {
-                this.addEntityToMenu('routerName', false, 'react', false);
+                this.addEntityToMenu('routerName', false, REACT, false);
             },
             addEntityToModuleStep() {
                 this.addEntityToModule(
@@ -56,10 +55,10 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                     'entityFolderName',
                     'entityFileName',
                     'entityUrl',
-                    'react',
+                    REACT,
                     'microServiceNam'
                 );
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -70,21 +69,21 @@ describe('needle API React: JHipster client generator with blueprint', () => {
         helpers
             .run(path.join(__dirname, '../../generators/client'))
             .withOptions({
-                'from-cli': true,
+                fromCli: true,
                 build: 'maven',
                 auth: 'jwt',
                 db: 'mysql',
                 skipInstall: true,
                 blueprint: 'myblueprint',
-                skipChecks: true
+                skipChecks: true,
             })
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
             .withPrompts({
                 baseName: 'jhipster',
-                clientFramework: 'react',
+                clientFramework: REACT,
                 enableTranslation: true,
                 nativeLanguage: 'en',
-                languages: ['en', 'fr']
+                languages: ['en', 'fr'],
             })
             .on('end', done);
     });
@@ -92,7 +91,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
     it('Assert entity is added to menu', () => {
         assert.fileContent(
             `${CLIENT_MAIN_SRC_DIR}app/shared/layout/menus/entities.tsx`,
-            '<MenuItem icon="asterisk" to="/entity/routerName">\n      Router Name\n    </MenuItem>'
+            '<MenuItem icon="asterisk" to="/routerName">\n      Router Name\n    </MenuItem>'
         );
     });
 
@@ -101,7 +100,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
         const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/shared/reducers/index.ts`;
 
         assert.fileContent(indexModulePath, "import entityName from './entityFolderName';");
-        assert.fileContent(indexModulePath, '<ErrorBoundaryRoute path={`${match.url}/entityFileName`} component={entityName} />'); // eslint-disable-line
+        assert.fileContent(indexModulePath, '<ErrorBoundaryRoute path={`${match.url}entityFileName`} component={entityName} />'); // eslint-disable-line
 
         assert.fileContent(
             indexReducerPath,

@@ -33,7 +33,6 @@ import io.github.jhipster.service.filter.ZonedDateTimeFilter;
 <%_ } _%>
 
 <%_
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 const referenceFilterType = '' + primaryKeyType + 'Filter';
 var filterVariables = [{name:'id', type: primaryKeyType, filterType:referenceFilterType,fieldInJavaBeanMethod:'Id' } ];
 var extraFilters = {};
@@ -69,8 +68,8 @@ filterVariables.push({ filterType : oauthAwareReferenceFilterType,
 });
 _%>
 /**
- * Criteria class for the {@link <%=packageName%>.domain.<%= asEntity(entityClass) %>} entity. This class is used
- * in {@link <%=packageName%>.web.rest.<%= entityClass %>Resource} to receive all the possible filtering options from
+ * Criteria class for the {@link <%= packageName %>.domain.<%= asEntity(entityClass) %>} entity. This class is used
+ * in {@link <%= packageName %>.web.rest.<%= entityClass %>Resource} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
  * {@code /<%= entityApiUrl %>?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
@@ -106,10 +105,10 @@ public class <%= entityClass %>Criteria implements Serializable, Criteria {
     private <%- filterVariable.filterType %> <%= filterVariable.name %>;
 <%_ }); _%>
 
-    public <%= entityClass %>Criteria(){
+    public <%= entityClass %>Criteria() {
     }
 
-    public <%= entityClass %>Criteria(<%= entityClass %>Criteria other){
+    public <%= entityClass %>Criteria(<%= entityClass %>Criteria other) {
 <%_ filterVariables.forEach((filterVariable) => { _%>
         this.<%= filterVariable.name %> = other.<%= filterVariable.name %> == null ? null : other.<%= filterVariable.name %>.copy();
 <%_ }); _%>
@@ -163,6 +162,7 @@ public class <%= entityClass %>Criteria implements Serializable, Criteria {
         );
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "<%= entityClass %>Criteria{" +

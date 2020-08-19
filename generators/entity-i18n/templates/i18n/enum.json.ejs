@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,8 +19,8 @@
 {
     "<%= angularAppName %>": {
         "<%= enumName %>" : {
-            "null": ""<% for (enumId in enums) { %>,
-            "<%=enums[enumId]%>": "<%=enums[enumId]%>"<% } %>
+            "null": ""<% enumValues.forEach(enumValue => { %>,
+            "<%= enumValue.name %>": "<%= enumValue.value %>"<% }); %>
         }
     }
 }

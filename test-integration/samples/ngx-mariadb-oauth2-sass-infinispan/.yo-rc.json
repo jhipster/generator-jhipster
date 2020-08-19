@@ -1,8 +1,8 @@
 {
     "generator-jhipster": {
-        "baseName": "travisOauth2SassInfinispan",
-        "packageName": "io.github.jhipster.travis",
-        "packageFolder": "io/github/jhipster/travis",
+        "baseName": "sampleOauth2SassInfinispan",
+        "packageName": "io.github.jhipster.sample",
+        "packageFolder": "io/github/jhipster/sample",
         "serverPort": "8080",
         "authenticationType": "oauth2",
         "cacheProvider": "infinispan",
@@ -18,10 +18,10 @@
         "applicationType": "monolith",
         "testFrameworks": ["gatling", "protractor"],
         "jhiPrefix": "myPrefix",
-        "travis": true,
         "serviceDiscoveryType": false,
         "enableTranslation": false,
         "clientPackageManager": "npm",
-        "clientFramework": "angularX"
+        "clientFramework": "angularX",
+        "creationTimestamp": 1596513172471
     }
 }

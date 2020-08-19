@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,49 +17,84 @@
  limitations under the License.
 -%>
 <%_
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 const tsKeyId = generateTestEntityId(primaryKeyType);
 _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
+<%_ if (fieldsContainBlob) { _%>
+import { JhiDataUtils } from 'ng-jhipster';
+<%_ } _%>
 
-import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
+import { TestModule } from '../../../<%= entityParentPathAddition %>test.module';
 import { <%= entityAngularName %>DetailComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.component';
 import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 describe('Component Tests', () => {
-
     describe('<%= entityAngularName %> Management Detail Component', () => {
         let comp: <%= entityAngularName %>DetailComponent;
         let fixture: ComponentFixture<<%= entityAngularName %>DetailComponent>;
-        const route = ({data: of({<%= entityInstance %>: new <%= entityAngularName %>(<%- tsKeyId %>)})} as any) as ActivatedRoute;
+        <%_ if (fieldsContainBlob) { _%>
+        let dataUtils: JhiDataUtils;
+        <%_ } _%>
+        const route = ({ data: of({ <%= entityInstance %>: new <%= entityAngularName %>(<%- tsKeyId %>) }) } as any) as ActivatedRoute;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
-                imports: [<%=angularXAppName%>TestModule],
+                imports: [TestModule],
                 declarations: [<%= entityAngularName %>DetailComponent],
                 providers: [
-                    {provide: ActivatedRoute, useValue: route}
+                    { provide: ActivatedRoute, useValue: route }
                 ]
             })
             .overrideTemplate(<%= entityAngularName %>DetailComponent, '')
             .compileComponents();
             fixture = TestBed.createComponent(<%= entityAngularName %>DetailComponent);
             comp = fixture.componentInstance;
+            <%_ if (fieldsContainBlob) { _%>
+            dataUtils = fixture.debugElement.injector.get(JhiDataUtils);
+            <%_ } _%>
         });
 
         describe('OnInit', () => {
-            it('Should call load all on init', () => {
-                // GIVEN
-
+            it('Should load <%= entityInstance %> on init', () => {
                 // WHEN
                 comp.ngOnInit();
 
                 // THEN
-                expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+                expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
             });
         });
-    });
 
+        <%_ if (fieldsContainBlob) { _%>
+        describe('byteSize', () => {
+            it('Should call byteSize from JhiDataUtils', () => {
+                // GIVEN
+                spyOn(dataUtils, 'byteSize');
+                const fakeBase64 = 'fake base64';
+
+                // WHEN
+                comp.byteSize(fakeBase64);
+
+                // THEN
+                expect(dataUtils.byteSize).toBeCalledWith(fakeBase64);
+            });
+        });
+
+        describe('openFile', () => {
+            it('Should call openFile from JhiDataUtils', () => {
+                // GIVEN
+                spyOn(dataUtils, 'openFile');
+                const fakeContentType = 'fake content type';
+                const fakeBase64 = 'fake base64';
+
+                // WHEN
+                comp.openFile(fakeContentType, fakeBase64);
+
+                // THEN
+                expect(dataUtils.openFile).toBeCalledWith(fakeContentType, fakeBase64);
+            });
+        });
+        <%_ } _%>
+    });
 });

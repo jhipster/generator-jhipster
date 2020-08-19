@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -41,15 +41,12 @@
                 <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
-                "userManagement": "User management",
+                "userManagement": "Gestão de utilizadores",
                 "tracker": "Atividade dos utilizadores",
                 "metrics": "Métricas",
                 "health": "Estado do Sistema",
                 "configuration": "Configuração",
                 "logs": "Logs",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "Auditorias",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "Base de Dados",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -59,8 +56,8 @@
         "form": {
             "username.label": "Nome de utilizador",
             "username.placeholder": "O seu nome de utilizador",
-            "currentpassword.label": "Current password",
-            "currentpassword.placeholder": "Current password",
+            "currentpassword.label": "Palavra-passe actual",
+            "currentpassword.placeholder": "Palavra-passe actual",
             "newpassword.label": "Nova palavra-passe",
             "newpassword.placeholder": "Nova palavra-passe",
             "confirmpassword.label": "Confirmação de nova palavra-passe",
@@ -86,13 +83,13 @@
             "validate": {
                 "newpassword": {
                     "required": "A palavra-passe é obrigatória.",
-                    "minlength": "A palavra-passe deve ter pelo menos 5 caracteres",
+                    "minlength": "A palavra-passe deve ter pelo menos 4 caracteres",
                     "maxlength": "A palavra-passe não pode ter mais de 50 caracteres",
                     "strength": "Nível de dificuldade da palavra-passe:"
                 },
                 "confirmpassword": {
                     "required": "A confirmação da palavra-passe é obrigatória.",
-                    "minlength": "A confirmação da palavra-passe deve ter pelo menos 5 caracteres",
+                    "minlength": "A confirmação da palavra-passe deve ter pelo menos 4 caracteres",
                     "maxlength": "A confirmação da palavra-passe não pode ter mais de 50 caracteres"
                 },
                 "email": {
@@ -107,19 +104,19 @@
             "id" : "Código"
         },
         "ribbon": {
-            "dev": "Development"
+            "dev": "Desenvolvimento"
         },
         "item-count": "Mostrando {{first}} - {{second}} de {{total}} resultados."
     },
     "entity": {
         "action": {
-            "addblob": "Adicionar blob",
+            "addblob": "Adicionar ficheiro",
             "addimage": "Adicionar imagem",
             "back": "Voltar",
             "cancel": "Cancelar",
             "delete": "Eliminar",
             "edit": "Editar",
-            "open": "Open",
+            "open": "Abrir",
             "save": "Guardar",
             "view": "Visualizar"
         },
@@ -144,15 +141,19 @@
         }
     },
     "error": {
-        "internalServerError": "Internal server error",
-        "server.not.reachable": "Server not reachable",
-        "url.not.found": "Not found",
-        "NotNull": "Field {{fieldName}} cannot be empty!",
-        "Size": "Field {{fieldName}} does not meet min/max size requirements!",
-        "userexists": "Login name already used!",
-        "emailexists": "Email is already in use!",
-        "idexists": "A new {{entityName}} cannot already have an ID",
-        "idnull": "Invalid ID"
+        "internalServerError": "Erro interno do servidor",
+        "server.not.reachable": "Servidor inacessível",
+        "url.not.found": "Não encontrado",
+        "NotNull": "Campo {{fieldName}} não pode estar vazio!",
+        "Size": "Campo {{fieldName}} não atende aos requisitos de tamanho mínimo/máximo!",
+        "userexists": "Nome de Utilizador em uso!",
+        "emailexists": "E-mail em uso!",
+        "idexists": "Um novo {{entityName}} não pode ter um ID",
+        "idnull": "ID inválido",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "Este é o seu rodapé"
 }

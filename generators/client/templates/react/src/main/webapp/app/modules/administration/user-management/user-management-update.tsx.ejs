@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -33,7 +33,7 @@ import { IRootState } from 'app/shared/reducers';
 export interface IUserManagementUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ login: string }> {}
 
 export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
-  const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.login);
+  const [isNew] = useState(!props.match.params || !props.match.params.login);
 
   useEffect(() => {
     if (isNew) {
@@ -42,7 +42,9 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
       props.getUser(props.match.params.login);
     }
     props.getRoles();
-    return () => props.reset();
+    return () => {
+      props.reset();
+    };
   }, []);
 
   const handleClose = () => {
@@ -96,7 +98,7 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
                   errorMessage: translate('register.messages.validate.login.required')
                 },
                 pattern: {
-                  value: '^[_.@A-Za-z0-9-]*$',
+                  value: "<%- LOGIN_REGEX %>",
                   errorMessage: translate('register.messages.validate.login.pattern')
                 },
                 minLength: {
@@ -174,7 +176,7 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
           </AvGroup>
           <AvGroup check>
             <Label>
-              <AvInput type="checkbox" name="activated" value={user.activated} /> <Translate contentKey="userManagement.activated">Activated</Translate>
+              <AvInput type="checkbox" name="activated" value={user.activated} checked={user.activated} disabled={!user.id} /> <Translate contentKey="userManagement.activated">Activated</Translate>
             </Label>
           </AvGroup>
   <%_ if (enableTranslation) { _%>
@@ -182,7 +184,7 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
             <Label for="langKey">
               <Translate contentKey="userManagement.langKey">Language Key</Translate>
             </Label>
-            <AvField type="select" className="form-control" name="langKey" value={user.langKey}>
+            <AvField type="select" className="form-control" name="langKey" value={user.langKey || locales[0]}>
               {locales.map(locale =>
                 <option value={locale} key={locale}>
                   {languages[locale].name}
@@ -193,7 +195,7 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
   <%_ } _%>
           <AvGroup>
             <Label for="authorities">
-              <Translate contentKey="userManagement.profiles">Language Key</Translate>
+              <Translate contentKey="userManagement.profiles">Profiles</Translate>
             </Label>
             <AvInput type="select" className="form-control" name="authorities" value={user.authorities} multiple>
               {roles.map(role => (

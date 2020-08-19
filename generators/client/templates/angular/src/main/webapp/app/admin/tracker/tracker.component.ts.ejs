@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,24 +17,26 @@
  limitations under the License.
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
-import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/core/tracker/tracker.service';
+import { TrackerService } from 'app/core/tracker/tracker.service';
+import { TrackerActivity } from 'app/core/tracker/tracker-activity.model';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-tracker',
     templateUrl: './tracker.component.html'
 })
-export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit, OnDestroy {
-
-    activities: any[] = [];
+export class TrackerComponent implements OnInit, OnDestroy {
+    activities: TrackerActivity[] = [];
+    subscription?: Subscription;
 
     constructor(
-        private trackerService: <%=jhiPrefixCapitalized%>TrackerService
-    ) {
-    }
+        private trackerService: TrackerService
+    ) {}
 
-    showActivity(activity: any) {
+    showActivity(activity: TrackerActivity): void {
         let existingActivity = false;
+
         for (let index = 0; index < this.activities.length; index++) {
             if (this.activities[index].sessionId === activity.sessionId) {
                 existingActivity = true;
@@ -45,19 +47,23 @@ export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit, OnDest
                 }
             }
         }
+
         if (!existingActivity && (activity.page !== 'logout')) {
             this.activities.push(activity);
         }
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.trackerService.subscribe();
-        this.trackerService.receive().subscribe((activity) => {
+        this.subscription = this.trackerService.receive().subscribe((activity: TrackerActivity) => {
             this.showActivity(activity);
         });
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.trackerService.unsubscribe();
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
 }

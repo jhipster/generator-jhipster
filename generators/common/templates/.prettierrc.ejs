@@ -10,3 +10,11 @@ arrowParens: avoid
 
 # jsx and tsx rules:
 jsxBracketSameLine: false
+<%_ if (!skipServer) { _%>
+
+# java rules:
+overrides:
+  - files: "*.java"
+    options:
+      tabWidth: 4
+<%_ } _%>

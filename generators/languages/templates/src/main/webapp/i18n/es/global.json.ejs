@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "Salud",
                 "configuration": "Configuración",
                 "logs": "Logs",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "Auditorías",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "Base de datos",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -86,13 +83,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Se requiere que ingrese una contraseña.",
-                    "minlength": "Se requiere que su contraseña tenga por lo menos 5 caracteres",
+                    "minlength": "Se requiere que su contraseña tenga por lo menos 4 caracteres",
                     "maxlength": "Su contraseña no puede tener más de 50 caracteres",
                     "strength": "Seguridad de la contraseña:"
                 },
                 "confirmpassword": {
                     "required": "Se requiere que confirme la contraseña.",
-                    "minlength": "Se requiere que su contraseña de confirmación tenga por lo menos 5 caracteres",
+                    "minlength": "Se requiere que su contraseña de confirmación tenga por lo menos 4 caracteres",
                     "maxlength": "Su contraseña de confirmación no puede tener más de 50 caracteres"
                 },
                 "email": {
@@ -109,7 +106,7 @@
         "ribbon": {
             "dev": "Development"
         },
-        "item-count": "Monstrando {{first}} - {{second}} de {{total}} elementos."
+        "item-count": "Mostrando {{first}} - {{second}} de {{total}} elementos."
     },
     "entity": {
         "action": {
@@ -149,10 +146,14 @@
         "url.not.found": "No existe",
         "NotNull": "¡El campo {{fieldName}} no puede estar vacío!",
         "Size": "¡El campo {{fieldName}} no cumple con los requisitos de tamaño mínimo/máximo!",
-        "userexists": "¡El nombre de usuario ya estiste!",
+        "userexists": "¡El nombre de usuario ya existe!",
         "emailexists": "¡La cuenta de correo ya está en uso!",
         "idexists": "Un/a nuevo/a {{entityName}} no puede tener ID",
-        "idnull": "ID inválido"
+        "idnull": "ID inválido",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "Pie de página"
 }

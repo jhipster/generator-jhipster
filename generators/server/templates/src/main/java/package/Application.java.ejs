@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,30 +16,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>;
+package <%= packageName %>;
 
 <%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
-import <%=packageName%>.client.OAuth2InterceptedFeignConfiguration;
+import <%= packageName %>.client.OAuth2InterceptedFeignConfiguration;
 <%_ } _%>
-import <%=packageName%>.config.ApplicationProperties;
-import <%=packageName%>.config.DefaultProfileUtil;
+import <%= packageName %>.config.ApplicationProperties;
 
+import io.github.jhipster.config.DefaultProfileUtil;
 import io.github.jhipster.config.JHipsterConstants;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 <%_ } _%>
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-<%_ if (serviceDiscoveryType) { _%>
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-<%_ } _%>
-<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationType === 'gateway' && !reactive) { _%>
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 <%_ } _%>
 <%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
@@ -48,10 +44,12 @@ import org.springframework.context.annotation.FilterType;
 <%_ } _%>
 import org.springframework.core.env.Environment;
 
+import javax.annotation.PostConstruct;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 
 <%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
 @ComponentScan(
@@ -60,13 +58,10 @@ import java.util.Collection;
 <%_ } _%>
 @SpringBootApplication
 @EnableConfigurationProperties({<% if (databaseType === 'sql') { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
-<%_ if (serviceDiscoveryType) { _%>
-@EnableDiscoveryClient
-<%_ } _%>
-<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationType === 'gateway' && !reactive) { _%>
 @EnableZuulProxy
 <%_ } _%>
-public class <%= mainClass %> implements InitializingBean {
+public class <%= mainClass %> {
 
     private static final Logger log = LoggerFactory.getLogger(<%= mainClass %>.class);
 
@@ -83,8 +78,8 @@ public class <%= mainClass %> implements InitializingBean {
      * <p>
      * You can find more information on how profiles work with JHipster on <a href="https://www.jhipster.tech/profiles/">https://www.jhipster.tech/profiles/</a>.
      */
-    @Override
-    public void afterPropertiesSet() throws Exception {
+    @PostConstruct
+    public void initApplication() {
         Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
             log.error("You have misconfigured your application! It should not run " +
@@ -109,15 +104,9 @@ public class <%= mainClass %> implements InitializingBean {
     }
 
     private static void logApplicationStartup(Environment env) {
-        String protocol = "http";
-        if (env.getProperty("server.ssl.key-store") != null) {
-            protocol = "https";
-        }
+        String protocol = Optional.ofNullable(env.getProperty("server.ssl.key-store")).map(key -> "https").orElse("http");
         String serverPort = env.getProperty("server.port");
-        String contextPath = env.getProperty("server.servlet.context-path");
-        if (StringUtils.isBlank(contextPath)) {
-            contextPath = "/";
-        }
+        String contextPath = Optional.ofNullable(env.getProperty("server.servlet.context-path")).filter(StringUtils::isNotBlank).orElse("/");
         String hostAddress = "localhost";
         try {
             hostAddress = InetAddress.getLocalHost().getHostAddress();

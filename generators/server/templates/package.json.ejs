@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -26,12 +26,22 @@
     "node_modules"
   ],
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "1.0.13-4.3.1",
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
-    "generator-jhipster": "<%= jhipsterVersion %>"
+    "generator-jhipster": "<%= jhipsterVersion %>",
+    <%_ if (!skipCommitHook) { _%>
+    "husky": "<%= HUSKY_VERSION %>",
+    "lint-staged": "<%= LINT_STAGED_VERSION %>",
+    <%_ } _%>
+    "prettier": "<%= PRETTIER_VERSION %>",
+    "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>"
   },
   "engines": {
-    "node": ">=8.9.0"
+    "node": ">=<%= NODE_VERSION %>"
+  },
+  "scripts": {
+    "prettier:format": "prettier --write \"{,src/**/}*.{<%= getPrettierExtensions() %>}\""
   }
 }

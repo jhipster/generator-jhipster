@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "Status",
                 "configuration": "Konfiguracja",
                 "logs": "Logi",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "Audyty",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "Baza danych",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -152,7 +149,11 @@
         "userexists": "Użytkownik o takiej nazwie już istnieje!",
         "emailexists": "Użytkownik z takim adresem email już istnieje!",
         "idexists": "Nowy {{entityName}} nie może jeszcze mieć przypisanego ID",
-        "idnull": "Błędne ID"
+        "idnull": "Błędne ID",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "To jest stopka"
 }

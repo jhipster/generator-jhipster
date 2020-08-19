@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -38,7 +38,7 @@ S3.prototype.createBucket = function createBucket(params, callback) {
 
     const s3Params = {
         Bucket: bucket,
-        CreateBucketConfiguration: { LocationConstraint: region }
+        CreateBucketConfiguration: { LocationConstraint: region },
     };
 
     if (region === S3_STANDARD_REGION) {
@@ -47,7 +47,7 @@ S3.prototype.createBucket = function createBucket(params, callback) {
 
     const s3 = new this.Aws.S3({
         params: s3Params,
-        signatureVersion: 'v4'
+        signatureVersion: 'v4',
     });
 
     s3.headBucket(err => {
@@ -87,10 +87,10 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
             const s3 = new this.Aws.S3({
                 params: {
                     Bucket: bucket,
-                    Key: warKey
+                    Key: warKey,
                 },
                 signatureVersion: 'v4',
-                httpOptions: { timeout: 600000 }
+                httpOptions: { timeout: 600000 },
             });
 
             const filePath = buildFolder + warKey;
@@ -134,7 +134,7 @@ function uploadToS3(s3, body, callback) {
                             incomplete: ' ',
                             width: 20,
                             total,
-                            clear: true
+                            clear: true,
                         });
                     }
 

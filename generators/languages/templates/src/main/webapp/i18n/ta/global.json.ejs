@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "ஆரோக்கியம்",
                 "configuration": "கட்டமைப்பு",
                 "logs": "பதிவுகள்",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "தணிக்கைகள்",
-                <%_ } _%>
                 "apidocs": "எபிஐ ",
                 "database": "டேடாபேஸ்",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -84,13 +81,13 @@
             "validate": {
                 "newpassword": {
                     "required": "உங்கள் கடவுச்சொல் தேவைப்படுகிறது.",
-                    "minlength": "உங்கள் கடவுச்சொல் குறைந்தது 5 எழுத்துக்கள் இருக்க வேண்டும்.",
+                    "minlength": "உங்கள் கடவுச்சொல் குறைந்தது 4 எழுத்துக்கள் இருக்க வேண்டும்.",
                     "maxlength": "உங்கள் கடவுச்சொல்லை 50 எழுத்துக்களை விட அதிகமாக இருக்க முடியாது.",
                     "strength": "கடவுச்சொல் வலிமை:"
                 },
                 "confirmpassword": {
                     "required": "உங்கள் உறுதிப்படுத்தல் கடவுச்சொல்லை தேவைப்படுகிறது.",
-                    "minlength": "உங்கள் உறுதிப்படுத்தல் கடவுச்சொல்லை குறைந்தது 5 எழுத்துக்கள் இருக்க வேண்டும்.",
+                    "minlength": "உங்கள் உறுதிப்படுத்தல் கடவுச்சொல்லை குறைந்தது 4 எழுத்துக்கள் இருக்க வேண்டும்.",
                     "maxlength": "உங்கள் உறுதிப்படுத்தல் கடவுச்சொல்லை 50 எழுத்துக்களை விட அதிகமாக இருக்க முடியாது."
                 },
                 "email": {
@@ -111,7 +108,7 @@
     },
     "entity": {
         "action": {
-	         "addblob": "பிளாப் சேர்க்க",
+             "addblob": "பிளாப் சேர்க்க",
             "addimage": "படம் சேர்க்க",
             "back": "பின் செல்க",
             "cancel": "ரத்து",
@@ -150,7 +147,11 @@
         "userexists": "உள் நுழை பெயர் எடுக்கப்பட்டது!",
         "emailexists": "மின்னஞ்சல் உபயோகிக்கப்பட்டது!",
         "idexists": "புது {{entityName}} -க்கு ஐ.டி இருக்கமுடியாது",
-        "idnull": "Invalid ID"
+        "idnull": "Invalid ID",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "இது உங்கள் முடிப்பு"
 }

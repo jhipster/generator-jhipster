@@ -1,0 +1,5 @@
+Description:
+    Deploys an application to Azure Spring Cloud.
+
+Example:
+    jhipster azure-spring-cloud

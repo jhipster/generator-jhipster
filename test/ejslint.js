@@ -5,7 +5,7 @@ const glob = require('glob');
 
 describe('EJS Lint', () => {
     const opts = {
-        delimiter: '%'
+        delimiter: '%',
     };
     it('EJS templates are valid', () => {
         const files = glob.sync('generators/**/*.ejs');

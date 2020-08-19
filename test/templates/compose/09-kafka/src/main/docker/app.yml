@@ -3,11 +3,17 @@ services:
     samplekafka-app:
         image: samplekafka
         environment:
-            - SPRING_PROFILES_ACTIVE=prod,swagger
-            - SPRING_DATASOURCE_URL=jdbc:mysql://samplekafka-mysql:3306/samplekafka?useUnicode=true&characterEncoding=utf8&useSSL=false
+            - SPRING_PROFILES_ACTIVE=prod,api-docs
+            - SPRING_DATASOURCE_URL=jdbc:mysql://samplekafka-mysql:3306/samplekafka?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
             - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
-            - SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS=kafka:9092
-            - SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS=kafka:9092
+            - KAFKA_CONSUMER_KEY_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
+            - KAFKA_CONSUMER_VALUE_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
+            - KAFKA_CONSUMER_BOOTSTRAP_SERVERS=kafka:9092
+            - KAFKA_CONSUMER_GROUP_ID=<%= dasherizedBaseName %>
+            - KAFKA_CONSUMER_AUTO_OFFSET_RESET=earliest
+            - KAFKA_PRODUCER_BOOTSTRAP_SERVERS=kafka:9092
+            - KAFKA_PRODUCER_KEY_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
+            - KAFKA_PRODUCER_VALUE_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
         ports:
             - 8080:8080
     samplekafka-mysql:

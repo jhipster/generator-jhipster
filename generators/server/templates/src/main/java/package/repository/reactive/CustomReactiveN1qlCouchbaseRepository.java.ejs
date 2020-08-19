@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -16,26 +16,46 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository.reactive;
+package <%= packageName %>.repository;
 
+<%_ if (searchEngine === 'couchbase') { _%>
+import com.couchbase.client.java.search.SearchQuery;
+import com.couchbase.client.java.search.queries.AbstractFtsQuery;
+import com.couchbase.client.java.search.queries.DocIdQuery;
+import com.couchbase.client.java.search.queries.QueryStringQuery;
+import com.couchbase.client.java.search.result.AsyncSearchQueryResult;
+import com.couchbase.client.java.search.result.SearchQueryRow;
+import <%= packageName %>.repository.search.SearchCouchbaseRepository;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.couchbase.core.CouchbaseTemplate;
 import org.springframework.data.couchbase.core.RxJavaCouchbaseOperations;
 import org.springframework.data.couchbase.core.mapping.CouchbasePersistentEntity;
 import org.springframework.data.couchbase.repository.query.CouchbaseEntityInformation;
 import org.springframework.data.couchbase.repository.support.ReactiveN1qlCouchbaseRepository;
+<%_ if (searchEngine === 'couchbase') { _%>
+import org.springframework.data.domain.Pageable;
+<%_ } _%>
 import org.springframework.data.repository.util.QueryExecutionConverters;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+<%_ if (searchEngine === 'couchbase') { _%>
+import rx.Observable;
+import rx.RxReactiveStreams;
+<%_ } _%>
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Set;
+<%_ if (searchEngine === 'couchbase') { _%>
+import java.util.LinkedList;
+import java.util.List;
+<%_ } _%>
 
 /**
  * A custom implementation of {@code CouchbaseRepository}.
  */
-public class CustomReactiveN1qlCouchbaseRepository<T, ID extends Serializable> extends ReactiveN1qlCouchbaseRepository<T, ID> {
+public class CustomReactiveN1qlCouchbaseRepository<T, ID extends Serializable> extends ReactiveN1qlCouchbaseRepository<T, ID><%if (searchEngine === 'couchbase') { %> implements SearchCouchbaseRepository<T, ID><% } %> {
 
     private final CouchbasePersistentEntity<?> persistentEntity;
 
@@ -72,6 +92,50 @@ public class CustomReactiveN1qlCouchbaseRepository<T, ID extends Serializable> e
     public <S extends T> Mono<S> save(S entity) {
         return super.save(populateIdIfNecessary(entity));
     }
+<%_ if (searchEngine === 'couchbase') { _%>
+
+    public Flux<T> search(String indexName, String request, Pageable pageable) {
+        SearchQuery searchQuery = new SearchQuery(indexName, queryString(request))
+            .limit(pageable.getPageSize())
+            .skip((int) pageable.getOffset());
+        return search(searchQuery);
+    }
+
+    @Override
+    public Flux<T> search(String indexName, String request) {
+        SearchQuery searchQuery = new SearchQuery(indexName, queryString(request));
+        return search(searchQuery);
+    }
+
+    static AbstractFtsQuery queryString(String request) {
+        List<String> ids = new LinkedList<>();
+        for (String r : request.split(" ")) {
+            if (r.indexOf("id:") == 0) {
+                ids.add(r.substring(3));
+                request = request.replace(r, "").replaceAll("[ ]+", " ").trim();
+            }
+        }
+        QueryStringQuery queryString = SearchQuery.queryString(request);
+        if (ids.size() != 0) {
+            DocIdQuery docIdQuery = SearchQuery.docId(ids.toArray(new String[0]));
+            if (!request.isEmpty()) {
+                return SearchQuery.conjuncts(queryString, docIdQuery);
+            }
+            return docIdQuery;
+        }
+        return queryString;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Flux<T> search(SearchQuery searchQuery) {
+        Observable<String> resultIdObservable = getCouchbaseOperations().getCouchbaseBucket().async().query(searchQuery)
+            .flatMap(AsyncSearchQueryResult::hits)
+            .map(SearchQueryRow::id);
+        return Flux.from(RxReactiveStreams.toPublisher(resultIdObservable))
+            .map(id -> (ID) id)
+            .flatMap(this::findById);
+    }
+<%_ } _%>
 
     /**
      * Add generated ID to entity if not already set.

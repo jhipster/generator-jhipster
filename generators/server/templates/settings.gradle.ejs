@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -28,13 +28,14 @@ pluginManagement {
           <%_ if (!skipClient) { _%>
           id 'com.github.node-gradle.node' version "${gradle_node_plugin_version}"
           <%_ } _%>
-          <%_ if (databaseType === 'sql') { _%>
+          <%_ if (databaseType === 'sql' && !reactive) { _%>
           id 'org.liquibase.gradle' version "${liquibase_plugin_version}"
           <%_ } _%>
           id 'org.sonarqube' version "${sonarqube_plugin_version}"
           id 'net.ltgt.apt-eclipse' version "${apt_plugin_version}"
           id 'net.ltgt.apt-idea' version "${apt_plugin_version}"
           id 'net.ltgt.apt' version "${apt_plugin_version}"
+          id "io.spring.nohttp" version "${spring_no_http_plugin_version}"
      }
 }
 

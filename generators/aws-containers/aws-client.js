@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,11 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* global process */
 const _ = require('lodash');
 const fs = require('fs');
 const chalk = require('chalk');
-const shelljs = require('shelljs');
+const AWS = require('aws-sdk');
+const ProgressBar = require('progress');
+const ora = require('ora');
 
 const utils = require('../utils');
 
@@ -31,21 +32,16 @@ const AwsCF = require('./lib/cloudFormation');
 const DEFAULT_REGION = 'us-east-1';
 const S3_MIN_PART_SIZE = 5242880;
 
-// Instance from aws-sdk
-let AWS;
 let credentials;
 let ec2;
 // let ecr;
 let s3;
 let sts;
-let ora;
 
 // Instances from ./lib. Composed with aws-sdk
 let SSM;
 let ECR;
 let CF;
-
-let ProgressBar;
 
 module.exports = {
     DEFAULT_REGION,
@@ -57,44 +53,11 @@ module.exports = {
     listRegions,
     listSubnets,
     listVpcs,
-    loadAWS,
     saveCredentialsInAWS,
     initAwsStuff,
     sanitizeBucketName,
-    uploadTemplate
+    uploadTemplate,
 };
-
-/**
- * Will load the aws-sdk npm dependency if it's not already loaded.
- *
- * @param generator the yeoman generator it'll be loaded in.
- * @returns {Promise} The promise will succeed if the aws-sdk has been loaded and fails if it couldn't be installed.
- */
-function loadAWS(generator) {
-    return new Promise((resolve, reject) => {
-        try {
-            AWS = require('aws-sdk'); // eslint-disable-line
-            ProgressBar = require('progress'); // eslint-disable-line
-            ora = require('ora'); // eslint-disable-line
-        } catch (e) {
-            generator.log('Installing AWS dependencies');
-            let installCommand = 'yarn add aws-sdk@2.167.0 progress@2.0.0 ora@1.3.0';
-            if (generator.config.get('clientPackageManager') === 'npm') {
-                installCommand = 'npm install aws-sdk@2.167.0 progress@2.0.0 ora@1.3.0--save';
-            }
-            shelljs.exec(installCommand, { silent: false }, code => {
-                if (code !== 0) {
-                    generator.error('Something went wrong while installing the dependencies\n');
-                    reject();
-                }
-                AWS = require('aws-sdk'); // eslint-disable-line
-                ProgressBar = require('progress'); // eslint-disable-line
-                ora = require('ora'); // eslint-disable-line
-            });
-        }
-        resolve();
-    });
-}
 
 /**
  * Init AWS stuff like ECR and whatnot.
@@ -171,13 +134,13 @@ function listSubnets(vpcId) {
         Filters: [
             {
                 Name: 'vpc-id',
-                Values: [vpcId]
+                Values: [vpcId],
             },
             {
                 Name: 'state',
-                Values: ['available']
-            }
-        ]
+                Values: ['available'],
+            },
+        ],
     };
     return spinner(
         ec2
@@ -223,7 +186,7 @@ function getDockerLogin() {
                         resolve({
                             username: splitResult[0],
                             password: splitResult[1],
-                            accountId: data.Account
+                            accountId: data.Account,
                         });
                     })
                     .catch(() => reject(new Error("Couldn't retrieve the user informations")))
@@ -263,13 +226,13 @@ function _getAuthorizationToken() {
  */
 function createS3Bucket(bucketName, region = DEFAULT_REGION) {
     const createBuckerParams = {
-        Bucket: bucketName
+        Bucket: bucketName,
     };
     return spinner(
         new Promise((resolve, reject) =>
             s3
                 .headBucket({
-                    Bucket: bucketName
+                    Bucket: bucketName,
                 })
                 .promise()
                 .catch(error => {
@@ -320,11 +283,11 @@ function uploadTemplate(bucketName, filename, path) {
                     {
                         Bucket: bucketName,
                         Key: filename,
-                        Body: fs.createReadStream(path)
+                        Body: fs.createReadStream(path),
                     },
                     {
                         partSize: Math.max(stats.size, S3_MIN_PART_SIZE),
-                        queueSize: 1
+                        queueSize: 1,
                     }
                 );
                 let bar;
@@ -336,17 +299,14 @@ function uploadTemplate(bucketName, filename, path) {
                             incomplete: ' ',
                             width: 20,
                             total,
-                            clear: true
+                            clear: true,
                         });
                     }
 
                     const curr = evt.loaded / 1000000;
                     bar.tick(curr - bar.curr);
                 });
-                return upload
-                    .promise()
-                    .then(resolve)
-                    .catch(reject);
+                return upload.promise().then(resolve).catch(reject);
             })
         )
     );

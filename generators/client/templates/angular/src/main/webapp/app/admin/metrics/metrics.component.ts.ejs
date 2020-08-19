@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,49 +16,50 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import {Component, OnInit} from '@angular/core';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { flatMap } from 'rxjs/operators';
 
-import { <%=jhiPrefixCapitalized%>MetricsService } from './metrics.service';
+import { MetricsService, Metrics, MetricsKey, ThreadDump, Thread } from './metrics.service';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-metrics',
-    templateUrl: './metrics.component.html'
+    templateUrl: './metrics.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnInit {
-    metrics: any = {};
-    threadData: any = {};
+export class MetricsComponent implements OnInit {
+    metrics?: Metrics;
+    threads?: Thread[];
     updatingMetrics = true;
-    JCACHE_KEY: string;
 
-    constructor(
-        private modalService: NgbModal,
-        private metricsService: <%=jhiPrefixCapitalized%>MetricsService
-    ) {
-        this.JCACHE_KEY = 'jcache.statistics';
-    }
+    constructor(private metricsService: MetricsService, private changeDetector: ChangeDetectorRef) {}
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.refresh();
     }
 
-    refresh() {
+    refresh(): void {
         this.updatingMetrics = true;
-        this.metricsService.getMetrics().subscribe(metrics => {
-            this.metrics = metrics;
-            this.metricsService.threadDump().subscribe(data => {
-                this.threadData = data.threads;
-                this.updatingMetrics = false;
-            });
-        });
+        this.metricsService
+            .getMetrics()
+            .pipe(
+                flatMap(
+                    () => this.metricsService.threadDump(),
+                    (metrics: Metrics, threadDump: ThreadDump) => {
+                        this.metrics = metrics;
+                        this.threads = threadDump.threads;
+                        this.updatingMetrics = false;
+                        this.changeDetector.detectChanges();
+                    }
+                )
+            )
+            .subscribe();
     }
 
-    isObjectExisting(metrics: any, key: string) {
-        return metrics && metrics[key];
+    metricsKeyExists(key: MetricsKey): boolean {
+        return this.metrics && this.metrics[key];
     }
 
-    isObjectExistingAndNotEmpty(metrics: any, key: string) {
-        return this.isObjectExisting(metrics, key) && JSON.stringify(metrics[key]) !== '{}';
+    metricsKeyExistsAndObjectNotEmpty(key: MetricsKey): boolean {
+        return this.metrics && this.metrics[key] && JSON.stringify(this.metrics[key]) !== '{}';
     }
-
 }

@@ -10,7 +10,7 @@
                     "required": "Uživatelské jméno již existuje.",
                     "minlength": "Uživatelské jméno musí mít alespoň 1 znak.",
                     "maxlength": "Uživatelské jméno nesmí být delší než 50 znaků.",
-                    "pattern": "Uživatelské jméno může obsahovat pouze malá písmena a číslice."
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>Registrace uložená!</strong> Pro potvrzení registrace si prosím zkontrolujte vaši emailovú schránku.",

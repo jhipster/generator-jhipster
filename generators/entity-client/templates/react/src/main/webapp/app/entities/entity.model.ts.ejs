@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,8 +17,7 @@
  limitations under the License.
 -%>
 <%
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
-const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto);
+const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto, 'string', embedded);
 const typeImports = generateEntityClientImports(relationships, dto);
 const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields, 'react');
 const enumImports = generateEntityClientEnumImports(fields);
@@ -27,7 +26,9 @@ const enumImports = generateEntityClientEnumImports(fields);
 import { Moment } from 'moment';
 <%_ } _%>
 <%_ typeImports.forEach( (importedPath, importedType) => { _%>
+    <%_ if (importedType !== `I${entityReactName}`) { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
+    <%_ } _%>
 <%_ }); _%>
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';

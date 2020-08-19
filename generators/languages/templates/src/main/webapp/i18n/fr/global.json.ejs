@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "Diagnostics",
                 "configuration": "Configuration",
                 "logs": "Logs",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "Audits",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "Base de données",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -86,13 +83,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Votre mot de passe est requis.",
-                    "minlength": "Votre mot de passe doit comporter au moins 5 caractères.",
+                    "minlength": "Votre mot de passe doit comporter au moins 4 caractères.",
                     "maxlength": "Votre mot de passe ne doit pas comporter plus de 50 caractères.",
                     "strength": "Robustesse du mot de passe :"
                 },
                 "confirmpassword": {
                     "required": "Votre confirmation du mot de passe est requise.",
-                    "minlength": "Votre confirmation du mot de passe doit comporter au moins 5 caractères.",
+                    "minlength": "Votre confirmation du mot de passe doit comporter au moins 4 caractères.",
                     "maxlength": "Votre confirmation du mot de passe ne doit pas comporter plus de 50 caractères."
                 },
                 "email": {
@@ -140,7 +137,8 @@
             "maxbytes": "Ce champ doit être inférieur à {{max}} bytes.",
             "pattern": "Ce champ doit suivre l'expression régulière {{pattern}}.",
             "number": "Ce champ doit être un nombre.",
-            "datetimelocal": "Ce champ doit être une date et une heure."
+            "datetimelocal": "Ce champ doit être une date et une heure.",
+            "patternLogin": "Ce champ ne peut contenir que des lettres, des chiffres ou des adresses e-mail."
         }
     },
     "error": {
@@ -151,8 +149,12 @@
         "Size": "Le champ {{fieldName}} ne respecte pas les critères minimum et maximum !",
         "userexists": "Login déjà utilisé !",
         "emailexists": "Email déjà utilisé !",
-        "idexists": "Une nouvelle entité {{entityName}} ne peut pas avoir d'ID !",
-        "idnull": "Invalid ID"
+        "idexists": "Une nouvelle entité {{entityName}} ne peut pas avoir d'identifiant !",
+        "idnull": "Identifiant invalide",
+        "file": {
+            "could.not.extract": "Impossible d'extraire le fichier",
+            "not.image": "Le fichier doit être une image et non du type \"{{ fileType }}\""
+        }
     },
     "footer": "Ceci est votre pied de page"
 }

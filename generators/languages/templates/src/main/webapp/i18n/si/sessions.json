@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "[<strong>{{username}}</strong>] සඳහා ක්\u200Dරියාකාරී සැසි",
+        "table": {
+            "ipaddress": "IP ලිපිනය",
+            "useragent": "පරිශීලක නියෝජිත",
+            "date": "දිනය",
+            "button": "අවලංගු කරන්න"
+        },
+        "messages": {
+            "success": "<strong>සැසිය අවලංගුයි!</strong>",
+            "error": "<strong>දෝෂයක් සිදුවී ඇත!</strong> සැසිය අවලංගු කළ නොහැක."
+        }
+    }
+}

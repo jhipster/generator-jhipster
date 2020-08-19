@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Button, Col, Progress, Row, Table } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import {
   CacheMetrics,
   DatasourceMetrics,
@@ -39,8 +39,6 @@ import { IRootState } from 'app/shared/reducers';
 export interface IMetricsPageProps extends StateProps, DispatchProps {}
 
 export const MetricsPage = (props: IMetricsPageProps) => {
-  const [showModal, setShowModal] = useState(false);
-
   useEffect(() => {
     props.systemMetrics();
     props.systemThreadDump();
@@ -106,8 +104,8 @@ export const MetricsPage = (props: IMetricsPageProps) => {
       ) : (
         ''
       )}
-      {metrics && metrics.endpointsRequests ? (
-        <EndpointsRequestsMetrics endpointsRequestsMetrics={metrics.endpointsRequests} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT} />
+      {metrics && metrics.services ? (
+        <EndpointsRequestsMetrics endpointsRequestsMetrics={metrics.services} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT} />
       ) : (
         ''
       )}

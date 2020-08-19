@@ -1,5 +1,5 @@
 <%#
-Copyright 2013-2019 the original author or authors from the JHipster project.
+Copyright 2013-2020 the original author or authors from the JHipster project.
 
 This file is part of the JHipster project, see https://www.jhipster.tech/
 for more information.
@@ -47,6 +47,8 @@ const expect = chai.expect;
 describe('Account', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
+  const username = process.env.E2E_USERNAME || 'admin';
+  const password = process.env.E2E_PASSWORD || 'admin';
   <%_ if (!skipUserManagement) { _%>
   let passwordPage: PasswordPage;
   let settingsPage: SettingsPage;
@@ -72,14 +74,14 @@ describe('Account', () => {
     // Login page should appear
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
-    await signInPage.username.sendKeys('admin');
+    await signInPage.username.sendKeys(username);
     await signInPage.password.sendKeys('foo');
     await signInPage.loginButton.click();
 
     // Login page should stay open when login fails
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
     <%_ } else { _%>
-    await signInPage.loginWithOAuth('admin', 'foo');
+    await signInPage.loginWithOAuth(username, 'foo');
     const alert = element(by.css('.alert-error'));
     if (await alert.isPresent()) {
       // Keycloak
@@ -102,8 +104,8 @@ describe('Account', () => {
 
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
-    await signInPage.username.sendKeys('admin');
-    await signInPage.password.sendKeys('admin');
+    await signInPage.username.sendKeys(username);
+    await signInPage.password.sendKeys(password);
     await signInPage.loginButton.click();
     await signInPage.waitUntilHidden();
 
@@ -114,7 +116,7 @@ describe('Account', () => {
       <%_ } _%>
     <%_ } else { _%>
     // Keycloak credentials by default, change them to be able to use oauth2 with Okta
-    await signInPage.loginWithOAuth('admin', 'admin');
+    await signInPage.loginWithOAuth(username, password);
     const success = element(by.className('alert-success'));
     await waitUntilDisplayed(success);
 
@@ -147,8 +149,8 @@ describe('Account', () => {
     await signInPage.get();
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
-    await signInPage.username.sendKeys('admin');
-    await signInPage.password.sendKeys('admin');
+    await signInPage.username.sendKeys(username);
+    await signInPage.password.sendKeys(password);
     await signInPage.loginButton.click();
     await signInPage.waitUntilHidden();
 
@@ -166,6 +168,7 @@ describe('Account', () => {
 <%_ if (databaseType !== 'cassandra') { _%>
 
     const modifiedDateSortButton = getModifiedDateSortButton();
+    await waitUntilDisplayed(modifiedDateSortButton);
     await waitUntilClickable(modifiedDateSortButton);
     await modifiedDateSortButton.click();
 <%_ } _%>
@@ -222,8 +225,8 @@ describe('Account', () => {
     await signInPage.get();
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
-    await signInPage.username.sendKeys('admin');
-    await signInPage.password.sendKeys('admin');
+    await signInPage.username.sendKeys(username);
+    await signInPage.password.sendKeys(password);
     await signInPage.loginButton.click();
     await signInPage.waitUntilHidden();
 
@@ -252,7 +255,7 @@ describe('Account', () => {
     await passwordPage.waitUntilDisplayed();
     expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
 
-    await passwordPage.autoChangePassword('admin', 'new_password', 'new_password');
+    await passwordPage.autoChangePassword(username, 'new_password', 'new_password');
     <%_ if (enableTranslation) { _%>
     const toast = getToastByInnerText('Password changed!');
     <% } else { %>
@@ -269,7 +272,7 @@ describe('Account', () => {
     await signInPage.get();
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
-    await signInPage.username.sendKeys('admin');
+    await signInPage.username.sendKeys(username);
     await signInPage.password.sendKeys('new_password');
     await signInPage.loginButton.click();
     await signInPage.waitUntilHidden();
@@ -279,7 +282,7 @@ describe('Account', () => {
     await passwordPage.get();
     expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
 
-    await passwordPage.autoChangePassword('new_password', 'admin', 'admin');
+    await passwordPage.autoChangePassword('new_password', password, password);
 
     await navBarPage.autoSignOut();
   });
@@ -300,6 +303,7 @@ describe('Account', () => {
     await waitUntilDisplayed(navBarPage.accountMenu);
 
     settingsPage = await navBarPage.getSettingsPage();
+    await waitUntilDisplayed(settingsPage.title);
     expect(await settingsPage.getTitle()).to.eq(settingsPageTitle);
 
     await settingsPage.firstName.sendKeys('jhipster');
@@ -318,8 +322,8 @@ describe('Account', () => {
     await signInPage.get();
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
-    await signInPage.username.sendKeys('admin');
-    await signInPage.password.sendKeys('admin');
+    await signInPage.username.sendKeys(username);
+    await signInPage.password.sendKeys(password);
     await signInPage.loginButton.click();
     await signInPage.waitUntilHidden();
 

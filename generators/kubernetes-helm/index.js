@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,13 +17,12 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const shelljs = require('shelljs');
 const fs = require('fs');
 const prompts = require('../kubernetes/prompts');
 const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-base-docker');
 const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
-const { checkKubernetes, loadConfig, saveConfig, setupKubernetesConstants } = require('../kubernetes-base');
+const { checkKubernetes, checkHelm, loadConfig, saveConfig, setupKubernetesConstants, setupHelmConstants } = require('../kubernetes-base');
 const statistics = require('../statistics');
 
 module.exports = class extends BaseDockerGenerator {
@@ -35,22 +34,10 @@ module.exports = class extends BaseDockerGenerator {
             },
             ...super.initializing,
             checkKubernetes,
-            checkHelm() {
-                if (this.skipChecks) return;
-                const done = this.async();
-
-                shelljs.exec('helm version --client', { silent: true }, (code, stdout, stderr) => {
-                    if (stderr) {
-                        this.log(
-                            `${chalk.yellow.bold('WARNING!')} helm 2.8 or later is not installed on your computer.\n` +
-                                'Make sure you have helm installed. Read https://github.com/helm/helm/\n'
-                        );
-                    }
-                    done();
-                });
-            },
+            checkHelm,
             loadConfig,
-            setupKubernetesConstants
+            setupKubernetesConstants,
+            setupHelmConstants,
         };
     }
 
@@ -68,7 +55,8 @@ module.exports = class extends BaseDockerGenerator {
             askForDockerPushCommand: prompts.askForDockerPushCommand,
             askForIstioSupport: prompts.askForIstioSupport,
             askForKubernetesServiceType: prompts.askForKubernetesServiceType,
-            askForIngressDomain: prompts.askForIngressDomain
+            askForIngressType: prompts.askForIngressType,
+            askForIngressDomain: prompts.askForIngressDomain,
         };
     }
 
@@ -91,7 +79,7 @@ module.exports = class extends BaseDockerGenerator {
                     }
                 });
             },
-            saveConfig
+            saveConfig,
         };
     }
 

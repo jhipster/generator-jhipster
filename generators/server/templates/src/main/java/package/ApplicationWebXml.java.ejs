@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,9 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>;
+package <%= packageName %>;
 
-import <%=packageName%>.config.DefaultProfileUtil;
+import io.github.jhipster.config.DefaultProfileUtil;
+
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
@@ -30,9 +31,7 @@ public class ApplicationWebXml extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        /**
-         * set a default to use when no profile is configured.
-         */
+        // set a default to use when no profile is configured.
         DefaultProfileUtil.addDefaultProfile(application.application());
         return application.sources(<%= mainClass %>.class);
     }

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.config;
+package <%= packageName %>.config;
 
 import io.github.jhipster.config.JHipsterProperties;
 
-import <%=packageName%>.gateway.accesscontrol.AccessControlFilter;
-import <%=packageName%>.gateway.responserewriting.SwaggerBasePathRewritingFilter;
+import <%= packageName %>.gateway.accesscontrol.AccessControlFilter;
+import <%= packageName %>.gateway.responserewriting.SwaggerBasePathRewritingFilter;
 <%_ if (cacheProvider === 'hazelcast') { _%>
-import <%=packageName%>.gateway.ratelimiting.RateLimitingFilter;
+import <%= packageName %>.gateway.ratelimiting.RateLimitingFilter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 <%_ } _%>
 import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
@@ -37,7 +37,7 @@ public class GatewayConfiguration {
     public static class SwaggerBasePathRewritingConfiguration {
 
         @Bean
-        public SwaggerBasePathRewritingFilter swaggerBasePathRewritingFilter(){
+        public SwaggerBasePathRewritingFilter swaggerBasePathRewritingFilter() {
             return new SwaggerBasePathRewritingFilter();
         }
     }
@@ -46,7 +46,7 @@ public class GatewayConfiguration {
     public static class AccessControlFilterConfiguration {
 
         @Bean
-        public AccessControlFilter accessControlFilter(RouteLocator routeLocator, JHipsterProperties jHipsterProperties){
+        public AccessControlFilter accessControlFilter(RouteLocator routeLocator, JHipsterProperties jHipsterProperties) {
             return new AccessControlFilter(routeLocator, jHipsterProperties);
         }
     }
@@ -55,7 +55,7 @@ public class GatewayConfiguration {
     /**
      * Configures the Zuul filter that limits the number of API calls per user.
      * <p>
-     * This uses Bucket4J to limit the API calls, see {@link <%=packageName%>.gateway.ratelimiting.RateLimitingFilter}.
+     * This uses Bucket4J to limit the API calls, see {@link <%= packageName %>.gateway.ratelimiting.RateLimitingFilter}.
      */
     @Configuration
     @ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")

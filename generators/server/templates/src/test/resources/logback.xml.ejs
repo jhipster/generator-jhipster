@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,7 +22,7 @@
 <configuration scan="true">
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
-    <logger name="<%=packageName%>" level="INFO"/>
+    <logger name="<%= packageName %>" level="INFO"/>
 
     <logger name="io.github.jhipster" level="WARN"/>
 
@@ -42,21 +42,37 @@
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
     <logger name="com.netflix" level="WARN"/>
+    <logger name="com.netflix.config.sources.URLConfigurationSource" level="ERROR"/>
     <logger name="com.netflix.discovery" level="INFO"/>
     <%_ } _%>
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
+    <%_ if (reactive) { _%>
+    <logger name="io.netty" level="WARN"/>
+    <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     <logger name="io.searchbox" level="WARN"/>
     <%_ } _%>
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+    <logger name="io.r2dbc" level="WARN"/>
+    <%_ } _%>
+    <%_ if (databaseType === 'sql') { _%>
+    <logger name="com.github.dockerjava" level="WARN"/>
+    <logger name="org.testcontainers" level="WARN"/>
+    <%_ } _%>
+    <%_ if (!reactive) { _%>
     <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>
+    <%_ } _%>
     <%_ if (cacheProvider === 'memcached') { _%>
     <logger name="net.rubyeye.xmemcached" level="INFO"/>
     <%_ } _%>
     <%_ if (cacheProvider === 'ehcache') { _%>
     <logger name="org.ehcache" level="WARN"/>
+    <%_ } _%>
+    <%_ if (cacheProvider === 'caffeine') { _%>
+    <logger name="com.github.benmanes.caffeine" level="WARN"/>
     <%_ } _%>
     <logger name="org.apache" level="WARN"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
@@ -65,7 +81,7 @@
     <logger name="org.elasticsearch" level="WARN"/>
     <%_ } _%>
     <logger name="org.hibernate.validator" level="WARN"/>
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
     <%_ } else if (databaseType === 'mongodb') { _%>
@@ -84,21 +100,27 @@
     <%_ if (cacheProvider === 'memcached') { _%>
     <logger name="net.rubyeye.xmemcached" level="INFO"/>
     <%_ } _%>
-    <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
+    <%_ if (prodDatabaseType === 'postgresql') { _%>
     <logger name="org.postgresql.jdbc" level="WARN"/>
     <%_ } _%>
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>
     <logger name="org.springframework.security" level="WARN"/>
     <logger name="org.springframework.cache" level="WARN"/>
+    <%_ if (reactive) { _%>
+    <logger name="org.synchronoss" level="WARN"/>
+    <%_ } _%>
     <logger name="org.thymeleaf" level="WARN"/>
     <logger name="org.xnio" level="WARN"/>
     <%_ if (messageBroker === 'kafka') { _%>
     <logger name="kafka" level="WARN"/>
     <logger name="org.I0Itec" level="WARN"/>
     <%_ } _%>
-    <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
+    <%_ if (prodDatabaseType === 'mssql') { _%>
     <logger name="com.microsoft.sqlserver.jdbc.internals" level="WARN"/>
+    <%_ } _%>
+    <%_ if (reactive) { _%>
+    <logger name="reactor" level="WARN"/>
     <%_ } _%>
     <logger name="springfox" level="WARN"/>
     <logger name="sun.rmi" level="WARN"/><% if (databaseType === 'sql') { %>
@@ -111,8 +133,10 @@
     <%_ if (cacheProvider === 'infinispan') { _%>
     <logger name="unknown.jul.logger" level="WARN"/>
     <%_ } _%>
+    <logger name="com.tngtech.archunit.core.importer" level="ERROR"/>
 
-    <root level="WARN">
+    <root>
+        <level>WARN</level>
         <appender-ref ref="CONSOLE"/>
     </root>
 

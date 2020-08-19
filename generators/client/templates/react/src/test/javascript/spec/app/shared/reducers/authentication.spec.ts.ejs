@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -205,7 +205,8 @@ describe('Authentication reducer tests', () => {
             locale: '<%= nativeLanguage %>'
           }<% } %>
       ];
-      await store.dispatch(getSession()).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getSession());
+      expect(store.getActions()).toEqual(expectedActions);
     });
 
     it('dispatches LOGOUT actions', async () => {
@@ -280,7 +281,8 @@ describe('Authentication reducer tests', () => {
           locale: '<%= nativeLanguage %>'
         }<% } %>
       ];
-      await store.dispatch(login('test', 'test')).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(login('test', 'test'));
+      expect(store.getActions()).toEqual(expectedActions);
     });
     <%_ } _%>
   });
@@ -292,30 +294,28 @@ describe('Authentication reducer tests', () => {
       store = mockStore({ authentication: { account: { langKey: 'en' } } });
     });
     it('clears the session token on clearAuthToken', async () => {
-      const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
+      const AUTH_TOKEN_KEY = '<%= jhiPrefixDashed %>-authenticationToken';
       const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
       axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
 
-      await store.dispatch(login('test', 'test')).then(() => {
-          expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe('TestToken');
-          expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
-          clearAuthToken()
-          expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
-          expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
-      });
+      await store.dispatch(login('test', 'test'));
+      expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe('TestToken');
+      expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
+      clearAuthToken()
+      expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
+      expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
     });
     it('clears the local storage token on clearAuthToken', async () => {
-      const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
+      const AUTH_TOKEN_KEY = '<%= jhiPrefixDashed %>-authenticationToken';
       const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
       axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
 
-      await store.dispatch(login('user', 'user', true)).then(() => {
-          expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
-          expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe('TestToken');
-          clearAuthToken()
-          expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
-          expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
-      });
+      await store.dispatch(login('user', 'user', true));
+      expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
+      expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe('TestToken');
+      clearAuthToken()
+      expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
+      expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
     });
   });
   <%_ } _%>

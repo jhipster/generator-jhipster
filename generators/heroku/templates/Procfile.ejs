@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,5 +18,5 @@
 -%>
 web: java $JAVA_OPTS <% if (applicationType === 'gateway' || dynoSize === 'Free') { %>-Xmx256m<% } %> -jar <% if (buildTool === 'maven') { %>target<% } %><% if (buildTool === 'gradle') { %>build/libs<% } %>/*.jar --spring.profiles.active=prod,heroku<% if (buildTool == 'maven' && herokuDeployType == 'git') { %>,no-liquibase<% } %> --server.port=$PORT <% if (prodDatabaseType === 'mongodb') { %>--spring.data.mongodb.database=$(echo "$MONGODB_URI" | sed "s/^.*:[0-9]*\///g")<% } %>
 <%_ if (buildTool == 'maven' && herokuDeployType == 'git' && (prodDatabaseType === 'postgresql' || prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb')) { _%>
-release: cp -R src/main/resources/config config && ./mvnw liquibase:update -Pprod,heroku
+release: cp -R src/main/resources/config config && ./mvnw -ntp liquibase:update -Pprod,heroku
 <%_ } _%>

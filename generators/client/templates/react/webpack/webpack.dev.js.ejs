@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,7 +18,7 @@
 -%>
 const webpack = require('webpack');
 const writeFilePlugin = require('write-file-webpack-plugin');
-const webpackMerge = require('webpack-merge');
+const webpackMerge = require('webpack-merge').merge;
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
@@ -65,6 +65,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         '/management',
         '/swagger-resources',
         '/v2/api-docs',
+        '/v3/api-docs',
         '/h2-console',<% if (authenticationType === 'oauth2') { %>
         '/oauth2',
         '/login',<% } %>
@@ -110,6 +111,13 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
           heartbeatTimeout: 60000
         }
       }
+      /*
+      ,ghostMode: { // uncomment this part to disable BrowserSync ghostMode; https://github.com/jhipster/generator-jhipster/issues/11116
+        clicks: false,
+        location: false,
+        forms: false,
+        scroll: false
+      } */
     }, {
       reload: false
     }),

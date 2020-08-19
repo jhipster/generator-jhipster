@@ -12,12 +12,10 @@ const mockBlueprintSubGen = class extends LanguagesGenerator {
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
         if (!jhContext) {
-            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprint myblueprint');
+            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
         }
 
         this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupEntityOptions(this, jhContext, this);
     }
 
     get initializing() {
@@ -53,14 +51,14 @@ describe('JHipster languages generator with blueprint', () => {
                         fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
                     })
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipInstall: true,
                         blueprint: blueprintName,
-                        skipChecks: true
+                        skipChecks: true,
                     })
                     .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:languages']])
                     .withPrompts({
-                        languages: ['de']
+                        languages: ['de'],
                     })
                     .on('end', done);
             });

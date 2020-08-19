@@ -4,17 +4,18 @@ import { element, by, ElementFinder<% if (authenticationType === 'oauth2') { _%>
 let elementGetter = `getText()`;
 if (enableTranslation) {
     elementGetter = `getAttribute('jhiTranslate')`;
-} _%>
+}
+_%>
 /* eslint @typescript-eslint/no-use-before-define: 0 */
 export class NavBarPage {
     entityMenu = element(by.id('entity-menu'));
     accountMenu = element(by.id('account-menu'));
-    adminMenu: ElementFinder;
+    adminMenu!: ElementFinder;
     signIn = element(by.id('login'));
-    register = element(by.css('[routerLink="register"]'));
+    register = element(by.css('[routerLink="account/register"]'));
     signOut = element(by.id('logout'));
-    passwordMenu = element(by.css('[routerLink="password"]'));
-    settingsMenu = element(by.css('[routerLink="settings"]'));
+    passwordMenu = element(by.css('[routerLink="account/password"]'));
+    settingsMenu = element(by.css('[routerLink="account/settings"]'));
 
     constructor(asAdmin?: Boolean) {
         if (asAdmin) {
@@ -22,81 +23,82 @@ export class NavBarPage {
         }
     }
 
-    async clickOnEntityMenu() {
+    async clickOnEntityMenu(): Promise<void> {
         await this.entityMenu.click();
     }
 
-    async clickOnAccountMenu() {
+    async clickOnAccountMenu(): Promise<void> {
         await this.accountMenu.click();
     }
 
-    async clickOnAdminMenu() {
+    async clickOnAdminMenu(): Promise<void> {
         await this.adminMenu.click();
     }
 
-    async clickOnSignIn() {
+    async clickOnSignIn(): Promise<void> {
         await this.signIn.click();
     }
 
-    async clickOnRegister() {
+    async clickOnRegister(): Promise<void> {
         await this.signIn.click();
     }
 
-    async clickOnSignOut() {
+    async clickOnSignOut(): Promise<void> {
         await this.signOut.click();
     }
 
-    async clickOnPasswordMenu() {
+    async clickOnPasswordMenu(): Promise<void> {
         await this.passwordMenu.click();
     }
 
-    async clickOnSettingsMenu() {
+    async clickOnSettingsMenu(): Promise<void> {
         await this.settingsMenu.click();
     }
 
-    async clickOnEntity(entityName: string) {
+    async clickOnEntity(entityName: string): Promise<void> {
         await element(by.css('[routerLink="' + entityName + '"]')).click();
     }
 
-    async clickOnAdmin(entityName: string) {
+    async clickOnAdmin(entityName: string): Promise<void> {
         await element(by.css('[routerLink="admin/' + entityName + '"]')).click();
     }
 
-    async getSignInPage() {
+    async getSignInPage(): Promise<SignInPage> {
         await this.clickOnAccountMenu();
         await this.clickOnSignIn();
         return new SignInPage();
     }
+
     <%_ if (!skipUserManagement) { _%>
-    async getPasswordPage() {
+    async getPasswordPage(): Promise<PasswordPage> {
         await this.clickOnAccountMenu();
         await this.clickOnPasswordMenu();
         return new PasswordPage();
     }
 
-    async getSettingsPage() {
+    async getSettingsPage(): Promise<SettingsPage> {
         await this.clickOnAccountMenu();
         await this.clickOnSettingsMenu();
         return new SettingsPage();
     }
     <%_ } _%>
 
-    async goToEntity(entityName: string) {
+    async goToEntity(entityName: string): Promise<void> {
         await this.clickOnEntityMenu();
         await this.clickOnEntity(entityName);
     }
 
-    async goToSignInPage() {
+    async goToSignInPage(): Promise<void> {
         await this.clickOnAccountMenu();
         await this.clickOnSignIn();
     }
 
-    async goToPasswordMenu() {
+    async goToPasswordMenu(): Promise<void> {
         await this.clickOnAccountMenu();
         await this.clickOnPasswordMenu();
     }
 
-    async autoSignOut() {
+    async autoSignOut(): Promise<void> {
         await this.clickOnAccountMenu();
         await this.clickOnSignOut();
     }
@@ -113,39 +115,38 @@ export class SignInPage {
     loginButton = element(by.css('input[type=submit]'));
     <%_ } _%>
 
-    async setUserName(username) {
+    async setUserName(username: string): Promise<void> {
         await this.username.sendKeys(username);
     }
 
-    async getUserName() {
+    async getUserName(): Promise<string> {
         return this.username.getAttribute('value');
     }
 
-    async clearUserName() {
+    async clearUserName(): Promise<void> {
         await this.username.clear();
     }
 
-    async setPassword(password) {
+    async setPassword(password: string): Promise<void> {
         await this.password.sendKeys(password);
     }
 
-    async getPassword() {
+    async getPassword(): Promise<string> {
         return this.password.getAttribute('value');
     }
 
-    async clearPassword() {
+    async clearPassword(): Promise<void> {
         await this.password.clear();
     }
-    <%_ if (authenticationType !== 'oauth2') { _%>
 
-    async autoSignInUsing(username: string, password: string) {
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    async autoSignInUsing(username: string, password: string): Promise<void> {
         await this.setUserName(username);
         await this.setPassword(password);
         await this.login();
     }
     <%_ } else { _%>
-
-    async loginWithOAuth(username: string, password: string) {
+    async loginWithOAuth(username: string, password: string): Promise<void> {
         // Entering non angular site, tell webdriver to switch to synchronous mode.
         await browser.waitForAngularEnabled(false);
 
@@ -162,10 +163,11 @@ export class SignInPage {
     }
     <%_ } _%>
 
-    async login() {
+    async login(): Promise<void> {
         await this.loginButton.click();
     }
 }
+
 <%_ if (!skipUserManagement) { _%>
 export class PasswordPage {
     currentPassword = element(by.id('currentPassword'));
@@ -174,39 +176,39 @@ export class PasswordPage {
     saveButton = element(by.css('button[type=submit]'));
     title = element.all(by.css('h2')).first();
 
-    async setCurrentPassword(password) {
+    async setCurrentPassword(password: string): Promise<void> {
         await this.currentPassword.sendKeys(password);
     }
 
-    async setPassword(password) {
+    async setPassword(password: string): Promise<void> {
         await this.password.sendKeys(password);
     }
 
-    async getPassword() {
+    async getPassword(): Promise<string> {
         return this.password.getAttribute('value');
     }
 
-    async clearPassword() {
+    async clearPassword(): Promise<void> {
         await this.password.clear();
     }
 
-    async setConfirmPassword(confirmPassword) {
+    async setConfirmPassword(confirmPassword: string): Promise<void> {
         await this.confirmPassword.sendKeys(confirmPassword);
     }
 
-    async getConfirmPassword() {
+    async getConfirmPassword(): Promise<string> {
         return this.confirmPassword.getAttribute('value');
     }
 
-    async clearConfirmPassword() {
+    async clearConfirmPassword(): Promise<void> {
         await this.confirmPassword.clear();
     }
 
-    async getTitle() {
+    async getTitle(): Promise<string> {
         return this.title.<%- elementGetter %>;
     }
 
-    async save() {
+    async save(): Promise<void> {
         await this.saveButton.click();
     }
 }
@@ -218,47 +220,47 @@ export class SettingsPage {
     saveButton = element(by.css('button[type=submit]'));
     title = element.all(by.css('h2')).first();
 
-    async setFirstName(firstName) {
+    async setFirstName(firstName: string): Promise<void> {
         await this.firstName.sendKeys(firstName);
     }
 
-    async getFirstName() {
+    async getFirstName(): Promise<string> {
         return this.firstName.getAttribute('value');
     }
 
-    async clearFirstName() {
+    async clearFirstName(): Promise<void> {
         await this.firstName.clear();
     }
 
-    async setLastName(lastName) {
+    async setLastName(lastName: string): Promise<void> {
         await this.lastName.sendKeys(lastName);
     }
 
-    async getLastName() {
+    async getLastName(): Promise<string> {
         return this.lastName.getAttribute('value');
     }
 
-    async clearLastName() {
+    async clearLastName(): Promise<void> {
         await this.lastName.clear();
     }
 
-    async setEmail(email) {
+    async setEmail(email: string): Promise<void> {
         await this.email.sendKeys(email);
     }
 
-    async getEmail() {
+    async getEmail(): Promise<string> {
         return this.email.getAttribute('value');
     }
 
-    async clearEmail() {
+    async clearEmail(): Promise<void> {
         await this.email.clear();
     }
 
-    async getTitle() {
+    async getTitle(): Promise<string> {
         return this.title.<%- elementGetter %>;
     }
 
-    async save() {
+    async save(): Promise<void> {
         await this.saveButton.click();
     }
 }

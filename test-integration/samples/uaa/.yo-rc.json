@@ -1,8 +1,8 @@
 {
     "generator-jhipster": {
-        "baseName": "travisUaa",
-        "packageName": "io.github.jhipster.travis",
-        "packageFolder": "io/github/jhipster/travis",
+        "baseName": "sampleUaa",
+        "packageName": "io.github.jhipster.sample",
+        "packageFolder": "io/github/jhipster/sample",
         "serverPort": "9999",
         "authenticationType": "uaa",
         "cacheProvider": "hazelcast",
@@ -22,8 +22,8 @@
         "skipClient": true,
         "nativeLanguage": "en",
         "languages": ["en"],
-        "travis": true,
         "clientFramework": "angularX",
-        "clientPackageManager": "npm"
+        "clientPackageManager": "npm",
+        "creationTimestamp": 1596513172471
     }
 }

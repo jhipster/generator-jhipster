@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,23 +23,25 @@ import { NavBarPage, SignInPage } from '../page-objects/jhi-page-objects';
 let elementGetter = `getText()`;
 if (enableTranslation) {
     elementGetter = `getAttribute('jhiTranslate')`;
-} _%>
+}
+_%>
 
 const expect = chai.expect;
 
 describe('administration', () => {
-
     let navBarPage: NavBarPage;
     let signInPage: SignInPage;
+    const username = process.env.E2E_USERNAME || 'admin';
+    const password = process.env.E2E_PASSWORD || 'admin';
 
     before(async () => {
         await browser.get('/');
         navBarPage = new NavBarPage(true);
         signInPage = await navBarPage.getSignInPage();
         <%_ if (authenticationType !== 'oauth2') { _%>
-        await signInPage.autoSignInUsing('admin', 'admin');
+        await signInPage.autoSignInUsing(username, password);
         <%_ } else { _%>
-        await signInPage.loginWithOAuth('admin', 'admin');
+        await signInPage.loginWithOAuth(username, password);
         <%_ } _%>
         await browser.wait(ec.visibilityOf(navBarPage.adminMenu), 5000);
     });
@@ -62,7 +64,7 @@ describe('administration', () => {
     <%_ } _%>
 
     it('should load metrics', async () => {
-        await navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-metrics');
+        await navBarPage.clickOnAdmin('metrics');
         <%_ if (enableTranslation) { _%>
         const expect1 = 'metrics.title';
         <%_ } else { _%>
@@ -73,7 +75,7 @@ describe('administration', () => {
     });
 
     it('should load health', async () => {
-        await navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-health');
+        await navBarPage.clickOnAdmin('health');
         <%_ if (enableTranslation) { _%>
         const expect1 = 'health.title';
         <%_ } else { _%>
@@ -84,7 +86,7 @@ describe('administration', () => {
     });
 
     it('should load configuration', async () => {
-        await navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-configuration');
+        await navBarPage.clickOnAdmin('configuration');
         await browser.sleep(500);
         <%_ if (enableTranslation) { _%>
         const expect1 = 'configuration.title';
@@ -95,20 +97,6 @@ describe('administration', () => {
         expect(value1).to.eq(expect1);
     });
 
-<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-    it('should load audits', async () => {
-        await navBarPage.clickOnAdmin('audits');
-        await browser.sleep(500);
-        <%_ if (enableTranslation) { _%>
-        const expect1 = 'audits.title';
-        <%_ } else { _%>
-        const expect1 = 'Audits';
-        <%_ } _%>
-        const value1 = await element(by.id('audits-page-heading')).<%- elementGetter %>;
-        expect(value1).to.eq(expect1);
-    });
-
-<%_ } _%>
     it('should load logs', async () => {
         await navBarPage.clickOnAdmin('logs');
         await browser.sleep(500);

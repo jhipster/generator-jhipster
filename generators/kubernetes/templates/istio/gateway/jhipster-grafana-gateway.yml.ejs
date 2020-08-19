@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -30,13 +30,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - jhipster-grafana.<%= kubernetesNamespace %><%= ingressDomain %>
+    - jhipster-grafana.<%= kubernetesNamespace %>.<%= ingressDomain %>
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - jhipster-grafana.<%= kubernetesNamespace %><%= ingressDomain %>
+    - jhipster-grafana.<%= kubernetesNamespace %>.<%= ingressDomain %>
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -45,7 +45,7 @@ metadata:
   namespace: <%= kubernetesNamespace %>
 spec:
   hosts:
-  - jhipster-grafana.<%= kubernetesNamespace %><%= ingressDomain %>
+  - jhipster-grafana.<%= kubernetesNamespace %>.<%= ingressDomain %>
   gateways:
   - jhipster-grafana-gateway
   http:

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,30 +17,33 @@
  limitations under the License.
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpErrorResponse, <%_ if (pagination !== 'no') { _%>HttpHeaders, <% } %>HttpResponse } from '@angular/common/http';
-<%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-import { ActivatedRoute, Router } from '@angular/router';
-<%_ } else if (searchEngine === 'elasticsearch') { _%>
+import { <%_ if (pagination !== 'no') { _%>HttpHeaders, <% } %>HttpResponse } from '@angular/common/http';
+<%_ if (pagination === 'pagination') { _%>
+import { ActivatedRoute, ParamMap, Router, Data } from '@angular/router';
+<%_ } else if (searchEngine !== false) { _%>
 import { ActivatedRoute } from '@angular/router';
 <%_ } _%>
-import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
-import { JhiEventManager, <% if (pagination !== 'no') { %>JhiParseLinks, <% } %>JhiAlertService<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
+import { Subscription<% if (pagination === 'pagination') { %>, combineLatest<% } %> } from 'rxjs';
+import { JhiEventManager <% if (pagination === 'infinite-scroll') { %>, JhiParseLinks <% } %><% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
+<%_ if (!readOnly) { _%>
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+<%_ } _%>
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-import { AccountService } from 'app/core/auth/account.service';
 <%_ if (pagination !== 'no') { %>
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 <%_ } _%>
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
+<%_ if (!readOnly) { _%>
+import { <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
+<%_ } _%>
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
     templateUrl: './<%= entityFileName %>.component.html'
 })
 export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
-    <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
+    <%_ if (pagination === 'pagination') { _%>
 <%- include('pagination-template', {toArrayString: toArrayString}); -%>
     <%_ } else if (pagination === 'infinite-scroll') { _%>
 <%- include('infinite-scroll-template', {toArrayString: toArrayString}); -%>
@@ -48,72 +51,96 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
 <%- include('no-pagination-template', {toArrayString: toArrayString}); -%>
     <%_ } _%>
 
-    ngOnInit() {
-        this.loadAll();
-        this.accountService.identity().then((account) => {
-            this.currentAccount = account;
-        });
-        this.registerChangeIn<%= entityClassPlural %>();
+    ngOnDestroy(): void {
+        if (this.eventSubscriber) {
+            this.eventManager.destroy(this.eventSubscriber);
+        }
     }
 
-    ngOnDestroy() {
-        this.eventManager.destroy(this.eventSubscriber);
+    trackId(index: number, item: I<%= entityAngularName %>): <%= tsKeyType %> {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        return item.id!;
     }
 
-    trackId(index: number, item: I<%= entityAngularName %>) {
-        return item.id;
-    }
     <%_ if (fieldsContainBlob) { _%>
-
-    byteSize(field) {
-        return this.dataUtils.byteSize(field);
+    byteSize(base64String: string): string {
+        return this.dataUtils.byteSize(base64String);
     }
 
-    openFile(contentType, field) {
-        return this.dataUtils.openFile(contentType, field);
+    openFile(contentType = '', base64String: string): void {
+        return this.dataUtils.openFile(contentType, base64String);
     }
     <%_ } _%>
+
     <%_
     let eventCallBack = 'this.loadAll()';
-    if (pagination === 'infinite-scroll') {
+    if (pagination === 'pagination') {
+        eventCallBack = 'this.loadPage()';
+    } else if (pagination === 'infinite-scroll') {
         eventCallBack = 'this.reset()';
-    } _%>
-
-    registerChangeIn<%= entityClassPlural %>() {
-        this.eventSubscriber = this.eventManager.subscribe('<%= entityInstance %>ListModification', (response) => <%= eventCallBack %>);
     }
-    <%_ if (pagination !== 'no') { _%>
-        <%_ if (databaseType !== 'cassandra') { _%>
+    _%>
 
-    sort() {
-        const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+    registerChangeIn<%= entityClassPlural %>(): void {
+        this.eventSubscriber = this.eventManager.subscribe('<%= entityInstance %>ListModification', () => <%= eventCallBack %>);
+    }
+
+    <%_ if (!readOnly) { _%>
+    delete(<%= entityInstance %>: I<%= entityAngularName %>): void {
+        const modalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+        modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
+    }
+    <%_ } _%>
+
+<%_ if (pagination !== 'no') { _%>
+    sort(): string[] {
+        const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
         if (this.predicate !== 'id') {
             result.push('id');
         }
         return result;
     }
-        <%_ } _%>
-        <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
 
-    protected paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[], headers: HttpHeaders) {
-        <%_ if (databaseType !== 'cassandra') { _%>
-        this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
+    <%_ if (pagination === 'pagination') { _%>
+
+    protected onSuccess(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
+        this.totalItems = Number(headers.get('X-Total-Count'));
+        this.page = page;
+        <%_ if (searchEngine !== false) { _%>
+        this.ngbPaginationPage = this.page;
         <%_ } _%>
-        this.<%= entityInstancePlural %> = data;
+        if (navigate) {
+            this.router.navigate(['/<%= entityUrl %>'], {
+                queryParams: {
+                    page: this.page,
+                    size: this.itemsPerPage,
+                    <%_ if (searchEngine !== false) { _%>
+                    search: this.currentSearch,
+                    <%_ } _%>
+                    sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
+                }
+            });
+        }
+        this.<%= entityInstancePlural %> = data || [];
+        this.ngbPaginationPage = this.page;
     }
-        <%_ } else if (pagination === 'infinite-scroll') { _%>
 
-    protected paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[], headers: HttpHeaders) {
-        this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
-        for (let i = 0; i < data.length; i++) {
-            this.<%= entityInstancePlural %>.push(data[i]);
+    protected onError(): void {
+        this.ngbPaginationPage = this.page ?? 1;
+    }
+
+    <%_ } else if (pagination === 'infinite-scroll') { _%>
+
+    protected paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders): void {
+        const headersLink = headers.get('link');
+        this.links = this.parseLinks.parse(headersLink ? headersLink : '');
+        if (data) {
+            for (let i = 0; i < data.length; i++) {
+                this.<%= entityInstancePlural %>.push(data[i]);
+            }
         }
     }
-    <%_ }} _%>
 
-    protected onError(errorMessage: string) {
-        this.jhiAlertService.error(errorMessage, null, null);
-    }
+    <%_ } _%>
+<%_ } _%>
 }

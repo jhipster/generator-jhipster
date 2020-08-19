@@ -10,7 +10,7 @@
                     "required": "Votre nom d'utilisateur est obligatoire.",
                     "minlength": "Votre nom d'utilisateur doit contenir plus d'un caractère.",
                     "maxlength": "Votre nom d'utilisateur ne peut pas contenir plus de 50 caractères.",
-                    "pattern": "Votre nom d'utilisateur ne peut contenir que des lettres minuscules ou des nombres."
+                    "pattern": "Votre nom d'utilisateur est invalide."
                 }
             },
             "success": "<strong>Compte enregistré !</strong> Merci de vérifier votre email de confirmation.",

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "服务状态",
                 "configuration": "配置",
                 "logs": "日志",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "审核",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "数据库",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -86,13 +83,13 @@
             "validate": {
                 "newpassword": {
                     "required": "您的密码是必填项.",
-                    "minlength": "您的密码长度至少要有5个字符",
+                    "minlength": "您的密码长度至少要有4个字符",
                     "maxlength": "您的密码长度不能超过50个字符",
                     "strength": "密码强度:"
                 },
                 "confirmpassword": {
                     "required": "您的确认密码是必填项.",
-                    "minlength": "您的确认密码长度至少要有5个字符",
+                    "minlength": "您的确认密码长度至少要有4个字符",
                     "maxlength": "您的确认密码长度不能超过50个字符"
                 },
                 "email": {
@@ -152,7 +149,11 @@
         "userexists": "该用户名已存在!",
         "emailexists": "该邮箱已被使用!",
         "idexists": "新建的 {{entityName}} 不能包含ID",
-        "idnull": "Invalid ID"
+        "idnull": "Invalid ID",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "这里是页脚"
 }

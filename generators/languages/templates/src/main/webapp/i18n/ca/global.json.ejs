@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "Salud",
                 "configuration": "Configuració",
                 "logs": "Registres",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "Auditories",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "Base de dades",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -86,13 +83,13 @@
             "validate": {
                 "newpassword": {
                     "required": "La seva contrasenya és necessaria.",
-                    "minlength": "La seva contrasenya ha de tenir, com a mínim, 5 caràcters",
+                    "minlength": "La seva contrasenya ha de tenir, com a mínim, 4 caràcters",
                     "maxlength": "La seva contrasenya no pot tenir més de 50 caràcters",
                     "strength": "Fortalesa de la contrasenya:"
                 },
                 "confirmpassword": {
                     "required": "És necessari confirmar la seva contrasenya.",
-                    "minlength": "La confirmació de la seva contrasenya ha de tenir, com a mínim, 5 caràcters",
+                    "minlength": "La confirmació de la seva contrasenya ha de tenir, com a mínim, 4 caràcters",
                     "maxlength": "La confirmació de la seva contrasenya no pot tenir més de 50 caràcters"
                 },
                 "email": {
@@ -152,7 +149,11 @@
         "userexists": "Nom d'usuari ja en ús!",
         "emailexists": "Email ja en ús!",
         "idexists": "Una nova {{entityName}} no pot ja tenir un ID",
-        "idnull": "Invalid ID"
+        "idnull": "Invalid ID",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "Aquest és el teu peu de pàgina"
 }

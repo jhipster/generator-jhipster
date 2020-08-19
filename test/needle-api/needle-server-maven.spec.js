@@ -10,7 +10,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
         if (!jhContext) {
-            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprint myblueprint');
+            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
         }
 
         this.configOptions = jhContext.configOptions || {};
@@ -39,56 +39,67 @@ const mockBlueprintSubGen = class extends ServerGenerator {
         const customPhaseSteps = {
             mavenStep() {
                 this.addMavenDependencyManagement(
-                    'groupId',
-                    'artifactId',
+                    'dependencyManagementGroupId',
+                    'dependencyManagementArtifactId',
                     'version',
                     'type',
                     'scope',
-                    '            <exclusions>\n' +
-                        '                <exclusion>\n' +
-                        '                    <groupId>aGroupId</groupId>\n' +
-                        '                    <artifactId>anArtifactId</artifactId>\n' +
-                        '                </exclusion>\n' +
-                        '            </exclusions>'
+                    '                <exclusions>\n' +
+                        '                    <exclusion>\n' +
+                        '                        <groupId>exclusionGroupId</groupId>\n' +
+                        '                        <artifactId>exclusionArtifactId</artifactId>\n' +
+                        '                    </exclusion>\n' +
+                        '                </exclusions>'
                 );
 
-                this.addMavenRepository('id', 'url');
-                this.addMavenPluginRepository('id', 'url');
+                this.addMavenRepository('repoId', 'repoUrl', '            <name>repoName</name>');
+                this.addMavenPluginRepository('pluginRepoId', 'pluginRepoUrl');
                 this.addMavenDistributionManagement('snapshotsId', 'snapshotsUrl', 'releasesId', 'releasesUrl');
-                this.addMavenProperty('name', 'value');
+                this.addMavenProperty('propertyName', 'propertyValue');
                 this.addMavenDependency(
-                    'groupId',
-                    'artifactId',
+                    'dependencyGroupId',
+                    'dependencyArtifactId',
                     'version',
                     '            <exclusions>\n' +
                         '                <exclusion>\n' +
-                        '                    <groupId>aGroupId</groupId>\n' +
-                        '                    <artifactId>anArtifactId</artifactId>\n' +
+                        '                    <groupId>exclusionGroupId</groupId>\n' +
+                        '                    <artifactId>exclusionArtifactId</artifactId>\n' +
                         '                </exclusion>\n' +
                         '            </exclusions>'
                 );
                 this.addMavenDependencyInDirectory(
                     '.',
-                    'groupId2',
-                    'artifactId2',
+                    'directoryDependencyGroupId',
+                    'directoryDependencyArtifactId',
                     'version2',
                     '            <exclusions>\n' +
                         '                <exclusion>\n' +
-                        '                    <groupId>aGroupId</groupId>\n' +
-                        '                    <artifactId>anArtifactId</artifactId>\n' +
+                        '                    <groupId>exclusionGroupId</groupId>\n' +
+                        '                    <artifactId>exclusionArtifactId</artifactId>\n' +
                         '                </exclusion>\n' +
                         '            </exclusions>'
                 );
                 this.addMavenPlugin(
-                    'groupId',
-                    'artifactId',
+                    'mavenPluginGroupId',
+                    'mavenPluginArtifactId',
                     'version',
-                    '            <exclusions>\n' +
-                        '                <exclusion>\n' +
-                        '                    <groupId>aGroupId</groupId>\n' +
-                        '                    <artifactId>anArtifactId</artifactId>\n' +
-                        '                </exclusion>\n' +
-                        '            </exclusions>'
+                    '                <exclusions>\n' +
+                        '                    <exclusion>\n' +
+                        '                        <groupId>exclusionGroupId</groupId>\n' +
+                        '                        <artifactId>exclusionArtifactId</artifactId>\n' +
+                        '                    </exclusion>\n' +
+                        '                </exclusions>'
+                );
+                this.addMavenPluginManagement(
+                    'mavenPluginManagementGroupId',
+                    'mavenPluginManagementArtifactId',
+                    'version',
+                    '                    <exclusions>\n' +
+                        '                        <exclusion>\n' +
+                        '                            <groupId>exclusionGroupId</groupId>\n' +
+                        '                            <artifactId>exclusionArtifactId</artifactId>\n' +
+                        '                        </exclusion>\n' +
+                        '                    </exclusions>'
                 );
                 this.addMavenAnnotationProcessor(
                     'annotationProcessorGroupId',
@@ -96,7 +107,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                     'annotationProcessorVersion'
                 );
                 this.addMavenProfile('profileId', '            <other>other</other>');
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -107,10 +118,10 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
         helpers
             .run(path.join(__dirname, '../../generators/server'))
             .withOptions({
-                'from-cli': true,
+                fromCli: true,
                 skipInstall: true,
                 blueprint: 'myblueprint',
-                skipChecks: true
+                skipChecks: true,
             })
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
             .withPrompts({
@@ -129,7 +140,7 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
                 languages: ['fr'],
                 buildTool: 'maven',
                 rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                serverSideOptions: []
+                serverSideOptions: [],
             })
             .on('end', done);
     });
@@ -138,64 +149,84 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
         assert.fileContent(
             'pom.xml',
             '            <dependency>\n' +
-                '                <groupId>groupId</groupId>\n' +
-                '                <artifactId>artifactId</artifactId>\n' +
+                '                <groupId>dependencyManagementGroupId</groupId>\n' +
+                '                <artifactId>dependencyManagementArtifactId</artifactId>\n' +
                 '                <version>version</version>\n' +
                 '                <type>type</type>\n' +
                 '                <scope>scope</scope>\n' +
-                '            <exclusions>\n' +
-                '                <exclusion>\n' +
-                '                    <groupId>aGroupId</groupId>\n' +
-                '                    <artifactId>anArtifactId</artifactId>\n' +
-                '                </exclusion>\n' +
-                '            </exclusions>\n' +
-                '             </dependency>'
+                '                <exclusions>\n' +
+                '                    <exclusion>\n' +
+                '                        <groupId>exclusionGroupId</groupId>\n' +
+                '                        <artifactId>exclusionArtifactId</artifactId>\n' +
+                '                    </exclusion>\n' +
+                '                </exclusions>\n' +
+                '            </dependency>\n' +
+                '            <!-- jhipster-needle-maven-add-dependency-management -->'
         );
     });
 
     it('Assert pom.xml has the repository added', () => {
-        assert.fileContent('pom.xml', '        <repository>\n            <id>id</id>\n            <url>url</url>\n        </repository>');
+        assert.fileContent(
+            'pom.xml',
+            '        <repository>\n' +
+                '            <id>repoId</id>\n' +
+                '            <url>repoUrl</url>\n' +
+                '            <name>repoName</name>\n' +
+                '        </repository>\n' +
+                '        <!-- jhipster-needle-maven-repository -->'
+        );
     });
 
     it('Assert pom.xml has the plugin repository added', () => {
         assert.fileContent(
             'pom.xml',
-            '        <pluginRepository>\n            <id>id</id>\n            <url>url</url>\n        </pluginRepository>'
+            '        <pluginRepository>\n' +
+                '            <id>pluginRepoId</id>\n' +
+                '            <url>pluginRepoUrl</url>\n' +
+                '        </pluginRepository>\n' +
+                '        <!-- jhipster-needle-maven-plugin-repository -->'
         );
     });
 
     it('Assert pom.xml has the distributionManagement added', () => {
         assert.fileContent(
             'pom.xml',
-            '        <repository>\n' +
+            '    <distributionManagement>\n' +
+                '        <snapshotRepository>\n' +
+                '            <id>snapshotsId</id>\n' +
+                '            <url>snapshotsUrl</url>\n' +
+                '        </snapshotRepository>\n' +
+                '        <repository>\n' +
                 '            <id>releasesId</id>\n' +
                 '            <url>releasesUrl</url>\n' +
-                '        </repository>'
+                '        </repository>\n' +
+                '    </distributionManagement>\n' +
+                '    <!-- jhipster-needle-distribution-management -->'
         );
     });
 
     it('Assert pom.xml has the property added', () => {
-        assert.fileContent('pom.xml', '<name>value</name>');
-    });
-
-    it('Assert pom.xml has the dependencyManagement added', () => {
-        assert.fileContent('pom.xml', '');
+        assert.fileContent('pom.xml', '<propertyName>propertyValue</propertyName>');
     });
 
     it('Assert pom.xml has the dependency added', () => {
         assert.fileContent(
             'pom.xml',
             '        <dependency>\n' +
-                '            <groupId>groupId</groupId>\n' +
-                '            <artifactId>artifactId</artifactId>\n' +
+                '            <groupId>dependencyGroupId</groupId>\n' +
+                '            <artifactId>dependencyArtifactId</artifactId>\n' +
                 '            <version>version</version>\n' +
                 '            <exclusions>\n' +
                 '                <exclusion>\n' +
-                '                    <groupId>aGroupId</groupId>\n' +
-                '                    <artifactId>anArtifactId</artifactId>\n' +
+                '                    <groupId>exclusionGroupId</groupId>\n' +
+                '                    <artifactId>exclusionArtifactId</artifactId>\n' +
                 '                </exclusion>\n' +
                 '            </exclusions>\n' +
-                '        </dependency>'
+                '        </dependency>\n' +
+                // The needle is not here, since another dependency has been added with addMavenDependencyInDirectory()
+                '        <dependency>\n' +
+                '            <groupId>directoryDependencyGroupId</groupId>\n' +
+                '            <artifactId>directoryDependencyArtifactId</artifactId>'
         );
     });
 
@@ -203,34 +234,76 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
         assert.fileContent(
             'pom.xml',
             '        <dependency>\n' +
-                '            <groupId>groupId2</groupId>\n' +
-                '            <artifactId>artifactId2</artifactId>\n' +
+                '            <groupId>directoryDependencyGroupId</groupId>\n' +
+                '            <artifactId>directoryDependencyArtifactId</artifactId>\n' +
                 '            <version>version2</version>\n' +
                 '            <exclusions>\n' +
                 '                <exclusion>\n' +
-                '                    <groupId>aGroupId</groupId>\n' +
-                '                    <artifactId>anArtifactId</artifactId>\n' +
+                '                    <groupId>exclusionGroupId</groupId>\n' +
+                '                    <artifactId>exclusionArtifactId</artifactId>\n' +
                 '                </exclusion>\n' +
                 '            </exclusions>\n' +
-                '        </dependency>'
+                '        </dependency>\n' +
+                '        <!-- jhipster-needle-maven-add-dependency -->'
+        );
+    });
+
+    it('Assert pom.xml has the maven plugin added', () => {
+        assert.fileContent(
+            'pom.xml',
+            '            <plugin>\n' +
+                '                <groupId>mavenPluginGroupId</groupId>\n' +
+                '                <artifactId>mavenPluginArtifactId</artifactId>\n' +
+                '                <version>version</version>\n' +
+                '                <exclusions>\n' +
+                '                    <exclusion>\n' +
+                '                        <groupId>exclusionGroupId</groupId>\n' +
+                '                        <artifactId>exclusionArtifactId</artifactId>\n' +
+                '                    </exclusion>\n' +
+                '                </exclusions>\n' +
+                '            </plugin>\n' +
+                '            <!-- jhipster-needle-maven-add-plugin -->'
+        );
+    });
+
+    it('Assert pom.xml has the maven plugin management added', () => {
+        assert.fileContent(
+            'pom.xml',
+            '                <plugin>\n' +
+                '                    <groupId>mavenPluginManagementGroupId</groupId>\n' +
+                '                    <artifactId>mavenPluginManagementArtifactId</artifactId>\n' +
+                '                    <version>version</version>\n' +
+                '                    <exclusions>\n' +
+                '                        <exclusion>\n' +
+                '                            <groupId>exclusionGroupId</groupId>\n' +
+                '                            <artifactId>exclusionArtifactId</artifactId>\n' +
+                '                        </exclusion>\n' +
+                '                    </exclusions>\n' +
+                '                </plugin>\n' +
+                '                <!-- jhipster-needle-maven-add-plugin-management -->'
         );
     });
 
     it('Assert pom.xml has the annotation processor added', () => {
         assert.fileContent(
             'pom.xml',
-            '        <path>\n' +
-                '            <groupId>annotationProcessorGroupId</groupId>\n' +
-                '            <artifactId>annotationProcessorArtifactId</artifactId>\n' +
-                '            <version>annotationProcessorVersion</version>\n' +
-                '        </path>'
+            '                            <path>\n' +
+                '                                <groupId>annotationProcessorGroupId</groupId>\n' +
+                '                                <artifactId>annotationProcessorArtifactId</artifactId>\n' +
+                '                                <version>annotationProcessorVersion</version>\n' +
+                '                            </path>\n' +
+                '                            <!-- jhipster-needle-maven-add-annotation-processor -->'
         );
     });
 
     it('Assert pom.xml has the profile added', () => {
         assert.fileContent(
             'pom.xml',
-            '        <profile>\n            <id>profileId</id>\n            <other>other</other>\n        </profile>'
+            '        <profile>\n' +
+                '            <id>profileId</id>\n' +
+                '            <other>other</other>\n' +
+                '        </profile>\n' +
+                '        <!-- jhipster-needle-maven-add-profile -->'
         );
     });
 });

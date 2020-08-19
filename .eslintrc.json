@@ -1,9 +1,11 @@
 {
     "env": {
         "node": true,
-        "es6": true
+        "es6": true,
+        "mocha": true
     },
     "extends": ["airbnb-base", "plugin:prettier/recommended"],
+    "plugins": ["mocha", "prettier", "chai-friendly"],
     "rules": {
         "prettier/prettier": "error",
         "linebreak-style": 0,
@@ -23,17 +25,11 @@
         "class-methods-use-this": "off",
         "no-underscore-dangle": "off",
         "no-plusplus": "off",
-        "no-unused-expressions": [2, { "allowShortCircuit": true, "allowTernary": true }],
+        "no-unused-expressions": 0,
+        "chai-friendly/no-unused-expressions": [2, { "allowShortCircuit": true, "allowTernary": true }],
         "prefer-destructuring": "off",
-
         "no-multi-assign": "off",
         "no-param-reassign": "off",
         "no-shadow": "off"
-    },
-    "overrides": [
-        {
-            "files": ["test/**/*.js"],
-            "env": { "mocha": true }
-        }
-    ]
+    }
 }

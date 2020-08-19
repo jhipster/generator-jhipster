@@ -1,0 +1,24 @@
+apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
+kind: VirtualService
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-virtualservice
+  namespace: <%= kubernetesNamespace %>
+spec:
+  gateways:
+  - mesh
+  hosts:
+  - <%= app.baseName.toLowerCase() %>-knative
+  http:
+  - route:
+    - destination:
+        host: <%= app.baseName.toLowerCase() %>-knative
+        subset: "v1"
+      headers:
+        request:
+          add:
+            Knative-Serving-Namespace: <%= kubernetesNamespace %>
+            Knative-Serving-Revision: <%= app.baseName.toLowerCase() %>-knative
+      weight: 100
+    retries:
+      attempts: 3
+      perTryTimeout: 2s

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "Status",
                 "configuration": "Konfigurering",
                 "logs": "Loggar",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "Granskningar",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "Databas",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -84,13 +81,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Du måste fylla i ett lösenord",
-                    "minlength": "Ditt lösenord måste vara 5 tecken",
+                    "minlength": "Ditt lösenord måste vara 4 tecken",
                     "maxlength": "Ditt lösenord kan inte vara längre än 50 tecken",
                     "strength": "Lösenordsstyrka:"
                 },
                 "confirmpassword": {
                     "required": "Du måste bekräfta ditt lösenord",
-                    "minlength": "Ditt konfirmationslösenord måste vara 5 tecken långt",
+                    "minlength": "Ditt konfirmationslösenord måste vara 4 tecken långt",
                     "maxlength": "Ditt konfirmationslösenord kan inte vara längre än 50 tecken"
                 },
                 "email": {
@@ -150,7 +147,11 @@
         "userexists": "Användarnamnet är upptaget!",
         "emailexists": "E-postadressen är redan registrerad!",
         "idexists": "En ny {{entityName}} kan inte redan ha ett ID",
-        "idnull": "Invalid ID"
+        "idnull": "Invalid ID",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "Detta är din footer"
 }

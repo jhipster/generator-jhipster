@@ -16,93 +16,126 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.web.rest;
+package <%= packageName %>.web.rest;
 
-import <%=packageName%>.<%= mainClass %>;
-import <%=packageName%>.config.TestSecurityConfiguration;
-import <%=packageName%>.security.AuthoritiesConstants;
+import <%= packageName %>.<%= mainClass %>;
+<%_ if (cacheProvider === 'redis') { _%>
+import <%= packageName %>.RedisTestContainerExtension;
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import <%= packageName %>.AbstractNeo4jIT;
+<%_ } _%>
+import <%= packageName %>.config.TestSecurityConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+<%_ if (cacheProvider === 'redis') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-<%_ if (messageBroker === 'kafka') { _%>
-import org.springframework.kafka.test.context.EmbeddedKafka;
+<%_ if (reactive) { _%>
+import org.springframework.context.ApplicationContext;
 <%_ } _%>
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.<% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+<%_ if (!reactive) { _%>
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+<%_ } else { _%>
+import org.springframework.test.web.reactive.server.WebTestClient;
+<%_ } _%>
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static <%= packageName %>.web.rest.TestUtil.ID_TOKEN;
+import static <%= packageName %>.web.rest.TestUtil.authenticationToken;
+<%_ if (!reactive) { _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+<%_ } else { _%>
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.*;
+<%_ } _%>
 
 /**
  * Integration tests for the {@link LogoutResource} REST controller.
  */
-<%_ if (messageBroker === 'kafka') { _%>
-@EmbeddedKafka
-<%_ } _%>
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
+<%_ if (cacheProvider === 'redis') { _%>
+@ExtendWith(RedisTestContainerExtension.class)
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+@ExtendWith(AbstractNeo4jIT.class)
+<%_ } _%>
 public class LogoutResourceIT {
 
     @Autowired
-    private ClientRegistrationRepository registrations;
+    private <% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository registrations;
 
     @Autowired
-    private WebApplicationContext context;
+    private <% if (!reactive) { %>Web<% } %>ApplicationContext context;
 
-    private final static String ID_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9" +
-        ".eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsIm" +
-        "p0aSI6ImQzNWRmMTRkLTA5ZjYtNDhmZi04YTkzLTdjNmYwMzM5MzE1OSIsImlhdCI6MTU0M" +
-        "Tk3MTU4MywiZXhwIjoxNTQxOTc1MTgzfQ.QaQOarmV8xEUYV7yvWzX3cUE_4W1luMcWCwpr" +
-        "oqqUrg";
-
+<%_ if (!reactive) { _%>
     private MockMvc restLogoutMockMvc;
+<%_ } else { _%>
+    private WebTestClient webTestClient;
+<%_ } _%>
+
+    private OidcIdToken idToken;
 
     @BeforeEach
-    public void before() throws Exception {
+    public void before() <% if (!reactive) { %>throws Exception <% } %>{
         Map<String, Object> claims = new HashMap<>();
-        claims.put("groups", "ROLE_USER");
+        claims.put("groups", Collections.singletonList("ROLE_USER"));
         claims.put("sub", 123);
-        OidcIdToken idToken = new OidcIdToken(ID_TOKEN, Instant.now(),
-            Instant.now().plusSeconds(60), claims);
+        this.idToken = new OidcIdToken(ID_TOKEN, Instant.now(), Instant.now().plusSeconds(60), claims);
+
+    <%_ if (!reactive) { _%>
         SecurityContextHolder.getContext().setAuthentication(authenticationToken(idToken));
         SecurityContextHolderAwareRequestFilter authInjector = new SecurityContextHolderAwareRequestFilter();
         authInjector.afterPropertiesSet();
 
         this.restLogoutMockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+    <%_ } else { _%>
+        this.webTestClient = WebTestClient.bindToApplicationContext(this.context)
+            .apply(springSecurity())
+            .configureClient()
+            .build();
+    <%_ } _%>
     }
 
     @Test
-    public void getLogoutInformation() throws Exception {
+    public void getLogoutInformation() <% if (!reactive) { %>throws Exception <% } %>{
+    <%_ if (!reactive) { _%>
         String logoutUrl = this.registrations.findByRegistrationId("oidc").getProviderDetails()
             .getConfigurationMetadata().get("end_session_endpoint").toString();
         restLogoutMockMvc.perform(post("/api/logout"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.logoutUrl").value(logoutUrl))
             .andExpect(jsonPath("$.idToken").value(ID_TOKEN));
-    }
+    <%_ } else { _%>
+        String logoutUrl = this.registrations.findByRegistrationId("oidc")
+            .map(oidc -> oidc.getProviderDetails().getConfigurationMetadata()
+                .get("end_session_endpoint").toString()).block();
 
-    private OAuth2AuthenticationToken authenticationToken(OidcIdToken idToken) {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
-        OidcUser user = new DefaultOidcUser(authorities, idToken);
-        return new OAuth2AuthenticationToken(user, authorities, "oidc");
+        this.webTestClient.mutateWith(csrf())
+            .mutateWith(mockAuthentication(TestUtil.authenticationToken(idToken)))
+            .post().uri("/api/logout").exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
+            .expectBody()
+            .jsonPath("$.logoutUrl").isEqualTo(logoutUrl.toString())
+            .jsonPath("$.idToken").isEqualTo(ID_TOKEN);
+    <%_ } _%>
     }
 }

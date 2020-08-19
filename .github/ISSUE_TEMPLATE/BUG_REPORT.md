@@ -54,7 +54,6 @@ If you have a JDL please wrap it in below structure
   </details>
 -->
 
-
 ##### **Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory**
 
 <!--

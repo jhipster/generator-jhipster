@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,75 +18,68 @@
 -%>
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-<%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-import { JhiResolvePagingParams } from 'ng-jhipster';
-<%_ } _%>
-import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
+import { Observable, of, EMPTY } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
+import { Authority } from 'app/shared/constants/authority.constants';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
+import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
 import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>-detail.component';
+<%_ if (!readOnly) { _%>
 import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
-<%_ if (entityFileName.length <= 30) { _%>
-import { <%= entityAngularName %>DeletePopupComponent } from './<%= entityFileName %>-delete-dialog.component';
-<%_ } else { _%>
-import {
-    <%= entityAngularName %>DeletePopupComponent
-} from './<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
-import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class <%= entityAngularName %>Resolve implements Resolve<I<%= entityAngularName %>> {
+    constructor(private service: <%= entityAngularName %>Service, private router: Router) {}
 
-    constructor(private service: <%= entityAngularName %>Service) {
-    }
-
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<I<%= entityAngularName %>> {
+    resolve(route: ActivatedRouteSnapshot): Observable<I<%= entityAngularName %>> | Observable<never> {
         const id = route.params['id'];
         if (id) {
             return this.service.find(id).pipe(
-                filter((response: HttpResponse<<%= entityAngularName %>>) => response.ok),
-                map((<%= entityInstance %>: HttpResponse<<%= entityAngularName %>>) => <%= entityInstance %>.body)
+                flatMap((<%= entityInstance %>: HttpResponse<<%= entityAngularName %>>) => {
+                    if (<%= entityInstance %>.body) {
+                        return of(<%= entityInstance %>.body);
+                    } else {
+                        this.router.navigate(['404']);
+                        return EMPTY;
+                    }
+                })
             );
         }
         return of(new <%= entityAngularName %>());
     }
 }
 
-
 export const <%= entityInstance %>Route: Routes = [
     {
         path: '',
         component: <%= entityAngularName %>Component,
-        <%_ if (pagination === 'pagination' || pagination === 'pager'){ _%>
-        resolve: {
-            'pagingParams': JhiResolvePagingParams
-        },
-        <%_ } _%>
         data: {
-            authorities: ['ROLE_USER'],
-            <%_ if (pagination === 'pagination' || pagination === 'pager'){ _%>
+            authorities: [Authority.USER],
+            <%_ if (pagination === 'pagination') { _%>
             defaultSort: 'id,asc',
             <%_ } _%>
-            pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
+            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
-    }, {
+    },
+    {
         path: ':id/view',
         component: <%= entityAngularName %>DetailComponent,
         resolve: {
             <%= entityInstance %>: <%= entityAngularName %>Resolve
         },
         data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
+            authorities: [Authority.USER],
+            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
     },
+    <%_ if (!readOnly) { _%>
     {
         path: 'new',
         component: <%= entityAngularName %>UpdateComponent,
@@ -94,8 +87,8 @@ export const <%= entityInstance %>Route: Routes = [
             <%= entityInstance %>: <%= entityAngularName %>Resolve
         },
         data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
+            authorities: [Authority.USER],
+            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
     },
@@ -106,25 +99,10 @@ export const <%= entityInstance %>Route: Routes = [
             <%= entityInstance %>: <%= entityAngularName %>Resolve
         },
         data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
+            authorities: [Authority.USER],
+            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
     },
-];
-
-export const <%= entityInstance %>PopupRoute: Routes = [
-    {
-        path: ':id/delete',
-        component: <%= entityAngularName %>DeletePopupComponent,
-        resolve: {
-            <%= entityInstance %>: <%= entityAngularName %>Resolve
-        },
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
-    }
+    <%_ } _%>
 ];

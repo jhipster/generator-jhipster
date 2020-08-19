@@ -5,45 +5,28 @@ const fse = require('fs-extra');
 const expectedFiles = require('../utils/expected-files');
 const getFilesForOptions = require('../utils/utils').getFilesForOptions;
 const angularFiles = require('../../generators/client/files-angular').files;
+const EnvironmentBuilder = require('../../cli/environment-builder');
 
 describe('JHipster application generator with scoped blueprint', () => {
     describe('generate monolith application with scoped blueprint', () => {
-        before(done => {
-            helpers
-                .run(path.join(__dirname, '../../generators/app'))
+        before(() => {
+            return helpers
+                .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
                 .inTmpDir(dir => {
                     // Fake the presence of the blueprint in node_modules
-                    const packagejs = {
-                        name: '@jhipster/generator-jhipster-scoped-blueprint',
-                        version: '9.9.9'
-                    };
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/@jhipster/generator-jhipster-scoped-blueprint');
                     fse.ensureDirSync(fakeBlueprintModuleDir);
-                    fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
+                    fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
                 })
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     skipChecks: true,
-                    blueprint: '@jhipster/generator-jhipster-scoped-blueprint'
-                })
-                .withPrompts({
+                    blueprints: '@jhipster/generator-jhipster-scoped-blueprint',
                     baseName: 'jhipster',
-                    clientFramework: 'angularX',
-                    packageName: 'com.mycompany.myapp',
-                    packageFolder: 'com/mycompany/myapp',
-                    serviceDiscoveryType: false,
-                    authenticationType: 'jwt',
-                    cacheProvider: 'ehcache',
-                    enableHibernateCache: true,
-                    databaseType: 'sql',
-                    devDatabaseType: 'h2Memory',
-                    prodDatabaseType: 'mysql',
-                    enableTranslation: true,
-                    nativeLanguage: 'en',
-                    languages: ['fr']
+                    defaults: true,
                 })
-                .on('end', done);
+                .run();
         });
 
         it('creates expected default files for server and angularX', () => {
@@ -54,14 +37,14 @@ describe('JHipster application generator with scoped blueprint', () => {
                     enableTranslation: true,
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
-                    testFrameworks: []
+                    testFrameworks: [],
                 })
             );
         });
 
         it('blueprint version is saved in .yo-rc.json', () => {
             assert.JSONFileContent('.yo-rc.json', {
-                'generator-jhipster': { blueprints: [{ name: '@jhipster/generator-jhipster-scoped-blueprint', version: '9.9.9' }] }
+                'generator-jhipster': { blueprints: [{ name: '@jhipster/generator-jhipster-scoped-blueprint', version: '9.9.9' }] },
             });
         });
         it('blueprint module and version are in package.json', () => {

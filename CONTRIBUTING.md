@@ -107,16 +107,16 @@ Before you submit your pull request consider the following guidelines:
 -   Generate a new JHipster project, and ensure that all tests pass
 
     ```shell
-    mvn verify -Pprod
+    mvnw verify -Pprod
     ```
 
 -   Test that the new project runs correctly:
 
     ```shell
-    mvn spring-boot:run
+    mvnw spring-boot:run
     ```
 
--   You can generate our Continuous Integration (with Travis CI and Azure Pipelines) by following [this](#local-build)
+-   You can generate our Continuous Integration (with GitHub Actions and Azure Pipelines) by following [this](#local-build)
 
 -   Commit your changes using a descriptive commit message that follows our
     [commit message conventions](#commit-message-format).
@@ -219,20 +219,20 @@ Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhi
 
 [Please read the GitHub forking documentation for more information](https://help.github.com/articles/fork-a-repo)
 
-### Set NPM/YARN to use the cloned project
+### Set NPM to use the cloned project
 
-In your cloned `generator-jhipster` project, type `npm link` or `yarn && yarn link` depending on the package manager you use.
+In your cloned `generator-jhipster` project, type `npm link`.
 
 This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `jhipster`, you will now use the development version of JHipster.
 
 For testing, you will want to generate an application, and there is a specific issue here: for each application, JHipster installs a local version of itself. This is made to enable several applications to each use a specific JHipster version (application A uses JHipster 3.1.0, and application B uses JHipster 3.2.0).
 
-To overcome this you need to run `npm link generator-jhipster` or `yarn link generator-jhipster` on the generated project folder as well, so that the local version has a symbolic link to the development version of JHipster.
+To overcome this you need to run `npm link generator-jhipster` on the generated project folder as well, so that the local version has a symbolic link to the development version of JHipster.
 
 To put it in a nutshell, you need to:
 
-1.  run `npm link` or `yarn link` on the `generator-jhipster` project
-2.  run `npm link generator-jhipster` or `yarn link generator-jhipster` on the generated application folder (you need to do this for each application you create)
+1.  run `npm link` on the `generator-jhipster` project
+2.  run `npm link generator-jhipster` on the generated application folder (you need to do this for each application you create)
 
 Now, running the 'jhipster' command should run your locally installed JHipster version directly from sources. Check that the symbolic link is correct with the following command :
 
@@ -255,6 +255,20 @@ jhipster --with-entities
 
 You should see your changes reflected in the generated project.
 
+Note: The generated project might not build properly in case the generator is using a
+snapshot version of [jhipster/jhipster](https://github.com/jhipster/jhipster). This issue is mentioned in; https://github.com/jhipster/generator-jhipster/issues/9571. In
+this case clone the jhipster/jhipster project and build it using:
+
+```shell script
+./mvnw clean install -Dgpg.skip=true
+```
+
+or on Windows:
+
+```
+.\mvnw.cmd clean install -D"gpg.skip=true"
+```
+
 ### Use a text editor
 
 As modifying the JHipster generator includes modifying Java and JavaScript templates, most IDE will not work correctly. We recommend you use a text editor like [Atom](https://atom.io/) or [VSCode](https://code.visualstudio.com/) to code your changes. The ESLint and EditorConfig extensions are recommended to help with respecting code conventions.
@@ -265,7 +279,7 @@ It is possible to debug JHipster's code using a Node.js debugger. To achieve thi
 
 #### Debugging with VSCode
 
-To start debugging JHipster with **VSCode**, open the generator code in your workspace and simply press F5 (or click the green arrow in the **Debug** menu reachable with Ctrl+Shift+D). This will start the generator in debug mode and generate files in the `travis/samples/app-sample-dev` folder.
+To start debugging JHipster with **VSCode**, open the generator code in your workspace and simply press F5 (or click the green arrow in the **Debug** menu reachable with Ctrl+Shift+D). This will start the generator in debug mode and generate files in the `test-integration/samples/app-sample-dev` folder.
 
 It is also possible to debug sub generators by selecting one of the other debug options (for example `jhipster entity`). Those debug configurations are specified in the `.vscode/launch.json` file.
 
@@ -316,6 +330,8 @@ Sub templates can be unit tested.
 
 We have rules over how our git commit messages must be formatted. Please ensure to [squash](https://help.github.com/articles/about-git-rebase/#commands-available-while-rebasing) unnecessary commits so that your commit history is clean.
 
+If the commit only involves documentation changes you can skip the continuous integration pipelines using `[ci skip]` or `[skip ci]` in your commit message header.
+
 ### <a name="commit-message-format"></a> Commit Message Format
 
 Each commit message consists of a **header**, a **body** and a **footer**.
@@ -365,6 +381,20 @@ see http://spring.io/blog/2014/09/26/spring-boot-1-1-7-released
 
 Fix #1234
 ```
+
+### Regular Contributor Guidelines
+
+These are some of the guidelines that we would like to emphasize if you are a regular contributor to the project
+or joined the [JHipster team](https://www.jhipster.tech/team/).
+
+-   We recommend not committing directly to master, but always submit changes through PRs.
+-   Before merging, try to get at least one review on the PR.
+-   Add appropriate labels to issues and PRs that you create (if you have permission to do so).
+-   Follow the project's [policies](https://www.jhipster.tech/policies/#-policies).
+-   Follow the project's [Code of Conduct](https://github.com/jhipster/generator-jhipster/blob/master/CODE_OF_CONDUCT.md)
+    and be polite and helpful to users when answering questions/bug reports and when reviewing PRs.
+-   We work on our free time so we have no obligation nor commitment. Work/life balance is important, so don't
+    feel tempted to put in all your free time fixing something.
 
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md

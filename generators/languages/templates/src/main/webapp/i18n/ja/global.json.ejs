@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,7 +47,6 @@
                 "health": "ヘルスステータス",
                 "configuration": "設定",
                 "logs": "ログ",
-                "audits": "監査",
                 "apidocs": "API",
                 "database": "データベース",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -84,13 +83,13 @@
             "validate": {
                 "newpassword": {
                     "required": "パスワードを入力してください。",
-                    "minlength": "パスワードは5文字以上で入力してください。",
+                    "minlength": "パスワードは4文字以上で入力してください。",
                     "maxlength": "パスワードは50文字以下で入力してください。",
                     "strength": "パスワード強度:"
                 },
                 "confirmpassword": {
                     "required": "パスワード(確認)を入力してください。",
-                    "minlength": "パスワード(確認)は5文字以上で入力してください。",
+                    "minlength": "パスワード(確認)は4文字以上で入力してください。",
                     "maxlength": "パスワード(確認)は50文字以下で入力してください。"
                 },
                 "email": {
@@ -150,7 +149,11 @@
         "userexists": "Login name already used!",
         "emailexists": "Email is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID",
-        "idnull": "Invalid ID"
+        "idnull": "Invalid ID",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "フッターです"
 }

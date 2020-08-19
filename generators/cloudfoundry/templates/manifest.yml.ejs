@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,14 +17,15 @@
  limitations under the License.
 -%>
 ---
-path: .
-instances: 1
-buildpack: https://github.com/cloudfoundry/java-buildpack
-<%_ if (databaseType !== 'no') { _%>
-services:
-- <%= cloudfoundryDeployedName %>
-<%_ } _%>
 applications:
-- name: <%= cloudfoundryDeployedName %>
-  env:
-    SPRING_PROFILES_ACTIVE: <%= cloudfoundryProfile %>, cloudfoundry
+  - name: <%= cloudfoundryDeployedName %>
+    path: .
+    instances: 1
+    buildpacks:
+     - https://github.com/cloudfoundry/java-buildpack
+    env:
+      SPRING_PROFILES_ACTIVE: <%= cloudfoundryProfile %>, cloudfoundry
+<%_ if (databaseType !== 'no') { _%>
+    services:
+      - <%= cloudfoundryDeployedName %>
+<%_ } _%>

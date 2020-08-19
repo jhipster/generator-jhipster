@@ -1,0 +1,29 @@
+{
+    "generator-jhipster": {
+        "baseName": "sampleCouchbaseNoCache",
+        "packageName": "io.github.jhipster.sample",
+        "packageFolder": "io/github/jhipster/sample",
+        "serverPort": "8080",
+        "authenticationType": "jwt",
+        "cacheProvider": "no",
+        "enableHibernateCache": false,
+        "websocket": false,
+        "databaseType": "couchbase",
+        "devDatabaseType": "couchbase",
+        "prodDatabaseType": "couchbase",
+        "searchEngine": "couchbase",
+        "messageBroker": false,
+        "serviceDiscoveryType": false,
+        "buildTool": "maven",
+        "enableSwaggerCodegen": false,
+        "clientFramework": "angularX",
+        "clientPackageManager": "npm",
+        "applicationType": "monolith",
+        "testFrameworks": ["gatling", "protractor"],
+        "jhiPrefix": "jhi",
+        "enableTranslation": true,
+        "nativeLanguage": "en",
+        "languages": ["en", "fr"],
+        "creationTimestamp": 1596513172471
+    }
+}

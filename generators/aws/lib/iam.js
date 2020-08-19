@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -36,7 +36,7 @@ const createRole = (RoleName, Description, AssumeRolePolicyDocument) => {
         .createRole({
             RoleName,
             Description,
-            AssumeRolePolicyDocument
+            AssumeRolePolicyDocument,
         })
         .promise();
 };
@@ -45,7 +45,7 @@ const createInstanceProfile = InstanceProfileName => {
     const iam = new aws.IAM();
     return iam
         .createInstanceProfile({
-            InstanceProfileName
+            InstanceProfileName,
         })
         .promise();
 };
@@ -55,7 +55,7 @@ const addRoleToInstanceProfile = (InstanceProfileName, RoleName) => {
     return iam
         .addRoleToInstanceProfile({
             InstanceProfileName,
-            RoleName
+            RoleName,
         })
         .promise();
 };
@@ -65,7 +65,7 @@ const attachRolePolicy = (PolicyArn, RoleName) => {
     return iam
         .attachRolePolicy({
             PolicyArn,
-            RoleName
+            RoleName,
         })
         .promise();
 };
@@ -77,7 +77,7 @@ const getRole = RoleName => {
     const iam = new aws.IAM();
     return iam
         .getRole({
-            RoleName
+            RoleName,
         })
         .promise();
 };
@@ -96,7 +96,7 @@ const hasInstanceProfileName = InstanceProfileName => {
     const iam = new aws.IAM();
     return iam
         .getInstanceProfile({
-            InstanceProfileName
+            InstanceProfileName,
         })
         .promise()
         .then(() => true)
@@ -139,7 +139,7 @@ const createServiceProfileRoleWithAttachedPolicies = () => {
     return createRole(roleName, description, assumedPolicyDoc).then(() => {
         const policiesToAttach = [
             attachServicePolicyToRole('AWSElasticBeanstalkEnhancedHealth', roleName),
-            attachServicePolicyToRole('AWSElasticBeanstalkService', roleName)
+            attachServicePolicyToRole('AWSElasticBeanstalkService', roleName),
         ];
         return Promise.all(policiesToAttach);
     });
@@ -165,7 +165,7 @@ const createInstanceRoleWithAttachedPolicies = () => {
         const policiesToAttach = [
             attachPolicyToRole('AWSElasticBeanstalkWebTier', roleName),
             attachPolicyToRole('AWSElasticBeanstalkWorkerTier', roleName),
-            attachPolicyToRole('AWSElasticBeanstalkMulticontainerDocker', roleName)
+            attachPolicyToRole('AWSElasticBeanstalkMulticontainerDocker', roleName),
         ];
         return Promise.all(policiesToAttach);
     });
@@ -213,7 +213,7 @@ Iam.prototype.verifyRoles = function verifyRoles(params, callback) {
         .catch(err => {
             callback(
                 {
-                    message: err.message
+                    message: err.message,
                 },
                 null
             );

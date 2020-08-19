@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,56 +16,35 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-<%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from 'ng-jhipster';
-import { JhiLanguageHelper } from 'app/core/language/language.helper';
-<%_ } _%>
 
-import { <%= angularXAppName %>SharedModule } from 'app/shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
 import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>-detail.component';
+<%_ if (!readOnly) { _%>
 import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
-import { <%= entityAngularName %>DeletePopupComponent, <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
-import { <%= entityInstance %>Route, <%= entityInstance %>PopupRoute } from './<%= entityFileName %>.route';
-
-const ENTITY_STATES = [
-    ...<%= entityInstance %>Route,
-    ...<%= entityInstance %>PopupRoute,
-];
+import { <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
+<%_ } _%>
+import { <%= entityInstance %>Route } from './<%= entityFileName %>.route';
 
 @NgModule({
     imports: [
-        <%= angularXAppName %>SharedModule,
-        RouterModule.forChild(ENTITY_STATES)
+        SharedModule,
+        RouterModule.forChild(<%= entityInstance %>Route)
     ],
     declarations: [
         <%= entityAngularName %>Component,
         <%= entityAngularName %>DetailComponent,
+        <%_ if (!readOnly) { _%>
         <%= entityAngularName %>UpdateComponent,
         <%= entityAngularName %>DeleteDialogComponent,
-        <%= entityAngularName %>DeletePopupComponent,
+        <%_ } %>
     ],
+    <%_ if (!readOnly) { _%>
     entryComponents: [
-        <%= entityAngularName %>Component,
-        <%= entityAngularName %>UpdateComponent,
-        <%= entityAngularName %>DeleteDialogComponent,
-        <%= entityAngularName %>DeletePopupComponent,
-    ],
-    <%_ if (enableTranslation) { _%>
-    providers: [ { provide: JhiLanguageService, useClass: JhiLanguageService } ],
+        <%= entityAngularName %>DeleteDialogComponent
+    ]
     <%_ } _%>
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : angularXAppName %><%= entityAngularName %>Module {
-    <%_ if (enableTranslation) { _%>
-    constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
-        this.languageHelper.language.subscribe((languageKey: string) => {
-            if (languageKey) {
-                this.languageService.changeLanguage(languageKey);
-            }
-        });
-    }
-    <%_ } _%>
-}
+export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : '' %><%= entityAngularName %>Module {}

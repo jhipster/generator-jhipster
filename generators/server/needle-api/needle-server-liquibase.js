@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -25,6 +25,10 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 module.exports = class extends needleServer {
     addChangelog(changelogName) {
         this.addChangelogToMaster(changelogName, 'jhipster-needle-liquibase-add-changelog');
+    }
+
+    addIncrementalChangelog(changelogName) {
+        this.addChangelogToMaster(changelogName, 'jhipster-needle-liquibase-add-incremental-changelog');
     }
 
     addConstraintsChangelog(changelogName) {

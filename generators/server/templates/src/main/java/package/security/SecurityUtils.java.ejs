@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,8 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.security;
+package <%= packageName %>.security;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 <%_ if (authenticationType === 'oauth2') { _%>
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -38,17 +39,15 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import reactor.core.publisher.Mono;
 <%_ } _%>
 
-import java.util.ArrayList;
 <%_ if (authenticationType === 'oauth2') { _%>
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Collection;
-<%_ } _%>
-import java.util.List;
-<%_ if (authenticationType === 'oauth2') { _%>
-import java.util.Map;
 <%_ } _%>
 <%_ if (!reactive) { _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
 import java.util.Optional;
+    <%_ } _%>
+import java.util.stream.Stream;
 <%_ } _%>
 
 /**
@@ -67,30 +66,35 @@ public final class SecurityUtils {
     public static <% if (!reactive) { %>Optional<% } else { %>Mono<% } %><String> getCurrentUserLogin() {
 <%_ if (!reactive) { _%>
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.ofNullable(securityContext.getAuthentication())
+        return Optional.ofNullable(extractPrincipal(securityContext.getAuthentication()));
 <%_ } else { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
+            .flatMap(authentication -> Mono.justOrEmpty(extractPrincipal(authentication)));
 <%_ } _%>
-            .map(authentication -> {
-                if (authentication.getPrincipal() instanceof UserDetails) {
-                    UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
-                    return springSecurityUser.getUsername();
-<%_ if (authenticationType === 'oauth2') { _%>
-                } else if (authentication instanceof JwtAuthenticationToken) {
-                    return (String) ((JwtAuthenticationToken)authentication).getToken().getClaims().get("preferred_username");
-                } else if (authentication.getPrincipal() instanceof DefaultOidcUser) {
-                    Map<String, Object> attributes = ((DefaultOidcUser) authentication.getPrincipal()).getAttributes();
-                    if (attributes.containsKey("preferred_username")) {
-                        return (String) attributes.get("preferred_username");
-                    }
-<%_ } _%>
-                } else if (authentication.getPrincipal() instanceof String) {
-                    return (String) authentication.getPrincipal();
-                }
-                return null;
-            });
     }
+
+    private static String extractPrincipal(Authentication authentication) {
+        if (authentication == null) {
+            return null;
+        } else if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
+            return springSecurityUser.getUsername();
+<%_ if (authenticationType === 'oauth2') { _%>
+        } else if (authentication instanceof JwtAuthenticationToken) {
+            return (String) ((JwtAuthenticationToken)authentication).getToken().getClaims().get("preferred_username");
+        } else if (authentication.getPrincipal() instanceof DefaultOidcUser) {
+            Map<String, Object> attributes = ((DefaultOidcUser) authentication.getPrincipal()).getAttributes();
+            if (attributes.containsKey("preferred_username")) {
+                return (String) attributes.get("preferred_username");
+            }
+<%_ } _%>
+        } else if (authentication.getPrincipal() instanceof String) {
+            return (String) authentication.getPrincipal();
+        }
+        return null;
+    }
+
 <%_ if (authenticationType === 'jwt') { _%>
 
     /**
@@ -118,29 +122,18 @@ public final class SecurityUtils {
      */
     public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %> isAuthenticated() {
 <%_ if (!reactive) { _%>
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.ofNullable(securityContext.getAuthentication())
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null &&
+            getAuthorities(authentication).noneMatch(AuthoritiesConstants.ANONYMOUS::equals);
 <%_ } else { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
+            .map(Authentication::getAuthorities)
+            .map(authorities -> authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .noneMatch(AuthoritiesConstants.ANONYMOUS::equals)
+            );
 <%_ } _%>
-            .map(authentication -> {
-                List<GrantedAuthority> authorities = new ArrayList<>();
-<%_ if (authenticationType === 'oauth2') { _%>
-                if (authentication instanceof JwtAuthenticationToken) {
-                    authorities.addAll(
-                        extractAuthorityFromClaims(((JwtAuthenticationToken) authentication).getToken()
-                            .getClaims()));
-                } else {
-<%_ } _%>
-                    authorities.addAll(authentication.getAuthorities());
-<%_ if (authenticationType === 'oauth2') { _%>
-                }
-<%_ } _%>
-                return authorities.stream()
-                    .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(AuthoritiesConstants.ANONYMOUS));
-            })<% if (!reactive) { %>
-            .orElse(false)<% } %>;
     }
 
     /**
@@ -153,34 +146,37 @@ public final class SecurityUtils {
      */
     public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %> isCurrentUserInRole(String authority) {
 <%_ if (!reactive) { _%>
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.ofNullable(securityContext.getAuthentication())
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null &&
+            getAuthorities(authentication).anyMatch(authority::equals);
 <%_ } else { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
+            .map(Authentication::getAuthorities)
+            .map(authorities -> authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(authority::equals)
+            );
 <%_ } _%>
-            .map(authentication -> {
-                List<GrantedAuthority> authorities = new ArrayList<>();
-<%_ if (authenticationType === 'oauth2') { _%>
-                if (authentication instanceof JwtAuthenticationToken) {
-                    authorities.addAll(
-                        extractAuthorityFromClaims(((JwtAuthenticationToken) authentication).getToken()
-                            .getClaims()));
-                } else {
-<%_ } _%>
-                    authorities.addAll(authentication.getAuthorities());
-<%_ if (authenticationType === 'oauth2') { _%>
-                }
-<%_ } _%>
-                return authorities.stream()
-                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(authority));
-            })<% if (!reactive) { %>
-            .orElse(false)<% } %>;
     }
+
+<%_ if (!reactive) { _%>
+    private static Stream<String> getAuthorities(Authentication authentication) {
+        <%_ if (authenticationType === 'oauth2') { _%>
+        Collection<? extends GrantedAuthority> authorities = authentication instanceof JwtAuthenticationToken ?
+            extractAuthorityFromClaims(((JwtAuthenticationToken) authentication).getToken().getClaims())
+            : authentication.getAuthorities();
+        return authorities.stream()
+        <%_ } else { _%>
+        return authentication.getAuthorities().stream()
+        <%_ } _%>
+            .map(GrantedAuthority::getAuthority);
+    }
+
+<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
     public static List<GrantedAuthority> extractAuthorityFromClaims(Map<String, Object> claims) {
-        return mapRolesToGrantedAuthorities(
-            getRolesFromClaims(claims));
+        return mapRolesToGrantedAuthorities(getRolesFromClaims(claims));
     }
 
     @SuppressWarnings("unchecked")
@@ -192,7 +188,8 @@ public final class SecurityUtils {
     private static List<GrantedAuthority> mapRolesToGrantedAuthorities(Collection<String> roles) {
         return roles.stream()
             .filter(role -> role.startsWith("ROLE_"))
-            .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+            .map(SimpleGrantedAuthority::new)
+            .collect(Collectors.toList());
     }
 <%_ } _%>
 }

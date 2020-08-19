@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,7 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (kubernetesUseDynamicStorage) { _%>
+apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+kind: PersistentVolumeClaim
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-mongodb-pvc
+  namespace: <%= kubernetesNamespace %>
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  <%_ if (kubernetesStorageClassName) { _%>
+  storageClassName: <%= kubernetesStorageClassName %>
+  <%_ } _%>
 ---
+<%_ } _%>
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Secret
 metadata:
@@ -158,9 +174,20 @@ spec:
         - name: <%= app.baseName.toLowerCase() %>-couchbase-data
           mountPath: /opt/couchbase/var/lib/couchbase/data/
         resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
         imagePullPolicy: IfNotPresent
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
+<%_ if (!kubernetesUseDynamicStorage) { _%>
+      volumes:
+      - name: <%= app.baseName.toLowerCase() %>-couchbase-data
+        emptyDir: {}
+<%_ } else { _%>
   volumeClaimTemplates:
   - metadata:
       name: <%= app.baseName.toLowerCase() %>-couchbase-data
@@ -169,6 +196,10 @@ spec:
       resources:
         requests:
           storage: 1Gi
+  <%_ if (kubernetesStorageClassName !== '') { _%>
+      storageClassName: <%= kubernetesStorageClassName %>
+  <%_ } _%>
+<%_ } _%>
 ---
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service

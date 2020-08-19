@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,104 +16,82 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+<%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
+<%_ } _%>
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/shared/constants/error.constants';
 import { LoginModalService } from 'app/core/login/login-modal.service';
-import { Register } from './register.service';
+import { RegisterService } from './register.service';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-register',
     templateUrl: './register.component.html'
 })
-export class RegisterComponent implements OnInit, AfterViewInit {
+export class RegisterComponent implements AfterViewInit {
+    @ViewChild('login', { static: false })
+    login?: ElementRef;
 
-    doNotMatch: string;
-    error: string;
-    errorEmailExists: string;
-    errorUserExists: string;
-    success: boolean;
-    modalRef: NgbModalRef;
+    doNotMatch = false;
+    error = false;
+    errorEmailExists = false;
+    errorUserExists = false;
+    success = false;
 
     registerForm = this.fb.group({
-        login: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), Validators.pattern('^[_.@A-Za-z0-9-]*$')]],
+        login: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), Validators.pattern("<%- LOGIN_REGEX %>")]],
         email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
         password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
         confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]]
     });
 
     constructor(
+        <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
+        <%_ } _%>
         private loginModalService: LoginModalService,
-        private registerService: Register,
-        private elementRef: ElementRef,
-        private renderer: Renderer,
+        private registerService: RegisterService,
         private fb: FormBuilder
-    ) {
-    }
+    ) {}
 
-    ngOnInit() {
-        this.success = false;
-    }
-
-    ngAfterViewInit() {
-        this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#login'), 'focus', []);
-    }
-
-    register() {
-        let registerAccount = {};
-        const login = this.registerForm.get(['login']).value;
-        const email = this.registerForm.get(['email']).value;
-        const password = this.registerForm.get(['password']).value;
-        if (password !== this.registerForm.get(['confirmPassword']).value) {
-            this.doNotMatch = 'ERROR';
-        } else {
-            registerAccount = {...registerAccount,
-                login,
-                email,
-                password
-            };
-            this.doNotMatch = null;
-            this.error = null;
-            this.errorUserExists = null;
-            this.errorEmailExists = null;
-<%_ if (enableTranslation) { _%>
-            this.languageService.getCurrent().then((langKey) => {
-                registerAccount = {...registerAccount,
-                    langKey
-                };
-                this.registerService.save(registerAccount).subscribe(() => {
-                    this.success = true;
-                }, (response) => this.processError(response));
-            });
-<%_ } else { _%>
-            registerAccount = {...registerAccount,
-                langKey: 'en'
-            };
-
-            this.registerService.save(registerAccount).subscribe(() => {
-                this.success = true;
-            }, (response) => this.processError(response));
-<%_ } _%>
+    ngAfterViewInit(): void {
+        if (this.login) {
+            this.login.nativeElement.focus();
         }
     }
 
-    openLogin() {
-        this.modalRef = this.loginModalService.open();
+    register(): void {
+        this.doNotMatch = false;
+        this.error = false;
+        this.errorEmailExists = false;
+        this.errorUserExists = false;
+
+        const password = this.registerForm.get(['password'])!.value;
+        if (password !== this.registerForm.get(['confirmPassword'])!.value) {
+            this.doNotMatch = true;
+        } else {
+            const login = this.registerForm.get(['login'])!.value;
+            const email = this.registerForm.get(['email'])!.value;
+            this.registerService
+                .save({ login, email, password, langKey: <% if (enableTranslation) { %>this.languageService.getCurrentLanguage()<% } else { %>'en'<% } %> })
+                .subscribe(() => (this.success = true), response => this.processError(response));
+        }
     }
 
-    private processError(response: HttpErrorResponse) {
-        this.success = null;
+    openLogin(): void {
+        this.loginModalService.open();
+    }
+
+    private processError(response: HttpErrorResponse): void {
         if (response.status === 400 && response.error.type === LOGIN_ALREADY_USED_TYPE) {
-            this.errorUserExists = 'ERROR';
+            this.errorUserExists = true;
         } else if (response.status === 400 && response.error.type === EMAIL_ALREADY_USED_TYPE) {
-            this.errorEmailExists = 'ERROR';
+            this.errorEmailExists = true;
         } else {
-            this.error = 'ERROR';
+            this.error = true;
         }
     }
 }

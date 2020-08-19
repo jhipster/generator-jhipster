@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,79 +16,33 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
-_%>
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-
-import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Component } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 
 @Component({
-    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-delete-dialog',
     templateUrl: './<%= entityFileName %>-delete-dialog.component.html'
 })
 export class <%= entityAngularName %>DeleteDialogComponent {
-
-    <%= entityInstance %>: I<%= entityAngularName %>;
+    <%= entityInstance %>?: I<%= entityAngularName %>;
 
     constructor(
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
         public activeModal: NgbActiveModal,
         protected eventManager: JhiEventManager
-    ) {
-    }
-
-    clear() {
-        this.activeModal.dismiss('cancel');
-    }
-
-    confirmDelete(id: <% if (primaryKeyType === 'String' || pkType === 'UUID') { %>string<% } else { %>number<% } %>) {
-        this.<%= entityInstance %>Service.delete(id).subscribe((response) => {
-            this.eventManager.broadcast({
-                name: '<%= entityInstance %>ListModification',
-                content: 'Deleted an <%= entityInstance %>'
-            });
-            this.activeModal.dismiss(true);
-        });
-    }
-}
-
-@Component({
-    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-delete-popup',
-    template: ''
-})
-export class <%= entityAngularName %>DeletePopupComponent implements OnInit, OnDestroy {
-
-    protected ngbModalRef: NgbModalRef;
-
-    constructor(
-        protected activatedRoute: ActivatedRoute,
-        protected router: Router,
-        protected modalService: NgbModal
     ) {}
 
-    ngOnInit() {
-        this.activatedRoute.data.subscribe(({<%= entityInstance %>}) => {
-            setTimeout(() => {
-                this.ngbModalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent as Component, { size: 'lg', backdrop: 'static'});
-                this.ngbModalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
-                this.ngbModalRef.result.then((result) => {
-                    this.router.navigate(['/<%= entityUrl %>', { outlets: { popup: null }}]);
-                    this.ngbModalRef = null;
-                }, (reason) => {
-                    this.router.navigate(['/<%= entityUrl %>', { outlets: { popup: null }}]);
-                    this.ngbModalRef = null;
-                });
-            }, 0);
-        });
+    cancel(): void {
+        this.activeModal.dismiss();
     }
 
-    ngOnDestroy() {
-        this.ngbModalRef = null;
+    confirmDelete(id: <%= tsKeyType %>): void {
+        this.<%= entityInstance %>Service.delete(id).subscribe(() => {
+            this.eventManager.broadcast('<%= entityInstance %>ListModification');
+            this.activeModal.close();
+        });
     }
 }

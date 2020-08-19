@@ -12,7 +12,6 @@
         "devDatabaseType": "h2Disk",
         "prodDatabaseType": "mysql",
         "searchEngine": false,
-
         "buildTool": "maven",
         "enableTranslation": true,
         "nativeLanguage": "en",
@@ -20,10 +19,11 @@
         "testFrameworks": ["gatling", "protractor"],
         "serverPort": "8080",
         "jhiPrefix": "myPrefix",
-        "travis": true,
         "messageBroker": false,
         "serviceDiscoveryType": false,
         "clientPackageManager": "npm",
-        "clientFramework": "angularX"
+        "clientFramework": "angularX",
+        "embeddableLaunchScript": false,
+        "creationTimestamp": 1596513172471
     }
 }

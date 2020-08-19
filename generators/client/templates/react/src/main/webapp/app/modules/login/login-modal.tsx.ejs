@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -78,7 +78,7 @@ class LoginModal extends React.Component<ILoginModalProps> {
             <div className="mt-1">&nbsp;</div>
             <%_ if (!skipUserManagement) { _%>
             <Alert color="warning">
-              <Link to="/reset/request">
+              <Link to="/account/reset/request">
                 <Translate contentKey="login.password.forgot">Did you forget your password?</Translate>
               </Link>
             </Alert>
@@ -87,7 +87,7 @@ class LoginModal extends React.Component<ILoginModalProps> {
                 <Translate contentKey="global.messages.info.register.noaccount">You don&apos;t have an account yet?</Translate>
               </span>
               {' '}
-              <Link to="/register">
+              <Link to="/account/register">
                 <Translate contentKey="global.messages.info.register.link">Register a new account</Translate>
               </Link>
             </Alert>

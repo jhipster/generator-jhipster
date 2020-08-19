@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "Stav systému",
                 "configuration": "Konfigurácia",
                 "logs": "Logy",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "Audity",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "Databáza",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -84,13 +81,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Heslo je povinné.",
-                    "minlength": "Vaše heslo musí mať aspoň 5 znakov.",
+                    "minlength": "Vaše heslo musí mať aspoň 4 znakov.",
                     "maxlength": "Vaše heslo nemôže byť dlhšie ako 50 znakov.",
                     "strength": "Sila hesla:"
                 },
                 "confirmpassword": {
                     "required": "Potvrdenie hesla je povinné.",
-                    "minlength": "Vaše potvrdenie hesla musí mať aspoň 5 znakov.",
+                    "minlength": "Vaše potvrdenie hesla musí mať aspoň 4 znakov.",
                     "maxlength": "Vaše potvrdenie hesla nemôže byť dlhšie ako 50 znakov."
                 },
                 "email": {
@@ -150,7 +147,11 @@
         "userexists": "Zadané používateľské meno už niekto používa!",
         "emailexists": "Zadaný email už niekto používa!",
         "idexists": "Nová entita {{ entityName }} ešte nemôže mať ID",
-        "idnull": "Invalid ID"
+        "idnull": "Invalid ID",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "Toto je vaše zápätie"
 }

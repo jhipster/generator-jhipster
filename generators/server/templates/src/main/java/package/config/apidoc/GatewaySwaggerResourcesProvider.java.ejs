@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.config.apidoc;
+package <%= packageName %>.config.apidoc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ import springfox.documentation.swagger.web.SwaggerResourcesProvider;
  */
 @Component
 @Primary
-@Profile(JHipsterConstants.SPRING_PROFILE_SWAGGER)
+@Profile(JHipsterConstants.SPRING_PROFILE_API_DOCS)
 public class GatewaySwaggerResourcesProvider implements SwaggerResourcesProvider {
 
     private final RouteLocator routeLocator;
@@ -51,12 +51,12 @@ public class GatewaySwaggerResourcesProvider implements SwaggerResourcesProvider
         List<SwaggerResource> resources = new ArrayList<>();
 
         //Add the default swagger resource that correspond to the gateway's own swagger doc
-        resources.add(swaggerResource("default", "/v2/api-docs"));
+        resources.add(swaggerResource("default", "/v3/api-docs"));
 
-        //Add the registered microservices swagger docs as additional swagger resources
+        //Add the registered microservices OpenAPI docs as additional swagger resources
         List<Route> routes = routeLocator.getRoutes();
         routes.forEach(route -> {
-            resources.add(swaggerResource(route.getId(), route.getFullPath().replace("**", "v2/api-docs")));
+            resources.add(swaggerResource(route.getId(), route.getFullPath().replace("**", "v3/api-docs")));
         });
 
         return resources;
@@ -66,7 +66,7 @@ public class GatewaySwaggerResourcesProvider implements SwaggerResourcesProvider
         SwaggerResource swaggerResource = new SwaggerResource();
         swaggerResource.setName(name);
         swaggerResource.setLocation(location);
-        swaggerResource.setSwaggerVersion("2.0");
+        swaggerResource.setSwaggerVersion("3.0");
         return swaggerResource;
     }
 }

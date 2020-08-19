@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,12 +18,14 @@
 -%><%
 let helpBlocks = 0; %>
 {
+    <% // Male (default) variant
+    if (entityI18nVariant !== 'female') { %>
     "<%= angularAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "createLabel": "Criar novo <%= entityClassHumanized %>",
-                "createOrEditLabel": "Criar ou editar <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "createOrEditLabel": "Criar ou editar <%= entityClassHumanized %>"<% if (searchEngine !== false) { %>,
                 "search": "Pesquisar por <%= entityClassHumanized %>"<% } %>,
                 "notFound": "Nenhum <%= entityClassHumanized %> encontrado"
             },<% if (!microserviceAppName) { %>
@@ -37,22 +39,62 @@ let helpBlocks = 0; %>
                 "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].javadoc !== 'undefined') ++helpBlocks; %>,
-            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
-            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0){%>,
+            "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
             "help": {<% for (idx in fields) {
                 if (fields[idx].javadoc) {
                     --helpBlocks; %>
-                "<%=fields[idx].fieldName%>": "<%= fields[idx].javadoc %>"<% if (helpBlocks > 0) { %>,<%}
+                "<%= fields[idx].fieldName %>": "<%= fields[idx].javadoc %>"<% if (helpBlocks > 0) { %>,<% }
                 }
             } %>
             }<% } %>
         }
-    }<% if (microserviceAppName) { %>,
+    }<%     if (microserviceAppName) { %>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
             "created": "Um novo <%= entityClassHumanized %> foi criado com o identificador {{ param }}",
             "updated": "Um <%= entityClassHumanized %> foi atualizado com o identificador {{ param }}",
             "deleted": "Um <%= entityClassHumanized %> foi excluído com o identificador {{ param }}"
         }
-    }<% } %>
+    }<%     } %>
+    <% } else {
+      // Female variant %>
+    "<%= angularAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "home": {
+                "title": "<%= entityClassPluralHumanized %>",
+                "createLabel": "Criar nova <%= entityClassHumanized %>",
+                "createOrEditLabel": "Criar ou editar <%= entityClassHumanized %>"<% if (searchEngine !== false) { %>,
+                "search": "Pesquisar por <%= entityClassHumanized %>"<% } %>,
+                "notFound": "Nenhuma <%= entityClassHumanized %> encontrada"
+            },<% if (!microserviceAppName) { %>
+            "created": "Uma nova <%= entityClassHumanized %> foi criada com o identificador {{ param }}",
+            "updated": "Uma <%= entityClassHumanized %> foi atualizada com o identificador {{ param }}",
+            "deleted": "Uma <%= entityClassHumanized %> foi excluída com o identificador {{ param }}",<% } %>
+            "delete": {
+                "question": "Tem certeza de que deseja excluir <%= entityClassHumanized %> {{ id }}?"
+            },
+            "detail": {
+                "title": "<%= entityClassHumanized %>"
+            }<% for (idx in fields) {
+            if (typeof fields[idx].javadoc !== 'undefined') ++helpBlocks; %>,
+            "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
+            "help": {<% for (idx in fields) {
+                if (fields[idx].javadoc) {
+                    --helpBlocks; %>
+                "<%= fields[idx].fieldName %>": "<%= fields[idx].javadoc %>"<% if (helpBlocks > 0) { %>,<% }
+                }
+            } %>
+            }<% } %>
+        }
+    }<%     if (microserviceAppName) { %>,
+    "<%= microserviceAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "created": "Uma nova <%= entityClassHumanized %> foi criada com o identificador {{ param }}",
+            "updated": "Uma <%= entityClassHumanized %> foi atualizada com o identificador {{ param }}",
+            "deleted": "Uma <%= entityClassHumanized %> foi excluída com o identificador {{ param }}"
+        }
+    }<%     } %>
+    <% } %>
 }

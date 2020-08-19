@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -31,6 +31,15 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+<%_ if (databaseType === 'neo4j') { _%>
+org:
+  neo4j:
+    migrations:
+      locations-to-scan:
+      packages-to-scan: <%= packageName %>.config.neo4j
+      installed-by: <%= baseName %>
+<%_ } _%>
+
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 eureka:
     client:
@@ -41,20 +50,34 @@ eureka:
 <%_ } _%>
 
 spring:
+<%_ if (databaseType === 'sql' && !reactive) { _%>
+    profiles:
+        # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
+        #active: testcontainers
+<%_ } _%>
     application:
         name: <%= baseName %>
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (applicationType === 'gateway' && reactive) { _%>
+    autoconfigure:
+        exclude:
+            - org.springframework.cloud.gateway.config.GatewayMetricsAutoConfiguration
+    <%_ } _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MULTI_THREADED=FALSE
+        url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
         name:
         username:
         password:
         hikari:
             auto-commit: false
+    <%_ } _%>
+    jackson:
+        serialization:
+            write-durations-as-timestamps: false
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     jpa:
         database-platform: io.github.jhipster.domain.util.FixedH2Dialect
-        database: H2
         open-in-view: false
         show-sql: false
         hibernate:
@@ -93,6 +116,11 @@ spring:
             properties:
                 path:
                     home: <%= BUILD_DIR %>elasticsearch
+                <%_ if (cucumberTests) { _%>
+                # See https://github.com/jhipster/generator-jhipster/issues/10302
+                node:
+                    max_local_storage_nodes: 2
+                <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
@@ -100,13 +128,12 @@ spring:
             name: jhipster
             password: password
     <%_ } _%>
-    <%_ if (messageBroker === 'kafka') { _%>
-    kafka:
-        bootstrap-servers: ${spring.embedded.kafka.brokers}
-    <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     liquibase:
         contexts: test
+        <%_ if (reactive) { _%>
+        url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        <%_ } _%>
     <%_ } _%>
     mail:
         host: localhost
@@ -114,9 +141,12 @@ spring:
         allow-bean-definition-overriding: true
     messages:
         basename: i18n/messages
-    mvc:
-        favicon:
-            enabled: false
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+    r2dbc:
+        url: r2dbc:h2:mem:///<%= baseName %>?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        username: r2dbc
+        password:
+    <%_ } _%>
     <%_ if (skipUserManagement && ['monolith', 'gateway'].includes(applicationType) && authenticationType === 'jwt') { _%>
     security:
         user:
@@ -161,7 +191,7 @@ jhipster:
         name: "<%= angularAppName %>"
     logging:
         # To test json console appender
-        use-json-format: true # By default, logs are in Json format
+        use-json-format: false
         logstash:
             enabled: false
             host: localhost
@@ -202,6 +232,18 @@ jhipster:
         logs: # Reports metrics in the logs
             enabled: true
             report-frequency: 60 # in seconds
+<%_ if (messageBroker === 'kafka') { _%>
+kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+        key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        group.id: <%= dasherizedBaseName %>
+        auto.offset.reset: earliest
+    producer:
+        key.serializer: org.apache.kafka.common.serialization.StringSerializer
+        value.serializer: org.apache.kafka.common.serialization.StringSerializer
+<%_ } _%>
 
 # ===================================================================
 # Application specific properties

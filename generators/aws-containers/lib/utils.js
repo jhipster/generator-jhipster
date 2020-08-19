@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash'); // eslint-disable-line
-const ora = require('ora'); // eslint-disable-line
+const _ = require('lodash');
+const ora = require('ora');
 
 /**
  * Wraps the promise in a CLI spinner
@@ -41,13 +41,10 @@ function spinner(promise, text = 'loading', spinnerIcon = 'monkey') {
 }
 
 function formatRDSUsername(username) {
-    return _.chain(username)
-        .replace('_', '')
-        .truncate({ length: 16, omission: '' })
-        .value();
+    return _.chain(username).replace('_', '').truncate({ length: 16, omission: '' }).value();
 }
 
 module.exports = {
     spinner,
-    formatRDSUsername
+    formatRDSUsername,
 };

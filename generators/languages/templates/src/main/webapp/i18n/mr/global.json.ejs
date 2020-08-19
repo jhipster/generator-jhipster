@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "आरोग्य",
                 "configuration": "संरचना",
                 "logs": "नोंदी",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "ऑडिट",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "डेटाबेस",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -86,13 +83,13 @@
             "validate": {
                 "newpassword": {
                     "required": "आपला संकेतशब्द आवश्यक आहे.",
-                    "minlength": "आपला संकेतशब्द कमीत कमी 5 वर्ण असणे आवश्यक आहे.",
+                    "minlength": "आपला संकेतशब्द कमीत कमी 4 वर्ण असणे आवश्यक आहे.",
                     "maxlength": "आपला संकेतशब्द 50 वर्ण असू शकत नाही.",
                     "strength": "पासवर्ड सामर्थ्य:"
                 },
                 "confirmpassword": {
                     "required": "आपल्या पुष्टीकरण संकेतशब्द आवश्यक आहे.",
-                    "minlength": "आपल्या पुष्टीकरण पासवर्ड कमीत कमी 5 वर्ण असणे आवश्यक आहे.",
+                    "minlength": "आपल्या पुष्टीकरण पासवर्ड कमीत कमी 4 वर्ण असणे आवश्यक आहे.",
                     "maxlength": "आपल्या पुष्टीकरण संकेतशब्द 50 वर्ण असू शकत नाही."
                 },
                 "email": {
@@ -152,7 +149,11 @@
         "userexists": "लॉगिन नाव आधीच वापरले आहे!",
         "emailexists": "ई-मेल आधीच वापरात आहे!",
         "idexists": "एक नवीन {{entityName}} आधीच आयडी असू शकत नाही",
-        "idnull": "Invalid ID"
+        "idnull": "Invalid ID",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "हे आपल्या तळटीप आहे"
 }

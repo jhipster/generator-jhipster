@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -35,7 +35,7 @@ module.exports = class extends BaseDockerGenerator {
             ...super.initializing,
             checkKubernetes,
             loadConfig,
-            setupKubernetesConstants
+            setupKubernetesConstants,
         };
     }
 
@@ -53,7 +53,10 @@ module.exports = class extends BaseDockerGenerator {
             askForDockerPushCommand: prompts.askForDockerPushCommand,
             askForIstioSupport: prompts.askForIstioSupport,
             askForKubernetesServiceType: prompts.askForKubernetesServiceType,
-            askForIngressDomain: prompts.askForIngressDomain
+            askForIngressType: prompts.askForIngressType,
+            askForIngressDomain: prompts.askForIngressDomain,
+            askForPersistentStorage: prompts.askForPersistentStorage,
+            askForStorageClassName: prompts.askForStorageClassName,
         };
     }
 
@@ -76,7 +79,7 @@ module.exports = class extends BaseDockerGenerator {
                     }
                 });
             },
-            saveConfig
+            saveConfig,
         };
     }
 
@@ -94,7 +97,7 @@ module.exports = class extends BaseDockerGenerator {
         }
 
         this.log(
-            `${chalk.yellow.bold(
+            `\n${chalk.yellow.bold(
                 'WARNING!'
             )} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`
         );
@@ -107,8 +110,27 @@ module.exports = class extends BaseDockerGenerator {
             this.log(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
         }
 
-        this.log('\nYou can deploy all your apps by running the following script:');
-        this.log(`  ${chalk.cyan('bash kubectl-apply.sh')}`);
+        if (this.dockerRepositoryName) {
+            this.log(
+                `\n${chalk.green.bold('INFO!')} Alternatively, you can use Jib to build and push image directly to a remote registry:`
+            );
+            this.appsFolders.forEach((appsFolder, index) => {
+                const appConfig = this.appConfigs[index];
+                let runCommand = '';
+                if (appConfig.buildTool === 'maven') {
+                    runCommand = `./mvnw -ntp -Pprod verify jib:build -Djib.to.image=${appConfig.targetImageName}`;
+                } else {
+                    runCommand = `./gradlew bootJar -Pprod jib -Djib.to.image=${appConfig.targetImageName}`;
+                }
+                this.log(`  ${chalk.cyan(`${runCommand}`)} in ${this.destinationPath(this.directoryPath + appsFolder)}`);
+            });
+        }
+
+        this.log('\nYou can deploy all your apps by running the following kubectl command:');
+        this.log(`  ${chalk.cyan('bash kubectl-apply.sh -f')}`);
+        this.log('\n[OR]');
+        this.log('\nIf you want to use kustomize configuration, then run the following command:');
+        this.log(`  ${chalk.cyan('bash kubectl-apply.sh -k')}`);
         if (this.gatewayNb + this.monolithicNb >= 1) {
             const namespaceSuffix = this.kubernetesNamespace === 'default' ? '' : ` -n ${this.kubernetesNamespace}`;
             this.log("\nUse these commands to find your application's IP addresses:");

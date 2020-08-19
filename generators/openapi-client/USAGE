@@ -1,0 +1,5 @@
+Description:
+    Generates java client code from an OpenAPI/Swagger definition
+
+Example:
+    jhipster openapi-client

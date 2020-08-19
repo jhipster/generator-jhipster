@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "服務狀態",
                 "configuration": "設定",
                 "logs": "紀錄",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "稽核",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "資料庫",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -59,8 +56,8 @@
         "form": {
             "username.label": "帳號",
             "username.placeholder": "您的帳號",
-            "currentpassword.label": "Current password",
-            "currentpassword.placeholder": "Current password",
+            "currentpassword.label": "現在的密碼",
+            "currentpassword.placeholder": "現在的密碼",
             "newpassword.label": "新密碼",
             "newpassword.placeholder": "您的新密碼",
             "confirmpassword.label": "新密碼確認",
@@ -86,13 +83,13 @@
             "validate": {
                 "newpassword": {
                     "required": "您的密碼是必填欄位。",
-                    "minlength": "您的密碼長度至少要有 5 個字元。",
+                    "minlength": "您的密碼長度至少要有 4 個字元。",
                     "maxlength": "您的密碼長度不能超過 50 個字元。",
                     "strength": "密碼強度:"
                 },
                 "confirmpassword": {
                     "required": "您的確認密碼是必填欄位。",
-                    "minlength": "您的確認密碼長度至少要有 5 個字元。",
+                    "minlength": "您的確認密碼長度至少要有 4 個字元。",
                     "maxlength": "您的確認密碼長度不能超過 50 個字元。"
                 },
                 "email": {
@@ -152,7 +149,11 @@
         "userexists": "登入帳號名稱已被使用!",
         "emailexists": "電子郵件地址已被使用!",
         "idexists": "新實體不能包含 ID",
-        "idnull": "無效的 ID"
+        "idnull": "無效的 ID",
+        "file": {
+            "could.not.extract": "無法解壓縮檔案",
+            "not.image": "檔案應該要是圖片格式，但實際卻是 \"{{ fileType }}\""
+        }
     },
     "footer": "這裡是您的頁尾"
 }

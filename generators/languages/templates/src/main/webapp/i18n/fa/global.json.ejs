@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "سلامتی",
                 "configuration": "پیکربندی",
                 "logs": "وقایع ثبت شده",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "وقایع بازرسی",
-                <%_ } _%>
                 "apidocs": "ای‌پی‌آی",
                 "database": "پایگاه داده",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -152,7 +149,11 @@
         "userexists": "این نام کاربر در سیستم وجود دارد!",
         "emailexists": "این آدرس ایمیل در سیستم وجود دارد!",
         "idexists": "موجودیت جدید {{ entityName }} نمی‌تواند شناسه داشته‌باشد.",
-        "idnull": "Invalid ID"
+        "idnull": "Invalid ID",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "این پاورقی است"
 }

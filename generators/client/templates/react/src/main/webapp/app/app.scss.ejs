@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 // Override Boostrap variables
-<%_ if (clientTheme !== 'none') {_%>
+<%_ if (clientTheme !== 'none') { _%>
 @import "~bootswatch/dist/<%= clientTheme %>/variables";
 <%_ } _%>
 // Import Bootstrap source files from node_modules
@@ -336,11 +336,6 @@ http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
 
 .width-min {
   width: 1% !important;
-}
-
-// Fix checkbox alignment https://github.com/jhipster/generator-jhipster/issues/8463
-.form-check-input {
-  margin-top: -0.5rem;
 }
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,32 +20,31 @@
 const tsKeyId = generateTestEntityId(pkType);
 _%>
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
-import { of } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { of } from 'rxjs';
 
-import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { UserMgmtComponent } from 'app/admin/user-management/user-management.component';
+import { TestModule } from '../../../test.module';
+import { UserManagementComponent } from 'app/admin/user-management/user-management.component';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.model';
 
 describe('Component Tests', () => {
-
     describe('User Management Component', () => {
-        let comp: UserMgmtComponent;
-        let fixture: ComponentFixture<UserMgmtComponent>;
+        let comp: UserManagementComponent;
+        let fixture: ComponentFixture<UserManagementComponent>;
         let service: UserService;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [<%=angularXAppName%>TestModule],
-                declarations: [UserMgmtComponent]
+                imports: [TestModule],
+                declarations: [UserManagementComponent]
             })
-            .overrideTemplate(UserMgmtComponent, '')
+            .overrideTemplate(UserManagementComponent, '')
             .compileComponents();
         }));
 
         beforeEach(() => {
-            fixture = TestBed.createComponent(UserMgmtComponent);
+            fixture = TestBed.createComponent(UserManagementComponent);
             comp = fixture.componentInstance;
             service = fixture.debugElement.injector.get(UserService);
         });
@@ -67,7 +66,7 @@ describe('Component Tests', () => {
 
                         // THEN
                         expect(service.query).toHaveBeenCalled();
-                        expect(comp.users[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+                        expect(comp.users && comp.users[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
                     })
                 )
             );
@@ -91,13 +90,12 @@ describe('Component Tests', () => {
                         tick(); // simulate async
 
                         // THEN
-                        expect(service.update).toHaveBeenCalledWith(user);
+                        expect(service.update).toHaveBeenCalledWith({ ...user, activated: true });
                         expect(service.query).toHaveBeenCalled();
-                        expect(comp.users[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+                        expect(comp.users && comp.users[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
                     })
                 )
             );
         });
     });
-
 });

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,43 +21,39 @@ import { Component, OnInit } from '@angular/core';
 import { AccountService } from 'app/core/auth/account.service';
 import { Session } from './session.model';
 import { SessionsService } from './sessions.service';
+import { Account } from 'app/core/user/account.model';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-sessions',
     templateUrl: './sessions.component.html'
 })
 export class SessionsComponent implements OnInit {
-
-    account: any;
-    error: string;
-    success: string;
-    sessions: Session[];
+    account: Account | null = null;
+    error = false;
+    success = false;
+    sessions: Session[] = [];
 
     constructor(
         private sessionsService: SessionsService,
         private accountService: AccountService
-    ) {
-    }
+    ) {}
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.sessionsService.findAll().subscribe((sessions) => this.sessions = sessions);
 
-        this.accountService.identity().then((account) => {
-            this.account = account;
-        });
+        this.accountService.identity().subscribe((account) => this.account = account);
     }
 
-    invalidate(series) {
+    invalidate(series: string): void {
+        this.error = false;
+        this.success = false;
+
         this.sessionsService.delete(encodeURIComponent(series)).subscribe(
-            (response) => {
-                if (response.status === 200) {
-                    this.error = null;
-                    this.success = 'OK';
-                    this.sessionsService.findAll().subscribe((sessions) => this.sessions = sessions);
-                } else {
-                    this.success = null;
-                    this.error = 'ERROR';
-                }
-            });
+            () => {
+                this.success = true;
+                this.sessionsService.findAll().subscribe(sessions => this.sessions = sessions);
+            },
+            () => this.error = true
+        );
     }
 }

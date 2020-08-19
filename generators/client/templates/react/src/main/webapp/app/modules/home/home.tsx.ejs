@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -24,7 +24,6 @@ import { Translate } from 'react-jhipster';
 import { connect } from 'react-redux';
 import { Row, Col, Alert } from 'reactstrap';
 
-import { IRootState } from 'app/shared/reducers';
 <%_ if (authenticationType === 'oauth2') { _%>
 import { getLoginUrl } from 'app/shared/util/url-utils';
 <%_ } _%>
@@ -67,7 +66,7 @@ export const Home = (props: IHomeProp) => {
               <%_ if (!skipUserManagement) { _%>
               <Alert color="warning">
                 <Translate contentKey="global.messages.info.register.noaccount">You do not have an account yet?</Translate>&nbsp;
-                <Link to="/register" className="alert-link"><Translate contentKey="global.messages.info.register.link">Register a new account</Translate></Link>
+                <Link to="/account/register" className="alert-link"><Translate contentKey="global.messages.info.register.link">Register a new account</Translate></Link>
               </Alert>
               <%_ } _%>
             </div>
@@ -99,8 +98,8 @@ export const Home = (props: IHomeProp) => {
             </a>
           </li>
           <li>
-            <a href="https://twitter.com/java_hipster" target="_blank" rel="noopener noreferrer">
-              <Translate contentKey="home.link.follow">follow @java_hipster on Twitter</Translate>
+            <a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer">
+              <Translate contentKey="home.link.follow">follow @jhipster on Twitter</Translate>
             </a>
           </li>
         </ul>

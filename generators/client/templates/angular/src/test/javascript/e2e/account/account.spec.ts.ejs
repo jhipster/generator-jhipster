@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,14 +23,16 @@ import { NavBarPage, SignInPage<%_ if (!skipUserManagement) { _%>, PasswordPage,
 let elementGetter = `getText()`;
 if (enableTranslation) {
     elementGetter = `getAttribute('jhiTranslate')`;
-} _%>
+}
+_%>
 
 const expect = chai.expect;
 
 describe('account', () => {
-
     let navBarPage: NavBarPage;
     let signInPage: SignInPage;
+    const username = process.env.E2E_USERNAME || 'admin';
+    const password = process.env.E2E_PASSWORD || 'admin';
     <%_ if (!skipUserManagement) { _%>
     let passwordPage: PasswordPage;
     let settingsPage: SettingsPage;
@@ -51,7 +53,7 @@ describe('account', () => {
         expect(value1).to.eq(expect1);
     <%_ if (authenticationType !== 'oauth2') { _%>
         signInPage = await navBarPage.getSignInPage();
-        await signInPage.autoSignInUsing('admin', 'foo');
+        await signInPage.autoSignInUsing(username, 'foo');
 
         <%_ if (enableTranslation) { _%>
         const expect2 = 'login.messages.error.authentication';
@@ -62,7 +64,7 @@ describe('account', () => {
         expect(value2).to.eq(expect2);
     <%_ } else { _%>
         signInPage = await navBarPage.getSignInPage();
-        await signInPage.loginWithOAuth('admin', 'foo');
+        await signInPage.loginWithOAuth(username, 'foo');
 
         // Keycloak
         const alert = element(by.css('.alert-error'));
@@ -77,7 +79,7 @@ describe('account', () => {
     });
 
     it('should login successfully with admin account', async () => {
-        <%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
         await browser.get('/');
         signInPage = await navBarPage.getSignInPage();
 
@@ -88,10 +90,10 @@ describe('account', () => {
         <%_ } _%>
         const value1 = await element(by.className('username-label')).<%- elementGetter %>;
         expect(value1).to.eq(expect1);
-        await signInPage.autoSignInUsing('admin', 'admin');
-        <%_ } else {_%>
-        await signInPage.loginWithOAuth('', 'admin');
-        <%_ } _%>
+        await signInPage.autoSignInUsing(username, password);
+    <%_ } else { _%>
+        await signInPage.loginWithOAuth('', password);
+    <%_ } _%>
 
         <%_ if (enableTranslation) { _%>
         const expect2 = 'home.logged.message';
@@ -110,7 +112,7 @@ describe('account', () => {
         <%_ if (enableTranslation) { _%>
         const expect1 = 'settings.title';
         <%_ } else { _%>
-        const expect1 = 'User settings for [admin]';
+        const expect1 = `User settings for [${username}]`;
         <%_ } _%>
         const value1 = await settingsPage.getTitle();
         expect(value1).to.eq(expect1);
@@ -132,7 +134,7 @@ describe('account', () => {
         <%_ if (enableTranslation) { _%>
         expect(await passwordPage.getTitle()).to.eq('password.title');
         <%_ } else { _%>
-        expect(await passwordPage.getTitle()).to.eq('Password for [admin]');
+        expect(await passwordPage.getTitle()).to.eq(`Password for [${username}]`);
         <%_ } _%>
 
         await passwordPage.setCurrentPassword('wrong_current_password');
@@ -157,34 +159,50 @@ describe('account', () => {
         <%_ if (enableTranslation) { _%>
         expect(await passwordPage.getTitle()).to.eq('password.title');
         <%_ } else { _%>
-        expect(await passwordPage.getTitle()).to.eq('Password for [admin]');
+        expect(await passwordPage.getTitle()).to.eq(`Password for [${username}]`);
         <%_ } _%>
 
-        await passwordPage.setCurrentPassword('admin');
+        await passwordPage.setCurrentPassword(password);
         await passwordPage.setPassword('newpassword');
         await passwordPage.setConfirmPassword('newpassword');
         await passwordPage.save();
 
         <%_ if (enableTranslation) { _%>
-        const expect2 = 'password.messages.success';
+        const successMsg = 'password.messages.success';
         <%_ } else { _%>
-        const expect2 = 'Password changed!';
+        const successMsg = 'Password changed!';
         <%_ } _%>
         const alert = element(by.css('.alert-success'));
-        const value2 = await alert.<%- elementGetter %>;
-        expect(value2).to.eq(expect2);
+        const alertValue = await alert.<%- elementGetter %>;
+        expect(alertValue).to.eq(successMsg);
         await navBarPage.autoSignOut();
         await navBarPage.goToSignInPage();
-        await signInPage.autoSignInUsing('admin', 'newpassword');
+        await signInPage.autoSignInUsing(username, 'newpassword');
 
         // change back to default
         await navBarPage.goToPasswordMenu();
         await passwordPage.setCurrentPassword('newpassword');
-        await passwordPage.setPassword('admin');
-        await passwordPage.setConfirmPassword('admin');
+        await passwordPage.setPassword(password);
+        await passwordPage.setConfirmPassword(password);
         await passwordPage.save();
+
+        // wait for success message
+        const alertValue2 = await alert.<%- elementGetter %>;
+        expect(alertValue2).to.eq(successMsg);
     });
 <%_ } _%>
+
+    it('should navigate to 404 not found error page on non existing route and show user own navbar if valid authentication exists', async () => {
+        // don't sign out and refresh page with non existing route
+        await browser.get('/this-is-link-to-non-existing-page');
+
+        // should navigate to 404 not found page
+        const url = await browser.getCurrentUrl();
+        expect(url).to.endWith('404');
+
+        // as user is admin then should show admin menu to user
+        await navBarPage.clickOnAdminMenu();
+    });
 
     after(async () => {
         await navBarPage.autoSignOut();

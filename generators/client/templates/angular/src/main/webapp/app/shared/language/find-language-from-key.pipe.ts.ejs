@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,17 +18,19 @@
 -%>
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({name: 'findLanguageFromKey'})
+@Pipe({ name: 'findLanguageFromKey' })
 export class FindLanguageFromKeyPipe implements PipeTransform {
-    private languages: any = {
+    private languages: { [key: string]: { name: string, rtl?: boolean } } = {
         // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
     };
+
     transform(lang: string): string {
         return this.languages[lang].name;
     }
+
     <%_ if (enableI18nRTL) { _%>
     isRTL(lang: string): boolean {
-        return this.languages[lang].rtl;
+        return Boolean(this.languages[lang].rtl);
     }
     <%_ } _%>
 }

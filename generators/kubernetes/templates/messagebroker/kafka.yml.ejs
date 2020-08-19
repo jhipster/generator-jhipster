@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -49,6 +49,13 @@ spec:
           value: '1'
         ports:
         - containerPort: 9092
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
 ---
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
@@ -92,6 +99,13 @@ spec:
           value: '2'
         ports:
         - containerPort: 2181
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
 ---
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service

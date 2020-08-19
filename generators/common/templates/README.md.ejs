@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,12 +22,6 @@ let clientPackageMngrName = 'Npm';
 let clientPackageMngrAddGlobal = 'install -g';
 let clientPackageMngrAdd = 'install --save --save-exact';
 let clientPackageMngrAddDev = 'install --save-dev --save-exact';
-if (clientPackageManager === 'yarn') {
-    clientPackageMngrName = 'Yarn';
-    clientPackageMngrAddGlobal = 'global add';
-    clientPackageMngrAdd = 'add --exact';
-    clientPackageMngrAddDev = 'add --dev --exact';
-}
 let DOCUMENTATION_ARCHIVE_URL = `${DOCUMENTATION_URL + DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`;
 _%>
 This application was generated using JHipster <%= jhipsterVersion %>, you can find documentation and help at [<%= DOCUMENTATION_ARCHIVE_URL %>](<%= DOCUMENTATION_ARCHIVE_URL %>).
@@ -44,34 +38,63 @@ This application is configured for Service Discovery and Configuration with <% i
 ## Development
 
 <%_ if (skipClient) { _%>
-To start your application in the dev profile, simply run:
+To start your application in the dev profile, run:
 
-    <% if (buildTool === 'maven') { %>./mvnw<% } %><% if (buildTool === 'gradle'){ %>./gradlew<% } %>
-
+```
+<% if (buildTool === 'maven') { %>./mvnw<% } %><% if (buildTool === 'gradle') { %>./gradlew<% } %>
+```
 <%_ } _%>
+
 <%_ if (!skipClient) { _%>
 Before you can build this project, you must install and configure the following dependencies on your machine:
 
 1. [Node.js][]: We use Node to run a development web server and build the project.
    Depending on your system, you can install Node either from source or as a pre-packaged bundle.
-<%_ if (clientPackageManager === 'yarn') { _%>
-2. [Yarn][]: We use Yarn to manage Node dependencies.
-   Depending on your system, you can install Yarn either from source or as a pre-packaged bundle.
-<%_ } _%>
 
 After installing Node, you should be able to run the following command to install development tools.
 You will only need to run this command when dependencies change in [package.json](package.json).
 
-    <%= clientPackageManager %> install
+```
+<%= clientPackageManager %> install
+```
 
 We use <%= clientPackageManager %> scripts and [Webpack][] as our build system.
 
+<%_ if (['hazelcast', 'memcached', 'redis'].includes(cacheProvider)) { _%>
+If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.
+To start your cache server, run:
+
+```
+docker-compose -f src/main/docker/<%= cacheProvider==='hazelcast'?'hazelcast-management-center':cacheProvider %>.yml up -d
+```
+
+<%_ if (cacheProvider === 'redis') { _%>
+
+The cache can also be turned off by adding to the application yaml:
+```
+spring:
+    cache:
+        type: none
+```
+See [here](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-caching.html#boot-features-caching-provider-none) for details.
+
+**WARNING**: If you using second level hibernate cache and disabling the spring cache, you have to disable the second level hibernate cache as well since they are using
+the same CacheManager.
+    <%_ } _%>
+<%_ } _%>
+
 Run the following commands in two separate terminals to create a blissful development experience where your browser
 auto-refreshes when files change on your hard drive.
+
+```
 <% if (buildTool === 'maven') { %>
-    ./mvnw<% } %><% if (buildTool === 'gradle') { %>
-    ./gradlew<% } %>
-    <%= clientPackageManager %> start
+./mvnw
+<% } %>
+<% if (buildTool === 'gradle') { %>
+./gradlew -x webpack
+<% } %>
+<%= clientPackageManager %> start
+```
 
 <%= clientPackageMngrName %> is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
 specifying a newer version in [package.json](package.json). You can also run `<%= clientPackageManager %> update` and `<%= clientPackageManager %> install` to manage dependencies.
@@ -90,7 +113,7 @@ To log in to your app, you'll need to have [Keycloak](https://keycloak.org) up a
 docker-compose -f src/main/docker/keycloak.yml up
 ```
 
-The security settings in `src/main/resources/application.yml` are configured for this image.
+The security settings in `src/main/resources/config/application.yml` are configured for this image.
 
 ```yaml
 spring:
@@ -107,11 +130,19 @@ spring:
             client-secret: web_app
 ```
 
+### JHipster Control Center
+
+JHipster Control Center can help you to manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
+
+```
+docker-compose -f src/main/docker/jhipster-control-center.yml up
+```
+
 ### Okta
 
 If you'd like to use Okta instead of Keycloak, you'll need to change a few things. First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta domain, that has a name like `https://dev-123456.okta.com`.
 
-Modify `src/main/resources/application.yml` to use your Okta settings.
+Modify `src/main/resources/config/application.yml` to use your Okta settings.
 
 ```yaml
 spring:
@@ -140,7 +171,7 @@ After making these changes, you should be good to go! If you have any issues, pl
 
 ### PWA Support
 
-JHipster ships with PWA (Progressive Web App) support, and it's disabled by default. One of the main components of a PWA is a service worker.
+JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
 
 The service worker initialization code is commented out by default. To enable it, uncomment the following code in `src/main/webapp/index.html`:
 
@@ -160,20 +191,24 @@ Note: [Workbox](https://developers.google.com/web/tools/workbox/) powers JHipste
 
 For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
 
-    <%= clientPackageManager %> <%= clientPackageMngrAdd %> leaflet
+```
+<%= clientPackageManager %> <%= clientPackageMngrAdd %> leaflet
+```
 
 To benefit from TypeScript type definitions from [DefinitelyTyped][] repository in development, you would run following command:
 
-    <%= clientPackageManager %> <%= clientPackageMngrAddDev %> @types/leaflet
+```
+<%= clientPackageManager %> <%= clientPackageMngrAddDev %> @types/leaflet
+```
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
-<%_ if (clientFramework === 'angularX') { _%>
+<%_ if (clientFramework === ANGULAR) { _%>
 Edit [<%= CLIENT_MAIN_SRC_DIR %>app/vendor.ts](<%= CLIENT_MAIN_SRC_DIR %>app/vendor.ts) file:
 ~~~
 import 'leaflet/dist/leaflet.js';
 ~~~
 
-Edit [<%= CLIENT_MAIN_SRC_DIR %>content/css/vendor.css](<%= CLIENT_MAIN_SRC_DIR %>content/css/vendor.css) file:
+Edit [<%= CLIENT_MAIN_SRC_DIR %>content/scss/vendor.scss](<%= CLIENT_MAIN_SRC_DIR %>content/scss/vendor.scss) file:
 ~~~
 @import '~leaflet/dist/leaflet.css';
 ~~~
@@ -183,20 +218,25 @@ Note: There are still a few other things remaining to do for Leaflet that we won
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
-<%_ if (clientFramework === 'angularX' && applicationType !== 'microservice') { _%>
+<%_ if (clientFramework === ANGULAR && applicationType !== 'microservice') { _%>
 ### Using Angular CLI
 
 You can also use [Angular CLI][] to generate some custom client code.
 
 For example, the following command:
 
-    ng generate component my-component
+```
+ng generate component my-component
+```
 
 will generate few files:
 
-    create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.html
-    create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.ts
-    update <%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts
+```
+create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.html
+create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.ts
+update <%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts
+```
+
 <%_ } _%>
 <%_ if (enableSwaggerCodegen) { _%>
 ### Doing API-First development using openapi-generator
@@ -224,17 +264,29 @@ Refer to [Doing API-First development][] for more details.
 ### Packaging as jar
 
 To build the final jar and optimize the <%= baseName %> application for production, run:
+
+```
 <% if (buildTool === 'maven') { %>
-    ./mvnw -Pprod clean verify<% } %><% if (buildTool === 'gradle') { %>
-    ./gradlew -Pprod clean bootJar<% } %>
+./mvnw -Pprod clean verify
+<% } %>
+<% if (buildTool === 'gradle') { %>
+./gradlew -Pprod clean bootJar
+<% } %>
+```
 
 <%_ if (!skipClient) { _%>
 This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
 <%_ } _%>
 To ensure everything worked, run:
+
+```
 <% if (buildTool === 'maven') { %>
-    java -jar target/*.jar<% } %><% if (buildTool === 'gradle') { %>
-    java -jar build/libs/*.jar<% } %>
+java -jar target/*.jar
+<% } %>
+<% if (buildTool === 'gradle') { %>
+java -jar build/libs/*.jar
+<% } %>
+```
 
 <% if (!skipClient) { %>Then navigate to [http://localhost:<%= serverPort %>](http://localhost:<%= serverPort %>) in your browser.
 <% } %>
@@ -243,25 +295,36 @@ Refer to [Using JHipster in production][] for more details.
 ### Packaging as war
 
 To package your application as a war in order to deploy it to an application server, run:
+
+```
 <% if (buildTool === 'maven') { %>
-    ./mvnw -Pprod,war clean verify<% } %><% if (buildTool === 'gradle') { %>
-    ./gradlew -Pprod -Pwar clean bootWar<% } %>
+./mvnw -Pprod,war clean verify
+<% } %>
+<% if (buildTool === 'gradle') { %>
+./gradlew -Pprod -Pwar clean bootWar
+<% } %>
+```
 
 ## Testing
 
 To launch your application's tests, run:
 
-    <%_ if (buildTool === 'maven') { _%>
-    ./mvnw verify
-    <%_ } else { _%>
-    ./gradlew test integrationTest
-    <%_ } _%>
+```
+<%_ if (buildTool === 'maven') { _%>
+./mvnw verify
+<%_ } else { _%>
+./gradlew test integrationTest jacocoTestReport
+<%_ } _%>
+```
+
 <% if (!skipClient) { %>
 ### Client tests
 
 Unit tests are run by [Jest][] and written with [Jasmine][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](<%= CLIENT_TEST_SRC_DIR %>) and can be run with:
 
-    <%= clientPackageManager %> test
+```
+<%= clientPackageManager %> test
+```
 
 <% if (protractorTests) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [<%= CLIENT_TEST_SRC_DIR %>e2e](<%= CLIENT_TEST_SRC_DIR %>e2e)
 and can be run by starting Spring Boot in one terminal (`<% if (buildTool === 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<%= clientPackageManager %> run e2e`) in a second one.<% } %>
@@ -295,10 +358,9 @@ If you need to re-run the Sonar phase, please be sure to specify at least the `i
 ```
 ./mvnw initialize sonar:sonar
 ```
-or
-<%_ } else if(buildTool === 'gradle') { _%>
+<%_ } else if (buildTool === 'gradle') { _%>
 ```
-./gradlew -Pprod clean check sonarqube
+./gradlew -Pprod clean check jacocoTestReport sonarqube
 ```
 <%_ } _%>
 
@@ -308,22 +370,31 @@ For more information, refer to the [Code quality page][].
 
 You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
 <% if (databaseType !== 'no') { %>
-For example, to start a <%= prodDatabaseType%> database in a docker container, run:
+For example, to start a <%= prodDatabaseType %> database in a docker container, run:
 
-    docker-compose -f src/main/docker/<%= prodDatabaseType%>.yml up -d
+```
+docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml up -d
+```
 
 To stop it and remove the container, run:
 
-    docker-compose -f src/main/docker/<%= prodDatabaseType%>.yml down
+```
+docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml down
+```
+
 <% } %>
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
-    <% if (buildTool === 'maven') { %>./mvnw -Pprod verify jib:dockerBuild<% } %><% if (buildTool === 'gradle') { %>./gradlew bootJar -Pprod jibDockerBuild<% } %>
+```
+<% if (buildTool === 'maven') { %>./mvnw -Pprod verify jib:dockerBuild<% } %><% if (buildTool === 'gradle') { %>./gradlew bootJar -Pprod jibDockerBuild<% } %>
+```
 
 Then run:
 
-    docker-compose -f src/main/docker/app.yml up -d
+```
+docker-compose -f src/main/docker/app.yml up -d
+```
 
 For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
 
@@ -348,21 +419,20 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [Code quality page]: <%= DOCUMENTATION_ARCHIVE_URL %>/code-quality/
 [Setting up Continuous Integration]: <%= DOCUMENTATION_ARCHIVE_URL %>/setting-up-ci/
 
-<% if (testFrameworks.includes("gatling")) { %>[Gatling]: http://gatling.io/<% } %>
-<%_ if (!skipClient) {_%>
+<% if (testFrameworks.includes("gatling")) { %>[Gatling]: https://gatling.io/<% } %>
+<%_ if (!skipClient) { _%>
 [Node.js]: https://nodejs.org/
-[Yarn]: https://yarnpkg.org/
 [Webpack]: https://webpack.github.io/
 [Angular CLI]: https://cli.angular.io/
-[BrowserSync]: http://www.browsersync.io/
+[BrowserSync]: https://www.browsersync.io/
 [Jest]: https://facebook.github.io/jest/
-[Jasmine]: http://jasmine.github.io/2.0/introduction.html
+[Jasmine]: https://jasmine.github.io/2.0/introduction.html
 [Protractor]: https://angular.github.io/protractor/
-[Leaflet]: http://leafletjs.com/
-[DefinitelyTyped]: http://definitelytyped.org/
+[Leaflet]: https://leafletjs.com/
+[DefinitelyTyped]: https://definitelytyped.org/
 <%_ } _%>
 <%_ if (enableSwaggerCodegen) { _%>
 [OpenAPI-Generator]: https://openapi-generator.tech
-[Swagger-Editor]: http://editor.swagger.io
+[Swagger-Editor]: https://editor.swagger.io
 [Doing API-First development]: <%= DOCUMENTATION_ARCHIVE_URL %>/doing-api-first-development/
 <%_ } _%>

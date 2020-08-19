@@ -2,9 +2,9 @@
     "generator-jhipster": {
         "applicationType": "monolith",
         "reactive": true,
-        "baseName": "travisWebflux",
-        "packageName": "io.github.jhipster.travis",
-        "packageFolder": "io/github/jhipster/travis",
+        "baseName": "sampleWebfluxMongodb",
+        "packageName": "io.github.jhipster.sample",
+        "packageFolder": "io/github/jhipster/sample",
         "authenticationType": "jwt",
         "cacheProvider": "no",
         "enableHibernateCache": false,
@@ -17,11 +17,11 @@
         "enableTranslation": true,
         "nativeLanguage": "en",
         "languages": ["en", "fr"],
-        "testFrameworks": ["gatling"],
+        "testFrameworks": ["gatling", "protractor"],
         "serverPort": "8080",
         "jhiPrefix": "jhi",
-        "travis": true,
-        "clientPackageManager": "yarn",
-        "clientFramework": "angularX"
+        "clientPackageManager": "npm",
+        "clientFramework": "angularX",
+        "creationTimestamp": 1596513172471
     }
 }

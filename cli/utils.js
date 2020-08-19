@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,30 +18,42 @@
  */
 /* eslint-disable no-console */
 const chalk = require('chalk');
-const didYouMean = require('didyoumean');
 const meow = require('meow');
-const yeoman = require('yeoman-environment');
 const _ = require('lodash');
-
-const SUB_GENERATORS = require('./commands');
 
 const CLI_NAME = 'jhipster';
 const GENERATOR_NAME = 'generator-jhipster';
-const debug = function(msg) {
+
+const SUCCESS_MESSAGE = 'Congratulations, JHipster execution is complete!';
+
+const debug = function (msg) {
     if (this.debugEnabled) {
         console.log(`${chalk.blue('DEBUG!')}  ${msg}`);
     }
 };
 
-const info = function(msg) {
+const info = function (msg) {
     console.info(`${chalk.green.bold('INFO!')} ${msg}`);
 };
 
-const log = function(msg) {
+const log = function (msg) {
     console.log(msg);
 };
 
-const error = function(msg, trace) {
+const error = function (msg, trace) {
+    console.error(`${chalk.red(msg)}`);
+    if (trace) {
+        console.log(trace);
+    }
+    process.exitCode = 1;
+};
+
+/**
+ *  Use with carefull.
+ *  process.exit is not recommended by Node.js.
+ *  Refer to https://nodejs.org/api/process.html#process_process_exit_code.
+ */
+const fatal = function (msg, trace) {
     console.error(`${chalk.red(msg)}`);
     if (trace) {
         console.log(trace);
@@ -49,15 +61,22 @@ const error = function(msg, trace) {
     process.exit(1);
 };
 
-const init = function(program) {
+const init = function (program) {
     program.option('-d, --debug', 'enable debugger');
 
-    const argv = program.normalize(process.argv);
-    this.debugEnabled = program.debug = argv.includes('-d') || argv.includes('--debug'); // Need this early
+    this.debugEnabled = process.argv.includes('-d') || process.argv.includes('--debug'); // Need this early
 
-    if (this.debugEnabled) {
-        info('Debug logging is on');
-    }
+    const self = this;
+    // Option event fallback.
+    program.on('option:debug', function () {
+        if (self.debugEnabled) {
+            return;
+        }
+        self.debugEnabled = this.debug;
+        if (self.debugEnabled) {
+            info('Debug logging is on');
+        }
+    });
 };
 
 const logger = {
@@ -65,7 +84,8 @@ const logger = {
     debug,
     info,
     log,
-    error
+    error,
+    fatal,
 };
 
 const toString = item => {
@@ -86,20 +106,6 @@ const initHelp = (program, cliName) => {
         logger.info(`  For more info visit ${chalk.blue('https://www.jhipster.tech')}`);
         logger.info('');
     });
-
-    program.on('command:*', name => {
-        console.error(chalk.red(`${chalk.yellow(name)} is not a known command. See '${chalk.white(`${cliName} --help`)}'.`));
-
-        const cmd = Object.values(name).join('');
-        const availableCommands = program.commands.map(c => c._name);
-
-        const suggestion = didYouMean(cmd, availableCommands);
-        if (suggestion) {
-            logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
-        }
-
-        process.exit(1);
-    });
 };
 
 /**
@@ -115,7 +121,7 @@ const getArgs = opts => {
 /**
  * Get options from arguments
  */
-const getOptionsFromArgs = args => {
+const getOptionsFromArgs = (args = []) => {
     const options = [];
     args.forEach(item => {
         if (typeof item == 'string') {
@@ -130,22 +136,26 @@ const getOptionsFromArgs = args => {
 };
 
 /* Convert option objects to command line args */
-const getOptionAsArgs = (options, withEntities, force) => {
-    const args = Object.entries(options).map(([key, value]) => {
-        const prefix = key.length === 1 ? '-' : '--';
-        if (value === true) {
-            return `${prefix}${_.kebabCase(key)}`;
-        }
-        if (value === false) {
-            return `${prefix}no-${_.kebabCase(key)}`;
-        }
-        return value ? `${prefix}${_.kebabCase(key)} ${value}` : '';
-    });
-    if (withEntities) args.push('--with-entities');
-    if (force) args.push('--force');
-    args.push('--from-cli');
+const getOptionAsArgs = (options = {}) => {
+    options = Object.fromEntries(
+        Object.entries(options).map(([key, value]) => {
+            return [_.kebabCase(key), value];
+        })
+    );
+    const args = Object.entries(options)
+        .map(([key, value]) => {
+            const prefix = key.length === 1 ? '-' : '--';
+            if (value === true) {
+                return `${prefix}${key}`;
+            }
+            if (value === false) {
+                return `${prefix}no-${key}`;
+            }
+            return value !== undefined ? [`${prefix}${key}`, `${value}`] : undefined;
+        })
+        .filter(arg => arg !== undefined);
     logger.debug(`converted options: ${args}`);
-    return _.uniq(args.join(' ').split(' ')).filter(it => it !== '');
+    return args.flat();
 };
 
 /**
@@ -162,46 +172,41 @@ const getCommand = (cmd, args, opts) => {
     }
     const cmdArgs = options.join(' ').trim();
     logger.debug(`cmdArgs: ${cmdArgs}`);
-    return `${CLI_NAME}:${cmd}${cmdArgs ? ` ${cmdArgs}` : ''}`;
+    return `${cmd}${cmdArgs ? ` ${cmdArgs}` : ''}`;
 };
 
-const getCommandOptions = (pkg, argv) => {
+const addKebabCase = (options = {}) => {
+    const kebabCase = Object.keys(options).reduce((acc, key) => {
+        acc[_.kebabCase(key)] = options[key];
+        return acc;
+    }, {});
+    return { ...kebabCase, ...options };
+};
+
+const getCommandOptions = (pkg, argv = []) => {
     const options = meow({ help: false, pkg, argv });
-    const flags = options ? options.flags : null;
-    if (flags) {
-        flags['from-cli'] = true;
-        // Add un-camelized options too, for legacy
-        Object.keys(flags).forEach(key => {
-            const legacyKey = key.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`);
-            flags[legacyKey] = flags[key];
-        });
-        return flags;
-    }
-    return { 'from-cli': true };
+    const flags = options ? options.flags : undefined;
+    return addKebabCase({ ...flags });
 };
 
-const done = errorMsg => {
-    if (errorMsg) {
-        logger.error(`${chalk.red.bold('ERROR!')} ${errorMsg}`);
+const doneFactory = successMsg => {
+    return errorOrMsg => {
+        if (errorOrMsg instanceof Error) {
+            logger.error(`ERROR! ${errorOrMsg.message}`, errorOrMsg);
+        } else if (errorOrMsg) {
+            logger.error(`ERROR! ${errorOrMsg}`);
+        } else if (successMsg) {
+            logger.info(chalk.green.bold(successMsg));
+        }
+    };
+};
+
+const printSuccess = () => {
+    if (process.exitCode === undefined || process.exitCode === 0) {
+        logger.info(chalk.green.bold(SUCCESS_MESSAGE));
     } else {
-        logger.info(chalk.green.bold('Congratulations, JHipster execution is complete!'));
+        logger.error(`ERROR! JHipster finished with code ${process.exitCode}`);
     }
-};
-
-const createYeomanEnv = () => {
-    const env = yeoman.createEnv();
-    /* Register yeoman generators */
-    Object.keys(SUB_GENERATORS)
-        .filter(command => !SUB_GENERATORS[command].cliOnly)
-        .forEach(generator => {
-            if (SUB_GENERATORS[generator].blueprint) {
-                /* eslint-disable prettier/prettier */
-                env.register(require.resolve(`${SUB_GENERATORS[generator].blueprint}/generators/${generator}`), `${CLI_NAME}:${generator}`);
-            } else {
-                env.register(require.resolve(`../generators/${generator}`), `${CLI_NAME}:${generator}`);
-            }
-        });
-    return env;
 };
 
 module.exports = {
@@ -214,7 +219,9 @@ module.exports = {
     getOptionsFromArgs,
     getCommand,
     getCommandOptions,
-    done,
-    createYeomanEnv,
-    getOptionAsArgs
+    addKebabCase,
+    doneFactory,
+    done: doneFactory(SUCCESS_MESSAGE),
+    printSuccess,
+    getOptionAsArgs,
 };

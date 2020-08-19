@@ -20,10 +20,15 @@ if [ -a src/main/docker/consul.yml ]; then
     docker-compose -f src/main/docker/consul.yml up -d
 fi
 if [ -a src/main/docker/cassandra.yml ]; then
-    docker-compose -f src/main/docker/cassandra.yml up -d
+    # this container can't be started otherwise, as it will take a lot of memory
+    # so here, only prepare the image
+    docker-compose -f src/main/docker/cassandra.yml build
 fi
 if [ -a src/main/docker/mongodb.yml ]; then
     docker-compose -f src/main/docker/mongodb.yml up -d
+fi
+if [ -a src/main/docker/neo4j.yml ]; then
+    docker-compose -f src/main/docker/neo4j.yml up -d
 fi
 if [ -a src/main/docker/couchbase.yml ]; then
     # this container can't be started otherwise, it will be conflict with tests
@@ -38,6 +43,12 @@ if [ -a src/main/docker/postgresql.yml ]; then
 fi
 if [ -a src/main/docker/mariadb.yml ]; then
     docker-compose -f src/main/docker/mariadb.yml up -d
+fi
+if [ -a src/main/docker/redis.yml ]; then
+    docker-compose -f src/main/docker/redis.yml up -d
+fi
+if [ -a src/main/docker/memcached.yml ]; then
+    docker-compose -f src/main/docker/memcached.yml up -d
 fi
 if [ -a src/main/docker/jhipster-registry.yml ]; then
     docker-compose -f src/main/docker/jhipster-registry.yml up -d

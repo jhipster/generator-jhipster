@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,7 +20,7 @@
 configserver:
     name: Docker JHipster Registry
     status: Connected to <% if (serviceDiscoveryType === 'eureka') { %>the JHipster Registry<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul<% } %> running in Docker
-
+   
 jhipster:
     security:
         authentication:
@@ -35,11 +35,31 @@ jhipster:
         logs: # report metrics in the logs
             enabled: true
             report-frequency: 60 # in seconds
-<%_ } _%>
 
+management:
+    metrics:
+        export:
+            prometheus:
+                enabled: false
+<%_ } _%>
+<%_ if (monitoring === 'prometheus') { _%>
+    logging:
+        logstash: # do not forward logs to ELK
+            enabled: false
+            host: jhipster-logstash
+    metrics:
+        logs: # do not report metrics in the logs
+            enabled: false
+
+management:
+    metrics:
+        export:
+            prometheus:
+                enabled: true
+<%_ } _%>  
 <%_ if (consoleOptions && consoleOptions.includes('zipkin') || !skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
 spring:
-    <%_ if (consoleOptions && consoleOptions.includes('zipkin')) {_%>
+    <%_ if (consoleOptions && consoleOptions.includes('zipkin')) { _%>
     zipkin:
         base-url: http://jhipster-zipkin:9411
         enabled: true

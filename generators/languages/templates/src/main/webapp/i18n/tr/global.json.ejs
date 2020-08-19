@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "Sağlık",
                 "configuration": "Yapılandırma",
                 "logs": "Kayıtlar",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "Denetim",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "Veritabanı",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -86,13 +83,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Şifre zorunlu alandır.",
-                    "minlength": "Şifreniz en az 5 karakter olmak zorundadır",
+                    "minlength": "Şifreniz en az 4 karakter olmak zorundadır",
                     "maxlength": "Şifreniz 50 karakterden uzun olamaz",
                     "strength": "Şifre karmaşıklığı:"
                 },
                 "confirmpassword": {
                     "required": "Tekrar şifresi zorunludur.",
-                    "minlength": "Tekrar şifreniz en az 5 karakter olmalıdır",
+                    "minlength": "Tekrar şifreniz en az 4 karakter olmalıdır",
                     "maxlength": "Tekrar şifreniz 50 karakterden uzun olamaz"
                 },
                 "email": {
@@ -153,7 +150,11 @@
         "userexists": "Kullanıcı adı daha önce alınmış!",
         "emailexists": "E-posta adresi zaten kullanılıyor!",
         "idexists": "A new {{entityName}} cannot already have an ID",
-        "idnull": "Invalid ID"
+        "idnull": "Invalid ID",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "Burası sayfa alt bilgisi"
 }

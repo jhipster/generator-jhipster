@@ -40,9 +40,9 @@ entity Operation {
 }
 
 enum BankAccountType {
-  CHECKING,
-  SAVINGS,
-  LOAN
+  CHECKING (checking_account),
+  SAVINGS (savings_account),
+  LOAN (loan_account)
 }
 
 entity Department {
@@ -163,8 +163,8 @@ relationship ManyToOne {
 }
 
 relationship ManyToMany {
-  JobHistory to Department,
-  JobHistory to Job{history},
+  JobHistory{department} to Department{history},
+  JobHistory{job} to Job{history},
   JobHistory{emp(firstName)} to Employee{history},
   Job{chore(title)} to Task{linkedJob(title)}
 }

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -128,7 +128,7 @@ objects:
                     done
               containerName: ${APPLICATION_NAME}
         resources:
-      replicas: "1"
+      replicas: 1
       template:
         metadata:
           labels:
@@ -140,7 +140,7 @@ objects:
             imagePullPolicy: IfNotPresent
             env:
             - name: SPRING_PROFILES_ACTIVE
-              value: prod,swagger
+              value: prod,api-docs
             <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
             - name: SPRING_CLOUD_CONFIG_URI
               value: http://admin:${jhipster.registry.password}@jhipster-registry:8761/config
@@ -156,39 +156,17 @@ objects:
             - name: SPRING_CLOUD_CONSUL_HOST
               value: ${APPLICATION_NAME}-consul
             - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
+              value: 8500
             <%_ } _%>
-            <%_ if (app.prodDatabaseType === 'mysql') { _%>
+            <%_ if (['mysql', 'mariadb', 'postgresql'].includes(app.prodDatabaseType)) { _%>
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://${APPLICATION_NAME}-mysqldb/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
-            - name: SPRING_DATASOURCE_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: ${SECRET_REF}
-                  key: database-user
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ${SECRET_REF}
-                  key: database-password
-            <%_ } _%>
-            <%_ if (app.prodDatabaseType === 'mariadb') { _%>
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mariadb://${APPLICATION_NAME}-mariadb/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
-            - name: SPRING_DATASOURCE_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: ${SECRET_REF}
-                  key: database-user
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ${SECRET_REF}
-                  key: database-password
-            <%_ } _%>
-            <%_ if (app.prodDatabaseType === 'postgresql') { _%>
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://${APPLICATION_NAME}-postgresqldb/${APPLICATION_NAME}
+              <%_ if (app.prodDatabaseType === 'mysql') { _%>
+              value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}db`, databaseName: app.baseName.toLowerCase() }) %>
+              <%_ } else if (app.prodDatabaseType === 'mariadb') { _%>
+              value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}`, databaseName: app.baseName.toLowerCase() }) %>
+              <%_ } else if (app.prodDatabaseType === 'postgresql') { _%>
+              value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}db`, databaseName: '${APPLICATION_NAME}' }) %>
+              <%_ } _%>
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -233,10 +211,22 @@ objects:
               value: http://${APPLICATION_NAME}-elasticsearch:9200
             <%_ } _%>
             <%_ if (app.messageBroker === 'kafka') { _%>
-            - name: SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS
+            - name: KAFKA_CONSUMER_KEY_DESERIALIZER
+              value: 'org.apache.kafka.common.serialization.StringDeserializer'
+            - name: KAFKA_CONSUMER_VALUE_DESERIALIZER
+              value: 'org.apache.kafka.common.serialization.StringDeserializer'
+            - name: KAFKA_CONSUMER_BOOTSTRAP_SERVERS
               value: jhipster-kafka:9092
-            - name: SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS
+            - name: KAFKA_CONSUMER_GROUP_ID
+              value: '<%= dasherizedBaseName %>'
+            - name: KAFKA_CONSUMER_AUTO_OFFSET_RESET
+              value: 'earliest'
+            - name: KAFKA_PRODUCER_BOOTSTRAP_SERVERS
               value: jhipster-kafka:9092
+            - name: KAFKA_PRODUCER_KEY_DESERIALIZER
+              value: 'org.apache.kafka.common.serialization.StringDeserializer'
+            - name: KAFKA_PRODUCER_VALUE_DESERIALIZER
+              value: 'org.apache.kafka.common.serialization.StringDeserializer'
             <%_ } _%>
             <%_ if (monitoring === 'elk') { _%>
             - name: JHIPSTER_METRICS_LOGS_ENABLED
@@ -262,7 +252,7 @@ objects:
             <%_ } _%>
             ports:
             - name: http
-              containerPort: "${APP_PORT}"
+              containerPort: ${{APP_PORT}}
   -
     apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
@@ -283,7 +273,7 @@ objects:
       type: LoadBalancer
       ports:
       - name: http
-        port: "${APP_PORT}"
+        port: ${{APP_PORT}}
   -
     apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Route
@@ -293,7 +283,7 @@ objects:
       to:
         kind: Service
         name: ${APPLICATION_NAME}
-        weight: "100"
+        weight: 100
       port:
         targetPort: "http"
       wildcardPolicy: None

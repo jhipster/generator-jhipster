@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,42 +24,59 @@ const statistics = require('../statistics');
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
         // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
+        this.option('fromCli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         // Automatically configure Travis
         this.argument('autoconfigure-travis', {
             type: Boolean,
             defaults: false,
-            description: 'Automatically configure Travis'
+            description: 'Automatically configure Travis',
         });
 
         // Automatically configure Jenkins
         this.argument('autoconfigure-jenkins', {
             type: Boolean,
             defaults: false,
-            description: 'Automatically configure Jenkins'
+            description: 'Automatically configure Jenkins',
         });
 
         // Automatically configure Gitlab
         this.argument('autoconfigure-gitlab', {
             type: Boolean,
             defaults: false,
-            description: 'Automatically configure Gitlab'
+            description: 'Automatically configure Gitlab',
         });
 
         // Automatically configure Azure
         this.argument('autoconfigure-azure', {
             type: Boolean,
             defaults: false,
-            description: 'Automatically configure Azure'
+            description: 'Automatically configure Azure',
         });
+
+        // Automatically configure GitHub Actions
+        this.argument('autoconfigure-github', {
+            type: Boolean,
+            defaults: false,
+            description: 'Automatically configure GitHub Actions',
+        });
+
+        // Automatically configure CircleCI
+        this.argument('autoconfigure-circle', {
+            type: Boolean,
+            defaults: false,
+            description: 'Automatically configure CircleCI',
+        });
+
         this.registerPrettierTransform();
     }
 
@@ -73,40 +90,49 @@ module.exports = class extends BaseGenerator {
             },
             getConfig() {
                 this.jhipsterVersion = packagejs.version;
-                this.baseName = this.config.get('baseName');
-                this.applicationType = this.config.get('applicationType');
-                this.skipClient = this.config.get('skipClient');
-                this.clientPackageManager = this.config.get('clientPackageManager');
-                this.buildTool = this.config.get('buildTool');
-                this.herokuAppName = this.config.get('herokuAppName');
+                const configuration = this.config;
+                this.baseName = configuration.get('baseName');
+                this.dasherizedBaseName = _.kebabCase(this.baseName);
+                this.applicationType = configuration.get('applicationType');
+                this.databaseType = configuration.get('databaseType');
+                this.prodDatabaseType = configuration.get('prodDatabaseType');
+                this.skipClient = configuration.get('skipClient');
+                this.skipServer = configuration.get('skipServer');
+                this.clientPackageManager = configuration.get('clientPackageManager');
+                this.buildTool = configuration.get('buildTool');
+                this.reactive = configuration.get('reactive');
+                this.herokuAppName = configuration.get('herokuAppName');
                 if (this.herokuAppName === undefined) {
                     this.herokuAppName = _.kebabCase(this.baseName);
                 }
-                this.clientFramework = this.config.get('clientFramework');
-                this.testFrameworks = this.config.get('testFrameworks');
-                this.autoconfigureTravis = this.options['autoconfigure-travis'];
-                this.autoconfigureJenkins = this.options['autoconfigure-jenkins'];
-                this.autoconfigureGitlab = this.options['autoconfigure-gitlab'];
-                this.autoconfigureAzure = this.options['autoconfigure-azure'];
+                this.clientFramework = configuration.get('clientFramework');
+                this.testFrameworks = configuration.get('testFrameworks');
+                this.cacheProvider = configuration.get('cacheProvider');
+                this.autoconfigureTravis = this.options.autoconfigureTravis;
+                this.autoconfigureJenkins = this.options.autoconfigureJenkins;
+                this.autoconfigureGitlab = this.options.autoconfigureGitlab;
+                this.autoconfigureAzure = this.options.autoconfigureAzure;
+                this.autoconfigureGithub = this.options.autoconfigureGithub;
+                this.autoconfigureCircleCI = this.options.autoconfigureCircle;
                 this.abort = false;
             },
             initConstants() {
                 this.NODE_VERSION = constants.NODE_VERSION;
-                this.YARN_VERSION = constants.YARN_VERSION;
                 this.NPM_VERSION = constants.NPM_VERSION;
             },
             getConstants() {
                 this.DOCKER_DIR = constants.DOCKER_DIR;
                 this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
                 this.DOCKER_JENKINS = constants.DOCKER_JENKINS;
-            }
+                this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+            },
         };
     }
 
     get prompting() {
         return {
             askPipeline: prompts.askPipeline,
-            askIntegrations: prompts.askIntegrations
+            askIntegrations: prompts.askIntegrations,
         };
     }
 
@@ -124,12 +150,12 @@ module.exports = class extends BaseGenerator {
                 this.gitLabIndent = this.sendBuildToGitlab ? '    ' : '';
                 this.indent = this.insideDocker ? '    ' : '';
                 this.indent += this.gitLabIndent;
-                if (this.clientFramework === 'react') {
+                if (this.clientFramework === REACT) {
                     this.frontTestCommand = 'test-ci';
                 } else {
                     this.frontTestCommand = 'test';
                 }
-            }
+            },
         };
     }
 
@@ -143,13 +169,16 @@ module.exports = class extends BaseGenerator {
             this.template('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
         }
         if (this.pipeline === 'circle') {
-            this.template('circle.yml.ejs', 'circle.yml');
+            this.template('circle.yml.ejs', '.circleci/config.yml');
         }
         if (this.pipeline === 'travis') {
             this.template('travis.yml.ejs', '.travis.yml');
         }
         if (this.pipeline === 'azure') {
             this.template('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
+        }
+        if (this.pipeline === 'github') {
+            this.template('github-ci.yml.ejs', '.github/workflows/github-ci.yml');
         }
 
         if (this.cicdIntegrations.includes('deploy')) {

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,8 +19,6 @@
 import { Component, OnInit<%_ if (authenticationType !== 'oauth2') { _%>, OnDestroy <%_ } _%> } from '@angular/core';
 <%_ if (authenticationType !== 'oauth2') { _%>
 import { Subscription } from 'rxjs';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
 <%_ } _%>
 
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -40,57 +38,45 @@ import { Account } from 'app/core/user/account.model';
 
 })
 export class HomeComponent implements OnInit <%_ if (authenticationType !== 'oauth2') { _%>, OnDestroy <%_ } _%> {
-    account: Account;
+    account: Account | null = null;
     <%_ if (authenticationType !== 'oauth2') { _%>
-    authSubscription: Subscription;
-    modalRef: NgbModalRef;
+    authSubscription?: Subscription;
     <%_ } _%>
 
     constructor(
         private accountService: AccountService,
         <%_ if (authenticationType !== 'oauth2') { _%>
-        private loginModalService: LoginModalService,
-        private eventManager: JhiEventManager
+        private loginModalService: LoginModalService
         <%_ } else { _%>
         private loginService: LoginService
         <%_ } _%>
-    ) {
-    }
+    ) {}
 
-    ngOnInit() {
-        this.accountService.identity().then((account: Account) => {
-            this.account = account;
-        });
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        this.registerAuthenticationSuccess();
-    }
-
-    registerAuthenticationSuccess() {
-        this.authSubscription = this.eventManager.subscribe('authenticationSuccess', (message) => {
-            this.accountService.identity().then((account) => {
-                this.account = account;
-            });
-        });
+    ngOnInit(): void {
+        <%_ if (authenticationType === 'oauth2') { _%>
+        this.accountService.identity().subscribe(account => (this.account = account));
+        <%_ } else { _%>
+        this.authSubscription = this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
         <%_ } _%>
     }
 
-    isAuthenticated() {
+    isAuthenticated(): boolean {
         return this.accountService.isAuthenticated();
     }
 
-    login() {
+    login(): void {
         <%_ if (authenticationType !== 'oauth2') { _%>
-        this.modalRef = this.loginModalService.open();
+        this.loginModalService.open();
         <%_ } else { _%>
         this.loginService.login();
-        <%_ }_%>
+        <%_ } _%>
     }
 
     <%_ if (authenticationType !== 'oauth2') { _%>
-    ngOnDestroy() {
-        if(this.authSubscription) {
-            this.eventManager.destroy(this.authSubscription);
+    ngOnDestroy(): void {
+        if (this.authSubscription) {
+            this.authSubscription.unsubscribe();
         }
     }
-    <%_ }_%>
+    <%_ } _%>
 }

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -25,29 +25,23 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
-import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { UserMgmtUpdateComponent } from 'app/admin/user-management/user-management-update.component';
+import { Authority } from 'app/shared/constants/authority.constants';
+import { TestModule } from '../../../test.module';
+import { UserManagementUpdateComponent } from 'app/admin/user-management/user-management-update.component';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.model';
-<%_ if (enableTranslation) { _%>
-import { JhiLanguageHelper } from 'app/core/language/language.helper';
-<%_ } _%>
 
 describe('Component Tests', () => {
-
     describe('User Management Update Component', () => {
-        let comp: UserMgmtUpdateComponent;
-        let fixture: ComponentFixture<UserMgmtUpdateComponent>;
+        let comp: UserManagementUpdateComponent;
+        let fixture: ComponentFixture<UserManagementUpdateComponent>;
         let service: UserService;
-        <%_ if (enableTranslation) { _%>
-        let mockLanguageHelper: any;
-        <%_ } _%>
-        const route = ({data: of({user: new User(1, 'user', 'first', 'last', 'first@last.com', true, 'en', ['ROLE_USER'], 'admin', null, null, null)})} as any) as ActivatedRoute;
+        const route: ActivatedRoute = ({ data: of({ user: new User(1, 'user', 'first', 'last', 'first@last.com', true, 'en', [Authority.USER], 'admin') }) } as any) as ActivatedRoute;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [<%=angularXAppName%>TestModule],
-                declarations: [UserMgmtUpdateComponent],
+                imports: [TestModule],
+                declarations: [UserManagementUpdateComponent],
                 providers: [
                     FormBuilder,
                     {
@@ -56,17 +50,14 @@ describe('Component Tests', () => {
                     }
                 ]
             })
-            .overrideTemplate(UserMgmtUpdateComponent, '')
+            .overrideTemplate(UserManagementUpdateComponent, '')
             .compileComponents();
         }));
 
         beforeEach(() => {
-            fixture = TestBed.createComponent(UserMgmtUpdateComponent);
+            fixture = TestBed.createComponent(UserManagementUpdateComponent);
             comp = fixture.componentInstance;
             service = fixture.debugElement.injector.get(UserService);
-            <%_ if (enableTranslation) { _%>
-            mockLanguageHelper = fixture.debugElement.injector.get(JhiLanguageHelper);
-            <%_ } _%>
         });
 
         describe('OnInit', () => {
@@ -82,9 +73,6 @@ describe('Component Tests', () => {
                         // THEN
                         expect(service.authorities).toHaveBeenCalled();
                         expect(comp.authorities).toEqual(['USER']);
-                        <%_ if (enableTranslation) { _%>
-                        expect(mockLanguageHelper.getAllSpy).toHaveBeenCalled();
-                        <%_ } _%>
                     })
                 )
             );
@@ -117,7 +105,7 @@ describe('Component Tests', () => {
                     fakeAsync(() => {
                         // GIVEN
                         const entity = new User();
-                        spyOn(service, 'create').and.returnValue(of(new HttpResponse({body: entity})));
+                        spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
                         comp.user = entity;
                         // WHEN
                         comp.save();
@@ -131,5 +119,4 @@ describe('Component Tests', () => {
             );
         });
     });
-
 });

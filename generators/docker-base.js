@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -29,7 +29,7 @@ module.exports = {
     setAppsFolderPaths,
     loadConfigs,
     loadFromYoRc,
-    setClusteredApps
+    setClusteredApps,
 };
 
 /**
@@ -46,7 +46,7 @@ function checkImages() {
         const appConfig = this.appConfigs[index];
         if (appConfig.buildTool === 'maven') {
             imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/target/jib-cache`);
-            runCommand = './mvnw -Pprod verify jib:dockerBuild';
+            runCommand = './mvnw -ntp -Pprod verify jib:dockerBuild';
         } else {
             imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/build/jib-cache`);
             runCommand = './gradlew bootJar -Pprod jibDockerBuild';
@@ -103,10 +103,9 @@ function loadConfigs() {
     // Loading configs
     this.debug(`Apps folders: ${this.appsFolders}`);
     this.appsFolders.forEach(appFolder => {
-        const path = this.destinationPath(`${this.directoryPath + appFolder}/.yo-rc.json`);
-        const fileData = this.fs.readJSON(path);
-        if (fileData) {
-            const config = fileData['generator-jhipster'];
+        const path = this.destinationPath(`${this.directoryPath + appFolder}`);
+        if (this.fs.exists(`${path}/.yo-rc.json`)) {
+            const config = this.getJhipsterConfig(`${path}/.yo-rc.json`).createProxy();
 
             if (config.applicationType === 'monolith') {
                 this.monolithicNb++;
@@ -145,6 +144,7 @@ function loadFromYoRc() {
     this.consoleOptions = this.config.get('consoleOptions');
     this.useKafka = false;
     this.useMemcached = false;
+    this.useRedis = false;
     this.dockerRepositoryName = this.config.get('dockerRepositoryName');
     this.dockerPushCommand = this.config.get('dockerPushCommand');
     this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');

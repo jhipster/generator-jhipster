@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 module.exports = {
-    writeFiles
+    writeFiles,
 };
 
 function writeFiles() {
@@ -60,6 +60,16 @@ function writeFiles() {
             }
         },
 
+        writeGatewayConfig() {
+            if (this.serviceDiscoveryType) {
+                this.appConfigs.forEach(appConfig => {
+                    if (appConfig.applicationType === 'gateway') {
+                        this.template('central-server-config/gateway.yml.ejs', `central-server-config/${appConfig.baseName}.yml`);
+                    }
+                });
+            }
+        },
+
         writeElkFiles() {
             if (this.monitoring !== 'elk') return;
 
@@ -74,7 +84,7 @@ function writeFiles() {
             // Generate a list of target apps to monitor for the prometheus config
             const appsToMonitor = [];
             for (let i = 0; i < this.appConfigs.length; i++) {
-                appsToMonitor.push(`        - ${this.appConfigs[i].baseName}-app:${this.appConfigs[i].serverPort}`);
+                appsToMonitor.push(`        - ${this.appConfigs[i].baseName}:${this.appConfigs[i].serverPort}`);
             }
 
             // Format the application target list as a YAML array
@@ -84,6 +94,6 @@ function writeFiles() {
             this.template('prometheus-conf/prometheus.yml.ejs', 'prometheus-conf/prometheus.yml');
             this.template('prometheus-conf/alert_rules.yml.ejs', 'prometheus-conf/alert_rules.yml');
             this.template('alertmanager-conf/config.yml.ejs', 'alertmanager-conf/config.yml');
-        }
+        },
     };
 }

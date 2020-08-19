@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -24,7 +24,7 @@ jib {
         image = "<%= baseName.toLowerCase() %>:latest"
     }
     container {
-        entrypoint = ["sh", "-c", "chmod +x /entrypoint.sh && sync && /entrypoint.sh"]
+        entrypoint = ["bash", "-c", "/entrypoint.sh"]
         ports = ["<%= serverPort %>"<% if (cacheProvider === 'hazelcast') { %>, "5701/udp" <% } %>]
         environment = [
             <%_ if (cacheProvider === 'infinispan') { _%>
@@ -33,7 +33,12 @@ jib {
             SPRING_OUTPUT_ANSI_ENABLED: "ALWAYS",
             JHIPSTER_SLEEP: "0"
         ]
-        useCurrentTimestamp = true
+        creationTime = "USE_CURRENT_TIMESTAMP"
+        user = 1000
+    }
+    extraDirectories {
+      paths = file("<%= MAIN_DIR %>jib")
+      permissions = ["/entrypoint.sh": "755"]
     }
 }
 

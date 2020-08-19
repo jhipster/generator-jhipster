@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -50,9 +50,6 @@
                 "health": "Stare",
                 "configuration": "Configurare",
                 "logs": "Jurnal",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "Audit",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "Bază de date",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -95,13 +92,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Parola dumneavoastră este necesară.",
-                    "minlength": "Parola dumneavoastră trebuie să aibă cel puțin 5 caractere.",
+                    "minlength": "Parola dumneavoastră trebuie să aibă cel puțin 4 caractere.",
                     "maxlength": "Parola dumneavoastră poate avea maxim 50 de caractere.",
                     "strength": "Complexitatea parolei:"
                 },
                 "confirmpassword": {
                     "required": "Confirmarea parolei este necesară.",
-                    "minlength": "Confirmarea parolei trebuie să aibă cel puțin 5 caractere.",
+                    "minlength": "Confirmarea parolei trebuie să aibă cel puțin 4 caractere.",
                     "maxlength": "Confirmarea parolei poate avea maxim 50 de caractere."
                 },
                 "email": {
@@ -161,7 +158,11 @@
         "userexists": "Numele de utilizator există deja!",
         "emailexists": "Emailul este deja folosit!",
         "idexists": "O nouă entitate {{entityName}} nu poate avea un ID existent",
-        "idnull": "Invalid ID"
+        "idnull": "Invalid ID",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "Acesta este subsolul paginii dumneavoastră"
 }

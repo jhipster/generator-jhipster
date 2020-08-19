@@ -1,0 +1,3 @@
+export class TrackerActivity {
+    constructor(public sessionId: string, public userLogin: string, public ipAddress: string, public page: string, public time: string) {}
+}

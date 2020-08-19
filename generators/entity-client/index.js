@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -29,11 +29,22 @@ module.exports = class extends BaseBlueprintGenerator {
         super(args, opts);
         utils.copyObjectProps(this, opts.context);
         this.jhipsterContext = opts.jhipsterContext || opts.context;
-        this.configOptions = opts.configOptions || {};
 
-        useBlueprints =
-            !opts.fromBlueprint &&
-            this.instantiateBlueprints('entity-client', { context: opts.context, debug: opts.context.isDebugEnabled });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-client', { context: opts.context });
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _configuring() {
+        return {
+            setup() {
+                this.tsKeyType = this.getTypescriptKeyType(this.primaryKeyType);
+            },
+        };
+    }
+
+    get configuring() {
+        if (useBlueprints) return;
+        return this._configuring();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -50,11 +61,11 @@ module.exports = class extends BaseBlueprintGenerator {
     _end() {
         return {
             end() {
-                if (!this.options['skip-install'] && !this.skipClient) {
+                if (!this.options.skipInstall && !this.skipClient) {
                     this.rebuildClient();
                 }
                 this.log(chalk.bold.green(`Entity ${this.entityNameCapitalized} generated successfully.`));
-            }
+            },
         };
     }
 

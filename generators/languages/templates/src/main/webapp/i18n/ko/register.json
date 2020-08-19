@@ -10,7 +10,7 @@
                     "required": "아이디 입력이 필요합니다",
                     "minlength": "아이디는 적어도 1자 이상이어야 합니다",
                     "maxlength": "아이디는 최대 50자 까지입니다",
-                    "pattern": "아이디는 오직 알파벳 소문자와 숫자로만 구성되어야 합니다"
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>회원가입 내용이 저장되었습니다!</strong> 가입을 완료하기 위해 이메일을 확인해주세요.",

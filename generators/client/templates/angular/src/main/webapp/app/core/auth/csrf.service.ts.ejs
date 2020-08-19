@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,14 +17,13 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie';
+import { CookieService } from 'ngx-cookie-service';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class CSRFService {
-
     constructor(private cookieService: CookieService) {}
 
-    getCSRF(name = 'XSRF-TOKEN') {
+    getCSRF(name = 'XSRF-TOKEN'): string {
         return this.cookieService.get(name);
     }
 }

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -27,8 +27,8 @@ if (project.hasProperty("no-liquibase")) {
     profiles += ",no-liquibase"
 }
 
-if (project.hasProperty("swagger")) {
-    profiles += ",swagger"
+if (project.hasProperty("api-docs")) {
+    profiles += ",api-docs"
 }
 
 springBoot {
@@ -73,16 +73,6 @@ processResources {
         }
     }
     <%_ } _%>
-}
-
-generateGitProperties {
-    onlyIf {
-        !source.isEmpty()
-    }
-}
-
-gitProperties {
-    keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
 }
 
 <%_ if (!skipClient) { _%>

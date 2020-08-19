@@ -1,0 +1,92 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.repository;
+
+import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+<%_ if (databaseType === 'cassandra') { _%>
+import org.springframework.data.cassandra.repository.ReactiveCassandraRepository;
+<%_ } _%>
+<%_ if (searchEngine === 'couchbase') { _%>
+import <%= packageName %>.repository.search.SearchCouchbaseRepository;
+<%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
+import org.springframework.data.couchbase.core.query.Query;
+import org.springframework.data.couchbase.repository.ReactiveCouchbaseSortingRepository;
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.repository.ReactiveNeo4jRepository;
+import org.neo4j.springframework.data.repository.query.Query;
+<%_ } _%>
+<%_ if (pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
+import org.springframework.data.domain.Pageable;
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
+    <%_ if (fieldsContainOwnerManyToMany === true) { _%>
+import org.springframework.data.mongodb.repository.Query;
+    <%_ } _%>
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+<%_ } _%>
+import org.springframework.stereotype.Repository;
+<%_ if (databaseType === 'couchbase' || pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
+import reactor.core.publisher.Flux;
+<%_ } _%>
+<%_ if (fieldsContainOwnerManyToMany === true) { _%>
+import reactor.core.publisher.Mono;
+<%_ } _%>
+<%_ if (databaseType === 'cassandra') { _%>
+
+import java.util.UUID;
+<%_ } _%>
+
+/**
+ * Spring Data <% if (databaseType === 'mongodb') { %>MongoDB<% } if (databaseType === 'couchbase') { %>Couchbase<% } if (databaseType === 'cassandra') { %>Cassandra<% } if (databaseType === 'neo4j') { %>Neo4j<% } %> reactive repository for the <%= asEntity(entityClass) %> entity.
+ */
+@SuppressWarnings("unused")
+@Repository
+public interface <%= entityClass %>Repository extends Reactive<% if (databaseType === 'mongodb') { %>Mongo<% } if (databaseType === 'couchbase') { %>N1qlCouchbase<% } if (databaseType === 'neo4j') { %>Neo4j<% } if (databaseType === 'cassandra') { %>Cassandra<% } %>Repository<<%= asEntity(entityClass) %>, <%= primaryKeyType %>><% if (searchEngine === 'couchbase') { %>, SearchCouchbaseRepository<<%= asEntity(entityClass) %>, <%= primaryKeyType %>><% } %> {
+
+    <%_ if (pagination !== 'no') { _%>
+
+    Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable);
+    <%_ } _%>
+    <%_ if (fieldsContainOwnerManyToMany === true) { _%>
+        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase')  { _%>
+
+    @Query("<%= (databaseType === 'mongodb') ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
+    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable pageable);
+
+    @Query("<%= (databaseType === 'mongodb') ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
+    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
+
+    @Query("<%- (databaseType === 'mongodb') ? "{'id': ?0}" : "#{#n1ql.selectEntity} USE KEYS $1 WHERE #{#n1ql.filter}" %>")
+    Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKeyType %> id);
+        <%_ } _%>
+        <%_ if (databaseType === 'neo4j') { _%>
+    @Query("MATCH (n:<%= asEntity(entityClass) %>)<-[]-(m) RETURN n,m")
+    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable pageable);
+
+    @Query("MATCH (n:<%= asEntity(entityClass) %>)<-[]-(m) RETURN n,m")
+    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
+
+    @Query("MATCH (e:<%= asEntity(entityClass) %> {id: $id}) RETURN e")
+    Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKeyType %> id);
+        <%_ } _%>
+    <%_ } _%>
+
+}

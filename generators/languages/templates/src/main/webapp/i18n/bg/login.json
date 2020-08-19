@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "Вход",
+        "form": {
+            "password": "Парола",
+            "password.placeholder": "Вашата парола",
+            "rememberme": "Автоматичен вход",
+            "button": "Вход"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Влизането не бе успешно!</strong> Моля, проверете вашите идентификационни данни и опитайте отново."
+            }
+        },
+        "password": {
+            "forgot": "Забравихте ли паролата си?"
+        }
+    }
+}

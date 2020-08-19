@@ -14,7 +14,7 @@ const mockBlueprintSubGen = class extends EntityServerGenerator {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
         if (!this.jhipsterContext) {
-            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprint myblueprint');
+            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
         }
     }
 
@@ -23,7 +23,7 @@ const mockBlueprintSubGen = class extends EntityServerGenerator {
             customPhase() {
                 this.name = 'JHipster';
                 this.template(path.join(process.cwd(), 'HelloKotlin.kt.ejs'), `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/HelloKotlin.kt`);
-            }
+            },
         };
     }
 };
@@ -41,10 +41,10 @@ describe('JHipster entity server generator with blueprint', () => {
                     })
                     .withArguments(['foo'])
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipInstall: true,
                         blueprint: blueprintName,
-                        skipChecks: true
+                        skipChecks: true,
                     })
                     .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:entity-server']])
                     .withPrompts({
@@ -52,7 +52,7 @@ describe('JHipster entity server generator with blueprint', () => {
                         relationshipAdd: false,
                         dto: 'no',
                         service: 'no',
-                        pagination: 'no'
+                        pagination: 'no',
                     })
                     .on('end', done);
             });

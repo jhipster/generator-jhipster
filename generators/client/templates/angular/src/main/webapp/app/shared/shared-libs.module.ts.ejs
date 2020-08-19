@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,17 +22,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgJhipsterModule } from 'ng-jhipster';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { CookieModule } from 'ngx-cookie';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 
 @NgModule({
-    imports: [
-        NgbModule,
-        InfiniteScrollModule,
-        CookieModule.forRoot(),
-        FontAwesomeModule,
-        ReactiveFormsModule
-    ],
     exports: [
         FormsModule,
         CommonModule,
@@ -40,13 +35,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
         NgJhipsterModule,
         InfiniteScrollModule,
         FontAwesomeModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        <%_ if (enableTranslation) { _%>
+        TranslateModule
+        <%_ } _%>
     ]
 })
-export class <%=angularXAppName%>SharedLibsModule {
-    static forRoot() {
-        return {
-            ngModule: <%=angularXAppName%>SharedLibsModule
-        };
-    }
-}
+export class SharedLibsModule {}

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,17 +17,16 @@
  limitations under the License.
 -%>
 <%_
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 const tsKeyId = generateTestEntityId(primaryKeyType);
 _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 <%_ if (pagination !== 'no') { _%>
-import { ActivatedRoute, Data } from '@angular/router';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 <%_ } _%>
 
-import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
+import { TestModule } from '../../../<%= entityParentPathAddition %>test.module';
 import { <%= entityAngularName %>Component } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
@@ -40,23 +39,27 @@ describe('Component Tests', () => {
 
         beforeEach(() => {
             TestBed.configureTestingModule({
-                imports: [<%=angularXAppName%>TestModule],
+                imports: [TestModule],
                 declarations: [<%= entityAngularName %>Component],
+                <%_ if (pagination !== 'no') { _%>
                 providers: [
-                    <% if (pagination !== 'no') { %> {
-                    provide: ActivatedRoute,
-                    useValue: {
-                        data: {
-                            subscribe: (fn: (value: Data) => void) => fn({pagingParams: {
-                                        predicate: 'id',
-                                        reverse: false,
-                                        page: 0
-                                    }
+                    {
+                        provide: ActivatedRoute,
+                        useValue: {
+                            data: of({
+                                defaultSort: 'id,asc',
+                            }),
+                            queryParamMap: of(
+                                convertToParamMap({
+                                    page: '1',
+                                    size: '1',
+                                    sort: 'id,desc',
                                 })
-                            }
+                            )
                         }
-                    }<% } %>
+                    }
                 ]
+                <%_ } _%>
             })
             .overrideTemplate(<%= entityAngularName %>Component, '')
             .compileComponents();
@@ -79,10 +82,10 @@ describe('Component Tests', () => {
 
             // THEN
             expect(service.query).toHaveBeenCalled();
-            expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+            expect(comp.<%= entityInstancePlural %> && comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
         });
-    <%_ if (pagination !== 'no') { _%>
 
+    <%_ if (pagination !== 'no') { _%>
         it('should load a page', () => {
             // GIVEN
             const headers = new HttpHeaders().append('link', 'link;link');
@@ -100,20 +103,10 @@ describe('Component Tests', () => {
 
             // THEN
             expect(service.query).toHaveBeenCalled();
-            expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+            expect(comp.<%= entityInstancePlural %> && comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
         });
-        <%_ if (pagination !== 'infinite-scroll') { _%>
 
-        it('should not load a page is the page is the same as the previous page', () => {
-            spyOn(service, 'query').and.callThrough();
-
-            // WHEN
-            comp.loadPage(0);
-
-            // THEN
-            expect(service.query).toHaveBeenCalledTimes(0);
-        });
-        <%_ } _%>
+        <%_ if (pagination === 'infinite-scroll') { _%>
 
         it('should re-initialize the page', () => {
             // GIVEN
@@ -129,20 +122,17 @@ describe('Component Tests', () => {
 
             // WHEN
             comp.loadPage(1);
-            <%_ if (pagination === 'infinite-scroll') { _%>
             comp.reset();
-            <%_ } else { _%>
-            comp.clear();
-            <%_ } _%>
 
             // THEN
             expect(comp.page).toEqual(0);
             expect(service.query).toHaveBeenCalledTimes(2);
-            expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+            expect(comp.<%= entityInstancePlural %> && comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
         });
-        <%_ if (pagination === 'infinite-scroll') { _%>
+
         it('should calculate the sort attribute for an id', () => {
             // WHEN
+            comp.ngOnInit();
             const result = comp.sort();
 
             // THEN
@@ -150,6 +140,9 @@ describe('Component Tests', () => {
         });
 
         it('should calculate the sort attribute for a non-id attribute', () => {
+            // INIT
+            comp.ngOnInit();
+
             // GIVEN
             comp.predicate = 'name';
 
@@ -159,9 +152,12 @@ describe('Component Tests', () => {
             // THEN
                 expect(result).toEqual(['name,asc', 'id']);
         });
+
         <%_ } else { _%>
+
         it('should calculate the sort attribute for an id', () => {
             // WHEN
+            comp.ngOnInit();
             const result = comp.sort();
 
             // THEN
@@ -169,6 +165,9 @@ describe('Component Tests', () => {
         });
 
         it('should calculate the sort attribute for a non-id attribute', () => {
+            // INIT
+            comp.ngOnInit();
+
             // GIVEN
             comp.predicate = 'name';
 
@@ -178,6 +177,7 @@ describe('Component Tests', () => {
             // THEN
             expect(result).toEqual(['name,desc', 'id']);
         });
+
         <%_ } _%>
     <%_ } _%>
     });

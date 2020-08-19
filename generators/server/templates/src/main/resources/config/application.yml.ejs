@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -60,7 +60,7 @@ ribbon:
     eureka:
         enabled: true
 <%_ } _%>
-<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationType === 'gateway' && !reactive) { _%>
 # See http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
 zuul: # those values must be configured depending on the application specific needs
     sensitive-headers: Cookie,Set-Cookie #see https://github.com/spring-cloud/spring-cloud-netflix/issues/3126
@@ -73,6 +73,8 @@ zuul: # those values must be configured depending on the application specific ne
     <%_ if (serviceDiscoveryType === 'consul') { _%>
     ignoredServices: 'consul,<%= baseName %>' # Prevent Consul and the "<%= baseName %>" app itself from having a Zuul route automatically created for them
     <%_ } _%>
+<%_ } _%>
+<%_ if (applicationType === 'gateway') { _%>
 
 # See https://github.com/Netflix/Hystrix/wiki/Configuration
 hystrix:
@@ -112,10 +114,10 @@ management:
         web:
             base-path: /management
             exposure:
-                include: ["configprops", "env", "health", "info", "jhimetrics", "logfile", "loggers", "prometheus", "threaddump"]
+                include: ["configprops", "env", <% if (applicationType === 'gateway' && reactive) { %>"gateway", <% } %>"health", "info", "jhimetrics", "logfile", "loggers", "prometheus", "threaddump"]
     endpoint:
         health:
-            show-details: when-authorized
+            show-details: when_authorized
             roles: "ROLE_ADMIN"
         jhimetrics:
             enabled: true
@@ -146,10 +148,12 @@ management:
             application: ${spring.application.name}
         web:
             server:
-                auto-time-requests: true
+                request:
+                    autotime:
+                        enabled: true
 
 spring:
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine === 'elasticsearch' && !reactive) { _%>
     autoconfigure:
         exclude: <% if (databaseType === 'sql' && messageBroker === 'kafka') { %>org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration,<% } %>org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration,org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration
     <%_ } else if (databaseType === 'sql' && messageBroker === 'kafka') { _%>
@@ -158,8 +162,9 @@ spring:
     <%_ } _%>
     application:
         name: <%= baseName %>
-    <%_ if (serviceDiscoveryType === 'consul') { _%>
+    <%_ if (serviceDiscoveryType === 'consul' || (applicationType === 'gateway' && reactive)) { _%>
     cloud:
+        <%_ if (serviceDiscoveryType === 'consul') { _%>
         consul:
             discovery:
                 healthCheckPath: /management/health
@@ -168,6 +173,28 @@ spring:
             config:
                 watch:
                     enabled: false
+        <%_ } _%>
+        <%_ if (applicationType === 'gateway' && reactive) { _%>
+        gateway:
+            default-filters:
+                - <% if (authenticationType === 'jwt') { %>JWTRelay<% } else { %>TokenRelay<% } %>
+            discovery:
+                locator:
+                    enabled: true
+                    lower-case-service-id: true
+                    predicates:
+                        - name: Path
+                          args:
+                              pattern: "'/services/'+serviceId.toLowerCase()+'/**'"
+                    filters:
+                        - name: RewritePath
+                          args:
+                              regexp: "'/services/' + serviceId.toLowerCase() + '/(?<remaining>.*)'"
+                              replacement: "'/${remaining}'"
+            httpclient:
+                pool:
+                    max-connections: 1000
+        <%_ } _%>
     <%_ } _%>
     <%_ if (!serviceDiscoveryType) { _%>
     profiles:
@@ -178,7 +205,7 @@ spring:
     <%_ } _%>
     jmx:
         enabled: false
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     data:
         jpa:
             repositories:
@@ -187,6 +214,36 @@ spring:
         open-in-view: false
         properties:
             hibernate.jdbc.time_zone: UTC
+            hibernate.id.new_generator_mappings: true
+            hibernate.connection.provider_disables_autocommit: true
+            hibernate.cache.use_second_level_cache: <% if (enableHibernateCache) { %>true<% } else { %>false<% } %>
+            hibernate.cache.use_query_cache: false
+            hibernate.generate_statistics: false
+            # modify batch size as necessary
+            hibernate.jdbc.batch_size: 25
+            hibernate.order_inserts: true
+            hibernate.order_updates: true
+            <%_ if (prodDatabaseType === 'mssql' || prodDatabaseType === 'oracle') { _%>
+            # modify fetch size as necessary
+            hibernate.jdbc.fetch_size: 150
+            hibernate.criteria.literal_handling_mode: BIND
+            <%_ } _%>
+            hibernate.query.fail_on_pagination_over_collection_fetch: true
+            hibernate.query.in_clause_parameter_padding: true
+            <%_ if (enableHibernateCache) { _%>
+                <%_ if (cacheProvider === 'hazelcast') { _%>
+            hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
+            hibernate.cache.use_minimal_puts: true
+            hibernate.cache.hazelcast.instance_name: <%= baseName %>
+            hibernate.cache.hazelcast.use_lite_member: true
+                <%_ } else if (cacheProvider === 'infinispan') { _%>
+            hibernate.cache.infinispan.statistics: false
+            hibernate.cache.use_minimal_puts: true
+            hibernate.cache.infinispan.entity.expiration.lifespan: 3600000
+            hibernate.cache.infinispan.entity.memory.size: 1000
+            hibernate.cache.infinispan.jgroups_cfg: default-configs/default-jgroups-tcp.xml
+                <%_ } _%>
+            <%_ } _%>
         hibernate:
             ddl-auto: none
             naming:
@@ -197,9 +254,6 @@ spring:
         basename: i18n/messages
     main:
         allow-bean-definition-overriding: true
-    mvc:
-        favicon:
-            enabled: false
     <%_ if (skipUserManagement && ['monolith', 'gateway'].includes(applicationType) && !['oauth2','uaa'].includes(authenticationType)) { _%>
     security:
         user:
@@ -222,6 +276,9 @@ spring:
                 size: 2
     thymeleaf:
         mode: HTML
+    output:
+        ansi:
+          console-available: true
 <%_ if (authenticationType === 'oauth2') { _%>
     security:
         oauth2:
@@ -254,9 +311,6 @@ security:
 
 server:
     servlet:
-        <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && !serviceDiscoveryType) { _%>
-        context-path: /services/${spring.application.name}
-        <%_ } _%>
         session:
             cookie:
                 http-only: true
@@ -289,18 +343,36 @@ jhipster:
     #     max-age: 1800
     mail:
         from: <%= baseName %>@localhost
-    swagger:
+    api-docs:
         default-include-pattern: /api/.*
-        title: <%=baseName%> API
-        description: <%=baseName%> API documentation
+        title: <%= baseName %> API
+        description: <%= baseName %> API documentation
         version: 0.0.1
         terms-of-service-url:
         contact-name:
         contact-url:
         contact-email:
-        license:
+        license: unlicensed
         license-url:
-
+    <%_ if (authenticationType === 'oauth2') { _%>
+    security:
+        oauth2:
+            audience:
+                - account
+                - api://default
+    <%_ } _%>
+<%_ if (messageBroker === 'kafka') { _%>
+kafka:
+  bootstrap-servers: localhost:9092
+  consumer:
+    key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    group.id: <%= dasherizedBaseName %>
+    auto.offset.reset: earliest
+  producer:
+    key.serializer: org.apache.kafka.common.serialization.StringSerializer
+    value.serializer: org.apache.kafka.common.serialization.StringSerializer
+<%_ } _%>
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -34,8 +34,13 @@
 logging:
     level:
         ROOT: INFO
-        <%=packageName%>: INFO
         io.github.jhipster: INFO
+        <%_ if (packageName !== 'io.github.jhipster') { _%>
+        <%= packageName %>: INFO
+        <%_ } _%>
+        <%_ if (databaseType === 'neo4j') { _%>
+        org.neo4j.driver: WARN
+        <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
 eureka:
@@ -46,6 +51,22 @@ eureka:
             defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 <%_ } _%>
 
+<%_ if (databaseType === 'neo4j') { _%>
+org:
+    neo4j:
+        driver:
+            pool:
+                metrics-enabled: true
+            uri: bolt://localhost:7687
+            # Uncomment to use an authenticated connection
+            # authentication:
+            #     username: neo4j
+            #     password: secret
+        migrations:
+            locations-to-scan:
+            packages-to-scan: <%= packageName %>.config.neo4j
+            installed-by: <%= baseName %>
+<%_ } _%>
 management:
     metrics:
         export:
@@ -58,19 +79,6 @@ spring:
             enabled: false
         livereload:
             enabled: false
-    <%_ if (messageBroker === 'kafka') { _%>
-    kafka:
-        consumer:
-            bootstrap-servers: localhost:9092
-            group-id: group_id
-            auto-offset-reset: earliest
-            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-            value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-        producer:
-            bootstrap-servers: localhost:9092
-            key-serializer: org.apache.kafka.common.serialization.StringSerializer
-            value-serializer: org.apache.kafka.common.serialization.StringSerializer
-    <%_ } _%>
     <%_ if (serviceDiscoveryType === 'consul') { _%>
     cloud:
         consul:
@@ -79,27 +87,23 @@ spring:
             host: localhost
             port: 8500
     <%_ } _%>
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        <%_ if (prodDatabaseType === 'mysql') { _%>
-        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
-        username: root
-        password:
-        <%_ } else if (prodDatabaseType === 'mariadb') { _%>
-        url: jdbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC
+        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: root
         password:
         <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-        url: jdbc:postgresql://localhost:5432/<%= baseName %>
+        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: <%= baseName %>
         password:
         <%_ } else if (prodDatabaseType === 'mssql') { _%>
-        url: jdbc:sqlserver://localhost:1433;database=<%= baseName %>
+        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: SA
         password: yourStrong(!)Password
         <%_ } else if (prodDatabaseType === 'oracle') { _%>
-        url: jdbc:oracle:thin:@localhost:1521:xe
+        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
         username: system
         password: oracle
         <%_ } _%>
@@ -114,52 +118,10 @@ spring:
                 useServerPrepStmts: true
         <%_ } _%>
     jpa:
-        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
-        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-        <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL95Dialect
-        <%_ } else if (prodDatabaseType === 'oracle') { _%>
-        database-platform: org.hibernate.dialect.Oracle12cDialect
-        <%_ } else if (prodDatabaseType === 'mssql') { _%>
-        database-platform: org.hibernate.dialect.SQLServer2012Dialect
-        <%_ } else { _%>
-        database-platform: org.hibernate.dialect.HSQLDialect
-        <%_ } _%>
-        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
-        database: MYSQL
-        <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-        database: POSTGRESQL
-        <%_ } else if (prodDatabaseType === 'oracle') { _%>
-        database: ORACLE
-        <%_ } else if (prodDatabaseType === 'mssql') { _%>
-        database: SQL_SERVER
-        <%_ } else { _%>
-        database: HSQL
+        <%_ if (prodDatabaseType === 'postgresql') { _%>
+        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
         <%_ } _%>
         show-sql: false
-        properties:
-            hibernate.id.new_generator_mappings: true
-            hibernate.connection.provider_disables_autocommit: true
-            hibernate.cache.use_second_level_cache: <% if (enableHibernateCache) { %>true<% } else { %>false<% } %>
-            hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: false
-            <%_ if (enableHibernateCache) { _%>
-                <%_ if (cacheProvider === 'hazelcast') { _%>
-            hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
-            hibernate.cache.hazelcast.instance_name: <%= baseName %>
-                <%_ } else if (cacheProvider === 'infinispan') { _%>
-            hibernate.cache.region.factory_class: <%=packageName%>.config.CacheFactoryConfiguration
-            hibernate.cache.inifinispan.statistics: false
-            hibernate.cache.use_minimal_puts: true
-            hibernate.cache.infinispan.entity.expiration.lifespan: 3600000
-            hibernate.cache.infinispan.entity.memory.size: 1000
-            hibernate.cache.infinispan.jgroups_cfg: default-configs/default-jgroups-tcp.xml
-                <%_ } _%>
-                <%_ if (cacheProvider === 'hazelcast') { _%>
-            hibernate.cache.use_minimal_puts: true
-            hibernate.cache.hazelcast.use_lite_member: true
-                <%_ } _%>
-            <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || searchEngine === 'elasticsearch') { _%>
     data:
@@ -177,12 +139,19 @@ spring:
             keyspaceName: <%= baseName %>
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
+        <%_ if (!reactive) { _%>
         jest:
             uri: http://localhost:9200
     # see https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-nosql.html#boot-features-connecting-to-elasticsearch-jest
     elasticsearch:
         rest:
             uris: http://localhost:9200
+        <%_ } else { _%>
+        elasticsearch:
+          client:
+            reactive:
+              endpoints: localhost:9200
+        <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
@@ -195,12 +164,43 @@ spring:
     # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
     liquibase:
         contexts: prod
+        <%_ if (reactive) { _%>
+            <%_ if (['mysql', 'mariadb', 'postgresql', 'mssql'].includes(prodDatabaseType)) { _%>
+        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+            <%_ } else if (prodDatabaseType === 'oracle') { _%>
+        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
+            <%_ } _%>
+        <%_ } _%>
     <%_ } _%>
     mail:
         host: localhost
         port: 25
         username:
         password:
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+    r2dbc:
+        <%_ if (prodDatabaseType === 'mysql') { _%>
+        url: r2dbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+        username: root
+        password:
+        <%_ } else if (prodDatabaseType === 'mariadb') { _%>
+        url: r2dbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC
+        username: root
+        password:
+        <%_ } else if (prodDatabaseType === 'postgresql') { _%>
+        url: r2dbc:postgresql://localhost:5432/<%= baseName %>
+        username: <%= baseName %>
+        password:
+        <%_ } else if (prodDatabaseType === 'mssql') { _%>
+        url: r2dbc:sqlserver://localhost:1433/<%= baseName %>
+        username: SA
+        password: yourStrong(!)Password
+        <%_ } else if (prodDatabaseType === 'oracle') { _%>
+        url: r2dbc:oracle:thin:@localhost:1521:xe
+        username: system
+        password: oracle
+        <%_ } _%>
+    <%_ } _%>
     thymeleaf:
         cache: true
 <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
@@ -225,14 +225,14 @@ spring:
 # Then, modify the server.ssl properties so your "server" configuration looks like:
 #
 # server:
-#    port: 443
-#    ssl:
-#        key-store: classpath:config/tls/keystore.p12
-#        key-store-password: password
-#        key-store-type: PKCS12
-#        key-alias: <%= baseName.toLowerCase() %>
-#        # The ciphers suite enforce the security by deactivating some old and deprecated SSL cipher, this list was tested against SSL Labs (https://www.ssllabs.com/ssltest/)
-#        ciphers: TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 ,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA,TLS_RSA_WITH_CAMELLIA_128_CBC_SHA
+#   port: 443
+#   ssl:
+#     key-store: classpath:config/tls/keystore.p12
+#     key-store-password: password
+#     key-store-type: PKCS12
+#     key-alias: selfsigned
+#     # The ciphers suite enforce the security by deactivating some old and deprecated SSL cipher, this list was tested against SSL Labs (https://www.ssllabs.com/ssltest/)
+#     ciphers: TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 ,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA,TLS_RSA_WITH_CAMELLIA_128_CBC_SHA
 # ===================================================================
 server:
     port: <%= serverPort %>
@@ -252,8 +252,10 @@ jhipster:
     gateway:
         rate-limiting:
             enabled: false
+        <%_ if (!reactive) { _%>
         authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
             app1: /api # recommended prod configuration
+        <%_ } _%>
     <%_ } _%>
     http:
         cache: # Used by the CachingHttpHeadersFilter
@@ -274,22 +276,27 @@ jhipster:
             time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
             max-entries: 1000 # Number of objects in each cache entry
         <%_ } _%>
+        <%_ if (cacheProvider === 'caffeine') { _%>
+        caffeine: # Caffeine configuration
+            time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache. This sets expireAfterWrite in Caffeine (https://github.com/ben-manes/caffeine/wiki/Eviction#time-based)
+            max-entries: 1000 # Number of objects in each cache entry
+        <%_ } _%>
         <%_ if (cacheProvider === 'infinispan') { _%>
         infinispan:
             config-file: default-configs/default-jgroups-tcp.xml
             statsEnabled: true
             # local app cache
             local:
-                time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
+                time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
                 max-entries: 1000 # Number of objects in each cache entry
             # distributed app cache
             distributed:
-                time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
+                time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
                 max-entries: 1000 # Number of objects in each cache entry
                 instance-count: 2
             # replicated app cache
             replicated:
-                time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
+                time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
                 max-entries: 1000 # Number of objects in each cache entry
         <%_ } _%>
         <%_ if (cacheProvider === 'memcached') { _%>
@@ -298,6 +305,14 @@ jhipster:
             servers: localhost:11211
             expiration: 300
             use-binary-protocol: true
+        <%_ } _%>
+        <%_ if (cacheProvider === 'redis') { _%>
+        redis: # Redis configuration
+            expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
+            server: redis://localhost:6379
+            cluster: false
+            # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
+            # cluster: true
         <%_ } _%>
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,9 +18,8 @@
 -%>
 const webpack = require('webpack');
 const writeFilePlugin = require('write-file-webpack-plugin');
-const webpackMerge = require('webpack-merge');
+const webpackMerge = require('webpack-merge').merge;
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
@@ -43,9 +42,12 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
                 '/management',
                 '/swagger-resources',
                 '/v2/api-docs',
-                '/h2-console',<% if (authenticationType === 'oauth2') { %>
+                '/v3/api-docs',
+                '/h2-console',
+                <%_ if (authenticationType === 'oauth2') { _%>
                 '/oauth2',
-                '/login',<% } %>
+                '/login',
+                <%_ } _%>
                 '/auth'
             ],
             target: `http${options.tls ? 's' : ''}://localhost:<%= serverPort %>`,
@@ -66,7 +68,6 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         historyApiFallback: true
     },
     entry: {
-        polyfills: './<%= MAIN_SRC_DIR %>app/polyfills',
         global: './<%= MAIN_SRC_DIR %>content/scss/global.scss',
         main: './<%= MAIN_SRC_DIR %>app/app.main'
     },
@@ -83,38 +84,8 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
             exclude: /node_modules/
         },
         {
-            test: /\.ts$/,
-            use: [
-                'angular2-template-loader',
-                {
-                    loader: 'cache-loader',
-                    options: {
-                      cacheDirectory: path.resolve('<%= BUILD_DIR %>cache-loader')
-                    }
-                },
-                {
-                    loader: 'thread-loader',
-                    options: {
-                        // There should be 1 cpu for the fork-ts-checker-webpack-plugin.
-                        // The value may need to be adjusted (e.g. to 1) in some CI environments,
-                        // as cpus() may report more cores than what are available to the build.
-                        workers: require('os').cpus().length - 1
-                    }
-                },
-                {
-                    loader: 'ts-loader',
-                    options: {
-                        transpileOnly: true,
-                        happyPackMode: true
-                    }
-                },
-                'angular-router-loader'
-            ],
-            exclude: /(node_modules)/
-        },
-        {
             test: /\.scss$/,
-            use: ['to-string-loader', 'css-loader', {
+            use: ['to-string-loader', 'css-loader', 'postcss-loader', {
                 loader: 'sass-loader',
                 options: { implementation: sass }
             }],
@@ -136,14 +107,15 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
                 format: options.stats === 'minimal' ? 'compact' : 'expanded'
               }),
         new FriendlyErrorsWebpackPlugin(),
-        new ForkTsCheckerWebpackPlugin(),
         new BrowserSyncPlugin({
             https: options.tls,
             host: 'localhost',
             port: 9000,
             proxy: {
-                target: `http${options.tls ? 's' : ''}://localhost:9060`<% if (websocket === 'spring-websocket') { %>,
-                ws: true<% } %>,
+                target: `http${options.tls ? 's' : ''}://localhost:9060`,
+                <%_ if (websocket === 'spring-websocket') { _%>
+                ws: true,
+                <%_ } _%>
                 proxyOptions: {
                     changeOrigin: false  //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430
                 }
@@ -153,6 +125,13 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
                     heartbeatTimeout: 60000
                 }
             }
+            /*
+            ,ghostMode: { // uncomment this part to disable BrowserSync ghostMode; https://github.com/jhipster/generator-jhipster/issues/11116
+                clicks: false,
+                location: false,
+                forms: false,
+                scroll: false
+            } */
         }, {
             reload: false
         }),

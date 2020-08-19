@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "Terveys",
                 "configuration": "Konfiguraatio",
                 "logs": "Logit",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "Audit logit",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "Tietokanta",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -153,7 +150,11 @@
         "userexists": "Käyttäjänimi on jo käytössä!",
         "emailexists": "Sähköposti on jo käytössä!",
         "idexists": "Uusi {{ entityName }} ei voi sisältää ID:tä",
-        "idnull": "ID virheellinen"
+        "idnull": "ID virheellinen",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "Tämä on footer teksti"
 }

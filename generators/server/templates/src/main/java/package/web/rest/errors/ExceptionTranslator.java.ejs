@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.web.rest.errors;
+package <%= packageName %>.web.rest.errors;
 
 import io.github.jhipster.web.util.HeaderUtil;
 
@@ -25,6 +25,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
 import org.springframework.http.ResponseEntity;
+<%_ if (reactive && databaseType === 'sql') { _%>
+import org.springframework.stereotype.Component;
+<%_ } _%>
 import org.springframework.validation.BindingResult;
 <%_ if (!reactive) { _%>
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -55,9 +58,6 @@ import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 <%_ } _%>
 import java.util.List;
-<%_ if (!reactive) { _%>
-import java.util.NoSuchElementException;
-<%_ } _%>
 import java.util.stream.Collectors;
 
 /**
@@ -65,6 +65,9 @@ import java.util.stream.Collectors;
  * The error response follows RFC7807 - Problem Details for HTTP APIs (https://tools.ietf.org/html/rfc7807).
  */
 @ControllerAdvice
+<%_ if (databaseType === 'sql' && reactive) { _%>
+@Component("jhiExceptionTranslator")
+<%_ } _%>
 public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait {
 
 <%_
@@ -149,15 +152,23 @@ _%>
             .build();
         return create(ex, problem, request);
     }
-    <%_ if (!reactive) { _%>
+    <%_ if (!skipUserManagement) { _%>
 
     @ExceptionHandler
-    public ResponseEntity<Problem> handleNoSuchElementException(NoSuchElementException ex, NativeWebRequest request) {
-        Problem problem = Problem.builder()
-            .withStatus(Status.NOT_FOUND)
-            .with(MESSAGE_KEY, ErrorConstants.ENTITY_NOT_FOUND_TYPE)
-            .build();
-        return create(ex, problem, request);
+    public <%- returnType %> handleEmailAlreadyUsedException(<%= packageName %>.service.EmailAlreadyUsedException ex, <%= requestClass %> request) {
+        EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
+        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+    }
+
+    @ExceptionHandler
+    public <%- returnType %> handleUsernameAlreadyUsedException(<%= packageName %>.service.UsernameAlreadyUsedException ex, <%= requestClass %> request) {
+        LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
+        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+    }
+
+    @ExceptionHandler
+    public <%- returnType %> handleInvalidPasswordException(<%= packageName %>.service.InvalidPasswordException ex, <%= requestClass %> request) {
+        return create(new InvalidPasswordException(), request);
     }
     <%_ } _%>
 

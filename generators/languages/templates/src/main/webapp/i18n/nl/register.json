@@ -10,7 +10,7 @@
                     "required": "Uw login is vereist.",
                     "minlength": "Uw login moet minstens 1 tekens lang zijn",
                     "maxlength": "Uw login kan niet langer zijn dan 50 tekens.",
-                    "pattern": "Uw login kan alleen kleine letters en cijfers bevatten.."
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>Registratie opgeslaan!</strong> Gelieve uw email te controlleren ter bevestiging.",

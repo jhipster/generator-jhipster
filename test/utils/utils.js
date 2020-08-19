@@ -1,25 +1,38 @@
 const path = require('path');
 const os = require('os');
-const shelljs = require('shelljs');
 const assert = require('yeoman-assert');
+const fse = require('fs-extra');
+const fs = require('fs');
+
 const Generator = require('../../generators/generator-base');
 const constants = require('../../generators/generator-constants');
 
 const DOCKER_DIR = constants.DOCKER_DIR;
+const FAKE_BLUEPRINT_DIR = path.join(__dirname, '../templates/fake-blueprint');
 
 module.exports = {
     getFilesForOptions,
     shouldBeV3DockerfileCompatible,
     getJHipsterCli,
-    testInTempDir
+    prepareTempDir,
+    testInTempDir,
+    revertTempDir,
+    copyTemplateBlueprints,
+    copyBlueprint,
+    copyFakeBlueprint,
+    lnYeoman,
 };
 
 function getFilesForOptions(files, options, prefix, excludeFiles) {
     const generator = options;
+    generator.debug = () => {};
+    const outputPathCustomizer = generator.outputPathCustomizer || (file => file);
+
+    const destFiles = Generator.prototype.writeFilesToDisk.call(generator, files, undefined, true, prefix).map(outputPathCustomizer);
     if (excludeFiles === undefined) {
-        return Generator.prototype.writeFilesToDisk(files, generator, true, prefix);
+        return destFiles;
     }
-    return Generator.prototype.writeFilesToDisk(files, generator, true, prefix).filter(file => !excludeFiles.includes(file));
+    return destFiles.filter(file => !excludeFiles.includes(file));
 }
 
 function shouldBeV3DockerfileCompatible(databaseType) {
@@ -40,23 +53,68 @@ function getJHipsterCli() {
         // corrected test for windows user
         cmd = cmd.replace(/\\/g, '/');
     }
-    /* eslint-disable-next-line no-console */
-    console.log(cmd);
     return cmd;
 }
 
-function testInTempDir(cb) {
+function _prepareTempEnv() {
     const cwd = process.cwd();
-    /* eslint-disable-next-line no-console */
-    console.log(`current cwd: ${cwd}`);
     const tempDir = path.join(os.tmpdir(), 'jhitemp');
-    shelljs.rm('-rf', tempDir);
-    shelljs.mkdir('-p', tempDir);
+    process.chdir(os.tmpdir());
+    if (fs.existsSync(tempDir)) {
+        fs.rmdirSync(tempDir, { recursive: true });
+    }
+    fs.mkdirSync(tempDir, { recursive: true });
     process.chdir(tempDir);
-    /* eslint-disable-next-line no-console */
-    console.log(`New cwd: ${process.cwd()}`);
-    cb(tempDir);
+    return { cwd, tempDir };
+}
+
+function prepareTempDir() {
+    return _prepareTempEnv().cwd;
+}
+
+function testInTempDir(cb, keepInTestDir) {
+    const preparedEnv = _prepareTempEnv();
+    const cwd = preparedEnv.cwd;
+    const cbReturn = cb(preparedEnv.tempDir);
+    if (cbReturn instanceof Promise) {
+        return cbReturn.then(() => {
+            if (!keepInTestDir) {
+                revertTempDir(cwd);
+            }
+            return cwd;
+        });
+    }
+    if (!keepInTestDir) {
+        revertTempDir(cwd);
+    }
+    return cwd;
+}
+
+function revertTempDir(cwd) {
     process.chdir(cwd);
-    /* eslint-disable-next-line no-console */
-    console.log(`current cwd: ${process.cwd()}`);
+}
+
+function copyTemplateBlueprints(destDir, ...blueprintNames) {
+    blueprintNames.forEach(blueprintName =>
+        copyBlueprint(path.join(__dirname, `../templates/blueprints/generator-jhipster-${blueprintName}`), destDir, blueprintName)
+    );
+}
+
+function copyBlueprint(sourceDir, destDir, ...blueprintNames) {
+    const nodeModulesPath = `${destDir}/node_modules`;
+    fse.ensureDirSync(nodeModulesPath);
+    blueprintNames.forEach(blueprintName => {
+        fse.copySync(sourceDir, `${nodeModulesPath}/generator-jhipster-${blueprintName}`);
+    });
+}
+
+function copyFakeBlueprint(destDir, ...blueprintName) {
+    copyBlueprint(FAKE_BLUEPRINT_DIR, destDir, ...blueprintName);
+}
+
+function lnYeoman(packagePath) {
+    const nodeModulesPath = `${packagePath}/node_modules`;
+    fse.ensureDirSync(nodeModulesPath);
+    fs.symlinkSync(path.join(__dirname, '../../node_modules/yeoman-generator/'), `${nodeModulesPath}/yeoman-generator`);
+    fs.symlinkSync(path.join(__dirname, '../../node_modules/yeoman-environment/'), `${nodeModulesPath}/yeoman-environment`);
 }

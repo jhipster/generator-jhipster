@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,7 +18,6 @@
 -%>
 const path = require('path');
 const webpack = require('webpack');
-const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
@@ -70,9 +69,7 @@ module.exports = options => ({
       '.js', '.jsx', '.ts', '.tsx', '.json'
     ],
     modules: ['node_modules'],
-    alias: {
-      app: utils.root('<%= MAIN_SRC_DIR %>app/')
-    }
+    alias: utils.mapTypescriptAliasToWebpackAlias()
   },
   module: {
     rules: [
@@ -140,23 +137,26 @@ module.exports = options => ({
       }
     }),
     new ForkTsCheckerWebpackPlugin({ eslint: true }),
-    new CopyWebpackPlugin([
-      { from: './node_modules/swagger-ui/dist/css', to: 'swagger-ui/dist/css' },
-      { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
-      { from: './node_modules/swagger-ui/dist/swagger-ui.min.js', to: 'swagger-ui/dist/swagger-ui.min.js' },
-      { from: './<%= MAIN_SRC_DIR %>/swagger-ui/', to: 'swagger-ui' },
-      { from: './<%= MAIN_SRC_DIR %>content/', to: 'content' },
-      { from: './<%= MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
-      { from: './<%= MAIN_SRC_DIR %>manifest.webapp', to: 'manifest.webapp' },
-      // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
-      { from: './<%= MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' }
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
+        { from: './node_modules/swagger-ui-dist/*.{js,css,html,png}', to: 'swagger-ui', flatten: true, globOptions: { ignore: ['**/index.html'] }},
+        { from: './node_modules/axios/dist/axios.min.js', to: 'swagger-ui' },
+        { from: './<%= MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui' },
+        <%_ } _%>
+        { from: './<%= MAIN_SRC_DIR %>content/', to: 'content' },
+        { from: './<%= MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
+        { from: './<%= MAIN_SRC_DIR %>manifest.webapp', to: 'manifest.webapp' },
+        // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
+        { from: './<%= MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' }
+      ],
+    }),
     new HtmlWebpackPlugin({
       template: './<%= CLIENT_MAIN_SRC_DIR %>index.html',
-      chunksSortMode: 'dependency',
-      inject: 'body'
+      chunksSortMode: 'auto',
+      inject: 'body',
+      base: '/',
     }),
-    new BaseHrefWebpackPlugin({ baseHref: '/' }),
     <%_ if (enableTranslation) { _%>
     new MergeJsonWebpackPlugin({
       output: {

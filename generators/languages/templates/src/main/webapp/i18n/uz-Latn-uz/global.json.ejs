@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "Holat",
                 "configuration": "Sozlamalar",
                 "logs": "Loglar",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "Audit",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "Ma`lumotlar bazasi",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -86,13 +83,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Parol kiritilishi zarur.",
-                    "minlength": "Parol uzunligi kamida 5 harfdan iborat bo`lsin",
+                    "minlength": "Parol uzunligi kamida 4 harfdan iborat bo`lsin",
                     "maxlength": "Parol 50 harfdan uzun bo`lmasin",
                     "strength": "Parol murakkabligi:"
                 },
                 "confirmpassword": {
                     "required": "Parol tasdig`i kiritilishi zarur.",
-                    "minlength": "Parol tasdig`i uzunligi kamida 5 harfdan iborat bo`lsin",
+                    "minlength": "Parol tasdig`i uzunligi kamida 4 harfdan iborat bo`lsin",
                     "maxlength": "Parol tasdig`i 50 harfdan uzun bo`lmasin"
                 },
                 "email": {
@@ -152,7 +149,11 @@
         "userexists": "Foydalanuvchi tizimda mavjud!",
         "emailexists": "Email allaqachon mavjud!",
         "idexists": "Yangi {{entityName}} IDsi bo`lmasligi kerak",
-        "idnull": "Noto`g`ri ID"
+        "idnull": "Noto`g`ri ID",
+        "file": {
+            "could.not.extract": "Faylni chiqarib bo‘lmaydi",
+            "not.image": "Fayl rasm bo‘lishi kerak edi, lekin \"{{ fileType }}\" topildi"
+        }
     },
     "footer": "Sahifa tag qismi"
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -49,7 +49,7 @@ Rds.prototype.createDatabase = function createDatabase(params, callback) {
                                 dbEngine,
                                 dbPassword,
                                 dbUsername,
-                                rdsSecurityGroupId
+                                rdsSecurityGroupId,
                             },
                             (err, data) => {
                                 if (err) {
@@ -88,7 +88,7 @@ function createRdsSecurityGroup(params, callback) {
 
     const securityGroupParams = {
         Description: 'Enable database access to Beanstalk application',
-        GroupName: params.rdsSecurityGroupName
+        GroupName: params.rdsSecurityGroupName,
     };
 
     ec2.createSecurityGroup(securityGroupParams, (err, data) => {
@@ -110,7 +110,7 @@ function authorizeSecurityGroupIngress(params, callback) {
         IpProtocol: 'tcp',
         FromPort: 0,
         ToPort: 65535,
-        CidrIp: '0.0.0.0/0'
+        CidrIp: '0.0.0.0/0',
     };
 
     ec2.authorizeSecurityGroupIngress(securityGroupParams, err => {
@@ -135,7 +135,7 @@ function createDbInstance(params, callback) {
         DBName: params.dbName,
         VpcSecurityGroupIds: [params.rdsSecurityGroupId],
         MultiAZ: false,
-        Iops: 0
+        Iops: 0,
     };
 
     rds.createDBInstance(dbInstanceParams, err => {

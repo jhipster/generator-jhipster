@@ -7,16 +7,17 @@ source $(dirname $0)/00-init-env.sh
 #--------------------------------------------------
 cd "$JHI_FOLDER_APP"
 
-if [[ "$JHI_APP" = "ngx-default" && "$TRAVIS_REPO_SLUG" = "jhipster/generator-jhipster" && "$TRAVIS_BRANCH" = "master" && "$TRAVIS_PULL_REQUEST" = "false" ]]; then
+if [[ "$JHI_APP" = "ngx-default" && "$GITHUB_REPOSITORY" = "jhipster/generator-jhipster" && "$GITHUB_REF" = "refs/heads/master" ]]; then
     echo "*** Sonar analyze for master branch"
-    ./mvnw -ntp initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar \
+    ./mvnw -ntp --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar \
         -Dsonar.host.url=https://sonarcloud.io \
-        -Dsonar.projectKey=io.github.jhipster.sample:jhipster-sample-application \
+        -Dsonar.projectKey=jhipster-sample-application \
+        -Dsonar.organization=jhipster \
         -Dsonar.login=$SONAR_TOKEN
 
 elif [[ $JHI_SONAR = 1 ]]; then
     echo "*** Sonar analyze locally"
-    ./mvnw -ntp initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar \
+    ./mvnw -ntp --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar \
         -Dsonar.host.url=http://localhost:9001 \
         -Dsonar.projectKey=JHipsterSonar
         

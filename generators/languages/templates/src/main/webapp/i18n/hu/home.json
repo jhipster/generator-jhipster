@@ -11,7 +11,7 @@
             "stackoverflow": "JHipster a Stack Overflow-n",
             "bugtracker": "JHipster hibakövető",
             "chat": "JHipster public chat room",
-            "follow": "lépjen kapcsolatba @java_hipster -rel a Twitter-en"
+            "follow": "lépjen kapcsolatba @jhipster -rel a Twitter-en"
         },
         "like": "Ha tetszik a JHipster, ne feledjen csillagot adni a",
         "github": "GitHub-on"

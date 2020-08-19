@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "Состояние",
                 "configuration": "Настройки",
                 "logs": "Логи",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "Аудит",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "База данных",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -86,13 +83,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Пароль должен быть указан.",
-                    "minlength": "Длина пароля должна быть хотя-бы 5 символов",
+                    "minlength": "Длина пароля должна быть хотя-бы 4 символов",
                     "maxlength": "Пароль не может быть длиннее чем 50 символов",
                     "strength": "Сложность пароля:"
                 },
                 "confirmpassword": {
                     "required": "подтверждение пароля должно быть указано.",
-                    "minlength": "Длина подтверждения пароля должна быть хотя-бы 5 символов",
+                    "minlength": "Длина подтверждения пароля должна быть хотя-бы 4 символов",
                     "maxlength": "Подтверждение пароля не может быть больше чем 50 символов"
                 },
                 "email": {
@@ -152,7 +149,11 @@
         "userexists": "Имя пользователя уже используется!",
         "emailexists": "Эл. почта уже используется!!",
         "idexists": "Новый {{entityName}} не может иметь данный ID",
-        "idnull": "Неверный ID"
+        "idnull": "Неверный ID",
+        "file": {
+            "could.not.extract": "Не удалось извлечь файл",
+            "not.image": "Файл должен был быть изображением, но было установлено, что \"{{ fileType }}\""
+        }
     },
     "footer": "Это ваш футтер"
 }

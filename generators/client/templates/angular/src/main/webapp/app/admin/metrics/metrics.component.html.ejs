@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,19 +19,26 @@
 <div>
     <h2>
         <span id="metrics-page-heading" jhiTranslate="metrics.title">Application Metrics</span>
+
         <button class="btn btn-primary float-right" (click)="refresh()">
-            <fa-icon [icon]="'sync'"></fa-icon> <span jhiTranslate="metrics.refresh.button">Refresh</span>
+            <fa-icon icon="sync"></fa-icon> <span jhiTranslate="metrics.refresh.button">Refresh</span>
         </button>
     </h2>
 
     <h3 jhiTranslate="metrics.jvm.title">JVM Metrics</h3>
-    <div class="row" *ngIf="!updatingMetrics">
+
+    <div class="row" *ngIf="metrics && !updatingMetrics">
         <jhi-jvm-memory
             class="col-md-4"
             [updating]="updatingMetrics"
             [jvmMemoryMetrics]="metrics.jvm">
         </jhi-jvm-memory>
-        <jhi-jvm-threads class="col-md-4" [threadData]="threadData"></jhi-jvm-threads>
+
+        <jhi-jvm-threads
+            class="col-md-4"
+            [threadData]="threads">
+        </jhi-jvm-threads>
+
         <jhi-metrics-system
             class="col-md-4"
             [updating]="updatingMetrics"
@@ -39,35 +46,38 @@
         </jhi-metrics-system>
     </div>
 
-    <div *ngIf="isObjectExisting(metrics, 'garbageCollector')">
+    <div *ngIf="metrics && metricsKeyExists('garbageCollector')">
         <h3 jhiTranslate="metrics.jvm.gc.title">Garbage collector statistics</h3>
-        <jhi-metrics-garbagecollector [updating]="updatingMetrics" [garbageCollectorMetrics]="metrics.garbageCollector"></jhi-metrics-garbagecollector>
+
+        <jhi-metrics-garbagecollector
+            [updating]="updatingMetrics"
+            [garbageCollectorMetrics]="metrics.garbageCollector">
+        </jhi-metrics-garbagecollector>
     </div>
 
     <div class="well well-lg" *ngIf="updatingMetrics" jhiTranslate="metrics.updating">Updating...</div>
 
     <jhi-metrics-request
-        *ngIf="isObjectExisting(metrics, 'http.server.requests')"
+        *ngIf="metrics && metricsKeyExists('http.server.requests')"
         [updating]="updatingMetrics"
         [requestMetrics]="metrics['http.server.requests']">
     </jhi-metrics-request>
 
     <jhi-metrics-endpoints-requests
-        *ngIf="isObjectExisting(metrics, 'services')"
+        *ngIf="metrics && metricsKeyExists('services')"
         [updating]="updatingMetrics"
         [endpointsRequestsMetrics]="metrics.services">
     </jhi-metrics-endpoints-requests>
 
     <jhi-metrics-cache
-        *ngIf="isObjectExisting(metrics, 'cache')"
+        *ngIf="metrics && metricsKeyExists('cache')"
         [updating]="updatingMetrics"
         [cacheMetrics]="metrics.cache">
     </jhi-metrics-cache>
 
     <jhi-metrics-datasource
-        *ngIf="isObjectExistingAndNotEmpty(metrics, 'databases')"
+        *ngIf="metrics && metricsKeyExistsAndObjectNotEmpty('databases')"
         [updating]="updatingMetrics"
         [datasourceMetrics]="metrics.databases">
     </jhi-metrics-datasource>
-
 </div>

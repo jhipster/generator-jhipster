@@ -44,6 +44,11 @@ describe('jhipster cli utils test', () => {
         });
     });
     describe('getOptionsFromArgs', () => {
+        describe('when called with undefined args', () => {
+            it('returns an empty array', () => {
+                expect(cliUtil.getOptionsFromArgs()).to.eql([]);
+            });
+        });
         describe('when called with empty args', () => {
             it('returns an empty array', () => {
                 expect(cliUtil.getOptionsFromArgs([])).to.eql([]);
@@ -71,68 +76,86 @@ describe('jhipster cli utils test', () => {
     describe('getOptionAsArgs', () => {
         describe('when called with empty args', () => {
             it('returns a default string array', () => {
-                expect(cliUtil.getOptionAsArgs({})).to.eql(['--from-cli']);
+                expect(cliUtil.getOptionAsArgs({})).to.eql([]);
             });
         });
         describe('when called with valid arguments', () => {
             const argument = { foo: true, bar: '123' };
             it('returns an array of truthy string args', () => {
-                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '--from-cli']);
+                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123']);
             });
         });
         describe('when called with valid argument having false value', () => {
             const argument = { foo: true, bar: '123', insight: false };
             it('returns an array of truthy string args', () => {
-                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '--no-insight', '--from-cli']);
+                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '--no-insight']);
             });
         });
         describe('when called with valid arguments and withEntities', () => {
-            const argument = { foo: true, bar: '123' };
+            const argument = { foo: true, bar: '123', withEntities: true };
             it('returns an array of string args', () => {
-                expect(cliUtil.getOptionAsArgs(argument, true)).to.eql(['--foo', '--bar', '123', '--with-entities', '--from-cli']);
+                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '--with-entities']);
             });
         });
         describe('when called with valid arguments and force', () => {
-            const argument = { foo: true, bar: '123' };
+            const argument = { foo: true, bar: '123', force: true };
             it('returns an array of string args', () => {
-                expect(cliUtil.getOptionAsArgs(argument, false, true)).to.eql(['--foo', '--bar', '123', '--force', '--from-cli']);
+                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '--force']);
             });
         });
         describe('when called with valid arguments with duplicates in different case', () => {
             const argument = { fooBar: true, bar: '123', 'foo-bar': true, foo_bar: true };
             it('returns an array of string args', () => {
-                expect(cliUtil.getOptionAsArgs(argument, false, true)).to.eql(['--foo-bar', '--bar', '123', '--force', '--from-cli']);
+                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo-bar', '--bar', '123']);
             });
         });
         describe('when called with valid arguments with single char keys', () => {
             const argument = { foo: true, bar: '123', d: true };
             it('returns an array of string args', () => {
-                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '-d', '--from-cli']);
+                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '-d']);
+            });
+        });
+        describe('when called with empty string', () => {
+            const argument = { foo: true, bar: '' };
+            it('returns an array of string args', () => {
+                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '']);
             });
         });
     });
     describe('getCommand', () => {
         describe('when called with only cmd', () => {
             it('returns a default command', () => {
-                expect(cliUtil.getCommand('app')).to.eql('jhipster:app');
+                expect(cliUtil.getCommand('app')).to.eql('app');
             });
         });
         describe('when called with cmd & invalid opts', () => {
             it('returns a default command', () => {
-                expect(cliUtil.getCommand('app', {}, {})).to.eql('jhipster:app');
+                expect(cliUtil.getCommand('app', {}, {})).to.eql('app');
             });
         });
         describe('when called with cmd, args & valid opts', () => {
             const argument = [['bar', 'foo']];
             it('returns a command with argument', () => {
-                expect(cliUtil.getCommand('app', argument, { argument })).to.eql('jhipster:app bar foo');
+                expect(cliUtil.getCommand('app', argument, { argument })).to.eql('app bar foo');
+            });
+        });
+    });
+    describe('addKebabCase', () => {
+        describe('when called with undefined', () => {
+            it('returns empty object', () => {
+                expect(cliUtil.addKebabCase()).to.eql({});
+            });
+        });
+        describe('when called with object', () => {
+            it('returns object with a kebabCase option', () => {
+                expect(cliUtil.addKebabCase({ foo: 'bar', fooBar: true })).to.eql({ 'foo-bar': true, fooBar: true, foo: 'bar' });
             });
         });
     });
     describe('getCommandOptions', () => {
         describe('when called with empty argv', () => {
             it('returns the default object', () => {
-                expect(cliUtil.getCommandOptions(packageJson, [])).to.eql({ 'from-cli': true });
+                expect(cliUtil.getCommandOptions(packageJson, [])).to.eql({});
             });
         });
         describe('when called with argv flags', () => {
@@ -142,7 +165,6 @@ describe('jhipster cli utils test', () => {
                     force: true,
                     'skip-install': true,
                     skipInstall: true,
-                    'from-cli': true
                 });
             });
         });
@@ -154,7 +176,6 @@ describe('jhipster cli utils test', () => {
                     'skip-install': true,
                     skipInstall: true,
                     foo: 'bar',
-                    'from-cli': true
                 });
             });
         });
@@ -166,7 +187,6 @@ describe('jhipster cli utils test', () => {
                     'skip-install': true,
                     skipInstall: true,
                     foo: 'bar,who',
-                    'from-cli': true
                 });
             });
         });

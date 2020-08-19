@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -29,33 +29,30 @@ import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileN
     templateUrl: './<%= entityFileName %>-detail.component.html'
 })
 export class <%= entityAngularName %>DetailComponent implements OnInit {
-
-    <%= entityInstance %>: I<%= entityAngularName %>;
+    <%= entityInstance %>: I<%= entityAngularName %> | null = null;
 
     constructor(
         <%_ if (fieldsContainBlob) { _%>
         protected dataUtils: JhiDataUtils,
         <%_ } _%>
         protected activatedRoute: ActivatedRoute
-    ) {
-    }
+    ) {}
 
-    ngOnInit() {
-        this.activatedRoute.data.subscribe(({<%= entityInstance %>}) => {
-            this.<%= entityInstance %> = <%= entityInstance %>;
-        });
+    ngOnInit(): void {
+        this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => this.<%= entityInstance %> = <%= entityInstance %>);
     }
 
     <%_ if (fieldsContainBlob) { _%>
-    byteSize(field) {
-        return this.dataUtils.byteSize(field);
+    byteSize(base64String: string): string {
+        return this.dataUtils.byteSize(base64String);
     }
 
-    openFile(contentType, field) {
-        return this.dataUtils.openFile(contentType, field);
+    openFile(contentType = '', base64String: string): void {
+        this.dataUtils.openFile(contentType, base64String);
     }
     <%_ } _%>
-    previousState() {
+
+    previousState(): void {
         window.history.back();
     }
 

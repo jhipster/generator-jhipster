@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,27 +16,25 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { browser, element, by<% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>, protractor<% } %> } from 'protractor';
+import { browser, element, by } from 'protractor';
 
 import NavBarPage from './../../<%= entityParentPathAddition %>page-objects/navbar-page';
 import SignInPage from './../../<%= entityParentPathAddition %>page-objects/signin-page';
-import <%= entityClass %>ComponentsPage, { <%= entityClass %>DeleteDialog } from './<%= entityFileName %>.page-object';
-import <%= entityClass %>UpdatePage from './<%= entityFileName%>-update.page-object';
-import { waitUntilDisplayed, waitUntilHidden } from '../../<%= entityParentPathAddition %>util/utils';
-<%_ if (fieldsContainBlobOrImage) { _%>
+import <%= entityClass %>ComponentsPage from './<%= entityFileName %>.page-object';
+<%_ if (!readOnly) { _%>
+import <%= entityClass %>UpdatePage from './<%= entityFileName %>-update.page-object';
+<%_ } _%>
+import { waitUntilDisplayed, waitUntilAnyDisplayed, click, getRecordsCount, waitUntilHidden, waitUntilCount, isVisible } from '../../<%= entityParentPathAddition %>util/utils';
+<%_ if (fieldsContainBlobOrImage && !readOnly) { _%>
 import path from 'path';
 <%_ } _%>
 <%_
-let elementGetter = `getText()`;
-let openBlockComment = ``;
-let closeBlockComment = ``;
-if (enableTranslation) {
-    elementGetter = `getAttribute('jhiTranslate')`;
-}
+let openBlockComment = '';
+let closeBlockComment = '';
 for (let relationship of relationships) {
     if (relationship.relationshipRequired || relationship.useJPADerivedIdentifier) {
-        openBlockComment = `/* `;
-        closeBlockComment = ` */`;
+        openBlockComment = '/* ';
+        closeBlockComment = ' */';
         break;
     }
 } _%>
@@ -46,13 +44,10 @@ const expect = chai.expect;
 describe('<%= entityClass %> e2e test', () => {
     let navBarPage: NavBarPage;
     let signInPage: SignInPage;
-    let <%= entityInstance %>UpdatePage: <%= entityClass %>UpdatePage;
     let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
-    <%= openBlockComment %>let <%= entityInstance %>DeleteDialog: <%= entityClass %>DeleteDialog;<%= closeBlockComment %>
-    <%_ if (fieldsContainBlobOrImage) { _%>
-    const fileToUpload = '../../../../../../<%= entityParentPathAddition %><%= CLIENT_MAIN_SRC_DIR %>content/images/logo-jhipster.png';
-    const absolutePath = path.resolve(__dirname, fileToUpload);
-    <%_ } _%>
+<%_ if (!readOnly) { _%>
+    let <%= entityInstance %>UpdatePage: <%= entityClass %>UpdatePage;
+<%_ } _%>
 
     before(async () => {
         await browser.get('/');
@@ -69,116 +64,45 @@ describe('<%= entityClass %> e2e test', () => {
         await signInPage.loginWithOAuth('admin', 'admin');
         <%_ } _%>
         await waitUntilDisplayed(navBarPage.entityMenu);
+        await waitUntilDisplayed(navBarPage.adminMenu);
+        await waitUntilDisplayed(navBarPage.accountMenu);
+    });
+
+    beforeEach(async() => {
+        await browser.get('/');
+        await waitUntilDisplayed(navBarPage.entityMenu);
+        <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
+        <%= entityInstance %>ComponentsPage = await <%= entityInstance %>ComponentsPage.goToPage(navBarPage);
     });
 
     it('should load <%= entityClassPlural %>', async () => {
-        await navBarPage.getEntityPage('<%= entityStateName %>');
-        <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
-        expect(await <%= entityInstance %>ComponentsPage.getTitle().getText())
+        expect(await <%= entityInstance %>ComponentsPage.title.getText())
             .to.match(/<%= entityClassPluralHumanized %>/);
-
-    });
-
-    it('should load create <%= entityClass %> page', async () => {
-        await <%= entityInstance %>ComponentsPage.clickOnCreateButton();
-        <%= entityInstance %>UpdatePage = new <%= entityClass %>UpdatePage();
-        <%_ if (enableTranslation) { _%>
-        expect(await <%= entityInstance %>UpdatePage.getPageTitle().getAttribute('id'))
-            .to.match(/<%= i18nKeyPrefix %>.home.createOrEditLabel/);
-        <%_ } else { _%>
-        expect(await <%= entityInstance %>UpdatePage.getPageTitle().getText())
-            .to.match(/Create or edit a <%= entityClass %>/);
+        <%_ if (!readOnly) { _%>
+        expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
         <%_ } _%>
-        await <%= entityInstance %>UpdatePage.cancel();
     });
 
-   <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', async () => {
-        async function create<%= entityClass %>() {
-            await <%= entityInstance %>ComponentsPage.clickOnCreateButton();
-            <%_ fields.forEach((field) => {
-                const fieldName = field.fieldName;
-                const fieldNameCapitalized = field.fieldNameCapitalized;
-                const fieldType = field.fieldType;
-                const fieldTypeBlobContent = field.fieldTypeBlobContent;
-                const fieldIsEnum = field.fieldIsEnum;
-            _%>
-            <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
-            await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('5');
-            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('5');
-            <%_ } else if (fieldType === 'LocalDate') { _%>
-            await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('01-01-2001');
-            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('2001-01-01');
-            <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-            await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('01/01/2001' + protractor.Key.TAB + '02:30AM');
-            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('2001-01-01T02:30');
-            <%_ } else if (fieldType === 'Duration') { _%>
-            await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('PT12S');
-            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('12');
-            <%_ } else if (fieldType === 'Boolean') { _%>
-            const selected<%= fieldNameCapitalized %> = await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected();
-            if (selected<%= fieldNameCapitalized %>) {
-                await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
-                expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).to.be.false;
-            } else {
-                await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
-                expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).to.be.true;
-            }
-            <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-            await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
-            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldName %>/);
-            <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
-            await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input(absolutePath);
-            <%_ } else if (fieldIsEnum) { _%>
-            await <%= entityInstance %>UpdatePage.<%=fieldName %>SelectLastOption();
-            <%_ } else if (fieldType === 'UUID'){ _%>
-            await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade974');
-            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/64c99148-3908-465d-8c4a-e510e3ade974/);
-            <%_ } else { _%>
-            await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
-            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldName %>/);
-            <%_ } _%>
-            <%_ }); _%>
-            <%_ relationships.forEach((relationship) => {
-                const relationshipType = relationship.relationshipType;
-                const ownerSide = relationship.ownerSide;
-                const relationshipName = relationship.relationshipName;
-                const relationshipFieldName = relationship.relationshipFieldName; _%>
-            <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-            await <%= entityInstance %>UpdatePage.<%=relationshipName %>SelectLastOption();
-            <%_ } else if ((relationshipType === 'many-to-many' && ownerSide === true)) { _%>
-            // <%= entityInstance %>UpdatePage.<%=relationshipName %>SelectLastOption();
-            <%_ } _%>
-            <%_ }); _%>
-            await waitUntilDisplayed(<%= entityInstance %>UpdatePage.getSaveButton());
-            await <%= entityInstance %>UpdatePage.save();
-            await waitUntilHidden(<%= entityInstance %>UpdatePage.getSaveButton());
-            expect(await <%= entityInstance %>UpdatePage.getSaveButton().isPresent()).to.be.false;
+<%_ if (!readOnly) { _%>
+    <%= openBlockComment %>it('should create and delete <%= entityClassPlural %>', async () => {
+        const beforeRecordsCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
+        <%= entityInstance %>UpdatePage = await <%= entityInstance %>ComponentsPage.goToCreate<%= entityClass %>();
+        await <%= entityInstance %>UpdatePage.enterData();
+
+        expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
+        await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.table);
+        await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount + 1);
+        expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount + 1);
+        
+        await <%= entityInstance %>ComponentsPage.delete<%= entityClass %>();
+        if(beforeRecordsCount !== 0) { 
+          await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount);
+          expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount);
+        } else {
+          await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.noRecords);
         }
-
-        await create<%= entityClass %>();
-        await <%= entityInstance %>ComponentsPage.waitUntilLoaded();
-        const nbButtonsBeforeCreate = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
-        await create<%= entityClass %>();
-
-        await <%= entityInstance %>ComponentsPage.waitUntilDeleteButtonsLength(nbButtonsBeforeCreate + 1);
-        expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1);
     });<%= closeBlockComment %>
-
-    <%= openBlockComment %> it('should delete last <%= entityClass %>', async () => {
-        await <%= entityInstance %>ComponentsPage.waitUntilLoaded();
-        const nbButtonsBeforeDelete = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
-        await <%= entityInstance %>ComponentsPage.clickOnLastDeleteButton();
-
-        const deleteModal = element(by.className('modal'));
-        await waitUntilDisplayed(deleteModal);
-
-        <%= entityInstance %>DeleteDialog = new <%= entityClass %>DeleteDialog();
-        expect(await <%= entityInstance %>DeleteDialog.getDialogTitle().getAttribute('id')).to.match(/<%= i18nKeyPrefix %>.delete.question/);
-        await <%= entityInstance %>DeleteDialog.clickOnConfirmButton();
-
-        await <%= entityInstance %>ComponentsPage.waitUntilDeleteButtonsLength(nbButtonsBeforeDelete - 1);
-        expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-    });<%= closeBlockComment %>
+<%_ } _%>
 
     after(async () => {
         await navBarPage.autoSignOut();

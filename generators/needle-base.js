@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -26,9 +26,10 @@ module.exports = class {
 
     addBlockContentToFile(rewriteFileModel, errorMessage) {
         try {
-            jhipsterUtils.rewriteFile(rewriteFileModel, this.generator);
+            return jhipsterUtils.rewriteFile(rewriteFileModel, this.generator);
         } catch (e) {
             this.logNeedleNotFound(e, errorMessage, rewriteFileModel.file);
+            return false;
         }
     }
 
@@ -50,7 +51,7 @@ module.exports = class {
         return {
             file: aFile,
             needle: needleTag,
-            splicable: content
+            splicable: content,
         };
     }
 };

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -29,7 +29,7 @@ const dockerCLI = require('./docker-cli');
 module.exports = {
     checkDocker,
     checkImageExist,
-    checkAndBuildImages
+    checkAndBuildImages,
 };
 
 /**
@@ -56,9 +56,9 @@ function checkDocker() {
             if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {
                 this.log(
                     chalk.red(
-                        `${'Docker version 1.10.0 or later is not installed on your computer.\n' +
-                            '         Docker version found: '}${dockerVersion}\n` +
-                            '         Read http://docs.docker.com/engine/installation/#installation\n'
+                        `Docker version 1.10.0 or later is not installed on your computer.
+                                 Docker version found: ${dockerVersion}
+                                 Read http://docs.docker.com/engine/installation/#installation`
                     )
                 );
                 this.abort = true;
@@ -85,7 +85,7 @@ function checkImageExist(opts = { cwd: './', appConfig: null }) {
     this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
     if (opts.appConfig.buildTool === 'maven') {
         imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/target/docker`);
-        this.dockerBuildCommand = './mvnw -Pprod verify jib:dockerBuild';
+        this.dockerBuildCommand = './mvnw -ntp -Pprod verify jib:dockerBuild';
     } else {
         imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/build/docker`);
         this.dockerBuildCommand = './gradlew bootWar -Pprod jibDockerBuild';

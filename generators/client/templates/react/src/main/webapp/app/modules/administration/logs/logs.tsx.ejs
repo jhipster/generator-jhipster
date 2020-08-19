@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -32,12 +32,6 @@ export const LogsPage = (props: ILogsPageProps) => {
     props.getLoggers();
   }, []);
 
-  const getLogs = () => {
-    if (!props.isFetching) {
-      props.getLoggers();
-    }
-  };
-
   const changeLevel = (loggerName, level) => () => props.changeLogLevel(loggerName, level);
 
   const changeFilter = evt => setFilter(evt.target.value);
@@ -65,7 +59,7 @@ export const LogsPage = (props: ILogsPageProps) => {
       </span>
       <input type="text" value={filter} onChange={changeFilter} className="form-control" disabled={isFetching} />
 
-      <table className="table table-sm table-striped table-bordered">
+      <table className="table table-sm table-striped table-bordered" aria-describedby="logs-page-heading">
         <thead>
           <tr title="click to order">
             <th>

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,22 +17,26 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const JCore = require('jhipster-core');
 const BaseGenerator = require('../generator-base');
-const { logger } = require('../utils');
 const statistics = require('../statistics');
+
+const JSONToJDLConverter = require('../../jdl/converters/json-to-jdl-converter');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-        this.baseName = this.config.get('baseName');
-        this.argument('jdlFile', { type: String, required: false, defaults: `${this.baseName}.jh` });
+        this.argument('jdlFile', { type: String, required: false });
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
+        if (this.options.help) {
+            return;
+        }
+        this.baseName = this.config.get('baseName');
+        this.jdlFile = this.options.jdlFile || `${this.baseName}.jdl`;
     }
 
     get default() {
@@ -47,11 +51,11 @@ module.exports = class extends BaseGenerator {
 
             convertToJDL() {
                 try {
-                    JCore.convertToJDL();
+                    JSONToJDLConverter.convertToJDL('.', this.jdlFile);
                 } catch (error) {
-                    logger.error(`An error occurred while exporting to JDL: ${error.message}\n${error}`);
+                    this.error(`An error occurred while exporting to JDL: ${error.message}\n${error}`);
                 }
-            }
+            },
         };
     }
 

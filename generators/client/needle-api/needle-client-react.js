@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,22 +20,19 @@ const chalk = require('chalk');
 const _ = require('lodash');
 
 const needleClientBase = require('./needle-client');
-const constants = require('../../generator-constants');
-
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
 module.exports = class extends needleClientBase {
     addAppSCSSStyle(style, comment) {
-        const filePath = `${CLIENT_MAIN_SRC_DIR}app/app.scss`;
+        const filePath = `${this.CLIENT_MAIN_SRC_DIR}app/app.scss`;
         this.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-main');
     }
 
     addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu) {
         const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
-        const entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/shared/layout/menus/entities.tsx`;
+        const entityMenuPath = `${this.CLIENT_MAIN_SRC_DIR}app/shared/layout/menus/entities.tsx`;
         const entityEntry =
             // prettier-ignore
-            this.generator.stripMargin(`|<MenuItem icon="asterisk" to="/entity/${routerName}">
+            this.generator.stripMargin(`|<MenuItem icon="asterisk" to="/${routerName}">
                         |      ${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${_.startCase(routerName)}`}
                         |    </MenuItem>`);
         const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-entity-to-menu', entityEntry);
@@ -44,8 +41,8 @@ module.exports = class extends needleClientBase {
     }
 
     addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName) {
-        const indexModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`;
-        const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/shared/reducers/index.ts`;
+        const indexModulePath = `${this.CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`;
+        const indexReducerPath = `${this.CLIENT_MAIN_SRC_DIR}app/shared/reducers/index.ts`;
 
         const errorMessage = path =>
             `${chalk.yellow('Reference to ') + entityInstance + entityClass + entityFolderName + entityFileName} ${chalk.yellow(
@@ -62,7 +59,7 @@ module.exports = class extends needleClientBase {
         const indexAddRoutePathRewriteFileModel = this.generateFileModel(
             indexModulePath,
             'jhipster-needle-add-route-path',
-            this.generator.stripMargin(`|<ErrorBoundaryRoute path={\`\${match.url}/${entityFileName}\`} component={${entityName}} />`)
+            this.generator.stripMargin(`|<ErrorBoundaryRoute path={\`\${match.url}${entityFileName}\`} component={${entityName}} />`)
         );
         this.addBlockContentToFile(indexAddRoutePathRewriteFileModel, errorMessage(indexModulePath));
 

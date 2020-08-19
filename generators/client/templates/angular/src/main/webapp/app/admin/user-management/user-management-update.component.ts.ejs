@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,10 +18,10 @@
 -%>
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageHelper } from 'app/core/language/language.helper';
+import { LANGUAGES } from 'app/core/language/language.constants';
 <%_ } _%>
 import { User } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
@@ -30,49 +30,61 @@ import { UserService } from 'app/core/user/user.service';
     selector: '<%= jhiPrefixDashed %>-user-mgmt-update',
     templateUrl: './user-management-update.component.html'
 })
-export class UserMgmtUpdateComponent implements OnInit {
-
-    user: User;
-    languages: any[];
-    authorities: any[];
-    isSaving: boolean;
+export class UserManagementUpdateComponent implements OnInit {
+    user!: User;
+    <%_ if (enableTranslation) { _%>
+    languages = LANGUAGES;
+    <%_ } _%>
+    authorities: string[] = [];
+    isSaving = false;
 
     editForm = this.fb.group({
-        id: [null],
-        login: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), Validators.pattern('^[_.@A-Za-z0-9-]*')]],
+        id: [],
+        login: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), Validators.pattern("<%- LOGIN_REGEX %>")]],
         firstName: ['', [Validators.maxLength(50)]],
         lastName: ['', [Validators.maxLength(50)]],
         email: ['', [Validators.minLength(5), Validators.maxLength(254), Validators.email]],
-        activated: [true],
+        activated: [],
         langKey: [],
         authorities: []
     });
 
     constructor(
-        <%_ if (enableTranslation) { _%>
-        private languageHelper: JhiLanguageHelper,
-        <%_ } _%>
         private userService: UserService,
         private route: ActivatedRoute,
-        private router: Router,
         private fb: FormBuilder
     ) {}
 
-    ngOnInit() {
-        this.isSaving = false;
-        this.route.data.subscribe(({user}) => {
-            this.user = user.body ? user.body : user;
-            this.updateForm(this.user);
+    ngOnInit(): void {
+        this.route.data.subscribe(({ user }) => {
+            if (user) {
+                this.user = user;
+                if (this.user.id === undefined) {
+                    this.user.activated = true;
+                }
+                this.updateForm(user);
+            }
         });
-        this.authorities = [];
         this.userService.authorities().subscribe((authorities) => {
             this.authorities = authorities;
         });
-        <%_ if (enableTranslation) { _%>
-        this.languageHelper.getAll().then((languages) => {
-            this.languages = languages;
-        });
-        <%_ } _%>
+    }
+
+    previousState(): void {
+        window.history.back();
+    }
+
+    save(): void {
+        this.isSaving = true;
+        this.updateUser(this.user);
+        if (this.user.id !== undefined) {
+            this.userService.update(this.user).subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+        } else {
+            <%_ if (!enableTranslation) { _%>
+            this.user.langKey = 'en';
+            <%_ } _%>
+            this.userService.create(this.user).subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+        }
     }
 
     private updateForm(user: User): void {
@@ -88,37 +100,22 @@ export class UserMgmtUpdateComponent implements OnInit {
         });
     }
 
-    previousState() {
-        window.history.back();
-    }
-
-    save() {
-        this.isSaving = true;
-        this.updateUser(this.user);
-        if (this.user.id !== null) {
-            this.userService.update(this.user).subscribe((response) => this.onSaveSuccess(response), () => this.onSaveError());
-        } else {<% if (!enableTranslation) { %>
-            this.user.langKey = 'en';<% } %>
-            this.userService.create(this.user).subscribe((response) => this.onSaveSuccess(response), () => this.onSaveError());
-        }
-    }
-
     private updateUser(user: User): void {
-        user.login = this.editForm.get(['login']).value;
-        user.firstName = this.editForm.get(['firstName']).value;
-        user.lastName = this.editForm.get(['lastName']).value;
-        user.email = this.editForm.get(['email']).value;
-        user.activated = this.editForm.get(['activated']).value;
-        user.langKey = this.editForm.get(['langKey']).value;
-        user.authorities = this.editForm.get(['authorities']).value;
+        user.login = this.editForm.get(['login'])!.value;
+        user.firstName = this.editForm.get(['firstName'])!.value;
+        user.lastName = this.editForm.get(['lastName'])!.value;
+        user.email = this.editForm.get(['email'])!.value;
+        user.activated = this.editForm.get(['activated'])!.value;
+        user.langKey = this.editForm.get(['langKey'])!.value;
+        user.authorities = this.editForm.get(['authorities'])!.value;
     }
 
-    private onSaveSuccess(result) {
+    private onSaveSuccess(): void {
         this.isSaving = false;
         this.previousState();
     }
 
-    private onSaveError() {
+    private onSaveError(): void {
         this.isSaving = false;
     }
 }

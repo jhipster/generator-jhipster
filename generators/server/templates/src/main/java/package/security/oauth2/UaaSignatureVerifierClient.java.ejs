@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.security.oauth2;
+package <%= packageName %>.security.oauth2;
 
-import <%=packageName%>.config.oauth2.OAuth2Properties;
+import <%= packageName %>.config.oauth2.OAuth2Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,7 +43,7 @@ public class UaaSignatureVerifierClient implements OAuth2SignatureVerifierClient
     private final RestTemplate restTemplate;
     protected final OAuth2Properties oAuth2Properties;
 
-    public UaaSignatureVerifierClient(DiscoveryClient discoveryClient, @Qualifier("loadBalancedRestTemplate") RestTemplate restTemplate,
+    public UaaSignatureVerifierClient(DiscoveryClient discoveryClient, @Qualifier("<%= !serviceDiscoveryType ? 'restTemplate' : 'loadBalancedRestTemplate' %>") RestTemplate restTemplate,
                                   OAuth2Properties oAuth2Properties) {
         this.restTemplate = restTemplate;
         this.oAuth2Properties = oAuth2Properties;

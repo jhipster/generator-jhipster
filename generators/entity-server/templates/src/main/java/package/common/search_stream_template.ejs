@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,11 +19,24 @@
 <%_
 const mapper = entityInstance  + 'Mapper';
 const entityToDtoReference = mapper + '::' + 'toDto'; %>
-        <%_ if (!viaService) { _%>
+<%_ if (!viaService) { _%>
+    <%_ if (!reactive) { _%>
+        <%_ if (searchEngine === 'elasticsearch') { _%>
         return StreamSupport
-            .stream(<%= entityInstance %>SearchRepository.search(queryStringQuery(query)).spliterator(), false)<% if (dto === 'mapstruct') { %>
-            .map(<%= entityToDtoReference %>)<% } %>
-            .collect(Collectors.toList());
+            .stream(<%= entityInstance %>SearchRepository.search(queryStringQuery(query)).spliterator(), false)
         <%_ } else { _%>
-        return <%= entityInstance %>Service.search(query);
+            return <%= entityInstance %>Repository.search(<%= entityClass %>.PREFIX, query)<% if (dto !== 'mapstruct') { %>;<% } else { %>.stream()<% } %>
         <%_ } _%>
+        <%_ if (dto === 'mapstruct') { _%>
+            .map(<%= entityToDtoReference %>)
+        <%_ } _%>
+        <%_ if (dto === 'mapstruct' || searchEngine === 'elasticsearch') { _%>
+        .collect(Collectors.toList());
+        <%_ } _%>
+    <%_ } else { _%>
+        return <%= entityInstance %><% if (searchEngine === 'elasticsearch') { %>Search<% } %>Repository.search(<% if (searchEngine === 'couchbase') { %><%= entityClass %>.PREFIX, <% } %>query)<%_ if (dto === 'mapstruct') { %>
+            .map(<%= entityToDtoReference %>)<%_ } %><%_ if (fromResource) { _%>.collectList()<%_ } _%>;
+    <%_ } _%>
+<%_ } else { _%>
+        return <%= entityInstance %>Service.search(query)<% if (reactive && fromResource) { %>.collectList()<% } %>;
+<%_ } _%>

@@ -1,8 +1,8 @@
 {
     "generator-jhipster": {
-        "baseName": "travisCouchbaseNoCache",
-        "packageName": "io.github.jhipster.travis",
-        "packageFolder": "io/github/jhipster/travis",
+        "baseName": "sampleCouchbaseNoCache",
+        "packageName": "io.github.jhipster.sample",
+        "packageFolder": "io/github/jhipster/sample",
         "serverPort": "8080",
         "authenticationType": "jwt",
         "cacheProvider": "no",
@@ -21,9 +21,9 @@
         "applicationType": "monolith",
         "testFrameworks": ["gatling", "protractor"],
         "jhiPrefix": "jhi",
-        "travis": true,
         "enableTranslation": true,
         "nativeLanguage": "en",
-        "languages": ["en", "fr"]
+        "languages": ["en", "fr"],
+        "creationTimestamp": 1596513172471
     }
 }

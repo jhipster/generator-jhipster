@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,15 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.domain;
+package <%= packageName %>.domain;
 
 <%_ if (databaseType === 'couchbase') { _%>
 import com.couchbase.client.java.repository.annotation.Field;
 <%_ } _%>
 import com.fasterxml.jackson.annotation.JsonIgnore;
-<%_ if (databaseType === 'sql') { _%>
-import org.hibernate.envers.Audited;
-<%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.data.annotation.CreatedBy;
 <%_ } _%>
@@ -36,7 +33,10 @@ import org.springframework.data.annotation.LastModifiedDate;
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.core.mapping.Field;
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.core.schema.Property;
+<%_ } _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 <%_ } _%>
 
@@ -44,17 +44,18 @@ import java.io.Serializable;
 import java.time.Instant;
 <%_ if (databaseType === 'sql') { _%>
 import javax.persistence.Column;
+<%_ } _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 <%_ } _%>
 
 /**
- * Base abstract class for entities which will hold definitions for created, last modified by and created,
- * last modified by date.
+ * Base abstract class for entities which will hold definitions for created, last modified, created by,
+ * last modified by attributes.
  */
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 @MappedSuperclass
-@Audited
 @EntityListeners(AuditingEntityListener.class)
 <%_ } _%>
 public abstract class AbstractAuditingEntity implements Serializable {
@@ -70,6 +71,9 @@ public abstract class AbstractAuditingEntity implements Serializable {
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     @Field("created_by")
     <%_ } _%>
+    <%_ if (databaseType === 'neo4j') { _%>
+    @Property("created_by")
+    <%_ } _%>
     @JsonIgnore
     private String createdBy;
 
@@ -79,6 +83,9 @@ public abstract class AbstractAuditingEntity implements Serializable {
     <%_ } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     @Field("created_date")
+    <%_ } _%>
+    <%_ if (databaseType === 'neo4j') { _%>
+    @Property("created_date")
     <%_ } _%>
     @JsonIgnore
     private Instant createdDate = Instant.now();
@@ -92,6 +99,9 @@ public abstract class AbstractAuditingEntity implements Serializable {
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     @Field("last_modified_by")
     <%_ } _%>
+    <%_ if (databaseType === 'neo4j') { _%>
+    @Property("last_modified_by")
+    <%_ } _%>
     @JsonIgnore
     private String lastModifiedBy;
 
@@ -101,6 +111,9 @@ public abstract class AbstractAuditingEntity implements Serializable {
     <%_ } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     @Field("last_modified_date")
+    <%_ } _%>
+    <%_ if (databaseType === 'neo4j') { _%>
+    @Property("last_modified_date")
     <%_ } _%>
     @JsonIgnore
     private Instant lastModifiedDate = Instant.now();

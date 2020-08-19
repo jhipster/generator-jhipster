@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "Estado do Sistema",
                 "configuration": "Configuração",
                 "logs": "Logs",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "Auditorias",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "Banco de dados",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -92,7 +89,7 @@
                 },
                 "confirmpassword": {
                     "required": "A confirmação da senha é obrigatória.",
-                    "minlength": "A confirmação da senha deve ter pelo menos 5 caracteres",
+                    "minlength": "A confirmação da senha deve ter pelo menos 4 caracteres",
                     "maxlength": "A confirmação da senha não pode ter mais de 50 caracteres"
                 },
                 "email": {
@@ -153,7 +150,11 @@
         "userexists": "Usuário já está cadastrado!",
         "emailexists": "E-mail já está cadastrado!",
         "idexists": "Novo(a) {{entityName}} não pode ter um identificador",
-        "idnull": "Identificador inválido"
+        "idnull": "Identificador inválido",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "Este é o rodapé da página"
 }

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,9 +47,6 @@
                 "health": "Tình trạng",
                 "configuration": "Cấu hình",
                 "logs": "Ghi logs",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "Kiểm duyệt",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "Cơ sở dữ liệu",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -150,7 +147,11 @@
         "userexists": "Tên đăng nhập đã được sử dụng!",
         "emailexists": "Email đã được sử dụng!",
         "idexists": "Thêm mới {{ entityName }} không được trùng với định danh đã tồn tại",
-        "idnull": "Invalid ID"
+        "idnull": "Invalid ID",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "Đây là chân trang của bạn"
 }

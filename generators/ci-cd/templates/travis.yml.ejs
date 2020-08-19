@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -32,9 +32,6 @@ cache:
 <%_ } else if (buildTool === 'gradle') { _%>
     - $HOME/.gradle
 <%_ } _%>
-<%_ if (clientPackageManager === 'yarn') { _%>
-    - $HOME/.yarn-cache
-<%_ } _%>
 env:
   global:
     - NODE_VERSION=<%= NODE_VERSION %>
@@ -42,60 +39,58 @@ env:
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
     - NG_CLI_ANALYTICS="false"
+<%_ if (buildTool === 'maven') { _%>
+    - MAVEN_USER_HOME=$HOME/.m2/repository/
+<%_ } _%>
 before_install:
-  -
+  - |
     if [[ $JHI_JDK = '8' ]]; then
       echo '*** Using OpenJDK 8'
     else
       echo '*** Using OpenJDK 11 by default'
-      sudo add-apt-repository ppa:openjdk-r/ppa
-      sudo apt-get update
-      sudo apt-get install -y openjdk-11-jdk
+      sudo add-apt-repository ppa:openjdk-r/ppa -y
+      sudo apt-get update -q
+      sudo apt-get install -y openjdk-11-jdk -y
       sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
       java -version
     fi
   - java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
-  <%_ if (clientPackageManager === 'npm') { _%>
   - nvm install $NODE_VERSION
   - npm install -g npm
   - node -v
   - npm -v
-  <%_ } _%>
-  <%_ if (clientPackageManager === 'yarn') { _%>
-  # Repo for Yarn
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
-  - export PATH=$HOME/.yarn/bin:$PATH
-  <%_ } _%>
 install:
   - <%= clientPackageManager %> install
 script:
 <%_ if (buildTool === 'maven') { _%>
   - chmod +x mvnw
-  - ./mvnw clean verify
+  - ./mvnw -ntp checkstyle:check
+  - ./mvnw -ntp clean verify
 <%_ } else if (buildTool === 'gradle') { _%>
   - chmod +x gradlew
+  - ./gradlew checkstyleNohttp
   - ./gradlew clean test integrationTest
 <%_ } _%>
 <%_ if (!skipClient) { _%>
   <%_ if (buildTool === 'maven') { _%>
-  - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>' -Dmaven.repo.local=$MAVEN_USER_HOME
+  - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>' -Dmaven.repo.local=$MAVEN_USER_HOME
   <%_ } else if (buildTool === 'gradle') { _%>
   - ./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon
   <%_ } _%>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
   <%_ if (cicdIntegrations.includes('sonar')) { _%>
-  - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN
+  - if [ $TRAVIS_PULL_REQUEST == "false" ]; then ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN; fi
   <%_ } _%>
-  - ./mvnw verify -Pprod -DskipTests
+  - ./mvnw -ntp verify -Pprod -DskipTests
   <%_ if (cicdIntegrations.includes('heroku')) { _%>
-  - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
+  - ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
   <%_ } _%>
 <%_ } else if (buildTool === 'gradle') { _%>
   <%_ if (cicdIntegrations.includes('sonar')) { _%>
-  - ./gradlew sonarqube --no-daemon <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN
+  - if [ $TRAVIS_PULL_REQUEST == "false" ]; then ./gradlew sonarqube --no-daemon <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN; fi
   <%_ } _%>
   - ./gradlew bootJar -Pprod -x test
   <%_ if (cicdIntegrations.includes('heroku')) { _%>

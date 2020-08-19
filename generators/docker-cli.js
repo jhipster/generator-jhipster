@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -29,7 +29,7 @@ module.exports = {
     getImageID,
     tagImage,
     loginToAws,
-    pushImage
+    pushImage,
 };
 
 let stdOut = data => console.log(data.toString().trim()); // eslint-disable-line
@@ -52,7 +52,7 @@ function command(cmd, cb, opts = {}) {
     const options = {
         silent: false,
         maxBuffer: 10240000,
-        ...opts
+        ...opts,
     };
     const command = exec(`${cmd}`, { maxBuffer: options.maxBuffer }, cb);
 

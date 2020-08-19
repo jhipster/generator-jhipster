@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -36,16 +36,17 @@ module.exports = class extends BaseGenerator {
 
     initializing() {
         this.log(chalk.bold('CloudFoundry configuration is starting'));
-        this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-        this.baseName = this.config.get('baseName');
-        this.buildTool = this.config.get('buildTool');
-        this.packageName = this.config.get('packageName');
-        this.packageFolder = this.config.get('packageFolder');
-        this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
-        this.enableHibernateCache = this.config.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
-        this.databaseType = this.config.get('databaseType');
-        this.devDatabaseType = this.config.get('devDatabaseType');
-        this.prodDatabaseType = this.config.get('prodDatabaseType');
+        const configuration = this.config;
+        this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
+        this.baseName = configuration.get('baseName');
+        this.buildTool = configuration.get('buildTool');
+        this.packageName = configuration.get('packageName');
+        this.packageFolder = configuration.get('packageFolder');
+        this.cacheProvider = configuration.get('cacheProvider') || 'no';
+        this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
+        this.databaseType = configuration.get('databaseType');
+        this.devDatabaseType = configuration.get('devDatabaseType');
+        this.prodDatabaseType = configuration.get('prodDatabaseType');
         this.angularAppName = this.getAngularAppName();
     }
 
@@ -80,7 +81,7 @@ module.exports = class extends BaseGenerator {
                     }
                     done();
                 });
-            }
+            },
         };
     }
 
@@ -110,9 +111,7 @@ module.exports = class extends BaseGenerator {
                 if (this.databaseType !== 'no') {
                     this.log(chalk.bold('Creating the database'));
                     const child = exec(
-                        `cf create-service ${this.cloudfoundryDatabaseServiceName} ${this.cloudfoundryDatabaseServicePlan} ${
-                            this.cloudfoundryDeployedName
-                        }`,
+                        `cf create-service ${this.cloudfoundryDatabaseServiceName} ${this.cloudfoundryDatabaseServicePlan} ${this.cloudfoundryDeployedName}`,
                         {},
                         (err, stdout, stderr) => {
                             done();
@@ -144,7 +143,7 @@ module.exports = class extends BaseGenerator {
                 child.stdout.on('data', data => {
                     this.log(data.toString());
                 });
-            }
+            },
         };
     }
 
@@ -189,7 +188,7 @@ module.exports = class extends BaseGenerator {
                 exec(`cf restart ${this.cloudfoundryDeployedName}`, (err, stdout, stderr) => {
                     this.log(chalk.green('\nYour app should now be live'));
                 });
-            }
+            },
         };
     }
 };

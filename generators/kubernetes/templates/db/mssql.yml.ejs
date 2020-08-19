@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,6 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (kubernetesUseDynamicStorage) { _%>
+apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+kind: PersistentVolumeClaim
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-mssql-pvc
+  namespace: <%= kubernetesNamespace %>
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  <%_ if (kubernetesStorageClassName) { _%>
+  storageClassName: <%= kubernetesStorageClassName %>
+  <%_ } _%>
+---
+<%_ } _%>
 apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
@@ -36,30 +53,41 @@ spec:
      <%_ } _%>
     spec:
       volumes:
+      - name: mssqldb
+        persistentVolumeClaim:
+          claimName: mssql-data
       - name: data
+        <%_ if (kubernetesUseDynamicStorage) { _%>
+        persistentVolumeClaim:
+          claimName: <%= app.baseName.toLowerCase() %>-mssql-pvc
+        <%_ } else { _%>
         emptyDir: {}
+        <%_ } _%>
       containers:
       - name: mysql
         image: <%= DOCKER_MSSQL %>
         env:
         - name: MSSQL_PID
-          value: "Developer"
+          value: "Express"
         - name: ACCEPT_EULA
           value: "Y"
         - name: MSSQL_SA_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mssql
-              key: SA_PASSWORD 
+              key: SA_PASSWORD
         ports:
         - containerPort: 1433
         volumeMounts:
         - name: mssqldb
           mountPath: /var/opt/mssql
-      volumes:
-      - name: mssqldb
-        persistentVolumeClaim:
-          claimName: mssql-data
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
 
 ---
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
@@ -76,24 +104,14 @@ spec:
       targetPort: 1433
   type: LoadBalancer
 ---
-kind: StorageClass
-apiVersion: storage.k8s.io/v1beta1
-metadata:
-     name: <%= app.baseName.toLowerCase() %>-mssql
-provisioner: kubernetes.io/azure-disk
-parameters:
-  storageaccounttype: Standard_LRS
-  kind: Managed
----
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: mssql-data
-  annotations:
-    volume.beta.kubernetes.io/storage-class: azure-disk
 spec:
   accessModes:
   - ReadWriteOnce
+  storageClassName: managed-premium
   resources:
     requests:
       storage: 8Gi

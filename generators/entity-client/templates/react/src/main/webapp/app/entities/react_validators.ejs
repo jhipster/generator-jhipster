@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%#	Returns a string of all react validators required for the input field. -%>
+<%# Returns a string of all react validators required for the input field. -%>
 <%
 const field = fields[idx];
 let result = '';
 
 if (field.fieldValidate === true) {
-	const rules = field.fieldValidateRules;
-	const validators = [];
+    const rules = field.fieldValidateRules;
+    const validators = [];
 
 
     if (rules.includes('required') && field.fieldType !== 'Boolean') {
@@ -44,7 +44,7 @@ if (field.fieldValidate === true) {
     if (rules.includes('pattern')) {
         validators.push('pattern: { value: \'' + field.fieldValidateRulesPatternReact.replace(/\\/g, '\\\\') + '\', errorMessage: translate(\'entity.validation.pattern\', { pattern: \'' + field.fieldValidateRulesPatternReact.replace(/\\/g, '\\\\') + '\' }) }');
     }
-    if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
+    if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(field.fieldType)) {
         validators.push('number: { value: true, errorMessage: translate(\'entity.validation.number\') }');
     }
     // Not supported anymore because the server can't check the size of the blob before downloading it completely.

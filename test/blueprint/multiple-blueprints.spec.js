@@ -1,13 +1,17 @@
+/* eslint-disable max-classes-per-file */
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files');
 const ClientGenerator = require('../../generators/client');
 const ServerGenerator = require('../../generators/server');
+const constants = require('../../generators/generator-constants');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
 const mockClientBlueprintSubGen = class extends ClientGenerator {
     constructor(args, opts) {
-        super(args, Object.assign({ fromBlueprint: true }, opts)); // fromBlueprint variable is important
+        super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
     }
 
     get initializing() {
@@ -35,11 +39,11 @@ const mockClientBlueprintSubGen = class extends ClientGenerator {
         const customPhaseSteps = {
             addDummyProperty() {
                 this.addNpmDependency('dummy-blueprint-property', '2.0');
-            }
+            },
         };
         return {
             ...phaseFromJHipster,
-            ...customPhaseSteps
+            ...customPhaseSteps,
         };
     }
 
@@ -56,7 +60,7 @@ const mockClientBlueprintSubGen = class extends ClientGenerator {
 
 const mockServerBlueprintSubGen = class extends ServerGenerator {
     constructor(args, opts) {
-        super(args, Object.assign({ fromBlueprint: true }, opts)); // fromBlueprint variable is important
+        super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
     }
 
     get initializing() {
@@ -69,11 +73,11 @@ const mockServerBlueprintSubGen = class extends ServerGenerator {
         const customPhaseSteps = {
             addDummyProperty() {
                 this.addMavenProperty('dummy-blueprint-property', 'foo');
-            }
+            },
         };
         return {
             ...phaseFromJHipster,
-            ...customPhaseSteps
+            ...customPhaseSteps,
         };
     }
 
@@ -106,7 +110,7 @@ const mockServerBlueprintSubGen = class extends ServerGenerator {
 describe('JHipster entity generator with multiple blueprints', () => {
     const blueprintNames = [
         'generator-jhipster-my-client-blueprint,generator-jhipster-my-server-blueprint',
-        'my-client-blueprint,my-server-blueprint'
+        'my-client-blueprint,my-server-blueprint',
     ];
 
     blueprintNames.forEach(blueprints => {
@@ -115,18 +119,18 @@ describe('JHipster entity generator with multiple blueprints', () => {
                 helpers
                     .run(path.join(__dirname, '../../generators/app'))
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipInstall: true,
                         skipChecks: true,
-                        blueprints
+                        blueprints,
                     })
                     .withGenerators([
                         [mockClientBlueprintSubGen, 'jhipster-my-client-blueprint:client'],
-                        [mockServerBlueprintSubGen, 'jhipster-my-server-blueprint:server']
+                        [mockServerBlueprintSubGen, 'jhipster-my-server-blueprint:server'],
                     ])
                     .withPrompts({
                         baseName: 'jhipster',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
                         serviceDiscoveryType: false,
@@ -138,7 +142,7 @@ describe('JHipster entity generator with multiple blueprints', () => {
                         prodDatabaseType: 'mysql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
-                        languages: ['fr']
+                        languages: ['fr'],
                     })
                     .on('end', done);
             });

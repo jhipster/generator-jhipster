@@ -1,12 +1,18 @@
 {
     "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "embeddedOperation",
+            "otherEntityName": "embeddedOperation",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "documentBankAccount"
+        }
+    ],
     "fields": [
         {
             "fieldName": "name",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "bankNumber",
@@ -27,9 +33,7 @@
         {
             "fieldName": "balance",
             "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "openingDay",

@@ -42,14 +42,6 @@
             "otherEntityRelationshipName": "testOneToOne"
         },
         {
-            "relationshipName": "testPager",
-            "otherEntityName": "testPager",
-            "relationshipType": "one-to-one",
-            "otherEntityField": "id",
-            "ownerSide": true,
-            "otherEntityRelationshipName": "testOneToOne"
-        },
-        {
             "relationshipName": "testPagination",
             "otherEntityName": "testPagination",
             "relationshipType": "one-to-one",

@@ -13,16 +13,14 @@
         {
             "fieldName": "labelName",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "minlength"
-            ],
+            "fieldValidateRules": ["required", "minlength"],
             "fieldValidateRulesMinlength": "3"
         }
     ],
-    "changelogDate": "20150805124936",
+    "changelogDate": "20200804163353",
     "dto": "no",
     "pagination": "pagination",
     "service": "serviceClass",
-    "clientRootFolder": "test-root"
+    "clientRootFolder": "test-root",
+    "readOnly": true
 }

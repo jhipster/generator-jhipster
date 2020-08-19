@@ -1,0 +1,60 @@
+import { createLocalVue, shallowMount, Wrapper } from '@vue/test-utils';
+import Home from '@/core/home/home.vue';
+import HomeClass from '@/core/home/home.component';
+import * as config from '@/shared/config/config';
+
+const localVue = createLocalVue();
+config.initVueApp(localVue);
+const store = config.initVueXStore(localVue);
+<%_ if (enableTranslation) { _%>
+const i18n = config.initI18N(localVue);
+<%_ } _%>
+localVue.component('router-link', {});
+
+describe('Home', () => {
+  let home: HomeClass;
+  let wrapper: Wrapper<HomeClass>;
+  <%_ if (authenticationType === 'jwt') { _%>
+  const loginService = { openLogin: jest.fn() };
+  <%_ } else if (authenticationType === 'session') { _%>
+  const loginService = { openLogin: jest.fn(), logout: jest.fn() };
+  <%_ } else if (authenticationType === 'oauth2') { _%>
+  const loginService = { login: jest.fn(), logout: jest.fn() };
+  <%_ } _%>
+
+  beforeEach(() => {
+    wrapper = shallowMount<HomeClass>(Home, {
+      <%_ if (enableTranslation) { _%>
+      i18n,
+      <%_ } _%>
+      store,
+      localVue,
+      provide: {
+        loginService: () => loginService
+      }
+    });
+    home = wrapper.vm;
+  });
+
+  it('should not have user data set', () => {
+    expect(home.authenticated).toBeFalsy();
+    expect(home.username).toBe('');
+  });
+
+  it('should have user data set after authentication', () => {
+    store.commit('authenticated', {login: 'test'});
+
+    expect(home.authenticated).toBeTruthy();
+    expect(home.username).toBe('test');
+  });
+
+  it('should use login service', () => {
+    home.openLogin();
+
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    expect(loginService.openLogin).toHaveBeenCalled();
+    <%_ } else { %>
+    expect(loginService.login).toHaveBeenCalled();
+    <%_ } %>
+  });
+});

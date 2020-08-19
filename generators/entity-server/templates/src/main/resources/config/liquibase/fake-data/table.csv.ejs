@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,8 +47,8 @@ for (idx in relationships) {
     if ( relationships[idx].useJPADerivedIdentifier === true ) {
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         if (otherEntityNameCapitalized === 'User') {
-            // there are only 4 user records by default
-            numberOfRows = 4;
+            // Only few user records are generated
+            numberOfRows = (authenticationType === 'oauth2') ? 2 : 4;
         }
         break;
     }
@@ -87,11 +87,11 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         } else if (columnType === 'boolean') {
             data = this.faker.random.boolean();
         } else if (columnType === 'date') {
-            data = this.faker.date.recent().toISOString().split('T')[0];
+            data = this.getRecentForLiquibase(1, changelogDate).toISOString().split('T')[0];
         } else if (columnType === 'datetime') {
             // Write the date without milliseconds so Java can parse it
             // See https://stackoverflow.com/a/34053802/150868
-            data = this.faker.date.recent().toISOString().split('.')[0];
+            data = this.getRecentForLiquibase(1, changelogDate).toISOString().split('.')[0];
         } else if (columnType.startsWith('varchar')) {
             let columnName = fields[idx].fieldNameAsDatabaseColumn;
             if (columnName === 'first_name') {
@@ -115,7 +115,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             } else if (columnName === 'color') {
                 data = this.faker.commerce.color();
             } else if (columnName === 'account') {
-                data = this.faker.commerce.account();
+                data = this.faker.finance.account();
             } else if (columnName === 'account_name') {
                 data = this.faker.finance.accountName();
             } else if (columnName === 'currency_code') {
@@ -138,22 +138,23 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         }
         if (fields[idx].fieldIsEnum) {
             if (fields[idx].fieldValues.length !== 0) {
-                const enums = fields[idx].fieldValues.split(',');
-                data = enums[Math.floor(Math.random() * Math.floor(enums.length))];
+                const enumValues = fields[idx].enumValues;
+                data = enumValues[this.faker.random.number(enumValues.length-1)].name;
             } else {
                 data = '';
             }
         }
         if (columnType === 'blob' || columnType === 'longblob') {
             data = '../fake-data/blob/hipster.png'
-        } else if (columnType === '${clobType}'){
+        } else if (columnType === '${clobType}') {
             data = '../fake-data/blob/hipster.txt'
         }
 
         // Validation rules
         if (fields[idx].fieldValidate === true) {
             if (fields[idx].fieldValidateRules.includes('pattern')) {
-                data = new this.randexp(fields[idx].fieldValidateRulesPattern).gen();
+                const randExp = new this.randexp(fields[idx].fieldValidateRulesPattern)
+                data = `"${randExp.gen().replace(/"/g, '')}"`;
             }
 
             // manage String max length
@@ -171,7 +172,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             // test if generated data is still compatible with the regexp as we potentially modify it with min/maxLength
             if (
                 fields[idx].fieldValidateRules.includes("pattern") &&
-                !new RegExp("^" + fields[idx].fieldValidateRulesPattern + "$").test(data)
+                !new RegExp("^" + fields[idx].fieldValidateRulesPattern + "$").test(data.substring(1, data.length - 1))
             ) {
                 data = "";
             }
@@ -219,12 +220,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
 }
 
 let result = table
-        .map(line =>
-            line.map(data => {
-                    return data;
-                })
-                .join(';')
-        )
+        .map(line => line.join(';'))
         .join('\n');
  _%>
-<%-result%>
+<%- result %>

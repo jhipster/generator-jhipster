@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,30 +17,29 @@
  limitations under the License.
 -%>
     <%= entityInstancePlural %>: I<%= entityAngularName %>[];
-    currentAccount: any;
-    eventSubscriber: Subscription;
+    eventSubscriber?: Subscription;
     itemsPerPage: number;
     links: any;
-    page: any;
-    predicate: any;
-    reverse: any;
-    totalItems: number;
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    page: number;
+    predicate: string;
+    ascending: boolean;
+    <%_ if (searchEngine !== false) { _%>
     currentSearch: string;
     <%_ } _%>
 
     constructor(
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
-        protected jhiAlertService: JhiAlertService,
         <%_ if (fieldsContainBlob) { _%>
         protected dataUtils: JhiDataUtils,
         <%_ } _%>
         protected eventManager: JhiEventManager,
+        <%_ if (!readOnly) { _%>
+        protected modalService: NgbModal,
+        <%_ } _%>
         protected parseLinks: JhiParseLinks,
-        <%_ if (searchEngine === 'elasticsearch') { _%>
+        <%_ if (searchEngine !== false) { _%>
         protected activatedRoute: ActivatedRoute,
         <%_ } _%>
-        protected accountService: AccountService
     ) {
         this.<%= entityInstancePlural %> = [];
         this.itemsPerPage = ITEMS_PER_PAGE;
@@ -49,15 +48,15 @@
             last: 0
         };
         this.predicate = 'id';
-        this.reverse = true;
-        <%_ if (searchEngine === 'elasticsearch') { _%>
-        this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.params['search'] ?
-            this.activatedRoute.snapshot.params['search'] : '';
+        this.ascending = true;
+        <%_ if (searchEngine !== false) { _%>
+        this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search'] ?
+            this.activatedRoute.snapshot.queryParams['search'] : '';
         <%_ } _%>
     }
 
-    loadAll() {
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    loadAll(): void {
+        <%_ if (searchEngine !== false) { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
                 query: this.currentSearch,
@@ -65,58 +64,52 @@
                 size: this.itemsPerPage,
                 sort: this.sort()
             }).subscribe(
-                (res: HttpResponse<I<%= entityAngularName %>[]>) => this.paginate<%= entityClassPlural %>(res.body, res.headers),
-                (res: HttpErrorResponse) => this.onError(res.message)
+                (res: HttpResponse<I<%= entityAngularName %>[]>) => this.paginate<%= entityClassPlural %>(res.body, res.headers)
             );
             return;
         }
-    <%_ } _%>
+        <%_ } _%>
+
         this.<%= entityInstance %>Service.query({
             page: this.page,
             size: this.itemsPerPage,
             sort: this.sort()
         }).subscribe(
-            (res: HttpResponse<I<%= entityAngularName %>[]>) => this.paginate<%= entityClassPlural %>(res.body, res.headers),
-            (res: HttpErrorResponse) => this.onError(res.message)
+            (res: HttpResponse<I<%= entityAngularName %>[]>) => this.paginate<%= entityClassPlural %>(res.body, res.headers)
         );
     }
 
-    reset() {
+    reset(): void {
         this.page = 0;
         this.<%= entityInstancePlural %> = [];
         this.loadAll();
     }
 
-    loadPage(page) {
+    loadPage(page: number): void {
         this.page = page;
         this.loadAll();
     }
-    <%_ if (searchEngine === 'elasticsearch') { _%>
 
-    clear() {
+    <%_ if (searchEngine !== false) { _%>
+    search(query: string): void {
         this.<%= entityInstancePlural %> = [];
         this.links = {
             last: 0
         };
         this.page = 0;
-        this.predicate = 'id';
-        this.reverse = true;
-        this.currentSearch = '';
-        this.loadAll();
-    }
-
-    search(query) {
-        if (!query) {
-            return this.clear();
+        if (query) {
+            this.predicate = '_score';
+            this.ascending = false;
+        } else {
+            this.predicate = 'id';
+            this.ascending = true;
         }
-        this.<%= entityInstancePlural %> = [];
-        this.links = {
-            last: 0
-        };
-        this.page = 0;
-        this.predicate = '_score';
-        this.reverse = false;
         this.currentSearch = query;
         this.loadAll();
     }
     <%_ } _%>
+
+    ngOnInit(): void {
+        this.loadAll();
+        this.registerChangeIn<%= entityClassPlural %>();
+    }

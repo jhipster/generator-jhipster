@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,7 +22,7 @@
 _%>
 import axios from 'axios';
 import {
-  <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%_ if (searchEngine !== false) { _%>
   ICrudSearchAction,
   <%_ } _%>
   <%_ if (pagination === 'infinite-scroll') { _%>
@@ -42,17 +42,19 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 export const ACTION_TYPES = {
-  <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%_ if (searchEngine !== false) { _%>
   SEARCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/SEARCH_<%= entityActionNamePlural %>',
   <%_ } _%>
   FETCH_<%= entityActionName %>_LIST: '<%= entityInstance %>/FETCH_<%= entityActionName %>_LIST',
   FETCH_<%= entityActionName %>:  '<%= entityInstance %>/FETCH_<%= entityActionName %>',
+<%_ if (!readOnly) { _%>
   CREATE_<%= entityActionName %>: '<%= entityInstance %>/CREATE_<%= entityActionName %>',
   UPDATE_<%= entityActionName %>: '<%= entityInstance %>/UPDATE_<%= entityActionName %>',
   DELETE_<%= entityActionName %>: '<%= entityInstance %>/DELETE_<%= entityActionName %>',
   <%_ if (fieldsContainBlob) { _%>
   SET_BLOB: '<%= entityInstance %>/SET_BLOB',
   <%_ } _%>
+<%_ } _%>
   RESET: '<%= entityInstance %>/RESET'
 };
 
@@ -77,7 +79,7 @@ export type <%= entityReactName %>State =  Readonly<typeof initialState>;
 
 export default (state: <%= entityReactName %>State = initialState, action): <%= entityReactName %>State => {
   switch (action.type) {
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
     case REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
     <%_ } _%>
     case REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
@@ -88,6 +90,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         updateSuccess: false,
         loading: true
       };
+    <%_ if (!readOnly) { _%>
     case REQUEST(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case REQUEST(ACTION_TYPES.UPDATE_<%= entityActionName %>):
     case REQUEST(ACTION_TYPES.DELETE_<%= entityActionName %>):
@@ -97,14 +100,17 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         updateSuccess: false,
         updating: true
       };
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ } _%>
+    <%_ if (searchEngine !== false) { _%>
     case FAILURE(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
     <%_ } _%>
     case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
     case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>):
+    <%_ if (!readOnly) { _%>
     case FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.DELETE_<%= entityActionName %>):
+    <%_ } _%>
       return {
         ...state,
         loading: false,
@@ -112,7 +118,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         updateSuccess: false,
         errorMessage: action.payload
       };
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
     case SUCCESS(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
     <%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
@@ -147,6 +153,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         loading: false,
         entity: action.payload.data
       };
+    <%_ if (!readOnly) { _%>
     case SUCCESS(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case SUCCESS(ACTION_TYPES.UPDATE_<%= entityActionName %>):
       return {
@@ -175,6 +182,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
       };
     }
     <%_ } _%>
+    <%_ } _%>
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -185,13 +193,13 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
 };
 
 const apiUrl = '<% if (applicationType === 'gateway' && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngine !== false) { _%>
 const apiSearchUrl = '<% if (applicationType === 'gateway' && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
 <%_ } _%>
 
 // Actions
 
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngine !== false) { _%>
 export const getSearchEntities: ICrudSearchAction<I<%= entityReactName %>> = (query, page, size, sort) => ({
   type: ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>,
 <%_ if (pagination !== 'no') { _%>
@@ -226,6 +234,7 @@ export const getEntity: ICrudGetAction<I<%= entityReactName %>> = id => {
   };
 };
 
+<%_ if (!readOnly) { _%>
 export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
@@ -242,9 +251,6 @@ export const updateEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
     payload: axios.put(apiUrl, cleanEntity(entity))
   });
-  <%_ if (pagination !== 'infinite-scroll') { _%>
-  dispatch(getEntities());
-  <%_ } _%>
   return result;
 };
 
@@ -269,6 +275,7 @@ export const setBlob = (name, data, contentType?) => ({
     contentType
   }
 });
+<%_ } _%>
 <%_ } _%>
 
 export const reset = () => ({

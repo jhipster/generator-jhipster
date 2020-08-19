@@ -1,6 +1,11 @@
+const path = require('path');
 const expect = require('chai').expect;
 // using base generator which extends the private base
 const BaseGenerator = require('../generators/generator-base').prototype;
+const constants = require('../generators/generator-constants');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 BaseGenerator.log = msg => {
     // eslint-disable-next-line no-console
@@ -27,16 +32,13 @@ export * from './entityFolderName/entityFileName.state';`;
         it('should produce correct indented output without margin', () => {
             const routerName = 'routerName';
             const enableTranslation = true;
-            const glyphiconName = 'glyphiconName';
             const content = `|<li ui-sref-active="active">
                  |    <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
-                 |        <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
                  |        <span ${enableTranslation ? `data-translate="global.menu.${routerName}"` : ''}>${routerName}</span>
                  |    </a>
                  |</li>`;
             const out = `<li ui-sref-active="active">
     <a ui-sref="routerName" ng-click="vm.collapseNavbar()">
-        <span class="glyphicon glyphicon-glyphiconName"></span>&nbsp;
         <span data-translate="global.menu.routerName">routerName</span>
     </a>
 </li>`;
@@ -66,11 +68,11 @@ export * from './entityFolderName/entityFileName.state';`;
         describe('with relationships from or to the User', () => {
             const relationships = [
                 {
-                    otherEntityAngularName: 'User'
+                    otherEntityAngularName: 'User',
                 },
                 {
-                    otherEntityAngularName: 'AnEntity'
-                }
+                    otherEntityAngularName: 'AnEntity',
+                },
             ];
             describe('when called with dto option', () => {
                 it('return an empty Map', () => {
@@ -88,11 +90,11 @@ export * from './entityFolderName/entityFileName.state';`;
             describe('when called with 2 identical relationships without dto option', () => {
                 const relationships = [
                     {
-                        otherEntityAngularName: 'User'
+                        otherEntityAngularName: 'User',
                     },
                     {
-                        otherEntityAngularName: 'User'
-                    }
+                        otherEntityAngularName: 'User',
+                    },
                 ];
                 it('return a Map with 1 import', () => {
                     const imports = BaseGenerator.generateEntityClientImports(relationships, 'no');
@@ -109,18 +111,18 @@ export * from './entityFolderName/entityFileName.state';`;
                     {
                         otherEntityAngularName: 'AnEntity',
                         otherEntityFileName: 'AnEntity',
-                        otherEntityClientRootFolder: 'anEntity'
+                        otherEntityClientRootFolder: 'anEntity',
                     },
                     {
                         otherEntityAngularName: 'AnotherEntity',
                         otherEntityFileName: 'AnotherEntity',
-                        otherEntityClientRootFolder: 'anotherEntity'
-                    }
+                        otherEntityClientRootFolder: 'anotherEntity',
+                    },
                 ];
 
                 before(() => {
-                    importsForAngular = BaseGenerator.generateEntityClientImports(relationships, 'no', 'angularX');
-                    importsForReact = BaseGenerator.generateEntityClientImports(relationships, 'no', 'react');
+                    importsForAngular = BaseGenerator.generateEntityClientImports(relationships, 'no', ANGULAR);
+                    importsForReact = BaseGenerator.generateEntityClientImports(relationships, 'no', REACT);
                 });
 
                 it('adds the same imports regardless of the client framework', () => {
@@ -140,7 +142,7 @@ export * from './entityFolderName/entityFileName.state';`;
             it('return languages pipe syntax', () => {
                 expect(BaseGenerator.generateLanguageOptions(['en', 'fr'])).to.eql([
                     `'en': { name: 'English' }`, // eslint-disable-line
-                    `'fr': { name: 'Français' }` // eslint-disable-line
+                    `'fr': { name: 'Français' }`, // eslint-disable-line
                 ]);
             });
         });
@@ -173,6 +175,101 @@ export * from './entityFolderName/entityFileName.state';`;
         describe('when called with UUID', () => {
             it("return '9fec3727-3421-4967-b213-ba36557ca194'", () => {
                 expect(BaseGenerator.generateTestEntityId('UUID')).to.equal("'9fec3727-3421-4967-b213-ba36557ca194'");
+            });
+        });
+    });
+
+    describe('getJDBCUrl', () => {
+        describe('when called for mysql', () => {
+            it('return jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true', () => {
+                expect(BaseGenerator.getJDBCUrl('mysql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true'
+                );
+            });
+        });
+        describe('when called for mysql with skipExtraOptions enabled', () => {
+            it('return jdbc:mysql://localhost:3306/test', () => {
+                expect(BaseGenerator.getJDBCUrl('mysql', { databaseName: 'test', hostname: 'localhost', skipExtraOptions: true })).to.equal(
+                    'jdbc:mysql://localhost:3306/test'
+                );
+            });
+        });
+        describe('when called for mariadb', () => {
+            it('return jdbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC', () => {
+                expect(BaseGenerator.getJDBCUrl('mariadb', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'jdbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC'
+                );
+            });
+        });
+        describe('when called for mariadb with skipExtraOptions enabled', () => {
+            it('return jdbc:mariadb://localhost:3306/test', () => {
+                expect(
+                    BaseGenerator.getJDBCUrl('mariadb', { databaseName: 'test', hostname: 'localhost', skipExtraOptions: true })
+                ).to.equal('jdbc:mariadb://localhost:3306/test');
+            });
+        });
+        describe('when called for postgresql', () => {
+            it('return jdbc:postgresql://localhost:5432/test', () => {
+                expect(BaseGenerator.getJDBCUrl('postgresql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'jdbc:postgresql://localhost:5432/test'
+                );
+            });
+        });
+        describe('when called for oracle', () => {
+            it('return jdbc:oracle:thin:@localhost:1521:test', () => {
+                expect(BaseGenerator.getJDBCUrl('oracle', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'jdbc:oracle:thin:@localhost:1521:test'
+                );
+            });
+        });
+        describe('when called for mssql', () => {
+            it('return jdbc:sqlserver://localhost:1433;database=test', () => {
+                expect(BaseGenerator.getJDBCUrl('mssql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'jdbc:sqlserver://localhost:1433;database=test'
+                );
+            });
+        });
+        describe('when called for h2Disk', () => {
+            it('return jdbc:h2:file:./build/h2db/db/test;DB_CLOSE_DELAY=-1', () => {
+                expect(BaseGenerator.getJDBCUrl('h2Disk', { databaseName: 'test', localDirectory: './build/h2db/db' })).to.equal(
+                    'jdbc:h2:file:./build/h2db/db/test;DB_CLOSE_DELAY=-1'
+                );
+            });
+        });
+        describe('when called for h2Disk with skipExtraOptions enabled', () => {
+            it('return jdbc:h2:file:./build/h2db/db/test', () => {
+                expect(
+                    BaseGenerator.getJDBCUrl('h2Disk', { databaseName: 'test', localDirectory: './build/h2db/db', skipExtraOptions: true })
+                ).to.equal('jdbc:h2:file:./build/h2db/db/test');
+            });
+        });
+        describe('when called for h2Disk with missing `localDirectory` option', () => {
+            it('throw an error', () => {
+                expect(() => BaseGenerator.getJDBCUrl('h2Disk', { databaseName: 'test' })).to.throw(
+                    "'localDirectory' option should be provided for h2Disk databaseType"
+                );
+            });
+        });
+        describe('when called for h2Memory', () => {
+            it('return jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE', () => {
+                expect(BaseGenerator.getJDBCUrl('h2Memory', { databaseName: 'test' })).to.equal(
+                    'jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE'
+                );
+            });
+        });
+        describe('when called for h2Memory with skipExtraOptions enabled', () => {
+            it('return jdbc:h2:mem:test', () => {
+                expect(BaseGenerator.getJDBCUrl('h2Memory', { databaseName: 'test', skipExtraOptions: true })).to.equal('jdbc:h2:mem:test');
+            });
+        });
+        describe('when called with missing `databaseName` option', () => {
+            it('throw an error', () => {
+                expect(() => BaseGenerator.getJDBCUrl('mysql')).to.throw("option 'databaseName' is required");
+            });
+        });
+        describe('when called for an unknown databaseType', () => {
+            it('throw an error', () => {
+                expect(() => BaseGenerator.getJDBCUrl('foodb', { databaseName: 'test' })).to.throw('foodb databaseType is not supported');
             });
         });
     });
@@ -210,7 +307,6 @@ export * from './entityFolderName/entityFileName.state';`;
             });
             describe('when having quotes', () => {
                 it('formats the text to make the string valid', () => {
-                    // eslint-disable-next-line quotes
                     expect(BaseGenerator.formatAsApiDescription('JHipster is "the" best')).to.equal('JHipster is \\"the\\" best');
                 });
             });
@@ -252,13 +348,11 @@ export * from './entityFolderName/entityFileName.state';`;
             });
             describe('when having quotes', () => {
                 it('formats the text to escape it', () => {
-                    // eslint-disable-next-line quotes
                     expect(BaseGenerator.formatAsLiquibaseRemarks('JHipster is "the" best')).to.equal('JHipster is &quot;the&quot; best');
                 });
             });
             describe('when having apostrophe', () => {
                 it('formats the text to escape it', () => {
-                    // eslint-disable-next-line quotes
                     expect(BaseGenerator.formatAsLiquibaseRemarks("JHipster is 'the' best")).to.equal('JHipster is &apos;the&apos; best');
                 });
             });
@@ -266,6 +360,59 @@ export * from './entityFolderName/entityFileName.state';`;
                 it('formats the text to escape it', () => {
                     expect(BaseGenerator.formatAsLiquibaseRemarks('Not boldy\n<b>boldy</b>')).to.equal('Not boldy&lt;b&gt;boldy&lt;/b&gt;');
                 });
+            });
+        });
+    });
+
+    describe('getEntityParentPathAddition', () => {
+        describe('when passing /', () => {
+            it('returns an empty string', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('/')).to.equal('');
+            });
+        });
+        describe('when passing /foo/', () => {
+            it('returns ../', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('/foo/')).to.equal('../');
+            });
+        });
+        describe('when passing undefined', () => {
+            it('returns an empty string', () => {
+                expect(BaseGenerator.getEntityParentPathAddition()).to.equal('');
+            });
+        });
+        describe('when passing empty', () => {
+            it('returns an empty string', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('')).to.equal('');
+            });
+        });
+        describe('when passing foo', () => {
+            it('returns ../', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('foo')).to.equal('../');
+            });
+        });
+        describe('when passing foo/bar', () => {
+            it('returns ../../', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('foo/bar')).to.equal(`..${path.sep}../`);
+            });
+        });
+        describe('when passing ../foo', () => {
+            it('returns an empty string', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('../foo')).to.equal('');
+            });
+        });
+        describe('when passing ../foo/bar', () => {
+            it('returns ../', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('../foo/bar')).to.equal('../');
+            });
+        });
+        describe('when passing ../foo/bar/foo2', () => {
+            it('returns ../../', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('../foo/bar/foo2')).to.equal(`..${path.sep}../`);
+            });
+        });
+        describe('when passing ../../foo', () => {
+            it('throw an error', () => {
+                expect(() => BaseGenerator.getEntityParentPathAddition('../../foo')).to.throw();
             });
         });
     });

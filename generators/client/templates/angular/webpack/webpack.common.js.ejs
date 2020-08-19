@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,13 +17,14 @@
  limitations under the License.
 -%>
 const webpack = require('webpack');
-const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
-<%_ } if (buildTool === undefined) { _%>
+<%_ } _%>
 
+<%_ if (buildTool === undefined) { _%>
 const packageJson = require('./../package.json');
 <%_ } _%>
 const utils = require('./utils.js');
@@ -33,9 +34,7 @@ module.exports = (options) => ({
         extensions: ['.ts', '.js'],
         modules: ['node_modules'],
         mainFields: [ 'es2015', 'browser', 'module', 'main'],
-        alias: {
-            app: utils.root('<%= MAIN_SRC_DIR %>app/')
-        }
+        alias: utils.mapTypescriptAliasToWebpackAlias()
     },
     stats: {
         children: false
@@ -43,16 +42,21 @@ module.exports = (options) => ({
     module: {
         rules: [
             {
+                test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
+                loader: '@ngtools/webpack'
+            },
+            {
                 test: /\.html$/,
                 loader: 'html-loader',
                 options: {
-                    minimize: true,
-                    caseSensitive: true,
-                    removeAttributeQuotes:false,
-                    minifyJS:false,
-                    minifyCSS:false
+                    minimize: {
+                        caseSensitive: true,
+                        removeAttributeQuotes:false,
+                        minifyJS:false,
+                        minifyCSS:false
+                    }
                 },
-                exclude: /(<%= MAIN_SRC_DIR.replace(/\//g, '\\\/') %>index.html)/
+                exclude: utils.root('src/main/webapp/index.html')
             },
             {
                 test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
@@ -60,7 +64,10 @@ module.exports = (options) => ({
                 options: {
                     digest: 'hex',
                     hash: 'sha512',
-                    name: 'content/[hash].[ext]'
+                    // For fixing src attr of image
+                    // See https://github.com/jhipster/generator-jhipster/issues/11209
+                    name: 'content/[hash].[ext]',
+                    esModule: false
                 }
             },
             {
@@ -79,12 +86,12 @@ module.exports = (options) => ({
             'process.env': {
                 NODE_ENV: `'${options.env}'`,
                 BUILD_TIMESTAMP: `'${new Date().getTime()}'`,
-<%_ if (buildTool === undefined) { _%>
+                <%_ if (buildTool === undefined) { _%>
                 VERSION: `'${packageJson.version}'`,
-<%_ } else { _%>
+                <%_ } else { _%>
                 // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
                 VERSION: `'${process.env.hasOwnProperty('APP_VERSION') ? process.env.APP_VERSION : 'DEV'}'`,
-<%_ } _%>
+                <%_ } _%>
                 DEBUG_INFO_ENABLED: options.env === 'development',
                 // The root URL for API calls, ending with a '/' - for example: `"https://www.jhipster.tech:8081/myservice/"`.
                 // If this URL is left empty (""), then it will be relative to the current context.
@@ -93,17 +100,20 @@ module.exports = (options) => ({
                 SERVER_API_URL: `''`
             }
         }),
-        new CopyWebpackPlugin([
-            { from: './node_modules/swagger-ui/dist/css', to: 'swagger-ui/dist/css' },
-            { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
-            { from: './node_modules/swagger-ui/dist/swagger-ui.min.js', to: 'swagger-ui/dist/swagger-ui.min.js' },
-            { from: './<%= MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui' },
-            { from: './<%= MAIN_SRC_DIR %>content/', to: 'content' },
-            { from: './<%= MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
-            { from: './<%= MAIN_SRC_DIR %>manifest.webapp', to: 'manifest.webapp' },
-            // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
-            { from: './<%= MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' }
-        ]),
+        new CopyWebpackPlugin({
+            patterns: [
+                <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
+                { from: './node_modules/swagger-ui-dist/*.{js,css,html,png}', to: 'swagger-ui', flatten: true, globOptions: { ignore: ['**/index.html'] }},
+                { from: './node_modules/axios/dist/axios.min.js', to: 'swagger-ui' },
+                { from: './<%= MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui' },
+                <%_ } _%>
+                { from: './<%= MAIN_SRC_DIR %>content/', to: 'content' },
+                { from: './<%= MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
+                { from: './<%= MAIN_SRC_DIR %>manifest.webapp', to: 'manifest.webapp' },
+                // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
+                { from: './<%= MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' }
+            ],
+        }),
         <%_ if (enableTranslation) { _%>
         new MergeJsonWebpackPlugin({
             output: {
@@ -117,8 +127,13 @@ module.exports = (options) => ({
             template: './<%= MAIN_SRC_DIR %>index.html',
             chunks: ['polyfills', 'main', 'global'],
             chunksSortMode: 'manual',
-            inject: 'body'
+            inject: 'body',
+            base: '/',
         }),
-        new BaseHrefWebpackPlugin({ baseHref: '/' })
+        new AngularCompilerPlugin({
+            mainPath: utils.root('<%= MAIN_SRC_DIR %>app/app.main.ts'),
+            tsConfigPath: utils.root('tsconfig.app.json'),
+            sourceMap: true
+        })
     ]
 });
