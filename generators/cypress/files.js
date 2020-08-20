@@ -38,11 +38,13 @@ const cypressFiles = {
             path: TEST_SRC_DIR,
             templates: [
                 'cypress/fixtures/users/user.json',
+                'cypress/fixtures/integration-test.png',
                 'cypress/plugins/index.ts',
                 'cypress/integration/administration/administration.spec.ts',
                 'cypress/support/commands.ts',
                 'cypress/support/navbar.ts',
                 'cypress/support/index.ts',
+                'cypress/support/entity.ts',
                 'cypress/tsconfig.json',
             ],
         },

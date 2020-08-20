@@ -176,7 +176,8 @@
                             </button>
 
                             <button type="submit" (click)="delete(<%= entityInstance %>)"
-                                    class="btn btn-danger btn-sm">
+                                    class="btn btn-danger btn-sm"
+                                    data-cy="entityDeleteButton">
                                 <fa-icon icon="times"></fa-icon>
                                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                             </button>

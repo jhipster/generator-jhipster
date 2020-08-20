@@ -53,7 +53,7 @@ _%>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="<%= translationKey %>" for="field_<%= fieldName %>"<% if (fields[idx].javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= fields[idx].javadoc %>"<% } } %>><%= fieldNameHumanized %></label>
     <%_ if (fields[idx].fieldIsEnum) { _%>
-                    <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>">
+                    <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>">
         <%_ const enumPrefix = angularAppName + '.'+ fieldType;
             const values = fields[idx].enumValues;
             for (key in values) {
@@ -83,25 +83,25 @@ _%>
                                 <fa-icon icon="times"></fa-icon>
                             </button>
                         </div>
-                        <input type="file" id="file_<%= fieldName %>" (change)="setFileData($event, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*" jhiTranslate="entity.action.addimage"<% } else { %>false)" jhiTranslate="entity.action.addblob"<% } %>/>
+                        <input type="file" id="file_<%= fieldName %>" data-cy="<%= fieldName %>" (change)="setFileData($event, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*" jhiTranslate="entity.action.addimage"<% } else { %>false)" jhiTranslate="entity.action.addblob"<% } %>/>
                     </div>
         <%_ } _%>
         <%_ if (fieldType === 'LocalDate') { _%>
                     <div class="input-group">
-                        <input id="field_<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" ngbDatepicker #<%= fieldName %>Dp="ngbDatepicker" formControlName="<%= fieldName %>"/>
+                        <input id="field_<%= fieldName %>" data-cy="<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" ngbDatepicker #<%= fieldName %>Dp="ngbDatepicker" formControlName="<%= fieldName %>"/>
                         <span class="input-group-append">
                             <button type="button" class="btn btn-secondary" (click)="<%= fieldName %>Dp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
                         </span>
                     </div>
         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                     <div class="d-flex">
-                        <input id="field_<%= fieldName %>" type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" placeholder="YYYY-MM-DD HH:mm"/>
+                        <input id="field_<%= fieldName %>" data-cy="<%= fieldName %>" type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" placeholder="YYYY-MM-DD HH:mm"/>
                     </div>
         <%_ } else if (fieldTypeBlobContent === 'text') { _%>
-                    <textarea class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>"
+                    <textarea class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>"
                               formControlName="<%= fieldName %>"></textarea>
         <%_ } else { _%>
-                    <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>"
+                    <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>"
                            formControlName="<%= fieldName %>"/>
             <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
                     <input type="hidden" class="form-control" name="<%= fieldName %>ContentType" id="field_<%= fieldName %>ContentType"
@@ -195,7 +195,7 @@ _%>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
         <%_ if (dto === 'no') { _%>
-                    <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" formControlName="<%= relationshipFieldName %>">
+                    <select class="form-control" id="field_<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" formControlName="<%= relationshipFieldName %>">
             <%_ if (!relationshipRequired) { _%>
                         <option [ngValue]="null"></option>
             <%_ } else { _%>
@@ -204,7 +204,7 @@ _%>
                         <option [ngValue]="<%= otherEntityName %>Option.id === editForm.get('<%= relationshipFieldName %>')!.value?.id ? editForm.get('<%= relationshipFieldName %>')!.value : <%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <%= otherEntityNamePlural.toLowerCase() %>; trackBy: trackById">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     </select>
         <%_ } else { _%>
-                    <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" formControlName="<%= relationshipName %>Id">
+                    <select class="form-control" id="field_<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" formControlName="<%= relationshipName %>Id">
             <%_ if (!relationshipRequired) { _%>
                         <option [ngValue]="null"></option>
             <%_ } else { _%>
@@ -219,7 +219,7 @@ _%>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
         <%_ if (dto === 'no') { _%>
-                    <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" formControlName="<%= relationshipName %>">
+                    <select class="form-control" id="field_<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" formControlName="<%= relationshipName %>">
             <%_ if (!relationshipRequired) { _%>
                         <option [ngValue]="null"></option>
             <%_ } else { _%>
@@ -228,7 +228,7 @@ _%>
                         <option [ngValue]="<%= otherEntityName %>Option.id === editForm.get('<%= relationshipFieldName %>')!.value?.id ? editForm.get('<%= relationshipFieldName %>')!.value : <%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <%= relationshipFieldNamePlural.toLowerCase() %>; trackBy: trackById">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     </select>
         <%_ } else { _%>
-                    <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" formControlName="<%= relationshipName %>Id">
+                    <select class="form-control" id="field_<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" formControlName="<%= relationshipName %>Id">
             <%_ if (!relationshipRequired) { _%>
                         <option [ngValue]="null"></option>
             <%_ } else { _%>
@@ -242,7 +242,7 @@ _%>
 
                 <div class="form-group">
                     <label jhiTranslate="<%= translationKey %>" for="field_<%= relationshipFieldNamePlural %>"><%= relationshipNameHumanized %></label>
-                    <select class="form-control" id="field_<%= relationshipFieldNamePlural %>" multiple name="<%= relationshipFieldNamePlural %>" formControlName="<%= relationshipFieldNamePlural %>">
+                    <select class="form-control" id="field_<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipFieldNamePlural %>" formControlName="<%= relationshipFieldNamePlural %>">
                         <option [ngValue]="getSelected(editForm.get('<%= relationshipFieldNamePlural %>')!.value, <%= otherEntityName %>Option)" *ngFor="let <%= otherEntityName %>Option of <%= otherEntityNamePlural.toLowerCase() %>; trackBy: trackById">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     </select>
                 </div>
