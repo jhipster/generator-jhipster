@@ -24,26 +24,12 @@ const ejs = require('ejs');
 const _ = require('lodash');
 const fs = require('fs');
 const crypto = require('crypto');
-const randexp = require('randexp');
-const faker = require('faker');
 const os = require('os');
 
 const constants = require('./generator-constants');
 const FileUtils = require('../jdl/utils/file-utils');
 
 const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
-
-class RandexpWithFaker extends randexp {
-    constructor(regexp, m) {
-        super(regexp, m);
-        this.max = 5;
-    }
-
-    // In order to have consistent results with RandExp, the RNG is seeded.
-    randInt(min, max) {
-        return faker.random.number({ min, max });
-    }
-}
 
 module.exports = {
     rewrite,
@@ -67,7 +53,6 @@ module.exports = {
     loadYoRc,
     packageNameToNamespace,
     stringHashCode,
-    RandexpWithFaker,
     gitExec,
     isGitInstalled,
     vueReplaceTranslation,
@@ -76,6 +61,8 @@ module.exports = {
     vueAddPageServiceToMainImport,
     vueAddPageServiceToMain,
     vueAddPageProtractorConf,
+    languageSnakeCase,
+    languageToJavaLanguage,
 };
 
 /**
@@ -815,4 +802,16 @@ function vueAddPageProtractorConf(generator, pageFolderName) {
         },
         generator
     );
+}
+
+function languageSnakeCase(language) {
+    // Template the message server side properties
+    return language.replace(/-/g, '_');
+}
+
+function languageToJavaLanguage(language) {
+    // Template the message server side properties
+    const langProp = languageSnakeCase(language);
+    // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
+    return langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
 }

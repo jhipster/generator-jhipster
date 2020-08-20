@@ -284,11 +284,11 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             sampleTextString += "A";
             updatedTextString += "B";
         }
-        if (!this._.isUndefined(fields[idx].fieldValidateRulesPattern)) {
+        if (fields[idx].fieldValidateRulesPattern !== undefined) {
             // Generate Strings, using pattern
             try {
                 const patternRegExp = new RegExp(fields[idx].fieldValidateRulesPattern);
-                const randExp = new this.randexp(fields[idx].fieldValidateRulesPattern);
+                const randExp = fields[idx].createRandexp();
                 // set infinite repetitions max range
                 if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
                     sampleTextString = randExp.gen().replace(/\\/g, '\\\\').replace(/"/g, '\\"');

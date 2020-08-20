@@ -18,6 +18,7 @@
  */
 
 const constants = require('./generator-constants');
+const { languageSnakeCase, languageToJavaLanguage } = require('./utils');
 
 const ANGULAR_DIR = constants.ANGULAR_DIR;
 const REACT_DIR = constants.REACT_DIR;
@@ -300,9 +301,8 @@ function upgradeFiles(generator) {
         const languages = generator.config.get('languages');
         if (languages) {
             const langNameDiffer = function (lang) {
-                const langProp = lang.replace(/-/g, '_');
-                // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
-                const langJavaProp = langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
+                const langProp = languageSnakeCase(lang);
+                const langJavaProp = languageToJavaLanguage(lang);
                 return langProp !== langJavaProp ? [langProp, langJavaProp] : undefined;
             };
             languages

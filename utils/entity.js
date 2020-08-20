@@ -20,7 +20,10 @@
 const _ = require('lodash');
 const pluralize = require('pluralize');
 const { fieldIsEnum } = require('./field');
+const { createFaker } = require('./faker');
+const { parseLiquibaseChangelogDate } = require('./liquibase');
 const { entityDefaultConfig } = require('../generators/generator-defaults');
+const { stringHashCode } = require('../generators/utils');
 
 const BASE_TEMPLATE_DATA = {
     skipUiGrouping: false,
@@ -73,6 +76,11 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     const entityName = entityWithConfig.name;
     const entityNamePluralizedAndSpinalCased = _.kebabCase(pluralize(entityName));
     _.defaults(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
+
+    entityWithConfig.changelogDateForRecent = parseLiquibaseChangelogDate(entityWithConfig.changelogDate);
+    entityWithConfig.faker = entityWithConfig.faker || createFaker(generator.jhipsterConfig.nativeLanguage);
+    entityWithConfig.resetFakerSeed = (suffix = '') =>
+        entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
 
     entityWithConfig.entityTableName = entityWithConfig.entityTableName || generator.getTableName(entityName);
     entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix;

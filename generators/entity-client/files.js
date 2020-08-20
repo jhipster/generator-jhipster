@@ -17,12 +17,8 @@
  * limitations under the License.
  */
 const _ = require('lodash');
-const faker = require('faker');
 const utils = require('../utils');
 const constants = require('../generator-constants');
-
-/* Use customized randexp */
-const Randexp = utils.RandexpWithFaker;
 
 /* Constants use throughout */
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
@@ -413,7 +409,7 @@ function addEnumerationFiles(generator, templateDir, clientFolder) {
 function addSampleRegexTestingStrings(generator) {
     generator.fields.forEach(field => {
         if (field.fieldValidateRulesPattern !== undefined) {
-            const randExp = new Randexp(field.fieldValidateRulesPattern);
+            const randExp = field.createRandexp();
             field.fieldValidateSampleString = randExp.gen();
             field.fieldValidateModifiedString = randExp.gen();
         }
@@ -426,7 +422,7 @@ function writeFiles() {
             if (this.skipClient) return;
 
             // In order to have consistent results with Faker, restart seed with current entity name hash.
-            faker.seed(utils.stringHashCode(this.name.toLowerCase()));
+            this.resetFakerSeed();
         },
 
         writeClientFiles() {
