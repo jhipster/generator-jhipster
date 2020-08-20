@@ -129,7 +129,7 @@ describe('<%= entityClass %> e2e test', () => {
     cy.wait('@entitiesRequest');
     cy.get(entityCreateButtonSelector).click({force: true});
     cy.getEntityCreateUpdateHeading('<%= entityClass %>');
-    const randomText = '<%= entityClass %>' + Math.floor(Math.random() * 1000) + 1;
+    const randomText = 'text' + Math.floor(Math.random() * 1000) + 1;
 
     <%_ fields.forEach((field) => {
       const fieldName = field.fieldName;
