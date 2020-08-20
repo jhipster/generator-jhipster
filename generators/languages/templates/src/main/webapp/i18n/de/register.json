@@ -8,8 +8,8 @@
             "validate": {
                 "login": {
                     "required": "Ihr Benutzername wird benötigt.",
-                    "minlength": "Ihr Benutzername muss mindestens 1 Zeichen lang sein",
-                    "maxlength": "Ihr Benutzername darf nicht länger als 50 Zeichen sein",
+                    "minlength": "Ihr Benutzername muss mindestens ein Zeichen lang sein.",
+                    "maxlength": "Ihr Benutzername darf nicht länger als 50 Zeichen sein.",
                     "pattern": "Ihr Benutzername ist ungültig."
                 }
             },
@@ -17,7 +17,7 @@
             "error": {
                 "fail": "<strong>Registrierung fehlgeschlagen!</strong> Bitte versuchen Sie es später nochmal.",
                 "userexists": "<strong>Benutzername bereits vergeben!</strong> Bitte wählen Sie einen anderen aus.",
-                "emailexists": "<strong>E-Mailadresse wird bereits verwendet!</strong> Bitte wählen Sie eine andere aus."
+                "emailexists": "<strong>E-Mail-Adresse wird bereits verwendet!</strong> Bitte wählen Sie eine andere aus."
             }
         }
     }
