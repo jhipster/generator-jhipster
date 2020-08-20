@@ -241,12 +241,14 @@ _%>
   <%_ } _%>
   public initRelationships() : void {
     <%_
+        let entitiesSet = new Set();
         for (idx in relationships) {
           if (!relationships[idx].otherEntityIsEmbedded) {
           const otherEntityName = relationships[idx].otherEntityName;
           const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
           const otherEntityAngularName = relationships[idx].otherEntityAngularName;
-          if (!(otherEntityAngularName === 'User' && authenticationType === "oauth2")) {
+          if (!(otherEntityAngularName === 'User' && authenticationType === "oauth2") && !entitiesSet.has(otherEntityName)) {
+            entitiesSet.add(otherEntityName);
     _%>
     this.<%= otherEntityName %>Service().retrieve().then((res) => {
       this.<%= otherEntityNamePlural %> = res.data;
