@@ -100,10 +100,17 @@ Cypress.Commands.add('setFieldNumberAsStringOfEntity', (fieldName: string, numbe
 });
 
 Cypress.Commands.add('setFieldSelectToLastOfEntity', (fieldName: string) => {
-  return cy.get(`[data-cy="${fieldName}"] option`).then((options : any) => {
-    const elements = [...options].map(o => o.label);
-    const lastElement = elements.length - 1;
-    cy.get(`[data-cy="${fieldName}"]`).select(elements[lastElement]).type('{downarrow}');
+  return cy.get(`[data-cy="${fieldName}"]`).then(select => {
+    const selectSize: number = Number(select.attr("size"));
+    if (selectSize > 0) {
+      return cy.get(`[data-cy="${fieldName}"] option`).then((options: any) => {
+        const elements = [...options].map(o => o.label);
+        const lastElement = elements.length - 1;
+        cy.get(`[data-cy="${fieldName}"]`).select(elements[lastElement]).type('{downarrow}');
+      });
+    } else {
+      return cy.get(`[data-cy="${fieldName}"]`).type('{downarrow}');
+    }
   });
 });
 

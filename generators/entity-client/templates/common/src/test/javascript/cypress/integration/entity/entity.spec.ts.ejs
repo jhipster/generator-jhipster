@@ -1,12 +1,14 @@
 import {
   entityTableSelector,
-  entityCreateButtonSelector,
-  entityCreateSaveButtonSelector,
   entityDetailsButtonSelector,
   entityDetailsBackButtonSelector,
+  <%_ if (!readOnly) { _%>
+  entityCreateButtonSelector,
+  entityCreateSaveButtonSelector,
   entityEditButtonSelector,
   entityDeleteButtonSelector,
   entityConfirmDeleteButtonSelector,
+  <%_ } _%>
 } from '../../support/entity';
 <%_
 const baseApi = (applicationType === 'gateway' && locals.microserviceName) ? microserviceName.toLowerCase() + '/api/' : 'api/';
@@ -147,7 +149,10 @@ describe('<%= entityClass %> e2e test', () => {
     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
     cy.setFieldTimestampOfEntity('<%= fieldName %>', '2001-01-01T02:30').invoke('val').should('equal', '2001-01-01T02:30');
 
-    <%_ } else if (fieldType === 'Duration') { _%>
+    <%_ } else if (fieldType === 'Duration' && clientFramework === 'react') { _%>
+    cy.setFieldDurationOfEntity('<%= fieldName %>', 'PT12S').should('have.value', 'PT12S');
+
+    <%_ } else if (fieldType === 'Duration' && clientFramework !== 'react') { _%>
     cy.setFieldDurationOfEntity('<%= fieldName %>', 'PT12S').should('have.value', '12');
 
     <%_ } else if (fieldType === 'Boolean') { _%>
@@ -181,13 +186,18 @@ describe('<%= entityClass %> e2e test', () => {
       const relationshipNameCapitalized = relationship.relationshipNameCapitalized;_%>
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
     cy.setFieldSelectToLastOfEntity('<%= relationshipName %>');
+
     <%_ } else if ((relationshipType === 'many-to-many' && ownerSide === true)) { _%>
     cy.setFieldSelectToLastOfEntity('<%= relationshipName %>');
+
     <%_ } _%>
     <%_ }); _%>
-
     cy.get(entityCreateSaveButtonSelector).click({force: true});
     cy.get(entityCreateSaveButtonSelector).should('not.exist');
+    cy.route('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequestAfterCreate');
+    cy.visit('/');
+    cy.clickOnEntityMenuItem('<%= entityStateName %>');
+    cy.wait('@entitiesRequestAfterCreate');
     cy.get(entityTableSelector).should('have.lengthOf', startingEntitiesCount + 1);
     cy.visit('/');
   });
@@ -208,6 +218,10 @@ describe('<%= entityClass %> e2e test', () => {
         cy.getEntityDeleteDialogHeading('<%= entityInstance %>').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click({force: true});
         cy.wait('@deleteEntityRequest');
+        cy.route('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequestAfterDelete');
+        cy.visit('/');
+        cy.clickOnEntityMenuItem('<%= entityStateName %>');
+        cy.wait('@entitiesRequestAfterDelete');
         cy.get(entityTableSelector).should('have.lengthOf', startingEntitiesCount - 1);
       }
       cy.visit('/');
