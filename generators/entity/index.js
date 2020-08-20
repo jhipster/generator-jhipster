@@ -448,6 +448,28 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 });
             },
 
+            composing() {
+                const context = this.context;
+                if (!context.skipServer) {
+                    this.composeWithJHipster('entity-server', {
+                        context,
+                    });
+                }
+
+                if (!context.skipClient) {
+                    this.composeWithJHipster('entity-client', {
+                        context,
+                        skipInstall: this.options.skipInstall,
+                    });
+                    if (this.jhipsterConfig.enableTranslation) {
+                        this.composeWithJHipster('entity-i18n', {
+                            context,
+                            skipInstall: this.options.skipInstall,
+                        });
+                    }
+                }
+            },
+
             insight() {
                 // track insights
                 const context = this.context;
@@ -481,34 +503,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (this.isJhipsterVersionLessThan('6.3.0') && context.clientFramework === ANGULAR) {
                     this.removeFile(`${constants.ANGULAR_DIR}entities/${context.entityFolderName}/index.ts`);
                 }
-            },
-
-            composeServer() {
-                const context = this.context;
-                if (context.skipServer) return;
-
-                this.composeWithJHipster('entity-server', {
-                    context,
-                });
-            },
-
-            composeClient() {
-                const context = this.context;
-                if (context.skipClient) return;
-
-                this.composeWithJHipster('entity-client', {
-                    context,
-                    skipInstall: this.options.skipInstall,
-                });
-            },
-
-            composeI18n() {
-                const context = this.context;
-                if (context.skipClient) return;
-                this.composeWithJHipster('entity-i18n', {
-                    context,
-                    skipInstall: this.options.skipInstall,
-                });
             },
         };
     }
