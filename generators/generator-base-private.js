@@ -460,13 +460,13 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Rename File
+     * Execute a git mv.
      *
      * @param {string} source
      * @param {string} dest
      * @returns {boolean} true if success; false otherwise
      */
-    renameFile(source, dest) {
+    gitMove(source, dest) {
         source = this.destinationPath(source);
         dest = this.destinationPath(dest);
         if (source && dest && shelljs.test('-f', source)) {
@@ -703,15 +703,6 @@ module.exports = class extends Generator {
     }
 
     /**
-     * @param {Array} array - array to search in
-     * @param {any} item - item to search for
-     * @return {boolean} true if array contains item; false otherwise
-     */
-    contains(array, item) {
-        return _.includes(array, item);
-    }
-
-    /**
      * Function to issue a https get request, and process the result
      *
      *  @param {string} url - the url to fetch
@@ -849,27 +840,18 @@ module.exports = class extends Generator {
      * Check if Node is installed
      */
     checkNode() {
-        if (this.skipChecks || this.skipServer) return;
-        const done = this.async();
-        exec('node -v', (err, stdout, stderr) => {
-            if (err) {
-                this.warning('NodeJS is not found on your system.');
-            } else {
-                const nodeVersion = semver.clean(stdout);
-                const nodeFromPackageJson = packagejs.engines.node;
-                if (!semver.satisfies(nodeVersion, nodeFromPackageJson)) {
-                    this.warning(
-                        `Your NodeJS version is too old (${nodeVersion}). You should use at least NodeJS ${chalk.bold(nodeFromPackageJson)}`
-                    );
-                }
-                if (!(process.release || {}).lts) {
-                    this.warning(
-                        'Your Node version is not LTS (Long Term Support), use it at your own risk! JHipster does not support non-LTS releases, so if you encounter a bug, please use a LTS version first.'
-                    );
-                }
-            }
-            done();
-        });
+        if (this.skipChecks) return;
+        const nodeFromPackageJson = packagejs.engines.node;
+        if (!semver.satisfies(process.version, nodeFromPackageJson)) {
+            this.warning(
+                `Your NodeJS version is too old (${process.version}). You should use at least NodeJS ${chalk.bold(nodeFromPackageJson)}`
+            );
+        }
+        if (!(process.release || {}).lts) {
+            this.warning(
+                'Your Node version is not LTS (Long Term Support), use it at your own risk! JHipster does not support non-LTS releases, so if you encounter a bug, please use a LTS version first.'
+            );
+        }
     }
 
     /**
@@ -960,7 +942,7 @@ module.exports = class extends Generator {
                             .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body || []);`;
                 }
             }
-            if (variableName && !this.contains(queries, query)) {
+            if (variableName && !queries.includes(query)) {
                 queries.push(query);
                 variables.push(`${variableName}: I${relationship.otherEntityAngularName}[] = [];`);
             }

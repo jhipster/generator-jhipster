@@ -68,8 +68,16 @@ function _prepareTempEnv() {
     return { cwd, tempDir };
 }
 
+/**
+ * Creates a temporary dir.
+ * @return {function} callback to cleanup the test dir.
+ */
 function prepareTempDir() {
-    return _prepareTempEnv().cwd;
+    const testEnv = _prepareTempEnv();
+    return () => {
+        revertTempDir(testEnv.cwd);
+        fs.rmdirSync(testEnv.tempDir, { recursive: true });
+    };
 }
 
 function testInTempDir(cb, keepInTestDir) {

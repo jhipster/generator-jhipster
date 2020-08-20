@@ -29,11 +29,11 @@ const EnvironmentBuilder = require('../../cli/environment-builder');
 const { prepareTempDir, revertTempDir, testInTempDir, copyBlueprint, lnYeoman } = require('../utils/utils');
 
 describe('Environment builder', () => {
-    let cwd;
+    let cleanup;
     before(() => {
-        cwd = prepareTempDir();
+        cleanup = prepareTempDir();
     });
-    after(() => revertTempDir(cwd));
+    after(() => cleanup());
 
     describe('create', () => {
         let envBuilder;

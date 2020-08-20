@@ -309,7 +309,7 @@ function upgradeFiles(generator) {
                 .map(langNameDiffer)
                 .filter(props => props)
                 .forEach(props => {
-                    const code = generator.renameFile(
+                    const code = generator.gitMove(
                         `${SERVER_MAIN_RES_DIR}i18n/messages_${props[0]}.properties`,
                         `${SERVER_MAIN_RES_DIR}i18n/messages_${props[1]}.properties`
                     );

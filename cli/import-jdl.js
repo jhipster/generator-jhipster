@@ -65,7 +65,7 @@ function runGenerator(command, cwd, generatorOptions = {}, options = {}) {
                 logger.info(`Generator ${command} succeed`);
             },
             error => {
-                logger.error(`Error running generator ${command}: ${error}`);
+                logger.error(`Error running generator ${command}: ${error}`, error);
             }
         );
     }
