@@ -455,7 +455,13 @@ function writeFiles() {
                 templatesDir = CLIENT_VUE_TEMPLATES_DIR;
             } else {
                 if (!this.embedded) {
-                    this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
+                    this.addEntityToMenu(
+                        this.entityStateName,
+                        this.enableTranslation,
+                        this.clientFramework,
+                        this.entityTranslationKeyMenu,
+                        this.entityClassHumanized
+                    );
                 }
                 return;
             }
@@ -478,7 +484,13 @@ function writeFiles() {
                     microserviceName,
                     this.readOnly
                 );
-                this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
+                this.addEntityToMenu(
+                    this.entityStateName,
+                    this.enableTranslation,
+                    this.clientFramework,
+                    this.entityTranslationKeyMenu,
+                    this.entityClassHumanized
+                );
             }
 
             if (this.clientFramework === VUE && !this.enableTranslation) {
