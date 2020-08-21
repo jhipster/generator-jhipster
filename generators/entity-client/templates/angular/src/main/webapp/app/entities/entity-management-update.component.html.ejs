@@ -37,7 +37,7 @@
     let fieldInputType = 'text';
     let ngModelOption = '';
     const translationKey = `${i18nKeyPrefix}.${fieldName}`;
-    if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) {
+    if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
         fieldInputType = 'number';
     } else if (fieldType === 'LocalDate') {
         fieldInputType = 'date';

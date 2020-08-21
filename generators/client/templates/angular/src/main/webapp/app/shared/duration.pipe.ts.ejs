@@ -6,7 +6,10 @@ import * as moment from 'moment';
   name: 'duration',
 })
 export class DurationPipe implements PipeTransform {
-  transform(value: string): String {
-    return moment.duration(value).humanize();
+  transform(value: any): String {
+    if (value) {
+        return moment.duration(value).humanize();
+    }
+    return "";
   }
 }
