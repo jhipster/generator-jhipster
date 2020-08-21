@@ -87,6 +87,8 @@
                     </td>
                         <%_ } else if (fields[idx].fieldIsEnum) { _%>
                     <td v-text="$t('<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>)">{{<%= entityInstance %>.<%= fieldName %>}}</td>
+                        <%_ } else if (['Duration'].includes(fieldType)) { _%>
+                    <td>{{<%=entityInstance %>.<%=fieldName%> | duration}}</td>  
                         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                         <%_ if (enableTranslation) { _%>
                     <td>{{<%=entityInstance %>.<%=fieldName%> ? $d(Date.parse(<%=entityInstance %>.<%=fieldName%>), 'short') : ''}}</td>
