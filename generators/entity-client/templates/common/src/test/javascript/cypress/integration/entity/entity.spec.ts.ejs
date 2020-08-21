@@ -207,6 +207,9 @@ describe('<%= entityClass %> e2e test', () => {
   it('should delete last instance of <%= entityClass %>', () => {
     cy.server();
     cy.route('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
+    <%_ if (clientFramework === 'react') { _%>
+    cy.route('GET', '/<%= baseApi + entityApiUrl %>/*').as('dialogDeleteRequest');
+    <%_ } _%>
     cy.route('DELETE', '/<%= baseApi + entityApiUrl %>/*').as('deleteEntityRequest');
     cy.visit('/');
     cy.clickOnEntityMenuItem('<%= entityStateName %>');
@@ -215,6 +218,9 @@ describe('<%= entityClass %> e2e test', () => {
       if (startingEntitiesCount > 0) {
         cy.get(entityTableSelector).should('have.lengthOf', startingEntitiesCount);
         cy.get(entityDeleteButtonSelector).last().click({force: true});
+        <%_ if (clientFramework === 'react') { _%>
+        cy.wait('@dialogDeleteRequest');
+        <%_ } _%>
         cy.getEntityDeleteDialogHeading('<%= entityInstance %>').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click({force: true});
         cy.wait('@deleteEntityRequest');
