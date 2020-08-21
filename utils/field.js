@@ -229,7 +229,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
         if (field.fieldValidate === true && field.fieldValidateRules.includes('unique')) {
             let i = 0;
             while (field.uniqueValue.indexOf(data) !== -1) {
-                if (i++ !== 5) {
+                if (i++ === 5) {
                     data = undefined;
                     break;
                 }
