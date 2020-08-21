@@ -27,6 +27,7 @@ import { AlertErrorComponent } from './alert/alert-error.component';
 import { LoginModalComponent } from '../core/login/login-modal.component';
 <%_ } _%>
 import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
+import { DurationPipe } from './duration.pipe';
 
 @NgModule({
     imports: [
@@ -41,7 +42,8 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
         <%_ if (authenticationType !== 'oauth2') { _%>
         LoginModalComponent,
         <%_ } _%>
-        HasAnyAuthorityDirective
+        HasAnyAuthorityDirective,
+        DurationPipe
     ],
     <%_ if (authenticationType !== 'oauth2') { _%>
     entryComponents: [LoginModalComponent],
@@ -56,7 +58,8 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
         <%_ if (authenticationType !== 'oauth2') { _%>
         LoginModalComponent,
         <%_ } _%>
-        HasAnyAuthorityDirective
+        HasAnyAuthorityDirective,
+        DurationPipe
     ]
 })
 export class SharedModule {}

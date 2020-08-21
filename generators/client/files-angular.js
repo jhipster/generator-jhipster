@@ -345,6 +345,7 @@ const files = {
                 'shared/constants/input.constants.ts',
                 'shared/constants/pagination.constants.ts',
                 'shared/constants/authority.constants.ts',
+                'shared/duration.pipe.ts',
                 // models
                 'shared/util/request-util.ts',
                 // alert service code
