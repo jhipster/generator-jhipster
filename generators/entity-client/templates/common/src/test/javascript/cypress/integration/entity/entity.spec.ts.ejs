@@ -131,36 +131,37 @@ describe('<%= entityClass %> e2e test', () => {
     cy.wait('@entitiesRequest');
     cy.get(entityCreateButtonSelector).click({force: true});
     cy.getEntityCreateUpdateHeading('<%= entityClass %>');
-    const randomText = 'text' + Math.floor(Math.random() * 1000) + 1;
-
     <%_ fields.forEach((field) => {
       const fieldName = field.fieldName;
       const fieldNameCapitalized = field.fieldNameCapitalized;
       const fieldType = field.fieldType;
       const fieldTypeBlobContent = field.fieldTypeBlobContent;
       const fieldIsEnum = field.fieldIsEnum;
+      const fieldValue = field.generateFakeData();
+      if (fieldValue === undefined) {
+          warning(`Error generating a value for field ${fieldName}`);
+          return;
+      }
     _%>
-    <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
-    cy.setFieldNumberOfEntity('<%= fieldName %>', 5).should('have.value', '5');
 
-    <%_ } else if (fieldType === 'LocalDate') { _%>
-    cy.setFieldLocalDateOfEntity('<%= fieldName %>', '2001-01-01').should('have.value', '2001-01-01');
-
-    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-    cy.setFieldTimestampOfEntity('<%= fieldName %>', '2001-01-01T02:30').invoke('val').should('equal', '2001-01-01T02:30');
+    <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%_ const fieldValueFormated = fieldValue.substr(0, fieldValue.length-3); _%>
+    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValueFormated %>').invoke('val').should('equal', '<%= fieldValueFormated %>');
 
     <%_ } else if (fieldType === 'Duration' && clientFramework === 'react') { _%>
-    cy.setFieldDurationOfEntity('<%= fieldName %>', 'PT12S').should('have.value', 'PT12S');
+    cy.get(`[data-cy="<%= fieldName %>"]`).type('PT12S').should('have.value', 'PT12S');
 
     <%_ } else if (fieldType === 'Duration' && clientFramework !== 'react') { _%>
-    cy.setFieldDurationOfEntity('<%= fieldName %>', 'PT12S').should('have.value', '12');
+    cy.get(`[data-cy="<%= fieldName %>"]`).type('PT12S').should('have.value', '12');
 
     <%_ } else if (fieldType === 'Boolean') { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).should('not.be.checked');
-    cy.setFieldBooleanOfEntity('<%= fieldName %>').should('be.checked');
+    if (`'<%= fieldValue %>'` === 'true') {
+        cy.get(`[data-cy="<%= fieldName %>"]`).click().should('be.checked');
+    }
 
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-    cy.setFieldTextAsBytesOfEntity('<%= fieldName %>', randomText).invoke('val').should('match', new RegExp(randomText));
+    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>', { force: true }).invoke('val').should('match', new RegExp('<%= fieldValue %>'));
 
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
     cy.setFieldImageAsBytesOfEntity('<%= fieldName %>', 'integration-test.png', 'image/png');
@@ -169,13 +170,13 @@ describe('<%= entityClass %> e2e test', () => {
     cy.setFieldEnumToLastOfEntity('<%= fieldName %>');
 
     <%_ } else if (fieldType === 'UUID'){ _%>
-    cy.setFieldUuidOfEntity('<%= fieldName %>', '64c99148-3908-465d-8c4a-e510e3ade974').invoke('val').should('match', /64c99148-3908-465d-8c4a-e510e3ade974/);
+    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('match', new RegExp('<%= fieldValue %>'));
 
-    <%_ } else if(fieldType === 'String' && fieldName.toLowerCase().includes('number')) { _%>
-    cy.setFieldNumberAsStringOfEntity('<%= fieldName %>', '5').should('have.value', '5');
+    <%_ } else if(['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'LocalDate', ].includes(fieldType)) { _%>
+    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').should('have.value', '<%= fieldValue %>');
 
     <%_ } else { _%>
-    cy.setFieldTextAsBytesOfEntity('<%= fieldName %>', randomText).invoke('val').should('match', new RegExp(randomText));
+    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>', { force: true }).invoke('val').should('match', new RegExp('<%= fieldValue %>'));
 
     <%_ } _%>
     <%_ }); _%>

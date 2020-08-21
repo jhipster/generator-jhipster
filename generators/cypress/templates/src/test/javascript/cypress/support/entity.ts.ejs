@@ -37,33 +37,6 @@ Cypress.Commands.add('getEntityDeleteDialogHeading', (entityInstanceName: string
   return cy.get(`[data-cy="${entityInstanceName}DeleteDialogHeading"]`);
 });
 
-Cypress.Commands.add('setFieldNumberOfEntity', (fieldName: string, number: number) => {
-  return cy.get(`[data-cy="${fieldName}"]`).type(`${number}`);
-});
-
-Cypress.Commands.add('setFieldLocalDateOfEntity', (fieldName: string, date: string) => {
-  // format should be like : '2001-01-01'
-  return cy.get(`[data-cy="${fieldName}"]`).type(`${date}`);
-});
-
-Cypress.Commands.add('setFieldTimestampOfEntity', (fieldName: string, timestamp: string) => {
-  // format should be like : '2001-01-01T02:30'
-  return cy.get(`[data-cy="${fieldName}"]`).type(`${timestamp}`);
-});
-
-Cypress.Commands.add('setFieldDurationOfEntity', (fieldName: string, duration: string) => {
-  // format should be like : 'PT12S'
-  return cy.get(`[data-cy="${fieldName}"]`).type(`${duration}`);
-});
-
-Cypress.Commands.add('setFieldBooleanOfEntity', (fieldName: string) => {
-  return cy.get(`[data-cy="${fieldName}"]`).click();
-});
-
-Cypress.Commands.add('setFieldTextAsBytesOfEntity', (fieldName: string, bytes: any) => {
-  return cy.get(`[data-cy="${fieldName}"]`).type(`${bytes}`);
-});
-
 Cypress.Commands.add('setFieldImageAsBytesOfEntity', (fieldName: string, fileName: string, mimeType: string) => {
   // fileName is the image which you have already put in cypress fixture folder
   // should be like : 'integration-test.png', 'image/png'
@@ -89,16 +62,6 @@ Cypress.Commands.add('setFieldEnumToLastOfEntity', (fieldName: string) => {
     .trigger('change');
 });
 
-Cypress.Commands.add('setFieldUuidOfEntity', (fieldName: string, uuid: string) => {
-  // should be like : '64c99148-3908-465d-8c4a-e510e3ade974'
-  return cy.get(`[data-cy="${fieldName}"]`).type(`${uuid}`);
-});
-
-Cypress.Commands.add('setFieldNumberAsStringOfEntity', (fieldName: string, number: string) => {
-  // should be like : '5'
-  return cy.get(`[data-cy="${fieldName}"]`).type(`${number}`);
-});
-
 Cypress.Commands.add('setFieldSelectToLastOfEntity', (fieldName: string) => {
   return cy.get(`[data-cy="${fieldName}"]`).then(select => {
     const selectSize: number = Number(select.attr("size"));
@@ -121,16 +84,8 @@ declare global {
       getEntityCreateUpdateHeading(entityName: string): Cypress.Chainable;
       getEntityDetailsHeading(entityInstanceName: string): Cypress.Chainable;
       getEntityDeleteDialogHeading(entityInstanceName: string): Cypress.Chainable;
-      setFieldNumberOfEntity(fieldName: string, number: number): Cypress.Chainable;
-      setFieldLocalDateOfEntity(fieldName: string, date: string): Cypress.Chainable;
-      setFieldTimestampOfEntity(fieldName: string, timestamp: string): Cypress.Chainable;
-      setFieldDurationOfEntity(fieldName: string, duration: string): Cypress.Chainable;
-      setFieldBooleanOfEntity(fieldName: string): Cypress.Chainable;
-      setFieldTextAsBytesOfEntity (fieldName: string, bytes: any): Cypress.Chainable;
       setFieldImageAsBytesOfEntity(fieldName: string, fileName: string, mimeType: string): Cypress.Chainable;
       setFieldEnumToLastOfEntity(fieldName: string): Cypress.Chainable;
-      setFieldUuidOfEntity(fieldName: string, uuid: string): Cypress.Chainable;
-      setFieldNumberAsStringOfEntity(fieldName: string, bytes: any): Cypress.Chainable;
       setFieldSelectToLastOfEntity(fieldName: string): Cypress.Chainable;
     }
   }

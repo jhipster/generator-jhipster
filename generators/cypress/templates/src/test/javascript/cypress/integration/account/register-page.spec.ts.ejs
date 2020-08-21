@@ -94,9 +94,13 @@ describe('/account/register', () => {
   });
 
   it('register a valid user', () => {
-    const randomUsername = 'jon_doe' + Math.floor(Math.random() * 1000) + 1;
+    const faker = require('faker');
+    const { stringHashCode } = require('generator-jhipster/generators/utils');
+    faker.seed(stringHashCode(this.jhipsterConfig.baseName));
+    const randomUsername = faker.internet.username();
+    const randomEmail = faker.internet.email();
     cy.get(usernameRegisterSelector).type(randomUsername);
-    cy.get(emailRegisterSelector).type(randomUsername + '@localhost.com');
+    cy.get(emailRegisterSelector).type(randomEmail);
     cy.get(firstPasswordRegisterSelector).type('jondoe');
     cy.get(secondPasswordRegisterSelector).type('jondoe');
     cy.get(submitRegisterSelector).click({force: true});
