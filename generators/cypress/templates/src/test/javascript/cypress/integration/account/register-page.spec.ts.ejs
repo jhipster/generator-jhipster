@@ -94,9 +94,6 @@ describe('/account/register', () => {
   });
 
   it('register a valid user', () => {
-    const faker = require('faker');
-    const { stringHashCode } = require('generator-jhipster/generators/utils');
-    faker.seed(stringHashCode(this.jhipsterConfig.baseName));
     const randomUsername = faker.internet.username();
     const randomEmail = faker.internet.email();
     cy.get(usernameRegisterSelector).type(randomUsername);

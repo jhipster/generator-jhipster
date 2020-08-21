@@ -137,7 +137,7 @@ describe('<%= entityClass %> e2e test', () => {
       const fieldType = field.fieldType;
       const fieldTypeBlobContent = field.fieldTypeBlobContent;
       const fieldIsEnum = field.fieldIsEnum;
-      const fieldValue = field.generateFakeData();
+      const fieldValue = field.generateFakeData('cypress');
       if (fieldValue === undefined) {
           warning(`Error generating a value for field ${fieldName}`);
           return;
@@ -167,7 +167,7 @@ describe('<%= entityClass %> e2e test', () => {
     cy.setFieldImageAsBytesOfEntity('<%= fieldName %>', 'integration-test.png', 'image/png');
 
     <%_ } else if (fieldIsEnum) { _%>
-    cy.setFieldEnumToLastOfEntity('<%= fieldName %>');
+    cy.setFieldSelectToLastOfEntity('<%= fieldName %>');
 
     <%_ } else if (fieldType === 'UUID'){ _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('match', new RegExp('<%= fieldValue %>'));

@@ -54,14 +54,6 @@ Cypress.Commands.add('setFieldImageAsBytesOfEntity', (fieldName: string, fileNam
     });
 });
 
-Cypress.Commands.add('setFieldEnumToLastOfEntity', (fieldName: string) => {
-  return cy.get(`[data-cy="${fieldName}"]`)
-    .find('option').last()
-    .then($els => $els.get(0).setAttribute('selected', 'selected'))
-    .parent()
-    .trigger('change');
-});
-
 Cypress.Commands.add('setFieldSelectToLastOfEntity', (fieldName: string) => {
   return cy.get(`[data-cy="${fieldName}"]`).then(select => {
     const selectSize: number = Number(select.attr("size"));
@@ -85,7 +77,6 @@ declare global {
       getEntityDetailsHeading(entityInstanceName: string): Cypress.Chainable;
       getEntityDeleteDialogHeading(entityInstanceName: string): Cypress.Chainable;
       setFieldImageAsBytesOfEntity(fieldName: string, fileName: string, mimeType: string): Cypress.Chainable;
-      setFieldEnumToLastOfEntity(fieldName: string): Cypress.Chainable;
       setFieldSelectToLastOfEntity(fieldName: string): Cypress.Chainable;
     }
   }

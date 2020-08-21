@@ -23,6 +23,10 @@
  */
 const constants = require('../generator-constants');
 
+const faker = require('faker');
+
+const { stringHashCode } = require('generator-jhipster/generators/utils');
+
 const TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 
 const cypressFiles = {
@@ -77,6 +81,8 @@ module.exports = {
 function writeFiles() {
     return {
         writeFiles() {
+            faker.seed(stringHashCode(this.jhipsterConfig.baseName));
+            this.faker = faker;
             this.writeFilesToDisk(cypressFiles, this, false, this.fetchFromInstalledJHipster('cypress/templates'));
         },
     };

@@ -96,6 +96,9 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
         // Write the date without milliseconds so Java can parse it
         // See https://stackoverflow.com/a/34053802/150868
         data = faker.getRecentDate(1, changelogDate).toISOString().split('.')[0];
+    } else if (['Instant', 'ZonedDateTime'].includes(field.fieldType) && type === 'cypress') {
+        const dateField = faker.getRecentDate(1, changelogDate).toISOString().split('.')[0];
+        data = dateField.substr(0, dateField.length - 3);
     } else if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') {
         data = '../fake-data/blob/hipster.png';
     } else if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent === 'text') {
