@@ -21,11 +21,12 @@
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
-const constants = require('../generator-constants');
 
 const faker = require('faker');
 
-const { stringHashCode } = require('generator-jhipster/generators/utils');
+const constants = require('../generator-constants');
+
+const { stringHashCode } = require('../utils');
 
 const TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 
