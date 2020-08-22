@@ -94,8 +94,8 @@ describe('/account/register', () => {
   });
 
   it('register a valid user', () => {
-    const randomUsername = faker.internet.username();
-    const randomEmail = faker.internet.email();
+    const randomEmail = '<%= faker.internet.email() %>';
+    const randomUsername = '<%= faker.internet.userName() %>';
     cy.get(usernameRegisterSelector).type(randomUsername);
     cy.get(emailRegisterSelector).type(randomEmail);
     cy.get(firstPasswordRegisterSelector).type('jondoe');
