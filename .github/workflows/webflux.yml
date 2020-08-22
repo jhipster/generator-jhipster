@@ -57,7 +57,7 @@ jobs:
             fail-fast: false
             matrix:
                 node_version: [12.16.1]
-                os: [ubuntu-latest]
+                os: [ubuntu-20.04]
                 app-type:
                     - webflux-mongodb
                     - webflux-mongodb-es-session
