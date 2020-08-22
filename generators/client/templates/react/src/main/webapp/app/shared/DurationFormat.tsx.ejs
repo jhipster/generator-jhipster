@@ -9,8 +9,8 @@ export interface IDurationFormat {
 }
 
 export const DurationFormat = ({ value, blankOnInvalid, locale }: IDurationFormat) => {
-  if (blankOnInvalid) {
-    if (!value) return null;
+  if (blankOnInvalid && !value) {
+    return null;
   }
 
   if (!locale) {
