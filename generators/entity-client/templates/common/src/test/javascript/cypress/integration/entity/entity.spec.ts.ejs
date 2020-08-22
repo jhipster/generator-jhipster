@@ -204,6 +204,7 @@ describe('<%= entityClass %> e2e test', () => {
     <%_ } _%>
     <%_ }); _%>
     cy.get(entityCreateSaveButtonSelector).click({force: true});
+    cy.scrollTo('top', {ensureScrollable: false});
     cy.get(entityCreateSaveButtonSelector).should('not.exist');
     cy.route('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequestAfterCreate');
     cy.visit('/');
