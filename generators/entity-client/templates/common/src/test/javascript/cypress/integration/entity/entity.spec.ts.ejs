@@ -156,8 +156,7 @@ describe('<%= entityClass %> e2e test', () => {
     _%>
 
     <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-    <%_ const fieldValueFormated = fieldValue.substr(0, fieldValue.length-3); _%>
-    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValueFormated %>').invoke('val').should('equal', '<%= fieldValueFormated %>');
+    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('equal', '<%= fieldValue %>');
 
     <%_ } else if (fieldType === 'Duration' && clientFramework === 'react') { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).type('PT12S').should('have.value', 'PT12S');
