@@ -14,11 +14,22 @@ import {
 const baseApi = (applicationType === 'gateway' && locals.microserviceName) ? microserviceName.toLowerCase() + '/api/' : 'api/';
 let openBlockComment = ``;
 let closeBlockComment = ``;
+
 for (let relationship of relationships) {
   if (relationship.relationshipRequired || relationship.useJPADerivedIdentifier) {
     openBlockComment = `/* this test is commented because it contains required relationships`;
     closeBlockComment = `*/`;
     break;
+  }
+}
+
+let entityFakeData;
+if (!openBlockComment) {
+  resetFakerSeed('entity-cypress');
+  entityFakeData = generateFakeData('cypress');
+  if (!entityFakeData) {
+    openBlockComment = `/* this test is commented because it failed to generate a correct full sample`;
+    closeBlockComment = `*/`;
   }
 }
 _%>
@@ -137,7 +148,7 @@ describe('<%= entityClass %> e2e test', () => {
       const fieldType = field.fieldType;
       const fieldTypeBlobContent = field.fieldTypeBlobContent;
       const fieldIsEnum = field.fieldIsEnum;
-      const fieldValue = field.generateFakeData('cypress');
+      const fieldValue = !entityFakeData ? field.generateFakeData('cypress') : entityFakeData[field.fieldName];
       if (fieldValue === undefined) {
           warning(`Error generating a value for field ${fieldName}`);
           return;
