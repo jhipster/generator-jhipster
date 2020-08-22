@@ -33,8 +33,6 @@ import GatewayService from '@/admin/gateway/gateway.service';
 <%_ if (websocket === 'spring-websocket') { _%>
 import TrackerService from './admin/tracker/tracker.service';
 <%_ } _%>
-import * as duration from 'duration-fns';
-import { formatDuration } from 'date-fns';
 /* tslint:disable */
 
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
@@ -49,15 +47,6 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('jhi-item-count', JhiItemCountComponent);
 Vue.component('jhi-sort-indicator', JhiSortIndicatorComponent);
 Vue.component('infinite-loading', InfiniteLoading);
-
-Vue.filter('duration', function(value) {
-  const formatted =  formatDuration(duration.parse(value));
-  if (formatted) {
-    return formatted;
-  }
-  return value;
-});
-
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(Vue);
 <%_ } _%>
