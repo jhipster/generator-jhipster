@@ -33,7 +33,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                node_version: [12.16.1]
+                node_version: [12.18.3]
                 os: [ubuntu-20.04]
         steps:
             - uses: actions/checkout@v2
