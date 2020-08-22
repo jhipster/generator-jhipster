@@ -723,7 +723,7 @@ function vueReplaceTranslation(generator, files) {
     }
 }
 
-function vueAddPageToRouterImport(generator, pageName, pageFolderName) {
+function vueAddPageToRouterImport(generator, pageName, pageFolderName, pageFilename = pageFolderName) {
     this.rewriteFile(
         {
             file: `${constants.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
@@ -732,7 +732,7 @@ function vueAddPageToRouterImport(generator, pageName, pageFolderName) {
                 generator.stripMargin(
                     // prettier-ignore
                     `|// prettier-ignore
-                |const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFolderName}.vue');`
+                |const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFilename}.vue');`
                 ),
             ],
         },
@@ -740,7 +740,7 @@ function vueAddPageToRouterImport(generator, pageName, pageFolderName) {
     );
 }
 
-function vueAddPageToRouter(generator, pageName, pageFolderName) {
+function vueAddPageToRouter(generator, pageName, pageFilename) {
     this.rewriteFile(
         {
             file: `${constants.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
@@ -749,7 +749,7 @@ function vueAddPageToRouter(generator, pageName, pageFolderName) {
                 generator.stripMargin(
                     // prettier-ignore
                     `|{
-                    |    path: '/pages/${pageFolderName}',
+                    |    path: '/pages/${pageFilename}',
                     |    name: '${pageName}',
                     |    component: ${pageName},
                     |    meta: { authorities: [Authority.USER] }
@@ -761,7 +761,7 @@ function vueAddPageToRouter(generator, pageName, pageFolderName) {
     );
 }
 
-function vueAddPageServiceToMainImport(generator, pageName, pageFolderName) {
+function vueAddPageServiceToMainImport(generator, pageName, pageFolderName, pageFilename = pageFolderName) {
     this.rewriteFile(
         {
             file: `${constants.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
@@ -769,7 +769,7 @@ function vueAddPageServiceToMainImport(generator, pageName, pageFolderName) {
             splicable: [
                 generator.stripMargin(
                     // prettier-ignore
-                    `|import ${pageName}Service from '@/pages/${pageFolderName}/${pageFolderName}.service';`
+                    `|import ${pageName}Service from '@/pages/${pageFolderName}/${pageFilename}.service';`
                 ),
             ],
         },
@@ -793,7 +793,7 @@ function vueAddPageServiceToMain(generator, pageName, pageInstance) {
     );
 }
 
-function vueAddPageProtractorConf(generator, pageFolderName) {
+function vueAddPageProtractorConf(generator) {
     this.rewriteFile(
         {
             file: `${constants.CLIENT_TEST_SRC_DIR}/protractor.conf.js`,
