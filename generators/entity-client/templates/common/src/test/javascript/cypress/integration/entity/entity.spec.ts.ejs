@@ -14,11 +14,22 @@ import {
 const baseApi = (applicationType === 'gateway' && locals.microserviceName) ? microserviceName.toLowerCase() + '/api/' : 'api/';
 let openBlockComment = ``;
 let closeBlockComment = ``;
+
 for (let relationship of relationships) {
   if (relationship.relationshipRequired || relationship.useJPADerivedIdentifier) {
     openBlockComment = `/* this test is commented because it contains required relationships`;
     closeBlockComment = `*/`;
     break;
+  }
+}
+
+let entityFakeData;
+if (!openBlockComment) {
+  resetFakerSeed('entity-cypress');
+  entityFakeData = generateFakeData('cypress');
+  if (!entityFakeData) {
+    openBlockComment = `/* this test is commented because it failed to generate a correct full sample`;
+    closeBlockComment = `*/`;
   }
 }
 _%>
@@ -137,7 +148,7 @@ describe('<%= entityClass %> e2e test', () => {
       const fieldType = field.fieldType;
       const fieldTypeBlobContent = field.fieldTypeBlobContent;
       const fieldIsEnum = field.fieldIsEnum;
-      const fieldValue = field.generateFakeData('cypress');
+      const fieldValue = !entityFakeData ? field.generateFakeData('cypress') : entityFakeData[field.fieldName];
       if (fieldValue === undefined) {
           warning(`Error generating a value for field ${fieldName}`);
           return;
@@ -145,8 +156,7 @@ describe('<%= entityClass %> e2e test', () => {
     _%>
 
     <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-    <%_ const fieldValueFormated = fieldValue.substr(0, fieldValue.length-3); _%>
-    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValueFormated %>').invoke('val').should('equal', '<%= fieldValueFormated %>');
+    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('equal', '<%= fieldValue %>');
 
     <%_ } else if (fieldType === 'Duration' && clientFramework === 'react') { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).type('PT12S').should('have.value', 'PT12S');
@@ -167,7 +177,7 @@ describe('<%= entityClass %> e2e test', () => {
     cy.setFieldImageAsBytesOfEntity('<%= fieldName %>', 'integration-test.png', 'image/png');
 
     <%_ } else if (fieldIsEnum) { _%>
-    cy.setFieldSelectToLastOfEntity('<%= fieldName %>');
+    cy.get(`[data-cy="<%= fieldName %>"]`).select('<%= fieldValue %>');
 
     <%_ } else if (fieldType === 'UUID'){ _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('match', new RegExp('<%= fieldValue %>'));
@@ -194,6 +204,7 @@ describe('<%= entityClass %> e2e test', () => {
     <%_ } _%>
     <%_ }); _%>
     cy.get(entityCreateSaveButtonSelector).click({force: true});
+    cy.scrollTo('top', {ensureScrollable: false});
     cy.get(entityCreateSaveButtonSelector).should('not.exist');
     cy.route('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequestAfterCreate');
     cy.visit('/');

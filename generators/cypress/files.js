@@ -82,7 +82,7 @@ module.exports = {
 function writeFiles() {
     return {
         writeFiles() {
-            faker.seed(stringHashCode(this.jhipsterConfig.baseName));
+            faker.seed(stringHashCode(this.jhipsterConfig.baseName || 'jhipsterSample'));
             this.faker = faker;
             this.writeFilesToDisk(cypressFiles, this, false, this.fetchFromInstalledJHipster('cypress/templates'));
         },
