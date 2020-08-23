@@ -1,11 +1,13 @@
 FROM ubuntu:20.04
-
 RUN \
   # configure the "jhipster" user
   groupadd jhipster && \
   useradd jhipster -s /bin/bash -m -g jhipster -G sudo && \
   echo 'jhipster:jhipster' |chpasswd && \
   mkdir /home/jhipster/app && \
+  export DEBIAN_FRONTEND=noninteractive && \
+  export TZ=Europe\Paris && \
+  ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
   apt-get update && \
   # install utilities
   apt-get install -y \
@@ -22,9 +24,6 @@ RUN \
     build-essential \
     software-properties-common \
     sudo && \
-  # install tzdata
-  export DEBIAN_FRONTEND=noninteractive && \
-  apt-get install -y tzdata && \
   # install OpenJDK 11
   add-apt-repository ppa:openjdk-r/ppa && \
   apt-get update && \
