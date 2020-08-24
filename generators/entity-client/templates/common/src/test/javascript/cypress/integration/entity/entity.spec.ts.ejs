@@ -166,7 +166,7 @@ describe('<%= entityClass %> e2e test', () => {
 
     <%_ } else if (fieldType === 'Boolean') { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).should('not.be.checked');
-    if (`'<%= fieldValue %>'` === 'true') {
+    if ('<%= fieldValue %>' === 'true') {
         cy.get(`[data-cy="<%= fieldName %>"]`).click().should('be.checked');
     }
 
