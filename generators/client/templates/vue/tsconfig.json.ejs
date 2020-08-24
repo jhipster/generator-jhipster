@@ -1,0 +1,34 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "removeComments": false,
+        "noImplicitAny": false,
+        "skipLibCheck": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "outDir": "<%= DIST_DIR %>app",
+        "lib": ["es7", "dom"],
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "baseUrl": "./",
+        "paths": {
+            "@/*": ["src/main/webapp/app/*"]
+        },
+        "importHelpers": true,
+        "allowJs": true
+    },
+    "include": [
+        "src/main/webapp/app",
+        "src/test/javascript/spec"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

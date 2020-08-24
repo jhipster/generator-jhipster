@@ -18,14 +18,9 @@
  */
 const _ = require('lodash');
 const chalk = require('chalk');
-const faker = require('faker');
 const fs = require('fs');
 const utils = require('../utils');
-const liquibaseUtils = require('../../utils/liquibase');
 const constants = require('../generator-constants');
-
-/* Use customized randexp */
-const randexp = utils.RandexpWithFaker;
 
 /* Constants use throughout */
 const INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX;
@@ -98,11 +93,6 @@ const serverFiles = {
                     file: 'config/liquibase/fake-data/table.csv',
                     options: {
                         interpolate: INTERPOLATE_REGEX,
-                        context: {
-                            getRecentForLiquibase: liquibaseUtils.getRecentDateForLiquibase,
-                            faker,
-                            randexp,
-                        },
                     },
                     renameTo: generator => `config/liquibase/fake-data/${generator.entityTableName}.csv`,
                 },
@@ -248,7 +238,6 @@ const serverFiles = {
                     file: 'package/web/rest/EntityResourceIT.java',
                     options: {
                         context: {
-                            randexp,
                             _,
                             chalkRed: chalk.red,
                             fs,
@@ -321,21 +310,11 @@ module.exports = {
 
 function writeFiles() {
     return {
-        saveRemoteEntityPath() {
-            if (_.isUndefined(this.microservicePath)) {
-                return;
-            }
-            this.copy(
-                `${this.microservicePath}/${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`,
-                this.destinationPath(`${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`)
-            );
-        },
-
         setupReproducibility() {
             if (this.skipServer) return;
 
             // In order to have consistent results with Faker, restart seed with current entity name hash.
-            faker.seed(utils.stringHashCode(this.name.toLowerCase()));
+            this.resetFakerSeed();
         },
 
         writeServerFiles() {

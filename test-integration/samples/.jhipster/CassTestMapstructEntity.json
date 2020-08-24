@@ -9,32 +9,24 @@
         {
             "fieldName": "stringRequiredField",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "stringMinlengthField",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "minlength"
-            ],
+            "fieldValidateRules": ["minlength"],
             "fieldValidateRulesMinlength": 0
         },
         {
             "fieldName": "stringMaxlengthField",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
+            "fieldValidateRules": ["maxlength"],
             "fieldValidateRulesMaxlength": 20
         },
         {
             "fieldName": "stringPatternField",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "pattern"
-            ],
+            "fieldValidateRules": ["pattern"],
             "fieldValidateRulesPattern": "^[a-zA-Z0-9]*$",
             "fieldValidateRulesPatternJava": "^[a-zA-Z0-9]*$"
         },
@@ -45,24 +37,18 @@
         {
             "fieldName": "integerRequiredField",
             "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "integerMinField",
             "fieldType": "Integer",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "integerMaxField",
             "fieldType": "Integer",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
@@ -72,24 +58,18 @@
         {
             "fieldName": "longRequiredField",
             "fieldType": "Long",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "longMinField",
             "fieldType": "Long",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "longMaxField",
             "fieldType": "Long",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
@@ -99,70 +79,52 @@
         {
             "fieldName": "floatRequiredField",
             "fieldType": "Float",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "floatMinField",
             "fieldType": "Float",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "floatMaxField",
             "fieldType": "Float",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
             "fieldName": "doubleRequiredField",
             "fieldType": "Double",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "doubleMinField",
             "fieldType": "Double",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "doubleMaxField",
             "fieldType": "Double",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
             "fieldName": "bigDecimalRequiredField",
             "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "bigDecimalMinField",
             "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "bigDecimalMaxField",
             "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
@@ -172,9 +134,7 @@
         {
             "fieldName": "dateRequiredField",
             "fieldType": "Date",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "zonedDateTimeField",
@@ -183,9 +143,7 @@
         {
             "fieldName": "zonedDateTimeRequiredField",
             "fieldType": "ZonedDateTime",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "booleanField",
@@ -194,17 +152,13 @@
         {
             "fieldName": "booleanRequiredField",
             "fieldType": "Boolean",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "picture",
             "fieldType": "ByteBuffer",
             "fieldTypeBlobContent": "image",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "operationsFile",

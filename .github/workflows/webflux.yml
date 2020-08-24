@@ -18,7 +18,13 @@
 #
 
 name: Webflux
-on: [push, pull_request]
+on:
+    push:
+        branches-ignore:
+            - 'dependabot/**'
+    pull_request:
+        branches:
+            - '*'
 env:
     JHI_RUN_APP: 1
     JHI_JDK: 11
@@ -39,17 +45,19 @@ jobs:
         name: ${{ matrix.app-type }}
         runs-on: ${{ matrix.os }}
         if: >-
+            contains(github.event.head_commit.message, '[webflux]') &&
             !contains(github.event.head_commit.message, '[ci skip]') &&
             !contains(github.event.head_commit.message, '[skip ci]') &&
             !contains(github.event.pull_request.title, '[skip ci]') &&
             !contains(github.event.pull_request.title, '[ci skip]') &&
-            (github.event.pull_request.draft == false || !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci'))
+            (github.event.pull_request.draft == false || !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci')) &&
+            !contains(github.event.pull_request.user.login, 'dependabot')
         timeout-minutes: 40
         strategy:
             fail-fast: false
             matrix:
-                node_version: [12.16.1]
-                os: [ubuntu-latest]
+                node_version: [12.18.3]
+                os: [ubuntu-20.04]
                 app-type:
                     - webflux-mongodb
                     - webflux-mongodb-es-session
@@ -111,16 +119,18 @@ jobs:
             # Install all tools and check configuration
             #----------------------------------------------------------------------
             - uses: actions/checkout@v2
-            - uses: actions/setup-node@v1
+            - uses: actions/setup-node@v2.1.1
               with:
                   node-version: ${{ matrix.node_version }}
-            - name: Download latest chrome binary
-              run: |
-                  sudo apt update
-                  sudo apt install google-chrome-stable
             - uses: actions/setup-java@v1
               with:
                   java-version: '11.x'
+            - name: Get chrome/chromedriver version
+              id: chromedriver-version
+              run: |
+                  CHROME_VERSION=$(google-chrome --version | cut -f 3 -d ' ' | cut -d '.' -f 1) \
+                  && CHROMEDRIVER_VERSION=$(curl --location --fail --retry 3 http://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}) \
+                  && echo "::set-output name=version::$CHROMEDRIVER_VERSION"
             - name: 'TOOLS: configure tools installed by the system'
               run: $JHI_SCRIPTS/03-system.sh
             - name: 'TOOLS: configure git'
@@ -149,6 +159,10 @@ jobs:
               run: $JHI_SCRIPTS/22-tests-frontend.sh
             - name: 'TESTS: packaging'
               run: $JHI_SCRIPTS/23-package.sh
+            - name: 'Synchronize chromedriver version'
+              if: ${{ matrix.protractor == 1 }}
+              run: npm run e2e:update-webdriver --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
+              working-directory: /home/runner/app
             - name: 'TESTS: End-to-End'
               run: $JHI_SCRIPTS/24-tests-e2e.sh
             - name: 'TESTS: Sonar analysis'

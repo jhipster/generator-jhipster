@@ -1,0 +1,14 @@
+entity A
+entity B
+
+relationship OneToOne {
+  A to B
+}
+
+relationship OneToMany {
+  A to B
+}
+
+relationship ManyToMany {
+  A to B
+}

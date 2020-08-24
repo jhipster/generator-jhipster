@@ -48,11 +48,7 @@ bootRun {
 
 <%_ if (!skipClient) { _%>
 task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task) {
-    <%_ if (clientPackageManager==='npm') { _%>
     inputs.files("package-lock.json")
-    <%_ } else { _%>
-    inputs.files("yarn.lock")
-    <%_ } _%>
     inputs.files("build.gradle")
     inputs.dir("<%= CLIENT_MAIN_SRC_DIR %>")
 

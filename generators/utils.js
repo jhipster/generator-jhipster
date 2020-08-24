@@ -22,28 +22,14 @@ const path = require('path');
 const shelljs = require('shelljs');
 const ejs = require('ejs');
 const _ = require('lodash');
-const jhiCore = require('jhipster-core');
 const fs = require('fs');
 const crypto = require('crypto');
-const randexp = require('randexp');
-const faker = require('faker');
 const os = require('os');
 
 const constants = require('./generator-constants');
+const FileUtils = require('../jdl/utils/file-utils');
 
 const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
-
-class RandexpWithFaker extends randexp {
-    constructor(regexp, m) {
-        super(regexp, m);
-        this.max = 5;
-    }
-
-    // In order to have consistent results with RandExp, the RNG is seeded.
-    randInt(min, max) {
-        return faker.random.number({ min, max });
-    }
-}
 
 module.exports = {
     rewrite,
@@ -59,21 +45,24 @@ module.exports = {
     getEnumInfo,
     copyObjectProps,
     decodeBase64,
-    getAllJhipsterConfig,
     getDBTypeFromDBValue,
     getBase64Secret,
     getRandomHex,
     checkStringInFile,
     checkRegexInFile,
     loadYoRc,
-    loadBlueprintsFromConfiguration,
-    parseBluePrints,
-    normalizeBlueprintName,
     packageNameToNamespace,
     stringHashCode,
-    RandexpWithFaker,
     gitExec,
     isGitInstalled,
+    vueReplaceTranslation,
+    vueAddPageToRouterImport,
+    vueAddPageToRouter,
+    vueAddPageServiceToMainImport,
+    vueAddPageServiceToMain,
+    vueAddPageProtractorConf,
+    languageSnakeCase,
+    languageToJavaLanguage,
 };
 
 /**
@@ -253,7 +242,8 @@ function renderContent(source, generator, context, options, cb) {
         if (!err) {
             cb(res);
         } else {
-            generator.error(`Copying template ${source} failed. [${err}]`);
+            generator.warning(`Copying template ${source} failed. [${err}]`);
+            throw err;
         }
     });
 }
@@ -578,48 +568,10 @@ function decodeBase64(string, encoding = 'utf-8') {
 }
 
 function loadYoRc(filePath = '.yo-rc.json') {
-    if (!jhiCore.FileUtils.doesFileExist(filePath)) {
+    if (!FileUtils.doesFileExist(filePath)) {
         return undefined;
     }
     return JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }));
-}
-
-/**
- * Get all the generator configuration from the .yo-rc.json file
- * @param {Generator} generator the generator instance to use
- * @param {boolean} force force getting direct from file
- * @param {String} base path where the .yo-rc.json file is located. Default is cwd.
- */
-function getAllJhipsterConfig(generator, force, basePath = '') {
-    let configuration = generator && generator.config ? generator.config.getAll() || {} : {};
-    const filePath = path.join(basePath || '', '.yo-rc.json');
-    if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist(filePath)) {
-        let yoRc;
-        if (generator && generator.fs) {
-            yoRc = generator.fs.readJSON(filePath);
-        } else {
-            yoRc = loadYoRc(filePath);
-        }
-        configuration = yoRc['generator-jhipster'];
-        // merge the blueprint configs if available
-        configuration.blueprints = loadBlueprintsFromConfiguration(configuration);
-        const blueprintConfigs = configuration.blueprints.map(bp => yoRc[bp.name]).filter(el => el !== null && el !== undefined);
-        if (blueprintConfigs.length > 0) {
-            const mergedConfigs = Object.assign(...blueprintConfigs);
-            configuration = { ...configuration, ...mergedConfigs };
-        }
-    }
-    if (!configuration.get || typeof configuration.get !== 'function') {
-        configuration = {
-            ...configuration,
-            getAll: () => configuration,
-            get: key => configuration[key],
-            set: (key, value) => {
-                configuration[key] = value;
-            },
-        };
-    }
-    return configuration;
 }
 
 /**
@@ -675,82 +627,12 @@ function checkRegexInFile(path, regex, generator) {
 }
 
 /**
- * Loads the blueprint information from the configuration of the specified generator.
- * @param config - the generator's configuration object.
- * @returns {Array} an array that contains the info for each blueprint
- */
-function loadBlueprintsFromConfiguration(config) {
-    // handle both config based on yeoman's Storage object, and direct configuration loaded from .yo-rc.json
-    const configuration = config && config.getAll && typeof config.getAll === 'function' ? config.getAll() || {} : config;
-    // load blueprints from config file
-    const blueprints = configuration.blueprints || [];
-
-    const oldBlueprintName = configuration.blueprint;
-    if (oldBlueprintName && blueprints.findIndex(e => e.name === oldBlueprintName) === -1) {
-        const version = configuration.blueprintVersion || 'latest';
-        blueprints.push(parseBlueprintInfo(`${oldBlueprintName}@${version}`));
-    }
-    return blueprints;
-}
-
-/**
- * Splits and normalizes a comma separated list of blueprint names with optional versions.
- * @param {string} blueprints - comma separated list of blueprint names, e.g kotlin,vuewjs@1.0.1. If an array then
- * no processing is performed and it is returned as is.
- * @returns {Array} an array that contains the info for each blueprint
- */
-function parseBluePrints(blueprints) {
-    if (blueprints && !Array.isArray(blueprints)) {
-        return blueprints
-            .split(',')
-            .filter(el => el != null && el.length > 0)
-            .map(blueprint => parseBlueprintInfo(blueprint));
-    }
-    return blueprints;
-}
-
-/**
- * Normalize blueprint name if needed and also extracts version if defined. If no version is defined then `latest`
- * is used by default.
- * @param {string} blueprint - name of the blueprint and optionally a version, e.g kotlin[@0.8.1]
- * @returns {object} containing the name and version of the blueprint
- */
-function parseBlueprintInfo(blueprint) {
-    let bpName = normalizeBlueprintName(blueprint);
-    let version = 'latest';
-    const idx = bpName.lastIndexOf('@');
-    if (idx > 0) {
-        version = bpName.slice(idx + 1);
-        bpName = bpName.slice(0, idx);
-    }
-    return {
-        name: bpName,
-        version,
-    };
-}
-
-/**
  * Remove 'generator-' prefix from generators for compatibility with yeoman namespaces.
  * @param {string} packageName - name of the blueprint's package name
  * @returns {string} namespace of the blueprint
  */
 function packageNameToNamespace(packageName) {
     return packageName.replace('generator-', '');
-}
-
-/**
- * Normalize blueprint name: prepend 'generator-jhipster-' if needed
- * @param {string} blueprint - name of the blueprint
- * @returns {string} the normalized blueprint name
- */
-function normalizeBlueprintName(blueprint) {
-    if (blueprint && blueprint.startsWith('@')) {
-        return blueprint;
-    }
-    if (blueprint && !blueprint.startsWith('generator-jhipster')) {
-        return `generator-jhipster-${blueprint}`;
-    }
-    return blueprint;
 }
 
 /**
@@ -816,4 +698,120 @@ function isGitInstalled(callback) {
     const code = gitExec('--version', { trace: false }).code;
     if (callback) callback(code);
     return code === 0;
+}
+
+/**
+ * Replace translation for Vue application
+ * @param {*} generator
+ * @param {*} files
+ */
+function vueReplaceTranslation(generator, files) {
+    for (let i = 0; i < files.length; i++) {
+        const filePath = `${constants.CLIENT_MAIN_SRC_DIR}${files[i]}`;
+        // Match the below attributes and the $t() method
+        const regexp = ['v-text', 'v-bind:placeholder', 'v-html', 'v-bind:title', 'v-bind:label', 'v-bind:value', 'v-bind:html']
+            .map(s => `${s}="\\$t\\(.*?\\)"`)
+            .join(')|(');
+        this.replaceContent(
+            {
+                file: filePath,
+                pattern: new RegExp(` ?(${regexp})`, 'g'),
+                content: '',
+            },
+            generator
+        );
+    }
+}
+
+function vueAddPageToRouterImport(generator, pageName, pageFolderName, pageFilename = pageFolderName) {
+    this.rewriteFile(
+        {
+            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
+            needle: 'jhipster-needle-add-entity-to-router-import',
+            splicable: [
+                generator.stripMargin(
+                    // prettier-ignore
+                    `|// prettier-ignore
+                |const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFilename}.vue');`
+                ),
+            ],
+        },
+        generator
+    );
+}
+
+function vueAddPageToRouter(generator, pageName, pageFilename) {
+    this.rewriteFile(
+        {
+            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
+            needle: 'jhipster-needle-add-entity-to-router',
+            splicable: [
+                generator.stripMargin(
+                    // prettier-ignore
+                    `|{
+                    |    path: '/pages/${pageFilename}',
+                    |    name: '${pageName}',
+                    |    component: ${pageName},
+                    |    meta: { authorities: [Authority.USER] }
+                    |  },`
+                ),
+            ],
+        },
+        generator
+    );
+}
+
+function vueAddPageServiceToMainImport(generator, pageName, pageFolderName, pageFilename = pageFolderName) {
+    this.rewriteFile(
+        {
+            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+            needle: 'jhipster-needle-add-entity-service-to-main-import',
+            splicable: [
+                generator.stripMargin(
+                    // prettier-ignore
+                    `|import ${pageName}Service from '@/pages/${pageFolderName}/${pageFilename}.service';`
+                ),
+            ],
+        },
+        generator
+    );
+}
+
+function vueAddPageServiceToMain(generator, pageName, pageInstance) {
+    this.rewriteFile(
+        {
+            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+            needle: 'jhipster-needle-add-entity-service-to-main',
+            splicable: [
+                generator.stripMargin(
+                    // prettier-ignore
+                    `|${pageInstance}Service: () => new ${pageName}Service(),`
+                ),
+            ],
+        },
+        generator
+    );
+}
+
+function vueAddPageProtractorConf(generator) {
+    this.rewriteFile(
+        {
+            file: `${constants.CLIENT_TEST_SRC_DIR}/protractor.conf.js`,
+            needle: 'jhipster-needle-add-protractor-tests',
+            splicable: [generator.stripMargin("'./e2e/pages/**/*.spec.ts',")],
+        },
+        generator
+    );
+}
+
+function languageSnakeCase(language) {
+    // Template the message server side properties
+    return language.replace(/-/g, '_');
+}
+
+function languageToJavaLanguage(language) {
+    // Template the message server side properties
+    const langProp = languageSnakeCase(language);
+    // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
+    return langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
 }

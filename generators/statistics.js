@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 const { v4: uuid } = require('uuid');
-const chalk = require('chalk');
 const Config = require('conf');
 const osLocale = require('os-locale');
 const axios = require('axios');
@@ -144,16 +143,6 @@ class Statistics {
 
     setOptOutStatus(status) {
         this.setConfig('optOut', status);
-    }
-
-    /**
-     * @deprecated Use setOptOutStatus(status) instead.
-     * This method will be removed in JHipster v7.
-     */
-    setOptoutStatus(status) {
-        // eslint-disable-next-line no-console
-        console.log(chalk.yellow('\nPlease use setOptOutStatus() instead. This method will be removed in v7\n'));
-        this.setOptOutStatus(status);
     }
 
     setLinkedStatus(status) {

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { <%= angularXAppName %>SharedModule } from 'app/shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 
 import { DocsComponent } from './docs.component';
 
@@ -8,7 +8,7 @@ import { docsRoute } from './docs.route';
 
 @NgModule({
   imports: [
-    <%= angularXAppName %>SharedModule,
+    SharedModule,
     RouterModule.forChild([docsRoute])
   ],
   declarations: [DocsComponent]

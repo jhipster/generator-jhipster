@@ -1,0 +1,67 @@
+{
+  "fluentMethods": true,
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "relationshipName": "location",
+      "otherEntityName": "location",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "department"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "relationshipValidateRules": "required",
+      "relationshipName": "employee",
+      "otherEntityName": "employee",
+      "javadoc": "A relationship",
+      "otherEntityRelationshipName": "department"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "jobHistory",
+      "otherEntityRelationshipName": "department",
+      "ownerSide": false,
+      "relationshipName": "jobHistory",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "fields": [
+    {
+      "fieldName": "departmentId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "departmentName",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "advertisement",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "logo",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image"
+    }
+  ],
+  "changelogDate": "20160926092246",
+  "entityTableName": "department",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "skipClient": true,
+  "skipServer": true,
+  "clientRootFolder": "toto",
+  "applications": "*"
+}

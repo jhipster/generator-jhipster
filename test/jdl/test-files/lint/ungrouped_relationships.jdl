@@ -1,0 +1,15 @@
+entity A
+entity B
+entity C
+
+relationship OneToMany {
+  A to B
+}
+
+relationship OneToMany {
+  B to C
+}
+
+relationship OneToMany {
+  A to C
+}

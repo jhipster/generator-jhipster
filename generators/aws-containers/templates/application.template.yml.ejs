@@ -265,7 +265,7 @@ Resources:
             - Name: JAVA_OPTS
               Value: '-Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses'
             - Name: SPRING_PROFILES_ACTIVE
-              Value: 'prod,swagger,aws'
+              Value: 'prod,api-docs,aws'
             - Name: SPRING_DATASOURCE_URL
               Value: !Join ['',['jdbc:', <%= app.dbType %> ,'://',!GetAtt JHipsterRDSCluster.Endpoint.Address ,':', !GetAtt JHipsterRDSCluster.Endpoint.Port,'/', !Ref databaseName]]
             - Name: SPRING_DATASOURCE_USERNAME

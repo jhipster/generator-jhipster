@@ -22,7 +22,6 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, <% if (haveFieldWithJavadoc) { %>UncontrolledTooltip, <% } %>Row, Col } from 'reactstrap';
 import {
   Translate,
-  ICrudGetAction,
   <%_ if (fieldsContainBlob) { _%>
     <%_ if (fieldsContainBlobOrImage) { _%>
   openFile,
@@ -37,7 +36,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
 import { getEntity } from './<%= entityFileName %>.reducer';
-import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
 export interface I<%= entityReactName %>DetailProps extends StateProps, DispatchProps, RouteComponentProps<{id: string}>  {}

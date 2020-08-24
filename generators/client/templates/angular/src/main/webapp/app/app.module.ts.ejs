@@ -20,11 +20,11 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import './vendor';
-import { <%= angularXAppName %>SharedModule } from 'app/shared/shared.module';
-import { <%= angularXAppName %>CoreModule } from 'app/core/core.module';
-import { <%= angularXAppName %>AppRoutingModule } from './app-routing.module';
-import { <%= angularXAppName %>HomeModule } from './home/home.module';
-import { <%= angularXAppName %>EntityModule } from './entities/entity.module';
+import { SharedModule } from 'app/shared/shared.module';
+import { CoreModule } from 'app/core/core.module';
+import { AppRoutingModule } from './app-routing.module';
+import { HomeModule } from './home/home.module';
+import { EntityRoutingModule } from './entities/entity-routing.module';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { MainComponent } from './layouts/main/main.component';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
@@ -38,12 +38,12 @@ import { ErrorComponent } from './layouts/error/error.component';
 @NgModule({
     imports: [
         BrowserModule,
-        <%= angularXAppName %>SharedModule,
-        <%= angularXAppName %>CoreModule,
-        <%= angularXAppName %>HomeModule,
+        SharedModule,
+        CoreModule,
+        HomeModule,
         // jhipster-needle-angular-add-module JHipster will add new module here
-        <%= angularXAppName %>EntityModule,
-        <%= angularXAppName %>AppRoutingModule
+        EntityRoutingModule,
+        AppRoutingModule
     ],
     declarations: [
         MainComponent,
@@ -57,4 +57,4 @@ import { ErrorComponent } from './layouts/error/error.component';
     ],
     bootstrap: [ MainComponent ]
 })
-export class <%= angularXAppName %>AppModule {}
+export class AppModule {}

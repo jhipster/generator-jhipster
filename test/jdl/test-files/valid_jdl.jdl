@@ -1,0 +1,15 @@
+entity A
+entity B {}
+entity C {
+  name String required
+}
+entity D {
+  myValue Integer min(42)
+}
+
+relationship OneToOne {
+  A to B{a},
+  C{d} to D{c}
+}
+
+dto * with mapstruct except A

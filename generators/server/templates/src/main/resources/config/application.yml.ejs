@@ -340,7 +340,7 @@ jhipster:
     #     max-age: 1800
     mail:
         from: <%= baseName %>@localhost
-    swagger:
+    api-docs:
         default-include-pattern: /api/.*
         title: <%= baseName %> API
         description: <%= baseName %> API documentation
@@ -349,7 +349,7 @@ jhipster:
         contact-name:
         contact-url:
         contact-email:
-        license:
+        license: unlicensed
         license-url:
     <%_ if (authenticationType === 'oauth2') { _%>
     security:

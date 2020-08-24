@@ -22,7 +22,6 @@ profile=dev
 # Build properties
 node_version=<%= NODE_VERSION %>
 npm_version=<%= NPM_VERSION %>
-yarn_version=<%= YARN_VERSION %>
 
 # Dependency versions
 jhipster_dependencies_version=<%= JHIPSTER_DEPENDENCIES_VERSION %>
@@ -41,16 +40,16 @@ log4j2_mock_version=0.0.2
 jackson_databind_nullable_version=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 <%_ } _%>
 <%_ if (cacheProvider === 'caffeine') { _%>
-caffeine_version=2.8.4
+caffeine_version=2.8.5
 typesafe_config_version=1.4.0
 <%_ } _%>
 <%_ if (databaseType === 'sql' && !reactive) { _%>
-liquibase_hibernate5_version=3.8
+liquibase_hibernate5_version=3.10.2
 liquibaseTaskPrefix=liquibase
 <%_ } _%>
 
 <%_ if (reactive) { _%>
-blockhound_junit_platform_version=1.0.3.RELEASE
+blockhound_junit_platform_version=1.0.4.RELEASE
 junit_platform_launcher_version=1.6.2
 <%_ } _%>
 
@@ -65,23 +64,20 @@ cassandra_driver_version=4.6.1
 
 # gradle plugin version
 jib_plugin_version=<%= JIB_VERSION %>
-git_properties_plugin_version=2.2.2
+git_properties_plugin_version=2.2.3
 <%_ if (!skipClient) { _%>
 gradle_node_plugin_version=2.2.4
 <%_ } _%>
 apt_plugin_version=0.21
 <%_ if (databaseType === 'sql' && !reactive) { _%>
-liquibase_plugin_version=2.0.3
+liquibase_plugin_version=2.0.4
 <%_ } _%>
-sonarqube_plugin_version=2.8
+sonarqube_plugin_version=3.0
 <%_ if (enableSwaggerCodegen) { _%>
 openapi_plugin_version=4.3.1
 <%_ } _%>
-spring_no_http_plugin_version=0.0.4.RELEASE
-checkstyle_version=8.32
-<%_ if (reactive && (applicationType === 'gateway' || applicationType === 'monolith')) { _%>
-springfox_version=3.0.0-SNAPSHOT
-<%_ } _%>
+spring_no_http_plugin_version=0.0.5.RELEASE
+checkstyle_version=8.35
 
 # jhipster-needle-gradle-property - JHipster will add additional properties here
 

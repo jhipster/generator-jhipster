@@ -107,12 +107,14 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
 <%- include('../../common/inject_template', {asEntity, asDto, viaService: false, constructorName: serviceClassName, queryService: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
 
+    <%_ if (service !== 'serviceImpl') { _%>
     /**
      * Save a <%= entityInstance %>.
      *
      * @param <%= instanceName %> the entity to save.
      * @return the persisted entity.
      */
+    <%_ } _%>
     <%_ if (service === 'serviceImpl') { _%>
     @Override
     <%_ } _%>
@@ -125,12 +127,14 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
         <%_ } _%>
     }
 
+    <%_ if (service !== 'serviceImpl') { _%>
     /**
      * Get all the <%= entityInstancePlural %>.
      *<% if (pagination !== 'no') { %>
      * @param pageable the pagination information.<% } %>
      * @return the list of entities.
      */
+    <%_ } _%>
     <%_ if (service === 'serviceImpl') { _%>
     @Override
     <%_ } _%>
@@ -151,42 +155,50 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
 
     <%_ if (fieldsContainOwnerManyToMany === true) { _%>
 
+    <%_ if (service !== 'serviceImpl') { _%>
     /**
      * Get all the <%= entityInstancePlural %> with eager load of many-to-many relationships.
      *
      * @return the list of entities.
      */
+    <%_ } _%>
     public <%= pageOrFlux %><<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable) {
         return <%= entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
     }
     <%_ } _%>
 <%- include('../../common/get_filtered_template', {asEntity, asDto}); -%>
 <%_ if (reactive) { _%>
+    <%_ if (service !== 'serviceImpl') { _%>
     /**
-    * Returns the number of <%= entityInstancePlural %> available.
-    *
-    */
+     * Returns the number of <%= entityInstancePlural %> available.
+     *
+     */
+    <%_ } _%>
     public Mono<Long> countAll() {
         return <%= entityInstance %>Repository.count();
     }
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
+    <%_ if (service !== 'serviceImpl') { _%>
     /**
-    * Returns the number of <%= entityInstancePlural %> available in search repository.
-    *
-    */
+     * Returns the number of <%= entityInstancePlural %> available in search repository.
+     *
+     */
+    <%_ } _%>
     public Mono<Long> searchCount() {
         return <%= entityInstance %>SearchRepository.count();
     }
-    <%_  } _%>
+    <%_ } _%>
 
-<%_  } _%>
+<%_ } _%>
+    <%_ if (service !== 'serviceImpl') { _%>
     /**
      * Get one <%= entityInstance %> by id.
      *
      * @param id the id of the entity.
      * @return the entity.
      */
+    <%_ } _%>
     <%_ if (service === 'serviceImpl') { _%>
     @Override
     <%_ } _%>
@@ -197,11 +209,13 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
         log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService: false, returnDirectly:true}); -%>
     }
 
+    <%_ if (service !== 'serviceImpl') { _%>
     /**
      * Delete the <%= entityInstance %> by id.
      *
      * @param id the id of the entity.
      */
+    <%_ } _%>
     <%_ if (service === 'serviceImpl') { _%>
     @Override
     <%_ } _%>
@@ -211,6 +225,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     }
     <%_ if (searchEngine !== false) { _%>
 
+    <%_ if (service !== 'serviceImpl') { _%>
     /**
      * Search for the <%= entityInstance %> corresponding to the query.
      *
@@ -218,6 +233,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
      * @param pageable the pagination information.<% } %>
      * @return the list of entities.
      */
+    <%_ } _%>
     <%_ if (service === 'serviceImpl') { _%>
     @Override
     <%_ } _%>

@@ -130,6 +130,9 @@ elif [[ "$JHI_ENTITY" == "sqlfull" ]]; then
     moveEntity MapsIdChildEntityWithDTO
     moveEntity MapsIdUserProfileWithDTO
 
+    moveEntity JpaFilteringRelationship
+    moveEntity JpaFilteringOtherSide
+
 elif [[ "$JHI_ENTITY" == "sql" ]]; then
     moveEntity BankAccount
     moveEntity Label

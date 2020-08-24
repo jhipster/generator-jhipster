@@ -90,7 +90,6 @@ const files = {
     ],
     swagger: [
         {
-            condition: generator => !generator.reactive,
             path: MAIN_SRC_DIR,
             templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }],
         },
@@ -235,11 +234,6 @@ const files = {
             ],
         },
         {
-            condition: generator => !['no', 'cassandra'].includes(generator.databaseType),
-            path: REACT_DIR,
-            templates: [{ file: 'modules/administration/audits/audits.tsx', method: 'processJsx' }],
-        },
-        {
             condition: generator => generator.websocket === 'spring-websocket',
             path: REACT_DIR,
             templates: [{ file: 'modules/administration/tracker/tracker.tsx', method: 'processJsx' }],
@@ -319,7 +313,7 @@ const files = {
             path: TEST_SRC_DIR,
             templates: [
                 'jest.conf.js',
-                'spec/enzyme-setup.ts',
+                'spec/icons-mock.ts',
                 'spec/storage-mock.ts',
                 'spec/app/utils.ts',
                 'spec/app/config/axios-interceptor.spec.ts',
@@ -340,7 +334,6 @@ const files = {
                 // 'spec/app/account/password-reset/finish/_password-reset-finish.component.spec.js',
                 // 'spec/app/account/settings/_settings.component.spec.js',
                 // 'spec/app/admin/health/_health.component.spec.js',
-                // 'spec/app/admin/audits/_audits.component.spec.js',
                 // 'spec/helpers/_spyobject.js',
                 // 'spec/helpers/_mock-account.service.js',
                 // 'spec/helpers/_mock-principal.service.js',

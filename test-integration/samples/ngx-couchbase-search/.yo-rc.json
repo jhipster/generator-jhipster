@@ -23,6 +23,7 @@
         "jhiPrefix": "jhi",
         "enableTranslation": true,
         "nativeLanguage": "en",
-        "languages": ["en", "fr"]
+        "languages": ["en", "fr"],
+        "creationTimestamp": 1596513172471
     }
 }

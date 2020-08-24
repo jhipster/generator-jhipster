@@ -16,7 +16,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -%>
-<%_ var optionsForwarder = clientPackageManager == 'yarn' ? '' : '-- ' _%>
 {
   "name": "<%= dasherizedBaseName %>",
   "version": "0.0.1-SNAPSHOT",
@@ -70,11 +69,11 @@ limitations under the License.
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "1.0.13-4.3.1",
+    "@testing-library/react": "10.4.8",
     <%_ if (protractorTests) { _%>
     "@types/chai": "4.2.11",
     <%_ } _%>
-    "@types/enzyme": "3.10.5",
-    "@types/jest": "25.2.1",
+    "@types/jest": "26.0.10",
     "@types/lodash": "4.14.150",
     <%_ if (protractorTests) { _%>
     "@types/mocha": "7.0.2",
@@ -92,7 +91,6 @@ limitations under the License.
     "@typescript-eslint/eslint-plugin": "2.29.0",
     "@typescript-eslint/parser": "2.29.0",
     "autoprefixer": "9.7.6",
-    "base-href-webpack-plugin": "2.0.0",
     "browser-sync": "2.26.7",
     "browser-sync-webpack-plugin": "2.2.2",
     "cache-loader": "4.1.0",
@@ -100,13 +98,10 @@ limitations under the License.
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
     <%_ } _%>
-    "copy-webpack-plugin": "5.1.1",
+    "copy-webpack-plugin": "6.0.3",
     "core-js": "3.6.5",
     "cross-env": "7.0.2",
     "css-loader": "3.5.3",
-    "enzyme": "3.11.0",
-    "enzyme-adapter-react-16": "1.15.2",
-    "enzyme-to-json": "3.4.4",
     "eslint": "6.8.0",
     "eslint-config-jhipster": "0.0.1",
     "eslint-config-jhipster-react": "0.0.1",
@@ -117,13 +112,13 @@ limitations under the License.
     "fork-ts-checker-webpack-plugin": "4.1.3",
     "friendly-errors-webpack-plugin": "1.7.0",
     "generator-jhipster": "<%= packagejs.version %>",
-    "html-webpack-plugin": "3.2.0",
+    "html-webpack-plugin": "4.3.0",
     <%_ if (!skipCommitHook) { _%>
     "husky": "<%= HUSKY_VERSION %>",
     <%_ } _%>
     "identity-obj-proxy": "3.0.0",
-    "jest": "25.4.0",
-    "jest-junit": "10.0.0",
+    "jest": "26.4.2",
+    "jest-junit": "11.1.0",
     "jest-sonar-reporter": "2.0.0",
     "json-loader": "0.5.7",
     <%_ if (!skipCommitHook) { _%>
@@ -140,7 +135,7 @@ limitations under the License.
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "postcss-loader": "3.0.0",
     "prettier": "<%= PRETTIER_VERSION %>",
-    <%_ if (!skipServer && prettierJava) { _%>
+    <%_ if (!skipServer) { _%>
     "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
     <%_ } _%>
     <%_ if (protractorTests) { _%>
@@ -164,7 +159,7 @@ limitations under the License.
     "terser-webpack-plugin": "2.3.6",
     "thread-loader": "2.1.3",
     "to-string-loader": "1.1.6",
-    "ts-jest": "25.4.0",
+    "ts-jest": "26.2.0",
     "ts-loader": "7.0.1",
     <%_ if (protractorTests) { _%>
     "ts-node": "8.9.1",
@@ -176,45 +171,39 @@ limitations under the License.
     "webpack": "4.43.0",
     "webpack-cli": "3.3.11",
     "webpack-dev-server": "3.10.3",
-    "webpack-merge": "4.2.2",
+    "webpack-merge": "5.0.9",
     "webpack-notifier": "1.8.0",
     "workbox-webpack-plugin": "5.1.3",
     "write-file-webpack-plugin": "4.5.1"
   },
-<%_ if (clientPackageManager === 'yarn') { _%>
-  "resolutions": {
-    "@types/react": "16.9.34",
-    "redux": "4.0.5"
-  },
-<%_ } _%>
   "engines": {
-    "node": ">=<%= NODE_VERSION %>"<% if (clientPackageManager === 'yarn') { %>,
-    "yarn": ">=1.19.0"<% } %>
+    "node": ">=<%= NODE_VERSION %>"
   },
   "scripts": {
-    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,tsx,css,scss,yml<%= !skipServer && prettierJava ? ',java' : '' %>}\"",
+    "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
-    "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
+    "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= DIST_DIR %>",
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
-    "postinstall": "node node_modules/protractor/bin/webdriver-manager update --gecko false",
+    "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
+    "e2e:update-webdriver": "webdriver-manager update --gecko false",
     <%_ } _%>
     <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
-    "start-tls": "<%= clientPackageManager %> run webpack:dev <%= optionsForwarder %>--env.tls",
+    "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config src/test/javascript/jest.conf.js",
-    "jest:update": "<%= clientPackageManager %> run jest <%= optionsForwarder %>--updateSnapshot",
+    "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
     "test": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest",
     "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",
-    "test:watch": "<%= clientPackageManager %> test <%= optionsForwarder %>--watch",
-    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
-    "webpack:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
-    "webpack:build:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.dev.js --env.stats=minimal",
+    "test:watch": "<%= clientPackageManager %> test -- --watch",
+    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
+    "webpack:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
+    "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
     "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
-    "webpack:prod:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.prod.js --profile",
+    "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
     "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main",
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",

@@ -47,9 +47,6 @@
                 "health": "Holat",
                 "configuration": "Sozlamalar",
                 "logs": "Loglar",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "Audit",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "Ma`lumotlar bazasi",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -154,8 +151,8 @@
         "idexists": "Yangi {{entityName}} IDsi bo`lmasligi kerak",
         "idnull": "Noto`g`ri ID",
         "file": {
-            "could.not.extract": "Could not extract file",
-            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+            "could.not.extract": "Faylni chiqarib bo‘lmaydi",
+            "not.image": "Fayl rasm bo‘lishi kerak edi, lekin \"{{ fileType }}\" topildi"
         }
     },
     "footer": "Sahifa tag qismi"

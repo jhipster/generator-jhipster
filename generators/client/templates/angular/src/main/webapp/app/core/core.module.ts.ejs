@@ -19,13 +19,13 @@ import {
 } from 'app/shared/language/find-language-from-key.pipe';
 <%_ } _%>
 import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
-import { NgbDateMomentAdapter } from 'app/shared/util/datepicker-adapter';
+import { NgbDateMomentAdapter } from 'app/core/date/datepicker-adapter';
 
 <%_ if (authenticationType === 'jwt') { _%>
 import { AuthInterceptor } from 'app/blocks/interceptor/auth.interceptor';
 <%_ } _%>
 import { AuthExpiredInterceptor } from 'app/blocks/interceptor/auth-expired.interceptor';
-import { ErrorHandlerInterceptor } from 'app/blocks/interceptor/errorhandler.interceptor';
+import { ErrorHandlerInterceptor } from 'app/blocks/interceptor/error-handler.interceptor';
 import { NotificationInterceptor } from 'app/blocks/interceptor/notification.interceptor';
 
 import { fontAwesomeIcons } from './icons/font-awesome-icons';
@@ -98,7 +98,7 @@ import { fontAwesomeIcons } from './icons/font-awesome-icons';
         }
     ]
 })
-export class <%= angularXAppName %>CoreModule {
+export class CoreModule {
     constructor(iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig<% if (enableTranslation) { %>, languageService: JhiLanguageService<% } %>) {
         registerLocaleData(locale);
         iconLibrary.addIcons(...fontAwesomeIcons);

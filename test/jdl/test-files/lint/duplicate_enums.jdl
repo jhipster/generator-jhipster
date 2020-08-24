@@ -1,0 +1,16 @@
+entity E {
+  a A
+  b B
+}
+
+enum A {
+  AA,
+  AB
+}
+enum B {
+  BA,
+  BB
+}
+enum A {
+  AA
+}
