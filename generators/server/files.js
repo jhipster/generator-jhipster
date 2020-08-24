@@ -1415,8 +1415,8 @@ const serverFiles = {
             templates: [
                 {
                     file: 'package/ReactiveSqlTestContainerExtension.java',
-                    renameTo: generator => `${generator.testDir}ReactiveSqlTestContainerExtension.java`
-                }
+                    renameTo: generator => `${generator.testDir}ReactiveSqlTestContainerExtension.java`,
+                },
             ],
         },
         {
