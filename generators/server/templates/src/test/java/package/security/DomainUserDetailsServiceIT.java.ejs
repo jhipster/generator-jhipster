@@ -27,6 +27,9 @@ import <%= packageName %>.AbstractNeo4jIT;
 <%_ if (cacheProvider === 'redis') { _%>
 import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
+<%_ if (reactive && ['mysql', 'postgresql', 'mssql'].includes(prodDatabaseType)) { _%>
+import <%= packageName %>.ReactiveSqlTestContainerExtension;
+<%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (databaseType === 'sql' && reactive) { _%>
 import <%= packageName %>.config.Constants;
@@ -37,10 +40,7 @@ import <%= packageName %>.repository.UserRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if (cacheProvider === 'redis') { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseType === 'neo4j' || cacheProvider === 'redis' || (reactive && ['mysql', 'postgresql', 'mssql'].includes(prodDatabaseType))) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +76,9 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
 @ExtendWith(AbstractNeo4jIT.class)
+<%_ } _%>
+<%_ if (reactive && ['mysql', 'postgresql', 'mssql'].includes(prodDatabaseType)) { _%>
+@ExtendWith(ReactiveSqlTestContainerExtension.class)
 <%_ } _%>
 <%_ if (databaseType === 'sql' && !reactive) { _%>
 @Transactional

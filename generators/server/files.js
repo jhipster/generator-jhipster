@@ -1410,6 +1410,16 @@ const serverFiles = {
             templates: [{ file: 'testcontainers/mariadb/my.cnf', method: 'copy', noEjs: true }],
         },
         {
+            condition: generator => ['mysql', 'postgresql', 'mssql'].includes(generator.prodDatabaseType) && generator.reactive,
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/ReactiveSqlTestContainerExtension.java',
+                    renameTo: generator => `${generator.testDir}ReactiveSqlTestContainerExtension.java`
+                }
+            ],
+        },
+        {
             // TODO : add these tests to reactive
             condition: generator => !generator.reactive,
             path: SERVER_TEST_SRC_DIR,
