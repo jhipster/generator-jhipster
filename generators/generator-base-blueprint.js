@@ -38,7 +38,8 @@ module.exports = class extends BaseGenerator {
         this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
 
         if (this.fromBlueprint) {
-            this.blueprintConfig = this.config;
+            this.blueprintStorage = this._getStorage();
+            this.blueprintConfig = this.blueprintStorage.createProxy();
         }
     }
 

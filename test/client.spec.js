@@ -82,7 +82,7 @@ describe('JHipster client generator', () => {
         });
     });
 
-    describe.only('--skip-jhipster-dependencies', () => {
+    describe('--skip-jhipster-dependencies', () => {
         [ANGULAR, REACT, VUE].forEach(clientFramework => {
             describe(`and ${clientFramework}`, () => {
                 let runResult;
