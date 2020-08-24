@@ -148,7 +148,7 @@ const R2DBC_DB_OPTIONS = [
     },
     {
         value: 'mssql',
-        name: 'Microsoft SQL Server'
+        name: 'Microsoft SQL Server',
     },
 ];
 
