@@ -24,6 +24,7 @@ const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
 const writeVueFiles = require('./files-vue').writeFiles;
+const writeCommonFiles = require('./files-common').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
@@ -144,6 +145,19 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
+            loadSharedConfig() {
+                this.loadAppConfig();
+                this.loadClientConfig();
+                this.loadServerConfig();
+                this.loadTranslationConfig();
+            },
+            composeCommon() {
+                this.composeWithJHipster('common', true);
+            },
+            composeCypress() {
+                if (!this.cypressTests) return;
+                this.composeWithJHipster('cypress', true);
+            },
             composeLanguages() {
                 // We don't expose client/server to cli, composing with languages is used for test purposes.
                 if (this.jhipsterConfig.enableTranslation === false) return;
@@ -178,12 +192,6 @@ module.exports = class extends BaseBlueprintGenerator {
                         )} flag`
                     );
                 }
-            },
-            loadSharedConfig() {
-                this.loadAppConfig();
-                this.loadClientConfig();
-                this.loadServerConfig();
-                this.loadTranslationConfig();
             },
             setupSharedOptions() {
                 this.enableI18nRTL = false;
@@ -246,6 +254,10 @@ module.exports = class extends BaseBlueprintGenerator {
                     default:
                     // do nothing by default
                 }
+            },
+            writeCommonFiles() {
+                if (this.skipClient) return;
+                return writeCommonFiles.call(this, useBlueprints);
             },
         };
     }

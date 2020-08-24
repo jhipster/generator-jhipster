@@ -20,7 +20,7 @@ fi
 #-------------------------------------------------------------------------------
 # Functions
 #-------------------------------------------------------------------------------
-launchCurlOrProtractor() {
+launchCurlOrE2e() {
     retryCount=1
     maxRetry=10
     httpUrl="http://localhost:8080"
@@ -43,7 +43,7 @@ launchCurlOrProtractor() {
         return 1
     fi
 
-    if [ "$JHI_PROTRACTOR" != 1 ]; then
+    if [ "$JHI_E2E" != 1 ]; then
         return 0
     fi
 
@@ -62,8 +62,9 @@ launchCurlOrProtractor() {
         sleep 15
     done
     return $result
-}
 
+    return $?
+}
 #-------------------------------------------------------------------------------
 # Run the application
 #-------------------------------------------------------------------------------
@@ -105,7 +106,7 @@ if [ "$JHI_RUN_APP" == 1 ]; then
     fi
     sleep 40
 
-    launchCurlOrProtractor
+    launchCurlOrE2e
     resultRunApp=$?
     kill $(cat .pidRunApp)
 

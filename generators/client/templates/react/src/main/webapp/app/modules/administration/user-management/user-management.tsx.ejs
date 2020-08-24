@@ -85,7 +85,7 @@ export const UserManagement = (props: IUserManagementProps) => {
   const { users, account, match, totalItems } = props;
   return (
     <div>
-      <h2 id="user-management-page-heading">
+      <h2 id="user-management-page-heading" data-cy="userManagementPageHeading">
         <Translate contentKey="userManagement.home.title">Users</Translate>
         <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity">
           <FontAwesomeIcon icon="plus" /> <Translate contentKey="userManagement.home.createLabel">Create a new user</Translate>

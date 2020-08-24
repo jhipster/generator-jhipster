@@ -21,14 +21,12 @@
         "paths": {
             "@/*": ["src/main/webapp/app/*"]
         },
-        "importHelpers": true,
+        "importHelpers": false,
         "allowJs": true
     },
     "include": [
         "src/main/webapp/app",
         "src/test/javascript/spec"
     ],
-    "exclude": [
-        "node_modules"
-    ]
+    "exclude": ["node_modules"<% if (!cypressTests) { %>,"src/test/javascript/cypress"<% } %>]
 }

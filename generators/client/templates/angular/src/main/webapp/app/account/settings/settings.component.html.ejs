@@ -31,7 +31,7 @@
                 <div class="form-group">
                     <label class="form-control-label" for="firstName" jhiTranslate="settings.form.firstname">First Name</label>
                     <input type="text" class="form-control" id="firstName" name="firstName" placeholder="{{ 'settings.form.firstname.placeholder' | translate }}"
-                           formControlName="firstName">
+                           formControlName="firstName" data-cy="firstname">
 
                     <div *ngIf="settingsForm.get('firstName')!.invalid && (settingsForm.get('firstName')!.dirty || settingsForm.get('firstName')!.touched)">
                         <small class="form-text text-danger"
@@ -57,7 +57,7 @@
                 <div class="form-group">
                     <label class="form-control-label" for="lastName" jhiTranslate="settings.form.lastname">Last Name</label>
                     <input type="text" class="form-control" id="lastName" name="lastName" placeholder="{{ 'settings.form.lastname.placeholder' | translate }}"
-                           formControlName="lastName">
+                           formControlName="lastName" data-cy="lastname">
 
                     <div *ngIf="settingsForm.get('lastName')!.invalid && (settingsForm.get('lastName')!.dirty || settingsForm.get('lastName')!.touched)">
                         <small class="form-text text-danger"
@@ -83,7 +83,7 @@
                 <div class="form-group">
                     <label class="form-control-label" for="email" jhiTranslate="global.form.email.label">Email</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="{{ 'global.form.email.placeholder' | translate }}"
-                           formControlName="email">
+                           formControlName="email" data-cy="email">
 
                     <div *ngIf="settingsForm.get('email')!.invalid && (settingsForm.get('email')!.dirty || settingsForm.get('email')!.touched)">
                         <small class="form-text text-danger"
@@ -115,13 +115,13 @@
 
                 <div class="form-group" *ngIf="languages && languages.length > 0">
                     <label for="langKey" jhiTranslate="settings.form.language">Language</label>
-                    <select class="form-control" id="langKey" name="langKey" formControlName="langKey">
+                    <select class="form-control" id="langKey" name="langKey" formControlName="langKey" data-cy="langKey">
                         <option *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
                     </select>
                 </div>
                 <%_ } _%>
 
-                <button type="submit" [disabled]="settingsForm.invalid" class="btn btn-primary" jhiTranslate="settings.form.button">Save</button>
+                <button type="submit" [disabled]="settingsForm.invalid" class="btn btn-primary" jhiTranslate="settings.form.button" data-cy="submit">Save</button>
             </form>
         </div>
     </div>

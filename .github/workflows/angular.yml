@@ -77,68 +77,68 @@ jobs:
                       entity: sql
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 1
                     - app-type: ngx-psql-es-noi18n-mapsid
                       entity: sqlfull
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: ngx-mariadb-oauth2-infinispan
                       entity: sqlfull
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: ngx-mongodb-kafka-cucumber
                       entity: mongodb
                       profile: dev,webpack
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: ngx-h2mem-ws-nol2
                       entity: sql
                       profile: dev,webpack
                       war: 0 # TODO: need change to 1, when maven+war is fixed
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: ngx-gradle-fr
                       entity: sql
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: ngx-gradle-psql-es-noi18n-mapsid
                       entity: sqlfull
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 1
                     - app-type: ngx-gradle-mariadb-oauth2-infinispan
                       entity: sql
                       profile: dev,webpack
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 1
                     - app-type: ngx-gradle-mongodb-kafka-cucumber
                       entity: mongodb
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: ngx-gradle-h2disk-ws-nocache
                       entity: sql
                       profile: dev,webpack
                       war: 1
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
             JHI_PROFILE: ${{ matrix.profile }}
             JHI_WAR: ${{ matrix.war }}
-            JHI_PROTRACTOR: ${{ matrix.protractor }}
+            JHI_E2E: ${{ matrix.e2e }}
             JHI_TESTCONTAINERS: ${{ matrix.testcontainers }}
         steps:
             #----------------------------------------------------------------------
@@ -190,7 +190,13 @@ jobs:
               run: npm run e2e:update-webdriver --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
               working-directory: /home/runner/app
             - name: 'TESTS: End-to-End'
+              id: e2e
               run: $JHI_SCRIPTS/24-tests-e2e.sh
+            - uses: actions/upload-artifact@v2
+              if: ${{ always() && steps.e2e.outcome == 'failure'}}
+              with:
+                  name: screenshots-${{ matrix.app-type }}
+                  path: /home/runner/app/target/cypress/screenshots
             - name: 'TESTS: Sonar analysis'
               run: $JHI_SCRIPTS/25-sonar-analyze.sh
               env:

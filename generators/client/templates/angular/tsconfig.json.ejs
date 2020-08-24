@@ -21,9 +21,10 @@
   "references": [
     {
       "path": "./tsconfig.app.json"
-    },
+    }<%_ if (!cypressTests) { _%>,
     {
       "path": "./tsconfig.e2e.json"
     }
+<%_ } _%>
   ]
 }
