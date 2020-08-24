@@ -27,7 +27,8 @@
           right
           id="entity-menu"
           v-if="authenticated"
-          active-class="active" class="pointer">
+          active-class="active" class="pointer"
+          data-cy="entity">
           <span slot="button-content" class="navbar-dropdown-menu">
             <font-awesome-icon icon="th-list" />
             <span v-text="$t('global.menu.entities.main')">Entities</span>

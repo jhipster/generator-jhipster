@@ -375,11 +375,27 @@ const vueFiles = {
     ],
 };
 
+const commonFiles = {
+    testsCypress: [
+        {
+            condition: generator => generator.cypressTests && !generator.embedded,
+            path: `${CLIENT_TEST_SRC_DIR}cypress/`,
+            templates: [
+                {
+                    file: 'integration/entity/entity.spec.ts',
+                    renameTo: generator => `integration/entity/${generator.entityFileName}.spec.ts`,
+                },
+            ],
+        },
+    ],
+};
+
 module.exports = {
     writeFiles,
     angularFiles,
     reactFiles,
     vueFiles,
+    commonFiles,
 };
 
 function addEnumerationFiles(generator, templateDir, clientFolder) {
@@ -464,6 +480,12 @@ function writeFiles() {
 
             const entityTemplatesDir = `entity-client/templates/${templatesDir}`;
             this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster(entityTemplatesDir));
+
+            if (this.cypressTests) {
+                const cypressTemplatesDir = 'entity-client/templates/common';
+                this.writeFilesToDisk(commonFiles, this, false, this.fetchFromInstalledJHipster(cypressTemplatesDir));
+            }
+
             if (this.clientFramework !== VUE) {
                 addEnumerationFiles(this, templatesDir, destDir);
             }

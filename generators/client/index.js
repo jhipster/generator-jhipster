@@ -153,14 +153,12 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.loadServerConfig();
                 this.loadTranslationConfig();
             },
+            composeCommon() {
+                this.composeWithJHipster('common', true);
+            },
             composeCypress() {
-                if (this.configOptions.skipComposeCypress || !this.cypressTests) return;
-                this.configOptions.skipComposeCypress = true;
-                this.composeWith(require.resolve('../cypress'), {
-                    ...this.options,
-                    configOptions: this.configOptions,
-                    debug: this.isDebugEnabled,
-                });
+                if (!this.cypressTests) return;
+                this.composeWithJHipster('cypress', true);
             },
             composeLanguages() {
                 // We don't expose client/server to cli, composing with languages is used for test purposes.

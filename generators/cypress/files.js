@@ -21,7 +21,12 @@
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
+
+const faker = require('faker');
+
 const constants = require('../generator-constants');
+
+const { stringHashCode } = require('../utils');
 
 const TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 
@@ -38,11 +43,13 @@ const cypressFiles = {
             path: TEST_SRC_DIR,
             templates: [
                 'cypress/fixtures/users/user.json',
+                'cypress/fixtures/integration-test.png',
                 'cypress/plugins/index.ts',
                 'cypress/integration/administration/administration.spec.ts',
                 'cypress/support/commands.ts',
                 'cypress/support/navbar.ts',
                 'cypress/support/index.ts',
+                'cypress/support/entity.ts',
                 'cypress/tsconfig.json',
             ],
         },
@@ -75,6 +82,8 @@ module.exports = {
 function writeFiles() {
     return {
         writeFiles() {
+            faker.seed(stringHashCode(this.jhipsterConfig.baseName || 'jhipsterSample'));
+            this.faker = faker;
             this.writeFilesToDisk(cypressFiles, this, false, this.fetchFromInstalledJHipster('cypress/templates'));
         },
     };
