@@ -1065,7 +1065,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
 
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= relationship.relationshipNameCapitalized %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
-        <%_ if (relationship.relationshipValidate === true || relationship.useJPADerivedIdentifier === true) { _%>
+        <%_ if ((relationship.relationshipValidate === true && relationship.relationshipType === 'one-to-one') || relationship.useJPADerivedIdentifier === true) { _%>
         // Get already existing entity
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= asEntity(entityInstance) %>.get<%= relationship.relationshipNameCapitalized %>();
         <%_ } else { _%>
@@ -1074,14 +1074,14 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
         em.persist(<%= relationship.relationshipFieldName %>);
         em.flush();
-<%_ if (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') { _%>
+            <%_ if (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') { _%>
         <%= asEntity(entityInstance) %>.add<%= relationship.relationshipNameCapitalized %>(<%= relationship.relationshipFieldName %>);
-<%_ } else { _%>
+            <%_ } else { _%>
         <%= asEntity(entityInstance) %>.set<%= relationship.relationshipNameCapitalized %>(<%= relationship.relationshipFieldName %>);
-<%_     if (relationship.ownerSide === false) { _%>
+            <%_     if (relationship.ownerSide === false) { _%>
         <%= relationship.relationshipFieldName %>.set<%= relationship.otherEntityRelationshipNameCapitalized %>(<%= asEntity(entityInstance) %>);
-<%_     } _%>
-<%_ } _%>
+            <%_     } _%>
+            <%_ } _%>
         <%_ } _%>
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
         <% if (authenticationType === 'oauth2' && relationship.otherEntityName === 'user') { _%>String<%_ } else { _%>Long<% } %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.getId();

@@ -25,7 +25,9 @@ const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields);
   importedPath = importedPath.replace('core/user/user.model', 'shared/model/user.model');
   importedPath = importedPath.replace('app/', '@/');
 _%>
+<%_ if (importedType !== "I".concat(entityAngularName)) { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
+<%_ } _%>
 <%_ }); _%>
 
 <%_ const enumsAlreadyDeclared = [];

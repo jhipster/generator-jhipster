@@ -24,7 +24,7 @@ jobs:
     - job: Test
       condition: not(contains(variables['System.PullRequest.SourceBranch'], 'dependabot'))
       pool:
-          vmImage: 'ubuntu-18.04'
+          vmImage: 'ubuntu-20.04'
       variables:
           JHI_PROFILE: dev,webpack
           JHI_RUN_APP: 1
@@ -94,7 +94,7 @@ jobs:
           #----------------------------------------------------------------------
           - task: NodeTool@0
             inputs:
-                versionSpec: '12.16.1'
+                versionSpec: '12.18.3'
             displayName: 'TOOLS: install Node.js'
           - script: |
                 if [[ $JHI_JDK = '11' ]]; then

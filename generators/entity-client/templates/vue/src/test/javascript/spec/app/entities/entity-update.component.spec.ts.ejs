@@ -178,6 +178,7 @@ describe('Component Tests', () => {
         // GIVEN
         const found<%= entityAngularName %> = { id: <%- tsKeyId %> };
         <%= entityInstance %>ServiceStub.find.resolves(found<%= entityAngularName %>);
+        <%= entityInstance %>ServiceStub.retrieve.resolves([found<%= entityAngularName %>]);
 
         // WHEN
         comp.beforeRouteEnter({ params: { <%= entityInstance %>Id: <%- tsKeyId %> } }, null, cb => cb(comp));

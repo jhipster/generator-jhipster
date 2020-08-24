@@ -59,8 +59,8 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                node_version: [12.16.1]
-                os: [ubuntu-latest]
+                node_version: [12.18.3]
+                os: [ubuntu-20.04]
                 app-type:
                     - react-default
                     - react-maven-psql-es-noi18n-mapsid

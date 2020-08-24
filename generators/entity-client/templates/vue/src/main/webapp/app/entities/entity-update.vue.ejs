@@ -222,7 +222,7 @@
                     <%_ } else if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
                     <div class="form-group">
                         <label v-text="$t('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
-                        <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipName %>" v-model="<%=entityInstance %>.<%=relationshipFieldNamePlural %>"<% if (relationshipRequired) { %> required<% } %>>
+                        <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipName %>" v-if="<%=entityInstance %>.<%=relationshipFieldNamePlural %> !== undefined" v-model="<%=entityInstance %>.<%=relationshipFieldNamePlural %>"<% if (relationshipRequired) { %> required<% } %>>
                             <option v-bind:value="getSelected(<%=entityInstance %>.<%=relationshipFieldNamePlural %>, <%=otherEntityName %>Option)" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                         </select>
                     </div>
