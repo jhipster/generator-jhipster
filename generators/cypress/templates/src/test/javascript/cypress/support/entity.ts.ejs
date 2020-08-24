@@ -42,15 +42,13 @@ Cypress.Commands.add('setFieldImageAsBytesOfEntity', (fieldName: string, fileNam
   // should be like : 'integration-test.png', 'image/png'
   cy.fixture(fileName).as('image')
     .get(`[data-cy="${fieldName}"]`).then(function(el) {
-      return Cypress.Blob.base64StringToBlob(this.image, mimeType)
-        .then(blob => {
-          let file = new File([blob], fileName, { type: mimeType });
-          let list = new DataTransfer();
-          list.items.add(file);
-          let myFileList = list.files;
-          el[0].files = myFileList;
-          el[0].dispatchEvent(new Event('change', {bubbles: true}))
-        })
+      const blob = Cypress.Blob.base64StringToBlob(this.image, mimeType);
+      let file = new File([blob], fileName, { type: mimeType });
+      let list = new DataTransfer();
+      list.items.add(file);
+      let myFileList = list.files;
+      el[0].files = myFileList;
+      el[0].dispatchEvent(new Event('change', {bubbles: true}));
     });
 });
 
