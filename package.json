@@ -5,6 +5,7 @@
     "files": [
         "cli",
         "generators",
+        "jdl",
         "utils"
     ],
     "keywords": [
