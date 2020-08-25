@@ -166,10 +166,7 @@ describe('<%= entityClass %> e2e test', () => {
 
     <%_ } else if (fieldType === 'Boolean') { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).should('not.be.checked');
-    if ('<%= fieldValue %>' === 'true') {
-        cy.get(`[data-cy="<%= fieldName %>"]`).click().should('be.checked');
-    }
-
+    cy.get(`[data-cy="<%= fieldName %>"]`).click().should('be.checked');
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>', { force: true }).invoke('val').should('match', new RegExp('<%= fieldValue %>'));
 
