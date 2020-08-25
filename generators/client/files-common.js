@@ -16,11 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const mkdirp = require('mkdirp');
-const constants = require('../generator-constants');
-
-const MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-
 module.exports = {
     writeFiles,
 };
@@ -34,6 +29,5 @@ const commonFiles = {
 };
 
 function writeFiles() {
-    mkdirp(MAIN_SRC_DIR);
     this.writeFilesToDisk(commonFiles, this, false, this.fetchFromInstalledJHipster('client/templates/common'));
 }
