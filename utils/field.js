@@ -97,7 +97,7 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
         });
     } else if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(field.fieldType)) {
         // Iso: YYYY-MM-DDTHH:mm:ss.sssZ
-        const isoDate = faker.getRecentDate(1, changelogDate).toISOString();
+        const isoDate = faker.date.recent(1, changelogDate).toISOString();
         if (field.fieldType === 'LocalDate') {
             data = isoDate.split('T')[0];
         } else {

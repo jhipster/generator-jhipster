@@ -874,7 +874,7 @@ describe('JHipster generator for entity', () => {
                 it('creates reproducible liquibase data', () => {
                     assert.fileContent(
                         `${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/foo.csv`,
-                        /1;New Leu Diverse Illinois;24849;"860"/
+                        /1;Qatari Rial Diverse Illinois;24849;"860"/
                     );
                 });
 
