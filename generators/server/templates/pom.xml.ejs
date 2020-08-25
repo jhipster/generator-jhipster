@@ -429,19 +429,6 @@
             <scope>test</scope>
         </dependency>
 <%_ } _%>
-<%_ if (databaseType === 'sql' && reactive) { _%>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-    <%_ if (prodDatabaseType === 'mysql') { _%>
-            <artifactId>mysql</artifactId>
-    <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-            <artifactId>postgresql</artifactId>
-    <%_ } else if (prodDatabaseType === 'mssql') { _%>
-            <artifactId>mssqlserver</artifactId>
-    <%_ } _%>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
 <%_ if (['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached'].includes(cacheProvider)) { _%>
         <dependency>
             <groupId>javax.cache</groupId>
