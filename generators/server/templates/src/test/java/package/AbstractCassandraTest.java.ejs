@@ -35,7 +35,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.support.TestPropertySourceUtils;
-import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
@@ -86,7 +85,7 @@ public class AbstractCassandraTest {
         }
     }
 
-    private static void startTestcontainer() throws TTransportException, IOException {
+    private static void startTestContainer() {
         CASSANDRA_CONTAINER.start();
     }
 
