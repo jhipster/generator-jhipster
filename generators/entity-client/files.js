@@ -23,7 +23,7 @@ const constants = require('../generator-constants');
 /* Constants use throughout */
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const ANGULAR_DIR = constants.ANGULAR_DIR;
-const REACT_DIR = constants.ANGULAR_DIR;
+const REACT_DIR = constants.REACT_DIR;
 const VUE_DIR = constants.VUE_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;

@@ -196,6 +196,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
             source.registerCorsConfiguration("/management/**", config);
             source.registerCorsConfiguration("/v2/api-docs", config);
             source.registerCorsConfiguration("/v3/api-docs", config);
+            source.registerCorsConfiguration("/swagger-resources", config);
             <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
             source.registerCorsConfiguration("/auth/**", config);
             <%_ } _%>
