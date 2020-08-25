@@ -22,6 +22,7 @@ on:
     push:
         branches-ignore:
             - 'dependabot/**'
+            - 'skip_ci*'
     pull_request:
         branches:
             - '*'
