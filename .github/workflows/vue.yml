@@ -182,7 +182,7 @@ jobs:
               id: e2e
               run: $JHI_SCRIPTS/24-tests-e2e.sh
             - uses: actions/upload-artifact@v2
-              if: ${{ always() && steps.e2e.outcome == 'failure'}}
+              if: ${{ always() && steps.e2e.outcome == 'failure' }}
               with:
                   name: screenshots-${{ matrix.app-type }}
                   path: /home/runner/app/target/cypress/screenshots
