@@ -4,7 +4,7 @@
         "baseName": "sampleGateway",
         "packageName": "io.github.jhipster.sample",
         "packageFolder": "io/github/jhipster/sample",
-        "authenticationType": "oauth2",
+        "authenticationType": "jwt",
         "cacheProvider": "hazelcast",
         "enableHibernateCache": true,
         "websocket": false,
