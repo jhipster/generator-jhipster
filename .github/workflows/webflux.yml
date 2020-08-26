@@ -184,7 +184,7 @@ jobs:
             - name: 'MERGE: merge base project'
               continue-on-error: true
               id: base-app
-              if: ${{ steps.base-checkout.outcome == 'success' }}
+              if: steps.base-checkout.outcome == 'success'
               working-directory: ${{ github.workspace }}/base/app
               run: |
                   $JHI_SCRIPTS/11-generate-entities.sh
@@ -197,7 +197,7 @@ jobs:
             - name: 'MERGE: merge uaa project diff'
               continue-on-error: true
               id: uaa-is-equal
-              if: ${{ steps.base-app.outcome == 'success' }}
+              if: steps.base-app.outcome == 'success'
               working-directory: ${{ github.workspace }}/base/uaa
               run: |
                   # Copy git repository (clone without the files)
@@ -207,11 +207,11 @@ jobs:
                   # File package-lock.json is not generated
                   # Verify if the generated source has changed
                   git add .
-                  git -c color.ui=always diff -R --cached --exit-code -- . ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12'
+                  git -c color.ui=always diff -R --cached --exit-code -- . ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12' || echo "::set-output name=has-changes::true"
             - name: 'MERGE: merge project diff'
               continue-on-error: true
               id: merge-is-equal
-              if: ${{ steps.uaa-is-equal.outcome == 'success' }}
+              if: steps.base-app.outcome == 'success'
               working-directory: ${{ github.workspace }}/base/app
               run: |
                   # Copy git repository (clone without the files)
@@ -221,10 +221,15 @@ jobs:
                   # File package-lock.json is not generated
                   # Verify if the generated source has changed
                   git add .
-                  git -c color.ui=always diff -R --cached --exit-code -- . ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12'
-            - name: 'MERGE: should run tests'
-              if: ${{ steps.merge-is-equal.outcome != 'success' }}
-              run: echo 'Tests should be executed'
+                  git -c color.ui=always diff -R --cached --exit-code -- . ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12' || echo "::set-output name=has-changes::true"
+            - name: 'MERGE: tests should be skipped'
+              id: tests-should-be-skipped
+              if: >
+                  steps.uaa-is-equal.outcome == 'success' &&
+                  steps.uaa-is-equal.outputs.has-changes != 'true' &&
+                  steps.merge-is-equal.outcome == 'success' &&
+                  steps.merge-is-equal.outputs.has-changes != 'true'
+              run: echo 'Skipping tests' && echo "::set-output name=skip-tests::true"
             #----------------------------------------------------------------------
             # Launch tests
             #----------------------------------------------------------------------
@@ -237,7 +242,7 @@ jobs:
             - name: 'TESTS: packaging'
               run: $JHI_SCRIPTS/23-package.sh
             - name: 'E2E: Synchronize chromedriver version'
-              if: ${{ matrix.e2e == 1 }}
+              if: matrix.e2e == 1
               run: npm run e2e:update-webdriver -- --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
               working-directory: ${{ github.workspace }}/app
             - name: 'E2E: Run'
@@ -245,7 +250,7 @@ jobs:
               run: $JHI_SCRIPTS/24-tests-e2e.sh
             - name: 'E2E: Store failure screenshots'
               uses: actions/upload-artifact@v2
-              if: ${{ always() && steps.e2e.outcome == 'failure' }}
+              if: always() && steps.e2e.outcome == 'failure'
               with:
                   name: screenshots-${{ matrix.app-type }}
                   path: ${{ github.workspace }}/app/target/cypress/screenshots
