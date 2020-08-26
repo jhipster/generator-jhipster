@@ -346,16 +346,16 @@ export * from './entityFolderName/entityFileName.state';`;
             });
         });
         describe('when called for h2Memory', () => {
-            it('return r2dbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE', () => {
+            it('return r2dbc:h2:mem:///test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE', () => {
                 expect(BaseGenerator.getR2DBCUrl('h2Memory', { databaseName: 'test' })).to.equal(
-                    'r2dbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE'
+                    'r2dbc:h2:mem:///test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE'
                 );
             });
         });
         describe('when called for h2Memory with skipExtraOptions enabled', () => {
-            it('return r2dbc:h2:mem:test', () => {
+            it('return r2dbc:h2:mem:///test', () => {
                 expect(BaseGenerator.getR2DBCUrl('h2Memory', { databaseName: 'test', skipExtraOptions: true })).to.equal(
-                    'r2dbc:h2:mem:test'
+                    'r2dbc:h2:mem:///test'
                 );
             });
         });
