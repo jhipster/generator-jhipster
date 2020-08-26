@@ -532,7 +532,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         const otherEntityRelationshipNameCapitalized = relationships[idx].otherEntityRelationshipNameCapitalized;
         const otherEntityRelationshipNameCapitalizedPlural = relationships[idx].otherEntityRelationshipNameCapitalizedPlural;
         const otherEntityIsEmbedded = relationships[idx].otherEntityIsEmbedded;
-        const ownerSide = relationships[idx].ownerSide;
+        const ownerSide = relationships[idx].ownerSide || false;
 
         // An embedded entity should not reference entities that embeds it, unless the other entity is also embedded
         if (embedded && !otherEntityIsEmbedded && ownerSide === false) {

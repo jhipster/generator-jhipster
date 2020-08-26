@@ -122,7 +122,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.reactive && ['sql'].includes(generator.databaseType) && !generator.embedded,
+            condition: generator => generator.reactive && generator.databaseType === 'sql' && !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
