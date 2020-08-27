@@ -74,7 +74,7 @@ jobs:
                   JHI_APP: ms-react-gateway-consul-oauth2
                   JHI_ENTITY: sqllight
                   JHI_PROFILE: prod
-                  JHI_E2E: 0
+                  JHI_E2E: 1
               jdl-default:
                   JHI_APP: jdl-default
                   JHI_ENTITY: jdl
