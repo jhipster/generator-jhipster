@@ -39,7 +39,7 @@ import org.springframework.data.domain.Pageable;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
-import org.springframework.data.r2dbc.query.Criteria;
+import org.springframework.data.relational.core.query.Criteria;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
     <%_ if (fieldsContainOwnerManyToMany === true) { _%>

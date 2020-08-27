@@ -110,19 +110,6 @@ module.exports = class extends BaseBlueprintGenerator {
         return `${this.getColumnName(relationship.relationshipName)}_id`;
     }
 
-    _generateTableJoins(relationships) {
-        const joins = [];
-        Object.values(relationships).forEach(rel => {
-            if (rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true)) {
-                const colName = this._getJoinColumnName(rel);
-                joins.push(
-                    ` LEFT JOIN ${rel.otherEntityTableName} \\"${rel.relationshipName}\\" ON entity.${colName} = \\"${rel.relationshipName}\\".id`
-                );
-            }
-        });
-        return joins;
-    }
-
     _getUseMapsIdRelation(relationships) {
         const jpaDerivedRelation = Object.values(relationships).find(rel => rel.useJPADerivedIdentifier === true);
         if (jpaDerivedRelation) {
