@@ -223,7 +223,7 @@ jobs:
                   # File package-lock.json is not generated
                   # Verify if the generated source has changed
                   git add .
-                  git diff --cached --exit-code -- . ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12'
+                  git -c color.ui=always diff -R --cached --exit-code -- . ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12'
             - name: 'MERGE: merge project diff'
               continue-on-error: true
               id: merge-is-equal
@@ -237,7 +237,7 @@ jobs:
                   # File package-lock.json is not generated
                   # Verify if the generated source has changed
                   git add .
-                  git diff --cached --exit-code -- . ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12'
+                  git -c color.ui=always diff -R --cached --exit-code -- . ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12'
             - name: 'MERGE: should run tests'
               if: ${{ steps.merge-is-equal.outcome != 'success' }}
               run: echo 'Tests should be executed'
