@@ -2223,6 +2223,7 @@ module.exports = class extends PrivateBase {
         dest.gatlingTests = dest.testFrameworks.includes('gatling');
         dest.cucumberTests = dest.testFrameworks.includes('cucumber');
         dest.protractorTests = dest.testFrameworks.includes('protractor');
+        dest.cypressTests = dest.testFrameworks.includes('cypress');
 
         dest.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
         dest.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);

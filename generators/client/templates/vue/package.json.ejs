@@ -55,18 +55,18 @@ limitations under the License.
   },
   "devDependencies": {
     "babel-core": "7.0.0-bridge.0",
-<%_ if (protractorTests) { _%>
+    <%_ if (protractorTests) { _%>
     "@types/chai": "4.2.11",
     "@types/chai-string": "1.4.2",
-<%_ } _%>
+    <%_ } _%>
     "@types/jest": "26.0.10",
-<%_ if (protractorTests) { _%>
+    <%_ if (protractorTests) { _%>
     "@types/mocha": "7.0.2",
-<%_ } _%>
+    <%_ } _%>
     "@types/node": "14.0.4",
-<%_ if (protractorTests) { _%>
+    <%_ if (protractorTests) { _%>
     "@types/selenium-webdriver": "4.0.9",
-<%_ } _%>
+    <%_ } _%>
     "@types/sinon": "9.0.3",
     "@types/vuelidate": "0.7.13",
     "@vue/cli-plugin-typescript": "4.5.4",
@@ -75,11 +75,11 @@ limitations under the License.
     "autoprefixer": "9.8.0",
     "browser-sync": "2.26.7",
     "browser-sync-webpack-plugin": "2.2.2",
-<%_ if (protractorTests) { _%>
+    <%_ if (protractorTests) { _%>
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
     "chai-string": "1.5.0",
-<%_ } _%>
+    <%_ } _%>
     "copy-webpack-plugin": "6.0.1",
     "css-loader": "3.5.3",
     "file-loader": "6.0.0",
@@ -99,9 +99,9 @@ limitations under the License.
     "lint-staged": "10.2.4",
     <%_ } _%>
     "merge-jsons-webpack-plugin": "1.0.21",
-<%_ if (protractorTests) { _%>
+    <%_ if (protractorTests) { _%>
     "mocha": "7.1.2",
-<%_ } _%>
+    <%_ } _%>
     "mini-css-extract-plugin": "0.9.0",
     "node-notifier": "7.0.0",
     "numeral": "2.0.6",
@@ -114,9 +114,12 @@ limitations under the License.
     <%_ if (!skipServer) { _%>
     "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
     <%_ } _%>
-<%_ if (protractorTests) { _%>
+    <%_ if (protractorTests) { _%>
     "protractor": "5.4.4",
-<%_ } _%>
+    <%_ } _%>
+    <%_ if (cypressTests) { _%>
+    "cypress": "5.0.0",
+    <%_ } _%>
     "rimraf": "3.0.2",
     "sass": "1.26.5",
     "sass-loader": "8.0.2",
@@ -124,9 +127,9 @@ limitations under the License.
     "terser-webpack-plugin": "3.0.1",
     "ts-jest": "26.2.0",
     "ts-loader": "7.0.4",
-<%_ if (protractorTests) { _%>
+    <%_ if (protractorTests) { _%>
     "ts-node": "8.10.1",
-<%_ } _%>
+    <%_ } _%>
     "tslib": "2.0.0",
     "tslint": "6.1.2",
     "tslint-config-prettier": "1.18.0",
@@ -137,6 +140,9 @@ limitations under the License.
     "vue-jest": "3.0.6",
     "vue-loader": "15.9.3",
     "vue-template-compiler": "2.6.12",
+    <%_ if (protractorTests || cypressTests) { _%>
+    "webdriver-manager": "12.1.7",
+    <%_ } _%>
     "webpack": "4.43.0",
     "webpack-bundle-analyzer": "3.8.0",
     "webpack-cli": "3.3.11",
@@ -157,11 +163,22 @@ limitations under the License.
     "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
     "serve": "<%= clientPackageManager %> run start",
     "build": "<%= clientPackageManager %> run webpack:prod",
-<%_ if (protractorTests) { _%>
-    "e2e": "protractor src/test/javascript/protractor.conf.js",
+    <%_ if (protractorTests && !cypressTests) { _%>
+    "e2e": "<%= clientPackageManager %> run e2e:protractor",
+    <%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
+    "e2e": "<%= clientPackageManager %> run e2e:cypress",
+    <%_ } _%>
+    <%_ if (protractorTests) { _%>
+    "e2e:protractor": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
+    <%_ } _%>
+    <%_ if (cypressTests) { _%>
+    "e2e:cypress": "cypress run --browser chrome --headless",
+    "cypress": "cypress open",
+    <%_ } _%>
+    <%_ if (protractorTests || cypressTests) { _%>
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
-<%_ } _%>
+    <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --no-cache --config src/test/javascript/jest.conf.js",
     "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
     "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",

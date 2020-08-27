@@ -1,6 +1,6 @@
 <template>
   <div class="table-responsive">
-    <h2 id="logs-page-heading" v-text="$t('logs.title')">Logs</h2>
+    <h2 id="logs-page-heading" v-text="$t('logs.title')" data-cy="logsPageHeading">Logs</h2>
 
     <div v-if="loggers">
       <p v-text="$t('logs.nbloggers', { total: loggers.length })">There are {{ loggers.length }} loggers.</p>
