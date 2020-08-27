@@ -315,7 +315,6 @@ public class DatabaseConfiguration {
      */
     @WritingConverter
     public enum ZonedDateTimeToLongConverter implements Converter<ZonedDateTime, Long> {
-
         INSTANCE;
 
         @Override
@@ -329,7 +328,6 @@ public class DatabaseConfiguration {
      */
     @ReadingConverter
     public enum NumberToLocalDateTimeConverter implements Converter<Number, ZonedDateTime> {
-
         INSTANCE;
 
         @Override
@@ -406,7 +404,6 @@ public class DatabaseConfiguration {
     */
     @WritingConverter
     public enum UUIDToStringConverter implements Converter<UUID, String> {
-
         INSTANCE;
 
         @Override
@@ -420,7 +417,6 @@ public class DatabaseConfiguration {
     */
     @ReadingConverter
     public enum StringToUUIDConverter implements Converter<String, UUID> {
-
         INSTANCE;
 
         @Override
@@ -437,18 +433,20 @@ public class DatabaseConfiguration {
     @Bean
     public R2dbcCustomConversions r2dbcCustomConversions(R2dbcDialect dialect) {
         List<Object> converters = new ArrayList<>(dialect.getConverters());
-        converters.add(new InstantWriteConverter());
-        converters.add(new InstantReadConverter());
+        converters.add(InstantWriteConverter.INSTANCE);
+        converters.add(InstantReadConverter.INSTANCE);
         converters.add(BitSetReadConverter.INSTANCE);
-        converters.add(new DurationWriteConverter());
-        converters.add(new DurationReadConverter());
-        converters.add(new ZonedDateTimeReadConverter());
-        converters.add(new ZonedDateTimeWriteConverter());
+        converters.add(DurationWriteConverter.INSTANCE);
+        converters.add(DurationReadConverter.INSTANCE);
+        converters.add(ZonedDateTimeReadConverter.INSTANCE);
+        converters.add(ZonedDateTimeWriteConverter.INSTANCE);
         converters.add(StringToUUIDConverter.INSTANCE);
+        converters.add(UUIDToStringConverter.INSTANCE);
         converters.addAll(R2dbcCustomConversions.STORE_CONVERTERS);
         return new R2dbcCustomConversions(
             CustomConversions.StoreConversions.of(dialect.getSimpleTypeHolder(), converters),
-            Collections.emptyList());
+            Collections.emptyList()
+        );
     }
 
     @Bean
@@ -468,7 +466,8 @@ public class DatabaseConfiguration {
     }
 
     @WritingConverter
-    public static class InstantWriteConverter implements Converter<Instant, LocalDateTime> {
+    public enum InstantWriteConverter implements Converter<Instant, LocalDateTime> {
+        INSTANCE;
 
         public LocalDateTime convert(Instant source) {
             return LocalDateTime.ofInstant(source, ZoneOffset.UTC);
@@ -476,7 +475,8 @@ public class DatabaseConfiguration {
     }
 
     @ReadingConverter
-    public static class InstantReadConverter implements Converter<LocalDateTime, Instant> {
+    public enum InstantReadConverter implements Converter<LocalDateTime, Instant> {
+        INSTANCE;
 
         @Override
         public Instant convert(LocalDateTime localDateTime) {
@@ -495,7 +495,8 @@ public class DatabaseConfiguration {
     }
 
     @ReadingConverter
-    public static class ZonedDateTimeReadConverter implements Converter<LocalDateTime, ZonedDateTime> {
+    public enum ZonedDateTimeReadConverter implements Converter<LocalDateTime, ZonedDateTime> {
+        INSTANCE;
 
         @Override
         public ZonedDateTime convert(LocalDateTime localDateTime) {
@@ -505,7 +506,8 @@ public class DatabaseConfiguration {
     }
 
     @WritingConverter
-    public static class ZonedDateTimeWriteConverter implements Converter<ZonedDateTime, LocalDateTime> {
+    public enum ZonedDateTimeWriteConverter implements Converter<ZonedDateTime, LocalDateTime> {
+        INSTANCE;
 
         @Override
         public LocalDateTime convert(ZonedDateTime zonedDateTime) {
@@ -514,7 +516,8 @@ public class DatabaseConfiguration {
     }
 
     @WritingConverter
-    public static class DurationWriteConverter implements Converter<Duration, Long> {
+    public enum DurationWriteConverter implements Converter<Duration, Long> {
+        INSTANCE;
 
         @Override
         public Long convert(Duration source) {
@@ -523,7 +526,8 @@ public class DatabaseConfiguration {
     }
 
     @ReadingConverter
-    public static class DurationReadConverter implements Converter<Long, Duration> {
+    public enum DurationReadConverter implements Converter<Long, Duration> {
+        INSTANCE;
 
         @Override
         public Duration convert(Long source) {
