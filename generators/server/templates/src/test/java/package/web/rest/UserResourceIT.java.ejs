@@ -525,6 +525,50 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         <%_ } _%>
     }
 
+    <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
+    @Test
+    <%_ if (!reactive) { _%>
+    @Transactional
+    <%_ } _%>
+    void getAllUsersSortedByResetKey() throws Exception {
+        // Initialize the database
+        userRepository.<% if (reactive) { %>create<% } else { %>saveAndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+
+        <%_ if (!reactive) { _%>
+            restUserMockMvc.perform(get("/api/users?sort=resetKey,desc")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+        <%_ } else { _%>
+            webTestClient.get().uri("/api/users?sort=resetKey,DESC")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isBadRequest();
+        <%_ } _%>
+    }
+    <%_ } _%>
+
+    <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
+    @Test
+    <%_ if (!reactive) { _%>
+    @Transactional
+    <%_ } _%>
+    void getAllUsersSortedByPassword() throws Exception {
+        // Initialize the database
+        userRepository.<% if (reactive) { %>create<% } else { %>saveAndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+
+        <%_ if (!reactive) { _%>
+            restUserMockMvc.perform(get("/api/users?sort=password,desc")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+        <%_ } else { _%>
+            webTestClient.get().uri("/api/users?sort=password,DESC")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isBadRequest();
+        <%_ } _%>
+    }
+    <%_ } _%>
+
     @Test
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional

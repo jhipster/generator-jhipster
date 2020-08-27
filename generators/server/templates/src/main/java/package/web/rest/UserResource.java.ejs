@@ -31,6 +31,8 @@ import <%= packageName %>.repository.search.UserSearchRepository;
 import <%= packageName %>.security.AuthoritiesConstants;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%= packageName %>.service.MailService;
+import org.springframework.data.domain.Sort;
+import java.util.Collections;
 <%_ } _%>
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
@@ -126,6 +128,9 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 @RestController
 @RequestMapping("/api")
 public class UserResource {
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    private static final List<String> FORBIDDEN_ORDERED_PROPERTIES = Collections.unmodifiableList(Arrays.asList("resetKey", "password"));
+    <%_ } _%>
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
@@ -287,17 +292,36 @@ public class UserResource {
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
         <%_ if (!reactive) { _%>
     public ResponseEntity<List<<%= asDto('User') %>>> getAllUsers(Pageable pageable) {
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        if (containsForbiddenSortedProperties(pageable)) {
+            return ResponseEntity.badRequest().build();
+        }
+        <% } %>
         final Page<<%= asDto('User') %>> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         <%_ } else { _%>
     public Mono<ResponseEntity<Flux<<%= asDto('User') %>>>> getAllUsers(ServerHttpRequest request, Pageable pageable) {
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        if (containsForbiddenSortedProperties(pageable)) {
+            return Mono.just(ResponseEntity.badRequest().build());
+        }
+        <% } %>
         return userService.countManagedUsers()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
             .map(page -> PaginationUtil.generatePaginationHttpHeaders(UriComponentsBuilder.fromHttpRequest(request), page))
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllManagedUsers(pageable)));
         <%_ } _%>
     }
+
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    private boolean containsForbiddenSortedProperties(Pageable pageable) {
+        return pageable.getSort()
+            .stream()
+            .map(Sort.Order::getProperty)
+            .anyMatch(FORBIDDEN_ORDERED_PROPERTIES::contains);
+    }
+    <%_ } _%>
 
     /**
      * Gets a list of all roles.
