@@ -146,7 +146,7 @@ task integrationTest(type: Test) {
         events 'FAILED', 'SKIPPED'
     }
 
-<%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseType === 'sql') { _%>
     if (project.hasProperty('testcontainers')) {
         environment 'spring.profiles.active', 'testcontainers'
     }
@@ -407,16 +407,16 @@ dependencies {
     testImplementation "org.testcontainers:neo4j"
     testImplementation 'org.testcontainers:junit-jupiter'
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'mysql' && !reactive) { _%>
+    <%_ if (prodDatabaseType === 'mysql') { _%>
     testImplementation "org.testcontainers:mysql"
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mariadb' && !reactive) { _%>
     testImplementation "org.testcontainers:mariadb"
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'postgresql' && !reactive) { _%>
+    <%_ if (prodDatabaseType === 'postgresql') { _%>
     testImplementation "org.testcontainers:postgresql"
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'mssql' && !reactive) { _%>
+    <%_ if (prodDatabaseType === 'mssql') { _%>
     testImplementation "org.testcontainers:mssqlserver"
     <%_ } _%>
     <%_ if (prodDatabaseType === 'oracle' && !reactive) { _%>

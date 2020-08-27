@@ -65,7 +65,7 @@ spring:
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        url: <%- getJDBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
         name:
         username:
         password:
@@ -132,7 +132,7 @@ spring:
     liquibase:
         contexts: test
         <%_ if (reactive) { _%>
-        url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        url: <%- getJDBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
         <%_ } _%>
     <%_ } _%>
     mail:
@@ -143,7 +143,7 @@ spring:
         basename: i18n/messages
     <%_ if (databaseType === 'sql' && reactive) { _%>
     r2dbc:
-        url: r2dbc:h2:mem:///<%= baseName %>?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        url: <%- getR2DBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
         username: r2dbc
         password:
     <%_ } _%>

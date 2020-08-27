@@ -274,6 +274,103 @@ export * from './entityFolderName/entityFileName.state';`;
         });
     });
 
+    describe('getR2DBCUrl', () => {
+        describe('when called for mysql', () => {
+            it('return r2dbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true', () => {
+                expect(BaseGenerator.getR2DBCUrl('mysql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'r2dbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true'
+                );
+            });
+        });
+        describe('when called for mysql with skipExtraOptions enabled', () => {
+            it('return r2dbc:mysql://localhost:3306/test', () => {
+                expect(
+                    BaseGenerator.getR2DBCUrl('mysql', { databaseName: 'test', hostname: 'localhost', skipExtraOptions: true })
+                ).to.equal('r2dbc:mysql://localhost:3306/test');
+            });
+        });
+        describe('when called for mariadb', () => {
+            it('return r2dbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC', () => {
+                expect(BaseGenerator.getR2DBCUrl('mariadb', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'r2dbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC'
+                );
+            });
+        });
+        describe('when called for mariadb with skipExtraOptions enabled', () => {
+            it('return r2dbc:mariadb://localhost:3306/test', () => {
+                expect(
+                    BaseGenerator.getR2DBCUrl('mariadb', { databaseName: 'test', hostname: 'localhost', skipExtraOptions: true })
+                ).to.equal('r2dbc:mariadb://localhost:3306/test');
+            });
+        });
+        describe('when called for postgresql', () => {
+            it('return r2dbc:postgresql://localhost:5432/test', () => {
+                expect(BaseGenerator.getR2DBCUrl('postgresql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'r2dbc:postgresql://localhost:5432/test'
+                );
+            });
+        });
+        describe('when called for oracle', () => {
+            it('return r2dbc:oracle:thin:@localhost:1521:test', () => {
+                expect(BaseGenerator.getR2DBCUrl('oracle', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'r2dbc:oracle:thin:@localhost:1521:test'
+                );
+            });
+        });
+        describe('when called for mssql', () => {
+            it('return r2dbc:sqlserver://localhost:1433;database=test', () => {
+                expect(BaseGenerator.getR2DBCUrl('mssql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'r2dbc:sqlserver://localhost:1433;database=test'
+                );
+            });
+        });
+        describe('when called for h2Disk', () => {
+            it('return r2dbc:h2:file:./build/h2db/db/test;DB_CLOSE_DELAY=-1', () => {
+                expect(BaseGenerator.getR2DBCUrl('h2Disk', { databaseName: 'test', localDirectory: './build/h2db/db' })).to.equal(
+                    'r2dbc:h2:file:./build/h2db/db/test;DB_CLOSE_DELAY=-1'
+                );
+            });
+        });
+        describe('when called for h2Disk with skipExtraOptions enabled', () => {
+            it('return r2dbc:h2:file:./build/h2db/db/test', () => {
+                expect(
+                    BaseGenerator.getR2DBCUrl('h2Disk', { databaseName: 'test', localDirectory: './build/h2db/db', skipExtraOptions: true })
+                ).to.equal('r2dbc:h2:file:./build/h2db/db/test');
+            });
+        });
+        describe('when called for h2Disk with missing `localDirectory` option', () => {
+            it('throw an error', () => {
+                expect(() => BaseGenerator.getR2DBCUrl('h2Disk', { databaseName: 'test' })).to.throw(
+                    "'localDirectory' option should be provided for h2Disk databaseType"
+                );
+            });
+        });
+        describe('when called for h2Memory', () => {
+            it('return r2dbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE', () => {
+                expect(BaseGenerator.getR2DBCUrl('h2Memory', { databaseName: 'test' })).to.equal(
+                    'r2dbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE'
+                );
+            });
+        });
+        describe('when called for h2Memory with skipExtraOptions enabled', () => {
+            it('return r2dbc:h2:mem:test', () => {
+                expect(BaseGenerator.getR2DBCUrl('h2Memory', { databaseName: 'test', skipExtraOptions: true })).to.equal(
+                    'r2dbc:h2:mem:test'
+                );
+            });
+        });
+        describe('when called with missing `databaseName` option', () => {
+            it('throw an error', () => {
+                expect(() => BaseGenerator.getR2DBCUrl('mysql')).to.throw("option 'databaseName' is required");
+            });
+        });
+        describe('when called for an unknown databaseType', () => {
+            it('throw an error', () => {
+                expect(() => BaseGenerator.getR2DBCUrl('foodb', { databaseName: 'test' })).to.throw('foodb databaseType is not supported');
+            });
+        });
+    });
+
     describe('formatAsApiDescription', () => {
         describe('when formatting a nil text', () => {
             it('returns it', () => {
