@@ -93,6 +93,7 @@ import java.util.*;
 <%_ if (reactive) { _%>
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch' && !reactive) { _%>
 import java.util.stream.Collectors;
@@ -129,7 +130,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 @RequestMapping("/api")
 public class UserResource {
     <%_ if (authenticationType !== 'oauth2') { _%>
-    private static final List<String> FORBIDDEN_ORDERED_PROPERTIES = Collections.unmodifiableList(Arrays.asList("resetKey", "password"));
+    private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections.unmodifiableList(Arrays.asList("id", "login", "firstName", "lastName", "email", "activated", "langKey"));
     <%_ } _%>
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
@@ -293,7 +294,7 @@ public class UserResource {
         <%_ if (!reactive) { _%>
     public ResponseEntity<List<<%= asDto('User') %>>> getAllUsers(Pageable pageable) {
         <%_ if (authenticationType !== 'oauth2') { _%>
-        if (containsForbiddenSortedProperties(pageable)) {
+        if (!onlyContainsAllowedProperties(pageable)) {
             return ResponseEntity.badRequest().build();
         }
         <% } %>
@@ -303,7 +304,7 @@ public class UserResource {
         <%_ } else { _%>
     public Mono<ResponseEntity<Flux<<%= asDto('User') %>>>> getAllUsers(ServerHttpRequest request, Pageable pageable) {
         <%_ if (authenticationType !== 'oauth2') { _%>
-        if (containsForbiddenSortedProperties(pageable)) {
+        if (!onlyContainsAllowedProperties(pageable)) {
             return Mono.just(ResponseEntity.badRequest().build());
         }
         <% } %>
@@ -315,11 +316,8 @@ public class UserResource {
     }
 
     <%_ if (authenticationType !== 'oauth2') { _%>
-    private boolean containsForbiddenSortedProperties(Pageable pageable) {
-        return pageable.getSort()
-            .stream()
-            .map(Sort.Order::getProperty)
-            .anyMatch(FORBIDDEN_ORDERED_PROPERTIES::contains);
+    private boolean onlyContainsAllowedProperties(Pageable pageable) {
+        return pageable.getSort().stream().map(Sort.Order::getProperty).allMatch(ALLOWED_ORDERED_PROPERTIES::contains);
     }
     <%_ } _%>
 
