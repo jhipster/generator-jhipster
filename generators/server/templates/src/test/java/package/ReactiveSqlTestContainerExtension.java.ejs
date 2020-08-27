@@ -1,0 +1,73 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>;
+
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+<%_ if (prodDatabaseType === 'mysql') { _%>
+import org.testcontainers.containers.MySQLContainer;
+<%_ } else if (prodDatabaseType === 'postgresql') { _%>
+import org.testcontainers.containers.PostgreSQLContainer;
+<%_ } else if (prodDatabaseType === 'mssql') { _%>
+import org.testcontainers.containers.MSSQLServerContainer;      
+<%_ } _%>
+import java.util.Collections;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public class ReactiveSqlTestContainerExtension implements BeforeAllCallback {
+
+    private static AtomicBoolean started = new AtomicBoolean(false);
+    
+    <%_ if (prodDatabaseType === 'mysql') { _%>
+    private static MySQLContainer container = (MySQLContainer) new MySQLContainer("<%= DOCKER_MYSQL %>")
+            .withDatabaseName("<%= baseName %>")
+            .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
+    <%_ } else if (prodDatabaseType === 'postgresql') { _%>
+    private static PostgreSQLContainer container = (PostgreSQLContainer) new PostgreSQLContainer("<%= DOCKER_POSTGRESQL %>")
+            .withDatabaseName("<%= baseName %>")
+            .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
+    <%_ } else if (prodDatabaseType === 'mssql') { _%>
+    private static MSSQLServerContainer container =  (MSSQLServerContainer) new MSSQLServerContainer<>("<%= DOCKER_MSSQL %>")
+            .withDatabaseName("<%= baseName %>")
+            .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
+    <%_ } _%>
+    
+    @Override
+    public void beforeAll(ExtensionContext extensionContext) throws Exception {
+    if (!started.get() && useTestcontainers()) {
+            container.start();
+            System.setProperty("spring.r2dbc.url", container.getJdbcUrl().replace("jdbc", "r2dbc"));
+            System.setProperty("spring.r2dbc.username", container.getUsername());
+            System.setProperty("spring.r2dbc.password", container.getPassword());
+            System.setProperty("spring.liquibase.url", container.getJdbcUrl());
+            System.setProperty("spring.liquibase.user", container.getUsername());
+            System.setProperty("spring.liquibase.password", container.getPassword());
+            started.set(true);
+        }
+    }
+
+    private boolean useTestcontainers() {
+
+        String systemProperties = StringUtils.defaultIfBlank(System.getProperty("spring.profiles.active"), "");
+        String environmentVariables = StringUtils.defaultIfBlank(System.getenv("SPRING_PROFILES_ACTIVE"), "");
+
+        return systemProperties.contains("testcontainers") || environmentVariables.contains("testcontainers");
+    }
+}

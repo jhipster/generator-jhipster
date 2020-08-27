@@ -19,7 +19,7 @@
         "clientFramework": "angularX",
         "clientPackageManager": "npm",
         "applicationType": "monolith",
-        "testFrameworks": ["gatling", "protractor"],
+        "testFrameworks": ["gatling", "cypress"],
         "jhiPrefix": "jhi",
         "enableTranslation": true,
         "nativeLanguage": "en",

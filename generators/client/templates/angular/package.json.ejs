@@ -26,14 +26,14 @@
     "node_modules"
   ],
   "dependencies": {
-    "@angular/common": "10.0.11",
-    "@angular/compiler": "10.0.11",
-    "@angular/core": "10.0.11",
-    "@angular/forms": "10.0.11",
-    "@angular/localize": "10.0.11",
-    "@angular/platform-browser": "10.0.11",
-    "@angular/platform-browser-dynamic": "10.0.11",
-    "@angular/router": "10.0.11",
+    "@angular/common": "10.0.14",
+    "@angular/compiler": "10.0.14",
+    "@angular/core": "10.0.14",
+    "@angular/forms": "10.0.14",
+    "@angular/localize": "10.0.14",
+    "@angular/platform-browser": "10.0.14",
+    "@angular/platform-browser-dynamic": "10.0.14",
+    "@angular/router": "10.0.14",
     "@fortawesome/angular-fontawesome": "0.6.1",
     "@fortawesome/fontawesome-svg-core": "1.2.29",
     "@fortawesome/free-solid-svg-icons": "5.13.1",
@@ -62,8 +62,8 @@
     "zone.js": "0.10.3"
   },
   "devDependencies": {
-    "@angular/cli": "10.0.7",
-    "@angular/compiler-cli": "10.0.11",
+    "@angular/cli": "10.0.8",
+    "@angular/compiler-cli": "10.0.14",
     "@ngtools/webpack": "10.0.0",
     "@openapitools/openapi-generator-cli": "1.0.13-4.3.1",
     <%_ if (protractorTests) { _%>
@@ -144,12 +144,15 @@
     <%_ if (protractorTests) { _%>
     "ts-node": "8.10.2",
     <%_ } _%>
+    <%_ if (cypressTests) { _%>
+    "cypress": "5.0.0",
+    <%_ } _%>
     "tslint": "6.1.2",
     "typescript": "3.9.5",
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
-    <%_ if (protractorTests) { _%>
+    <%_ if (protractorTests || cypressTests) { _%>
     "webdriver-manager": "12.1.7",
     <%_ } _%>
     "webpack": "4.43.0",
@@ -171,8 +174,19 @@
     "ngc": "ngc -p tsconfig.app.json",
     "cleanup": "rimraf <%= DIST_DIR %>",
     "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
+    <%_ if (protractorTests && !cypressTests) { _%>
+    "e2e": "<%= clientPackageManager %> run e2e:protractor",
+    <%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
+    "e2e": "<%= clientPackageManager %> run e2e:cypress",
+    <%_ } _%>
     <%_ if (protractorTests) { _%>
-    "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
+    "e2e:protractor": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
+    <%_ } _%>
+    <%_ if (cypressTests) { _%>
+    "e2e:cypress": "cypress run --browser chrome --headless",
+    "cypress": "cypress open",
+    <%_ } _%>
+    <%_ if (protractorTests || cypressTests) { _%>
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
     <%_ } _%>

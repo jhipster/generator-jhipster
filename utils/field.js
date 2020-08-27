@@ -74,8 +74,13 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
         const generated = field.createRandexp().gen();
         if (type === 'csv') {
             data = `"${generated.replace(/"/g, '')}"`;
+        } else if (type === 'cypress') {
+            data = generated.replace(/"/g, '');
         } else {
             data = generated;
+        }
+        if (data.length === 0) {
+            data = undefined;
         }
     } else if (field.fieldIsEnum) {
         if (field.fieldValues.length !== 0) {
@@ -90,12 +95,21 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
             max: field.fieldValidateRulesMax ? parseInt(field.fieldValidateRulesMax, 10) : undefined,
             min: field.fieldValidateRulesMin ? parseInt(field.fieldValidateRulesMin, 10) : undefined,
         });
-    } else if (field.fieldType === 'LocalDate') {
-        data = faker.getRecentDate(1, changelogDate).toISOString().split('T')[0];
-    } else if (['Instant', 'ZonedDateTime'].includes(field.fieldType)) {
-        // Write the date without milliseconds so Java can parse it
-        // See https://stackoverflow.com/a/34053802/150868
-        data = faker.getRecentDate(1, changelogDate).toISOString().split('.')[0];
+    } else if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(field.fieldType)) {
+        // Iso: YYYY-MM-DDTHH:mm:ss.sssZ
+        const isoDate = faker.date.recent(1, changelogDate).toISOString();
+        if (field.fieldType === 'LocalDate') {
+            data = isoDate.split('T')[0];
+        } else {
+            // Write the date without milliseconds so Java can parse it
+            // See https://stackoverflow.com/a/34053802/150868
+            // YYYY-MM-DDTHH:mm:ss
+            data = isoDate.split('.')[0];
+            if (type === 'cypress') {
+                // YYYY-MM-DDTHH:mm
+                data = data.substr(0, data.length - 3);
+            }
+        }
     } else if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') {
         data = '../fake-data/blob/hipster.png';
     } else if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent === 'text') {
@@ -106,13 +120,10 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
         data = faker.random.uuid();
     } else if (field.fieldType === 'Boolean') {
         data = faker.random.boolean();
-    } else {
-        // eslint-disable-next-line no-console
-        console.warn(`Field type ${field.fieldType} not supported for fake data`);
     }
 
     // Validation rules
-    if (field.fieldValidate === true) {
+    if (data !== undefined && field.fieldValidate === true) {
         // manage String max length
         if (field.fieldValidateRules.includes('maxlength')) {
             const maxlength = field.fieldValidateRulesMaxlength;
@@ -229,7 +240,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
         if (field.fieldValidate === true && field.fieldValidateRules.includes('unique')) {
             let i = 0;
             while (field.uniqueValue.indexOf(data) !== -1) {
-                if (i++ !== 5) {
+                if (i++ === 5) {
                     data = undefined;
                     break;
                 }
@@ -238,6 +249,9 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
             if (data !== undefined) {
                 field.uniqueValue.push(data);
             }
+        }
+        if (data === undefined) {
+            generator.warning(`Error generating fake data for field ${field.fieldName}`);
         }
         return data;
     };
