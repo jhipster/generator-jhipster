@@ -17,10 +17,11 @@
         "enableTranslation": true,
         "nativeLanguage": "en",
         "languages": ["en", "fr"],
-        "testFrameworks": ["gatling", "protractor"],
+        "testFrameworks": ["gatling", "cypress"],
         "serverPort": "8080",
         "jhiPrefix": "jhi",
-        "clientPackageManager": "yarn",
-        "clientFramework": "angularX"
+        "clientPackageManager": "npm",
+        "clientFramework": "angularX",
+        "creationTimestamp": 1596513172471
     }
 }

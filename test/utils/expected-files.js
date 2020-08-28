@@ -368,7 +368,6 @@ const expectedFiles = {
     client: [
         'angular.json',
         '.eslintrc.json',
-        '.eslintignore',
         'package.json',
         'postcss.config.js',
         'proxy.conf.json',
@@ -409,9 +408,9 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/blocks/config/prod.config.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/blocks/config/uib-pagination.config.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/auth-expired.interceptor.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/errorhandler.interceptor.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/error-handler.interceptor.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/notification.interceptor.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/entity-routing.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/home/home.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/home/home.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/home/home.scss`,
@@ -442,7 +441,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/core/icons/font-awesome-icons.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/auth/has-any-authority.directive.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/state-storage.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/core/auth/user-route-access-service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/auth/user-route-access.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/constants/authority.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/constants/error.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/constants/input.constants.ts`,
@@ -451,11 +450,11 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/login/login.model.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/login/login-modal.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/login/login.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/login/login.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/login/login-modal.component.html`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/login/login-modal.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/login/login.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/util/request-util.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/util/datepicker-adapter.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/date/datepicker-adapter.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/shared-libs.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/shared.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/user/account.model.ts`,
@@ -505,12 +504,12 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics.service.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/core/user/account.service.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/core/login/login-modal.service.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/core/login/login-modal.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/home/home.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/layouts/main/main.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/layouts/navbar/navbar.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert-error.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/helpers/mock-account.service.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/helpers/mock-active-modal.service.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/helpers/mock-alert.service.ts`,
@@ -532,6 +531,8 @@ const expectedFiles = {
         'webpack/webpack.dev.js',
         'webpack/webpack.prod.js',
     ],
+
+    clientCommon: ['.eslintignore'],
 
     i18n: [
         `${SERVER_MAIN_RES_DIR}i18n/messages_en.properties`,
@@ -668,7 +669,7 @@ const expectedFiles = {
 
     microserviceGradle: ['gradle/docker.gradle'],
 
-    dockerServices: [`${DOCKER_DIR}app.yml`, `${DOCKER_DIR}sonar.yml`],
+    dockerServices: [`${DOCKER_DIR}app.yml`, `${DOCKER_DIR}sonar.yml`, `${DOCKER_DIR}jhipster-control-center.yml`],
 
     hibernateTimeZoneConfig: [
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/timezone/HibernateTimeZoneIT.java`,
@@ -786,6 +787,28 @@ const expectedFiles = {
     ],
 
     consul: [`${DOCKER_DIR}central-server-config/application.yml`, `${DOCKER_DIR}consul.yml`, `${DOCKER_DIR}config/git2consul.json`],
+
+    cypress: [
+        'cypress.json',
+        `${CLIENT_TEST_SRC_DIR}cypress/fixtures/users/user.json`,
+        `${CLIENT_TEST_SRC_DIR}cypress/plugins/index.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/support/commands.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/support/navbar.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/support/index.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/tsconfig.json`,
+    ],
+
+    cypressNoOAuth2: [`${CLIENT_TEST_SRC_DIR}cypress/integration/account/login-page.spec.ts`],
+
+    cypressWithDatabaseAndNoOAuth2: [
+        `${CLIENT_TEST_SRC_DIR}cypress/integration/account/register-page.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/integration/account/settings-page.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/integration/account/password-page.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/integration/account/reset-password-page.spec.ts`,
+    ],
+
+    cypressWithOauth2: [`${CLIENT_TEST_SRC_DIR}cypress/support/keycloak-oauth2.ts`, `${CLIENT_TEST_SRC_DIR}cypress/support/utils.ts`],
 };
 
 module.exports = expectedFiles;

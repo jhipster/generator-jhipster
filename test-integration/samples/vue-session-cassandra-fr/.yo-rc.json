@@ -13,7 +13,7 @@
         "skipFakeData": false,
         "entitySuffix": "",
         "dtoSuffix": "DTO",
-        "testFrameworks": ["gatling", "protractor"],
+        "testFrameworks": ["gatling", "cypress"],
         "blueprints": [],
         "creationTimestamp": 1594452153587,
         "serviceDiscoveryType": false,
@@ -39,6 +39,7 @@
         "jwtSecretKey": "NGJiOTZiMWFlMmQ5NmVkNzhmNzA1NjgxYmNlYjI2MzgwZGE3MzAwY2VkZDc0MThmMzM4MjRiODg0ZWVkYTVkNzU1MDNiODM1YjJmMjBhMDJhYzQwZTViNDUwMzA4YjJlOGYxZjhkYzQ1M2RlMGY1ZGQyYmFlOWVmZGYxMjEyODQ=",
         "clientThemeVariant": "primary",
         "useSass": true,
-        "languages": ["fr"]
+        "languages": ["fr"],
+        "rememberMeKey": "a5e93fdeb16e2ee2dc4a629b5dbdabb30f968e418dfc0483c53afdc695cfac96d06cf5c581cbefb93e3aaa241880857fcafe"
     }
 }

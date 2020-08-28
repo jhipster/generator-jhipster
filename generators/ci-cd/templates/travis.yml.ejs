@@ -32,9 +32,6 @@ cache:
 <%_ } else if (buildTool === 'gradle') { _%>
     - $HOME/.gradle
 <%_ } _%>
-<%_ if (clientPackageManager === 'yarn') { _%>
-    - $HOME/.yarn-cache
-<%_ } _%>
 env:
   global:
     - NODE_VERSION=<%= NODE_VERSION %>
@@ -60,17 +57,10 @@ before_install:
   - java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
-  <%_ if (clientPackageManager === 'npm') { _%>
   - nvm install $NODE_VERSION
   - npm install -g npm
   - node -v
   - npm -v
-  <%_ } _%>
-  <%_ if (clientPackageManager === 'yarn') { _%>
-  # Repo for Yarn
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
-  - export PATH=$HOME/.yarn/bin:$PATH
-  <%_ } _%>
 install:
   - <%= clientPackageManager %> install
 script:

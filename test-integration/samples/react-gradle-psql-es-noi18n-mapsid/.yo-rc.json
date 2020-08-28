@@ -19,7 +19,7 @@
         "clientFramework": "react",
         "useSass": true,
         "clientPackageManager": "npm",
-        "testFrameworks": ["gatling", "protractor"],
+        "testFrameworks": ["gatling", "cypress"],
         "jhiPrefix": "jhi",
         "otherModules": [],
         "enableTranslation": false,
@@ -29,6 +29,7 @@
         "clientTheme": "none",
         "entitySuffix": "",
         "dtoSuffix": "DTO",
-        "blueprints": []
+        "blueprints": [],
+        "creationTimestamp": 1596513172471
     }
 }

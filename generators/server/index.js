@@ -47,14 +47,13 @@ module.exports = class extends BaseBlueprintGenerator {
             desc:
                 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
-            defaults: false,
         });
 
         if (this.options.help) {
             return;
         }
 
-        this.loadOptions();
+        this.loadStoredAppOptions();
         this.loadRuntimeOptions();
 
         // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
@@ -95,6 +94,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.PRETTIER_JAVA_VERSION = constants.PRETTIER_JAVA_VERSION;
 
                 this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
+                this.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
                 this.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;
                 this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
                 this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
@@ -126,7 +126,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.JAVA_VERSION = constants.JAVA_VERSION;
 
                 this.NODE_VERSION = constants.NODE_VERSION;
-                this.YARN_VERSION = constants.YARN_VERSION;
                 this.NPM_VERSION = constants.NPM_VERSION;
                 this.GRADLE_VERSION = constants.GRADLE_VERSION;
 
@@ -221,14 +220,8 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             composeLanguages() {
                 // We don't expose client/server to cli, composing with languages is used for test purposes.
-                if (this.configOptions.skipComposeLanguages || this.jhipsterConfig.enableTranslation === false) return;
-
-                this.configOptions.skipComposeLanguages = true;
-                this.composeWith(require.resolve('../languages'), {
-                    ...this.options,
-                    configOptions: this.configOptions,
-                    debug: this.isDebugEnabled,
-                });
+                if (this.jhipsterConfig.enableTranslation === false) return;
+                this.composeWithJHipster('languages', true);
             },
 
             loadSharedConfig() {
@@ -323,13 +316,8 @@ module.exports = class extends BaseBlueprintGenerator {
             installing() {
                 if (this.skipClient) {
                     if (!this.options.skipInstall) {
-                        if (this.clientPackageManager === 'yarn') {
-                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));
-                            this.yarnInstall();
-                        } else if (this.clientPackageManager === 'npm') {
-                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
-                            this.npmInstall();
-                        }
+                        this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
+                        this.npmInstall();
                     }
                 }
             },

@@ -67,6 +67,9 @@ import <%= packageName %>.AbstractNeo4jIT;
 <%_ if (cacheProvider === 'redis') { _%>
 import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
+<%_ if (reactive && ['mysql', 'postgresql', 'mssql'].includes(prodDatabaseType)) { _%>
+import <%= packageName %>.ReactiveSqlTestContainerExtension;
+<%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (authenticationType === 'uaa') { _%>
 import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
@@ -110,13 +113,10 @@ import <%= packageName %>.service.<%= entityClass %>QueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany || cacheProvider === 'redis') { _%>
+<%_ if ((searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany || cacheProvider === 'redis') || databaseType === 'neo4j' || (reactive && ['mysql', 'postgresql', 'mssql'].includes(prodDatabaseType))) { _%>
 import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (!reactive) { _%>
@@ -219,13 +219,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ if (databaseType === 'neo4j') { _%>
 @ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
+<%_ if (reactive && ['mysql', 'postgresql', 'mssql'].includes(prodDatabaseType)) { _%>
+@ExtendWith(ReactiveSqlTestContainerExtension.class)
+<%_ } _%>
 <%_ if (!reactive) { _%>
 @AutoConfigureMockMvc
 <%_ } else { _%>
 @AutoConfigureWebTestClient
 <%_ } _%>
 @WithMockUser
-public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
     <%_ for (idx in fields) {
     const defaultValueName = 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase();
     const updatedValueName = 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase();
@@ -260,7 +263,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     let enumValue1;
     let enumValue2;
     if (isEnum) {
-        const enumValues = getEnumValuesWithCustomValues(fields[idx].fieldValues);
+        const enumValues = fields[idx].enumValues;
         enumValue1 = enumValues[0];
         if (enumValues.length > 1) {
             enumValue2 = enumValues[1];
@@ -284,11 +287,11 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
             sampleTextString += "A";
             updatedTextString += "B";
         }
-        if (!this._.isUndefined(fields[idx].fieldValidateRulesPattern)) {
+        if (fields[idx].fieldValidateRulesPattern !== undefined) {
             // Generate Strings, using pattern
             try {
                 const patternRegExp = new RegExp(fields[idx].fieldValidateRulesPattern);
-                const randExp = new this.randexp(fields[idx].fieldValidateRulesPattern);
+                const randExp = fields[idx].createRandexp();
                 // set infinite repetitions max range
                 if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
                     sampleTextString = randExp.gen().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
@@ -549,7 +552,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 <%_ if (!readOnly) { _%>
 
     @Test<%= transactionalAnnotation %>
-    public void create<%= entityClass %>() throws Exception {
+    void create<%= entityClass %>() throws Exception {
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
     <%_ if (reactive && searchEngine === 'elasticsearch') { _%>
         // Configure the mock search repository
@@ -603,7 +606,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     }
 
     @Test<%= transactionalAnnotation %>
-    public void create<%= entityClass %>WithExistingId() throws Exception {
+    void create<%= entityClass %>WithExistingId() throws Exception {
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
 
         // Create the <%= entityClass %> with an existing ID
@@ -641,7 +644,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 
     <%_ if (databaseType === 'sql' && isUsingMapsId === true) { _%>
     @Test<%= transactionalAnnotation %>
-    public void update<%= entityClass %>MapsIdAssociationWithNewId() throws Exception {
+    void update<%= entityClass %>MapsIdAssociationWithNewId() throws Exception {
         // Initialize the database
 <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
         <%= entityInstance %>Service.save(<%= asEntity(entityInstance) %>);
@@ -713,7 +716,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     }
     if (required) { %>
     @Test<%= transactionalAnnotation %>
-    public void check<%= fields[idx].fieldInJavaBeanMethod %>IsRequired() throws Exception {
+    void check<%= fields[idx].fieldInJavaBeanMethod %>IsRequired() throws Exception {
         int databaseSizeBeforeTest = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
         // set the field null
         <%= asEntity(entityInstance) %>.set<%= fields[idx].fieldInJavaBeanMethod %>(null);
@@ -746,7 +749,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 <%_ if (reactiveRepositories && pagination === 'no') { _%>
 
     @Test
-    public void getAll<%= entityClassPlural %>AsStream() {
+    void getAll<%= entityClassPlural %>AsStream() {
         // Initialize the database
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
@@ -784,7 +787,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 <%_  } _%>
 
     @Test<%= transactionalAnnotation %>
-    public void getAll<%= entityClassPlural %>() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%= entityClassPlural %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
@@ -863,7 +866,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     <%_ } _%>
 
     @Test<%= transactionalAnnotation %>
-    public void get<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
+    void get<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
@@ -894,7 +897,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 <%_ if (jpaMetamodelFiltering) {  %>
 
     @Test<%= transactionalAnnotation %>
-    public void get<%= entityClassPlural %>ByIdFiltering() <% if (!reactive) { %>throws Exception <% } %>{
+    void get<%= entityClassPlural %>ByIdFiltering() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
 
@@ -917,7 +920,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
                  _%>
 
     @Test<%= transactionalAnnotation %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
 
@@ -929,7 +932,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     }
 
     @Test<%= transactionalAnnotation %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsNotEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsNotEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
 
@@ -941,7 +944,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     }
 
     @Test<%= transactionalAnnotation %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsInShouldWork() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsInShouldWork() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
 
@@ -953,7 +956,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     }
 
     @Test<%= transactionalAnnotation %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsNullOrNotNull() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsNullOrNotNull() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
 
@@ -968,7 +971,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
             if (searchBy.fieldType === 'String') {
                 _%>
                 @Test<%= transactionalAnnotation %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>ContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>ContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
 
@@ -980,7 +983,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     }
 
     @Test<%= transactionalAnnotation %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>NotContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>NotContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
 
@@ -1012,7 +1015,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
             _%>
 
     @Test<%= transactionalAnnotation %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
 
@@ -1024,7 +1027,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     }
 
     @Test<%= transactionalAnnotation %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
 
@@ -1036,7 +1039,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     }
 
     @Test<%= transactionalAnnotation %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
 
@@ -1048,7 +1051,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     }
 
     @Test<%= transactionalAnnotation %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
 
@@ -1064,8 +1067,8 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 <%_ relationships.forEach((relationship) => { _%>
 
     @Test<%= transactionalAnnotation %>
-    public void getAll<%= entityClassPlural %>By<%= relationship.relationshipNameCapitalized %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
-        <%_ if (relationship.relationshipValidate === true || relationship.useJPADerivedIdentifier === true) { _%>
+    void getAll<%= entityClassPlural %>By<%= relationship.relationshipNameCapitalized %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
+        <%_ if ((relationship.relationshipValidate === true && relationship.relationshipType === 'one-to-one') || relationship.useJPADerivedIdentifier === true) { _%>
         // Get already existing entity
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= asEntity(entityInstance) %>.get<%= relationship.relationshipNameCapitalized %>();
         <%_ } else { _%>
@@ -1074,14 +1077,14 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
         em.persist(<%= relationship.relationshipFieldName %>);
         em.flush();
-<%_ if (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') { _%>
+            <%_ if (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') { _%>
         <%= asEntity(entityInstance) %>.add<%= relationship.relationshipNameCapitalized %>(<%= relationship.relationshipFieldName %>);
-<%_ } else { _%>
+            <%_ } else { _%>
         <%= asEntity(entityInstance) %>.set<%= relationship.relationshipNameCapitalized %>(<%= relationship.relationshipFieldName %>);
-<%_     if (relationship.ownerSide === false) { _%>
+            <%_     if (relationship.ownerSide === false) { _%>
         <%= relationship.relationshipFieldName %>.set<%= relationship.otherEntityRelationshipNameCapitalized %>(<%= asEntity(entityInstance) %>);
-<%_     } _%>
-<%_ } _%>
+            <%_     } _%>
+            <%_ } _%>
         <%_ } _%>
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
         <% if (authenticationType === 'oauth2' && relationship.otherEntityName === 'user') { _%>String<%_ } else { _%>Long<% } %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.getId();
@@ -1133,7 +1136,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 
 <%_  } _%>
     @Test<%= transactionalAnnotation %>
-    public void getNonExisting<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
+    void getNonExisting<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Get the <%= entityInstance %>
         <%_ if (!reactive) { _%>
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <% if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { %>Long.MAX_VALUE<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID().toString()<% } %>))
@@ -1148,7 +1151,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 <%_ if (!readOnly) { _%>
 
     @Test<%= transactionalAnnotation %>
-    public void update<%= entityClass %>() throws Exception {
+    void update<%= entityClass %>() throws Exception {
     <%_ if (reactive && searchEngine === 'elasticsearch') { _%>
         // Configure the mock search repository
         when(mock<%= entityClass %>SearchRepository.save(any()))
@@ -1226,7 +1229,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     }
 
     @Test<%= transactionalAnnotation %>
-    public void updateNonExisting<%= entityClass %>() throws Exception {
+    void updateNonExisting<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
 
         <%_ if (dto === 'mapstruct') { _%>
@@ -1262,7 +1265,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     }
 
     @Test<%= transactionalAnnotation %>
-    public void delete<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
+    void delete<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
 <%_ if (reactive && searchEngine === 'elasticsearch') { _%>
         // Configure the mock search repository
     <%_ if (service !== 'no') { _%>
@@ -1311,7 +1314,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     <%_ if (searchEngine !== false) { _%>
 
     @Test<%= transactionalAnnotation %>
-    public void search<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
+    void search<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
 <%_ if (searchEngine === 'elasticsearch') { _%>
         // Configure the mock search repository
     <%_ if (reactive) { _%>

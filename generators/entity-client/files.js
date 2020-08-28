@@ -17,17 +17,13 @@
  * limitations under the License.
  */
 const _ = require('lodash');
-const faker = require('faker');
 const utils = require('../utils');
 const constants = require('../generator-constants');
-
-/* Use customized randexp */
-const Randexp = utils.RandexpWithFaker;
 
 /* Constants use throughout */
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const ANGULAR_DIR = constants.ANGULAR_DIR;
-const REACT_DIR = constants.ANGULAR_DIR;
+const REACT_DIR = constants.REACT_DIR;
 const VUE_DIR = constants.VUE_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
@@ -379,11 +375,27 @@ const vueFiles = {
     ],
 };
 
+const commonFiles = {
+    testsCypress: [
+        {
+            condition: generator => generator.cypressTests && !generator.embedded,
+            path: `${CLIENT_TEST_SRC_DIR}cypress/`,
+            templates: [
+                {
+                    file: 'integration/entity/entity.spec.ts',
+                    renameTo: generator => `integration/entity/${generator.entityFileName}.spec.ts`,
+                },
+            ],
+        },
+    ],
+};
+
 module.exports = {
     writeFiles,
     angularFiles,
     reactFiles,
     vueFiles,
+    commonFiles,
 };
 
 function addEnumerationFiles(generator, templateDir, clientFolder) {
@@ -413,7 +425,7 @@ function addEnumerationFiles(generator, templateDir, clientFolder) {
 function addSampleRegexTestingStrings(generator) {
     generator.fields.forEach(field => {
         if (field.fieldValidateRulesPattern !== undefined) {
-            const randExp = new Randexp(field.fieldValidateRulesPattern);
+            const randExp = field.createRandexp();
             field.fieldValidateSampleString = randExp.gen();
             field.fieldValidateModifiedString = randExp.gen();
         }
@@ -426,7 +438,7 @@ function writeFiles() {
             if (this.skipClient) return;
 
             // In order to have consistent results with Faker, restart seed with current entity name hash.
-            faker.seed(utils.stringHashCode(this.name.toLowerCase()));
+            this.resetFakerSeed();
         },
 
         writeClientFiles() {
@@ -455,13 +467,25 @@ function writeFiles() {
                 templatesDir = CLIENT_VUE_TEMPLATES_DIR;
             } else {
                 if (!this.embedded) {
-                    this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
+                    this.addEntityToMenu(
+                        this.entityStateName,
+                        this.enableTranslation,
+                        this.clientFramework,
+                        this.entityTranslationKeyMenu,
+                        this.entityClassHumanized
+                    );
                 }
                 return;
             }
 
             const entityTemplatesDir = `entity-client/templates/${templatesDir}`;
             this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster(entityTemplatesDir));
+
+            if (this.cypressTests) {
+                const cypressTemplatesDir = 'entity-client/templates/common';
+                this.writeFilesToDisk(commonFiles, this, false, this.fetchFromInstalledJHipster(cypressTemplatesDir));
+            }
+
             if (this.clientFramework !== VUE) {
                 addEnumerationFiles(this, templatesDir, destDir);
             }
@@ -478,7 +502,13 @@ function writeFiles() {
                     microserviceName,
                     this.readOnly
                 );
-                this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
+                this.addEntityToMenu(
+                    this.entityStateName,
+                    this.enableTranslation,
+                    this.clientFramework,
+                    this.entityTranslationKeyMenu,
+                    this.entityClassHumanized
+                );
             }
 
             if (this.clientFramework === VUE && !this.enableTranslation) {

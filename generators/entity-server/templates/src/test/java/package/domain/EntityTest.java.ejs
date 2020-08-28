@@ -35,10 +35,10 @@ _%>
 import java.util.UUID;
 <%_ } _%>
 
-public class <%= entityClass %>Test {
+class <%= entityClass %>Test {
 
     @Test
-    public void equalsVerifier() throws Exception {
+    void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(<%= asEntity(entityClass) %>.class);
     <%_if (!embedded) { _%>
         <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %>1 = new <%= asEntity(entityClass) %>();

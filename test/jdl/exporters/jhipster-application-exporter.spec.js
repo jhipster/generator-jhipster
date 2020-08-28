@@ -151,7 +151,7 @@ describe('JHipsterApplicationExporter', () => {
                     });
                 });
             });
-            context('when exporting an application to JSON with skipYoRcGeneration', () => {
+            context('when exporting an application to JSON with skipFileGeneration', () => {
                 before(() => {
                     exportApplication(
                         createJDLApplication({
@@ -163,7 +163,7 @@ describe('JHipsterApplicationExporter', () => {
                             jhipsterVersion: '4.9.0',
                             otherModules: ['MyModule'],
                         }),
-                        { skipYoRcGeneration: true }
+                        { skipFileGeneration: true }
                     );
                 });
 
@@ -319,6 +319,46 @@ describe('JHipsterApplicationExporter', () => {
             });
         });
         context('when passing valid arguments', () => {
+            context('when exporting applications to JSON with skipFileGeneration', () => {
+                let returned;
+                let baseNames;
+
+                before('common setup for both applications', () => {
+                    returned = exportApplications(
+                        {
+                            toto: createJDLApplication({
+                                applicationType: MONOLITH,
+                                baseName: 'toto',
+                                packageName: 'com.mathieu.toto',
+                                enableTranslation: false,
+                                languages: ['en', 'fr'],
+                                jhipsterVersion: '4.9.0',
+                            }),
+                            titi: createJDLApplication({
+                                applicationType: MONOLITH,
+                                baseName: 'titi',
+                                packageName: 'com.mathieu.titi',
+                                enableTranslation: false,
+                                languages: ['en', 'fr'],
+                                jhipsterVersion: '4.9.0',
+                            }),
+                        },
+                        { skipFileGeneration: true }
+                    );
+                    baseNames = returned.map(application => application['generator-jhipster'].baseName);
+                });
+
+                it('should return the exported applications', () => {
+                    expect(returned).to.have.lengthOf(2);
+                });
+                it('should not save config files', () => {
+                    expect(baseNames).to.be.eql(['toto', 'titi']);
+                    baseNames.forEach(baseName => {
+                        expect(fs.existsSync(path.join(baseName, '.yo-rc.json'))).to.be.false;
+                        expect(fs.existsSync(path.join(baseName, '.jhipster'))).to.be.false;
+                    });
+                });
+            });
             context('when exporting applications to JSON', () => {
                 let returned;
 

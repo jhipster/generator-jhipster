@@ -38,7 +38,7 @@ async function askForInsightOptIn() {
         default: true,
     });
     if (answers.insight !== undefined) {
-        statistics.setOptoutStatus(!answers.insight);
+        statistics.setOptOutStatus(!answers.insight);
     }
 }
 
@@ -99,7 +99,8 @@ async function askForTestOpts() {
     }
     if (!this.skipClient) {
         // all client side test frameworks should be added here
-        choices.push({ name: 'Protractor', value: 'protractor' });
+        choices.push({ name: 'Protractor **Deprecated**', value: 'protractor' });
+        choices.push({ name: 'Cypress', value: 'cypress' });
     }
     const PROMPT = {
         type: 'checkbox',

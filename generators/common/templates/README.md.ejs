@@ -22,12 +22,6 @@ let clientPackageMngrName = 'Npm';
 let clientPackageMngrAddGlobal = 'install -g';
 let clientPackageMngrAdd = 'install --save --save-exact';
 let clientPackageMngrAddDev = 'install --save-dev --save-exact';
-if (clientPackageManager === 'yarn') {
-    clientPackageMngrName = 'Yarn';
-    clientPackageMngrAddGlobal = 'global add';
-    clientPackageMngrAdd = 'add --exact';
-    clientPackageMngrAddDev = 'add --dev --exact';
-}
 let DOCUMENTATION_ARCHIVE_URL = `${DOCUMENTATION_URL + DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`;
 _%>
 This application was generated using JHipster <%= jhipsterVersion %>, you can find documentation and help at [<%= DOCUMENTATION_ARCHIVE_URL %>](<%= DOCUMENTATION_ARCHIVE_URL %>).
@@ -56,10 +50,6 @@ Before you can build this project, you must install and configure the following 
 
 1. [Node.js][]: We use Node to run a development web server and build the project.
    Depending on your system, you can install Node either from source or as a pre-packaged bundle.
-<%_ if (clientPackageManager === 'yarn') { _%>
-2. [Yarn][]: We use Yarn to manage Node dependencies.
-   Depending on your system, you can install Yarn either from source or as a pre-packaged bundle.
-<%_ } _%>
 
 After installing Node, you should be able to run the following command to install development tools.
 You will only need to run this command when dependencies change in [package.json](package.json).
@@ -138,6 +128,14 @@ spring:
           oidc:
             client-id: web_app
             client-secret: web_app
+```
+
+### JHipster Control Center
+
+JHipster Control Center can help you to manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
+
+```
+docker-compose -f src/main/docker/jhipster-control-center.yml up
 ```
 
 ### Okta
@@ -424,7 +422,6 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 <% if (testFrameworks.includes("gatling")) { %>[Gatling]: https://gatling.io/<% } %>
 <%_ if (!skipClient) { _%>
 [Node.js]: https://nodejs.org/
-[Yarn]: https://yarnpkg.org/
 [Webpack]: https://webpack.github.io/
 [Angular CLI]: https://cli.angular.io/
 [BrowserSync]: https://www.browsersync.io/

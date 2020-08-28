@@ -34,7 +34,6 @@ const files = {
             templates: [
                 'package.json',
                 '.eslintrc.json',
-                '.eslintignore',
                 'tsconfig.json',
                 'tsconfig.test.json',
                 { file: '.editorconfig', method: 'copy', noEjs: true },
@@ -313,7 +312,7 @@ const files = {
             path: TEST_SRC_DIR,
             templates: [
                 'jest.conf.js',
-                'spec/enzyme-setup.ts',
+                'spec/icons-mock.ts',
                 'spec/storage-mock.ts',
                 'spec/app/utils.ts',
                 'spec/app/config/axios-interceptor.spec.ts',

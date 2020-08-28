@@ -12,7 +12,6 @@ test/temp/
 .vscode
 .DS_Store
 /.jhipster
-yarn-error.log
 *.sw?
 /test/templates/import-jdl/*.png
 .git

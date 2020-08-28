@@ -35,6 +35,11 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="200em" src="https://www.jhipster.tech/images/open-collective/octoconsulting.png">
         </a>
       </td>
+      <td align="center" valign="middle">
+        <a href="https://dev.entando.org/jhipster" target="_blank">
+          <img width="200em" src="https://www.jhipster.tech/images/open-collective/Entando_E.png">
+        </a>
+      </td>
     </tr>
   </tbody>
 </table>
@@ -77,16 +82,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
         </a>
       </td>
       <td align="center" valign="middle">
-        <a href="https://matchbanker.pl/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/matchbanker.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://matchbanker.no/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/matchbanker.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
         <a href="https://writersperhour.com/urgent-essay-writing-service" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/writersperhour.png">
         </a>
@@ -96,8 +91,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/minitool.png">
         </a>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="middle">
         <a href="https://edubirdie.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/edubirdie.png">	
@@ -108,14 +101,11 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/zadluzenia.png">	
         </a>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="middle">	
         <a href="https://opencollective.com/jim-van-dam" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/jim-van-dam.png">	
-        </a>
-      </td>
-      <td align="center" valign="middle">	
-        <a href="https://papersowl.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/papersowl.png">	
         </a>
       </td>
       <td align="center" valign="middle">	
@@ -151,7 +141,6 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 | [![Vue Gradle NoSQL][github-vue-gradle-nosql]][github-actions]         |
 | [![Elasticsearch][github-elasticsearch]][github-actions]               |
 | [![Monolith OAuth2][github-monolith-oauth2]][github-actions]           |
-| [![Yarn][github-yarn]][github-actions]                                 |
 | [![No Database][github-no-database]][github-actions]                   |
 | [![Microservices JWT][github-ms-jwt]][github-actions]                  |
 | [![Microservices OAuth2][github-ms-oauth2]][github-actions]            |
@@ -179,7 +168,6 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [github-vue-gradle-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Gradle%20NoSQL/badge.svg
 [github-elasticsearch]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Elasticsearch/badge.svg
 [github-monolith-oauth2]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Monolith%20OAuth2/badge.svg
-[github-yarn]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Yarn/badge.svg
 [github-no-database]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/No%20Database/badge.svg
 [github-ms-jwt]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Microservices%20JWT/badge.svg
 [github-ms-oauth2]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Microservices%20OAuth2/badge.svg

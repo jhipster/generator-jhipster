@@ -16,7 +16,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -%>
-<%_ var optionsForwarder = clientPackageManager == 'yarn' ? '' : '-- ' _%>
 {
   "name": "<%= dasherizedBaseName %>",
   "version": "0.0.0",
@@ -27,6 +26,7 @@ limitations under the License.
     "node_modules"
   ],
   "dependencies": {
+    "@openapitools/openapi-generator-cli": "1.0.13-4.3.1",
     "@fortawesome/fontawesome-svg-core": "1.2.28",
     "@fortawesome/free-solid-svg-icons": "5.13.0",
     "@fortawesome/vue-fontawesome": "0.1.9",
@@ -42,56 +42,61 @@ limitations under the License.
     "sockjs-client": "1.1.4",
     "webstomp-client": "1.2.0",
     <%_ } _%>
-    "vue": "2.6.11",
-    "vue-class-component": "7.2.3",
+    "vue": "2.6.12",
+    "vue-class-component": "7.2.5",
     "vue-cookie": "1.1.4",
-    "vue-i18n": "8.17.7",
+    "vue-i18n": "8.21.0",
     "vue-infinite-loading": "2.4.5",
-    "vue-property-decorator": "8.4.2",
-    "vue-router": "3.2.0",
+    "vue-property-decorator": "9.0.0",
+    "vue-router": "3.4.3",
     "vue2-filters": "0.11.0",
     "vuelidate": "0.7.5",
-    "vuex": "3.4.0"
+    "vuex": "3.5.1"
   },
   "devDependencies": {
     "babel-core": "7.0.0-bridge.0",
-<%_ if (protractorTests) { _%>
+    <%_ if (protractorTests) { _%>
     "@types/chai": "4.2.11",
     "@types/chai-string": "1.4.2",
-<%_ } _%>
-    "@types/jest": "25.2.3",
-<%_ if (protractorTests) { _%>
+    <%_ } _%>
+    "@types/jest": "26.0.10",
+    <%_ if (protractorTests) { _%>
     "@types/mocha": "7.0.2",
-<%_ } _%>
+    <%_ } _%>
     "@types/node": "14.0.4",
-<%_ if (protractorTests) { _%>
+    <%_ if (protractorTests) { _%>
     "@types/selenium-webdriver": "4.0.9",
-<%_ } _%>
+    <%_ } _%>
     "@types/sinon": "9.0.3",
     "@types/vuelidate": "0.7.13",
-    "@vue/cli-plugin-typescript": "4.3.1",
-    "@vue/cli-service": "4.3.1",
-    "@vue/test-utils": "1.0.3",
+    "@vue/cli-plugin-typescript": "4.5.4",
+    "@vue/cli-service": "4.5.4",
+    "@vue/test-utils": "1.0.4",
     "autoprefixer": "9.8.0",
     "browser-sync": "2.26.7",
     "browser-sync-webpack-plugin": "2.2.2",
-<%_ if (protractorTests) { _%>
+    <%_ if (protractorTests) { _%>
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
     "chai-string": "1.5.0",
-<%_ } _%>
+    <%_ } _%>
     "copy-webpack-plugin": "6.0.1",
     "css-loader": "3.5.3",
     "file-loader": "6.0.0",
     "fork-ts-checker-webpack-plugin": "4.1.4",
     "friendly-errors-webpack-plugin": "1.7.0",
+<%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= packagejs.version %>",
+    <%_ otherModules.forEach(module => { _%>
+    "<%= module.name %>": "<%= module.version %>",
+    <%_ });
+} _%>
     "html-webpack-plugin": "4.3.0",
     <%_ if (!skipCommitHook) { _%>
     "husky": "4.2.5",
     <%_ } _%>
-    "jest": "26.0.1",
-    "jest-junit": "10.0.0",
+    "jest": "26.4.2",
+    "jest-junit": "11.1.0",
     "jest-serializer-vue": "2.0.2",
     "jest-sonar-reporter": "2.0.0",
     "jest-vue-preprocessor": "1.7.1",
@@ -99,9 +104,9 @@ limitations under the License.
     "lint-staged": "10.2.4",
     <%_ } _%>
     "merge-jsons-webpack-plugin": "1.0.21",
-<%_ if (protractorTests) { _%>
+    <%_ if (protractorTests) { _%>
     "mocha": "7.1.2",
-<%_ } _%>
+    <%_ } _%>
     "mini-css-extract-plugin": "0.9.0",
     "node-notifier": "7.0.0",
     "numeral": "2.0.6",
@@ -110,23 +115,26 @@ limitations under the License.
     "postcss-import": "12.0.1",
     "postcss-loader": "3.0.0",
     "postcss-url": "8.0.0",
-    "prettier": "2.0.5",
+    "prettier": "<%= PRETTIER_VERSION %>",
     <%_ if (!skipServer) { _%>
     "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
     <%_ } _%>
-<%_ if (protractorTests) { _%>
+    <%_ if (protractorTests) { _%>
     "protractor": "5.4.4",
-<%_ } _%>
+    <%_ } _%>
+    <%_ if (cypressTests) { _%>
+    "cypress": "5.0.0",
+    <%_ } _%>
     "rimraf": "3.0.2",
     "sass": "1.26.5",
     "sass-loader": "8.0.2",
     "sinon": "9.0.2",
     "terser-webpack-plugin": "3.0.1",
-    "ts-jest": "26.0.0",
+    "ts-jest": "26.2.0",
     "ts-loader": "7.0.4",
-<%_ if (protractorTests) { _%>
+    <%_ if (protractorTests) { _%>
     "ts-node": "8.10.1",
-<%_ } _%>
+    <%_ } _%>
     "tslib": "2.0.0",
     "tslint": "6.1.2",
     "tslint-config-prettier": "1.18.0",
@@ -134,14 +142,17 @@ limitations under the License.
     "tslint-loader": "3.6.0",
     "typescript": "3.9.3",
     "url-loader": "4.1.0",
-    "vue-jest": "3.0.5",
-    "vue-loader": "15.9.2",
-    "vue-template-compiler": "2.6.11",
+    "vue-jest": "3.0.6",
+    "vue-loader": "15.9.3",
+    "vue-template-compiler": "2.6.12",
+    <%_ if (protractorTests || cypressTests) { _%>
+    "webdriver-manager": "12.1.7",
+    <%_ } _%>
     "webpack": "4.43.0",
     "webpack-bundle-analyzer": "3.8.0",
     "webpack-cli": "3.3.11",
     "webpack-dev-server": "3.11.0",
-    "webpack-merge": "4.2.2"
+    "webpack-merge": "5.0.9"
   },
   "engines": {
     "node": ">= 10.17.0",
@@ -150,30 +161,42 @@ limitations under the License.
   "scripts": {
     "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
-    "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
+    "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= DIST_DIR %>",
     "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
     "start": "<%= clientPackageManager %> run webpack:dev",
-    "start-tls": "<%= clientPackageManager %> run webpack:dev <%= optionsForwarder %>--env.tls",
+    "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
     "serve": "<%= clientPackageManager %> run start",
     "build": "<%= clientPackageManager %> run webpack:prod",
-<%_ if (protractorTests) { _%>
-    "e2e": "protractor src/test/javascript/protractor.conf.js",
-    "postinstall": "webdriver-manager update --gecko false",
-<%_ } _%>
+    <%_ if (protractorTests && !cypressTests) { _%>
+    "e2e": "<%= clientPackageManager %> run e2e:protractor",
+    <%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
+    "e2e": "<%= clientPackageManager %> run e2e:cypress",
+    <%_ } _%>
+    <%_ if (protractorTests) { _%>
+    "e2e:protractor": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
+    <%_ } _%>
+    <%_ if (cypressTests) { _%>
+    "e2e:cypress": "cypress run --browser chrome --headless",
+    "cypress": "cypress open",
+    <%_ } _%>
+    <%_ if (protractorTests || cypressTests) { _%>
+    "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
+    "e2e:update-webdriver": "webdriver-manager update --gecko false",
+    <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --no-cache --config src/test/javascript/jest.conf.js",
-    "jest:update": "<%= clientPackageManager %> run jest <%= optionsForwarder %>--updateSnapshot",
+    "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
     "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
-    "webpack:build:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.dev.js --progress --profile",
-    "webpack:prod:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.prod.js --profile",
+    "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --progress --profile",
+    "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
     "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main && <%= clientPackageManager %> run clean-www",
-    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --progress --inline",
+    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress --inline",
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
     "test": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest",
     "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",
-    "test:watch": "<%= clientPackageManager %> run jest <%= optionsForwarder %>--watch"
+    "test:watch": "<%= clientPackageManager %> run jest -- --watch"
   },
   "jestSonar": {
     "reportPath": "<%= BUILD_DIR %>test-results/jest",

@@ -36,11 +36,19 @@ const appDefaultConfig = {
     entitySuffix: '',
     dtoSuffix: 'DTO',
     reactive: false,
-    testFrameworks: [],
-    blueprints: [],
-    otherModules: [],
     clientPackageManager: 'npm',
-    pages: [],
+    get testFrameworks() {
+        return [];
+    },
+    get blueprints() {
+        return [];
+    },
+    get otherModules() {
+        return [];
+    },
+    get pages() {
+        return [];
+    },
 };
 
 /** Required config for prompts to be skipped */
@@ -78,7 +86,9 @@ const clientDefaultConfig = {
 const translationDefaultConfig = {
     enableTranslation: true,
     nativeLanguage: 'en',
-    languages: [],
+    get languages() {
+        return [];
+    },
 };
 
 /** Required config for prompts to be skipped, baseName is missing */
@@ -96,8 +106,6 @@ const defaultConfig = {
 };
 
 const entityDefaultConfig = {
-    fields: [],
-    relationships: [],
     pagination: 'no',
     validation: false,
     dto: 'no',
@@ -105,10 +113,15 @@ const entityDefaultConfig = {
     jpaMetamodelFiltering: false,
     readOnly: false,
     embedded: false,
-    skipUiGrouping: false,
     entityAngularJSSuffix: '',
     fluentMethods: true,
     clientRootFolder: '',
+    get fields() {
+        return [];
+    },
+    get relationships() {
+        return [];
+    },
 };
 
 module.exports = {

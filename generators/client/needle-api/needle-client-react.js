@@ -27,13 +27,13 @@ module.exports = class extends needleClientBase {
         this.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-main');
     }
 
-    addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu) {
+    addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue = _.startCase(routerName)) {
         const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
         const entityMenuPath = `${this.CLIENT_MAIN_SRC_DIR}app/shared/layout/menus/entities.tsx`;
         const entityEntry =
             // prettier-ignore
             this.generator.stripMargin(`|<MenuItem icon="asterisk" to="/${routerName}">
-                        |      ${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${_.startCase(routerName)}`}
+                        |      ${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${entityTranslationValue}`}
                         |    </MenuItem>`);
         const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-entity-to-menu', entityEntry);
 

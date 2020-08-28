@@ -16,7 +16,7 @@
         "enableTranslation": true,
         "nativeLanguage": "en",
         "languages": ["en", "fr"],
-        "testFrameworks": ["gatling", "protractor"],
+        "testFrameworks": ["gatling", "cypress"],
         "serverPort": "8080",
         "jhiPrefix": "myPrefix",
         "messageBroker": false,
@@ -30,6 +30,7 @@
         "entitySuffix": "",
         "dtoSuffix": "DTO",
         "otherModules": [],
-        "blueprints": []
+        "blueprints": [],
+        "creationTimestamp": 1596513172471
     }
 }

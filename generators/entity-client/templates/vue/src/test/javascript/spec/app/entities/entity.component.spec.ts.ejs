@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = generateTestEntityId(pkType);
+const tsKeyId = generateTestEntityId(primaryKeyType);
 _%>
 /* tslint:disable max-line-length */
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
@@ -164,7 +164,7 @@ describe('Component Tests', () => {
       const result = comp.sort();
 
       // THEN
-      expect(result).toEqual(['id,desc']);
+      expect(result).toEqual(['id,asc']);
     });
 
     it('should calculate the sort attribute for a non-id attribute', () => {
@@ -175,7 +175,7 @@ describe('Component Tests', () => {
       const result = comp.sort();
 
       // THEN
-      expect(result).toEqual(['name,desc', 'id']);
+      expect(result).toEqual(['name,asc', 'id']);
     });
     <%_ } _%>
 <%_ } _%>

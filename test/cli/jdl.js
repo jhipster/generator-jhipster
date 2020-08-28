@@ -221,7 +221,6 @@ describe('jdl command test', () => {
                 // Fake a success response
                 const response = { pipe: fileStream => fileStream.close() };
                 sinon.stub(https, 'get').callsFake((url, cb) => {
-                    console.log(url);
                     if (url.includes(`v${packageJson.version}`)) {
                         cb({ ...response, statusCode: 400 });
                     } else {

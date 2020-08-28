@@ -23,7 +23,4 @@ The token received by ECR to authenticate is structured as follows. We'll only t
 ```
 # NPM
 npm i --save-dev aws-sdk@2.167.0 progress@2.0.0 ora@1.3.0
-
-# Yarn
-yarn add --dev aws-sdk@2.167.0 progress@2.0.0 ora@1.3.0
 ```

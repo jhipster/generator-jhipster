@@ -19,7 +19,7 @@ limitations under the License.
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { of } from 'rxjs';
 
-import { <%= angularXAppName %>TestModule } from '../../../test.module';
+import { TestModule } from '../../../test.module';
 import { MetricsComponent } from 'app/admin/metrics/metrics.component';
 import { MetricsService } from 'app/admin/metrics/metrics.service';
 
@@ -31,7 +31,7 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [<%= angularXAppName %>TestModule],
+                imports: [TestModule],
                 declarations: [MetricsComponent]
             })
                 .overrideTemplate(MetricsComponent, '')

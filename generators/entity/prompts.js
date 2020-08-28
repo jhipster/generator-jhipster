@@ -91,7 +91,7 @@ function askForUpdate() {
     const context = this.context;
 
     // ask only if running an existing entity without arg option --force or --regenerate
-    const isForce = context.options.force || context.regenerate;
+    const isForce = this.options.force || context.regenerate;
     context.updateEntity = 'regenerate'; // default if skipping questions by --force
     if (isForce || !context.useConfigurationFile) {
         return undefined;
@@ -1100,7 +1100,7 @@ function askForRelationship() {
 function logFieldsAndRelationships() {
     const context = this.context;
     if (this.entityConfig.fields.length > 0 || this.entityConfig.relationships.length > 0) {
-        this.log(chalk.red(chalk.white('\n================= ') + context.entityNameCapitalized + chalk.white(' =================')));
+        this.log(chalk.red(chalk.white('\n================= ') + context.name + chalk.white(' =================')));
     }
     if (this.entityConfig.fields.length > 0) {
         this.log(chalk.white('Fields'));

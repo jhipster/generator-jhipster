@@ -141,7 +141,7 @@ module.exports = class extends BaseGenerator {
             });
 
             // Remove potential previous value to avoid duplicates
-            otherModules = otherModules.filter(module => this.blueprints.findIndex(blueprint => blueprint.name === module.name) === -1);
+            otherModules = otherModules.filter(module => blueprints.findIndex(blueprint => blueprint.name === module.name) === -1);
             otherModules.push(...blueprints);
         }
 

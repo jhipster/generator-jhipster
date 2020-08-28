@@ -54,6 +54,7 @@ const serverFiles = {
             path: DOCKER_DIR,
             templates: [
                 'app.yml',
+                'jhipster-control-center.yml',
                 'sonar.yml',
                 'monitoring.yml',
                 'prometheus/prometheus.yml',
@@ -246,11 +247,17 @@ const serverFiles = {
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 {
+                    override: generator =>
+                        !generator.jhipsterConfig.incrementalChangelog || generator.configOptions.recreateInitialChangelog,
                     file: 'config/liquibase/changelog/initial_schema.xml',
                     renameTo: () => 'config/liquibase/changelog/00000000000000_initial_schema.xml',
                     options: { interpolate: INTERPOLATE_REGEX },
                 },
-                'config/liquibase/master.xml',
+                {
+                    override: generator =>
+                        !generator.jhipsterConfig.incrementalChangelog || generator.configOptions.recreateInitialChangelog,
+                    file: 'config/liquibase/master.xml',
+                },
             ],
         },
         {
@@ -1401,6 +1408,16 @@ const serverFiles = {
             condition: generator => generator.prodDatabaseType === 'mariadb' && !generator.reactive,
             path: SERVER_TEST_RES_DIR,
             templates: [{ file: 'testcontainers/mariadb/my.cnf', method: 'copy', noEjs: true }],
+        },
+        {
+            condition: generator => ['mysql', 'postgresql', 'mssql'].includes(generator.prodDatabaseType) && generator.reactive,
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/ReactiveSqlTestContainerExtension.java',
+                    renameTo: generator => `${generator.testDir}ReactiveSqlTestContainerExtension.java`,
+                },
+            ],
         },
         {
             // TODO : add these tests to reactive

@@ -24,26 +24,12 @@ const ejs = require('ejs');
 const _ = require('lodash');
 const fs = require('fs');
 const crypto = require('crypto');
-const randexp = require('randexp');
-const faker = require('faker');
 const os = require('os');
 
 const constants = require('./generator-constants');
 const FileUtils = require('../jdl/utils/file-utils');
 
 const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
-
-class RandexpWithFaker extends randexp {
-    constructor(regexp, m) {
-        super(regexp, m);
-        this.max = 5;
-    }
-
-    // In order to have consistent results with RandExp, the RNG is seeded.
-    randInt(min, max) {
-        return faker.random.number({ min, max });
-    }
-}
 
 module.exports = {
     rewrite,
@@ -67,7 +53,6 @@ module.exports = {
     loadYoRc,
     packageNameToNamespace,
     stringHashCode,
-    RandexpWithFaker,
     gitExec,
     isGitInstalled,
     vueReplaceTranslation,
@@ -76,6 +61,8 @@ module.exports = {
     vueAddPageServiceToMainImport,
     vueAddPageServiceToMain,
     vueAddPageProtractorConf,
+    languageSnakeCase,
+    languageToJavaLanguage,
 };
 
 /**
@@ -255,7 +242,8 @@ function renderContent(source, generator, context, options, cb) {
         if (!err) {
             cb(res);
         } else {
-            generator.error(`Copying template ${source} failed. [${err}]`);
+            generator.warning(`Copying template ${source} failed. [${err}]`);
+            throw err;
         }
     });
 }
@@ -735,7 +723,7 @@ function vueReplaceTranslation(generator, files) {
     }
 }
 
-function vueAddPageToRouterImport(generator, pageName, pageFolderName) {
+function vueAddPageToRouterImport(generator, pageName, pageFolderName, pageFilename = pageFolderName) {
     this.rewriteFile(
         {
             file: `${constants.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
@@ -744,7 +732,7 @@ function vueAddPageToRouterImport(generator, pageName, pageFolderName) {
                 generator.stripMargin(
                     // prettier-ignore
                     `|// prettier-ignore
-                |const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFolderName}.vue');`
+                |const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFilename}.vue');`
                 ),
             ],
         },
@@ -752,7 +740,7 @@ function vueAddPageToRouterImport(generator, pageName, pageFolderName) {
     );
 }
 
-function vueAddPageToRouter(generator, pageName, pageFolderName) {
+function vueAddPageToRouter(generator, pageName, pageFilename) {
     this.rewriteFile(
         {
             file: `${constants.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
@@ -761,7 +749,7 @@ function vueAddPageToRouter(generator, pageName, pageFolderName) {
                 generator.stripMargin(
                     // prettier-ignore
                     `|{
-                    |    path: '/pages/${pageFolderName}',
+                    |    path: '/pages/${pageFilename}',
                     |    name: '${pageName}',
                     |    component: ${pageName},
                     |    meta: { authorities: [Authority.USER] }
@@ -773,7 +761,7 @@ function vueAddPageToRouter(generator, pageName, pageFolderName) {
     );
 }
 
-function vueAddPageServiceToMainImport(generator, pageName, pageFolderName) {
+function vueAddPageServiceToMainImport(generator, pageName, pageFolderName, pageFilename = pageFolderName) {
     this.rewriteFile(
         {
             file: `${constants.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
@@ -781,7 +769,7 @@ function vueAddPageServiceToMainImport(generator, pageName, pageFolderName) {
             splicable: [
                 generator.stripMargin(
                     // prettier-ignore
-                    `|import ${pageName}Service from '@/pages/${pageFolderName}/${pageFolderName}.service';`
+                    `|import ${pageName}Service from '@/pages/${pageFolderName}/${pageFilename}.service';`
                 ),
             ],
         },
@@ -805,7 +793,7 @@ function vueAddPageServiceToMain(generator, pageName, pageInstance) {
     );
 }
 
-function vueAddPageProtractorConf(generator, pageFolderName) {
+function vueAddPageProtractorConf(generator) {
     this.rewriteFile(
         {
             file: `${constants.CLIENT_TEST_SRC_DIR}/protractor.conf.js`,
@@ -814,4 +802,16 @@ function vueAddPageProtractorConf(generator, pageFolderName) {
         },
         generator
     );
+}
+
+function languageSnakeCase(language) {
+    // Template the message server side properties
+    return language.replace(/-/g, '_');
+}
+
+function languageToJavaLanguage(language) {
+    // Template the message server side properties
+    const langProp = languageSnakeCase(language);
+    // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
+    return langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
 }

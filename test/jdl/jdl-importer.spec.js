@@ -504,6 +504,7 @@ describe('JDLImporter', () => {
                     ],
                     exportedApplications: [],
                     exportedDeployments: [],
+                    exportedApplicationsWithEntities: {},
                 });
             });
             it('should create the files', () => {
@@ -567,6 +568,18 @@ relationship OneToOne {
                 expect(fse.statSync('.jhipster').isDirectory()).to.be.true;
                 expect(fse.statSync(path.join('.jhipster', 'BankAccount.json')).isFile()).to.be.true;
             });
+            it('should return the corresponding exportedApplicationsWithEntities', () => {
+                returned.exportedApplications.forEach(application => {
+                    const applicationConfig = application['generator-jhipster'];
+                    const entityNames = application.entities || [];
+                    const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
+                    expect(applicationConfig).to.be.eql(applicationWithEntities.config);
+                    expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
+                    expect(returned.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(
+                        applicationWithEntities.entities
+                    );
+                });
+            });
         });
         context('when parsing one JDL application and entities passed as string', () => {
             let returned;
@@ -607,6 +620,18 @@ relationship OneToOne {
                 expect(fse.statSync('.jhipster').isDirectory()).to.be.true;
                 expect(fse.statSync(path.join('.jhipster', 'BankAccount.json')).isFile()).to.be.true;
             });
+            it('should return the corresponding exportedApplicationsWithEntities', () => {
+                returned.exportedApplications.forEach(application => {
+                    const applicationConfig = application['generator-jhipster'];
+                    const entityNames = application.entities || [];
+                    const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
+                    expect(applicationConfig).to.be.eql(applicationWithEntities.config);
+                    expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
+                    expect(returned.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(
+                        applicationWithEntities.entities
+                    );
+                });
+            });
         });
         context('when parsing one JDL application and entities with entity and dto suffixes', () => {
             let returned;
@@ -632,6 +657,18 @@ relationship OneToOne {
                 expect(fse.statSync('.yo-rc.json').isFile()).to.be.true;
                 expect(content['generator-jhipster'].entitySuffix).to.equal('Entity');
                 expect(content['generator-jhipster'].dtoSuffix).to.equal('DTO');
+            });
+            it('should return the corresponding exportedApplicationsWithEntities', () => {
+                returned.exportedApplications.forEach(application => {
+                    const applicationConfig = application['generator-jhipster'];
+                    const entityNames = application.entities || [];
+                    const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
+                    expect(applicationConfig).to.be.eql(applicationWithEntities.config);
+                    expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
+                    expect(returned.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(
+                        applicationWithEntities.entities
+                    );
+                });
             });
         });
         context('when parsing JDL applications and exporting them', () => {
@@ -1032,6 +1069,18 @@ relationship OneToOne {
                         default:
                         // nothing to do
                     }
+                });
+            });
+            it('should return the corresponding exportedApplicationsWithEntities', () => {
+                importState.exportedApplications.forEach(application => {
+                    const applicationConfig = application['generator-jhipster'];
+                    const entityNames = application.entities || [];
+                    const applicationWithEntities = importState.exportedApplicationsWithEntities[applicationConfig.baseName];
+                    expect(applicationConfig).to.be.eql(applicationWithEntities.config);
+                    expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
+                    expect(importState.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(
+                        applicationWithEntities.entities
+                    );
                 });
             });
         });
@@ -1780,7 +1829,7 @@ paginate * with infinite-scroll
                 expect(entityF).to.be.false;
             });
         });
-        context('when passing skipYoRcGeneration and skipEntityFilesGeneration options', () => {
+        context('when passing the skipFileGeneration option', () => {
             before(() => {
                 expect(fse.existsSync('.yo-rc.json')).to.be.false;
                 expect(fse.existsSync('.jhipster')).to.be.false;
@@ -1802,8 +1851,7 @@ paginate * with infinite-scroll
                     {
                         creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
                         generatorVersion: '7.0.0',
-                        skipYoRcGeneration: true,
-                        skipEntityFilesGeneration: true,
+                        skipFileGeneration: true,
                     }
                 );
                 importer.import();

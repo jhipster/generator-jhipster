@@ -1,6 +1,5 @@
 const path = require('path');
 const os = require('os');
-const shelljs = require('shelljs');
 const assert = require('yeoman-assert');
 const fse = require('fs-extra');
 const fs = require('fs');
@@ -61,14 +60,24 @@ function _prepareTempEnv() {
     const cwd = process.cwd();
     const tempDir = path.join(os.tmpdir(), 'jhitemp');
     process.chdir(os.tmpdir());
-    shelljs.rm('-rf', tempDir);
-    shelljs.mkdir('-p', tempDir);
+    if (fs.existsSync(tempDir)) {
+        fs.rmdirSync(tempDir, { recursive: true });
+    }
+    fs.mkdirSync(tempDir, { recursive: true });
     process.chdir(tempDir);
     return { cwd, tempDir };
 }
 
+/**
+ * Creates a temporary dir.
+ * @return {function} callback to cleanup the test dir.
+ */
 function prepareTempDir() {
-    return _prepareTempEnv().cwd;
+    const testEnv = _prepareTempEnv();
+    return () => {
+        revertTempDir(testEnv.cwd);
+        fs.rmdirSync(testEnv.tempDir, { recursive: true });
+    };
 }
 
 function testInTempDir(cb, keepInTestDir) {

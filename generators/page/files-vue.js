@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
 const constants = require('../generator-constants');
 const utils = require('../utils');
 
@@ -31,16 +30,19 @@ const vueFiles = {
             path: VUE_DIR,
             templates: [
                 {
+                    override: generator => generator.options.recreate,
                     file: 'pages/page.vue',
-                    renameTo: generator => `pages/${generator.pageFolderName}/${generator.pageFolderName}.vue`,
+                    renameTo: generator => `pages/${generator.pageFolderName}/${generator.pageFileName}.vue`,
                 },
                 {
+                    override: generator => generator.options.recreate,
                     file: 'pages/page.service.ts',
-                    renameTo: generator => `pages/${generator.pageFolderName}/${generator.pageFolderName}.service.ts`,
+                    renameTo: generator => `pages/${generator.pageFolderName}/${generator.pageFileName}.service.ts`,
                 },
                 {
+                    override: generator => generator.options.recreate,
                     file: 'pages/page.component.ts',
-                    renameTo: generator => `pages/${generator.pageFolderName}/${generator.pageFolderName}.component.ts`,
+                    renameTo: generator => `pages/${generator.pageFolderName}/${generator.pageFileName}.component.ts`,
                 },
             ],
         },
@@ -50,12 +52,14 @@ const vueFiles = {
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
+                    override: generator => generator.options.recreate,
                     file: 'spec/app/pages/page.component.spec.ts',
-                    renameTo: generator => `spec/app/pages/${generator.pageFolderName}/${generator.pageFolderName}.component.spec.ts`,
+                    renameTo: generator => `spec/app/pages/${generator.pageFolderName}/${generator.pageFileName}.component.spec.ts`,
                 },
                 {
+                    override: generator => generator.options.recreate,
                     file: 'spec/app/pages/page.service.spec.ts',
-                    renameTo: generator => `spec/app/pages/${generator.pageFolderName}/${generator.pageFolderName}.service.spec.ts`,
+                    renameTo: generator => `spec/app/pages/${generator.pageFolderName}/${generator.pageFileName}.service.spec.ts`,
                 },
             ],
         },
@@ -64,12 +68,14 @@ const vueFiles = {
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
+                    override: generator => generator.options.recreate,
                     file: 'e2e/pages/page.page-object.ts',
-                    renameTo: generator => `e2e/pages/${generator.pageFolderName}/${generator.pageFolderName}.page-object.ts`,
+                    renameTo: generator => `e2e/pages/${generator.pageFolderName}/${generator.pageFileName}.page-object.ts`,
                 },
                 {
+                    override: generator => generator.options.recreate,
                     file: 'e2e/pages/page.spec.ts',
-                    renameTo: generator => `e2e/pages/${generator.pageFolderName}/${generator.pageFolderName}.spec.ts`,
+                    renameTo: generator => `e2e/pages/${generator.pageFolderName}/${generator.pageFileName}.spec.ts`,
                 },
             ],
         },
@@ -81,23 +87,18 @@ module.exports = {
 };
 
 function writeFiles() {
-    if (this.skipClient) return;
-
-    this.pageFolderName = this.pageName.toLowerCase();
-    this.pageInstance = _.lowerFirst(this.pageName);
-
     // write client side files for Vue
     this.writeFilesToDisk(vueFiles, this, false, `${CLIENT_VUE_TEMPLATES_DIR}`);
 
     // Add page paths to routing system
-    utils.vueAddPageToRouterImport(this, this.pageName, this.pageFolderName);
-    utils.vueAddPageToRouter(this, this.pageName, this.pageFolderName);
+    utils.vueAddPageToRouterImport(this, this.pageName, this.pageFolderName, this.pageFileName);
+    utils.vueAddPageToRouter(this, this.pageName, this.pageFileName);
     // Add page services to main
-    utils.vueAddPageServiceToMainImport(this, this.pageName, this.pageFolderName);
+    utils.vueAddPageServiceToMainImport(this, this.pageName, this.pageFileName);
     utils.vueAddPageServiceToMain(this, this.pageName, this.pageInstance);
 
     // Add tests to protractor conf
     if (this.protractorTests) {
-        utils.vueAddPageProtractorConf(this, this.pageFolderName);
+        utils.vueAddPageProtractorConf(this);
     }
 }

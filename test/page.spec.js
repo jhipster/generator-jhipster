@@ -8,7 +8,7 @@ const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const CLIENT_SPEC_SRC_DIR = `${CLIENT_TEST_SRC_DIR}spec/`;
 
 const pageName = 'MyTestPage';
-const pageFolderName = 'mytestpage';
+const pageFolderName = 'my-test-page';
 const pageInstance = 'myTestPage';
 
 const createClientProject = options =>

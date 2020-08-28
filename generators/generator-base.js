@@ -25,7 +25,6 @@ const shelljs = require('shelljs');
 const semver = require('semver');
 const exec = require('child_process').exec;
 const os = require('os');
-const pluralize = require('pluralize');
 const normalize = require('normalize-path');
 
 const packagejs = require('../package.json');
@@ -34,6 +33,7 @@ const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig } = require('./generator-defaults');
+const { formatDateForChangelog } = require('../utils/liquibase');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
@@ -60,6 +60,9 @@ module.exports = class extends PrivateBase {
             return;
         }
 
+        // JHipster runtime config that should not be stored to .yo-rc.json.
+        this.configOptions = this.options.configOptions || {};
+
         /* Force config to use 'generator-jhipster' namespace. */
         this.config = this._getStorage('generator-jhipster');
         /* JHipster config using proxy mode used as a plain object instead of using get/set. */
@@ -84,13 +87,8 @@ module.exports = class extends PrivateBase {
             this.config.set(this.options.localConfig);
         }
 
-        // JHipster runtime config that should not be stored to .yo-rc.json.
-        this.configOptions = this.options.configOptions || {};
-
-        // Preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
-        if (this.configOptions.jhipsterOldVersion === undefined) {
-            this.configOptions.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion || null;
-        }
+        // Load common runtime options.
+        this.parseCommonRuntimeOptions();
     }
 
     /**
@@ -129,7 +127,10 @@ module.exports = class extends PrivateBase {
      * @param {string} outputPath - Path to customize.
      */
     applyOutputPathCustomizer(outputPath) {
-        const outputPathCustomizer = this.options.outputPathCustomizer;
+        let outputPathCustomizer = this.options.outputPathCustomizer;
+        if (!outputPathCustomizer && this.configOptions) {
+            outputPathCustomizer = this.configOptions.outputPathCustomizer;
+        }
         if (!outputPathCustomizer) {
             return outputPath;
         }
@@ -220,13 +221,19 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework
      * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
      */
-    addEntityToMenu(routerName, enableTranslation, clientFramework, entityTranslationKeyMenu = _.camelCase(routerName)) {
+    addEntityToMenu(
+        routerName,
+        enableTranslation,
+        clientFramework,
+        entityTranslationKeyMenu = _.camelCase(routerName),
+        entityTranslationValue = _.startCase(routerName)
+    ) {
         if (this.clientFramework === ANGULAR) {
-            this.needleApi.clientAngular.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
+            this.needleApi.clientAngular.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
         } else if (this.clientFramework === REACT) {
-            this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
+            this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
         } else if (this.clientFramework === VUE) {
-            this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
+            this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
         }
     }
 
@@ -974,13 +981,13 @@ module.exports = class extends PrivateBase {
         // Miliseconds is ignored for changelogDate.
         now.setMilliseconds(0);
         // Run reproducible timestamp when regenerating the project with with-entities option.
-        if (reproducible && (this.options.withEntities || this.options.creationTimestamp)) {
+        if (reproducible && (this.options.withEntities || this.configOptions.creationTimestamp)) {
             if (this.configOptions.reproducibleLiquibaseTimestamp) {
                 // Counter already started.
                 now = this.configOptions.reproducibleLiquibaseTimestamp;
             } else {
                 // Create a new counter
-                const creationTimestamp = this.parseCreationTimestamp() || this.config.get('creationTimestamp');
+                const creationTimestamp = this.configOptions.creationTimestamp || this.config.get('creationTimestamp');
                 now = creationTimestamp ? new Date(creationTimestamp) : now;
                 now.setMilliseconds(0);
             }
@@ -1005,37 +1012,7 @@ module.exports = class extends PrivateBase {
             }
             this.config.set('lastLiquibaseTimestamp', now.getTime());
         }
-
-        const nowUTC = new Date(
-            now.getUTCFullYear(),
-            now.getUTCMonth(),
-            now.getUTCDate(),
-            now.getUTCHours(),
-            now.getUTCMinutes(),
-            now.getUTCSeconds()
-        );
-        const year = `${nowUTC.getFullYear()}`;
-        let month = `${nowUTC.getMonth() + 1}`;
-        if (month.length === 1) {
-            month = `0${month}`;
-        }
-        let day = `${nowUTC.getDate()}`;
-        if (day.length === 1) {
-            day = `0${day}`;
-        }
-        let hour = `${nowUTC.getHours()}`;
-        if (hour.length === 1) {
-            hour = `0${hour}`;
-        }
-        let minute = `${nowUTC.getMinutes()}`;
-        if (minute.length === 1) {
-            minute = `0${minute}`;
-        }
-        let second = `${nowUTC.getSeconds()}`;
-        if (second.length === 1) {
-            second = `0${second}`;
-        }
-        return `${year}${month}${day}${hour}${minute}${second}`;
+        return formatDateForChangelog(now);
     }
 
     /**
@@ -1299,6 +1276,45 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Compose with a jhipster generator using default jhipster config.
+     * @param {string} generator - jhipster generator.
+     * @param {object} [options] - options to pass
+     * @param {boolean} [once] - compose once with the generator
+     * @return {object} the composed generator
+     */
+    composeWithJHipster(generator, options = {}, once = false) {
+        if (options === true || once) {
+            this.configOptions.composedWith = this.configOptions.composedWith || [];
+            if (this.configOptions.composedWith.includes(generator)) {
+                return undefined;
+            }
+            this.configOptions.composedWith.push(generator);
+        }
+
+        const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
+        if (this.env.get(namespace)) {
+            generator = namespace;
+        } else {
+            // Keep test compatibily were jhipster lookup does not run.
+            try {
+                generator = require.resolve(`./${generator}`);
+            } catch (e) {
+                throw new Error(`Generator ${generator} was not found`);
+            }
+        }
+
+        return this.composeWith(
+            generator,
+            {
+                ...this.options,
+                configOptions: this.configOptions,
+                ...options,
+            },
+            true
+        );
+    }
+
+    /**
      * Compose an external generator with Yeoman.
      * @param {string} npmPackageName - package name
      * @param {string} subGen - sub generator name
@@ -1330,33 +1346,44 @@ module.exports = class extends PrivateBase {
      * get sorted list of entities according to changelog date (i.e. the order in which they were added)
      */
     getExistingEntities() {
-        const entities = [];
-
         function isBefore(e1, e2) {
             return e1.definition.changelogDate - e2.definition.changelogDate;
         }
 
-        // TODO 7.0 this.destinationPath(JHIPSTER_CONFIG_DIR);
-        if (!shelljs.test('-d', JHIPSTER_CONFIG_DIR)) {
-            return entities;
+        const configDir = this.destinationPath(JHIPSTER_CONFIG_DIR);
+        if (!fs.existsSync(configDir)) {
+            fs.mkdirSync(configDir);
         }
+        const dir = fs.opendirSync(configDir);
+        const entityNames = [];
+        let dirent = dir.readSync();
+        while (dirent !== null) {
+            const extname = path.extname(dirent.name);
+            if (dirent.isFile() && extname === '.json') {
+                entityNames.push(path.basename(dirent.name, extname));
+            }
+            dirent = dir.readSync();
+        }
+        dir.closeSync();
 
-        // TODO 7.0 this.destinationPath(JHIPSTER_CONFIG_DIR);
-        return shelljs
-            .ls(path.join(JHIPSTER_CONFIG_DIR, '*.json'))
-            .reduce((acc, file) => {
+        return [...new Set((this.jhipsterConfig.entities || []).concat(entityNames))]
+            .map(entityName => {
+                const file = this.destinationPath(configDir, `${entityName}.json`);
                 try {
                     const definition = this.fs.readJSON(file);
-                    // Execute a write operation to set the file as modified on mem-fs to trigger prettier.
-                    this.fs.append(file, '', { trimEnd: false, separator: '' });
-                    acc.push({ name: path.basename(file, '.json'), definition });
+                    if (this.options.namespace !== 'jhipster:info') {
+                        // Execute a write operation to set the file as modified on mem-fs to trigger prettier.
+                        this.fs.append(file, '', { trimEnd: false, separator: '' });
+                    }
+                    return { name: path.basename(file, '.json'), definition };
                 } catch (error) {
                     // not an entity file / malformed?
                     this.warning(`Unable to parse entity file ${file}`);
                     this.debug('Error:', error);
+                    return undefined;
                 }
-                return acc;
-            }, entities)
+            })
+            .filter(entity => entity)
             .sort(isBefore);
     }
 
@@ -1417,15 +1444,6 @@ module.exports = class extends PrivateBase {
      */
     getColumnName(value) {
         return this.hibernateSnakeCase(value);
-    }
-
-    /**
-     * get a table column names plural form in JHipster preferred style.
-     *
-     * @param {string} value - table column name string
-     */
-    getPluralColumnName(value) {
-        return this.getColumnName(pluralize(value));
     }
 
     /**
@@ -1725,11 +1743,7 @@ module.exports = class extends PrivateBase {
                                 chalk.gray(` (current: ${packagejs.version})`)
                             }\n`
                         );
-                        if (this.useNpm) {
-                            this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
-                        } else {
-                            this.log(chalk.yellow(`  Run ${chalk.magenta(`yarn global upgrade ${GENERATOR_JHIPSTER}`)} to update.\n`));
-                        }
+                        this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
                         this.log(chalk.yellow(' ______________________________________________________________________________\n'));
                     }
                     done();
@@ -1939,6 +1953,23 @@ module.exports = class extends PrivateBase {
                             // remove the .ejs suffix
                             templatePathTo = templatePath.replace('.ejs', '');
                         }
+
+                        if (_this.destinationPath) {
+                            templatePathTo = _this.destinationPath(templatePathTo);
+                        }
+
+                        if (templateObj.override !== undefined && _this.fs && _this.fs.exists(templatePathTo)) {
+                            if (typeof templateObj.override === 'function') {
+                                if (!templateObj.override(_this)) {
+                                    this.debug(`skipping file ${templatePathTo}`);
+                                    return;
+                                }
+                            } else if (!templateObj.override) {
+                                this.debug(`skipping file ${templatePathTo}`);
+                                return;
+                            }
+                        }
+
                         filesOut.push(templatePathTo);
                         if (!returnFiles) {
                             let templatePathFrom = prefix ? `${prefix}/${templatePath}` : templatePath;
@@ -2010,18 +2041,75 @@ module.exports = class extends PrivateBase {
         this.setupSharedOptions(generator, context, dest);
     }
 
-    loadOptions(options = this.options) {
+    /**
+     * Parse runtime options.
+     * @param {Object} [options] - object to load from.
+     * @param {Object} [dest] - object to write to.
+     */
+    parseCommonRuntimeOptions(options = this.options, dest = this.configOptions) {
+        if (options.outputPathCustomizer) {
+            if (dest.outputPathCustomizer === undefined) {
+                dest.outputPathCustomizer = [];
+            } else if (!Array.isArray(dest.outputPathCustomizer)) {
+                dest.outputPathCustomizer = [dest.outputPathCustomizer];
+            }
+            if (Array.isArray(options.outputPathCustomizer)) {
+                options.outputPathCustomizer.forEach(customizer => {
+                    if (!dest.outputPathCustomizer.includes(customizer)) {
+                        dest.outputPathCustomizer.push(customizer);
+                    }
+                });
+            } else if (!dest.outputPathCustomizer.includes(options.outputPathCustomizer)) {
+                dest.outputPathCustomizer.push(options.outputPathCustomizer);
+            }
+        }
+
+        if (dest.jhipsterOldVersion === undefined) {
+            // Preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
+            dest.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion || null;
+        }
+        if (options.withEntities !== undefined) {
+            dest.withEntities = options.withEntities;
+        }
+        if (options.skipChecks !== undefined) {
+            dest.skipChecks = options.skipChecks;
+        }
+        if (options.debug !== undefined) {
+            dest.isDebugEnabled = options.debug;
+        }
+        if (options.experimental !== undefined) {
+            dest.experimental = options.experimental;
+        }
+        if (options.skipClient !== undefined) {
+            dest.skipClient = options.skipClient;
+        }
+        if (dest.creationTimestamp === undefined && options.creationTimestamp) {
+            const creationTimestamp = this.parseCreationTimestamp(options.creationTimestamp);
+            if (creationTimestamp) {
+                dest.creationTimestamp = creationTimestamp;
+            }
+        }
+    }
+
+    /**
+     * Load common options to be stored.
+     * @param {Object} [options] - options object to be loaded from.
+     */
+    loadStoredAppOptions(options = this.options) {
         // Parse options only once.
         if (this.configOptions.optionsParsed) return;
         this.configOptions.optionsParsed = true;
 
-        // Load runtime only options
-        this.configOptions.withEntities = options.withEntities;
-        this.configOptions.skipChecks = options.skipChecks;
-        this.configOptions.isDebugEnabled = options.debug;
-        this.configOptions.experimental = options.experimental;
-
         // Load stored options
+        if (options.skipJhipsterDependencies !== undefined) {
+            this.jhipsterConfig.skipJhipsterDependencies = options.skipJhipsterDependencies;
+        }
+        if (options.incrementalChangelog !== undefined) {
+            this.jhipsterConfig.incrementalChangelog = options.incrementalChangelog;
+        }
+        if (options.recreateInitialChangelog) {
+            this.configOptions.recreateInitialChangelog = options.recreateInitialChangelog;
+        }
         if (options.skipClient) {
             this.skipClient = this.jhipsterConfig.skipClient = true;
         }
@@ -2084,28 +2172,39 @@ module.exports = class extends PrivateBase {
             this.jhipsterConfig.testFrameworks = options.testFrameworks;
         }
 
-        this.configOptions.useYarn = this.options.yarn || this.jhipsterConfig.clientPackageManager === 'yarn';
-        this.configOptions.useNpm = !this.configOptions.useYarn;
-        this.jhipsterConfig.clientPackageManager = this.configOptions.useYarn ? 'yarn' : 'npm';
-
         if (options.creationTimestamp) {
             const creationTimestamp = this.parseCreationTimestamp(options.creationTimestamp);
             if (creationTimestamp) {
-                this.jhipsterConfig.creationTimestamp = creationTimestamp;
+                this.configOptions.creationTimestamp = creationTimestamp;
+                if (this.jhipsterConfig.creationTimestamp === undefined) {
+                    this.jhipsterConfig.creationTimestamp = creationTimestamp;
+                }
             }
         }
     }
 
-    loadRuntimeOptions(configOptions = this.configOptions, dest = this) {
-        dest.withEntities = configOptions.withEntities;
-        dest.skipChecks = configOptions.skipChecks;
-        dest.isDebugEnabled = configOptions.isDebugEnabled;
-        dest.experimental = configOptions.experimental;
-        dest.useYarn = configOptions.useYarn;
-        dest.useNpm = configOptions.useNpm;
-        dest.logo = configOptions.logo;
+    /**
+     * Load runtime options into dest.
+     * all variables should be set to dest,
+     * all variables should be referred from config,
+     * @param {any} config - config to load config from
+     * @param {any} dest - destination context to use default is context
+     */
+    loadRuntimeOptions(config = this.configOptions, dest = this) {
+        dest.withEntities = config.withEntities;
+        dest.skipChecks = config.skipChecks;
+        dest.isDebugEnabled = config.isDebugEnabled;
+        dest.experimental = config.experimental;
+        dest.logo = config.logo;
     }
 
+    /**
+     * Load app configs into dest.
+     * all variables should be set to dest,
+     * all variables should be referred from config,
+     * @param {any} config - config to load config from
+     * @param {any} dest - destination context to use default is context
+     */
     loadAppConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
         dest.jhipsterVersion = config.jhipsterVersion;
         dest.baseName = config.baseName;
@@ -2123,11 +2222,13 @@ module.exports = class extends PrivateBase {
         dest.skipClient = config.skipClient;
         dest.prettierJava = config.prettierJava;
         dest.pages = config.pages;
+        dest.skipJhipsterDependencies = !!config.skipJhipsterDependencies;
 
         dest.testFrameworks = config.testFrameworks || [];
         dest.gatlingTests = dest.testFrameworks.includes('gatling');
         dest.cucumberTests = dest.testFrameworks.includes('cucumber');
         dest.protractorTests = dest.testFrameworks.includes('protractor');
+        dest.cypressTests = dest.testFrameworks.includes('cypress');
 
         dest.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
         dest.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);
@@ -2147,6 +2248,13 @@ module.exports = class extends PrivateBase {
         dest.clientThemeVariant = config.clientThemeVariant;
     }
 
+    /**
+     * Load translation configs into dest.
+     * all variables should be set to dest,
+     * all variables should be referred from config,
+     * @param {any} config - config to load config from
+     * @param {any} dest - destination context to use default is context
+     */
     loadTranslationConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
         dest.enableTranslation = config.enableTranslation;
         dest.nativeLanguage = config.nativeLanguage;
@@ -2238,28 +2346,6 @@ module.exports = class extends PrivateBase {
             this._needleApi = new NeedleApi(this);
         }
         return this._needleApi;
-    }
-
-    /**
-     * From an enum's values (with or without custom values), returns the enum's values without custom values.
-     * @param {String} enumValues - an enum's values.
-     * @return {Array<String>} the formatted enum's values.
-     */
-    getEnumValuesWithCustomValues(enumValues) {
-        if (!enumValues || enumValues === '') {
-            throw new Error('Enumeration values must be passed to get the formatted values.');
-        }
-        return enumValues.split(',').map(enumValue => {
-            if (!enumValue.includes('(')) {
-                return { name: enumValue.trim(), value: enumValue.trim() };
-            }
-            // eslint-disable-next-line no-unused-vars
-            const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
-            return {
-                name: matched[1],
-                value: matched[2],
-            };
-        });
     }
 
     /**

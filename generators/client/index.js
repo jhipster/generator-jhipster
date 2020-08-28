@@ -24,14 +24,13 @@ const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
 const writeVueFiles = require('./files-vue').writeFiles;
+const writeCommonFiles = require('./files-common').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { clientDefaultConfig } = require('../generator-defaults');
 
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
-const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
+const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 let useBlueprints;
 
@@ -55,7 +54,6 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('skip-commit-hook', {
             desc: 'Skip adding husky commit hooks',
             type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--experimental` flag which can be used to enable experimental features
@@ -63,14 +61,13 @@ module.exports = class extends BaseBlueprintGenerator {
             desc:
                 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
-            defaults: false,
         });
 
         if (this.options.help) {
             return;
         }
 
-        this.loadOptions();
+        this.loadStoredAppOptions();
         this.loadRuntimeOptions();
 
         this.existingProject = !!this.jhipsterConfig.clientFramework;
@@ -91,7 +88,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
             },
 
-            setupClientconsts() {
+            setupClientConstants() {
                 // Make constants available in templates
                 this.LOGIN_REGEX = constants.LOGIN_REGEX_JS;
                 this.ANGULAR = ANGULAR;
@@ -148,16 +145,24 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
+            loadSharedConfig() {
+                this.loadAppConfig();
+                this.loadClientConfig();
+                this.loadServerConfig();
+                this.loadTranslationConfig();
+            },
+            composeCommon() {
+                this.composeWithJHipster('common', true);
+            },
+            composeCypress() {
+                if (!this.cypressTests) return;
+                this.composeWithJHipster('cypress', true);
+            },
             composeLanguages() {
                 // We don't expose client/server to cli, composing with languages is used for test purposes.
-                if (this.configOptions.skipComposeLanguages || this.jhipsterConfig.enableTranslation === false) return;
+                if (this.jhipsterConfig.enableTranslation === false) return;
 
-                this.configOptions.skipComposeLanguages = true;
-                this.composeWith(require.resolve('../languages'), {
-                    ...this.options,
-                    configOptions: this.configOptions,
-                    debug: this.isDebugEnabled,
-                });
+                this.composeWithJHipster('languages', true);
             },
 
             validateSkipServer() {
@@ -187,12 +192,6 @@ module.exports = class extends BaseBlueprintGenerator {
                         )} flag`
                     );
                 }
-            },
-            loadSharedConfig() {
-                this.loadAppConfig();
-                this.loadClientConfig();
-                this.loadServerConfig();
-                this.loadTranslationConfig();
             },
             setupSharedOptions() {
                 this.enableI18nRTL = false;
@@ -256,6 +255,10 @@ module.exports = class extends BaseBlueprintGenerator {
                     // do nothing by default
                 }
             },
+            writeCommonFiles() {
+                if (this.skipClient) return;
+                return writeCommonFiles.call(this, useBlueprints);
+            },
         };
     }
 
@@ -273,8 +276,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 const installConfig = {
                     bower: false,
-                    npm: this.clientPackageManager !== 'yarn',
-                    yarn: this.clientPackageManager === 'yarn',
+                    npm: true,
                 };
 
                 if (this.options.skipInstall) {

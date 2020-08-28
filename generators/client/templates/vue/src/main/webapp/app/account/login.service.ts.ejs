@@ -1,7 +1,9 @@
 <%_ if (authenticationType !== 'oauth2') { _%>
 import Vue from 'vue';
 <%_ } _%>
+<%_ if (authenticationType !== 'jwt') { _%>
 import axios, { AxiosPromise } from 'axios';
+<%_ } _%>
 
 export default class LoginService {
 

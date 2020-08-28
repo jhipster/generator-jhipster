@@ -39,7 +39,6 @@ const files = {
                 'tsconfig.app.json',
                 'tslint.json',
                 '.eslintrc.json',
-                '.eslintignore',
                 'angular.json',
                 'webpack/utils.js',
                 'webpack/webpack.common.js',
@@ -122,7 +121,7 @@ const files = {
                 'blocks/config/prod.config.ts',
                 'blocks/config/uib-pagination.config.ts',
                 // interceptors
-                'blocks/interceptor/errorhandler.interceptor.ts',
+                'blocks/interceptor/error-handler.interceptor.ts',
                 'blocks/interceptor/notification.interceptor.ts',
                 'blocks/interceptor/auth-expired.interceptor.ts',
             ],
@@ -138,7 +137,7 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 // entities
-                'entities/entity.module.ts',
+                'entities/entity-routing.module.ts',
                 // home module
                 { file: 'home/home.module.ts', method: 'processJs' },
                 { file: 'home/home.route.ts', method: 'processJs' },
@@ -352,7 +351,7 @@ const files = {
                 'shared/alert/alert-error.component.ts',
                 'shared/alert/alert-error.model.ts',
                 // dates
-                'shared/util/datepicker-adapter.ts',
+                'core/date/datepicker-adapter.ts',
             ],
         },
         {
@@ -360,8 +359,8 @@ const files = {
             condition: generator => generator.authenticationType !== 'oauth2',
             templates: [
                 // login
-                'shared/login/login.component.ts',
-                { file: 'shared/login/login.component.html', method: 'processHtml' },
+                'core/login/login-modal.component.ts',
+                { file: 'core/login/login-modal.component.html', method: 'processHtml' },
             ],
         },
         {
@@ -378,7 +377,7 @@ const files = {
                 'core/auth/state-storage.service.ts',
                 'shared/auth/has-any-authority.directive.ts',
                 'core/auth/account.service.ts',
-                'core/auth/user-route-access-service.ts',
+                'core/auth/user-route-access.service.ts',
             ],
         },
         {
@@ -439,7 +438,7 @@ const files = {
             condition: generator => generator.authenticationType !== 'oauth2',
             path: TEST_SRC_DIR,
             templates: [
-                'spec/app/shared/login/login.component.spec.ts',
+                'spec/app/core/login/login-modal.component.spec.ts',
                 'spec/app/shared/alert/alert.component.spec.ts',
                 'spec/app/shared/alert/alert-error.component.spec.ts',
                 'spec/app/core/login/login-modal.service.spec.ts',
