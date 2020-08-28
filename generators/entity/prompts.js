@@ -1086,7 +1086,7 @@ function askForRelationship() {
             this.entityConfig.relationships = this.entityConfig.relationships.concat(relationship);
         }
         logFieldsAndRelationships.call(this);
-        if (props.relationshipAdd) {
+        if (props.relationshipAdd && !context.testMode) {
             return askForRelationship.call(this);
         }
         this.log('\n');

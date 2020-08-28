@@ -676,18 +676,309 @@ describe('JHipster generator for entity', () => {
                     .on('end', done);
             });
 
-            it('creates expected default files', () => {
+            it('creates expected new liquibase file', () => {
                 assert.file(expectedFiles.serverLiquibaseUpdate);
                 assert.fileContent(
-                    expectedFiles.serverLiquibaseUpdate,
-                    '    <changeSet id="20160120000100-1" author="jhipster">\n' +
+                    expectedFiles.serverLiquibaseUpdate[0],
+                    '<?xml version="1.0" encoding="utf-8"?>\n' +
+                        '<databaseChangeLog\n' +
+                        '    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"\n' +
+                        '    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"\n' +
+                        '    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n' +
+                        '    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd\n' +
+                        '                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">\n' +
+                        '\n' +
+                        '    <!--\n' +
+                        '        Updated the entity Foo.\n' +
+                        '    -->\n' +
+                        '    <changeSet id="20160120000100-1" author="jhipster">\n' +
                         '        <addColumn tableName="foo">\n' +
                         '            <column name="description" type="varchar(255)">\n' +
                         '                <constraints nullable="true" />\n' +
                         '            </column>\n' +
-                        '        </addColumn>\n\n\n' +
-                        '    </changeSet>'
+                        '            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->\n' +
+                        '        </addColumn>\n' +
+                        '    </changeSet>\n' +
+                        '\n' +
+                        '\n' +
+                        '    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->\n' +
+                        '\n' +
+                        '</databaseChangeLog>'
                 );
+            });
+        });
+
+        describe('update : remove field to entity', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/default-ng2-with-entities'), dir);
+                    })
+                    .withArguments(['foo'])
+                    .withOptions({ testMode: true, creationTimestamp: '2016-01-20', force: false })
+                    .withPrompts({
+                        updateEntity: 'remove',
+                        newChangelog: true,
+                        fieldsToRemove: ['comment'],
+                        confirmRemove: true,
+                        dto: 'no',
+                        service: 'no',
+                        pagination: 'pagination',
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected new liquibase file', () => {
+                assert.file(expectedFiles.serverLiquibaseUpdate);
+                assert.fileContent(
+                    expectedFiles.serverLiquibaseUpdate[0],
+                    '<?xml version="1.0" encoding="utf-8"?>\n' +
+                        '<databaseChangeLog\n' +
+                        '    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"\n' +
+                        '    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"\n' +
+                        '    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n' +
+                        '    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd\n' +
+                        '                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">\n' +
+                        '\n' +
+                        '    <!--\n' +
+                        '        Updated the entity Foo.\n' +
+                        '    -->\n' +
+                        '    <changeSet id="20160120000100-1" author="jhipster">\n' +
+                        '        <dropColumn tableName="foo">\n' +
+                        '            <column name="comment" />\n' +
+                        '            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->\n' +
+                        '        </dropColumn>\n' +
+                        '    </changeSet>\n' +
+                        '\n' +
+                        '\n' +
+                        '    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->\n' +
+                        '\n' +
+                        '</databaseChangeLog>'
+                );
+            });
+        });
+
+        describe('update : add one-to-many relationship to entity', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/default-ng2-with-entities'), dir);
+                    })
+                    .withArguments(['foo'])
+                    .withOptions({ testMode: true, creationTimestamp: '2016-01-20', force: false })
+                    .withPrompts({
+                        updateEntity: 'add',
+                        newChangelog: true,
+                        fieldAdd: false,
+                        relationshipAdd: true,
+                        otherEntityName: 'bar',
+                        relationshipName: 'bar',
+                        relationshipType: 'many-to-one',
+                        ownerSide: true,
+                        useJPADerivedIdentifier: false,
+                        otherEntityRelationshipName: 'foo',
+                        otherEntityField: 'id',
+                        relationshipValidate: false,
+                        dto: 'no',
+                        service: 'no',
+                        pagination: 'pagination',
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected new liquibase file', () => {
+                assert.file(expectedFiles.serverLiquibaseUpdate);
+                assert.fileContent(
+                    expectedFiles.serverLiquibaseUpdate[0],
+                    '<?xml version="1.0" encoding="utf-8"?>\n' +
+                        '<databaseChangeLog\n' +
+                        '    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"\n' +
+                        '    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"\n' +
+                        '    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n' +
+                        '    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd\n' +
+                        '                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">\n' +
+                        '\n' +
+                        '    <!--\n' +
+                        '        Updated the entity Foo.\n' +
+                        '    -->\n' +
+                        '    <changeSet id="20160120000100-1" author="jhipster">\n' +
+                        '        <addColumn tableName="foo">\n' +
+                        '            <column name="bar_id" type="bigint">\n' +
+                        '                <constraints nullable="true" />\n' +
+                        '            </column>\n' +
+                        '        </addColumn>\n' +
+                        '    </changeSet>\n' +
+                        '\n' +
+                        '    <changeSet id="20160120000100-1-relations" author="jhipster">\n' +
+                        '\n' +
+                        '    </changeSet>\n' +
+                        '\n' +
+                        '    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->\n' +
+                        '\n' +
+                        '</databaseChangeLog>'
+                );
+            });
+        });
+
+        describe('update : add many-to-many relationship to entity', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/default-ng2-with-entities'), dir);
+                    })
+                    .withArguments(['foo'])
+                    .withOptions({ testMode: true, creationTimestamp: '2016-01-20', force: false })
+                    .withPrompts({
+                        updateEntity: 'add',
+                        newChangelog: true,
+                        fieldAdd: false,
+                        relationshipAdd: true,
+                        otherEntityName: 'bar',
+                        relationshipName: 'bar',
+                        relationshipType: 'many-to-many',
+                        ownerSide: true,
+                        useJPADerivedIdentifier: false,
+                        otherEntityRelationshipName: 'foo',
+                        otherEntityField: 'id',
+                        relationshipValidate: false,
+                        dto: 'no',
+                        service: 'no',
+                        pagination: 'pagination',
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected new liquibase file', () => {
+                assert.file(expectedFiles.serverLiquibaseUpdate);
+                assert.fileContent(
+                    expectedFiles.serverLiquibaseUpdate[0],
+                    '<?xml version="1.0" encoding="utf-8"?>\n' +
+                        '<databaseChangeLog\n' +
+                        '    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"\n' +
+                        '    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"\n' +
+                        '    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n' +
+                        '    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd\n' +
+                        '                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">\n' +
+                        '\n' +
+                        '    <!--\n' +
+                        '        Updated the entity Foo.\n' +
+                        '    -->\n' +
+                        '    <changeSet id="20160120000100-1" author="jhipster">\n' +
+                        '    </changeSet>\n' +
+                        '\n' +
+                        '    <changeSet id="20160120000100-1-relations" author="jhipster">\n' +
+                        '        <createTable tableName="foo_bar">\n' +
+                        '            <column name="bar_id" type="bigint">\n' +
+                        '                <constraints nullable="false"/>\n' +
+                        '            </column>\n' +
+                        '            <column name="foo_id" type="bigint">\n' +
+                        '                <constraints nullable="false"/>\n' +
+                        '            </column>\n' +
+                        '        </createTable>\n' +
+                        '\n' +
+                        '        <addPrimaryKey columnNames="foo_id, bar_id" tableName="foo_bar"/>\n' +
+                        '        \n' +
+                        '    </changeSet>\n' +
+                        '\n' +
+                        '    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->\n' +
+                        '\n' +
+                        '</databaseChangeLog>\n'
+                );
+            });
+        });
+
+        describe('update : add one-to-one relationship to entity', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/default-ng2-with-entities'), dir);
+                    })
+                    .withArguments(['foo'])
+                    .withOptions({ testMode: true, creationTimestamp: '2016-01-20', force: false })
+                    .withPrompts({
+                        updateEntity: 'add',
+                        newChangelog: true,
+                        fieldAdd: false,
+                        relationshipAdd: true,
+                        otherEntityName: 'bar',
+                        relationshipName: 'bar',
+                        relationshipType: 'one-to-one',
+                        ownerSide: true,
+                        useJPADerivedIdentifier: false,
+                        otherEntityRelationshipName: 'foo',
+                        otherEntityField: 'id',
+                        relationshipValidate: false,
+                        dto: 'no',
+                        service: 'no',
+                        pagination: 'pagination',
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected new liquibase file', () => {
+                assert.file(expectedFiles.serverLiquibaseUpdate);
+                assert.fileContent(
+                    expectedFiles.serverLiquibaseUpdate[0],
+                    '<?xml version="1.0" encoding="utf-8"?>\n' +
+                        '<databaseChangeLog\n' +
+                        '    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"\n' +
+                        '    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"\n' +
+                        '    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n' +
+                        '    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd\n' +
+                        '                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">\n' +
+                        '\n' +
+                        '    <!--\n' +
+                        '        Updated the entity Foo.\n' +
+                        '    -->\n' +
+                        '    <changeSet id="20160120000100-1" author="jhipster">\n' +
+                        '        <addColumn tableName="foo">\n' +
+                        '            <column name="bar_id" type="bigint">\n' +
+                        '                <constraints unique="true" nullable="true" uniqueConstraintName="ux_foo_bar_id" />\n' +
+                        '            </column>\n' +
+                        '        </addColumn>\n' +
+                        '    </changeSet>\n' +
+                        '\n' +
+                        '    <changeSet id="20160120000100-1-relations" author="jhipster">\n' +
+                        '\n' +
+                        '    </changeSet>\n' +
+                        '\n' +
+                        '    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->\n' +
+                        '\n' +
+                        '</databaseChangeLog>'
+                );
+            });
+        });
+
+        describe('update : add field to entity but no new changelog requested', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/default-ng2-with-entities'), dir);
+                    })
+                    .withArguments(['foo'])
+                    .withOptions({ testMode: true, creationTimestamp: '2016-01-20', force: false })
+                    .withPrompts({
+                        updateEntity: 'add',
+                        newChangelog: false,
+                        fieldAdd: true,
+                        fieldName: 'description',
+                        fieldType: 'String',
+                        fieldValidate: false,
+                        relationshipAdd: false,
+                        dto: 'no',
+                        service: 'no',
+                        pagination: 'pagination',
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected new liquibase file', () => {
+                assert.noFile(expectedFiles.serverLiquibaseUpdate);
             });
         });
 

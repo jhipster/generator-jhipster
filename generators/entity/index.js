@@ -37,13 +37,10 @@ const stringify = data => JSON.stringify(data, null, 4);
 
 let useBlueprints;
 
-const getNewElements = (currentElements, previousElements) => {
-    console.log({ currentElements });
-    console.log({ previousElements });
-    return currentElements.filter(
+const getNewElements = (currentElements, previousElements) =>
+    currentElements.filter(
         currentElement => !previousElements.find(previousElement => JSON.stringify(previousElement) === JSON.stringify(currentElement))
     );
-};
 
 const getRemovedElements = (currentElements, previousElements) =>
     previousElements.filter(
@@ -555,9 +552,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
                 }
 
-                console.log(context.newFields);
-                console.log(context.fields);
-
                 context.newFields = context.newFields.map(field => this._formatField(field));
                 context.removedFields = context.removedFields.map(field => this._formatField(field));
 
@@ -886,8 +880,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
      * @param {any} field - field object to format
      */
     _formatField(field) {
-        console.log({ field });
-
         const context = this.context;
 
         const fieldOptions = field.options || {};
