@@ -186,3 +186,8 @@ jobs:
               with:
                   name: screenshots-${{ matrix.app-type }}
                   path: /home/runner/app/target/cypress/screenshots
+            - name: 'TESTS: Sonar analysis'
+              run: $JHI_SCRIPTS/25-sonar-analyze.sh
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
