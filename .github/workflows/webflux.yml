@@ -52,7 +52,8 @@ jobs:
             run:
                 working-directory: ${{ github.workspace }}/app
         if: >-
-            contains(github.event.head_commit.message, '[webflux]') &&
+            (contains(github.event.head_commit.message, '[webflux]') ||
+                contains(github.event.pull_request.title, '[webflux]')) &&
             !contains(github.event.head_commit.message, '[ci skip]') &&
             !contains(github.event.head_commit.message, '[skip ci]') &&
             !contains(github.event.pull_request.title, '[skip ci]') &&

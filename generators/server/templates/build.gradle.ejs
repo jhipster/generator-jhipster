@@ -409,7 +409,7 @@ dependencies {
     <%_ if (prodDatabaseType === 'mysql') { _%>
     testImplementation "org.testcontainers:mysql"
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'mariadb' && !reactive) { _%>
+    <%_ if (prodDatabaseType === 'mariadb') { _%>
     testImplementation "org.testcontainers:mariadb"
     <%_ } _%>
     <%_ if (prodDatabaseType === 'postgresql') { _%>
