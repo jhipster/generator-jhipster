@@ -297,7 +297,8 @@ public class UserResource {
         if (!onlyContainsAllowedProperties(pageable)) {
             return ResponseEntity.badRequest().build();
         }
-        <% } %>
+        <%_ } _%>
+
         final Page<<%= asDto('User') %>> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -307,7 +308,8 @@ public class UserResource {
         if (!onlyContainsAllowedProperties(pageable)) {
             return Mono.just(ResponseEntity.badRequest().build());
         }
-        <% } %>
+        <%_ } _%>
+
         return userService.countManagedUsers()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
             .map(page -> PaginationUtil.generatePaginationHttpHeaders(UriComponentsBuilder.fromHttpRequest(request), page))
