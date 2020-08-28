@@ -1410,7 +1410,7 @@ const serverFiles = {
             templates: [{ file: 'testcontainers/mariadb/my.cnf', method: 'copy', noEjs: true }],
         },
         {
-            condition: generator => ['mysql', 'postgresql', 'mssql'].includes(generator.prodDatabaseType) && generator.reactive,
+            condition: generator => generator.reactiveSqlTestContainers,
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {

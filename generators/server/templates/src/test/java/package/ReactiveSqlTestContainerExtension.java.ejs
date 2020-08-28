@@ -23,6 +23,8 @@ import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 <%_ if (prodDatabaseType === 'mysql') { _%>
 import org.testcontainers.containers.MySQLContainer;
+<%_ } else if (prodDatabaseType === 'mariadb') { _%>
+import org.testcontainers.containers.MariaDBContainer;
 <%_ } else if (prodDatabaseType === 'postgresql') { _%>
 import org.testcontainers.containers.PostgreSQLContainer;
 <%_ } else if (prodDatabaseType === 'mssql') { _%>
@@ -36,15 +38,19 @@ public class ReactiveSqlTestContainerExtension implements BeforeAllCallback {
     private static AtomicBoolean started = new AtomicBoolean(false);
     
     <%_ if (prodDatabaseType === 'mysql') { _%>
-    private static MySQLContainer container = (MySQLContainer) new MySQLContainer("<%= DOCKER_MYSQL %>")
+    private static MySQLContainer<?> container = new MySQLContainer<>("<%= DOCKER_MYSQL %>")
+            .withDatabaseName("<%= baseName %>")
+            .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
+    <%_ } else if (prodDatabaseType === 'mariadb') { _%>
+    private static MariaDBContainer<?> container = new MariaDBContainer<>("<%= DOCKER_MARIADB %>")
             .withDatabaseName("<%= baseName %>")
             .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
     <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-    private static PostgreSQLContainer container = (PostgreSQLContainer) new PostgreSQLContainer("<%= DOCKER_POSTGRESQL %>")
+    private static PostgreSQLContainer<?> container = new PostgreSQLContainer<>("<%= DOCKER_POSTGRESQL %>")
             .withDatabaseName("<%= baseName %>")
             .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
     <%_ } else if (prodDatabaseType === 'mssql') { _%>
-    private static MSSQLServerContainer container =  (MSSQLServerContainer) new MSSQLServerContainer<>("<%= DOCKER_MSSQL %>")
+    private static MSSQLServerContainer<?> container =  new MSSQLServerContainer<>("<%= DOCKER_MSSQL %>")
             .withDatabaseName("<%= baseName %>")
             .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
     <%_ } _%>

@@ -2275,6 +2275,7 @@ module.exports = class extends PrivateBase {
         dest.searchEngine = config.searchEngine;
         dest.cacheProvider = config.cacheProvider;
         dest.enableHibernateCache = config.enableHibernateCache;
+        dest.reactiveSqlTestContainers = config.reactive && ['mysql', 'postgresql', 'mssql', 'mariadb'].includes(config.prodDatabaseType);
 
         dest.enableSwaggerCodegen = config.enableSwaggerCodegen;
         dest.messageBroker = config.messageBroker;
