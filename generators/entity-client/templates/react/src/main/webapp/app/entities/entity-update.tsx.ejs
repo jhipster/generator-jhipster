@@ -295,7 +295,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               value={(!isNew && <%= entityInstance %>Entity.<%= fieldName %>) || '<%= enumValues[0].name %>'}
             >
             <%_
-              const enumPrefix = angularAppName + '.'+ fieldType;
+              const enumPrefix = frontendAppName + '.'+ fieldType;
               enumValues.forEach(enumValue => {
             _%>
               <option value="<%= enumValue.name %>">

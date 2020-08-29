@@ -319,7 +319,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                     <%_ } else if (fieldType === 'LocalDate') { _%>
                       {<%= entityInstance %>.<%= fieldName %> ? <TextFormat type="date" value={<%= entityInstance %>.<%= fieldName %>} format={APP_LOCAL_DATE_FORMAT} />: null}
                     <%_ } else if (fieldIsEnum && enableTranslation) { _%>
-                      <Translate contentKey={`<%= angularAppName %>.<%= fieldType %>.${<%= entityInstance %>.<%= fieldName %>}`} />
+                      <Translate contentKey={`<%= frontendAppName %>.<%= fieldType %>.${<%= entityInstance %>.<%= fieldName %>}`} />
                     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
                       <%_
                         // blobFields

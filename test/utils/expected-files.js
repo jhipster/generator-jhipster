@@ -1,13 +1,15 @@
 const constants = require('../../generators/generator-constants');
 
-const TEST_DIR = constants.TEST_DIR;
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
-const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
-const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
-const SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
-const DOCKER_DIR = constants.DOCKER_DIR;
+const {
+    TEST_DIR,
+    CLIENT_MAIN_SRC_DIR,
+    CLIENT_TEST_SRC_DIR,
+    SERVER_MAIN_SRC_DIR,
+    SERVER_MAIN_RES_DIR,
+    SERVER_TEST_SRC_DIR,
+    SERVER_TEST_RES_DIR,
+    DOCKER_DIR,
+} = constants;
 
 const expectedFiles = {
     entity: {
@@ -463,31 +465,9 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}content/css/loading.css`,
         `${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`,
         `${CLIENT_MAIN_SRC_DIR}content/scss/_bootstrap-variables.scss`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0.svg`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_1.svg`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_2.svg`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_3.svg`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0_head-192.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_1_head-192.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_2_head-192.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_3_head-192.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0_head-256.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_1_head-256.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_2_head-256.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_3_head-256.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0_head-384.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_1_head-384.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_2_head-384.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_3_head-384.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0_head-512.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_1_head-512.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_2_head-512.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_3_head-512.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/logo-jhipster.png`,
         `${CLIENT_MAIN_SRC_DIR}WEB-INF/web.xml`,
         `${CLIENT_MAIN_SRC_DIR}favicon.ico`,
         `${CLIENT_MAIN_SRC_DIR}index.html`,
-        `${CLIENT_MAIN_SRC_DIR}manifest.webapp`,
         `${CLIENT_MAIN_SRC_DIR}robots.txt`,
         `${CLIENT_MAIN_SRC_DIR}swagger-ui/dist/images/throbber.gif`,
         `${CLIENT_MAIN_SRC_DIR}swagger-ui/index.html`,
@@ -531,7 +511,35 @@ const expectedFiles = {
         'webpack/webpack.prod.js',
     ],
 
-    clientCommon: ['.eslintignore'],
+    clientCommon: [
+        '.eslintignore',
+        `${CLIENT_MAIN_SRC_DIR}manifest.webapp`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/hipster192.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/hipster256.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/hipster384.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/hipster512.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0.svg`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0_head-192.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0_head-256.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0_head-384.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0_head-512.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_1.svg`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_1_head-192.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_1_head-256.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_1_head-384.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_1_head-512.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_2.svg`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_2_head-192.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_2_head-256.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_2_head-384.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_2_head-512.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_3.svg`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_3_head-192.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_3_head-256.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_3_head-384.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_3_head-512.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/logo-jhipster.png`,
+    ],
 
     i18n: [
         `${SERVER_MAIN_RES_DIR}i18n/messages_en.properties`,

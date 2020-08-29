@@ -19,9 +19,7 @@
 const constants = require('../generator-constants');
 const utils = require('../utils');
 
-const MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-const TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
-const VUE_DIR = constants.ANGULAR_DIR;
+const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, VUE_DIR } = constants;
 
 module.exports = {
     writeFiles,
@@ -52,68 +50,33 @@ const vueFiles = {
             templates: ['tsconfig.e2e.json'],
         },
     ],
-    image: [
-        {
-            path: MAIN_SRC_DIR,
-            templates: [
-                { file: 'content/images/jhipster_family_member_0.svg', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_1.svg', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_2.svg', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_3.svg', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_0_head-192.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_1_head-192.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_2_head-192.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_3_head-192.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_0_head-256.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_1_head-256.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_2_head-256.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_3_head-256.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_0_head-384.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_1_head-384.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_2_head-384.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_3_head-384.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_0_head-512.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_1_head-512.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_2_head-512.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_3_head-512.png', method: 'copy' },
-                { file: 'content/images/logo-jhipster.png', method: 'copy' },
-            ],
-        },
-    ],
     css: [
         {
-            path: MAIN_SRC_DIR,
+            path: CLIENT_MAIN_SRC_DIR,
             templates: ['content/css/loading.css'],
         },
     ],
     sass: [
         {
-            path: MAIN_SRC_DIR,
+            path: CLIENT_MAIN_SRC_DIR,
             templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss'],
         },
         {
             condition: generator => generator.enableI18nRTL,
-            path: MAIN_SRC_DIR,
+            path: CLIENT_MAIN_SRC_DIR,
             templates: ['content/scss/rtl.scss'],
         },
     ],
     swagger: [
         {
-            path: MAIN_SRC_DIR,
+            path: CLIENT_MAIN_SRC_DIR,
             templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }],
         },
     ],
     commonWeb: [
         {
-            path: MAIN_SRC_DIR,
-            templates: [
-                'WEB-INF/web.xml',
-                { file: 'favicon.ico', method: 'copy' },
-                'robots.txt',
-                '404.html',
-                'index.html',
-                'manifest.webapp',
-            ],
+            path: CLIENT_MAIN_SRC_DIR,
+            templates: ['WEB-INF/web.xml', { file: 'favicon.ico', method: 'copy' }, 'robots.txt', '404.html', 'index.html'],
         },
     ],
     vueApp: [
@@ -269,13 +232,13 @@ const vueFiles = {
     ],
     clientTestConfig: [
         {
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: ['jest.conf.js'],
         },
     ],
     clientTestFw: [
         {
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: [
                 'jest.conf.js',
                 'spec/app/account/account.service.spec.ts',
@@ -297,27 +260,27 @@ const vueFiles = {
         },
         {
             condition: generator => generator.enableTranslation,
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: ['spec/app/shared/config/formatter.spec.ts'],
         },
         {
             condition: generator => generator.authenticationType === 'oauth2',
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: ['spec/app/account/login.service.spec.ts'],
         },
         {
             condition: generator => generator.authenticationType !== 'oauth2',
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: ['spec/app/account/login-form/login-form.component.spec.ts'],
         },
         {
             condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: ['spec/app/account/sessions/sessions.component.spec.ts', 'spec/app/account/login.service.spec.ts'],
         },
         {
             condition: generator => !generator.skipUserManagement,
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: [
                 'spec/app/account/change-password/change-password.component.spec.ts',
                 'spec/app/account/register/register.component.spec.ts',
@@ -329,12 +292,12 @@ const vueFiles = {
         },
         {
             condition: generator => generator.websocket === 'spring-websocket',
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: ['spec/app/admin/tracker/tracker.component.spec.ts', 'spec/app/admin/tracker/tracker.service.spec.ts'],
         },
         {
             condition: generator => !generator.skipUserManagement,
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: [
                 'spec/app/admin/user-management/user-management.component.spec.ts',
                 'spec/app/admin/user-management/user-management-view.component.spec.ts',
@@ -343,12 +306,12 @@ const vueFiles = {
         },
         {
             condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: ['spec/app/admin/gateway/gateway.component.spec.ts'],
         },
         {
             condition: generator => generator.protractorTests,
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: [
                 'e2e/modules/account/account.spec.ts',
                 'e2e/modules/administration/administration.spec.ts',
@@ -362,7 +325,7 @@ const vueFiles = {
         },
         {
             condition: generator => generator.protractorTests && !generator.skipUserManagement,
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: ['e2e/page-objects/password-page.ts', 'e2e/page-objects/settings-page.ts', 'e2e/page-objects/register-page.ts'],
         },
     ],
