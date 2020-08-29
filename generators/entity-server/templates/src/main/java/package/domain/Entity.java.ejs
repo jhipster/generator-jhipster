@@ -52,7 +52,7 @@ import io.swagger.annotations.ApiModelProperty;
 <%_ } if (enableHibernateCache) { _%>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-<%_ } if (hasTextBlob === true || (fieldsContainUUID === true && ['mysql', 'mariadb'].includes(prodDatabaseType))) { _%>
+<%_ } if (!reactive && (hasTextBlob === true || (fieldsContainUUID === true && ['mysql', 'mariadb'].includes(prodDatabaseType)))) { _%>
 import org.hibernate.annotations.Type;
 <%_ } if (databaseType === 'mongodb') {
         if (!embedded) { _%>
