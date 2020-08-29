@@ -51,7 +51,6 @@ public class ReactiveSqlTestContainerExtension implements BeforeAllCallback {
             .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
     <%_ } else if (prodDatabaseType === 'mssql') { _%>
     private static MSSQLServerContainer<?> container =  new MSSQLServerContainer<>("<%= DOCKER_MSSQL %>")
-            .withDatabaseName("<%= baseName %>")
             .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
     <%_ } _%>
     
