@@ -19,7 +19,7 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="<%= entityInstance %>">
-            <h2><span jhiTranslate="<%= i18nKeyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{ <%= entityInstance %>.id }}</h2>
+            <h2 data-cy="<%= entityInstance %>DetailsHeading"><span jhiTranslate="<%= i18nKeyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{ <%= entityInstance %>.id }}</h2>
 
             <hr>
 
@@ -110,7 +110,8 @@
 
             <button type="submit"
                     (click)="previousState()"
-                    class="btn btn-info">
+                    class="btn btn-info"
+                    data-cy="entityDetailsBackButton">
                 <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
             </button>
             <%_ if (!readOnly) { _%>

@@ -14,7 +14,7 @@
         "skipFakeData": false,
         "entitySuffix": "",
         "dtoSuffix": "DTO",
-        "testFrameworks": ["gatling", "cucumber", "protractor"],
+        "testFrameworks": ["gatling", "cucumber", "cypress"],
         "blueprints": [],
         "creationTimestamp": 1594541091665,
         "serviceDiscoveryType": false,

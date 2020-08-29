@@ -367,7 +367,6 @@ const expectedFiles = {
     client: [
         'angular.json',
         '.eslintrc.json',
-        '.eslintignore',
         'package.json',
         'postcss.config.js',
         'proxy.conf.json',
@@ -532,6 +531,8 @@ const expectedFiles = {
         'webpack/webpack.dev.js',
         'webpack/webpack.prod.js',
     ],
+
+    clientCommon: ['.eslintignore'],
 
     i18n: [
         `${SERVER_MAIN_RES_DIR}i18n/messages_en.properties`,
@@ -786,6 +787,28 @@ const expectedFiles = {
     ],
 
     consul: [`${DOCKER_DIR}central-server-config/application.yml`, `${DOCKER_DIR}consul.yml`, `${DOCKER_DIR}config/git2consul.json`],
+
+    cypress: [
+        'cypress.json',
+        `${CLIENT_TEST_SRC_DIR}cypress/fixtures/users/user.json`,
+        `${CLIENT_TEST_SRC_DIR}cypress/plugins/index.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/support/commands.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/support/navbar.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/support/index.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/tsconfig.json`,
+    ],
+
+    cypressNoOAuth2: [`${CLIENT_TEST_SRC_DIR}cypress/integration/account/login-page.spec.ts`],
+
+    cypressWithDatabaseAndNoOAuth2: [
+        `${CLIENT_TEST_SRC_DIR}cypress/integration/account/register-page.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/integration/account/settings-page.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/integration/account/password-page.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}cypress/integration/account/reset-password-page.spec.ts`,
+    ],
+
+    cypressWithOauth2: [`${CLIENT_TEST_SRC_DIR}cypress/support/keycloak-oauth2.ts`, `${CLIENT_TEST_SRC_DIR}cypress/support/utils.ts`],
 };
 
 module.exports = expectedFiles;

@@ -111,7 +111,12 @@ limitations under the License.
     "file-loader": "6.0.0",
     "fork-ts-checker-webpack-plugin": "4.1.3",
     "friendly-errors-webpack-plugin": "1.7.0",
+    <%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= packagejs.version %>",
+        <%_ otherModules.forEach(module => { _%>
+    "<%= module.name %>": "<%= module.version %>",
+        <%_ });
+    } _%>
     "html-webpack-plugin": "4.3.0",
     <%_ if (!skipCommitHook) { _%>
     "husky": "<%= HUSKY_VERSION %>",
@@ -153,9 +158,6 @@ limitations under the License.
     "stripcomment-loader": "0.1.0",
     "style-loader": "1.2.0",
     "swagger-ui-dist": "3.25.1",
-    <%_ otherModules.forEach(module => { _%>
-    "<%= module.name %>": "<%= module.version %>",
-    <%_ }); _%>
     "terser-webpack-plugin": "2.3.6",
     "thread-loader": "2.1.3",
     "to-string-loader": "1.1.6",
@@ -164,8 +166,11 @@ limitations under the License.
     <%_ if (protractorTests) { _%>
     "ts-node": "8.9.1",
     <%_ } _%>
+    <%_ if (cypressTests) { _%>
+    "cypress": "5.0.0",
+    <%_ } _%>
     "typescript": "3.8.3",
-    <%_ if (protractorTests) { _%>
+    <%_ if (protractorTests || cypressTests) { _%>
     "webdriver-manager": "12.1.7",
     <%_ } _%>
     "webpack": "4.43.0",
@@ -184,8 +189,19 @@ limitations under the License.
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= DIST_DIR %>",
+    <%_ if (protractorTests && !cypressTests) { _%>
+    "e2e": "<%= clientPackageManager %> run e2e:protractor",
+    <%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
+    "e2e": "<%= clientPackageManager %> run e2e:cypress",
+    <%_ } _%>
     <%_ if (protractorTests) { _%>
-    "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
+    "e2e:protractor": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
+    <%_ } _%>
+    <%_ if (cypressTests) { _%>
+    "e2e:cypress": "cypress run --browser chrome --headless",
+    "cypress": "cypress open",
+    <%_ } _%>
+    <%_ if (protractorTests || cypressTests) { _%>
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
     <%_ } _%>

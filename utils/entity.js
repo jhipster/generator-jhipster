@@ -203,6 +203,21 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
             entityWithConfig.validation = true;
         }
     });
+
+    entityWithConfig.generateFakeData = type => {
+        const fieldEntries = entityWithConfig.fields.map(field => {
+            const fieldData = field.generateFakeData(type);
+            if (!field.nullable && fieldData === null) return undefined;
+            return [field.fieldName, fieldData];
+        });
+        const withError = fieldEntries.find(entry => !entry);
+        if (withError) {
+            generator.warning(`Error generating a full sample for entity ${entityName}`);
+            return undefined;
+        }
+        return Object.fromEntries(fieldEntries);
+    };
+
     return entityWithConfig;
 }
 

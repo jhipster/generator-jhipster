@@ -507,7 +507,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
             <%_ } _%>
             .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
         <%_ } else { _%>
-        <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=createdDate,DESC")
+        <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=id,DESC")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -524,6 +524,29 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         assertThat(foundUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
         <%_ } _%>
     }
+
+    <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
+    @Test
+    <%_ if (!reactive) { _%>
+    @Transactional
+    <%_ } _%>
+    void getAllUsersSortedByParameters() throws Exception {
+        // Initialize the database
+        userRepository.<% if (reactive) { %>save<% } else { %>saveAndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+
+        <%_ if (!reactive) { _%>
+            restUserMockMvc.perform(get("/api/users?sort=resetKey,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+            restUserMockMvc.perform(get("/api/users?sort=password,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+            restUserMockMvc.perform(get("/api/users?sort=resetKey,id,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+            restUserMockMvc.perform(get("/api/users?sort=id,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        <%_ } else { _%>
+            webTestClient.get().uri("/api/users?sort=resetKey,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
+            webTestClient.get().uri("/api/users?sort=password,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
+            webTestClient.get().uri("/api/users?sort=resetKey,id,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
+            webTestClient.get().uri("/api/users?sort=id,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk();
+        <%_ } _%>
+    }
+    <%_ } _%>
 
     @Test
     <%_ if (databaseType === 'sql' && !reactive) { _%>

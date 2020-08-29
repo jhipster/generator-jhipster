@@ -31,6 +31,8 @@ import <%= packageName %>.repository.search.UserSearchRepository;
 import <%= packageName %>.security.AuthoritiesConstants;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%= packageName %>.service.MailService;
+import org.springframework.data.domain.Sort;
+import java.util.Collections;
 <%_ } _%>
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
@@ -91,6 +93,7 @@ import java.util.*;
 <%_ if (reactive) { _%>
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch' && !reactive) { _%>
 import java.util.stream.Collectors;
@@ -126,6 +129,9 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 @RestController
 @RequestMapping("/api")
 public class UserResource {
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections.unmodifiableList(Arrays.asList("id", "login", "firstName", "lastName", "email", "activated", "langKey"));
+    <%_ } _%>
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
@@ -287,17 +293,35 @@ public class UserResource {
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
         <%_ if (!reactive) { _%>
     public ResponseEntity<List<<%= asDto('User') %>>> getAllUsers(Pageable pageable) {
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        if (!onlyContainsAllowedProperties(pageable)) {
+            return ResponseEntity.badRequest().build();
+        }
+        <%_ } _%>
+
         final Page<<%= asDto('User') %>> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         <%_ } else { _%>
     public Mono<ResponseEntity<Flux<<%= asDto('User') %>>>> getAllUsers(ServerHttpRequest request, Pageable pageable) {
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        if (!onlyContainsAllowedProperties(pageable)) {
+            return Mono.just(ResponseEntity.badRequest().build());
+        }
+        <%_ } _%>
+
         return userService.countManagedUsers()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
             .map(page -> PaginationUtil.generatePaginationHttpHeaders(UriComponentsBuilder.fromHttpRequest(request), page))
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllManagedUsers(pageable)));
         <%_ } _%>
     }
+
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    private boolean onlyContainsAllowedProperties(Pageable pageable) {
+        return pageable.getSort().stream().map(Sort.Order::getProperty).allMatch(ALLOWED_ORDERED_PROPERTIES::contains);
+    }
+    <%_ } _%>
 
     /**
      * Gets a list of all roles.

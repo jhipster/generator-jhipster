@@ -2100,6 +2100,9 @@ module.exports = class extends PrivateBase {
         this.configOptions.optionsParsed = true;
 
         // Load stored options
+        if (options.skipJhipsterDependencies !== undefined) {
+            this.jhipsterConfig.skipJhipsterDependencies = options.skipJhipsterDependencies;
+        }
         if (options.incrementalChangelog !== undefined) {
             this.jhipsterConfig.incrementalChangelog = options.incrementalChangelog;
         }
@@ -2218,11 +2221,13 @@ module.exports = class extends PrivateBase {
         dest.skipClient = config.skipClient;
         dest.prettierJava = config.prettierJava;
         dest.pages = config.pages;
+        dest.skipJhipsterDependencies = !!config.skipJhipsterDependencies;
 
         dest.testFrameworks = config.testFrameworks || [];
         dest.gatlingTests = dest.testFrameworks.includes('gatling');
         dest.cucumberTests = dest.testFrameworks.includes('cucumber');
         dest.protractorTests = dest.testFrameworks.includes('protractor');
+        dest.cypressTests = dest.testFrameworks.includes('cypress');
 
         dest.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
         dest.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);

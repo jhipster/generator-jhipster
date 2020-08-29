@@ -18,7 +18,7 @@
         "enableTranslation": true,
         "nativeLanguage": "en",
         "languages": ["en", "es"],
-        "testFrameworks": ["protractor"],
+        "testFrameworks": ["cypress"],
         "serverPort": "8080",
         "jhiPrefix": "jhi",
         "creationTimestamp": 1596513172471

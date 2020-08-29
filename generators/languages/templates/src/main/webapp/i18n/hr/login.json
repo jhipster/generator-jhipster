@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "Prijava",
+        "form": {
+            "password": "Zaporka",
+            "password.placeholder": "Vaša zaporka",
+            "rememberme": "Zapamti me",
+            "button": "Prijava"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Greška kod prijave!</strong> Molimo provjerite vaše akreditacije i pokušajte ponovno."
+            }
+        },
+        "password": {
+            "forgot": "Da li ste zaboravili zaporku?"
+        }
+    }
+}

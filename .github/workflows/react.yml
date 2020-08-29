@@ -76,62 +76,62 @@ jobs:
                       entity: sql
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: react-maven-psql-es-noi18n-mapsid
                       entity: sqlfull
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 1
                     - app-type: react-maven-h2mem-memcached
                       entity: sql
                       profile: dev,webpack
                       war: 0 # TODO: need change to 1, when maven+war is fixed
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: react-maven-cassandra-session-redis
                       entity: cassandra
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: react-maven-couchbase-caffeine
                       entity: couchbase
                       profile: prod
                       war: 0
-                      protractor: 0
+                      e2e: 0
                       testcontainers: 0
                     - app-type: react-gradle-psql-es-noi18n-mapsid
                       entity: sqlfull
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: react-gradle-h2mem-memcached
                       entity: sql
                       profile: dev,webpack
                       war: 1
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: react-gradle-cassandra-session-redis
                       entity: cassandra
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: react-gradle-couchbase-caffeine
                       entity: couchbase
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
             JHI_PROFILE: ${{ matrix.profile }}
             JHI_WAR: ${{ matrix.war }}
-            JHI_PROTRACTOR: ${{ matrix.protractor }}
+            JHI_E2E: ${{ matrix.e2e }}
             JHI_TESTCONTAINERS: ${{ matrix.testcontainers }}
         steps:
             #----------------------------------------------------------------------
@@ -179,11 +179,17 @@ jobs:
             - name: 'TESTS: packaging'
               run: $JHI_SCRIPTS/23-package.sh
             - name: 'Synchronize chromedriver version'
-              if: ${{ matrix.protractor == 1 }}
+              if: ${{ matrix.e2e == 1 }}
               run: npm run e2e:update-webdriver -- --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
               working-directory: /home/runner/app
             - name: 'TESTS: End-to-End'
+              id: e2e
               run: $JHI_SCRIPTS/24-tests-e2e.sh
+            - uses: actions/upload-artifact@v2
+              if: ${{ always() && steps.e2e.outcome == 'failure' }}
+              with:
+                  name: screenshots-${{ matrix.app-type }}
+                  path: /home/runner/app/target/cypress/screenshots
             - name: 'TESTS: Sonar analysis'
               run: $JHI_SCRIPTS/25-sonar-analyze.sh
               env:

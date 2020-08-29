@@ -24,7 +24,7 @@
         "clientFramework": "react",
         "clientTheme": "none",
         "clientThemeVariant": "",
-        "testFrameworks": ["gatling", "protractor"],
+        "testFrameworks": ["gatling", "cypress"],
         "jhiPrefix": "jhi",
         "entitySuffix": "",
         "dtoSuffix": "DTO",

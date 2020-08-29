@@ -39,7 +39,6 @@ const files = {
                 'tsconfig.app.json',
                 'tslint.json',
                 '.eslintrc.json',
-                '.eslintignore',
                 'angular.json',
                 'webpack/utils.js',
                 'webpack/webpack.common.js',
