@@ -162,7 +162,7 @@ describe('<%= entityClass %> e2e test', () => {
     cy.get(`[data-cy="<%= fieldName %>"]`).type('PT12S').should('have.value', 'PT12S');
 
     <%_ } else if (fieldType === 'Duration' && clientFramework !== 'react') { _%>
-    cy.get(`[data-cy="<%= fieldName %>"]`).type('PT12S').should('have.value', '12');
+    cy.get(`[data-cy="<%= fieldName %>"]`).type('PT12S').should('have.value', 'PT12S');
 
     <%_ } else if (fieldType === 'Boolean') { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).should('not.be.checked');
