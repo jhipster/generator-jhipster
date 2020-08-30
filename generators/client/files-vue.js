@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const mkdirp = require('mkdirp');
 const constants = require('../generator-constants');
 const utils = require('../utils');
 
@@ -370,7 +369,6 @@ const vueFiles = {
 };
 
 function writeFiles() {
-    mkdirp(MAIN_SRC_DIR);
     // write Vue files
     this.writeFilesToDisk(vueFiles, this, false, this.fetchFromInstalledJHipster('client/templates/vue'));
 

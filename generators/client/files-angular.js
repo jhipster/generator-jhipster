@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const mkdirp = require('mkdirp');
 const constants = require('../generator-constants');
 
 /* Constants use throughout */
@@ -494,7 +493,6 @@ module.exports = {
 };
 
 function writeFiles() {
-    mkdirp(this.CLIENT_MAIN_SRC_DIR);
     // write angular 2.x and above files
     this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/angular'));
 }
