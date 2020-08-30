@@ -707,7 +707,7 @@ function isGitInstalled(callback) {
  */
 function vueReplaceTranslation(generator, files) {
     for (let i = 0; i < files.length; i++) {
-        const filePath = `${constants.CLIENT_MAIN_SRC_DIR}${files[i]}`;
+        const filePath = `${generator.CLIENT_MAIN_SRC_DIR}${files[i]}`;
         // Match the below attributes and the $t() method
         const regexp = ['v-text', 'v-bind:placeholder', 'v-html', 'v-bind:title', 'v-bind:label', 'v-bind:value', 'v-bind:html']
             .map(s => `${s}="\\$t\\(.*?\\)"`)
