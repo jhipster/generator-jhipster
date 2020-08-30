@@ -796,7 +796,7 @@ function vueAddPageServiceToMain(generator, pageName, pageInstance) {
 function vueAddPageProtractorConf(generator) {
     this.rewriteFile(
         {
-            file: `${constants.CLIENT_TEST_SRC_DIR}/protractor.conf.js`,
+            file: `${generator.CLIENT_TEST_SRC_DIR}/protractor.conf.js`,
             needle: 'jhipster-needle-add-protractor-tests',
             splicable: [generator.stripMargin("'./e2e/pages/**/*.spec.ts',")],
         },
