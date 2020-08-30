@@ -504,7 +504,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
             <%_ } _%>
             .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
         <%_ } else { _%>
-        <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=createdDate,DESC")
+        <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=id,DESC")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
