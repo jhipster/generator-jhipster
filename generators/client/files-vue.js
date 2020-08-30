@@ -370,7 +370,6 @@ const vueFiles = {
 };
 
 function writeFiles() {
-    mkdirp(this.CLIENT_MAIN_SRC_DIR);
     // write Vue files
     this.writeFilesToDisk(vueFiles, this, false, this.fetchFromInstalledJHipster('client/templates/vue'));
 
