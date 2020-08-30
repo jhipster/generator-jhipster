@@ -726,7 +726,7 @@ function vueReplaceTranslation(generator, files) {
 function vueAddPageToRouterImport(generator, pageName, pageFolderName, pageFilename = pageFolderName) {
     this.rewriteFile(
         {
-            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
+            file: `${generator.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
             needle: 'jhipster-needle-add-entity-to-router-import',
             splicable: [
                 generator.stripMargin(
@@ -743,7 +743,7 @@ function vueAddPageToRouterImport(generator, pageName, pageFolderName, pageFilen
 function vueAddPageToRouter(generator, pageName, pageFilename) {
     this.rewriteFile(
         {
-            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
+            file: `${generator.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
             needle: 'jhipster-needle-add-entity-to-router',
             splicable: [
                 generator.stripMargin(
@@ -764,7 +764,7 @@ function vueAddPageToRouter(generator, pageName, pageFilename) {
 function vueAddPageServiceToMainImport(generator, pageName, pageFolderName, pageFilename = pageFolderName) {
     this.rewriteFile(
         {
-            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+            file: `${generator.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
             needle: 'jhipster-needle-add-entity-service-to-main-import',
             splicable: [
                 generator.stripMargin(
@@ -780,7 +780,7 @@ function vueAddPageServiceToMainImport(generator, pageName, pageFolderName, page
 function vueAddPageServiceToMain(generator, pageName, pageInstance) {
     this.rewriteFile(
         {
-            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+            file: `${generator.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
             needle: 'jhipster-needle-add-entity-service-to-main',
             splicable: [
                 generator.stripMargin(
