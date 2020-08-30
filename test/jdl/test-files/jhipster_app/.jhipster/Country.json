@@ -1,0 +1,46 @@
+{
+  "fluentMethods": true,
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "relationshipName": "region",
+      "otherEntityName": "region",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "useJPADerivedIdentifier": true,
+      "otherEntityRelationshipName": "country"
+    },
+    {
+      "relationshipType": "one-to-one",
+      "relationshipName": "user",
+      "otherEntityName": "user",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "country"
+    }
+  ],
+  "fields": [
+    {
+      "fieldName": "countryId",
+      "fieldType": "Long",
+      "javadoc": "The country Id"
+    },
+    {
+      "fieldName": "countryName",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "unique"
+      ]
+    }
+  ],
+  "changelogDate": "20160926101210",
+  "entityTableName": "country",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "skipClient": true,
+  "skipServer": true,
+  "clientRootFolder": "toto",
+  "applications": "*"
+}

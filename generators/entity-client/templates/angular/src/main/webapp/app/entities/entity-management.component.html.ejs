@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 <div>
-    <h2 id="page-heading">
+    <h2 id="page-heading" data-cy="<%= entityClass %>Heading">
         <span jhiTranslate="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></span>
         <%_ if (!readOnly) { _%>
 
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityUrl %>/new']">
+        <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary float-right jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityUrl %>/new']">
             <fa-icon icon="plus"></fa-icon>
             <span <% if (searchEngine !== false) { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= i18nKeyPrefix %>.home.createLabel">
             Create a new <%= entityClassHumanized %>
@@ -79,7 +79,7 @@
                 </tr>
             </thead>
             <tbody<% if (pagination === 'infinite-scroll') { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0"<% } %>>
-                <tr *ngFor="let <%= entityInstance %> of <%= entityInstancePlural %> ;trackBy: trackId">
+                <tr *ngFor="let <%= entityInstance %> of <%= entityInstancePlural %>; trackBy: trackId" data-cy="entityTable">
                     <td><a [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.id, 'view']">{{ <%= entityInstance %>.id }}</a></td>
                 <%_ for (idx in fields) {
                     const fieldName = fields[idx].fieldName;
@@ -160,7 +160,8 @@
                         <div class="btn-group">
                             <button type="submit"
                                     [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.id, 'view']"
-                                    class="btn btn-info btn-sm">
+                                    class="btn btn-info btn-sm"
+                                    data-cy="entityDetailsButton">
                                 <fa-icon icon="eye"></fa-icon>
                                 <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                             </button>
@@ -168,13 +169,15 @@
 
                             <button type="submit"
                                     [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.id, 'edit']"
-                                    class="btn btn-primary btn-sm">
+                                    class="btn btn-primary btn-sm"
+                                    data-cy="entityEditButton">
                                 <fa-icon icon="pencil-alt"></fa-icon>
                                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                             </button>
 
                             <button type="submit" (click)="delete(<%= entityInstance %>)"
-                                    class="btn btn-danger btn-sm">
+                                    class="btn btn-danger btn-sm"
+                                    data-cy="entityDeleteButton">
                                 <fa-icon icon="times"></fa-icon>
                                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                             </button>

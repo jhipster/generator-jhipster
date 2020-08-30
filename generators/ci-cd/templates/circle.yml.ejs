@@ -27,14 +27,10 @@ jobs:
             # Download and cache dependencies
             - restore_cache:
                 keys:
-                    <%_ if (buildTool === 'maven' && clientPackageManager === 'npm') { _%>
+                    <%_ if (buildTool === 'maven') { _%>
                     - v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
-                    <%_ } else if (buildTool === 'maven' && clientPackageManager === 'yarn') { _%>
-                    - v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "yarn.lock" }}
-                    <%_ } else if (buildTool === 'gradle' && clientPackageManager === 'npm') { _%>
+                    <%_ } else if (buildTool === 'gradle') { _%>
                     - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
-                    <%_ } else if (buildTool === 'gradle' && clientPackageManager === 'yarn') { _%>
-                    - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "yarn.lock" }}
                     <%_ } _%>
                     # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
                     - v1-dependencies-
@@ -56,32 +52,18 @@ jobs:
                 command: |
                     nvm install <%= NODE_VERSION %>
                     nvm alias default <%= NODE_VERSION %>
-            <%_ if (clientPackageManager === 'yarn') { _%>
-            - run:
-                name: Set URL for Yarn
-                command: 'curl -o- -L https://yarnpkg.com/install.sh | bash'
-            - run:
-                name: Set PATH
-                command: echo 'export PATH="$HOME/.yarn/bin:$PATH"' >> $BASH_ENV
-            <%_ } _%>
             - run:
                 name: Print Java Version
                 command: 'java -version'
             - run:
                 name: Print Node Version
                 command: 'node -v'
-            <%_ if (clientPackageManager === 'npm') { _%>
             - run:
                 name: Print NPM Version
                 command: 'npm -v'
-            <%_ } _%>
             - run:
                 name: Install Node Modules
-                <%_ if (clientPackageManager === 'npm') { _%>
                 command: 'npm install'
-                <%_ } else if (clientPackageManager === 'yarn') { _%>
-                command: 'yarn install'
-                <%_ } _%>
 
             - save_cache:
                 paths:
@@ -92,20 +74,11 @@ jobs:
                     <%_ } else if (buildTool === 'gradle') { _%>
                     - ~/.gradle
                     <%_ } _%>
-                <%_ if (clientPackageManager === 'npm') { _%>
                     <%_ if (buildTool === 'maven') { _%>
                 key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
                     <%_ } else if (buildTool === 'gradle') { _%>
                 key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
                     <%_ } _%>
-                <%_ } else if (clientPackageManager === 'yarn') { _%>
-                    - $HOME/.yarn-cache
-                    <%_ if (buildTool === 'maven') { _%>
-                key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "yarn.lock" }}
-                    <%_ } else if (buildTool === 'gradle') { _%>
-                key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "yarn.lock" }}
-                    <%_ } _%>
-                <%_ } _%>
 
             <%_ if (buildTool === 'maven') { _%>
             - run:

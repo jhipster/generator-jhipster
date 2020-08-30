@@ -12,9 +12,7 @@
         {
             "fieldName": "name",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "bankNumber",
@@ -35,9 +33,7 @@
         {
             "fieldName": "balance",
             "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "openingDay",

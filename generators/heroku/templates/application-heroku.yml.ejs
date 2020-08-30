@@ -41,7 +41,7 @@ eureka:
             defaultZone: ${JHIPSTER_REGISTRY_URL}/eureka/
 <%_ } _%>
 
-<%_ if (prodDatabaseType === 'neo4j') { _%> 
+<%_ if (prodDatabaseType === 'neo4j') { _%>
 org:
     neo4j:
       driver:
@@ -52,7 +52,7 @@ org:
         config:
             encrypted: true
 <%_ } _%>
-<%_ if (cacheProvider === 'memcached' || cacheProvider === 'redis') { _%> 
+<%_ if (cacheProvider === 'memcached' || cacheProvider === 'redis') { _%>
 jhipster:
   cache:
     <%_ if (cacheProvider === 'redis') { _%>
@@ -62,8 +62,8 @@ jhipster:
         connectionPoolSize: 3
         connectionMinimumIdleSize: 1
         subscriptionConnectionPoolSize: 3
-    <%_ } _%>    
-    <%_ if (cacheProvider === 'memcached') { _%> 
+    <%_ } _%>
+    <%_ if (cacheProvider === 'memcached') { _%>
     memcached:
         enabled: true
         servers: ${MEMCACHIER_SERVERS}
@@ -108,3 +108,5 @@ spring:
                         client-id: ${OKTA_OAUTH2_CLIENT_ID_WEB}
                         client-secret: ${OKTA_OAUTH2_CLIENT_SECRET_WEB}
 <%_ } _%>
+server:
+  port: ${PORT:8080}

@@ -180,23 +180,23 @@ spring:
     <%_ if (databaseType === 'sql' && reactive) { _%>
     r2dbc:
         <%_ if (prodDatabaseType === 'mysql') { _%>
-        url: r2dbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+        url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: root
         password:
         <%_ } else if (prodDatabaseType === 'mariadb') { _%>
-        url: r2dbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC
+        url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: root
         password:
         <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-        url: r2dbc:postgresql://localhost:5432/<%= baseName %>
+        url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: <%= baseName %>
         password:
         <%_ } else if (prodDatabaseType === 'mssql') { _%>
-        url: r2dbc:sqlserver://localhost:1433/<%= baseName %>
+        url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: SA
         password: yourStrong(!)Password
         <%_ } else if (prodDatabaseType === 'oracle') { _%>
-        url: r2dbc:oracle:thin:@localhost:1521:xe
+        url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
         username: system
         password: oracle
         <%_ } _%>
@@ -366,10 +366,6 @@ jhipster:
             host: localhost
             port: 5000
             queue-size: 512
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-    audit-events:
-        retention-period: 30 # Number of days before audit events are deleted.
-    <%_ } _%>
 <%_ if (applicationType === 'uaa') { _%>
 uaa:
     #be sure to to change to a different keystore in production!

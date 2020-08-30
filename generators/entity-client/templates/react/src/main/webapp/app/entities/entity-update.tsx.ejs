@@ -35,16 +35,13 @@ import {
   <% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput<% if (fieldsIsReactAvField) { %>, AvField <% } %> } from 'availity-reactstrap-validation';
 import {
-  Translate,
-  translate,
-  ICrudGetAction,
-  ICrudGetAllAction,
   <%_ if (fieldsContainBlob) { _%>
   setFileData,
   <% if (fieldsContainBlobOrImage) { %> openFile,<% } %>
   byteSize,
   <%_ } _%>
-  ICrudPutAction
+  Translate,
+  translate
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
@@ -123,7 +120,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
   <%_ relFieldNames.forEach(val => { _%>
   const [<%= val.relationshipFieldName %>Id, set<%= upperFirstCamelCase(val.relationshipFieldName) %>Id] = useState('0');
   <%_ }) _%>
-  const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
+  const [isNew] = useState(!props.match.params || !props.match.params.id);
 
   const { <%= entityInstance %>Entity,<%
   uniqueRelationFields.forEach(rel => {
@@ -221,7 +218,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
     <div>
     <Row className="justify-content-center">
       <Col md="8">
-        <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel">
+        <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%= entityClass %>CreateUpdateHeading">
           <Translate contentKey="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%= entityClass %></Translate>
         </h2>
       </Col>
@@ -245,7 +242,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
           <AvGroup <% if (fieldType === 'Boolean') { %> check <% } %>>
           <%_ if (fieldType === 'Boolean') { _%>
             <Label id="<%= fieldName %>Label">
-              <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="checkbox" className="form-check-input" name="<%= fieldName %>" />
+              <AvInput id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" type="checkbox" className="form-check-input" name="<%= fieldName %>" />
               <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
                 <%= fieldNameHumanized %>
               </Translate>
@@ -258,6 +255,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             </Label>
             <AvInput
               id="<%= entityFileName %>-<%= fieldName %>"
+              data-cy="<%= fieldName %>"
               type="datetime-local"
               className="form-control"
               name="<%= fieldName %>"
@@ -273,6 +271,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             </Label>
             <AvField
               id="<%= entityFileName %>-<%= fieldName %>"
+              data-cy="<%= fieldName %>"
               type="date"
               className="form-control"
               name="<%= fieldName %>"
@@ -280,7 +279,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             />
           <%_
             } else if (fields[idx].fieldIsEnum) {
-              const enumValues = getEnumValuesWithCustomValues(fields[idx].fieldValues);
+              const enumValues = fields[idx].enumValues;
           _%>
             <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
               <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
@@ -289,6 +288,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             </Label>
             <AvInput
               id="<%= entityFileName %>-<%= fieldName %>"
+              data-cy="<%= fieldName %>"
               type="select"
               className="form-control"
               name="<%= fieldName %>"
@@ -313,7 +313,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                 <%= fieldNameHumanized %>
               </Translate>
             </Label>
-            <AvField id="<%= entityFileName %>-<%= fieldName %>" type="string" className="form-control" name="<%= fieldName %>" <%- include('react_validators'); %> />
+            <AvField id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" type="string" className="form-control" name="<%= fieldName %>" <%- include('react_validators'); %> />
           <%_
           } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
 
@@ -353,7 +353,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                 </Row>
               </div>
             ) : null}
-            <input id="file_<%= fieldName %>" type="file" onChange={onBlobChange(<%= isAnImage %>, '<%= fieldName %>')} <% if (isAnImage) { %>accept="image/*"<% } %> />
+            <input id="file_<%= fieldName %>" data-cy="<%= fieldName %>" type="file" onChange={onBlobChange(<%= isAnImage %>, '<%= fieldName %>')} <% if (isAnImage) { %>accept="image/*"<% } %> />
             <AvInput type="hidden" name="<%= fieldName %>" value={<%= fieldName %>} <%- include('react_validators'); %>/>
           </AvGroup>
 
@@ -363,7 +363,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                 <%= fieldNameHumanized %>
               </Translate>
             </Label>
-            <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="textarea" name="<%= fieldName %>" <%- include('react_validators'); %>/>
+            <AvInput id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" type="textarea" name="<%= fieldName %>" <%- include('react_validators'); %>/>
             <%_ } _%>
           <%_ } else { _%>
           <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
@@ -371,7 +371,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               <%= fieldNameHumanized %>
             </Translate>
           </Label>
-          <AvField id="<%= entityFileName %>-<%= fieldName %>" type="text" name="<%= fieldName %>" <%- include('react_validators'); %>/>
+          <AvField id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" type="text" name="<%= fieldName %>" <%- include('react_validators'); %>/>
         <%_ } _%>
           <%_ if (fields[idx].javadoc) { _%>
           <UncontrolledTooltip target="<%= fieldName %>Label">
@@ -407,6 +407,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                 <%_ if (!relationshipRequired) { _%>
             <AvInput
               id="<%= entityFileName %>-<%= relationshipName %>"
+              data-cy="<%= relationshipFieldName %>"
               type="select"
               className="form-control"
               name="<%= relationshipFieldName %>.id"
@@ -425,6 +426,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               <%_ } else { _%>
             <AvInput
               id="<%= entityFileName %>-<%= relationshipName %>"
+              data-cy="<%= relationshipFieldName %>"
               type="select"
               className="form-control"
               name="<%= relationshipFieldName %>.id"
@@ -447,6 +449,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               <%_ if (!relationshipRequired) { _%>
                 <AvInput
                   id="<%= entityFileName %>-<%= relationshipName %>"
+                  data-cy="<%= relationshipFieldName %>"
                   type="select"
                   className="form-control"
                   name="<%= relationshipFieldName %>Id"
@@ -465,6 +468,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               <%_ } else { _%>
                 <AvInput
                   id="<%= entityFileName %>-<%= relationshipName %>"
+                  data-cy="<%= relationshipFieldName %>"
                   type="select"
                   className="form-control"
                   name="<%= relationshipFieldName %>Id"
@@ -492,6 +496,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               <%_ if (dto === 'no') { _%>
                 <AvInput
                   id="<%= entityFileName %>-<%= relationshipName %>"
+                  data-cy="<%= relationshipFieldName %>"
                   type="select"
                   className="form-control"
                   name="<%= relationshipFieldName %>.id"
@@ -510,6 +515,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               <%_ } else { _%>
                 <AvInput
                   id="<%= entityFileName %>-<%= relationshipName %>"
+                  data-cy="<%= relationshipFieldName %>"
                   type="select"
                   className="form-control"
                   name="<%= relationshipFieldName %>Id"
@@ -532,6 +538,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             <Label for="<%= entityFileName %>-<%= relationshipName %>"><Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate></Label>
             <AvInput
               id="<%= entityFileName %>-<%= relationshipName %>"
+              data-cy="<%= relationshipFieldName %>"
               type="select"
               multiple
               className="form-control"
@@ -557,7 +564,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
           </Button>
           &nbsp;
-          <Button color="primary" id="save-entity" type="submit" disabled={updating}>
+          <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
             <FontAwesomeIcon icon="save" />&nbsp;
             <Translate contentKey="entity.action.save">Save</Translate>
           </Button>

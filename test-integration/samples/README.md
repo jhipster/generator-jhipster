@@ -28,7 +28,7 @@ Those are described in `.yo-rc.json` files which is the descriptor file created 
 -   ngx-gradle-mariadb-oauth2-infinispan
 -   ngx-gradle-mongodb-kafka-cucumber
 -   ngx-gradle-psql-es-noi18n-mapsid
--   ngx-gradle-yarn-h2disk-ws-nocache
+-   ngx-gradle-npm-h2disk-ws-nocache
 -   ngx-h2mem-ws-nol2
 -   ngx-mariadb-oauth2-infinispan
 -   ngx-mariadb-oauth2-sass-infinispan

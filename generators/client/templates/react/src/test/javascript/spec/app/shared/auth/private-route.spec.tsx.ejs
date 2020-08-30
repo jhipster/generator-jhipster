@@ -1,6 +1,7 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
-import { shallow } from 'enzyme';
+import { Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
+import { render } from '@testing-library/react';
 <%_ if (enableTranslation) { _%>
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
@@ -19,62 +20,48 @@ describe('private-route component', () => {
   <%_ } _%>
   // All tests will go here
   it('Should throw error when no component is provided', () => {
-    expect(() => shallow(<PrivateRouteComponent component={null} isAuthenticated sessionHasBeenFetched isAuthorized />)).toThrow(Error);
+    const originalError = console.error;
+    console.error = jest.fn();
+    expect(() => render(<PrivateRouteComponent component={null} isAuthenticated sessionHasBeenFetched isAuthorized path="/" />)).toThrow(Error);
+    console.error = originalError;
   });
 
   it('Should render an error message when the user has no authorities', () => {
-    const route = shallow(<PrivateRouteComponent component={TestComp} isAuthenticated sessionHasBeenFetched isAuthorized={false} path="/" />);
-    const renderedRoute = route.find(Route);
-    const props = renderedRoute.props() as any;
-    const renderFn: Function = props.render;
-    const comp = shallow(
-      renderFn({
-        location: '/'
-      })
+    const history = createMemoryHistory();
+    const { container } = render(
+      <Router history={history}>
+        <PrivateRouteComponent component={TestComp} isAuthenticated sessionHasBeenFetched isAuthorized={false} path="/" />
+      </Router>
     );
-    expect(comp.length).toEqual(1);
-    const error = comp.find('div.insufficient-authority');
-    expect(error.length).toEqual(1);
-    expect(error.find('.alert-danger').html()).toEqual(
-      <%_ if (enableTranslation) { _%>
-      '<div class="alert alert-danger"><span>You are not authorized to access this page.</span></div>'
-      <%_ } else { _%>
-      '<div class="alert alert-danger">You are not authorized to access this page.</div>'
-      <%_ } _%>
+    <%_ if (enableTranslation) { _%>
+    expect(container.innerHTML).toEqual(
+      '<div class="insufficient-authority"><div class="alert alert-danger"><span>You are not authorized to access this page.</span></div></div>'
     );
+    <%_ } else { _%>
+    expect(container.innerHTML).toEqual(
+      '<div class="insufficient-authority"><div class="alert alert-danger">You are not authorized to access this page.</div></div>'
+    );
+    <%_ } _%>
   });
 
   it('Should render a route for the component provided when authenticated', () => {
-    const route = shallow(<PrivateRouteComponent component={TestComp} isAuthenticated sessionHasBeenFetched isAuthorized path="/" />);
-    const renderedRoute = route.find(Route);
-    expect(renderedRoute.length).toEqual(1);
-    const props = renderedRoute.props() as any;
-    expect(props.path).toEqual('/');
-    expect(props.render).toBeDefined();
-    const renderFn: Function = props.render;
-    const comp = shallow(
-      renderFn({
-        location: '/'
-      })
+    const history = createMemoryHistory();
+    const { container } = render(
+      <Router history={history}>
+        <PrivateRouteComponent component={TestComp} isAuthenticated sessionHasBeenFetched isAuthorized path="/" />
+      </Router>
     );
-    expect(comp.length).toEqual(1);
-    expect(comp.html()).toEqual('<div>Test</div>');
+    expect(container.innerHTML).toEqual('<div>Test</div>');
   });
 
   it('Should render a redirect to login when not authenticated', () => {
-    const route = shallow(<PrivateRouteComponent component={TestComp} isAuthenticated={false} sessionHasBeenFetched isAuthorized path="/" />);
-    const renderedRoute = route.find(Route);
-    expect(renderedRoute.length).toEqual(1);
-    const props = renderedRoute.props() as any;
-    const renderFn: Function = props.render;
-    // as rendering redirect outside router will throw error
-    expect(() =>
-      shallow(
-        renderFn({
-          location: '/'
-        })
-      ).html()
-    ).toThrow(Error);
+    const history = createMemoryHistory();
+    const { container } = render(
+      <Router history={history}>
+        <PrivateRouteComponent exact component={TestComp} isAuthenticated={false} sessionHasBeenFetched isAuthorized path="/" />
+      </Router>
+    );
+    expect(container.innerHTML).not.toEqual('<div>Test</div>');
   });
 });
 

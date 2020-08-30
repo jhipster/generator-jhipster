@@ -25,8 +25,6 @@ const shelljs = require('shelljs');
 const semver = require('semver');
 const exec = require('child_process').exec;
 const os = require('os');
-const pluralize = require('pluralize');
-const jhiCore = require('jhipster-core');
 const normalize = require('normalize-path');
 
 const packagejs = require('../package.json');
@@ -34,14 +32,18 @@ const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
+const { defaultConfig } = require('./generator-defaults');
+const { formatDateForChangelog } = require('../utils/liquibase');
+const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 
-const JHIPSTER_CONFIG_DIR = '.jhipster';
+const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 /**
  * This is the Generator base class.
@@ -51,6 +53,44 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class extends PrivateBase {
+    constructor(args, opts) {
+        super(args, opts);
+
+        if (this.options.help) {
+            return;
+        }
+
+        // JHipster runtime config that should not be stored to .yo-rc.json.
+        this.configOptions = this.options.configOptions || {};
+
+        /* Force config to use 'generator-jhipster' namespace. */
+        this.config = this._getStorage('generator-jhipster');
+        /* JHipster config using proxy mode used as a plain object instead of using get/set. */
+        this.jhipsterConfig = this.config.createProxy();
+
+        /*
+         * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the
+         * generator and then executes generator.config.defaults(localConfig).
+         * JHipster workflow does a lot of configuration at the constructor, sometimes this is required due to current
+         * blueprints support implementation, making it incompatible with yeoman-test's withLocalConfig.
+         * 'defaultLocalConfig' option is a replacement for yeoman-test's withLocalConfig method.
+         * 'defaults' function sets every key that has undefined value at current config.
+         */
+        if (this.options.defaultLocalConfig) {
+            this.config.defaults(this.options.defaultLocalConfig);
+        }
+        /*
+         * Option 'localConfig' uses set instead of defaults of 'defaultLocalConfig'.
+         * 'set' function sets every key from 'localConfig'.
+         */
+        if (this.options.localConfig) {
+            this.config.set(this.options.localConfig);
+        }
+
+        // Load common runtime options.
+        this.parseCommonRuntimeOptions();
+    }
+
     /**
      * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
      */
@@ -70,12 +110,27 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Verify if the entity is a built-in entity.
+     * @param {String} entityName - Entity name to verify.
+     * @return {boolean} true if the entity is built-in.
+     */
+    isBuiltInUserEntity(entityName) {
+        if (_.upperFirst(entityName) === 'User') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Apply output customizer.
      *
      * @param {string} outputPath - Path to customize.
      */
     applyOutputPathCustomizer(outputPath) {
-        const outputPathCustomizer = this.options.outputPathCustomizer;
+        let outputPathCustomizer = this.options.outputPathCustomizer;
+        if (!outputPathCustomizer && this.configOptions) {
+            outputPathCustomizer = this.configOptions.outputPathCustomizer;
+        }
         if (!outputPathCustomizer) {
             return outputPath;
         }
@@ -87,6 +142,17 @@ module.exports = class extends PrivateBase {
             return outputPath;
         }
         return outputPathCustomizer.call(this, outputPath);
+    }
+
+    getPrettierExtensions() {
+        let prettierExtensions = 'md,json,yml';
+        if (!this.skipClient && !this.jhipsterConfig.skipClient) {
+            prettierExtensions = `${prettierExtensions},js,ts,tsx,css,scss`;
+        }
+        if (!this.skipServer && !this.jhipsterConfig.skipServer) {
+            prettierExtensions = `${prettierExtensions},java`;
+        }
+        return prettierExtensions;
     }
 
     /**
@@ -155,11 +221,19 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework
      * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
      */
-    addEntityToMenu(routerName, enableTranslation, clientFramework, entityTranslationKeyMenu = _.camelCase(routerName)) {
+    addEntityToMenu(
+        routerName,
+        enableTranslation,
+        clientFramework,
+        entityTranslationKeyMenu = _.camelCase(routerName),
+        entityTranslationValue = _.startCase(routerName)
+    ) {
         if (this.clientFramework === ANGULAR) {
-            this.needleApi.clientAngular.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
+            this.needleApi.clientAngular.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
         } else if (this.clientFramework === REACT) {
-            this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
+            this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
+        } else if (this.clientFramework === VUE) {
+            this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
         }
     }
 
@@ -183,7 +257,8 @@ module.exports = class extends PrivateBase {
         entityFileName,
         entityUrl,
         clientFramework,
-        microServiceName
+        microServiceName,
+        readOnly
     ) {
         if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addEntityToModule(
@@ -197,6 +272,11 @@ module.exports = class extends PrivateBase {
             );
         } else if (clientFramework === REACT) {
             this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName);
+        } else if (clientFramework === VUE) {
+            this.needleApi.clientVue.addEntityToRouterImport(entityName, entityFileName, entityFolderName, readOnly);
+            this.needleApi.clientVue.addEntityToRouter(entityInstance, entityName, entityFileName, readOnly);
+            this.needleApi.clientVue.addEntityServiceToMainImport(entityName, entityClass, entityFileName, entityFolderName);
+            this.needleApi.clientVue.addEntityServiceToMain(entityInstance, entityName);
         }
     }
 
@@ -901,13 +981,13 @@ module.exports = class extends PrivateBase {
         // Miliseconds is ignored for changelogDate.
         now.setMilliseconds(0);
         // Run reproducible timestamp when regenerating the project with with-entities option.
-        if (reproducible && (this.options.withEntities || this.options.creationTimestamp)) {
+        if (reproducible && (this.options.withEntities || this.configOptions.creationTimestamp)) {
             if (this.configOptions.reproducibleLiquibaseTimestamp) {
                 // Counter already started.
                 now = this.configOptions.reproducibleLiquibaseTimestamp;
             } else {
                 // Create a new counter
-                const creationTimestamp = this.parseCreationTimestamp() || this.config.get('creationTimestamp');
+                const creationTimestamp = this.configOptions.creationTimestamp || this.config.get('creationTimestamp');
                 now = creationTimestamp ? new Date(creationTimestamp) : now;
                 now.setMilliseconds(0);
             }
@@ -932,37 +1012,7 @@ module.exports = class extends PrivateBase {
             }
             this.config.set('lastLiquibaseTimestamp', now.getTime());
         }
-
-        const nowUTC = new Date(
-            now.getUTCFullYear(),
-            now.getUTCMonth(),
-            now.getUTCDate(),
-            now.getUTCHours(),
-            now.getUTCMinutes(),
-            now.getUTCSeconds()
-        );
-        const year = `${nowUTC.getFullYear()}`;
-        let month = `${nowUTC.getMonth() + 1}`;
-        if (month.length === 1) {
-            month = `0${month}`;
-        }
-        let day = `${nowUTC.getDate()}`;
-        if (day.length === 1) {
-            day = `0${day}`;
-        }
-        let hour = `${nowUTC.getHours()}`;
-        if (hour.length === 1) {
-            hour = `0${hour}`;
-        }
-        let minute = `${nowUTC.getMinutes()}`;
-        if (minute.length === 1) {
-            minute = `0${minute}`;
-        }
-        let second = `${nowUTC.getSeconds()}`;
-        if (second.length === 1) {
-            second = `0${second}`;
-        }
-        return `${year}${month}${day}${hour}${minute}${second}`;
+        return formatDateForChangelog(now);
     }
 
     /**
@@ -1226,13 +1276,52 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Compose with a jhipster generator using default jhipster config.
+     * @param {string} generator - jhipster generator.
+     * @param {object} [options] - options to pass
+     * @param {boolean} [once] - compose once with the generator
+     * @return {object} the composed generator
+     */
+    composeWithJHipster(generator, options = {}, once = false) {
+        if (options === true || once) {
+            this.configOptions.composedWith = this.configOptions.composedWith || [];
+            if (this.configOptions.composedWith.includes(generator)) {
+                return undefined;
+            }
+            this.configOptions.composedWith.push(generator);
+        }
+
+        const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
+        if (this.env.get(namespace)) {
+            generator = namespace;
+        } else {
+            // Keep test compatibily were jhipster lookup does not run.
+            try {
+                generator = require.resolve(`./${generator}`);
+            } catch (e) {
+                throw new Error(`Generator ${generator} was not found`);
+            }
+        }
+
+        return this.composeWith(
+            generator,
+            {
+                ...this.options,
+                configOptions: this.configOptions,
+                ...options,
+            },
+            true
+        );
+    }
+
+    /**
      * Compose an external generator with Yeoman.
      * @param {string} npmPackageName - package name
      * @param {string} subGen - sub generator name
      * @param {any} options - options to pass
      * @return {object} the composed generator
      */
-    composeExternalModule(npmPackageName, subGen, options) {
+    composeExternalModule(npmPackageName, subGen, options = {}) {
         const generatorName = jhipsterUtils.packageNameToNamespace(npmPackageName);
         const generatorCallback = `${generatorName}:${subGen}`;
         if (!this.env.isPackageRegistered(generatorName)) {
@@ -1241,6 +1330,7 @@ module.exports = class extends PrivateBase {
         if (!this.env.get(generatorCallback)) {
             throw new Error(`Generator ${generatorCallback} isn't registered.`);
         }
+        options.configOptions = options.configOptions || this.configOptions;
         return this.composeWith(generatorCallback, options, true);
     }
 
@@ -1253,127 +1343,47 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Load an entity configuration file into context.
-     */
-    loadEntityJson(fromPath = this.context.fromPath) {
-        const context = this.context;
-        try {
-            context.fileData = this.fs.readJSON(fromPath);
-        } catch (err) {
-            this.debug('Error:', err);
-            this.error('\nThe entity configuration file could not be read!\n');
-        }
-        if (context.fileData.databaseType) {
-            context.databaseType = context.fileData.databaseType;
-        }
-        context.relationships = context.fileData.relationships || [];
-        context.fields = context.fileData.fields || [];
-        context.haveFieldWithJavadoc = false;
-        context.fields.forEach(field => {
-            if (field.javadoc) {
-                context.haveFieldWithJavadoc = true;
-            }
-        });
-        context.changelogDate = context.fileData.changelogDate;
-        context.dto = context.fileData.dto;
-        context.service = context.fileData.service;
-        context.fluentMethods = context.fileData.fluentMethods;
-        context.clientRootFolder = context.fileData.clientRootFolder;
-        context.pagination = context.fileData.pagination;
-        context.searchEngine = _.isUndefined(context.fileData.searchEngine) ? context.searchEngine : context.fileData.searchEngine;
-        context.javadoc = context.fileData.javadoc;
-        context.entityTableName = context.fileData.entityTableName;
-        context.jhiPrefix = context.fileData.jhiPrefix || context.jhiPrefix;
-        context.skipCheckLengthOfIdentifier = context.fileData.skipCheckLengthOfIdentifier || context.skipCheckLengthOfIdentifier;
-        context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
-        context.skipClient = context.fileData.skipClient || context.skipClient;
-        context.readOnly = context.fileData.readOnly || false;
-        context.embedded = context.fileData.embedded || false;
-        this.copyFilteringFlag(context.fileData, context, context);
-        if (_.isUndefined(context.entityTableName)) {
-            this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
-            context.entityTableName = this.getTableName(context.name);
-        }
-        if (jhiCore.isReservedTableName(context.entityTableName, context.prodDatabaseType) && context.jhiPrefix) {
-            context.entityTableName = `${context.jhiTablePrefix}_${context.entityTableName}`;
-        }
-        context.fields.forEach(field => {
-            context.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
-            context.fieldNameChoices.push({ name: field.fieldName, value: field.fieldName });
-        });
-        context.relationships.forEach(rel => {
-            context.relNameChoices.push({
-                name: `${rel.relationshipName}:${rel.relationshipType}`,
-                value: `${rel.relationshipName}:${rel.relationshipType}`,
-            });
-        });
-        if (context.fileData.angularJSSuffix !== undefined) {
-            context.entityAngularJSSuffix = context.fileData.angularJSSuffix;
-        }
-        context.useMicroserviceJson = context.useMicroserviceJson || !_.isUndefined(context.fileData.microserviceName);
-        if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
-            context.microserviceName = context.fileData.microserviceName;
-            if (!context.microserviceName) {
-                this.error('Microservice name for the entity is not found. Entity cannot be generated!');
-            }
-            context.microserviceAppName = this.getMicroserviceAppName(context.microserviceName);
-            context.skipServer = true;
-        }
-    }
-
-    /**
-     * get an entity from the configuration file
-     * @param {string} file - configuration file name for the entity
-     */
-    getEntityJson(file) {
-        let entityJson = null;
-
-        try {
-            let filename = path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`);
-            if (this.context && this.context.microservicePath) {
-                filename = path.join(this.context.microservicePath, filename);
-            }
-            // TODO 7.0 filename = this.destinationPath(filename);
-            entityJson = this.fs.readJSON(filename);
-        } catch (err) {
-            this.log(chalk.red(`The JHipster entity configuration file could not be read for file ${file}!`) + err);
-            this.debug('Error:', err);
-        }
-
-        return entityJson;
-    }
-
-    /**
      * get sorted list of entities according to changelog date (i.e. the order in which they were added)
      */
     getExistingEntities() {
-        const entities = [];
-
         function isBefore(e1, e2) {
             return e1.definition.changelogDate - e2.definition.changelogDate;
         }
 
-        // TODO 7.0 this.destinationPath(JHIPSTER_CONFIG_DIR);
-        if (!shelljs.test('-d', JHIPSTER_CONFIG_DIR)) {
-            return entities;
+        const configDir = this.destinationPath(JHIPSTER_CONFIG_DIR);
+        if (!fs.existsSync(configDir)) {
+            fs.mkdirSync(configDir);
         }
+        const dir = fs.opendirSync(configDir);
+        const entityNames = [];
+        let dirent = dir.readSync();
+        while (dirent !== null) {
+            const extname = path.extname(dirent.name);
+            if (dirent.isFile() && extname === '.json') {
+                entityNames.push(path.basename(dirent.name, extname));
+            }
+            dirent = dir.readSync();
+        }
+        dir.closeSync();
 
-        // TODO 7.0 this.destinationPath(JHIPSTER_CONFIG_DIR);
-        return shelljs
-            .ls(path.join(JHIPSTER_CONFIG_DIR, '*.json'))
-            .reduce((acc, file) => {
+        return [...new Set((this.jhipsterConfig.entities || []).concat(entityNames))]
+            .map(entityName => {
+                const file = this.destinationPath(configDir, `${entityName}.json`);
                 try {
                     const definition = this.fs.readJSON(file);
-                    // Execute a write operation to set the file as modified on mem-fs to trigger prettier.
-                    this.fs.append(file, '', { trimEnd: false, separator: '' });
-                    acc.push({ name: path.basename(file, '.json'), definition });
+                    if (this.options.namespace !== 'jhipster:info') {
+                        // Execute a write operation to set the file as modified on mem-fs to trigger prettier.
+                        this.fs.append(file, '', { trimEnd: false, separator: '' });
+                    }
+                    return { name: path.basename(file, '.json'), definition };
                 } catch (error) {
                     // not an entity file / malformed?
                     this.warning(`Unable to parse entity file ${file}`);
                     this.debug('Error:', error);
+                    return undefined;
                 }
-                return acc;
-            }, entities)
+            })
+            .filter(entity => entity)
             .sort(isBefore);
     }
 
@@ -1397,11 +1407,12 @@ module.exports = class extends PrivateBase {
      * @param {string} version - A valid semver version string
      */
     isJhipsterVersionLessThan(version) {
-        if (!this.jhipsterOldVersion) {
+        const jhipsterOldVersion = this.jhipsterOldVersion || this.configOptions.jhipsterOldVersion;
+        if (!jhipsterOldVersion) {
             // if old version is unknown then can't compare and return false
             return false;
         }
-        return semver.lt(this.jhipsterOldVersion, version);
+        return semver.lt(jhipsterOldVersion, version);
     }
 
     /**
@@ -1433,15 +1444,6 @@ module.exports = class extends PrivateBase {
      */
     getColumnName(value) {
         return this.hibernateSnakeCase(value);
-    }
-
-    /**
-     * get a table column names plural form in JHipster preferred style.
-     *
-     * @param {string} value - table column name string
-     */
-    getPluralColumnName(value) {
-        return this.getColumnName(pluralize(value));
     }
 
     /**
@@ -1741,11 +1743,7 @@ module.exports = class extends PrivateBase {
                                 chalk.gray(` (current: ${packagejs.version})`)
                             }\n`
                         );
-                        if (this.useNpm) {
-                            this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
-                        } else {
-                            this.log(chalk.yellow(`  Run ${chalk.magenta(`yarn global upgrade ${GENERATOR_JHIPSTER}`)} to update.\n`));
-                        }
+                        this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
                         this.log(chalk.yellow(' ______________________________________________________________________________\n'));
                     }
                     done();
@@ -1846,78 +1844,9 @@ module.exports = class extends PrivateBase {
                 default: defaultAppBaseName,
             })
             .then(prompt => {
-                generator.baseName = prompt.baseName;
+                generator.baseName = generator.jhipsterConfig.baseName = prompt.baseName;
                 done();
             });
-    }
-
-    /**
-     * ask a prompt for i18n option.
-     *
-     * @param {object} generator - generator instance to use
-     */
-    aski18n(generator) {
-        const languageOptions = this.getAllSupportedLanguageOptions();
-
-        const done = generator.async();
-        const prompts = [
-            {
-                type: 'confirm',
-                name: 'enableTranslation',
-                message: 'Would you like to enable internationalization support?',
-                default: true,
-            },
-            {
-                when: response => response.enableTranslation === true,
-                type: 'list',
-                name: 'nativeLanguage',
-                message: 'Please choose the native language of the application',
-                choices: languageOptions,
-                default: 'en',
-                store: true,
-            },
-            {
-                when: response => response.enableTranslation === true,
-                type: 'checkbox',
-                name: 'languages',
-                message: 'Please choose additional languages to install',
-                choices: response => _.filter(languageOptions, o => o.value !== response.nativeLanguage),
-            },
-        ];
-
-        generator.prompt(prompts).then(prompt => {
-            generator.enableTranslation = prompt.enableTranslation;
-            generator.nativeLanguage = prompt.nativeLanguage;
-            generator.languages = [prompt.nativeLanguage].concat(prompt.languages);
-            done();
-        });
-    }
-
-    /**
-     * compose using the language sub generator.
-     *
-     * @param {object} generator - generator instance to use
-     * @param {object} configOptions - options to pass to the generator
-     * @param {String} type - server | client
-     */
-    composeLanguagesSub(generator, configOptions, type) {
-        if (generator.enableTranslation) {
-            // skip server if app type is client
-            const skipServer = type && type === 'client';
-            // skip client if app type is server
-            const skipClient = type && type === 'server';
-            generator.composeWith(require.resolve('./languages'), {
-                configOptions,
-                'skip-install': true,
-                'skip-server': skipServer,
-                'skip-client': skipClient,
-                'from-cli': generator.options['from-cli'],
-                skipChecks: generator.options.skipChecks,
-                languages: generator.languages,
-                force: generator.options.force,
-                debug: generator.options.debug,
-            });
-        }
     }
 
     /**
@@ -2023,6 +1952,23 @@ module.exports = class extends PrivateBase {
                             // remove the .ejs suffix
                             templatePathTo = templatePath.replace('.ejs', '');
                         }
+
+                        if (_this.destinationPath) {
+                            templatePathTo = _this.destinationPath(templatePathTo);
+                        }
+
+                        if (templateObj.override !== undefined && _this.fs && _this.fs.exists(templatePathTo)) {
+                            if (typeof templateObj.override === 'function') {
+                                if (!templateObj.override(_this)) {
+                                    this.debug(`skipping file ${templatePathTo}`);
+                                    return;
+                                }
+                            } else if (!templateObj.override) {
+                                this.debug(`skipping file ${templatePathTo}`);
+                                return;
+                            }
+                        }
+
                         filesOut.push(templatePathTo);
                         if (!returnFiles) {
                             let templatePathFrom = prefix ? `${prefix}/${templatePath}` : templatePath;
@@ -2060,26 +2006,12 @@ module.exports = class extends PrivateBase {
      * @param {any} context - context to use default is generator instance
      * @param {any} dest - destination context to use default is context
      */
-    setupSharedOptions(generator, context = generator, dest = context) {
-        dest.skipClient = context.options['client-hook'] === false || context.configOptions.skipClient || context.config.get('skipClient');
-        dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
-        dest.skipUserManagement =
-            context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
-        dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
-        dest.otherModules = context.configOptions.otherModules || [];
-        dest.baseName = context.configOptions.baseName;
-        dest.logo = context.configOptions.logo;
-        dest.clientPackageManager = context.configOptions.clientPackageManager;
-        dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
-        dest.experimental = context.configOptions.experimental || context.options.experimental;
-        dest.embeddableLaunchScript = context.configOptions.embeddableLaunchScript || false;
-
-        const uaaBaseName = context.configOptions.uaaBaseName || context.options['uaa-base-name'] || context.config.get('uaaBaseName');
-        if (dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
-            generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
-        }
-        dest.uaaBaseName = uaaBaseName;
-        dest.prettierJava = context.options['prettier-java'] || context.config.get('prettierJava');
+    setupSharedOptions(generator = this, context = generator, dest = context) {
+        const config = _.defaults({}, context.jhipsterConfig, defaultConfig);
+        generator.loadAppConfig.call(generator, config, dest);
+        generator.loadClientConfig.call(generator, config, dest);
+        generator.loadServerConfig.call(generator, config, dest);
+        generator.loadTranslationConfig.call(generator, config, dest);
     }
 
     /**
@@ -2093,30 +2025,6 @@ module.exports = class extends PrivateBase {
      */
     setupClientOptions(generator, context = generator, dest = context) {
         this.setupSharedOptions(generator, context, dest);
-        dest.authenticationType =
-            context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
-        dest.serviceDiscoveryType = context.configOptions.serviceDiscoveryType || context.config.get('serviceDiscoveryType');
-
-        dest.buildTool = context.configOptions.buildTool;
-        dest.websocket = context.configOptions.websocket;
-        dest.devDatabaseType = context.configOptions.devDatabaseType || context.config.get('devDatabaseType');
-        dest.prodDatabaseType = context.configOptions.prodDatabaseType || context.config.get('prodDatabaseType');
-        dest.databaseType =
-            generator.getDBTypeFromDBValue(dest.prodDatabaseType) ||
-            context.configOptions.databaseType ||
-            context.config.get('databaseType');
-        if (dest.authenticationType === 'oauth2' || (dest.databaseType === 'no' && dest.authenticationType !== 'uaa')) {
-            dest.skipUserManagement = true;
-        }
-        dest.searchEngine = context.config.get('searchEngine');
-        dest.cacheProvider = context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
-        dest.enableHibernateCache = context.config.get('enableHibernateCache') && !['no', 'memcached'].includes(dest.cacheProvider);
-        dest.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix');
-        dest.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
-        dest.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
-        dest.testFrameworks = context.configOptions.testFrameworks || [];
-
-        dest.useYarn = context.configOptions.useYarn;
     }
 
     /**
@@ -2130,63 +2038,282 @@ module.exports = class extends PrivateBase {
      */
     setupServerOptions(generator, context = generator, dest = context) {
         this.setupSharedOptions(generator, context, dest);
-        dest.enableTranslation = context.configOptions.enableTranslation || context.config.get('enableTranslation');
-        dest.testFrameworks = context.configOptions.testFrameworks;
     }
 
     /**
-     * Setup Entity instance level options from context.
+     * Parse runtime options.
+     * @param {Object} [options] - object to load from.
+     * @param {Object} [dest] - object to write to.
+     */
+    parseCommonRuntimeOptions(options = this.options, dest = this.configOptions) {
+        if (options.outputPathCustomizer) {
+            if (dest.outputPathCustomizer === undefined) {
+                dest.outputPathCustomizer = [];
+            } else if (!Array.isArray(dest.outputPathCustomizer)) {
+                dest.outputPathCustomizer = [dest.outputPathCustomizer];
+            }
+            if (Array.isArray(options.outputPathCustomizer)) {
+                options.outputPathCustomizer.forEach(customizer => {
+                    if (!dest.outputPathCustomizer.includes(customizer)) {
+                        dest.outputPathCustomizer.push(customizer);
+                    }
+                });
+            } else if (!dest.outputPathCustomizer.includes(options.outputPathCustomizer)) {
+                dest.outputPathCustomizer.push(options.outputPathCustomizer);
+            }
+        }
+
+        if (dest.jhipsterOldVersion === undefined) {
+            // Preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
+            dest.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion || null;
+        }
+        if (options.withEntities !== undefined) {
+            dest.withEntities = options.withEntities;
+        }
+        if (options.skipChecks !== undefined) {
+            dest.skipChecks = options.skipChecks;
+        }
+        if (options.debug !== undefined) {
+            dest.isDebugEnabled = options.debug;
+        }
+        if (options.experimental !== undefined) {
+            dest.experimental = options.experimental;
+        }
+        if (options.skipClient !== undefined) {
+            dest.skipClient = options.skipClient;
+        }
+        if (dest.creationTimestamp === undefined && options.creationTimestamp) {
+            const creationTimestamp = this.parseCreationTimestamp(options.creationTimestamp);
+            if (creationTimestamp) {
+                dest.creationTimestamp = creationTimestamp;
+            }
+        }
+    }
+
+    /**
+     * Load common options to be stored.
+     * @param {Object} [options] - options object to be loaded from.
+     */
+    loadStoredAppOptions(options = this.options) {
+        // Parse options only once.
+        if (this.configOptions.optionsParsed) return;
+        this.configOptions.optionsParsed = true;
+
+        // Load stored options
+        if (options.skipJhipsterDependencies !== undefined) {
+            this.jhipsterConfig.skipJhipsterDependencies = options.skipJhipsterDependencies;
+        }
+        if (options.incrementalChangelog !== undefined) {
+            this.jhipsterConfig.incrementalChangelog = options.incrementalChangelog;
+        }
+        if (options.recreateInitialChangelog) {
+            this.configOptions.recreateInitialChangelog = options.recreateInitialChangelog;
+        }
+        if (options.skipClient) {
+            this.skipClient = this.jhipsterConfig.skipClient = true;
+        }
+        if (options.applicationType) {
+            this.jhipsterConfig.applicationType = options.applicationType;
+        }
+        if (options.skipServer) {
+            this.skipServer = this.jhipsterConfig.skipServer = true;
+        }
+        if (options.skipFakeData) {
+            this.jhipsterConfig.skipFakeData = true;
+        }
+        if (options.skipUserManagement) {
+            this.jhipsterConfig.skipUserManagement = true;
+        }
+        if (options.skipCheckLengthOfIdentifier) {
+            this.jhipsterConfig.skipCheckLengthOfIdentifier = true;
+        }
+
+        if (options.skipCommitHook) {
+            this.jhipsterConfig.skipCommitHook = true;
+        }
+
+        if (options.baseName) {
+            this.jhipsterConfig.baseName = this.options.baseName;
+        }
+        if (options.db) {
+            this.jhipsterConfig.databaseType = this.getDBTypeFromDBValue(this.options.db);
+            this.jhipsterConfig.devDatabaseType = options.db;
+            this.jhipsterConfig.prodDatabaseType = options.db;
+        }
+        if (options.auth) {
+            this.jhipsterConfig.authenticationType = options.auth;
+        }
+        if (options.uaaBaseName) {
+            this.jhipsterConfig.uaaBaseName = options.uaaBaseName;
+        }
+        if (options.searchEngine) {
+            this.jhipsterConfig.searchEngine = options.searchEngine;
+        }
+        if (options.build) {
+            this.jhipsterConfig.buildTool = options.build;
+        }
+        if (options.websocket) {
+            this.jhipsterConfig.websocket = options.websocket;
+        }
+        if (options.jhiPrefix) {
+            this.jhipsterConfig.jhiPrefix = options.jhiPrefix;
+        }
+        if (options.entitySuffix) {
+            this.jhipsterConfig.entitySuffix = options.entitySuffix;
+        }
+        if (options.dtoSuffix) {
+            this.jhipsterConfig.dtoSuffix = options.dtoSuffix;
+        }
+        if (options.clientFramework) {
+            this.jhipsterConfig.clientFramework = options.clientFramework;
+        }
+        if (options.testFrameworks) {
+            this.jhipsterConfig.testFrameworks = options.testFrameworks;
+        }
+
+        if (options.creationTimestamp) {
+            const creationTimestamp = this.parseCreationTimestamp(options.creationTimestamp);
+            if (creationTimestamp) {
+                this.configOptions.creationTimestamp = creationTimestamp;
+                if (this.jhipsterConfig.creationTimestamp === undefined) {
+                    this.jhipsterConfig.creationTimestamp = creationTimestamp;
+                }
+            }
+        }
+    }
+
+    /**
+     * Load runtime options into dest.
      * all variables should be set to dest,
-     * all variables should be referred from context,
-     * all methods should be called on generator,
-     * @param {any} generator - generator instance
-     * @param {any} context - context to use default is generator instance
+     * all variables should be referred from config,
+     * @param {any} config - config to load config from
      * @param {any} dest - destination context to use default is context
      */
-    setupEntityOptions(generator, context = generator, dest = context) {
-        dest.name = context.options.name;
-        // remove extension if feeding json files
-        if (dest.name !== undefined) {
-            dest.name = dest.name.replace('.json', '');
-        }
+    loadRuntimeOptions(config = this.configOptions, dest = this) {
+        dest.withEntities = config.withEntities;
+        dest.skipChecks = config.skipChecks;
+        dest.isDebugEnabled = config.isDebugEnabled;
+        dest.experimental = config.experimental;
+        dest.logo = config.logo;
+    }
 
-        dest.regenerate = context.options.regenerate;
-        dest.fluentMethods = context.options['fluent-methods'];
-        dest.skipCheckLengthOfIdentifier = context.options['skip-check-length-of-identifier'];
-        dest.entityTableName = generator.getTableName(context.options['table-name'] || dest.name);
-        dest.entityNameCapitalized = _.upperFirst(dest.name);
-        dest.entityAngularJSSuffix = context.options['angular-suffix'];
-        dest.skipUiGrouping = context.options['skip-ui-grouping'];
-        dest.clientRootFolder = context.options['skip-ui-grouping'] ? '' : context.options['client-root-folder'];
-        dest.isDebugEnabled = context.options.debug;
-        dest.experimental = context.options.experimental;
-        if (dest.entityAngularJSSuffix && !dest.entityAngularJSSuffix.startsWith('-')) {
-            dest.entityAngularJSSuffix = `-${dest.entityAngularJSSuffix}`;
-        }
-        dest.rootDir = generator.destinationRoot();
-        // enum-specific consts
-        dest.enums = [];
+    /**
+     * Load app configs into dest.
+     * all variables should be set to dest,
+     * all variables should be referred from config,
+     * @param {any} config - config to load config from
+     * @param {any} dest - destination context to use default is context
+     */
+    loadAppConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+        dest.jhipsterVersion = config.jhipsterVersion;
+        dest.baseName = config.baseName;
+        dest.applicationType = config.applicationType;
+        dest.reactive = config.reactive;
+        dest.jhiPrefix = config.jhiPrefix;
+        dest.skipFakeData = config.skipFakeData;
+        dest.entitySuffix = config.entitySuffix;
+        dest.dtoSuffix = config.dtoSuffix;
+        dest.skipUserManagement = config.skipUserManagement;
 
-        dest.existingEnum = false;
+        dest.skipServer = config.skipServer;
+        dest.skipCommitHook = config.skipCommitHook;
+        dest.otherModules = config.otherModules || [];
+        dest.skipClient = config.skipClient;
+        dest.prettierJava = config.prettierJava;
+        dest.pages = config.pages;
+        dest.skipJhipsterDependencies = !!config.skipJhipsterDependencies;
 
-        dest.fieldNamesUnderscored = ['id'];
-        // these variable hold field and relationship names for question options during update
-        dest.fieldNameChoices = [];
-        dest.relNameChoices = [];
+        dest.testFrameworks = config.testFrameworks || [];
+        dest.gatlingTests = dest.testFrameworks.includes('gatling');
+        dest.cucumberTests = dest.testFrameworks.includes('cucumber');
+        dest.protractorTests = dest.testFrameworks.includes('protractor');
+        dest.cypressTests = dest.testFrameworks.includes('cypress');
+
+        dest.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
+        dest.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);
+    }
+
+    /**
+     * Load client configs into dest.
+     * all variables should be set to dest,
+     * all variables should be referred from config,
+     * @param {any} config - config to load config from
+     * @param {any} dest - destination context to use default is context
+     */
+    loadClientConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+        dest.clientPackageManager = config.clientPackageManager;
+        dest.clientFramework = config.clientFramework;
+        dest.clientTheme = config.clientTheme;
+        dest.clientThemeVariant = config.clientThemeVariant;
+    }
+
+    /**
+     * Load translation configs into dest.
+     * all variables should be set to dest,
+     * all variables should be referred from config,
+     * @param {any} config - config to load config from
+     * @param {any} dest - destination context to use default is context
+     */
+    loadTranslationConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+        dest.enableTranslation = config.enableTranslation;
+        dest.nativeLanguage = config.nativeLanguage;
+        dest.languages = config.languages;
+    }
+
+    /**
+     * Load server configs into dest.
+     * all variables should be set to dest,
+     * all variables should be referred from config,
+     * @param {any} config - config to load config from
+     * @param {any} dest - destination context to use default is context
+     */
+    loadServerConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+        dest.packageName = config.packageName;
+        dest.packageFolder = config.packageFolder;
+        dest.serverPort = config.serverPort;
+        dest.uaaBaseName = config.uaaBaseName;
+        dest.buildTool = config.buildTool;
+
+        dest.authenticationType = config.authenticationType;
+        dest.rememberMeKey = config.rememberMeKey;
+        dest.jwtSecretKey = config.jwtSecretKey;
+
+        dest.databaseType = config.databaseType;
+        dest.devDatabaseType = config.devDatabaseType;
+        dest.prodDatabaseType = config.prodDatabaseType;
+        dest.searchEngine = config.searchEngine;
+        dest.cacheProvider = config.cacheProvider;
+        dest.enableHibernateCache = config.enableHibernateCache;
+
+        dest.enableSwaggerCodegen = config.enableSwaggerCodegen;
+        dest.messageBroker = config.messageBroker;
+        dest.websocket = config.websocket;
+        dest.serviceDiscoveryType = config.serviceDiscoveryType;
+
+        dest.embeddableLaunchScript = config.embeddableLaunchScript;
     }
 
     /**
      * Get all the generator configuration from the .yo-rc.json file
-     * @param {Generator} generator the generator instance to use
-     * @param {boolean} force force getting direct from file
+     * @param {string} yoRcPath - .yo-rc.json folder.
      */
-    getAllJhipsterConfig(generator = this, force) {
-        const configRootPath =
-            generator.configRootPath ||
-            (generator.options && generator.options.configRootPath) ||
-            (generator.configOptions && generator.configOptions.configRootPath) ||
-            '';
-        return jhipsterUtils.getAllJhipsterConfig(generator, force, configRootPath);
+    getJhipsterConfig(yoRcPath) {
+        if (yoRcPath === undefined) {
+            const configRootPath =
+                this.configRootPath ||
+                (this.options && this.options.configRootPath) ||
+                (this.configOptions && this.configOptions.configRootPath);
+            yoRcPath = path.join(configRootPath || this.destinationPath(), '.yo-rc.json');
+        }
+        return this.createStorage(yoRcPath, 'generator-jhipster');
+    }
+
+    /**
+     * Get all the generator configuration from the .yo-rc.json file
+     * @param {string} entityName - Name of the entity to load.
+     */
+    getEntityConfig(entityName) {
+        return this.createStorage(this.destinationPath(JHIPSTER_CONFIG_DIR, `${_.upperFirst(entityName)}.json`));
     }
 
     /**
@@ -2221,24 +2348,39 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * From an enum's values (with or without custom values), returns the enum's values without custom values.
-     * @param {String} enumValues - an enum's values.
-     * @return {Array<String>} the formatted enum's values.
+     * Get default config based on applicationType
      */
-    getEnumValuesWithCustomValues(enumValues) {
-        if (!enumValues || enumValues === '') {
-            throw new Error('Enumeration values must be passed to get the formatted values.');
+    getDefaultConfigForApplicationType(applicationType = this.jhipsterConfig.applicationType) {
+        let defaultAppTypeConfig = {};
+        switch (applicationType) {
+            case 'monolith':
+                defaultAppTypeConfig = defaultApplicationOptions.getConfigForMonolithApplication();
+                break;
+            case 'gateway':
+                defaultAppTypeConfig = defaultApplicationOptions.getConfigForGatewayApplication();
+                break;
+            case 'microservice':
+                defaultAppTypeConfig = defaultApplicationOptions.getConfigForMicroserviceApplication();
+                break;
+            case 'uaa':
+                defaultAppTypeConfig = defaultApplicationOptions.getConfigForUAAApplication();
+                break;
+            default:
+                defaultAppTypeConfig = defaultApplicationOptions.getDefaultConfigForNewApplication();
         }
-        return enumValues.split(',').map(enumValue => {
-            if (!enumValue.includes('(')) {
-                return { name: enumValue.trim(), value: enumValue.trim() };
-            }
-            // eslint-disable-next-line no-unused-vars
-            const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
-            return {
-                name: matched[1],
-                value: matched[2],
-            };
+        return { ...defaultAppTypeConfig, ...defaultConfig };
+    }
+
+    setConfigDefaults(defaults = defaultConfig) {
+        const jhipsterVersion = packagejs.version;
+        const baseName = this.getDefaultAppName();
+        const creationTimestamp = new Date().getTime();
+
+        this.config.defaults({
+            ...defaults,
+            jhipsterVersion,
+            baseName,
+            creationTimestamp,
         });
     }
 };

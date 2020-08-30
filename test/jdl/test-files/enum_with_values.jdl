@@ -1,0 +1,13 @@
+enum EnvironmentType {
+  ARCHIVE (archive),
+  DEV (development),
+  INTEGRATION (integration),
+  PROD (production),
+  TEST (test),
+  UAT (uat),
+  NON_PROD (nonProd)
+}
+
+entity Environment {
+  type EnvironmentType required
+}

@@ -76,9 +76,12 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
                 default: false,
             },
             {
+                option: '--fork',
+                desc: 'Run generators using fork',
+            },
+            {
                 option: '--interactive',
                 desc: 'Run generation in series so that questions can be interacted with',
-                default: false,
             },
             {
                 option: '--db <value>',
@@ -158,6 +161,10 @@ Example:
     },
     openshift: {
         desc: 'Deploy the current application to OpenShift',
+    },
+    page: {
+        argument: ['pageName'],
+        desc: 'Create a new page. (Supports vue clients)',
     },
     'spring-service': {
         alias: 'service',

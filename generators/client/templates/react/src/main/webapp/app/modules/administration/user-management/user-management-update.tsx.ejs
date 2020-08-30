@@ -33,7 +33,7 @@ import { IRootState } from 'app/shared/reducers';
 export interface IUserManagementUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ login: string }> {}
 
 export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
-  const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.login);
+  const [isNew] = useState(!props.match.params || !props.match.params.login);
 
   useEffect(() => {
     if (isNew) {

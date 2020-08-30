@@ -8,6 +8,7 @@ const proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 const sinon = require('sinon');
 
 const { testInTempDir, revertTempDir } = require('../utils/utils');
+const packageJson = require('../../package.json');
 const cliUtils = require('../../cli/utils');
 
 const { logger } = cliUtils;
@@ -41,7 +42,7 @@ describe('jdl command test', () => {
             });
             it('should forward options to jdl.js', () => {
                 expect(jdlStub.getCall(0).args[1].downloadOnly).to.be.true;
-                expect(jdlStub.getCall(0).args[1]['download-only']).to.be.true;
+                expect(jdlStub.getCall(0).args[1].downloadOnly).to.be.true;
             });
         });
         describe('with 2 argument and options', () => {
@@ -61,7 +62,7 @@ describe('jdl command test', () => {
             });
             it('should forward options to jdl.js', () => {
                 expect(jdlStub.getCall(0).args[1].downloadOnly).to.be.true;
-                expect(jdlStub.getCall(0).args[1]['download-only']).to.be.true;
+                expect(jdlStub.getCall(0).args[1].downloadOnly).to.be.true;
             });
         });
         describe('using import-jdl alias', () => {
@@ -84,7 +85,7 @@ describe('jdl command test', () => {
             });
             it('should forward options to jdl.js', () => {
                 expect(jdlStub.getCall(0).args[1].downloadOnly).to.be.true;
-                expect(jdlStub.getCall(0).args[1]['download-only']).to.be.true;
+                expect(jdlStub.getCall(0).args[1].downloadOnly).to.be.true;
             });
         });
     });
@@ -218,9 +219,13 @@ describe('jdl command test', () => {
             const jdlReturn = { foo: 'bar' };
             beforeEach(() => {
                 // Fake a success response
-                const response = { statusCode: 200, pipe: fileStream => fileStream.close() };
-                sinon.stub(https, 'get').callsFake((_url, cb) => {
-                    cb(response);
+                const response = { pipe: fileStream => fileStream.close() };
+                sinon.stub(https, 'get').callsFake((url, cb) => {
+                    if (url.includes(`v${packageJson.version}`)) {
+                        cb({ ...response, statusCode: 400 });
+                    } else {
+                        cb({ ...response, statusCode: 200 });
+                    }
                     return { on: () => {} };
                 });
                 importJdlStub = sinon.stub().callsFake(() => {
@@ -246,6 +251,9 @@ describe('jdl command test', () => {
                 });
                 it('should pass to https.get with jdl-sample repository', () => {
                     expect(https.get.getCall(0).args[0]).to.be.equal(
+                        `https://raw.githubusercontent.com/jhipster/jdl-samples/v${packageJson.version}/foo.jh`
+                    );
+                    expect(https.get.getCall(1).args[0]).to.be.equal(
                         'https://raw.githubusercontent.com/jhipster/jdl-samples/master/foo.jh'
                     );
                 });
@@ -271,6 +279,9 @@ describe('jdl command test', () => {
                 });
                 it('should append jdl extension and pass to https.get with jdl-sample repository', () => {
                     expect(https.get.getCall(0).args[0]).to.be.equal(
+                        `https://raw.githubusercontent.com/jhipster/jdl-samples/v${packageJson.version}/foo.jdl`
+                    );
+                    expect(https.get.getCall(1).args[0]).to.be.equal(
                         'https://raw.githubusercontent.com/jhipster/jdl-samples/master/foo.jdl'
                     );
                 });

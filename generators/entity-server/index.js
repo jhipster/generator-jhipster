@@ -30,13 +30,10 @@ module.exports = class extends BaseBlueprintGenerator {
         super(args, opts);
         utils.copyObjectProps(this, opts.context);
         this.jhipsterContext = opts.jhipsterContext || opts.context;
-        this.configOptions = opts.configOptions || {};
 
         this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.jhipsterContext.authenticationType);
 
-        useBlueprints =
-            !this.fromBlueprint &&
-            this.instantiateBlueprints('entity-server', { context: opts.context, debug: opts.context.isDebugEnabled });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-server', { context: opts.context });
     }
 
     // Public API method used by the getter and also by Blueprints

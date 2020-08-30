@@ -1,0 +1,45 @@
+{
+  "fluentMethods": true,
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "relationshipName": "country",
+      "otherEntityName": "country",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "location"
+    }
+  ],
+  "fields": [
+    {
+      "fieldName": "locationId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "streetAddress",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "postalCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "city",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "stateProvince",
+      "fieldType": "String"
+    }
+  ],
+  "changelogDate": "20160924092439",
+  "entityTableName": "location",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "skipClient": true,
+  "skipServer": true,
+  "clientRootFolder": "toto",
+  "applications": "*"
+}

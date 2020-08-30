@@ -21,7 +21,7 @@ const chalk = require('chalk');
 const didYouMean = require('didyoumean');
 
 const packageJson = require('../package.json');
-const { CLI_NAME, initHelp, logger, toString, getCommand, getCommandOptions, addKebabCase, getArgs, done } = require('./utils');
+const { CLI_NAME, initHelp, logger, toString, getCommand, getCommandOptions, getArgs, done } = require('./utils');
 const EnvironmentBuilder = require('./environment-builder');
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
@@ -50,7 +50,7 @@ const runYoCommand = (cmd, args, options, opts) => {
     logger.info(chalk.yellow(`Executing ${command}`));
     logger.debug(chalk.yellow(`Options: ${toString(options)}`));
     try {
-        env.run(command, options, done);
+        env.run(command, options).then(done, done);
     } catch (e) {
         logger.error(e.message, e);
     }
@@ -158,9 +158,9 @@ Object.entries(allCommands).forEach(([key, opts]) => {
             // Get unknown options and parse.
             const options = {
                 ...getCommandOptions(packageJson, unknownArgs),
-                ...addKebabCase(program.opts()),
-                ...addKebabCase(cmdOptions),
-                ...addKebabCase(customOptions),
+                ...program.opts(),
+                ...cmdOptions,
+                ...customOptions,
             };
 
             if (opts.cliOnly) {

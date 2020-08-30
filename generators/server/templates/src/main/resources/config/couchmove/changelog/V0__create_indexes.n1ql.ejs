@@ -7,9 +7,7 @@ CREATE INDEX user_mail ON `${bucket}`(email)
     WHERE `_class` = "<%= packageName %>.domain.<%= asEntity('User') %>"
     WITH { "defer_build" : true };
 
-CREATE INDEX audit_event ON `${bucket}`(principal, event_date, event_type)
-    WHERE `_class` = "<%= packageName %>.domain.PersistentAuditEvent"
-    WITH { "defer_build" : true };<% if (authenticationType === 'session') { %>
+<% if (authenticationType === 'session') { %>
 
 CREATE INDEX token_login ON `${bucket}`(login)
     WHERE `_class` = "<%= packageName %>.domain.PersistentToken"
@@ -21,4 +19,4 @@ CREATE INDEX token_date ON `${bucket}`(tokenDate)
 <%_ } _%>
 
 -- build indexes asynchronously
-BUILD INDEX ON `${bucket}`(type<% if (!skipUserManagement) { %>, user_mail, audit_event<% if (authenticationType === 'session') { %>, token_login, token_date<% } %><% } %>);
+BUILD INDEX ON `${bucket}`(type<% if (!skipUserManagement) { %>, user_mail<% if (authenticationType === 'session') { %>, token_login, token_date<% } %><% } %>);

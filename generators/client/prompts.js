@@ -18,27 +18,27 @@
  */
 const chalk = require('chalk');
 const constants = require('../generator-constants');
+const { clientDefaultConfig } = require('../generator-defaults');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 module.exports = {
     askForModuleName,
     askForClient,
-    askForI18n,
-    askFori18n,
     askForClientTheme,
     askForClientThemeVariant,
 };
 
 function askForModuleName() {
-    if (this.baseName) return;
+    if (this.jhipsterConfig.baseName) return undefined;
 
-    this.askModuleName(this);
+    return this.askModuleName(this);
 }
 
-function askForClient(meta) {
-    if (!meta && this.existingProject) return;
+function askForClient() {
+    if (this.existingProject) return true;
 
     const applicationType = this.applicationType;
 
@@ -52,6 +52,10 @@ function askForClient(meta) {
             name: 'React',
         },
         {
+            value: VUE,
+            name: 'Vue',
+        },
+        {
             value: 'no',
             name: 'No client',
         },
@@ -63,45 +67,23 @@ function askForClient(meta) {
         when: response => applicationType !== 'microservice' && applicationType !== 'uaa',
         message: `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
         choices,
-        default: ANGULAR,
+        default: clientDefaultConfig.clientFramework,
     };
 
-    if (meta) return PROMPT; // eslint-disable-line consistent-return
-
-    const done = this.async();
-
-    this.prompt(PROMPT).then(prompt => {
-        this.clientFramework = prompt.clientFramework;
+    return this.prompt(PROMPT).then(prompt => {
+        this.clientFramework = this.jhipsterConfig.clientFramework = prompt.clientFramework;
         if (this.clientFramework === 'no') {
-            this.skipClient = true;
+            this.skipClient = this.jhipsterConfig.skipClient = true;
         }
-        done();
     });
 }
 
-function askForI18n() {
-    if (this.existingProject || this.configOptions.skipI18nQuestion) return;
-
-    this.aski18n(this);
-}
-
-/**
- * @deprecated Use askForI18n() instead.
- * This method will be removed in JHipster v7.
- */
-function askFori18n() {
-    // eslint-disable-next-line no-console
-    console.log(chalk.yellow('\nPlease use askForI18n() instead. This method will be removed in v7\n'));
-    this.askForI18n();
-}
-
-function askForClientTheme(meta) {
-    if (!meta && this.existingProject) {
+function askForClientTheme() {
+    if (this.existingProject) {
         return;
     }
 
     const skipClient = this.skipClient;
-    const done = this.async();
     const defaultChoices = [
         {
             value: 'none',
@@ -136,9 +118,17 @@ function askForClientTheme(meta) {
         when: () => !skipClient,
         message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
         choices: defaultChoices,
-        default: 'none',
+        default: clientDefaultConfig.clientTheme,
     };
 
+    const self = this;
+    const promptClientTheme = function (PROMPT) {
+        return self.prompt(PROMPT).then(prompt => {
+            self.clientTheme = self.jhipsterConfig.clientTheme = prompt.clientTheme;
+        });
+    };
+
+    const done = this.async();
     this.httpsGet(
         'https://bootswatch.com/api/4.json',
         // eslint-disable-next-line consistent-return
@@ -156,35 +146,25 @@ function askForClientTheme(meta) {
                         name: theme.name,
                     })),
                 ];
-
-                if (meta) return PROMPT;
-                promptQuestion(PROMPT, done, this);
             } catch (err) {
                 this.warning('Could not fetch bootswatch themes from API. Using default ones.');
-                promptQuestion(PROMPT, done, this);
             }
+            done(undefined, promptClientTheme(PROMPT));
         },
         () => {
             this.warning('Could not fetch bootswatch themes from API. Using default ones.');
-            promptQuestion(PROMPT, done, this);
+            done(undefined, promptClientTheme(PROMPT));
         }
     );
 }
 
-function promptQuestion(PROMPT, done, generator) {
-    generator.prompt(PROMPT).then(prompt => {
-        generator.clientTheme = prompt.clientTheme;
-        done();
-    });
-}
-
-function askForClientThemeVariant(meta) {
-    if (!meta && this.existingProject) {
-        return;
+function askForClientThemeVariant() {
+    if (this.existingProject) {
+        return undefined;
     }
     if (this.clientTheme === 'none') {
         this.clientThemeVariant = '';
-        return;
+        return undefined;
     }
 
     const skipClient = this.skipClient;
@@ -201,15 +181,10 @@ function askForClientThemeVariant(meta) {
         when: () => !skipClient,
         message: 'Choose a Bootswatch variant navbar theme (https://bootswatch.com/)?',
         choices,
-        default: 'primary',
+        default: clientDefaultConfig.clientThemeVariant,
     };
 
-    if (meta) return PROMPT; // eslint-disable-line consistent-return
-
-    const done = this.async();
-
-    this.prompt(PROMPT).then(prompt => {
-        this.clientThemeVariant = prompt.clientThemeVariant;
-        done();
+    return this.prompt(PROMPT).then(prompt => {
+        this.clientThemeVariant = this.jhipsterConfig.clientThemeVariant = prompt.clientThemeVariant;
     });
 }

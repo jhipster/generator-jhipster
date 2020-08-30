@@ -43,16 +43,6 @@ node {
 <%= indent %>    }
 
     <%_ if (!skipClient) { _%>
-        <%_ if (clientPackageManager === 'yarn') { _%>
-<%= indent %>    stage('install tools') {
-<%= indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v<%= NODE_VERSION %> -DyarnVersion=v<%= YARN_VERSION %>"
-<%= indent %>    }
-
-<%= indent %>    stage('yarn install') {
-<%= indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:yarn"
-<%= indent %>    }
-
-        <%_ } else if (clientPackageManager === 'npm') { _%>
 <%= indent %>    stage('install tools') {
 <%= indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v<%= NODE_VERSION %> -DnpmVersion=<%= NPM_VERSION %>"
 <%= indent %>    }
@@ -61,7 +51,6 @@ node {
 <%= indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm"
 <%= indent %>    }
 
-        <%_ } _%>
     <%_ } _%>
 <%= indent %>    stage('backend tests') {
 <%= indent %>        try {
@@ -77,13 +66,8 @@ node {
 <%= indent %>    stage('frontend tests') {
 <%= indent %>        try {
         <%_ if (insideDocker) { _%>
-            <%_ if (clientPackageManager === 'yarn') { _%>
-<%= indent %>           yarn install
-<%= indent %>           yarn test
-            <%_ } else if (clientPackageManager === 'npm') { _%>                         
 <%= indent %>           npm install
 <%= indent %>           npm test
-            <%_ } _%>
         <%_ } else { _%>
 <%= indent %>            sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>'"
         <%_ } _%>

@@ -1,0 +1,37 @@
+{
+  "fluentMethods": true,
+  "relationships": [
+    {
+      "relationshipType": "many-to-many",
+      "relationshipValidateRules": "required",
+      "relationshipName": "job",
+      "otherEntityName": "job",
+      "ownerSide": false,
+      "otherEntityRelationshipName": "task"
+    }
+  ],
+  "fields": [
+    {
+      "fieldName": "taskId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "changelogDate": "20160926100704",
+  "entityTableName": "task",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "skipClient": true,
+  "skipServer": true,
+  "clientRootFolder": "toto",
+  "applications": "*"
+}

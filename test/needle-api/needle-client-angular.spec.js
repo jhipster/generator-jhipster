@@ -83,7 +83,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
         helpers
             .run(path.join(__dirname, '../../generators/client'))
             .withOptions({
-                'from-cli': true,
+                fromCli: true,
                 build: 'maven',
                 auth: 'jwt',
                 db: 'mysql',
@@ -176,7 +176,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
 
     it('entity module contains the microservice object added by needle api', () => {
         assert.fileContent(
-            `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/entity-routing.module.ts`,
             '      {\n' +
                 "        path: 'entityUrl',\n" +
                 "        loadChildren: () => import('./entityFolderName/entityFileName.module').then(m => m.MicroServiceNameentityNameModule)\n" +

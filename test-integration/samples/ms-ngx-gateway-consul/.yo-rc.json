@@ -22,6 +22,7 @@
         "jhiPrefix": "myPrefix",
         "messageBroker": false,
         "clientPackageManager": "npm",
-        "clientFramework": "angularX"
+        "clientFramework": "angularX",
+        "creationTimestamp": 1596513172471
     }
 }

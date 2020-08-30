@@ -2,6 +2,8 @@ node_modules
 travis
 docs
 .git
-.jhipster
+test/jdl/**/.jhipster/**
 .vscode
 **/templates/**/
+**/jdl-core.min.js
+**/generated-serialized-grammar.js

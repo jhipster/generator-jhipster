@@ -7,10 +7,16 @@ const proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 const sinon = require('sinon');
 const Environment = require('yeoman-environment');
 
-const { getJHipsterCli, testInTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('../utils/utils');
+const { getJHipsterCli, testInTempDir, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('../utils/utils');
 const { logger } = require('../../cli/utils');
 
 describe('jhipster cli test', () => {
+    let cleanup;
+    before(() => {
+        cleanup = prepareTempDir();
+    });
+    after(() => cleanup());
+
     const cmd = getJHipsterCli();
 
     it('verify correct cmd format', () => {
@@ -82,6 +88,7 @@ describe('jhipster cli test', () => {
             commands.mocked = { desc: 'Mocked command' };
             sinon.stub(Environment.prototype, 'run').callsFake((...args) => {
                 callback(...args);
+                return Promise.resolve();
             });
             sinon.stub(Environment.prototype, 'create').returns({ _options: {} });
         });
@@ -94,7 +101,7 @@ describe('jhipster cli test', () => {
             it('should pass a truthy fromCli', done => {
                 callback = (_command, options) => {
                     expect(options.fromCli).to.be.true;
-                    expect(options['from-cli']).to.be.true;
+                    expect(options.fromCli).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands });
@@ -120,7 +127,6 @@ describe('jhipster cli test', () => {
                     expect(command).to.be.equal('jhipster:mocked');
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands });
@@ -140,7 +146,6 @@ describe('jhipster cli test', () => {
                     expect(command).to.be.equal('jhipster:mocked Foo');
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands });
@@ -160,7 +165,6 @@ describe('jhipster cli test', () => {
                     expect(command).to.be.equal('jhipster:mocked Foo Bar');
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands });
@@ -185,7 +189,7 @@ describe('jhipster cli test', () => {
             it('should pass a truthy fromCli', done => {
                 const cb = (_args, options, _env) => {
                     expect(options.fromCli).to.be.true;
-                    expect(options['from-cli']).to.be.true;
+                    expect(options.fromCli).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
@@ -214,7 +218,27 @@ describe('jhipster cli test', () => {
                     expect(args).to.eql(['Foo']);
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
+                    done();
+                };
+                proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
+            });
+        });
+
+        describe('with negate argument', () => {
+            beforeEach(() => {
+                commands.mocked.desc = 'Mocked command';
+                commands.mocked.argument = ['name'];
+                commands.mocked.cliOnly = true;
+                process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--no-foo', '--no-foo-bar'];
+            });
+
+            commonTests();
+
+            it('should forward argument and options', done => {
+                const cb = (args, options) => {
+                    expect(args).to.eql(['Foo']);
+                    expect(options.foo).to.be.false;
+                    expect(options.fooBar).to.be.false;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
@@ -236,7 +260,6 @@ describe('jhipster cli test', () => {
                     expect(args).to.eql(['Foo', 'Bar']);
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
@@ -257,7 +280,6 @@ describe('jhipster cli test', () => {
                     expect(args).to.eql([]);
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });

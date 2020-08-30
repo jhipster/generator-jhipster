@@ -19,7 +19,7 @@
 {
     "compilerOptions": {
       "target": "es6",
-      "module": "esnext",
+      "module": "es2020",
       "moduleResolution": "node",
       "sourceMap": true,
       "emitDecoratorMetadata": true,
@@ -45,5 +45,8 @@
       "fullTemplateTypeCheck": true,
       "strictTemplates": true,
       "preserveWhitespaces": true
-    }
+    },
+     <%_ if (cypressTests) { _%>
+    "exclude": ["src/test/javascript/cypress"]
+    <%_ } _%>
 }

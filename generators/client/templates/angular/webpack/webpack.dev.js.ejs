@@ -18,7 +18,7 @@
 -%>
 const webpack = require('webpack');
 const writeFilePlugin = require('write-file-webpack-plugin');
-const webpackMerge = require('webpack-merge');
+const webpackMerge = require('webpack-merge').merge;
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
@@ -42,6 +42,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
                 '/management',
                 '/swagger-resources',
                 '/v2/api-docs',
+                '/v3/api-docs',
                 '/h2-console',
                 <%_ if (authenticationType === 'oauth2') { _%>
                 '/oauth2',

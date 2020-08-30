@@ -244,7 +244,9 @@ public class CacheConfiguration {
 
     private void createCache(javax.cache.CacheManager cm, String cacheName) {
         javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
-        if (cache == null) {
+        if (cache != null) {
+            cache.clear();
+        } else {
             cm.createCache(cacheName, jcacheConfiguration);
         }
     }
@@ -719,7 +721,7 @@ public class CacheConfiguration {
         DefaultAddressProvider addressProvider = new DefaultAddressProvider();
         addressProvider.setAddress(jHipsterProperties.getCache().getMemcached().getServers());
         defaultCache.setAddressProvider(addressProvider);
-        
+
         Map<InetSocketAddress, AuthInfo> authInfoMap = new HashMap<>();
 
         if (jHipsterProperties.getCache().getMemcached().getAuthentication().isEnabled()) {
@@ -808,7 +810,9 @@ public class CacheConfiguration {
 
     private void createCache(javax.cache.CacheManager cm, String cacheName, javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
         javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
-        if (cache == null) {
+        if (cache != null) {
+            cache.clear();
+        } else {
             cm.createCache(cacheName, jcacheConfiguration);
         }
     }

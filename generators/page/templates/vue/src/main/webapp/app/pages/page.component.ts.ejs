@@ -1,0 +1,15 @@
+import { Component, Inject, Vue } from 'vue-property-decorator';
+import <%= pageName %>Service from './<%= pageFolderName %>.service';
+
+@Component
+export default class <%= pageName %> extends Vue {
+  @Inject('<%= pageInstance %>Service') private <%= pageInstance %>Service: () => <%= pageName %>Service;
+
+  public mounted(): void {
+    this.init();
+  }
+
+  public init(): void {
+    this.<%= pageInstance %>Service().method();
+  }
+}

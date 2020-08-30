@@ -24,15 +24,15 @@ jobs:
     - job: Test
       condition: not(contains(variables['System.PullRequest.SourceBranch'], 'dependabot'))
       pool:
-          vmImage: 'ubuntu-18.04'
+          vmImage: 'ubuntu-20.04'
       variables:
           JHI_PROFILE: dev,webpack
           JHI_RUN_APP: 1
-          JHI_PROTRACTOR: 0
+          JHI_E2E: 0
           JHI_JDK: 11
           # if JHI_LIB_BRANCH value is release, use the release from Maven
           JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
-          JHI_LIB_BRANCH: release
+          JHI_LIB_BRANCH: master
           # if JHI_GEN_BRANCH value is release, use the release from NPM
           JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
           JHI_GEN_BRANCH: master
@@ -50,12 +50,12 @@ jobs:
                   JHI_APP: ms-ngx-gateway-eureka-jwt
                   JHI_ENTITY: sqllight
                   JHI_PROFILE: prod
-                  JHI_PROTRACTOR: 1
+                  JHI_E2E: 1
               ms-ngx-gateway-eureka-oauth2:
                   JHI_APP: ms-ngx-gateway-eureka-oauth2
                   JHI_ENTITY: sqllight
                   JHI_PROFILE: prod
-                  JHI_PROTRACTOR: 1
+                  JHI_E2E: 1
               ms-ngx-gateway-eureka-uaa:
                   JHI_APP: ms-ngx-gateway-eureka-uaa
                   JHI_ENTITY: uaa
@@ -69,17 +69,17 @@ jobs:
                   JHI_APP: ms-react-gateway-consul-jwt
                   JHI_ENTITY: sqllight
                   JHI_PROFILE: prod
-                  JHI_PROTRACTOR: 1
+                  JHI_E2E: 1
               ms-react-gateway-consul-oauth2:
                   JHI_APP: ms-react-gateway-consul-oauth2
                   JHI_ENTITY: sqllight
                   JHI_PROFILE: prod
-                  JHI_PROTRACTOR: 1
+                  JHI_E2E: 1
               jdl-default:
                   JHI_APP: jdl-default
                   JHI_ENTITY: jdl
                   JHI_PROFILE: prod
-                  JHI_PROTRACTOR: 1
+                  JHI_E2E: 1
                   JHI_TESTCONTAINERS: 1
       steps:
           #----------------------------------------------------------------------
@@ -94,7 +94,7 @@ jobs:
           #----------------------------------------------------------------------
           - task: NodeTool@0
             inputs:
-                versionSpec: '12.16.1'
+                versionSpec: '12.18.3'
             displayName: 'TOOLS: install Node.js'
           - script: |
                 if [[ $JHI_JDK = '11' ]]; then
@@ -116,8 +116,6 @@ jobs:
             displayName: 'TOOLS: install google-chrome-stable'
           - script: npm install -g npm
             displayName: 'TOOLS: update NPM'
-          - script: npm install -g yarn
-            displayName: 'TOOLS: install Yarn'
           - bash: $(JHI_SCRIPTS)/01-display-configuration.sh
             displayName: 'TOOLS: display configuration'
           - bash: $(JHI_SCRIPTS)/03-system.sh
