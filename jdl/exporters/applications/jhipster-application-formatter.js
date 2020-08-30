@@ -17,75 +17,39 @@
  * limitations under the License.
  */
 
-const path = require('path');
-const ApplicationValidator = require('../validators/application-validator');
-const { createFolderIfItDoesNotExist, doesFileExist } = require('../utils/file-utils');
-const { GENERATOR_NAME, writeConfigFile } = require('./export-utils');
+const { GENERATOR_NAME } = require('../export-utils');
 
 module.exports = {
-    exportApplications,
-    exportApplication,
-    exportApplicationInCurrentDirectory,
+    formatApplicationsToExport,
+    formatApplicationToExport,
 };
 
 /**
  * Exports JDL applications to JDL files in separate folders (based on application base names).
  * @param applications the applications to exporters (key: application name, value: a JDLApplication).
- * @param {Object} configuration - the configuration object.
- * @param {Boolean} configuration.skipFileGeneration - set true to skip writing .yo-rc.json.
  * @return object[] exported applications in their final form.
  */
-function exportApplications(applications, configuration = {}) {
+function formatApplicationsToExport(applications, configuration) {
     if (!applications) {
         throw new Error('Applications have to be passed to be exported.');
     }
     return Object.values(applications).map(application => {
-        checkForErrors(application);
-        const exportableApplication = setUpApplicationStructure(application);
-        if (!configuration.skipFileGeneration) {
-            writeApplicationFileForMultipleApplications(exportableApplication);
-        }
-        return exportableApplication;
+        return setUpApplicationStructure(application, configuration);
     });
-}
-
-/**
- * Alias of exportApplication.
- */
-function exportApplicationInCurrentDirectory(application, configuration = {}) {
-    return exportApplication(application, configuration);
 }
 
 /**
  * Exports JDL a application to a JDL file in the current directory.
  * @param {Object} application - the JDL application to export.
  * @param {Object} configuration - the configuration object.
- * @param {Boolean} configuration.skipFileGeneration - set true to skip writing .yo-rc.json.
  * @param {Integer} configuration.creationTimestampConfig - date representation to be written to creationTimestamp at .yo-rc.json.
  * @return {Object} the exported application in its final form.
  */
-function exportApplication(application, configuration = {}) {
-    checkForErrors(application);
-    const exportableApplication = setUpApplicationStructure(application, configuration);
-    if (!configuration.skipFileGeneration) {
-        writeConfigFile(exportableApplication);
-    }
-    return exportableApplication;
+function formatApplicationToExport(application, configuration = {}) {
+    return setUpApplicationStructure(application, configuration);
 }
 
-function checkForErrors(application) {
-    if (!application) {
-        throw new Error('An application has to be passed to be exported.');
-    }
-    const validator = new ApplicationValidator();
-    try {
-        validator.validate(application);
-    } catch (error) {
-        throw new Error(`Can't export invalid application. ${error}`);
-    }
-}
-
-function setUpApplicationStructure(application, configuration = {}) {
+function setUpApplicationStructure(application, { creationTimestampConfig }) {
     let applicationToExport = {
         [GENERATOR_NAME]: {},
     };
@@ -93,8 +57,8 @@ function setUpApplicationStructure(application, configuration = {}) {
     applicationToExport.entities = application.getEntityNames();
     if (application.hasConfigurationOption('creationTimestamp')) {
         applicationToExport[GENERATOR_NAME].creationTimestamp = application.getConfigurationOptionValue('creationTimestamp');
-    } else if (configuration.creationTimestampConfig) {
-        applicationToExport[GENERATOR_NAME].creationTimestamp = configuration.creationTimestampConfig;
+    } else if (creationTimestampConfig) {
+        applicationToExport[GENERATOR_NAME].creationTimestamp = creationTimestampConfig;
     }
     applicationToExport = cleanUpOptions(applicationToExport);
     return applicationToExport;
@@ -118,21 +82,5 @@ function cleanUpOptions(application) {
             name: blueprintName,
         }));
     }
-
     return application;
-}
-
-/**
- * This function writes a Yeoman config file in an application folder.
- * @param application the application.
- */
-function writeApplicationFileForMultipleApplications(application) {
-    const applicationBaseName = application[GENERATOR_NAME].baseName;
-    if (doesFileExist(applicationBaseName)) {
-        throw new Error(
-            `A file named '${applicationBaseName}' already exists, so a folder of the same name can't be created for the application.`
-        );
-    }
-    createFolderIfItDoesNotExist(applicationBaseName);
-    writeConfigFile(application, path.join(applicationBaseName, '.yo-rc.json'));
 }

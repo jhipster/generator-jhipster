@@ -24,62 +24,6 @@ const path = require('path');
 const JSONFileReader = require('../../../jdl/readers/json-file-reader');
 
 describe('JSONFileReader', () => {
-    describe('readEntityJSON', () => {
-        context('when passing an invalid argument', () => {
-            context('because it is nil', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        JSONFileReader.readEntityJSON();
-                    }).to.throw(/^The passed file path must not be nil to read the JSON entity\.$/);
-                });
-            });
-            context('because it is empty', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        JSONFileReader.readEntityJSON('');
-                    }).to.throw(/^The passed file path must not be nil to read the JSON entity\.$/);
-                });
-            });
-            context('because the file does not exist', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        JSONFileReader.readEntityJSON(path.join(__dirname, '..', 'test-files', 'WrongFile.json'));
-                    }).to.throw(new RegExp("The passed file '.*?WrongFile.json' must exist and must not be a directory to be read."));
-                });
-            });
-            context('because the file is a folder', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        JSONFileReader.readEntityJSON(__dirname);
-                    }).to.throw(/^The passed file '.*?' must exist and must not be a directory to be read.$/);
-                });
-            });
-        });
-        context('when passing a valid entity name', () => {
-            let content;
-
-            before(() => {
-                content = JSONFileReader.readEntityJSON(path.join(__dirname, '..', 'test-files', 'MyEntity.json'));
-            });
-
-            it('should read the file', () => {
-                expect(content).to.deep.eq({
-                    relationships: [],
-                    fields: [
-                        {
-                            fieldName: 'myField',
-                            fieldType: 'String',
-                        },
-                    ],
-                    changelogDate: '20160705183933',
-                    dto: 'no',
-                    service: 'no',
-                    entityTableName: 'my_entity',
-                    pagination: 'no',
-                });
-            });
-        });
-    });
     describe('toFilePath', () => {
         context('when converting an entity name to a path', () => {
             context('with a nil entity name', () => {
