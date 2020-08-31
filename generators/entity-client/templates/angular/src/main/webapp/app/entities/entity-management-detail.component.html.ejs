@@ -34,7 +34,7 @@
                 <dt><span jhiTranslate="<%= i18nKeyPrefix %>.<%= fieldName %>"<% if (fields[idx].javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= fields[idx].javadoc %>"<% } } %>><%= fields[idx].fieldNameHumanized %></span></dt>
                 <dd>
                     <%_ if (fields[idx].fieldIsEnum) { _%>
-                    <span jhiTranslate="{{ '<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}</span>
+                    <span jhiTranslate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}</span>
                     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
                     <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
                         <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">

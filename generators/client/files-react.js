@@ -18,10 +18,7 @@
  */
 const constants = require('../generator-constants');
 
-/* Constants use throughout */
-const MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-const TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
-const REACT_DIR = constants.ANGULAR_DIR;
+const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, REACT_DIR } = constants;
 
 /**
  * The default is to use a file path string. It implies use of the template method.
@@ -54,54 +51,25 @@ const files = {
         },
         {
             condition: generator => generator.enableI18nRTL,
-            path: MAIN_SRC_DIR,
+            path: CLIENT_MAIN_SRC_DIR,
             templates: ['app/rtl.scss'],
-        },
-    ],
-    image: [
-        {
-            path: MAIN_SRC_DIR,
-            templates: [
-                { file: 'content/images/jhipster_family_member_0.svg', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_1.svg', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_2.svg', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_3.svg', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_0_head-192.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_1_head-192.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_2_head-192.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_3_head-192.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_0_head-256.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_1_head-256.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_2_head-256.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_3_head-256.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_0_head-384.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_1_head-384.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_2_head-384.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_3_head-384.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_0_head-512.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_1_head-512.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_2_head-512.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_3_head-512.png', method: 'copy' },
-                { file: 'content/images/logo-jhipster.png', method: 'copy' },
-            ],
         },
     ],
     swagger: [
         {
-            path: MAIN_SRC_DIR,
+            path: CLIENT_MAIN_SRC_DIR,
             templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }],
         },
     ],
     commonWeb: [
         {
-            path: MAIN_SRC_DIR,
+            path: CLIENT_MAIN_SRC_DIR,
             templates: [
                 'WEB-INF/web.xml',
                 { file: 'favicon.ico', method: 'copy' },
                 'robots.txt',
                 '404.html',
                 'index.html',
-                'manifest.webapp',
                 'content/css/loading.css',
             ],
         },
@@ -308,7 +276,7 @@ const files = {
     ],
     clientTestFw: [
         {
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: [
                 'jest.conf.js',
                 'spec/icons-mock.ts',
@@ -340,7 +308,7 @@ const files = {
         },
         {
             condition: generator => !generator.skipUserManagement,
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: [
                 // 'spec/app/modules/account/register/register.spec.tsx',
                 'spec/app/modules/account/register/register.reducer.spec.ts',
@@ -351,29 +319,29 @@ const files = {
         },
         {
             condition: generator => !generator.skipUserManagement,
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: ['spec/app/modules/administration/user-management/user-management.reducer.spec.ts'],
         },
         {
             condition: generator => generator.enableTranslation,
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: ['spec/app/shared/reducers/locale.spec.ts'],
         },
         {
             condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2',
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: ['spec/app/shared/reducers/user-management.spec.ts'],
         },
         // {
         //     condition: generator => generator.authenticationType === 'session',
-        //     path: TEST_SRC_DIR,
+        //     path: CLIENT_TEST_SRC_DIR,
         //     templates: [
         //         'spec/app/modules/account/sessions/sessions.reducer.spec.ts',
         //     ]
         // },
         {
             condition: generator => generator.protractorTests,
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: [
                 'e2e/modules/account/account.spec.ts',
                 'e2e/modules/administration/administration.spec.ts',
@@ -386,7 +354,7 @@ const files = {
         },
         {
             condition: generator => generator.protractorTests && !generator.skipUserManagement,
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: ['e2e/page-objects/password-page.ts', 'e2e/page-objects/settings-page.ts', 'e2e/page-objects/register-page.ts'],
         },
     ],

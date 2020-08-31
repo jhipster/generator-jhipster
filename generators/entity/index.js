@@ -234,8 +234,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
                 context.capitalizedBaseName = _.upperFirst(context.baseName);
 
-                context.angularAppName = this.getAngularAppName(context.baseName);
-                context.angularXAppName = this.getAngularXAppName(context.baseName);
+                context.frontendAppName = this.getFrontendAppName(context.baseName);
                 context.mainClass = this.getMainClassName(context.baseName);
                 context.microserviceAppName = '';
 

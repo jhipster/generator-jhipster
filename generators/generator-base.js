@@ -1756,20 +1756,11 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * get the Angular application name.
-     * @param {string} baseName of application
+     * get the frontend application name.
+     * @param {string} baseName of application - (defaults to <code>this.jhipsterConfig.baseName</code>)
      */
-    getAngularAppName(baseName = this.baseName) {
+    getFrontendAppName(baseName = this.jhipsterConfig.baseName) {
         const name = _.camelCase(baseName) + (baseName.endsWith('App') ? '' : 'App');
-        return name.match(/^\d/) ? 'App' : name;
-    }
-
-    /**
-     * get the Angular application name.
-     * @param {string} baseName of application
-     */
-    getAngularXAppName(baseName = this.baseName) {
-        const name = this.upperFirstCamelCase(baseName);
         return name.match(/^\d/) ? 'App' : name;
     }
 

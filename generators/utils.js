@@ -468,11 +468,11 @@ function getEnumInfo(field, clientRootFolder) {
  * @Deprecated
  * Build an enum object, deprecated use getEnumInfoInstead
  * @param {any} field : entity field
- * @param {string} angularAppName
+ * @param {string} frontendAppName
  * @param {string} packageName
  * @param {string} clientRootFolder
  */
-function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
+function buildEnumInfo(field, frontendAppName, packageName, clientRootFolder) {
     const fieldType = field.fieldType;
     field.enumInstance = _.lowerFirst(fieldType);
     const enums = field.fieldValues.replace(/\s/g, '').split(',');
@@ -483,7 +483,7 @@ function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
         enumInstance: field.enumInstance,
         enums,
         enumsWithCustomValue,
-        angularAppName,
+        frontendAppName,
         packageName,
         clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
     };
