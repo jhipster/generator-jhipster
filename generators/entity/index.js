@@ -440,14 +440,25 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
-    _default() {
+    _loading() {
         return {
             loadConfig() {
                 // Update current context with config from file.
                 Object.assign(this.context, this.entityStorage.getAll());
                 loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
             },
-            prepareForTemplates() {
+        };
+    }
+
+    get loading() {
+        if (useBlueprints) return;
+        return this._loading();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _preparing() {
+        return {
+            prepareEntityForTemplates() {
                 const entity = this.context;
                 prepareEntityForTemplates(entity, this);
 
@@ -459,7 +470,25 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     prepareRelationshipForTemplates(entity, relationship, this);
                 });
             },
+        };
+    }
 
+    get preparing() {
+        if (useBlueprints) return;
+        return this._preparing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return {
+            prepareRelationshipsForTemplates() {
+                this.context.relationships.forEach(relationship => {
+                    prepareRelationshipForTemplates(this.context, relationship, this);
+                });
+            },
+            /*
+             * Composed generators uses context ready for the templates.
+             */
             composing() {
                 const context = this.context;
                 if (!context.skipServer) {

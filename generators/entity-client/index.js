@@ -34,7 +34,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
-    _configuring() {
+    _preparing() {
         return {
             setup() {
                 this.tsKeyType = this.getTypescriptKeyType(this.primaryKeyType);
@@ -42,9 +42,9 @@ module.exports = class extends BaseBlueprintGenerator {
         };
     }
 
-    get configuring() {
+    get preparing() {
         if (useBlueprints) return;
-        return this._configuring();
+        return this._preparing();
     }
 
     // Public API method used by the getter and also by Blueprints

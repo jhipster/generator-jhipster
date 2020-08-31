@@ -338,7 +338,7 @@ module.exports = class extends BaseBlueprintGenerator {
         return this._configuring();
     }
 
-    _default() {
+    _composing() {
         return {
             /**
              * Composing with others generators, must be runned after `configuring` priority to let blueprints
@@ -365,22 +365,41 @@ module.exports = class extends BaseBlueprintGenerator {
                     );
                 }
             },
-
             askForTestOpts: prompts.askForTestOpts,
 
             askForMoreModules: prompts.askForMoreModules,
+        };
+    }
 
-            saveConfig() {
+    get composing() {
+        if (useBlueprints) return;
+        return this._composing();
+    }
+
+    _loading() {
+        return {
+            saveConfigWithDefaults() {
                 this.setConfigDefaults();
-
-                const config = {};
-                this.blueprints && (config.blueprints = this.blueprints);
-                this.blueprintVersion && (config.blueprintVersion = this.blueprintVersion);
-                this.config.set(config);
 
                 this._validateAppConfiguration();
             },
 
+            saveBlueprintConfig() {
+                const config = {};
+                this.blueprints && (config.blueprints = this.blueprints);
+                this.blueprintVersion && (config.blueprintVersion = this.blueprintVersion);
+                this.config.set(config);
+            },
+        };
+    }
+
+    get loading() {
+        if (useBlueprints) return;
+        return this._loading();
+    }
+
+    _default() {
+        return {
             insight() {
                 const yorc = {
                     ..._.omit(this.jhipsterConfig, [
@@ -449,7 +468,16 @@ module.exports = class extends BaseBlueprintGenerator {
                     arguments: existingEntities.map(entity => entity.name),
                 });
             },
+        };
+    }
 
+    get writing() {
+        if (useBlueprints) return;
+        return this._writing();
+    }
+
+    _end() {
+        return {
             initGitRepo() {
                 if (!this.options.skipGit) {
                     if (this.gitInstalled || this.isGitInstalled()) {
@@ -468,16 +496,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     }
                 }
             },
-        };
-    }
-
-    get writing() {
-        if (useBlueprints) return;
-        return this._writing();
-    }
-
-    _end() {
-        return {
             gitCommit() {
                 if (!this.options.skipGit && this.isGitInstalled()) {
                     if (this.gitInitialized) {
