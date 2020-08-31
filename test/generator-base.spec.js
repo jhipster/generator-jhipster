@@ -1,6 +1,9 @@
 /* eslint-disable no-unused-expressions */
 const expect = require('chai').expect;
+const sinon = require('sinon');
 const assert = require('yeoman-assert');
+const helpers = require('yeoman-test');
+
 const expectedFiles = require('./utils/expected-files');
 const Base = require('../generators/generator-base');
 const { testInTempDir, revertTempDir } = require('./utils/utils');
@@ -431,6 +434,130 @@ describe('Generator Base', () => {
                     expect(() => new Base({ ...options })).to.throw(/^Creation timestamp should not be in the future: 2030-01-01\.$/);
                 });
             });
+        });
+    });
+    describe('priorities', () => {
+        let mockedPriorities;
+        const priorities = [
+            'initializing',
+            'prompting',
+            'configuring',
+            'composing',
+            'loading',
+            'preparing',
+            'default',
+            'writing',
+            'postWriting',
+            'install',
+            'end',
+        ];
+        before(() => {
+            mockedPriorities = {};
+            priorities.forEach(priority => {
+                mockedPriorities[priority] = sinon.fake();
+            });
+            const mockBlueprintSubGen = class extends Base {
+                get initializing() {
+                    return {
+                        mocked() {
+                            mockedPriorities.initializing();
+                        },
+                    };
+                }
+
+                get prompting() {
+                    return {
+                        mocked() {
+                            mockedPriorities.prompting();
+                        },
+                    };
+                }
+
+                get configuring() {
+                    return {
+                        mocked() {
+                            mockedPriorities.configuring();
+                        },
+                    };
+                }
+
+                get composing() {
+                    return {
+                        mocked() {
+                            mockedPriorities.composing();
+                        },
+                    };
+                }
+
+                get loading() {
+                    return {
+                        mocked() {
+                            mockedPriorities.loading();
+                        },
+                    };
+                }
+
+                get preparing() {
+                    return {
+                        mocked() {
+                            mockedPriorities.preparing();
+                        },
+                    };
+                }
+
+                get default() {
+                    return {
+                        mocked() {
+                            mockedPriorities.default();
+                        },
+                    };
+                }
+
+                get writing() {
+                    return {
+                        mocked() {
+                            mockedPriorities.writing();
+                        },
+                    };
+                }
+
+                get postWriting() {
+                    return {
+                        mocked() {
+                            mockedPriorities.postWriting();
+                        },
+                    };
+                }
+
+                get install() {
+                    return {
+                        mocked() {
+                            mockedPriorities.install();
+                        },
+                    };
+                }
+
+                get end() {
+                    return {
+                        mocked() {
+                            mockedPriorities.end();
+                        },
+                    };
+                }
+            };
+            return helpers.create(mockBlueprintSubGen).run();
+        });
+
+        priorities.forEach((priority, idx) => {
+            it(`executes ${priority}`, () => {
+                assert(mockedPriorities[priority].calledOnce);
+            });
+            if (idx > 0) {
+                const lastPriority = priorities[idx - 1];
+                it(`executes ${priority} after ${lastPriority} `, () => {
+                    assert(mockedPriorities[priority].calledAfter(mockedPriorities[lastPriority]));
+                });
+            }
         });
     });
 });

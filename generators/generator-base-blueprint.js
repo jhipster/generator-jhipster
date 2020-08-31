@@ -59,12 +59,32 @@ module.exports = class extends BaseGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
+    _composing() {
+        return {};
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _loading() {
+        return {};
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _preparing() {
+        return {};
+    }
+
+    // Public API method used by the getter and also by Blueprints
     _default() {
         return {};
     }
 
     // Public API method used by the getter and also by Blueprints
     _writing() {
+        return {};
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _postWriting() {
         return {};
     }
 
