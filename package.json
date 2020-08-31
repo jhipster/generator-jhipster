@@ -64,7 +64,7 @@
         "conf": "7.1.2",
         "didyoumean": "1.2.1",
         "ejs": "3.1.5",
-        "faker": "5.0.0",
+        "faker": "5.1.0",
         "glob": "7.1.6",
         "gulp-filter": "6.0.0",
         "insight": "0.10.3",
