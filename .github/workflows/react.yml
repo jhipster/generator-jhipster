@@ -189,6 +189,7 @@ jobs:
             # Detect changes against base commit
             #----------------------------------------------------------------------
             - name: 'MERGE: Checkout base generator-jhipster'
+              continue-on-error: true
               uses: actions/checkout@v2
               if: ${{ github.event.pull_request }}
               id: base-checkout
