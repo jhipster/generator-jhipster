@@ -451,7 +451,7 @@ module.exports = class extends BaseGenerator {
 
                 const cloudSqlInstances = [{ value: '', name: 'New Cloud SQL Instance' }];
                 shelljs.exec(
-                    `gcloud sql instances list  --format='value[separator=":"](project,region,name)' --project="${this.gcpProjectId}"`,
+                    `gcloud sql instances list  --format="value[separator=':'](project,region,name)" --project="${this.gcpProjectId}"`,
                     (code, stdout, err) => {
                         if (err && code !== 0) {
                             this.log.error(err);
@@ -548,7 +548,7 @@ module.exports = class extends BaseGenerator {
                 const cloudSqlDatabases = [{ value: '', name: 'New Database' }];
                 const name = this.gcpCloudSqlInstanceName.split(':')[2];
                 shelljs.exec(
-                    `gcloud sql databases list -i ${name} --format='value(name)' --project="${this.gcpProjectId}"`,
+                    `gcloud sql databases list -i ${name} --format="value(name)" --project="${this.gcpProjectId}"`,
                     { silent: true },
                     (code, stdout, err) => {
                         if (err && code !== 0) {
@@ -685,7 +685,7 @@ module.exports = class extends BaseGenerator {
 
                 const name = this.gcpCloudSqlInstanceName.split(':')[2];
                 shelljs.exec(
-                    `gcloud sql users list -i jhipster --format='value(name)' --project="${this.gcpProjectId}"`,
+                    `gcloud sql users list -i jhipster --format="value(name)" --project="${this.gcpProjectId}"`,
                     { silent: true },
                     (code, stdout, err) => {
                         if (_.includes(stdout, this.gcpCloudSqlUserName)) {
