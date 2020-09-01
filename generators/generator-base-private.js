@@ -48,7 +48,7 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
  *
  * The method signatures in private API can be changed without a major version change.
  */
-module.exports = class extends Generator {
+module.exports = class JHipsterBasePrivateGenerator extends Generator {
     constructor(args, opts) {
         super(args, opts);
         // expose lodash to templates

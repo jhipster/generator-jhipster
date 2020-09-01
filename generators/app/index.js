@@ -29,7 +29,7 @@ const { JHIPSTER_CONFIG_DIR } = require('../generator-constants');
 
 let useBlueprints;
 
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -400,6 +400,8 @@ module.exports = class extends BaseBlueprintGenerator {
 
     _default() {
         return {
+            ...super._missingPreDefault(),
+
             insight() {
                 const yorc = {
                     ..._.omit(this.jhipsterConfig, [
@@ -468,6 +470,8 @@ module.exports = class extends BaseBlueprintGenerator {
                     arguments: existingEntities.map(entity => entity.name),
                 });
             },
+
+            ...super._missingPostWriting(),
         };
     }
 

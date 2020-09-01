@@ -34,7 +34,7 @@ const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 let useBlueprints;
 
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -253,6 +253,8 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
+            ...super._missingPreDefault(),
+
             insight() {
                 statistics.sendSubGenEvent('generator', 'client', {
                     app: {
@@ -291,6 +293,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.skipClient) return;
                 return writeCommonFiles.call(this, useBlueprints);
             },
+
+            ...super._missingPostWriting(),
         };
     }
 

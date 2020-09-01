@@ -31,7 +31,7 @@ const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, norma
  *
  * The method signatures in public API should not be changed without a major version change
  */
-module.exports = class extends BaseGenerator {
+module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -43,62 +43,153 @@ module.exports = class extends BaseGenerator {
         }
     }
 
-    // Public API method used by the getter and also by Blueprints
+    /**
+     * Public API method used by the getter and also by Blueprints
+     * @returns {Object} tasks
+     */
     _initializing() {
         return {};
     }
 
-    // Public API method used by the getter and also by Blueprints
+    /**
+     * Public API method used by the getter and also by Blueprints
+     * @returns {Object} tasks
+     */
     _prompting() {
         return {};
     }
 
-    // Public API method used by the getter and also by Blueprints
+    /**
+     * Public API method used by the getter and also by Blueprints
+     * @returns {Object} tasks
+     */
     _configuring() {
         return {};
     }
 
-    // Public API method used by the getter and also by Blueprints
+    /**
+     * Public API method used by the getter and also by Blueprints
+     * @returns {Object} tasks
+     */
     _composing() {
         return {};
     }
 
-    // Public API method used by the getter and also by Blueprints
+    /**
+     * Public API method used by the getter and also by Blueprints
+     * @returns {Object} tasks
+     */
     _loading() {
         return {};
     }
 
-    // Public API method used by the getter and also by Blueprints
+    /**
+     * Public API method used by the getter and also by Blueprints
+     * @returns {Object} tasks
+     */
     _preparing() {
         return {};
     }
 
-    // Public API method used by the getter and also by Blueprints
+    /**
+     * @private
+     * Execute custom priorities if they are not declared
+     * Should be used by jhipster official generators only.
+     * @returns {Object} tasks
+     */
+    _missingPreDefault() {
+        let tasks = {};
+        if (this.sbsBlueprint) return tasks;
+        if (this._isPriorityMissing('composing', 'default')) {
+            tasks = { ...tasks, ...this._composing() };
+        }
+        if (this._isPriorityMissing('loading', 'default')) {
+            tasks = { ...tasks, ...this._loading() };
+        }
+        if (this._isPriorityMissing('preparing', 'default')) {
+            tasks = { ...tasks, ...this._preparing() };
+        }
+        return tasks;
+    }
+
+    /**
+     * Public API method used by the getter and also by Blueprints
+     * @returns {Object} tasks
+     */
     _default() {
         return {};
     }
 
-    // Public API method used by the getter and also by Blueprints
+    /**
+     * Public API method used by the getter and also by Blueprints
+     * @returns {Object} tasks
+     */
     _writing() {
         return {};
     }
 
-    // Public API method used by the getter and also by Blueprints
+    /**
+     * @private
+     * Execute custom priorities if they are not declared
+     * Should be used by jhipster official generators only.
+     * @returns {Object} tasks
+     */
+    _missingPostWriting() {
+        let tasks = {};
+        if (this.sbsBlueprint) return tasks;
+        if (this._isPriorityMissing('postWriting', 'writing')) {
+            tasks = { ...tasks, ...this._postWriting() };
+        }
+        return tasks;
+    }
+
+    /**
+     * Public API method used by the getter and also by Blueprints
+     */
     _postWriting() {
         return {};
     }
 
-    // Public API method used by the getter and also by Blueprints
+    /**
+     * Public API method used by the getter and also by Blueprints
+     * @returns {Object} tasks
+     */
     _install() {
         return {};
     }
 
-    // Public API method used by the getter and also by Blueprints
+    /**
+     * Public API method used by the getter and also by Blueprints
+     * @returns {Object} tasks
+     */
     _end() {
         return {};
     }
 
     /**
+     * @private
+     * Detect if a priority is implemented in the super class but missing in current one.
+     * That indicates the blueprint was not updated with the custom priorities.
+     * @param {string} priorityName - Priority to be checked.
+     * @param {sring} destPriority - Priority that the task is related to for logging purpose.
+     * @return {boolean} true if the priority is missing.
+     */
+    _isPriorityMissing(priorityName, destPriority = 'related') {
+        const ownPrototype = Object.getPrototypeOf(this);
+        if (
+            !Object.getOwnPropertyDescriptor(ownPrototype, priorityName) &&
+            Object.getOwnPropertyDescriptor(Object.getPrototypeOf(ownPrototype), priorityName)
+        ) {
+            this.warning(
+                `Priority ${priorityName} is missing for generator ${this.options.namespace}. Merging into ${destPriority} priority.`
+            );
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @private
      * Instantiates the blueprint generators, if any.
      * @param {string} subGen - sub generator
      * @param {any} extraOptions - extra options to pass to blueprint generator

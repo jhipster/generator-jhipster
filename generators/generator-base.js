@@ -75,7 +75,7 @@ const CUSTOM_PRIORITIES = [
  *
  * The method signatures in public API should not be changed without a major version change
  */
-module.exports = class extends PrivateBase {
+module.exports = class JHipsterBaseGenerator extends PrivateBase {
     constructor(args, opts) {
         super(args, opts);
 

@@ -481,6 +481,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
+            ...super._missingPreDefault(),
+
             prepareRelationshipsForTemplates() {
                 this.context.relationships.forEach(relationship => {
                     prepareRelationshipForTemplates(this.context, relationship, this);
@@ -554,6 +556,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     arguments: [this.context.name],
                 });
             },
+
+            ...super._missingPostWriting(),
         };
     }
 

@@ -549,12 +549,12 @@ describe('Generator Base', () => {
         });
 
         priorities.forEach((priority, idx) => {
-            it(`executes ${priority}`, () => {
+            it(`should execute ${priority}`, () => {
                 assert(mockedPriorities[priority].calledOnce);
             });
             if (idx > 0) {
                 const lastPriority = priorities[idx - 1];
-                it(`executes ${priority} after ${lastPriority} `, () => {
+                it(`should execute ${priority} after ${lastPriority} `, () => {
                     assert(mockedPriorities[priority].calledAfter(mockedPriorities[lastPriority]));
                 });
             }
