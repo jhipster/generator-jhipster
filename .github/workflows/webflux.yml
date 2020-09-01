@@ -244,7 +244,7 @@ jobs:
               if: ${{ always() && steps.e2e.outcome == 'failure' }}
               with:
                   name: screenshots-${{ matrix.app-type }}
-                  path: /home/runner/app/target/cypress/screenshots
+                  path: ${{ github.workspace }}/app/target/cypress/screenshots
             - name: 'TESTS: Sonar analysis'
               run: $JHI_SCRIPTS/25-sonar-analyze.sh
               env:
