@@ -79,7 +79,7 @@
         "parse-gitignore": "1.0.1",
         "pluralize": "8.0.0",
         "prettier": "2.1.1",
-        "prettier-plugin-java": "0.8.1",
+        "prettier-plugin-java": "0.8.2",
         "progress": "2.0.3",
         "randexp": "0.5.3",
         "semver": "7.3.2",
@@ -92,7 +92,7 @@
         "uuid": "8.3.0",
         "winston": "3.3.3",
         "yeoman-environment": "2.10.3",
-        "yeoman-generator": "4.11.0"
+        "yeoman-generator": "4.12.0"
     },
     "devDependencies": {
         "@openapitools/openapi-generator-cli": "1.0.15-4.3.1",
