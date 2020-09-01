@@ -48,7 +48,7 @@
         "ejs-lint": "mocha test/ejslint.js",
         "ejslint": "ejslint",
         "pretest": "npm run lint",
-        "test": "mocha --no-insight",
+        "test": "mocha --no-insight --forbid-only",
         "jsdoc": "jsdoc --configure jsdoc-conf.json",
         "prepare": "npm run jdl:diagrams && npm run jdl:bundle && npm run jdl:commit-dist",
         "jdl:bundle": "node jdl/bundling/scripts/bundle.js && webpack --config jdl/bundling/webpack.config.js",
