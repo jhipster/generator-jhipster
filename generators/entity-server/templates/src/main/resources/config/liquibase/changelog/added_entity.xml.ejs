@@ -76,9 +76,9 @@
                 } else if (fieldType === 'LocalDate') {
                     columnType="date";
                 } else if (fieldType === 'Instant') {
-                    columnType="datetime";
+                    columnType="${datetimeType}";
                 } else if (fieldType === 'ZonedDateTime') {
-                    columnType="datetime";
+                    columnType="${datetimeType}";
                 } else if (fieldType === 'Duration') {
                     columnType="bigint";
                 } else if (fieldType === 'UUID') {
@@ -142,7 +142,7 @@
         </createTable>
         <%_ for (const idx in fields) {
             if (fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'Instant') { _%>
-        <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%= fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
+        <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%= fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="${datetimeType}"/>
         <%_ }
         } _%>
     </changeSet>
