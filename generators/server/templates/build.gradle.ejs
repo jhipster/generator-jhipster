@@ -311,13 +311,13 @@ dependencies {
     implementation "org.apache.httpcomponents:httpclient"
     <%_ } _%>
     <%_ if (cacheProvider === 'hazelcast') { _%>
-    implementation "com.hazelcast:hazelcast"
+    implementation "com.hazelcast:hazelcast:${hazelcast_version}"
     <%_ } _%>
     <%_ if (cacheProvider === 'hazelcast' && enableHibernateCache) { _%>
-    implementation "com.hazelcast:hazelcast-hibernate53"
+    implementation "com.hazelcast:hazelcast-hibernate53:${hazelcast_hibernate5_version}"
     <%_ } _%>
     <%_ if (cacheProvider === 'hazelcast') { _%>
-    implementation "com.hazelcast:hazelcast-spring"
+    implementation "com.hazelcast:hazelcast-spring:${hazelcast_version}"
     <%_ } _%>
     <%_ if (cacheProvider === 'infinispan') { _%>
     implementation "org.infinispan:infinispan-hibernate-cache-v53"
