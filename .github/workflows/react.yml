@@ -144,13 +144,15 @@ jobs:
             #----------------------------------------------------------------------
             # Install all tools and check configuration
             #----------------------------------------------------------------------
-            - name: 'Checkout generator-jhipster'
+            - name: 'SETUP: Checkout generator-jhipster'
               uses: actions/checkout@v2
               with:
                   path: generator-jhipster
-            - name: 'Create required dir'
+                  fetch-depth: 2
+            - name: 'SETUP: Create required structure'
               run: |
                   mkdir app
+                  mkdir -p base/generator-jhipster
                   mkdir -p base/app
                   mkdir -p base/uaa
               working-directory: ${{ github.workspace }}
@@ -160,7 +162,7 @@ jobs:
             - uses: actions/setup-java@v1
               with:
                   java-version: '11.x'
-            - name: Get chrome/chromedriver version
+            - name: 'SETUP: Get chrome/chromedriver version'
               id: chromedriver-version
               run: |
                   CHROME_VERSION=$(google-chrome --version | cut -f 3 -d ' ' | cut -d '.' -f 1) \
@@ -188,23 +190,22 @@ jobs:
             #----------------------------------------------------------------------
             # Detect changes against base commit
             #----------------------------------------------------------------------
-            - name: 'MERGE: Checkout base generator-jhipster'
+            - name: 'MERGE: Install base generator-jhipster'
               continue-on-error: true
-              uses: actions/checkout@v2
-              if: ${{ github.event.pull_request }}
               id: base-checkout
-              with:
-                  path: base/generator-jhipster
-                  repository: ${{ github.event.pull_request.base.repo.full_name }}
-                  ref: ${{ github.event.pull_request.base.sha }}
+              working-directory: ${{ github.workspace }}/base/generator-jhipster
+              run: |
+                  git clone ${{ github.workspace }}/generator-jhipster .
+                  git checkout @~1
+                  git log
+                  npm uninstall -g generator-jhipster
+                  npm install -g .
             - name: 'MERGE: merge base project'
               continue-on-error: true
               id: base-app
               if: ${{ steps.base-checkout.outcome == 'success' }}
               working-directory: ${{ github.workspace }}/base/app
               run: |
-                  npm uninstall -g generator-jhipster
-                  npm install -g ${{ github.workspace }}/base/generator-jhipster
                   $JHI_SCRIPTS/11-generate-entities.sh
                   # 11-generate-entities.sh removes current dir, we need to switch to the new one
                   cd ../app
@@ -254,19 +255,20 @@ jobs:
               run: $JHI_SCRIPTS/22-tests-frontend.sh
             - name: 'TESTS: packaging'
               run: $JHI_SCRIPTS/23-package.sh
-            - name: 'Synchronize chromedriver version'
+            - name: 'E2E: Synchronize chromedriver version'
               if: ${{ matrix.e2e == 1 }}
               run: npm run e2e:update-webdriver -- --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
               working-directory: ${{ github.workspace }}/app
-            - name: 'TESTS: End-to-End'
+            - name: 'E2E: Run'
               id: e2e
               run: $JHI_SCRIPTS/24-tests-e2e.sh
-            - uses: actions/upload-artifact@v2
+            - name: 'E2E: Store failure screenshots'
+              uses: actions/upload-artifact@v2
               if: ${{ always() && steps.e2e.outcome == 'failure' }}
               with:
                   name: screenshots-${{ matrix.app-type }}
                   path: ${{ github.workspace }}/app/target/cypress/screenshots
-            - name: 'TESTS: Sonar analysis'
+            - name: 'ANALYSIS: Sonar analysis'
               run: $JHI_SCRIPTS/25-sonar-analyze.sh
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
