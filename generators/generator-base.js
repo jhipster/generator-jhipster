@@ -1756,20 +1756,11 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * get the Angular application name.
-     * @param {string} baseName of application
+     * get the frontend application name.
+     * @param {string} baseName of application - (defaults to <code>this.jhipsterConfig.baseName</code>)
      */
-    getAngularAppName(baseName = this.baseName) {
+    getFrontendAppName(baseName = this.jhipsterConfig.baseName) {
         const name = _.camelCase(baseName) + (baseName.endsWith('App') ? '' : 'App');
-        return name.match(/^\d/) ? 'App' : name;
-    }
-
-    /**
-     * get the Angular application name.
-     * @param {string} baseName of application
-     */
-    getAngularXAppName(baseName = this.baseName) {
-        const name = this.upperFirstCamelCase(baseName);
         return name.match(/^\d/) ? 'App' : name;
     }
 
@@ -2100,6 +2091,9 @@ module.exports = class extends PrivateBase {
         this.configOptions.optionsParsed = true;
 
         // Load stored options
+        if (options.skipJhipsterDependencies !== undefined) {
+            this.jhipsterConfig.skipJhipsterDependencies = options.skipJhipsterDependencies;
+        }
         if (options.incrementalChangelog !== undefined) {
             this.jhipsterConfig.incrementalChangelog = options.incrementalChangelog;
         }
@@ -2218,6 +2212,7 @@ module.exports = class extends PrivateBase {
         dest.skipClient = config.skipClient;
         dest.prettierJava = config.prettierJava;
         dest.pages = config.pages;
+        dest.skipJhipsterDependencies = !!config.skipJhipsterDependencies;
 
         dest.testFrameworks = config.testFrameworks || [];
         dest.gatlingTests = dest.testFrameworks.includes('gatling');

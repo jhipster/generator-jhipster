@@ -1,20 +1,20 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+Copyright 2013-2020 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://www.jhipster.tech/
- for more information.
+This file is part of the JHipster project, see https://www.jhipster.tech/
+for more information.
 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 -%>
 {
   "name": "<%= dasherizedBaseName %>",
@@ -35,7 +35,7 @@
     "@angular/platform-browser-dynamic": "10.0.14",
     "@angular/router": "10.0.14",
     "@fortawesome/angular-fontawesome": "0.6.1",
-    "@fortawesome/fontawesome-svg-core": "1.2.29",
+    "@fortawesome/fontawesome-svg-core": "1.2.30",
     "@fortawesome/free-solid-svg-icons": "5.13.1",
     "@ng-bootstrap/ng-bootstrap": "7.0.0",
     "@ngx-translate/core": "12.1.2",
@@ -101,7 +101,12 @@
     "eslint-loader": "4.0.2",
     "file-loader": "6.0.0",
     "friendly-errors-webpack-plugin": "1.7.0",
+    <%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= packagejs.version %>",
+        <%_ otherModules.forEach(module => { _%>
+    "<%= module.name %>": "<%= module.version %>",
+        <%_ });
+    } _%>
     "html-loader": "1.1.0",
     "html-webpack-plugin": "4.3.0",
     <%_ if (!skipCommitHook) { _%>
@@ -149,9 +154,6 @@
     <%_ } _%>
     "tslint": "6.1.2",
     "typescript": "3.9.5",
-    <%_ otherModules.forEach(module => { _%>
-    "<%= module.name %>": "<%= module.version %>",
-    <%_ }); _%>
     <%_ if (protractorTests || cypressTests) { _%>
     "webdriver-manager": "12.1.7",
     <%_ } _%>

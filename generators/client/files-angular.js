@@ -16,13 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const mkdirp = require('mkdirp');
 const constants = require('../generator-constants');
 
-/* Constants use throughout */
-const MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-const TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
-const ANGULAR_DIR = constants.ANGULAR_DIR;
+const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, ANGULAR_DIR } = constants;
 
 /**
  * The default is to use a file path string. It implies use of the template method.
@@ -51,59 +47,30 @@ const files = {
     ],
     sass: [
         {
-            path: MAIN_SRC_DIR,
+            path: CLIENT_MAIN_SRC_DIR,
             templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss'],
         },
         {
             condition: generator => generator.enableI18nRTL,
-            path: MAIN_SRC_DIR,
+            path: CLIENT_MAIN_SRC_DIR,
             templates: ['content/scss/rtl.scss'],
-        },
-    ],
-    image: [
-        {
-            path: MAIN_SRC_DIR,
-            templates: [
-                { file: 'content/images/jhipster_family_member_0.svg', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_1.svg', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_2.svg', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_3.svg', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_0_head-192.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_1_head-192.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_2_head-192.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_3_head-192.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_0_head-256.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_1_head-256.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_2_head-256.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_3_head-256.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_0_head-384.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_1_head-384.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_2_head-384.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_3_head-384.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_0_head-512.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_1_head-512.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_2_head-512.png', method: 'copy' },
-                { file: 'content/images/jhipster_family_member_3_head-512.png', method: 'copy' },
-                { file: 'content/images/logo-jhipster.png', method: 'copy' },
-            ],
         },
     ],
     swagger: [
         {
-            path: MAIN_SRC_DIR,
+            path: CLIENT_MAIN_SRC_DIR,
             templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }],
         },
     ],
     commonWeb: [
         {
-            path: MAIN_SRC_DIR,
+            path: CLIENT_MAIN_SRC_DIR,
             templates: [
                 'WEB-INF/web.xml',
                 { file: 'favicon.ico', method: 'copy' },
                 'robots.txt',
                 '404.html',
                 'index.html',
-                'manifest.webapp',
                 'content/css/loading.css',
             ],
         },
@@ -393,7 +360,7 @@ const files = {
     ],
     clientTestFw: [
         {
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: [
                 'jest.conf.js',
                 'jest.ts',
@@ -423,7 +390,7 @@ const files = {
         },
         {
             condition: generator => !generator.skipUserManagement,
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: [
                 'spec/app/account/activate/activate.component.spec.ts',
                 'spec/app/account/password/password.component.spec.ts',
@@ -436,7 +403,7 @@ const files = {
         },
         {
             condition: generator => generator.authenticationType !== 'oauth2',
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: [
                 'spec/app/core/login/login-modal.component.spec.ts',
                 'spec/app/shared/alert/alert.component.spec.ts',
@@ -446,7 +413,7 @@ const files = {
         },
         {
             condition: generator => !generator.skipUserManagement,
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: [
                 'spec/app/admin/user-management/user-management.component.spec.ts',
                 'spec/app/admin/user-management/user-management-detail.component.spec.ts',
@@ -458,22 +425,22 @@ const files = {
         },
         {
             condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: ['spec/app/account/sessions/sessions.component.spec.ts'],
         },
         {
             condition: generator => generator.enableTranslation,
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: ['spec/helpers/mock-language.service.ts'],
         },
         {
             condition: generator => generator.websocket === 'spring-websocket',
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: ['spec/helpers/mock-tracker.service.ts'],
         },
         {
             condition: generator => generator.protractorTests,
-            path: TEST_SRC_DIR,
+            path: CLIENT_TEST_SRC_DIR,
             templates: [
                 'e2e/account/account.spec.ts',
                 'e2e/admin/administration.spec.ts',
@@ -494,7 +461,6 @@ module.exports = {
 };
 
 function writeFiles() {
-    mkdirp(this.CLIENT_MAIN_SRC_DIR);
     // write angular 2.x and above files
     this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/angular'));
 }

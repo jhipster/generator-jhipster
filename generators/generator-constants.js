@@ -65,11 +65,11 @@ const DOCKER_NEO4J = 'neo4j:4.1.1';
 const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:4.0.3';
 const DOCKER_MEMCACHED = 'memcached:1.6.6-alpine';
 const DOCKER_REDIS = 'redis:6.0.6';
-const DOCKER_KEYCLOAK = 'jboss/keycloak:10.0.0'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
+const DOCKER_KEYCLOAK = 'jboss/keycloak:11.0.1'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
 const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:7.6.2'; // The version should be coherent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
 const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;
-const DOCKER_SONAR = 'sonarqube:8.4.1-community';
+const DOCKER_SONAR = 'sonarqube:8.4.2-community';
 const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v4.1.0';
 const DOCKER_JHIPSTER_CURATOR = 'jhipster/jhipster-curator:v4.1.0';
 const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v4.1.0';
@@ -222,6 +222,7 @@ const LANGUAGES = [
         value: 'zh-tw',
         localeId: 'zh-Hant',
     },
+    { name: 'Croatian', dispName: 'Hrvatski', value: 'hr' },
     { name: 'Czech', dispName: 'Český', value: 'cs' },
     { name: 'Danish', dispName: 'Dansk', value: 'da' },
     { name: 'Dutch', dispName: 'Nederlands', value: 'nl' },

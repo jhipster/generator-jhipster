@@ -234,7 +234,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
             setupSharedOptions() {
                 // Application name modified, using each technology's conventions
-                this.angularAppName = this.getAngularAppName();
+                this.frontendAppName = this.getFrontendAppName();
                 this.camelizedBaseName = _.camelCase(this.baseName);
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.lowercaseBaseName = this.baseName.toLowerCase();

@@ -32,7 +32,7 @@ const mockBlueprintSubGen = class extends EntityGenerator {
         };
         const customPostPhaseSteps = {
             changeProperty() {
-                this.context.angularAppName = 'awesomeAngularAppName';
+                this.context.frontendAppName = 'awesomeApp';
             },
         };
         return {
@@ -103,7 +103,7 @@ describe('JHipster entity generator with blueprint', () => {
             });
 
             it('contains the specific change added by the blueprint', () => {
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/en/foo.json`, /awesomeAngularAppName/);
+                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/en/foo.json`, /awesomeApp/);
             });
 
             // Verify if the custom entity config is persisted.

@@ -404,7 +404,7 @@ function addEnumerationFiles(generator, templateDir, clientFolder) {
             const enumFileName = _.kebabCase(field.fieldType);
             const enumInfo = {
                 ...utils.getEnumInfo(field, generator.clientRootFolder),
-                angularAppName: generator.angularAppName,
+                frontendAppName: generator.frontendAppName,
                 packageName: generator.packageName,
             };
             if (!generator.skipClient) {

@@ -196,6 +196,10 @@ module.exports = class extends BaseBlueprintGenerator {
             desc: 'Recreate the initial database changelog based on the current config',
             type: Boolean,
         });
+        this.option('skip-jhipster-dependencies', {
+            desc: "Don't write jhipster dependencies.",
+            type: Boolean,
+        });
 
         // Just constructing help, stop here
         if (this.options.help) {
