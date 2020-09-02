@@ -201,8 +201,7 @@
             <artifactId>javax.annotation-api</artifactId>
         </dependency>
 <%_ // This is useful for major Spring Boot migration
-    // FIXME: remove the condition on JHIPSTER_DEPENDENCIES_VERSION once Spring Boot 2.3 migration is done
-    if (JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT') || !SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+    if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-properties-migrator</artifactId>

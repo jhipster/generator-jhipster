@@ -286,8 +286,7 @@ dependencies {
         exclude group: "org.springframework", module: "spring-webmvc"
     }<% } %>
     <%_ // This is useful for major Spring Boot migration
-        // FIXME: remove the condition on JHIPSTER_DEPENDENCIES_VERSION once Spring Boot 2.3 migration is done
-    if (JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT') || !SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+    if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
     runtime "org.springframework.boot:spring-boot-properties-migrator"
     <%_ } _%>
     implementation "javax.annotation:javax.annotation-api"
@@ -311,13 +310,13 @@ dependencies {
     implementation "org.apache.httpcomponents:httpclient"
     <%_ } _%>
     <%_ if (cacheProvider === 'hazelcast') { _%>
-    implementation "com.hazelcast:hazelcast:${hazelcast_version}"
+    implementation "com.hazelcast:hazelcast"
     <%_ } _%>
     <%_ if (cacheProvider === 'hazelcast' && enableHibernateCache) { _%>
-    implementation "com.hazelcast:hazelcast-hibernate53:${hazelcast_hibernate5_version}"
+    implementation "com.hazelcast:hazelcast-hibernate53"
     <%_ } _%>
     <%_ if (cacheProvider === 'hazelcast') { _%>
-    implementation "com.hazelcast:hazelcast-spring:${hazelcast_version}"
+    implementation "com.hazelcast:hazelcast-spring"
     <%_ } _%>
     <%_ if (cacheProvider === 'infinispan') { _%>
     implementation "org.infinispan:infinispan-hibernate-cache-v53"
