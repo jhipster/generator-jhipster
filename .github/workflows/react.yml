@@ -73,11 +73,11 @@ jobs:
                     - react-maven-psql-es-noi18n-mapsid
                     - react-maven-h2mem-memcached
                     - react-maven-cassandra-session-redis
-#                    - react-maven-couchbase-caffeine
+                    #                    - react-maven-couchbase-caffeine
                     - react-gradle-psql-es-noi18n-mapsid
                     - react-gradle-h2mem-memcached
                     - react-gradle-cassandra-session-redis
-#                    - react-gradle-couchbase-caffeine
+                #                    - react-gradle-couchbase-caffeine
                 include:
                     - app-type: react-default
                       entity: sql
@@ -103,12 +103,12 @@ jobs:
                       war: 0
                       e2e: 1
                       testcontainers: 0
-#                    - app-type: react-maven-couchbase-caffeine
-#                      entity: couchbase
-#                      profile: prod
-#                      war: 0
-#                      e2e: 0
-#                      testcontainers: 0
+                    #                    - app-type: react-maven-couchbase-caffeine
+                    #                      entity: couchbase
+                    #                      profile: prod
+                    #                      war: 0
+                    #                      e2e: 0
+                    #                      testcontainers: 0
                     - app-type: react-gradle-psql-es-noi18n-mapsid
                       entity: sqlfull
                       profile: prod
@@ -127,12 +127,12 @@ jobs:
                       war: 0
                       e2e: 1
                       testcontainers: 0
-#                    - app-type: react-gradle-couchbase-caffeine
-#                      entity: couchbase
-#                      profile: prod
-#                      war: 0
-#                      e2e: 1
-#                      testcontainers: 0
+        #                    - app-type: react-gradle-couchbase-caffeine
+        #                      entity: couchbase
+        #                      profile: prod
+        #                      war: 0
+        #                      e2e: 1
+        #                      testcontainers: 0
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
