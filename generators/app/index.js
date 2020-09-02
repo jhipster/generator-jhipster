@@ -236,7 +236,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
         this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
 
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('app');
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('jhipster');
 
         this.registerPrettierTransform();
         this.registerForceEntitiesTransform();
