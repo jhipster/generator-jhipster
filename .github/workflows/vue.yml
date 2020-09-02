@@ -76,6 +76,7 @@ jobs:
                     - vue-gradle-session
                     - vue-ws-theme
                     - vue-oauth2
+#                    - vue-couchbase
                     - vue-mongodb-kafka-cucumber
                     - vue-session-cassandra-fr
                 include:
@@ -114,6 +115,11 @@ jobs:
                       profile: prod
                       war: 0
                       e2e: 1
+#                    - app-type: vue-couchbase
+#                      entity: couchbase
+#                      profile: dev,webpack
+#                      war: 0
+#                      e2e: 1
                     - app-type: vue-mongodb-kafka-cucumber
                       entity: mongodb
                       profile: dev,webpack
