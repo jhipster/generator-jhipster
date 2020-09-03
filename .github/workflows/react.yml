@@ -253,19 +253,24 @@ jobs:
             # Launch tests
             #----------------------------------------------------------------------
             - name: 'TESTS: Start docker-compose containers'
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: $JHI_SCRIPTS/20-docker-compose.sh
             - name: 'TESTS: backend'
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: $JHI_SCRIPTS/21-tests-backend.sh
             - name: 'TESTS: frontend'
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: $JHI_SCRIPTS/22-tests-frontend.sh
             - name: 'TESTS: packaging'
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: $JHI_SCRIPTS/23-package.sh
             - name: 'E2E: Synchronize chromedriver version'
-              if: matrix.e2e == 1
+              if: matrix.e2e == 1 && steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: npm run e2e:update-webdriver -- --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
               working-directory: ${{ github.workspace }}/app
             - name: 'E2E: Run'
               id: e2e
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: $JHI_SCRIPTS/24-tests-e2e.sh
             - name: 'E2E: Store failure screenshots'
               uses: actions/upload-artifact@v2
@@ -274,6 +279,7 @@ jobs:
                   name: screenshots-${{ matrix.app-type }}
                   path: ${{ github.workspace }}/app/target/cypress/screenshots
             - name: 'ANALYSIS: Sonar analysis'
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: $JHI_SCRIPTS/25-sonar-analyze.sh
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
