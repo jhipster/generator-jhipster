@@ -32,10 +32,6 @@ const commonFiles = {
         {
             path: CLIENT_MAIN_SRC_DIR,
             templates: [
-                { file: 'content/images/hipster192.png', method: 'copy' },
-                { file: 'content/images/hipster256.png', method: 'copy' },
-                { file: 'content/images/hipster384.png', method: 'copy' },
-                { file: 'content/images/hipster512.png', method: 'copy' },
                 { file: 'content/images/jhipster_family_member_0.svg', method: 'copy' },
                 { file: 'content/images/jhipster_family_member_0_head-192.png', method: 'copy' },
                 { file: 'content/images/jhipster_family_member_0_head-256.png', method: 'copy' },

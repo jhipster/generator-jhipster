@@ -514,10 +514,6 @@ const expectedFiles = {
     clientCommon: [
         '.eslintignore',
         `${CLIENT_MAIN_SRC_DIR}manifest.webapp`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/hipster192.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/hipster256.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/hipster384.png`,
-        `${CLIENT_MAIN_SRC_DIR}content/images/hipster512.png`,
         `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0.svg`,
         `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0_head-192.png`,
         `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0_head-256.png`,
