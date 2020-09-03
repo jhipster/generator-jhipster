@@ -32,10 +32,11 @@ const JIB_VERSION = '2.5.0';
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '3.10.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.2.9.RELEASE';
+const SPRING_BOOT_VERSION = '2.3.3.RELEASE';
 const LIQUIBASE_VERSION = '3.10.2';
 const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
 const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;
+const HIBERNATE_VERSION = '5.4.20.Final';
 
 const JACOCO_VERSION = '0.8.5';
 const KAFKA_VERSION = '5.5.1';
@@ -61,11 +62,11 @@ const DOCKER_COUCHBASE = 'couchbase:6.5.1';
 const DOCKER_CASSANDRA = 'cassandra:3.11.7';
 const DOCKER_MSSQL = 'mcr.microsoft.com/mssql/server:2019-CU6-ubuntu-16.04';
 const DOCKER_NEO4J = 'neo4j:4.1.1';
-const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.12.9'; // waiting for https://github.com/jhipster/generator-jhipster/issues/11244
+const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:4.0.3';
 const DOCKER_MEMCACHED = 'memcached:1.6.6-alpine';
 const DOCKER_REDIS = 'redis:6.0.6';
 const DOCKER_KEYCLOAK = 'jboss/keycloak:11.0.1'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
-const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:6.8.10'; // The version should be coherent with the one from spring-data-elasticsearch project
+const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:7.6.2'; // The version should be coherent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
 const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;
 const DOCKER_SONAR = 'sonarqube:8.4.2-community';
@@ -381,6 +382,7 @@ const constants = {
     SPRING_BOOT_VERSION,
     LIQUIBASE_VERSION,
     LIQUIBASE_DTD_VERSION,
+    HIBERNATE_VERSION,
     JACOCO_VERSION,
     JACKSON_DATABIND_NULLABLE_VERSION,
 

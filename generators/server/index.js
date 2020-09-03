@@ -134,6 +134,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
                 this.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
                 this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
+                this.HIBERNATE_VERSION = constants.HIBERNATE_VERSION;
                 this.JACOCO_VERSION = constants.JACOCO_VERSION;
 
                 this.KAFKA_VERSION = constants.KAFKA_VERSION;

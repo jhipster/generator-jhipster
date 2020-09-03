@@ -287,6 +287,18 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${testDir}service/AuditEventServiceIT.java`);
         generator.removeFile(`${testDir}web/rest/AuditResourceIT.java`);
         generator.removeFile(`${testDir}repository/CustomAuditEventRepositoryIT.java`);
+
+        if (generator.databaseType === 'cassandra') {
+            generator.removeFile(`${javaDir}config/metrics/package-info.java`);
+            generator.removeFile(`${javaDir}config/metrics/CassandraHealthIndicator.java`);
+            generator.removeFile(`${javaDir}config/metrics/JHipsterHealthIndicatorConfiguration.java`);
+            generator.removeFile(`${javaDir}config/cassandra/package-info.java`);
+            generator.removeFile(`${javaDir}config/cassandra/CassandraConfiguration.java`);
+            generator.removeFile(`${testDir}config/CassandraConfigurationIT.java`);
+        }
+        if (generator.searchEngine === 'elasticsearch') {
+            generator.removeFile(`${testDir}config/ElasticsearchTestConfiguration.java`);
+        }
     }
 }
 
