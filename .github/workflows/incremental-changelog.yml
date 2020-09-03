@@ -37,7 +37,10 @@ env:
     SPRING_JPA_SHOW_SQL: false
     JHI_DISABLE_WEBPACK_LOGS: true
     JHI_E2E_HEADLESS: true
-    JHI_SCRIPTS: ${{ github.workspace }}/test-integration/scripts
+    JHI_HOME: ${{ github.workspace }}/generator-jhipster
+    JHI_SCRIPTS: ${{ github.workspace }}/generator-jhipster/test-integration/scripts
+    JHI_FOLDER_APP: ${{ github.workspace }}/app
+    JHI_FOLDER_UAA: ${{ github.workspace }}/uaa
     NG_CLI_ANALYTICS: 'false'
     JHI_GITHUB_CI: true
     FORCE_COLOR: 1
@@ -45,6 +48,9 @@ jobs:
     applications:
         name: ${{ matrix.app-type }}
         runs-on: ${{ matrix.os }}
+        defaults:
+            run:
+                working-directory: ${{ github.workspace }}/app
         if: >-
             !contains(github.event.head_commit.message, '[ci skip]') &&
             !contains(github.event.head_commit.message, '[skip ci]') &&
@@ -56,8 +62,8 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                node_version: [12.16.1]
-                os: [ubuntu-latest]
+                node_version: [12.18.3]
+                os: [ubuntu-20.04]
                 app-type:
                     - liquibase-jdl-rename-field
                 include:
@@ -66,20 +72,27 @@ jobs:
                       liquibase: jdl
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
             JHI_LIQUIBASE: ${{ matrix.liquibase }}
             JHI_PROFILE: ${{ matrix.profile }}
             JHI_WAR: ${{ matrix.war }}
-            JHI_PROTRACTOR: ${{ matrix.protractor }}
+            JHI_E2E: ${{ matrix.e2e }}
             JHI_TESTCONTAINERS: ${{ matrix.testcontainers }}
         steps:
             #----------------------------------------------------------------------
             # Install all tools and check configuration
             #----------------------------------------------------------------------
-            - uses: actions/checkout@v2
+            - name: 'Checkout generator-jhipster'
+              uses: actions/checkout@v2
+              with:
+                  path: generator-jhipster
+            - name: 'Create required dir'
+              run: |
+                  mkdir app
+              working-directory: ${{ github.workspace }}
             - uses: actions/setup-node@v2.1.1
               with:
                   node-version: ${{ matrix.node_version }}
@@ -105,14 +118,16 @@ jobs:
               run: $JHI_SCRIPTS/10-install-jhipster.sh
             - name: 'GENERATION: entities'
               run: $JHI_SCRIPTS/11-generate-entities.sh
-            - name: Dump GitHub context
-              env:
-                  GITHUB_CONTEXT: ${{ toJson(github) }}
-              run: echo "$GITHUB_CONTEXT"
             - name: 'GENERATION: project'
+              run: $JHI_SCRIPTS/12-generate-project.sh --with-entities --force --skip-jhipster-dependencies --creation-timestamp '2020-01-01'
+            - name: 'GENERATION: incremental project'
+              run: $JHI_SCRIPTS/12-generate-project.sh --incremental-changelog --with-entities --force
+              env:
+                  JHI_APP: ${{ matrix.app-type }}-post
+            - name: 'GENERATION: incremetal changes'
               run: |
-                  $JHI_SCRIPTS/12-generate-project.sh --with-entities --force --skip-jhipster-dependencies --creation-timestamp '2020-01-01'
-                  JHI_APP=$JHI_APP-post $JHI_SCRIPTS/12-generate-project.sh --incremental-changelog --with-entities --force
+                  git add .
+                  git diff --cached
             - name: 'GENERATION: replace version in generated project'
               run: $JHI_SCRIPTS/13-replace-version-generated-project.sh
             - name: 'GENERATION: jhipster info'
@@ -129,11 +144,17 @@ jobs:
             - name: 'TESTS: packaging'
               run: $JHI_SCRIPTS/23-package.sh
             - name: 'Synchronize chromedriver version'
-              if: ${{ matrix.protractor == 1 }}
-              run: npm run e2e:update-webdriver --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
-              working-directory: /home/runner/app
+              if: ${{ matrix.e2e == 1 }}
+              run: npm run e2e:update-webdriver -- --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
+              working-directory: ${{ github.workspace }}/app
             - name: 'TESTS: End-to-End'
+              id: e2e
               run: $JHI_SCRIPTS/24-tests-e2e.sh
+            - uses: actions/upload-artifact@v2
+              if: ${{ always() && steps.e2e.outcome == 'failure' }}
+              with:
+                  name: screenshots-${{ matrix.app-type }}
+                  path: ${{ github.workspace }}/app/target/cypress/screenshots
             - name: 'TESTS: Sonar analysis'
               run: $JHI_SCRIPTS/25-sonar-analyze.sh
               env:
