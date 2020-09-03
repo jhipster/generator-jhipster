@@ -124,7 +124,7 @@ jobs:
               run: $JHI_SCRIPTS/12-generate-project.sh --incremental-changelog --with-entities --force
               env:
                   JHI_APP: ${{ matrix.app-type }}-post
-            - name: 'GENERATION: incremetal changes'
+            - name: 'GENERATION: incremental changes'
               run: |
                   git add .
                   git -c color.ui=always diff --cached
