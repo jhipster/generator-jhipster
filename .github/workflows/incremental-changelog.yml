@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-name: incremental-changelog
+name: Incremental Changelog
 on:
     push:
         branches-ignore:
@@ -26,6 +26,12 @@ on:
     pull_request:
         branches:
             - '*'
+        paths:
+            - 'utils/**'
+            - 'test-integration/**'
+            - 'generators/entity/**'
+            - 'generators/database-chagelog/**'
+            - 'generators/database-chagelog-liquibase/**'
 env:
     JHI_RUN_APP: 1
     JHI_JDK: 11
