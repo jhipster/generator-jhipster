@@ -233,32 +233,18 @@ module.exports = class extends BaseGenerator {
 
     _loadColumnType(entity, field) {
         const columnType = field.columnType;
-        if (
-            columnType === 'integer' ||
-            columnType === 'bigint' ||
-            columnType === 'double' ||
-            columnType === 'decimal(21,2)' ||
-            // eslint-disable-next-line no-template-curly-in-string
-            columnType === '${floatType}'
-        ) {
-            return 'numeric';
-        }
-
-        if (columnType === 'date') {
-            return 'date';
-        }
-
         // eslint-disable-next-line no-template-curly-in-string
-        if (columnType === '${datetimeType}') {
-            return 'datetime';
-        }
-
-        if (columnType === 'boolean') {
-            return 'boolean';
+        if (['integer', 'bigint', 'double', 'decimal(21,2)', '${floatType}'].includes(columnType)) {
+            return 'numeric';
         }
 
         if (field.fieldIsEnum) {
             return 'string';
+        }
+
+        // eslint-disable-next-line no-template-curly-in-string
+        if (['date', '${datetimeType}', 'boolean'].includes(columnType)) {
+            return columnType;
         }
 
         if (columnType === 'blob' || columnType === 'longblob') {
