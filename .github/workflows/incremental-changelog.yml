@@ -127,7 +127,7 @@ jobs:
             - name: 'GENERATION: incremetal changes'
               run: |
                   git add .
-                  git diff --cached
+                  git -c color.ui=always diff --cached
             - name: 'GENERATION: replace version in generated project'
               run: $JHI_SCRIPTS/13-replace-version-generated-project.sh
             - name: 'GENERATION: jhipster info'
