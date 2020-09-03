@@ -28,7 +28,7 @@ on:
             - '*'
         paths:
             - 'utils/**'
-            - 'test-integration/**'
+            - 'test-integration/incremental-changelog-samples/**'
             - 'generators/entity/**'
             - 'generators/database-chagelog/**'
             - 'generators/database-chagelog-liquibase/**'
@@ -126,9 +126,12 @@ jobs:
               run: $JHI_SCRIPTS/11-generate-entities.sh
             - name: 'GENERATION: project'
               run: $JHI_SCRIPTS/12-generate-project.sh --with-entities --force --skip-jhipster-dependencies --creation-timestamp '2020-01-01'
+              env:
+                  JHI_SAMPLES: ${{ github.workspace }}/generator-jhipster/test-integration/incremental-changelog-samples
             - name: 'GENERATION: incremental project'
               run: $JHI_SCRIPTS/12-generate-project.sh --incremental-changelog --with-entities --force
               env:
+                  JHI_SAMPLES: ${{ github.workspace }}/generator-jhipster/test-integration/incremental-changelog-samples
                   JHI_APP: ${{ matrix.app-type }}-post
             - name: 'GENERATION: incremental changes'
               run: |
