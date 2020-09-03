@@ -22,7 +22,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-<%= LIQUIBASE_DTD_VERSION %>.xsd">
     <!--
-        Added the constraints for entity <%= entityClass %>.
+        Added the constraints for entity <%= entity.entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>-2" author="jhipster">
         <% for (idx in relationships) {
@@ -31,27 +31,27 @@
             ownerSide = relationships[idx].ownerSide,
             otherEntityTableName = relationships[idx].otherEntityTableName;
             if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide)) {
-                const constraintName = getFKConstraintName(entityTableName, relationshipName, prodDatabaseType);
+                const constraintName = getFKConstraintName(entity.entityTableName, relationshipName, prodDatabaseType);
                 let baseColumnName = getColumnName(relationshipName) + '_id';
                 if (relationshipType === 'one-to-one' && ownerSide && relationships[idx].useJPADerivedIdentifier === true) {
                     baseColumnName = 'id';
                 } %>
         <addForeignKeyConstraint baseColumnNames="<%= baseColumnName %>"
-                                 baseTableName="<%= entityTableName %>"
+                                 baseTableName="<%= entity.entityTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= otherEntityTableName %>"/>
-        <%_ } else if (relationshipType === 'many-to-many' && ownerSide) {
-                const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
-                const constraintName = getFKConstraintName(joinTableName, getColumnName(entityTableName), prodDatabaseType, true);
+        <%_ } else if (relationships[idx].shouldCreateJoinTable) {
+                const joinTableName = getJoinTableName(entity.entityTableName, relationshipName, prodDatabaseType);
+                const constraintName = getFKConstraintName(joinTableName, getColumnName(entity.entityTableName), prodDatabaseType, true);
                 const otherEntityConstraintName = getFKConstraintName(joinTableName, getColumnName(relationshipName), prodDatabaseType, true);
           _%>
 
-        <addForeignKeyConstraint baseColumnNames="<%= getColumnName(name) %>_id"
+        <addForeignKeyConstraint baseColumnNames="<%= getColumnName(entity.name) %>_id"
                                  baseTableName="<%= joinTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
-                                 referencedTableName="<%= entityTableName %>"/>
+                                 referencedTableName="<%= entity.entityTableName %>"/>
 
         <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
                                  baseTableName="<%= joinTableName %>"

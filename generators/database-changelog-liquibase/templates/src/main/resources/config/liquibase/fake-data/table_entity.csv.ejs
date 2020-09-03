@@ -23,9 +23,9 @@ let table = [];
 let header = [];
 header.push('id');
 for (idx in fields) {
-    header.push(fields[idx].fieldNameAsDatabaseColumn);
+    header.push(fields[idx].columnName);
     if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') {
-        header.push(fields[idx].fieldNameAsDatabaseColumn + '_content_type');
+        header.push(fields[idx].columnName + '_content_type');
     }
 }
 for (idx in relationships) {
@@ -92,7 +92,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             ) && (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired)
         ) {
             if (relationships[idx].otherEntityNameCapitalized === 'User') {
-                line.push(faker.random.number({min: 1, max: 2}));
+                line.push(entity.faker.random.number({min: 1, max: 2}));
             } else {
                 line.push(lineNb);
             }

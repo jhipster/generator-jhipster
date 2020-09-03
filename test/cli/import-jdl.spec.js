@@ -367,7 +367,7 @@ describe('JHipster generator import jdl', () => {
         });
     });
 
-    describe('imports single app and entities', () => {
+    describe('imports single app and entities with --fork', () => {
         let oldCwd;
         const options = { skipInstall: true, noInsight: true, skipGit: false, creationTimestamp: '2019-01-01' };
         beforeEach(() => {
@@ -375,7 +375,7 @@ describe('JHipster generator import jdl', () => {
                 oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
                 fse.removeSync(`${dir}/.yo-rc.json`);
-                return loadImportJdl()(['single-app-and-entities.jdl'], options, env);
+                return loadImportJdl()(['single-app-and-entities.jdl'], { ...options, fork: true }, env);
             }, true);
         });
 
@@ -414,7 +414,7 @@ describe('JHipster generator import jdl', () => {
         });
     });
 
-    describe('imports single app and entities with --no-fork', () => {
+    describe('imports single app and entities', () => {
         let oldCwd;
         const options = { skipInstall: true, noInsight: true, skipGit: false, creationTimestamp: '2019-01-01' };
         beforeEach(() => {
@@ -422,7 +422,7 @@ describe('JHipster generator import jdl', () => {
                 oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
                 fse.removeSync(`${dir}/.yo-rc.json`);
-                return loadImportJdl()(['single-app-and-entities.jdl'], { ...options, fork: false }, env);
+                return loadImportJdl()(['single-app-and-entities.jdl'], options, env);
             }, true);
         });
 
@@ -450,7 +450,7 @@ describe('JHipster generator import jdl', () => {
         });
     });
 
-    describe('imports single app and entities passed with --inline', () => {
+    describe('imports single app and entities passed with --inline and --fork', () => {
         let oldCwd;
         const options = {
             skipInstall: true,
@@ -461,7 +461,7 @@ describe('JHipster generator import jdl', () => {
         beforeEach(() => {
             return testInTempDir(dir => {
                 oldCwd = dir;
-                return loadImportJdl()([], options, env);
+                return loadImportJdl()([], { ...options, fork: true }, env);
             }, true);
         });
 
@@ -490,7 +490,7 @@ describe('JHipster generator import jdl', () => {
         });
     });
 
-    describe('imports single app and entities passed with --inline and --no-fork', () => {
+    describe('imports single app and entities passed with --inline', () => {
         let oldCwd;
         const options = {
             skipInstall: true,
@@ -501,7 +501,7 @@ describe('JHipster generator import jdl', () => {
         beforeEach(() => {
             return testInTempDir(dir => {
                 oldCwd = dir;
-                return loadImportJdl()([], { ...options, fork: false }, env);
+                return loadImportJdl()([], options, env);
             }, true);
         });
 
@@ -528,7 +528,7 @@ describe('JHipster generator import jdl', () => {
         });
     });
 
-    describe('imports single app only', () => {
+    describe('imports single app only with --fork', () => {
         let oldCwd;
         const options = { skipInstall: true, noInsight: true, interactive: false, skipGit: false };
         beforeEach(() => {
@@ -536,7 +536,7 @@ describe('JHipster generator import jdl', () => {
                 oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
                 fse.removeSync(`${dir}/.yo-rc.json`);
-                return loadImportJdl()(['single-app-only.jdl'], options, env);
+                return loadImportJdl()(['single-app-only.jdl'], { ...options, fork: true }, env);
             }, true);
         });
 
@@ -560,7 +560,7 @@ describe('JHipster generator import jdl', () => {
         });
     });
 
-    describe('imports single app only with --no-fork', () => {
+    describe('imports single app only', () => {
         let oldCwd;
         const options = { skipInstall: true, noInsight: true, interactive: false, skipGit: false };
         beforeEach(() => {
@@ -568,7 +568,7 @@ describe('JHipster generator import jdl', () => {
                 oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
                 fse.removeSync(`${dir}/.yo-rc.json`);
-                return loadImportJdl()(['single-app-only.jdl'], { ...options, fork: false }, env);
+                return loadImportJdl()(['single-app-only.jdl'], options, env);
             }, true);
         });
 
