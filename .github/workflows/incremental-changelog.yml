@@ -91,11 +91,11 @@ jobs:
             #----------------------------------------------------------------------
             # Install all tools and check configuration
             #----------------------------------------------------------------------
-            - name: 'Checkout generator-jhipster'
+            - name: 'SETUP: Checkout generator-jhipster'
               uses: actions/checkout@v2
               with:
                   path: generator-jhipster
-            - name: 'Create required dir'
+            - name: 'SETUP: Create required structure'
               run: |
                   mkdir app
               working-directory: ${{ github.workspace }}
@@ -105,7 +105,7 @@ jobs:
             - uses: actions/setup-java@v1
               with:
                   java-version: '11.x'
-            - name: Get chrome/chromedriver version
+            - name: 'SETUP: Get chrome/chromedriver version'
               id: chromedriver-version
               run: |
                   CHROME_VERSION=$(google-chrome --version | cut -f 3 -d ' ' | cut -d '.' -f 1) \
@@ -152,19 +152,20 @@ jobs:
               run: $JHI_SCRIPTS/22-tests-frontend.sh
             - name: 'TESTS: packaging'
               run: $JHI_SCRIPTS/23-package.sh
-            - name: 'Synchronize chromedriver version'
-              if: ${{ matrix.e2e == 1 }}
+            - name: 'E2E: Synchronize chromedriver version'
+              if: matrix.e2e == 1
               run: npm run e2e:update-webdriver -- --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
               working-directory: ${{ github.workspace }}/app
-            - name: 'TESTS: End-to-End'
+            - name: 'E2E: Run'
               id: e2e
               run: $JHI_SCRIPTS/24-tests-e2e.sh
-            - uses: actions/upload-artifact@v2
-              if: ${{ always() && steps.e2e.outcome == 'failure' }}
+            - name: 'E2E: Store failure screenshots'
+              uses: actions/upload-artifact@v2
+              if: always() && steps.e2e.outcome == 'failure'
               with:
                   name: screenshots-${{ matrix.app-type }}
                   path: ${{ github.workspace }}/app/target/cypress/screenshots
-            - name: 'TESTS: Sonar analysis'
+            - name: 'ANALYSIS: Sonar analysis'
               run: $JHI_SCRIPTS/25-sonar-analyze.sh
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
