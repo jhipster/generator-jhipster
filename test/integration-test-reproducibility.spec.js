@@ -33,19 +33,36 @@ describe('Integration Test reproducibility', () => {
             if (dirent.isDirectory() && fs.existsSync(yoFile)) {
                 const yoJson = fse.readJsonSync(yoFile);
                 const config = yoJson['generator-jhipster'];
-                it(`${dirent.name} contains creationTimestamp`, () => {
-                    if (process.argv.includes('--fix-reproducibility')) {
-                        if (!config.creationTimestamp) {
-                            config.creationTimestamp = 1596513172471;
-                            fse.writeJsonSync(yoFile, yoJson);
+                describe(`${dirent.name} test`, () => {
+                    before(() => {
+                        if (process.argv.includes('--fix-reproducibility')) {
+                            if (!config.creationTimestamp) {
+                                config.creationTimestamp = 1596513172471;
+                                fse.writeJsonSync(yoFile, yoJson);
+                            }
+                            if (config.authenticationType === 'session' && !config.rememberMeKey) {
+                                config.rememberMeKey =
+                                    'a5e93fdeb16e2ee2dc4a629b5dbdabb30f968e418dfc0483c53afdc695cfac96d06cf5c581cbefb93e3aaa241880857fcafe';
+                                fse.writeJsonSync(yoFile, yoJson);
+                            } else if (config.authenticationType === 'jwt' && !config.jwtSecretKey) {
+                                config.jwtSecretKey =
+                                    'ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=';
+                                fse.writeJsonSync(yoFile, yoJson);
+                            }
                         }
-                        if (config.authenticationType === 'session' && !config.rememberMeKey) {
-                            config.rememberMeKey =
-                                'a5e93fdeb16e2ee2dc4a629b5dbdabb30f968e418dfc0483c53afdc695cfac96d06cf5c581cbefb93e3aaa241880857fcafe';
-                            fse.writeJsonSync(yoFile, yoJson);
-                        }
+                    });
+                    it('should contain creationTimestamp', () => {
+                        assert(config.creationTimestamp);
+                    });
+                    if (config.authenticationType === 'jwt') {
+                        it('should contain jwtSecretKey', () => {
+                            assert(config.jwtSecretKey);
+                        });
+                    } else if (config.authenticationType === 'session') {
+                        it('should contain rememberMeKey', () => {
+                            assert(config.rememberMeKey);
+                        });
                     }
-                    assert(config.creationTimestamp);
                 });
             }
             dirent = dir.readSync();
