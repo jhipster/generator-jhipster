@@ -87,7 +87,19 @@ describe('jhipster cli', () => {
             process.argv = oldArgv;
         });
         beforeEach(() => {
-            commands.mocked = { desc: 'Mocked command' };
+            commands.mocked = {
+                desc: 'Mocked command',
+                options: [
+                    {
+                        option: '--foo',
+                        desc: 'Foo',
+                    },
+                    {
+                        option: '--foo-bar',
+                        desc: 'Foo bar',
+                    },
+                ],
+            };
             sinon.stub(Environment.prototype, 'run').callsFake((...args) => {
                 callback(...args);
                 return Promise.resolve();
@@ -168,7 +180,9 @@ describe('jhipster cli', () => {
 
     describe('with mocked cliOnly commands', () => {
         let oldArgv;
-        const commands = { mocked: {} };
+        const commands = {
+            mocked: {},
+        };
         before(() => {
             oldArgv = process.argv;
         });
@@ -176,7 +190,27 @@ describe('jhipster cli', () => {
             process.argv = oldArgv;
         });
         beforeEach(() => {
-            commands.mocked = { cb: () => {} };
+            commands.mocked = {
+                cb: () => {},
+                options: [
+                    {
+                        option: '--foo',
+                        desc: 'Foo',
+                    },
+                    {
+                        option: '--no-foo',
+                        desc: 'No foo',
+                    },
+                    {
+                        option: '--foo-bar',
+                        desc: 'Foo bar',
+                    },
+                    {
+                        option: '--no-foo-bar',
+                        desc: 'No foo bar',
+                    },
+                ],
+            };
         });
 
         const commonTests = () => {

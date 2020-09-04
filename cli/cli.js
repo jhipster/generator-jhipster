@@ -21,7 +21,7 @@ const chalk = require('chalk');
 const didYouMean = require('didyoumean');
 
 const packageJson = require('../package.json');
-const { CLI_NAME, initHelp, logger, toString, getCommand, getCommandOptions, getArgs, done, buildCommanderOptions } = require('./utils');
+const { CLI_NAME, initHelp, logger, toString, getCommand, getArgs, done, buildCommanderOptions } = require('./utils');
 const EnvironmentBuilder = require('./environment-builder');
 const SUB_GENERATORS = require('./commands');
 const { packageNameToNamespace } = require('../generators/utils');
@@ -38,7 +38,6 @@ program
     .passCommandToAction(false)
     .version(version)
     .usage('[command] [options]')
-    .allowUnknownOption()
     // JHipster common options
     .option(
         '--blueprints <value>',
@@ -131,56 +130,20 @@ Object.entries(allCommands).forEach(([key, opts]) => {
 
     const additionalCommandDescription = opts.blueprint ? chalk.yellow(` (blueprint: ${opts.blueprint})`) : '';
     command
-        .allowUnknownOption()
         .description(opts.desc + additionalCommandDescription)
         .action((...everything) => {
-            let cmdOptions;
-            let unknownArgs = [];
-            const last = everything.pop();
-            if (Array.isArray(last)) {
-                unknownArgs = last || [];
-                cmdOptions = everything.pop();
-            } else {
-                cmdOptions = last;
-            }
-
-            // Arguments processing merges unknown options with cmd args, move unknown options back
-            // Unknown options should be disabled for jhipster 7
-            const splitUnknown = argsToSplit => {
-                const args = [];
-                const unknown = [];
-                argsToSplit.find((item, index) => {
-                    if (item && item.startsWith('-')) {
-                        unknown.push(...argsToSplit.slice(index));
-                        return true;
-                    }
-                    args.push(item);
-                    return false;
-                });
-                return [args, unknown];
-            };
-            const variadicArg = everything.pop();
-
-            const splitted = splitUnknown(everything);
-            const args = splitted[0];
-            unknownArgs.unshift(...splitted[1]);
-
-            if (variadicArg) {
-                if (Array.isArray(variadicArg)) {
-                    const splittedVariadic = splitUnknown(variadicArg);
-                    if (splittedVariadic[0].length > 0) {
-                        args.push(splittedVariadic[0]);
-                    }
-                    unknownArgs.unshift(...splittedVariadic[1]);
-                } else {
-                    args.push(variadicArg);
+            const cmdOptions = everything.pop();
+            if (Array.isArray(cmdOptions)) {
+                // Unknown commands or unknown argument.
+                const cmd = cmdOptions[0];
+                if (key !== 'app') {
+                    logger.fatal(
+                        `${chalk.yellow(key)} command doesn't take ${chalk.yellow(cmd)} argument. See '${chalk.white(
+                            `${CLI_NAME} ${key} --help`
+                        )}'.`
+                    );
+                    return;
                 }
-            }
-
-            const firstUnknownArg = Array.isArray(unknownArgs) && unknownArgs.length > 0 ? unknownArgs[0] : undefined;
-            if (key === 'app' && firstUnknownArg !== undefined && !firstUnknownArg.startsWith('-')) {
-                // Unknown commands.
-                const cmd = Object.values(unknownArgs).join('');
                 const availableCommands = program.commands.map(c => c._name);
 
                 const suggestion = didYouMean(cmd, availableCommands);
@@ -188,13 +151,13 @@ Object.entries(allCommands).forEach(([key, opts]) => {
                     logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
                 }
 
-                logger.fatal(`${chalk.yellow(firstUnknownArg)} is not a known command. See '${chalk.white(`${CLI_NAME} --help`)}'.`);
+                logger.fatal(`${chalk.yellow(cmd)} is not a known command. See '${chalk.white(`${CLI_NAME} --help`)}'.`);
                 return;
             }
+            const args = everything;
 
             // Get unknown options and parse.
             const options = {
-                ...getCommandOptions(packageJson, unknownArgs),
                 ...program.opts(),
                 ...cmdOptions,
             };

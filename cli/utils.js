@@ -222,6 +222,10 @@ const buildCommanderOptions = (optionName, optionDefinition, additionalDescripti
         cmdString = `${cmdString} <value>`;
     }
     const commanderOption = [cmdString, optionDefinition.description + additionalDescription, optionDefinition.default];
+    if (optionDefinition.type === Boolean && optionDefinition.default === undefined) {
+        // Workaround commander not accepting negate values by default.
+        return [commanderOption, [`--no-${optionName}`]];
+    }
     return [commanderOption];
 };
 
