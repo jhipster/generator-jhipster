@@ -465,10 +465,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.context.fields.forEach(field => {
                     prepareFieldForTemplates(entity, field, this);
                 });
-
-                this.context.relationships.forEach(relationship => {
-                    prepareRelationshipForTemplates(entity, relationship, this);
-                });
             },
         };
     }
