@@ -1,6 +1,5 @@
 const expect = require('chai').expect;
 const cliUtil = require('../../cli/utils');
-const packageJson = require('../../package.json');
 
 describe('jhipster cli utils test', () => {
     describe('toString', () => {
@@ -149,45 +148,6 @@ describe('jhipster cli utils test', () => {
         describe('when called with object', () => {
             it('returns object with a kebabCase option', () => {
                 expect(cliUtil.addKebabCase({ foo: 'bar', fooBar: true })).to.eql({ 'foo-bar': true, fooBar: true, foo: 'bar' });
-            });
-        });
-    });
-    describe('getCommandOptions', () => {
-        describe('when called with empty argv', () => {
-            it('returns the default object', () => {
-                expect(cliUtil.getCommandOptions(packageJson, [])).to.eql({});
-            });
-        });
-        describe('when called with argv flags', () => {
-            const argv = ['--force', '--skip-install'];
-            it('returns an object with camelcase and dashcase keys', () => {
-                expect(cliUtil.getCommandOptions(packageJson, argv)).to.eql({
-                    force: true,
-                    'skip-install': true,
-                    skipInstall: true,
-                });
-            });
-        });
-        describe('when called with argv flags with value', () => {
-            const argv = ['--force', '--skip-install', '--foo', 'bar'];
-            it('returns an object with camelcase and dashcase keys', () => {
-                expect(cliUtil.getCommandOptions(packageJson, argv)).to.eql({
-                    force: true,
-                    'skip-install': true,
-                    skipInstall: true,
-                    foo: 'bar',
-                });
-            });
-        });
-        describe('when called with argv flags with value array', () => {
-            const argv = ['--force', '--skip-install', '--foo', 'bar,who'];
-            it('returns an object with camelcase and dashcase keys', () => {
-                expect(cliUtil.getCommandOptions(packageJson, argv)).to.eql({
-                    force: true,
-                    'skip-install': true,
-                    skipInstall: true,
-                    foo: 'bar,who',
-                });
             });
         });
     });
