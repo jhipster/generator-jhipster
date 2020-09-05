@@ -188,14 +188,15 @@ const generateApplicationFiles = ({ processor, applicationWithEntities, inFolder
  * @param {any} entity
  * @param {boolean} inFolder
  * @param {any} env
- * @param {boolean} shouldTriggerInstall
+ * @param {boolean} shouldSkipInstall
  * @return Promise
  */
-const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInstall) => {
+const generateEntityFiles = (processor, entity, inFolder, env, shouldSkipInstall) => {
     const options = {
-        skipInstall: !shouldTriggerInstall,
         force: !processor.options.interactive ? true : undefined,
         ...processor.options,
+        /* skip-install is required by yeoman-generator processor.options.skipInstall will not be undefined, we need for force skipInstall option. */
+        skipInstall: shouldSkipInstall,
         regenerate: true,
         fromCli: true,
     };
@@ -231,16 +232,13 @@ const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInst
 };
 
 /**
- * Check if NPM install needs to be triggered. This will be done for the last entity.
+ * Check if NPM install needs to be skipped.
+ * It should not be skipped for the last entity or if user specifies it.
  * @param {any} processor
  * @param {number} index
  */
-const shouldTriggerInstall = (processor, index) =>
-    index === processor.importState.exportedEntities.length - 1 &&
-    !processor.options.skipInstall &&
-    !processor.skipClient &&
-    !processor.options.jsonOnly &&
-    !shouldGenerateApplications(processor);
+const shouldSkipInstallEntity = (processor, index) =>
+    index !== processor.importState.exportedEntities.length - 1 || processor.options.skipInstall;
 
 class JDLProcessor {
     constructor(jdlFiles, jdlContent, options) {
@@ -376,7 +374,7 @@ class JDLProcessor {
                         exportedEntity,
                         this.importState.exportedApplications.length > 1,
                         env,
-                        shouldTriggerInstall(this, i)
+                        shouldSkipInstallEntity(this, i)
                     );
                 })
             );

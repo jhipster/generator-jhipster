@@ -191,7 +191,7 @@ describe('JHipster generator import jdl', () => {
 
     describe('imports a JDL entity model from single file with --skip-db-changelog', () => {
         let oldCwd;
-        const options = { skipDbChangelog: true, skipInstall: true };
+        const options = { skipDbChangelog: true };
         beforeEach(() => {
             return testInTempDir(dir => {
                 oldCwd = dir;
@@ -226,7 +226,22 @@ describe('JHipster generator import jdl', () => {
                 'jhipster:entity Job',
                 'jhipster:entity JobHistory',
             ]);
-            expect(subGenCallParams.options[0]).to.eql({
+        });
+
+        it('calls entity subgenerator with correct options', () => {
+            subGenCallParams.options.slice(0, subGenCallParams.options.length - 1).forEach(subGenOptions => {
+                expect(subGenOptions).to.eql({
+                    ...options,
+                    ...defaultAddedOptions,
+                    skipInstall: true,
+                    regenerate: true,
+                    interactive: true,
+                });
+            });
+        });
+
+        it('last entity subgenerator should be called without skipInstall', () => {
+            expect(subGenCallParams.options[subGenCallParams.options.length - 1]).to.eql({
                 ...options,
                 ...defaultAddedOptions,
                 regenerate: true,
@@ -680,8 +695,8 @@ describe('JHipster generator import jdl', () => {
                 'jhipster:entity F',
             ]);
             expect(subGenCallParams.options[0]).to.eql([
-                '--skip-install',
                 '--force',
+                '--skip-install',
                 '--ignore-application',
                 '--no-interactive',
                 '--no-skip-git',
