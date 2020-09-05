@@ -132,13 +132,7 @@ describe('JHipster generator import jdl', () => {
         });
         it('calls generator in order', () => {
             expect(subGenCallParams.count).to.equal(5);
-            expect(subGenCallParams.commands).to.eql([
-                'jhipster:app',
-                'jhipster:app',
-                'jhipster:app',
-                'jhipster:docker-compose',
-                'jhipster:kubernetes',
-            ]);
+            expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'docker-compose', 'kubernetes']);
             expect(subGenCallParams.options[0]).to.eql([
                 '--with-entities',
                 '--skip-install',
@@ -414,7 +408,7 @@ describe('JHipster generator import jdl', () => {
         });
         it('calls application generator', () => {
             expect(subGenCallParams.count).to.equal(1);
-            expect(subGenCallParams.commands).to.eql(['jhipster:app']);
+            expect(subGenCallParams.commands).to.eql(['app']);
             expect(subGenCallParams.options[0]).to.eql([
                 '--force',
                 '--with-entities',
@@ -490,7 +484,7 @@ describe('JHipster generator import jdl', () => {
         });
         it('calls application generator', () => {
             expect(subGenCallParams.count).to.equal(1);
-            expect(subGenCallParams.commands).to.eql(['jhipster:app']);
+            expect(subGenCallParams.commands).to.eql(['app']);
             expect(subGenCallParams.options[0]).to.eql([
                 '--force',
                 '--with-entities',
@@ -562,7 +556,7 @@ describe('JHipster generator import jdl', () => {
         });
         it('calls application generator', () => {
             expect(subGenCallParams.count).to.equal(1);
-            expect(subGenCallParams.commands).to.eql(['jhipster:app']);
+            expect(subGenCallParams.commands).to.eql(['app']);
             expect(subGenCallParams.options[0]).to.eql([
                 '--force',
                 '--skip-install',
@@ -639,7 +633,7 @@ describe('JHipster generator import jdl', () => {
         });
         it('calls application generator', () => {
             expect(subGenCallParams.count).to.equal(3);
-            expect(subGenCallParams.commands).to.eql(['jhipster:app', 'jhipster:app', 'jhipster:app']);
+            expect(subGenCallParams.commands).to.eql(['app', 'app', 'app']);
             expect(subGenCallParams.options[0]).to.eql([
                 '--force',
                 '--with-entities',
@@ -686,14 +680,7 @@ describe('JHipster generator import jdl', () => {
         });
         it('does not call application generator', () => {
             expect(subGenCallParams.count).to.equal(6);
-            expect(subGenCallParams.commands).to.eql([
-                'jhipster:entity A',
-                'jhipster:entity B',
-                'jhipster:entity E',
-                'jhipster:entity E',
-                'jhipster:entity F',
-                'jhipster:entity F',
-            ]);
+            expect(subGenCallParams.commands).to.eql(['entity A', 'entity B', 'entity E', 'entity E', 'entity F', 'entity F']);
             expect(subGenCallParams.options[0]).to.eql([
                 '--force',
                 '--skip-install',
@@ -728,7 +715,7 @@ describe('JHipster generator import jdl', () => {
             ]);
         });
         it('calls deployment generator', () => {
-            const invokedSubgens = ['jhipster:docker-compose', 'jhipster:kubernetes', 'jhipster:openshift'];
+            const invokedSubgens = ['docker-compose', 'kubernetes', 'openshift'];
             expect(subGenCallParams.commands).to.eql(invokedSubgens);
             expect(subGenCallParams.count).to.equal(invokedSubgens.length);
             expect(subGenCallParams.options[0]).to.eql([
@@ -760,13 +747,7 @@ describe('JHipster generator import jdl', () => {
 
             it('calls generator in order', () => {
                 expect(subGenCallParams.count).to.equal(5);
-                expect(subGenCallParams.commands).to.eql([
-                    'jhipster:app',
-                    'jhipster:app',
-                    'jhipster:app',
-                    'jhipster:docker-compose',
-                    'jhipster:kubernetes',
-                ]);
+                expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'docker-compose', 'kubernetes']);
                 expect(subGenCallParams.options[0]).to.eql([
                     '--force',
                     '--with-entities',
@@ -842,7 +823,7 @@ describe('JHipster generator import jdl', () => {
 
         it('calls generator in order', () => {
             expect(subGenCallParams.count).to.equal(3);
-            expect(subGenCallParams.commands).to.eql(['jhipster:app', 'jhipster:app', 'jhipster:app']);
+            expect(subGenCallParams.commands).to.eql(['app', 'app', 'app']);
             expect(subGenCallParams.options[0]).to.eql([
                 '--force',
                 '--with-entities',
