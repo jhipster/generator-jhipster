@@ -416,6 +416,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.getExistingEntities().forEach(entity => {
                         this.composeWithJHipster('entity', {
                             regenerate: true,
+                            skipDbChangelog: this.jhipsterConfig.databaseType === 'sql',
                             skipInstall: true,
                             arguments: [entity.name],
                         });
@@ -432,6 +433,20 @@ module.exports = class extends BaseBlueprintGenerator {
                         arguments: [page.name],
                         page,
                     });
+                });
+            },
+
+            databaseChangelog() {
+                if (this.skipServer || this.jhipsterConfig.databaseType !== 'sql') {
+                    return;
+                }
+                const existingEntities = this.getExistingEntities();
+                if (existingEntities.length === 0) {
+                    return;
+                }
+
+                this.composeWithJHipster('database-changelog', {
+                    arguments: existingEntities.map(entity => entity.name),
                 });
             },
 

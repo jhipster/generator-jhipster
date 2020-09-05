@@ -23,7 +23,7 @@ import <%= packageName %>.repository.PersistentTokenRepository;
 import <%= packageName %>.repository.UserRepository;
 
 <%_ if (databaseType === 'cassandra') { _%>
-import com.datastax.driver.core.exceptions.DriverException;
+import com.datastax.oss.driver.api.core.DriverException;
 <%_ } _%>
 
 import io.github.jhipster.config.JHipsterProperties;
@@ -31,8 +31,10 @@ import io.github.jhipster.security.PersistentTokenCache;
 import io.github.jhipster.security.RandomUtil;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>
-import org.springframework.dao.DataAccessException;<% } %>
+import org.slf4j.LoggerFactory;
+<%_ if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { _%>
+import org.springframework.dao.DataAccessException;
+<%_ } _%>
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -42,10 +44,10 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
+<%_ if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { _%>
 import java.time.LocalDate;
-<%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ } else if (databaseType === 'cassandra') { _%>
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
 import java.util.*;
@@ -119,24 +121,30 @@ public class PersistentTokenRememberMeServices extends
             }
 
             if (login == null) {
-                PersistentToken token = getPersistentToken(cookieTokens);<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { %>
-                login = token.getUser().getLogin();<% } else { %>
-                login = token.getLogin();<% } %>
+                PersistentToken token = getPersistentToken(cookieTokens);
+            <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
+                login = token.getUser().getLogin();
+            <%_ } else { _%>
+                login = token.getLogin();
+            <%_ } _%>
 
                 // Token also matches, so login is valid. Update the token value, keeping the *same* series number.
-                log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>
-                token.setTokenDate(LocalDate.now());<% } %><% if (databaseType === 'cassandra') { %>
-                token.setTokenDate(new Date());<% } %>
+                log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());
+            <%_ if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { _%>
+                token.setTokenDate(LocalDate.now());
+            <%_ } else if (databaseType === 'cassandra') { _%>
+                token.setTokenDate(Instant.now());
+            <%_ } _%>
                 token.setTokenValue(RandomUtil.generateRandomAlphanumericString());
                 token.setIpAddress(request.getRemoteAddr());
                 token.setUserAgent(request.getHeader("User-Agent"));
                 try {
-                    <% if (databaseType === 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } else { %>persistentTokenRepository.save(token);<% } %>
-                    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
+                    persistentTokenRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(token);
+            <%_ if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { _%>
                 } catch (DataAccessException e) {
-                    <%_ } else { _%>
+            <%_ } else if (databaseType === 'cassandra') { _%>
                 } catch (DriverException e) {
-                    <%_ } _%>
+            <%_ } _%>
                     log.error("Failed to update token: ", e);
                     throw new RememberMeAuthenticationException("Autologin failed due to data access problem", e);
                 }
@@ -156,21 +164,29 @@ public class PersistentTokenRememberMeServices extends
         log.debug("Creating new persistent login for user {}", login);
         PersistentToken token = userRepository.findOneByLogin(login).map(u -> {
             PersistentToken t = new PersistentToken();
-            t.setSeries(RandomUtil.generateRandomAlphanumericString());<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { %>
-            t.setUser(u);<% } else { %>
-            t.setLogin(login);<% } %><% if (databaseType === 'cassandra') { %>
-            t.setUserId(u.getId());<% } %>
+            t.setSeries(RandomUtil.generateRandomAlphanumericString());
+        <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
+            t.setUser(u);
+        <%_ } else { _%>
+            t.setLogin(login);
+        <%_ } _%>
+        <%_ if (databaseType === 'cassandra') { _%>
+            t.setUserId(u.getId());
+        <%_ } _%>
             t.setTokenValue(RandomUtil.generateRandomAlphanumericString());
-            t.setTokenDate(<% if (databaseType === 'cassandra') { %>new Date()<% } else { %>LocalDate.now()<% } %>);
+            t.setTokenDate(<% if (databaseType === 'cassandra') { %>Instant.now()<% } else { %>LocalDate.now()<% } %>);
             t.setIpAddress(request.getRemoteAddr());
             t.setUserAgent(request.getHeader("User-Agent"));
             return t;
         }).orElseThrow(() -> new UsernameNotFoundException("User " + login + " was not found in the database"));
         try {
-            <% if (databaseType === 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } else { %>persistentTokenRepository.save(token);<% } %>
-            addCookie(token, request, response);<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>
-        } catch (DataAccessException e) {<% } else { %>
-        } catch (DriverException e) {<% } %>
+            persistentTokenRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(token);
+            addCookie(token, request, response);
+        <%_ if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { _%>
+        } catch (DataAccessException e) {
+        <%_ } else if (databaseType === 'cassandra') { _%>
+        } catch (DriverException e) {
+        <%_ } _%>
             log.error("Failed to save persistent token ", e);
         }
     }
@@ -244,7 +260,7 @@ public class PersistentTokenRememberMeServices extends
         if (token.getTokenDate().plusDays(TOKEN_VALIDITY_DAYS).isBefore(LocalDate.now())) {
         <%_ } _%>
         <%_ if (databaseType === 'cassandra') { _%>
-        if (token.getTokenDate().toInstant().plus(TOKEN_VALIDITY_DAYS, ChronoUnit.DAYS).isBefore((new Date()).toInstant())) {
+        if (token.getTokenDate().plus(TOKEN_VALIDITY_DAYS, ChronoUnit.DAYS).isBefore(Instant.now())) {
         <%_ } _%>
             <%_ if (databaseType === 'sql') { _%>
             persistentTokenRepository.deleteById(token.getSeries());

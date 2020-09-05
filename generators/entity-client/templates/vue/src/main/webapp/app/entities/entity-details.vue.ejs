@@ -13,7 +13,7 @@
                     </dt>
                     <dd>
                         <%_ if (fields[idx].fieldIsEnum) { _%>
-                        <span v-text="$t('<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>)">{{<%= entityInstance %>.<%= fieldName %>}}</span>
+                        <span v-text="$t('<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>)">{{<%= entityInstance %>.<%= fieldName %>}}</span>
                         <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
                         <div v-if="<%= entityInstance %>.<%= fieldName %>">
                             <a v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">

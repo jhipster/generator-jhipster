@@ -34,7 +34,7 @@ function writeFiles() {
                 if (field.fieldIsEnum === true) {
                     const enumInfo = {
                         ...utils.getEnumInfo(field, this.clientRootFolder),
-                        angularAppName: this.angularAppName,
+                        frontendAppName: this.frontendAppName,
                         packageName: this.packageName,
                     };
 

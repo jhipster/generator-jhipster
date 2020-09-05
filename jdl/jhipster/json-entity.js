@@ -20,7 +20,7 @@
 const { merge } = require('../utils/object-utils');
 const { formatDateForLiquibase, formatComment } = require('../utils/format-utils');
 const { upperFirst } = require('../utils/string-utils');
-const { createFromEntityName } = require('./entity-table-name-creator');
+const { getTableNameFromEntityName } = require('./entity-table-name-creator');
 
 /**
  * The JSONEntity class represents a read-to-be exported to JSON entity.
@@ -122,7 +122,7 @@ function defaults(entityName) {
         relationships: [],
         changelogDate: formatDateForLiquibase(),
         javadoc: formatComment(),
-        entityTableName: createFromEntityName(entityName),
+        entityTableName: getTableNameFromEntityName(entityName),
         dto: 'no',
         pagination: 'no',
         service: 'no',

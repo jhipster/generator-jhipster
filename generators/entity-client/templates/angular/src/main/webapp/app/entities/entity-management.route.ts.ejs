@@ -63,7 +63,7 @@ export const <%= entityInstance %>Route: Routes = [
             <%_ if (pagination === 'pagination') { _%>
             defaultSort: 'id,asc',
             <%_ } _%>
-            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
+            pageTitle: <% if (enableTranslation) { %>'<%= frontendAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
     },
@@ -75,7 +75,7 @@ export const <%= entityInstance %>Route: Routes = [
         },
         data: {
             authorities: [Authority.USER],
-            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
+            pageTitle: <% if (enableTranslation) { %>'<%= frontendAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
     },
@@ -88,7 +88,7 @@ export const <%= entityInstance %>Route: Routes = [
         },
         data: {
             authorities: [Authority.USER],
-            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
+            pageTitle: <% if (enableTranslation) { %>'<%= frontendAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
     },
@@ -100,7 +100,7 @@ export const <%= entityInstance %>Route: Routes = [
         },
         data: {
             authorities: [Authority.USER],
-            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
+            pageTitle: <% if (enableTranslation) { %>'<%= frontendAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
     },

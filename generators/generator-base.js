@@ -1756,20 +1756,11 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * get the Angular application name.
-     * @param {string} baseName of application
+     * get the frontend application name.
+     * @param {string} baseName of application - (defaults to <code>this.jhipsterConfig.baseName</code>)
      */
-    getAngularAppName(baseName = this.baseName) {
+    getFrontendAppName(baseName = this.jhipsterConfig.baseName) {
         const name = _.camelCase(baseName) + (baseName.endsWith('App') ? '' : 'App');
-        return name.match(/^\d/) ? 'App' : name;
-    }
-
-    /**
-     * get the Angular application name.
-     * @param {string} baseName of application
-     */
-    getAngularXAppName(baseName = this.baseName) {
-        const name = this.upperFirstCamelCase(baseName);
         return name.match(/^\d/) ? 'App' : name;
     }
 
@@ -2284,6 +2275,7 @@ module.exports = class extends PrivateBase {
         dest.searchEngine = config.searchEngine;
         dest.cacheProvider = config.cacheProvider;
         dest.enableHibernateCache = config.enableHibernateCache;
+        dest.reactiveSqlTestContainers = config.reactive && ['mysql', 'postgresql', 'mssql', 'mariadb'].includes(config.prodDatabaseType);
 
         dest.enableSwaggerCodegen = config.enableSwaggerCodegen;
         dest.messageBroker = config.messageBroker;

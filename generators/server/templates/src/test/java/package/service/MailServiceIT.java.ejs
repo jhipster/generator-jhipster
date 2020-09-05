@@ -27,7 +27,7 @@ import <%= packageName %>.AbstractNeo4jIT;
 <%_ if (cacheProvider === 'redis') { _%>
 import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
-<%_ if (reactive && ['mysql', 'postgresql', 'mssql'].includes(prodDatabaseType)) { _%>
+<%_ if (reactiveSqlTestContainers) { _%>
 import <%= packageName %>.ReactiveSqlTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
@@ -35,7 +35,7 @@ import <%= packageName %>.domain.<%= asEntity('User') %>;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if (databaseType === 'neo4j' || cacheProvider === 'redis' || (reactive && ['mysql', 'postgresql', 'mssql'].includes(prodDatabaseType))) { _%>
+<%_ if (databaseType === 'neo4j' || cacheProvider === 'redis' || reactiveSqlTestContainers) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 import org.mockito.ArgumentCaptor;
@@ -78,7 +78,7 @@ import static org.mockito.Mockito.*;
 <%_ if (databaseType === 'neo4j') { _%>
 @ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
-<%_ if (reactive && ['mysql', 'postgresql', 'mssql'].includes(prodDatabaseType)) { _%>
+<%_ if (reactiveSqlTestContainers) { _%>
 @ExtendWith(ReactiveSqlTestContainerExtension.class)
 <%_ } _%>
 class MailServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{

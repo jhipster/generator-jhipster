@@ -94,7 +94,7 @@ spring:
             hibernate.hbm2ddl.auto: validate
             hibernate.jdbc.time_zone: UTC
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || searchEngine === 'elasticsearch') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
     data:
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
@@ -105,22 +105,10 @@ spring:
     <%_ } _%>
     <%_ if (databaseType === 'cassandra') { _%>
         cassandra:
-            contactPoints: localhost
-            port: 0
-            protocolVersion: V4
+            contact-points: localhost
             compression: NONE
-            keyspaceName: cassandra_unit_keyspace
-    <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
-        elasticsearch:
-            properties:
-                path:
-                    home: <%= BUILD_DIR %>elasticsearch
-                <%_ if (cucumberTests) { _%>
-                # See https://github.com/jhipster/generator-jhipster/issues/10302
-                node:
-                    max_local_storage_nodes: 2
-                <%_ } _%>
+            keyspace-name: cassandra_unit_keyspace
+            local-datacenter: datacenter1
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
@@ -188,7 +176,7 @@ server:
 
 jhipster:
     clientApp:
-        name: "<%= angularAppName %>"
+        name: "<%= frontendAppName %>"
     logging:
         # To test json console appender
         use-json-format: false

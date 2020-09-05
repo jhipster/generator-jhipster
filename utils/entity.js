@@ -142,7 +142,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
 
     entityWithConfig.differentTypes.push(entityWithConfig.entityClass);
     entityWithConfig.i18nToLoad.push(entityWithConfig.entityInstance);
-    entityWithConfig.i18nKeyPrefix = `${entityWithConfig.angularAppName}.${entityWithConfig.entityTranslationKey}`;
+    entityWithConfig.i18nKeyPrefix = `${entityWithConfig.frontendAppName}.${entityWithConfig.entityTranslationKey}`;
 
     const hasUserField = entityWithConfig.relationships.some(relationship => generator.isBuiltInUserEntity(relationship.otherEntityName));
     entityWithConfig.saveUserSnapshot =

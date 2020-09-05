@@ -58,6 +58,7 @@ describe('<%= entityClass %> e2e test', () => {
     cy.window().then((win) => {
       win.sessionStorage.clear()
     });
+    <%_ if (authenticationType === 'session') { _%>cy.clearCookie('SESSION')<% } %>
     cy.clearCookies();
     cy.server();
     cy.route('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
@@ -68,12 +69,6 @@ describe('<%= entityClass %> e2e test', () => {
       startingEntitiesCount = array.length;
     });
     cy.visit('/');
-  });
-  <%_ } _%>
-
-  <%_ if (authenticationType === 'session') { _%>
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('JSESSIONID', 'XSRF-TOKEN');
   });
   <%_ } _%>
 
