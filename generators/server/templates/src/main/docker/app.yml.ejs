@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
     <%= baseName.toLowerCase() %>-app:
@@ -90,8 +91,10 @@ services:
             - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true
             <%_ } _%>
         <%_ if (applicationType === 'monolith' || applicationType === 'gateway') { _%>
+        # If you want to expose these ports outside your dev PC, 
+        # remove the "127.0.0.1:" prefix
         ports:
-            - <%= serverPort %>:<%= serverPort %>
+            - 127.0.0.1:<%= serverPort %>:<%= serverPort %>
         <%_ } _%>
     <%_ if (prodDatabaseType === 'mysql') { _%>
     <%= baseName.toLowerCase() %>-mysql:
