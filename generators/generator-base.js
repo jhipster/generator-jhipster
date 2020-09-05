@@ -45,6 +45,29 @@ const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
+const CUSTOM_PRIORITIES = [
+    {
+        priorityName: 'preparing',
+        queueName: 'jhipster:preparing',
+        before: 'default',
+    },
+    {
+        priorityName: 'loading',
+        queueName: 'jhipster:loading',
+        before: 'preparing',
+    },
+    {
+        priorityName: 'composing',
+        queueName: 'jhipster:composing',
+        before: 'loading',
+    },
+    {
+        priorityName: 'postWriting',
+        queueName: 'jhipster:postWriting',
+        before: 'conflicts',
+    },
+];
+
 /**
  * This is the Generator base class.
  * This provides all the public API methods exposed via the module system.
@@ -52,13 +75,15 @@ const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
  *
  * The method signatures in public API should not be changed without a major version change
  */
-module.exports = class extends PrivateBase {
+module.exports = class JHipsterBaseGenerator extends PrivateBase {
     constructor(args, opts) {
         super(args, opts);
 
         if (this.options.help) {
             return;
         }
+
+        this.registerPriorities(CUSTOM_PRIORITIES);
 
         // JHipster runtime config that should not be stored to .yo-rc.json.
         this.configOptions = this.options.configOptions || {};

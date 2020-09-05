@@ -52,8 +52,18 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
+    _default() {
+        return super._missingPreDefault();
+    }
+
+    get default() {
+        if (useBlueprints) return;
+        return this._default();
+    }
+
+    // Public API method used by the getter and also by Blueprints
     _writing() {
-        return writeFiles();
+        return { ...writeFiles(), ...super._missingPostWriting() };
     }
 
     get writing() {

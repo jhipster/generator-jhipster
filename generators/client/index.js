@@ -34,7 +34,7 @@ const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 let useBlueprints;
 
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -143,19 +143,14 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
-    _default() {
+    _composing() {
         return {
-            loadSharedConfig() {
-                this.loadAppConfig();
-                this.loadClientConfig();
-                this.loadServerConfig();
-                this.loadTranslationConfig();
-            },
             composeCommon() {
                 this.composeWithJHipster('common', true);
             },
             composeCypress() {
-                if (!this.cypressTests) return;
+                const testFrameworks = this.jhipsterConfig.testFrameworks;
+                if (!Array.isArray(testFrameworks) || !testFrameworks.includes('cypress')) return;
                 this.composeWithJHipster('cypress', true);
             },
             composeLanguages() {
@@ -163,6 +158,23 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.jhipsterConfig.enableTranslation === false) return;
 
                 this.composeWithJHipster('languages', true);
+            },
+        };
+    }
+
+    get composing() {
+        if (useBlueprints) return;
+        return this._composing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _loading() {
+        return {
+            loadSharedConfig() {
+                this.loadAppConfig();
+                this.loadClientConfig();
+                this.loadServerConfig();
+                this.loadTranslationConfig();
             },
 
             validateSkipServer() {
@@ -193,7 +205,18 @@ module.exports = class extends BaseBlueprintGenerator {
                     );
                 }
             },
-            setupSharedOptions() {
+        };
+    }
+
+    get loading() {
+        if (useBlueprints) return;
+        return this._loading();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _preparing() {
+        return {
+            prepareForTemplates() {
                 this.enableI18nRTL = false;
                 if (this.languages !== undefined) {
                     this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
@@ -219,6 +242,18 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.skipUserManagement = true;
                 }
             },
+        };
+    }
+
+    get preparing() {
+        if (useBlueprints) return;
+        return this._preparing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return {
+            ...super._missingPreDefault(),
 
             insight() {
                 statistics.sendSubGenEvent('generator', 'client', {
@@ -258,6 +293,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.skipClient) return;
                 return writeCommonFiles.call(this, useBlueprints);
             },
+
+            ...super._missingPostWriting(),
         };
     }
 
