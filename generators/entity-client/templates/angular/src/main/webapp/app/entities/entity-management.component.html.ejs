@@ -105,6 +105,8 @@
                     <td>{{ <%= entityInstance %>.<%= fieldName %> | date:'medium' }}</td>
                     <%_ } else if (fieldType === 'LocalDate') { _%>
                     <td>{{ <%= entityInstance %>.<%= fieldName %> | date:'mediumDate' }}</td>
+                    <%_ } else if (fieldType === 'Duration') { _%>
+                    <td title="{{ <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> | duration }}</td>
                     <%_ } else { _%>
                     <td>{{ <%= entityInstance %>.<%= fieldName %> }}</td>
                     <%_ } _%>

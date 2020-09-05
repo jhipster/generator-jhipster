@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, formatDuration } from 'date-fns';
+import * as duration from 'duration-fns';
 
 export const DATE_FORMAT = 'yyyy-MM-dd';
 export const DATE_TIME_FORMAT = 'yyyy-MM-dd HH:mm';
@@ -18,6 +19,16 @@ export function initFilters() {
     Vue.filter('formatMillis', value => {
         if (value) {
           return format(new Date(value), DATE_TIME_FORMAT);
+        }
+        return '';
+    });
+    Vue.filter('duration', value => {
+        if (value) {
+          const formatted = formatDuration(duration.parse(value));
+          if (formatted) {
+            return formatted;
+          }
+          return value;
         }
         return '';
     });
