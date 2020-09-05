@@ -480,8 +480,10 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         return this._writing();
     }
 
-    _end() {
+    // Public API method used by the getter and also by Blueprints
+    _install() {
         return {
+            /** Initialize git repository before package manager install for commit hooks */
             initGitRepo() {
                 if (!this.options.skipGit) {
                     if (this.gitInstalled || this.isGitInstalled()) {
@@ -500,6 +502,17 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
                     }
                 }
             },
+        };
+    }
+
+    get install() {
+        if (useBlueprints) return;
+        return this._install();
+    }
+
+    _end() {
+        return {
+            /** Initial commit to git repository after package manager install for package-lock.json */
             gitCommit() {
                 if (!this.options.skipGit && this.isGitInstalled()) {
                     if (this.gitInitialized) {
