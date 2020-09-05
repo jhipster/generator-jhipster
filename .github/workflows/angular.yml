@@ -200,6 +200,7 @@ jobs:
             - name: 'MERGE: Install base generator-jhipster'
               continue-on-error: true
               id: base-checkout
+              if: github.event.pull_request
               working-directory: ${{ github.workspace }}/base/generator-jhipster
               run: |
                   git clone ${{ github.workspace }}/generator-jhipster .
