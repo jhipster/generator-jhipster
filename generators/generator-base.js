@@ -1332,6 +1332,8 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
             generator,
             {
                 ...this.options,
+                // Install priority should be executed only by the root generator
+                skipInstall: true,
                 configOptions: this.configOptions,
                 ...options,
             },
