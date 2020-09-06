@@ -85,7 +85,7 @@ function checkForForbiddenUseOfUserAsSource(jdlRelationship, skippedUserManageme
         throw new Error(
             `Relationships from the ${jdlRelationship.from} entity is not supported in the declaration between '${jdlRelationship.from}' and ` +
                 `'${jdlRelationship.to}'. You can have this by using the 'skipUserManagement' option. ` + 
-                `Unless you are using 'jdl'/'import-jdl', in which case it it will not work per #12366.`
+                `Unless you are using 'jdl'/'import-jdl', in which case it will not work per #12366.`
         );
     }
 }
@@ -137,7 +137,7 @@ function checkManyToOneRelationship(jdlRelationship, skippedUserManagementOption
             `In the Many-to-One relationship from ${jdlRelationship.from} to ${jdlRelationship.to}, ` +
                 'the User entity has the injected field without its management being skipped. ' +
                 "To have such a relation, you should use the 'skipUserManagement' option." + 
-                `Unless you are using 'jdl'/'import-jdl', in which case it it will not work per #12366.`
+                `Unless you are using 'jdl'/'import-jdl', in which case it will not work per #12366.`
         );
     }
 }
