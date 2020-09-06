@@ -19,5 +19,12 @@
 const Generator = require('yeoman-generator');
 
 module.exports = class extends Generator {
+    constructor(args, options) {
+        super(args, options);
+        this.option('foo', {
+            desc: 'foo description',
+            type: Boolean,
+        });
+    }
     initializing() {}
 };
