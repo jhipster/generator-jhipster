@@ -86,7 +86,7 @@ Object.entries(allCommands).forEach(([key, opts]) => {
         command.option(opt.option, opt.desc + additionalDescription, opt.default);
     });
 
-    if (!opts.cliOnly) {
+    if (!opts.cliOnly || key === 'jdl') {
         const registeredOptions = [];
         const registerGeneratorOptions = (generator, blueprintOptionDescription) => {
             Object.entries(generator._options).forEach(([key, value]) => {
@@ -104,12 +104,13 @@ Object.entries(allCommands).forEach(([key, opts]) => {
             // Blueprint only command.
             registerGeneratorOptions(env.create(`${packageNameToNamespace(opts.blueprint)}:${key}`, { options: { help: true } }));
         } else {
+            const generator = key === 'jdl' ? 'app' : key;
             // Register jhipster upstream options.
-            registerGeneratorOptions(env.create(`${JHIPSTER_NS}:${key}`, { options: { help: true } }));
+            registerGeneratorOptions(env.create(`${JHIPSTER_NS}:${generator}`, { options: { help: true } }));
 
             // Register blueprint specific options.
             envBuilder.getBlueprintsNamespaces().forEach(blueprintNamespace => {
-                const generatorNamespace = `${blueprintNamespace}:${key}`;
+                const generatorNamespace = `${blueprintNamespace}:${generator}`;
                 if (!env.get(generatorNamespace)) {
                     return;
                 }
