@@ -34,7 +34,24 @@ const JHIPSTER_NS = CLI_NAME;
 const envBuilder = EnvironmentBuilder.createDefaultBuilder();
 const env = envBuilder.getEnvironment();
 
-program.storeOptionsAsProperties(false).passCommandToAction(false).version(version).usage('[command] [options]').allowUnknownOption();
+program
+    .storeOptionsAsProperties(false)
+    .passCommandToAction(false)
+    .version(version)
+    .usage('[command] [options]')
+    .allowUnknownOption()
+    // JHipster common options
+    .option(
+        '--blueprints <value>',
+        'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs'
+    )
+    .option('--no-insight', 'Disable insight', false)
+    // Conflicter options
+    .option('--force', 'Override every file', false)
+    .option('--dry-run', 'Print conflicts', false)
+    .option('--whitespace', 'Whitespace changes will not trigger conflicts', false)
+    .option('--bail', 'Fail on first conflict', false)
+    .option('--skip-regenerate', "Don't regenerate identical files", false);
 
 /* setup debugging */
 logger.init(program);
