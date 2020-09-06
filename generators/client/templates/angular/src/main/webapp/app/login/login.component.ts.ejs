@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
          }
         },
         () => {
-          (this.authenticationError = true);
+          this.authenticationError = true;
         }
       );
   }
