@@ -18,6 +18,7 @@
  */
 
 const constants = require('./generator-constants');
+const { languageSnakeCase, languageToJavaLanguage } = require('./utils');
 
 const ANGULAR_DIR = constants.ANGULAR_DIR;
 const REACT_DIR = constants.REACT_DIR;
@@ -118,10 +119,18 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.route.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.module.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.service.ts`);
+            generator.removeFile(`${ANGULAR_DIR}blocks/interceptor/errorhandler.interceptor.ts`);
+            generator.removeFile(`${ANGULAR_DIR}entities/entity.module.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/util/datepicker-adapter.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.html`);
+            generator.removeFile(`${ANGULAR_DIR}core/auth/user-route-access-service.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`);
         } else if (generator.jhipsterConfig.clientFramework === REACT) {
             generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx.ejs`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/enzyme-setup.ts`);
         } else if (generator.jhipsterConfig.clientFramework === VUE) {
             generator.removeFile(`${VUE_DIR}admin/audits/audits.component.ts`);
             generator.removeFile(`${VUE_DIR}admin/audits/audits.service.ts`);
@@ -278,6 +287,18 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${testDir}service/AuditEventServiceIT.java`);
         generator.removeFile(`${testDir}web/rest/AuditResourceIT.java`);
         generator.removeFile(`${testDir}repository/CustomAuditEventRepositoryIT.java`);
+
+        if (generator.databaseType === 'cassandra') {
+            generator.removeFile(`${javaDir}config/metrics/package-info.java`);
+            generator.removeFile(`${javaDir}config/metrics/CassandraHealthIndicator.java`);
+            generator.removeFile(`${javaDir}config/metrics/JHipsterHealthIndicatorConfiguration.java`);
+            generator.removeFile(`${javaDir}config/cassandra/package-info.java`);
+            generator.removeFile(`${javaDir}config/cassandra/CassandraConfiguration.java`);
+            generator.removeFile(`${testDir}config/CassandraConfigurationIT.java`);
+        }
+        if (generator.searchEngine === 'elasticsearch') {
+            generator.removeFile(`${testDir}config/ElasticsearchTestConfiguration.java`);
+        }
     }
 }
 
@@ -292,16 +313,15 @@ function upgradeFiles(generator) {
         const languages = generator.config.get('languages');
         if (languages) {
             const langNameDiffer = function (lang) {
-                const langProp = lang.replace(/-/g, '_');
-                // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
-                const langJavaProp = langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
+                const langProp = languageSnakeCase(lang);
+                const langJavaProp = languageToJavaLanguage(lang);
                 return langProp !== langJavaProp ? [langProp, langJavaProp] : undefined;
             };
             languages
                 .map(langNameDiffer)
                 .filter(props => props)
                 .forEach(props => {
-                    const code = generator.renameFile(
+                    const code = generator.gitMove(
                         `${SERVER_MAIN_RES_DIR}i18n/messages_${props[0]}.properties`,
                         `${SERVER_MAIN_RES_DIR}i18n/messages_${props[1]}.properties`
                     );

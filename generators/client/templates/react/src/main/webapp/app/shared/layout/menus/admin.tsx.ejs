@@ -22,7 +22,6 @@ import {
   DropdownItem
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { NavLink as Link } from 'react-router-dom';
 import { NavDropdown } from './menu-components';
 import { Translate, translate } from 'react-jhipster';
 
@@ -58,7 +57,7 @@ const databaseItem = (
 <%_ } _%>
 
 export const AdminMenu = ({ showOpenAPI <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>, showDatabase <%_ } _%>}) => (
-  <NavDropdown icon="user-plus" name={translate('global.menu.admin.main')} style={{ width: '140%' }} id="admin-menu">
+  <NavDropdown icon="user-plus" name={translate('global.menu.admin.main')} style={{ width: '140%' }} id="admin-menu" data-cy="adminMenu">
       {adminMenuItems}
       {showOpenAPI && openAPIItem}
       <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>

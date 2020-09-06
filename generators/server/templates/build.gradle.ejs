@@ -146,7 +146,7 @@ task integrationTest(type: Test) {
         events 'FAILED', 'SKIPPED'
     }
 
-<%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseType === 'sql') { _%>
     if (project.hasProperty('testcontainers')) {
         environment 'spring.profiles.active', 'testcontainers'
     }
@@ -260,6 +260,9 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
+    <%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+    maven { url 'https://repo.spring.io/milestone' }
+    <%_ } _%>
     <%_ if (reactive && databaseType === 'sql' || JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT')) { _%>
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots/"
@@ -282,6 +285,10 @@ dependencies {
     implementation group: "io.github.jhipster", name: "jhipster-framework"<% if (reactive) { %>, {
         exclude group: "org.springframework", module: "spring-webmvc"
     }<% } %>
+    <%_ // This is useful for major Spring Boot migration
+    if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+    runtime "org.springframework.boot:spring-boot-properties-migrator"
+    <%_ } _%>
     implementation "javax.annotation:javax.annotation-api"
     <%_ if (cacheProvider !== 'no') { _%>
     implementation "org.springframework.boot:spring-boot-starter-cache"
@@ -335,6 +342,7 @@ dependencies {
     implementation "org.hibernate:hibernate-core"
     implementation "com.zaxxer:HikariCP"
     <%_ } _%>
+    implementation "org.apache.commons:commons-lang3"
     <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase' || applicationType === 'gateway') { _%>
     implementation "commons-codec:commons-codec"
     <%_ } _%>
@@ -380,20 +388,11 @@ dependencies {
         <%_ if (!reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
         <%_ } else { _%>
-    implementation "org.springframework.boot.experimental:spring-boot-starter-data-r2dbc:${spring_boot_starter_data_r2dbc_version}"
+    implementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
         <%_ } _%>
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch"
-        <%_ if (!reactive) { _%>
-    // Spring Data Jest dependencies for Elasticsearch
-    implementation ("com.github.vanroy:spring-boot-starter-data-jest") {
-        exclude module: "commons-logging"
-    }
-        <%_ } _%>
-    // log4j2-mock needed to create embedded elasticsearch instance with SLF4J
-    runtimeOnly "de.dentrassi.elasticsearch:log4j2-mock:${log4j2_mock_version}"
-    // end of Spring Data Jest dependencies
     <%_ } _%>
     <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-<%= databaseType %><% if (reactive) { %>-reactive<% } %>"
@@ -407,16 +406,16 @@ dependencies {
     testImplementation "org.testcontainers:neo4j"
     testImplementation 'org.testcontainers:junit-jupiter'
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'mysql' && !reactive) { _%>
+    <%_ if (prodDatabaseType === 'mysql') { _%>
     testImplementation "org.testcontainers:mysql"
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'mariadb' && !reactive) { _%>
+    <%_ if (prodDatabaseType === 'mariadb') { _%>
     testImplementation "org.testcontainers:mariadb"
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'postgresql' && !reactive) { _%>
+    <%_ if (prodDatabaseType === 'postgresql') { _%>
     testImplementation "org.testcontainers:postgresql"
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'mssql' && !reactive) { _%>
+    <%_ if (prodDatabaseType === 'mssql') { _%>
     testImplementation "org.testcontainers:mssqlserver"
     <%_ } _%>
     <%_ if (prodDatabaseType === 'oracle' && !reactive) { _%>
@@ -446,8 +445,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
     implementation "org.zalando:problem-spring-web<% if (reactive) { %>flux<% } %>"
     <%_ if (databaseType === 'cassandra') { _%>
-    implementation "com.datastax.cassandra:cassandra-driver-extras"
-    implementation "com.datastax.cassandra:cassandra-driver-mapping"
+    implementation "com.datastax.oss:java-driver-mapper-runtime"
     <%_ } _%>
     <%_ if (applicationType === 'gateway') { _%>
         <%_ if (!reactive) { _%>
@@ -478,7 +476,7 @@ dependencies {
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
     <%_ } _%>
-    implementation "org.springframework.boot:spring-boot-starter-cloud-connectors"
+    implementation "org.springframework.cloud:spring-cloud-spring-service-connector"
     implementation "org.springframework.security:spring-security-config"
     implementation "org.springframework.security:spring-security-data"
     implementation "org.springframework.security:spring-security-web"
@@ -505,7 +503,8 @@ dependencies {
     <% if (databaseType === 'sql') { %>implementation<% } else { %>runtimeOnly<% } %> "org.glassfish.jaxb:jaxb-runtime:${jaxb_runtime_version}"
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
-    implementation "com.github.mongobee:mongobee"
+    implementation "com.github.cloudyrock.mongock:mongock-spring-v5"
+    implementation "com.github.cloudyrock.mongock:mongodb-springdata-v3-driver"
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     implementation "com.github.differentway:couchmove"
@@ -520,7 +519,7 @@ dependencies {
         <%_ if (!reactive) { _%>
     liquibaseRuntime "mysql:mysql-connector-java"
         <%_ } else { _%>
-    implementation "dev.miku:r2dbc-mysql:${r2dbc_mysql_version}"
+    implementation "dev.miku:r2dbc-mysql"
         <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'postgresql') { _%>
@@ -528,7 +527,7 @@ dependencies {
         <%_ if (!reactive) { _%>
     liquibaseRuntime "org.postgresql:postgresql"
         <%_ } else { _%>
-    implementation "io.r2dbc:r2dbc-postgresql:${r2dbc_postgresql_version}"
+    implementation "io.r2dbc:r2dbc-postgresql"
         <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mariadb') { _%>
@@ -542,7 +541,7 @@ dependencies {
     liquibaseRuntime  "com.microsoft.sqlserver:mssql-jdbc"
     liquibaseRuntime "com.github.sabomichal:liquibase-mssql"
         <%_ } else { _%>
-    implementation "io.r2dbc:r2dbc-mssql:${r2dbc_mssql_version}"
+    implementation "io.r2dbc:r2dbc-mssql"
         <%_ } _%>
     <%_ } _%>
     implementation "org.mapstruct:mapstruct:${mapstruct_version}"
@@ -550,6 +549,9 @@ dependencies {
     <%_ if (databaseType === 'sql') { _%>
     annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernate_version}"
     annotationProcessor "org.glassfish.jaxb:jaxb-runtime:${jaxb_runtime_version}"
+    <%_ } _%>
+    <%_ if (databaseType === 'cassandra') { _%>
+    annotationProcessor "com.datastax.oss:java-driver-mapper-processor:${cassandra_driver_version}"
     <%_ } _%>
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}"
     <%_ if (databaseType === 'cassandra') { _%>
@@ -573,8 +575,6 @@ dependencies {
     // Temporarily disabled see https://github.com/jhipster/generator-jhipster/issues/11599
     // testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhound_junit_platform_version}"
     // testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junit_platform_launcher_version}'
-    // See https://github.com/netty/netty/pull/10020 . Remove when Spring Boot has caught up
-    implementation 'io.netty:netty-common:${netty_common_version}'
     <%_ } _%>
     testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunit_junit5_version}"
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunit_junit5_version}"
@@ -587,14 +587,14 @@ dependencies {
     <%_ if (databaseType === 'sql') { _%>
     testImplementation "com.h2database:h2"
         <%_ if (reactive) { _%>
-    testImplementation "io.r2dbc:r2dbc-h2:${r2dbc_h2_version}"
+    testImplementation "io.r2dbc:r2dbc-h2"
         <%_ } _%>
     <%_ } _%>
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
         <%_ if (!reactive) { _%>
     liquibaseRuntime "com.h2database:h2"
         <%_ } else { _%>
-    implementation "io.r2dbc:r2dbc-h2:${r2dbc_h2_version}"
+    implementation "io.r2dbc:r2dbc-h2"
         <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'oracle') { _%>
@@ -636,7 +636,6 @@ if (project.hasProperty("nodeInstall")) {
     node {
         version = "${node_version}"
         npmVersion = "${npm_version}"
-        yarnVersion = "${yarn_version}"
         download = true
     }
 }

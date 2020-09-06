@@ -13,6 +13,7 @@ import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vue
             dateFnsIncluded = true;
 _%>
 import format from 'date-fns/format';
+import isValid from 'date-fns/isValid';
 import parse from 'date-fns/parse';
 import parseISO from 'date-fns/parseISO';
 import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
@@ -61,7 +62,7 @@ const validations: any = {
     <%_ if (fields[idx].fieldValidateRules.includes('maxlength')) { _%>
       maxLength: maxLength(<%= fields[idx].fieldValidateRulesMaxlength %>),
     <%_ } _%>
-    <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
+    <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
     numeric,
     <%_ if (fields[idx].fieldValidateRules.includes('min')) { _%>
       min: minValue(<%= fields[idx].fieldValidateRulesMin %>),
@@ -182,7 +183,7 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
             dateFunctionIncluded = true;
   _%>
     public convertDateTimeFromServer(date: Date): string {
-      if (date) {
+      if (date && isValid(date)) {
         return format(date, DATE_TIME_LONG_FORMAT);
       }
       return null;
@@ -241,12 +242,14 @@ _%>
   <%_ } _%>
   public initRelationships() : void {
     <%_
+        let entitiesSet = new Set();
         for (idx in relationships) {
           if (!relationships[idx].otherEntityIsEmbedded) {
           const otherEntityName = relationships[idx].otherEntityName;
           const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
           const otherEntityAngularName = relationships[idx].otherEntityAngularName;
-          if (!(otherEntityAngularName === 'User' && authenticationType === "oauth2")) {
+          if (!(otherEntityAngularName === 'User' && authenticationType === "oauth2") && !entitiesSet.has(otherEntityName)) {
+            entitiesSet.add(otherEntityName);
     _%>
     this.<%= otherEntityName %>Service().retrieve().then((res) => {
       this.<%= otherEntityNamePlural %> = res.data;

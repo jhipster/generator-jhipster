@@ -20,7 +20,7 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { HttpErrorResponse } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
 
-import { <%= angularXAppName %>TestModule } from '../../../test.module';
+import { TestModule } from '../../../test.module';
 import { HealthComponent } from 'app/admin/health/health.component';
 import { HealthService, Health } from 'app/admin/health/health.service';
 
@@ -32,7 +32,7 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [<%= angularXAppName %>TestModule],
+                imports: [TestModule],
                 declarations: [HealthComponent]
             })
             .overrideTemplate(HealthComponent, '')

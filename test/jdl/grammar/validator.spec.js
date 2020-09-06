@@ -511,7 +511,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                             parse(`
             application {
               config {
-                clientPackageManager yarn
+                clientPackageManager npm
               }
             }`)
                         ).not.to.throw();
@@ -523,7 +523,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                             parse(`
             application {
               config {
-                clientPackageManager yarn42
+                clientPackageManager npm42
               }
             }`)
                         ).not.to.throw();
@@ -537,10 +537,10 @@ describe('JDLSyntaxValidatorVisitor', () => {
                             parse(`
             application {
               config {
-                clientPackageManager "yarn"
+                clientPackageManager "npm"
               }
             }`)
-                        ).to.throw(new RegExp('^A name is expected, but found: ""yarn""'));
+                        ).to.throw(new RegExp('^A name is expected, but found: ""npm""'));
                     });
                 });
                 context('such as numbers', () => {

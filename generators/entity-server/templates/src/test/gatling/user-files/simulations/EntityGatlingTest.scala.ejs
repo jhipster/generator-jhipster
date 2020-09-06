@@ -188,7 +188,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
             .body(StringBody("""{
                 "id":null
                 <%_ for (idx in fields) { _%>
-                , "<%= fields[idx].fieldName %>":<% if (fields[idx].fieldType === 'String') { %>"SAMPLE_TEXT"<% } else if (['Integer', 'BigDecimal'].includes(fields[idx].fieldType)) { %>"0"<% } else if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType)) { %>"2020-01-01T00:00:00.000Z"<% } else if (fields[idx].fieldIsEnum) { %>"<%= getEnumValuesWithCustomValues(fields[idx].fieldValues)[0].name %>"<% } else { %>null<% } %>
+                , "<%= fields[idx].fieldName %>":<% if (fields[idx].fieldType === 'String') { %>"SAMPLE_TEXT"<% } else if (['Integer', 'BigDecimal'].includes(fields[idx].fieldType)) { %>"0"<% } else if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType)) { %>"2020-01-01T00:00:00.000Z"<% } else if (fields[idx].fieldIsEnum) { %>"<%= fields[idx].enumValues[0].name %>"<% } else { %>null<% } %>
                 <%_ } _%>
                 }""")).asJson
             .check(status.is(201))

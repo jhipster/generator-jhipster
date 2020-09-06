@@ -1,4 +1,4 @@
-import { createLocalVue, Wrapper, shallowMount } from '@vue/test-utils';
+import { createLocalVue } from '@vue/test-utils';
 import * as config from '@/shared/config/config';
 import AlertService from '@/shared/alert/alert.service';
 

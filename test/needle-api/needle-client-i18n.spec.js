@@ -41,16 +41,16 @@ const mockBlueprintSubGen = class extends LanguagesGenerator {
         const phaseFromJHipster = super._writing();
         const customPhaseSteps = {
             addElementInTranslation() {
-                this.addElementTranslationKey('my_key', 'My value', 'en');
-                this.addElementTranslationKey('ma_cle', 'Ma valeur', 'fr');
+                this.addElementTranslationKey('my_key', 'My Value', 'en');
+                this.addElementTranslationKey('ma_cle', 'Ma Valeur', 'fr');
             },
             addAdminElementTranslationKey() {
-                this.addAdminElementTranslationKey('my_admin_key', 'my admin value', 'en');
-                this.addAdminElementTranslationKey('ma_cle_admin', 'ma valeur admin', 'fr');
+                this.addAdminElementTranslationKey('my_admin_key', 'My Admin Value', 'en');
+                this.addAdminElementTranslationKey('ma_cle_admin', 'Ma Valeur Admin', 'fr');
             },
             addEntityTranslationKey() {
-                this.addEntityTranslationKey('my_entity_key', 'my entity value', 'en');
-                this.addEntityTranslationKey('ma_cle_entite', 'ma valeur entite', 'fr');
+                this.addEntityTranslationKey('my_entity_key', 'My Entity Value', 'en');
+                this.addEntityTranslationKey('ma_cle_entite', 'Ma Valeur Entite', 'fr');
             },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };

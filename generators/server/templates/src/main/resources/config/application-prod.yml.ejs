@@ -123,7 +123,7 @@ spring:
         <%_ } _%>
         show-sql: false
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || searchEngine === 'elasticsearch') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || (searchEngine === 'elasticsearch' && reactive)) { _%>
     data:
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
@@ -133,24 +133,21 @@ spring:
     <%_ } _%>
     <%_ if (databaseType === 'cassandra') { _%>
         cassandra:
-            contactPoints: localhost
-            protocolVersion: V4
+            contact-points: localhost
             compression: LZ4
-            keyspaceName: <%= baseName %>
+            keyspace-name: <%= baseName %>
+            local-datacenter: datacenter1
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
-        <%_ if (!reactive) { _%>
-        jest:
-            uri: http://localhost:9200
-    # see https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-nosql.html#boot-features-connecting-to-elasticsearch-jest
-    elasticsearch:
-        rest:
-            uris: http://localhost:9200
-        <%_ } else { _%>
+        <%_ if (reactive) { _%>
         elasticsearch:
           client:
             reactive:
               endpoints: localhost:9200
+        <%_ } else { _%>
+    elasticsearch:
+        rest:
+            uris: http://localhost:9200
         <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
@@ -180,23 +177,23 @@ spring:
     <%_ if (databaseType === 'sql' && reactive) { _%>
     r2dbc:
         <%_ if (prodDatabaseType === 'mysql') { _%>
-        url: r2dbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+        url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: root
         password:
         <%_ } else if (prodDatabaseType === 'mariadb') { _%>
-        url: r2dbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC
+        url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: root
         password:
         <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-        url: r2dbc:postgresql://localhost:5432/<%= baseName %>
+        url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: <%= baseName %>
         password:
         <%_ } else if (prodDatabaseType === 'mssql') { _%>
-        url: r2dbc:sqlserver://localhost:1433/<%= baseName %>
+        url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: SA
         password: yourStrong(!)Password
         <%_ } else if (prodDatabaseType === 'oracle') { _%>
-        url: r2dbc:oracle:thin:@localhost:1521:xe
+        url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
         username: system
         password: oracle
         <%_ } _%>
@@ -236,6 +233,7 @@ spring:
 # ===================================================================
 server:
     port: <%= serverPort %>
+    shutdown: graceful # see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-graceful-shutdown
     compression:
         enabled: true
         mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
@@ -266,10 +264,6 @@ jhipster:
         hazelcast: # Hazelcast distributed cache
             time-to-live-seconds: 3600
             backup-count: 1
-            management-center: # Full reference is available at: http://docs.hazelcast.org/docs/management-center/3.9/manual/html/Deploying_and_Starting.html
-                enabled: false
-                update-interval: 3
-                url:
         <%_ } _%>
         <%_ if (cacheProvider === 'ehcache') { _%>
         ehcache: # Ehcache configuration

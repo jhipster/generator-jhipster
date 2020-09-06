@@ -58,21 +58,19 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('skip-client', {
             desc: 'Skip installing client files',
             type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--skip-server` flag
         this.option('skip-server', {
             desc: 'Skip installing server files',
             type: Boolean,
-            defaults: false,
         });
 
         if (this.options.help) {
             return;
         }
 
-        this.loadOptions();
+        this.loadStoredAppOptions();
         this.loadRuntimeOptions();
 
         // Validate languages passed as argument.
@@ -168,24 +166,48 @@ module.exports = class extends BaseBlueprintGenerator {
         return this._configuring();
     }
 
-    _default() {
+    // Public API method used by the getter and also by Blueprints
+    _loading() {
         return {
-            insight() {
-                statistics.sendSubGenEvent('generator', 'languages');
-            },
-
             getSharedConfigOptions() {
                 this.loadAppConfig();
                 this.loadClientConfig();
                 this.loadServerConfig();
                 this.loadTranslationConfig();
+            },
+        };
+    }
 
+    get loading() {
+        if (useBlueprints) return;
+        return this._loading();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _preparing() {
+        return {
+            prepareForTemplates() {
                 this.languagesToApply = this.languagesToApply || this.languages || [];
 
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
 
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
+            },
+        };
+    }
+
+    get preparing() {
+        if (useBlueprints) return;
+        return this._preparing();
+    }
+
+    _default() {
+        return {
+            ...super._missingPreDefault(),
+
+            insight() {
+                statistics.sendSubGenEvent('generator', 'languages');
             },
         };
     }
@@ -232,6 +254,8 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.updateLanguagesInLanguageMailServiceIT(this.languages, this.packageFolder);
                 }
             },
+
+            ...super._missingPostWriting(),
         };
     }
 

@@ -1,0 +1,12 @@
+{
+    "tracker": {
+        "title": "Korisničke aktivnosti u stvarnom vremenu",
+        "table": {
+            "userlogin": "Korisnik",
+            "ipaddress": "IP Adresa",
+            "userAgent": "Korisnički agent",
+            "page": "Trenutna stranica",
+            "time": "Vrijeme"
+        }
+    }
+}

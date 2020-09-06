@@ -193,7 +193,7 @@ function askForServerSideOpts() {
                 }
                 opts.push({
                     value: 'couchbase',
-                    name: 'Couchbase',
+                    name: '[BROKEN] Couchbase',
                 });
                 opts.push({
                     value: 'neo4j',

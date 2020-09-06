@@ -78,6 +78,10 @@ module.exports = class EnvironmentBuilder {
         this.env = env;
     }
 
+    getBlueprintsNamespaces() {
+        return Object.keys(this._blueprintsWithVersion).map(packageName => packageNameToNamespace(packageName));
+    }
+
     /**
      * @private
      * Lookup current jhipster generators.

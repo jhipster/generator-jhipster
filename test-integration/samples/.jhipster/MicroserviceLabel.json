@@ -13,10 +13,7 @@
         {
             "fieldName": "label",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "minlength"
-            ],
+            "fieldValidateRules": ["required", "minlength"],
             "fieldValidateRulesMinlength": "3"
         }
     ],

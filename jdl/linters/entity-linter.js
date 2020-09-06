@@ -18,7 +18,7 @@
 
 const Rules = require('./rules');
 const EntityIssue = require('./issues/entity-issue');
-const { createFromEntityName } = require('../jhipster/entity-table-name-creator');
+const { getTableNameFromEntityName } = require('../jhipster/entity-table-name-creator');
 
 let issues;
 
@@ -88,7 +88,7 @@ function checkForUselessTableName(entityDeclaration) {
     const entityTableNameDeclaration = entityDeclaration.children.entityTableNameDeclaration;
     if (entityTableNameDeclaration) {
         const tableName = entityTableNameDeclaration[0].children.NAME[0].image;
-        if (createFromEntityName(entityName) === tableName) {
+        if (getTableNameFromEntityName(entityName) === tableName) {
             issues.push(
                 new EntityIssue({
                     ruleName: Rules.RuleNames.ENT_OPTIONAL_TABLE_NAME,

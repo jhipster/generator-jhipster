@@ -140,7 +140,7 @@ describe('<%= entityClass %> e2e test', () => {
 
       <%_ } else if (fieldType === 'Duration') { _%>
       await updatePage.<%= fieldName %>Input.sendKeys('PT12S');
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('12');
+      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('PT12S');
 
       <%_ } else if (fieldType === 'Boolean') { _%>
       const selected<%= fieldNameCapitalized %> = await updatePage.<%= fieldName %>Input.isSelected();
@@ -281,9 +281,9 @@ describe('<%= entityClass %> e2e test', () => {
           expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('2019-01-01T02:30');
 
         <%_ } else if (fieldType === 'Duration') { _%>
-          await updatePage.<%= fieldName %>Input.clear();
+          await clear(updatePage.<%= fieldName %>Input);
           await updatePage.<%= fieldName %>Input.sendKeys('PT14S');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('14');
+          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('PT14S');
 
         <%_ } else if (fieldType === 'Boolean') { _%>
           const selected<%= fieldNameCapitalized %> = await updatePage.<%= fieldName %>Input.isSelected();

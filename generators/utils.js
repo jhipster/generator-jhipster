@@ -24,26 +24,12 @@ const ejs = require('ejs');
 const _ = require('lodash');
 const fs = require('fs');
 const crypto = require('crypto');
-const randexp = require('randexp');
-const faker = require('faker');
 const os = require('os');
 
 const constants = require('./generator-constants');
 const FileUtils = require('../jdl/utils/file-utils');
 
 const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
-
-class RandexpWithFaker extends randexp {
-    constructor(regexp, m) {
-        super(regexp, m);
-        this.max = 5;
-    }
-
-    // In order to have consistent results with RandExp, the RNG is seeded.
-    randInt(min, max) {
-        return faker.random.number({ min, max });
-    }
-}
 
 module.exports = {
     rewrite,
@@ -67,7 +53,6 @@ module.exports = {
     loadYoRc,
     packageNameToNamespace,
     stringHashCode,
-    RandexpWithFaker,
     gitExec,
     isGitInstalled,
     vueReplaceTranslation,
@@ -76,6 +61,8 @@ module.exports = {
     vueAddPageServiceToMainImport,
     vueAddPageServiceToMain,
     vueAddPageProtractorConf,
+    languageSnakeCase,
+    languageToJavaLanguage,
 };
 
 /**
@@ -255,7 +242,8 @@ function renderContent(source, generator, context, options, cb) {
         if (!err) {
             cb(res);
         } else {
-            generator.error(`Copying template ${source} failed. [${err}]`);
+            generator.warning(`Copying template ${source} failed. [${err}]`);
+            throw err;
         }
     });
 }
@@ -480,11 +468,11 @@ function getEnumInfo(field, clientRootFolder) {
  * @Deprecated
  * Build an enum object, deprecated use getEnumInfoInstead
  * @param {any} field : entity field
- * @param {string} angularAppName
+ * @param {string} frontendAppName
  * @param {string} packageName
  * @param {string} clientRootFolder
  */
-function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
+function buildEnumInfo(field, frontendAppName, packageName, clientRootFolder) {
     const fieldType = field.fieldType;
     field.enumInstance = _.lowerFirst(fieldType);
     const enums = field.fieldValues.replace(/\s/g, '').split(',');
@@ -495,7 +483,7 @@ function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
         enumInstance: field.enumInstance,
         enums,
         enumsWithCustomValue,
-        angularAppName,
+        frontendAppName,
         packageName,
         clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
     };
@@ -719,7 +707,7 @@ function isGitInstalled(callback) {
  */
 function vueReplaceTranslation(generator, files) {
     for (let i = 0; i < files.length; i++) {
-        const filePath = `${constants.CLIENT_MAIN_SRC_DIR}${files[i]}`;
+        const filePath = `${generator.CLIENT_MAIN_SRC_DIR}${files[i]}`;
         // Match the below attributes and the $t() method
         const regexp = ['v-text', 'v-bind:placeholder', 'v-html', 'v-bind:title', 'v-bind:label', 'v-bind:value', 'v-bind:html']
             .map(s => `${s}="\\$t\\(.*?\\)"`)
@@ -735,16 +723,16 @@ function vueReplaceTranslation(generator, files) {
     }
 }
 
-function vueAddPageToRouterImport(generator, pageName, pageFolderName) {
+function vueAddPageToRouterImport(generator, pageName, pageFolderName, pageFilename = pageFolderName) {
     this.rewriteFile(
         {
-            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
+            file: `${generator.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
             needle: 'jhipster-needle-add-entity-to-router-import',
             splicable: [
                 generator.stripMargin(
                     // prettier-ignore
                     `|// prettier-ignore
-                |const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFolderName}.vue');`
+                |const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFilename}.vue');`
                 ),
             ],
         },
@@ -752,16 +740,16 @@ function vueAddPageToRouterImport(generator, pageName, pageFolderName) {
     );
 }
 
-function vueAddPageToRouter(generator, pageName, pageFolderName) {
+function vueAddPageToRouter(generator, pageName, pageFilename) {
     this.rewriteFile(
         {
-            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
+            file: `${generator.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
             needle: 'jhipster-needle-add-entity-to-router',
             splicable: [
                 generator.stripMargin(
                     // prettier-ignore
                     `|{
-                    |    path: '/pages/${pageFolderName}',
+                    |    path: '/pages/${pageFilename}',
                     |    name: '${pageName}',
                     |    component: ${pageName},
                     |    meta: { authorities: [Authority.USER] }
@@ -773,15 +761,15 @@ function vueAddPageToRouter(generator, pageName, pageFolderName) {
     );
 }
 
-function vueAddPageServiceToMainImport(generator, pageName, pageFolderName) {
+function vueAddPageServiceToMainImport(generator, pageName, pageFolderName, pageFilename = pageFolderName) {
     this.rewriteFile(
         {
-            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+            file: `${generator.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
             needle: 'jhipster-needle-add-entity-service-to-main-import',
             splicable: [
                 generator.stripMargin(
                     // prettier-ignore
-                    `|import ${pageName}Service from '@/pages/${pageFolderName}/${pageFolderName}.service';`
+                    `|import ${pageName}Service from '@/pages/${pageFolderName}/${pageFilename}.service';`
                 ),
             ],
         },
@@ -792,7 +780,7 @@ function vueAddPageServiceToMainImport(generator, pageName, pageFolderName) {
 function vueAddPageServiceToMain(generator, pageName, pageInstance) {
     this.rewriteFile(
         {
-            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+            file: `${generator.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
             needle: 'jhipster-needle-add-entity-service-to-main',
             splicable: [
                 generator.stripMargin(
@@ -805,13 +793,25 @@ function vueAddPageServiceToMain(generator, pageName, pageInstance) {
     );
 }
 
-function vueAddPageProtractorConf(generator, pageFolderName) {
+function vueAddPageProtractorConf(generator) {
     this.rewriteFile(
         {
-            file: `${constants.CLIENT_TEST_SRC_DIR}/protractor.conf.js`,
+            file: `${generator.CLIENT_TEST_SRC_DIR}/protractor.conf.js`,
             needle: 'jhipster-needle-add-protractor-tests',
             splicable: [generator.stripMargin("'./e2e/pages/**/*.spec.ts',")],
         },
         generator
     );
+}
+
+function languageSnakeCase(language) {
+    // Template the message server side properties
+    return language.replace(/-/g, '_');
+}
+
+function languageToJavaLanguage(language) {
+    // Template the message server side properties
+    const langProp = languageSnakeCase(language);
+    // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
+    return langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
 }

@@ -18,7 +18,7 @@ if [[ "$JHI_ENTITY" == "jdl" ]]; then
     mkdir -p "$JHI_FOLDER_APP"
     cp -f "$JHI_SAMPLES"/"$JHI_APP"/*.jdl "$JHI_FOLDER_APP"/
     cd "$JHI_FOLDER_APP"
-    jhipster import-jdl *.jdl --no-insight
+    jhipster import-jdl *.jdl --no-insight $@
 
 else
     #-------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ else
         mkdir -p "$JHI_FOLDER_UAA"
         cp -f "$JHI_SAMPLES"/uaa/.yo-rc.json "$JHI_FOLDER_UAA"/
         cd "$JHI_FOLDER_UAA"
-        jhipster --force --no-insight --with-entities --skip-checks --from-cli
+        jhipster --force --no-insight --with-entities --skip-checks $@
         ls -al "$JHI_FOLDER_UAA"
     fi
 
@@ -38,7 +38,7 @@ else
     mkdir -p "$JHI_FOLDER_APP"
     cp -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json "$JHI_FOLDER_APP"/
     cd "$JHI_FOLDER_APP"
-    jhipster --force --no-insight --skip-checks --with-entities --from-cli
+    jhipster --force --no-insight --skip-checks --with-entities $@
 
 fi
 
@@ -46,4 +46,4 @@ fi
 # Check folder where the app is generated
 #-------------------------------------------------------------------------------
 ls -al "$JHI_FOLDER_APP"
-git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit || true

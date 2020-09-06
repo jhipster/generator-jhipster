@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = generateTestEntityId(pkType);
+const tsKeyId = generateTestEntityId(primaryKeyType);
 _%>
 /* tslint:disable max-line-length */
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
@@ -178,6 +178,7 @@ describe('Component Tests', () => {
         // GIVEN
         const found<%= entityAngularName %> = { id: <%- tsKeyId %> };
         <%= entityInstance %>ServiceStub.find.resolves(found<%= entityAngularName %>);
+        <%= entityInstance %>ServiceStub.retrieve.resolves([found<%= entityAngularName %>]);
 
         // WHEN
         comp.beforeRouteEnter({ params: { <%= entityInstance %>Id: <%- tsKeyId %> } }, null, cb => cb(comp));

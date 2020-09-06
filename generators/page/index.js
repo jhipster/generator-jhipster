@@ -23,7 +23,7 @@ const prompts = require('./prompts');
 const writeVueFiles = require('./files-vue').writeFiles;
 const constants = require('../generator-constants');
 
-const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
+const { VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 let useBlueprints;
 
@@ -31,10 +31,18 @@ module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
+        // This makes it possible to pass `pageName` by argument
+        this.argument('pageName', {
+            type: String,
+            required: false,
+            description: 'Page name',
+        });
+
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
+            hide: true,
             defaults: false,
         });
         this.option('skip-prompts', {
@@ -43,19 +51,18 @@ module.exports = class extends BaseBlueprintGenerator {
             hide: true,
             defaults: false,
         });
-        // This makes it possible to pass `languages` by argument
-        this.argument('pageName', {
-            type: String,
+        this.argument('recreate', {
+            type: Boolean,
             required: false,
-            description: 'Page name',
+            description: 'Recreate the page',
         });
-        this.pageName = this.options.pageName;
 
         if (this.options.help) {
             return;
         }
+        this.pageName = this.options.pageName;
+        this.page = this.options.page || {};
 
-        this.loadOptions();
         this.loadRuntimeOptions();
 
         this.rootGenerator = this.env.rootGenerator() === this;
@@ -74,10 +81,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.enableTranslation = this.jhipsterConfig.enableTranslation;
                 this.protractorTests = this.jhipsterConfig.testFrameworks && this.jhipsterConfig.testFrameworks.includes('protractor');
                 this.clientFramework = this.jhipsterConfig.clientFramework;
-
-                if (this.clientFramework !== VUE) {
-                    this.error(`This sub generator page is not supported for ${this.clientFramework}`);
-                }
             },
         };
     }
@@ -116,9 +119,33 @@ module.exports = class extends BaseBlueprintGenerator {
         return this._configuring();
     }
 
+    _default() {
+        return {
+            prepareForTemplates() {
+                this.jhiPrefix = this.page.jhiPrefix || this.jhipsterConfig.jhiPrefix;
+
+                this.pageNameDashed = this._.kebabCase(this.pageName);
+                this.pageInstance = this._.lowerFirst(this.pageName);
+                this.jhiPrefixDashed = this._.kebabCase(this.jhiPrefix);
+
+                this.pageFileName = this.page.pageFileName || this.pageNameDashed;
+                this.pageFolderName = this.page.pageFileName || this.pageFileName;
+            },
+        };
+    }
+
+    get default() {
+        if (useBlueprints) return;
+        return this._default();
+    }
+
     _writing() {
         return {
-            writeAdditionalFile() {
+            writeClientPageFiles() {
+                if (this.skipClient) return;
+                if (![VUE].includes(this.clientFramework)) {
+                    throw new Error(`The page sub-generator is not supported for client ${this.clientFramework}`);
+                }
                 writeVueFiles.call(this);
             },
         };

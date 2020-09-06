@@ -16,15 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-configurations {
-    developmentOnly
-    runtimeClasspath {
-        extendsFrom developmentOnly
-    }
-}
-
 dependencies {
-    developmentOnly "org.springframework.boot:spring-boot-devtools"
+    developmentOnly "org.springframework.boot:spring-boot-devtools:${spring_boot_version}"
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
     implementation "com.h2database:h2"
     <%_ } _%>
@@ -55,11 +48,7 @@ bootRun {
 
 <%_ if (!skipClient) { _%>
 task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task) {
-    <%_ if (clientPackageManager==='npm') { _%>
     inputs.files("package-lock.json")
-    <%_ } else { _%>
-    inputs.files("yarn.lock")
-    <%_ } _%>
     inputs.files("build.gradle")
     inputs.dir("<%= CLIENT_MAIN_SRC_DIR %>")
 

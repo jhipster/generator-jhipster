@@ -21,8 +21,8 @@ package <%= packageName %>;
 <%_ if (cacheProvider === 'redis') { _%>
 import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
-import com.datastax.driver.core.Metadata;
-import com.datastax.driver.core.Session;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.metadata.Metadata;
 import org.junit.jupiter.api.Test;
 <%_ if (cacheProvider === 'redis') { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,11 +39,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CassandraKeyspaceIT extends AbstractCassandraTest {
 
     @Autowired
-    private Session session;
+    private CqlSession session;
 
     @Test
-    public void shouldListCassandraUnitKeyspace() throws Exception {
-        Metadata metadata = session.getCluster().getMetadata();
+    public void shouldListCassandraUnitKeyspace() {
+        Metadata metadata = session.getMetadata();
         assertThat(metadata.getKeyspace(CASSANDRA_UNIT_KEYSPACE)).isNotNull();
     }
 }

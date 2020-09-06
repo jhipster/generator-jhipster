@@ -7,7 +7,7 @@ application {
     prodDatabaseType mysql,
     buildTool maven,
     searchEngine false,
-    testFrameworks [gatling, protractor],
+    testFrameworks [gatling, cypress],
     clientFramework angularX,
     enableTranslation true,
     nativeLanguage en,

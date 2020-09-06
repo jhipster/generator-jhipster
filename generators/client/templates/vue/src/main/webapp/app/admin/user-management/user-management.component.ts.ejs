@@ -55,7 +55,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mi
 
   <%_ if (databaseType !== 'cassandra') { _%>
   public sort(): any {
-    const result = [this.propOrder + ',' + (this.reverse ? 'asc' : 'desc')];
+    const result = [this.propOrder + ',' + (this.reverse ? 'desc' : 'asc')];
     if (this.propOrder !== 'id') {
       result.push('id');
     }
@@ -83,8 +83,8 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mi
   public deleteUser(): void {
     this.userManagementService().remove(this.removeId).then(res => {
       <%_
-      const headerAlert = `X-${angularAppName}-alert`.toLowerCase();
-      const headerParams = `X-${angularAppName}-params`.toLowerCase();
+      const headerAlert = `X-${frontendAppName}-alert`.toLowerCase();
+      const headerParams = `X-${frontendAppName}-params`.toLowerCase();
       if (enableTranslation) {
       _%>
       const message = this.$t(res.headers['<%=headerAlert%>'], { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) });
@@ -107,7 +107,9 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mi
   }
 
   public closeDialog() : void {
-    (<any>this.$refs.removeUser).hide();
+    if (<any>this.$refs.removeUser) {
+      (<any>this.$refs.removeUser).hide();
+    }
   }
 
   public get username(): string {

@@ -84,7 +84,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.databaseType = configuration.get('databaseType');
                 this.prodDatabaseType = configuration.get('prodDatabaseType');
                 this.searchEngine = configuration.get('searchEngine');
-                this.angularAppName = this.getAngularAppName();
+                this.frontendAppName = this.getFrontendAppName();
                 this.buildTool = configuration.get('buildTool');
                 this.applicationType = configuration.get('applicationType');
                 this.reactive = configuration.get('reactive') || false;
@@ -622,7 +622,9 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.useOkta) {
                     this.template('provision-okta-addon.sh.ejs', 'provision-okta-addon.sh');
                     fs.appendFile('.gitignore', 'provision-okta-addon.sh', 'utf8', (err, data) => {
-                        this.log(`${chalk.yellow.bold('WARNING!')}Failed to add 'provision-okta-addon.sh' to .gitignore.'`);
+                        if (err) {
+                            this.log(`${chalk.yellow.bold('WARNING!')} Failed to add 'provision-okta-addon.sh' to .gitignore.'`);
+                        }
                     });
                 }
             },
