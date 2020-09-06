@@ -48,9 +48,11 @@ module.exports = class extends BaseGenerator {
                     this.environmentName = awsConfig.environmentName;
                     this.bucketName = awsConfig.bucketName;
                     this.instanceType = awsConfig.instanceType;
+                    this.customInstanceType = '';
                     this.awsRegion = awsConfig.awsRegion;
                     this.dbName = awsConfig.dbName;
                     this.dbInstanceClass = awsConfig.dbInstanceClass;
+                    this.customDBInstanceClass = '';
 
                     this.log(
                         chalk.green(

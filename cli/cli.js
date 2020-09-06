@@ -21,7 +21,7 @@ const chalk = require('chalk');
 const didYouMean = require('didyoumean');
 
 const packageJson = require('../package.json');
-const { CLI_NAME, initHelp, logger, toString, getCommand, getCommandOptions, addKebabCase, getArgs, done } = require('./utils');
+const { CLI_NAME, initHelp, logger, toString, getCommand, getCommandOptions, getArgs, done, buildCommanderOptions } = require('./utils');
 const EnvironmentBuilder = require('./environment-builder');
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
@@ -34,7 +34,24 @@ const JHIPSTER_NS = CLI_NAME;
 const envBuilder = EnvironmentBuilder.createDefaultBuilder();
 const env = envBuilder.getEnvironment();
 
-program.storeOptionsAsProperties(false).passCommandToAction(false).version(version).usage('[command] [options]').allowUnknownOption();
+program
+    .storeOptionsAsProperties(false)
+    .passCommandToAction(false)
+    .version(version)
+    .usage('[command] [options]')
+    .allowUnknownOption()
+    // JHipster common options
+    .option(
+        '--blueprints <value>',
+        'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs'
+    )
+    .option('--no-insight', 'Disable insight', false)
+    // Conflicter options
+    .option('--force', 'Override every file', false)
+    .option('--dry-run', 'Print conflicts', false)
+    .option('--whitespace', 'Whitespace changes will not trigger conflicts', false)
+    .option('--bail', 'Fail on first conflict', false)
+    .option('--skip-regenerate', "Don't regenerate identical files", false);
 
 /* setup debugging */
 logger.init(program);
@@ -50,7 +67,7 @@ const runYoCommand = (cmd, args, options, opts) => {
     logger.info(chalk.yellow(`Executing ${command}`));
     logger.debug(chalk.yellow(`Options: ${toString(options)}`));
     try {
-        env.run(command, options, done);
+        env.run(command, options).then(done, done);
     } catch (e) {
         logger.error(e.message, e);
     }
@@ -66,71 +83,98 @@ Object.entries(allCommands).forEach(([key, opts]) => {
     }
 
     (opts.options || []).forEach(opt => {
-        command.option(opt.option, opt.desc, opt.default);
+        const additionalDescription = opts.blueprint ? chalk.yellow(` (blueprint option: ${opts.blueprint})`) : '';
+        command.option(opt.option, opt.desc + additionalDescription, opt.default);
     });
 
     if (!opts.cliOnly) {
-        const namespace = opts.blueprint ? `${packageNameToNamespace(opts.blueprint)}:${key}` : `${JHIPSTER_NS}:${key}`;
-        const generator = env.create(namespace, { options: { help: true } });
-        Object.entries(generator._options).forEach(([key, value]) => {
-            if (value.hide || key === 'help') {
-                return;
-            }
-            let cmdString = '';
-            if (value.alias) {
-                cmdString = `-${value.alias}, `;
-            }
-            cmdString = `${cmdString}--${key}`;
-            if (value.type === String) {
-                cmdString = `${cmdString} <value>`;
-            }
-            command.option(cmdString, value.description, value.default);
-        });
+        const registeredOptions = [];
+        const registerGeneratorOptions = (generator, blueprintOptionDescription) => {
+            Object.entries(generator._options).forEach(([key, value]) => {
+                if (registeredOptions.includes(key)) {
+                    return;
+                }
+                registeredOptions.push(key);
+                buildCommanderOptions(key, value, blueprintOptionDescription).forEach(commanderOption => {
+                    command.option(...commanderOption);
+                });
+            });
+        };
+
+        if (opts.blueprint) {
+            // Blueprint only command.
+            registerGeneratorOptions(env.create(`${packageNameToNamespace(opts.blueprint)}:${key}`, { options: { help: true } }));
+        } else {
+            // Register jhipster upstream options.
+            registerGeneratorOptions(env.create(`${JHIPSTER_NS}:${key}`, { options: { help: true } }));
+
+            // Register blueprint specific options.
+            envBuilder.getBlueprintsNamespaces().forEach(blueprintNamespace => {
+                const generatorNamespace = `${blueprintNamespace}:${key}`;
+                if (!env.get(generatorNamespace)) {
+                    return;
+                }
+                const blueprintName = blueprintNamespace.replace(/^jhipster-/, '');
+                try {
+                    registerGeneratorOptions(
+                        env.create(generatorNamespace, { options: { help: true } }),
+                        chalk.yellow(` (blueprint option: ${blueprintName})`)
+                    );
+                } catch (error) {
+                    logger.info(
+                        `Error parsing options for generator ${generatorNamespace}, unknown option will lead to error at jhipster 7`
+                    );
+                }
+            });
+        }
     }
 
+    const additionalCommandDescription = opts.blueprint ? chalk.yellow(` (blueprint: ${opts.blueprint})`) : '';
     command
         .allowUnknownOption()
-        .description(opts.desc)
-        .action((first, second, third) => {
-            let args;
+        .description(opts.desc + additionalCommandDescription)
+        .action((...everything) => {
             let cmdOptions;
-            let unknownArgs;
-            logger.debug(`first command arg: ${toString(first)}`);
-            logger.debug(`second command arg: ${toString(second)}`);
-            logger.debug(`third command arg: ${toString(third)}`);
-
-            if (opts.argument) {
-                // Option that contains arguments
-                // first=arguments second=cmdOptions third=unknownArgs
-                if (Array.isArray(first)) {
-                    // Var args unknown options are concatenated.
-                    // consider valid args before first unknown option (starts with -).
-                    args = [];
-                    unknownArgs = [];
-                    let unknown = false;
-                    first.forEach(item => {
-                        if (item.startsWith('-')) {
-                            unknown = true;
-                        }
-                        if (unknown) {
-                            unknownArgs.push(item);
-                        } else {
-                            args.push(item);
-                        }
-                    });
-                } else if (first !== undefined) {
-                    args = [first];
-                }
-                cmdOptions = second;
-                if (third) {
-                    unknownArgs = (unknownArgs || []).concat(third);
-                }
+            let unknownArgs = [];
+            const last = everything.pop();
+            if (Array.isArray(last)) {
+                unknownArgs = last || [];
+                cmdOptions = everything.pop();
             } else {
-                // Option that doesn't contain arguments
-                // first=cmdOptions second=unknownArgs
-                args = [];
-                cmdOptions = first;
-                unknownArgs = second || [];
+                cmdOptions = last;
+            }
+
+            // Arguments processing merges unknown options with cmd args, move unknown options back
+            // Unknown options should be disabled for jhipster 7
+            const splitUnknown = argsToSplit => {
+                const args = [];
+                const unknown = [];
+                argsToSplit.find((item, index) => {
+                    if (item && item.startsWith('-')) {
+                        unknown.push(...argsToSplit.slice(index));
+                        return true;
+                    }
+                    args.push(item);
+                    return false;
+                });
+                return [args, unknown];
+            };
+            const variadicArg = everything.pop();
+
+            const splitted = splitUnknown(everything);
+            const args = splitted[0];
+            unknownArgs.unshift(...splitted[1]);
+
+            if (variadicArg) {
+                if (Array.isArray(variadicArg)) {
+                    const splittedVariadic = splitUnknown(variadicArg);
+                    if (splittedVariadic[0].length > 0) {
+                        args.push(splittedVariadic[0]);
+                    }
+                    unknownArgs.unshift(...splittedVariadic[1]);
+                } else {
+                    args.push(variadicArg);
+                }
             }
 
             const firstUnknownArg = Array.isArray(unknownArgs) && unknownArgs.length > 0 ? unknownArgs[0] : undefined;
@@ -156,13 +200,18 @@ Object.entries(allCommands).forEach(([key, opts]) => {
             // Get unknown options and parse.
             const options = {
                 ...getCommandOptions(packageJson, unknownArgs),
-                ...addKebabCase(program.opts()),
-                ...addKebabCase(cmdOptions),
-                ...addKebabCase(customOptions),
+                ...program.opts(),
+                ...cmdOptions,
+                ...customOptions,
             };
 
             if (opts.cliOnly) {
                 logger.debug('Executing CLI only script');
+                if (args.length > 0 && Array.isArray(args[args.length - 1])) {
+                    // Convert the variadic argument into a argument for backward compatibility.
+                    // Remove for jhipster 7
+                    args.push(...args.pop());
+                }
                 /* eslint-disable global-require, import/no-dynamic-require */
                 require(`./${key}`)(args, options, env);
                 /* eslint-enable */

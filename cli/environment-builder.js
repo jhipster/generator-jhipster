@@ -22,7 +22,8 @@ const _ = require('lodash');
 const path = require('path');
 const Environment = require('yeoman-environment');
 const { CLI_NAME, logger } = require('./utils');
-const { normalizeBlueprintName, packageNameToNamespace, loadYoRc, loadBlueprintsFromConfiguration } = require('../generators/utils');
+const { loadYoRc, packageNameToNamespace } = require('../generators/utils');
+const { parseBlueprintInfo, loadBlueprintsFromConfiguration, mergeBlueprints } = require('../utils/blueprint');
 
 module.exports = class EnvironmentBuilder {
     /**
@@ -31,8 +32,10 @@ module.exports = class EnvironmentBuilder {
      * @param {...any} args - Arguments passed to Environment.createEnv().
      * @return {EnvironmentBuilder} envBuilder
      */
-    static create(...args) {
-        const env = Environment.createEnv(...args);
+    static create(args, options = {}, adapter) {
+        // Remove after migration to environment 3.
+        options.newErrorHandler = true;
+        const env = Environment.createEnv(args, options, adapter);
         return new EnvironmentBuilder(env);
     }
 
@@ -73,6 +76,10 @@ module.exports = class EnvironmentBuilder {
      */
     constructor(env) {
         this.env = env;
+    }
+
+    getBlueprintsNamespaces() {
+        return Object.keys(this._blueprintsWithVersion).map(packageName => packageNameToNamespace(packageName));
     }
 
     /**
@@ -127,9 +134,11 @@ module.exports = class EnvironmentBuilder {
      */
     _loadSharedOptions() {
         const blueprintsPackagePath = this._getBlueprintPackagePaths();
-        const sharedOptions = this._getSharedOptions(blueprintsPackagePath) || {};
-        // Env will forward sharedOptions to every generator
-        Object.assign(this.env.sharedOptions, sharedOptions);
+        if (blueprintsPackagePath) {
+            const sharedOptions = this._getSharedOptions(blueprintsPackagePath) || {};
+            // Env will forward sharedOptions to every generator
+            Object.assign(this.env.sharedOptions, sharedOptions);
+        }
         return this;
     }
 
@@ -156,6 +165,7 @@ module.exports = class EnvironmentBuilder {
      * @private
      * Load blueprints from argv.
      * At this point, commander has not parsed yet because we are building it.
+     * @returns {Blueprint[]}
      */
     _getBlueprintsFromArgv() {
         const blueprintNames = [];
@@ -170,12 +180,13 @@ module.exports = class EnvironmentBuilder {
         if (!blueprintNames.length) {
             return [];
         }
-        return blueprintNames.filter((v, i, a) => a.indexOf(v) === i).map(v => normalizeBlueprintName(v));
+        return blueprintNames.map(v => parseBlueprintInfo(v));
     }
 
     /**
      * @private
      * Load blueprints from .yo-rc.json.
+     * @returns {Blueprint[]}
      */
     _getBlueprintsFromYoRc() {
         const yoRc = loadYoRc();
@@ -190,16 +201,10 @@ module.exports = class EnvironmentBuilder {
      * Creates a 'blueprintName: blueprintVersion' object from argv and .yo-rc.json blueprints.
      */
     _getAllBlueprintsWithVersion() {
-        const blueprintsWithVersion = this._getBlueprintsFromArgv().reduce((acc, blueprint) => {
-            acc[blueprint] = undefined;
-            return acc;
-        }, {});
-
-        this._getBlueprintsFromYoRc().reduce((acc, blueprint) => {
+        return mergeBlueprints(this._getBlueprintsFromArgv(), this._getBlueprintsFromYoRc()).reduce((acc, blueprint) => {
             acc[blueprint.name] = blueprint.version;
             return acc;
-        }, blueprintsWithVersion);
-        return blueprintsWithVersion;
+        }, {});
     }
 
     /**
@@ -208,7 +213,7 @@ module.exports = class EnvironmentBuilder {
      */
     _getBlueprintPackagePaths() {
         const blueprints = this._blueprintsWithVersion;
-        if (!blueprints) {
+        if (!blueprints || Object.keys(blueprints).length === 0) {
             return undefined;
         }
 

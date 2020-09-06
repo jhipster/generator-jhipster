@@ -136,22 +136,26 @@ const getOptionsFromArgs = (args = []) => {
 };
 
 /* Convert option objects to command line args */
-const getOptionAsArgs = (options, withEntities, force) => {
-    const args = Object.entries(options).map(([key, value]) => {
-        const prefix = key.length === 1 ? '-' : '--';
-        if (value === true) {
-            return `${prefix}${_.kebabCase(key)}`;
-        }
-        if (value === false) {
-            return `${prefix}no-${_.kebabCase(key)}`;
-        }
-        return value ? `${prefix}${_.kebabCase(key)} ${value}` : '';
-    });
-    if (withEntities) args.push('--with-entities');
-    if (force) args.push('--force');
-    args.push('--from-cli');
+const getOptionAsArgs = (options = {}) => {
+    options = Object.fromEntries(
+        Object.entries(options).map(([key, value]) => {
+            return [_.kebabCase(key), value];
+        })
+    );
+    const args = Object.entries(options)
+        .map(([key, value]) => {
+            const prefix = key.length === 1 ? '-' : '--';
+            if (value === true) {
+                return `${prefix}${key}`;
+            }
+            if (value === false) {
+                return `${prefix}no-${key}`;
+            }
+            return value !== undefined ? [`${prefix}${key}`, `${value}`] : undefined;
+        })
+        .filter(arg => arg !== undefined);
     logger.debug(`converted options: ${args}`);
-    return _.uniq(args.join(' ').split(' ')).filter(it => it !== '');
+    return args.flat();
 };
 
 /**
@@ -205,6 +209,22 @@ const printSuccess = () => {
     }
 };
 
+const buildCommanderOptions = (optionName, optionDefinition, additionalDescription = '') => {
+    if (optionDefinition.hide || optionName === 'help') {
+        return [];
+    }
+    let cmdString = '';
+    if (optionDefinition.alias) {
+        cmdString = `-${optionDefinition.alias}, `;
+    }
+    cmdString = `${cmdString}--${optionName}`;
+    if (optionDefinition.type === String) {
+        cmdString = `${cmdString} <value>`;
+    }
+    const commanderOption = [cmdString, optionDefinition.description + additionalDescription, optionDefinition.default];
+    return [commanderOption];
+};
+
 module.exports = {
     CLI_NAME,
     GENERATOR_NAME,
@@ -220,4 +240,5 @@ module.exports = {
     done: doneFactory(SUCCESS_MESSAGE),
     printSuccess,
     getOptionAsArgs,
+    buildCommanderOptions,
 };

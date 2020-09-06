@@ -27,6 +27,9 @@ import <%= packageName %>.AbstractNeo4jIT;
 <%_ if (cacheProvider === 'redis') { _%>
 import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
+<%_ if (reactiveSqlTestContainers) { _%>
+import <%= packageName %>.ReactiveSqlTestContainerExtension;
+<%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.config.Constants;
 <%_ if (authenticationType === 'oauth2') { _%>
@@ -61,18 +64,13 @@ import org.apache.commons.lang3.RandomStringUtils;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if (cacheProvider === 'redis') { _%>
+<%_ if (databaseType === 'neo4j' || cacheProvider === 'redis' || reactiveSqlTestContainers) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
-<%_ if (databaseType === 'sql' && !reactive && authenticationType !== 'oauth2') { _%>
-import org.mockito.Mock;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (databaseType === 'sql' && !reactive && authenticationType !== 'oauth2') { _%>
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.auditing.AuditingHandler;
 import org.springframework.data.auditing.DateTimeProvider;
 <%_ } _%>
@@ -160,10 +158,13 @@ import static org.mockito.Mockito.when;
 <%_ if (databaseType === 'neo4j') { _%>
 @ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
+<%_ if (reactiveSqlTestContainers) { _%>
+@ExtendWith(ReactiveSqlTestContainerExtension.class)
+<%_ } _%>
 <%_ if (databaseType === 'sql' && !reactive) { _%>
 @Transactional
 <%_ } _%>
-public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+class UserServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     private static final String DEFAULT_LOGIN = "johndoe";
 
@@ -206,7 +207,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     @Autowired
     private AuditingHandler auditingHandler;
 
-    @Mock
+    @MockBean
     private DateTimeProvider dateTimeProvider;
     <%_ } _%>
     <%_ if (databaseType !== 'no') { _%>
@@ -276,7 +277,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
         <%_ } _%>
-    public void testRemoveOldPersistentTokens() {
+    void testRemoveOldPersistentTokens() {
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
         int existingCount = persistentTokenRepository.findByUser(user).size();
         LocalDate today = LocalDate.now();
@@ -293,7 +294,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
         <%_ } _%>
-    public void assertThatUserMustExistToResetPassword() {
+    void assertThatUserMustExistToResetPassword() {
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         Optional<<%= asEntity('User') %>> maybeUser = userService.requestPasswordReset("invalid.login@localhost")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(maybeUser).isNotPresent();
@@ -309,7 +310,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
         <%_ } _%>
-    public void assertThatOnlyActivatedUserCanRequestPasswordReset() {
+    void assertThatOnlyActivatedUserCanRequestPasswordReset() {
         user.setActivated(false);
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
@@ -322,7 +323,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
         <%_ } _%>
-    public void assertThatResetKeyMustNotBeOlderThan24Hours() {
+    void assertThatResetKeyMustNotBeOlderThan24Hours() {
         Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
         user.setActivated(true);
@@ -339,7 +340,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
         <%_ } _%>
-    public void assertThatResetKeyMustBeValid() {
+    void assertThatResetKeyMustBeValid() {
         Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         user.setActivated(true);
         user.setResetDate(daysAgo);
@@ -355,7 +356,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
         <%_ } _%>
-    public void assertThatUserCanResetPassword() {
+    void assertThatUserCanResetPassword() {
         String oldPassword = user.getPassword();
         Instant daysAgo = Instant.now().minus(2, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
@@ -377,7 +378,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
         <%_ } _%>
-    public void assertThatNotActivatedUsersWithNotNullActivationKeyCreatedBefore3DaysAreDeleted() {
+    void assertThatNotActivatedUsersWithNotNullActivationKeyCreatedBefore3DaysAreDeleted() {
         Instant now = Instant.now();
         <%_ if (databaseType === 'sql' && !reactive) { _%>
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
@@ -416,7 +417,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
         <%_ } _%>
-    public void assertThatNotActivatedUsersWithNullActivationKeyCreatedBefore3DaysAreNotDeleted() {
+    void assertThatNotActivatedUsersWithNullActivationKeyCreatedBefore3DaysAreNotDeleted() {
         Instant now = Instant.now();
         <%_ if (databaseType === 'sql' && !reactive) { _%>
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)<% if (databaseType === 'sql' && reactive) { %>.atOffset(ZoneOffset.UTC)<% } %>));
@@ -465,7 +466,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ } else if (databaseType === 'couchbase') { _%>
     @WithAnonymousUser
         <%_ } _%>
-    public void assertThatAnonymousUserIsNotGet() {
+    void assertThatAnonymousUserIsNotGet() {
         <%_ if (authenticationType === 'oauth2') { _%>
         user.setId(Constants.ANONYMOUS_USER);
         <%_ } _%>
@@ -490,7 +491,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void testDefaultUserDetails() {
+    void testDefaultUserDetails() {
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
         <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
 
@@ -508,7 +509,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void testUserDetailsWithUsername() {
+    void testUserDetailsWithUsername() {
         userDetails.put("preferred_username", "TEST");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
@@ -521,7 +522,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void testUserDetailsWithLangKey() {
+    void testUserDetailsWithLangKey() {
         userDetails.put("langKey", DEFAULT_LANGKEY);
         userDetails.put("locale", "en-US");
 
@@ -535,7 +536,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void testUserDetailsWithLocale() {
+    void testUserDetailsWithLocale() {
         userDetails.put("locale", "it-IT");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
@@ -548,7 +549,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void testUserDetailsWithUSLocaleUnderscore() {
+    void testUserDetailsWithUSLocaleUnderscore() {
         userDetails.put("locale", "en_US");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
@@ -561,7 +562,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void testUserDetailsWithUSLocaleDash() {
+    void testUserDetailsWithUSLocaleDash() {
         userDetails.put("locale", "en-US");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);

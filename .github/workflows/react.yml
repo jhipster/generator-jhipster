@@ -18,7 +18,14 @@
 #
 
 name: React
-on: [push, pull_request]
+on:
+    push:
+        branches-ignore:
+            - 'dependabot/**'
+            - 'skip_ci*'
+    pull_request:
+        branches:
+            - '*'
 env:
     JHI_RUN_APP: 1
     JHI_JDK: 11
@@ -30,7 +37,10 @@ env:
     SPRING_JPA_SHOW_SQL: false
     JHI_DISABLE_WEBPACK_LOGS: true
     JHI_E2E_HEADLESS: true
-    JHI_SCRIPTS: ./test-integration/scripts
+    JHI_HOME: ${{ github.workspace }}/generator-jhipster
+    JHI_SCRIPTS: ${{ github.workspace }}/generator-jhipster/test-integration/scripts
+    JHI_FOLDER_APP: ${{ github.workspace }}/app
+    JHI_FOLDER_UAA: ${{ github.workspace }}/uaa
     NG_CLI_ANALYTICS: 'false'
     JHI_GITHUB_CI: true
     FORCE_COLOR: 1
@@ -38,105 +48,128 @@ jobs:
     applications:
         name: ${{ matrix.app-type }}
         runs-on: ${{ matrix.os }}
+        defaults:
+            run:
+                working-directory: ${{ github.workspace }}/app
         if: >-
+            !contains(github.event.head_commit.message, '[angular]') &&
+            !contains(github.event.head_commit.message, '[vue]') &&
+            !contains(github.event.pull_request.title, '[angular]') &&
+            !contains(github.event.pull_request.title, '[vue]') &&
             !contains(github.event.head_commit.message, '[ci skip]') &&
             !contains(github.event.head_commit.message, '[skip ci]') &&
             !contains(github.event.pull_request.title, '[skip ci]') &&
             !contains(github.event.pull_request.title, '[ci skip]') &&
-            (github.event.pull_request.draft == false || !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci'))
+            (github.event.pull_request.draft == false || !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci')) &&
+            !contains(github.event.pull_request.user.login, 'dependabot')
         timeout-minutes: 40
         strategy:
             fail-fast: false
             matrix:
-                node_version: [12.16.1]
-                os: [ubuntu-latest]
+                node_version: [12.18.3]
+                os: [ubuntu-20.04]
                 app-type:
                     - react-default
                     - react-maven-psql-es-noi18n-mapsid
                     - react-maven-h2mem-memcached
                     - react-maven-cassandra-session-redis
-                    - react-maven-couchbase-caffeine
+                    #                    - react-maven-couchbase-caffeine
                     - react-gradle-psql-es-noi18n-mapsid
                     - react-gradle-h2mem-memcached
                     - react-gradle-cassandra-session-redis
-                    - react-gradle-couchbase-caffeine
+                #                    - react-gradle-couchbase-caffeine
                 include:
                     - app-type: react-default
                       entity: sql
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: react-maven-psql-es-noi18n-mapsid
                       entity: sqlfull
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 1
                     - app-type: react-maven-h2mem-memcached
                       entity: sql
                       profile: dev,webpack
                       war: 0 # TODO: need change to 1, when maven+war is fixed
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: react-maven-cassandra-session-redis
                       entity: cassandra
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
-                    - app-type: react-maven-couchbase-caffeine
-                      entity: couchbase
-                      profile: prod
-                      war: 0
-                      protractor: 0
-                      testcontainers: 0
+                    #                    - app-type: react-maven-couchbase-caffeine
+                    #                      entity: couchbase
+                    #                      profile: prod
+                    #                      war: 0
+                    #                      e2e: 0
+                    #                      testcontainers: 0
                     - app-type: react-gradle-psql-es-noi18n-mapsid
                       entity: sqlfull
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: react-gradle-h2mem-memcached
                       entity: sql
                       profile: dev,webpack
                       war: 1
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
                     - app-type: react-gradle-cassandra-session-redis
                       entity: cassandra
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 0
-                    - app-type: react-gradle-couchbase-caffeine
-                      entity: couchbase
-                      profile: prod
-                      war: 0
-                      protractor: 1
-                      testcontainers: 0
+        #                    - app-type: react-gradle-couchbase-caffeine
+        #                      entity: couchbase
+        #                      profile: prod
+        #                      war: 0
+        #                      e2e: 1
+        #                      testcontainers: 0
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
             JHI_PROFILE: ${{ matrix.profile }}
             JHI_WAR: ${{ matrix.war }}
-            JHI_PROTRACTOR: ${{ matrix.protractor }}
+            JHI_E2E: ${{ matrix.e2e }}
             JHI_TESTCONTAINERS: ${{ matrix.testcontainers }}
         steps:
             #----------------------------------------------------------------------
             # Install all tools and check configuration
             #----------------------------------------------------------------------
-            - uses: actions/checkout@v2
-            - uses: actions/setup-node@v1
+            - name: 'SETUP: Checkout generator-jhipster'
+              uses: actions/checkout@v2
+              with:
+                  path: generator-jhipster
+                  fetch-depth: 2
+            - name: 'SETUP: Create required structure'
+              run: |
+                  mkdir app
+                  mkdir -p base/generator-jhipster
+                  mkdir -p base/app
+                  mkdir -p base/uaa
+              working-directory: ${{ github.workspace }}
+            - uses: actions/setup-node@v2.1.1
               with:
                   node-version: ${{ matrix.node_version }}
             - uses: actions/setup-java@v1
               with:
                   java-version: '11.x'
-            - name: Download latest chrome binary
+            - name: 'SETUP: Get chrome/chromedriver version'
+              id: chromedriver-version
               run: |
-                  sudo apt update
-                  sudo apt install google-chrome-stable
+                  CHROME_VERSION=$(google-chrome --version | cut -f 3 -d ' ' | cut -d '.' -f 1) \
+                  && CHROMEDRIVER_VERSION=$(curl --location --fail --retry 3 http://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}) \
+                  && echo "::set-output name=version::$CHROMEDRIVER_VERSION"
+            - name: 'ENV: display variables'
+              run: $JHI_SCRIPTS/01-display-configuration.sh
             - name: 'TOOLS: configure tools installed by the system'
               run: $JHI_SCRIPTS/03-system.sh
             - name: 'TOOLS: configure git'
@@ -155,19 +188,99 @@ jobs:
             - name: 'GENERATION: jhipster info'
               run: $JHI_SCRIPTS/14-jhipster-info.sh
             #----------------------------------------------------------------------
+            # Detect changes against base commit
+            #----------------------------------------------------------------------
+            - name: 'MERGE: Install base generator-jhipster'
+              continue-on-error: true
+              id: base-checkout
+              if: github.event.pull_request
+              working-directory: ${{ github.workspace }}/base/generator-jhipster
+              run: |
+                  git clone ${{ github.workspace }}/generator-jhipster .
+                  git checkout @~1
+                  git log
+                  npm uninstall -g generator-jhipster
+                  npm install -g .
+            - name: 'MERGE: merge base project'
+              continue-on-error: true
+              id: base-app
+              if: steps.base-checkout.outcome == 'success'
+              working-directory: ${{ github.workspace }}/base/app
+              run: |
+                  $JHI_SCRIPTS/11-generate-entities.sh
+                  # 11-generate-entities.sh removes current dir, we need to switch to the new one
+                  cd ../app
+                  $JHI_SCRIPTS/12-generate-project.sh --skip-install --skip-git
+              env:
+                  JHI_FOLDER_APP: ${{ github.workspace }}/base/app
+                  JHI_FOLDER_UAA: ${{ github.workspace }}/base/uaa
+            - name: 'MERGE: merge uaa project diff'
+              continue-on-error: true
+              id: uaa-is-equal
+              if: steps.base-app.outcome == 'success'
+              working-directory: ${{ github.workspace }}/base/uaa
+              run: |
+                  # Copy git repository (clone without the files)
+                  cp -a ${{ github.workspace }}/uaa/.git ../uaa/ || exit 0
+                  git log
+                  # File keystore.p12 always changes
+                  # File package-lock.json is not generated
+                  # Verify if the generated source has changed
+                  git add .
+                  git -c color.ui=always diff -R --cached --exit-code -- . ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12' || echo "::set-output name=has-changes::true"
+            - name: 'MERGE: merge project diff'
+              continue-on-error: true
+              id: merge-is-equal
+              if: steps.base-app.outcome == 'success'
+              working-directory: ${{ github.workspace }}/base/app
+              run: |
+                  # Copy git repository (clone without the files)
+                  cp -a ${{ github.workspace }}/app/.git .
+                  git log
+                  # File keystore.p12 always changes
+                  # File package-lock.json is not generated
+                  # Verify if the generated source has changed
+                  git add .
+                  git -c color.ui=always diff -R --cached --exit-code -- . ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12' || echo "::set-output name=has-changes::true"
+            - name: 'MERGE: tests should be skipped'
+              id: tests-should-be-skipped
+              if: >
+                  steps.uaa-is-equal.outcome == 'success' &&
+                  steps.uaa-is-equal.outputs.has-changes != 'true' &&
+                  steps.merge-is-equal.outcome == 'success' &&
+                  steps.merge-is-equal.outputs.has-changes != 'true'
+              run: echo 'Skipping tests' && echo "::set-output name=skip-tests::true"
+            #----------------------------------------------------------------------
             # Launch tests
             #----------------------------------------------------------------------
             - name: 'TESTS: Start docker-compose containers'
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: $JHI_SCRIPTS/20-docker-compose.sh
             - name: 'TESTS: backend'
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: $JHI_SCRIPTS/21-tests-backend.sh
             - name: 'TESTS: frontend'
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: $JHI_SCRIPTS/22-tests-frontend.sh
             - name: 'TESTS: packaging'
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: $JHI_SCRIPTS/23-package.sh
-            - name: 'TESTS: End-to-End'
+            - name: 'E2E: Synchronize chromedriver version'
+              if: matrix.e2e == 1 && steps.tests-should-be-skipped.outputs.skip-tests != 'true'
+              run: npm run e2e:update-webdriver -- --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
+              working-directory: ${{ github.workspace }}/app
+            - name: 'E2E: Run'
+              id: e2e
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: $JHI_SCRIPTS/24-tests-e2e.sh
-            - name: 'TESTS: Sonar analysis'
+            - name: 'E2E: Store failure screenshots'
+              uses: actions/upload-artifact@v2
+              if: always() && steps.e2e.outcome == 'failure'
+              with:
+                  name: screenshots-${{ matrix.app-type }}
+                  path: ${{ github.workspace }}/app/target/cypress/screenshots
+            - name: 'ANALYSIS: Sonar analysis'
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: $JHI_SCRIPTS/25-sonar-analyze.sh
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

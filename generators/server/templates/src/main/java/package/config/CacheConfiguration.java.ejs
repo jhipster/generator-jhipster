@@ -139,7 +139,12 @@ import java.util.List;
     <%_ } _%>
 <%_ } _%>
 <%_ if (cacheProvider === 'memcached') { _%>
-
+import java.util.HashMap;
+import java.util.Map;
+import java.net.InetSocketAddress;
+import net.rubyeye.xmemcached.auth.AuthInfo;
+import net.rubyeye.xmemcached.utils.AddrUtil;
+import com.google.code.ssm.providers.xmemcached.XMemcachedConfiguration;
 import com.google.code.ssm.CacheFactory;
 import com.google.code.ssm.config.DefaultAddressProvider;
 import com.google.code.ssm.providers.xmemcached.MemcacheClientFactoryImpl;
@@ -149,8 +154,11 @@ import com.google.code.ssm.spring.SSMCacheManager;
 import io.github.jhipster.config.JHipsterProperties;
 <%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
+import java.net.URI;
 import org.redisson.Redisson;
 import org.redisson.config.Config;
+import org.redisson.config.ClusterServersConfig;
+import org.redisson.config.SingleServerConfig;
 import org.redisson.jcache.configuration.RedissonConfiguration;
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -236,7 +244,9 @@ public class CacheConfiguration {
 
     private void createCache(javax.cache.CacheManager cm, String cacheName) {
         javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
-        if (cache == null) {
+        if (cache != null) {
+            cache.clear();
+        } else {
             cm.createCache(cacheName, jcacheConfiguration);
         }
     }
@@ -306,7 +316,6 @@ public class CacheConfiguration {
                 log.debug("Application is running with the \"dev\" profile, Hazelcast " +
                           "cluster will only work with localhost instances");
 
-                System.setProperty("hazelcast.local.localAddress", "127.0.0.1");
                 config.getNetworkConfig().setPort(serverProperties.getPort() + 5701);
                 config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
                 for (ServiceInstance instance : discoveryClient.getInstances(serviceId)) {
@@ -339,20 +348,11 @@ public class CacheConfiguration {
         <%_ } _%>
         config.getMapConfigs().put("default", initializeDefaultMapConfig(jHipsterProperties));
 
-        // Full reference is available at: https://docs.hazelcast.org/docs/management-center/3.9/manual/html/Deploying_and_Starting.html
-        config.setManagementCenterConfig(initializeDefaultManagementCenterConfig(jHipsterProperties));
+        config.setManagementCenterConfig(new ManagementCenterConfig());
         <%_ if (enableHibernateCache) { _%>
         config.getMapConfigs().put("<%= packageName %>.domain.*", initializeDomainMapConfig(jHipsterProperties));
         <%_ } _%>
         return Hazelcast.newHazelcastInstance(config);
-    }
-
-    private ManagementCenterConfig initializeDefaultManagementCenterConfig(JHipsterProperties jHipsterProperties) {
-        ManagementCenterConfig managementCenterConfig = new ManagementCenterConfig();
-        managementCenterConfig.setEnabled(jHipsterProperties.getCache().getHazelcast().getManagementCenter().isEnabled());
-        managementCenterConfig.setUrl(jHipsterProperties.getCache().getHazelcast().getManagementCenter().getUrl());
-        managementCenterConfig.setUpdateInterval(jHipsterProperties.getCache().getHazelcast().getManagementCenter().getUpdateInterval());
-        return managementCenterConfig;
     }
 
     private MapConfig initializeDefaultMapConfig(JHipsterProperties jHipsterProperties) {
@@ -372,7 +372,7 @@ public class CacheConfiguration {
         LFU (Least Frequently Used).
         NONE is the default.
         */
-        mapConfig.setEvictionPolicy(EvictionPolicy.LRU);
+        mapConfig.getEvictionConfig().setEvictionPolicy(EvictionPolicy.LRU);
 
         /*
         Maximum size of the map. When max size is reached,
@@ -380,7 +380,7 @@ public class CacheConfiguration {
         Any integer between 0 and Integer.MAX_VALUE. 0 means
         Integer.MAX_VALUE. Default is 0.
         */
-        mapConfig.setMaxSizeConfig(new MaxSizeConfig(0, MaxSizeConfig.MaxSizePolicy.USED_HEAP_SIZE));
+        mapConfig.getEvictionConfig().setMaxSizePolicy(MaxSizePolicy.USED_HEAP_SIZE);
 
         return mapConfig;
     }
@@ -712,8 +712,21 @@ public class CacheConfiguration {
         addressProvider.setAddress(jHipsterProperties.getCache().getMemcached().getServers());
         defaultCache.setAddressProvider(addressProvider);
 
-        com.google.code.ssm.providers.CacheConfiguration cacheConfiguration = new com.google.code.ssm.providers
-            .CacheConfiguration();
+        Map<InetSocketAddress, AuthInfo> authInfoMap = new HashMap<>();
+
+        if (jHipsterProperties.getCache().getMemcached().getAuthentication().isEnabled()) {
+            InetSocketAddress memcachedServers = AddrUtil.getOneAddress(jHipsterProperties.getCache().getMemcached().getServers());
+            AuthInfo authInfo =
+                AuthInfo.plain(
+                    jHipsterProperties.getCache().getMemcached().getAuthentication().getUsername(),
+                    jHipsterProperties.getCache().getMemcached().getAuthentication().getPassword());
+
+            authInfoMap.put(memcachedServers, authInfo);
+        }
+        XMemcachedConfiguration cacheConfiguration = new XMemcachedConfiguration();
+        if (!authInfoMap.isEmpty()) {
+            cacheConfiguration.setAuthInfoMap(authInfoMap);
+        }
         cacheConfiguration.setConsistentHashing(true);
         cacheConfiguration.setUseBinaryProtocol(jHipsterProperties.getCache().getMemcached().isUseBinaryProtocol());
         defaultCache.setConfiguration(cacheConfiguration);
@@ -726,11 +739,32 @@ public class CacheConfiguration {
     @Bean
     public javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration(JHipsterProperties jHipsterProperties) {
         MutableConfiguration<Object, Object> jcacheConfig = new MutableConfiguration<>();
+
+        URI redisUri = URI.create(jHipsterProperties.getCache().getRedis().getServer()[0]);
+
         Config config = new Config();
         if (jHipsterProperties.getCache().getRedis().isCluster()) {
-            config.useClusterServers().addNodeAddress(jHipsterProperties.getCache().getRedis().getServer());
+            ClusterServersConfig clusterServersConfig = config
+                .useClusterServers()
+                .setMasterConnectionPoolSize(jHipsterProperties.getCache().getRedis().getConnectionPoolSize())
+                .setMasterConnectionMinimumIdleSize(jHipsterProperties.getCache().getRedis().getConnectionMinimumIdleSize())
+                .setSubscriptionConnectionPoolSize(jHipsterProperties.getCache().getRedis().getSubscriptionConnectionPoolSize())
+                .addNodeAddress(jHipsterProperties.getCache().getRedis().getServer());
+
+            if (redisUri.getUserInfo() != null) {
+                clusterServersConfig.setPassword(redisUri.getUserInfo().substring(redisUri.getUserInfo().indexOf(':') + 1));
+            }
         } else {
-            config.useSingleServer().setAddress(jHipsterProperties.getCache().getRedis().getServer()[0]);
+            SingleServerConfig singleServerConfig = config
+                .useSingleServer()
+                .setConnectionPoolSize(jHipsterProperties.getCache().getRedis().getConnectionPoolSize())
+                .setConnectionMinimumIdleSize(jHipsterProperties.getCache().getRedis().getConnectionMinimumIdleSize())
+                .setSubscriptionConnectionPoolSize(jHipsterProperties.getCache().getRedis().getSubscriptionConnectionPoolSize())
+                .setAddress(jHipsterProperties.getCache().getRedis().getServer()[0]);
+
+            if (redisUri.getUserInfo() != null) {
+                singleServerConfig.setPassword(redisUri.getUserInfo().substring(redisUri.getUserInfo().indexOf(':') + 1));
+            }
         }
         jcacheConfig.setStatisticsEnabled(true);
         jcacheConfig.setExpiryPolicyFactory(CreatedExpiryPolicy.factoryOf(new Duration(TimeUnit.SECONDS, jHipsterProperties.getCache().getRedis().getExpiration())));
@@ -748,8 +782,8 @@ public class CacheConfiguration {
     public JCacheManagerCustomizer cacheManagerCustomizer(javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
         return cm -> {
             <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
-            createCache(cm, <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
-            createCache(cm, <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
+            createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
+            createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
                 <%_ if (enableHibernateCache) { _%>
             createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName(), jcacheConfiguration);
             createCache(cm, <%= packageName %>.domain.Authority.class.getName(), jcacheConfiguration);
@@ -766,7 +800,9 @@ public class CacheConfiguration {
 
     private void createCache(javax.cache.CacheManager cm, String cacheName, javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
         javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
-        if (cache == null) {
+        if (cache != null) {
+            cache.clear();
+        } else {
             cm.createCache(cacheName, jcacheConfiguration);
         }
     }

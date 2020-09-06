@@ -1,0 +1,34 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "authorityOneToMany",
+            "otherEntityName": "authority",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipName": "authorityManyToMany",
+            "otherEntityName": "authority",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "name",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "authorityOneToOne",
+            "otherEntityName": "authority",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "name",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "parent"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20160208210109",
+    "dto": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": true,
+    "angularJSSuffix": "mySuffixAlt",
+    "pagination": "no"
+}

@@ -1,6 +1,5 @@
 const path = require('path');
 const os = require('os');
-const shelljs = require('shelljs');
 const assert = require('yeoman-assert');
 const fse = require('fs-extra');
 const fs = require('fs');
@@ -15,8 +14,10 @@ module.exports = {
     getFilesForOptions,
     shouldBeV3DockerfileCompatible,
     getJHipsterCli,
+    prepareTempDir,
     testInTempDir,
     revertTempDir,
+    copyTemplateBlueprints,
     copyBlueprint,
     copyFakeBlueprint,
     lnYeoman,
@@ -52,22 +53,37 @@ function getJHipsterCli() {
         // corrected test for windows user
         cmd = cmd.replace(/\\/g, '/');
     }
-    /* eslint-disable-next-line no-console */
-    console.log(cmd);
     return cmd;
 }
 
-function testInTempDir(cb, keepInTestDir) {
+function _prepareTempEnv() {
     const cwd = process.cwd();
-    /* eslint-disable-next-line no-console */
-    console.log(`current cwd: ${cwd}`);
     const tempDir = path.join(os.tmpdir(), 'jhitemp');
-    shelljs.rm('-rf', tempDir);
-    shelljs.mkdir('-p', tempDir);
+    process.chdir(os.tmpdir());
+    if (fs.existsSync(tempDir)) {
+        fs.rmdirSync(tempDir, { recursive: true });
+    }
+    fs.mkdirSync(tempDir, { recursive: true });
     process.chdir(tempDir);
-    /* eslint-disable-next-line no-console */
-    console.log(`New cwd: ${process.cwd()}`);
-    const cbReturn = cb(tempDir);
+    return { cwd, tempDir };
+}
+
+/**
+ * Creates a temporary dir.
+ * @return {function} callback to cleanup the test dir.
+ */
+function prepareTempDir() {
+    const testEnv = _prepareTempEnv();
+    return () => {
+        revertTempDir(testEnv.cwd);
+        fs.rmdirSync(testEnv.tempDir, { recursive: true });
+    };
+}
+
+function testInTempDir(cb, keepInTestDir) {
+    const preparedEnv = _prepareTempEnv();
+    const cwd = preparedEnv.cwd;
+    const cbReturn = cb(preparedEnv.tempDir);
     if (cbReturn instanceof Promise) {
         return cbReturn.then(() => {
             if (!keepInTestDir) {
@@ -84,20 +100,24 @@ function testInTempDir(cb, keepInTestDir) {
 
 function revertTempDir(cwd) {
     process.chdir(cwd);
-    /* eslint-disable-next-line no-console */
-    console.log(`reverted to cwd: ${process.cwd()}`);
 }
 
-function copyBlueprint(sourceDir, packagePath, ...blueprintNames) {
-    const nodeModulesPath = `${packagePath}/node_modules`;
+function copyTemplateBlueprints(destDir, ...blueprintNames) {
+    blueprintNames.forEach(blueprintName =>
+        copyBlueprint(path.join(__dirname, `../templates/blueprints/generator-jhipster-${blueprintName}`), destDir, blueprintName)
+    );
+}
+
+function copyBlueprint(sourceDir, destDir, ...blueprintNames) {
+    const nodeModulesPath = `${destDir}/node_modules`;
     fse.ensureDirSync(nodeModulesPath);
     blueprintNames.forEach(blueprintName => {
         fse.copySync(sourceDir, `${nodeModulesPath}/generator-jhipster-${blueprintName}`);
     });
 }
 
-function copyFakeBlueprint(packagePath, ...blueprintName) {
-    copyBlueprint(FAKE_BLUEPRINT_DIR, packagePath, ...blueprintName);
+function copyFakeBlueprint(destDir, ...blueprintName) {
+    copyBlueprint(FAKE_BLUEPRINT_DIR, destDir, ...blueprintName);
 }
 
 function lnYeoman(packagePath) {

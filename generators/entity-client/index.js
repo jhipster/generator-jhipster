@@ -29,15 +29,12 @@ module.exports = class extends BaseBlueprintGenerator {
         super(args, opts);
         utils.copyObjectProps(this, opts.context);
         this.jhipsterContext = opts.jhipsterContext || opts.context;
-        this.configOptions = opts.configOptions || {};
 
-        useBlueprints =
-            !this.fromBlueprint &&
-            this.instantiateBlueprints('entity-client', { context: opts.context, debug: opts.context.isDebugEnabled });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-client', { context: opts.context });
     }
 
     // Public API method used by the getter and also by Blueprints
-    _configuring() {
+    _preparing() {
         return {
             setup() {
                 this.tsKeyType = this.getTypescriptKeyType(this.primaryKeyType);
@@ -45,14 +42,24 @@ module.exports = class extends BaseBlueprintGenerator {
         };
     }
 
-    get configuring() {
+    get preparing() {
         if (useBlueprints) return;
-        return this._configuring();
+        return this._preparing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return super._missingPreDefault();
+    }
+
+    get default() {
+        if (useBlueprints) return;
+        return this._default();
     }
 
     // Public API method used by the getter and also by Blueprints
     _writing() {
-        return writeFiles();
+        return { ...writeFiles(), ...super._missingPostWriting() };
     }
 
     get writing() {
@@ -64,7 +71,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _end() {
         return {
             end() {
-                if (!this.options['skip-install'] && !this.skipClient) {
+                if (!this.options.skipInstall && !this.skipClient) {
                     this.rebuildClient();
                 }
                 this.log(chalk.bold.green(`Entity ${this.entityNameCapitalized} generated successfully.`));

@@ -1,0 +1,120 @@
+import TrackerService from '@/admin/tracker/tracker.service';
+import * as sinon from 'sinon';
+import VueRouter from 'vue-router';
+
+describe('Tracker Service', () => {
+  let trackerService: TrackerService;
+  let routerStub: any;
+
+  beforeEach(() => {
+    routerStub = sinon.createStubInstance<VueRouter>(VueRouter);
+    routerStub.afterEach = sinon.spy();
+    trackerService = new TrackerService(routerStub);
+  });
+
+  it('Should connetion and listener be initialized', () => {
+    expect(trackerService.connection).toBeDefined();
+    expect(trackerService.listener).toBeDefined();
+  });
+
+  it('Should return listener', () => {
+    // WHEN
+    const receiveResult = trackerService.receive();
+
+    // THEN
+    expect(receiveResult).toBe(trackerService.listener);
+  });
+
+  it('Should not send activity for disconnected client', () => {
+    // GIVEN
+    const stompClientStub: any = sinon.stub();
+    stompClientStub.send = sinon.spy();
+    trackerService.stompClient = stompClientStub;
+
+    // WHEN
+    trackerService.sendActivity();
+
+    // THEN
+    expect(stompClientStub.send.notCalled).toBeTruthy();
+  });
+
+  it('Should send activity', () => {
+    // GIVEN
+    const stompClientStub: any = sinon.stub();
+    stompClientStub.connected = true;
+    stompClientStub.send = sinon.spy();
+    trackerService.stompClient = stompClientStub;
+    sinon.stub(routerStub, 'currentRoute').get(() => ({ fullPath: '/admin' }));
+
+    // WHEN
+    trackerService.sendActivity();
+
+    // THEN
+    expect(stompClientStub.send.calledOnce).toBeTruthy();
+    expect(stompClientStub.send.calledOnceWithExactly('/topic/activity',
+      JSON.stringify({ page: '/admin' }), {})).toBeTruthy();
+  });
+
+  it('Should connected for the first time', () => {
+    // GIVEN
+    const connectedPromise = sinon.spy();
+    trackerService.connectedPromise = connectedPromise;
+
+    // WHEN
+    trackerService.afterConnect();
+
+    // THEN
+    expect(connectedPromise.calledOnceWith('success'));
+    expect(trackerService.alreadyConnectedOnce).toBeTruthy();
+    expect(trackerService.connectedPromise).toBeNull();
+    expect(routerStub.afterEach.calledOnce).toBeTruthy();
+  });
+
+  it('Should connected for the second time', () => {
+    // GIVEN
+    const connectedPromise = sinon.spy();
+    trackerService.connectedPromise = connectedPromise;
+    trackerService.alreadyConnectedOnce = true;
+
+    // WHEN
+    trackerService.afterConnect();
+
+    // THEN
+    expect(connectedPromise.calledOnceWith('success'));
+    expect(trackerService.alreadyConnectedOnce).toBeTruthy();
+    expect(trackerService.connectedPromise).toBeNull();
+    expect(routerStub.afterEach.calledOnce).toBeFalsy();
+  });
+
+  it('Should unsubscribe', () => {
+    // GIVEN
+    const subscriberStub: any = sinon.stub();
+    subscriberStub.unsubscribe = sinon.spy();
+    trackerService.listener = null;
+    trackerService.subscriber = subscriberStub;
+
+    // WHEN
+    trackerService.unsubscribe();
+
+    // THEN
+    expect(subscriberStub.unsubscribe.calledOnce).toBeTruthy();
+    expect(trackerService.listener).toBeDefined();
+  });
+
+  it('Should disconnect', () => {
+    // GIVEN
+    const stompClientStub: any = sinon.stub();
+    stompClientStub.disconnect = sinon.spy();
+    trackerService.stompClient = stompClientStub;
+
+    // WHEN
+    trackerService.disconnect();
+
+    // THEN
+    expect(routerStub.afterEach.calledOnce).toBeTruthy();
+    expect(stompClientStub.disconnect.calledOnce).toBeTruthy();
+    expect(trackerService.stompClient).toBeNull();
+    expect(trackerService.alreadyConnectedOnce).toBeFalsy();
+  });
+
+});

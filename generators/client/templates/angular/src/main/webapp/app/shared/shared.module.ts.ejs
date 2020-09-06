@@ -17,17 +17,18 @@
  limitations under the License.
 -%>
 import { NgModule } from '@angular/core';
-import { <%= angularXAppName %>SharedLibsModule } from './shared-libs.module';
+import { SharedLibsModule } from './shared-libs.module';
 <%_ if (enableTranslation) { _%>
 import { FindLanguageFromKeyPipe } from './language/find-language-from-key.pipe';
 <%_ } _%>
 import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
 import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
+import { DurationPipe } from './duration.pipe';
 
 @NgModule({
     imports: [
-        <%= angularXAppName %>SharedLibsModule
+        SharedLibsModule
     ],
     declarations: [
         <%_ if (enableTranslation) { _%>
@@ -35,16 +36,17 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
         <%_ } _%>
         AlertComponent,
         AlertErrorComponent,
-        HasAnyAuthorityDirective
+        HasAnyAuthorityDirective,
+        DurationPipe
     ],
     exports: [
-        <%= angularXAppName %>SharedLibsModule,
+        SharedLibsModule,
         <%_ if (enableTranslation) { _%>
         FindLanguageFromKeyPipe,
         <%_ } _%>
         AlertComponent,
         AlertErrorComponent,
-        HasAnyAuthorityDirective
+        HasAnyAuthorityDirective,
+        DurationPipe
     ]
-})
-export class <%= angularXAppName %>SharedModule {}
+export class SharedModule {}

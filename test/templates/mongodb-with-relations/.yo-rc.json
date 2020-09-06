@@ -1,6 +1,6 @@
 {
     "generator-jhipster": {
-        "applicationType": "monolith",
+        "applicationType": "microservice",
         "baseName": "sampleMongodb",
         "packageName": "com.mycompany.myapp",
         "packageFolder": "com/mycompany/myapp",

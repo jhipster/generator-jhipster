@@ -130,7 +130,7 @@ public class <%= asDto(entityClass) %> implements Serializable {
     private Set<<%= asDto(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
     <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true && otherEntityIsEmbedded) { _%>
     private <%= asDto(otherEntityNameCapitalized) %> <%= relationshipFieldName %>;
-    <%_ } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+    <%_ } else if (!embedded && (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true))) { _%>
 
     private <%= otherEntityPrimaryKeyType %> <%= relationshipFieldName %>Id;
     <%_ if (otherEntityFieldCapitalized !== 'Id' && otherEntityFieldCapitalized !== '') { _%>
@@ -211,7 +211,7 @@ public class <%= asDto(entityClass) %> implements Serializable {
     public void set<%= relationshipNameCapitalized %>(<%= asDto(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
     }
-    <%_ } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+    <%_ } else if (!embedded && (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true))) { _%>
 
     <%_ if (relationshipNameCapitalized.length > 1) { _%>
     public <%= otherEntityPrimaryKeyType %> get<%= relationshipNameCapitalized %>Id() {
@@ -290,7 +290,7 @@ public class <%= asDto(entityClass) %> implements Serializable {
             ", <%= relationshipFieldNamePlural %>='" + get<%= relationshipNameCapitalizedPlural %>() + "'" +
                 <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true && otherEntityIsEmbedded) { _%>
             ", <%= relationshipFieldName %>='" + get<%= relationshipNameCapitalized %>() + "'" +
-                <%_ } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+                <%_ } else if (!embedded && (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true))) { _%>
             ", <%= relationshipFieldName %>Id=<% if (otherEntityPrimaryKeyType === 'String') { %>'<% } %>" + get<%= relationshipNameCapitalized %>Id() <% if (otherEntityPrimaryKeyType === 'String') { %>+ "'" <% } %>+
                     <%_ if (otherEntityFieldCapitalized !== 'Id' && otherEntityFieldCapitalized !== '') { _%>
             ", <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>='" + get<%= relationshipNameCapitalized %><%= otherEntityFieldCapitalized %>() + "'" +

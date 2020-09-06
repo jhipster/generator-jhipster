@@ -20,8 +20,6 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         }
 
         this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupEntityOptions(this, jhContext, this);
     }
 
     get initializing() {
@@ -56,7 +54,7 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
         helpers
             .run(path.join(__dirname, '../../generators/client'))
             .withOptions({
-                'from-cli': true,
+                fromCli: true,
                 build: 'maven',
                 auth: 'jwt',
                 db: 'mysql',

@@ -81,7 +81,7 @@ spring:
     profiles:
         active: dev
         include:
-            - swagger
+            - api-docs
             # Uncomment to activate TLS for the dev profile
             #- tls
     devtools:
@@ -153,7 +153,7 @@ spring:
     jpa:
         <%_ if (devDatabaseType === 'postgresql') { _%>
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
-        <%_ } else if (devDatabaseType === 'h2disk' || devDatabaseType === 'h2Memory') { _%>
+        <%_ } else if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
         database-platform: io.github.jhipster.domain.util.FixedH2Dialect
         <%_ } _%>
         show-sql: true
@@ -168,16 +168,15 @@ spring:
     <%_ } _%>
     <%_ if (databaseType === 'cassandra') { _%>
         cassandra:
-            contactPoints: localhost
-            protocolVersion: V4
+            contact-points: localhost
             compression: LZ4
-            keyspaceName: <%= baseName %>
+            keyspace-name: <%= baseName %>
+            local-datacenter: datacenter1
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
-        elasticsearch:
-            properties:
-                path:
-                    home: <%= BUILD_DIR %>elasticsearch
+    elasticsearch:
+        rest:
+            uris: http://localhost:9200
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
@@ -199,7 +198,7 @@ spring:
             <%_ } else if (devDatabaseType === 'oracle') { _%>
         url: <%- getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
             <%_ } else if (devDatabaseType === 'h2Disk') { _%>
-        url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `${BUILD_DIR}h2db/db` }) %>
+        url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/db` }) %>
             <%_ } else if (devDatabaseType === 'h2Memory') { _%>
         url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
             <%_ } _%>
@@ -214,31 +213,31 @@ spring:
     <%_ if (databaseType === 'sql' && reactive) { _%>
     r2dbc:
         <%_ if (devDatabaseType === 'mysql') { _%>
-        url: r2dbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+        url: <%- getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: root
         password:
         <%_ } else if (devDatabaseType === 'mariadb') { _%>
-        url: r2dbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC
+        url: <%- getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: root
         password:
         <%_ } else if (devDatabaseType === 'postgresql') { _%>
-        url: r2dbc:postgresql://localhost:5432/<%= baseName %>
+        url: <%- getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: <%= baseName %>
         password:
         <%_ } else if (devDatabaseType === 'oracle') { _%>
-        url: r2dbc:oracle:thin:@localhost:1521:xe
+        url: <%- getR2DBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
         username: system
         password: oracle
         <%_ } else if (devDatabaseType === 'mssql') { _%>
-        url: r2dbc:sqlserver://localhost:1433/<%= baseName %>
+        url: <%- getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: SA
         password: yourStrong(!)Password
         <%_ } else if (devDatabaseType === 'h2Disk') { _%>
-        url: r2dbc:h2:file:///./<%= BUILD_DIR %>h2db/db/<%= lowercaseBaseName %>?options=DB_CLOSE_DELAY=-1
+        url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/db` }) %>
         username: <%= baseName %>
         password:
         <%_ } else if (devDatabaseType === 'h2Memory') { _%>
-        url: r2dbc:h2:mem://<%= lowercaseBaseName %>?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
         username: <%= baseName %>
         password:
         <%_ } _%>
@@ -275,7 +274,7 @@ jhipster:
             duration-in-seconds: 3600
         <%_ if (!reactive) { _%>
         authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
-            app1: /api,/v2/api-docs # recommended dev configuration
+            app1: /api,/v3/api-docs # recommended dev configuration
         <%_ } _%>
     <%_ } _%>
     <%_ if (cacheProvider !== 'no') { _%>
@@ -284,10 +283,6 @@ jhipster:
         hazelcast: # Hazelcast distributed cache
             time-to-live-seconds: 3600
             backup-count: 1
-            management-center: # Full reference is available at: http://docs.hazelcast.org/docs/management-center/3.9/manual/html/Deploying_and_Starting.html
-                enabled: false
-                update-interval: 3
-                url: http://localhost:8180/hazelcast-mancenter
         <%_ } _%>
         <%_ if (cacheProvider === 'ehcache') { _%>
         ehcache: # Ehcache configuration
@@ -395,10 +390,6 @@ jhipster:
             host: localhost
             port: 5000
             queue-size: 512
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-    audit-events:
-        retention-period: 30 # Number of days before audit events are deleted.
-    <%_ } _%>
 <%_ if (applicationType === 'uaa') { _%>
 uaa:
     key-store:

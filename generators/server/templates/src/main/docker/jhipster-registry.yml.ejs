@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
     jhipster-registry:
@@ -28,7 +29,7 @@ services:
         # See https://www.jhipster.tech/jhipster-registry/#spring-cloud-config
         environment:
             - _JAVA_OPTIONS=-Xmx512m -Xms256m
-            - SPRING_PROFILES_ACTIVE=dev,swagger<% if (authenticationType === 'oauth2') { %>,oauth2<% } %><% if (authenticationType === 'uaa') { %>,uaa<% } %>
+            - SPRING_PROFILES_ACTIVE=dev,api-docs<% if (authenticationType === 'oauth2') { %>,oauth2<% } %><% if (authenticationType === 'uaa') { %>,uaa<% } %>
             - SPRING_SECURITY_USER_PASSWORD=admin
             - JHIPSTER_REGISTRY_PASSWORD=admin
             - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
@@ -42,5 +43,7 @@ services:
             - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-registry
             - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
             <%_ } _%>
+        # If you want to expose these ports outside your dev PC, 
+        # remove the "127.0.0.1:" prefix
         ports:
-            - 8761:8761
+            - 127.0.0.1:8761:8761

@@ -3,7 +3,7 @@ services:
     samplekafka-app:
         image: samplekafka
         environment:
-            - SPRING_PROFILES_ACTIVE=prod,swagger
+            - SPRING_PROFILES_ACTIVE=prod,api-docs
             - SPRING_DATASOURCE_URL=jdbc:mysql://samplekafka-mysql:3306/samplekafka?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
             - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
             - KAFKA_CONSUMER_KEY_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer

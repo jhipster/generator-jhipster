@@ -1,6 +1,4 @@
-const ServerGenerator = require('../../../../../generators/server');
-
-module.exports = class extends ServerGenerator {
+const createGenerator = env => class extends env.requireGenerator('jhipster:server') {
     constructor(args, opts) {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
@@ -41,3 +39,4 @@ module.exports = class extends ServerGenerator {
     }
 };
 
+module.exports = { createGenerator };

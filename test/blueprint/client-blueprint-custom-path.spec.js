@@ -6,7 +6,11 @@ const ClientGenerator = require('../../generators/client');
 
 const mockBlueprintSubGen = class extends ClientGenerator {
     constructor(args, opts) {
-        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+        super(args, {
+            fromBlueprint: true,
+            ...opts,
+            outputPathCustomizer: paths => (paths ? paths.replace(/^src\/main\/webapp([/$])/, 'src/main/webapp2$1') : undefined),
+        }); // fromBlueprint variable is important
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
         if (!jhContext) {
             this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
@@ -14,8 +18,6 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         this.configOptions = jhContext.configOptions || {};
         // This sets up options for this sub generator and is being reused from JHipster
         jhContext.setupClientOptions(this, jhContext);
-
-        this.options.outputPathCustomizer = paths => (paths ? paths.replace(/^src\/main\/webapp([/$])/, 'src/main/webapp2$1') : undefined);
     }
 
     get initializing() {
@@ -62,7 +64,7 @@ describe('JHipster client generator with blueprint with path customizer', () => 
                 helpers
                     .run(path.join(__dirname, '../../generators/client'))
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         build: 'maven',
                         auth: 'jwt',
                         db: 'mysql',
@@ -89,7 +91,13 @@ describe('JHipster client generator with blueprint with path customizer', () => 
                         return path;
                     })
                 );
-                assert.file(expectedFiles.i18nJson);
+                assert.file(
+                    expectedFiles.i18nJson.map(path => {
+                        path = path.replace(/^src\/main\/webapp([/$])/, 'src/main/webapp2$1');
+                        assert(!/^src\/main\/webapp([/$])/.test(path));
+                        return path;
+                    })
+                );
             });
 
             it('contains the specific change added by the blueprint', () => {

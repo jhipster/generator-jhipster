@@ -7,7 +7,7 @@ const constants = require('../../generators/generator-constants');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
-const mockBlueprintSubGen = class extends ClientGenerator {
+const MockedClientGenerator = class MockedClientGenerator extends ClientGenerator {
     constructor(args, opts) {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
@@ -63,7 +63,7 @@ describe('JHipster client generator with blueprint', () => {
                 helpers
                     .run(path.join(__dirname, '../../generators/client'))
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         build: 'maven',
                         auth: 'jwt',
                         db: 'mysql',
@@ -71,7 +71,7 @@ describe('JHipster client generator with blueprint', () => {
                         blueprint: blueprintName,
                         skipChecks: true,
                     })
-                    .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
+                    .withGenerators([[MockedClientGenerator, 'jhipster-myblueprint:client']])
                     .withPrompts({
                         baseName: 'jhipster',
                         clientFramework: ANGULAR,
@@ -98,7 +98,7 @@ describe('JHipster client generator with blueprint', () => {
             helpers
                 .run(path.join(__dirname, '../../generators/client'))
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
                     skipChecks: true,

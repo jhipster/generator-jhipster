@@ -17,17 +17,16 @@
  limitations under the License.
 -%>
 import React from 'react';
-import { shallow } from 'enzyme';
+import { render } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 
 <% if (enableTranslation) { %>
 import sinon from 'sinon';
 <% } %>
 
-import LoadingBar from 'react-redux-loading-bar';
-import { Navbar, Nav } from 'reactstrap';
-
-import { Home, Brand } from 'app/shared/layout/header/header-components';
-import { AdminMenu, EntitiesMenu, AccountMenu<%_ if (enableTranslation) { _%>, LocaleMenu<%_ } _%>} from 'app/shared/layout/menus';
+import initStore from 'app/config/store';
 import Header from 'app/shared/layout/header/header';
 
 describe('Header', () => {
@@ -44,13 +43,13 @@ describe('Header', () => {
     <%_ } _%>
     ribbonEnv: 'dev',
     isInProduction: false,
-    isSwaggerEnabled: true
+    isOpenAPIEnabled: true
   };
   const prodProps = {
     ...devProps,
     ribbonEnv: 'prod',
     isInProduction: true,
-    isSwaggerEnabled: false
+    isOpenAPIEnabled: false
   };
   const userProps = {
     ...prodProps,
@@ -64,7 +63,16 @@ describe('Header', () => {
 
   const wrapper = (props = devProps) => {
     if (!mountedWrapper) {
-      mountedWrapper = shallow(<Header {...props} />);
+      const store = initStore();
+      const history = createMemoryHistory();
+      const { container } = render(
+        <Provider store={store}>
+          <Router history={history}>
+            <Header {...props} />
+          </Router>
+        </Provider>
+      );
+      mountedWrapper = container.innerHTML;
     }
     return mountedWrapper;
   };
@@ -75,61 +83,59 @@ describe('Header', () => {
 
   // All tests will go here
   it('Renders a Header component in dev profile with LoadingBar, Navbar, Nav and dev ribbon.', () => {
-    const component = wrapper();
-    // the created snapshot must be committed to source control
-    expect(component).toMatchSnapshot();
-    expect(component.find(LoadingBar).length).toEqual(1);
-    const navbar = component.find(Navbar);
-    expect(navbar.length).toEqual(1);
-    expect(navbar.find(Brand).length).toEqual(1);
-    const nav = component.find(Nav);
-    expect(nav.length).toEqual(1);
-    expect(nav.find(Home).length).toEqual(1);
-    expect(nav.find(AdminMenu).length).toEqual(1);
-    expect(nav.find(EntitiesMenu).length).toEqual(1);
-    <%_ if (enableTranslation) { _%>
-    expect(nav.find(LocaleMenu).length).toEqual(1);
-    <% } %>
-    expect(nav.find(AccountMenu).length).toEqual(1);
-    const ribbon = component.find('.ribbon.dev');
-    expect(ribbon.length).toEqual(1);
+    const html = wrapper();
+    
+    // Find Navbar component
+    expect(html).toContain('navbar');
+    // Find AdminMenu component
+    expect(html).toContain('admin-menu');
+    // Find EntitiesMenu component
+    expect(html).toContain('entity-menu');
+    // Find AccountMenu component
+    expect(html).toContain('account-menu');
+    // Ribbon
+    expect(html).toContain('ribbon');
   });
 
   it('Renders a Header component in prod profile with LoadingBar, Navbar, Nav.', () => {
-    const component = wrapper(prodProps);
-    // the created snapshot must be committed to source control
-    expect(component).toMatchSnapshot();
-    const navbar = component.find(Navbar);
-    expect(navbar.length).toEqual(1);
-    expect(navbar.find(Brand).length).toEqual(1);
-    const nav = component.find(Nav);
-    expect(nav.length).toEqual(1);
-    expect(nav.find(Home).length).toEqual(1);
-    expect(nav.find(AdminMenu).length).toEqual(1);
-    expect(nav.find(EntitiesMenu).length).toEqual(1);
-    <%_ if (enableTranslation) { _%>
-    expect(nav.find(LocaleMenu).length).toEqual(1);
-    <% } %>
-    expect(nav.find(AccountMenu).length).toEqual(1);
-    const ribbon = component.find('.ribbon.dev');
-    expect(ribbon.length).toEqual(0);
+    const html = wrapper(prodProps);
+    
+    // Find Navbar component
+    expect(html).toContain('navbar');
+    // Find AdminMenu component
+    expect(html).toContain('admin-menu');
+    // Find EntitiesMenu component
+    expect(html).toContain('entity-menu');
+    // Find AccountMenu component
+    expect(html).toContain('account-menu');
+    // No Ribbon
+    expect(html).not.toContain('ribbon');
   });
 
   it('Renders a Header component in prod profile with logged in User', () => {
-    const nav = wrapper(userProps).find(Nav);
-    expect(nav.find(AdminMenu).length).toEqual(0);
-    expect(nav.find(EntitiesMenu).length).toEqual(1);
-    const account = nav.find(AccountMenu);
-    expect(account.first().props().isAuthenticated).toEqual(true);
+    const html = wrapper(userProps);
+    
+    // Find Navbar component
+    expect(html).toContain('navbar');
+    // Not find AdminMenu component
+    expect(html).not.toContain('admin-menu');
+    // Find EntitiesMenu component
+    expect(html).toContain('entity-menu');
+    // Find AccountMenu component
+    expect(html).toContain('account-menu');
   });
 
   it('Renders a Header component in prod profile with no logged in User', () => {
-    const nav = wrapper(guestProps).find(Nav);
-    expect(nav.find(AdminMenu).length).toEqual(0);
-    expect(nav.find(EntitiesMenu).length).toEqual(0);
-    const account = nav.find(AccountMenu);
-    expect(account.length).toEqual(1);
-    expect(account.first().props().isAuthenticated).toEqual(false);
+    const html = wrapper(guestProps);
+    
+    // Find Navbar component
+    expect(html).toContain('navbar');
+    // Not find AdminMenu component
+    expect(html).not.toContain('admin-menu');
+    // Not find EntitiesMenu component
+    expect(html).not.toContain('entity-menu');
+    // Find AccountMenu component
+    expect(html).toContain('account-menu');
   });
 
 });

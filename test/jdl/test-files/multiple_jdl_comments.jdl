@@ -1,0 +1,13 @@
+// First line of the internal JDL comment
+// Second line of the internal JDL comment
+entity A { // Another line
+  // line
+  // line
+  // line // again
+  name String, // line // again // again!
+  thing Integer
+}
+// thing
+relationship OneToOne {
+  A to User
+}

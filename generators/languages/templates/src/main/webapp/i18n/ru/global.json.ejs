@@ -47,9 +47,6 @@
                 "health": "Состояние",
                 "configuration": "Настройки",
                 "logs": "Логи",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "Аудит",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "База данных",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -154,8 +151,8 @@
         "idexists": "Новый {{entityName}} не может иметь данный ID",
         "idnull": "Неверный ID",
         "file": {
-            "could.not.extract": "Could not extract file",
-            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+            "could.not.extract": "Не удалось извлечь файл",
+            "not.image": "Файл должен был быть изображением, но было установлено, что \"{{ fileType }}\""
         }
     },
     "footer": "Это ваш футтер"

@@ -16,13 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
     <%= baseName.toLowerCase() %>-app:
         image: <%= baseName.toLowerCase() %>
         environment:
             - _JAVA_OPTIONS=-Xmx512m -Xms256m
-            - SPRING_PROFILES_ACTIVE=prod,swagger
+            - SPRING_PROFILES_ACTIVE=prod,api-docs
             - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
             <%_ if (serviceDiscoveryType === 'consul') { _%>
             - SPRING_CLOUD_CONSUL_HOST=consul
@@ -77,11 +78,12 @@ services:
                 <%_ } _%>
             <%_ } else if (prodDatabaseType === 'mariadb') { _%>
             - JHIPSTER_SLEEP=120 # gives time for mariadb server to start
+            <%_ } else if (prodDatabaseType === 'mssql') { _%>
+            - JHIPSTER_SLEEP=60 # gives time for mssql server to start
             <%_ } else { _%>
             - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
             <%_ } _%>
             <%_ if (searchEngine === 'elasticsearch') { _%>
-            - SPRING_DATA_JEST_URI=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
             - SPRING_ELASTICSEARCH_REST_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
             <%_ } _%>
             <%_ if (messageBroker === 'kafka') { _%>
@@ -91,8 +93,10 @@ services:
             - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true
             <%_ } _%>
         <%_ if (applicationType === 'monolith' || applicationType === 'gateway') { _%>
+        # If you want to expose these ports outside your dev PC, 
+        # remove the "127.0.0.1:" prefix
         ports:
-            - <%= serverPort %>:<%= serverPort %>
+            - 127.0.0.1:<%= serverPort %>:<%= serverPort %>
         <%_ } _%>
     <%_ if (prodDatabaseType === 'mysql') { _%>
     <%= baseName.toLowerCase() %>-mysql:

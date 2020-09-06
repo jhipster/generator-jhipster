@@ -1,0 +1,14 @@
+{
+    "error": {
+        "title": "Stranica greške!",
+        "http": {
+            "400": "Pogrešan zahtjev.",
+            "403": "Nemate ovlasti za pristup toj stranici.",
+            "404": "Stranica ne postoji.",
+            "405": "HTTP glagol koji je korišten nije podržan za zadani URL.",
+            "500": "Interna greška servera."
+        },
+        "concurrencyFailure": "Drugi korisnik modificirao je podatke u isto vrijeme kao i Vi. Vaše promjene nisu prihvaćene.",
+        "validation": "Greška kod provjere na serveru."
+    }
+}

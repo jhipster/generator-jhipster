@@ -140,7 +140,7 @@ objects:
             imagePullPolicy: IfNotPresent
             env:
             - name: SPRING_PROFILES_ACTIVE
-              value: prod,swagger
+              value: prod,api-docs
             <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
             - name: SPRING_CLOUD_CONFIG_URI
               value: http://admin:${jhipster.registry.password}@jhipster-registry:8761/config
@@ -205,8 +205,6 @@ objects:
               value: ${APPLICATION_NAME}
             <%_ } _%>
             <%_ if (app.searchEngine === 'elasticsearch') { _%>
-            - name: SPRING_DATA_JEST_URI
-              value: http://${APPLICATION_NAME}-elasticsearch:9200
             - name: SPRING_ELASTICSEARCH_REST_URIS
               value: http://${APPLICATION_NAME}-elasticsearch:9200
             <%_ } _%>

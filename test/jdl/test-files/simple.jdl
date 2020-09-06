@@ -1,0 +1,11 @@
+entity A {
+  myField String required,
+  myOtherField UUID,
+  myLastField ZonedDateTime
+}
+
+entity B
+
+relationship OneToMany {
+  A{b} to B{a(myOtherField) required}
+}

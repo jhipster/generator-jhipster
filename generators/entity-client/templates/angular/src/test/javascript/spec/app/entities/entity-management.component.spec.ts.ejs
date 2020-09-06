@@ -26,7 +26,7 @@ import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 <%_ } _%>
 
-import { <%= angularXAppName %>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
+import { TestModule } from '../../../<%= entityParentPathAddition %>test.module';
 import { <%= entityAngularName %>Component } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
@@ -39,7 +39,7 @@ describe('Component Tests', () => {
 
         beforeEach(() => {
             TestBed.configureTestingModule({
-                imports: [<%= angularXAppName %>TestModule],
+                imports: [TestModule],
                 declarations: [<%= entityAngularName %>Component],
                 <%_ if (pagination !== 'no') { _%>
                 providers: [

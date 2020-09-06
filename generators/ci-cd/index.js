@@ -30,7 +30,7 @@ module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
         // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
+        this.option('fromCli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
             defaults: false,
@@ -70,6 +70,13 @@ module.exports = class extends BaseGenerator {
             description: 'Automatically configure GitHub Actions',
         });
 
+        // Automatically configure CircleCI
+        this.argument('autoconfigure-circle', {
+            type: Boolean,
+            defaults: false,
+            description: 'Automatically configure CircleCI',
+        });
+
         this.registerPrettierTransform();
     }
 
@@ -83,7 +90,7 @@ module.exports = class extends BaseGenerator {
             },
             getConfig() {
                 this.jhipsterVersion = packagejs.version;
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 this.baseName = configuration.get('baseName');
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.applicationType = configuration.get('applicationType');
@@ -101,16 +108,16 @@ module.exports = class extends BaseGenerator {
                 this.clientFramework = configuration.get('clientFramework');
                 this.testFrameworks = configuration.get('testFrameworks');
                 this.cacheProvider = configuration.get('cacheProvider');
-                this.autoconfigureTravis = this.options['autoconfigure-travis'];
-                this.autoconfigureJenkins = this.options['autoconfigure-jenkins'];
-                this.autoconfigureGitlab = this.options['autoconfigure-gitlab'];
-                this.autoconfigureAzure = this.options['autoconfigure-azure'];
-                this.autoconfigureGithub = this.options['autoconfigure-github'];
+                this.autoconfigureTravis = this.options.autoconfigureTravis;
+                this.autoconfigureJenkins = this.options.autoconfigureJenkins;
+                this.autoconfigureGitlab = this.options.autoconfigureGitlab;
+                this.autoconfigureAzure = this.options.autoconfigureAzure;
+                this.autoconfigureGithub = this.options.autoconfigureGithub;
+                this.autoconfigureCircleCI = this.options.autoconfigureCircle;
                 this.abort = false;
             },
             initConstants() {
                 this.NODE_VERSION = constants.NODE_VERSION;
-                this.YARN_VERSION = constants.YARN_VERSION;
                 this.NPM_VERSION = constants.NPM_VERSION;
             },
             getConstants() {

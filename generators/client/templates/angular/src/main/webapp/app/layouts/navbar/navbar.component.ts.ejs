@@ -44,7 +44,7 @@ export class NavbarComponent implements OnInit {
     <%_ if (enableTranslation) { _%>
     languages = LANGUAGES;
     <%_ } _%>
-    swaggerEnabled?: boolean;
+    openAPIEnabled?: boolean;
     version: string;
 
     constructor(
@@ -63,7 +63,7 @@ export class NavbarComponent implements OnInit {
     ngOnInit(): void {
         this.profileService.getProfileInfo().subscribe((profileInfo) => {
             this.inProduction = profileInfo.inProduction;
-            this.swaggerEnabled = profileInfo.swaggerEnabled;
+            this.openAPIEnabled = profileInfo.openAPIEnabled;
         });
     }
 

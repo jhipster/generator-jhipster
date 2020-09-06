@@ -22,6 +22,7 @@ const https = require('https');
 const path = require('path');
 const cliUtils = require('./utils');
 const importJdl = require('./import-jdl');
+const packageJson = require('../package.json');
 
 const { logger } = cliUtils;
 
@@ -83,10 +84,14 @@ module.exports = (args, options = {}, env, forkProcess) => {
                 if (options.skipSampleRepository) {
                     return Promise.reject(new Error(`Could not find ${filename}, make sure the path is correct.`));
                 }
-                url = new URL(filename, 'https://raw.githubusercontent.com/jhipster/jdl-samples/master/').toString();
+                url = new URL(filename, `https://raw.githubusercontent.com/jhipster/jdl-samples/v${packageJson.version}/`).toString();
                 filename = path.basename(filename);
             }
-            return downloadFile(url, filename);
+            return downloadFile(url, filename).catch(error => {
+                logger.info(error.message);
+                url = new URL(filename, 'https://raw.githubusercontent.com/jhipster/jdl-samples/master/').toString();
+                return downloadFile(url, filename);
+            });
         }
         return Promise.resolve(filename);
     });

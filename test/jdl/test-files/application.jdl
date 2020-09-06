@@ -1,0 +1,8 @@
+application {
+  config {
+    baseName toto
+    packageName com.mathieu.sample
+    enableTranslation false
+    languages [en, fr]
+  }
+}

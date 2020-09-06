@@ -1,0 +1,32 @@
+{
+  "fluentMethods": true,
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "relationshipName": "country",
+      "otherEntityName": "country",
+      "ownerSide": false,
+      "otherEntityRelationshipName": "region"
+    }
+  ],
+  "fields": [
+    {
+      "fieldName": "regionId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "regionName",
+      "fieldType": "String"
+    }
+  ],
+  "changelogDate": "20160926083800",
+  "entityTableName": "region",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "skipClient": true,
+  "skipServer": true,
+  "clientRootFolder": "toto",
+  "applications": "*"
+}

@@ -17,26 +17,47 @@
  limitations under the License.
 -%>
 package <%= packageName %>.repository;
-<% if (databaseType === 'cassandra') { %>
-import com.datastax.driver.core.*;
-import com.datastax.driver.mapping.Mapper;
-import com.datastax.driver.mapping.MappingManager;<% } %>
+
+<%_ if (databaseType === 'cassandra') { _%>
+import com.datastax.oss.driver.api.core.CqlIdentifier;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.cql.BatchStatement;
+import com.datastax.oss.driver.api.core.cql.BatchStatementBuilder;
+import com.datastax.oss.driver.api.core.cql.BoundStatementBuilder;
+import com.datastax.oss.driver.api.core.cql.DefaultBatchType;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
+import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.mapper.annotations.Dao;
+import com.datastax.oss.driver.api.mapper.annotations.DaoFactory;
+import com.datastax.oss.driver.api.mapper.annotations.DaoKeyspace;
+import com.datastax.oss.driver.api.mapper.annotations.Delete;
+import com.datastax.oss.driver.api.mapper.annotations.Mapper;
+import com.datastax.oss.driver.api.mapper.annotations.Select;
+<%_ } _%>
 import <%= packageName %>.domain.PersistentToken;
-import <%= packageName %>.domain.<%= asEntity('User') %>;<% if (databaseType !== 'cassandra') { %>
-import java.time.LocalDate;<% } %><% if (databaseType === 'sql') { %>
+import <%= packageName %>.domain.<%= asEntity('User') %>;
+<%_ if (databaseType !== 'cassandra') { _%>
+import java.time.LocalDate;
+<%_ } _%>
+<%_ if (databaseType === 'sql') { _%>
 import org.springframework.data.jpa.repository.JpaRepository;
-<% } %><% if (databaseType === 'mongodb') { %>
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.MongoRepository;
-<% } %><%_ if (databaseType === 'neo4j') { _%>
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
 import org.neo4j.springframework.data.repository.Neo4jRepository;
-<%_ } _%><% if (databaseType === 'cassandra') { %>
+<%_ } _%>
+<%_ if (databaseType === 'cassandra') { _%>
+import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
 import org.springframework.stereotype.Repository;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 
-import java.util.ArrayList;<% } %>
+import java.util.ArrayList;
+<%_ } _%>
 import java.util.List;
 <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
 import java.util.Optional;
@@ -44,20 +65,26 @@ import java.util.Optional;
 <%_ if (databaseType === 'cassandra') { _%>
 import java.util.Set;
 <%_ } _%>
-<% if (databaseType === 'couchbase') { %>
+<%_ if (databaseType === 'couchbase') { _%>
+
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
-<% } %>
-<% if (databaseType === 'sql') { %>/**
+<%_ } _%>
+
+/**
+<%_ if (databaseType === 'sql') { _%>
  * Spring Data JPA repository for the {@link PersistentToken} entity.
- */<% } %><% if (databaseType === 'mongodb') { %>/**
+<%_ } else if (databaseType === 'mongodb') { _%>
  * Spring Data MongoDB repository for the {@link PersistentToken} entity.
- */<% } %><% if (databaseType === 'couchbase') { %>/**
+<%_ } else if (databaseType === 'couchbase') { _%>
  * Spring Data Couchbase repository for the {@link PersistentToken} entity.
- */<% } %><% if (databaseType === 'cassandra') { %>/**
+<%_ } else if (databaseType === 'cassandra') { _%>
  * Cassandra repository for the {@link PersistentToken} entity.
- */<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>
+<%_ } _%>
+ */
+<%_ if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { _%>
 public interface PersistentTokenRepository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><PersistentToken, String> {
-<% if (databaseType === 'couchbase') { %>
+    <%_ if (databaseType === 'couchbase') { _%>
+
     default Optional<PersistentToken> findBySeries(String series) {
         return findById(PersistentToken.PREFIX + ID_DELIMITER + series);
     }
@@ -70,20 +97,23 @@ public interface PersistentTokenRepository extends <% if (databaseType === 'sql'
         return findByLogin(user.getLogin());
     }
 
-    List<PersistentToken> findByLogin(String login);<% } else { %>
-    List<PersistentToken> findByUser(<%= asEntity('User') %> user);<% } %>
+    List<PersistentToken> findByLogin(String login);
+    <%_ } else { _%>
+    List<PersistentToken> findByUser(<%= asEntity('User') %> user);
+    <%_ } _%>
 
     List<PersistentToken> findByTokenDateBefore(LocalDate localDate);
 
-}<% } else if (databaseType === 'cassandra') { %>
+}
+<%_ } else if (databaseType === 'cassandra') { _%>
 @Repository
 public class PersistentTokenRepository {
 
-    private final Session session;
+    private final CqlSession session;
 
     private final Validator validator;
 
-    Mapper<PersistentToken> mapper;
+    PersistentTokenDao persistentTokenDao;
 
     private PreparedStatement findPersistentTokenSeriesByUserIdStmt;
 
@@ -93,10 +123,11 @@ public class PersistentTokenRepository {
 
     private PreparedStatement deletePersistentTokenSeriesByUserIdStmt;
 
-    public PersistentTokenRepository(Session session, Validator validator) {
+    public PersistentTokenRepository(CqlSession session, Validator validator, CassandraProperties cassandraProperties) {
         this.session = session;
         this.validator = validator;
-        mapper = new MappingManager(session).mapper(PersistentToken.class);
+        PersistentTokenMapper persistentTokenMapper = new PersistentTokenMapperBuilder(session).build();
+        persistentTokenDao = persistentTokenMapper.persistentTokenDao(CqlIdentifier.fromCql(cassandraProperties.getKeyspaceName()));
 
         findPersistentTokenSeriesByUserIdStmt = session.prepare(
             "SELECT persistent_token_series " +
@@ -119,17 +150,17 @@ public class PersistentTokenRepository {
     }
 
     public Optional<PersistentToken> findById(String presentedSeries) {
-        return Optional.ofNullable(mapper.get(presentedSeries));
+        return Optional.ofNullable(persistentTokenDao.get(presentedSeries));
     }
 
     public List<PersistentToken> findByUser(<%= asEntity('User') %> user) {
-        BoundStatement stmt = findPersistentTokenSeriesByUserIdStmt.bind();
-        stmt.setString("user_id", user.getId());
-        ResultSet rs = session.execute(stmt);
+        BoundStatementBuilder statementBuilder = findPersistentTokenSeriesByUserIdStmt.boundStatementBuilder();
+        statementBuilder.setString("user_id", user.getId());
+        ResultSet rs = session.execute(statementBuilder.build());
         List<PersistentToken> persistentTokens = new ArrayList<>();
         rs.all().stream()
             .map(row -> row.getString("persistent_token_series"))
-            .map(token -> mapper.get(token))
+            .map(token -> persistentTokenDao.get(token))
             .forEach(persistentTokens::add);
 
         return persistentTokens;
@@ -140,25 +171,42 @@ public class PersistentTokenRepository {
         if (violations != null && !violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
         }
-        BatchStatement batch = new BatchStatement();
-        batch.add(insertPersistentTokenStmt.bind()
+        BatchStatementBuilder batch = BatchStatement.builder(DefaultBatchType.LOGGED);
+        batch.addStatement(insertPersistentTokenStmt.bind()
             .setString("series", token.getSeries())
-            .setTimestamp("token_date", token.getTokenDate())
+            .setInstant("token_date", token.getTokenDate())
             .setString("user_agent", token.getUserAgent())
             .setString("token_value", token.getTokenValue())
             .setString("login", token.getLogin())
             .setString("user_id", token.getUserId())
             .setString("ip_address", token.getIpAddress()));
-        batch.add(insertPersistentTokenSeriesByUserIdStmt.bind()
+        batch.addStatement(insertPersistentTokenSeriesByUserIdStmt.bind()
             .setString("user_id", token.getUserId())
             .setString("persistent_token_series", token.getSeries()));
-        session.execute(batch);
+        session.execute(batch.build());
     }
 
     public void delete(PersistentToken token) {
-        mapper.delete(token);
+        persistentTokenDao.delete(token);
         session.execute(deletePersistentTokenSeriesByUserIdStmt.bind()
             .setString("user_id", token.getUserId())
             .setString("persistent_token_series", token.getSeries()));
     }
-}<% } %>
+}
+
+@Mapper
+interface PersistentTokenMapper {
+    @DaoFactory
+    PersistentTokenDao persistentTokenDao(@DaoKeyspace CqlIdentifier keyspace);
+}
+
+@Dao
+interface PersistentTokenDao {
+
+    @Select
+    PersistentToken get(String presentedSeries);
+
+    @Delete
+    void delete(PersistentToken token);
+}
+<%_ } _%>
