@@ -199,7 +199,7 @@ limitations under the License.
     "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
     "serve": "<%= clientPackageManager %> run start",
     "build": "<%= clientPackageManager %> run webpack:prod",
-    "test": "<%= clientPackageManager %> run lint && jest --coverage --logHeapUsage -w=2 --config src/test/javascript/jest.conf.js",
+    "test": "<%= clientPackageManager %> run lint && jest --coverage --logHeapUsage -w=2 --config <%= CLIENT_TEST_SRC_DIR %>jest.conf.js",
     "test:watch": "<%= clientPackageManager %> run test -- --watch",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --hot --port=9060 --watch-content-base --env.stats=minimal",
     "webpack:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --hot --port=9060 --watch-content-base --profile --progress --env.stats=normal",
