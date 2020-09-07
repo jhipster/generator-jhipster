@@ -37,16 +37,6 @@ const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 
 let useBlueprints;
 
-const getNewElements = (currentElements, previousElements) =>
-    currentElements.filter(
-        currentElement => !previousElements.find(previousElement => JSON.stringify(previousElement) === JSON.stringify(currentElement))
-    );
-
-const getRemovedElements = (currentElements, previousElements) =>
-    previousElements.filter(
-        previousElement => !currentElements.find(currentElement => JSON.stringify(currentElement) === JSON.stringify(previousElement))
-    );
-
 class EntityGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
@@ -287,7 +277,14 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 }
 
                 // Structure for prompts.
-                this.entityStorage.defaults({ fields: [], relationships: [] });
+                this.entityStorage.defaults({
+                    fields: [],
+                    newFields: [],
+                    removedFields: [],
+                    relationships: [],
+                    newRelationships: [],
+                    removedRelationships: []
+                });
 
                 if (!context.useConfigurationFile) {
                     this.log(`\nThe entity ${entityName} is being created.\n`);
@@ -369,6 +366,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.info(`changelogDate is missing in .jhipster/${this.entityConfig.name}.json, using ${currentDate} as fallback`);
                     context.changelogDate = this.entityConfig.changelogDate = currentDate;
                 }
+
+                const updateDate = this.dateFormatForLiquibase();
+                context.newChangelogDate = this.entityConfig.newChangelogDate = updateDate;
             },
 
             configureFields() {
@@ -601,7 +601,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         }
         return true;
     }
-
+F
     /**
      * Validate the entityTableName
      * @return {true|string} true for a valid value or error message.

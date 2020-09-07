@@ -25,6 +25,16 @@ const { parseLiquibaseChangelogDate } = require('./liquibase');
 const { entityDefaultConfig } = require('../generators/generator-defaults');
 const { stringHashCode } = require('../generators/utils');
 
+const getNewElements = (currentElements, previousElements) =>
+    currentElements.filter(
+        currentElement => !previousElements.find(previousElement => JSON.stringify(previousElement) === JSON.stringify(currentElement))
+    );
+
+const getRemovedElements = (currentElements, previousElements) =>
+    previousElements.filter(
+        previousElement => !currentElements.find(currentElement => JSON.stringify(currentElement) === JSON.stringify(previousElement))
+    );
+
 const BASE_TEMPLATE_DATA = {
     skipUiGrouping: false,
     haveFieldWithJavadoc: false,
@@ -50,11 +60,6 @@ const BASE_TEMPLATE_DATA = {
     fieldsContainManyToOne: false,
     fieldsContainEmbedded: false,
     fieldsIsReactAvField: false,
-
-    newFields: [],
-    removedFields: [],
-    newRelationships: [],
-    removedRelationships: [],
 
     get enums() {
         return [];
@@ -149,8 +154,6 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     entityWithConfig.i18nToLoad.push(entityWithConfig.entityInstance);
     entityWithConfig.i18nKeyPrefix = `${entityWithConfig.angularAppName}.${entityWithConfig.entityTranslationKey}`;
 
-    entityWithConfig.newChangelogDate = this.dateFormatForLiquibase();
-
     if (entityWithConfig.currentEntityState && entityWithConfig.currentEntityState.fields && entityWithConfig.currentEntityState.fields.length > 0) {
         entityWithConfig.newFields = getNewElements(entityWithConfig.fields, entityWithConfig.currentEntityState.fields);
         entityWithConfig.removedFields = getRemovedElements(entityWithConfig.fields, entityWithConfig.currentEntityState.fields);
@@ -178,7 +181,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
             entityWithConfig.newChangelog = true;
         }
     }
-    
+
     const hasUserField = entityWithConfig.relationships.some(relationship => generator.isBuiltInUserEntity(relationship.otherEntityName));
     entityWithConfig.saveUserSnapshot =
         entityWithConfig.applicationType === 'microservice' &&

@@ -140,7 +140,16 @@ function updateEntities(subFolder) {
 function writeEntities(subFolder) {
     configuration.entities.forEach(entity => {
         const filePath = path.join(subFolder, toFilePath(entity.name));
-        fs.writeFileSync(filePath, JSON.stringify(entity, null, 2).concat('\n'));
+
+        const entityToExtract = { ...entity };
+
+        delete entityToExtract.newFields;
+        delete entityToExtract.removedFields;
+        delete entityToExtract.newRelationships;
+        delete entityToExtract.removedRelationships;
+        delete entityToExtract.newChangelogDate;
+
+        fs.writeFileSync(filePath, JSON.stringify(entityToExtract, null, 2).concat('\n'));
     });
 }
 

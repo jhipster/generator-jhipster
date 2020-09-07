@@ -182,7 +182,7 @@ function askForFieldsToRemove() {
         if (props.confirmRemove) {
             this.log(chalk.red(`\nRemoving fields: ${props.fieldsToRemove}\n`));
             const fields = this.entityConfig.fields;
-            const removedFields = context.removedFields;
+            const removedFields = this.entityConfig.removedFields;
             for (let i = fields.length - 1; i >= 0; i -= 1) {
                 const field = this.entityConfig.fields[i];
                 if (props.fieldsToRemove.filter(val => val === field.fieldName).length > 0) {
@@ -191,7 +191,7 @@ function askForFieldsToRemove() {
                 }
             }
             this.entityConfig.fields = fields;
-            context.removedFields = removedFields;
+            this.entityConfig.removedFields = removedFields;
         }
     });
 }
@@ -244,7 +244,7 @@ function askForRelationsToRemove() {
         if (props.confirmRemove) {
             this.log(chalk.red(`\nRemoving relationships: ${props.relsToRemove}\n`));
             const relationships = this.entityConfig.relationships;
-            const removedRelationships = context.removedRelationships;
+            const removedRelationships = this.entityConfig.removedRelationships;
             for (let i = relationships.length - 1; i >= 0; i -= 1) {
                 const rel = relationships[i];
                 if (props.relsToRemove.filter(val => val === `${rel.relationshipName}:${rel.relationshipType}`).length > 0) {
@@ -253,7 +253,7 @@ function askForRelationsToRemove() {
                 }
             }
             this.entityConfig.relationships = relationships;
-            context.removedRelationships = removedRelationships;
+            this.entityConfig.removedRelationships = removedRelationships;
         }
     });
 }
@@ -884,11 +884,11 @@ function askForField() {
                 fieldValidateRulesMaxbytes: props.fieldValidateRulesMaxbytes,
             };
 
-            if (context.newChangelog) {
-                context.newFields = context.newFields.concat(field);
-            }
-
             this.entityConfig.fields = this.entityConfig.fields.concat(field);
+
+            if (context.newChangelog) {
+                this.entityConfig.newFields = this.entityConfig.newFields.concat(field);
+            }
         }
         logFieldsAndRelationships.call(this);
         if (props.fieldAdd && !context.testMode) {
@@ -1079,11 +1079,11 @@ function askForRelationship() {
                 relationship.otherEntityRelationshipName = _.lowerFirst(name);
             }
 
-            if (context.newChangelog) {
-                context.newRelationships = context.newRelationships.concat(relationship);
-            }
-
             this.entityConfig.relationships = this.entityConfig.relationships.concat(relationship);
+
+            if (context.newChangelog) {
+                this.entityConfig.newRelationships = this.entityConfig.newRelationships.concat(relationship);
+            }
         }
         logFieldsAndRelationships.call(this);
         if (props.relationshipAdd && !context.testMode) {
