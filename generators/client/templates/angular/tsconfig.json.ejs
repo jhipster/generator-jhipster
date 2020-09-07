@@ -29,11 +29,11 @@
     "noFallthroughCasesInSwitch": true,
     "suppressImplicitAnyIndexErrors": true,
     "skipLibCheck": true,
-    "outDir": "target/classes/static/app",
+    "outDir": "<%= DIST_DIR %>app",
     "lib": ["es7", "dom"],
     "baseUrl": "./",
     "paths": {
-      "app/*": ["src/main/webapp/app/*"]
+      "app/*": ["<%= CLIENT_MAIN_SRC_DIR %>app/*"]
     },
     "importHelpers": true,
     "downlevelIteration": true,
@@ -46,6 +46,6 @@
     "strictTemplates": true,
     "preserveWhitespaces": true
   },
-  "exclude": ["src/test/javascript/cypress"]
+  "exclude": ["<%= CLIENT_TEST_SRC_DIR %>cypress"]
 }
 
