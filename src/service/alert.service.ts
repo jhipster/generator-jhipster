@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { Injectable, SecurityContext, Optional } from '@angular/core';
+import { Injectable, SecurityContext, Optional, NgZone } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -49,6 +49,7 @@ export class JhiAlertService {
     constructor(
         private sanitizer: DomSanitizer,
         private configService: JhiConfigService,
+        private ngZone: NgZone,
         @Optional() private translateService: TranslateService
     ) {
         const config = this.configService.getConfig();
@@ -130,9 +131,15 @@ export class JhiAlertService {
         }
         const alert = this.factory(alertOptions);
         if (alertOptions.timeout && alertOptions.timeout > 0) {
-            setTimeout(() => {
-                this.closeAlert(alertOptions.id, extAlerts);
-            }, alertOptions.timeout);
+             // Workaround protractor waiting for setTimeout.
+             // Reference https://www.protractortest.org/#/timeouts
+             this.ngZone.runOutsideAngular(() => {
+                  setTimeout(() => {
+                      this.ngZone.run(() => {
+                          this.closeAlert(alertOptions.id, extAlerts);
+                      });
+                  }, alertOptions.timeout);
+             });
         }
         return alert;
     }
