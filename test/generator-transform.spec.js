@@ -25,10 +25,6 @@ describe('JHipster generator', () => {
                 assert.fileContent('.prettierrc', /tabWidth: 10/);
             });
 
-            it('uses custom prettier formatting to json file', () => {
-                assert.fileContent('tsconfig.base.json', / {10}"compilerOptions":/);
-            });
-
             it('uses custom prettier formatting to java file', () => {
                 assert.fileContent('src/main/java/com/mycompany/myapp/JhipsterApp.java', / {10}public JhipsterApp/);
             });
