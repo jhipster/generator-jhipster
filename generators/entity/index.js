@@ -528,6 +528,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.entityStorage.delete('newRelationships');
                 this.entityStorage.delete('removedRelationships');
                 this.entityStorage.delete('newChangelogDate');
+                this.entityStorage.delete('currentState');
 
                 const context = this.context;
                 const entityName = context.name;
