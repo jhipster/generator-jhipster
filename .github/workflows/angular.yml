@@ -28,6 +28,8 @@ on:
             - '*'
         paths-ignore:
             - 'package*.json'
+            - 'generators/client/templates/react/**'
+            - 'generators/client/templates/vue/**'
 env:
     JHI_RUN_APP: 1
     JHI_JDK: 11

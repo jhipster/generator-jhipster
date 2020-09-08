@@ -320,7 +320,17 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
                         );
                         break;
                     case REACT:
+                        this.replacePackageJsonVersions(
+                            'VERSION_MANAGED_BY_CLIENT_REACT',
+                            this.fetchFromInstalledJHipster('client/templates/react/package.json')
+                        );
+                        break;
                     case VUE:
+                        this.replacePackageJsonVersions(
+                            'VERSION_MANAGED_BY_CLIENT_VUE',
+                            this.fetchFromInstalledJHipster('client/templates/vue/package.json')
+                        );
+                        break;
                     default:
                     // do nothing by default
                 }
