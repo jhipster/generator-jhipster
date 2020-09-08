@@ -482,9 +482,7 @@ function writeFiles() {
                 this.writeFilesToDisk(commonFiles, this, false, this.fetchFromInstalledJHipster(cypressTemplatesDir));
             }
 
-            if (this.clientFramework !== VUE) {
-                addEnumerationFiles(this, templatesDir, clientMainSrcDir);
-            }
+            addEnumerationFiles(this, templatesDir, clientMainSrcDir);
 
             if (!this.embedded) {
                 this.addEntityToModule(
