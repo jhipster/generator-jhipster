@@ -46,16 +46,7 @@ function writeEntityConfig(entity, basePath) {
     const entitiesPath = path.join(basePath, JHIPSTER_CONFIG_DIR);
     createFolderIfItDoesNotExist(entitiesPath);
     const filePath = path.join(entitiesPath, `${_.upperFirst(entity.name)}.json`);
-
-    const entityToExtract = { ...entity };
-
-    delete entityToExtract.newFields;
-    delete entityToExtract.removedFields;
-    delete entityToExtract.newRelationships;
-    delete entityToExtract.removedRelationships;
-    delete entityToExtract.newChangelogDate;
-
-    fs.writeFileSync(filePath, JSON.stringify(entityToExtract, null, 2).concat('\n'));
+    fs.writeFileSync(filePath, JSON.stringify(entity, null, 2).concat('\n'));
 }
 
 function writeApplicationConfig(applicationWithEntities, basePath) {

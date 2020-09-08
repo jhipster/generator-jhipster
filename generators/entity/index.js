@@ -523,6 +523,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
     _writing() {
         return {
             cleanup() {
+                this.entityStorage.delete('newFields');
+                this.entityStorage.delete('removedFields');
+                this.entityStorage.delete('newRelationships');
+                this.entityStorage.delete('removedRelationships');
+                this.entityStorage.delete('newChangelogDate');
+
                 const context = this.context;
                 const entityName = context.name;
                 if (this.isJhipsterVersionLessThan('5.0.0')) {

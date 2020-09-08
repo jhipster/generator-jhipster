@@ -27,6 +27,8 @@
     <!--
         Updated the entity <%= entityClass %>.
     -->
+    <%_ if ((newFields && newFields.length > 0) || (newRelationships && newRelationships.length > 0)
+            || (removedFields && removedFields.length > 0) || (removedRelationships && removedRelationships.length > 0)) { _%>
     <changeSet id="<%= newChangelogDate %>-1" author="jhipster">
         <%_ if (newFields && newFields.length > 0) { _%>
             <%_ if (typeof javadoc == 'undefined') { _%>
@@ -192,6 +194,7 @@
         <%_ }
         } _%>
     </changeSet>
+    <%_ } _%>
 
     <%_ if (newRelationships && newRelationships.length > 0) { _%>
     <changeSet id="<%= newChangelogDate %>-1-relations" author="jhipster">
