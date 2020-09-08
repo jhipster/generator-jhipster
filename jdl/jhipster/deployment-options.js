@@ -38,7 +38,6 @@ const Options = {
     },
     monitoring: {
         no: 'no',
-        elk: 'elk',
         prometheus: 'prometheus',
     },
     directoryPath: '../',

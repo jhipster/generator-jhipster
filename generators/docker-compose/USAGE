@@ -10,8 +10,3 @@ Example:
     If using Service discovery and Configuration:
         jhipster-registry.yml or consul.yml
         central-server-config/application.yml
-
-    If using ELK monitoring:
-        elk.yml
-        log-conf/logstash.conf
-        log-data/

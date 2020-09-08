@@ -104,15 +104,6 @@ module.exports = class extends BaseDockerGenerator {
                         portIndex++;
                     }
 
-                    // Add monitoring configuration for monolith directly in the docker-compose file as they can't get them from the config server
-                    if (appConfig.applicationType === 'monolith' && this.monitoring === 'elk') {
-                        yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=true');
-                        yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash');
-                        yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=true');
-                        yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_REPORT_FREQUENCY=60');
-                        yamlConfig.environment.push('MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=false');
-                    }
-
                     if (appConfig.applicationType === 'monolith' && this.monitoring === 'prometheus') {
                         yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=false');
                         yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=false');

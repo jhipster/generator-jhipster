@@ -188,20 +188,6 @@ spec:
         - name: KAFKA_PRODUCER_VALUE_DESERIALIZER
           value: 'org.apache.kafka.common.serialization.StringDeserializer'
         <%_ } _%>
-        <%_ if (monitoring === 'elk') { _%>
-        - name: JHIPSTER_METRICS_LOGS_ENABLED
-          value: 'true'
-        - name: JHIPSTER_LOGGING_LOGSTASH_ENABLED
-          value: 'true'
-        - name: JHIPSTER_LOGGING_LOGSTASH_HOST
-          value: jhipster-logstash
-            <%_ if (deploymentApplicationType === 'microservice') { _%>
-        - name: SPRING_ZIPKIN_ENABLED
-          value: "true"
-        - name: SPRING_ZIPKIN_BASE_URL
-          value: http://jhipster-zipkin
-            <%_ } _%>
-        <%_ } _%>
         <%_ if (monitoring === 'prometheus') { _%>
         - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
           value: 'true'

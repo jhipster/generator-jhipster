@@ -52,7 +52,6 @@ function askForStorageType() {
         if (
             appConfig.prodDatabaseType !== 'no' ||
             appConfig.searchEngine === 'elasticsearch' ||
-            appConfig.monitoring === 'elk' ||
             appConfig.monitoring === 'prometheus'
         ) {
             storageEnabled = true;

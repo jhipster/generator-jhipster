@@ -158,9 +158,6 @@ module.exports = class extends BaseDockerGenerator {
         this.log(`  ${chalk.cyan(`${this.directoryPath}ocp/ocp-apply.sh`)}`);
         this.log('OR');
         this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/scc-config.yml | oc apply -f -`)}`);
-        if (this.monitoring === 'elk') {
-            this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/monitoring/jhipster-monitoring.yml | oc apply -f -`)}`);
-        }
         if (this.monitoring === 'prometheus') {
             this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/monitoring/jhipster-metrics.yml | oc apply -f -`)}`);
         }

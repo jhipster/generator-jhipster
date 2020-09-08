@@ -9,13 +9,6 @@ const expectedFiles = {
     jhgate: ['./jhgate-k8s/jhgate-deployment.yml', './jhgate-k8s/jhgate-mysql.yml', './jhgate-k8s/jhgate-service.yml'],
     jhgateingress: ['./jhgate-k8s/jhgate-ingress.yml'],
     customnamespace: ['./namespace.yml'],
-    jhconsole: [
-        './console-k8s/jhipster-console.yml',
-        './console-k8s/jhipster-elasticsearch.yml',
-        './console-k8s/jhipster-logstash.yml',
-        './console-k8s/jhipster-dashboard-console.yml',
-        './console-k8s/jhipster-zipkin.yml',
-    ],
     msmysql: ['./msmysql-k8s/msmysql-deployment.yml', './msmysql-k8s/msmysql-mysql.yml', './msmysql-k8s/msmysql-service.yml'],
     mspsql: [
         './mspsql-k8s/mspsql-deployment.yml',
@@ -136,7 +129,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
         });
     });
 
-    describe('mysql microservice with custom namespace and jhipster-console (with zipkin)', () => {
+    describe('mysql microservice with custom namespace', () => {
         before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
@@ -151,7 +144,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'mynamespace',
-                    monitoring: 'elk',
                     jhipsterConsole: true,
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
@@ -165,9 +157,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
-        });
-        it('creates expected jhipster-console files', () => {
-            assert.file(expectedFiles.jhconsole);
         });
         it('creates expected namespace file', () => {
             assert.file(expectedFiles.customnamespace);

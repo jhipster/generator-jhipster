@@ -70,12 +70,6 @@ const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:7.6.
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
 const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;
 const DOCKER_SONAR = 'sonarqube:8.4.2-community';
-const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v4.1.0';
-const DOCKER_JHIPSTER_CURATOR = 'jhipster/jhipster-curator:v4.1.0';
-const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v4.1.0';
-const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v4.1.0';
-const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v4.1.0';
-const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v4.1.0';
 const DOCKER_TRAEFIK = 'traefik:1.7.26'; // waiting for https://github.com/jhipster/generator-jhipster/issues/11198
 const DOCKER_CONSUL = 'consul:1.8.3';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.3.1';
@@ -358,12 +352,6 @@ const constants = {
     DOCKER_KAFKA,
     DOCKER_ZOOKEEPER,
     DOCKER_SONAR,
-    DOCKER_JHIPSTER_CONSOLE,
-    DOCKER_JHIPSTER_CURATOR,
-    DOCKER_JHIPSTER_ELASTICSEARCH,
-    DOCKER_JHIPSTER_LOGSTASH,
-    DOCKER_JHIPSTER_IMPORT_DASHBOARDS,
-    DOCKER_JHIPSTER_ZIPKIN,
     DOCKER_TRAEFIK,
     DOCKER_CONSUL,
     DOCKER_CONSUL_CONFIG_LOADER,

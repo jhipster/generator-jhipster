@@ -91,7 +91,6 @@ describe('JDLDeployment', () => {
                     appsFolders: ['foo', 'bar'],
                     directoryPath: '../parent',
                     gatewayType: 'zuul',
-                    monitoring: 'elk',
                     dockerRepositoryName: 'test',
                 };
                 deployment = new JDLDeployment(args);

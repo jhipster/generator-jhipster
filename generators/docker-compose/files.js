@@ -70,14 +70,6 @@ function writeFiles() {
             }
         },
 
-        writeElkFiles() {
-            if (this.monitoring !== 'elk') return;
-
-            this.template('jhipster-console.yml.ejs', 'jhipster-console.yml');
-            this.template('log-conf/logstash.conf.ejs', 'log-conf/logstash.conf');
-            this.template('log-data/.gitignore.ejs', 'log-data/.gitignore');
-        },
-
         writePrometheusFiles() {
             if (this.monitoring !== 'prometheus') return;
 
