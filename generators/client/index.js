@@ -308,10 +308,16 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         return {
             packageJson() {
                 if (this.skipClient) return;
-                this.replacePackageJsonVersions('VERSION_MANAGED_BY_CLIENT_COMMON', this.templatePath('common', 'package.json'));
+                this.replacePackageJsonVersions(
+                    'VERSION_MANAGED_BY_CLIENT_COMMON',
+                    this.fetchFromInstalledJHipster('client/templates/common/package.json')
+                );
                 switch (this.clientFramework) {
                     case ANGULAR:
-                        this.replacePackageJsonVersions('VERSION_MANAGED_BY_CLIENT_ANGULAR', this.templatePath('angular', 'package.json'));
+                        this.replacePackageJsonVersions(
+                            'VERSION_MANAGED_BY_CLIENT_ANGULAR',
+                            this.fetchFromInstalledJHipster('client/templates/angular/package.json')
+                        );
                         break;
                     case REACT:
                     case VUE:
