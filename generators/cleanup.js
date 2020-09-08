@@ -22,7 +22,7 @@ const { languageSnakeCase, languageToJavaLanguage } = require('./utils');
 
 const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR } = constants;
 
-const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 module.exports = {
     cleanupOldFiles,
