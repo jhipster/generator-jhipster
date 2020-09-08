@@ -43,12 +43,12 @@ export class AlertErrorComponent implements OnDestroy {
     httpErrorListener: Subscription;
 
     constructor(private alertService: JhiAlertService, private eventManager: JhiEventManager<% if (enableTranslation) { %>, translateService: TranslateService<% } %>) {
-        this.errorListener = eventManager.subscribe('<%= angularAppName %>.error', (response: JhiEventWithContent<AlertError>) => {
+        this.errorListener = eventManager.subscribe('<%= frontendAppName %>.error', (response: JhiEventWithContent<AlertError>) => {
             const errorResponse = response.content;
             this.addErrorAlert(errorResponse.message<% if (enableTranslation) { %>, errorResponse.key, errorResponse.params<% } %>);
         });
 
-        this.httpErrorListener = eventManager.subscribe('<%= angularAppName %>.httpError', (response: JhiEventWithContent<HttpErrorResponse>) => {
+        this.httpErrorListener = eventManager.subscribe('<%= frontendAppName %>.httpError', (response: JhiEventWithContent<HttpErrorResponse>) => {
             const httpErrorResponse = response.content;
             switch (httpErrorResponse.status) {
                 // connection refused, server not reachable
@@ -84,7 +84,7 @@ export class AlertErrorComponent implements OnDestroy {
                             }
                             // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
                             const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
-                            const fieldName = <% if (enableTranslation) { %>translateService.instant('<%= angularAppName %>.' +
+                            const fieldName = <% if (enableTranslation) { %>translateService.instant('<%= frontendAppName %>.' +
                                 fieldError.objectName + '.' + convertedField)<% } else { %>convertedField.charAt(0).toUpperCase() +
                                 convertedField.slice(1)<% } %>;
                             this.addErrorAlert(

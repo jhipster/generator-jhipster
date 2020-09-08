@@ -20,7 +20,7 @@ let helpBlocks = 0; %>
 {
     <% // Male (default) variant
     if (entityI18nVariant !== 'female') { %>
-    "<%= angularAppName %>": {
+    "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
@@ -59,7 +59,7 @@ let helpBlocks = 0; %>
     }<%     } %>
     <% } else {
       // Female variant %>
-    "<%= angularAppName %>": {
+    "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",

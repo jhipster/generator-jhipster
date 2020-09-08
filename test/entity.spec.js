@@ -1202,20 +1202,17 @@ describe('JHipster generator for entity', () => {
                 });
 
                 it('creates reproducible liquibase data', () => {
-                    assert.fileContent(
-                        `${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/foo.csv`,
-                        /1;Qatari Rial Diverse Illinois;24849;"860"/
-                    );
+                    assert.fileContent(`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/foo.csv`, /1;Qatari salmon Monitored;65526;"6"/);
                 });
 
                 it('creates reproducible backend test', () => {
                     assert.fileContent(
                         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`,
-                        /DEFAULT_NUMBER_PATTERN_REQUIRED = "1511"/
+                        /DEFAULT_NUMBER_PATTERN_REQUIRED = "66225"/
                     );
                     assert.fileContent(
                         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`,
-                        /UPDATED_NUMBER_PATTERN_REQUIRED = "1126"/
+                        /UPDATED_NUMBER_PATTERN_REQUIRED = "24"/
                     );
                 });
             });

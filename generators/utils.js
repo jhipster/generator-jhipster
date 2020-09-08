@@ -468,11 +468,11 @@ function getEnumInfo(field, clientRootFolder) {
  * @Deprecated
  * Build an enum object, deprecated use getEnumInfoInstead
  * @param {any} field : entity field
- * @param {string} angularAppName
+ * @param {string} frontendAppName
  * @param {string} packageName
  * @param {string} clientRootFolder
  */
-function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
+function buildEnumInfo(field, frontendAppName, packageName, clientRootFolder) {
     const fieldType = field.fieldType;
     field.enumInstance = _.lowerFirst(fieldType);
     const enums = field.fieldValues.replace(/\s/g, '').split(',');
@@ -483,7 +483,7 @@ function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
         enumInstance: field.enumInstance,
         enums,
         enumsWithCustomValue,
-        angularAppName,
+        frontendAppName,
         packageName,
         clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
     };
@@ -707,7 +707,7 @@ function isGitInstalled(callback) {
  */
 function vueReplaceTranslation(generator, files) {
     for (let i = 0; i < files.length; i++) {
-        const filePath = `${constants.CLIENT_MAIN_SRC_DIR}${files[i]}`;
+        const filePath = `${generator.CLIENT_MAIN_SRC_DIR}${files[i]}`;
         // Match the below attributes and the $t() method
         const regexp = ['v-text', 'v-bind:placeholder', 'v-html', 'v-bind:title', 'v-bind:label', 'v-bind:value', 'v-bind:html']
             .map(s => `${s}="\\$t\\(.*?\\)"`)
@@ -726,7 +726,7 @@ function vueReplaceTranslation(generator, files) {
 function vueAddPageToRouterImport(generator, pageName, pageFolderName, pageFilename = pageFolderName) {
     this.rewriteFile(
         {
-            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
+            file: `${generator.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
             needle: 'jhipster-needle-add-entity-to-router-import',
             splicable: [
                 generator.stripMargin(
@@ -743,7 +743,7 @@ function vueAddPageToRouterImport(generator, pageName, pageFolderName, pageFilen
 function vueAddPageToRouter(generator, pageName, pageFilename) {
     this.rewriteFile(
         {
-            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
+            file: `${generator.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
             needle: 'jhipster-needle-add-entity-to-router',
             splicable: [
                 generator.stripMargin(
@@ -764,7 +764,7 @@ function vueAddPageToRouter(generator, pageName, pageFilename) {
 function vueAddPageServiceToMainImport(generator, pageName, pageFolderName, pageFilename = pageFolderName) {
     this.rewriteFile(
         {
-            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+            file: `${generator.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
             needle: 'jhipster-needle-add-entity-service-to-main-import',
             splicable: [
                 generator.stripMargin(
@@ -780,7 +780,7 @@ function vueAddPageServiceToMainImport(generator, pageName, pageFolderName, page
 function vueAddPageServiceToMain(generator, pageName, pageInstance) {
     this.rewriteFile(
         {
-            file: `${constants.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+            file: `${generator.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
             needle: 'jhipster-needle-add-entity-service-to-main',
             splicable: [
                 generator.stripMargin(
@@ -796,7 +796,7 @@ function vueAddPageServiceToMain(generator, pageName, pageInstance) {
 function vueAddPageProtractorConf(generator) {
     this.rewriteFile(
         {
-            file: `${constants.CLIENT_TEST_SRC_DIR}/protractor.conf.js`,
+            file: `${generator.CLIENT_TEST_SRC_DIR}/protractor.conf.js`,
             needle: 'jhipster-needle-add-protractor-tests',
             splicable: [generator.stripMargin("'./e2e/pages/**/*.spec.ts',")],
         },

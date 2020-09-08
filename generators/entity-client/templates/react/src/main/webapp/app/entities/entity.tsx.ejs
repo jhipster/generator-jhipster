@@ -43,6 +43,10 @@ import {
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+<%_ if (fieldsContainDuration) { _%>
+import { DurationFormat } from 'app/shared/DurationFormat';
+<%_ } _%>
+
 import { IRootState } from 'app/shared/reducers';
 import {
   <%_ if (searchEngine !== false) { _%>
@@ -316,10 +320,12 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                       {<%= entityInstance %>.<%= fields[idx].fieldName %> ? 'true' : 'false'}
                     <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
                       {<%= entityInstance %>.<%= fieldName %> ? <TextFormat type="date" value={<%= entityInstance %>.<%= fieldName %>} format={APP_DATE_FORMAT} />: null}
+                    <%_ } else if (fieldType === 'Duration') { _%>
+                      {<%= entityInstance %>.<%= fieldName %> ? <DurationFormat value={<%= entityInstance %>.<%= fieldName %>} />: null}
                     <%_ } else if (fieldType === 'LocalDate') { _%>
                       {<%= entityInstance %>.<%= fieldName %> ? <TextFormat type="date" value={<%= entityInstance %>.<%= fieldName %>} format={APP_LOCAL_DATE_FORMAT} />: null}
                     <%_ } else if (fieldIsEnum && enableTranslation) { _%>
-                      <Translate contentKey={`<%= angularAppName %>.<%= fieldType %>.${<%= entityInstance %>.<%= fieldName %>}`} />
+                      <Translate contentKey={`<%= frontendAppName %>.<%= fieldType %>.${<%= entityInstance %>.<%= fieldName %>}`} />
                     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
                       <%_
                         // blobFields

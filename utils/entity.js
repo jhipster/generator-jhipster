@@ -152,7 +152,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
 
     entityWithConfig.differentTypes.push(entityWithConfig.entityClass);
     entityWithConfig.i18nToLoad.push(entityWithConfig.entityInstance);
-    entityWithConfig.i18nKeyPrefix = `${entityWithConfig.angularAppName}.${entityWithConfig.entityTranslationKey}`;
+    entityWithConfig.i18nKeyPrefix = `${entityWithConfig.frontendAppName}.${entityWithConfig.entityTranslationKey}`;
 
     if (entityWithConfig.currentEntityState && entityWithConfig.currentEntityState.fields && entityWithConfig.currentEntityState.fields.length > 0) {
         entityWithConfig.newFields = getNewElements(entityWithConfig.fields, entityWithConfig.currentEntityState.fields);

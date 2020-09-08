@@ -19,7 +19,7 @@
                         let fieldInputClass = 'form-control';
                         let ngModelOption = '';
                         const translationKey = `${i18nKeyPrefix}.${fieldName}`;
-                        if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) {
+                        if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
                             fieldInputType = 'number';
                         } else if (fieldType === 'LocalDate') {
                             fieldInputType = 'date';
@@ -36,7 +36,7 @@
                         <label class="form-control-label" v-text="$t('<%= translationKey %>')" for="<%= entityFileName %>-<%= fieldName %>"><%= fieldNameHumanized %></label>
                         <%_ if (fields[idx].fieldIsEnum) { _%>
                         <select class="form-control" name="<%= fieldName %>" :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model" id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %>>
-                        <%_ const enumPrefix = angularAppName + '.'+ fieldType;
+                        <%_ const enumPrefix = frontendAppName + '.'+ fieldType;
                             const values = fields[idx].enumValues;
                             for (key in values) {
                                 const enumValue = values[key]; _%>

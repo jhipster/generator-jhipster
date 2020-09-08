@@ -48,7 +48,7 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
  *
  * The method signatures in private API can be changed without a major version change.
  */
-module.exports = class extends Generator {
+module.exports = class JHipsterBasePrivateGenerator extends Generator {
     constructor(args, opts) {
         super(args, opts);
         // expose lodash to templates
@@ -1367,7 +1367,7 @@ module.exports = class extends Generator {
             dbcUrl = `${protocol}:h2:file:${options.localDirectory}/${options.databaseName}`;
             extraOptions = ';DB_CLOSE_DELAY=-1';
         } else if (databaseType === 'h2Memory') {
-            dbcUrl = `${protocol}:h2:mem:${options.databaseName}`;
+            dbcUrl = `${protocol}:h2:mem:${protocol === 'r2dbc' ? '///' : ''}${options.databaseName}`;
             extraOptions = ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE';
         } else {
             throw new Error(`${databaseType} databaseType is not supported`);

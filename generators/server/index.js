@@ -31,7 +31,7 @@ const { defaultConfig } = require('../generator-defaults');
 
 let useBlueprints;
 
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -134,6 +134,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
                 this.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
                 this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
+                this.HIBERNATE_VERSION = constants.HIBERNATE_VERSION;
                 this.JACOCO_VERSION = constants.JACOCO_VERSION;
 
                 this.KAFKA_VERSION = constants.KAFKA_VERSION;
@@ -216,24 +217,44 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
-    _default() {
+    _composing() {
         return {
             composeLanguages() {
                 // We don't expose client/server to cli, composing with languages is used for test purposes.
                 if (this.jhipsterConfig.enableTranslation === false) return;
                 this.composeWithJHipster('languages', true);
             },
+        };
+    }
 
+    get composing() {
+        if (useBlueprints) return;
+        return this._composing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _loading() {
+        return {
             loadSharedConfig() {
                 this.loadAppConfig();
                 this.loadClientConfig();
                 this.loadServerConfig();
                 this.loadTranslationConfig();
             },
+        };
+    }
 
-            setupSharedOptions() {
+    get loading() {
+        if (useBlueprints) return;
+        return this._loading();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _preparing() {
+        return {
+            prepareForTemplates() {
                 // Application name modified, using each technology's conventions
-                this.angularAppName = this.getAngularAppName();
+                this.frontendAppName = this.getFrontendAppName();
                 this.camelizedBaseName = _.camelCase(this.baseName);
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.lowercaseBaseName = this.baseName.toLowerCase();
@@ -274,6 +295,18 @@ module.exports = class extends BaseBlueprintGenerator {
                     }
                 }
             },
+        };
+    }
+
+    get preparing() {
+        if (useBlueprints) return;
+        return this._preparing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return {
+            ...super._missingPreDefault(),
 
             insight() {
                 statistics.sendSubGenEvent('generator', 'server', {
@@ -303,7 +336,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
     // Public API method used by the getter and also by Blueprints
     _writing() {
-        return writeFiles();
+        return { ...writeFiles(), ...super._missingPostWriting() };
     }
 
     get writing() {

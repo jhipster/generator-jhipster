@@ -26,17 +26,17 @@ limitations under the License.
     "node_modules"
   ],
   "dependencies": {
-    "@angular/common": "10.0.14",
-    "@angular/compiler": "10.0.14",
-    "@angular/core": "10.0.14",
-    "@angular/forms": "10.0.14",
-    "@angular/localize": "10.0.14",
-    "@angular/platform-browser": "10.0.14",
-    "@angular/platform-browser-dynamic": "10.0.14",
-    "@angular/router": "10.0.14",
-    "@fortawesome/angular-fontawesome": "0.6.1",
-    "@fortawesome/fontawesome-svg-core": "1.2.29",
-    "@fortawesome/free-solid-svg-icons": "5.13.1",
+    "@angular/common": "10.1.0",
+    "@angular/compiler": "10.1.0",
+    "@angular/core": "10.1.0",
+    "@angular/forms": "10.1.0",
+    "@angular/localize": "10.1.0",
+    "@angular/platform-browser": "10.1.0",
+    "@angular/platform-browser-dynamic": "10.1.0",
+    "@angular/router": "10.1.0",
+    "@fortawesome/angular-fontawesome": "0.7.0",
+    "@fortawesome/fontawesome-svg-core": "1.2.30",
+    "@fortawesome/free-solid-svg-icons": "5.14.0",
     "@ng-bootstrap/ng-bootstrap": "7.0.0",
     "@ngx-translate/core": "12.1.2",
     "@ngx-translate/http-loader": "5.0.0",
@@ -49,7 +49,7 @@ limitations under the License.
     "ngx-cookie-service": "3.0.4",
     "ngx-infinite-scroll": "9.0.0",
     "ngx-webstorage": "5.0.0",
-    "rxjs": "6.6.2",
+    "rxjs": "6.6.3",
     "swagger-ui-dist": "3.25.1",
     <%_ if (websocket === 'spring-websocket') { _%>
     "sockjs-client": "1.4.0",
@@ -62,8 +62,8 @@ limitations under the License.
     "zone.js": "0.10.3"
   },
   "devDependencies": {
-    "@angular/cli": "10.0.8",
-    "@angular/compiler-cli": "10.0.14",
+    "@angular/cli": "10.1.0",
+    "@angular/compiler-cli": "10.1.0",
     "@ngtools/webpack": "10.0.0",
     "@openapitools/openapi-generator-cli": "1.0.13-4.3.1",
     <%_ if (protractorTests) { _%>
@@ -150,10 +150,10 @@ limitations under the License.
     "ts-node": "8.10.2",
     <%_ } _%>
     <%_ if (cypressTests) { _%>
-    "cypress": "5.0.0",
+    "cypress": "5.1.0",
     <%_ } _%>
     "tslint": "6.1.2",
-    "typescript": "3.9.5",
+    "typescript": "4.0.2",
     <%_ if (protractorTests || cypressTests) { _%>
     "webdriver-manager": "12.1.7",
     <%_ } _%>
@@ -199,7 +199,7 @@ limitations under the License.
     "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
     "serve": "<%= clientPackageManager %> run start",
     "build": "<%= clientPackageManager %> run webpack:prod",
-    "test": "<%= clientPackageManager %> run lint && jest --coverage --logHeapUsage -w=2 --config src/test/javascript/jest.conf.js",
+    "test": "<%= clientPackageManager %> run lint && jest --coverage --logHeapUsage -w=2 --config <%= CLIENT_TEST_SRC_DIR %>jest.conf.js",
     "test:watch": "<%= clientPackageManager %> run test -- --watch",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --hot --port=9060 --watch-content-base --env.stats=minimal",
     "webpack:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --hot --port=9060 --watch-content-base --profile --progress --env.stats=normal",

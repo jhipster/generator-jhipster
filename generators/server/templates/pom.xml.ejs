@@ -30,7 +30,7 @@
     <name><%= humanizedBaseName %></name>
 
     <repositories>
-        <%_ if (reactive) { _%>
+        <%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
         <repository>
             <id>spring-milestone</id>
             <url>https://repo.spring.io/milestone</url>
@@ -49,6 +49,13 @@
     </repositories>
 
     <pluginRepositories>
+        <%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+        <pluginRepository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+        </pluginRepository>
+        <%_ } _%>
         <!-- jhipster-needle-maven-plugin-repository -->
     </pluginRepositories>
 
@@ -87,7 +94,7 @@
 <%_ if (databaseType === 'sql') { _%>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <hibernate.version>5.4.18.Final</hibernate.version>
+        <hibernate.version><%= HIBERNATE_VERSION %></hibernate.version>
     <%_ if (!reactive) { _%>
         <!-- The javassist version should match the one managed by
         https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
@@ -102,29 +109,18 @@
     <%_ if (devDatabaseType === 'h2Disk') { _%>
         <h2.version>1.4.200</h2.version>
     <%_ } _%>
-    <%_ if (reactive) { _%>
-        <r2dbc-h2.version>0.8.4.RELEASE</r2dbc-h2.version>
-    <%_ } _%>
-    <%_ if (reactive && prodDatabaseType === 'mysql') { _%>
-        <r2dbc-mysql.version>0.8.2.RELEASE</r2dbc-mysql.version>
-    <%_ } _%>
-    <%_ if (reactive && prodDatabaseType === 'mssql') { _%>
-        <r2dbc-mssql.version>0.8.4.RELEASE</r2dbc-mssql.version>
-    <%_ } _%>
-    <%_ if (reactive && prodDatabaseType === 'postgresql') { _%>
-        <r2dbc-postgresql.version>0.8.4.RELEASE</r2dbc-postgresql.version>
-    <%_ } _%>
-    <%_ if (reactive) { _%>
-        <spring-boot-starter-data-r2dbc.version>0.1.0.M3</spring-boot-starter-data-r2dbc.version>
-    <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
 <%_ } _%>
 <%_ if (reactive) { _%>
         <blockhound-junit-platform.version>1.0.4.RELEASE</blockhound-junit-platform.version>
-        <netty-common.version>4.1.51.Final</netty-common.version>
 <%_ } _%>
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
         <jaxb-runtime.version>2.3.3</jaxb-runtime.version>
+<%_ } _%>
+<%_ if (databaseType === 'cassandra') { _%>
+        <!-- The cassandra driver version should match the one managed by
+        https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
+        <cassandra-driver.version>4.6.1</cassandra-driver.version>
 <%_ } _%>
         <archunit-junit5.version>0.14.1</archunit-junit5.version>
 <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -146,11 +142,11 @@
         <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
         <maven-idea-plugin.version>2.2.1</maven-idea-plugin.version>
-        <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+        <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
         <maven-checkstyle.version>3.1.1</maven-checkstyle.version>
-        <checkstyle.version>8.35</checkstyle.version>
+        <checkstyle.version>8.36</checkstyle.version>
         <spring-nohttp-checkstyle.version>0.0.5.RELEASE</spring-nohttp-checkstyle.version>
 <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
@@ -204,7 +200,14 @@
             <groupId>javax.annotation</groupId>
             <artifactId>javax.annotation-api</artifactId>
         </dependency>
-
+<%_ // This is useful for major Spring Boot migration
+    if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-properties-migrator</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+<%_ } _%>
 <%_ if (cacheProvider !== 'no') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -241,7 +244,6 @@
         <dependency>
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-h2</artifactId>
-            <version>${r2dbc-h2.version}</version>
             <scope>test</scope>
         </dependency>
     <%_ } _%>
@@ -337,6 +339,10 @@
             <artifactId>HikariCP</artifactId>
         </dependency>
 <%_ } _%>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
 <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
         <dependency>
             <groupId>commons-codec</groupId>
@@ -380,6 +386,12 @@
         <dependency>
             <groupId>eu.michael-simons.neo4j</groupId>
             <artifactId>neo4j-migrations-spring-boot-starter</artifactId>
+        </dependency>
+        <!-- This needs to be pinned with the one from neo4j migrations otherwise an older incompatible version from spring fox is used-->
+        <dependency>
+            <groupId>io.github.classgraph</groupId>
+            <artifactId>classgraph</artifactId>
+            <version>4.8.87</version>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -442,7 +454,6 @@
         <dependency>
             <groupId>dev.miku</groupId>
             <artifactId>r2dbc-mysql</artifactId>
-            <version>${r2dbc-mysql.version}</version>
         </dependency>
     <%_ } _%>
 <%_ } _%>
@@ -477,7 +488,6 @@
         <dependency>
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-mssql</artifactId>
-            <version>${r2dbc-mssql.version}</version>
         </dependency>
     <%_ } _%>
 <%_ } _%>
@@ -555,8 +565,12 @@
         </dependency>
 <%_ if (databaseType === 'mongodb') { _%>
         <dependency>
-            <groupId>com.github.mongobee</groupId>
-            <artifactId>mongobee</artifactId>
+            <groupId>com.github.cloudyrock.mongock</groupId>
+            <artifactId>mongock-spring-v5</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.cloudyrock.mongock</groupId>
+            <artifactId>mongodb-springdata-v3-driver</artifactId>
         </dependency>
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
@@ -574,7 +588,6 @@
         <dependency>
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-postgresql</artifactId>
-            <version>${r2dbc-postgresql.version}</version>
         </dependency>
         <%_ } _%>
 <%_ } _%>
@@ -612,9 +625,8 @@
         </dependency>
     <%_ } else { _%>
         <dependency>
-            <groupId>org.springframework.boot.experimental</groupId>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-r2dbc</artifactId>
-            <version>${spring-boot-starter-data-r2dbc.version}</version>
         </dependency>
     <%_ } _%>
 <%_ } _%>
@@ -623,27 +635,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
-        <%_ if (!reactive) { _%>
-        <!-- Spring Data Jest dependencies for Elasticsearch -->
-        <dependency>
-            <groupId>com.github.vanroy</groupId>
-            <artifactId>spring-boot-starter-data-jest</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <%_ } _%>
-        <!-- log4j2-mock needed to create embedded elasticsearch instance with SLF4J -->
-        <dependency>
-            <groupId>de.dentrassi.elasticsearch</groupId>
-            <artifactId>log4j2-mock</artifactId>
-            <version>${log4j2-mock.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <!-- end of Spring Data Jest dependencies -->
 <%_ } _%>
 <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
         <dependency>
@@ -715,12 +706,6 @@
             <scope>test</scope>
         </dependency>
         -->
-        <!-- See https://github.com/netty/netty/pull/10020 . Remove when Spring Boot has caught up -->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-common</artifactId>
-            <version>${netty-common.version}</version>
-        </dependency>
 <%_ } _%>
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
@@ -814,12 +799,8 @@
 <%_ if (databaseType === 'cassandra') { _%>
         <!-- DataStax driver -->
         <dependency>
-            <groupId>com.datastax.cassandra</groupId>
-            <artifactId>cassandra-driver-extras</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.datastax.cassandra</groupId>
-            <artifactId>cassandra-driver-mapping</artifactId>
+            <groupId>com.datastax.oss</groupId>
+            <artifactId>java-driver-mapper-runtime</artifactId>
         </dependency>
 <%_ } _%>
         <!-- Spring Cloud -->
@@ -895,8 +876,8 @@
         </dependency>
 <%_ } _%>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cloud-connectors</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-spring-service-connector</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -1080,6 +1061,13 @@
                                 <groupId>org.glassfish.jaxb</groupId>
                                 <artifactId>jaxb-runtime</artifactId>
                                 <version>${jaxb-runtime.version}</version>
+                            </path>
+<%_ } _%>
+<%_ if (databaseType === 'cassandra') { _%>
+                            <path>
+                                <groupId>com.datastax.oss</groupId>
+                                <artifactId>java-driver-mapper-processor</artifactId>
+                                <version>${cassandra-driver.version}</version>
                             </path>
 <%_ } _%>
                             <!-- jhipster-needle-maven-add-annotation-processor -->
@@ -1577,7 +1565,6 @@
                 <dependency>
                     <groupId>io.r2dbc</groupId>
                     <artifactId>r2dbc-h2</artifactId>
-                    <version>${r2dbc-h2.version}</version>
                 </dependency>
         <%_ } _%>
     <%_ } _%>
@@ -1654,7 +1641,6 @@
                 <dependency>
                     <groupId>io.r2dbc</groupId>
                     <artifactId>r2dbc-h2</artifactId>
-                    <version>${r2dbc-h2.version}</version>
                 </dependency>
     <%_ } _%>
 <%_ } _%>

@@ -54,7 +54,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
-    _default() {
+    _loading() {
         return {
             loadSharedConfig() {
                 this.loadAppConfig();
@@ -62,11 +62,32 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.loadServerConfig();
                 this.loadTranslationConfig();
             },
-            setupConstants() {
+        };
+    }
+
+    get loading() {
+        if (useBlueprints) return;
+        return this._loading();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _preparing() {
+        return {
+            prepareForTemplates() {
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
                 this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.buildTool) + constants.CLIENT_DIST_DIR;
             },
         };
+    }
+
+    get preparing() {
+        if (useBlueprints) return;
+        return this._preparing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return super._missingPreDefault();
     }
 
     get default() {
@@ -76,7 +97,10 @@ module.exports = class extends BaseBlueprintGenerator {
 
     // Public API method used by the getter and also by Blueprints
     _writing() {
-        return writeFiles();
+        return {
+            ...writeFiles(),
+            ...super._missingPostWriting(),
+        };
     }
 
     get writing() {

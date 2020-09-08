@@ -18,8 +18,10 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
+const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
+
 const prompts = require('./prompts');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
@@ -236,8 +238,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
                 context.capitalizedBaseName = _.upperFirst(context.baseName);
 
-                context.angularAppName = this.getAngularAppName(context.baseName);
-                context.angularXAppName = this.getAngularXAppName(context.baseName);
+                context.frontendAppName = this.getFrontendAppName(context.baseName);
                 context.mainClass = this.getMainClassName(context.baseName);
                 context.microserviceAppName = '';
 
@@ -369,6 +370,17 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                 const updateDate = this.dateFormatForLiquibase();
                 context.newChangelogDate = this.entityConfig.newChangelogDate = updateDate;
+
+                if (this.entityConfig.incrementalChangelog === undefined) {
+                    // Keep entity's original incrementalChangelog option.
+                    this.entityConfig.incrementalChangelog =
+                        this.jhipsterConfig.incrementalChangelog &&
+                        !fs.existsSync(
+                            this.destinationPath(
+                                `src/main/resources/config/liquibase/changelog/${this.entityConfig.changelogDate}_added_entity_${this.entityConfig.name}.xml`
+                            )
+                        );
+                }
             },
 
             configureFields() {
@@ -440,14 +452,25 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
-    _default() {
+    _loading() {
         return {
             loadConfig() {
                 // Update current context with config from file.
                 Object.assign(this.context, this.entityStorage.getAll());
                 loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
             },
-            prepareForTemplates() {
+        };
+    }
+
+    get loading() {
+        if (useBlueprints) return;
+        return this._loading();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _preparing() {
+        return {
+            prepareEntityForTemplates() {
                 const entity = this.context;
                 prepareEntityForTemplates(entity, this);
 
@@ -462,9 +485,23 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.context.removedFields.forEach(field => {
                     prepareFieldForTemplates(entity, field, this);
                 });
+            },
+        };
+    }
 
+    get preparing() {
+        if (useBlueprints) return;
+        return this._preparing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return {
+            ...super._missingPreDefault(),
+
+            prepareRelationshipsForTemplates() {
                 this.context.relationships.forEach(relationship => {
-                    prepareRelationshipForTemplates(entity, relationship, this);
+                    prepareRelationshipForTemplates(this.context, relationship, this);
                 });
 
                 this.context.newRelationships.forEach(relationship => {
@@ -475,7 +512,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     prepareRelationshipForTemplates(entity, relationship, this);
                 });
             },
-
+            /*
+             * Composed generators uses context ready for the templates.
+             */
             composing() {
                 const context = this.context;
                 if (!context.skipServer) {
@@ -539,6 +578,17 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.removeFile(`${constants.ANGULAR_DIR}entities/${context.entityFolderName}/index.ts`);
                 }
             },
+
+            databaseChangelog() {
+                if (this.options.skipDbChangelog) {
+                    return;
+                }
+                this.composeWithJHipster('database-changelog', {
+                    arguments: [this.context.name],
+                });
+            },
+
+            ...super._missingPostWriting(),
         };
     }
 
@@ -608,7 +658,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         }
         return true;
     }
-F
+
     /**
      * Validate the entityTableName
      * @return {true|string} true for a valid value or error message.

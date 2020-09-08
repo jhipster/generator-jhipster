@@ -22,15 +22,10 @@ describe('/admin', () => {
     cy.window().then((win) => {
       win.sessionStorage.clear()
     });
+    <%_ if (authenticationType === 'session') { _%>cy.clearCookie('SESSION')<% } %>
     cy.clearCookies();
     cy.visit('');
     cy.login('admin', 'admin');
-  });
-  <%_ } _%>
-
-  <%_ if (authenticationType === 'session') { _%>
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('JSESSIONID', 'XSRF-TOKEN');
   });
   <%_ } _%>
 

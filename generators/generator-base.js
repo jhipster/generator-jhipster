@@ -45,6 +45,29 @@ const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
+const CUSTOM_PRIORITIES = [
+    {
+        priorityName: 'preparing',
+        queueName: 'jhipster:preparing',
+        before: 'default',
+    },
+    {
+        priorityName: 'loading',
+        queueName: 'jhipster:loading',
+        before: 'preparing',
+    },
+    {
+        priorityName: 'composing',
+        queueName: 'jhipster:composing',
+        before: 'loading',
+    },
+    {
+        priorityName: 'postWriting',
+        queueName: 'jhipster:postWriting',
+        before: 'conflicts',
+    },
+];
+
 /**
  * This is the Generator base class.
  * This provides all the public API methods exposed via the module system.
@@ -52,13 +75,15 @@ const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
  *
  * The method signatures in public API should not be changed without a major version change
  */
-module.exports = class extends PrivateBase {
+module.exports = class JHipsterBaseGenerator extends PrivateBase {
     constructor(args, opts) {
         super(args, opts);
 
         if (this.options.help) {
             return;
         }
+
+        this.registerPriorities(CUSTOM_PRIORITIES);
 
         // JHipster runtime config that should not be stored to .yo-rc.json.
         this.configOptions = this.options.configOptions || {};
@@ -1756,20 +1781,11 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * get the Angular application name.
-     * @param {string} baseName of application
+     * get the frontend application name.
+     * @param {string} baseName of application - (defaults to <code>this.jhipsterConfig.baseName</code>)
      */
-    getAngularAppName(baseName = this.baseName) {
+    getFrontendAppName(baseName = this.jhipsterConfig.baseName) {
         const name = _.camelCase(baseName) + (baseName.endsWith('App') ? '' : 'App');
-        return name.match(/^\d/) ? 'App' : name;
-    }
-
-    /**
-     * get the Angular application name.
-     * @param {string} baseName of application
-     */
-    getAngularXAppName(baseName = this.baseName) {
-        const name = this.upperFirstCamelCase(baseName);
         return name.match(/^\d/) ? 'App' : name;
     }
 
@@ -2196,6 +2212,7 @@ module.exports = class extends PrivateBase {
         dest.isDebugEnabled = config.isDebugEnabled;
         dest.experimental = config.experimental;
         dest.logo = config.logo;
+        dest.backendName = config.backendName || 'Java';
     }
 
     /**
@@ -2285,6 +2302,7 @@ module.exports = class extends PrivateBase {
         dest.searchEngine = config.searchEngine;
         dest.cacheProvider = config.cacheProvider;
         dest.enableHibernateCache = config.enableHibernateCache;
+        dest.reactiveSqlTestContainers = config.reactive && ['mysql', 'postgresql', 'mssql', 'mariadb'].includes(config.prodDatabaseType);
 
         dest.enableSwaggerCodegen = config.enableSwaggerCodegen;
         dest.messageBroker = config.messageBroker;

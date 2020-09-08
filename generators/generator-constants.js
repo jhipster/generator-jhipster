@@ -32,10 +32,11 @@ const JIB_VERSION = '2.5.0';
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '3.10.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.2.9.RELEASE';
+const SPRING_BOOT_VERSION = '2.3.3.RELEASE';
 const LIQUIBASE_VERSION = '3.10.2';
 const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
 const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;
+const HIBERNATE_VERSION = '5.4.20.Final';
 
 const JACOCO_VERSION = '0.8.5';
 const KAFKA_VERSION = '5.5.1';
@@ -54,21 +55,21 @@ const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.3.0';
 const DOCKER_JHIPSTER_CONTROL_CENTER = 'jhipster/jhipster-control-center:v0.1.O';
 const DOCKER_JAVA_JRE = 'adoptopenjdk:11-jre-hotspot';
 const DOCKER_MYSQL = 'mysql:8.0.21';
-const DOCKER_MARIADB = 'mariadb:10.5.4';
-const DOCKER_POSTGRESQL = 'postgres:12.3';
+const DOCKER_MARIADB = 'mariadb:10.5.5';
+const DOCKER_POSTGRESQL = 'postgres:12.4';
 const DOCKER_MONGODB = 'mongo:4.4.0';
-const DOCKER_COUCHBASE = 'couchbase:6.5.1';
-const DOCKER_CASSANDRA = 'cassandra:3.11.7';
+const DOCKER_COUCHBASE = 'couchbase:6.6.0';
+const DOCKER_CASSANDRA = 'cassandra:3.11.8';
 const DOCKER_MSSQL = 'mcr.microsoft.com/mssql/server:2019-CU6-ubuntu-16.04';
 const DOCKER_NEO4J = 'neo4j:4.1.1';
-const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.12.9'; // waiting for https://github.com/jhipster/generator-jhipster/issues/11244
+const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:4.0.3';
 const DOCKER_MEMCACHED = 'memcached:1.6.6-alpine';
-const DOCKER_REDIS = 'redis:6.0.6';
-const DOCKER_KEYCLOAK = 'jboss/keycloak:10.0.0'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
-const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:6.8.10'; // The version should be coherent with the one from spring-data-elasticsearch project
+const DOCKER_REDIS = 'redis:6.0.7';
+const DOCKER_KEYCLOAK = 'jboss/keycloak:11.0.1'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
+const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:7.6.2'; // The version should be coherent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
 const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;
-const DOCKER_SONAR = 'sonarqube:8.4.1-community';
+const DOCKER_SONAR = 'sonarqube:8.4.2-community';
 const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v4.1.0';
 const DOCKER_JHIPSTER_CURATOR = 'jhipster/jhipster-curator:v4.1.0';
 const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v4.1.0';
@@ -76,15 +77,15 @@ const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v4.1.0';
 const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v4.1.0';
 const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v4.1.0';
 const DOCKER_TRAEFIK = 'traefik:1.7.26'; // waiting for https://github.com/jhipster/generator-jhipster/issues/11198
-const DOCKER_CONSUL = 'consul:1.8.2';
+const DOCKER_CONSUL = 'consul:1.8.3';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.3.1';
 const DOCKER_PROMETHEUS = 'prom/prometheus:v2.20.1';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.21.0';
-const DOCKER_GRAFANA = 'grafana/grafana:7.1.3';
+const DOCKER_GRAFANA = 'grafana/grafana:7.1.5';
 const DOCKER_JENKINS = 'jenkins/jenkins:lts';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '2';
-const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.41.0';
+const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.41.1';
 const DOCKER_GRAFANA_WATCHER = 'quay.io/coreos/grafana-watcher:v0.0.8';
 
 // Kubernetes versions
@@ -381,6 +382,7 @@ const constants = {
     SPRING_BOOT_VERSION,
     LIQUIBASE_VERSION,
     LIQUIBASE_DTD_VERSION,
+    HIBERNATE_VERSION,
     JACOCO_VERSION,
     JACKSON_DATABIND_NULLABLE_VERSION,
 

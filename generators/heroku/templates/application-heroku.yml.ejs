@@ -85,16 +85,15 @@ spring:
         hikari:
             maximumPoolSize: 8
 <%_ } _%>
-<%_ if (prodDatabaseType === 'mongodb' || searchEngine === 'elasticsearch') { _%>
+<%_ if (prodDatabaseType === 'mongodb') { _%>
     data:
-  <%_ if (prodDatabaseType === 'mongodb') { _%>
         mongodb:
             uri: ${MONGODB_URI}?authMode=scram-sha1
-  <%_ } _%>
-  <%_ if (searchEngine === 'elasticsearch') { _%>
-        jest:
-            uri: ${BONSAI_URL}
-  <%_ } _%>
+<%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+    elasticsearch:
+        rest:
+            uris: ${BONSAI_URL}
 <%_ } _%>
 <%_ if (useOkta) { _%>
     security:

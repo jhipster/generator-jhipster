@@ -4,9 +4,16 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const { JHIPSTER_CONFIG_DIR } = require('../../generators/generator-constants');
 
-const mockedComposedGenerators = ['jhipster:common', 'jhipster:server', 'jhipster:client', 'jhipster:languages', 'jhipster:entity'];
+const mockedComposedGenerators = [
+    'jhipster:common',
+    'jhipster:server',
+    'jhipster:client',
+    'jhipster:languages',
+    'jhipster:entity',
+    'jhipster:database-changelog',
+];
 
-describe('jhipster:app applicationWithEntities feature', () => {
+describe('jhipster:app with applicationWithEntities option', () => {
     describe('with default options', () => {
         let runResult;
         before(() => {
@@ -73,7 +80,7 @@ describe('jhipster:app applicationWithEntities feature', () => {
                 runResult.assertFile('.jhipster/Foo.json');
                 runResult.assertFileContent('.jhipster/Foo.json', /"name": "Foo"/);
             });
-            it('calls entity generator', () => {
+            it('should compose with entity generator', () => {
                 const EntityGenerator = runResult.mockedGenerators['jhipster:entity'];
                 assert(EntityGenerator.calledOnce);
                 assert.equal(EntityGenerator.getCall(0).args[0], 'Foo');
@@ -116,11 +123,16 @@ describe('jhipster:app applicationWithEntities feature', () => {
                 runResult.assertFile('.jhipster/Bar.json');
                 runResult.assertFileContent('.jhipster/Bar.json', /"name": "Bar"/);
             });
-            it('calls entity generator', () => {
+            it('should compose with entity generator', () => {
                 const EntityGenerator = runResult.mockedGenerators['jhipster:entity'];
                 assert(EntityGenerator.callCount === 2);
                 assert.equal(EntityGenerator.getCall(0).args[0], 'Foo');
                 assert.equal(EntityGenerator.getCall(1).args[0], 'Bar');
+            });
+            it('should compose with database-changelog generator', () => {
+                const EntityGenerator = runResult.mockedGenerators['jhipster:database-changelog'];
+                assert.equal(EntityGenerator.callCount, 1);
+                assert.deepStrictEqual(EntityGenerator.getCall(0).args[0], ['Foo', 'Bar']);
             });
         });
 
@@ -156,27 +168,16 @@ describe('jhipster:app applicationWithEntities feature', () => {
 
             after(() => runResult.cleanup());
 
-            it('composes with mocked common generator', () => {
-                const CommonGenerator = runResult.mockedGenerators['jhipster:common'];
-                assert(CommonGenerator.calledOnce);
-            });
-            it('compose with mocked server generator', () => {
-                const ServerGenerator = runResult.mockedGenerators['jhipster:server'];
-                assert(ServerGenerator.calledOnce);
-            });
-            it('composes with mocked client generator', () => {
-                const ClientGenerator = runResult.mockedGenerators['jhipster:client'];
-                assert(ClientGenerator.calledOnce);
-            });
-            it('composes with mocked languages generator', () => {
-                const LanguagesGenerator = runResult.mockedGenerators['jhipster:languages'];
-                assert(LanguagesGenerator.calledOnce);
-            });
-            it('composes with mocked entity generator ordered by changelogDate', () => {
+            it('should compose with mocked entity generator ordered by changelogDate', () => {
                 const EntityGenerator = runResult.mockedGenerators['jhipster:entity'];
                 assert.equal(EntityGenerator.callCount, 2);
                 assert.deepStrictEqual(EntityGenerator.getCall(0).args[0], ['Foo']);
                 assert.deepStrictEqual(EntityGenerator.getCall(1).args[0], ['Bar']);
+            });
+            it('should compose with database-changelog generator', () => {
+                const EntityGenerator = runResult.mockedGenerators['jhipster:database-changelog'];
+                assert.equal(EntityGenerator.callCount, 1);
+                assert.deepStrictEqual(EntityGenerator.getCall(0).args[0], ['Foo', 'Bar']);
             });
         });
 
@@ -215,29 +216,18 @@ describe('jhipster:app applicationWithEntities feature', () => {
 
             after(() => runResult.cleanup());
 
-            it('composes with mocked common generator', () => {
-                const CommonGenerator = runResult.mockedGenerators['jhipster:common'];
-                assert(CommonGenerator.calledOnce);
-            });
-            it('compose with mocked server generator', () => {
-                const ServerGenerator = runResult.mockedGenerators['jhipster:server'];
-                assert(ServerGenerator.calledOnce);
-            });
-            it('composes with mocked client generator', () => {
-                const ClientGenerator = runResult.mockedGenerators['jhipster:client'];
-                assert(ClientGenerator.calledOnce);
-            });
-            it('composes with mocked languages generator', () => {
-                const LanguagesGenerator = runResult.mockedGenerators['jhipster:languages'];
-                assert(LanguagesGenerator.calledOnce);
-            });
-            it('composes with mocked entity generator ordered by changelogDate', () => {
+            it('should compose with mocked entity generator ordered by changelogDate', () => {
                 const EntityGenerator = runResult.mockedGenerators['jhipster:entity'];
                 assert.equal(EntityGenerator.callCount, 4);
                 assert.deepStrictEqual(EntityGenerator.getCall(0).args[0], ['Four']);
                 assert.deepStrictEqual(EntityGenerator.getCall(1).args[0], ['Three']);
                 assert.deepStrictEqual(EntityGenerator.getCall(2).args[0], ['Two']);
                 assert.deepStrictEqual(EntityGenerator.getCall(3).args[0], ['One']);
+            });
+            it('should compose with database-changelog generator', () => {
+                const EntityGenerator = runResult.mockedGenerators['jhipster:database-changelog'];
+                assert.equal(EntityGenerator.callCount, 1);
+                assert.deepStrictEqual(EntityGenerator.getCall(0).args[0], ['Four', 'Three', 'Two', 'One']);
             });
         });
     });

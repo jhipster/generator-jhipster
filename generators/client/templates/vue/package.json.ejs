@@ -27,16 +27,17 @@ limitations under the License.
   ],
   "dependencies": {
     "@openapitools/openapi-generator-cli": "1.0.13-4.3.1",
-    "@fortawesome/fontawesome-svg-core": "1.2.28",
-    "@fortawesome/free-solid-svg-icons": "5.13.0",
-    "@fortawesome/vue-fontawesome": "0.1.9",
+    "@fortawesome/fontawesome-svg-core": "1.2.30",
+    "@fortawesome/free-solid-svg-icons": "5.14.0",
+    "@fortawesome/vue-fontawesome": "0.1.10",
     "axios": "0.19.2",
     "bootstrap": "4.5.0",
     "bootstrap-vue": "2.14.0",
     <%_ if (clientTheme !== 'none') { _%>
     "bootswatch": "4.5.0",
     <%_ } _%>
-    "date-fns": "2.14.0",
+    "date-fns": "2.15.0",
+    "duration-fns": "2.0.1",
     "swagger-ui-dist": "3.25.4",
     <%_ if (websocket === 'spring-websocket') { _%>
     "sockjs-client": "1.1.4",
@@ -123,7 +124,7 @@ limitations under the License.
     "protractor": "5.4.4",
     <%_ } _%>
     <%_ if (cypressTests) { _%>
-    "cypress": "5.0.0",
+    "cypress": "5.1.0",
     <%_ } _%>
     "rimraf": "3.0.2",
     "sass": "1.26.5",
@@ -184,7 +185,7 @@ limitations under the License.
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
     <%_ } _%>
-    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --no-cache --config src/test/javascript/jest.conf.js",
+    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --no-cache --config <%= CLIENT_TEST_SRC_DIR %>jest.conf.js",
     "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
     "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
     "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --progress --profile",

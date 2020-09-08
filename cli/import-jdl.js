@@ -34,7 +34,7 @@ const packagejs = require('../package.json');
 const statistics = require('../generators/statistics');
 const { JHIPSTER_CONFIG_DIR, SUPPORTED_CLIENT_FRAMEWORKS } = require('../generators/generator-constants');
 
-const runYeomanProcess = require.resolve('./run-yeoman-process.js');
+const jhipsterCli = require.resolve('./cli.js');
 const { writeConfigFile } = require('../jdl/exporters/export-utils');
 const { createFolderIfItDoesNotExist } = require('../jdl/utils/file-utils');
 
@@ -61,7 +61,7 @@ function runGenerator(command, cwd, generatorOptions = {}, options = {}) {
 
     if (options.fork === false) {
         const env = options.env || EnvironmentBuilder.createDefaultBuilder(undefined, { cwd }).getEnvironment();
-        return env.run(command, generatorOptions).then(
+        return env.run(`${CLI_NAME}:${command}`, generatorOptions).then(
             () => {
                 logger.info(`Generator ${command} succeed`);
             },
@@ -72,7 +72,7 @@ function runGenerator(command, cwd, generatorOptions = {}, options = {}) {
     }
     logger.debug(`Child process will be triggered for ${command} with cwd: ${cwd}`);
     const args = [command, ...getOptionAsArgs(generatorOptions)];
-    const childProc = fork(runYeomanProcess, args, {
+    const childProc = fork(jhipsterCli, args, {
         cwd,
     });
     return new Promise(resolve => {
@@ -145,9 +145,9 @@ const generateDeploymentFiles = ({ processor, deployment, inFolder }) => {
     logger.debug(`Generating deployment: ${pretty(deployment[GENERATOR_NAME])}`);
 
     const cwd = inFolder ? path.join(processor.pwd, deploymentType) : processor.pwd;
-    logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
+    logger.debug(`Child process will be triggered for ${jhipsterCli} with cwd: ${cwd}`);
 
-    const command = `${CLI_NAME}:${deploymentType}`;
+    const command = deploymentType;
     const force = !processor.options.interactive ? true : undefined;
     return runGenerator(command, cwd, { force, ...processor.options, skipPrompts: true });
 };
@@ -162,7 +162,7 @@ const generateApplicationFiles = ({ processor, applicationWithEntities, inFolder
     logger.debug(`Generating application: ${pretty(applicationWithEntities.config)}`);
 
     const cwd = inFolder ? path.join(processor.pwd, baseName) : processor.pwd;
-    const { fork = true } = processor.options;
+    const { fork = inFolder } = processor.options;
     const skipApplication = !shouldGenerateApplications(processor);
     if (fork || skipApplication) {
         writeApplicationConfig(applicationWithEntities, cwd);
@@ -172,7 +172,7 @@ const generateApplicationFiles = ({ processor, applicationWithEntities, inFolder
         }
     }
 
-    const command = `${CLI_NAME}:app`;
+    const command = 'app';
     const withEntities = applicationWithEntities.entities.length > 0 ? true : undefined;
     const force = !processor.options.interactive ? true : undefined;
     const generatorOptions = { force, withEntities, ...processor.options };
@@ -189,19 +189,20 @@ const generateApplicationFiles = ({ processor, applicationWithEntities, inFolder
  * @param {any} entity
  * @param {boolean} inFolder
  * @param {any} env
- * @param {boolean} shouldTriggerInstall
+ * @param {boolean} shouldSkipInstall
  * @return Promise
  */
-const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInstall) => {
+const generateEntityFiles = (processor, entity, inFolder, env, shouldSkipInstall) => {
     const options = {
-        skipInstall: !shouldTriggerInstall,
         force: !processor.options.interactive ? true : undefined,
         ...processor.options,
+        /* skip-install is required by yeoman-generator processor.options.skipInstall will not be undefined, we need for force skipInstall option. */
+        skipInstall: shouldSkipInstall,
         regenerate: true,
         fromCli: true,
         currentEntityState: entity.currentState,
     };
-    const command = `${CLI_NAME}:entity ${entity.name}`;
+    const command = `entity ${entity.name}`;
     const { fork = inFolder } = processor.options;
 
     const callGenerator = baseName => {
@@ -214,7 +215,7 @@ const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInst
             return Promise.resolve();
         }
 
-        logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
+        logger.debug(`Child process will be triggered for ${jhipsterCli} with cwd: ${cwd}`);
         return runGenerator(command, cwd, options, { env, fork });
     };
 
@@ -233,16 +234,13 @@ const generateEntityFiles = (processor, entity, inFolder, env, shouldTriggerInst
 };
 
 /**
- * Check if NPM install needs to be triggered. This will be done for the last entity.
+ * Check if NPM install needs to be skipped.
+ * It should not be skipped for the last entity or if user specifies it.
  * @param {any} processor
  * @param {number} index
  */
-const shouldTriggerInstall = (processor, index) =>
-    index === processor.importState.exportedEntities.length - 1 &&
-    !processor.options.skipInstall &&
-    !processor.skipClient &&
-    !processor.options.jsonOnly &&
-    !shouldGenerateApplications(processor);
+const shouldSkipInstallEntity = (processor, index) =>
+    index !== processor.importState.exportedEntities.length - 1 || processor.options.skipInstall;
 
 class JDLProcessor {
     constructor(jdlFiles, jdlContent, options) {
@@ -383,7 +381,7 @@ class JDLProcessor {
                         },
                         this.importState.exportedApplications.length > 1,
                         env,
-                        shouldTriggerInstall(this, i)
+                        shouldSkipInstallEntity(this, i)
                     );
                 })
             );

@@ -25,7 +25,7 @@ import <%= packageName %>.RedisTestContainerExtension;
 <%_ if (databaseType === 'neo4j') { _%>
 import <%= packageName %>.AbstractNeo4jIT;
 <%_ } _%>
-<%_ if (reactive && ['mysql', 'postgresql', 'mssql'].includes(prodDatabaseType)) { _%>
+<%_ if (reactiveSqlTestContainers) { _%>
 import <%= packageName %>.ReactiveSqlTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
@@ -76,7 +76,7 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 <%_ if (databaseType === 'neo4j') { _%>
 @ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
-<%_ if (reactive && ['mysql', 'postgresql', 'mssql'].includes(prodDatabaseType)) { _%>
+<%_ if (reactiveSqlTestContainers) { _%>
 @ExtendWith(ReactiveSqlTestContainerExtension.class)
 <%_ } _%>
 public class LogoutResourceIT {

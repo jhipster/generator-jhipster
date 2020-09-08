@@ -21,7 +21,7 @@ const chalk = require('chalk');
 const didYouMean = require('didyoumean');
 
 const packageJson = require('../package.json');
-const { CLI_NAME, initHelp, logger, toString, getCommand, getCommandOptions, getArgs, done } = require('./utils');
+const { CLI_NAME, initHelp, logger, toString, getCommand, getCommandOptions, getArgs, done, buildCommanderOptions } = require('./utils');
 const EnvironmentBuilder = require('./environment-builder');
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
@@ -34,7 +34,24 @@ const JHIPSTER_NS = CLI_NAME;
 const envBuilder = EnvironmentBuilder.createDefaultBuilder();
 const env = envBuilder.getEnvironment();
 
-program.storeOptionsAsProperties(false).passCommandToAction(false).version(version).usage('[command] [options]').allowUnknownOption();
+program
+    .storeOptionsAsProperties(false)
+    .passCommandToAction(false)
+    .version(version)
+    .usage('[command] [options]')
+    .allowUnknownOption()
+    // JHipster common options
+    .option(
+        '--blueprints <value>',
+        'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs'
+    )
+    .option('--no-insight', 'Disable insight', false)
+    // Conflicter options
+    .option('--force', 'Override every file', false)
+    .option('--dry-run', 'Print conflicts', false)
+    .option('--whitespace', 'Whitespace changes will not trigger conflicts', false)
+    .option('--bail', 'Fail on first conflict', false)
+    .option('--skip-regenerate', "Don't regenerate identical files", false);
 
 /* setup debugging */
 logger.init(program);
@@ -66,31 +83,56 @@ Object.entries(allCommands).forEach(([key, opts]) => {
     }
 
     (opts.options || []).forEach(opt => {
-        command.option(opt.option, opt.desc, opt.default);
+        const additionalDescription = opts.blueprint ? chalk.yellow(` (blueprint option: ${opts.blueprint})`) : '';
+        command.option(opt.option, opt.desc + additionalDescription, opt.default);
     });
 
     if (!opts.cliOnly) {
-        const namespace = opts.blueprint ? `${packageNameToNamespace(opts.blueprint)}:${key}` : `${JHIPSTER_NS}:${key}`;
-        const generator = env.create(namespace, { options: { help: true } });
-        Object.entries(generator._options).forEach(([key, value]) => {
-            if (value.hide || key === 'help') {
-                return;
-            }
-            let cmdString = '';
-            if (value.alias) {
-                cmdString = `-${value.alias}, `;
-            }
-            cmdString = `${cmdString}--${key}`;
-            if (value.type === String) {
-                cmdString = `${cmdString} <value>`;
-            }
-            command.option(cmdString, value.description, value.default);
-        });
+        const registeredOptions = [];
+        const registerGeneratorOptions = (generator, blueprintOptionDescription) => {
+            Object.entries(generator._options).forEach(([key, value]) => {
+                if (registeredOptions.includes(key)) {
+                    return;
+                }
+                registeredOptions.push(key);
+                buildCommanderOptions(key, value, blueprintOptionDescription).forEach(commanderOption => {
+                    command.option(...commanderOption);
+                });
+            });
+        };
+
+        if (opts.blueprint) {
+            // Blueprint only command.
+            registerGeneratorOptions(env.create(`${packageNameToNamespace(opts.blueprint)}:${key}`, { options: { help: true } }));
+        } else {
+            // Register jhipster upstream options.
+            registerGeneratorOptions(env.create(`${JHIPSTER_NS}:${key}`, { options: { help: true } }));
+
+            // Register blueprint specific options.
+            envBuilder.getBlueprintsNamespaces().forEach(blueprintNamespace => {
+                const generatorNamespace = `${blueprintNamespace}:${key}`;
+                if (!env.get(generatorNamespace)) {
+                    return;
+                }
+                const blueprintName = blueprintNamespace.replace(/^jhipster-/, '');
+                try {
+                    registerGeneratorOptions(
+                        env.create(generatorNamespace, { options: { help: true } }),
+                        chalk.yellow(` (blueprint option: ${blueprintName})`)
+                    );
+                } catch (error) {
+                    logger.info(
+                        `Error parsing options for generator ${generatorNamespace}, unknown option will lead to error at jhipster 7`
+                    );
+                }
+            });
+        }
     }
 
+    const additionalCommandDescription = opts.blueprint ? chalk.yellow(` (blueprint: ${opts.blueprint})`) : '';
     command
         .allowUnknownOption()
-        .description(opts.desc)
+        .description(opts.desc + additionalCommandDescription)
         .action((...everything) => {
             let cmdOptions;
             let unknownArgs = [];

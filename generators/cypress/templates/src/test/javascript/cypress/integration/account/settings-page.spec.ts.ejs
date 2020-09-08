@@ -10,6 +10,7 @@ describe('/account/settings', () => {
     cy.window().then((win) => {
       win.sessionStorage.clear()
     });
+    <%_ if (authenticationType === 'session') { _%>cy.clearCookie('SESSION')<% } %>
     cy.clearCookies();
     cy.visit('');
     cy.login('user', 'user');
@@ -17,7 +18,6 @@ describe('/account/settings', () => {
   })
 
   beforeEach(() => {
-    <%_ if (authenticationType === 'session') { _%>Cypress.Cookies.preserveOnce('JSESSIONID', 'XSRF-TOKEN')<% } %>
     cy.server();
     cy.route('POST', '/api/account').as('settingsSave');
   });
