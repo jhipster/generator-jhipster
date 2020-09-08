@@ -41,6 +41,12 @@ describe('JHipster client generator', () => {
         it('contains clientFramework with react value', () => {
             assert.fileContent('.yo-rc.json', /"clientFramework": "react"/);
         });
+        it('should not contain version placeholders at package.json', () => {
+            assert.noFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_COMMON/);
+            assert.noFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_ANGULAR/);
+            assert.noFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_REACT/);
+            assert.noFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_VUE/);
+        });
     });
 
     describe('generate client with Angular', () => {
@@ -79,6 +85,12 @@ describe('JHipster client generator', () => {
         });
         it('contains clientPackageManager with npm value', () => {
             assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
+        });
+        it('should not contain version placeholders at package.json', () => {
+            assert.noFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_COMMON/);
+            assert.noFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_ANGULAR/);
+            assert.noFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_REACT/);
+            assert.noFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_VUE/);
         });
     });
 

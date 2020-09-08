@@ -6,6 +6,12 @@ updates:
           interval: 'weekly'
       open-pull-requests-limit: 10
 
+    - package-ecosystem: 'npm'
+      directory: '/generators/client/templates/angular/'
+      schedule:
+          interval: 'daily'
+      open-pull-requests-limit: 10
+
     - package-ecosystem: 'github-actions'
       directory: '/'
       schedule:

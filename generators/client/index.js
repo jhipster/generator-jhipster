@@ -304,6 +304,30 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
+    _postWriting() {
+        return {
+            packageJson() {
+                if (this.skipClient) return;
+                this.replacePackageJsonVersions('VERSION_MANAGED_BY_CLIENT_COMMON', this.templatePath('common', 'package.json'));
+                switch (this.clientFramework) {
+                    case ANGULAR:
+                        this.replacePackageJsonVersions('VERSION_MANAGED_BY_CLIENT_ANGULAR', this.templatePath('angular', 'package.json'));
+                        break;
+                    case REACT:
+                    case VUE:
+                    default:
+                    // do nothing by default
+                }
+            },
+        };
+    }
+
+    get postWriting() {
+        if (useBlueprints) return;
+        return this._postWriting();
+    }
+
+    // Public API method used by the getter and also by Blueprints
     _install() {
         return {
             installing() {
