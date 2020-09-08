@@ -210,7 +210,7 @@ limitations under the License.
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
     "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
-    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config src/test/javascript/jest.conf.js",
+    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config <%= CLIENT_TEST_SRC_DIR %>jest.conf.js",
     "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
     "test": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest",
     "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",

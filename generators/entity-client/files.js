@@ -21,13 +21,8 @@ const utils = require('../utils');
 const constants = require('../generator-constants');
 
 /* Constants use throughout */
-const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
-const ANGULAR_DIR = constants.ANGULAR_DIR;
-const REACT_DIR = constants.REACT_DIR;
-const VUE_DIR = constants.VUE_DIR;
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
-const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
+const { CLIENT_TEST_SRC_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR } = constants;
+const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 const CLIENT_NG2_TEMPLATES_DIR = 'angular';
 const CLIENT_REACT_TEMPLATES_DIR = 'react';
@@ -408,11 +403,12 @@ function addEnumerationFiles(generator, templateDir, clientFolder) {
                 packageName: generator.packageName,
             };
             if (!generator.skipClient) {
+                const destinationFile = generator.destinationPath(`${clientFolder}shared/model/enumerations/${enumFileName}.model.ts`);
                 generator.template(
                     `${generator.fetchFromInstalledJHipster(
                         `entity-client/templates/${templateDir}`
                     )}/${clientFolder}entities/enumerations/enum.model.ts.ejs`,
-                    `${clientFolder}shared/model/enumerations/${enumFileName}.model.ts`,
+                    destinationFile,
                     generator,
                     {},
                     enumInfo
@@ -448,22 +444,22 @@ function writeFiles() {
             }
 
             let files;
-            let destDir;
+            let clientMainSrcDir;
             let templatesDir;
             let microserviceName = this.microserviceName;
 
             if (this.clientFramework === ANGULAR) {
                 files = angularFiles;
-                destDir = ANGULAR_DIR;
+                clientMainSrcDir = ANGULAR_DIR;
                 templatesDir = CLIENT_NG2_TEMPLATES_DIR;
                 microserviceName = this.microserviceName;
             } else if (this.clientFramework === REACT) {
                 files = reactFiles;
-                destDir = REACT_DIR;
+                clientMainSrcDir = REACT_DIR;
                 templatesDir = CLIENT_REACT_TEMPLATES_DIR;
             } else if (this.clientFramework === VUE) {
                 files = vueFiles;
-                destDir = VUE_DIR;
+                clientMainSrcDir = VUE_DIR;
                 templatesDir = CLIENT_VUE_TEMPLATES_DIR;
             } else {
                 if (!this.embedded) {
@@ -487,7 +483,7 @@ function writeFiles() {
             }
 
             if (this.clientFramework !== VUE) {
-                addEnumerationFiles(this, templatesDir, destDir);
+                addEnumerationFiles(this, templatesDir, clientMainSrcDir);
             }
 
             if (!this.embedded) {

@@ -2211,6 +2211,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         dest.isDebugEnabled = config.isDebugEnabled;
         dest.experimental = config.experimental;
         dest.logo = config.logo;
+        dest.backendName = config.backendName || 'Java';
     }
 
     /**
