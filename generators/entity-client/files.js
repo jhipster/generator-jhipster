@@ -24,6 +24,7 @@ const constants = require('../generator-constants');
 const { CLIENT_TEST_SRC_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR } = constants;
 const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
+const CLIENT_COMMON_TEMPLATES_DIR = 'common';
 const CLIENT_NG2_TEMPLATES_DIR = 'angular';
 const CLIENT_REACT_TEMPLATES_DIR = 'react';
 const CLIENT_VUE_TEMPLATES_DIR = 'vue';
@@ -393,7 +394,7 @@ module.exports = {
     commonFiles,
 };
 
-function addEnumerationFiles(generator, templateDir, clientFolder) {
+function addEnumerationFiles(generator, clientFolder) {
     generator.fields.forEach(field => {
         if (field.fieldIsEnum === true) {
             const enumFileName = _.kebabCase(field.fieldType);
@@ -406,7 +407,7 @@ function addEnumerationFiles(generator, templateDir, clientFolder) {
                 const destinationFile = generator.destinationPath(`${clientFolder}shared/model/enumerations/${enumFileName}.model.ts`);
                 generator.template(
                     `${generator.fetchFromInstalledJHipster(
-                        `entity-client/templates/${templateDir}`
+                        `entity-client/templates/${CLIENT_COMMON_TEMPLATES_DIR}`
                     )}/${clientFolder}entities/enumerations/enum.model.ts.ejs`,
                     destinationFile,
                     generator,
@@ -482,9 +483,7 @@ function writeFiles() {
                 this.writeFilesToDisk(commonFiles, this, false, this.fetchFromInstalledJHipster(cypressTemplatesDir));
             }
 
-            if (this.clientFramework !== VUE) {
-                addEnumerationFiles(this, templatesDir, clientMainSrcDir);
-            }
+            addEnumerationFiles(this, clientMainSrcDir);
 
             if (!this.embedded) {
                 this.addEntityToModule(
