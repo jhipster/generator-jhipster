@@ -10,7 +10,19 @@ updates:
       directory: '/generators/client/templates/angular/'
       schedule:
           interval: 'daily'
-      open-pull-requests-limit: 10
+      open-pull-requests-limit: 5
+
+    - package-ecosystem: 'npm'
+      directory: '/generators/client/templates/react/'
+      schedule:
+          interval: 'daily'
+      open-pull-requests-limit: 5
+
+    - package-ecosystem: 'npm'
+      directory: '/generators/client/templates/vue/'
+      schedule:
+          interval: 'daily'
+      open-pull-requests-limit: 5
 
     - package-ecosystem: 'github-actions'
       directory: '/'
