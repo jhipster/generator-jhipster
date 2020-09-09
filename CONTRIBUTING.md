@@ -40,7 +40,7 @@ would like to implement a new feature then consider what kind of change it is:
 
 ## <a name="rfcs"></a> RFCs
 
-Sometimes, major feature requests are "complex" or "substantial". In this case, Github Issues might not be the best tool to to present them because we will need a lot of going back and forth to reach a consensus.
+Sometimes, major feature requests are "complex" or "substantial". In this case, GitHub Issues might not be the best tool to to present them because we will need a lot of going back and forth to reach a consensus.
 
 So we ask that these feature request be put through a formal design process and have their specifications described in an "RFC" (request for comments) that will be validated by the team through a Pull Request Review.
 
@@ -48,8 +48,8 @@ The RFC process is intended to provide a consistent and controlled path for majo
 
 To submit an RFC follow those steps:
 
-1. Discuss the RFC proposal with the core team through Github issues or other channels
-2. Create the initial Github issue for the Feature Request if it doesn't already exist
+1. Discuss the RFC proposal with the core team through GitHub issues or other channels
+2. Create the initial GitHub issue for the Feature Request if it doesn't already exist
 3. Copy the `rfcs/0-jhipster-rfc-template.md` to `rfcs/${featureRequestIssueNumber}-my-feature-request-name.md`
 4. Fill in the RFC, make sure to complete every required section
 5. Submit the RFC as a Pull Request with the summary of the proposal in the PR description
