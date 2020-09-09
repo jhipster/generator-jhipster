@@ -49,6 +49,8 @@ const LINT_STAGED_VERSION = '8.2.1';
 // The installed prettier version should be the same that the one used during JHipster generation to avoid formatting differences
 const PRETTIER_VERSION = packagejs.dependencies.prettier;
 const PRETTIER_JAVA_VERSION = packagejs.dependencies['prettier-plugin-java'];
+// Cypress version
+const CYPRESS_VERSION = '5.1.0';
 
 // Version of docker images
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.3.0';
@@ -391,6 +393,7 @@ const constants = {
     LINT_STAGED_VERSION,
     PRETTIER_VERSION,
     PRETTIER_JAVA_VERSION,
+    CYPRESS_VERSION,
 
     DOCKER_JENKINS,
     DOCKER_SWAGGER_EDITOR,
