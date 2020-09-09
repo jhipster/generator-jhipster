@@ -23,13 +23,16 @@ on:
         branches-ignore:
             - 'dependabot/**'
             - 'skip_ci*'
+        paths-ignore:
+            - 'generators/*client/templates/angular/**'
+            - 'generators/*client/templates/vue/**'
     pull_request:
         branches:
             - '*'
         paths-ignore:
             - 'package*.json'
-            - 'generators/client/templates/angular/**'
-            - 'generators/client/templates/vue/**'
+            - 'generators/*client/templates/angular/**'
+            - 'generators/*client/templates/vue/**'
 env:
     JHI_RUN_APP: 1
     JHI_JDK: 11
