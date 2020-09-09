@@ -181,6 +181,32 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     }
 
     /**
+     * Replace placeholders with versions from packageJsonSourceFile.
+     * @param {string} keyToPlace - PlaceHolder name.
+     * @param {string} packageJsonSourceFile - Package json filepath with actual versions.
+     */
+    replacePackageJsonVersions(keyToReplace, packageJsonSourceFile) {
+        const packageJsonSource = JSON.parse(fs.readFileSync(packageJsonSourceFile, 'utf-8'));
+        const packageJsonTargetFile = this.destinationPath('package.json');
+        const packageJsonTarget = this.fs.readJSON(packageJsonTargetFile);
+        const replace = section => {
+            if (packageJsonTarget[section]) {
+                Object.entries(packageJsonTarget[section]).forEach(([dependency, version]) => {
+                    if (version === keyToReplace) {
+                        if (!packageJsonSource[section][dependency]) {
+                            throw new Error(`Error setting ${dependency} version`);
+                        }
+                        packageJsonTarget[section][dependency] = packageJsonSource[section][dependency];
+                    }
+                });
+            }
+        };
+        replace('dependencies');
+        replace('devDependencies');
+        this.fs.writeJSON(packageJsonTargetFile, packageJsonTarget);
+    }
+
+    /**
      * Add a new icon to icon imports.
      *
      * @param {string} iconName - The name of the Font Awesome icon.
