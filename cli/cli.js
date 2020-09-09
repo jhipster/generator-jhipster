@@ -192,17 +192,12 @@ Object.entries(allCommands).forEach(([key, opts]) => {
                 return;
             }
 
-            const customOptions = { fromCli: true };
-            if (key === 'jdl' && process.argv[2] === 'import-jdl') {
-                customOptions.skipSampleRepository = true;
-            }
-
             // Get unknown options and parse.
             const options = {
                 ...getCommandOptions(packageJson, unknownArgs),
                 ...program.opts(),
                 ...cmdOptions,
-                ...customOptions,
+                fromCli: true,
             };
 
             if (opts.cliOnly) {

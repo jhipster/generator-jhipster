@@ -44,7 +44,7 @@ class Statistics {
         this.doNotAskCounter = this.config.get('doNotAskCounter');
         this.optOut = this.config.get('optOut');
         this.isLinked = this.config.get('isLinked');
-        this.noInsight = process.argv.includes('--no-insight');
+        this.noInsight = process.argv.includes('--no-insight') || process.env.CI === 'true';
         this.forceInsight = process.argv.includes('--force-insight');
         this.configInsight();
 
