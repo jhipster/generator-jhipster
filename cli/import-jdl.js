@@ -158,7 +158,7 @@ const generateDeploymentFiles = ({ processor, deployment, inFolder }) => {
  */
 const generateApplicationFiles = ({ processor, applicationWithEntities, inFolder }) => {
     const baseName = applicationWithEntities.config.baseName;
-    logger.debug(`Generating application: ${pretty(applicationWithEntities.config)}`);
+    logger.debug(`Generating application: ${pretty(applicationWithEntities)}`);
 
     const cwd = inFolder ? path.join(processor.pwd, baseName) : processor.pwd;
     const { fork = inFolder } = processor.options;
@@ -253,8 +253,8 @@ class JDLProcessor {
 
     getConfig() {
         if (fs.existsSync('.yo-rc.json')) {
-            const yoRC = loadYoRc('.yo-rc.json');
-            const configuration = yoRC['generator-jhipster'];
+            this.yoRC = loadYoRc('.yo-rc.json');
+            const configuration = this.yoRC['generator-jhipster'];
             if (!configuration) {
                 return;
             }
@@ -284,6 +284,7 @@ class JDLProcessor {
             forceNoFiltering: this.options.force,
             creationTimestamp: this.options.creationTimestamp,
             skipFileGeneration: true,
+            application: this.yoRC,
         };
 
         let importer;

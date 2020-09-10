@@ -36,14 +36,14 @@ module.exports = {
  * @param {Date} creationTimestamp - the creation timestamp to use when creating JSON entity, optional.
  * @return {Map<String, JSONEntity>} a map having for keys entity names and for values the corresponding JSON entities.
  */
-function convert(jdlEntities, creationTimestamp) {
+function convert(jdlEntities, creationTimestamp, skipUserManagement) {
     if (!jdlEntities) {
         throw new Error('JDL entities must be passed to get the basic entity information.');
     }
-    return createJSONEntities(jdlEntities, creationTimestamp || new Date());
+    return createJSONEntities(jdlEntities, creationTimestamp || new Date(), skipUserManagement);
 }
 
-function createJSONEntities(jdlEntities, creationTimestamp) {
+function createJSONEntities(jdlEntities, creationTimestamp, skipUserManagement) {
     const convertedEntities = new Map();
     jdlEntities.forEach((jdlEntity, index) => {
         const entityName = jdlEntity.name;
@@ -52,7 +52,7 @@ function createJSONEntities(jdlEntities, creationTimestamp) {
          * created JHipster User entity and none of its fields and owner-side
          * relationships will be considered.
          */
-        if (builtInEntities.has(entityName.toLowerCase())) {
+        if (!skipUserManagement && builtInEntities.has(entityName.toLowerCase())) {
             logger.warn(
                 `An Entity name '${entityName}' was used: '${entityName}' is an entity created by default by JHipster.` +
                     ' All relationships toward it will be kept but any attributes and relationships from it will be disregarded.'

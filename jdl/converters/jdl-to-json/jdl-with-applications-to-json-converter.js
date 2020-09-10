@@ -21,6 +21,7 @@ const BasicEntityConverter = require('./jdl-to-json-basic-entity-converter');
 const FieldConverter = require('./jdl-to-json-field-converter');
 const RelationshipConverter = require('./jdl-to-json-relationship-converter');
 const OptionConverter = require('./jdl-to-json-option-converter');
+const { OptionNames } = require('../../jhipster/application-options');
 
 const USER = 'user';
 const AUTHORITY = 'authority';
@@ -51,9 +52,12 @@ function convert(args = {}) {
         const applicationNames = jdlObject.getApplications().map(jdlApplication => jdlApplication.getConfigurationOptionValue('baseName'));
         return new Map(applicationNames.map(applicationName => [applicationName, []]));
     }
-    setBasicEntityInformation(args.creationTimestamp);
-    setFields();
-    setRelationships();
+    const skipUserManagement = args.jdlObject
+        .getApplications()
+        .some(jdlApplication => jdlApplication.getConfigurationOptionValue(OptionNames.SKIP_USER_MANAGEMENT));
+    setBasicEntityInformation(args.creationTimestamp, skipUserManagement);
+    setFields(skipUserManagement);
+    setRelationships(skipUserManagement);
     setApplicationToEntities();
     const entitiesForEachApplication = getEntitiesForEachApplicationMap();
     setOptions(entitiesForEachApplication);
@@ -86,27 +90,27 @@ function setEntitiesPerApplication() {
     });
 }
 
-function setBasicEntityInformation(creationTimestamp = new Date()) {
-    const convertedEntities = BasicEntityConverter.convert(jdlObject.getEntities(), creationTimestamp);
+function setBasicEntityInformation(creationTimestamp = new Date(), skipUserManagement) {
+    const convertedEntities = BasicEntityConverter.convert(jdlObject.getEntities(), creationTimestamp, skipUserManagement);
     convertedEntities.forEach((jsonEntity, entityName) => {
         entities[entityName] = jsonEntity;
     });
 }
 
-function setFields() {
+function setFields(skipUserManagement) {
     const convertedFields = FieldConverter.convert(jdlObject);
     convertedFields.forEach((entityFields, entityName) => {
-        if (builtInEntities.has(entityName.toLowerCase())) {
+        if (!skipUserManagement && builtInEntities.has(entityName.toLowerCase())) {
             return;
         }
         entities[entityName].addFields(entityFields);
     });
 }
 
-function setRelationships() {
+function setRelationships(skipUserManagement) {
     const convertedRelationships = RelationshipConverter.convert(jdlObject.getRelationships(), jdlObject.getEntityNames());
     convertedRelationships.forEach((entityRelationships, entityName) => {
-        if (builtInEntities.has(entityName.toLowerCase())) {
+        if (!skipUserManagement && builtInEntities.has(entityName.toLowerCase())) {
             return;
         }
         entities[entityName].addRelationships(entityRelationships);

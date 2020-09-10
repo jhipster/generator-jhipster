@@ -48,10 +48,10 @@ function convert(args = {}) {
         throw new Error("The JDL object, the application's name and its the database type are mandatory.");
     }
     init(args);
-    setBasicEntityInformation(args.creationTimestamp);
+    setBasicEntityInformation(args.creationTimestamp, args.skipUserManagement);
     setOptions();
-    setFields();
-    setRelationships();
+    setFields(args.skipUserManagement);
+    setRelationships(args.skipUserManagement);
     setApplicationToEntities();
     return new Map([[args.applicationName, Object.values(entities)]]);
 }
@@ -69,8 +69,8 @@ function resetState() {
     entities = null;
 }
 
-function setBasicEntityInformation(creationTimestamp = new Date()) {
-    const convertedEntities = BasicEntityConverter.convert(jdlObject.getEntities(), creationTimestamp);
+function setBasicEntityInformation(creationTimestamp = new Date(), skipUserManagement) {
+    const convertedEntities = BasicEntityConverter.convert(jdlObject.getEntities(), creationTimestamp, skipUserManagement);
     convertedEntities.forEach((jsonEntity, entityName) => {
         entities[entityName] = jsonEntity;
     });
@@ -83,20 +83,20 @@ function setOptions() {
     });
 }
 
-function setFields() {
+function setFields(skipUserManagement) {
     const convertedFields = FieldConverter.convert(jdlObject);
     convertedFields.forEach((entityFields, entityName) => {
-        if (builtInEntities.has(entityName.toLowerCase())) {
+        if (!skipUserManagement && builtInEntities.has(entityName.toLowerCase())) {
             return;
         }
         entities[entityName].addFields(entityFields);
     });
 }
 
-function setRelationships() {
+function setRelationships(skipUserManagement) {
     const convertedRelationships = RelationshipConverter.convert(jdlObject.getRelationships(), jdlObject.getEntityNames());
     convertedRelationships.forEach((entityRelationships, entityName) => {
-        if (builtInEntities.has(entityName.toLowerCase())) {
+        if (!skipUserManagement && builtInEntities.has(entityName.toLowerCase())) {
             return;
         }
         entities[entityName].addRelationships(entityRelationships);

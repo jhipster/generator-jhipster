@@ -140,7 +140,10 @@ class BusinessErrorChecker {
             return;
         }
         const skippedUserManagement =
-            this.applicationSettings.skippedUserManagement || this.jdlObject.getOptionsForName(OptionNames.SKIP_USER_MANAGEMENT)[0];
+            this.applicationSettings.skippedUserManagement ||
+            this.jdlObject
+                .getApplications()
+                .some(jdlApplication => jdlApplication.getConfigurationOptionValue(OptionNames.SKIP_USER_MANAGEMENT));
         const validator = new RelationshipValidator();
         this.jdlObject.forEachRelationship(jdlRelationship => {
             validator.validate(jdlRelationship, skippedUserManagement);
