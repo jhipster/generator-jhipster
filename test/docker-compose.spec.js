@@ -125,7 +125,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
         });
     });
 
-    describe('gateway and one microservice, with zipkin', () => {
+    describe('gateway and one microservice', () => {
         before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
@@ -138,16 +138,11 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
-                    consoleOptions: ['zipkin'],
                 })
                 .on('end', done);
         });
         it('creates expected default files', () => {
             assert.file(expectedFiles.dockercompose);
-        });
-        it('creates compose file with zipkin, without curator', () => {
-            assert.fileContent('docker-compose.yml', /jhipster-zipkin/);
-            assert.noFileContent('docker-compose.yml', /jhipster-curator/);
         });
         it('creates jhipster-registry content', () => {
             assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
@@ -181,10 +176,6 @@ describe('JHipster Docker Compose Sub Generator', () => {
         it('creates expected default files', () => {
             assert.file(expectedFiles.dockercompose);
         });
-        it('creates compose file without zipkin, with curator', () => {
-            assert.noFileContent('docker-compose.yml', /jhipster-zipkin/);
-            assert.fileContent('docker-compose.yml', /jhipster-curator/);
-        });
         it('creates jhipster-registry content', () => {
             assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
         });
@@ -198,7 +189,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
         });
     });
 
-    describe('gateway and one microservice, with zipkin and curator', () => {
+    describe('gateway and one microservice', () => {
         before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
@@ -216,10 +207,6 @@ describe('JHipster Docker Compose Sub Generator', () => {
         });
         it('creates expected default files', () => {
             assert.file(expectedFiles.dockercompose);
-        });
-        it('creates compose file without zipkin, with curator', () => {
-            assert.fileContent('docker-compose.yml', /jhipster-zipkin/);
-            assert.fileContent('docker-compose.yml', /jhipster-curator/);
         });
         it('creates jhipster-registry content', () => {
             assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
