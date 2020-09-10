@@ -85,7 +85,7 @@ export default () => next => action => {
               const headers = Object.entries<string>(response.headers);
               let errorHeader: string | null = null;
               let entityKey: string | null = null;
-              headers.forEach(([k, v]: [string, string]) => {
+              headers.forEach(([k, v]) => {
                 if (k.toLowerCase().endsWith('app-error')) {
                   errorHeader = v;
                 } else if (k.toLowerCase().endsWith('app-params')) {
