@@ -32,7 +32,7 @@ module.exports = { convertRelationships };
  * @param {Boolean} conversionOptions.generateBidirectionalOneToMany - whether to generate bidirectional one-to-many.
  * @return {Array<JDLRelationship>} the converted JDL relationships.
  */
-function convertRelationships(parsedRelationships, annotationToOptionConverter, conversionOptions) {
+function convertRelationships(parsedRelationships, annotationToOptionConverter, conversionOptions = {}) {
     if (!parsedRelationships) {
         throw new Error('Relationships have to be passed so as to be converted.');
     }
