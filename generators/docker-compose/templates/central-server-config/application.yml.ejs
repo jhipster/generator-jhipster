@@ -37,7 +37,7 @@ management:
             prometheus:
                 enabled: true
 <%_ } _%>  
-<%_ if (consoleOptions && consoleOptions.includes('zipkin') || !skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
+<%_ if (!skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
 spring:
     <%_ if (!skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
     cloud:

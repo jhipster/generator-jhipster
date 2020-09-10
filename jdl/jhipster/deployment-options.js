@@ -43,10 +43,6 @@ const Options = {
     directoryPath: '../',
     appsFolders: [],
     clusteredDbApps: [],
-    consoleOptions: {
-        curator: 'curator',
-        zipkin: 'zipkin',
-    },
     // adminPassword: 'admin',
     serviceDiscoveryType: {
         eureka: 'eureka',
@@ -84,7 +80,6 @@ Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) =>
             directoryPath: Options.directoryPath,
             appsFolders: new Set(),
             clusteredDbApps: new Set(),
-            consoleOptions: new Set(),
             adminPassword: Options.adminPassword,
             serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
             dockerRepositoryName: Options.dockerRepositoryName,

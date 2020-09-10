@@ -220,16 +220,12 @@ module.exports = class extends BaseDockerGenerator {
             },
 
             saveConfig() {
-                if (this.monitoring === 'no') {
-                    this.consoleOptions = [];
-                }
                 this.config.set({
                     appsFolders: this.appsFolders,
                     directoryPath: this.directoryPath,
                     gatewayType: this.gatewayType,
                     clusteredDbApps: this.clusteredDbApps,
                     monitoring: this.monitoring,
-                    consoleOptions: this.consoleOptions,
                     serviceDiscoveryType: this.serviceDiscoveryType,
                     jwtSecretKey: this.jwtSecretKey,
                 });
