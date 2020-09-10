@@ -1937,5 +1937,30 @@ paginate * with infinite-scroll
                 ]);
             });
         });
+        context('when choosing neo4j as database type', () => {
+            let importState;
+
+            before(() => {
+                const content = `entity Person {
+   name String
+}
+
+relationship OneToMany {
+   Person{friends} to Person
+}`;
+                const importer = createImporterFromContent(content, {
+                    applicationName: 'toto',
+                    databaseType: 'neo4j',
+                });
+                importState = importer.import();
+            });
+            after(() => {
+                fse.removeSync('.jhipster');
+            });
+
+            it('should not generate a bidirectional one-to-many relationship', () => {
+                expect(importState.exportedEntities[0].relationships).to.have.length(1);
+            });
+        });
     });
 });
