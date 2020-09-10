@@ -41,6 +41,7 @@ module.exports = {
  * @param {String} args.databaseType - the database type
  * @param {applicationType} args.applicationType - the application's type
  * @param {Date} args.creationTimestamp - the creation timestamp, for entities
+ * @param {Boolean} args.disableBuiltInEntitiesFiltering - disable built in entities validation and filtering
  * @returns {Map} entities that can be exported to JSON
  */
 function convert(args = {}) {
@@ -48,10 +49,11 @@ function convert(args = {}) {
         throw new Error("The JDL object, the application's name and its the database type are mandatory.");
     }
     init(args);
-    setBasicEntityInformation(args.creationTimestamp);
+    const { disableBuiltInEntitiesFiltering } = args;
+    setBasicEntityInformation(args.creationTimestamp, disableBuiltInEntitiesFiltering);
     setOptions();
-    setFields();
-    setRelationships();
+    setFields(disableBuiltInEntitiesFiltering);
+    setRelationships(disableBuiltInEntitiesFiltering);
     setApplicationToEntities();
     return new Map([[args.applicationName, Object.values(entities)]]);
 }
@@ -69,8 +71,8 @@ function resetState() {
     entities = null;
 }
 
-function setBasicEntityInformation(creationTimestamp = new Date()) {
-    const convertedEntities = BasicEntityConverter.convert(jdlObject.getEntities(), creationTimestamp);
+function setBasicEntityInformation(creationTimestamp = new Date(), disableBuiltInEntitiesFiltering) {
+    const convertedEntities = BasicEntityConverter.convert(jdlObject.getEntities(), creationTimestamp, disableBuiltInEntitiesFiltering);
     convertedEntities.forEach((jsonEntity, entityName) => {
         entities[entityName] = jsonEntity;
     });
@@ -83,20 +85,20 @@ function setOptions() {
     });
 }
 
-function setFields() {
+function setFields(disableBuiltInEntitiesFiltering) {
     const convertedFields = FieldConverter.convert(jdlObject);
     convertedFields.forEach((entityFields, entityName) => {
-        if (builtInEntities.has(entityName.toLowerCase())) {
+        if (!disableBuiltInEntitiesFiltering && builtInEntities.has(entityName.toLowerCase())) {
             return;
         }
         entities[entityName].addFields(entityFields);
     });
 }
 
-function setRelationships() {
+function setRelationships(disableBuiltInEntitiesFiltering) {
     const convertedRelationships = RelationshipConverter.convert(jdlObject.getRelationships(), jdlObject.getEntityNames());
     convertedRelationships.forEach((entityRelationships, entityName) => {
-        if (builtInEntities.has(entityName.toLowerCase())) {
+        if (!disableBuiltInEntitiesFiltering && builtInEntities.has(entityName.toLowerCase())) {
             return;
         }
         entities[entityName].addRelationships(entityRelationships);

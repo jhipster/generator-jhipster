@@ -39,14 +39,14 @@ module.exports = {
  * @param {Array<String>} entityNames - all the entities' names.
  * @return {Map<String, Array<Object>>} a map having for keys entity names and for values arrays of JSON relationships.
  */
-function convert(jdlRelationships = [], entityNames = []) {
+function convert(jdlRelationships = [], entityNames = [], disableBuiltInEntitiesFiltering) {
     if (jdlRelationships.length === 0 || entityNames.length === 0) {
         return new Map();
     }
     convertedRelationships = new Map(entityNames.map(entityName => [entityName, []]));
     const relatedRelationships = getRelatedRelationships(jdlRelationships, entityNames);
     relatedRelationships.forEach((relatedRelationship, currentEntityName) => {
-        setRelationshipsFromEntity(relatedRelationship, currentEntityName);
+        setRelationshipsFromEntity(relatedRelationship, currentEntityName, disableBuiltInEntitiesFiltering);
         setRelationshipsToEntity(relatedRelationship, currentEntityName);
     });
     return convertedRelationships;
@@ -72,7 +72,7 @@ function getRelatedRelationships(relationships, entityNames) {
     return relatedRelationships;
 }
 
-function setRelationshipsFromEntity(relatedRelationships, entityName) {
+function setRelationshipsFromEntity(relatedRelationships, entityName, disableBuiltInEntitiesFiltering) {
     relatedRelationships.from.forEach(relationshipToConvert => {
         const otherSplitField = extractField(relationshipToConvert.injectedFieldInTo);
         const convertedRelationship = {
@@ -102,7 +102,7 @@ function setRelationshipsFromEntity(relatedRelationships, entityName) {
             if (!relationshipToConvert.injectedFieldInTo) {
                 convertedRelationship.otherEntityRelationshipName = lowerFirst(relationshipToConvert.from);
                 relationshipToConvert.type = MANY_TO_MANY;
-                if (!builtInEntities.has(relationshipToConvert.to.toLowerCase())) {
+                if (disableBuiltInEntitiesFiltering || !builtInEntities.has(relationshipToConvert.to.toLowerCase())) {
                     const convertedOtherEntityRelationships = convertedRelationships.get(relationshipToConvert.to);
                     const otherSideRelationship = {
                         relationshipName: camelCase(relationshipToConvert.from),

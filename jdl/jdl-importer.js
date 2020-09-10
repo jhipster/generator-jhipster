@@ -47,6 +47,8 @@ module.exports = {
  * @param {String} configuration.forceNoFiltering - whether to force filtering
  * @param {Boolean} configuration.skipFileGeneration - whether not to generate the .yo-rc.json file
  * @param {Date} configuration.creationTimestamp - the creation timestamp to use when generating entities
+ * @param {Boolean} configuration.disableBusinessErrorChecker - disable business error checker
+ * @param {Boolean} configuration.disableBuiltInEntitiesFiltering - disable built-in entities validation and filtering
  * @returns {Object} a JDL importer.
  * @throws {Error} if files aren't passed.
  */
@@ -74,6 +76,8 @@ function createImporterFromFiles(files, configuration) {
  * @param {String} configuration.forceNoFiltering - whether to force filtering
  * @param {Boolean} configuration.skipFileGeneration - whether not to generate the .yo-rc.json file
  * @param {Date} configuration.creationTimestamp - the creation timestamp to use when generating entities
+ * @param {Boolean} configuration.disableBusinessErrorChecker - disable business error checker
+ * @param {Boolean} configuration.disableBuiltInEntitiesFiltering - disable built-in entities validation and filtering
  * @returns {Object} a JDL importer.
  * @throws {Error} if the content isn't passed.
  */
@@ -104,7 +108,9 @@ function makeJDLImporter(content, configuration) {
         import: () => {
             configuration.creationTimestampConfig = getCreationTimestampToUse(configuration.creationTimestamp);
             const jdlObject = getJDLObject(content, configuration);
-            checkForErrors(jdlObject, configuration);
+            if (!configuration.disableBusinessErrorChecker) {
+                checkForErrors(jdlObject, configuration);
+            }
             if (jdlObject.getApplicationQuantity() === 0 && jdlObject.getEntityQuantity() > 0) {
                 importState.exportedEntities = importOnlyEntities(jdlObject, configuration);
             } else if (jdlObject.getApplicationQuantity() === 1) {
@@ -184,6 +190,7 @@ function checkForErrors(jdlObject, configuration) {
 
 function importOnlyEntities(jdlObject, configuration) {
     let { applicationName, applicationType, databaseType, creationTimestamp } = configuration;
+    const { disableBuiltInEntitiesFiltering } = configuration;
 
     if (configuration.application) {
         applicationType = configuration.application['generator-jhipster'].applicationType;
@@ -198,13 +205,14 @@ function importOnlyEntities(jdlObject, configuration) {
         applicationType,
         creationTimestamp,
         databaseType,
+        disableBuiltInEntitiesFiltering,
     });
     const jsonEntities = entitiesPerApplicationMap.get(applicationName);
     return exportJSONEntities(jsonEntities, configuration);
 }
 
 function importOneApplicationAndEntities(jdlObject, configuration) {
-    const { creationTimestamp, skipFileGeneration } = configuration;
+    const { creationTimestamp, skipFileGeneration, disableBuiltInEntitiesFiltering } = configuration;
 
     const importState = {
         exportedApplications: [],
@@ -222,6 +230,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
     const entitiesPerApplicationMap = JDLWithApplicationsToJSONConverter.convert({
         jdlObject,
         creationTimestamp,
+        disableBuiltInEntitiesFiltering,
     });
     const jsonEntities = entitiesPerApplicationMap.get(applicationName);
     importState.exportedApplicationsWithEntities[applicationName] = {
@@ -242,7 +251,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
 }
 
 function importApplicationsAndEntities(jdlObject, configuration) {
-    const { creationTimestamp, skipFileGeneration } = configuration;
+    const { creationTimestamp, skipFileGeneration, disableBuiltInEntitiesFiltering } = configuration;
 
     const importState = {
         exportedApplications: [],
@@ -259,6 +268,7 @@ function importApplicationsAndEntities(jdlObject, configuration) {
     const entitiesPerApplicationMap = JDLWithApplicationsToJSONConverter.convert({
         jdlObject,
         creationTimestamp,
+        disableBuiltInEntitiesFiltering,
     });
     entitiesPerApplicationMap.forEach((jsonEntities, applicationName) => {
         const jdlApplication = jdlObject.getApplication(applicationName);
