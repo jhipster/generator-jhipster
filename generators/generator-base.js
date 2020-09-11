@@ -135,11 +135,11 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     }
 
     /**
-     * Verify if the entity is a built-in entity.
+     * Verify if the entity is a User entity.
      * @param {String} entityName - Entity name to verify.
-     * @return {boolean} true if the entity is built-in.
+     * @return {boolean} true if the entity is User.
      */
-    isBuiltInUserEntity(entityName) {
+    isUserEntity(entityName) {
         if (_.upperFirst(entityName) === 'User') {
             return true;
         }

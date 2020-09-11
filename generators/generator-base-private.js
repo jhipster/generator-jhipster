@@ -1303,7 +1303,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      */
     getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships) {
         const derivedRelationship = relationships.find(relationship => relationship.useJPADerivedIdentifier === true);
-        return derivedRelationship && this.isBuiltInUserEntity(derivedRelationship.otherEntityName) && authenticationType === 'oauth2'
+        return derivedRelationship && this.isUserEntity(derivedRelationship.otherEntityName) && authenticationType === 'oauth2'
             ? 'String'
             : this.getPkType(databaseType);
     }

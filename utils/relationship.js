@@ -35,7 +35,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     }
 
     relationship.otherEntityPrimaryKeyType =
-        generator.isBuiltInUserEntity(otherEntityName) && entityWithConfig.authenticationType === 'oauth2'
+        generator.isUserEntity(otherEntityName) && entityWithConfig.authenticationType === 'oauth2'
             ? 'String'
             : generator.getPkType(entityWithConfig.databaseType);
 
@@ -112,7 +112,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         otherEntityTableName:
             otherEntityData.entityTableName ||
             generator.getTableName(
-                generator.isBuiltInUserEntity(otherEntityName) ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName
+                generator.isUserEntity(otherEntityName) ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName
             ),
     });
 
@@ -126,7 +126,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     });
 
     if (entityWithConfig.dto === 'mapstruct') {
-        if (otherEntityData.dto !== 'mapstruct' && !generator.isBuiltInUserEntity(otherEntityName)) {
+        if (otherEntityData.dto !== 'mapstruct' && !generator.isUserEntity(otherEntityName)) {
             generator.warning(
                 `This entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
             );
@@ -139,7 +139,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     }
 
     if (relationship.otherEntityAngularName === undefined) {
-        if (generator.isBuiltInUserEntity(otherEntityName)) {
+        if (generator.isUserEntity(otherEntityName)) {
             relationship.otherEntityAngularName = 'User';
         } else {
             const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
@@ -153,7 +153,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering,
     });
 
-    if (!generator.isBuiltInUserEntity(otherEntityName)) {
+    if (!generator.isUserEntity(otherEntityName)) {
         _.defaults(relationship, {
             otherEntityFileName: _.kebabCase(relationship.otherEntityAngularName),
             otherEntityFolderName: _.kebabCase(relationship.otherEntityAngularName),
