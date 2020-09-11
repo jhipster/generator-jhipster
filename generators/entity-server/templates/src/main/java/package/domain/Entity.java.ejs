@@ -517,8 +517,10 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
         this.<%= relationshipFieldName %>Ids.add(<%= otherEntityName %>.getId());
             <%_ } _%>
-            <%_ if (relationshipType === 'one-to-many') { _%>
-        <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
+            <%_ if (relationshipType === 'one-to-many') {
+                if (databaseType !== 'neo4j') { _%>
+                    <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
+                <%_ } _%>
             <%_ } else if (otherEntityRelationshipNameCapitalizedPlural !== '' && asEntity(otherEntityNameCapitalized)!=='User' && relationshipType === 'many-to-many') {
                 // JHipster version < 3.6.0 didn't ask for this relationship name _%>
         <%= otherEntityName %>.get<%= otherEntityRelationshipNameCapitalizedPlural %>().add(this);
@@ -533,8 +535,10 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
         this.<%= relationshipFieldName %>Ids.remove(<%= otherEntityName %>.getId());
             <%_ } _%>
-            <%_ if (relationshipType === 'one-to-many') { _%>
-        <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(null);
+            <%_ if (relationshipType === 'one-to-many') {
+                if (databaseType !== 'neo4j') { _%>
+                    <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(null);
+                <%_ } _%>
             <%_ } else if (otherEntityRelationshipNameCapitalizedPlural !== '' && asEntity(otherEntityNameCapitalized)!=='User' && relationshipType === 'many-to-many') {
                 // JHipster version < 3.6.0 didn't ask for this relationship name _%>
         <%= otherEntityName %>.get<%= otherEntityRelationshipNameCapitalizedPlural %>().remove(this);
