@@ -958,7 +958,7 @@ function askForRelationship() {
                         name: 'one-to-one',
                     },
                 ];
-                if (response.otherEntityName.toLowerCase() !== 'user') {
+                if (!this.isBuiltInUser(response.otherEntityName)) {
                     opts.unshift({
                         value: 'one-to-many',
                         name: 'one-to-many',
@@ -994,7 +994,7 @@ function askForRelationship() {
                 response.relationshipAdd === true &&
                 (response.relationshipType === 'one-to-many' ||
                     ((response.relationshipType === 'many-to-many' || response.relationshipType === 'one-to-one') &&
-                        response.otherEntityName.toLowerCase() !== 'user')),
+                        !this.isBuiltInUser(response.otherEntityName))),
             type: 'input',
             name: 'otherEntityRelationshipName',
             message: 'What is the name of this relationship in the other entity?',

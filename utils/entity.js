@@ -144,11 +144,11 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     entityWithConfig.i18nToLoad.push(entityWithConfig.entityInstance);
     entityWithConfig.i18nKeyPrefix = `${entityWithConfig.frontendAppName}.${entityWithConfig.entityTranslationKey}`;
 
-    const hasUserField = entityWithConfig.relationships.some(relationship => generator.isUserEntity(relationship.otherEntityName));
+    const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => generator.isBuiltInUser(relationship.otherEntityName));
     entityWithConfig.saveUserSnapshot =
         entityWithConfig.applicationType === 'microservice' &&
         entityWithConfig.authenticationType === 'oauth2' &&
-        hasUserField &&
+        hasBuiltInUserField &&
         entityWithConfig.dto === 'no';
 
     entityWithConfig.primaryKeyType = generator.getPkTypeBasedOnDBAndAssociation(

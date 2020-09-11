@@ -35,7 +35,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     }
 
     relationship.otherEntityPrimaryKeyType =
-        generator.isUserEntity(otherEntityName) && entityWithConfig.authenticationType === 'oauth2'
+        generator.isBuiltInUser(otherEntityName) && entityWithConfig.authenticationType === 'oauth2'
             ? 'String'
             : generator.getPkType(entityWithConfig.databaseType);
 
@@ -84,8 +84,10 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
                 otherEntityRelationshipNameCapitalized: otherRelationship.relationshipNameCapitalized,
                 otherEntityRelationshipNameCapitalizedPlural: relationship.relationshipNameCapitalizedPlural,
             });
+        } else if (relationship.relationshipType === 'one-to-many' || relationship.ownerSide === false) {
+            throw new Error(`Could not find the other side of the relationship ${stringify(relationship)}`);
         } else {
-            generator.warning(`Could not find the other side of the relationship ${stringify(relationship)}`);
+            generator.debug(`Could not find the other side of the relationship ${stringify(relationship)}`);
         }
     }
 
@@ -111,9 +113,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         otherEntityFieldCapitalized: _.upperFirst(relationship.otherEntityField),
         otherEntityTableName:
             otherEntityData.entityTableName ||
-            generator.getTableName(
-                generator.isUserEntity(otherEntityName) ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName
-            ),
+            generator.getTableName(generator.isBuiltInUser(otherEntityName) ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName),
     });
 
     _.defaults(relationship, {
@@ -126,7 +126,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     });
 
     if (entityWithConfig.dto === 'mapstruct') {
-        if (otherEntityData.dto !== 'mapstruct' && !generator.isUserEntity(otherEntityName)) {
+        if (otherEntityData.dto !== 'mapstruct' && !generator.isBuiltInUser(otherEntityName)) {
             generator.warning(
                 `This entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
             );
@@ -139,7 +139,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     }
 
     if (relationship.otherEntityAngularName === undefined) {
-        if (generator.isUserEntity(otherEntityName)) {
+        if (generator.isBuiltInUser(otherEntityName)) {
             relationship.otherEntityAngularName = 'User';
         } else {
             const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
@@ -153,7 +153,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering,
     });
 
-    if (!generator.isUserEntity(otherEntityName)) {
+    if (!generator.isBuiltInUser(otherEntityName)) {
         _.defaults(relationship, {
             otherEntityFileName: _.kebabCase(relationship.otherEntityAngularName),
             otherEntityFolderName: _.kebabCase(relationship.otherEntityAngularName),

@@ -159,6 +159,15 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     }
 
     /**
+     * Verify if the entity is a built-in User.
+     * @param {String} entityName - Entity name to verify.
+     * @return {boolean} true if the entity is User and is built-in.
+     */
+    isBuiltInUser(entityName) {
+        return this.isUsingBuiltInUser() && this.isUserEntity(entityName);
+    }
+
+    /**
      * Verify if the application is using built-in Authority.
      * @return {boolean} true if the Authority is built-in.
      */
@@ -181,6 +190,15 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Verify if the entity is a built-in Authority.
+     * @param {String} entityName - Entity name to verify.
+     * @return {boolean} true if the entity is Authority and is built-in.
+     */
+    isBuiltInAuthority(entityName) {
+        return this.isUsingBuiltInAuthority() && this.isAuthorityEntity(entityName);
     }
 
     /**

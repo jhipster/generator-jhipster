@@ -1099,7 +1099,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                 const otherEntityAngularName = relationship.otherEntityAngularName;
                 const importType = `I${otherEntityAngularName}`;
                 let importPath;
-                if (otherEntityAngularName === 'User') {
+                if (this.isBuiltInUser(otherEntityAngularName)) {
                     importPath = clientFramework === ANGULAR ? 'app/core/user/user.model' : 'app/shared/model/user.model';
                 } else {
                     importPath = `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
