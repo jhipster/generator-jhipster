@@ -22,7 +22,7 @@ const pluralize = require('pluralize');
 const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
 const { stringify } = require('.');
 
-function prepareRelationshipForTemplates(entityWithConfig, relationship, generator) {
+function prepareRelationshipForTemplates(entityWithConfig, relationship, generator, ignoreMissingRequiredRelationship) {
     const entityName = entityWithConfig.name;
     const relationshipOptions = relationship.options || {};
     const otherEntityName = relationship.otherEntityName;
@@ -95,6 +95,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
                 otherEntityRelationshipNameCapitalizedPlural: relationship.relationshipNameCapitalizedPlural,
             });
         } else if (
+            !ignoreMissingRequiredRelationship &&
             generator.jhipsterConfig.databaseType !== 'neo4j' &&
             (relationship.relationshipType === 'one-to-many' || relationship.ownerSide === false)
         ) {
