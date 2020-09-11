@@ -519,7 +519,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             <%_ } _%>
             <%_ if (relationshipType === 'one-to-many') {
                 if (databaseType !== 'neo4j') { _%>
-                    <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
+        <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
                 <%_ } _%>
             <%_ } else if (otherEntityRelationshipNameCapitalizedPlural !== '' && asEntity(otherEntityNameCapitalized)!=='User' && relationshipType === 'many-to-many') {
                 // JHipster version < 3.6.0 didn't ask for this relationship name _%>
