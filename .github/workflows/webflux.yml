@@ -83,26 +83,31 @@ jobs:
                       profile: prod
                       war: 0
                       e2e: 1
+                      testcontainers: 0
                     - app-type: webflux-mongodb-es-session
                       entity: mongodb
                       profile: prod
                       war: 0
                       e2e: 1
+                      testcontainers: 0
                     - app-type: webflux-mongodb-oauth2
                       entity: mongodb
                       profile: prod
                       war: 0
                       e2e: 1
+                      testcontainers: 0
                     - app-type: webflux-gateway-jwt
                       entity: none
                       profile: prod
                       war: 0
                       e2e: 1
+                      testcontainers: 0
                     - app-type: webflux-gateway-oauth2
                       entity: none
                       profile: prod
                       war: 0
                       e2e: 1
+                      testcontainers: 0
                     #                    - app-type: webflux-couchbase
                     #                      entity: couchbase
                     #                      profile: prod
@@ -118,21 +123,25 @@ jobs:
                       profile: prod
                       war: 0
                       protractor: 1
+                      testcontainers: 1
                     - app-type: webflux-mysql
                       entity: sqlfull
                       profile: prod
                       war: 0
                       e2e: 1
+                      testcontainers: 0
                     - app-type: webflux-mariadb-gradle
                       entity: sqlfull
                       profile: prod
                       war: 0
                       e2e: 1
+                      testcontainers: 1
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
             JHI_PROFILE: ${{ matrix.profile }}
             JHI_WAR: ${{ matrix.war }}
+            JHI_TESTCONTAINERS: ${{ matrix.testcontainers }}
             JHI_E2E: ${{ matrix.e2e }}
         steps:
             #----------------------------------------------------------------------

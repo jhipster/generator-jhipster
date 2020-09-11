@@ -22,6 +22,8 @@
         "jhiPrefix": "jhi",
         "clientPackageManager": "npm",
         "enableSwaggerCodegen": true,
-        "clientFramework": "angularX"
+        "clientFramework": "angularX",
+        "creationTimestamp": 1596513172471,
+        "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5"
     }
 }
