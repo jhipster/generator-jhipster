@@ -1939,8 +1939,17 @@ paginate * with infinite-scroll
    name String
 }
 
+entity Parent {
+   name String
+}
+
+entity Child {
+   name String
+}
+
 relationship OneToMany {
    Person{friends} to Person
+   Parent{childs} to Child
 }`;
                 const importer = createImporterFromContent(content, {
                     applicationName: 'toto',
@@ -1952,8 +1961,13 @@ relationship OneToMany {
                 fse.removeSync('.jhipster');
             });
 
-            it('should not generate a bidirectional one-to-many relationship', () => {
+            it('should not generate a bidirectional one-to-many relationship to itself', () => {
                 expect(importState.exportedEntities[0].relationships).to.have.length(1);
+            });
+
+            it('should not generate a bidirectional one-to-many relationship to another entity', () => {
+                expect(importState.exportedEntities[1].relationships).to.have.length(1);
+                expect(importState.exportedEntities[2].relationships).to.have.length(0);
             });
         });
     });
