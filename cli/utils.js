@@ -18,7 +18,6 @@
  */
 /* eslint-disable no-console */
 const chalk = require('chalk');
-const meow = require('meow');
 const _ = require('lodash');
 
 const CLI_NAME = 'jhipster';
@@ -183,12 +182,6 @@ const addKebabCase = (options = {}) => {
     return { ...kebabCase, ...options };
 };
 
-const getCommandOptions = (pkg, argv = []) => {
-    const options = meow({ help: false, pkg, argv });
-    const flags = options ? options.flags : undefined;
-    return addKebabCase({ ...flags });
-};
-
 const doneFactory = successMsg => {
     return errorOrMsg => {
         if (errorOrMsg instanceof Error) {
@@ -222,6 +215,10 @@ const buildCommanderOptions = (optionName, optionDefinition, additionalDescripti
         cmdString = `${cmdString} <value>`;
     }
     const commanderOption = [cmdString, optionDefinition.description + additionalDescription, optionDefinition.default];
+    if (optionDefinition.type === Boolean && optionDefinition.default === undefined) {
+        // Workaround commander not accepting negate values by default.
+        return [commanderOption, [`--no-${optionName}`]];
+    }
     return [commanderOption];
 };
 
@@ -234,7 +231,6 @@ module.exports = {
     getArgs,
     getOptionsFromArgs,
     getCommand,
-    getCommandOptions,
     addKebabCase,
     doneFactory,
     done: doneFactory(SUCCESS_MESSAGE),
