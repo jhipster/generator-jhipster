@@ -1505,11 +1505,16 @@ const serverFiles = {
                     renameTo: generator => `${generator.testDir}cucumber/stepdefs/StepDefs.java`,
                 },
                 {
-                    file: 'package/cucumber/CucumberContextConfiguration.java',
-                    renameTo: generator => `${generator.testDir}cucumber/CucumberContextConfiguration.java`,
+                    file: 'package/cucumber/CucumberTestContextConfiguration.java',
+                    renameTo: generator => `${generator.testDir}cucumber/CucumberTestContextConfiguration.java`,
                 },
                 { file: '../features/gitkeep', noEjs: true },
             ],
+        },
+        {
+            condition: generator => generator.cucumberTests,
+            path: SERVER_TEST_RES_DIR,
+            templates: ['cucumber.properties'],
         },
         {
             condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType !== 'oauth2',
