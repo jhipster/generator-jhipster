@@ -191,10 +191,14 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         const packageJsonTarget = this.fs.readJSON(packageJsonTargetFile);
         const replace = section => {
             if (packageJsonTarget[section]) {
-                Object.entries(packageJsonTarget[section]).forEach(([dependency, targetReference]) => {
-                    if (targetReference.startsWith(keyToReplace)) {
-                        const [referenceAtSource, sectionAtSource = section, dependencyAtSource = dependency] = targetReference.split('#');
-                        if (referenceAtSource !== keyToReplace) return;
+                Object.entries(packageJsonTarget[section]).forEach(([dependency, dependencyReference]) => {
+                    if (dependencyReference.startsWith(keyToReplace)) {
+                        const [
+                            keyToReplaceAtSource,
+                            sectionAtSource = section,
+                            dependencyAtSource = dependency,
+                        ] = dependencyReference.split('#');
+                        if (keyToReplaceAtSource !== keyToReplace) return;
                         if (!packageJsonSource[sectionAtSource] || !packageJsonSource[sectionAtSource][dependencyAtSource]) {
                             throw new Error(
                                 `Error setting ${dependencyAtSource} version, not found at ${sectionAtSource}.${dependencyAtSource}`
