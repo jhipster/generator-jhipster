@@ -106,7 +106,7 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
             if (rel.relationshipType === 'many-to-many' && rel.ownerSide) {
                 const joinTableName = getJoinTableName(entityTableName, rel.relationshipName, prodDatabaseType);
         _%>
-    private final static EntityManager.LinkTable <%= rel.relationshipName %>Link = new LinkTable("<%= joinTableName %>", "<%= getColumnName(rel.relationshipName) %>_id", "<%= getColumnName(name) %>_id");
+    private final static EntityManager.LinkTable <%= rel.relationshipName %>Link = new LinkTable("<%= joinTableName %>", "<%= getColumnName(name) %>_id", "<%= getColumnName(rel.relationshipName) %>_id");
         <%_ }
         }); _%>
 

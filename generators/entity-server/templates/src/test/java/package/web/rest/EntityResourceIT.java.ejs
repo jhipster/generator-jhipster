@@ -552,7 +552,12 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         _%>
     public static void deleteEntities(EntityManager em) {
         try {
-            em.deleteAll(<%= entityClass %>.class).block();
+        <%_ relationships.forEach(function(rel) {
+            if (rel.relationshipType === 'many-to-many' && rel.ownerSide) {
+                const joinTableName = getJoinTableName(entityTableName, rel.relationshipName, prodDatabaseType); _%>
+                em.deleteAll("<%= joinTableName %>").block();
+        <%_ }}); _%>
+                em.deleteAll(<%= entityClass %>.class).block();
         } catch (Exception e) {
             // It can fail, if other entities are still referring this - it will be removed later.
         }
