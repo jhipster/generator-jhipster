@@ -150,7 +150,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ if (!reactive) { _%>
 import org.springframework.test.web.servlet.MockMvc;
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 <%_ if (fieldsContainBlob === true) { _%>

@@ -91,7 +91,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 <%_ } _%>
 import org.springframework.http.ResponseEntity;
-<%_ if (databaseType === 'sql' && !viaService && ((!reactive && !saveUserSnapshot) || (reactive && isUsingMapsId === true))) { _%>
+<%_ if (databaseType === 'sql' && !viaService && (!saveUserSnapshot || isUsingMapsId === true)) { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 import org.springframework.web.bind.annotation.*;
