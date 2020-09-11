@@ -76,6 +76,10 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
                 default: false,
             },
             {
+                option: '--disable-jdl-validation',
+                desc: 'Disable jdl validations and filtering',
+            },
+            {
                 option: '--fork',
                 desc: 'Run generators using fork',
             },
