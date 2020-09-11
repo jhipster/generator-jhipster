@@ -22,6 +22,7 @@ const JDLUnaryOption = require('../../models/jdl-unary-option');
 const JDLBinaryOption = require('../../models/jdl-binary-option');
 const ApplicationTypes = require('../../jhipster/application-types');
 const BinaryOptions = require('../../jhipster/binary-options');
+const DatabaseTypes = require('../../jhipster/database-types');
 const { lowerFirst } = require('../../utils/string-utils');
 
 const { convertApplications } = require('./application-converter');
@@ -52,9 +53,10 @@ let applicationsPerEntityName;
  * @param {Object} configurationObject.parsedContent - The parsed JDL content
  * @param {String} configurationObject.applicationType - The application's type
  * @param {String} configurationObject.applicationName - The application's name
+ * @param {String} configurationObject.databaseType - The application's database type
  * @param {String} configurationObject.generatorVersion - The generator's version
  * @param {Boolean} configurationObject.skippedUserManagement - Whether user management is skipped
- * @return {ValidatedJDLObject} the built JDL object.
+ * @return {JDLObject} the built JDL object.
  */
 function parseFromConfigurationObject(configurationObject) {
     parsedContent = configurationObject.parsedContent || configurationObject.document;
@@ -193,7 +195,10 @@ function getConstantValueFromConstantName(constantName) {
 }
 
 function fillAssociations() {
-    const jdlRelationships = convertRelationships(parsedContent.relationships, convertAnnotationsToOptions);
+    const conversionOptions = {
+        generateBidirectionalOneToMany: configuration.databaseType !== DatabaseTypes.NEO4J,
+    };
+    const jdlRelationships = convertRelationships(parsedContent.relationships, convertAnnotationsToOptions, conversionOptions);
     jdlRelationships.forEach(jdlRelationship => {
         jdlObject.addRelationship(jdlRelationship, configuration.skippedUserManagement);
     });

@@ -142,6 +142,7 @@ function getJDLObject(parsedJDLContent, configuration) {
     let applicationType = configuration.applicationType;
     let generatorVersion = configuration.generatorVersion;
     let creationTimestamp = configuration.creationTimestampConfig;
+    let databaseType = configuration.databaseType;
     let skippedUserManagement = false;
 
     if (configuration.application) {
@@ -150,6 +151,7 @@ function getJDLObject(parsedJDLContent, configuration) {
         generatorVersion = configuration.application['generator-jhipster'].jhipsterVersion;
         creationTimestamp = configuration.application['generator-jhipster'].creationTimestamp;
         skippedUserManagement = configuration.application['generator-jhipster'].skipUserManagement;
+        databaseType = configuration.application['generator-jhipster'].databaseType;
     }
 
     return DocumentParser.parseFromConfigurationObject({
@@ -159,6 +161,7 @@ function getJDLObject(parsedJDLContent, configuration) {
         generatorVersion,
         creationTimestamp,
         skippedUserManagement,
+        databaseType,
     });
 }
 
