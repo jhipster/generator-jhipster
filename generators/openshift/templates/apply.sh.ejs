@@ -29,8 +29,6 @@ oc process -f <%- directoryPath %>ocp/registry/application-configmap.yml | oc ap
 oc process -f <%- directoryPath %>ocp/registry/consul.yml | oc apply -f -
 <%_ } _%> <%_ if (useKafka === true) { _%>
 oc process -f <%- directoryPath %>ocp/messagebroker/kafka.yml | oc apply -f -
-<%_ } _%> <%_ if (monitoring === 'elk') { _%>
-oc process -f <%- directoryPath %>ocp/monitoring/jhipster-monitoring.yml | oc apply -f -
 <%_ } _%> <%_ if (monitoring === 'prometheus') { _%>
 oc process -f <%- directoryPath %>ocp/monitoring/jhipster-metrics.yml | oc apply -f -
 <%_ } _%> <%_ for (var i = 0; i < appConfigs.length; i++) {

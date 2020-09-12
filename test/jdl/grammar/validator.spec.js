@@ -1543,7 +1543,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 });
             });
         });
-        const ALPHABETIC_LOWER = ['gatewayType', 'monitoring', 'consoleOptions', 'serviceDiscoveryType', 'storageType'];
+        const ALPHABETIC_LOWER = ['gatewayType', 'monitoring', 'serviceDiscoveryType', 'storageType'];
         ALPHABETIC_LOWER.forEach(type => {
             context(`and using for ${type}`, () => {
                 context('a valid value', () => {

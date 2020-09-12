@@ -91,7 +91,6 @@ describe('JDLDeployment', () => {
                     appsFolders: ['foo', 'bar'],
                     directoryPath: '../parent',
                     gatewayType: 'zuul',
-                    monitoring: 'elk',
                     dockerRepositoryName: 'test',
                 };
                 deployment = new JDLDeployment(args);
@@ -100,7 +99,6 @@ describe('JDLDeployment', () => {
             it('should stringify it', () => {
                 expect(deployment.toString()).to.eql(`deployment {
     deploymentType ${args.deploymentType}
-    monitoring ${args.monitoring}
     directoryPath ${args.directoryPath}
     appsFolders [${args.appsFolders.join(', ').replace(/'/g, '')}]
     dockerRepositoryName ${args.dockerRepositoryName}

@@ -79,7 +79,6 @@ function writeFiles() {
             const csOut = 'csvc'.concat('-', suffix);
             if (
                 this.useKafka ||
-                this.monitoring === 'elk' ||
                 this.monitoring === 'prometheus' ||
                 this.serviceDiscoveryType === 'eureka' ||
                 this.serviceDiscoveryType === 'consul'
@@ -88,20 +87,6 @@ function writeFiles() {
                 this.template('csvc/Chart.yml.ejs', `${csOut}/Chart.yaml`);
                 this.template('csvc/requirements.yml.ejs', `${csOut}/requirements.yaml`);
                 this.template('csvc/helpers.tpl.ejs', `${csOut}/templates/_helpers.tpl`);
-            }
-            if (this.monitoring === 'elk') {
-                this.template(`${k8s}/console/jhipster-logstash.yml.ejs`, `${csOut}/templates/jhipster-logstash.yml`);
-                this.template(`${k8s}/console/jhipster-console.yml.ejs`, `${csOut}/templates/jhipster-console.yml`);
-                this.template(`${k8s}/console/jhipster-dashboard-console.yml.ejs`, `${csOut}/templates/jhipster-dashboard-console.yml`);
-                if (this.deploymentApplicationType === 'microservice') {
-                    this.template(`${k8s}/console/jhipster-zipkin.yml.ejs`, `${csOut}/templates/jhipster-zipkin.yml`);
-                }
-                if (this.istio) {
-                    this.template(
-                        `${k8s}/istio/gateway/jhipster-console-gateway.yml.ejs`,
-                        `${csOut}/templates/jhipster-console-gateway.yml`
-                    );
-                }
             }
             if (this.monitoring === 'prometheus') {
                 if (this.istio && this.kubernetesServiceType === 'Ingress') {
