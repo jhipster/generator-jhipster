@@ -18,6 +18,7 @@
  */
 /* eslint-disable no-console */
 const chalk = require('chalk');
+const { Option } = require('commander');
 const _ = require('lodash');
 
 const CLI_NAME = 'jhipster';
@@ -194,26 +195,6 @@ const printSuccess = () => {
     }
 };
 
-const buildCommanderOptions = (optionName, optionDefinition, additionalDescription = '') => {
-    if (optionDefinition.hide || optionName === 'help') {
-        return [];
-    }
-    let cmdString = '';
-    if (optionDefinition.alias) {
-        cmdString = `-${optionDefinition.alias}, `;
-    }
-    cmdString = `${cmdString}--${optionName}`;
-    if (optionDefinition.type === String) {
-        cmdString = `${cmdString} <value>`;
-    }
-    const commanderOption = [cmdString, optionDefinition.description + additionalDescription, optionDefinition.default];
-    if (optionDefinition.type === Boolean && optionDefinition.default === undefined) {
-        // Workaround commander not accepting negate values by default.
-        return [commanderOption, [`--no-${optionName}`]];
-    }
-    return [commanderOption];
-};
-
 module.exports = {
     CLI_NAME,
     GENERATOR_NAME,
@@ -227,5 +208,4 @@ module.exports = {
     done: doneFactory(SUCCESS_MESSAGE),
     printSuccess,
     getOptionAsArgs,
-    buildCommanderOptions,
 };

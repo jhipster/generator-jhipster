@@ -16,24 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const commander = require('commander');
 const chalk = require('chalk');
 const didYouMean = require('didyoumean');
+const JHipsterCommand = require('./jhipster-command');
 
 const packageJson = require('../package.json');
-const { CLI_NAME, initHelp, logger, toString, getCommand, getArgs, done, buildCommanderOptions } = require('./utils');
+const { CLI_NAME, initHelp, logger, toString, getCommand, getArgs, done } = require('./utils');
 const EnvironmentBuilder = require('./environment-builder');
 const SUB_GENERATORS = require('./commands');
 const { packageNameToNamespace } = require('../generators/utils');
 
-const program = new commander.Command();
 const version = packageJson.version;
 const JHIPSTER_NS = CLI_NAME;
 
 const envBuilder = EnvironmentBuilder.createDefaultBuilder();
 const env = envBuilder.getEnvironment();
 
-program
+const program = new JHipsterCommand()
     .storeOptionsAsProperties(false)
     .passCommandToAction(false)
     .version(version)
@@ -81,32 +80,18 @@ Object.entries(allCommands).forEach(([key, opts]) => {
         command.alias(opts.alias);
     }
 
-    (opts.options || []).forEach(opt => {
-        const additionalDescription = opts.blueprint ? chalk.yellow(` (blueprint option: ${opts.blueprint})`) : '';
-        command.option(opt.option, opt.desc + additionalDescription, opt.default);
-    });
+    command.addAllCommandOptions(opts.options);
 
     if (!opts.cliOnly || key === 'jdl') {
-        const registeredOptions = [];
-        const registerGeneratorOptions = (generator, blueprintOptionDescription) => {
-            Object.entries(generator._options).forEach(([key, value]) => {
-                if (registeredOptions.includes(key)) {
-                    return;
-                }
-                registeredOptions.push(key);
-                buildCommanderOptions(key, value, blueprintOptionDescription).forEach(commanderOption => {
-                    command.option(...commanderOption);
-                });
-            });
-        };
-
         if (opts.blueprint) {
             // Blueprint only command.
-            registerGeneratorOptions(env.create(`${packageNameToNamespace(opts.blueprint)}:${key}`, { options: { help: true } }));
+            command.addAllGeneratorOptions(
+                env.create(`${packageNameToNamespace(opts.blueprint)}:${key}`, { options: { help: true } })._options
+            );
         } else {
             const generator = key === 'jdl' ? 'app' : key;
             // Register jhipster upstream options.
-            registerGeneratorOptions(env.create(`${JHIPSTER_NS}:${generator}`, { options: { help: true } }));
+            command.addAllGeneratorOptions(env.create(`${JHIPSTER_NS}:${generator}`, { options: { help: true } })._options);
 
             // Register blueprint specific options.
             envBuilder.getBlueprintsNamespaces().forEach(blueprintNamespace => {
@@ -116,8 +101,8 @@ Object.entries(allCommands).forEach(([key, opts]) => {
                 }
                 const blueprintName = blueprintNamespace.replace(/^jhipster-/, '');
                 try {
-                    registerGeneratorOptions(
-                        env.create(generatorNamespace, { options: { help: true } }),
+                    command.addAllGeneratorOptions(
+                        env.create(generatorNamespace, { options: { help: true } })._options,
                         chalk.yellow(` (blueprint option: ${blueprintName})`)
                     );
                 } catch (error) {
@@ -133,9 +118,10 @@ Object.entries(allCommands).forEach(([key, opts]) => {
     command
         .description(opts.desc + additionalCommandDescription)
         .action((...everything) => {
+            // [args, opts, extraArgs]
             const cmdOptions = everything.pop();
             if (Array.isArray(cmdOptions)) {
-                // Unknown commands or unknown argument.
+                // if extraArgs exists: Unknown commands or unknown argument.
                 const cmd = cmdOptions[0];
                 if (key !== 'app') {
                     logger.fatal(

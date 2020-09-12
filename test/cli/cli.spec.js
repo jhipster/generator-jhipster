@@ -413,9 +413,12 @@ describe('jhipster cli', () => {
                     });
                 });
 
+                it('should print foo command', () => {
+                    expect(stdout.includes('Create a new foo. (blueprint: generator-jhipster-cli)')).to.be.true;
+                });
+
                 it('should print foo options', () => {
                     expect(stdout.includes('--foo')).to.be.true;
-                    expect(stdout.includes('foo description (blueprint option: generator-jhipster-cli)')).to.be.true;
                 });
             });
 
