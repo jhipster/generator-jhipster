@@ -1541,6 +1541,27 @@ const serverFiles = {
     ],
     serverJavaUserManagement: [
         {
+            condition: generator => generator.isUsingBuiltInUser(),
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/domain/User.java',
+                    renameTo: generator => `${generator.javaDir}domain/${generator.asEntity('User')}.java`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.isUsingBuiltInAuthority(),
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                { file: 'package/domain/Authority.java', renameTo: generator => `${generator.javaDir}domain/Authority.java` },
+                {
+                    file: 'package/repository/AuthorityRepository.java',
+                    renameTo: generator => `${generator.javaDir}repository/AuthorityRepository.java`,
+                },
+            ],
+        },
+        {
             condition: generator =>
                 (generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice') ||
                 (!generator.skipUserManagement && generator.databaseType === 'sql'),
@@ -1577,11 +1598,6 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/domain/User.java',
-                    renameTo: generator => `${generator.javaDir}domain/${generator.asEntity('User')}.java`,
-                },
-                { file: 'package/domain/Authority.java', renameTo: generator => `${generator.javaDir}domain/Authority.java` },
-                {
                     file: 'package/service/mapper/package-info.java',
                     renameTo: generator => `${generator.javaDir}service/mapper/package-info.java`,
                 },
@@ -1592,10 +1608,6 @@ const serverFiles = {
                 {
                     file: 'package/repository/UserRepository.java',
                     renameTo: generator => `${generator.javaDir}repository/UserRepository.java`,
-                },
-                {
-                    file: 'package/repository/AuthorityRepository.java',
-                    renameTo: generator => `${generator.javaDir}repository/AuthorityRepository.java`,
                 },
                 { file: 'package/web/rest/UserResource.java', renameTo: generator => `${generator.javaDir}web/rest/UserResource.java` },
                 {
@@ -1675,17 +1687,6 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator =>
-                generator.authenticationType === 'oauth2' && ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/repository/AuthorityRepository.java',
-                    renameTo: generator => `${generator.javaDir}repository/AuthorityRepository.java`,
-                },
-            ],
-        },
-        {
             condition: generator => !generator.skipUserManagement,
             path: SERVER_MAIN_RES_DIR,
             templates: [
@@ -1695,26 +1696,9 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator =>
-                !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                { file: 'package/domain/Authority.java', renameTo: generator => `${generator.javaDir}domain/Authority.java` },
-                {
-                    file: 'package/repository/AuthorityRepository.java',
-                    renameTo: generator => `${generator.javaDir}repository/AuthorityRepository.java`,
-                },
-            ],
-        },
-        {
             condition: generator => !generator.skipUserManagement,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
-                /* User management java domain files */
-                {
-                    file: 'package/domain/User.java',
-                    renameTo: generator => `${generator.javaDir}domain/${generator.asEntity('User')}.java`,
-                },
                 {
                     file: 'package/repository/UserRepository.java',
                     renameTo: generator => `${generator.javaDir}repository/UserRepository.java`,

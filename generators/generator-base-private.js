@@ -1099,7 +1099,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                 const otherEntityAngularName = relationship.otherEntityAngularName;
                 const importType = `I${otherEntityAngularName}`;
                 let importPath;
-                if (otherEntityAngularName === 'User') {
+                if (this.isBuiltInUser(otherEntityAngularName)) {
                     importPath = clientFramework === ANGULAR ? 'app/core/user/user.model' : 'app/shared/model/user.model';
                 } else {
                     importPath = `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
@@ -1303,7 +1303,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      */
     getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships) {
         const derivedRelationship = relationships.find(relationship => relationship.useJPADerivedIdentifier === true);
-        return derivedRelationship && this.isBuiltInUserEntity(derivedRelationship.otherEntityName) && authenticationType === 'oauth2'
+        return derivedRelationship && this.isUserEntity(derivedRelationship.otherEntityName) && authenticationType === 'oauth2'
             ? 'String'
             : this.getPkType(databaseType);
     }
