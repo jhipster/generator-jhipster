@@ -35,19 +35,6 @@ services:
             # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
             # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
             # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
-            <%_ if (monitoring === 'prometheus') { _%>
-            - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
-            <%_ } _%>
-            <%_ if (authenticationType === 'oauth2') { _%>
-            # For Keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
-            - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
-            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-registry
-            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
-            <%_ } _%>
-            <%_ if (authenticationType === 'uaa') { _%>
-            # change the name of UAA server here, if needed
-            - JHIPSTER_SECURITY_CLIENT_AUTHORIZATION_TOKEN_SERVICE_ID=uaa
-            <%_ } _%>
         ports:
             - 8761:8761
 
