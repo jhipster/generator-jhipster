@@ -99,7 +99,7 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
 
     private final static Table entityTable = Table.aliased("<%= entityTableName %>", EntityManager.ENTITY_ALIAS);
         <%_ eagerRelations.forEach(function(rel) { _%>
-    private final static Table <%= rel.relationshipName %>Table = Table.aliased("<%= rel.otherEntityTableName %>", "<%= rel.relationshipName %>");
+    private final static Table <%= rel.relationshipName %>Table = Table.aliased("<%= rel.otherEntityTableName %>", "<%= _generateSqlSafeName(rel.relationshipName) %>");
         <%_ }); _%>
 
         <%_ relationships.forEach(function(rel) {
@@ -191,7 +191,6 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
             <%_ if (isUsingMapsId) { _%>
             entity.setId(entity.get<%= mapsIdAssoc.relationshipNameCapitalized %>().getId());
             <%_ } _%>
-            // TODO: implement many-to-many and one-to-many relationship persistence
             return insert(entity)<% if (fieldsContainOwnerManyToMany) { %>.flatMap(savedEntity -> updateRelations(savedEntity))<% } %>;
         } else {
             return update(entity).map(numberOfUpdates -> {
@@ -205,7 +204,6 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
 
     @Override
     public Mono<Integer> update(<%= asEntity(entityClass) %> entity) {
-        // TODO: implement many-to-many and one-to-many relationship persistence
         <%_ if (fields.length + eagerRelations.length > 0) { _%>
         return db.update().table(<%= asEntity(entityClass) %>.class).using(entity).fetch().rowsUpdated();
         <%_ } else { _%>

@@ -21,6 +21,7 @@ const constants = require('../generator-constants');
 const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const { isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
 
 /* constants used throughout */
 let useBlueprints;
@@ -108,6 +109,13 @@ module.exports = class extends BaseBlueprintGenerator {
             return 'id';
         }
         return `${this.getColumnName(relationship.relationshipName)}_id`;
+    }
+
+    _generateSqlSafeName(name) {
+        if (isReservedTableName(name, 'sql')) {
+            return `e_${name}`;
+        }
+        return name;
     }
 
     _getUseMapsIdRelation(relationships) {
