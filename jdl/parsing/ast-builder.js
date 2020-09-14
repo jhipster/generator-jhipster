@@ -44,6 +44,7 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
             relationships: [],
             enums: [],
             options: {},
+            specialOptions: [],
         };
 
         if (context.constantDeclaration) {
@@ -104,6 +105,13 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
                 const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
                 astResult.list = entityList;
                 astResult.excluded = excludedEntityList;
+            });
+        }
+
+        if (context.specialUnaryOptionDeclaration) {
+            context.specialUnaryOptionDeclaration.map(this.visit, this).forEach(option => {
+                console.log(option);
+                ast.specialOptions.push(option);
             });
         }
 
@@ -380,6 +388,10 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
         return getBinaryOptionFromContext(context, this);
     }
 
+    specialUnaryOptionDeclaration(context) {
+        return getSpecialUnaryOptionDeclaration(context, this);
+    }
+
     filterDef(context) {
         let entityList = [];
         if (context.NAME) {
@@ -597,6 +609,21 @@ function getBinaryOptionFromContext(context, visitor) {
     return {
         optionName: context.BINARY_OPTION[0].image,
         optionValue,
+        list,
+        excluded,
+    };
+}
+
+function getSpecialUnaryOptionDeclaration(context, visitor) {
+    const list = visitor.visit(context.filterDef);
+
+    let excluded = [];
+    if (context.exclusion) {
+        excluded = visitor.visit(context.exclusion);
+    }
+
+    return {
+        // optionValues,
         list,
         excluded,
     };

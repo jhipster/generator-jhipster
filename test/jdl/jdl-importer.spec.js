@@ -1956,5 +1956,27 @@ relationship OneToMany {
                 expect(importState.exportedEntities[0].relationships).to.have.length(1);
             });
         });
+        context('when using the new option form', () => {
+            before(() => {
+                const content = `entity A
+entity B
+entity C
+
+use mapstruct, elasticsearch for A, B except C`;
+                const importer = createImporterFromContent(content, {
+                    applicationName: 'toto',
+                    databaseType: 'sql',
+                });
+                importer.import();
+            });
+            after(() => {
+                fse.removeSync('.jhipster');
+            });
+
+            it('should work', () => {
+                // TODO fix it, please
+                expect(true).to.be.true;
+            });
+        });
     });
 });

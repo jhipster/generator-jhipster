@@ -403,8 +403,9 @@ module.exports = class JDLParser extends CstParser {
                     this.CONSUME(LexerTokens.COMMA);
                 },
             });
+            this.CONSUME1(LexerTokens.NAME);
             this.CONSUME(LexerTokens.FOR);
-            this.SUBRULE(this.entityList);
+            this.SUBRULE(this.filterDef);
             this.OPTION(() => {
                 this.SUBRULE(this.exclusion);
             });
