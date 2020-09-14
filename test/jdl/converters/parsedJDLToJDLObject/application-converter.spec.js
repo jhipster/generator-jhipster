@@ -45,7 +45,7 @@ describe('ApplicationConverter', () => {
                                 excluded: [],
                             },
                             options: {},
-                            specialOptions: [],
+                            useOptions: [],
                         },
                     ]);
                     expectedApplication = [
@@ -78,7 +78,7 @@ describe('ApplicationConverter', () => {
                                         excluded: [],
                                     },
                                     options: {},
-                                    specialOptions: [],
+                                    useOptions: [],
                                 },
                             ],
                             { creationTimestamp: 42 }
@@ -113,7 +113,7 @@ describe('ApplicationConverter', () => {
                                         excluded: [],
                                     },
                                     options: {},
-                                    specialOptions: [],
+                                    useOptions: [],
                                 },
                             ],
                             { generatorVersion: '7.0.0' }
@@ -155,7 +155,7 @@ describe('ApplicationConverter', () => {
                                             excluded: [],
                                         },
                                         options: {},
-                                        specialOptions: [],
+                                        useOptions: [],
                                     },
                                 ],
                                 {}
@@ -196,7 +196,7 @@ describe('ApplicationConverter', () => {
                                     excluded: [],
                                 },
                                 options: {},
-                                specialOptions: [],
+                                useOptions: [],
                             },
                         ],
                         {},
@@ -256,7 +256,7 @@ describe('ApplicationConverter', () => {
                                     excluded: ['A'],
                                 },
                                 options: {},
-                                specialOptions: [],
+                                useOptions: [],
                             },
                         ],
                         {},
@@ -296,7 +296,7 @@ describe('ApplicationConverter', () => {
                                         },
                                     },
                                 },
-                                specialOptions: [],
+                                useOptions: [],
                             },
                         ];
                     });
@@ -329,7 +329,7 @@ describe('ApplicationConverter', () => {
                                             },
                                         },
                                     },
-                                    specialOptions: [],
+                                    useOptions: [],
                                 },
                             ],
                             {},

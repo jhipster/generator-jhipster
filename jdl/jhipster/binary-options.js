@@ -43,7 +43,7 @@ function getOptionName(optionValue) {
     return optionNames.find(optionName => Values[optionName] && Values[optionName][optionValue]);
 }
 
-const SpecialOptions = {
+const OptionValues = {
     MAPSTRUCT: 'mapstruct',
     SERVICE_CLASS: 'serviceClass',
     SERVICE_IMPL: 'serviceImpl',
@@ -76,7 +76,8 @@ function exists(passedOption, passedValue) {
 
 module.exports = {
     Options,
-    SpecialOptions,
+    // TODO change the names
+    OptionValues,
     Values,
     exists,
     forEach,

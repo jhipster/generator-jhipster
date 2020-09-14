@@ -44,7 +44,7 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
             relationships: [],
             enums: [],
             options: {},
-            specialOptions: [],
+            useOptions: [],
         };
 
         if (context.constantDeclaration) {
@@ -110,7 +110,7 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
 
         if (context.specialUnaryOptionDeclaration) {
             context.specialUnaryOptionDeclaration.map(this.visit, this).forEach(option => {
-                ast.specialOptions.push(option);
+                ast.useOptions.push(option);
             });
         }
 
@@ -447,7 +447,7 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
             config: {},
             entities: { entityList: [], excluded: [] },
             options: {},
-            specialOptions: [],
+            useOptions: [],
         };
 
         if (context.applicationSubConfig) {

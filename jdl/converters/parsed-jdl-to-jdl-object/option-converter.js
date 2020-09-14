@@ -21,7 +21,7 @@ const JDLUnaryOption = require('../../models/jdl-unary-option');
 const JDLBinaryOption = require('../../models/jdl-binary-option');
 const UnaryOptions = require('../../jhipster/unary-options');
 const BinaryOptions = require('../../jhipster/binary-options');
-const { SpecialOptions, getOptionName } = require('../../jhipster/binary-options');
+const { OptionValues, getOptionName } = require('../../jhipster/binary-options');
 
 module.exports = { convertOptions };
 
@@ -30,14 +30,14 @@ module.exports = { convertOptions };
  * @param {Object} parsedOptions - the parsed option object.
  * @returns {Array<JDLUnaryOption|JDLBinaryOption>} the converted JDLUnaryOption & JDLBinaryOption objects.
  */
-function convertOptions(parsedOptions, specialOptions) {
+function convertOptions(parsedOptions, useOptions) {
     if (!parsedOptions) {
         throw new Error('Options have to be passed so as to be converted.');
     }
     const convertedUnaryOptions = convertUnaryOptions(parsedOptions);
     const convertedBinaryOptions = convertBinaryOptions(parsedOptions);
-    const convertedSpecialOptions = convertSpecialOptions(specialOptions);
-    return [...convertedUnaryOptions, ...convertedBinaryOptions, ...convertedSpecialOptions];
+    const convertedUseOptions = convertUseOptions(useOptions);
+    return [...convertedUnaryOptions, ...convertedBinaryOptions, ...convertedUseOptions];
 }
 
 function convertUnaryOptions(parsedOptions) {
@@ -80,20 +80,21 @@ function convertBinaryOptions(parsedOptions) {
     return convertedBinaryOptions;
 }
 
-function convertSpecialOptions(specialOptions) {
-    const convertedSpecialOptions = [];
+function convertUseOptions(useOptions) {
+    const convertedUseOptions = [];
 
-    specialOptions.forEach(useValue => {
+    useOptions.forEach(useValue => {
         const { optionValues, list, excluded } = useValue;
 
-        const specialOptionsKeys = Object.keys(SpecialOptions);
+        // TODO change the names
+        const optionValueKeys = Object.keys(OptionValues);
 
-        specialOptionsKeys.forEach(specialOptionKey => {
-            if (optionValues.includes(SpecialOptions[specialOptionKey])) {
-                convertedSpecialOptions.push(
+        optionValueKeys.forEach(specialOptionKey => {
+            if (optionValues.includes(OptionValues[specialOptionKey])) {
+                convertedUseOptions.push(
                     new JDLBinaryOption({
                         name: getOptionName(specialOptionKey),
-                        value: SpecialOptions[specialOptionKey],
+                        value: OptionValues[specialOptionKey],
                         entityNames: list,
                         excludedNames: excluded,
                     })
@@ -102,5 +103,5 @@ function convertSpecialOptions(specialOptions) {
         });
     });
 
-    return convertedSpecialOptions;
+    return convertedUseOptions;
 }

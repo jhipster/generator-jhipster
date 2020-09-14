@@ -74,7 +74,7 @@ MAX = 43`);
                         excluded: [],
                     },
                     options: {},
-                    specialOptions: [],
+                    useOptions: [],
                 });
             });
         });
@@ -101,7 +101,7 @@ MAX = 43`);
                             excluded: [],
                         },
                         options: {},
-                        specialOptions: [],
+                        useOptions: [],
                     });
                 });
             });
@@ -127,7 +127,7 @@ MAX = 43`);
                             excluded: [],
                         },
                         options: {},
-                        specialOptions: [],
+                        useOptions: [],
                     });
                 });
             });
@@ -153,7 +153,7 @@ MAX = 43`);
                             excluded: [],
                         },
                         options: {},
-                        specialOptions: [],
+                        useOptions: [],
                     });
                 });
             });
@@ -191,7 +191,7 @@ application {
                             excluded: [],
                         },
                         options: {},
-                        specialOptions: [],
+                        useOptions: [],
                     },
                     {
                         config: {
@@ -203,7 +203,7 @@ application {
                             excluded: [],
                         },
                         options: {},
-                        specialOptions: [],
+                        useOptions: [],
                     },
                 ]);
             });

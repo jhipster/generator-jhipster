@@ -105,7 +105,7 @@ function checkEntityNamesInApplication(applicationName, entityNamesInApplication
 }
 
 function getEntityOptionsInApplication(parsedApplication) {
-    return convertOptions(parsedApplication.options, parsedApplication.specialOptions);
+    return convertOptions(parsedApplication.options, parsedApplication.useOptions);
 }
 
 /**
