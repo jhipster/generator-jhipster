@@ -63,20 +63,6 @@ parameters:
     description: Port of the application
     required: true
     displayName: Application Port
-<%_ if (app.monitoring === 'elk') { _%>
-  -
-    name: JHIPSTER_LOGSTASH
-    value: jhipster-logstash
-    description: Host name of the Logstash service
-    required: true
-    displayName: "*** PLEASE DO NOT CHANGE THIS ***"
-  -
-    name: JHIPSTER_ZIPKIN
-    value: http://jhipster-zipkin
-    description: Host name of the Zipkin service
-    required: true
-    displayName: "*** PLEASE DO NOT CHANGE THIS ***"
-<%_ } _%>
 objects:
   -
     apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
@@ -225,20 +211,6 @@ objects:
               value: 'org.apache.kafka.common.serialization.StringDeserializer'
             - name: KAFKA_PRODUCER_VALUE_DESERIALIZER
               value: 'org.apache.kafka.common.serialization.StringDeserializer'
-            <%_ } _%>
-            <%_ if (monitoring === 'elk') { _%>
-            - name: JHIPSTER_METRICS_LOGS_ENABLED
-              value: "true"
-            - name: JHIPSTER_LOGGING_LOGSTASH_ENABLED
-              value: "true"
-            - name: JHIPSTER_LOGGING_LOGSTASH_HOST
-              value: ${JHIPSTER_LOGSTASH}
-              <%_ if (deploymentApplicationType === 'microservice') { _%>
-            - name: SPRING_ZIPKIN_ENABLED
-              value: "true"
-            - name: SPRING_ZIPKIN_BASE_URL
-              value: ${JHIPSTER_ZIPKIN}
-              <%_ } _%>
             <%_ } _%>
             <%_ if (monitoring === 'prometheus') { _%>
             - name: JHIPSTER_METRICS_LOGS_ENABLED

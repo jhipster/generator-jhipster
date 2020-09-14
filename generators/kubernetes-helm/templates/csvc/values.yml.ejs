@@ -14,38 +14,6 @@ kafka:
       sidecar.istio.io/inject: "false"
     <%_ } _%>
 <%_ } _%>
-<%_ if (monitoring === 'elk') { _%>
-elk:
-  enabled: true
-elasticsearch:
-  image:
-    repository: "<%= DOCKER_JHIPSTER_ELASTICSEARCH.split(":")[0] %>"
-    tag: "<%= DOCKER_JHIPSTER_ELASTICSEARCH.split(":")[1] %>"
-  cluster:
-    env:
-      MINIMUM_MASTER_NODES: 2
-  master:
-    name: master
-    replicas: 2
-    <%_ if (istio) { _%>
-    podAnnotations:
-      sidecar.istio.io/inject: "false"
-    <%_ } _%>
-  data:
-    name: data
-    replicas: 1
-    <%_ if (istio) { _%>
-    podAnnotations:
-      sidecar.istio.io/inject: "false"
-    <%_ } _%>
-  client:
-    name: client
-    replicas: 1
-    <%_ if (istio) { _%>
-    podAnnotations:
-      sidecar.istio.io/inject: "false"
-    <%_ } _%>
-<%_ } _%>
 <%_ if (monitoring === 'prometheus') { _%>
 prometheus:
   enabled: true

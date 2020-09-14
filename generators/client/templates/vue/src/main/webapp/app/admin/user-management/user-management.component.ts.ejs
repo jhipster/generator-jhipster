@@ -1,13 +1,12 @@
-import { Component, Inject } from 'vue-property-decorator';
+import { Component, Inject, Vue } from 'vue-property-decorator';
 import { mixins } from 'vue-class-component';
 import Vue2Filters from 'vue2-filters';
 import UserManagementService from './user-management.service';
-import AlertMixin from '@/shared/alert/alert.mixin';
 
 @Component({
   mixins: [Vue2Filters.mixin]
 })
-export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mixins(AlertMixin) {
+export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends Vue {
   @Inject('userService') private userManagementService: () => UserManagementService;
   public error = '';
   public success = '';
@@ -91,8 +90,12 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mi
       <%_ } else {_%>
       const message = res.headers['<%=headerAlert%>'];
       <%_ } _%>
-      this.alertService().showAlert(message, 'danger');
-      this.getAlertFromStore();
+      this.$bvToast.toast(message.toString(), {
+        title: 'Info',
+        variant: 'danger',
+        solid: true,
+        autoHideDelay: 5000,
+      });
       this.removeId = null;
       this.loadAll();
       this.closeDialog();

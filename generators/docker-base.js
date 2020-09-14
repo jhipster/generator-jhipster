@@ -141,7 +141,6 @@ function loadFromYoRc() {
     this.gatewayType = this.config.get('gatewayType');
     this.clusteredDbApps = this.config.get('clusteredDbApps');
     this.monitoring = this.config.get('monitoring');
-    this.consoleOptions = this.config.get('consoleOptions');
     this.useKafka = false;
     this.useMemcached = false;
     this.useRedis = false;

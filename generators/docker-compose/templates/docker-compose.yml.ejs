@@ -53,47 +53,6 @@ services:
             file: traefik.yml
             service: traefik
 <%_ } _%>
-<%_ if (monitoring === 'elk') { _%>
-
-    jhipster-elasticsearch:
-        extends:
-            file: jhipster-console.yml
-            service: jhipster-elasticsearch
-    jhipster-logstash:
-        extends:
-            file: jhipster-console.yml
-            service: jhipster-logstash
-        depends_on:
-            - jhipster-elasticsearch
-    jhipster-console:
-        extends:
-            file: jhipster-console.yml
-            service: jhipster-console
-        depends_on:
-            - jhipster-elasticsearch
-    jhipster-import-dashboards:
-        extends:
-            file: jhipster-console.yml
-            service: jhipster-import-dashboards
-        depends_on:
-            - jhipster-elasticsearch
-    <%_ if (consoleOptions.includes('curator')) { _%>
-    jhipster-curator:
-        extends:
-            file: jhipster-console.yml
-            service: jhipster-curator
-        depends_on:
-            - jhipster-elasticsearch
-    <%_ } _%>
-    <%_ if (consoleOptions.includes('zipkin')) { _%>
-    jhipster-zipkin:
-        extends:
-            file: jhipster-console.yml
-            service: jhipster-zipkin
-        depends_on:
-            - jhipster-elasticsearch
-    <%_ } _%>
-<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
     keycloak:
         extends:

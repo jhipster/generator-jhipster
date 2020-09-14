@@ -123,8 +123,7 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
             },
         ],
         desc: `Create entities from the JDL file/content passed in argument.
-  By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.
-Note: jhipster import-jdl is the same as 'jhipster jdl --skip-sample-repository'`,
+  By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.`,
         help: `
 Arguments:
     jdlFiles # The JDL file names Type: String[] Required: true if --inline is not set

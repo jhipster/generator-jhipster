@@ -66,23 +66,9 @@ $ kubectl set image deployment/<app-name>-app <app-name>=<new-image> <%= kuberne
 
 Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availablity of your services. You will need minimum 2 replicas for every application deployment if you want to have zero-downtime deployed.
 This is because the rolling upgrade strategy first stops a running replica in order to place a new. Running only one replica, will cause a short downtime during upgrades.
-<%_ if (monitoring === 'elk' || monitoring === 'prometheus') { _%>
 
-## Monitoring tools
-
-<%_ if (monitoring === 'elk') { _%>
-### JHipster console
-
-Your application logs can be found in JHipster console (powered by Kibana). You can find its service details by
-```
-$ kubectl get svc jhipster-console<%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
-```
-
-* If you have chosen *Ingress*, then you should be able to access Kibana using the given ingress domain.
-* If you have chosen *NodePort*, then point your browser to an IP of any of your nodes and use the node port described in the output.
-* If you have chosen *LoadBalancer*, then use the IaaS provided LB IP
-<%_ } _%>
 <%_ if (monitoring === 'prometheus') { _%>
+## Monitoring tools
 
 ### Prometheus metrics
 
@@ -105,7 +91,6 @@ $ kubectl get svc jhipster-grafana<%= kubernetesNamespace === 'default' ? '' : `
 * If you have chosen *NodePort*, then point your browser to an IP of any of your nodes and use the node port described in the output.
 * If you have chosen *LoadBalancer*, then use the IaaS provided load balancer IP
 
-<%_ } _%>
 <%_ } _%>
 
 <%_ if (app.serviceDiscoveryType === 'eureka') { _%>

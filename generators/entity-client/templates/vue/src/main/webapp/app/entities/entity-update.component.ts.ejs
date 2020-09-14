@@ -3,7 +3,41 @@ import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vu
   import { mixins } from 'vue-class-component';
   import JhiDataUtils from '@/shared/data/data-utils.service';
 <% } %>
-import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vuelidate/lib/validators';
+<%_
+  let fieldsContainedValidators = [];
+  for (idx in fields) {
+    if (fields[idx].fieldValidate === true) {
+      if (!fieldsContainedValidators.includes('numeric') && ['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fields[idx].fieldType)) {
+        fieldsContainedValidators.push('numeric');
+      }
+      if (!fieldsContainedValidators.includes('required') && fields[idx].fieldValidateRules.includes('required')) {
+        fieldsContainedValidators.push('required');
+      }
+      if (!fieldsContainedValidators.includes('minLength') && fields[idx].fieldValidateRules.includes('minlength')) {
+        fieldsContainedValidators.push('minLength');
+      }
+      if (!fieldsContainedValidators.includes('maxLength') && fields[idx].fieldValidateRules.includes('maxlength')) {
+        fieldsContainedValidators.push('maxLength');
+      }
+      if (!fieldsContainedValidators.includes('minValue') && fields[idx].fieldValidateRules.includes('min')) {
+        fieldsContainedValidators.push('minValue');
+      }
+      if (!fieldsContainedValidators.includes('maxValue') && fields[idx].fieldValidateRules.includes('max')) {
+        fieldsContainedValidators.push('maxValue');
+      }
+    }
+  }
+  for (idx in relationships) {
+    if (relationships[idx].relationshipValidate === true) {
+      if (!fieldsContainedValidators.includes('required')) {
+        fieldsContainedValidators.push('required');
+      }
+    }
+  }
+  if (fieldsContainedValidators.length !== 0) {
+    let validators = fieldsContainedValidators.toString();
+  _%>import {<%= validators %>} from 'vuelidate/lib/validators';
+<%_ } _%>
 <%_
     let dateFnsIncluded = false;
     for (idx in fields) {
@@ -41,7 +75,6 @@ import <%= otherEntityAngularName %>Service from '@/entities/<%= otherEntityClie
 import { I<%= otherEntityAngularName %> } from '@/shared/model/<%= otherEntityModelName %>.model';
   <% } } %>
 <%_ importEntitiesSeen.push(otherEntityAngularName); } } _%>
-import AlertService from '@/shared/alert/alert.service';
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
@@ -90,7 +123,6 @@ const validations: any = {
   validations
 })
 export default class <%= entityAngularName %>Update extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
-  @Inject('alertService') private alertService: () => AlertService;
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service: () => <%= entityAngularName %>Service;
   public <%= entityInstance %>: I<%= entityAngularName %> = new <%= entityAngularName %>();
   <%_
@@ -158,7 +190,12 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
         <%_ } else {_%>
         const message = 'A <%= entityAngularName %> is updated with identifier ' + param.id;
         <%_ } _%>
-        this.alertService().showAlert(message, 'info');
+        return this.$root.$bvToast.toast(message.toString(), {
+          title: 'Info',
+          variant: 'info',
+          solid: true,
+          autoHideDelay: 5000,
+        });
       });
     } else {
       this.<%= entityInstance %>Service().create(this.<%= entityInstance %>).then((param) => {
@@ -169,7 +206,12 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
         <%_ } else {_%>
         const message = 'A <%= entityAngularName %> is created with identifier ' + param.id;
         <%_ } _%>
-        this.alertService().showAlert(message, 'success');
+        this.$root.$bvToast.toast(message.toString(), {
+          title: 'Success',
+          variant: 'success',
+          solid: true,
+          autoHideDelay: 5000,
+        });
       });
     }
   }

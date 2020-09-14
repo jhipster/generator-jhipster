@@ -153,6 +153,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.checkInvocationFromCLI();
             },
 
+            isBuiltInEntity() {
+                if (this.isBuiltInUser(this.context.name) || this.isBuiltInAuthority(this.context.name)) {
+                    throw new Error(`Is not possible to override built in ${this.context.name}`);
+                }
+            },
+
             setupRequiredConfigForMicroservicePrompt() {
                 this.context.filename = path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(this.context.name)}.json`);
             },

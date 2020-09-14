@@ -21,12 +21,6 @@ const expectedFiles = {
     ],
     jhgateingress: ['./jhgate-helm/templates/jhgate-ingress.yml'],
     customnamespace: ['./namespace.yml'],
-    jhconsole: [
-        './csvc-helm/templates/jhipster-console.yml',
-        './csvc-helm/templates/jhipster-logstash.yml',
-        './csvc-helm/templates/jhipster-dashboard-console.yml',
-        './csvc-helm/templates/jhipster-zipkin.yml',
-    ],
     msmysql: [
         './msmysql-helm/Chart.yaml',
         './msmysql-helm/requirements.yaml',
@@ -150,7 +144,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
     });
 
-    describe('mysql microservice with custom namespace and jhipster-console (with zipkin)', () => {
+    describe('mysql microservice with custom namespace', () => {
         beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes-helm'))
@@ -165,7 +159,6 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'mynamespace',
-                    monitoring: 'elk',
                     jhipsterConsole: true,
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
@@ -179,11 +172,6 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
             assert.fileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
-        });
-        it('creates expected jhipster-console files', () => {
-            assert.file(expectedFiles.csvcfiles);
-            assert.file(expectedFiles.jhconsole);
-            assert.fileContent('./csvc-helm/requirements.yaml', /name: elasticsearch/);
         });
         it('creates expected namespace file', () => {
             assert.file(expectedFiles.customnamespace);

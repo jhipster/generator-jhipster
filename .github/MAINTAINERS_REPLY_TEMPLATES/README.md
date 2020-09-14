@@ -2,7 +2,7 @@
 
 Here is a list of common **reply messages** shared by core team members to help them respond to issues.
 
-You can add those to your [Github saved replies settings](https://github.com/settings/replies).
+You can add those to your [GitHub saved replies settings](https://github.com/settings/replies).
 
 -   [Guidelines are not followed](GUIDELINES_NOT_FOLLOWED.md)
 -   [Use Stack Overflow](USE_STACK_OVERFLOW.md)
