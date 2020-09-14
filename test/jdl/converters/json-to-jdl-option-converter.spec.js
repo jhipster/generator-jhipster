@@ -23,7 +23,7 @@ const { expect } = require('chai');
 const { convertServerOptionsToJDL } = require('../../../jdl/converters/json-to-jdl-option-converter');
 const JDLObject = require('../../../jdl/models/jdl-object');
 const JDLUnaryOption = require('../../../jdl/models/jdl-unary-option');
-const { SKIP_USER_MANAGEMENT, SKIP_CLIENT } = require('../../../jdl/jhipster/unary-options');
+const { SKIP_CLIENT } = require('../../../jdl/jhipster/unary-options');
 
 describe('JSONToJDLOptionConverter', () => {
     describe('convertToServerOptions', () => {
@@ -38,17 +38,6 @@ describe('JSONToJDLOptionConverter', () => {
                 expect(jdlObject.getOptionQuantity()).to.equal(0);
             });
         });
-        context('when not passing a jdl object', () => {
-            let jdlObject;
-
-            before(() => {
-                jdlObject = convertServerOptionsToJDL({ 'generator-jhipster': { skipUserManagement: true } });
-            });
-
-            it('should return the converted options', () => {
-                expect(jdlObject.getOptionsForName(SKIP_USER_MANAGEMENT)).not.to.be.undefined;
-            });
-        });
         context('when passing a jdl object', () => {
             let jdlObject;
 
@@ -59,11 +48,10 @@ describe('JSONToJDLOptionConverter', () => {
                         name: SKIP_CLIENT,
                     })
                 );
-                jdlObject = convertServerOptionsToJDL({ 'generator-jhipster': { skipUserManagement: true } }, previousJDLObject);
+                jdlObject = convertServerOptionsToJDL({ 'generator-jhipster': {} }, previousJDLObject);
             });
 
             it('should add the converted options', () => {
-                expect(jdlObject.getOptionsForName(SKIP_USER_MANAGEMENT)).not.to.be.undefined;
                 expect(jdlObject.getOptionsForName(SKIP_CLIENT)).not.to.be.undefined;
             });
         });

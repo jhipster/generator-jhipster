@@ -26,7 +26,7 @@ const { readJSONFile } = require('../readers/json-file-reader');
 const { convertApplicationToJDL } = require('./json-to-jdl-application-converter');
 const { convertEntitiesToJDL } = require('./json-to-jdl-entity-converter');
 const { exportToJDL: exportJDLObject } = require('../exporters/jdl-exporter');
-const { SKIP_USER_MANAGEMENT } = require('../jhipster/unary-options');
+const { OptionNames } = require('../jhipster/application-options');
 
 module.exports = {
     convertToJDL,
@@ -72,7 +72,7 @@ function getJDLObjectFromSingleApplication(directory, existingJDLObject = new JD
         return existingJDLObject;
     }
     const entities = getJSONEntityFiles(directory);
-    const skippedUserManagement = existingJDLObject ? existingJDLObject.hasOption(SKIP_USER_MANAGEMENT) : false;
+    const skippedUserManagement = jdlApplication.getConfigurationOptionValue(OptionNames.SKIP_USER_MANAGEMENT);
     const jdlObject = convertEntitiesToJDL({ entities, skippedUserManagement });
     entities.forEach((entity, entityName) => jdlApplication.addEntityName(entityName));
     jdlObject.addApplication(jdlApplication);
