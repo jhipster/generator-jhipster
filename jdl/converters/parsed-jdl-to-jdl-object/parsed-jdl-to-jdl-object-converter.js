@@ -253,7 +253,6 @@ function fillUnaryAndBinaryOptions() {
             })
         );
     }
-    console.log({ parsedContent });
     const convertedOptions = convertOptions(parsedContent.options, parsedContent.specialOptions);
     convertedOptions.forEach(convertedOption => {
         jdlObject.addOption(convertedOption);

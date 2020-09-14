@@ -21,7 +21,7 @@ const JDLUnaryOption = require('../../models/jdl-unary-option');
 const JDLBinaryOption = require('../../models/jdl-binary-option');
 const UnaryOptions = require('../../jhipster/unary-options');
 const BinaryOptions = require('../../jhipster/binary-options');
-const { SpecialOptions, Values, getOptionName } = require('../../jhipster/binary-options');
+const { SpecialOptions, getOptionName } = require('../../jhipster/binary-options');
 
 module.exports = { convertOptions };
 
@@ -81,7 +81,6 @@ function convertBinaryOptions(parsedOptions) {
 }
 
 function convertSpecialOptions(specialOptions) {
-    console.log({ specialOptions });
     const convertedSpecialOptions = [];
 
     specialOptions.forEach(useValue => {
@@ -102,7 +101,6 @@ function convertSpecialOptions(specialOptions) {
             }
         });
     });
-    console.log(convertedSpecialOptions);
 
     return convertedSpecialOptions;
 }
