@@ -127,6 +127,11 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         if (!this.jhipsterConfig.skipGeneratedFlag) {
             this.registerGeneratedAnnotationTransform();
         }
+
+        // Register .yo-resolve file
+        if (!this.options.skipYoResolve) {
+            this.registerConflicterAttributesTransform();
+        }
     }
 
     /**

@@ -27,6 +27,9 @@ const exec = require('child_process').exec;
 const https = require('https');
 const filter = require('gulp-filter');
 const through = require('through2');
+const fs = require('fs');
+const minimatch = require('minimatch');
+const findUp = require('find-up');
 
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
@@ -1474,6 +1477,74 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             through.obj(function (file, enc, cb) {
                 if (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster') {
                     file.conflicter = 'force';
+                }
+                this.push(file);
+                cb();
+            })
+        );
+    }
+
+    parseYoAttributesFile(yoAttributeFileName) {
+        let overridesContent;
+        try {
+            overridesContent = fs.readFileSync(yoAttributeFileName, 'utf-8');
+        } catch (error) {
+            this.warning(`Error loading yo attributes file ${yoAttributeFileName}, ${error}`);
+            return null;
+        }
+        const absoluteDir = path.dirname(yoAttributeFileName);
+
+        return Object.fromEntries(
+            overridesContent
+                .split(/\r?\n/)
+                .map(override => override.trim())
+                .map(override => override.split('#')[0].trim())
+                .filter(override => override)
+                .map(override => override.split(/\s+/))
+                .map(([pattern, status = 'skip']) => [path.join(absoluteDir, pattern), status])
+        );
+    }
+
+    getConflicterStatusForFile(filePath, yoAttributeFileName) {
+        const fileDir = path.dirname(filePath);
+        this.yoResolveByFile = this.yoResolveByFile || {};
+        const yoResolveFiles = [];
+        let foundYoAttributesFile = findUp.sync([yoAttributeFileName], { cwd: fileDir });
+        while (foundYoAttributesFile) {
+            yoResolveFiles.push(foundYoAttributesFile);
+            foundYoAttributesFile = findUp.sync([yoAttributeFileName], { cwd: path.join(path.dirname(foundYoAttributesFile), '..') });
+        }
+
+        let fileStatus;
+        if (yoResolveFiles) {
+            yoResolveFiles.forEach(yoResolveFile => {
+                if (this.yoResolveByFile[yoResolveFile] === undefined) {
+                    this.yoResolveByFile[yoResolveFile] = this.parseYoAttributesFile(yoResolveFile);
+                }
+            });
+            yoResolveFiles
+                .map(yoResolveFile => this.yoResolveByFile[yoResolveFile])
+                .map(attributes => attributes)
+                .find(yoResolve => {
+                    return Object.entries(yoResolve).some(([pattern, status]) => {
+                        if (minimatch(filePath, pattern)) {
+                            fileStatus = status;
+                            return true;
+                        }
+                        return false;
+                    });
+                });
+        }
+        return fileStatus;
+    }
+
+    registerConflicterAttributesTransform(yoAttributeFileName = '.yo-resolve') {
+        const generator = this;
+        this.registerTransformStream(
+            through.obj(function (file, enc, cb) {
+                const status = generator.getConflicterStatusForFile(file.path, yoAttributeFileName);
+                if (status) {
+                    file.conflicter = status;
                 }
                 this.push(file);
                 cb();
