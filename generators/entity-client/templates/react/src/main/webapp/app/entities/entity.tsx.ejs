@@ -238,6 +238,10 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 
   const handleSyncList = () => sortEntities();
   <%_ } _%>
+
+  <%_ if (pagination === 'infinite-scroll') { %>
+  const handleSyncList = () => resetAll();
+  <%_ } _%>
   <%_ } _%>
 
   const { <%= entityInstance %>List, match, loading<% if (pagination === 'pagination') { %>, totalItems<% } %>} = props;
