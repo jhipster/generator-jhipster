@@ -170,6 +170,10 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   };
   <%_ } _%>
 
+  <%_ if (pagination === 'no') { _%>
+    const handleSyncList = () => props.getEntities();
+  <%_ } _%>
+
   <%_ if (pagination !== 'no') { _%>
 
   <%_ if (pagination === 'pagination') { _%>
