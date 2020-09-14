@@ -86,15 +86,14 @@ function convertUseOptions(useOptions) {
     useOptions.forEach(useValue => {
         const { optionValues, list, excluded } = useValue;
 
-        // TODO change the names
         const optionValueKeys = Object.keys(OptionValues);
 
-        optionValueKeys.forEach(specialOptionKey => {
-            if (optionValues.includes(OptionValues[specialOptionKey])) {
+        optionValueKeys.forEach(optionValueKey => {
+            if (optionValues.includes(OptionValues[optionValueKey])) {
                 convertedUseOptions.push(
                     new JDLBinaryOption({
-                        name: getOptionName(specialOptionKey),
-                        value: OptionValues[specialOptionKey],
+                        name: getOptionName(optionValueKey),
+                        value: OptionValues[optionValueKey],
                         entityNames: list,
                         excludedNames: excluded,
                     })
