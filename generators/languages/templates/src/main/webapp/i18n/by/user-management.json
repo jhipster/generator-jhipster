@@ -2,6 +2,7 @@
     "userManagement": {
         "home": {
             "title": "Карыстальнікі",
+            "refreshListLabel": "Refresh list",
             "createLabel": "Стварыць новага карыстальніка",
             "createOrEditLabel": "Стварыць або адрэдагаваць карыстальніка"
         },

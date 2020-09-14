@@ -2,6 +2,7 @@
     "userManagement": {
         "home": {
             "title": "వినియోగదారులు",
+            "refreshListLabel": "Refresh list",
             "createLabel": "క్రొత్త వినియోగదారుని సృష్టించండి",
             "createOrEditLabel": "వినియోగదారుని సృష్టించండి లేదా సవరించండి"
         },

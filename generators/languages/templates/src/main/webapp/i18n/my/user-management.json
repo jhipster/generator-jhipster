@@ -2,6 +2,7 @@
     "userManagement": {
         "home": {
             "title": "အသုံးပြုသူများ",
+            "refreshListLabel": "Refresh list",
             "createLabel": "အသုံးပြုသူအသစ်",
             "createOrEditLabel": "အသုံးပြုသူအသစ် မှတ်ပုံတင်ခြင်း (သို့) ပြုပြင်ခြင်း"
         },
