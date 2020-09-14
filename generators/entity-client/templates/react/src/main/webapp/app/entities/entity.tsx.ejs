@@ -235,6 +235,8 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
       ...paginationState,
       activePage: currentPage
     });
+
+  const handleSyncList = () => sortEntities();
   <%_ } _%>
   <%_ } _%>
 
@@ -243,14 +245,20 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     <div>
       <h2 id="<%= entityFileName %>-heading" data-cy="<%= entityClass %>Heading">
         <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
-        <%_ if (!readOnly) { _%>
-        <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-          <FontAwesomeIcon icon="plus" />&nbsp;
-          <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
-            Create new <%= entityClassHumanized %>
-          </Translate>
-        </Link>
-        <%_ } _%>
+        <div className="d-flex justify-content-end">
+          <Button className="mr-2" color="primary" onClick={handleSyncList} disabled={loading}>
+            {/* TODO: Add translation */}
+            <FontAwesomeIcon icon="sync" spin={loading} /> Refresh List
+          </Button>
+          <%_ if (!readOnly) { _%>
+            <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+              <FontAwesomeIcon icon="plus" />&nbsp;
+              <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
+                Create new <%= entityClassHumanized %>
+              </Translate>
+            </Link>
+          <%_ } _%>
+        </div>
       </h2>
       <%_ if (searchEngine !== false) { _%>
       <Row>
