@@ -234,7 +234,7 @@ To put it in a nutshell, you need to:
 1.  run `npm link` on the `generator-jhipster` project
 2.  run `npm link generator-jhipster` on the generated application folder (you need to do this for each application you create)
 
-Now, running the 'jhipster' command should run your locally installed JHipster version directly from sources. Check that the symbolic link is correct with the following command :
+Now, running the 'jhipster' command should run your locally installed JHipster version directly from sources. Check that the symbolic link is correct with the following command:
 
 ```shell
 ➜  ~ ll $(which jhipster)
