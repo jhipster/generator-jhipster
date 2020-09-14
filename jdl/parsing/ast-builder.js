@@ -110,7 +110,6 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
 
         if (context.specialUnaryOptionDeclaration) {
             context.specialUnaryOptionDeclaration.map(this.visit, this).forEach(option => {
-                console.log(option);
                 ast.specialOptions.push(option);
             });
         }
@@ -615,6 +614,7 @@ function getBinaryOptionFromContext(context, visitor) {
 }
 
 function getSpecialUnaryOptionDeclaration(context, visitor) {
+    const optionValues = context.NAME.map(name => name.image);
     const list = visitor.visit(context.filterDef);
 
     let excluded = [];
@@ -623,7 +623,7 @@ function getSpecialUnaryOptionDeclaration(context, visitor) {
     }
 
     return {
-        // optionValues,
+        optionValues,
         list,
         excluded,
     };
