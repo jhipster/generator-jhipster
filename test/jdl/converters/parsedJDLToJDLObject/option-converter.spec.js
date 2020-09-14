@@ -45,9 +45,12 @@ describe('OptionConverter', () => {
                                 excludedNames: ['B'],
                             }),
                         ];
-                        convertedOptions = convertOptions({
-                            [unaryOptionName]: { list: ['A'], excluded: ['B'] },
-                        });
+                        convertedOptions = convertOptions(
+                            {
+                                [unaryOptionName]: { list: ['A'], excluded: ['B'] },
+                            },
+                            []
+                        );
                     });
 
                     it('should convert it', () => {
@@ -84,7 +87,7 @@ describe('OptionConverter', () => {
                                     [optionValue]: { list: ['A'], excluded: ['B'] },
                                 },
                             },
-                            () => ({ entityList: ['A'], excludedEntityList: ['B'] })
+                            []
                         );
                     });
 
