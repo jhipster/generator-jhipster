@@ -111,11 +111,10 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
               @Value("${mongock.lockAcquiredForMinutes:5}") long lockAcquiredForMinutes,
               @Value("${mongock.maxWaitingForLockMinutes:3}") long maxWaitingForLockMinutes,
               @Value("${mongock.maxTries:3}") int maxTries) {
-        SpringDataMongo3Driver driver = new SpringDataMongo3Driver(mongoTemplate);
+        SpringDataMongo3Driver driver = new SpringDataMongo3Driver(mongoTemplate, lockAcquiredForMinutes, maxWaitingForLockMinutes, maxTries);
         return MongockSpring5.builder()
             .setDriver(driver)
             .addChangeLogsScanPackage("<%= packageName %>.config.dbmigrations")
-            .setLockConfig(lockAcquiredForMinutes, maxWaitingForLockMinutes, maxTries)
             .setSpringContext(springContext)
             .buildInitializingBeanRunner();
     }
