@@ -36,6 +36,9 @@ export const Home = (props: IHomeProp) => {
 
   return (
     <Row>
+      <Col md="3" className="pad">
+        <span className="hipster rounded" />
+      </Col>
       <Col md="9">
         <h2><Translate contentKey="home.title">Welcome, <%= backendName %> Hipster!</Translate></h2>
         <p className="lead"><Translate contentKey="home.subtitle">This is your homepage</Translate></p>
@@ -109,9 +112,6 @@ export const Home = (props: IHomeProp) => {
           {' '}
           <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">GitHub</a>!
         </p>
-      </Col>
-      <Col md="3" className="pad">
-        <span className="hipster rounded" />
       </Col>
     </Row>
   );
