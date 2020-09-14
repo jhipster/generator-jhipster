@@ -57,6 +57,7 @@ module.exports = class JDLParser extends CstParser {
         this.enumProp();
         this.entityList();
         this.exclusion();
+        this.specialUnaryOptionDeclaration();
         this.unaryOptionDeclaration();
         this.binaryOptionDeclaration();
         this.filterDef();
@@ -87,6 +88,7 @@ module.exports = class JDLParser extends CstParser {
                     { ALT: () => this.SUBRULE(this.relationDeclaration) },
                     { ALT: () => this.SUBRULE(this.enumDeclaration) },
                     { ALT: () => this.CONSUME(LexerTokens.JAVADOC) },
+                    { ALT: () => this.SUBRULE(this.specialUnaryOptionDeclaration) },
                     { ALT: () => this.SUBRULE(this.unaryOptionDeclaration) },
                     { ALT: () => this.SUBRULE(this.binaryOptionDeclaration) },
                     { ALT: () => this.SUBRULE(this.applicationDeclaration) },
@@ -387,6 +389,24 @@ module.exports = class JDLParser extends CstParser {
             this.MANY(() => {
                 this.CONSUME(LexerTokens.COMMA);
                 this.CONSUME2(LexerTokens.NAME);
+            });
+        });
+    }
+
+    specialUnaryOptionDeclaration() {
+        this.RULE('specialUnaryOptionDeclaration', () => {
+            this.CONSUME(LexerTokens.USE);
+            this.MANY({
+                GATE: () => this.LA(2).tokenType === LexerTokens.COMMA,
+                DEF: () => {
+                    this.CONSUME(LexerTokens.NAME);
+                    this.CONSUME(LexerTokens.COMMA);
+                },
+            });
+            this.CONSUME(LexerTokens.FOR);
+            this.SUBRULE(this.entityList);
+            this.OPTION(() => {
+                this.SUBRULE(this.exclusion);
             });
         });
     }
