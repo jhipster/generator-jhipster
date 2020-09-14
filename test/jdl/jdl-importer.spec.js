@@ -1967,7 +1967,8 @@ use mapstruct, elasticsearch for A, B except C`;
                     applicationName: 'toto',
                     databaseType: 'sql',
                 });
-                importer.import();
+                const res = importer.import();
+                console.log({ res });
             });
             after(() => {
                 fse.removeSync('.jhipster');

@@ -21,6 +21,7 @@ const JDLUnaryOption = require('../../models/jdl-unary-option');
 const JDLBinaryOption = require('../../models/jdl-binary-option');
 const UnaryOptions = require('../../jhipster/unary-options');
 const BinaryOptions = require('../../jhipster/binary-options');
+const { SpecialOptions, Values, getOptionName } = require('../../jhipster/binary-options');
 
 module.exports = { convertOptions };
 
@@ -29,13 +30,14 @@ module.exports = { convertOptions };
  * @param {Object} parsedOptions - the parsed option object.
  * @returns {Array<JDLUnaryOption|JDLBinaryOption>} the converted JDLUnaryOption & JDLBinaryOption objects.
  */
-function convertOptions(parsedOptions) {
+function convertOptions(parsedOptions, specialOptions) {
     if (!parsedOptions) {
         throw new Error('Options have to be passed so as to be converted.');
     }
     const convertedUnaryOptions = convertUnaryOptions(parsedOptions);
     const convertedBinaryOptions = convertBinaryOptions(parsedOptions);
-    return [...convertedUnaryOptions, ...convertedBinaryOptions];
+    const convertedSpecialOptions = convertSpecialOptions(specialOptions);
+    return [...convertedUnaryOptions, ...convertedBinaryOptions, ...convertedSpecialOptions];
 }
 
 function convertUnaryOptions(parsedOptions) {
@@ -76,4 +78,32 @@ function convertBinaryOptions(parsedOptions) {
         });
     });
     return convertedBinaryOptions;
+}
+
+function convertSpecialOptions(specialOptions) {
+    console.log({ specialOptions });
+    const convertedSpecialOptions = [];
+
+    specialOptions.forEach(useValue => {
+        const { optionValues, list, excluded } = useValue;
+
+        const specialOptionsKeys = Object.keys(SpecialOptions);
+
+        specialOptionsKeys.forEach(specialOptionKey => {
+            if (!optionValues[SpecialOptions[specialOptionKey]]) {
+                return;
+            }
+
+            convertedSpecialOptions.push(
+                new JDLBinaryOption({
+                    name: getOptionName(specialOptionKey),
+                    value: SpecialOptions[specialOptionKey],
+                    entityNames: list,
+                    excludedNames: excluded,
+                })
+            );
+        });
+    });
+
+    return convertedSpecialOptions;
 }

@@ -39,6 +39,20 @@ const Values = {
     [Options.SEARCH]: { ELASTIC_SEARCH: 'elasticsearch', COUCHBASE: 'couchbase' },
 };
 
+function getOptionName(optionValue) {
+    return optionNames.find(optionName => Values[optionName][optionValue]);
+}
+
+const SpecialOptions = {
+    MAPSTRUCT: 'mapstruct',
+    SERVICE_CLASS: 'serviceClass',
+    SERVICE_IMPL: 'serviceImpl',
+    PAGINATION: 'pagination',
+    'INFINITE-SCROLL': 'infinite-scroll',
+    ELASTIC_SEARCH: 'elasticsearch',
+    COUCHBASE: 'couchbase',
+};
+
 function forEach(passedFunction) {
     if (!passedFunction) {
         throw new Error('A function has to be passed to loop over the binary options.');
@@ -62,7 +76,9 @@ function exists(passedOption, passedValue) {
 
 module.exports = {
     Options,
+    SpecialOptions,
     Values,
     exists,
     forEach,
+    getOptionName,
 };
