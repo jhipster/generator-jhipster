@@ -8,7 +8,7 @@ services:
             - SPRING_DATASOURCE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
             - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
     mspsql-postgresql:
-        image: postgres:9.5.1
+        image: <%= DOCKER_POSTGRESQL %>
         # volumes:
         #     - ~/volumes/jhipster/mspsql/postgresql/:/var/lib/postgresql/
         environment:
@@ -17,7 +17,7 @@ services:
         ports:
             - 5432:5432
     mspsql-elasticsearch:
-        image: elasticsearch:2.4.6
+        image: <%= DOCKER_ELASTICSEARCH %>
         # volumes:
         #     - ~/volumes/jhipster/mspsql/elasticsearch/:/usr/share/elasticsearch/data/
         ports:

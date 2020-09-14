@@ -9,7 +9,7 @@ services:
         ports:
             - 8080:8080
     samplemysql-mysql:
-        image: mysql:5.7.18
+        image: <%= DOCKER_MYSQL %>
         # volumes:
         #     - ~/volumes/jhipster/sampleMysql/mysql/:/var/lib/mysql/
         environment:
