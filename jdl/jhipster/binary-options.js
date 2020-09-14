@@ -44,13 +44,13 @@ function getOptionName(optionValue) {
 }
 
 const OptionValues = {
-    MAPSTRUCT: 'mapstruct',
-    SERVICE_CLASS: 'serviceClass',
-    SERVICE_IMPL: 'serviceImpl',
-    PAGINATION: 'pagination',
-    'INFINITE-SCROLL': 'infinite-scroll',
-    ELASTICSEARCH: 'elasticsearch',
-    COUCHBASE: 'couchbase',
+    mapstruct: 'MAPSTRUCT',
+    serviceClass: 'SERVICE_CLASS',
+    serviceImpl: 'SERVICE_IMPL',
+    pagination: 'PAGINATION',
+    'infinite-scroll': 'INFINITE-SCROLL',
+    elasticsearch: 'ELASTICSEARCH',
+    couchbase: 'COUCHBASE',
 };
 
 function forEach(passedFunction) {

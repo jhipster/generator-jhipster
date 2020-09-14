@@ -86,19 +86,18 @@ function convertUseOptions(useOptions) {
     useOptions.forEach(useValue => {
         const { optionValues, list, excluded } = useValue;
 
-        const optionValueKeys = Object.keys(OptionValues);
-
-        optionValueKeys.forEach(optionValueKey => {
-            if (optionValues.includes(OptionValues[optionValueKey])) {
-                convertedUseOptions.push(
-                    new JDLBinaryOption({
-                        name: getOptionName(optionValueKey),
-                        value: OptionValues[optionValueKey],
-                        entityNames: list,
-                        excludedNames: excluded,
-                    })
-                );
+        optionValues.forEach(optionValue => {
+            if (!OptionValues[optionValue]) {
+                return;
             }
+            convertedUseOptions.push(
+                new JDLBinaryOption({
+                    name: getOptionName(OptionValues[optionValue]),
+                    value: optionValue,
+                    entityNames: list,
+                    excludedNames: excluded,
+                })
+            );
         });
     });
 
