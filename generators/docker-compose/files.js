@@ -28,9 +28,6 @@ function writeFiles() {
         },
 
         writeRegistryFiles() {
-            if (this.serviceDiscoveryType === 'eureka') {
-                this.template('jhipster-registry.yml.ejs', 'jhipster-registry.yml');
-            }
             if (this.serviceDiscoveryType) {
                 this.template('central-server-config/application.yml.ejs', 'central-server-config/application.yml');
             }
