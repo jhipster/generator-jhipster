@@ -54,7 +54,8 @@
         "jdl:bundle": "node jdl/bundling/scripts/bundle.js && webpack --config jdl/bundling/webpack.config.js",
         "jdl:commit-dist": "git add jdl/bundling/dist && git add jdl/parsing/generated && node scripts/commit-changed-generated-jdl-files.js",
         "jdl:diagrams": "node jdl/bundling/scripts/serialize-grammar.js && eslint jdl/parsing/generated",
-        "jdl:test": "mocha test/jdl --no-insight --forbid-only -p"
+        "jdl:test": "mocha test/jdl --no-insight --forbid-only -p",
+        "jdl:test-watch": "npm run jdl:test -- --watch"
     },
     "dependencies": {
         "aws-sdk": "2.749.0",
