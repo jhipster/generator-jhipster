@@ -431,7 +431,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod; _%>
 
     <%_ if (fieldTypeBlobContent !== 'text') { _%>
-    public <%= fieldType %> <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldInJavaBeanMethod %>() {
+    public <%= fieldType %> get<%= fieldInJavaBeanMethod %>() {
     <%_ } else { _%>
     public String get<%= fieldInJavaBeanMethod %>() {
     <%_ } _%>
@@ -615,7 +615,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
                 const fieldName = fields[idx].fieldName;
                 const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
                 const isNumeric = ['integer', 'long', 'float', 'double', 'bigdecimal'].includes(fieldType.toLowerCase()); _%>
-            ", <%= fieldName %>=<% if (! isNumeric) { %>'<% } %>" + <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<% } %><%= fieldInJavaBeanMethod %>() <% if (! isNumeric) { %>+ "'" <% } %>+
+            ", <%= fieldName %>=<% if (! isNumeric) { %>'<% } %>" + get<%= fieldInJavaBeanMethod %>() <% if (! isNumeric) { %>+ "'" <% } %>+
                 <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
             ", <%= fieldName %>ContentType='" + get<%= fieldInJavaBeanMethod %>ContentType() + "'" +
                 <%_ } _%>
