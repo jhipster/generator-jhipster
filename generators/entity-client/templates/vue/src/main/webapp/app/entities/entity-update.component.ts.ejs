@@ -3,7 +3,41 @@ import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vu
   import { mixins } from 'vue-class-component';
   import JhiDataUtils from '@/shared/data/data-utils.service';
 <% } %>
-import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vuelidate/lib/validators';
+<%_
+  let fieldsContainedValidators = [];
+  for (idx in fields) {
+    if (fields[idx].fieldValidate === true) {
+      if (!fieldsContainedValidators.includes('numeric') && ['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fields[idx].fieldType)) {
+        fieldsContainedValidators.push('numeric');
+      }
+      if (!fieldsContainedValidators.includes('required') && fields[idx].fieldValidateRules.includes('required')) {
+        fieldsContainedValidators.push('required');
+      }
+      if (!fieldsContainedValidators.includes('minLength') && fields[idx].fieldValidateRules.includes('minlength')) {
+        fieldsContainedValidators.push('minLength');
+      }
+      if (!fieldsContainedValidators.includes('maxLength') && fields[idx].fieldValidateRules.includes('maxlength')) {
+        fieldsContainedValidators.push('maxLength');
+      }
+      if (!fieldsContainedValidators.includes('minValue') && fields[idx].fieldValidateRules.includes('min')) {
+        fieldsContainedValidators.push('minValue');
+      }
+      if (!fieldsContainedValidators.includes('maxValue') && fields[idx].fieldValidateRules.includes('max')) {
+        fieldsContainedValidators.push('maxValue');
+      }
+    }
+  }
+  for (idx in relationships) {
+    if (relationships[idx].relationshipValidate === true) {
+      if (!fieldsContainedValidators.includes('required')) {
+        fieldsContainedValidators.push('required');
+      }
+    }
+  }
+  if (fieldsContainedValidators.length !== 0) {
+    let validators = fieldsContainedValidators.toString();
+  _%>import {<%= validators %>} from 'vuelidate/lib/validators';
+<%_ } _%>
 <%_
     let dateFnsIncluded = false;
     for (idx in fields) {
