@@ -20,8 +20,8 @@ package <%= packageName %>.config;
 <%_ if (databaseType === 'mongodb') { _%>
 
 import com.github.cloudyrock.mongock.driver.mongodb.springdata.v3.SpringDataMongo3Driver;
-import com.github.cloudyrock.spring.MongockSpring5;
-import com.github.cloudyrock.spring.MongockSpring5.MongockInitializingBeanRunner;
+import com.github.cloudyrock.spring.v5.MongockSpring5;
+import com.github.cloudyrock.spring.v5.MongockSpring5.MongockInitializingBeanRunner;
 
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.domain.util.JSR310DateConverters.*;
