@@ -179,13 +179,14 @@ limitations under the License.
     <%_ if (protractorTests && !cypressTests) { _%>
     "e2e": "<%= clientPackageManager %> run e2e:protractor",
     <%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
-    "e2e": "<%= clientPackageManager %> run e2e:cypress",
+    "e2e": "<%= clientPackageManager %> run cypress",
     <%_ } _%>
     <%_ if (protractorTests) { _%>
+    "e2e:headless": "npm run e2e:protractor"
     "e2e:protractor": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
     <%_ } _%>
     <%_ if (cypressTests) { _%>
-    "e2e:cypress": "cypress run --browser chrome --headless",
+    "e2e:headless": "cypress run --browser chrome --headless",
     "cypress": "cypress open",
     <%_ } _%>
     <%_ if (protractorTests || cypressTests) { _%>
