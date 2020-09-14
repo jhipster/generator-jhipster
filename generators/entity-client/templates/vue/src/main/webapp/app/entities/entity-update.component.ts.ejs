@@ -27,10 +27,16 @@ import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vu
       }
     }
   }
+  for (idx in relationships) {
+    if (relationships[idx].relationshipValidate === true) {
+      if (!fieldsContainedValidators.includes('required')) {
+        fieldsContainedValidators.push('required');
+      }
+    }
+  }
   if (fieldsContainedValidators.length !== 0) {
     let validators = fieldsContainedValidators.toString();
-_%>
-    import { <%= validators %> } from 'vuelidate/lib/validators';
+  _%>import {<%= validators %>} from 'vuelidate/lib/validators';
 <%_ } _%>
 <%_
     let dateFnsIncluded = false;
