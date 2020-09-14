@@ -160,7 +160,7 @@ function askActionType() {
         this.props = props;
 
         if (props.jhipsterEndpoint !== undefined) {
-            fetchSwaggerResources(props.jhipsterEndpoint).then(availableDocs => {
+            return fetchSwaggerResources(props.jhipsterEndpoint).then(availableDocs => {
                 props.availableDocs = availableDocs;
             });
         }
@@ -169,6 +169,7 @@ function askActionType() {
         } else if (props.customEndpoint !== undefined) {
             props.inputSpec = props.customEndpoint;
         }
+        return undefined;
     });
 }
 
