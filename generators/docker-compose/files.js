@@ -82,7 +82,6 @@ function writeFiles() {
             // Format the application target list as a YAML array
             this.appsToMonitorList = appsToMonitor.join('\n').replace(/'/g, '');
 
-            this.template('prometheus.yml.ejs', 'prometheus.yml');
             this.template('prometheus-conf/prometheus.yml.ejs', 'prometheus-conf/prometheus.yml');
             this.template('prometheus-conf/alert_rules.yml.ejs', 'prometheus-conf/alert_rules.yml');
             this.template('alertmanager-conf/config.yml.ejs', 'alertmanager-conf/config.yml');

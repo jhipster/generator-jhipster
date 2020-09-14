@@ -5,7 +5,7 @@ const fse = require('fs-extra');
 
 const expectedFiles = {
     dockercompose: ['docker-compose.yml', 'jhipster-registry.yml', 'central-server-config/application.yml'],
-    prometheus: ['prometheus.yml', 'prometheus-conf/alert_rules.yml', 'prometheus-conf/prometheus.yml', 'alertmanager-conf/config.yml'],
+    prometheus: ['prometheus-conf/alert_rules.yml', 'prometheus-conf/prometheus.yml', 'alertmanager-conf/config.yml'],
     monolith: ['docker-compose.yml'],
 };
 
