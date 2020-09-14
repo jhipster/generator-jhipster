@@ -18,7 +18,7 @@
  */
 const path = require('path');
 const shelljs = require('shelljs');
-const request = require('sync-request');
+const request = require('then-request');
 
 module.exports = {
     askActionType,
