@@ -345,6 +345,7 @@ class JDLProcessor {
             skipUserManagement: this.options.skipUserManagement,
             generatorVersion: packagejs.version,
             skipFileGeneration: true,
+            application: this.yoRC,
         };
 
         let importer;
