@@ -90,20 +90,19 @@ function convertSpecialOptions(specialOptions) {
         const specialOptionsKeys = Object.keys(SpecialOptions);
 
         specialOptionsKeys.forEach(specialOptionKey => {
-            if (!optionValues[SpecialOptions[specialOptionKey]]) {
-                return;
+            if (optionValues.includes(SpecialOptions[specialOptionKey])) {
+                convertedSpecialOptions.push(
+                    new JDLBinaryOption({
+                        name: getOptionName(specialOptionKey),
+                        value: SpecialOptions[specialOptionKey],
+                        entityNames: list,
+                        excludedNames: excluded,
+                    })
+                );
             }
-
-            convertedSpecialOptions.push(
-                new JDLBinaryOption({
-                    name: getOptionName(specialOptionKey),
-                    value: SpecialOptions[specialOptionKey],
-                    entityNames: list,
-                    excludedNames: excluded,
-                })
-            );
         });
     });
+    console.log(convertedSpecialOptions);
 
     return convertedSpecialOptions;
 }

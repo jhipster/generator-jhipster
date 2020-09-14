@@ -40,7 +40,7 @@ const Values = {
 };
 
 function getOptionName(optionValue) {
-    return optionNames.find(optionName => Values[optionName][optionValue]);
+    return optionNames.find(optionName => Values[optionName] && Values[optionName][optionValue]);
 }
 
 const SpecialOptions = {
