@@ -21,7 +21,7 @@ const DeploymentOptions = require('../jhipster/deployment-options');
 const mergeObjects = require('../utils/object-utils').merge;
 const { join } = require('../utils/set-utils');
 
-const arrayTypes = ['appsFolders', 'clusteredDbApps', 'consoleOptions'];
+const arrayTypes = ['appsFolders', 'clusteredDbApps'];
 
 module.exports = class JDLDeployment {
     constructor(args) {

@@ -502,7 +502,6 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/helpers/spyobject.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/test.module.ts`,
         'tsconfig.app.json',
-        'tsconfig.base.json',
         'tsconfig.json',
         'tslint.json',
         'webpack/logo-jhipster.png',
@@ -777,10 +776,11 @@ const expectedFiles = {
     cucumber: [
         `${TEST_DIR}features/user/user.feature`,
         `${TEST_DIR}features/gitkeep`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberContextConfiguration.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberTestContextConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/stepdefs/UserStepDefs.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/stepdefs/StepDefs.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberIT.java`,
+        `${SERVER_TEST_RES_DIR}cucumber.properties`,
     ],
 
     eureka: [

@@ -51,7 +51,7 @@ Object.keys(differentRelationships).forEach(key => {
     if (differentRelationships[key].some(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one' && rel.ownerSide === true || rel.relationshipType === 'many-to-many' && rel.ownerSide === true)) {
         const uniqueRel = differentRelationships[key][0];
         if (uniqueRel.otherEntityAngularName !== entityAngularName) {
-            if (uniqueRel.otherEntityAngularName === 'User') {
+            if (isBuiltInUser(uniqueRel.otherEntityAngularName)) {
 _%>
 import { IUser } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';

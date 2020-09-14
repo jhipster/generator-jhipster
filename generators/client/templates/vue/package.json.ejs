@@ -124,7 +124,7 @@ limitations under the License.
     "protractor": "5.4.4",
     <%_ } _%>
     <%_ if (cypressTests) { _%>
-    "cypress": "5.0.0",
+    "cypress": "VERSION_MANAGED_BY_CLIENT_COMMON",
     <%_ } _%>
     "rimraf": "3.0.2",
     "sass": "1.26.5",
@@ -141,7 +141,7 @@ limitations under the License.
     "tslint-config-prettier": "1.18.0",
     "tslint-eslint-rules": "5.4.0",
     "tslint-loader": "3.6.0",
-    "typescript": "3.9.3",
+    "typescript": "VERSION_MANAGED_BY_CLIENT_COMMON",
     "url-loader": "4.1.0",
     "vue-jest": "3.0.6",
     "vue-loader": "15.9.3",
@@ -149,7 +149,7 @@ limitations under the License.
     <%_ if (protractorTests || cypressTests) { _%>
     "webdriver-manager": "12.1.7",
     <%_ } _%>
-    "webpack": "4.43.0",
+    "webpack": "VERSION_MANAGED_BY_CLIENT_VUE",
     "webpack-bundle-analyzer": "3.8.0",
     "webpack-cli": "3.3.11",
     "webpack-dev-server": "3.11.0",
@@ -185,13 +185,13 @@ limitations under the License.
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
     <%_ } _%>
-    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --no-cache --config src/test/javascript/jest.conf.js",
+    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --no-cache --config <%= CLIENT_TEST_SRC_DIR %>jest.conf.js",
     "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
     "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
-    "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --progress --profile",
-    "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
+    "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --profile --env.stats=minimal",
+    "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile --env.stats=minimal",
     "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main && <%= clientPackageManager %> run clean-www",
-    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress --inline",
+    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress --inline --env.stats=normal",
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",

@@ -135,15 +135,70 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     }
 
     /**
-     * Verify if the entity is a built-in entity.
-     * @param {String} entityName - Entity name to verify.
-     * @return {boolean} true if the entity is built-in.
+     * Verify if the application is using built-in User.
+     * @return {boolean} true if the User is built-in.
      */
-    isBuiltInUserEntity(entityName) {
+    isUsingBuiltInUser() {
+        return (
+            !this.jhipsterConfig ||
+            !this.jhipsterConfig.skipUserManagement ||
+            (this.jhipsterConfig.authenticationType === 'oauth2' && this.jhipsterConfig.databaseType !== 'no')
+        );
+    }
+
+    /**
+     * Verify if the entity is a User entity.
+     * @param {String} entityName - Entity name to verify.
+     * @return {boolean} true if the entity is User.
+     */
+    isUserEntity(entityName) {
         if (_.upperFirst(entityName) === 'User') {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Verify if the entity is a built-in User.
+     * @param {String} entityName - Entity name to verify.
+     * @return {boolean} true if the entity is User and is built-in.
+     */
+    isBuiltInUser(entityName) {
+        return this.isUsingBuiltInUser() && this.isUserEntity(entityName);
+    }
+
+    /**
+     * Verify if the application is using built-in Authority.
+     * @return {boolean} true if the Authority is built-in.
+     */
+    isUsingBuiltInAuthority() {
+        return (
+            !this.jhipsterConfig ||
+            (!this.jhipsterConfig.skipUserManagement &&
+                ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(this.jhipsterConfig.databaseType)) ||
+            (this.jhipsterConfig.authenticationType === 'oauth2' && this.jhipsterConfig.databaseType !== 'no')
+        );
+    }
+
+    /**
+     * Verify if the entity is a Authority entity.
+     * @param {String} entityName - Entity name to verify.
+     * @return {boolean} true if the entity is Authority.
+     */
+    isAuthorityEntity(entityName) {
+        if (_.upperFirst(entityName) === 'Authority') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Verify if the entity is a built-in Authority.
+     * @param {String} entityName - Entity name to verify.
+     * @return {boolean} true if the entity is Authority and is built-in.
+     */
+    isBuiltInAuthority(entityName) {
+        return this.isUsingBuiltInAuthority() && this.isAuthorityEntity(entityName);
     }
 
     /**
@@ -178,6 +233,32 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
             prettierExtensions = `${prettierExtensions},java`;
         }
         return prettierExtensions;
+    }
+
+    /**
+     * Replace placeholders with versions from packageJsonSourceFile.
+     * @param {string} keyToPlace - PlaceHolder name.
+     * @param {string} packageJsonSourceFile - Package json filepath with actual versions.
+     */
+    replacePackageJsonVersions(keyToReplace, packageJsonSourceFile) {
+        const packageJsonSource = JSON.parse(fs.readFileSync(packageJsonSourceFile, 'utf-8'));
+        const packageJsonTargetFile = this.destinationPath('package.json');
+        const packageJsonTarget = this.fs.readJSON(packageJsonTargetFile);
+        const replace = section => {
+            if (packageJsonTarget[section]) {
+                Object.entries(packageJsonTarget[section]).forEach(([dependency, version]) => {
+                    if (version === keyToReplace) {
+                        if (!packageJsonSource[section][dependency]) {
+                            throw new Error(`Error setting ${dependency} version`);
+                        }
+                        packageJsonTarget[section][dependency] = packageJsonSource[section][dependency];
+                    }
+                });
+            }
+        };
+        replace('dependencies');
+        replace('devDependencies');
+        this.fs.writeJSON(packageJsonTargetFile, packageJsonTarget);
     }
 
     /**
@@ -2211,6 +2292,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         dest.isDebugEnabled = config.isDebugEnabled;
         dest.experimental = config.experimental;
         dest.logo = config.logo;
+        dest.backendName = config.backendName || 'Java';
     }
 
     /**

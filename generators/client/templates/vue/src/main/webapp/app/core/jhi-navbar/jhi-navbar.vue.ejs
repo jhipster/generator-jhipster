@@ -44,7 +44,7 @@
           class="pointer"
           data-cy="adminMenu">
           <span slot="button-content" class="navbar-dropdown-menu">
-            <font-awesome-icon icon="cogs" />
+            <font-awesome-icon icon="users-cog" />
             <span v-text="$t('global.menu.admin.main')">Administration</span>
           </span>
           <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
@@ -55,7 +55,7 @@
           <%_ } _%>
           <%_ if (!skipUserManagement) { _%>
           <b-dropdown-item to="/admin/user-management" active-class="active">
-            <font-awesome-icon icon="user" />
+            <font-awesome-icon icon="users" />
             <span v-text="$t('global.menu.admin.userManagement')">User management</span>
           </b-dropdown-item>
           <%_ } _%>
@@ -74,7 +74,7 @@
             <span v-text="$t('global.menu.admin.health')">Health</span>
           </b-dropdown-item>
           <b-dropdown-item  to="/admin/configuration" active-class="active">
-            <font-awesome-icon icon="list" />
+            <font-awesome-icon icon="cogs" />
             <span v-text="$t('global.menu.admin.configuration')">Configuration</span>
           </b-dropdown-item>
           <b-dropdown-item  to="/admin/logs" active-class="active">
@@ -87,7 +87,7 @@
           </b-dropdown-item>
           <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory' || devDatabaseType === 'couchbase') { _%>
           <b-dropdown-item v-if="!inProduction"  href='<% if (devDatabaseType === 'couchbase') { %>http://localhost:8091/<% } else { %>./h2-console<% } %>' target="_tab">
-            <font-awesome-icon icon="hdd" />
+            <font-awesome-icon icon="database" />
             <span v-text="$t('global.menu.admin.database')">Database</span>
           </b-dropdown-item>
           <%_ } _%>

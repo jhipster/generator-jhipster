@@ -52,7 +52,6 @@ function setUpDeploymentStructure(deployment) {
     let deploymentToExport = {};
     deploymentToExport[GENERATOR_NAME] = JSON.parse(JSON.stringify(deployment, null, 2).concat('\n'));
     deploymentToExport[GENERATOR_NAME].appsFolders = deployment.appsFolders;
-    deploymentToExport[GENERATOR_NAME].consoleOptions = deployment.consoleOptions;
     deploymentToExport[GENERATOR_NAME].clusteredDbApps = deployment.clusteredDbApps;
     deploymentToExport = setUpArrayOptions(deploymentToExport);
     return deploymentToExport;
@@ -60,7 +59,6 @@ function setUpDeploymentStructure(deployment) {
 
 function setUpArrayOptions(deployment) {
     deployment[GENERATOR_NAME].appsFolders = Array.from(deployment[GENERATOR_NAME].appsFolders);
-    deployment[GENERATOR_NAME].consoleOptions = Array.from(deployment[GENERATOR_NAME].consoleOptions);
     deployment[GENERATOR_NAME].clusteredDbApps = Array.from(deployment[GENERATOR_NAME].clusteredDbApps);
     return deployment;
 }

@@ -1328,7 +1328,6 @@ relationship OneToOne {
                         directoryPath: '../',
                         gatewayType: 'zuul',
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         deploymentType: 'docker-compose',
                         serviceDiscoveryType: 'eureka',
                         dockerPushCommand: 'docker push',
@@ -1380,7 +1379,6 @@ relationship OneToOne {
                         directoryPath: '../',
                         gatewayType: 'zuul',
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         deploymentType: 'docker-compose',
                         serviceDiscoveryType: 'eureka',
                         dockerPushCommand: 'docker push',
@@ -1392,7 +1390,6 @@ relationship OneToOne {
                     'generator-jhipster': {
                         appsFolders: ['tata', 'titi'],
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         directoryPath: '../',
                         deploymentType: 'kubernetes',
                         dockerPushCommand: 'docker push',
@@ -1410,7 +1407,6 @@ relationship OneToOne {
                     'generator-jhipster': {
                         appsFolders: ['tata', 'titi'],
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         directoryPath: '../',
                         deploymentType: 'openshift',
                         dockerPushCommand: 'docker push',
@@ -1598,7 +1594,6 @@ relationship OneToOne {
                         directoryPath: '../',
                         appsFolders: ['store', 'invoice', 'notification', 'product'],
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         serviceDiscoveryType: false,
                         dockerRepositoryName: 'deepu105',
                         dockerPushCommand: 'docker push',
@@ -1612,7 +1607,6 @@ relationship OneToOne {
                         directoryPath: '../',
                         appsFolders: ['store', 'invoice', 'notification', 'product'],
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         serviceDiscoveryType: false,
                         dockerRepositoryName: 'deepu105',
                         dockerPushCommand: 'docker push',
@@ -1935,6 +1929,31 @@ paginate * with infinite-scroll
                         },
                     },
                 ]);
+            });
+        });
+        context('when choosing neo4j as database type', () => {
+            let importState;
+
+            before(() => {
+                const content = `entity Person {
+   name String
+}
+
+relationship OneToMany {
+   Person{friends} to Person
+}`;
+                const importer = createImporterFromContent(content, {
+                    applicationName: 'toto',
+                    databaseType: 'neo4j',
+                });
+                importState = importer.import();
+            });
+            after(() => {
+                fse.removeSync('.jhipster');
+            });
+
+            it('should not generate a bidirectional one-to-many relationship', () => {
+                expect(importState.exportedEntities[0].relationships).to.have.length(1);
             });
         });
     });

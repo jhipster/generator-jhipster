@@ -114,7 +114,7 @@ _%>
     public <%- returnType %> process(@Nullable ResponseEntity<Problem> entity, <%= requestClass %> request) {
         if (entity == null) {
             <%_ if (!reactive) { _%>
-            return entity;
+            return null;
             <%_ } else { _%>
             return Mono.empty();
             <%_ } _%>

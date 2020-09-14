@@ -31,7 +31,11 @@ module.exports = class JDLRelationship {
         if (!RelationshipTypes.exists(merged.type) || !(merged.injectedFieldInFrom || merged.injectedFieldInTo)) {
             throw new Error('A valid type and at least one injected field must be passed to create a relationship.');
         }
-        if (merged.type === RelationshipTypes.ONE_TO_MANY && (!merged.injectedFieldInFrom || !merged.injectedFieldInTo)) {
+        if (
+            merged.type === RelationshipTypes.ONE_TO_MANY &&
+            (!merged.injectedFieldInFrom || !merged.injectedFieldInTo) &&
+            merged.generateBidirectionalOneToMany
+        ) {
             logger.warn(
                 `In the One-to-Many relationship from ${merged.from} to ${merged.to}, ` +
                     'only bidirectionality is supported for a One-to-Many association. ' +
@@ -123,6 +127,7 @@ function defaults() {
         options: {},
         commentInFrom: '',
         commentInTo: '',
+        generateBidirectionalOneToMany: true,
     };
 }
 

@@ -13,13 +13,6 @@ const expectedFiles = {
     jhgate: ['./jhgate-knative/jhgate-mysql.yml', './jhgate-knative/jhgate-service.yml'],
     jhgateingress: ['./jhgate-knative/jhgate-ingress.yml'],
     customnamespace: ['./namespace.yml'],
-    jhconsole: [
-        './console-knative/jhipster-console.yml',
-        './console-knative/jhipster-elasticsearch.yml',
-        './console-knative/jhipster-logstash.yml',
-        './console-knative/jhipster-dashboard-console.yml',
-        './console-knative/jhipster-zipkin.yml',
-    ],
     msmysql: ['./msmysql-knative/msmysql-service.yml', './msmysql-knative/msmysql-mysql.yml'],
     mspsql: [
         './mspsql-knative/mspsql-service.yml',
@@ -65,12 +58,6 @@ const helmExpectedFiles = {
         './jhgate-knative/templates/_helpers.tpl',
     ],
     customnamespace: ['./namespace.yml'],
-    jhconsole: [
-        './csvc-knative/templates/jhipster-console.yml',
-        './csvc-knative/templates/jhipster-logstash.yml',
-        './csvc-knative/templates/jhipster-dashboard-console.yml',
-        './csvc-knative/templates/jhipster-zipkin.yml',
-    ],
     msmysql: [
         './msmysql-knative/Chart.yaml',
         './msmysql-knative/requirements.yml',
@@ -184,7 +171,7 @@ describe('JHipster Knative Sub Generator', () => {
             });
         });
 
-        describe('mysql microservice with custom namespace and jhipster-console (with zipkin)', () => {
+        describe('mysql microservice with custom namespace', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/kubernetes-knative'))
@@ -199,7 +186,6 @@ describe('JHipster Knative Sub Generator', () => {
                         dockerRepositoryName: 'jhipster',
                         dockerPushCommand: 'docker push',
                         kubernetesNamespace: 'mynamespace',
-                        monitoring: 'elk',
                         jhipsterConsole: true,
                         clusteredDbApps: [],
                         generatorType: 'k8s',
@@ -212,9 +198,6 @@ describe('JHipster Knative Sub Generator', () => {
             });
             it('creates expected mysql files', () => {
                 assert.file(expectedFiles.msmysql);
-            });
-            it('creates expected jhipster-console files', () => {
-                assert.file(expectedFiles.jhconsole);
             });
             it('creates expected namespace file', () => {
                 assert.file(expectedFiles.customnamespace);
@@ -495,7 +478,7 @@ describe('JHipster Knative Sub Generator', () => {
             });
         });
 
-        describe('mysql microservice with custom namespace and jhipster-console (with zipkin)', () => {
+        describe('mysql microservice with custom namespace', () => {
             beforeEach(done => {
                 helpers
                     .run(require.resolve('../generators/kubernetes-knative'))
@@ -510,7 +493,6 @@ describe('JHipster Knative Sub Generator', () => {
                         dockerRepositoryName: 'jhipster',
                         dockerPushCommand: 'docker push',
                         kubernetesNamespace: 'mynamespace',
-                        monitoring: 'elk',
                         jhipsterConsole: true,
                         clusteredDbApps: [],
                         generatorType: 'helm',
@@ -525,11 +507,6 @@ describe('JHipster Knative Sub Generator', () => {
             it('creates expected mysql files', () => {
                 assert.file(helmExpectedFiles.msmysql);
                 assert.fileContent('./msmysql-knative/requirements.yml', /name: mysql/);
-            });
-            it('creates expected jhipster-console files', () => {
-                assert.file(helmExpectedFiles.csvcfiles);
-                assert.file(helmExpectedFiles.jhconsole);
-                assert.fileContent('./csvc-knative/requirements.yml', /name: elasticsearch/);
             });
             it('creates expected namespace file', () => {
                 assert.file(helmExpectedFiles.customnamespace);

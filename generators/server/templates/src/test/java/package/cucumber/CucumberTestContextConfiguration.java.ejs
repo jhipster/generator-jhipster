@@ -16,8 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export const enum <%= enumName %> {
-<% enumValues.forEach((enumValue, index) => { %>
-  <%= enumValue.name %> = '<%= enumValue.value %>'<% if (index < enumValues.length - 1) { %>,<% } %>
-<% }); %>
+package <%= packageName %>.cucumber;
+
+import <%= packageName %>.<%= mainClass %>;
+import io.cucumber.spring.CucumberContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.web.WebAppConfiguration;
+
+@CucumberContextConfiguration
+@SpringBootTest(classes = <%= mainClass %>.class)
+@WebAppConfiguration
+public class CucumberTestContextConfiguration {
+
 }

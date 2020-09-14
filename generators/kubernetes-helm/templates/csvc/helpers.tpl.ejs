@@ -23,22 +23,6 @@ Kafka and zookeeper customisation
 {{- default "jhipster-zookeeper" -}}
 {{- end -}}
 <%_ } _%>
-<%_ if (monitoring === 'elk') { _%>
-{{/*
-elk customisation
-*/}}
-{{- define "elasticsearch.name" -}}
-{{- default "jhipster-elasticsearch" -}}
-{{- end -}}
-
-{{- define "elasticsearch.fullname" -}}
-{{- default "jhipster-elasticsearch" -}}
-{{- end -}}
-
-{{- define "elasticsearch.client.fullname" -}}
-{{- default "jhipster-elasticsearch" -}}
-{{- end -}}
-<%_ } _%>
 <%_ if (monitoring === 'prometheus') { _%>
 {{/*
 prometheus/grafana customisation

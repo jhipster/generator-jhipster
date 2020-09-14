@@ -541,7 +541,6 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                     expect(deployment.appsFolders).to.deep.equal(new Set(['tata', 'titi']));
                     delete deployment.appsFolders;
                     delete deployment.clusteredDbApps;
-                    delete deployment.consoleOptions;
 
                     expect(deployment).to.deep.equal({
                         deploymentType: 'docker-compose',

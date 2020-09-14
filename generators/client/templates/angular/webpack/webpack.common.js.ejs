@@ -56,7 +56,7 @@ module.exports = (options) => ({
                         minifyCSS:false
                     }
                 },
-                exclude: utils.root('src/main/webapp/index.html')
+                exclude: utils.root('<%= CLIENT_MAIN_SRC_DIR %>index.html')
             },
             {
                 test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,

@@ -70,7 +70,7 @@ module.exports = class extends BaseGenerator {
                         .map(relationship => prepareRelationshipForTemplates(this.entity, relationship, this))
                         .map(relationship => this._prepareRelationshipForTemplates(this.entity, relationship));
                     this.removedRelationships = this.databaseChangelog.removedRelationships
-                        .map(relationship => prepareRelationshipForTemplates(this.entity, relationship, this))
+                        .map(relationship => prepareRelationshipForTemplates(this.entity, relationship, this, true))
                         .map(relationship => this._prepareRelationshipForTemplates(this.entity, relationship));
                 }
             },

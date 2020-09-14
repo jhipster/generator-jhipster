@@ -147,7 +147,6 @@ const expectedFiles = {
         `${CLIENT_SPEC_SRC_DIR}app/core/home/home.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/core/jhi-navbar/jhi-navbar.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/core/ribbon/ribbon.component.spec.ts`,
-        `${CLIENT_SPEC_SRC_DIR}app/shared/alert/alert.service.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/shared/config/axios-interceptor.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/shared/data/data-utils.service.spec.ts`,
 
@@ -155,13 +154,11 @@ const expectedFiles = {
 
         `${CLIENT_MAIN_SRC_DIR}app/router/index.ts`,
 
-        `${CLIENT_MAIN_SRC_DIR}app/shared/alert/alert.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/data/data-utils.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/date/filters.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/config.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/config-bootstrap-vue.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/store/account-store.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/config/store/alert-store.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/jhi-item-count.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/jhi-item-count.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/model/user.model.ts`,
@@ -189,7 +186,6 @@ const expectedFiles = {
     protractor: [
         `${CLIENT_TEST_SRC_DIR}e2e/modules/account/account.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}e2e/modules/administration/administration.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}e2e/page-objects/alert-page.ts`,
         `${CLIENT_TEST_SRC_DIR}e2e/page-objects/navbar-page.ts`,
         `${CLIENT_TEST_SRC_DIR}e2e/page-objects/password-page.ts`,
         `${CLIENT_TEST_SRC_DIR}e2e/page-objects/register-page.ts`,
