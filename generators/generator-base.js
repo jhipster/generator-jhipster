@@ -2065,7 +2065,10 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
                                 return;
                             }
                         }
-
+                        if (jhipsterUtils.isInJhipsterIgnore(jhipsterUtils.toRelativePath(_this.contextRoot, templatePathTo), _this.contextRoot)) {
+                            this.debug(`skipping file ${templatePathTo}`);
+                            return;
+                        }
                         filesOut.push(templatePathTo);
                         if (!returnFiles) {
                             let templatePathFrom = prefix ? `${prefix}/${templatePath}` : templatePath;

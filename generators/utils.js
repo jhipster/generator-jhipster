@@ -26,6 +26,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const os = require('os');
 
+
 const constants = require('./generator-constants');
 const FileUtils = require('../jdl/utils/file-utils');
 
@@ -63,6 +64,8 @@ module.exports = {
     vueAddPageProtractorConf,
     languageSnakeCase,
     languageToJavaLanguage,
+    toRelativePath,
+    isInJhipsterIgnore
 };
 
 /**
@@ -814,4 +817,31 @@ function languageToJavaLanguage(language) {
     const langProp = languageSnakeCase(language);
     // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
     return langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
+}
+
+function toRelativePath(contextRoot, path) {
+    return path.split(contextRoot)[1];
+}
+
+function gitPathMatchToRegexp(gitPathMatch) {
+    gitPathMatch.replace('.', '\\.');
+    gitPathMatch.replace('*', '.*');
+    return gitPathMatch;
+
+}
+function isInJhipsterIgnore(templatePathTo, contextRoot) {
+    if (fs.existsSync(contextRoot + '/.jhipsterignore')) {
+        const ignoreFile = fs.readFileSync(contextRoot + '/.jhipsterignore', 'utf-8');
+        let found = false;
+        let lines = ignoreFile.split(/\r?\n/);
+        for (let line of lines) {
+            const match = templatePathTo.match('^/' +  gitPathMatchToRegexp(line) + '$');
+
+            found = match?.length > 0 || false;
+            if (found === true) {
+                return found;
+            }
+        }
+    }
+    return false;
 }
