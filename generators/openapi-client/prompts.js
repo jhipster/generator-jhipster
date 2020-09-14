@@ -162,8 +162,9 @@ function askActionType() {
         if (props.jhipsterEndpoint !== undefined) {
             return fetchSwaggerResources(props.jhipsterEndpoint).then(availableDocs => {
                 props.availableDocs = availableDocs;
-            }
-        } else if (props.jhipsterDirectory !== undefined) {
+            });
+        }
+        if (props.jhipsterDirectory !== undefined) {
             props.inputSpec = `${props.jhipsterDirectory}/src/main/resources/swagger/api.yml`;
         } else if (props.customEndpoint !== undefined) {
             props.inputSpec = props.customEndpoint;
