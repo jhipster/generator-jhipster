@@ -49,7 +49,6 @@ import Vue2Filters from 'vue2-filters';
 
 import * as filters from '@/shared/date/filters';
 import { accountStore } from '@/shared/config/store/account-store';
-import { alertStore } from '@/shared/config/store/alert-store';
 <%_ if (enableTranslation) { _%>
 import { translationStore } from '@/shared/config/store/translation-store';
 <%_ } _%>
@@ -125,7 +124,6 @@ export function initVueXStore(vue) {
   return new Vuex.Store({
     modules: {
       accountStore,
-      alertStore,
       <%_ if (enableTranslation) { _%>
       translationStore,
       <%_ } _%>

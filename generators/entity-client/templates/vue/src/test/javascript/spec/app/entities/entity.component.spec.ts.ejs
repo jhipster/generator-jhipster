@@ -23,7 +23,6 @@ _%>
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
 
-import AlertService from '@/shared/alert/alert.service';
 import * as config from '@/shared/config/config';
 import <%= entityAngularName %>Component from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.vue';
 import <%= entityAngularName %>Class from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
@@ -37,7 +36,6 @@ const i18n = config.initI18N(localVue);
 <%_ } _%>
 const store = config.initVueXStore(localVue);
 localVue.component('font-awesome-icon', {});
-localVue.component('b-alert', {});
 localVue.component('b-badge', {});
 <%_ if (pagination !== 'no') { _%>
 localVue.component('jhi-sort-indicator', {});
@@ -72,7 +70,6 @@ describe('Component Tests', () => {
         localVue,
         stubs: {<%_ if (pagination !== 'no') { _%>jhiItemCount:true, bPagination:true,<%_ } _%> bModal: bModalStub as any},
         provide: {
-          alertService: () => new AlertService(store),
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub
         }
       });
@@ -191,7 +188,7 @@ describe('Component Tests', () => {
 
       // THEN
       expect(<%= entityInstance %>ServiceStub.delete.called).toBeTruthy();
-      expect(<%= entityInstance %>ServiceStub.retrieve.callCount).toEqual(2);
+      expect(<%= entityInstance %>ServiceStub.retrieve.callCount).toEqual(1);
     });
 <%_ } _%>
   });

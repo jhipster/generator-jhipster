@@ -75,7 +75,6 @@ import <%= otherEntityAngularName %>Service from '@/entities/<%= otherEntityClie
 import { I<%= otherEntityAngularName %> } from '@/shared/model/<%= otherEntityModelName %>.model';
   <% } } %>
 <%_ importEntitiesSeen.push(otherEntityAngularName); } } _%>
-import AlertService from '@/shared/alert/alert.service';
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
@@ -124,7 +123,6 @@ const validations: any = {
   validations
 })
 export default class <%= entityAngularName %>Update extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
-  @Inject('alertService') private alertService: () => AlertService;
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service: () => <%= entityAngularName %>Service;
   public <%= entityInstance %>: I<%= entityAngularName %> = new <%= entityAngularName %>();
   <%_
@@ -192,7 +190,12 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
         <%_ } else {_%>
         const message = 'A <%= entityAngularName %> is updated with identifier ' + param.id;
         <%_ } _%>
-        this.alertService().showAlert(message, 'info');
+        return this.$root.$bvToast.toast(message.toString(), {
+          title: 'Info',
+          variant: 'info',
+          solid: true,
+          autoHideDelay: 5000,
+        });
       });
     } else {
       this.<%= entityInstance %>Service().create(this.<%= entityInstance %>).then((param) => {
@@ -203,7 +206,12 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
         <%_ } else {_%>
         const message = 'A <%= entityAngularName %> is created with identifier ' + param.id;
         <%_ } _%>
-        this.alertService().showAlert(message, 'success');
+        this.$root.$bvToast.toast(message.toString(), {
+          title: 'Success',
+          variant: 'success',
+          solid: true,
+          autoHideDelay: 5000,
+        });
       });
     }
   }
