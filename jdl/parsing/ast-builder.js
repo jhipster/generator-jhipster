@@ -447,6 +447,7 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
             config: {},
             entities: { entityList: [], excluded: [] },
             options: {},
+            specialOptions: [],
         };
 
         if (context.applicationSubConfig) {

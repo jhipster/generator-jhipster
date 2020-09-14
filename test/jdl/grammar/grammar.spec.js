@@ -74,6 +74,7 @@ MAX = 43`);
                         excluded: [],
                     },
                     options: {},
+                    specialOptions: [],
                 });
             });
         });
@@ -100,6 +101,7 @@ MAX = 43`);
                             excluded: [],
                         },
                         options: {},
+                        specialOptions: [],
                     });
                 });
             });
@@ -125,6 +127,7 @@ MAX = 43`);
                             excluded: [],
                         },
                         options: {},
+                        specialOptions: [],
                     });
                 });
             });
@@ -150,6 +153,7 @@ MAX = 43`);
                             excluded: [],
                         },
                         options: {},
+                        specialOptions: [],
                     });
                 });
             });
@@ -187,6 +191,7 @@ application {
                             excluded: [],
                         },
                         options: {},
+                        specialOptions: [],
                     },
                     {
                         config: {
@@ -198,6 +203,7 @@ application {
                             excluded: [],
                         },
                         options: {},
+                        specialOptions: [],
                     },
                 ]);
             });
