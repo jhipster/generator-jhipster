@@ -1956,7 +1956,9 @@ relationship OneToMany {
                 expect(importState.exportedEntities[0].relationships).to.have.length(1);
             });
         });
-        context('when using the new option form', () => {
+        context('when having the use-options', () => {
+            let importState;
+
             before(() => {
                 const content = `entity A
 entity B
@@ -1967,16 +1969,22 @@ use mapstruct, elasticsearch for A, B except C`;
                     applicationName: 'toto',
                     databaseType: 'sql',
                 });
-                const res = importer.import();
-                console.log({ res });
+                importState = importer.import();
             });
             after(() => {
                 fse.removeSync('.jhipster');
             });
 
-            it('should work', () => {
-                // TODO fix it, please
-                expect(true).to.be.true;
+            it('should add the options', () => {
+                expect(importState.exportedEntities[0].dto).to.equal('mapstruct');
+                expect(importState.exportedEntities[1].dto).to.equal('mapstruct');
+                expect(importState.exportedEntities[2].dto).not.to.equal('mapstruct');
+                expect(importState.exportedEntities[0].service).to.equal('serviceClass');
+                expect(importState.exportedEntities[1].service).to.equal('serviceClass');
+                expect(importState.exportedEntities[2].service).not.to.equal('serviceClass');
+                expect(importState.exportedEntities[0].searchEngine).to.equal('elasticsearch');
+                expect(importState.exportedEntities[1].searchEngine).to.equal('elasticsearch');
+                expect(importState.exportedEntities[2].searchEngine).not.to.equal('elasticsearch');
             });
         });
     });
