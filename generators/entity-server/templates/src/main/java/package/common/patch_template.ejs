@@ -1,0 +1,56 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%
+const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
+const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
+const returnType = reactive ? 'Mono' : 'Optional'
+const mapOrFlatMap = reactive ? 'flatMap' : 'map'
+const returnPrefix = (isService) ? 'return' : returnType + '<' + instanceType + '> result =';
+const mapper = entityInstance  + 'Mapper';
+_%>
+<%_ if(viaService) { %>
+   <%_ if(!reactive) { %>
+   Optional<<%= instanceType %>> result = Optional.ofNullable(<%= entityInstance %>Service.partialUpdate(<%= instanceName %>));
+   <%_ } else { %>
+   Mono<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
+   <%_ } %>
+<%_ } else { %>
+<%- returnPrefix %> <%= entityInstance %>Repository.findById(<%= instanceName %>.getId())
+   .map(existing<%= entityClass %> -> {
+<%_ for (field of fields) { _%>
+   if (<%= instanceName %>.get<%= field.fieldNameCapitalized %>() != null) {
+      existing<%= entityClass %>.set<%= field.fieldNameCapitalized %>(<%= instanceName %>.get<%= field.fieldNameCapitalized %>());
+   }
+   <%_ if (isFieldWithContentType(field)) { _%>
+   if (<%= instanceName %>.get<%= field.fieldNameCapitalized %>ContentType() != null) {
+      existing<%= entityClass %>.set<%= field.fieldNameCapitalized %>ContentType(<%= instanceName %>.get<%= field.fieldNameCapitalized %>ContentType());
+   }
+   <%_ } _%>
+
+<% } %>
+   return existing<%= entityClass %>;
+   })
+   .<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)<% if (searchEngine === 'elasticsearch') { %>
+   .<%= mapOrFlatMap %>(saved<%= entityClass %> -> {
+         <%= entityInstance %>SearchRepository.save(saved<%= entityClass %>);
+         return saved<%= entityClass %>;
+      })<% } %><% if (dto !== 'no') { %>
+   .map(<%= mapper %>::toDto)<% } %><% if (isService && !reactive) { %>
+   .get()<% } %>;
+<%_ } %>

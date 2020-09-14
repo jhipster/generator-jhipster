@@ -2447,6 +2447,15 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         return name + this.dtoSuffix;
     }
 
+    /**
+     * Allows to know if the given field needs an additional content type field to save it's content type.
+     * @param {object} field - the entity field
+     * @returns {boolean} true if it needs an additional field.
+     */
+    isFieldWithContentType(field) {
+        return (field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text';
+    }
+
     get needleApi() {
         if (this._needleApi === undefined || this._needleApi === null) {
             this._needleApi = new NeedleApi(this);

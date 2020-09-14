@@ -105,7 +105,7 @@ public class <%= asDto(entityClass) %> implements Serializable {
     private String <%= fieldName %>;
     <%_ } _%>
 
-    <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
+    <%_ if (isFieldWithContentType(fields[idx])) { _%>
     private String <%= fieldName %>ContentType;
         <%_ } _%>
     <%_ } _%>
@@ -165,7 +165,7 @@ public class <%= asDto(entityClass) %> implements Serializable {
         <%_ } _%>
         this.<%= fieldName %> = <%= fieldName %>;
     }
-        <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
+        <%_ if (isFieldWithContentType(fields[idx])) { _%>
 
     public String get<%= fieldInJavaBeanMethod %>ContentType() {
         return <%= fieldName %>ContentType;
