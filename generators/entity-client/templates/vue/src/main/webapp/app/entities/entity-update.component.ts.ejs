@@ -7,8 +7,13 @@ import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vu
   let fieldsContainedValidators = [];
   for (idx in fields) {
     if (fields[idx].fieldValidate === true) {
-      if (!fieldsContainedValidators.includes('numeric') && fields[idx].fieldValidateRules.includes('numeric')) {
-        fieldsContainedValidators.push('numeric');
+      if (!fieldsContainedValidators.includes('numeric')) {
+        for (let el of ['Integer', 'Long', 'Float', 'Double', 'BigDecimal']) {
+          if (fields[idx].fieldType === el) {
+            fieldsContainedValidators.push('numeric');
+            break;
+          }
+        }
       }
       if (!fieldsContainedValidators.includes('required') && fields[idx].fieldValidateRules.includes('required')) {
         fieldsContainedValidators.push('required');
@@ -19,10 +24,10 @@ import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vu
       if (!fieldsContainedValidators.includes('maxLength') && fields[idx].fieldValidateRules.includes('maxlength')) {
         fieldsContainedValidators.push('maxLength');
       }
-      if (!fieldsContainedValidators.includes('minValue') && fields[idx].fieldValidateRules.includes('minValue')) {
+      if (!fieldsContainedValidators.includes('minValue') && fields[idx].fieldValidateRules.includes('min')) {
         fieldsContainedValidators.push('minValue');
       }
-      if (!fieldsContainedValidators.includes('maxValue') && fields[idx].fieldValidateRules.includes('maxValue')) {
+      if (!fieldsContainedValidators.includes('maxValue') && fields[idx].fieldValidateRules.includes('max')) {
         fieldsContainedValidators.push('maxValue');
       }
     }
