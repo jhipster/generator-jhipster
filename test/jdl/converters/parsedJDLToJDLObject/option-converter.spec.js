@@ -62,7 +62,7 @@ describe('OptionConverter', () => {
                 [BinaryOptions.Options.DTO, BinaryOptions.Values.dto.MAPSTRUCT],
                 [BinaryOptions.Options.SERVICE, BinaryOptions.Values.service.SERVICE_CLASS],
                 [BinaryOptions.Options.PAGINATION, BinaryOptions.Values.pagination.PAGINATION],
-                [BinaryOptions.Options.SEARCH, BinaryOptions.Values.search.ELASTIC_SEARCH],
+                [BinaryOptions.Options.SEARCH, BinaryOptions.Values.search.ELASTICSEARCH],
                 [BinaryOptions.Options.ANGULAR_SUFFIX, 'toto'],
                 [BinaryOptions.Options.CLIENT_ROOT_FOLDER, 'toto'],
                 [BinaryOptions.Options.MICROSERVICE, 'toto'],

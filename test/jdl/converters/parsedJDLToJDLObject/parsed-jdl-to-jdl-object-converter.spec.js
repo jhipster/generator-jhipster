@@ -184,7 +184,7 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                         new JDLBinaryOption({
                             name: BinaryOptions.SEARCH,
                             entityNames: ['Employee'],
-                            value: BinaryOptionValues.search.ELASTIC_SEARCH,
+                            value: BinaryOptionValues.search.ELASTICSEARCH,
                         }),
                     ]);
                 });

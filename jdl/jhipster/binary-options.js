@@ -36,7 +36,7 @@ const Values = {
         PAGINATION: 'pagination',
         'INFINITE-SCROLL': 'infinite-scroll',
     },
-    [Options.SEARCH]: { ELASTIC_SEARCH: 'elasticsearch', COUCHBASE: 'couchbase' },
+    [Options.SEARCH]: { ELASTICSEARCH: 'elasticsearch', COUCHBASE: 'couchbase' },
 };
 
 function getOptionName(optionValue) {
@@ -49,7 +49,7 @@ const OptionValues = {
     SERVICE_IMPL: 'serviceImpl',
     PAGINATION: 'pagination',
     'INFINITE-SCROLL': 'infinite-scroll',
-    ELASTIC_SEARCH: 'elasticsearch',
+    ELASTICSEARCH: 'elasticsearch',
     COUCHBASE: 'couchbase',
 };
 
