@@ -642,7 +642,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         managedUserVM.setFirstName(UPDATED_FIRSTNAME);
         managedUserVM.setLastName(UPDATED_LASTNAME);
         managedUserVM.setEmail(UPDATED_EMAIL);
-        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setActivated(updatedUser.isActivated());
         <%_ if (databaseType !== 'cassandra') { _%>
         managedUserVM.setImageUrl(UPDATED_IMAGEURL);
         <%_ } _%>
@@ -708,7 +708,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         managedUserVM.setFirstName(UPDATED_FIRSTNAME);
         managedUserVM.setLastName(UPDATED_LASTNAME);
         managedUserVM.setEmail(UPDATED_EMAIL);
-        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setActivated(updatedUser.isActivated());
         <%_ if (databaseType !== 'cassandra') { _%>
         managedUserVM.setImageUrl(UPDATED_IMAGEURL);
         <%_ } _%>
@@ -793,7 +793,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         managedUserVM.setFirstName(updatedUser.getFirstName());
         managedUserVM.setLastName(updatedUser.getLastName());
         managedUserVM.setEmail("jhipster@localhost");// this email should already be used by anotherUser
-        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setActivated(updatedUser.isActivated());
         <%_ if (databaseType !== 'cassandra') { _%>
         managedUserVM.setImageUrl(updatedUser.getImageUrl());
         <%_ } _%>
@@ -864,7 +864,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         managedUserVM.setFirstName(updatedUser.getFirstName());
         managedUserVM.setLastName(updatedUser.getLastName());
         managedUserVM.setEmail(updatedUser.getEmail());
-        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setActivated(updatedUser.isActivated());
         <%_ if (databaseType !== 'cassandra') { _%>
         managedUserVM.setImageUrl(updatedUser.getImageUrl());
         <%_ } _%>
@@ -996,7 +996,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         assertThat(user.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(user.getLastName()).isEqualTo(DEFAULT_LASTNAME);
         assertThat(user.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        assertThat(user.getActivated()).isTrue();
+        assertThat(user.isActivated()).isTrue();
         <%_ if (databaseType !== 'cassandra') { _%>
         assertThat(user.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         <%_ } _%>
