@@ -93,7 +93,7 @@ function askActionType() {
             name: 'jhipsterEndpoint',
             message: 'Enter the URL of the running Jhipster instance',
             default: 'http://localhost:8080',
-            validate: async (input) => {
+            validate: async input => {
                 try {
                     const availableDocs = await fetchSwaggerResources(input);
 
@@ -133,7 +133,7 @@ function askActionType() {
             message: 'Where is your Swagger/OpenAPI spec (URL or path) ?',
             default: 'http://petstore.swagger.io/v2/swagger.json',
             store: true,
-            validate: async (input) => {
+            validate: async input => {
                 try {
                     if (/^((http|https):\/\/)/.test(input)) {
                         await request('GET', `${input}`, {
@@ -160,7 +160,7 @@ function askActionType() {
         this.props = props;
 
         if (props.jhipsterEndpoint !== undefined) {
-            return fetchSwaggerResources(props.jhipsterEndpoint).then(availableDocs => {
+            fetchSwaggerResources(props.jhipsterEndpoint).then(availableDocs => {
                 props.availableDocs = availableDocs;
             });
         }
