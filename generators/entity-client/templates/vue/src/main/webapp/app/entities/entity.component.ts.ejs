@@ -164,6 +164,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
       const message = 'A <%= entityAngularName %> is deleted with identifier ' + this.removeId;
       <%_ } _%>
       this.$bvToast.toast(message.toString(), {
+        toaster: 'b-toaster-top-center',
         title: 'Info',
         variant: 'danger',
         solid: true,
