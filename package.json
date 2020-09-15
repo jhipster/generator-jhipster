@@ -87,7 +87,7 @@
         "semver": "7.3.2",
         "shelljs": "0.8.4",
         "simple-git": "2.20.1",
-        "sync-request": "6.1.0",
+        "then-request": "6.0.2",
         "tabtab": "2.2.2",
         "test": "^0.6.0",
         "through2": "4.0.2",
