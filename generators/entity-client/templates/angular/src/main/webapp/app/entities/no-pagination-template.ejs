@@ -18,6 +18,7 @@
 -%>
     <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
     eventSubscriber?: Subscription;
+    isLoading = false;
     <%_ if (searchEngine !== false) { _%>
     currentSearch: string;
     <%_ } _%>
@@ -42,20 +43,37 @@
     }
 
     loadAll(): void {
+        this.isLoading = true;
         <%_ if (searchEngine !== false) { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
                 query: this.currentSearch,
                 }).subscribe(
-                    (res: HttpResponse<I<%= entityAngularName %>[]>) => this.<%= entityInstancePlural %> = res.body || []
+                    (res: HttpResponse<I<%= entityAngularName %>[]>) => {
+                        this.isLoading = false;
+                        this.<%= entityInstancePlural %> = res.body || [];
+                    },
+                    () => {
+                        this.isLoading = false;
+                    }
                 );
             return;
         }
         <%_ } _%>
 
         this.<%= entityInstance %>Service.query().subscribe(
-            (res: HttpResponse<I<%= entityAngularName %>[]>) => this.<%= entityInstancePlural %> = res.body || []
+            (res: HttpResponse<I<%= entityAngularName %>[]>) => {
+                this.isLoading = false;
+                this.<%= entityInstancePlural %> = res.body || [];
+            },
+            () => {
+                this.isLoading = false;
+            }
         );
+    }
+
+    handleSyncList(): void {
+        this.loadAll();
     }
 
     <%_ if (searchEngine !== false) { _%>
