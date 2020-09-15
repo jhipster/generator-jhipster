@@ -93,7 +93,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     }
 
     handleSyncList(): void {
-      this.loadAll();
+        this.loadAll();
     }
 
     <%_ if (databaseType !== 'cassandra') { _%>
@@ -127,10 +127,10 @@ export class UserManagementComponent implements OnInit, OnDestroy {
           sort: this.sort()
       }<% } %>).subscribe(
           (res: HttpResponse<User[]>) => {
-            this.isLoading = false;
-            this.onSuccess(res.body<% if (databaseType !== 'cassandra') { %>, res.headers<% } %>);
+              this.isLoading = false;
+              this.onSuccess(res.body<% if (databaseType !== 'cassandra') { %>, res.headers<% } %>);
           }, () => {
-            this.isLoading = false;
+              this.isLoading = false;
           });
     }
 

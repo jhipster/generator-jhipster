@@ -67,11 +67,11 @@
                 sort: this.sort()
             }).subscribe(
                 (res: HttpResponse<I<%= entityAngularName %>[]>) => {
-                  this.isLoading = false;
-                  this.paginate<%= entityClassPlural %>(res.body, res.headers);
+                    this.isLoading = false;
+                    this.paginate<%= entityClassPlural %>(res.body, res.headers);
                 },
                 () => {
-                  this.isLoading = false;
+                    this.isLoading = false;
                 }
             );
             return;
@@ -84,11 +84,11 @@
             sort: this.sort()
         }).subscribe(
             (res: HttpResponse<I<%= entityAngularName %>[]>) => {
-              this.isLoading = false;
-              this.paginate<%= entityClassPlural %>(res.body, res.headers);
+                this.isLoading = false;
+                this.paginate<%= entityClassPlural %>(res.body, res.headers);
             },
             () => {
-              this.isLoading = false;
+                this.isLoading = false;
             }
         );
     }
@@ -105,7 +105,7 @@
     }
 
     handleSyncList(): void {
-      this.reset();
+        this.reset();
     }
 
     <%_ if (searchEngine !== false) { _%>

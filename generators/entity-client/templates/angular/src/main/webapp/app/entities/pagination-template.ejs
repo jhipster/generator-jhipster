@@ -59,12 +59,12 @@
                 size: this.itemsPerPage,
                 sort: this.sort()}).subscribe(
                     (res: HttpResponse<I<%= entityAngularName %>[]>) => {
-                      this.isLoading = false;
-                      this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+                        this.isLoading = false;
+                        this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
                     },
                     () => {
-                      this.isLoading = false;
-                      this.onError();
+                        this.isLoading = false;
+                        this.onError();
                     }
                 );
             return;
@@ -76,18 +76,18 @@
             size: this.itemsPerPage,
             sort: this.sort()}).subscribe(
                 (res: HttpResponse<I<%= entityAngularName %>[]>) => {
-                  this.isLoading = false;
-                  this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+                    this.isLoading = false;
+                    this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
                 },
                 () => {
-                  this.isLoading = false;
-                  this.onError();
+                    this.isLoading = false;
+                    this.onError();
                 }
             );
     }
 
     handleSyncList(): void {
-      this.loadPage();
+        this.loadPage();
     }
 
     <%_ if (searchEngine !== false) { _%>

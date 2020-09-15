@@ -21,19 +21,19 @@
         <span jhiTranslate="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></span>
 
         <div class="d-flex justify-content-end">
-          <button class="btn btn-primary mr-2" (click)="handleSyncList()" [disabled]="isLoading">
-            <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-            <span jhiTranslate="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</span>
-          </button>
-          <%_ if (!readOnly) { _%>
+            <button class="btn btn-primary mr-2" (click)="handleSyncList()" [disabled]="isLoading">
+                <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+                <span jhiTranslate="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</span>
+            </button>
+            <%_ if (!readOnly) { _%>
 
-          <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityUrl %>/new']">
-              <fa-icon icon="plus"></fa-icon>
-              <span <% if (searchEngine !== false) { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= i18nKeyPrefix %>.home.createLabel">
-              Create a new <%= entityClassHumanized %>
-              </span>
-          </button>
-          <%_ } _%>
+            <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityUrl %>/new']">
+                <fa-icon icon="plus"></fa-icon>
+                <span <% if (searchEngine !== false) { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= i18nKeyPrefix %>.home.createLabel">
+                Create a new <%= entityClassHumanized %>
+                </span>
+            </button>
+            <%_ } _%>
         </div>
     </h2>
 
