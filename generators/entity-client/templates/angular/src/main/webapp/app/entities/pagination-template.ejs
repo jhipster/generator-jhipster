@@ -21,6 +21,7 @@
     <%_ if (searchEngine !== false) { _%>
     currentSearch: string;
     <%_ } _%>
+    isLoading = false;
     totalItems = 0;
     itemsPerPage = ITEMS_PER_PAGE;
     page!: number;
@@ -47,6 +48,7 @@
     }
 
     loadPage(page?: number, dontNavigate?: boolean): void {
+        this.isLoading = true;
         const pageToLoad: number = page || this.page || 1;
 
         <%_ if (searchEngine !== false) { _%>
@@ -56,8 +58,14 @@
                 query: this.currentSearch,
                 size: this.itemsPerPage,
                 sort: this.sort()}).subscribe(
-                    (res: HttpResponse<I<%= entityAngularName %>[]>) => this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate),
-                    () => this.onError()
+                    (res: HttpResponse<I<%= entityAngularName %>[]>) => {
+                      this.isLoading = false;
+                      this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+                    },
+                    () => {
+                      this.isLoading = false;
+                      this.onError();
+                    }
                 );
             return;
         }
@@ -67,9 +75,19 @@
             page: pageToLoad - 1,
             size: this.itemsPerPage,
             sort: this.sort()}).subscribe(
-                (res: HttpResponse<I<%= entityAngularName %>[]>) => this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate),
-                () => this.onError()
+                (res: HttpResponse<I<%= entityAngularName %>[]>) => {
+                  this.isLoading = false;
+                  this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+                },
+                () => {
+                  this.isLoading = false;
+                  this.onError();
+                }
             );
+    }
+
+    handleSyncList(): void {
+      this.loadPage();
     }
 
     <%_ if (searchEngine !== false) { _%>
