@@ -314,6 +314,7 @@ const vueFiles = {
                 'e2e/util/utils.ts',
                 'e2e/page-objects/navbar-page.ts',
                 'e2e/page-objects/signin-page.ts',
+                'e2e/page-objects/alert-page.ts',
                 'e2e/page-objects/administration-page.ts',
                 'protractor.conf.js',
             ],

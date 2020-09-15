@@ -91,6 +91,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends Vu
       const message = res.headers['<%=headerAlert%>'];
       <%_ } _%>
       this.$bvToast.toast(message.toString(), {
+        toaster: 'b-toaster-top-center',
         title: 'Info',
         variant: 'danger',
         solid: true,

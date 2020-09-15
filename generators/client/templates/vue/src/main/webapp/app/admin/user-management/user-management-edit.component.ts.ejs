@@ -81,6 +81,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
       this.userManagementService().update(this.userAccount).then((res) => {
         this.returnToList();
         this.$root.$bvToast.toast(this.getMessageFromHeader(res).toString(), {
+          toaster: 'b-toaster-top-center',
           title: 'Info',
           variant: 'info',
           solid: true,
@@ -94,6 +95,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
       this.userManagementService().create(this.userAccount).then(res => {
         this.returnToList();
         this.$root.$bvToast.toast(this.getMessageFromHeader(res).toString(), {
+          toaster: 'b-toaster-top-center',
           title: 'Success',
           variant: 'success',
           solid: true,
