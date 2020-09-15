@@ -48,12 +48,10 @@
         "ejs-lint": "mocha test/ejslint.js",
         "ejslint": "ejslint",
         "pretest": "npm run lint",
-        "test": "npm run cli:test & npm run noncli:test",
-        "cli:test": "mocha test/cli --no-insight --forbid-only",
-        "noncli:test": "mocha --ignore 'test/cli/*' --no-insight --forbid-only -p",
-        "jsdoc": "jsdoc --configure jsdoc-conf.json",
-        "jdl:test": "mocha test/jdl --no-insight --forbid-only -p",
-        "jdl:test-watch": "npm run jdl:test -- --watch"
+        "test": "node scripts/launch-tests.js",
+        "cli:test": "mocha test/cli",
+        "noncli:test": "mocha --ignore 'test/cli/*' -p",
+        "jsdoc": "jsdoc --configure jsdoc-conf.json"
     },
     "dependencies": {
         "aws-sdk": "2.752.0",
