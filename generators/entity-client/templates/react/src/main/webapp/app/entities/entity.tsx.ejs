@@ -260,7 +260,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
             <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</Translate>
           </Button>
           <%_ if (!readOnly) { _%>
-            <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+            <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
               <FontAwesomeIcon icon="plus" />&nbsp;
               <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
                 Create new <%= entityClassHumanized %>

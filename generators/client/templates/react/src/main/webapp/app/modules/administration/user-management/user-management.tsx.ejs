@@ -99,7 +99,7 @@ export const UserManagement = (props: IUserManagementProps) => {
           <Button className="mr-2" color="primary" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="userManagement.home.refreshListLabel">Refresh List</Translate>
           </Button>
-          <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity">
+          <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity">
             <FontAwesomeIcon icon="plus" /> <Translate contentKey="userManagement.home.createLabel">Create a new user</Translate>
           </Link>
         </div>
