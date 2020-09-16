@@ -240,6 +240,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
 
         this.registerPrettierTransform();
         this.registerForceEntitiesTransform();
+        this.registerJhipsterIgnoreFilesTransform();
     }
 
     _initializing() {

@@ -837,7 +837,7 @@ function isInJhipsterIgnore(templatePathTo, contextRoot) {
         for (let line of lines) {
             const match = templatePathTo.match('^/' +  gitPathMatchToRegexp(line) + '$');
 
-            found = match?.length > 0 || false;
+            found = match && match.length > 0 || false;
             if (found === true) {
                 return found;
             }

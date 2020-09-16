@@ -1477,6 +1477,18 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         );
     }
 
+    registerJhipsterIgnoreFilesTransform() {
+        this.registerTransformStream(
+            through.obj(function (file, enc, cb) {
+                if (jhipsterUtils.isInJhipsterIgnore(jhipsterUtils.toRelativePath(file._cwd, file.path), file._cwd)) {
+                    file.conflicter = 'skip';
+                }
+
+                this.push(file);
+                cb();
+            }));
+    }
+
     /**
      * Check if the subgenerator has been invoked from JHipster CLI or from Yeoman (yo jhipster:subgenerator)
      */
