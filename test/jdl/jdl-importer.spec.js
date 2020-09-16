@@ -1960,7 +1960,15 @@ relationship OneToMany {
             let importState;
 
             before(() => {
-                const content = `entity A
+                const content = `application {
+  config {
+    baseName toto
+  }
+  entities A, B, C
+  use serviceImpl for * except C
+}
+
+entity A
 entity B
 entity C
 
@@ -1973,15 +1981,16 @@ use mapstruct, elasticsearch for A, B except C`;
             });
             after(() => {
                 fse.removeSync('.jhipster');
+                fse.unlinkSync('.yo-rc.json');
             });
 
             it('should add the options', () => {
                 expect(importState.exportedEntities[0].dto).to.equal('mapstruct');
                 expect(importState.exportedEntities[1].dto).to.equal('mapstruct');
                 expect(importState.exportedEntities[2].dto).not.to.equal('mapstruct');
-                expect(importState.exportedEntities[0].service).to.equal('serviceClass');
-                expect(importState.exportedEntities[1].service).to.equal('serviceClass');
-                expect(importState.exportedEntities[2].service).not.to.equal('serviceClass');
+                expect(importState.exportedEntities[0].service).to.equal('serviceImpl');
+                expect(importState.exportedEntities[1].service).to.equal('serviceImpl');
+                expect(importState.exportedEntities[2].service).not.to.equal('serviceImpl');
                 expect(importState.exportedEntities[0].searchEngine).to.equal('elasticsearch');
                 expect(importState.exportedEntities[1].searchEngine).to.equal('elasticsearch');
                 expect(importState.exportedEntities[2].searchEngine).not.to.equal('elasticsearch');

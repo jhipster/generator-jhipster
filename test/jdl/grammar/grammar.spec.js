@@ -310,6 +310,37 @@ application {
                 });
             });
         });
+        context('when having options in the use form', () => {
+            let application;
+
+            before(() => {
+                const content = parseFromContent(`application {
+  config {
+    baseName superApp
+    applicationType monolith
+  }
+  entities A, B, C
+  use pagination for A
+  use couchbase for * except C
+}`);
+                application = content.applications[0];
+            });
+
+            it('should parse them', () => {
+                expect(application.useOptions).to.deep.equal([
+                    {
+                        excluded: [],
+                        list: ['A'],
+                        optionValues: ['pagination'],
+                    },
+                    {
+                        excluded: ['C'],
+                        list: ['*'],
+                        optionValues: ['couchbase'],
+                    },
+                ]);
+            });
+        });
     });
     context('when parsing an entity', () => {
         context('with a name', () => {

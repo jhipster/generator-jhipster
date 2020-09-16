@@ -494,6 +494,7 @@ module.exports = class JDLParser extends CstParser {
                     { ALT: () => this.SUBRULE(this.applicationSubEntities) },
                     { ALT: () => this.SUBRULE(this.unaryOptionDeclaration) },
                     { ALT: () => this.SUBRULE(this.binaryOptionDeclaration) },
+                    { ALT: () => this.SUBRULE(this.useOptionDeclaration) },
                 ]);
             });
         });

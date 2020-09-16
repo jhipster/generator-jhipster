@@ -494,6 +494,12 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
             });
         }
 
+        if (context.useOptionDeclaration) {
+            context.useOptionDeclaration.map(this.visit, this).forEach(option => {
+                applicationSubDeclaration.useOptions.push(option);
+            });
+        }
+
         return applicationSubDeclaration;
     }
 
