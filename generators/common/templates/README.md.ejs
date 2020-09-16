@@ -87,12 +87,12 @@ Run the following commands in two separate terminals to create a blissful develo
 auto-refreshes when files change on your hard drive.
 
 ```
-<% if (buildTool === 'maven') { %>
+<%_ if (buildTool === 'maven') { _%>
 ./mvnw
-<% } %>
-<% if (buildTool === 'gradle') { %>
+<%_ } _%>
+<%_ if (buildTool === 'gradle') { _%>
 ./gradlew -x webpack
-<% } %>
+<%_ } _%>
 <%= clientPackageManager %> start
 ```
 
@@ -266,12 +266,12 @@ Refer to [Doing API-First development][] for more details.
 To build the final jar and optimize the <%= baseName %> application for production, run:
 
 ```
-<% if (buildTool === 'maven') { %>
+<%_ if (buildTool === 'maven') { _%>
 ./mvnw -Pprod clean verify
-<% } %>
-<% if (buildTool === 'gradle') { %>
+<%_ } _%>
+<%_ if (buildTool === 'gradle') { _%>
 ./gradlew -Pprod clean bootJar
-<% } %>
+<%_ } _%>
 ```
 
 <%_ if (!skipClient) { _%>
@@ -280,12 +280,12 @@ This will concatenate and minify the client CSS and JavaScript files. It will al
 To ensure everything worked, run:
 
 ```
-<% if (buildTool === 'maven') { %>
+<%_ if (buildTool === 'maven') { _%>
 java -jar target/*.jar
-<% } %>
-<% if (buildTool === 'gradle') { %>
+<%_ } _%>
+<%_ if (buildTool === 'gradle') { _%>
 java -jar build/libs/*.jar
-<% } %>
+<%_ } _%>
 ```
 
 <% if (!skipClient) { %>Then navigate to [http://localhost:<%= serverPort %>](http://localhost:<%= serverPort %>) in your browser.
@@ -297,12 +297,12 @@ Refer to [Using JHipster in production][] for more details.
 To package your application as a war in order to deploy it to an application server, run:
 
 ```
-<% if (buildTool === 'maven') { %>
+<%_ if (buildTool === 'maven') { _%>
 ./mvnw -Pprod,war clean verify
-<% } %>
-<% if (buildTool === 'gradle') { %>
+<%_ } _%>
+<%_ if (buildTool === 'gradle') { _%>
 ./gradlew -Pprod -Pwar clean bootWar
-<% } %>
+<%_ } _%>
 ```
 
 ## Testing
