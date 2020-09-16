@@ -31,7 +31,6 @@ const entityToDto = 'toDto';
 const entityToDtoReference = mapper + '::'+ 'toDto';
 const repository = entityInstance  + 'Repository';
 const searchRepository = entityInstance  + 'SearchRepository';
-let { isUsingMapsId, mapsIdAssoc } = _getUseMapsIdRelation(relationships);
 
 _%>
 <%_ if (service === 'serviceImpl') { _%>

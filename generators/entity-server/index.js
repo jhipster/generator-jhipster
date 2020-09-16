@@ -73,37 +73,70 @@ module.exports = class extends BaseBlueprintGenerator {
         return this._writing();
     }
 
-    /* Private methods used in templates */
-    _processJavaEntityImports(fields, relationships) {
-        let importJsonIgnore = false;
-        let importJsonIgnoreProperties = false;
-        let importSet = false;
-        const uniqueEnums = {};
+    _preparing() {
+        return {
+            processJavaEntityImports() {
+                this.importJsonIgnore = false;
+                this.importJsonIgnoreProperties = false;
+                this.importSet = false;
+                this.uniqueEnums = {};
 
-        let importApiModelProperty = Object.values(relationships).filter(v => typeof v.javadoc != 'undefined').length > 0;
-        if (!importApiModelProperty) {
-            importApiModelProperty = Object.values(fields).filter(v => typeof v.javadoc != 'undefined').length > 0;
-        }
+                this.importApiModelProperty = Object.values(this.relationships).filter(v => typeof v.javadoc != 'undefined').length > 0;
+                if (!this.importApiModelProperty) {
+                    this.importApiModelProperty = Object.values(this.fields).filter(v => typeof v.javadoc != 'undefined').length > 0;
+                }
 
-        Object.values(relationships).forEach(v => {
-            if (v.ownerSide === false && ['one-to-many', 'one-to-one', 'many-to-many'].includes(v.relationshipType)) {
-                importJsonIgnore = true;
-            } else if (v.relationshipType === 'many-to-one') {
-                importJsonIgnoreProperties = true;
-            }
-            if (v.relationshipType === 'one-to-many' || v.relationshipType === 'many-to-many') {
-                importSet = true;
-            }
-        });
+                Object.values(this.relationships).forEach(v => {
+                    if (v.ownerSide === false && ['one-to-many', 'one-to-one', 'many-to-many'].includes(v.relationshipType)) {
+                        this.importJsonIgnore = true;
+                    } else if (v.relationshipType === 'many-to-one') {
+                        this.importJsonIgnoreProperties = true;
+                    }
+                    if (v.relationshipType === 'one-to-many' || v.relationshipType === 'many-to-many') {
+                        this.importSet = true;
+                    }
+                });
 
-        Object.values(fields).forEach(v => {
-            if (v.fieldIsEnum && (!uniqueEnums[v.fieldType] || (uniqueEnums[v.fieldType] && v.fieldValues.length !== 0))) {
-                uniqueEnums[v.fieldType] = v.fieldType;
-            }
-        });
-        return { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums };
+                Object.values(this.fields).forEach(v => {
+                    if (
+                        v.fieldIsEnum &&
+                        (!this.uniqueEnums[v.fieldType] || (this.uniqueEnums[v.fieldType] && v.fieldValues.length !== 0))
+                    ) {
+                        this.uniqueEnums[v.fieldType] = v.fieldType;
+                    }
+                });
+            },
+
+            useMapsIdRelation() {
+                const jpaDerivedRelation = Object.values(this.relationships).find(rel => rel.useJPADerivedIdentifier === true);
+                if (jpaDerivedRelation) {
+                    this.isUsingMapsId = true;
+                    this.mapsIdAssoc = jpaDerivedRelation;
+                    this.hasOauthUser = this.mapsIdAssoc.otherEntityName === 'user' && this.authenticationType === 'oauth2';
+                } else {
+                    this.isUsingMapsId = false;
+                    this.mapsIdAssoc = null;
+                    this.hasOauthUser = false;
+                }
+            },
+
+            generateEagerRelationsAndEntityTypes() {
+                this.eagerRelations = this.relationships.filter(
+                    rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true)
+                );
+                this.regularEagerRelations = this.eagerRelations.filter(rel => rel.useJPADerivedIdentifier !== true);
+                this.uniqueEntityTypes = new Set(this.eagerRelations.map(rel => rel.otherEntityNameCapitalized));
+                this.uniqueEntityTypes.add(this.entityClass);
+            },
+        };
     }
 
+    get preparing() {
+        if (useBlueprints) return;
+        return this._preparing();
+    }
+
+    /* Private methods used in templates */
     _getJoinColumnName(relationship) {
         if (relationship.useJPADerivedIdentifier === true) {
             return 'id';
@@ -116,23 +149,5 @@ module.exports = class extends BaseBlueprintGenerator {
             return `e_${name}`;
         }
         return name;
-    }
-
-    _getUseMapsIdRelation(relationships) {
-        const jpaDerivedRelation = Object.values(relationships).find(rel => rel.useJPADerivedIdentifier === true);
-        if (jpaDerivedRelation) {
-            return { isUsingMapsId: true, mapsIdAssoc: jpaDerivedRelation };
-        }
-        return { isUsingMapsId: false, mapsIdAssoc: null };
-    }
-
-    _generateEagerRelationsAndEntityTypes(entityClass, relationships) {
-        const eagerRelations = relationships.filter(rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true));
-        const regularEagerRelations = eagerRelations.filter(rel => rel.useJPADerivedIdentifier !== true);
-        const uniqueEntityTypes = new Set(
-            eagerRelations.map(rel => rel.otherEntityNameCapitalized)
-        );
-        uniqueEntityTypes.add(entityClass);
-        return { eagerRelations, uniqueEntityTypes, regularEagerRelations };
     }
 };

@@ -17,10 +17,6 @@
  limitations under the License.
 -%>
 package <%= packageName %>.repository.rowmapper;
-<%_ 
-    let { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums } = _processJavaEntityImports(fields, relationships);
-    let { eagerRelations, uniqueEntityTypes, regularEagerRelations } = _generateEagerRelationsAndEntityTypes(entityClass, relationships);
-_%>
 
 <%_ if (fieldsContainBigDecimal === true) { _%>
 import java.math.BigDecimal;

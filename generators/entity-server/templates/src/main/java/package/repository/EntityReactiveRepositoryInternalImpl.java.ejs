@@ -18,12 +18,6 @@
 -%>
 package <%= packageName %>.repository;
 
-<%_
-    let { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums } = _processJavaEntityImports(fields, relationships);
-    let { eagerRelations, uniqueEntityTypes, regularEagerRelations } = _generateEagerRelationsAndEntityTypes(entityClass, relationships);
-    let { isUsingMapsId, mapsIdAssoc } = _getUseMapsIdRelation(relationships);
-
-_%>
 import java.util.function.BiFunction;
 <%_ if (fieldsContainBigDecimal === true) { _%>
 import java.math.BigDecimal;

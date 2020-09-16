@@ -20,17 +20,13 @@ package <%= packageName %>.web.rest;
 
 <%_
 
-let { isUsingMapsId, mapsIdAssoc } = _getUseMapsIdRelation(relationships);
-
 let mapsIdEntity;
 let mapsIdEntityInstance;
 let mapsIdRepoInstance;
-let hasOauthUser = false;
 if (isUsingMapsId) {
     mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
     mapsIdEntityInstance =  mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
     mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
-    hasOauthUser = mapsIdAssoc.otherEntityName === 'user' && authenticationType === 'oauth2';
 }
 
 let callBlock = '';

@@ -24,7 +24,6 @@ import <%= packageName %>.web.rest.TestUtil;
 <%_
 let hasOauthUser = false;
 
-let { isUsingMapsId, mapsIdAssoc } = _getUseMapsIdRelation(relationships);
 if (isUsingMapsId) {
     hasOauthUser = mapsIdAssoc.otherEntityName === 'user' && authenticationType === 'oauth2';
 }
