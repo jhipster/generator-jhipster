@@ -25,7 +25,7 @@ const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = require('../../..
 const { MAX, MAXBYTES, MAXLENGTH, MIN, MINBYTES, MINLENGTH, PATTERN, REQUIRED, UNIQUE } = require('../../../jdl/jhipster/validations');
 const { READ_ONLY, NO_FLUENT_METHOD, FILTER, SKIP_SERVER, SKIP_CLIENT, EMBEDDED } = require('../../../jdl/jhipster/unary-options');
 
-const { Options, Values } = require('../../../jdl/jhipster/binary-options');
+const { Options, Values, OptionValues } = require('../../../jdl/jhipster/binary-options');
 
 const { SEARCH, SERVICE, PAGINATION, DTO, ANGULAR_SUFFIX, MICROSERVICE } = Options;
 
@@ -1532,6 +1532,28 @@ entity A {
                         excluded: [],
                         list: ['*'],
                     },
+                });
+            });
+        });
+        context('using the use-form', () => {
+            Object.keys(OptionValues).forEach(optionValue => {
+                context(`of ${optionValue}`, () => {
+                    let parsedOptions;
+
+                    before(() => {
+                        const content = parseFromContent(`use ${optionValue} for A`);
+                        parsedOptions = content.useOptions;
+                    });
+
+                    it('should parse it', () => {
+                        expect(parsedOptions).to.deep.equal([
+                            {
+                                excluded: [],
+                                list: ['A'],
+                                optionValues: [optionValue],
+                            },
+                        ]);
+                    });
                 });
             });
         });
