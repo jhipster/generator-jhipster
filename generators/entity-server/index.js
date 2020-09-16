@@ -127,16 +127,10 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     _generateEagerRelationsAndEntityTypes(entityClass, relationships) {
-        const eagerRelations = relationships.filter(function (rel) {
-            return rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true);
-        });
-        const regularEagerRelations = eagerRelations.filter(function (rel) {
-            return rel.useJPADerivedIdentifier !== true;
-        });
+        const eagerRelations = relationships.filter(rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true));
+        const regularEagerRelations = eagerRelations.filter(rel => rel.useJPADerivedIdentifier !== true);
         const uniqueEntityTypes = new Set(
-            eagerRelations.map(function (rel) {
-                return rel.otherEntityNameCapitalized;
-            })
+            eagerRelations.map(rel => rel.otherEntityNameCapitalized)
         );
         uniqueEntityTypes.add(entityClass);
         return { eagerRelations, uniqueEntityTypes, regularEagerRelations };

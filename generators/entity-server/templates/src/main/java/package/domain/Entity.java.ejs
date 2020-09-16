@@ -537,7 +537,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         }
 
         const useJPADerivedIdentifier = relationships[idx].useJPADerivedIdentifier;
-        const reactiveRelationShipWithId = (databaseType === 'sql' && reactive && !(relationshipType === 'one-to-one' && 
+        const reactiveRelationshipWithId = (databaseType === 'sql' && reactive && !(relationshipType === 'one-to-one' &&
                 (ownerSide === false || (ownerSide === true && useJPADerivedIdentifier === true))));
     _%>
     <%_ if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') { _%>
@@ -611,7 +611,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 
     public <%= asEntity(entityClass) %> <%= relationshipFieldName %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
-            <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationShipWithId) { _%>
+            <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationshipWithId) { _%>
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
             <%_ } _%>
         return this;
@@ -620,11 +620,11 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 
     public void set<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
-        <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationShipWithId) { _%>
+        <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationshipWithId) { _%>
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
         <%_ } _%>
     }
-        <%_ if (reactiveRelationShipWithId) { _%>
+        <%_ if (reactiveRelationshipWithId) { _%>
 
     public Long get<%= relationshipNameCapitalized %>Id() {
         return this.<%= relationshipFieldName %>Id;
