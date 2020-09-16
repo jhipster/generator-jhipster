@@ -56,7 +56,7 @@
         "jdl:test-watch": "npm run jdl:test -- --watch"
     },
     "dependencies": {
-        "aws-sdk": "2.752.0",
+        "aws-sdk": "2.754.0",
         "axios": "0.20.0",
         "chalk": "4.1.0",
         "chevrotain": "7.0.2",
@@ -78,14 +78,14 @@
         "os-locale": "5.0.0",
         "parse-gitignore": "1.0.1",
         "pluralize": "8.0.0",
-        "prettier": "2.1.1",
+        "prettier": "2.1.2",
         "prettier-plugin-java": "0.8.2",
         "progress": "2.0.3",
         "randexp": "0.5.3",
         "semver": "7.3.2",
         "shelljs": "0.8.4",
         "then-request": "6.0.2",
-        "tabtab": "2.2.2",
+        "tabtab": "3.0.2",
         "test": "^0.6.0",
         "through2": "4.0.2",
         "uuid": "8.3.0",
@@ -94,7 +94,7 @@
         "yeoman-generator": "4.12.0"
     },
     "devDependencies": {
-        "@openapitools/openapi-generator-cli": "1.0.15-4.3.1",
+        "@openapitools/openapi-generator-cli": "1.0.18-4.3.1",
         "chai": "4.2.0",
         "ejs-lint": "1.1.0",
         "eslint": "7.9.0",
