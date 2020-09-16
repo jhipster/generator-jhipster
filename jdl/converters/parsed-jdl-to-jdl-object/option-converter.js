@@ -28,6 +28,7 @@ module.exports = { convertOptions };
 /**
  * Convert unary and binary options to JDLUnary & JDLBinary option classes.
  * @param {Object} parsedOptions - the parsed option object.
+ * @param {Array<Object>} useOptions - the parsed option object, using the use form.
  * @returns {Array<JDLUnaryOption|JDLBinaryOption>} the converted JDLUnaryOption & JDLBinaryOption objects.
  */
 function convertOptions(parsedOptions, useOptions) {
