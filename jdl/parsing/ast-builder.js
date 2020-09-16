@@ -108,8 +108,8 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
             });
         }
 
-        if (context.specialUnaryOptionDeclaration) {
-            context.specialUnaryOptionDeclaration.map(this.visit, this).forEach(option => {
+        if (context.useOptionDeclaration) {
+            context.useOptionDeclaration.map(this.visit, this).forEach(option => {
                 ast.useOptions.push(option);
             });
         }
@@ -387,7 +387,7 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
         return getBinaryOptionFromContext(context, this);
     }
 
-    specialUnaryOptionDeclaration(context) {
+    useOptionDeclaration(context) {
         return getSpecialUnaryOptionDeclaration(context, this);
     }
 
