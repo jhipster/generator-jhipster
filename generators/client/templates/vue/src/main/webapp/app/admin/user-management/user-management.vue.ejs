@@ -6,13 +6,6 @@
         <font-awesome-icon icon="plus"></font-awesome-icon> <span v-text="$t('userManagement.home.createLabel')">Create a new User</span>
       </router-link>
     </h2>
-    <b-alert :show="dismissCountDown"
-              dismissible
-              :variant="alertType"
-              @dismissed="dismissCountDown=0"
-              @dismiss-count-down="countDownChanged">
-      {{alertMessage}}
-    </b-alert>
     <div class="table-responsive" v-if="users">
       <table class="table table-striped">
         <caption>Users</caption>

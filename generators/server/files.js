@@ -29,6 +29,7 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 const shouldSkipUserManagement = generator =>
     generator.skipUserManagement && (generator.applicationType !== 'monolith' || generator.authenticationType !== 'oauth2');
@@ -215,7 +216,19 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.clientFramework !== REACT,
+            condition: generator => generator.clientFramework === VUE,
+            path: SERVER_MAIN_RES_DIR,
+            templates: [
+                {
+                    file: 'banner-vue.txt',
+                    method: 'copy',
+                    noEjs: true,
+                    renameTo: () => 'banner.txt',
+                },
+            ],
+        },
+        {
+            condition: generator => generator.clientFramework !== REACT && generator.clientFramework !== VUE,
             path: SERVER_MAIN_RES_DIR,
             templates: [{ file: 'banner.txt', method: 'copy', noEjs: true }],
         },

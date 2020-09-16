@@ -26,23 +26,23 @@ limitations under the License.
     "node_modules"
   ],
   "dependencies": {
-    "@angular/common": "10.1.1",
-    "@angular/compiler": "10.1.1",
-    "@angular/core": "10.1.1",
-    "@angular/forms": "10.1.1",
-    "@angular/localize": "10.1.1",
-    "@angular/platform-browser": "10.1.1",
-    "@angular/platform-browser-dynamic": "10.1.1",
-    "@angular/router": "10.1.1",
+    "@angular/common": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    "@angular/compiler": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
+    "@angular/core": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
+    "@angular/forms": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
+    "@angular/localize": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
+    "@angular/platform-browser": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
+    "@angular/platform-browser-dynamic": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
+    "@angular/router": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
     "@fortawesome/angular-fontawesome": "0.7.0",
     "@fortawesome/fontawesome-svg-core": "1.2.30",
     "@fortawesome/free-solid-svg-icons": "5.14.0",
     "@ng-bootstrap/ng-bootstrap": "7.0.0",
     "@ngx-translate/core": "12.1.2",
     "@ngx-translate/http-loader": "5.0.0",
-    "bootstrap": "4.5.2",
+    "bootstrap": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     <%_ if (clientTheme !== 'none') { _%>
-    "bootswatch": "4.5.2",
+    "bootswatch": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#bootstrap",
     <%_ } _%>
     "moment": "2.27.0",
     "ng-jhipster": "0.15.0",
@@ -62,9 +62,9 @@ limitations under the License.
     "zone.js": "0.10.3"
   },
   "devDependencies": {
-    "@angular/cli": "10.1.0",
-    "@angular/compiler-cli": "10.1.1",
-    "@ngtools/webpack": "10.0.0",
+    "@angular/cli": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    "@angular/compiler-cli": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
+    "@ngtools/webpack": "VERSION_MANAGED_BY_CLIENT_ANGULAR#devDependencies#@angular/cli",
     "@openapitools/openapi-generator-cli": "1.0.13-4.3.1",
     <%_ if (protractorTests) { _%>
     "@types/chai": "4.2.11",
