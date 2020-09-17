@@ -1043,7 +1043,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         <%_ } _%>
 
         user = userRepository.findOneByLogin(user.getLogin())<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
-        assertThat(user.getActivated()).isTrue();
+        assertThat(user.isActivated()).isTrue();
     }
 
     @Test<% if (databaseType === 'sql' && !reactive) { %>
@@ -1116,7 +1116,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         assertThat(updatedUser.getLangKey()).isEqualTo(userDTO.getLangKey());
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql' || databaseType === 'neo4j') { %>
         assertThat(updatedUser.getImageUrl()).isEqualTo(userDTO.getImageUrl());<% } %>
-        assertThat(updatedUser.getActivated()).isTrue();
+        assertThat(updatedUser.isActivated()).isTrue();
         assertThat(updatedUser.getAuthorities()).isEmpty();
     }
 
