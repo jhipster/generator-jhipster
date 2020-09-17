@@ -4,7 +4,7 @@
     "bootstrap": "4.5.2"
   },
   "devDependencies": {
-    "@angular/cli": "10.1.1",
+    "@angular/cli": "10.1.2",
     "webpack": "4.44.1"
   }
 }
