@@ -1996,5 +1996,31 @@ use mapstruct, elasticsearch for A, B except C`;
                 expect(importState.exportedEntities[2].searchEngine).not.to.equal('elasticsearch');
             });
         });
+        context('when using deprecated JDL values', () => {
+            context('such as no for database type', () => {
+                let importState;
+
+                before(() => {
+                    const content = `application {
+  config {
+    baseName toto
+    databaseType no
+  }
+}
+`;
+                    const importer = createImporterFromContent(content);
+                    importState = importer.import();
+                });
+                after(() => {
+                    fse.unlinkSync('.yo-rc.json');
+                });
+
+                it("should convert it to 'none'", () => {
+                    expect(importState.exportedApplications[0]['generator-jhipster'].databaseType).to.equal('none');
+                    expect(importState.exportedApplications[0]['generator-jhipster'].devDatabaseType).to.equal('none');
+                    expect(importState.exportedApplications[0]['generator-jhipster'].prodDatabaseType).to.equal('none');
+                });
+            });
+        });
     });
 });

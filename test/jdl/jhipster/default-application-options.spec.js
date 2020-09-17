@@ -652,23 +652,23 @@ describe('DefaultApplicationOptions', () => {
                 expect(enableHibernateCacheOption).to.be.false;
             });
         });
-        context('when the database type option is no', () => {
+        context('when the database type option is none', () => {
             let devDatabaseTypeOption;
             let prodDatabaseTypeOption;
 
             before(() => {
                 const options = getDefaultConfigForNewApplication({
-                    databaseType: 'no',
+                    databaseType: 'none',
                 });
                 devDatabaseTypeOption = options.devDatabaseType;
                 prodDatabaseTypeOption = options.prodDatabaseType;
             });
 
-            it('should set the devDatabaseType option to no', () => {
-                expect(devDatabaseTypeOption).to.equal('no');
+            it('should set the devDatabaseType option to none', () => {
+                expect(devDatabaseTypeOption).to.equal('none');
             });
-            it('should set the prodDatabaseType option to no', () => {
-                expect(prodDatabaseTypeOption).to.equal('no');
+            it('should set the prodDatabaseType option to none', () => {
+                expect(prodDatabaseTypeOption).to.equal('none');
             });
         });
         context('when the reactive option is set', () => {
@@ -682,6 +682,66 @@ describe('DefaultApplicationOptions', () => {
 
             it('should set the cache provider option to no', () => {
                 expect(cacheProviderOption).to.equal('no');
+            });
+        });
+    });
+    context('when there are deprecated option values', () => {
+        context("such as 'no' for the database type", () => {
+            let valuesForTheMonolithApplication = {};
+            let valuesForTheGatewayApplication = {};
+            let valuesForTheMicroserviceApplication = {};
+            let valuesForTheUaaApplication = {};
+
+            before(() => {
+                valuesForTheMonolithApplication = getConfigForMonolithApplication(
+                    getDefaultConfigForNewApplication({
+                        databaseType: 'no',
+                    })
+                );
+                valuesForTheGatewayApplication = getConfigForGatewayApplication(
+                    getDefaultConfigForNewApplication({
+                        databaseType: 'no',
+                    })
+                );
+                valuesForTheMicroserviceApplication = getConfigForMicroserviceApplication(
+                    getDefaultConfigForNewApplication({
+                        databaseType: 'no',
+                    })
+                );
+                valuesForTheUaaApplication = getConfigForUAAApplication(
+                    getDefaultConfigForNewApplication({
+                        databaseType: 'no',
+                    })
+                );
+            });
+
+            context('for a monolith application', () => {
+                it("should convert it to 'none'", () => {
+                    expect(valuesForTheMonolithApplication.databaseType).to.equal('none');
+                    expect(valuesForTheMonolithApplication.devDatabaseType).to.equal('none');
+                    expect(valuesForTheMonolithApplication.prodDatabaseType).to.equal('none');
+                });
+            });
+            context('for a gateway application', () => {
+                it("should convert it to 'none'", () => {
+                    expect(valuesForTheGatewayApplication.databaseType).to.equal('none');
+                    expect(valuesForTheGatewayApplication.devDatabaseType).to.equal('none');
+                    expect(valuesForTheGatewayApplication.prodDatabaseType).to.equal('none');
+                });
+            });
+            context('for a microservice application', () => {
+                it("should convert it to 'none'", () => {
+                    expect(valuesForTheMicroserviceApplication.databaseType).to.equal('none');
+                    expect(valuesForTheMicroserviceApplication.devDatabaseType).to.equal('none');
+                    expect(valuesForTheMicroserviceApplication.prodDatabaseType).to.equal('none');
+                });
+            });
+            context('for a uaa application', () => {
+                it("should convert it to 'none'", () => {
+                    expect(valuesForTheUaaApplication.databaseType).to.equal('none');
+                    expect(valuesForTheUaaApplication.devDatabaseType).to.equal('none');
+                    expect(valuesForTheUaaApplication.prodDatabaseType).to.equal('none');
+                });
             });
         });
     });

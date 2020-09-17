@@ -76,6 +76,9 @@ function getConfigForMonolithApplication(customOptions = {}) {
         [SKIP_USER_MANAGEMENT]: OptionValues[SKIP_USER_MANAGEMENT],
         ...customOptions,
     };
+    if (options[DATABASE_TYPE] === NO) {
+        options[DATABASE_TYPE] = NONE;
+    }
     if (!options[CLIENT_THEME]) {
         options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
         options[CLIENT_THEME_VARIANT] = OptionValues[CLIENT_THEME_VARIANT].none;
@@ -105,6 +108,9 @@ function getConfigForGatewayApplication(customOptions = {}) {
         [SKIP_USER_MANAGEMENT]: OptionValues[SKIP_USER_MANAGEMENT],
         ...customOptions,
     };
+    if (options[DATABASE_TYPE] === NO) {
+        options[DATABASE_TYPE] = NONE;
+    }
     if (!options[CLIENT_THEME]) {
         options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
         options[CLIENT_THEME_VARIANT] = OptionValues[CLIENT_THEME_VARIANT].none;
@@ -139,6 +145,9 @@ function getConfigForMicroserviceApplication(customOptions = {}) {
         [SKIP_USER_MANAGEMENT]: true,
         ...customOptions,
     };
+    if (options[DATABASE_TYPE] === NO) {
+        options[DATABASE_TYPE] = NONE;
+    }
     delete options[CLIENT_FRAMEWORK];
     delete options[CLIENT_THEME];
     delete options[CLIENT_THEME_VARIANT];
@@ -168,6 +177,9 @@ function getConfigForUAAApplication(customOptions = {}) {
         [SERVICE_DISCOVERY_TYPE]: OptionValues[SERVICE_DISCOVERY_TYPE].eureka,
         ...customOptions,
     };
+    if (options[DATABASE_TYPE] === NO) {
+        options[DATABASE_TYPE] = NONE;
+    }
     delete options[CLIENT_FRAMEWORK];
     delete options[CLIENT_THEME];
     delete options[CLIENT_THEME_VARIANT];
@@ -226,6 +238,9 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
     }
     if (typeof options[ENTITY_SUFFIX] === 'boolean') {
         options[ENTITY_SUFFIX] = '';
+    }
+    if (options[DATABASE_TYPE] === NO) {
+        options[DATABASE_TYPE] = NONE;
     }
     if ([MONGODB, COUCHBASE, CASSANDRA, NONE, NO].includes(options[DATABASE_TYPE])) {
         options[DEV_DATABASE_TYPE] = options[DATABASE_TYPE];
