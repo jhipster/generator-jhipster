@@ -18,7 +18,7 @@
  */
 
 const { GATEWAY, MONOLITH, MICROSERVICE, UAA } = require('./application-types');
-const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NEO4J, NO, ORACLE, POSTGRESQL, SQL } = require('./database-types');
+const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NEO4J, NO, NONE, ORACLE, POSTGRESQL, SQL } = require('./database-types');
 
 const ApplicationOptionTypes = {
     STRING: 'string',
@@ -126,6 +126,8 @@ const optionValues = {
         [CASSANDRA]: CASSANDRA,
         [COUCHBASE]: COUCHBASE,
         [NEO4J]: NEO4J,
+        [NONE]: NONE,
+        // deprecated
         [NO]: NO,
     },
     [optionNames.DEV_DATABASE_TYPE]: {
@@ -161,6 +163,8 @@ const optionValues = {
         [POSTGRESQL]: POSTGRESQL,
         [ORACLE]: ORACLE,
         [MSSQL]: MSSQL,
+        [NONE]: NONE,
+        // deprecated
         [NO]: NO,
     },
     [optionNames.REACTIVE]: false,

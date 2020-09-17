@@ -117,10 +117,10 @@ describe('FieldTypes', () => {
                 );
             });
         });
-        context("when passing 'no' as argument", () => {
+        context("when passing 'none' as argument", () => {
             it('should not fail', () => {
                 expect(() => {
-                    FieldTypes.getIsType(DatabaseTypes.NO, () => {});
+                    FieldTypes.getIsType(DatabaseTypes.NONE, () => {});
                 }).not.to.throw();
             });
         });

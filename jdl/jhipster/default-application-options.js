@@ -18,7 +18,7 @@
  */
 
 const { MONOLITH, MICROSERVICE, GATEWAY, UAA } = require('./application-types');
-const { COUCHBASE, CASSANDRA, MONGODB, NO } = require('./database-types');
+const { COUCHBASE, CASSANDRA, MONGODB, NO, NONE } = require('./database-types');
 const { OptionNames, OptionValues } = require('./application-options');
 
 const {
@@ -227,10 +227,10 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
     if (typeof options[ENTITY_SUFFIX] === 'boolean') {
         options[ENTITY_SUFFIX] = '';
     }
-    if ([MONGODB, COUCHBASE, CASSANDRA, NO].includes(options[DATABASE_TYPE])) {
+    if ([MONGODB, COUCHBASE, CASSANDRA, NONE, NO].includes(options[DATABASE_TYPE])) {
         options[DEV_DATABASE_TYPE] = options[DATABASE_TYPE];
         options[PROD_DATABASE_TYPE] = options[DATABASE_TYPE];
-        if (NO !== options[DATABASE_TYPE]) {
+        if (![NONE, NO].includes(options[DATABASE_TYPE])) {
             options[ENABLE_HIBERNATE_CACHE] = false;
         }
     }

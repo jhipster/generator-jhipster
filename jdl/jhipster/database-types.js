@@ -28,6 +28,8 @@ const Types = {
     CASSANDRA: 'cassandra',
     COUCHBASE: 'couchbase',
     NEO4J: 'neo4j',
+    NONE: 'none',
+    // deprecated
     NO: 'no',
 };
 
