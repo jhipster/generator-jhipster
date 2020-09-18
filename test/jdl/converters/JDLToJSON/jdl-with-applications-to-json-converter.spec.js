@@ -958,6 +958,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 relationshipType: 'one-to-one',
                             },
                             {
+                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 relationshipName: 'b',
@@ -1306,6 +1307,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
 
                         it('should add the relationship for the source entity', () => {
                             expect(relationshipFromSourceToDestination).to.deep.equal({
+                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 relationshipName: 'b',
@@ -1510,6 +1512,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
 
                         it('should ignore it for the source entity', () => {
                             expect(relationshipFromSourceToDestination).to.deep.equal({
+                                otherEntityField: 'name',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 relationshipName: 'b',

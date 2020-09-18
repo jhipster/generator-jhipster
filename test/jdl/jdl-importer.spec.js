@@ -57,6 +57,7 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
+                            otherEntityField: 'region',
                             relationshipType: 'one-to-many',
                             relationshipName: 'area',
                             otherEntityName: 'region',
@@ -120,6 +121,7 @@ describe('JDLImporter', () => {
                         {
                             relationshipType: 'one-to-many',
                             javadoc: 'A relationship',
+                            otherEntityField: 'id',
                             relationshipName: 'employee',
                             otherEntityName: 'employee',
                             otherEntityRelationshipName: 'department',
@@ -181,6 +183,7 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
+                            otherEntityField: 'id',
                             relationshipType: 'one-to-many',
                             relationshipName: 'job',
                             otherEntityName: 'job',
@@ -375,6 +378,7 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
+                            otherEntityField: 'id',
                             relationshipType: 'one-to-many',
                             relationshipName: 'country',
                             otherEntityName: 'country',

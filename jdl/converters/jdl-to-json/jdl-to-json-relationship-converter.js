@@ -93,6 +93,7 @@ function setRelationshipsFromEntity(relatedRelationships, entityName) {
             convertedRelationship.ownerSide = true;
         } else if (relationshipToConvert.type === ONE_TO_MANY) {
             convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.to);
+            convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
         } else if (relationshipToConvert.type === MANY_TO_ONE && relationshipToConvert.injectedFieldInFrom) {
             convertedRelationship.relationshipName = camelCase(splitField.relationshipName);
             convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
