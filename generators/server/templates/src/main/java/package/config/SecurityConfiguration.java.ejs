@@ -277,6 +277,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/websocket/**").permitAll()
     <%_ } _%>
             .antMatchers("/management/health").permitAll()
+            .antMatchers("/management/health/**").permitAll()
             .antMatchers("/management/info").permitAll()
             .antMatchers("/management/prometheus").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)<%_ if (authenticationType === 'session') { %>;<% } %>
@@ -426,6 +427,7 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
+            .antMatchers("/management/health/**").permitAll()
             .antMatchers("/management/info").permitAll()
             .antMatchers("/management/prometheus").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);

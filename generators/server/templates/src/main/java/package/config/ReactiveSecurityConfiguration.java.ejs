@@ -270,6 +270,7 @@ public class SecurityConfiguration {
             .pathMatchers("/services/**", "/swagger-resources/**").authenticated()
             <%_ } _%>
             .pathMatchers("/management/health").permitAll()
+            .antMatchers("/management/health/**").permitAll()
             .pathMatchers("/management/info").permitAll()
             .pathMatchers("/management/prometheus").permitAll()
             .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
