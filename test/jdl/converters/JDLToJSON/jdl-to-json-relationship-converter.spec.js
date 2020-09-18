@@ -518,6 +518,8 @@ describe('JDLToJSONRelationshipConverter', () => {
 
                     it('should add the relationship for the source entity', () => {
                         expect(relationshipFromSourceToDestination).to.deep.equal({
+                            otherEntityField: 'id',
+                            relationshipName: 'b',
                             otherEntityName: 'b',
                             otherEntityRelationshipName: 'a',
                             relationshipType: 'many-to-one',
