@@ -1044,15 +1044,11 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                 fieldName = relationship.relationshipFieldName;
             } else {
                 const relationshipFieldName = relationship.relationshipFieldName;
-                const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
                 const relationshipType = relationship.relationshipType;
                 const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
                 const ownerSide = relationship.ownerSide;
 
-                if (relationshipType === 'many-to-many' && ownerSide === true) {
-                    fieldType = `I${otherEntityFieldCapitalized}[]`;
-                    fieldName = relationshipFieldNamePlural;
-                } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
+                if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
                     if (otherEntityFieldCapitalized !== 'Id' && otherEntityFieldCapitalized !== '') {
                         fieldType = 'string';
                         fieldName = `${relationshipFieldName}${otherEntityFieldCapitalized}`;

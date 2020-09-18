@@ -51,7 +51,7 @@ import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-<%_ if (pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
+<%_ if (pagination !== 'no' || relationshipsContainEagerLoad) { _%>
     <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
     <%_ } _%>
@@ -136,7 +136,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     public <% if (pagination !== 'no') { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> findAll(<% if (pagination !== 'no') { %>Pageable pageable<% } %>) {
         log.debug("Request to get all <%= entityClassPlural %>");
         <%_ if (pagination === 'no') { _%>
-        return <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany === true) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto === 'mapstruct') { %><% if (!reactive) { %>.stream()<% } %>
+        return <%= entityInstance %>Repository.<% if (relationshipsContainEagerLoad) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto === 'mapstruct') { %><% if (!reactive) { %>.stream()<% } %>
             .map(<%= entityToDtoReference %>)<% if (!reactive) { %>
             .collect(Collectors.toCollection(LinkedList::new))<% } } %>;
         <%_ } else { _%>
@@ -145,7 +145,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
         <%_ } _%>
     }
 
-    <%_ if (fieldsContainOwnerManyToMany === true) { _%>
+    <%_ if (relationshipsContainEagerLoad) { _%>
 
     <%_ if (service !== 'serviceImpl') { _%>
     /**

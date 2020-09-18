@@ -28,6 +28,8 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     const otherEntityName = relationship.otherEntityName;
     const jhiTablePrefix = entityWithConfig.jhiTablePrefix || generator.getTableName(entityWithConfig.jhiPrefix);
 
+    relationship.otherSideReferenceExists = false;
+
     const otherEntityData = generator.getEntityConfig(otherEntityName).getAll();
     if (!otherEntityData && !this.isBuiltInEntity(otherEntityName)) {
         throw new Error(`Error at entity ${entityName}: could not find the entity of the relationship ${stringify(relationship)}`);
@@ -76,6 +78,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
             });
         }
         if (otherRelationship) {
+            relationship.otherSideReferenceExists = true;
             if (
                 !(relationship.relationshipType === 'one-to-one' && otherRelationship.relationshipType === 'one-to-one') &&
                 !(relationship.relationshipType === 'many-to-one' && otherRelationship.relationshipType === 'one-to-many') &&

@@ -260,7 +260,7 @@ public class <%= entityClass %>Resource {
      * @param request a {@link ServerHttpRequest} request.
         <%_ } _%>
     <%_ } _%>
-    <%_ if (!jpaMetamodelFiltering && fieldsContainOwnerManyToMany) { _%>
+    <%_ if (!jpaMetamodelFiltering && relationshipsContainEagerLoad) { _%>
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      <%_ } _%>
      <%_ if (jpaMetamodelFiltering) { _%>

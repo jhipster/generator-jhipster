@@ -483,8 +483,50 @@ class EntityGenerator extends BaseBlueprintGenerator {
             prepareRelationshipsForTemplates() {
                 this.context.relationships.forEach(relationship => {
                     prepareRelationshipForTemplates(this.context, relationship, this);
+                    this._.defaults(relationship, {
+                        // otherEntityField should be id if not specified
+                        otherEntityField: 'id',
+                        // let ownerSide true when type is 'many-to-one' for convenience.
+                        // means that this side should control the reference.
+                        ownerSide:
+                            relationship.relationshipType !== 'one-to-many' &&
+                            (relationship.ownerSide || relationship.relationshipType === 'many-to-one'),
+                    });
                 });
             },
+
+            processCollectionRelationships() {
+                this.context.relationships.forEach(relationship => {
+                    relationship.relationshipCollection = ['one-to-many', 'many-to-many'].includes(relationship.relationshipType);
+                    relationship.relationshipReferenceField = relationship.relationshipCollection
+                        ? relationship.relationshipFieldNamePlural
+                        : relationship.relationshipFieldName;
+                });
+                this.context.entityContainsCollectionField = this.context.relationships.some(
+                    relationship => relationship.relationshipCollection
+                );
+            },
+
+            /**
+             * Process relationships that should be loaded eagerly.
+             */
+            processEagerLoadRelationships() {
+                this.context.relationships
+                    .filter(relationship => relationship.relationshipEagerLoad === undefined)
+                    .forEach(relationship => {
+                        relationship.relationshipEagerLoad =
+                            !relationship.embedded &&
+                            // Allows the entity to force earger load every relationship
+                            (this.context.eagerLoad ||
+                                (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === true));
+                    });
+                this.context.relationshipsContainEagerLoad = this.context.relationships.some(
+                    relationship => relationship.relationshipEagerLoad
+                );
+                this.context.eagerRelations = this.context.relationships.filter(rel => rel.relationshipEagerLoad);
+                this.context.regularEagerRelations = this.context.eagerRelations.filter(rel => rel.useJPADerivedIdentifier !== true);
+            },
+
             /*
              * Composed generators uses context ready for the templates.
              */

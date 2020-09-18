@@ -75,30 +75,25 @@ module.exports = class extends BaseBlueprintGenerator {
 
     _preparing() {
         return {
+            /**
+             * Process json ignore references to prevent cyclic relationships.
+             */
+            processJsonIgnoreReferences() {
+                this.relationships
+                    .filter(relationship => relationship.relationshipOtherSideIgnore === undefined)
+                    .forEach(relationship => {
+                        relationship.ignoreOtherSideProperty = !relationship.embedded && relationship.otherSideReferenceExists;
+                    });
+                this.relationshipsContainOtherSideIgnore = this.relationships.some(relationship => relationship.ignoreOtherSideProperty);
+            },
+
             processJavaEntityImports() {
-                this.importJsonIgnore = false;
-                this.importJsonIgnoreProperties = false;
-                this.importSet = false;
+                this.importApiModelProperty =
+                    this.relationships.some(relationship => relationship.javadoc) || this.fields.some(field => field.javadoc);
+            },
+
+            processUniqueEnums() {
                 this.uniqueEnums = {};
-
-                this.importApiModelProperty = this.relationships.filter(v => typeof v.javadoc != 'undefined').length > 0;
-                if (!this.importApiModelProperty) {
-                    this.importApiModelProperty = this.fields.filter(v => typeof v.javadoc != 'undefined').length > 0;
-                }
-
-                this.relationships.forEach(relationship => {
-                    if (
-                        relationship.ownerSide === false &&
-                        ['one-to-many', 'one-to-one', 'many-to-many'].includes(relationship.relationshipType)
-                    ) {
-                        this.importJsonIgnore = true;
-                    } else if (relationship.relationshipType === 'many-to-one') {
-                        this.importJsonIgnoreProperties = true;
-                    }
-                    if (relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many') {
-                        this.importSet = true;
-                    }
-                });
 
                 this.fields.forEach(field => {
                     if (
@@ -123,11 +118,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
             },
 
-            generateEagerRelationsAndEntityTypes() {
-                this.eagerRelations = this.relationships.filter(
-                    rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true)
-                );
-                this.regularEagerRelations = this.eagerRelations.filter(rel => rel.useJPADerivedIdentifier !== true);
+            processUniqueEntityTypes() {
                 this.uniqueEntityTypes = new Set(this.eagerRelations.map(rel => rel.otherEntityNameCapitalized));
                 this.uniqueEntityTypes.add(this.entityClass);
             },
