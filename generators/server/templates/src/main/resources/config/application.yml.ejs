@@ -129,7 +129,7 @@ management:
             liveness:
                 include: livenessState
             readiness:
-                include: readinessState<% if (databaseType === 'sql'>,datasource<% } %>
+                include: readinessState<% if (databaseType === 'sql') { %>,datasource<% } %>
         probes:
             enabled: true
         mail:
