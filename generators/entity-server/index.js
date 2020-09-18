@@ -81,34 +81,37 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.importSet = false;
                 this.uniqueEnums = {};
 
-                this.importApiModelProperty = Object.values(this.relationships).filter(v => typeof v.javadoc != 'undefined').length > 0;
+                this.importApiModelProperty = this.relationships.filter(v => typeof v.javadoc != 'undefined').length > 0;
                 if (!this.importApiModelProperty) {
-                    this.importApiModelProperty = Object.values(this.fields).filter(v => typeof v.javadoc != 'undefined').length > 0;
+                    this.importApiModelProperty = this.fields.filter(v => typeof v.javadoc != 'undefined').length > 0;
                 }
 
-                Object.values(this.relationships).forEach(v => {
-                    if (v.ownerSide === false && ['one-to-many', 'one-to-one', 'many-to-many'].includes(v.relationshipType)) {
+                this.relationships.forEach(relationship => {
+                    if (
+                        relationship.ownerSide === false &&
+                        ['one-to-many', 'one-to-one', 'many-to-many'].includes(relationship.relationshipType)
+                    ) {
                         this.importJsonIgnore = true;
-                    } else if (v.relationshipType === 'many-to-one') {
+                    } else if (relationship.relationshipType === 'many-to-one') {
                         this.importJsonIgnoreProperties = true;
                     }
-                    if (v.relationshipType === 'one-to-many' || v.relationshipType === 'many-to-many') {
+                    if (relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many') {
                         this.importSet = true;
                     }
                 });
 
-                Object.values(this.fields).forEach(v => {
+                this.fields.forEach(field => {
                     if (
-                        v.fieldIsEnum &&
-                        (!this.uniqueEnums[v.fieldType] || (this.uniqueEnums[v.fieldType] && v.fieldValues.length !== 0))
+                        field.fieldIsEnum &&
+                        (!this.uniqueEnums[field.fieldType] || (this.uniqueEnums[field.fieldType] && field.fieldValues.length !== 0))
                     ) {
-                        this.uniqueEnums[v.fieldType] = v.fieldType;
+                        this.uniqueEnums[field.fieldType] = field.fieldType;
                     }
                 });
             },
 
             useMapsIdRelation() {
-                const jpaDerivedRelation = Object.values(this.relationships).find(rel => rel.useJPADerivedIdentifier === true);
+                const jpaDerivedRelation = this.relationships.find(rel => rel.useJPADerivedIdentifier === true);
                 if (jpaDerivedRelation) {
                     this.isUsingMapsId = true;
                     this.mapsIdAssoc = jpaDerivedRelation;
