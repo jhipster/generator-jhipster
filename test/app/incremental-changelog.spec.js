@@ -36,7 +36,7 @@ relationship ManyToOne {
 }
 `;
 
-describe('jhipster:app --incremental-changelog', function() {
+describe('jhipster:app --incremental-changelog', function () {
     this.timeout(45000);
     const options = {
         skipInstall: true,
