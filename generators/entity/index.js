@@ -251,14 +251,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 }
             },
 
-            validateReactiveCompatibility() {
-                if (this.context.reactive && !['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(this.context.databaseType)) {
-                    throw new Error(
-                        `The entity generator doesn't support reactive apps with databases of type ${this.context.databaseType} at the moment`
-                    );
-                }
-            },
-
             validateEntityName() {
                 const validation = this._validateEntityName(this.context.name);
                 if (validation !== true) {
@@ -353,7 +345,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.entityConfig.pagination = 'no';
                 }
 
-                if (this.entityConfig.jpaMetamodelFiltering && (context.databaseType !== 'sql' || this.entityConfig.service === 'no')) {
+                if (
+                    this.entityConfig.jpaMetamodelFiltering &&
+                    (context.databaseType !== 'sql' || this.entityConfig.service === 'no' || context.reactive === true)
+                ) {
                     this.warning('Not compatible with jpaMetamodelFiltering, disabling');
                     this.entityConfig.jpaMetamodelFiltering = false;
                 }

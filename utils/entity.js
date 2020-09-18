@@ -137,8 +137,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
             : entityWithConfig.entityStateName
     );
 
-    entityWithConfig.reactiveRepositories =
-        entityWithConfig.reactive && ['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(entityWithConfig.databaseType);
+    entityWithConfig.reactiveRepositories = entityWithConfig.reactive;
 
     entityWithConfig.differentTypes.push(entityWithConfig.entityClass);
     entityWithConfig.i18nToLoad.push(entityWithConfig.entityInstance);

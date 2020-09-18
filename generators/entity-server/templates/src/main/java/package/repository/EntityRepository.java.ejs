@@ -74,7 +74,7 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * Spring Data <% if (databaseType === 'mongodb') { %>MongoDB<% } if (databaseType === 'neo4j') { %>Neo4j<% } if (databaseType === 'couchbase') { %>Couchbase<% } if (databaseType === 'cassandra') { %>Cassandra<% } %> repository for the <%= asEntity(entityClass) %> entity.
+ * Spring Data <%= officialDatabaseType %> repository for the <%= asEntity(entityClass) %> entity.
  */
 <%_ if (!fieldsContainOwnerManyToMany) { _%>
 @SuppressWarnings("unused")

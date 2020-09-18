@@ -1,0 +1,80 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.repository.rowmapper;
+
+<%_ if (fieldsContainBigDecimal === true) { _%>
+import java.math.BigDecimal;
+<%_} if (fieldsContainInstant === true) { _%>
+import java.time.Instant;
+<%_ } if (fieldsContainLocalDate === true) { _%>
+import java.time.LocalDate;
+<%_ } if (fieldsContainZonedDateTime === true) { _%>
+import java.time.ZonedDateTime;
+<%_ } if (fieldsContainDuration === true) { _%>
+import java.time.Duration;
+<%_ } if (fieldsContainUUID === true) { _%>
+import java.util.UUID;
+<%_ } _%>
+import java.util.function.BiFunction;
+
+import org.springframework.stereotype.Service;
+
+import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+<%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
+import <%= packageName %>.domain.enumeration.<%= element %>;
+<%_ }); _%>
+import <%= packageName %>.service.ColumnConverter;
+
+import io.r2dbc.spi.Row;
+
+/**
+ * Converter between {@link Row} to {@link <%= asEntity(entityClass) %>}, with proper type conversions.
+ */
+@Service
+public class <%= entityClass %>RowMapper implements BiFunction<Row, String, <%= asEntity(entityClass) %>> {
+    private final ColumnConverter converter;
+    public <%= entityClass %>RowMapper(ColumnConverter converter) {
+        this.converter = converter;
+    }
+
+    /**
+     * Take a {@link Row} and a column prefix, and extract all the fields.
+     * @return the {@link <%= asEntity(entityClass) %>} stored in the database.
+     */
+    @Override
+    public <%= asEntity(entityClass) %> apply(Row row, String prefix) {
+        <%= asEntity(entityClass) %> entity = new <%= asEntity(entityClass) %>();
+        entity.setId(row.get(prefix + "_id", Long.class));
+        <%_ fields.forEach(function(field) {
+            let fieldType = field.fieldType;
+            if (field.fieldTypeBlobContent === 'text') {
+                fieldType = 'String';
+            }
+            if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') { _%>
+        entity.set<%= field.fieldInJavaBeanMethod %>ContentType(converter.fromRow(row, prefix + "_<%= field.fieldNameAsDatabaseColumn %>_content_type", String.class));
+            <%_ } _%>
+        entity.set<%= field.fieldInJavaBeanMethod %>(converter.fromRow(row, prefix + "_<%= field.fieldNameAsDatabaseColumn %>", <%= fieldType %>.class));
+        <%_ }); _%>
+        <%_ regularEagerRelations.forEach(function(rel) { _%>
+        entity.set<%= rel.relationshipNameCapitalized %>Id(converter.fromRow(row, prefix + "_<%= getColumnName(rel.relationshipName) %>_id", Long.class));
+        <%_ }); _%> 
+        return entity;
+    }
+
+}

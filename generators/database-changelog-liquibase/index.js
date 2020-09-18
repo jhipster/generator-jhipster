@@ -111,6 +111,7 @@ module.exports = class extends BaseGenerator {
                     authenticationType: this.entity.authenticationType,
                     jhiPrefix: this.entity.jhiPrefix,
                     skipFakeData: this.entity.skipFakeData || config.skipFakeData,
+                    reactive: config.reactive,
                 });
 
                 if (databaseChangelog.type === 'entity-new') {

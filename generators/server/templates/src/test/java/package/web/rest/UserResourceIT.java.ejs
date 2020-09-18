@@ -47,6 +47,9 @@ import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import <%= packageName %>.service.EntityManager;
+<%_ } _%>
 import <%= packageName %>.service.mapper.UserMapper;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%= packageName %>.web.rest.vm.ManagedUserVM;
@@ -208,7 +211,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
 
     @Autowired
     private UserMapper userMapper;
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+    <%_ if (databaseType === 'sql') { _%>
 
     @Autowired
     private EntityManager em;
@@ -249,7 +252,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which has a required relationship to the User entity.
      */
-    public static <%= asEntity('User') %> createEntity(<% if (databaseType === 'sql' && !reactive) { %>EntityManager em<% } %>) {
+    public static <%= asEntity('User') %> createEntity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra' || (authenticationType === 'oauth2' && databaseType !== 'couchbase')) { _%>
         user.setId(UUID.randomUUID().toString());
@@ -271,6 +274,20 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         <%_ } _%>
         return user;
     }
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+
+    /**
+     * Delete all the users from the database.
+     */
+    public static void deleteEntities(EntityManager em) {
+        try {
+            em.deleteAll("<%= jhiTablePrefix %>_user_authority").block();
+            em.deleteAll(User.class).block();
+        } catch (Exception e) {
+            // It can fail, if other entities are still referring this - it will be removed later.
+        }
+    }
+    <%_ } _%>
 
     @BeforeEach
     public void initTest() {
@@ -279,10 +296,8 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         <%_ } _%>
         <%_ if (databaseType !== 'sql' || reactive) { _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
-        user = createEntity();
-        <%_ } else { _%>
-        user = createEntity(em);
         <%_ } _%>
+        user = createEntity(<% if (databaseType === 'sql' ) { %>em<% } _%>);
         <%_ if (databaseType === 'sql') { _%>
         user.setLogin(DEFAULT_LOGIN);
         user.setEmail(DEFAULT_EMAIL);

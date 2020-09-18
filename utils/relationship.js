@@ -164,7 +164,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
 
     _.defaults(relationship, {
         otherEntityStateName: _.kebabCase(relationship.otherEntityAngularName),
-        jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering,
+        jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering && !entityWithConfig.reactive,
     });
 
     if (!generator.isBuiltInUser(otherEntityName)) {

@@ -1027,6 +1027,30 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.databaseType === 'sql' && generator.reactive,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/service/ColumnConverter.java',
+                    renameTo: generator => `${generator.javaDir}service/ColumnConverter.java`,
+                },
+                {
+                    file: 'package/service/EntityManager.java',
+                    renameTo: generator => `${generator.javaDir}service/EntityManager.java`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.databaseType === 'sql' && generator.reactive && !generator.skipUserManagement,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/repository/rowmapper/UserRowMapper.java',
+                    renameTo: generator => `${generator.javaDir}repository/rowmapper/UserRowMapper.java`,
+                },
+            ],
+        },
+        {
             condition: generator => !generator.reactive && generator.databaseType === 'couchbase',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
