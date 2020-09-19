@@ -982,6 +982,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         ]);
                         expect(relationshipsForB).to.deep.equal([
                             {
+                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 ownerSide: false,
@@ -996,6 +997,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 relationshipType: 'many-to-one',
                             },
                             {
+                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 relationshipName: 'a',
@@ -1157,6 +1159,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         ]);
                         expect(relationshipsForB).to.deep.equal([
                             {
+                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 ownerSide: false,
@@ -1216,6 +1219,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         ]);
                         expect(relationshipsForB).to.deep.equal([
                             {
+                                otherEntityField: 'id',
                                 javadoc: 'A to B but in the destination',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
@@ -1397,6 +1401,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 databaseType: SQL,
                                 creationTimestamp: Date.now(),
                             });
+                            console.log(returned.get('toto'));
                             relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
                             relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
                         });
@@ -1469,6 +1474,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         });
                         it('should ignore it for the destination entity', () => {
                             expect(relationshipFromDestinationToSource).to.deep.equal({
+                                otherEntityField: 'name',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 ownerSide: false,
@@ -1573,6 +1579,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         });
                         it('should ignore it for the source entity', () => {
                             expect(relationshipFromDestinationToSource).to.deep.equal({
+                                otherEntityField: 'name',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 relationshipName: 'a',
