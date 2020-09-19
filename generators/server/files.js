@@ -40,7 +40,7 @@ const shouldSkipUserManagement = generator =>
 const serverFiles = {
     jib: [
         {
-            path: 'src/main/jib/',
+            path: 'src/main/docker/jib/',
             templates: ['entrypoint.sh'],
         },
     ],
