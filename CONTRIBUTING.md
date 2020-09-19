@@ -227,12 +227,13 @@ This will do a symbolic link from the global `node_modules` version to point to 
 
 For testing, you will want to generate an application, and there is a specific issue here: for each application, JHipster installs a local version of itself. This is made to enable several applications to each use a specific JHipster version (application A uses JHipster 3.1.0, and application B uses JHipster 3.2.0).
 
-To overcome this you need to run `npm link generator-jhipster` on the generated project folder as well, so that the local version has a symbolic link to the development version of JHipster.
+To overcome this you need to run `npm link generator-jhipster` on the generated project folder as well, so that the local version has a symbolic link to the development version of JHipster.  
+You also need to run this command before you generate entities with JHipster.
 
 To put it in a nutshell, you need to:
 
 1.  run `npm link` on the `generator-jhipster` project
-2.  run `npm link generator-jhipster` on the generated application folder (you need to do this for each application you create)
+2.  run `npm link generator-jhipster` on the generated application folder (you need to do this for each application you create and before generating entities as well)
 
 Now, running the 'jhipster' command should run your locally installed JHipster version directly from sources. Check that the symbolic link is correct with the following command:
 
