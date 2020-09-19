@@ -139,13 +139,13 @@ function writeFiles() {
                     // eslint-disable-next-line no-template-curly-in-string
                     this.addMavenDependency('org.openapitools', 'jackson-databind-nullable', '${jackson-databind-nullable.version}');
                 } else if (this.buildTool === 'gradle') {
-                    this.addGradleProperty('jackson_databind_nullable_version', constants.JACKSON_DATABIND_NULLABLE_VERSION);
+                    this.addGradleProperty('jacksonDatabindNullableVersion', constants.JACKSON_DATABIND_NULLABLE_VERSION);
                     this.addGradleDependency(
                         'compile',
                         'org.openapitools',
                         'jackson-databind-nullable',
                         // eslint-disable-next-line no-template-curly-in-string
-                        '${jackson_databind_nullable_version}'
+                        '${jacksonDatabindNullableVersion}'
                     );
                 }
             }
