@@ -87,18 +87,11 @@ function setRelationshipsFromEntity(relatedRelationships, entityName) {
             convertedRelationship.javadoc = relationshipToConvert.commentInFrom;
         }
         const splitField = extractField(relationshipToConvert.injectedFieldInFrom);
+        convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.to);
+        convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
         if (relationshipToConvert.type === ONE_TO_ONE) {
-            convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.to);
-            convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
             convertedRelationship.ownerSide = true;
-        } else if (relationshipToConvert.type === ONE_TO_MANY) {
-            convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.to);
-        } else if (relationshipToConvert.type === MANY_TO_ONE && relationshipToConvert.injectedFieldInFrom) {
-            convertedRelationship.relationshipName = camelCase(splitField.relationshipName);
-            convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
         } else if (relationshipToConvert.type === MANY_TO_MANY) {
-            convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.to);
-            convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
             if (!relationshipToConvert.injectedFieldInTo) {
                 convertedRelationship.otherEntityRelationshipName = lowerFirst(relationshipToConvert.from);
                 relationshipToConvert.type = MANY_TO_MANY;
