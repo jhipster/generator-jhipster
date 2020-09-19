@@ -56,6 +56,7 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}shared/auth/user-route-access-service.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/language/language.constants.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/language/language.helper.ts`);
+        generator.removeFile(`${ANGULAR_DIR}shared/login/login-modal.service.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/login/login.service.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/model/base-entity.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/model/request-util.ts`);
