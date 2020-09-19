@@ -77,7 +77,7 @@ spring:
             write-durations-as-timestamps: false
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     jpa:
-        database-platform: io.github.jhipster.domain.util.FixedH2Dialect
+        database-platform: tech.jhipster.domain.util.FixedH2Dialect
         open-in-view: false
         show-sql: false
         hibernate:

@@ -3,7 +3,7 @@
         "applicationType": "gateway",
         "reactive": true,
         "baseName": "reactiveGateway",
-        "packageName": "io.github.jhipster.gateway",
+        "packageName": "tech.jhipster.gateway",
         "packageFolder": "io/github/jhipster/gateway",
         "authenticationType": "oauth2",
         "cacheProvider": "no",

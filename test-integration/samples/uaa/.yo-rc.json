@@ -1,7 +1,7 @@
 {
     "generator-jhipster": {
         "baseName": "sampleUaa",
-        "packageName": "io.github.jhipster.sample",
+        "packageName": "tech.jhipster.sample",
         "packageFolder": "io/github/jhipster/sample",
         "serverPort": "9999",
         "authenticationType": "uaa",

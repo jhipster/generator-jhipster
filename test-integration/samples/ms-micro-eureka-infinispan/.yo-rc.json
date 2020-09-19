@@ -2,7 +2,7 @@
     "generator-jhipster": {
         "applicationType": "microservice",
         "baseName": "samplesMicroserviceEurekaInfinispan",
-        "packageName": "io.github.jhipster.sample",
+        "packageName": "tech.jhipster.sample",
         "packageFolder": "io/github/jhipster/sample",
         "authenticationType": "jwt",
         "cacheProvider": "infinispan",

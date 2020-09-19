@@ -3,7 +3,7 @@
         "applicationType": "monolith",
         "reactive": true,
         "baseName": "sampleWebfluxMongodb",
-        "packageName": "io.github.jhipster.sample",
+        "packageName": "tech.jhipster.sample",
         "packageFolder": "io/github/jhipster/sample",
         "authenticationType": "jwt",
         "cacheProvider": "no",

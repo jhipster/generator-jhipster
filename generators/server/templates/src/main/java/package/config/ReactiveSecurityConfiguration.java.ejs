@@ -31,11 +31,11 @@ import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
     <%_ } _%>
-import io.github.jhipster.web.filter.reactive.CookieCsrfFilter;
+import tech.jhipster.web.filter.reactive.CookieCsrfFilter;
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import org.springframework.beans.factory.annotation.Value;
-import io.github.jhipster.config.JHipsterProperties;
+import tech.jhipster.config.JHipsterProperties;
 <%_ } _%>
 <%_ if (skipUserManagement && authenticationType !== 'oauth2') { _%>
 import org.springframework.boot.autoconfigure.security.SecurityProperties;

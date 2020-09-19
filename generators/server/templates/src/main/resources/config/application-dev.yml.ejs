@@ -34,8 +34,8 @@
 logging:
     level:
         ROOT: DEBUG
-        io.github.jhipster: DEBUG
-        <%_ if (packageName !== 'io.github.jhipster') { _%>
+        tech.jhipster: DEBUG
+        <%_ if (packageName !== 'tech.jhipster') { _%>
         <%= packageName %>: DEBUG
         <%_ } _%>
         <%_ if (databaseType === 'neo4j') { _%>
@@ -152,9 +152,9 @@ spring:
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     jpa:
         <%_ if (devDatabaseType === 'postgresql') { _%>
-        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
+        database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
         <%_ } else if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
-        database-platform: io.github.jhipster.domain.util.FixedH2Dialect
+        database-platform: tech.jhipster.domain.util.FixedH2Dialect
         <%_ } _%>
         show-sql: true
     <%_ } _%>
