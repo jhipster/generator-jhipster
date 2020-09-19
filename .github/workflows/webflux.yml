@@ -83,31 +83,31 @@ jobs:
                       profile: prod
                       war: 0
                       e2e: 1
-                      testcontainers: 0
+                      testcontainers: 1
                     - app-type: webflux-mongodb-es-session
                       entity: mongodb
                       profile: prod
                       war: 0
                       e2e: 1
-                      testcontainers: 0
+                      testcontainers: 1
                     - app-type: webflux-mongodb-oauth2
                       entity: mongodb
                       profile: prod
                       war: 0
                       e2e: 1
-                      testcontainers: 0
+                      testcontainers: 1
                     - app-type: webflux-gateway-jwt
                       entity: none
                       profile: prod
                       war: 0
                       e2e: 1
-                      testcontainers: 0
+                      testcontainers: 1
                     - app-type: webflux-gateway-oauth2
                       entity: none
                       profile: prod
                       war: 0
                       e2e: 1
-                      testcontainers: 0
+                      testcontainers: 1
                     #                    - app-type: webflux-couchbase
                     #                      entity: couchbase
                     #                      profile: prod
