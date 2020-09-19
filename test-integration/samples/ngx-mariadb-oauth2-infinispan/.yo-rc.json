@@ -2,7 +2,7 @@
     "generator-jhipster": {
         "baseName": "sampleOauth2Infinispan",
         "packageName": "tech.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageFolder": "tech/jhipster/sample",
         "serverPort": "8080",
         "authenticationType": "oauth2",
         "cacheProvider": "infinispan",

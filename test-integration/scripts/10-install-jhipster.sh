@@ -33,9 +33,9 @@ else
     test-integration/scripts/10-replace-version-jhipster.sh
 
     ./mvnw -ntp clean install -DskipTests  -Dmaven.javadoc.skip=true -Dgpg.skip=true --batch-mode
-    ls -al ~/.m2/repository/io/github/jhipster/jhipster-framework/
-    ls -al ~/.m2/repository/io/github/jhipster/jhipster-dependencies/
-    ls -al ~/.m2/repository/io/github/jhipster/jhipster-parent/
+    ls -al ~/.m2/repository/tech/jhipster/jhipster-framework/
+    ls -al ~/.m2/repository/tech/jhipster/jhipster-dependencies/
+    ls -al ~/.m2/repository/tech/jhipster/jhipster-parent/
 fi
 
 #-------------------------------------------------------------------------------

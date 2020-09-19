@@ -3,7 +3,7 @@
         "applicationType": "monolith",
         "baseName": "sampleReactCassandraSessionRedis",
         "packageName": "tech.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageFolder": "tech/jhipster/sample",
         "serverPort": "8080",
         "authenticationType": "session",
         "cacheProvider": "redis",
