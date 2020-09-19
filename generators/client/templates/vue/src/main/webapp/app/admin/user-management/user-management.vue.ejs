@@ -7,8 +7,7 @@
       </router-link>
     </h2>
     <div class="table-responsive" v-if="users">
-      <table class="table table-striped">
-        <caption>Users</caption>
+      <table class="table table-striped" aria-describedby="Users">
         <thead>
         <tr>
           <th scope="col"<% if (databaseType !== 'cassandra') { %> v-on:click="changeOrder('id')"<% } %>><span v-text="$t('global.field.id')">ID</span><% if (databaseType !== 'cassandra') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
