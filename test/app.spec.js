@@ -34,7 +34,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -54,7 +54,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(
                     getFilesForOptions(angularFiles, {
@@ -110,7 +110,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -130,7 +130,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(
                     getFilesForOptions(reactFiles, {
@@ -167,7 +167,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -187,7 +187,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(
                     getFilesForOptions(angularFiles, {
@@ -222,7 +222,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -240,7 +240,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gradle);
                 assert.file(expectedFiles.dockerServices);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(
                     getFilesForOptions(angularFiles, {
@@ -536,7 +536,7 @@ describe('JHipster generator', () => {
             });
         });
 
-        describe('postgresql and elasticsearch', () => {
+        describe('MySQL and Elasticsearch', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
@@ -551,8 +551,8 @@ describe('JHipster generator', () => {
                         cacheProvider: 'no',
                         enableHibernateCache: false,
                         databaseType: 'sql',
-                        devDatabaseType: 'postgresql',
-                        prodDatabaseType: 'postgresql',
+                        devDatabaseType: 'mysql',
+                        prodDatabaseType: 'mysql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -565,12 +565,12 @@ describe('JHipster generator', () => {
                     .on('end', done);
             });
 
-            it('creates expected files with "PostgreSQL" and "Elasticsearch"', () => {
-                assert.file(expectedFiles.postgresql);
+            it('creates expected files with "MySQL" and "Elasticsearch"', () => {
+                assert.file(expectedFiles.mysql);
                 assert.file(expectedFiles.elasticsearch);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
-            shouldBeV3DockerfileCompatible('postgresql');
+            shouldBeV3DockerfileCompatible('mysql');
         });
 
         describe('couchbase FTS', () => {
@@ -667,7 +667,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -681,7 +681,7 @@ describe('JHipster generator', () => {
             it('creates expected files with authenticationType "oauth2"', () => {
                 assert.file(expectedFiles.oauth2);
                 assert.file(expectedFiles.oauth2Client);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
             it('generates README with instructions for OAuth', () => {
@@ -705,7 +705,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -721,7 +721,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.oauth2Client);
                 assert.file(expectedFiles.elasticsearch);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
             });
         });
 
@@ -775,7 +775,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -790,7 +790,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.hazelcast);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
         });
@@ -811,7 +811,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -827,7 +827,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.infinispan);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
         });
@@ -848,7 +848,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -865,7 +865,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.eureka);
                 assert.file(expectedFiles.infinispan);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
         });
@@ -886,7 +886,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -902,7 +902,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.memcached);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
         });
@@ -923,7 +923,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -939,7 +939,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.redis);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
         });
@@ -962,7 +962,7 @@ describe('JHipster generator', () => {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         searchEngine: false,
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
@@ -984,7 +984,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gatling);
                 assert.file(expectedFiles.messageBroker);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
         });
@@ -1007,7 +1007,7 @@ describe('JHipster generator', () => {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         searchEngine: false,
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
@@ -1027,7 +1027,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.jwtServer);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(expectedFiles.gatling);
                 assert.file(expectedFiles.swaggerCodegen);
@@ -1055,7 +1055,7 @@ describe('JHipster generator', () => {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         searchEngine: false,
                         buildTool: 'gradle',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
@@ -1076,7 +1076,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.gradle);
                 assert.file(expectedFiles.jwtServer);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(expectedFiles.gatling);
                 assert.file(expectedFiles.swaggerCodegen);
@@ -1102,7 +1102,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -1136,7 +1136,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -1172,7 +1172,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -1207,7 +1207,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: false,
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
@@ -1238,7 +1238,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['ar-ly'],
@@ -1285,7 +1285,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -1325,7 +1325,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -1369,7 +1369,7 @@ describe('JHipster generator', () => {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         searchEngine: false,
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
@@ -1387,7 +1387,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(
                     getFilesForOptions(angularFiles, {
@@ -1419,7 +1419,7 @@ describe('JHipster generator', () => {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         searchEngine: false,
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
@@ -1437,7 +1437,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(expectedFiles.cucumber);
                 assert.noFile([`${TEST_DIR}gatling/conf/gatling.conf`, `${TEST_DIR}gatling/conf/logback.xml`]);
@@ -1449,7 +1449,7 @@ describe('JHipster generator', () => {
         before(done => {
             helpers
                 .run(path.join(__dirname, '../generators/app'))
-                .withOptions({ fromCli: true, skipInstall: true, skipServer: true, db: 'mysql', auth: 'jwt', skipChecks: true })
+                .withOptions({ fromCli: true, skipInstall: true, skipServer: true, db: 'postgresql', auth: 'jwt', skipChecks: true })
                 .withPrompts({
                     baseName: 'jhipster',
                     clientFramework: ANGULAR,
@@ -1470,7 +1470,7 @@ describe('JHipster generator', () => {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.userManagementServer);
             assert.noFile(expectedFiles.maven);
-            assert.noFile(expectedFiles.mysql);
+            assert.noFile(expectedFiles.postgresql);
             assert.noFile(expectedFiles.hibernateTimeZoneConfig);
             assert.file(
                 getFilesForOptions(angularFiles, {
@@ -1505,7 +1505,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         enableTranslation: true,
                         nativeLanguage: 'en',
@@ -1521,7 +1521,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.maven);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.noFile(
                     getFilesForOptions(
@@ -1572,7 +1572,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'gradle',
                         enableTranslation: true,
                         nativeLanguage: 'en',
@@ -1588,7 +1588,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.gradle);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.noFile(
                     getFilesForOptions(
@@ -1633,7 +1633,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         enableTranslation: true,
                         nativeLanguage: 'en',
@@ -1672,7 +1672,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -1710,7 +1710,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -1746,8 +1746,8 @@ describe('JHipster generator', () => {
                         cacheProvider: 'ehcache',
                         enableHibernateCache: true,
                         databaseType: 'sql',
-                        devDatabaseType: 'mysql',
-                        prodDatabaseType: 'mysql',
+                        devDatabaseType: 'postgresql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -1784,7 +1784,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -1799,7 +1799,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);
-                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.eureka);
@@ -1823,7 +1823,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -1862,8 +1862,8 @@ describe('JHipster generator', () => {
                         cacheProvider: 'no',
                         enableHibernateCache: false,
                         databaseType: 'sql',
-                        devDatabaseType: 'mysql',
-                        prodDatabaseType: 'mysql',
+                        devDatabaseType: 'postgresql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -1901,8 +1901,8 @@ describe('JHipster generator', () => {
                         cacheProvider: 'hazelcast',
                         enableHibernateCache: true,
                         databaseType: 'sql',
-                        devDatabaseType: 'mysql',
-                        prodDatabaseType: 'mysql',
+                        devDatabaseType: 'postgresql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -1943,7 +1943,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -1980,7 +1980,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -2015,8 +2015,8 @@ describe('JHipster generator', () => {
                         cacheProvider: 'ehcache',
                         enableHibernateCache: true,
                         databaseType: 'sql',
-                        devDatabaseType: 'mysql',
-                        prodDatabaseType: 'mysql',
+                        devDatabaseType: 'postgresql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -2055,7 +2055,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -2092,7 +2092,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -2127,8 +2127,8 @@ describe('JHipster generator', () => {
                         cacheProvider: 'ehcache',
                         enableHibernateCache: true,
                         databaseType: 'sql',
-                        devDatabaseType: 'mysql',
-                        prodDatabaseType: 'mysql',
+                        devDatabaseType: 'postgresql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
