@@ -7,7 +7,7 @@
         <button class="btn btn-primary mr-2" v-on:click="handleSyncList" :disabled="isLoading">
           <font-awesome-icon icon="sync" :spin="isLoading"></font-awesome-icon> <span v-text="$t('userManagement.home.refreshListLabel')">Refresh List</span>
         </button>
-        <router-link tag="button" class="btn btn-primary float-right jh-create-entity" :to="{name: '<%= jhiPrefixCapitalized %>UserCreate'}">
+        <router-link tag="button" class="btn btn-primary jh-create-entity" :to="{name: '<%= jhiPrefixCapitalized %>UserCreate'}">
           <font-awesome-icon icon="plus"></font-awesome-icon> <span v-text="$t('userManagement.home.createLabel')">Create a new User</span>
         </router-link>
       </div>
