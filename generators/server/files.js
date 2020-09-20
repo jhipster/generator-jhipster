@@ -305,8 +305,6 @@ const serverFiles = {
                 'config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json',
                 'config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json',
                 'config/couchmove/changelog/V0.1__initial_setup/user__admin.json',
-                'config/couchmove/changelog/V0.1__initial_setup/user__anonymoususer.json',
-                'config/couchmove/changelog/V0.1__initial_setup/user__system.json',
                 'config/couchmove/changelog/V0.1__initial_setup/user__user.json',
             ],
         },
@@ -333,14 +331,6 @@ const serverFiles = {
                 {
                     file: 'config/couchmove/changelog/V0.1__initial_setup/user__admin.json',
                     renameTo: () => 'config/neo4j/migrations/user__admin.json',
-                },
-                {
-                    file: 'config/couchmove/changelog/V0.1__initial_setup/user__anonymoususer.json',
-                    renameTo: () => 'config/neo4j/migrations/user__anonymoususer.json',
-                },
-                {
-                    file: 'config/couchmove/changelog/V0.1__initial_setup/user__system.json',
-                    renameTo: () => 'config/neo4j/migrations/user__system.json',
                 },
                 {
                     file: 'config/couchmove/changelog/V0.1__initial_setup/user__user.json',

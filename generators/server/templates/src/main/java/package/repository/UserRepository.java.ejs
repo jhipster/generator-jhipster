@@ -221,11 +221,13 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 
         <%_ } _%>
     <%_ } _%>
-    <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= asEntity('User') %>> findAllByLoginNot(Pageable pageable, String login);
-    <%_ if (reactive) { _%>
+    <% if (reactive) { %>
+    Flux<<%= asEntity('User') %>>findAllByIdNotNull(Pageable pageable);
 
-    Mono<Long> countAllByLoginNot(String anonymousUser);
-    <%_ } _%>
+    Mono<Long> count();
+    <% } else { %>
+    Page<<%= asEntity('User') %>>findAll(Pageable pageable);
+    <% } %>
 }
 <%_ } else if (databaseType === 'sql' && reactive) { _%>
 @Repository
@@ -243,9 +245,9 @@ public interface UserRepository extends R2dbcRepository<User, <% if (authenticat
     <%_ } _%>
     Mono<User> findOneByLogin(String login);
 
-    Flux<User> findAllByLoginNot(Pageable pageable, String login);
+    Flux<User> findAllByIdNotNull(Pageable pageable);
 
-    Mono<Long> countAllByLoginNot(String anonymousUser);
+    Mono<Long> count();
 
     @Query("INSERT INTO <%= jhiTablePrefix %>_user_authority VALUES(:userId, :authority)")
     Mono<Void> saveUserAuthority(<%= user.primaryKeyType %> userId, String authority);

@@ -251,7 +251,7 @@ class UserServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCas
             <%_ } _%>
         user.setLangKey(DEFAULT_LANGKEY);
             <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
             <%_ } _%>
         <%_ } _%>
         <%_ if (authenticationType === 'oauth2' ) { _%>
@@ -458,33 +458,6 @@ class UserServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCas
         persistentTokenRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(token);
     }
     <%_ } _%>
-    <%_ if (databaseType !== 'no') { _%>
-
-    @Test
-        <%_ if (databaseType === 'sql' && !reactive) { _%>
-    @Transactional
-        <%_ } else if (databaseType === 'couchbase') { _%>
-    @WithAnonymousUser
-        <%_ } _%>
-    void assertThatAnonymousUserIsNotGet() {
-        <%_ if (authenticationType === 'oauth2') { _%>
-        user.setId(Constants.ANONYMOUS_USER);
-        <%_ } _%>
-        user.setLogin(Constants.ANONYMOUS_USER);
-        if (!userRepository.findOneByLogin(Constants.ANONYMOUS_USER)<% if (reactive) { %>.blockOptional()<% } %>.isPresent()) {
-            userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        }<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>
-        final PageRequest pageable = PageRequest.of(0, (int) userRepository.count()<% if (reactive) { %>.block().intValue()<% } %>);
-        final <% if (reactive) { %>List<% } else { %>Page<% } %><<%= asDto('User') %>> allManagedUsers = userService.getAllManagedUsers(pageable)<% if (reactive) { %>
-            .collectList().block()<% } %>;
-        assertThat(allManagedUsers<% if (!reactive) { %>.getContent()<% } %>.stream()<% } %><% if (databaseType === 'cassandra') { %>
-        final List<<%= asDto('User') %>> allManagedUsers = userService.getAllManagedUsers()<% if (reactive) { %>
-            .collectList().block()<% } %>;
-        assertThat(allManagedUsers.stream()<% } %>
-            .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
-            .isTrue();
-    }
-    <%_ } _%>
 
     <%_ if (authenticationType === 'oauth2') { _%>
     @Test
@@ -573,7 +546,7 @@ class UserServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCas
 
     private OAuth2AuthenticationToken createMockOAuth2AuthenticationToken(Map<String, Object> userDetails) {
         Collection<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(Constants.ANONYMOUS_USER, Constants.ANONYMOUS_USER, authorities);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken("anonymous", "anonymous", authorities);
         usernamePasswordAuthenticationToken.setDetails(userDetails);
         OAuth2User user = new DefaultOAuth2User(authorities, userDetails, "sub");
 

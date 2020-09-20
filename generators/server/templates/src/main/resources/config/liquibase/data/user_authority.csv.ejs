@@ -1,8 +1,6 @@
 user_id;authority_name
+<%_ if (authenticationType !== 'oauth2') { _%>
 1;ROLE_ADMIN
 1;ROLE_USER
-<%_ if (authenticationType !== 'oauth2') { _%>
-3;ROLE_ADMIN
-3;ROLE_USER
-4;ROLE_USER
+2;ROLE_USER
 <%_ } _%>

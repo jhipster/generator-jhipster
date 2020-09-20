@@ -782,9 +782,7 @@ const expectedFiles = {
         `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json`,
         `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json`,
         `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__admin.json`,
-        `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__system.json`,
         `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__user.json`,
-        `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__anonymoususer.json`,
         `${DOCKER_DIR}couchbase.yml`,
         `${DOCKER_DIR}couchbase-cluster.yml`,
         `${DOCKER_DIR}couchbase/Couchbase.Dockerfile`,
@@ -794,9 +792,7 @@ const expectedFiles = {
     neo4j: [
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/AbstractNeo4jIT.java`,
         `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__admin.json`,
-        `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__system.json`,
         `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__user.json`,
-        `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__anonymoususer.json`,
         `${DOCKER_DIR}neo4j.yml`,
     ],
 
