@@ -61,7 +61,9 @@ describe('Generator Base', () => {
     describe('getJoinTableName', () => {
         describe('when called with a value', () => {
             it('returns a join table name', () => {
-                expect(BaseGenerator.getJoinTableName('entityName', 'relationshipName', 'postgresql')).to.equal('entity_name_relationship_name');
+                expect(BaseGenerator.getJoinTableName('entityName', 'relationshipName', 'postgresql')).to.equal(
+                    'entity_name_relationship_name'
+                );
             });
         });
         describe('when called with a long name', () => {
@@ -125,9 +127,9 @@ describe('Generator Base', () => {
         });
         describe('when called with a long name that is equal to limit and postgresql', () => {
             it('returns a proper constraint name', () => {
-                expect(BaseGenerator.getFKConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'postgresql')).to.have.length(
-                    64
-                );
+                expect(
+                    BaseGenerator.getFKConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'postgresql')
+                ).to.have.length(64);
                 expect(BaseGenerator.getFKConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'postgresql')).to.equal(
                     'test_custom_table_names_user_many_to_many_user_many_to_manies_id'
                 );
@@ -152,7 +154,9 @@ describe('Generator Base', () => {
         });
         describe('when called with a value and no snake case', () => {
             it('returns a constraint name', () => {
-                expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', 'postgresql', true)).to.equal('ux_entityName_columnName');
+                expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', 'postgresql', true)).to.equal(
+                    'ux_entityName_columnName'
+                );
             });
         });
         describe('when called with a long name and oracle', () => {
@@ -193,9 +197,9 @@ describe('Generator Base', () => {
         });
         describe('when called with a long name that is equal to limit and postgresql', () => {
             it('returns a proper constraint name', () => {
-                expect(BaseGenerator.getUXConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'postgresql')).to.have.length(
-                    64
-                );
+                expect(
+                    BaseGenerator.getUXConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'postgresql')
+                ).to.have.length(64);
                 expect(BaseGenerator.getUXConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'postgresql')).to.equal(
                     'ux_test_custom_table_names_user_many_to_many_user_many_to_manies'
                 );
