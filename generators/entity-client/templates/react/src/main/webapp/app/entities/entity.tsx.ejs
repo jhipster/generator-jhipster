@@ -256,7 +256,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
       <h2 id="<%= entityFileName %>-heading" data-cy="<%= entityClass %>Heading">
         <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
         <div className="d-flex justify-content-end">
-          <Button className="mr-2" color="primary" onClick={handleSyncList} disabled={loading}>
+          <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</Translate>
           </Button>
           <%_ if (!readOnly) { _%>

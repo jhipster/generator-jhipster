@@ -21,7 +21,7 @@
         <span jhiTranslate="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></span>
 
         <div class="d-flex justify-content-end">
-            <button class="btn btn-primary mr-2" (click)="handleSyncList()" [disabled]="isLoading">
+            <button class="btn btn-info mr-2" (click)="handleSyncList()" [disabled]="isLoading">
                 <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
                 <span jhiTranslate="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</span>
             </button>

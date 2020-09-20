@@ -4,7 +4,7 @@
       <span id="user-management-page-heading" v-text="$t('userManagement.home.title')" data-cy="userManagementPageHeading">Users</span>
 
       <div class="d-flex justify-content-end">
-        <button class="btn btn-primary mr-2" v-on:click="handleSyncList" :disabled="isLoading">
+        <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isLoading">
           <font-awesome-icon icon="sync" :spin="isLoading"></font-awesome-icon> <span v-text="$t('userManagement.home.refreshListLabel')">Refresh List</span>
         </button>
         <router-link tag="button" class="btn btn-primary jh-create-entity" :to="{name: '<%= jhiPrefixCapitalized %>UserCreate'}">
