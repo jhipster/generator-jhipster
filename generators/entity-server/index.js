@@ -29,7 +29,10 @@ let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
-        utils.copyObjectProps(this, opts.context);
+
+        // Context is the entity for entity-* generators
+        this.entity = opts.context;
+        utils.copyObjectProps(this, this.entity);
         this.jhipsterContext = opts.jhipsterContext || opts.context;
 
         this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.jhipsterContext.authenticationType);
@@ -53,43 +56,74 @@ module.exports = class extends BaseBlueprintGenerator {
         return this._initializing();
     }
 
-    // Public API method used by the getter and also by Blueprints
-    _default() {
-        return super._missingPreDefault();
-    }
-
-    get default() {
-        if (useBlueprints) return;
-        return this._default();
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _writing() {
-        return { ...writeFiles(), ...super._missingPostWriting() };
-    }
-
-    get writing() {
-        if (useBlueprints) return;
-        return this._writing();
-    }
-
     _preparing() {
         return {
             /**
-             * Process json ignore references to prevent cyclic relationships.
+             * Generate paths to files and resources.
              */
-            processJsonIgnoreReferences() {
-                this.relationships
-                    .filter(relationship => relationship.relationshipOtherSideIgnore === undefined)
-                    .forEach(relationship => {
-                        relationship.ignoreOtherSideProperty = !relationship.embedded && !!relationship.otherEntity;
-                    });
-                this.relationshipsContainOtherSideIgnore = this.relationships.some(relationship => relationship.ignoreOtherSideProperty);
-            },
+            generatePaths() {
+                if (this.domainName) {
+                    this.warning('Domain support is experimental and subject to change, use at your own risk');
+                } else {
+                    this.domainName = undefined;
+                }
 
-            processJavaEntityImports() {
-                this.importApiModelProperty =
-                    this.relationships.some(relationship => relationship.javadoc) || this.fields.some(field => field.javadoc);
+                this.domainPackage = this.domainName ? `${this.packageName}.${this.domainName}` : this.packageName;
+                const domainRelativeModelPackage =
+                    this.configOptions.domainRelativeModelPackage || this.domainName ? 'domain.model' : 'domain';
+                const domainRelativeRepositoryPackage =
+                    this.configOptions.domainRelativeRepositoryPackage || this.domainName ? 'adapter.repository' : 'repository';
+                const domainRelativeWebPackage =
+                    this.configOptions.domainRelativeWebPackage || this.domainName ? 'adapter.web' : 'web.rest';
+                const domainRelativeServicePackage =
+                    this.configOptions.domainRelativeServicePackage || this.domainName ? 'domain.service' : 'service';
+
+                this.domainModelPackageName = `${this.domainPackage}.${domainRelativeModelPackage}`;
+                this.domainRepositoryPackageName = `${this.domainPackage}.${domainRelativeRepositoryPackage}`;
+                this.domainWebPackageName = `${this.domainPackage}.${domainRelativeWebPackage}`;
+                this.domainServicePackageName = `${this.domainPackage}.${domainRelativeServicePackage}`;
+
+                this.domainServiceDtoPackageName = `${this.domainPackage}.${domainRelativeServicePackage}.dto`;
+
+                this.domainModelFolder = this.packageAsFolder(this.domainModelPackageName);
+                this.domainRepositoryFolder = this.packageAsFolder(this.domainRepositoryPackageName);
+                this.domainServiceFolder = this.packageAsFolder(this.domainServicePackageName);
+
+                if (this.domain) {
+                    this.domainFolder = this.packageAsFolder(this.domainPackage);
+
+                    this.entityPackage = this.domainModelPackageName;
+                    this.entityRepositoryDtoPackage = this.domainServiceDtoPackageName;
+                    this.entityRepositoryPackage = this.domainRepositoryPackageName;
+                    this.entityServicePackage = this.domainServicePackageName;
+                } else {
+                    this.entityPackage = this.domainModelPackageName;
+                    this.entityRepositoryDtoPackage = this.domainServiceDtoPackageName;
+                    this.entityRepositoryPackage = this.domainRepositoryPackageName;
+                    this.entityServicePackage = this.domainServicePackageName;
+                }
+
+                this.entityClassPath = `${this.entityPackage}.${this.asEntity(this.entityClass)}`;
+                this.entityRepositoryClassPath = `${this.entityRepositoryPackage}.${this.entityClass}Repository`;
+                this.entityControllerClassPath = `${this.domainWebPackageName}.${this.entityClass}Resource`;
+                this.entityServiceDtoClassPath = `${this.entityRepositoryDtoPackage}.${this.asDto(this.entityClass)}`;
+                this.entityServiceClassPath = `${this.entityServicePackage}.${this.entityClass}Service`;
+
+                this.entityBaseName = this.packageAsFolder(this.entityClassPath);
+                this.entityRepositoryBaseName = this.packageAsFolder(this.entityRepositoryClassPath);
+                this.entityControllerBaseName = this.packageAsFolder(this.entityControllerClassPath);
+                this.entityServiceDtoBaseName = this.packageAsFolder(this.entityServiceDtoClassPath);
+                this.entityServiceBaseName = this.packageAsFolder(this.entityServiceClassPath);
+
+                this.entityServiceImplClassPath = `${this.domainServicePackageName}.impl.${this.entityClass}ServiceImpl`;
+                this.entityServiceImplBaseName = this.packageAsFolder(this.entityServiceImplClassPath);
+
+                // Export to be used by relationships.
+                this.entity.entityClassPath = this.entityClassPath;
+                this.entity.entityRepositoryClassPath = this.entityRepositoryClassPath;
+                this.entity.entityControllerClassPath = this.entityControllerClassPath;
+                this.entity.entityServiceDtoClassPath = this.entityServiceDtoClassPath;
+                this.entity.entityServiceClassPath = this.entityServiceClassPath;
             },
 
             processUniqueEnums() {
@@ -103,6 +137,52 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.uniqueEnums[field.fieldType] = field.fieldType;
                     }
                 });
+            },
+        };
+    }
+
+    get preparing() {
+        if (useBlueprints) return;
+        return this._preparing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return {
+            ...super._missingPreDefault(),
+
+            /**
+             * Process json ignore references to prevent cyclic relationships.
+             */
+            processJsonIgnoreReferences() {
+                this.relationships
+                    .filter(relationship => relationship.relationshipOtherSideIgnore === undefined)
+                    .forEach(relationship => {
+                        relationship.ignoreOtherSideProperty =
+                            !relationship.embedded && !!relationship.otherEntity && !!relationship.otherEntity.relationships.length;
+                    });
+                this.relationshipsContainOtherSideIgnore = this.relationships.some(relationship => relationship.ignoreOtherSideProperty);
+            },
+
+            processJavaEntityImports() {
+                this.importApiModelProperty =
+                    this.relationships.some(relationship => relationship.javadoc) || this.fields.some(field => field.javadoc);
+            },
+
+            /**
+             * Process relationships that should be imported.
+             */
+            processRelationshipsFromOtherDomain() {
+                this.relatedEntitiesFromAnotherDomain = Array.from(
+                    new Set(
+                        this.relationships
+                            .map(relationship => relationship.otherEntity)
+                            .filter(otherEntity => otherEntity && otherEntity.domainName !== this.entity.domainName)
+                    )
+                );
+                this.relatedEntities = Array.from(
+                    new Set(this.relationships.map(relationship => relationship.otherEntity).filter(otherEntity => otherEntity))
+                );
             },
 
             useMapsIdRelation() {
@@ -125,9 +205,19 @@ module.exports = class extends BaseBlueprintGenerator {
         };
     }
 
-    get preparing() {
+    get default() {
         if (useBlueprints) return;
-        return this._preparing();
+        return this._default();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _writing() {
+        return { ...writeFiles(), ...super._missingPostWriting() };
+    }
+
+    get writing() {
+        if (useBlueprints) return;
+        return this._writing();
     }
 
     /* Private methods used in templates */

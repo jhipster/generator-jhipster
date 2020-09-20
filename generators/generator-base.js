@@ -722,7 +722,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} packageFolder - the Java package folder
      * @param {string} cacheProvider - the cache provider
      */
-    addEntryToCache(entry, packageFolder, cacheProvider) {
+    addEntryToCache(entry, packageFolder = this.jhipsterConfig.packageFolder, cacheProvider = this.jhipsterConfig.cacheProvider) {
         this.needleApi.serverCache.addEntryToCache(entry, packageFolder, cacheProvider);
     }
 
@@ -2097,6 +2097,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
                 }
             }
         }
+        this.debug(`Files written: ${JSON.stringify(filesOut, null, 4)}`);
         this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
         return filesOut;
     }
@@ -2442,7 +2443,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {String} name entity name
      */
     asEntity(name) {
-        return name + this.entitySuffix;
+        return name + (this.entitySuffix || this.jhipsterConfig.entitySuffix || '');
     }
 
     /**
@@ -2450,7 +2451,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {String} name entity name
      */
     asDto(name) {
-        return name + this.dtoSuffix;
+        return name + (this.dtoSuffix || this.jhipsterConfig.dtoSuffix || 'DTO');
     }
 
     get needleApi() {

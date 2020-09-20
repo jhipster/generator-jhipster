@@ -76,6 +76,15 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
 
     /**
+     * Convert java package to folder.
+     * @param {string} packageName - Package name to convert
+     * @return folder.
+     */
+    packageAsFolder(packageName) {
+        return packageName.replace(/\./g, '/');
+    }
+
+    /**
      * Install I18N Client Files By Language
      *
      * @param {any} _this reference to generator

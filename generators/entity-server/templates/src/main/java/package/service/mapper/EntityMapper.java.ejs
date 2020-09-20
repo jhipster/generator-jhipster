@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service.mapper;
+package <%= domainServicePackageName %>.mapper;
 
 <%_
 let existingMappings = [];
@@ -44,8 +44,8 @@ for (idx in relationships) {
 }
 _%>
 
-import <%= packageName %>.domain.*;
-import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
+import <%= domainModelPackageName %>.*;
+import <%= entityServiceDtoClassPath %>;
 
 import org.mapstruct.*;
 <%_ if (uuidMapMethod) { _%>

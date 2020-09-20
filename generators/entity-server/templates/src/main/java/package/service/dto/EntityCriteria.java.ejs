@@ -1,10 +1,10 @@
-package <%= packageName %>.service.dto;
+package <%= domainServiceDtoPackageName %>;
 
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
 <%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>
-import <%= packageName %>.domain.enumeration.<%= fields[idx].fieldType %>;
+import <%= domainModelPackageName %>.enumeration.<%= fields[idx].fieldType %>;
 <%_ } } _%>
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
@@ -68,8 +68,8 @@ filterVariables.push({ filterType : oauthAwareReferenceFilterType,
 });
 _%>
 /**
- * Criteria class for the {@link <%= packageName %>.domain.<%= asEntity(entityClass) %>} entity. This class is used
- * in {@link <%= packageName %>.web.rest.<%= entityClass %>Resource} to receive all the possible filtering options from
+ * Criteria class for the {@link <%= entityClassPath %>} entity. This class is used
+ * in {@link <%= domainWebPackageName %>.<%= entityClass %>Resource} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
  * {@code /<%= entityApiUrl %>?id.greaterThan=5&attr1.contains=something&attr2.specified=false}

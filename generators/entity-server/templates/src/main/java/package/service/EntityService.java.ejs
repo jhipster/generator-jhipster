@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service;
+package <%= domainServicePackageName %>;
 
 <%_
 const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
@@ -26,9 +26,9 @@ const listOrFlux = (reactive === true) ? 'Flux' : 'List';
 const pageOrFlux = (reactive === true) ? 'Flux' : 'Page';
 _%>
 <%_ if (dto === 'mapstruct') { _%>
-import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
+import <%= entityServiceDtoClassPath %>;
 <%_ } else { _%>
-import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+import <%= entityClassPath %>;
 <%_ } _%>
 <%_ if (pagination !== 'no' || relationshipsContainEagerLoad) { _%>
 
@@ -53,7 +53,7 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * Service Interface for managing {@link <% if (dto === 'mapstruct') { %><%= packageName %>.domain.<% } %><%= asEntity(entityClass) %>}.
+ * Service Interface for managing {@link <% if (dto === 'mapstruct') { %><%= domainModelPackageName %>.<% } %><%= asEntity(entityClass) %>}.
  */
 public interface <%= entityClass %>Service {
 

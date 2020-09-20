@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest;
+package <%= domainWebPackageName %>;
 
 <%_
 
@@ -57,6 +57,9 @@ if (databaseType === 'sql' && !reactive) {
 }
 
 _%>
+<%_ if (!!domainName) { _%>
+import <%= packageName %>.web.rest.TestUtil;
+<%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
@@ -76,41 +79,38 @@ import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
 <%_ if (authenticationType === 'oauth2') { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
-import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+import <%= entityClassPath %>;
+<%_ relatedEntities.forEach(entity => { _%>
+import <%= entity.entityClassPath %>;
+<%_ });
+relatedEntitiesFromAnotherDomain.forEach(entity => { _%>
+import <%= entity.entityControllerClassPath %>IT;
 <%_
-    var imported = [];
-    for (idx in relationships) { // import entities in required relationships
-        const relationshipValidate = relationships[idx].relationshipValidate;
-        const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-        const isUsingMapsIdL1 = relationships[idx].useJPADerivedIdentifier;
-        if (imported.indexOf(otherEntityNameCapitalized) === -1) {
-            if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
-import <%= packageName %>.domain.<%= asEntity(otherEntityNameCapitalized) %>;
-<%_         imported.push(otherEntityNameCapitalized);
-        } } } _%>
+}); _%>
+
 <%_ if (saveUserSnapshot) { _%>
 import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
-import <%= packageName %>.repository.<%= entityClass %>Repository;
+import <%= entityRepositoryClassPath %>;
 <%_ if (databaseType === 'sql' && reactive) { _%>
 import <%= packageName %>.service.EntityManager;
 <%_ } _%>
 <%_ if (isUsingMapsId === true && ( dto !== 'mapstruct' && service === 'no')) { _%>
-import <%= packageName %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
+import <%= domainRepositoryPackageName %>.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
-import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
+import <%= domainRepositoryPackageName %>.search.<%= entityClass %>SearchRepository;
 <%_ } _%>
 <%_ if (service !== 'no') { _%>
-import <%= packageName %>.service.<%= entityClass %>Service;
+import <%= entityServiceClassPath %>;
 <%_ } _%>
 <%_ if (dto === 'mapstruct') { _%>
-import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
-import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
+import <%= entityServiceDtoClassPath %>;
+import <%= domainServicePackageName %>.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering) { _%>
-import <%= packageName %>.service.dto.<%= entityClass %>Criteria;
-import <%= packageName %>.service.<%= entityClass %>QueryService;
+import <%= domainServiceDtoPackageName %>.<%= entityClass %>Criteria;
+import <%= domainServicePackageName %>.<%= entityClass %>QueryService;
 <%_ } _%>
 
 <%_ if (databaseType === 'sql' && reactive) { _%>
@@ -207,7 +207,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 <%_ } _%>
 
-<%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>import <%= packageName %>.domain.enumeration.<%= fields[idx].fieldType %>;
+<%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>import <%= domainModelPackageName %>.enumeration.<%= fields[idx].fieldType %>;
 <%_ } } _%>
 /**
  * Integration tests for the {@link <%= entityClass %>Resource} REST controller.
@@ -236,7 +236,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureWebTestClient
 <%_ } _%>
 @WithMockUser
-class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
     <%_ for (idx in fields) {
     const defaultValueName = 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase();
     const updatedValueName = 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase();
@@ -442,9 +442,9 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     <%_ } if (searchEngine === 'elasticsearch') { _%>
 
     /**
-     * This repository is mocked in the <%= packageName %>.repository.search test package.
+     * This repository is mocked in the <%= domainRepositoryPackageName %>.search test package.
      *
-     * @see <%= packageName %>.repository.search.<%= entityClass %>SearchRepositoryMockConfiguration
+     * @see <%= domainRepositoryPackageName %>.search.<%= entityClass %>SearchRepositoryMockConfiguration
      */
     @Autowired
     private <%= entityClass %>SearchRepository mock<%= entityClass %>SearchRepository;

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest;
+package <%= domainWebPackageName %>;
 
 <%_
 const viaService = service !== 'no';
@@ -30,17 +30,17 @@ for (idx in relationships) {
 }
 _%>
 <%_ if (dto !== 'mapstruct' || service === 'no') { _%>
-import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+import <%= entityClassPath %>;
 <%_ } _%>
 <%_ if (service !== 'no') { _%>
-import <%= packageName %>.service.<%= entityClass %>Service;
+import <%= entityServiceClassPath %>;
 <%_ } else { _%>
-import <%= packageName %>.repository.<%= entityClass %>Repository;
+import <%= entityRepositoryClassPath %>;
     <%_ if (isUsingMapsId === true) { _%>
-import <%= packageName %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
+import <%= domainRepositoryPackageName %>.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
-import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
+import <%= domainRepositoryPackageName %>.search.<%= entityClass %>SearchRepository;
     <%_ } _%>
 <%_ } _%>
 <%_ if (saveUserSnapshot) { _%>
@@ -48,14 +48,14 @@ import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
 import <%= packageName %>.web.rest.errors.BadRequestAlertException;
 <%_ if (dto === 'mapstruct') { _%>
-import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
+import <%= entityServiceDtoClassPath %>;
     <%_ if (service === 'no') { _%>
-import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
+import <%= domainServicePackageName %>.mapper.<%= entityClass %>Mapper;
     <%_ } _%>
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering) {  _%>
-import <%= packageName %>.service.dto.<%= entityClass %>Criteria;
-import <%= packageName %>.service.<%= entityClass %>QueryService;
+import <%= domainServiceDtoPackageName %>.<%= entityClass %>Criteria;
+import <%= domainServicePackageName %>.<%= entityClass %>QueryService;
 <%_ } _%>
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -134,7 +134,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 <%_ } _%>
 
 /**
- * REST controller for managing {@link <%= packageName %>.domain.<%= asEntity(entityClass) %>}.
+ * REST controller for managing {@link <%= entityClassPath %>}.
  */
 @RestController
 @RequestMapping("/api")

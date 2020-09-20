@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service<% if (service === 'serviceImpl') { %>.impl<% } %>;
+package <%= domainServicePackageName %><% if (service === 'serviceImpl') { %>.impl<% } %>;
 
 <%_
 const serviceClassName = service === 'serviceImpl' ? entityClass + 'ServiceImpl' : entityClass + 'Service';
@@ -34,19 +34,19 @@ const searchRepository = entityInstance  + 'SearchRepository';
 
 _%>
 <%_ if (service === 'serviceImpl') { _%>
-import <%= packageName %>.service.<%= entityClass %>Service;
+import <%= entityServiceClassPath %>;
 <%_ } _%>
-import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
-import <%= packageName %>.repository.<%= entityClass %>Repository;
+import <%= entityClassPath %>;
+import <%= entityRepositoryClassPath %>;
 <%_ if (isUsingMapsId === true) { _%>
-import <%= packageName %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
+import <%= domainRepositoryPackageName %>.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
-import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
+import <%= domainRepositoryPackageName %>.search.<%= entityClass %>SearchRepository;
 <%_ } _%>
 <%_ if (dto === 'mapstruct') { _%>
-import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
-import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
+import <%= entityServiceDtoClassPath %>;
+import <%= domainServicePackageName %>.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

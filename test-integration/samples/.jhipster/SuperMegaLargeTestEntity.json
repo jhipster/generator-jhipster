@@ -1,5 +1,6 @@
 {
     "fluentMethods": true,
+    "domainName": "cool",
     "relationships": [
         {
             "relationshipName": "superMegaLargeTestManyToOne",

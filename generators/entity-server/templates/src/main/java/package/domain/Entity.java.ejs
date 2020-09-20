@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.domain;
+package <%= domainModelPackageName %>;
 
 <%_
 
@@ -31,7 +31,12 @@ for (idx in fields) {
         break;
     }
 }
+
+relatedEntitiesFromAnotherDomain.forEach(entity => {
+_%>import <%= entity.entityClassPath %>;<%_
+});
 _%>
+
 <%_ if (databaseType === 'cassandra') { _%>
 import org.springframework.data.annotation.Id;
     <%_ if (fieldsContainBlob) { _%>
@@ -121,7 +126,7 @@ import java.util.UUID;
 <%_ }
 Object.keys(uniqueEnums).forEach(function(element) { _%>
 
-import <%= packageName %>.domain.enumeration.<%= element %>;
+import <%= domainModelPackageName %>.enumeration.<%= element %>;
 <%_ }); _%>
 
 <%_ if (databaseType === 'couchbase' && !embedded) { _%>

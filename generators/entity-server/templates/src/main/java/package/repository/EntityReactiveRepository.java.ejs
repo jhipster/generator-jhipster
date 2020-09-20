@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.repository;
+package <%= domainRepositoryPackageName %>;
 
-import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+import <%= entityClassPath %>;
 <%_ if (databaseType === 'cassandra') { _%>
 import org.springframework.data.cassandra.repository.ReactiveCassandraRepository;
 <%_ } _%>
 <%_ if (searchEngine === 'couchbase') { _%>
-import <%= packageName %>.repository.search.SearchCouchbaseRepository;
+import <%= domainRepositoryPackageName %>.search.SearchCouchbaseRepository;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.data.couchbase.core.query.Query;

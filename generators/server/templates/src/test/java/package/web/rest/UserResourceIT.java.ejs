@@ -149,7 +149,7 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 <%_ if (reactiveSqlTestContainers) { _%>
 @ExtendWith(ReactiveSqlTestContainerExtension.class)
 <%_ } _%>
-class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     private static final String DEFAULT_LOGIN = "johndoe";
     <%_ if (authenticationType !== 'oauth2') { _%>

@@ -398,6 +398,30 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         return this._loading();
     }
 
+    _preparing() {
+        return {
+            createBuiltInEntitiesStubs() {
+                this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
+                if (this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.authenticationType !== 'oauth2') return;
+                // Create entity definition for built-in entity to make easier to deal with relationships.
+                this.configOptions.sharedEntities.User = {
+                    entityClassPath: `${this.jhipsterConfig.packageName}.domain.${this.asEntity('User')}`,
+                    entityControllerClassPath: `${this.jhipsterConfig.packageName}.web.rest.UserResource`,
+                    relationships: [],
+                };
+                this.configOptions.sharedEntities.Authority = {
+                    entityClassPath: `${this.jhipsterConfig.packageName}.domain.${this.asEntity('Authority')}`,
+                    entityControllerClassPath: `${this.jhipsterConfig.packageName}.web.rest.AuthorityResource`,
+                    relationships: [],
+                };
+            },
+        };
+    }
+
+    get preparing() {
+        return this._preparing();
+    }
+
     _default() {
         return {
             ...super._missingPreDefault(),

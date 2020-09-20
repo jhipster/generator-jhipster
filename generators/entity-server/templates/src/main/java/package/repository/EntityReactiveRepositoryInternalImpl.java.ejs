@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.repository;
+package <%= domainRepositoryPackageName %>;
 
 import java.util.function.BiFunction;
 <%_ if (fieldsContainBigDecimal === true) { _%>
@@ -56,19 +56,19 @@ import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJ
 import org.springframework.data.relational.core.sql.Table;
 <%_ } _%>
 
-import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+import <%= entityClassPath %>;
 <% relationships.forEach(function(rel) {
     if (rel.relationshipType === 'many-to-many' && rel.ownerSide) { _%>
-import <%= packageName %>.domain.<%= asEntity(rel.otherEntityNameCapitalized) %>;
+import <%= domainModelPackageName %>.<%= asEntity(rel.otherEntityNameCapitalized) %>;
     <%_ } _%>
 <%_ } ); _%>
 <%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
 
-import <%= packageName %>.domain.enumeration.<%= element %>;
+import <%= domainModelPackageName %>.enumeration.<%= element %>;
 <%_ }); _%>
 
 <%_ uniqueEntityTypes.forEach(function(element) { _%>
-import <%= packageName %>.repository.rowmapper.<%= element %>RowMapper;
+import <%= domainRepositoryPackageName %>.rowmapper.<%= element %>RowMapper;
 <%_ }); _%>
 import <%= packageName %>.service.EntityManager;
 <%_ if (fieldsContainOwnerManyToMany) { _%>
