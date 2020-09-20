@@ -170,18 +170,6 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   };
   <%_ } _%>
 
-  const handleSyncList = () => {
-    <% if (pagination === 'no') { %>
-      props.getEntities();
-    <% } %>
-    <% if (pagination === 'pagination') { %>
-      sortEntities();
-    <% } %>
-    <% if (pagination === 'infinite-scroll') { %>
-      resetAll();
-    <% } %>
-  };
-
   <%_ if (pagination !== 'no') { _%>
 
   <%_ if (pagination === 'pagination') { _%>
@@ -249,6 +237,18 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     });
   <%_ } _%>
   <%_ } _%>
+
+  const handleSyncList = () => {
+    <% if (pagination === 'no') { %>
+      props.getEntities();
+    <% } %>
+    <% if (pagination === 'pagination') { %>
+      sortEntities();
+    <% } %>
+    <% if (pagination === 'infinite-scroll') { %>
+      resetAll();
+    <% } %>
+  };
 
   const { <%= entityInstance %>List, match, loading<% if (pagination === 'pagination') { %>, totalItems<% } %>} = props;
   return (
