@@ -216,12 +216,12 @@ describe('Vue applications', () => {
                     skipChecks: true,
                 })
                 .withPrompts({
-                    baseName: 'sampleMysql',
+                    baseName: 'samplePsql',
                     packageName: 'com.mycompany.myapp',
                     applicationType: 'monolith',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Disk',
-                    prodDatabaseType: 'mysql',
+                    prodDatabaseType: 'postgresql',
                     cacheProvider: 'ehcache',
                     authenticationType: 'jwt',
                     enableTranslation: true,
@@ -269,12 +269,12 @@ describe('Vue applications', () => {
                     skipChecks: true,
                 })
                 .withPrompts({
-                    baseName: 'sampleMysql',
+                    baseName: 'samplePsql',
                     packageName: 'com.mycompany.myapp',
                     applicationType: 'monolith',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Disk',
-                    prodDatabaseType: 'mysql',
+                    prodDatabaseType: 'postgresql',
                     cacheProvider: 'ehcache',
                     authenticationType: 'jwt',
                     enableTranslation: true,
@@ -323,12 +323,12 @@ describe('Vue applications', () => {
                     skipChecks: true,
                 })
                 .withPrompts({
-                    baseName: 'sampleMysql',
+                    baseName: 'samplePsql',
                     packageName: 'com.mycompany.myapp',
                     applicationType: 'monolith',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Disk',
-                    prodDatabaseType: 'mysql',
+                    prodDatabaseType: 'postgresql',
                     cacheProvider: 'ehcache',
                     authenticationType: 'session',
                     enableTranslation: false,
@@ -375,12 +375,12 @@ describe('Vue applications', () => {
                     skipChecks: true,
                 })
                 .withPrompts({
-                    baseName: 'sampleMysql',
+                    baseName: 'samplePsql',
                     packageName: 'com.mycompany.myapp',
                     applicationType: 'monolith',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Disk',
-                    prodDatabaseType: 'mysql',
+                    prodDatabaseType: 'postgresql',
                     cacheProvider: 'ehcache',
                     authenticationType: 'oauth2',
                     enableTranslation: false,
@@ -427,12 +427,12 @@ describe('Vue applications', () => {
                     skipChecks: true,
                 })
                 .withPrompts({
-                    baseName: 'sampleMysql',
+                    baseName: 'samplePsql',
                     packageName: 'com.mycompany.myapp',
                     applicationType: 'monolith',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Disk',
-                    prodDatabaseType: 'mysql',
+                    prodDatabaseType: 'postgresql',
                     cacheProvider: 'ehcache',
                     authenticationType: 'jwt',
                     enableTranslation: true,
@@ -487,7 +487,7 @@ describe('Vue applications', () => {
                     applicationType: 'monolith',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Disk',
-                    prodDatabaseType: 'mysql',
+                    prodDatabaseType: 'postgresql',
                     cacheProvider: 'ehcache',
                     authenticationType: 'jwt',
                     enableTranslation: true,
@@ -538,12 +538,12 @@ describe('Vue applications', () => {
                     skipChecks: true,
                 })
                 .withPrompts({
-                    baseName: 'sampleMysql',
+                    baseName: 'samplePsql',
                     packageName: 'com.mycompany.myapp',
                     applicationType: 'monolith',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Disk',
-                    prodDatabaseType: 'mysql',
+                    prodDatabaseType: 'postgresql',
                     cacheProvider: 'ehcache',
                     authenticationType: 'oauth2',
                     enableTranslation: true,
@@ -591,12 +591,12 @@ describe('Vue applications', () => {
                     skipChecks: true,
                 })
                 .withPrompts({
-                    baseName: 'sampleMysql',
+                    baseName: 'samplePsql',
                     packageName: 'com.mycompany.myapp',
                     applicationType: 'monolith',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Disk',
-                    prodDatabaseType: 'mysql',
+                    prodDatabaseType: 'postgresql',
                     cacheProvider: 'ehcache',
                     authenticationType: 'jwt',
                     enableTranslation: true,
