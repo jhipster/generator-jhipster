@@ -60,6 +60,10 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mi
     });
   }
 
+  public handleSyncList(): void {
+    this.loadAll();
+  }
+
   <%_ if (databaseType !== 'cassandra') { _%>
   public sort(): any {
     const result = [this.propOrder + ',' + (this.reverse ? 'desc' : 'asc')];
@@ -74,10 +78,6 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mi
       this.previousPage = page;
       this.transition();
     }
-  }
-
-  public handleSyncList(): void {
-    this.loadAll();
   }
 
   public transition(): void {
