@@ -10,7 +10,7 @@
         "websocket": "spring-websocket",
         "databaseType": "sql",
         "devDatabaseType": "h2Memory",
-        "prodDatabaseType": "mysql",
+        "prodDatabaseType": "postgresql",
         "searchEngine": false,
         "buildTool": "maven",
         "enableTranslation": true,
