@@ -330,7 +330,11 @@ relationships.forEach((relationship, idx) => {
     @Transient
     <%_ } _%>
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
-    @JsonIgnoreProperties(value = "<%= otherEntityRelationshipName %>", allowSetters = true)
+    @JsonIgnoreProperties(value = {
+        <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
+        "<%= otherRelationship.relationshipReferenceField %>",
+        <%_ }); _%>
+    }, allowSetters = true)
     <%_ } _%>
     private Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
@@ -355,7 +359,11 @@ relationships.forEach((relationship, idx) => {
     @Relationship("<%= relationshipFieldName %>")
     <%_ } _%>
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
-    @JsonIgnoreProperties(value = "<%= otherEntityRelationshipNamePlural %>", allowSetters = true)
+    @JsonIgnoreProperties(value = {
+        <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
+        "<%= otherRelationship.relationshipReferenceField %>",
+        <%_ }); _%>
+    }, allowSetters = true)
     <%_ } _%>
     <%_ if (databaseType === 'sql' && reactive) { _%>
     @Transient
@@ -392,7 +400,11 @@ relationships.forEach((relationship, idx) => {
         <%_ }
         }
         if (relationship.ignoreOtherSideProperty) { _%>
-    @JsonIgnoreProperties(value = "<%= otherEntityRelationshipNamePlural %>", allowSetters = true)
+    @JsonIgnoreProperties(value = {
+        <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
+        "<%= otherRelationship.relationshipReferenceField %>",
+        <%_ }); _%>
+    }, allowSetters = true)
     <%_ } _%>
     <%_ if (databaseType === 'sql' && reactive) { _%>
     @Transient
@@ -402,7 +414,11 @@ relationships.forEach((relationship, idx) => {
 <%_ } else {
         if (databaseType === 'sql' && !reactive) {
             if (relationship.ignoreOtherSideProperty) { _%>
-    @JsonIgnoreProperties(value = "<%= otherEntityRelationshipName %>", allowSetters = true)
+    @JsonIgnoreProperties(value = {
+        <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
+        "<%= otherRelationship.relationshipReferenceField %>",
+        <%_ }); _%>
+    }, allowSetters = true)
         <%_ }
             if (ownerSide) { _%>
     @OneToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
