@@ -2421,9 +2421,12 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     /**
      * Get all the generator configuration from the .yo-rc.json file
      * @param {string} entityName - Name of the entity to load.
+     * @param {boolean} create - Create storage if doesn't exists.
      */
-    getEntityConfig(entityName) {
-        return this.createStorage(this.destinationPath(JHIPSTER_CONFIG_DIR, `${_.upperFirst(entityName)}.json`));
+    getEntityConfig(entityName, create = false) {
+        const entityPath = this.destinationPath(JHIPSTER_CONFIG_DIR, `${_.upperFirst(entityName)}.json`);
+        if (!create && !this.fs.exists(entityPath)) return undefined;
+        return this.createStorage(entityPath);
     }
 
     /**

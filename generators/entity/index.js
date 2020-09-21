@@ -130,7 +130,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         }
 
         const name = _.upperFirst(this.options.name).replace('.json', '');
-        this.entityStorage = this.getEntityConfig(name);
+        this.entityStorage = this.getEntityConfig(name, true);
         this.entityConfig = this.entityStorage.createProxy();
 
         const entityExisted = this.options.entityExisted !== undefined ? this.options.entityExisted : this.entityStorage.existed;
@@ -467,6 +467,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     prepareFieldForTemplates(entity, field, this);
                 });
             },
+            shareEntity() {
+                this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
+                this.configOptions.sharedEntities[this.context.name] = this.context;
+            },
         };
     }
 
@@ -482,6 +486,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
             prepareRelationshipsForTemplates() {
                 this.context.relationships.forEach(relationship => {
+                    const otherEntityName = this._.upperFirst(relationship.otherEntityName);
+                    relationship.otherEntity = this.configOptions.sharedEntities[otherEntityName];
+
                     prepareRelationshipForTemplates(this.context, relationship, this);
                     this._.defaults(relationship, {
                         // otherEntityField should be id if not specified

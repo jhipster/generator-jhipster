@@ -30,15 +30,20 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
 
     relationship.otherSideReferenceExists = false;
 
-    const otherEntityData = generator.getEntityConfig(otherEntityName).getAll();
-    if (!otherEntityData && !this.isBuiltInEntity(otherEntityName)) {
+    let otherEntityData = relationship.otherEntity;
+    if (!otherEntityData) {
+        const entityStorage = generator.getEntityConfig(otherEntityName);
+        if (entityStorage) {
+            otherEntityData = entityStorage.getAll();
+            relationship.otherEntity = otherEntityData;
+        }
+    }
+    if (!otherEntityData && !generator.isBuiltInEntity(otherEntityName)) {
         throw new Error(`Error at entity ${entityName}: could not find the entity of the relationship ${stringify(relationship)}`);
     }
+    otherEntityData = otherEntityData || {};
 
     relationship.otherEntityIsEmbedded = otherEntityData.embedded;
-    if (otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
-        otherEntityData.clientRootFolder = otherEntityData.microserviceName;
-    }
 
     relationship.otherEntityPrimaryKeyType =
         generator.isBuiltInUser(otherEntityName) && entityWithConfig.authenticationType === 'oauth2'
@@ -176,21 +181,22 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
             otherEntityFolderName: _.kebabCase(relationship.otherEntityAngularName),
         });
 
-        if (entityWithConfig.skipUiGrouping || otherEntityData.clientRootFolder === '' || otherEntityData.clientRootFolder === undefined) {
+        const otherEntityClientRootFolder = otherEntityData.clientRootFolder || otherEntityData.microserviceName || '';
+        if (entityWithConfig.skipUiGrouping || !otherEntityClientRootFolder) {
             relationship.otherEntityClientRootFolder = '';
         } else {
-            relationship.otherEntityClientRootFolder = `${otherEntityData.clientRootFolder}/`;
+            relationship.otherEntityClientRootFolder = `${otherEntityClientRootFolder}/`;
         }
-        if (otherEntityData.clientRootFolder) {
-            if (entityWithConfig.clientRootFolder === otherEntityData.clientRootFolder) {
+        if (otherEntityClientRootFolder) {
+            if (entityWithConfig.clientRootFolder === otherEntityClientRootFolder) {
                 relationship.otherEntityModulePath = relationship.otherEntityFolderName;
             } else {
                 relationship.otherEntityModulePath = `${
                     entityWithConfig.entityParentPathAddition ? `${entityWithConfig.entityParentPathAddition}/` : ''
-                }${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
+                }${otherEntityClientRootFolder}/${relationship.otherEntityFolderName}`;
             }
-            relationship.otherEntityModelName = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
-            relationship.otherEntityPath = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
+            relationship.otherEntityModelName = `${otherEntityClientRootFolder}/${relationship.otherEntityFileName}`;
+            relationship.otherEntityPath = `${otherEntityClientRootFolder}/${relationship.otherEntityFolderName}`;
         } else {
             relationship.otherEntityModulePath = `${
                 entityWithConfig.entityParentPathAddition ? `${entityWithConfig.entityParentPathAddition}/` : ''
