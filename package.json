@@ -1,6 +1,6 @@
 {
     "name": "generator-jhipster",
-    "version": "6.10.1",
+    "version": "6.10.3",
     "description": "Spring Boot + Angular/React in one handy generator",
     "files": [
         "cli",
@@ -78,7 +78,7 @@
         "os-locale": "5.0.0",
         "parse-gitignore": "1.0.1",
         "pluralize": "8.0.0",
-        "prettier": "2.1.1",
+        "prettier": "2.1.2",
         "prettier-plugin-java": "0.8.2",
         "progress": "2.0.3",
         "randexp": "0.5.3",
