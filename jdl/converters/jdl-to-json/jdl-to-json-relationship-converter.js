@@ -89,6 +89,7 @@ function setRelationshipsFromEntity(relatedRelationships, entityName) {
         const splitField = extractField(relationshipToConvert.injectedFieldInFrom);
         convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.to);
         convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
+        convertedRelationship.primary = true;
         if (relationshipToConvert.type === ONE_TO_ONE) {
             convertedRelationship.ownerSide = true;
         } else if (relationshipToConvert.type === MANY_TO_MANY) {
@@ -134,6 +135,7 @@ function setRelationshipsToEntity(relatedRelationships, entityName) {
         const splitField = extractField(relationshipToConvert.injectedFieldInTo);
         convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.from);
         convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
+        convertedRelationship.secondary = true;
         if (relationshipToConvert.type === ONE_TO_ONE || relationshipToConvert.type === MANY_TO_MANY) {
             convertedRelationship.ownerSide = false;
         } else if (relationshipToConvert.type === ONE_TO_MANY) {
