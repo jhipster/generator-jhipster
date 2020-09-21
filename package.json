@@ -56,7 +56,7 @@
         "jdl:test-watch": "npm run jdl:test -- --watch"
     },
     "dependencies": {
-        "aws-sdk": "2.752.0",
+        "aws-sdk": "2.756.0",
         "axios": "0.20.0",
         "chalk": "4.1.0",
         "chevrotain": "7.0.2",
