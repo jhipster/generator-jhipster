@@ -139,7 +139,7 @@ function setRelationshipsToEntity(relatedRelationships, entityName) {
         } else if (relationshipToConvert.type === ONE_TO_MANY) {
             relationshipToConvert.injectedFieldInTo = relationshipToConvert.injectedFieldInTo || lowerFirst(relationshipToConvert.from);
         } else if (relationshipToConvert.type === MANY_TO_ONE && relationshipToConvert.injectedFieldInTo) {
-            convertedRelationship.relationshipType = ONE_TO_MANY;
+            convertedRelationship.relationshipType = 'one-to-many';
         }
         setOptionsForRelationship(relationshipToConvert, convertedRelationship);
         const convertedEntityRelationships = convertedRelationships.get(entityName);

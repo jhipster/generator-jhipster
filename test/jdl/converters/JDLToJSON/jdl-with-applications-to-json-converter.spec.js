@@ -1401,7 +1401,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 databaseType: SQL,
                                 creationTimestamp: Date.now(),
                             });
-                            console.log(returned.get('toto'));
                             relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
                             relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
                         });
