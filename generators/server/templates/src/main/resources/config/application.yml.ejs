@@ -153,10 +153,7 @@ management:
                         enabled: true
 
 spring:
-    <%_ if (searchEngine === 'elasticsearch' && !reactive) { _%>
-    autoconfigure:
-        exclude: <% if (databaseType === 'sql' && messageBroker === 'kafka') { %>org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration,<% } %>org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration,org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration
-    <%_ } else if (databaseType === 'sql' && messageBroker === 'kafka') { _%>
+    <%_ if (databaseType === 'sql' && messageBroker === 'kafka') { _%>
     autoconfigure:
         exclude: org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration
     <%_ } _%>
@@ -328,7 +325,7 @@ info:
 
 jhipster:
     clientApp:
-        name: "<%= angularAppName %>"
+        name: "<%= frontendAppName %>"
     # By default CORS is disabled. Uncomment to enable.
     # cors:
     #     allowed-origins: "*"

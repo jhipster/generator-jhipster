@@ -47,7 +47,7 @@ module.exports = class extends BaseGenerator {
         this.databaseType = configuration.get('databaseType');
         this.devDatabaseType = configuration.get('devDatabaseType');
         this.prodDatabaseType = configuration.get('prodDatabaseType');
-        this.angularAppName = this.getAngularAppName();
+        this.frontendAppName = this.getFrontendAppName();
     }
 
     get prompting() {

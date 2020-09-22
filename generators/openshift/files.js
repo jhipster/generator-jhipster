@@ -56,12 +56,6 @@ function writeFiles() {
             }
         },
 
-        writeElkFiles() {
-            if (this.monitoring !== 'elk') return;
-
-            this.template('monitoring/jhipster-monitoring.yml.ejs', `${this.directoryPath}/ocp/monitoring/jhipster-monitoring.yml`);
-        },
-
         writePrometheusFiles() {
             if (this.monitoring !== 'prometheus') return;
 

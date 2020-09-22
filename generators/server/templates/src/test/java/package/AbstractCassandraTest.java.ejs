@@ -18,12 +18,15 @@
 -%>
 package <%= packageName %>;
 
+import static java.nio.file.Files.newDirectoryStream;
+import static java.nio.file.Paths.get;
+import static java.util.Spliterator.SORTED;
+import static java.util.Spliterators.spliteratorUnknownSize;
+import static java.util.stream.StreamSupport.stream;
+
 import io.github.jhipster.config.JHipsterConstants;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
-import org.apache.cassandra.exceptions.ConfigurationException;
-import org.apache.thrift.transport.TTransportException;
+import com.datastax.oss.driver.api.core.CqlSession;
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
 import org.junit.jupiter.api.BeforeAll;
@@ -32,21 +35,17 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.support.TestPropertySourceUtils;
-import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Iterator;
+import java.util.Spliterator;
 
 /**
  * Base class for starting/stopping Cassandra during tests.
@@ -56,7 +55,7 @@ import java.util.List;
 public class AbstractCassandraTest {
 
     public static final String CASSANDRA_UNIT_KEYSPACE = "cassandra_unit_keyspace";
-    public static final GenericContainer CASSANDRA_CONTAINER;
+    public static final GenericContainer<?> CASSANDRA_CONTAINER;
     public static final int CASSANDRA_TEST_PORT = 9042;
     private static boolean started = false;
 
@@ -68,17 +67,17 @@ public class AbstractCassandraTest {
     }
 
     @BeforeAll
-    public static void startServer() throws TTransportException, ConfigurationException, IOException, URISyntaxException {
+    public static void startServer() throws IOException, URISyntaxException {
         if (!started) {
-            startTestcontainer();
-            Cluster cluster = new Cluster.Builder()
-                .addContactPoint("127.0.0.1")
-                .withPort(CASSANDRA_CONTAINER.getMappedPort(CASSANDRA_TEST_PORT))
-                .withoutMetrics()
-                .withoutJMXReporting()
+            startTestContainer();
+
+            CqlSession session = CqlSession.builder()
+                .addContactPoint(new InetSocketAddress(
+                    CASSANDRA_CONTAINER.getContainerIpAddress(),
+                    CASSANDRA_CONTAINER.getMappedPort(CASSANDRA_TEST_PORT)))
+                .withLocalDatacenter("datacenter1")
                 .build();
 
-            Session session = cluster.connect();
             createTestKeyspace(session);
             CQLDataLoader dataLoader = new CQLDataLoader(session);
             applyScripts(dataLoader, "config/cql/changelog/", "*.cql");
@@ -86,11 +85,11 @@ public class AbstractCassandraTest {
         }
     }
 
-    private static void startTestcontainer() throws TTransportException, IOException {
+    private static void startTestContainer() {
         CASSANDRA_CONTAINER.start();
     }
 
-    private static void createTestKeyspace(Session session) {
+    private static void createTestKeyspace(CqlSession session) {
         String createQuery = "CREATE KEYSPACE " + CASSANDRA_UNIT_KEYSPACE + " WITH replication={'class' : 'SimpleStrategy', 'replication_factor':1}";
         session.execute(createQuery);
         String useKeyspaceQuery = "USE " + CASSANDRA_UNIT_KEYSPACE;
@@ -103,17 +102,15 @@ public class AbstractCassandraTest {
             return;
         }
 
-        List<String> scripts = new ArrayList<>();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(dirUrl.toURI()), pattern)) {
-            for (Path entry : stream) {
-                scripts.add(entry.getFileName().toString());
-            }
-        }
-        Collections.sort(scripts);
-
-        for (String fileName : scripts) {
-            dataLoader.load(new ClassPathCQLDataSet(cqlDir + fileName, false, false, CASSANDRA_UNIT_KEYSPACE));
-        }
+        Iterator<Path> pathIterator = newDirectoryStream(get(dirUrl.toURI()), pattern).iterator();
+        Spliterator<Path> pathSpliterator = spliteratorUnknownSize(pathIterator, SORTED);
+        stream(pathSpliterator, false)
+            .map(Path::getFileName)
+            .map(Path::toString)
+            .sorted()
+            .map(file -> cqlDir + file)
+            .map(dataSetLocation -> new ClassPathCQLDataSet(dataSetLocation, false, false, CASSANDRA_UNIT_KEYSPACE))
+            .forEach(dataLoader::load);
     }
 
     public static class CassandraPortInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {

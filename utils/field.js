@@ -20,6 +20,134 @@
 const _ = require('lodash');
 const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
 
+const fakeStringTemplateForFieldName = columnName => {
+    let fakeTemplate;
+    if (columnName === 'first_name') {
+        fakeTemplate = 'name.firstName';
+    } else if (columnName === 'last_name') {
+        fakeTemplate = 'name.lastName';
+    } else if (columnName === 'job_title') {
+        fakeTemplate = 'name.jobTitle';
+    } else if (columnName === 'telephone' || columnName === 'phone') {
+        fakeTemplate = 'phone.phoneNumber';
+    } else if (columnName === 'zip_code' || columnName === 'post_code') {
+        fakeTemplate = 'address.zipCode';
+    } else if (columnName === 'city') {
+        fakeTemplate = 'address.city';
+    } else if (columnName === 'street_name' || columnName === 'street') {
+        fakeTemplate = 'address.streetName';
+    } else if (columnName === 'country') {
+        fakeTemplate = 'address.country';
+    } else if (columnName === 'country_code') {
+        fakeTemplate = 'address.countryCode';
+    } else if (columnName === 'color') {
+        fakeTemplate = 'commerce.color';
+    } else if (columnName === 'account') {
+        fakeTemplate = 'finance.account';
+    } else if (columnName === 'account_name') {
+        fakeTemplate = 'finance.accountName';
+    } else if (columnName === 'currency_code') {
+        fakeTemplate = 'finance.currencyCode';
+    } else if (columnName === 'currency_name') {
+        fakeTemplate = 'finance.currencyName';
+    } else if (columnName === 'currency_symbol') {
+        fakeTemplate = 'finance.currencySymbol';
+    } else if (columnName === 'iban') {
+        fakeTemplate = 'finance.iban';
+    } else if (columnName === 'bic') {
+        fakeTemplate = 'finance.bic';
+    } else if (columnName === 'email') {
+        fakeTemplate = 'internet.email';
+    } else if (columnName === 'url') {
+        fakeTemplate = 'internet.url';
+    } else {
+        fakeTemplate = 'random.words';
+    }
+    return `{{${fakeTemplate}}}`;
+};
+
+const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => {
+    let data;
+    if (field.options && field.options.fakerTemplate) {
+        data = faker.faker(field.options.fakerTemplate);
+    } else if (field.fieldValidate && field.fieldValidateRules.includes('pattern')) {
+        const generated = field.createRandexp().gen();
+        if (type === 'csv') {
+            data = `"${generated.replace(/"/g, '')}"`;
+        } else if (type === 'cypress') {
+            data = generated.replace(/"/g, '');
+        } else {
+            data = generated;
+        }
+        if (data.length === 0) {
+            data = undefined;
+        }
+    } else if (field.fieldIsEnum) {
+        if (field.fieldValues.length !== 0) {
+            const enumValues = field.enumValues;
+            data = enumValues[faker.random.number(enumValues.length - 1)].name;
+        } else {
+            data = undefined;
+        }
+        // eslint-disable-next-line no-template-curly-in-string
+    } else if (['Integer', 'Long', 'Float', '${floatType}', 'Double', 'BigDecimal', 'Duration'].includes(field.fieldType)) {
+        data = faker.random.number({
+            max: field.fieldValidateRulesMax ? parseInt(field.fieldValidateRulesMax, 10) : undefined,
+            min: field.fieldValidateRulesMin ? parseInt(field.fieldValidateRulesMin, 10) : undefined,
+        });
+    } else if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(field.fieldType)) {
+        // Iso: YYYY-MM-DDTHH:mm:ss.sssZ
+        const isoDate = faker.date.recent(1, changelogDate).toISOString();
+        if (field.fieldType === 'LocalDate') {
+            data = isoDate.split('T')[0];
+        } else {
+            // Write the date without milliseconds so Java can parse it
+            // See https://stackoverflow.com/a/34053802/150868
+            // YYYY-MM-DDTHH:mm:ss
+            data = isoDate.split('.')[0];
+            if (type === 'cypress') {
+                // YYYY-MM-DDTHH:mm
+                data = data.substr(0, data.length - 3);
+            }
+        }
+    } else if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') {
+        data = '../fake-data/blob/hipster.png';
+    } else if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent === 'text') {
+        data = '../fake-data/blob/hipster.txt';
+    } else if (field.fieldType === 'String') {
+        data = faker.fake(fakeStringTemplateForFieldName(field.columnName));
+    } else if (field.fieldType === 'UUID') {
+        data = faker.random.uuid();
+    } else if (field.fieldType === 'Boolean') {
+        data = faker.random.boolean();
+    }
+
+    // Validation rules
+    if (data !== undefined && field.fieldValidate === true) {
+        // manage String max length
+        if (field.fieldValidateRules.includes('maxlength')) {
+            const maxlength = field.fieldValidateRulesMaxlength;
+            data = data.substring(0, maxlength);
+        }
+
+        // manage String min length
+        if (field.fieldValidateRules.includes('minlength')) {
+            const minlength = field.fieldValidateRulesMinlength;
+            data = data.length > minlength ? data : data + 'X'.repeat(minlength - data.length);
+        }
+
+        // test if generated data is still compatible with the regexp as we potentially modify it with min/maxLength
+        if (
+            field.fieldValidateRules.includes('pattern') &&
+            !new RegExp(`^${field.fieldValidateRulesPattern}$`).test(data.substring(1, data.length - 1))
+        ) {
+            data = undefined;
+        }
+    }
+
+    return data;
+};
+
 function prepareFieldForTemplates(entityWithConfig, field, generator) {
     const fieldOptions = field.options || {};
     _.defaults(field, {
@@ -100,6 +228,33 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     if (field.fieldValidate === true && field.fieldValidateRules.includes('maxlength')) {
         field.maxlength = field.fieldValidateRulesMaxlength || 255;
     }
+
+    const faker = entityWithConfig.faker;
+    field.createRandexp = () => faker.createRandexp(field.fieldValidateRulesPattern);
+
+    field.uniqueValue = [];
+
+    field.generateFakeData = (type = 'csv') => {
+        let data = generateFakeDataForField(field, faker, entityWithConfig.changelogDateForRecent, type);
+        // manage uniqueness
+        if (field.fieldValidate === true && field.fieldValidateRules.includes('unique')) {
+            let i = 0;
+            while (field.uniqueValue.indexOf(data) !== -1) {
+                if (i++ === 5) {
+                    data = undefined;
+                    break;
+                }
+                data = generateFakeDataForField(field, faker, entityWithConfig.changelogDateForRecent, type);
+            }
+            if (data !== undefined) {
+                field.uniqueValue.push(data);
+            }
+        }
+        if (data === undefined) {
+            generator.warning(`Error generating fake data for field ${field.fieldName}`);
+        }
+        return data;
+    };
     return field;
 }
 

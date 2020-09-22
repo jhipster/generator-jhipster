@@ -869,16 +869,20 @@ describe('JHipster generator for entity', () => {
                     assert.file(expectedFiles.clientNg2);
                     assert.file(expectedFiles.gatling);
                     assert.file(expectedFiles.fakeData);
+                });
 
-                    assert.fileContent(`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/foo.csv`, /1;New Leu Diverse Illinois;"0646"/);
+                it('creates reproducible liquibase data', () => {
+                    assert.fileContent(`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/foo.csv`, /1;Qatari salmon Monitored;65526;"6"/);
+                });
 
+                it('creates reproducible backend test', () => {
                     assert.fileContent(
                         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`,
-                        /DEFAULT_NUMBER_PATTERN_REQUIRED = "387"/
+                        /DEFAULT_NUMBER_PATTERN_REQUIRED = "66225"/
                     );
                     assert.fileContent(
                         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`,
-                        /UPDATED_NUMBER_PATTERN_REQUIRED = "468439"/
+                        /UPDATED_NUMBER_PATTERN_REQUIRED = "24"/
                     );
                 });
             });

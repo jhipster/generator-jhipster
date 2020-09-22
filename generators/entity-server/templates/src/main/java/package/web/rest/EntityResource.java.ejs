@@ -20,15 +20,7 @@ package <%= packageName %>.web.rest;
 
 <%_
 const viaService = service !== 'no';
-let isUsingMapsId = false;
-let mapsIdAssoc;
-for (idx in relationships) {
-    isUsingMapsId = relationships[idx].useJPADerivedIdentifier === true;
-    if (isUsingMapsId) {
-        mapsIdAssoc = relationships[idx];
-        break;
-    }
-}
+
 let manyToManyWithUser = false;
 for (idx in relationships) {
     if (relationships[idx].otherEntityName === 'user' && relationships[idx].relationshipType === 'many-to-many') {
@@ -97,7 +89,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 <%_ } _%>
 import org.springframework.http.ResponseEntity;
-<%_ if (!viaService && !saveUserSnapshot) { _%>
+<%_ if (databaseType === 'sql' && !viaService && (!saveUserSnapshot || isUsingMapsId === true)) { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 import org.springframework.web.bind.annotation.*;
@@ -126,7 +118,7 @@ import java.util.Optional;
 <%_ if (databaseType === 'cassandra') { _%>
 import java.util.UUID;
 <%_ } _%>
-<%_ if ((searchEngine !== false && !reactive) || fieldsContainNoOwnerOneToOne === true) { _%>
+<%_ if ((searchEngine !== false || fieldsContainNoOwnerOneToOne === true) && !reactive) { _%>
     <%_ if (!viaService) { _%>
 import java.util.stream.Collectors;
     <%_ } _%>
@@ -339,7 +331,7 @@ public class <%= entityClass %>Resource {
             .then(Mono.just(ResponseEntity.noContent()
                 .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (primaryKeyType !== 'String') { %>.toString()<% } %>)).build())
             );
-        <%_ } else { _%>
+        <%_ } else { %>
             .map(result -> ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (primaryKeyType !== 'String') { %>.toString()<% } %>)).build()
         );

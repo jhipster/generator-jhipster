@@ -88,7 +88,7 @@ function checkImageExist(opts = { cwd: './', appConfig: null }) {
         this.dockerBuildCommand = './mvnw -ntp -Pprod verify jib:dockerBuild';
     } else {
         imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/build/docker`);
-        this.dockerBuildCommand = './gradlew bootWar -Pprod jibDockerBuild';
+        this.dockerBuildCommand = './gradlew bootJar -Pprod jibDockerBuild';
     }
 
     if (shelljs.ls(imagePath).length === 0) {

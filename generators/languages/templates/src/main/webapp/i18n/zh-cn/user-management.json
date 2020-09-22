@@ -2,6 +2,7 @@
     "userManagement": {
         "home": {
             "title": "用户",
+            "refreshListLabel": "Refresh list",
             "createLabel": "创建新用户",
             "createOrEditLabel": "创建或编辑用户"
         },

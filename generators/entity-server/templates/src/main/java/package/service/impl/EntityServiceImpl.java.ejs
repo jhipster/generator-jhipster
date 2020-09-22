@@ -31,15 +31,7 @@ const entityToDto = 'toDto';
 const entityToDtoReference = mapper + '::'+ 'toDto';
 const repository = entityInstance  + 'Repository';
 const searchRepository = entityInstance  + 'SearchRepository';
-let isUsingMapsId = false;
-let mapsIdAssoc;
-for (idx in relationships) {
-    isUsingMapsId = relationships[idx].useJPADerivedIdentifier === true;
-    if (isUsingMapsId) {
-        mapsIdAssoc = relationships[idx];
-        break;
-    }
-}
+
 _%>
 <%_ if (service === 'serviceImpl') { _%>
 import <%= packageName %>.service.<%= entityClass %>Service;
@@ -171,6 +163,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ if (service !== 'serviceImpl') { _%>
     /**
      * Returns the number of <%= entityInstancePlural %> available.
+     * @return the number of entities in the database.
      *
      */
     <%_ } _%>
@@ -214,6 +207,9 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
      * Delete the <%= entityInstance %> by id.
      *
      * @param id the id of the entity.
+<%_ if (reactive) { _%>
+     * @return a Mono to signal the deletion
+<%_ } _%>
      */
     <%_ } _%>
     <%_ if (service === 'serviceImpl') { _%>

@@ -6,6 +6,27 @@ updates:
           interval: 'weekly'
       open-pull-requests-limit: 10
 
+    - package-ecosystem: 'npm'
+      directory: '/generators/client/templates/angular/'
+      schedule:
+          interval: 'daily'
+      open-pull-requests-limit: 5
+      versioning-strategy: increase
+
+    - package-ecosystem: 'npm'
+      directory: '/generators/client/templates/react/'
+      schedule:
+          interval: 'daily'
+      open-pull-requests-limit: 5
+      versioning-strategy: increase
+
+    - package-ecosystem: 'npm'
+      directory: '/generators/client/templates/vue/'
+      schedule:
+          interval: 'daily'
+      open-pull-requests-limit: 5
+      versioning-strategy: increase
+
     - package-ecosystem: 'github-actions'
       directory: '/'
       schedule:

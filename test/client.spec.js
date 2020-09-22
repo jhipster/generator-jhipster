@@ -5,10 +5,10 @@ const getFilesForOptions = require('./utils/utils').getFilesForOptions;
 const expectedFiles = require('./utils/expected-files');
 const angularFiles = require('../generators/client/files-angular').files;
 const reactFiles = require('../generators/client/files-react').files;
-const constants = require('../generators/generator-constants');
-
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const { appDefaultConfig } = require('../generators/generator-defaults');
+const {
+    SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT, VUE },
+} = require('../generators/generator-constants');
 
 describe('JHipster client generator', () => {
     describe('generate client with React', () => {
@@ -28,6 +28,7 @@ describe('JHipster client generator', () => {
         });
         it('creates expected files for react configuration for client generator', () => {
             assert.noFile(expectedFiles.maven);
+            assert.file(expectedFiles.clientCommon);
             assert.file(
                 getFilesForOptions(reactFiles, {
                     enableTranslation: true,
@@ -39,6 +40,12 @@ describe('JHipster client generator', () => {
         });
         it('contains clientFramework with react value', () => {
             assert.fileContent('.yo-rc.json', /"clientFramework": "react"/);
+        });
+        it('should not contain version placeholders at package.json', () => {
+            assert.noFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_COMMON/);
+            assert.noFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_ANGULAR/);
+            assert.noFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_REACT/);
+            assert.noFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_VUE/);
         });
     });
 
@@ -59,10 +66,11 @@ describe('JHipster client generator', () => {
         });
 
         it('creates expected files for default configuration for client generator', () => {
-            assert.noFile(expectedFiles.common);
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
+            assert.file(expectedFiles.common);
             assert.file(expectedFiles.i18nJson);
+            assert.file(expectedFiles.clientCommon);
             assert.file(
                 getFilesForOptions(angularFiles, {
                     enableTranslation: true,
@@ -77,6 +85,43 @@ describe('JHipster client generator', () => {
         });
         it('contains clientPackageManager with npm value', () => {
             assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
+        });
+        it('should not contain version placeholders at package.json', () => {
+            assert.noFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_COMMON/);
+            assert.noFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_ANGULAR/);
+            assert.noFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_REACT/);
+            assert.noFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_VUE/);
+        });
+    });
+
+    describe('--skip-jhipster-dependencies', () => {
+        [ANGULAR, REACT, VUE].forEach(clientFramework => {
+            describe(`and ${clientFramework}`, () => {
+                let runResult;
+                before(() => {
+                    return helpers
+                        .create(require.resolve('../generators/app'))
+                        .withOptions({
+                            fromCli: true,
+                            skipInstall: true,
+                            defaultLocalConfig: { ...appDefaultConfig, clientFramework, skipServer: true },
+                            skipJhipsterDependencies: true,
+                        })
+                        .run()
+                        .then(result => {
+                            runResult = result;
+                        });
+                });
+
+                after(() => runResult.cleanup());
+
+                it('should add clientFramework to .yo-rc.json', () => {
+                    runResult.assertFileContent('.yo-rc.json', `"clientFramework": "${clientFramework}"`);
+                });
+                it('should not add generator-jhipster to package.json', () => {
+                    runResult.assertNoFileContent('package.json', 'generator-jhipster');
+                });
+            });
         });
     });
 });

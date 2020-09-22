@@ -26,27 +26,7 @@ jhipster:
         authentication:
             jwt:
                 base64-secret: <%= jwtSecretKey %>
-<%_ if (monitoring === 'elk') { _%>
-    logging:
-        logstash: # forward logs to ELK
-            enabled: true
-            host: jhipster-logstash
-    metrics:
-        logs: # report metrics in the logs
-            enabled: true
-            report-frequency: 60 # in seconds
-
-management:
-    metrics:
-        export:
-            prometheus:
-                enabled: false
-<%_ } _%>
 <%_ if (monitoring === 'prometheus') { _%>
-    logging:
-        logstash: # do not forward logs to ELK
-            enabled: false
-            host: jhipster-logstash
     metrics:
         logs: # do not report metrics in the logs
             enabled: false
@@ -57,16 +37,8 @@ management:
             prometheus:
                 enabled: true
 <%_ } _%>  
-<%_ if (consoleOptions && consoleOptions.includes('zipkin') || !skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
+<%_ if (!skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
 spring:
-    <%_ if (consoleOptions && consoleOptions.includes('zipkin')) { _%>
-    zipkin:
-        base-url: http://jhipster-zipkin:9411
-        enabled: true
-    sleuth:
-        sampler:
-            probability: 1 # report 100% of traces to Zipkin
-    <%_ } _%>
     <%_ if (!skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
     cloud:
         consul:

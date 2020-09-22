@@ -21,21 +21,24 @@ const JDLUnaryOption = require('../../models/jdl-unary-option');
 const JDLBinaryOption = require('../../models/jdl-binary-option');
 const UnaryOptions = require('../../jhipster/unary-options');
 const BinaryOptions = require('../../jhipster/binary-options');
+const { OptionValues, getOptionName } = require('../../jhipster/binary-options');
 
 module.exports = { convertOptions };
 
 /**
  * Convert unary and binary options to JDLUnary & JDLBinary option classes.
  * @param {Object} parsedOptions - the parsed option object.
+ * @param {Array<Object>} useOptions - the parsed option object, using the use form.
  * @returns {Array<JDLUnaryOption|JDLBinaryOption>} the converted JDLUnaryOption & JDLBinaryOption objects.
  */
-function convertOptions(parsedOptions) {
+function convertOptions(parsedOptions, useOptions) {
     if (!parsedOptions) {
         throw new Error('Options have to be passed so as to be converted.');
     }
     const convertedUnaryOptions = convertUnaryOptions(parsedOptions);
     const convertedBinaryOptions = convertBinaryOptions(parsedOptions);
-    return [...convertedUnaryOptions, ...convertedBinaryOptions];
+    const convertedUseOptions = convertUseOptions(useOptions);
+    return [...convertedUnaryOptions, ...convertedBinaryOptions, ...convertedUseOptions];
 }
 
 function convertUnaryOptions(parsedOptions) {
@@ -76,4 +79,28 @@ function convertBinaryOptions(parsedOptions) {
         });
     });
     return convertedBinaryOptions;
+}
+
+function convertUseOptions(useOptions) {
+    const convertedUseOptions = [];
+
+    useOptions.forEach(useValue => {
+        const { optionValues, list, excluded } = useValue;
+
+        optionValues.forEach(optionValue => {
+            if (!OptionValues[optionValue]) {
+                return;
+            }
+            convertedUseOptions.push(
+                new JDLBinaryOption({
+                    name: getOptionName(OptionValues[optionValue]),
+                    value: optionValue,
+                    entityNames: list,
+                    excludedNames: excluded,
+                })
+            );
+        });
+    });
+
+    return convertedUseOptions;
 }

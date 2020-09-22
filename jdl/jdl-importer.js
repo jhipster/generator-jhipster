@@ -20,7 +20,8 @@ const JDLReader = require('./readers/jdl-reader');
 const DocumentParser = require('./converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter');
 const JDLWithoutApplicationToJSONConverter = require('./converters/jdl-to-json/jdl-without-application-to-json-converter');
 const JDLWithApplicationsToJSONConverter = require('./converters/jdl-to-json/jdl-with-applications-to-json-converter');
-const JHipsterApplicationExporter = require('./exporters/jhipster-application-exporter');
+const JHipsterApplicationExporter = require('./exporters/applications/jhipster-application-exporter');
+const JHipsterApplicationFormatter = require('./exporters/applications/jhipster-application-formatter');
 const JHipsterDeploymentExporter = require('./exporters/jhipster-deployment-exporter');
 const JHipsterEntityExporter = require('./exporters/jhipster-entity-exporter');
 const BusinessErrorChecker = require('./validators/business-error-checker');
@@ -141,6 +142,7 @@ function getJDLObject(parsedJDLContent, configuration) {
     let applicationType = configuration.applicationType;
     let generatorVersion = configuration.generatorVersion;
     let creationTimestamp = configuration.creationTimestampConfig;
+    let databaseType = configuration.databaseType;
     let skippedUserManagement = false;
 
     if (configuration.application) {
@@ -149,6 +151,7 @@ function getJDLObject(parsedJDLContent, configuration) {
         generatorVersion = configuration.application['generator-jhipster'].jhipsterVersion;
         creationTimestamp = configuration.application['generator-jhipster'].creationTimestamp;
         skippedUserManagement = configuration.application['generator-jhipster'].skipUserManagement;
+        databaseType = configuration.application['generator-jhipster'].databaseType;
     }
 
     return DocumentParser.parseFromConfigurationObject({
@@ -158,6 +161,7 @@ function getJDLObject(parsedJDLContent, configuration) {
         generatorVersion,
         creationTimestamp,
         skippedUserManagement,
+        databaseType,
     });
 }
 
@@ -208,11 +212,11 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
         exportedEntities: [],
         exportedDeployments: [],
     };
-    const exportedApplication = JHipsterApplicationExporter.exportApplicationInCurrentDirectory(
-        jdlObject.getApplications()[0],
-        configuration
-    );
-    importState.exportedApplications.push(exportedApplication);
+    const formattedApplication = JHipsterApplicationFormatter.formatApplicationToExport(jdlObject.getApplications()[0], configuration);
+    if (!skipFileGeneration) {
+        JHipsterApplicationExporter.exportApplication(formattedApplication);
+    }
+    importState.exportedApplications.push(formattedApplication);
     const jdlApplication = jdlObject.getApplications()[0];
     const applicationName = jdlApplication.getConfigurationOptionValue('baseName');
     const entitiesPerApplicationMap = JDLWithApplicationsToJSONConverter.convert({
@@ -221,7 +225,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
     });
     const jsonEntities = entitiesPerApplicationMap.get(applicationName);
     importState.exportedApplicationsWithEntities[applicationName] = {
-        config: exportedApplication['generator-jhipster'],
+        config: formattedApplication['generator-jhipster'],
         entities: [],
     };
     if (jsonEntities.length !== 0) {
@@ -247,7 +251,11 @@ function importApplicationsAndEntities(jdlObject, configuration) {
         exportedDeployments: [],
     };
 
-    importState.exportedApplications = JHipsterApplicationExporter.exportApplications(jdlObject.applications, configuration);
+    const formattedApplications = JHipsterApplicationFormatter.formatApplicationsToExport(jdlObject.applications, configuration);
+    importState.exportedApplications = formattedApplications;
+    if (!skipFileGeneration) {
+        JHipsterApplicationExporter.exportApplications(formattedApplications);
+    }
     const entitiesPerApplicationMap = JDLWithApplicationsToJSONConverter.convert({
         jdlObject,
         creationTimestamp,

@@ -22,12 +22,16 @@ const pluralize = require('pluralize');
 const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
 const { stringify } = require('.');
 
-function prepareRelationshipForTemplates(entityWithConfig, relationship, generator) {
+function prepareRelationshipForTemplates(entityWithConfig, relationship, generator, ignoreMissingRequiredRelationship) {
     const entityName = entityWithConfig.name;
     const relationshipOptions = relationship.options || {};
     const otherEntityName = relationship.otherEntityName;
-    const otherEntityData = generator.getEntityConfig(otherEntityName).getAll();
     const jhiTablePrefix = entityWithConfig.jhiTablePrefix || generator.getTableName(entityWithConfig.jhiPrefix);
+
+    const otherEntityData = generator.getEntityConfig(otherEntityName).getAll();
+    if (!otherEntityData && !this.isBuiltInEntity(otherEntityName)) {
+        throw new Error(`Error at entity ${entityName}: could not find the entity of the relationship ${stringify(relationship)}`);
+    }
 
     relationship.otherEntityIsEmbedded = otherEntityData.embedded;
     if (otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
@@ -35,16 +39,34 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     }
 
     relationship.otherEntityPrimaryKeyType =
-        generator.isBuiltInUserEntity(otherEntityName) && entityWithConfig.authenticationType === 'oauth2'
+        generator.isBuiltInUser(otherEntityName) && entityWithConfig.authenticationType === 'oauth2'
             ? 'String'
             : generator.getPkType(entityWithConfig.databaseType);
 
     // Look for fields at the other other side of the relationship
     if (otherEntityData.relationships) {
         let otherRelationship;
-        if (relationship.relationshipType === 'many-to-one' || !relationship.ownerSide) {
+        if (relationship.otherEntityRelationshipName) {
             otherRelationship = otherEntityData.relationships.find(otherSideRelationship => {
-                if (_.upperFirst(otherSideRelationship.otherEntityName) !== entityName) {
+                if (_.upperFirst(otherSideRelationship.otherEntityName) !== _.upperFirst(entityName)) {
+                    return false;
+                }
+                return otherSideRelationship.relationshipName === relationship.otherEntityRelationshipName;
+            });
+            if (
+                otherRelationship &&
+                otherRelationship.otherEntityRelationshipName &&
+                otherRelationship.otherEntityRelationshipName !== relationship.relationshipName
+            ) {
+                throw new Error(
+                    `Error at entity ${entityName}: relationship name is not synchronized ${stringify(relationship)} with ${stringify(
+                        otherRelationship
+                    )}`
+                );
+            }
+        } else {
+            otherRelationship = otherEntityData.relationships.find(otherSideRelationship => {
+                if (_.upperFirst(otherSideRelationship.otherEntityName) !== _.upperFirst(entityName)) {
                     return false;
                 }
                 if (!otherSideRelationship.otherEntityRelationshipName) {
@@ -52,31 +74,19 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
                 }
                 return otherSideRelationship.otherEntityRelationshipName === relationship.relationshipName;
             });
-        } else {
-            otherRelationship = otherEntityData.relationships.find(otherSideRelationship => {
-                if (_.upperFirst(otherSideRelationship.otherEntityName) !== entityName) {
-                    return false;
-                }
-                if (!relationship.otherEntityRelationshipName) {
-                    return false;
-                }
-                return relationship.otherEntityRelationshipName === otherSideRelationship.relationshipName;
-            });
         }
         if (otherRelationship) {
-            if (
-                relationship.otherEntityRelationshipName &&
-                relationship.otherEntityRelationshipName !== otherRelationship.relationshipName
-            ) {
-                throw new Error(`Relationship name is not synchronized ${stringify(relationship)} with ${stringify(otherRelationship)}`);
-            }
             if (
                 !(relationship.relationshipType === 'one-to-one' && otherRelationship.relationshipType === 'one-to-one') &&
                 !(relationship.relationshipType === 'many-to-one' && otherRelationship.relationshipType === 'one-to-many') &&
                 !(relationship.relationshipType === 'one-to-many' && otherRelationship.relationshipType === 'many-to-one') &&
                 !(relationship.relationshipType === 'many-to-many' && otherRelationship.relationshipType === 'many-to-many')
             ) {
-                throw new Error(`Relationship type is not synchronized ${stringify(relationship)} with ${stringify(otherRelationship)}`);
+                throw new Error(
+                    `Error at entity ${entityName}: relationship type is not synchronized ${stringify(relationship)} with ${stringify(
+                        otherRelationship
+                    )}`
+                );
             }
             _.defaults(relationship, {
                 otherEntityRelationshipName: otherRelationship.relationshipName,
@@ -84,8 +94,14 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
                 otherEntityRelationshipNameCapitalized: otherRelationship.relationshipNameCapitalized,
                 otherEntityRelationshipNameCapitalizedPlural: relationship.relationshipNameCapitalizedPlural,
             });
+        } else if (
+            !ignoreMissingRequiredRelationship &&
+            generator.jhipsterConfig.databaseType !== 'neo4j' &&
+            (relationship.relationshipType === 'one-to-many' || relationship.ownerSide === false)
+        ) {
+            throw new Error(`Error at entity ${entityName}: could not find the other side of the relationship ${stringify(relationship)}`);
         } else {
-            generator.warning(`Could not find the other side of the relationship ${stringify(relationship)}`);
+            generator.debug(`Entity ${entityName}: Could not find the other side of the relationship ${stringify(relationship)}`);
         }
     }
 
@@ -111,9 +127,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         otherEntityFieldCapitalized: _.upperFirst(relationship.otherEntityField),
         otherEntityTableName:
             otherEntityData.entityTableName ||
-            generator.getTableName(
-                generator.isBuiltInUserEntity(otherEntityName) ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName
-            ),
+            generator.getTableName(generator.isBuiltInUser(otherEntityName) ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName),
     });
 
     _.defaults(relationship, {
@@ -126,9 +140,9 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     });
 
     if (entityWithConfig.dto === 'mapstruct') {
-        if (otherEntityData.dto !== 'mapstruct' && !generator.isBuiltInUserEntity(otherEntityName)) {
+        if (otherEntityData.dto !== 'mapstruct' && !generator.isBuiltInUser(otherEntityName)) {
             generator.warning(
-                `This entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
+                `Entity ${entityName}: this entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`
             );
         }
     }
@@ -139,7 +153,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     }
 
     if (relationship.otherEntityAngularName === undefined) {
-        if (generator.isBuiltInUserEntity(otherEntityName)) {
+        if (generator.isBuiltInUser(otherEntityName)) {
             relationship.otherEntityAngularName = 'User';
         } else {
             const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
@@ -150,10 +164,10 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
 
     _.defaults(relationship, {
         otherEntityStateName: _.kebabCase(relationship.otherEntityAngularName),
-        jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering,
+        jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering && !entityWithConfig.reactive,
     });
 
-    if (!generator.isBuiltInUserEntity(otherEntityName)) {
+    if (!generator.isBuiltInUser(otherEntityName)) {
         _.defaults(relationship, {
             otherEntityFileName: _.kebabCase(relationship.otherEntityAngularName),
             otherEntityFolderName: _.kebabCase(relationship.otherEntityAngularName),
@@ -201,7 +215,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
 
     if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes('required')) {
         if (entityName.toLowerCase() === relationship.otherEntityName.toLowerCase()) {
-            generator.warning('Required relationships to the same entity are not supported.');
+            generator.warning(`Error at entity ${entityName}: required relationships to the same entity are not supported.`);
         } else {
             relationship.relationshipValidate = relationship.relationshipRequired = entityWithConfig.validation = true;
         }

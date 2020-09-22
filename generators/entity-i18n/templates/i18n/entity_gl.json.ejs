@@ -18,10 +18,11 @@
 -%><%
 let helpBlocks = 0; %>
 {
-    "<%= angularAppName %>": {
+    "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPlural %>",
+                "refreshListLabel": "Refresh list",
                 "createLabel": "Crear novo <%= entityClassHumanized %>",
                 "createOrEditLabel": "Crear ou editar <%= entityClassHumanized %>"<% if (searchEngine !== false) { %>,
                 "search": "Search for <%= entityClassHumanized %>"<% } %>,

@@ -26,6 +26,8 @@ const {
 const optionTokens = [
     { name: 'WITH', pattern: 'with' },
     { name: 'EXCEPT', pattern: 'except' },
+    { name: 'USE', pattern: 'use' },
+    { name: 'FOR', pattern: 'for' },
     { name: 'CLIENT_ROOT_FOLDER', pattern: 'clientRootFolder', type: 'binary' },
     { name: 'NO_FLUENT_METHOD', pattern: 'noFluentMethod', type: 'unary' },
     { name: 'READ_ONLY', pattern: 'readOnly', type: 'unary' },

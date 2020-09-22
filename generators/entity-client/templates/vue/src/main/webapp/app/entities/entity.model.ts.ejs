@@ -20,27 +20,20 @@
 const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto, customDateType = 'Date', embedded);
 const typeImports = generateEntityClientImports(relationships, dto);
 const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields);
+const enumImports = generateEntityClientEnumImports(fields);
 %>
 <%_ typeImports.forEach( (importedPath, importedType) => {
   importedPath = importedPath.replace('core/user/user.model', 'shared/model/user.model');
   importedPath = importedPath.replace('app/', '@/');
 _%>
+<%_ if (importedType !== "I".concat(entityAngularName)) { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
+<%_ } _%>
 <%_ }); _%>
 
-<%_ const enumsAlreadyDeclared = [];
-fields.forEach(field => {
-    if (field.fieldIsEnum && !enumsAlreadyDeclared.includes(field.fieldType)) {
-        enumsAlreadyDeclared.push(field.fieldType); _%>
-export const enum <%= field.fieldType %> {<%
-        const enums = field.enumValues;
-        for (let i = 0; i < enums.length; i++) { %>
-    <%= enums[i].name %> = '<%= enums[i].value %>'<%if (i < enums.length - 1) { %>,<% }
-        } %>
-}
-
-<%_ }
-}); _%>
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
+import { <%- importedType %> } from '<%- importedPath.replace('app/', '@/'); %>';
+<%_ }); _%>
 export interface I<%= entityAngularName %> {
     <%_ variablesWithTypes.forEach(variablesWithType => { _%>
     <%- variablesWithType %>;

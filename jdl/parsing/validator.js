@@ -238,11 +238,6 @@ const deploymentConfigPropsValidations = {
         pattern: ALPHANUMERIC,
         msg: 'clusteredDbApps property',
     },
-    CONSOLE_OPTIONS: {
-        type: 'NAME',
-        pattern: ALPHABETIC_LOWER,
-        msg: 'consoleOptions property',
-    },
     // This is not secure, need to find a better way
     /*   ADMIN_PASSWORD: {
     type: 'STRING',

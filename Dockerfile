@@ -1,11 +1,13 @@
-FROM ubuntu:bionic
-
+FROM ubuntu:20.04
 RUN \
   # configure the "jhipster" user
   groupadd jhipster && \
   useradd jhipster -s /bin/bash -m -g jhipster -G sudo && \
   echo 'jhipster:jhipster' |chpasswd && \
   mkdir /home/jhipster/app && \
+  export DEBIAN_FRONTEND=noninteractive && \
+  export TZ=Europe\Paris && \
+  ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
   apt-get update && \
   # install utilities
   apt-get install -y \
@@ -22,16 +24,13 @@ RUN \
     build-essential \
     software-properties-common \
     sudo && \
-  # install tzdata
-  export DEBIAN_FRONTEND=noninteractive && \
-  apt-get install -y tzdata && \
   # install OpenJDK 11
   add-apt-repository ppa:openjdk-r/ppa && \
   apt-get update && \
   apt-get install -y openjdk-11-jdk && \
   update-java-alternatives -s java-1.11.0-openjdk-amd64 && \
   # install node.js
-  wget https://nodejs.org/dist/v12.16.1/node-v12.16.1-linux-x64.tar.gz -O /tmp/node.tar.gz && \
+  wget https://nodejs.org/dist/v12.18.3/node-v12.18.3-linux-x64.tar.gz -O /tmp/node.tar.gz && \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
   # upgrade npm
   npm install -g npm && \

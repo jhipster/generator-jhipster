@@ -184,7 +184,7 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                         new JDLBinaryOption({
                             name: BinaryOptions.SEARCH,
                             entityNames: ['Employee'],
-                            value: BinaryOptionValues.search.ELASTIC_SEARCH,
+                            value: BinaryOptionValues.search.ELASTICSEARCH,
                         }),
                     ]);
                 });
@@ -541,7 +541,6 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                     expect(deployment.appsFolders).to.deep.equal(new Set(['tata', 'titi']));
                     delete deployment.appsFolders;
                     delete deployment.clusteredDbApps;
-                    delete deployment.consoleOptions;
 
                     expect(deployment).to.deep.equal({
                         deploymentType: 'docker-compose',

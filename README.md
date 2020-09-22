@@ -77,21 +77,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
     </tr>
     <tr>
       <td align="center" valign="middle">
-        <a href="https://fair-laan.se/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/fair-laan.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://matchbanker.pl/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/matchbanker.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://matchbanker.no/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/matchbanker.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
         <a href="https://writersperhour.com/urgent-essay-writing-service" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/writersperhour.png">
         </a>
@@ -101,8 +86,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/minitool.png">
         </a>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="middle">
         <a href="https://edubirdie.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/edubirdie.png">	
@@ -118,14 +101,16 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/jim-van-dam.png">	
         </a>
       </td>
-      <td align="center" valign="middle">	
-        <a href="https://papersowl.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/papersowl.png">	
+    </tr>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://casino-academia.com/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/casinoacademia.png">
         </a>
       </td>
-      <td align="center" valign="middle">	
+      <td align="center" valign="middle">
         <a href="https://raj.bet/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/rajbet.png">	
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/rajbet.png">
         </a>
       </td>
     </tr>

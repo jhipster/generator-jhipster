@@ -49,12 +49,7 @@ function askForStorageType() {
 
     let storageEnabled = false;
     this.appConfigs.some((appConfig, index) => {
-        if (
-            appConfig.prodDatabaseType !== 'no' ||
-            appConfig.searchEngine === 'elasticsearch' ||
-            appConfig.monitoring === 'elk' ||
-            appConfig.monitoring === 'prometheus'
-        ) {
+        if (appConfig.prodDatabaseType !== 'no' || appConfig.searchEngine === 'elasticsearch' || appConfig.monitoring === 'prometheus') {
             storageEnabled = true;
             return storageEnabled;
         }

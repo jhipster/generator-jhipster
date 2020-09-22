@@ -140,7 +140,7 @@ describe('<%= entityClass %> e2e test', () => {
 
       <%_ } else if (fieldType === 'Duration') { _%>
       await updatePage.<%= fieldName %>Input.sendKeys('PT12S');
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('12');
+      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('PT12S');
 
       <%_ } else if (fieldType === 'Boolean') { _%>
       const selected<%= fieldNameCapitalized %> = await updatePage.<%= fieldName %>Input.isSelected();
@@ -196,9 +196,6 @@ describe('<%= entityClass %> e2e test', () => {
       await waitUntilHidden(updatePage.saveButton);
       expect(await isVisible(updatePage.saveButton)).to.be.false;
 
-      await waitUntilDisplayed(listPage.successAlert);
-      expect(await listPage.successAlert.isDisplayed()).to.be.true;
-
       await waitUntilCount(listPage.records, beforeRecordsCount + 1);
       expect(await listPage.records.count()).to.eq(beforeRecordsCount + 1);
     });<%= closeBlockComment %>
@@ -220,7 +217,6 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilHidden(deleteDialog.dialog);
 
         expect(await isVisible(deleteDialog.dialog)).to.be.false;
-        expect(await listPage.dangerAlert.isDisplayed()).to.be.true;
 
         await waitUntilCount(listPage.records, beforeRecordsCount);
         expect(await listPage.records.count()).to.eq(beforeRecordsCount);
@@ -281,9 +277,9 @@ describe('<%= entityClass %> e2e test', () => {
           expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('2019-01-01T02:30');
 
         <%_ } else if (fieldType === 'Duration') { _%>
-          await updatePage.<%= fieldName %>Input.clear();
+          await clear(updatePage.<%= fieldName %>Input);
           await updatePage.<%= fieldName %>Input.sendKeys('PT14S');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('14');
+          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('PT14S');
 
         <%_ } else if (fieldType === 'Boolean') { _%>
           const selected<%= fieldNameCapitalized %> = await updatePage.<%= fieldName %>Input.isSelected();
@@ -323,7 +319,6 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilHidden(updatePage.saveButton);
 
         expect(await isVisible(updatePage.saveButton)).to.be.false;
-        expect(await listPage.infoAlert.isDisplayed()).to.be.true;
         await waitUntilCount(listPage.records, beforeRecordsCount + 1);
       });
     });

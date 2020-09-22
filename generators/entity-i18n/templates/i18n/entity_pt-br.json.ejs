@@ -20,10 +20,11 @@ let helpBlocks = 0; %>
 {
     <% // Male (default) variant
     if (entityI18nVariant !== 'female') { %>
-    "<%= angularAppName %>": {
+    "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
+                "refreshListLabel": "Refresh list",
                 "createLabel": "Criar novo <%= entityClassHumanized %>",
                 "createOrEditLabel": "Criar ou editar <%= entityClassHumanized %>"<% if (searchEngine !== false) { %>,
                 "search": "Pesquisar por <%= entityClassHumanized %>"<% } %>,
@@ -59,7 +60,7 @@ let helpBlocks = 0; %>
     }<%     } %>
     <% } else {
       // Female variant %>
-    "<%= angularAppName %>": {
+    "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",

@@ -27,6 +27,9 @@ import <%= packageName %>.AbstractNeo4jIT;
 <%_ if (cacheProvider === 'redis') { _%>
 import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
+<%_ if (reactiveSqlTestContainers) { _%>
+import <%= packageName %>.ReactiveSqlTestContainerExtension;
+<%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (databaseType === 'sql' && reactive) { _%>
 import <%= packageName %>.config.Constants;
@@ -44,6 +47,9 @@ import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import <%= packageName %>.service.EntityManager;
+<%_ } _%>
 import <%= packageName %>.service.mapper.UserMapper;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%= packageName %>.web.rest.vm.ManagedUserVM;
@@ -51,10 +57,7 @@ import <%= packageName %>.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if (cacheProvider === 'redis') { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseType === 'neo4j' || cacheProvider === 'redis' || reactiveSqlTestContainers) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,6 +146,9 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 <%_ if (databaseType === 'neo4j') { _%>
 @ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
+<%_ if (reactiveSqlTestContainers) { _%>
+@ExtendWith(ReactiveSqlTestContainerExtension.class)
+<%_ } _%>
 class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     private static final String DEFAULT_LOGIN = "johndoe";
@@ -205,7 +211,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
 
     @Autowired
     private UserMapper userMapper;
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+    <%_ if (databaseType === 'sql') { _%>
 
     @Autowired
     private EntityManager em;
@@ -246,7 +252,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which has a required relationship to the User entity.
      */
-    public static <%= asEntity('User') %> createEntity(<% if (databaseType === 'sql' && !reactive) { %>EntityManager em<% } %>) {
+    public static <%= asEntity('User') %> createEntity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra' || (authenticationType === 'oauth2' && databaseType !== 'couchbase')) { _%>
         user.setId(UUID.randomUUID().toString());
@@ -268,6 +274,20 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         <%_ } _%>
         return user;
     }
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+
+    /**
+     * Delete all the users from the database.
+     */
+    public static void deleteEntities(EntityManager em) {
+        try {
+            em.deleteAll("<%= jhiTablePrefix %>_user_authority").block();
+            em.deleteAll(User.class).block();
+        } catch (Exception e) {
+            // It can fail, if other entities are still referring this - it will be removed later.
+        }
+    }
+    <%_ } _%>
 
     @BeforeEach
     public void initTest() {
@@ -276,10 +296,8 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         <%_ } _%>
         <%_ if (databaseType !== 'sql' || reactive) { _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
-        user = createEntity();
-        <%_ } else { _%>
-        user = createEntity(em);
         <%_ } _%>
+        user = createEntity(<% if (databaseType === 'sql' ) { %>em<% } _%>);
         <%_ if (databaseType === 'sql') { _%>
         user.setLogin(DEFAULT_LOGIN);
         user.setEmail(DEFAULT_EMAIL);
@@ -504,7 +522,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
             <%_ } _%>
             .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
         <%_ } else { _%>
-        <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=createdDate,DESC")
+        <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=id,DESC")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -521,6 +539,29 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         assertThat(foundUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
         <%_ } _%>
     }
+
+    <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
+    @Test
+    <%_ if (!reactive) { _%>
+    @Transactional
+    <%_ } _%>
+    void getAllUsersSortedByParameters() throws Exception {
+        // Initialize the database
+        userRepository.<% if (reactive) { %>save<% } else { %>saveAndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+
+        <%_ if (!reactive) { _%>
+            restUserMockMvc.perform(get("/api/users?sort=resetKey,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+            restUserMockMvc.perform(get("/api/users?sort=password,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+            restUserMockMvc.perform(get("/api/users?sort=resetKey,id,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+            restUserMockMvc.perform(get("/api/users?sort=id,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        <%_ } else { _%>
+            webTestClient.get().uri("/api/users?sort=resetKey,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
+            webTestClient.get().uri("/api/users?sort=password,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
+            webTestClient.get().uri("/api/users?sort=resetKey,id,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
+            webTestClient.get().uri("/api/users?sort=id,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk();
+        <%_ } _%>
+    }
+    <%_ } _%>
 
     @Test
     <%_ if (databaseType === 'sql' && !reactive) { _%>
@@ -616,7 +657,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         managedUserVM.setFirstName(UPDATED_FIRSTNAME);
         managedUserVM.setLastName(UPDATED_LASTNAME);
         managedUserVM.setEmail(UPDATED_EMAIL);
-        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setActivated(updatedUser.isActivated());
         <%_ if (databaseType !== 'cassandra') { _%>
         managedUserVM.setImageUrl(UPDATED_IMAGEURL);
         <%_ } _%>
@@ -682,7 +723,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         managedUserVM.setFirstName(UPDATED_FIRSTNAME);
         managedUserVM.setLastName(UPDATED_LASTNAME);
         managedUserVM.setEmail(UPDATED_EMAIL);
-        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setActivated(updatedUser.isActivated());
         <%_ if (databaseType !== 'cassandra') { _%>
         managedUserVM.setImageUrl(UPDATED_IMAGEURL);
         <%_ } _%>
@@ -767,7 +808,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         managedUserVM.setFirstName(updatedUser.getFirstName());
         managedUserVM.setLastName(updatedUser.getLastName());
         managedUserVM.setEmail("jhipster@localhost");// this email should already be used by anotherUser
-        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setActivated(updatedUser.isActivated());
         <%_ if (databaseType !== 'cassandra') { _%>
         managedUserVM.setImageUrl(updatedUser.getImageUrl());
         <%_ } _%>
@@ -838,7 +879,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         managedUserVM.setFirstName(updatedUser.getFirstName());
         managedUserVM.setLastName(updatedUser.getLastName());
         managedUserVM.setEmail(updatedUser.getEmail());
-        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setActivated(updatedUser.isActivated());
         <%_ if (databaseType !== 'cassandra') { _%>
         managedUserVM.setImageUrl(updatedUser.getImageUrl());
         <%_ } _%>
@@ -970,7 +1011,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         assertThat(user.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(user.getLastName()).isEqualTo(DEFAULT_LASTNAME);
         assertThat(user.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        assertThat(user.getActivated()).isTrue();
+        assertThat(user.isActivated()).isTrue();
         <%_ if (databaseType !== 'cassandra') { _%>
         assertThat(user.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         <%_ } _%>

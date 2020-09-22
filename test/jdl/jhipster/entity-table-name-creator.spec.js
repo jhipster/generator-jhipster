@@ -17,38 +17,9 @@
  */
 
 const { expect } = require('chai');
-const { createFromEntityName, getTableNameFromEntityName } = require('../../../jdl/jhipster/entity-table-name-creator');
+const { getTableNameFromEntityName } = require('../../../jdl/jhipster/entity-table-name-creator');
 
 describe('EntityTableNameCreator', () => {
-    describe('createFromEntityName', () => {
-        context('when not passing an entity name', () => {
-            it('should fail', () => {
-                expect(() => createFromEntityName(undefined)).to.throw(/^An entity name must be passed to get a table name.$/);
-            });
-        });
-        context('when passing an entity name', () => {
-            context("like 'Aabcd'", () => {
-                it('should just lowercase the first letter', () => {
-                    expect(createFromEntityName('Toto')).to.equal('toto');
-                });
-            });
-            context("like 'AaBbc", () => {
-                it('should add underscores before each capitalized letters and lowercase everything', () => {
-                    expect(createFromEntityName('TotoTata')).to.equal('toto_tata');
-                });
-            });
-            context('like ABabc', () => {
-                it('should add underscores before each capitalized letters and lowercase everything', () => {
-                    expect(createFromEntityName('TTotoTata')).to.equal('t_toto_tata');
-                });
-            });
-            context('for already converted names', () => {
-                it('should keep them the same', () => {
-                    expect(createFromEntityName('t_toto_tata')).to.equal('t_toto_tata');
-                });
-            });
-        });
-    });
     describe('getTableNameFromEntityName', () => {
         context('when not passing an entity name', () => {
             it('should fail', () => {

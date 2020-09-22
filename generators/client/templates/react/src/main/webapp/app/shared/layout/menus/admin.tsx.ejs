@@ -31,14 +31,14 @@ const adminMenuItems = (
     <MenuItem icon="road" to="/admin/gateway"><Translate contentKey="global.menu.admin.gateway">Gateway</Translate></MenuItem>
   <%_ } _%>
   <%_ if (!skipUserManagement) { _%>
-    <MenuItem icon="user" to="/admin/user-management"><Translate contentKey="global.menu.admin.userManagement">User management</Translate></MenuItem>
+    <MenuItem icon="users" to="/admin/user-management"><Translate contentKey="global.menu.admin.userManagement">User management</Translate></MenuItem>
   <%_ } _%>
   <%_ if (websocket === 'spring-websocket') { _%>
     <MenuItem icon="eye" to="/admin/tracker"><Translate contentKey="global.menu.admin.tracker">User tracker</Translate></MenuItem>
   <%_ } _%>
     <MenuItem icon="tachometer-alt" to="/admin/metrics"><Translate contentKey="global.menu.admin.metrics">Metrics</Translate></MenuItem>
     <MenuItem icon="heart" to="/admin/health"><Translate contentKey="global.menu.admin.health">Health</Translate></MenuItem>
-    <MenuItem icon="list" to="/admin/configuration"><Translate contentKey="global.menu.admin.configuration">Configuration</Translate></MenuItem>
+    <MenuItem icon="cogs" to="/admin/configuration"><Translate contentKey="global.menu.admin.configuration">Configuration</Translate></MenuItem>
   {/* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */}
     <MenuItem icon="tasks" to="/admin/logs"><Translate contentKey="global.menu.admin.logs">Logs</Translate></MenuItem>
   </>
@@ -51,13 +51,13 @@ const openAPIItem = (
 <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
 const databaseItem = (
   <DropdownItem tag="a" href="./h2-console" target="_tab">
-    <FontAwesomeIcon icon="hdd" fixedWidth /> <Translate contentKey="global.menu.admin.database">Database</Translate>
+    <FontAwesomeIcon icon="database" fixedWidth /> <Translate contentKey="global.menu.admin.database">Database</Translate>
   </DropdownItem>
 );
 <%_ } _%>
 
 export const AdminMenu = ({ showOpenAPI <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>, showDatabase <%_ } _%>}) => (
-  <NavDropdown icon="user-plus" name={translate('global.menu.admin.main')} style={{ width: '140%' }} id="admin-menu">
+  <NavDropdown icon="users-cog" name={translate('global.menu.admin.main')} style={{ width: '140%' }} id="admin-menu" data-cy="adminMenu">
       {adminMenuItems}
       {showOpenAPI && openAPIItem}
       <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>

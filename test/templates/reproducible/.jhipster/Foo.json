@@ -6,6 +6,10 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "age",
+            "fieldType": "Integer"
+        },
+        {
             "fieldName": "numberPatternRequired",
             "fieldType": "String",
             "fieldValidateRules": [

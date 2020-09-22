@@ -18,6 +18,7 @@
 -%>
 <%_
 const tsKeyId = generateTestEntityId(primaryKeyType);
+const enumImports = generateEntityClientEnumImports(fields);
 _%>
 /* tslint:disable max-line-length */
 import axios from 'axios';
@@ -28,14 +29,10 @@ import { format } from 'date-fns';
 import * as config from '@/shared/config/config';
 import { <%_ if (fieldsContainLocalDate) { _%>DATE_FORMAT,<%_ } if (fieldsContainInstant || fieldsContainZonedDateTime) {_%> DATE_TIME_FORMAT<%_ } _%> } from '@/shared/date/filters';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import { <%= entityAngularName %>, <%_ const enumsAlreadyDeclared = [];
-fields.forEach(field => {
-if (field.fieldIsEnum && !enumsAlreadyDeclared.includes(field.fieldType)) {
-  enumsAlreadyDeclared.push(field.fieldType); _%>
-<%=field.fieldType%>,
-<%_ }
-}) _%>
-} from '@/shared/model/<%= entityModelFileName %>.model';
+import { <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
+import { <%- importedType %> } from '<%- importedPath.replace('app/', '@/') %>';
+<%_ }); _%>
 
 const mockedAxios: any = axios;
 const error = {

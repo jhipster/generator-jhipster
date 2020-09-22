@@ -85,6 +85,7 @@ public interface <%= entityClass %>Service {
     /**
      * Get all the <%= entityInstancePlural %> with eager load of many-to-many relationships.
      *
+     * @param pageable the pagination information.
      * @return the list of entities.
      */
     <%= pageOrFlux %><<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable);
@@ -93,6 +94,7 @@ public interface <%= entityClass %>Service {
 <%_ if (reactive) { _%>
     /**
     * Returns the number of <%= entityInstancePlural %> available.
+    * @return the number of entities in the database.
     *
     */
     Mono<Long> countAll();
@@ -119,6 +121,9 @@ public interface <%= entityClass %>Service {
      * Delete the "id" <%= entityInstance %>.
      *
      * @param id the id of the entity.
+<%_ if (reactive) { _%>
+     * @return a Mono to signal the deletion
+<%_ } _%>
      */
     <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%= primaryKeyType %> id);<% if (searchEngine !== false) { %>
 

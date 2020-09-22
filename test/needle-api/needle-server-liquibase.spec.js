@@ -77,8 +77,8 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                 this.addChangesetToLiquibaseEntityChangelog(
                     `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
                     '    <changeSet id="20180328000000-2" author="jhipster">\n' +
-                    '        <createTable tableName="test">\n' +
-                    '            <column name="id" type="bigint" autoIncrement="${autoIncrement}">\n' + // eslint-disable-line
+                        '        <createTable tableName="test">\n' +
+                        '            <column name="id" type="bigint" autoIncrement="${autoIncrement}">\n' + // eslint-disable-line
                         '                <constraints primaryKey="true" nullable="false"/>\n' +
                         '            </column>\n' +
                         '        </createTable>\n' +
@@ -186,8 +186,8 @@ describe('needle API server liquibase: JHipster server generator with blueprint'
         assert.fileContent(
             `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
             '    <changeSet id="20180328000000-2" author="jhipster">\n' +
-            '        <createTable tableName="test">\n' +
-            '            <column name="id" type="bigint" autoIncrement="${autoIncrement}">\n' + // eslint-disable-line
+                '        <createTable tableName="test">\n' +
+                '            <column name="id" type="bigint" autoIncrement="${autoIncrement}">\n' + // eslint-disable-line
                 '                <constraints primaryKey="true" nullable="false"/>\n' +
                 '            </column>\n' +
                 '        </createTable>\n' +

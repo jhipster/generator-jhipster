@@ -180,7 +180,7 @@ export default class <%= entityClass %>UpdatePage {
         expect(await this.get<%= fieldNameCapitalized %>Input()).to.contain('2001-01-01T02:30');
         <%_ } else if (fieldType === 'Duration') { _%>
         await this.set<%= fieldNameCapitalized %>Input('PT12S');
-        expect(await this.get<%= fieldNameCapitalized %>Input()).to.contain('12');
+        expect(await this.get<%= fieldNameCapitalized %>Input()).to.contain('PT12S');
         <%_ } else if (fieldType === 'Boolean') { _%>
         const selected<%= fieldNameCapitalized %> = await this.get<%= fieldNameCapitalized %>Input().isSelected();
         if (selected<%= fieldNameCapitalized %>) {

@@ -129,21 +129,21 @@ async getRegisterPage() {
 
 <%_ } _%>
   async getMetricsPage() {
-    await this.clickOnAdminMenuItem('<%= jhiPrefixDashed %>-metrics');
+    await this.clickOnAdminMenuItem('metrics');
     const metricsPage = new MetricsPage();
     await waitUntilDisplayed(metricsPage.title);
     return metricsPage;
   }
 
   async getHealthPage() {
-    await this.clickOnAdminMenuItem('<%= jhiPrefixDashed %>-health');
+    await this.clickOnAdminMenuItem('health');
     const healthPage = new HealthPage();
     await waitUntilDisplayed(healthPage.title);
     return healthPage;
   }
 
   async getConfigurationsPage() {
-    await this.clickOnAdminMenuItem('<%= jhiPrefixDashed %>-configuration');
+    await this.clickOnAdminMenuItem('configuration');
     const configurationsPage = new ConfigurationsPage();
     await waitUntilDisplayed(configurationsPage.title);
     return configurationsPage;

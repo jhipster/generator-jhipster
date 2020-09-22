@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>
-      <span id="metrics-page-heading" v-text="$t('metrics.title')">Application Metrics</span>
+      <span id="metrics-page-heading" v-text="$t('metrics.title')" data-cy="metricsPageHeading">Application Metrics</span>
       <button class="btn btn-primary float-right" v-on:click="refresh()">
         <font-awesome-icon icon="sync"></font-awesome-icon> <span
           v-text="$t('metrics[\'refresh.button\']')">Refresh</span>
@@ -165,8 +165,7 @@
         </div>
       </div>
       <div class="table-responsive">
-        <table class="table table-striped">
-          <caption>Jvm gc</caption>
+        <table class="table table-striped" aria-describedby="Jvm gc">
           <thead>
             <tr>
               <th scope="col"></th>
@@ -198,8 +197,7 @@
     </div>
 
     <h3 v-text="$t('metrics.jvm.http.title')">HTTP requests (time in millisecond)</h3>
-    <table class="table table-striped" v-if="!updatingMetrics && isObjectExisting(metrics, 'http.server.requests')">
-      <caption>Jvm http</caption>
+    <table class="table table-striped" v-if="!updatingMetrics && isObjectExisting(metrics, 'http.server.requests')" aria-describedby="Jvm http">
       <thead>
         <tr>
           <th scope="col" v-text="$t('metrics.jvm.http.table.code')">Code</th>
@@ -226,8 +224,7 @@
 
     <h3>Endpoints requests (time in millisecond)</h3>
     <div class="table-responsive" v-if="!updatingMetrics">
-      <table class="table table-striped">
-        <caption>Endpoint</caption>
+      <table class="table table-striped" aria-describedby="Endpoint">
         <thead>
           <tr>
             <th scope="col">Method</th>
@@ -251,8 +248,7 @@
 
     <h3 v-text="$t('metrics.cache.title')">Cache statistics</h3>
     <div class="table-responsive" v-if="!updatingMetrics && isObjectExisting(metrics, 'cache')">
-      <table class="table table-striped">
-        <caption>Cache</caption>
+      <table class="table table-striped" aria-describedby="Cache">
         <thead>
           <tr>
             <th scope="col" v-text="$t('metrics.cache.cachename')">Cache name</th>
@@ -288,8 +284,7 @@
 
     <h3 v-text="$t('metrics.datasource.title')">DataSource statistics (time in millisecond)</h3>
     <div class="table-responsive" v-if="!updatingMetrics && isObjectExistingAndNotEmpty(metrics, 'databases')">
-      <table class="table table-striped">
-        <caption>Connection pool</caption>
+      <table class="table table-striped" aria-describedby="Connection pool">
         <thead>
           <tr>
             <th scope="col">

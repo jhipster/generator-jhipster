@@ -57,6 +57,7 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
+                            otherEntityField: 'region',
                             relationshipType: 'one-to-many',
                             relationshipName: 'area',
                             otherEntityName: 'region',
@@ -120,6 +121,7 @@ describe('JDLImporter', () => {
                         {
                             relationshipType: 'one-to-many',
                             javadoc: 'A relationship',
+                            otherEntityField: 'id',
                             relationshipName: 'employee',
                             otherEntityName: 'employee',
                             otherEntityRelationshipName: 'department',
@@ -181,6 +183,7 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
+                            otherEntityField: 'id',
                             relationshipType: 'one-to-many',
                             relationshipName: 'job',
                             otherEntityName: 'job',
@@ -375,6 +378,7 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
+                            otherEntityField: 'id',
                             relationshipType: 'one-to-many',
                             relationshipName: 'country',
                             otherEntityName: 'country',
@@ -1328,7 +1332,6 @@ relationship OneToOne {
                         directoryPath: '../',
                         gatewayType: 'zuul',
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         deploymentType: 'docker-compose',
                         serviceDiscoveryType: 'eureka',
                         dockerPushCommand: 'docker push',
@@ -1380,7 +1383,6 @@ relationship OneToOne {
                         directoryPath: '../',
                         gatewayType: 'zuul',
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         deploymentType: 'docker-compose',
                         serviceDiscoveryType: 'eureka',
                         dockerPushCommand: 'docker push',
@@ -1392,7 +1394,6 @@ relationship OneToOne {
                     'generator-jhipster': {
                         appsFolders: ['tata', 'titi'],
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         directoryPath: '../',
                         deploymentType: 'kubernetes',
                         dockerPushCommand: 'docker push',
@@ -1410,7 +1411,6 @@ relationship OneToOne {
                     'generator-jhipster': {
                         appsFolders: ['tata', 'titi'],
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         directoryPath: '../',
                         deploymentType: 'openshift',
                         dockerPushCommand: 'docker push',
@@ -1598,7 +1598,6 @@ relationship OneToOne {
                         directoryPath: '../',
                         appsFolders: ['store', 'invoice', 'notification', 'product'],
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         serviceDiscoveryType: false,
                         dockerRepositoryName: 'deepu105',
                         dockerPushCommand: 'docker push',
@@ -1612,7 +1611,6 @@ relationship OneToOne {
                         directoryPath: '../',
                         appsFolders: ['store', 'invoice', 'notification', 'product'],
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         serviceDiscoveryType: false,
                         dockerRepositoryName: 'deepu105',
                         dockerPushCommand: 'docker push',
@@ -1935,6 +1933,71 @@ paginate * with infinite-scroll
                         },
                     },
                 ]);
+            });
+        });
+        context('when choosing neo4j as database type', () => {
+            let importState;
+
+            before(() => {
+                const content = `entity Person {
+   name String
+}
+
+relationship OneToMany {
+   Person{friends} to Person
+}`;
+                const importer = createImporterFromContent(content, {
+                    applicationName: 'toto',
+                    databaseType: 'neo4j',
+                });
+                importState = importer.import();
+            });
+            after(() => {
+                fse.removeSync('.jhipster');
+            });
+
+            it('should not generate a bidirectional one-to-many relationship', () => {
+                expect(importState.exportedEntities[0].relationships).to.have.length(1);
+            });
+        });
+        context('when having the use-options', () => {
+            let importState;
+
+            before(() => {
+                const content = `application {
+  config {
+    baseName toto
+  }
+  entities A, B, C
+  use serviceImpl for * except C
+}
+
+entity A
+entity B
+entity C
+
+use mapstruct, elasticsearch for A, B except C`;
+                const importer = createImporterFromContent(content, {
+                    applicationName: 'toto',
+                    databaseType: 'sql',
+                });
+                importState = importer.import();
+            });
+            after(() => {
+                fse.removeSync('.jhipster');
+                fse.unlinkSync('.yo-rc.json');
+            });
+
+            it('should add the options', () => {
+                expect(importState.exportedEntities[0].dto).to.equal('mapstruct');
+                expect(importState.exportedEntities[1].dto).to.equal('mapstruct');
+                expect(importState.exportedEntities[2].dto).not.to.equal('mapstruct');
+                expect(importState.exportedEntities[0].service).to.equal('serviceImpl');
+                expect(importState.exportedEntities[1].service).to.equal('serviceImpl');
+                expect(importState.exportedEntities[2].service).not.to.equal('serviceImpl');
+                expect(importState.exportedEntities[0].searchEngine).to.equal('elasticsearch');
+                expect(importState.exportedEntities[1].searchEngine).to.equal('elasticsearch');
+                expect(importState.exportedEntities[2].searchEngine).not.to.equal('elasticsearch');
             });
         });
     });

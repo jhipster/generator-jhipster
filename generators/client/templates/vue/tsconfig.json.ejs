@@ -19,16 +19,14 @@
         ],
         "baseUrl": "./",
         "paths": {
-            "@/*": ["src/main/webapp/app/*"]
+            "@/*": ["<%= CLIENT_MAIN_SRC_DIR %>app/*"]
         },
-        "importHelpers": true,
+        "importHelpers": false,
         "allowJs": true
     },
     "include": [
-        "src/main/webapp/app",
-        "src/test/javascript/spec"
+        "<%= CLIENT_MAIN_SRC_DIR %>app",
+        "<%= CLIENT_TEST_SRC_DIR %>spec"
     ],
-    "exclude": [
-        "node_modules"
-    ]
+    "exclude": ["node_modules"<% if (!cypressTests) { %>,"<%= CLIENT_TEST_SRC_DIR %>cypress"<% } %>]
 }

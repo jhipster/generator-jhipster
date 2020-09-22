@@ -61,11 +61,30 @@ describe('JDLRelationship', () => {
                 });
             });
 
-            it('should not create the relationship', () => {
+            it('should create the relationship', () => {
                 expect(relationship.to).to.equal('Abc2');
                 expect(relationship.from).to.equal('Abc');
                 expect(relationship.injectedFieldInFrom).to.equal('something');
                 expect(relationship.type).to.equal(RelationshipTypes.ONE_TO_ONE);
+            });
+        });
+        context('when passing an unidirectional one-to-many relationship', () => {
+            context('and disabling the conversion to a bidirectional relationship', () => {
+                let relationship;
+
+                before(() => {
+                    relationship = new JDLRelationship({
+                        from: 'Abc',
+                        to: 'Abc2',
+                        injectedFieldInFrom: 'something',
+                        type: RelationshipTypes.ONE_TO_MANY,
+                        generateBidirectionalOneToMany: false,
+                    });
+                });
+
+                it('should not create a bidirectional relationship', () => {
+                    expect(relationship.injectedFieldInTo).to.be.null;
+                });
             });
         });
     });

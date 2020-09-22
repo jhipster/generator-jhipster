@@ -59,7 +59,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
     <%_ if (databaseType === 'sql') { _%>
 import org.springframework.transaction.annotation.Transactional;
     <%_ } _%>

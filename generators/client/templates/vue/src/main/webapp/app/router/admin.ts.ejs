@@ -51,7 +51,7 @@ export default [
       meta: { authorities: [Authority.ADMIN] }
     },
     {
-      path: '/admin/<%= jhiPrefixDashed %>-health',
+      path: '/admin/health',
       name: '<%= jhiPrefixCapitalized %>HealthComponent',
       component: <%= jhiPrefixCapitalized %>HealthComponent,
       meta: { authorities: [Authority.ADMIN] }
@@ -63,13 +63,13 @@ export default [
       meta: { authorities: [Authority.ADMIN] }
     },
     {
-      path: '/admin/<%= jhiPrefixDashed %>-metrics',
+      path: '/admin/metrics',
       name: '<%= jhiPrefixCapitalized %>MetricsComponent',
       component: <%= jhiPrefixCapitalized %>MetricsComponent,
       meta: { authorities: [Authority.ADMIN] }
     },
     {
-      path: '/admin/<%= jhiPrefixDashed %>-configuration',
+      path: '/admin/configuration',
       name: '<%= jhiPrefixCapitalized %>ConfigurationComponent',
       component: <%= jhiPrefixCapitalized %>ConfigurationComponent,
       meta: { authorities: [Authority.ADMIN] }
@@ -84,7 +84,7 @@ export default [
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>,
     {
-      path: '/admin/<%= jhiPrefixDashed %>-tracker',
+      path: '/admin/tracker',
       name: '<%= jhiPrefixCapitalized %>TrackerComponent',
       component: <%= jhiPrefixCapitalized %>TrackerComponent,
       meta: { authorities: [Authority.ADMIN] }

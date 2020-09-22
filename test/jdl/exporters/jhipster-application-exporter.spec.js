@@ -22,55 +22,16 @@
 const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
-const { exportApplication, exportApplications } = require('../../../jdl/exporters/jhipster-application-exporter');
-const { MONOLITH } = require('../../../jdl/jhipster/application-types');
-const { createJDLApplication } = require('../../../jdl/models/jdl-application-factory');
+const { exportApplication, exportApplications } = require('../../../jdl/exporters/applications/jhipster-application-exporter');
 
 describe('JHipsterApplicationExporter', () => {
     describe('exportApplication', () => {
-        context('when passing invalid parameters', () => {
-            context('such as undefined', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        exportApplication();
-                    }).to.throw('An application has to be passed to be exported.');
-                });
-            });
-        });
         context('when passing valid arguments', () => {
             context('when exporting an application to JSON', () => {
                 let content;
-                let returned;
 
-                before(done => {
-                    returned = exportApplication(
-                        createJDLApplication({
-                            applicationType: MONOLITH,
-                            baseName: 'toto',
-                            packageName: 'com.mathieu.sample',
-                            enableTranslation: false,
-                            languages: ['en', 'fr'],
-                            jhipsterVersion: '4.9.0',
-                            otherModules: ['MyModule'],
-                            creationTimestamp: 'new',
-                        })
-                    );
-                    fs.readFile(path.join('.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
-                        if (err) {
-                            return done(err);
-                        }
-                        content = JSON.parse(data);
-                        return done();
-                    });
-                });
-
-                after(() => {
-                    fs.unlinkSync(path.join('.yo-rc.json'));
-                });
-
-                it('should return the exported application', () => {
-                    expect(returned).to.deep.equal({
-                        entities: [],
+                before(() => {
+                    exportApplication({
                         'generator-jhipster': {
                             applicationType: 'monolith',
                             authenticationType: 'jwt',
@@ -81,6 +42,7 @@ describe('JHipsterApplicationExporter', () => {
                             clientTheme: 'none',
                             clientThemeVariant: '',
                             clientPackageManager: 'npm',
+                            creationTimestamp: 'new',
                             databaseType: 'sql',
                             devDatabaseType: 'h2Disk',
                             enableHibernateCache: true,
@@ -91,7 +53,6 @@ describe('JHipsterApplicationExporter', () => {
                             languages: ['en', 'fr'],
                             messageBroker: false,
                             nativeLanguage: 'en',
-                            otherModules: ['MyModule'],
                             packageFolder: 'com/mathieu/sample',
                             packageName: 'com.mathieu.sample',
                             prodDatabaseType: 'mysql',
@@ -104,101 +65,21 @@ describe('JHipsterApplicationExporter', () => {
                             testFrameworks: [],
                             useSass: true,
                             websocket: false,
-                            creationTimestamp: 'new',
+                            jwtSecretKey: '1234',
                         },
                     });
-                });
-                it('should export it', () => {
-                    expect(content).not.to.be.undefined;
-                });
-                it('should format it', () => {
-                    expect(content['generator-jhipster']).not.to.be.undefined;
-                    const config = content['generator-jhipster'];
-                    expect(config).to.deep.equal({
-                        applicationType: 'monolith',
-                        authenticationType: 'jwt',
-                        baseName: 'toto',
-                        buildTool: 'maven',
-                        cacheProvider: 'ehcache',
-                        clientFramework: 'angularX',
-                        clientTheme: 'none',
-                        clientThemeVariant: '',
-                        clientPackageManager: 'npm',
-                        databaseType: 'sql',
-                        devDatabaseType: 'h2Disk',
-                        enableSwaggerCodegen: false,
-                        enableTranslation: false,
-                        enableHibernateCache: true,
-                        jhiPrefix: 'jhi',
-                        jhipsterVersion: '4.9.0',
-                        languages: ['en', 'fr'],
-                        messageBroker: false,
-                        nativeLanguage: 'en',
-                        otherModules: ['MyModule'],
-                        packageFolder: 'com/mathieu/sample',
-                        packageName: 'com.mathieu.sample',
-                        prodDatabaseType: 'mysql',
-                        searchEngine: false,
-                        serverPort: '8080',
-                        serviceDiscoveryType: false,
-                        skipClient: false,
-                        skipServer: false,
-                        skipUserManagement: false,
-                        testFrameworks: [],
-                        useSass: true,
-                        websocket: false,
-                        creationTimestamp: 'new',
-                    });
-                });
-            });
-            context('when exporting an application to JSON with skipFileGeneration', () => {
-                before(() => {
-                    exportApplication(
-                        createJDLApplication({
-                            applicationType: MONOLITH,
-                            baseName: 'toto',
-                            packageName: 'com.mathieu.sample',
-                            enableTranslation: false,
-                            languages: ['en', 'fr'],
-                            jhipsterVersion: '4.9.0',
-                            otherModules: ['MyModule'],
-                        }),
-                        { skipFileGeneration: true }
-                    );
-                });
-
-                it('should not create the .yo-rc.json in the current folder', () => {
-                    expect(() => fs.statSync('.yo-rc.json')).to.throw();
-                });
-            });
-            context('when exporting an application to JSON with creationTimestampConfig', () => {
-                let content;
-                before(() => {
-                    exportApplication(
-                        createJDLApplication({
-                            applicationType: MONOLITH,
-                            baseName: 'toto',
-                            packageName: 'com.mathieu.sample',
-                            enableTranslation: false,
-                            languages: ['en', 'fr'],
-                            jhipsterVersion: '4.9.0',
-                            otherModules: ['MyModule'],
-                        }),
-                        { creationTimestampConfig: 1546300800000 }
-                    );
-                    content = JSON.parse(fs.readFileSync(path.join('.yo-rc.json'), { encoding: 'utf8' }));
+                    content = fs.readFileSync(path.join('.yo-rc.json'), { encoding: 'utf8' });
                 });
 
                 after(() => {
                     fs.unlinkSync(path.join('.yo-rc.json'));
                 });
 
-                it('sets creationTimestamp on .yo-rc.json', () => {
-                    expect(content['generator-jhipster']).not.to.be.undefined;
-                    expect(content['generator-jhipster'].creationTimestamp).to.equal(1546300800000);
+                it('should write it', () => {
+                    expect(content).not.to.be.undefined;
                 });
             });
-            context('when exporting an existing application to JSON', () => {
+            context('when the application has the creationTimestamp attribute', () => {
                 let content;
 
                 before(() => {
@@ -216,17 +97,43 @@ describe('JHipsterApplicationExporter', () => {
                             2
                         )
                     );
-                    exportApplication(
-                        createJDLApplication({
-                            applicationType: MONOLITH,
+                    exportApplication({
+                        'generator-jhipster': {
+                            applicationType: 'monolith',
+                            authenticationType: 'jwt',
                             baseName: 'toto',
-                            packageName: 'com.mathieu.sample',
-                            enableTranslation: false,
-                            languages: ['en', 'fr'],
-                            jhipsterVersion: '4.9.0',
+                            buildTool: 'maven',
+                            cacheProvider: 'ehcache',
+                            clientFramework: 'angularX',
+                            clientTheme: 'none',
+                            clientThemeVariant: '',
+                            clientPackageManager: 'npm',
                             creationTimestamp: 'new',
-                        })
-                    );
+                            databaseType: 'sql',
+                            devDatabaseType: 'h2Disk',
+                            enableHibernateCache: true,
+                            enableSwaggerCodegen: false,
+                            enableTranslation: false,
+                            jhiPrefix: 'jhi',
+                            jhipsterVersion: '4.9.0',
+                            languages: ['en', 'fr'],
+                            messageBroker: false,
+                            nativeLanguage: 'en',
+                            packageFolder: 'com/mathieu/sample',
+                            packageName: 'com.mathieu.sample',
+                            prodDatabaseType: 'mysql',
+                            searchEngine: false,
+                            serverPort: '8080',
+                            serviceDiscoveryType: false,
+                            skipClient: false,
+                            skipServer: false,
+                            skipUserManagement: false,
+                            testFrameworks: [],
+                            useSass: true,
+                            websocket: false,
+                            jwtSecretKey: '1234',
+                        },
+                    });
                     content = JSON.parse(fs.readFileSync(path.join('.yo-rc.json'), { encoding: 'utf8' }));
                 });
                 after(() => {
@@ -239,7 +146,6 @@ describe('JHipsterApplicationExporter', () => {
 
                 it('should add the read content to the exported application', () => {
                     expect(content).to.deep.equal({
-                        entities: [],
                         test: 1234,
                         'generator-jhipster': {
                             applicationType: 'monolith',
@@ -279,33 +185,6 @@ describe('JHipsterApplicationExporter', () => {
                     });
                 });
             });
-            context('when the application has the blueprints option', () => {
-                let returned;
-
-                before(() => {
-                    returned = exportApplication(
-                        createJDLApplication({
-                            baseName: 'toto',
-                            blueprints: ['generator-jhipster-vuejs', 'generator-jhipster-nodejs'],
-                        })
-                    );
-                });
-
-                after(() => {
-                    fs.unlinkSync(path.join('.yo-rc.json'));
-                });
-
-                it('should format it', () => {
-                    expect(returned['generator-jhipster'].blueprints).to.deep.equal([
-                        {
-                            name: 'generator-jhipster-vuejs',
-                        },
-                        {
-                            name: 'generator-jhipster-nodejs',
-                        },
-                    ]);
-                });
-            });
         });
     });
     describe('exportApplications', () => {
@@ -319,99 +198,10 @@ describe('JHipsterApplicationExporter', () => {
             });
         });
         context('when passing valid arguments', () => {
-            context('when exporting applications to JSON with skipFileGeneration', () => {
-                let returned;
-                let baseNames;
-
-                before('common setup for both applications', () => {
-                    returned = exportApplications(
-                        {
-                            toto: createJDLApplication({
-                                applicationType: MONOLITH,
-                                baseName: 'toto',
-                                packageName: 'com.mathieu.toto',
-                                enableTranslation: false,
-                                languages: ['en', 'fr'],
-                                jhipsterVersion: '4.9.0',
-                            }),
-                            titi: createJDLApplication({
-                                applicationType: MONOLITH,
-                                baseName: 'titi',
-                                packageName: 'com.mathieu.titi',
-                                enableTranslation: false,
-                                languages: ['en', 'fr'],
-                                jhipsterVersion: '4.9.0',
-                            }),
-                        },
-                        { skipFileGeneration: true }
-                    );
-                    baseNames = returned.map(application => application['generator-jhipster'].baseName);
-                });
-
-                it('should return the exported applications', () => {
-                    expect(returned).to.have.lengthOf(2);
-                });
-                it('should not save config files', () => {
-                    expect(baseNames).to.be.eql(['toto', 'titi']);
-                    baseNames.forEach(baseName => {
-                        expect(fs.existsSync(path.join(baseName, '.yo-rc.json'))).to.be.false;
-                        expect(fs.existsSync(path.join(baseName, '.jhipster'))).to.be.false;
-                    });
-                });
-            });
-            context('when exporting applications to JSON', () => {
-                let returned;
-
-                before('common setup for both applications', () => {
-                    returned = exportApplications({
-                        toto: createJDLApplication({
-                            applicationType: MONOLITH,
-                            baseName: 'toto',
-                            packageName: 'com.mathieu.toto',
-                            enableTranslation: false,
-                            languages: ['en', 'fr'],
-                            jhipsterVersion: '4.9.0',
-                        }),
-                        titi: createJDLApplication({
-                            applicationType: MONOLITH,
-                            baseName: 'titi',
-                            packageName: 'com.mathieu.titi',
-                            enableTranslation: false,
-                            languages: ['en', 'fr'],
-                            jhipsterVersion: '4.9.0',
-                        }),
-                    });
-                });
-
-                it('should return the exported applications', () => {
-                    expect(returned).to.have.lengthOf(2);
-                });
-                context('for the first application', () => {
-                    let content;
-
-                    before('setup for the first application', done => {
-                        fs.readFile(path.join('toto', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
-                            if (err) {
-                                return done(err);
-                            }
-                            content = JSON.parse(data);
-                            return done();
-                        });
-                    });
-
-                    after('cleanup for the fist application', () => {
-                        fs.unlinkSync(path.join('toto', '.yo-rc.json'));
-                        fs.rmdirSync('toto');
-                    });
-
-                    it('should export it', done => {
-                        fs.readFile(path.join('toto', '.yo-rc.json'), { encoding: 'utf8' }, done);
-                    });
-
-                    it('should format it', () => {
-                        expect(content['generator-jhipster']).not.to.be.undefined;
-                        const config = content['generator-jhipster'];
-                        expect(config).to.deep.equal({
+            before(() => {
+                exportApplications([
+                    {
+                        'generator-jhipster': {
                             applicationType: 'monolith',
                             authenticationType: 'jwt',
                             baseName: 'toto',
@@ -421,11 +211,12 @@ describe('JHipsterApplicationExporter', () => {
                             clientTheme: 'none',
                             clientThemeVariant: '',
                             clientPackageManager: 'npm',
+                            creationTimestamp: 'new',
                             databaseType: 'sql',
                             devDatabaseType: 'h2Disk',
+                            enableHibernateCache: true,
                             enableSwaggerCodegen: false,
                             enableTranslation: false,
-                            enableHibernateCache: true,
                             jhiPrefix: 'jhi',
                             jhipsterVersion: '4.9.0',
                             languages: ['en', 'fr'],
@@ -443,35 +234,12 @@ describe('JHipsterApplicationExporter', () => {
                             testFrameworks: [],
                             useSass: true,
                             websocket: false,
-                        });
-                    });
-                });
-                context('for the second application', () => {
-                    let content;
+                            jwtSecretKey: '1234',
+                        },
+                    },
 
-                    before('setup for the first application', done => {
-                        fs.readFile(path.join('titi', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
-                            if (err) {
-                                return done(err);
-                            }
-                            content = JSON.parse(data);
-                            return done();
-                        });
-                    });
-
-                    after('cleanup for the fist application', () => {
-                        fs.unlinkSync(path.join('titi', '.yo-rc.json'));
-                        fs.rmdirSync('titi');
-                    });
-
-                    it('should export it', done => {
-                        fs.readFile(path.join('titi', '.yo-rc.json'), { encoding: 'utf8' }, done);
-                    });
-
-                    it('should format it', () => {
-                        expect(content['generator-jhipster']).not.to.be.undefined;
-                        const config = content['generator-jhipster'];
-                        expect(config).to.deep.equal({
+                    {
+                        'generator-jhipster': {
                             applicationType: 'monolith',
                             authenticationType: 'jwt',
                             baseName: 'titi',
@@ -481,11 +249,12 @@ describe('JHipsterApplicationExporter', () => {
                             clientTheme: 'none',
                             clientThemeVariant: '',
                             clientPackageManager: 'npm',
+                            creationTimestamp: 'new',
                             databaseType: 'sql',
                             devDatabaseType: 'h2Disk',
+                            enableHibernateCache: true,
                             enableSwaggerCodegen: false,
                             enableTranslation: false,
-                            enableHibernateCache: true,
                             jhiPrefix: 'jhi',
                             jhipsterVersion: '4.9.0',
                             languages: ['en', 'fr'],
@@ -503,9 +272,27 @@ describe('JHipsterApplicationExporter', () => {
                             testFrameworks: [],
                             useSass: true,
                             websocket: false,
-                        });
-                    });
-                });
+                            jwtSecretKey: '1234',
+                        },
+                    },
+                ]);
+            });
+            after(() => {
+                fs.unlinkSync(path.join('toto', '.yo-rc.json'));
+                fs.rmdirSync('toto');
+                fs.unlinkSync(path.join('titi', '.yo-rc.json'));
+                fs.rmdirSync('titi');
+            });
+
+            it('should export the first application', () => {
+                expect(() => {
+                    fs.readFileSync(path.join('toto', '.yo-rc.json'), { encoding: 'utf8' });
+                }).not.to.throw();
+            });
+            it('should export the second application', () => {
+                expect(() => {
+                    fs.readFileSync(path.join('titi', '.yo-rc.json'), { encoding: 'utf8' });
+                }).not.to.throw();
             });
         });
     });

@@ -25,7 +25,6 @@ const shelljs = require('shelljs');
 const semver = require('semver');
 const exec = require('child_process').exec;
 const os = require('os');
-const pluralize = require('pluralize');
 const normalize = require('normalize-path');
 
 const packagejs = require('../package.json');
@@ -46,6 +45,29 @@ const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
+const CUSTOM_PRIORITIES = [
+    {
+        priorityName: 'preparing',
+        queueName: 'jhipster:preparing',
+        before: 'default',
+    },
+    {
+        priorityName: 'loading',
+        queueName: 'jhipster:loading',
+        before: 'preparing',
+    },
+    {
+        priorityName: 'composing',
+        queueName: 'jhipster:composing',
+        before: 'loading',
+    },
+    {
+        priorityName: 'postWriting',
+        queueName: 'jhipster:postWriting',
+        before: 'conflicts',
+    },
+];
+
 /**
  * This is the Generator base class.
  * This provides all the public API methods exposed via the module system.
@@ -53,13 +75,15 @@ const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
  *
  * The method signatures in public API should not be changed without a major version change
  */
-module.exports = class extends PrivateBase {
+module.exports = class JHipsterBaseGenerator extends PrivateBase {
     constructor(args, opts) {
         super(args, opts);
 
         if (this.options.help) {
             return;
         }
+
+        this.registerPriorities(CUSTOM_PRIORITIES);
 
         // JHipster runtime config that should not be stored to .yo-rc.json.
         this.configOptions = this.options.configOptions || {};
@@ -111,15 +135,70 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Verify if the entity is a built-in entity.
-     * @param {String} entityName - Entity name to verify.
-     * @return {boolean} true if the entity is built-in.
+     * Verify if the application is using built-in User.
+     * @return {boolean} true if the User is built-in.
      */
-    isBuiltInUserEntity(entityName) {
+    isUsingBuiltInUser() {
+        return (
+            !this.jhipsterConfig ||
+            !this.jhipsterConfig.skipUserManagement ||
+            (this.jhipsterConfig.authenticationType === 'oauth2' && this.jhipsterConfig.databaseType !== 'no')
+        );
+    }
+
+    /**
+     * Verify if the entity is a User entity.
+     * @param {String} entityName - Entity name to verify.
+     * @return {boolean} true if the entity is User.
+     */
+    isUserEntity(entityName) {
         if (_.upperFirst(entityName) === 'User') {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Verify if the entity is a built-in User.
+     * @param {String} entityName - Entity name to verify.
+     * @return {boolean} true if the entity is User and is built-in.
+     */
+    isBuiltInUser(entityName) {
+        return this.isUsingBuiltInUser() && this.isUserEntity(entityName);
+    }
+
+    /**
+     * Verify if the application is using built-in Authority.
+     * @return {boolean} true if the Authority is built-in.
+     */
+    isUsingBuiltInAuthority() {
+        return (
+            !this.jhipsterConfig ||
+            (!this.jhipsterConfig.skipUserManagement &&
+                ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(this.jhipsterConfig.databaseType)) ||
+            (this.jhipsterConfig.authenticationType === 'oauth2' && this.jhipsterConfig.databaseType !== 'no')
+        );
+    }
+
+    /**
+     * Verify if the entity is a Authority entity.
+     * @param {String} entityName - Entity name to verify.
+     * @return {boolean} true if the entity is Authority.
+     */
+    isAuthorityEntity(entityName) {
+        if (_.upperFirst(entityName) === 'Authority') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Verify if the entity is a built-in Authority.
+     * @param {String} entityName - Entity name to verify.
+     * @return {boolean} true if the entity is Authority and is built-in.
+     */
+    isBuiltInAuthority(entityName) {
+        return this.isUsingBuiltInAuthority() && this.isAuthorityEntity(entityName);
     }
 
     /**
@@ -154,6 +233,40 @@ module.exports = class extends PrivateBase {
             prettierExtensions = `${prettierExtensions},java`;
         }
         return prettierExtensions;
+    }
+
+    /**
+     * Replace placeholders with versions from packageJsonSourceFile.
+     * @param {string} keyToPlace - PlaceHolder name.
+     * @param {string} packageJsonSourceFile - Package json filepath with actual versions.
+     */
+    replacePackageJsonVersions(keyToReplace, packageJsonSourceFile) {
+        const packageJsonSource = JSON.parse(fs.readFileSync(packageJsonSourceFile, 'utf-8'));
+        const packageJsonTargetFile = this.destinationPath('package.json');
+        const packageJsonTarget = this.fs.readJSON(packageJsonTargetFile);
+        const replace = section => {
+            if (packageJsonTarget[section]) {
+                Object.entries(packageJsonTarget[section]).forEach(([dependency, dependencyReference]) => {
+                    if (dependencyReference.startsWith(keyToReplace)) {
+                        const [
+                            keyToReplaceAtSource,
+                            sectionAtSource = section,
+                            dependencyAtSource = dependency,
+                        ] = dependencyReference.split('#');
+                        if (keyToReplaceAtSource !== keyToReplace) return;
+                        if (!packageJsonSource[sectionAtSource] || !packageJsonSource[sectionAtSource][dependencyAtSource]) {
+                            throw new Error(
+                                `Error setting ${dependencyAtSource} version, not found at ${sectionAtSource}.${dependencyAtSource}`
+                            );
+                        }
+                        packageJsonTarget[section][dependency] = packageJsonSource[sectionAtSource][dependencyAtSource];
+                    }
+                });
+            }
+        };
+        replace('dependencies');
+        replace('devDependencies');
+        this.fs.writeJSON(packageJsonTargetFile, packageJsonTarget);
     }
 
     /**
@@ -222,13 +335,19 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework
      * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
      */
-    addEntityToMenu(routerName, enableTranslation, clientFramework, entityTranslationKeyMenu = _.camelCase(routerName)) {
+    addEntityToMenu(
+        routerName,
+        enableTranslation,
+        clientFramework,
+        entityTranslationKeyMenu = _.camelCase(routerName),
+        entityTranslationValue = _.startCase(routerName)
+    ) {
         if (this.clientFramework === ANGULAR) {
-            this.needleApi.clientAngular.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
+            this.needleApi.clientAngular.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
         } else if (this.clientFramework === REACT) {
-            this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
+            this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
         } else if (this.clientFramework === VUE) {
-            this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
+            this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
         }
     }
 
@@ -1286,12 +1405,16 @@ module.exports = class extends PrivateBase {
             this.configOptions.composedWith.push(generator);
         }
 
-        const namespace = `jhipster:${generator}`;
+        const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
         if (this.env.get(namespace)) {
             generator = namespace;
         } else {
             // Keep test compatibily were jhipster lookup does not run.
-            generator = require.resolve(`./${generator}`);
+            try {
+                generator = require.resolve(`./${generator}`);
+            } catch (e) {
+                throw new Error(`Generator ${generator} was not found`);
+            }
         }
 
         return this.composeWith(
@@ -1435,15 +1558,6 @@ module.exports = class extends PrivateBase {
      */
     getColumnName(value) {
         return this.hibernateSnakeCase(value);
-    }
-
-    /**
-     * get a table column names plural form in JHipster preferred style.
-     *
-     * @param {string} value - table column name string
-     */
-    getPluralColumnName(value) {
-        return this.getColumnName(pluralize(value));
     }
 
     /**
@@ -1756,20 +1870,11 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * get the Angular application name.
-     * @param {string} baseName of application
+     * get the frontend application name.
+     * @param {string} baseName of application - (defaults to <code>this.jhipsterConfig.baseName</code>)
      */
-    getAngularAppName(baseName = this.baseName) {
+    getFrontendAppName(baseName = this.jhipsterConfig.baseName) {
         const name = _.camelCase(baseName) + (baseName.endsWith('App') ? '' : 'App');
-        return name.match(/^\d/) ? 'App' : name;
-    }
-
-    /**
-     * get the Angular application name.
-     * @param {string} baseName of application
-     */
-    getAngularXAppName(baseName = this.baseName) {
-        const name = this.upperFirstCamelCase(baseName);
         return name.match(/^\d/) ? 'App' : name;
     }
 
@@ -2100,6 +2205,9 @@ module.exports = class extends PrivateBase {
         this.configOptions.optionsParsed = true;
 
         // Load stored options
+        if (options.skipJhipsterDependencies !== undefined) {
+            this.jhipsterConfig.skipJhipsterDependencies = options.skipJhipsterDependencies;
+        }
         if (options.incrementalChangelog !== undefined) {
             this.jhipsterConfig.incrementalChangelog = options.incrementalChangelog;
         }
@@ -2192,6 +2300,7 @@ module.exports = class extends PrivateBase {
         dest.isDebugEnabled = config.isDebugEnabled;
         dest.experimental = config.experimental;
         dest.logo = config.logo;
+        dest.backendName = config.backendName || 'Java';
     }
 
     /**
@@ -2218,11 +2327,13 @@ module.exports = class extends PrivateBase {
         dest.skipClient = config.skipClient;
         dest.prettierJava = config.prettierJava;
         dest.pages = config.pages;
+        dest.skipJhipsterDependencies = !!config.skipJhipsterDependencies;
 
         dest.testFrameworks = config.testFrameworks || [];
         dest.gatlingTests = dest.testFrameworks.includes('gatling');
         dest.cucumberTests = dest.testFrameworks.includes('cucumber');
         dest.protractorTests = dest.testFrameworks.includes('protractor');
+        dest.cypressTests = dest.testFrameworks.includes('cypress');
 
         dest.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
         dest.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);
@@ -2279,6 +2390,7 @@ module.exports = class extends PrivateBase {
         dest.searchEngine = config.searchEngine;
         dest.cacheProvider = config.cacheProvider;
         dest.enableHibernateCache = config.enableHibernateCache;
+        dest.reactiveSqlTestContainers = config.reactive && ['mysql', 'postgresql', 'mssql', 'mariadb'].includes(config.prodDatabaseType);
 
         dest.enableSwaggerCodegen = config.enableSwaggerCodegen;
         dest.messageBroker = config.messageBroker;

@@ -23,7 +23,6 @@ const { upperFirst } = require('../utils/string-utils');
 
 module.exports = {
     readJSONFile,
-    readEntityJSON,
     toFilePath,
 };
 
@@ -33,19 +32,6 @@ module.exports = {
  * @return its content
  */
 function readJSONFile(filePath) {
-    return JSON.parse(FileReader.readFile(filePath));
-}
-
-/**
- * @deprecated
- * Reads the given JSON entity file and converts it to JSON.
- * @param filePath the file's path
- * @returns {Object} the parsed JSON.
- */
-function readEntityJSON(filePath) {
-    if (!filePath) {
-        throw new Error('The passed file path must not be nil to read the JSON entity.');
-    }
     return JSON.parse(FileReader.readFile(filePath));
 }
 

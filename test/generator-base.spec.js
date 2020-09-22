@@ -1,6 +1,9 @@
 /* eslint-disable no-unused-expressions */
 const expect = require('chai').expect;
+const sinon = require('sinon');
 const assert = require('yeoman-assert');
+const helpers = require('yeoman-test');
+
 const expectedFiles = require('./utils/expected-files');
 const Base = require('../generators/generator-base');
 const { testInTempDir, revertTempDir } = require('./utils/utils');
@@ -52,13 +55,6 @@ describe('Generator Base', () => {
             it('returns a column name', () => {
                 expect(BaseGenerator.getColumnName('colName')).to.equal('col_name');
                 expect(BaseGenerator.getColumnName('colNName')).to.equal('colnname');
-            });
-        });
-    });
-    describe('getPluralColumnName', () => {
-        describe('when called with a value', () => {
-            it('returns a plural column name', () => {
-                expect(BaseGenerator.getPluralColumnName('colName')).to.equal('col_names');
             });
         });
     });
@@ -240,17 +236,23 @@ describe('Generator Base', () => {
             });
         });
     });
-    describe('getAngularAppName', () => {
-        describe('when called with name', () => {
-            it('return the angular app name', () => {
-                BaseGenerator.baseName = 'myTest';
-                expect(BaseGenerator.getAngularAppName()).to.equal('myTestApp');
+    describe('getFrontendAppName', () => {
+        describe('when called with name having App', () => {
+            it('returns the frontend app name', () => {
+                BaseGenerator.jhipsterConfig = { baseName: 'myAmazingApp' };
+                expect(BaseGenerator.getFrontendAppName()).to.equal('myAmazingApp');
             });
         });
-        describe('when called with name having App', () => {
-            it('return the angular app name', () => {
-                BaseGenerator.baseName = 'myApp';
-                expect(BaseGenerator.getAngularAppName()).to.equal('myApp');
+        describe('when called with name', () => {
+            it('returns the frontend app name with the App suffix added', () => {
+                BaseGenerator.jhipsterConfig = { baseName: 'myAwesomeProject' };
+                expect(BaseGenerator.getFrontendAppName()).to.equal('myAwesomeProjectApp');
+            });
+        });
+        describe('when called with name starting with a digit', () => {
+            it('returns the default frontend app name - App', () => {
+                BaseGenerator.jhipsterConfig = { baseName: '1derful' };
+                expect(BaseGenerator.getFrontendAppName()).to.equal('App');
             });
         });
     });
@@ -432,6 +434,130 @@ describe('Generator Base', () => {
                     expect(() => new Base({ ...options })).to.throw(/^Creation timestamp should not be in the future: 2030-01-01\.$/);
                 });
             });
+        });
+    });
+    describe('priorities', () => {
+        let mockedPriorities;
+        const priorities = [
+            'initializing',
+            'prompting',
+            'configuring',
+            'composing',
+            'loading',
+            'preparing',
+            'default',
+            'writing',
+            'postWriting',
+            'install',
+            'end',
+        ];
+        before(() => {
+            mockedPriorities = {};
+            priorities.forEach(priority => {
+                mockedPriorities[priority] = sinon.fake();
+            });
+            const mockBlueprintSubGen = class extends Base {
+                get initializing() {
+                    return {
+                        mocked() {
+                            mockedPriorities.initializing();
+                        },
+                    };
+                }
+
+                get prompting() {
+                    return {
+                        mocked() {
+                            mockedPriorities.prompting();
+                        },
+                    };
+                }
+
+                get configuring() {
+                    return {
+                        mocked() {
+                            mockedPriorities.configuring();
+                        },
+                    };
+                }
+
+                get composing() {
+                    return {
+                        mocked() {
+                            mockedPriorities.composing();
+                        },
+                    };
+                }
+
+                get loading() {
+                    return {
+                        mocked() {
+                            mockedPriorities.loading();
+                        },
+                    };
+                }
+
+                get preparing() {
+                    return {
+                        mocked() {
+                            mockedPriorities.preparing();
+                        },
+                    };
+                }
+
+                get default() {
+                    return {
+                        mocked() {
+                            mockedPriorities.default();
+                        },
+                    };
+                }
+
+                get writing() {
+                    return {
+                        mocked() {
+                            mockedPriorities.writing();
+                        },
+                    };
+                }
+
+                get postWriting() {
+                    return {
+                        mocked() {
+                            mockedPriorities.postWriting();
+                        },
+                    };
+                }
+
+                get install() {
+                    return {
+                        mocked() {
+                            mockedPriorities.install();
+                        },
+                    };
+                }
+
+                get end() {
+                    return {
+                        mocked() {
+                            mockedPriorities.end();
+                        },
+                    };
+                }
+            };
+            return helpers.create(mockBlueprintSubGen).run();
+        });
+
+        priorities.forEach((priority, idx) => {
+            it(`should execute ${priority}`, () => {
+                assert(mockedPriorities[priority].calledOnce);
+            });
+            if (idx > 0) {
+                const lastPriority = priorities[idx - 1];
+                it(`should execute ${priority} after ${lastPriority} `, () => {
+                    assert(mockedPriorities[priority].calledAfter(mockedPriorities[lastPriority]));
+                });
+            }
         });
     });
 });

@@ -178,7 +178,7 @@ function askForServerSideOpts() {
                 } else {
                     opts.push({
                         value: 'sql',
-                        name: 'SQL (H2, MySQL, PostgreSQL, MSSQL)',
+                        name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, MSSQL)',
                     });
                 }
                 opts.push({
@@ -193,7 +193,7 @@ function askForServerSideOpts() {
                 }
                 opts.push({
                     value: 'couchbase',
-                    name: 'Couchbase',
+                    name: '[BROKEN] Couchbase',
                 });
                 opts.push({
                     value: 'neo4j',

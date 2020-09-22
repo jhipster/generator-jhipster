@@ -24,18 +24,17 @@ const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
 const writeVueFiles = require('./files-vue').writeFiles;
+const writeCommonFiles = require('./files-common').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { clientDefaultConfig } = require('../generator-defaults');
 
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
-const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
+const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 let useBlueprints;
 
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -144,13 +143,38 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
-    _default() {
+    _composing() {
         return {
+            composeCommon() {
+                this.composeWithJHipster('common', true);
+            },
+            composeCypress() {
+                const testFrameworks = this.jhipsterConfig.testFrameworks;
+                if (!Array.isArray(testFrameworks) || !testFrameworks.includes('cypress')) return;
+                this.composeWithJHipster('cypress', true);
+            },
             composeLanguages() {
                 // We don't expose client/server to cli, composing with languages is used for test purposes.
                 if (this.jhipsterConfig.enableTranslation === false) return;
 
                 this.composeWithJHipster('languages', true);
+            },
+        };
+    }
+
+    get composing() {
+        if (useBlueprints) return;
+        return this._composing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _loading() {
+        return {
+            loadSharedConfig() {
+                this.loadAppConfig();
+                this.loadClientConfig();
+                this.loadServerConfig();
+                this.loadTranslationConfig();
             },
 
             validateSkipServer() {
@@ -181,13 +205,18 @@ module.exports = class extends BaseBlueprintGenerator {
                     );
                 }
             },
-            loadSharedConfig() {
-                this.loadAppConfig();
-                this.loadClientConfig();
-                this.loadServerConfig();
-                this.loadTranslationConfig();
-            },
-            setupSharedOptions() {
+        };
+    }
+
+    get loading() {
+        if (useBlueprints) return;
+        return this._loading();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _preparing() {
+        return {
+            prepareForTemplates() {
                 this.enableI18nRTL = false;
                 if (this.languages !== undefined) {
                     this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
@@ -203,8 +232,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 // Application name modified, using each technology's conventions
                 this.camelizedBaseName = _.camelCase(this.baseName);
-                this.angularAppName = this.getAngularAppName();
-                this.angularXAppName = this.getAngularXAppName();
+                this.frontendAppName = this.getFrontendAppName();
                 this.hipster = this.getHipster(this.baseName);
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
@@ -214,6 +242,18 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.skipUserManagement = true;
                 }
             },
+        };
+    }
+
+    get preparing() {
+        if (useBlueprints) return;
+        return this._preparing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return {
+            ...super._missingPreDefault(),
 
             insight() {
                 statistics.sendSubGenEvent('generator', 'client', {
@@ -249,12 +289,58 @@ module.exports = class extends BaseBlueprintGenerator {
                     // do nothing by default
                 }
             },
+            writeCommonFiles() {
+                if (this.skipClient) return;
+                return writeCommonFiles.call(this, useBlueprints);
+            },
+
+            ...super._missingPostWriting(),
         };
     }
 
     get writing() {
         if (useBlueprints) return;
         return this._writing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _postWriting() {
+        return {
+            packageJson() {
+                if (this.skipClient) return;
+                this.replacePackageJsonVersions(
+                    'VERSION_MANAGED_BY_CLIENT_COMMON',
+                    this.fetchFromInstalledJHipster('client/templates/common/package.json')
+                );
+                switch (this.clientFramework) {
+                    case ANGULAR:
+                        this.replacePackageJsonVersions(
+                            'VERSION_MANAGED_BY_CLIENT_ANGULAR',
+                            this.fetchFromInstalledJHipster('client/templates/angular/package.json')
+                        );
+                        break;
+                    case REACT:
+                        this.replacePackageJsonVersions(
+                            'VERSION_MANAGED_BY_CLIENT_REACT',
+                            this.fetchFromInstalledJHipster('client/templates/react/package.json')
+                        );
+                        break;
+                    case VUE:
+                        this.replacePackageJsonVersions(
+                            'VERSION_MANAGED_BY_CLIENT_VUE',
+                            this.fetchFromInstalledJHipster('client/templates/vue/package.json')
+                        );
+                        break;
+                    default:
+                    // do nothing by default
+                }
+            },
+        };
+    }
+
+    get postWriting() {
+        if (useBlueprints) return;
+        return this._postWriting();
     }
 
     // Public API method used by the getter and also by Blueprints

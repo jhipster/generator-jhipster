@@ -18,30 +18,15 @@
 -%>
 package <%= packageName %>.config;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-<%_ if (!reactive) { _%>
-import com.github.vanroy.springdata.jest.JestElasticsearchTemplate;
-import com.github.vanroy.springdata.jest.mapper.DefaultJestResultsMapper;
-import io.searchbox.client.JestClient;
-<%_ } _%>
-import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-<%_ if (!reactive) { _%>
-import org.springframework.context.annotation.Primary;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-<%_ } _%>
-import org.springframework.data.elasticsearch.core.EntityMapper;
-<%_ if (!reactive) { _%>
-import org.springframework.data.elasticsearch.core.convert.ElasticsearchConverter;
-<%_ } _%>
-<%_ if (databaseType === 'mongodb' || !reactive) { _%>
-import org.springframework.data.elasticsearch.core.mapping.SimpleElasticsearchMappingContext;
-<%_ } _%>
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.convert.WritingConverter;
+import org.springframework.data.elasticsearch.config.ElasticsearchConfigurationSupport;
+import org.springframework.data.elasticsearch.core.convert.ElasticsearchCustomConversions;
 <%_ if (databaseType === 'mongodb') { _%>
+import org.springframework.data.elasticsearch.core.mapping.SimpleElasticsearchMappingContext;
 import org.springframework.data.elasticsearch.core.mapping.ElasticsearchPersistentProperty;
 import org.springframework.data.elasticsearch.core.mapping.SimpleElasticsearchPersistentProperty;
 import org.springframework.data.mapping.PersistentEntity;
@@ -49,90 +34,107 @@ import org.springframework.data.mapping.model.Property;
 import org.springframework.data.mapping.model.SimpleTypeHolder;
 import org.springframework.data.elasticsearch.core.mapping.SimpleElasticsearchPersistentEntity;
 <%_ } _%>
-import org.springframework.data.mapping.MappingException;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
 
 @Configuration
-@EnableConfigurationProperties(ElasticsearchProperties.class)
-public class ElasticsearchConfiguration {
-
-    private ObjectMapper mapper;
-
-    public ElasticsearchConfiguration(ObjectMapper mapper) {
-        this.mapper = mapper;
-    }
+public class ElasticsearchConfiguration extends ElasticsearchConfigurationSupport {
 
     @Bean
-    public EntityMapper getEntityMapper() {
-        return new CustomEntityMapper(mapper);
+    @Override
+    public ElasticsearchCustomConversions elasticsearchCustomConversions() {
+        return new ElasticsearchCustomConversions(
+            Arrays.asList(
+                new ZonedDateTimeWritingConverter(),
+                new ZonedDateTimeReadingConverter(),
+                new InstantWritingConverter(),
+                new InstantReadingConverter(),
+                new LocalDateWritingConverter(),
+                new LocalDateReadingConverter()
+            )
+        );
+    }
+
+    @WritingConverter
+    static class ZonedDateTimeWritingConverter implements Converter<ZonedDateTime, String> {
+        @Override
+        public String convert(ZonedDateTime source) {
+            if (source == null) {
+                return null;
+            }
+            return source.toInstant().toString();
+        }
+    }
+
+    @ReadingConverter
+    static class ZonedDateTimeReadingConverter implements Converter<String, ZonedDateTime> {
+        @Override
+        public ZonedDateTime convert(String source) {
+            if (source == null) {
+                return null;
+            }
+            return Instant.parse(source).atZone(ZoneId.systemDefault());
+        }
+    }
+
+    @WritingConverter
+    static class InstantWritingConverter implements Converter<Instant, String> {
+        @Override
+        public String convert(Instant source) {
+            if (source == null) {
+                return null;
+            }
+            return source.toString();
+        }
+    }
+
+    @ReadingConverter
+    static class InstantReadingConverter implements Converter<String, Instant> {
+        @Override
+        public Instant convert(String source) {
+            if (source == null) {
+                return null;
+            }
+            return Instant.parse(source);
+        }
+    }
+
+    @WritingConverter
+    static class LocalDateWritingConverter implements Converter<LocalDate, String> {
+        @Override
+        public String convert(LocalDate source) {
+            if (source == null) {
+                return null;
+            }
+            return source.toString();
+        }
+    }
+
+    @ReadingConverter
+    static class LocalDateReadingConverter implements Converter<String, LocalDate> {
+        @Override
+        public LocalDate convert(String source) {
+            if (source == null) {
+                return null;
+            }
+            return LocalDate.parse(source);
+        }
     }
 <%_ if (databaseType === 'mongodb') { _%>
 
     @Bean
-    SimpleElasticsearchMappingContext mappingContext() {
-        return new CustomElasticsearchMappingContext();
+    @Override
+    public SimpleElasticsearchMappingContext elasticsearchMappingContext() {
+        CustomElasticsearchMappingContext mappingContext = new CustomElasticsearchMappingContext();
+        mappingContext.setInitialEntitySet(this.getInitialEntitySet());
+        mappingContext.setSimpleTypeHolder(this.elasticsearchCustomConversions().getSimpleTypeHolder());
+        return mappingContext;
     }
 <%_ } _%>
-<%_ if (!reactive) { _%>
-
-    @Bean
-    @Primary
-    public ElasticsearchOperations elasticsearchTemplate(JestClient jestClient,
-                                                         ElasticsearchConverter elasticsearchConverter,
-                                                         SimpleElasticsearchMappingContext mappingContext,
-                                                         EntityMapper entityMapper) {
-        return new JestElasticsearchTemplate(
-            jestClient,
-            elasticsearchConverter,
-            new DefaultJestResultsMapper(mappingContext, entityMapper));
-    }
-<%_ } _%>
-
-    public class CustomEntityMapper implements EntityMapper {
-
-        private ObjectMapper objectMapper;
-
-        public CustomEntityMapper(ObjectMapper objectMapper) {
-            this.objectMapper = objectMapper;
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-            objectMapper.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, true);
-            objectMapper.configure(SerializationFeature.INDENT_OUTPUT, false);
-            objectMapper.configure(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS, true);
-        }
-
-        @Override
-        public String mapToString(Object object) throws IOException {
-            return objectMapper.writeValueAsString(object);
-        }
-
-        @Override
-        public <T> T mapToObject(String source, Class<T> clazz) throws IOException {
-            return objectMapper.readValue(source, clazz);
-        }
-
-        @Override
-        public Map<String, Object> mapObject(Object source) {
-            try {
-                return objectMapper.readValue(mapToString(source), HashMap.class);
-            } catch (IOException e) {
-                throw new MappingException(e.getMessage(), e);
-            }
-        }
-
-        @Override
-        public <T> T readObject(Map<String, Object> source, Class<T> targetType) {
-            try {
-                return mapToObject(mapToString(source), targetType);
-            } catch (IOException e) {
-                throw new MappingException(e.getMessage(), e);
-            }
-        }
-    }
-
 }
 <%_ if (databaseType === 'mongodb') { _%>
 

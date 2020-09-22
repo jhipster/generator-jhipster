@@ -3,7 +3,6 @@ import { mixins } from 'vue-class-component';
 import { Component, Vue, Inject } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
-import AlertMixin from '@/shared/alert/alert.mixin';
 <% if (fieldsContainBlob || pagination === 'infinite-scroll') { %>
 import JhiDataUtils from '@/shared/data/data-utils.service';
 <% } %>
@@ -12,7 +11,7 @@ import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 @Component({
   mixins: [Vue2Filters.mixin]
 })
-export default class <%= entityAngularName %> extends <% if (fieldsContainBlob || pagination === 'infinite-scroll') { %>mixins(JhiDataUtils, AlertMixin)<% } else { %> mixins(AlertMixin)<% } %> {
+export default class <%= entityAngularName %> extends <% if (fieldsContainBlob || pagination === 'infinite-scroll') { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service: () => <%= entityAngularName %>Service;
   <%_ if (searchEngine === 'elasticsearch') { _%>
   public currentSearch = '';
@@ -31,7 +30,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
   public infiniteId = +new Date();
   public links = {};
   <%_ } _%>
-    
+
   public <%= entityInstancePlural %>: I<%= entityAngularName %>[] = [];
 
   public isFetching = false;
@@ -149,6 +148,10 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
     });
   }
 
+  public handleSyncList(): void {
+    this.clear();
+  }
+
   <%_ if (!readOnly) { _%>
   public prepareRemove(instance: I<%= entityAngularName %>) : void {
     this.removeId = instance.id;
@@ -164,8 +167,13 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
       <%_ } else {_%>
       const message = 'A <%= entityAngularName %> is deleted with identifier ' + this.removeId;
       <%_ } _%>
-      this.alertService().showAlert(message, 'danger');
-      this.getAlertFromStore();
+      this.$bvToast.toast(message.toString(), {
+        toaster: 'b-toaster-top-center',
+        title: 'Info',
+        variant: 'danger',
+        solid: true,
+        autoHideDelay: 5000,
+      });
       this.removeId = null;
       <%_ if (pagination === 'infinite-scroll') { _%>
       this.reset();
@@ -214,7 +222,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
     <%_ } else { _%>
     this.reset();
     <%_ } _%>
-    
+
   }
 
   <%_ } _%>

@@ -89,7 +89,7 @@ public class <%= asDto('User') %> {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
-        this.activated = user.getActivated();
+        this.activated = user.isActivated();
         <%_ if (databaseType !== 'cassandra') { _%>
         this.imageUrl = user.getImageUrl();
         <%_ } _%>

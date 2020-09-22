@@ -37,7 +37,6 @@ import parseISO from 'date-fns/parseISO';
 import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
 <%_ } } _%>
 
-import AlertService from '@/shared/alert/alert.service';
 import * as config from '@/shared/config/config';
 import <%= entityAngularName %>UpdateComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
 import <%= entityAngularName %>Class from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
@@ -94,7 +93,6 @@ describe('Component Tests', () => {
         localVue,
         router,
         provide: {
-          alertService: () => new AlertService(store),
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
           <%_
             const entitiesSeen = [entityAngularName];
@@ -178,6 +176,7 @@ describe('Component Tests', () => {
         // GIVEN
         const found<%= entityAngularName %> = { id: <%- tsKeyId %> };
         <%= entityInstance %>ServiceStub.find.resolves(found<%= entityAngularName %>);
+        <%= entityInstance %>ServiceStub.retrieve.resolves([found<%= entityAngularName %>]);
 
         // WHEN
         comp.beforeRouteEnter({ params: { <%= entityInstance %>Id: <%- tsKeyId %> } }, null, cb => cb(comp));

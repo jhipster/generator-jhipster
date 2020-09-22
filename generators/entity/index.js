@@ -18,8 +18,10 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
+const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
+
 const prompts = require('./prompts');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
@@ -151,6 +153,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.checkInvocationFromCLI();
             },
 
+            isBuiltInEntity() {
+                if (this.isBuiltInUser(this.context.name) || this.isBuiltInAuthority(this.context.name)) {
+                    throw new Error(`Is not possible to override built in ${this.context.name}`);
+                }
+            },
+
             setupRequiredConfigForMicroservicePrompt() {
                 this.context.filename = path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(this.context.name)}.json`);
             },
@@ -234,21 +242,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
                 context.capitalizedBaseName = _.upperFirst(context.baseName);
 
-                context.angularAppName = this.getAngularAppName(context.baseName);
-                context.angularXAppName = this.getAngularXAppName(context.baseName);
+                context.frontendAppName = this.getFrontendAppName(context.baseName);
                 context.mainClass = this.getMainClassName(context.baseName);
                 context.microserviceAppName = '';
 
                 if (context.entitySuffix === context.dtoSuffix) {
                     throw new Error('The entity cannot be generated as the entity suffix and DTO suffix are equals !');
-                }
-            },
-
-            validateReactiveCompatibility() {
-                if (this.context.reactive && !['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(this.context.databaseType)) {
-                    throw new Error(
-                        `The entity generator doesn't support reactive apps with databases of type ${this.context.databaseType} at the moment`
-                    );
                 }
             },
 
@@ -346,9 +345,30 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.entityConfig.pagination = 'no';
                 }
 
-                if (this.entityConfig.jpaMetamodelFiltering && (context.databaseType !== 'sql' || this.entityConfig.service === 'no')) {
+                if (
+                    this.entityConfig.jpaMetamodelFiltering &&
+                    (context.databaseType !== 'sql' || this.entityConfig.service === 'no' || context.reactive === true)
+                ) {
                     this.warning('Not compatible with jpaMetamodelFiltering, disabling');
                     this.entityConfig.jpaMetamodelFiltering = false;
+                }
+
+                // Validate root entity json content
+                if (this.entityConfig.changelogDate === undefined) {
+                    const currentDate = this.dateFormatForLiquibase();
+                    this.info(`changelogDate is missing in .jhipster/${this.entityConfig.name}.json, using ${currentDate} as fallback`);
+                    context.changelogDate = this.entityConfig.changelogDate = currentDate;
+                }
+
+                if (this.entityConfig.incrementalChangelog === undefined) {
+                    // Keep entity's original incrementalChangelog option.
+                    this.entityConfig.incrementalChangelog =
+                        this.jhipsterConfig.incrementalChangelog &&
+                        !fs.existsSync(
+                            this.destinationPath(
+                                `src/main/resources/config/liquibase/changelog/${this.entityConfig.changelogDate}_added_entity_${this.entityConfig.name}.xml`
+                            )
+                        );
                 }
             },
 
@@ -411,13 +431,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
                 });
                 this.entityConfig.relationships = relationships;
-
-                // Validate root entity json content
-                if (this.entityConfig.changelogDate === undefined && ['sql', 'cassandra', 'couchbase'].includes(context.databaseType)) {
-                    const currentDate = this.dateFormatForLiquibase();
-                    this.info(`changelogDate is missing in .jhipster/${entityName}.json, using ${currentDate} as fallback`);
-                    context.changelogDate = this.entityConfig.changelogDate = currentDate;
-                }
             },
         };
     }
@@ -428,24 +441,73 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
-    _default() {
+    _loading() {
         return {
             loadConfig() {
                 // Update current context with config from file.
                 Object.assign(this.context, this.entityStorage.getAll());
                 loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
             },
-            prepareForTemplates() {
+        };
+    }
+
+    get loading() {
+        if (useBlueprints) return;
+        return this._loading();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _preparing() {
+        return {
+            prepareEntityForTemplates() {
                 const entity = this.context;
                 prepareEntityForTemplates(entity, this);
 
                 this.context.fields.forEach(field => {
                     prepareFieldForTemplates(entity, field, this);
                 });
+            },
+        };
+    }
 
+    get preparing() {
+        if (useBlueprints) return;
+        return this._preparing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return {
+            ...super._missingPreDefault(),
+
+            prepareRelationshipsForTemplates() {
                 this.context.relationships.forEach(relationship => {
-                    prepareRelationshipForTemplates(entity, relationship, this);
+                    prepareRelationshipForTemplates(this.context, relationship, this);
                 });
+            },
+            /*
+             * Composed generators uses context ready for the templates.
+             */
+            composing() {
+                const context = this.context;
+                if (!context.skipServer) {
+                    this.composeWithJHipster('entity-server', {
+                        context,
+                    });
+                }
+
+                if (!context.skipClient) {
+                    this.composeWithJHipster('entity-client', {
+                        context,
+                        skipInstall: this.options.skipInstall,
+                    });
+                    if (this.jhipsterConfig.enableTranslation) {
+                        this.composeWithJHipster('entity-i18n', {
+                            context,
+                            skipInstall: this.options.skipInstall,
+                        });
+                    }
+                }
             },
 
             insight() {
@@ -483,33 +545,16 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 }
             },
 
-            composeServer() {
-                const context = this.context;
-                if (context.skipServer) return;
-
-                this.composeWithJHipster('entity-server', {
-                    context,
+            databaseChangelog() {
+                if (this.options.skipDbChangelog) {
+                    return;
+                }
+                this.composeWithJHipster('database-changelog', {
+                    arguments: [this.context.name],
                 });
             },
 
-            composeClient() {
-                const context = this.context;
-                if (context.skipClient) return;
-
-                this.composeWithJHipster('entity-client', {
-                    context,
-                    skipInstall: this.options.skipInstall,
-                });
-            },
-
-            composeI18n() {
-                const context = this.context;
-                if (context.skipClient) return;
-                this.composeWithJHipster('entity-i18n', {
-                    context,
-                    skipInstall: this.options.skipInstall,
-                });
-            },
+            ...super._missingPostWriting(),
         };
     }
 

@@ -1,14 +1,13 @@
 <template>
   <div class="table-responsive">
-    <h2 id="logs-page-heading" v-text="$t('logs.title')">Logs</h2>
+    <h2 id="logs-page-heading" v-text="$t('logs.title')" data-cy="logsPageHeading">Logs</h2>
 
     <div v-if="loggers">
       <p v-text="$t('logs.nbloggers', { total: loggers.length })">There are {{ loggers.length }} loggers.</p>
 
       <span v-text="$t('logs.filter')">Filter</span> <input type="text" v-model="filtered" class="form-control" />
 
-      <table class="table table-sm table-striped table-bordered">
-        <caption>Logs</caption>
+      <table class="table table-sm table-striped table-bordered" aria-describedby="Logs">
         <thead>
           <tr title="click to order">
             <th v-on:click="changeOrder('name')" scope="col"><span v-text="$t('logs.table.name')">Name</span></th>

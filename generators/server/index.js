@@ -31,7 +31,7 @@ const { defaultConfig } = require('../generator-defaults');
 
 let useBlueprints;
 
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -81,6 +81,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Make constants available in templates
                 this.MAIN_DIR = constants.MAIN_DIR;
                 this.TEST_DIR = constants.TEST_DIR;
+                this.DOCKER_DIR = constants.DOCKER_DIR;
                 this.LOGIN_REGEX = constants.LOGIN_REGEX;
                 this.CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
                 this.SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
@@ -112,9 +113,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
                 this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
                 this.DOCKER_SONAR = constants.DOCKER_SONAR;
-                this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
-                this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
-                this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
                 this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
                 this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
                 this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
@@ -134,6 +132,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
                 this.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
                 this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
+                this.HIBERNATE_VERSION = constants.HIBERNATE_VERSION;
                 this.JACOCO_VERSION = constants.JACOCO_VERSION;
 
                 this.KAFKA_VERSION = constants.KAFKA_VERSION;
@@ -216,24 +215,44 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
-    _default() {
+    _composing() {
         return {
             composeLanguages() {
                 // We don't expose client/server to cli, composing with languages is used for test purposes.
                 if (this.jhipsterConfig.enableTranslation === false) return;
                 this.composeWithJHipster('languages', true);
             },
+        };
+    }
 
+    get composing() {
+        if (useBlueprints) return;
+        return this._composing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _loading() {
+        return {
             loadSharedConfig() {
                 this.loadAppConfig();
                 this.loadClientConfig();
                 this.loadServerConfig();
                 this.loadTranslationConfig();
             },
+        };
+    }
 
-            setupSharedOptions() {
+    get loading() {
+        if (useBlueprints) return;
+        return this._loading();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _preparing() {
+        return {
+            prepareForTemplates() {
                 // Application name modified, using each technology's conventions
-                this.angularAppName = this.getAngularAppName();
+                this.frontendAppName = this.getFrontendAppName();
                 this.camelizedBaseName = _.camelCase(this.baseName);
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.lowercaseBaseName = this.baseName.toLowerCase();
@@ -274,6 +293,18 @@ module.exports = class extends BaseBlueprintGenerator {
                     }
                 }
             },
+        };
+    }
+
+    get preparing() {
+        if (useBlueprints) return;
+        return this._preparing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return {
+            ...super._missingPreDefault(),
 
             insight() {
                 statistics.sendSubGenEvent('generator', 'server', {
@@ -303,7 +334,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
     // Public API method used by the getter and also by Blueprints
     _writing() {
-        return writeFiles();
+        return { ...writeFiles(), ...super._missingPostWriting() };
     }
 
     get writing() {

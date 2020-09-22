@@ -1,13 +1,12 @@
-import { Component, Inject } from 'vue-property-decorator';
+import { Component, Inject, Vue } from 'vue-property-decorator';
 import { mixins } from 'vue-class-component';
 import Vue2Filters from 'vue2-filters';
 import UserManagementService from './user-management.service';
-import AlertMixin from '@/shared/alert/alert.mixin';
 
 @Component({
   mixins: [Vue2Filters.mixin]
 })
-export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mixins(AlertMixin) {
+export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends Vue {
   @Inject('userService') private userManagementService: () => UserManagementService;
   public error = '';
   public success = '';
@@ -19,6 +18,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mi
   public propOrder = 'id';
   public reverse = false;
   public totalItems = 0;
+  public isLoading = false;
   public removeId: <% if (pkType === 'String' || pkType === 'UUID') { %>string<% } else { %>number<% } %> = null;
 
   public mounted(): void {
@@ -41,16 +41,26 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mi
   }
 
   public loadAll(): void {
+    this.isLoading = true;
+
     this.userManagementService().retrieve(<% if (databaseType !== 'cassandra') { %>{
         page: this.page - 1,
         size: this.itemsPerPage,
         sort: this.sort()}<% } %>).then(res => {
+      this.isLoading = false;
       this.users = res.data;
       <%_ if (databaseType !== 'cassandra') { _%>
       this.totalItems = Number(res.headers['x-total-count']);
       this.queryCount = this.totalItems;
       <%_ } _%>
+    })
+    .catch(() => {
+      this.isLoading = false;
     });
+  }
+
+  public handleSyncList(): void {
+    this.loadAll();
   }
 
   <%_ if (databaseType !== 'cassandra') { _%>
@@ -83,16 +93,21 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mi
   public deleteUser(): void {
     this.userManagementService().remove(this.removeId).then(res => {
       <%_
-      const headerAlert = `X-${angularAppName}-alert`.toLowerCase();
-      const headerParams = `X-${angularAppName}-params`.toLowerCase();
+      const headerAlert = `X-${frontendAppName}-alert`.toLowerCase();
+      const headerParams = `X-${frontendAppName}-params`.toLowerCase();
       if (enableTranslation) {
       _%>
       const message = this.$t(res.headers['<%=headerAlert%>'], { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) });
       <%_ } else {_%>
       const message = res.headers['<%=headerAlert%>'];
       <%_ } _%>
-      this.alertService().showAlert(message, 'danger');
-      this.getAlertFromStore();
+      this.$bvToast.toast(message.toString(), {
+        toaster: 'b-toaster-top-center',
+        title: 'Info',
+        variant: 'danger',
+        solid: true,
+        autoHideDelay: 5000,
+      });
       this.removeId = null;
       this.loadAll();
       this.closeDialog();

@@ -20,7 +20,10 @@
 const _ = require('lodash');
 const pluralize = require('pluralize');
 const { fieldIsEnum } = require('./field');
+const { createFaker } = require('./faker');
+const { parseLiquibaseChangelogDate } = require('./liquibase');
 const { entityDefaultConfig } = require('../generators/generator-defaults');
+const { stringHashCode } = require('../generators/utils');
 
 const BASE_TEMPLATE_DATA = {
     skipUiGrouping: false,
@@ -73,6 +76,11 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     const entityName = entityWithConfig.name;
     const entityNamePluralizedAndSpinalCased = _.kebabCase(pluralize(entityName));
     _.defaults(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
+
+    entityWithConfig.changelogDateForRecent = parseLiquibaseChangelogDate(entityWithConfig.changelogDate);
+    entityWithConfig.faker = entityWithConfig.faker || createFaker(generator.jhipsterConfig.nativeLanguage);
+    entityWithConfig.resetFakerSeed = (suffix = '') =>
+        entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
 
     entityWithConfig.entityTableName = entityWithConfig.entityTableName || generator.getTableName(entityName);
     entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix;
@@ -129,18 +137,17 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
             : entityWithConfig.entityStateName
     );
 
-    entityWithConfig.reactiveRepositories =
-        entityWithConfig.reactive && ['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(entityWithConfig.databaseType);
+    entityWithConfig.reactiveRepositories = entityWithConfig.reactive;
 
     entityWithConfig.differentTypes.push(entityWithConfig.entityClass);
     entityWithConfig.i18nToLoad.push(entityWithConfig.entityInstance);
-    entityWithConfig.i18nKeyPrefix = `${entityWithConfig.angularAppName}.${entityWithConfig.entityTranslationKey}`;
+    entityWithConfig.i18nKeyPrefix = `${entityWithConfig.frontendAppName}.${entityWithConfig.entityTranslationKey}`;
 
-    const hasUserField = entityWithConfig.relationships.some(relationship => generator.isBuiltInUserEntity(relationship.otherEntityName));
+    const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => generator.isBuiltInUser(relationship.otherEntityName));
     entityWithConfig.saveUserSnapshot =
         entityWithConfig.applicationType === 'microservice' &&
         entityWithConfig.authenticationType === 'oauth2' &&
-        hasUserField &&
+        hasBuiltInUserField &&
         entityWithConfig.dto === 'no';
 
     entityWithConfig.primaryKeyType = generator.getPkTypeBasedOnDBAndAssociation(
@@ -195,6 +202,21 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
             entityWithConfig.validation = true;
         }
     });
+
+    entityWithConfig.generateFakeData = type => {
+        const fieldEntries = entityWithConfig.fields.map(field => {
+            const fieldData = field.generateFakeData(type);
+            if (!field.nullable && fieldData === null) return undefined;
+            return [field.fieldName, fieldData];
+        });
+        const withError = fieldEntries.find(entry => !entry);
+        if (withError) {
+            generator.warning(`Error generating a full sample for entity ${entityName}`);
+            return undefined;
+        }
+        return Object.fromEntries(fieldEntries);
+    };
+
     return entityWithConfig;
 }
 

@@ -132,13 +132,7 @@ describe('JHipster generator import jdl', () => {
         });
         it('calls generator in order', () => {
             expect(subGenCallParams.count).to.equal(5);
-            expect(subGenCallParams.commands).to.eql([
-                'jhipster:app',
-                'jhipster:app',
-                'jhipster:app',
-                'jhipster:docker-compose',
-                'jhipster:kubernetes',
-            ]);
+            expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'docker-compose', 'kubernetes']);
             expect(subGenCallParams.options[0]).to.eql([
                 '--with-entities',
                 '--skip-install',
@@ -191,7 +185,7 @@ describe('JHipster generator import jdl', () => {
 
     describe('imports a JDL entity model from single file with --skip-db-changelog', () => {
         let oldCwd;
-        const options = { skipDbChangelog: true, skipInstall: true };
+        const options = { skipDbChangelog: true };
         beforeEach(() => {
             return testInTempDir(dir => {
                 oldCwd = dir;
@@ -226,7 +220,22 @@ describe('JHipster generator import jdl', () => {
                 'jhipster:entity Job',
                 'jhipster:entity JobHistory',
             ]);
-            expect(subGenCallParams.options[0]).to.eql({
+        });
+
+        it('calls entity subgenerator with correct options', () => {
+            subGenCallParams.options.slice(0, subGenCallParams.options.length - 1).forEach(subGenOptions => {
+                expect(subGenOptions).to.eql({
+                    ...options,
+                    ...defaultAddedOptions,
+                    skipInstall: true,
+                    regenerate: true,
+                    interactive: true,
+                });
+            });
+        });
+
+        it('last entity subgenerator should be called without skipInstall', () => {
+            expect(subGenCallParams.options[subGenCallParams.options.length - 1]).to.eql({
                 ...options,
                 ...defaultAddedOptions,
                 regenerate: true,
@@ -367,7 +376,7 @@ describe('JHipster generator import jdl', () => {
         });
     });
 
-    describe('imports single app and entities', () => {
+    describe('imports single app and entities with --fork', () => {
         let oldCwd;
         const options = { skipInstall: true, noInsight: true, skipGit: false, creationTimestamp: '2019-01-01' };
         beforeEach(() => {
@@ -375,7 +384,7 @@ describe('JHipster generator import jdl', () => {
                 oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
                 fse.removeSync(`${dir}/.yo-rc.json`);
-                return loadImportJdl()(['single-app-and-entities.jdl'], options, env);
+                return loadImportJdl()(['single-app-and-entities.jdl'], { ...options, fork: true }, env);
             }, true);
         });
 
@@ -399,7 +408,7 @@ describe('JHipster generator import jdl', () => {
         });
         it('calls application generator', () => {
             expect(subGenCallParams.count).to.equal(1);
-            expect(subGenCallParams.commands).to.eql(['jhipster:app']);
+            expect(subGenCallParams.commands).to.eql(['app']);
             expect(subGenCallParams.options[0]).to.eql([
                 '--force',
                 '--with-entities',
@@ -414,7 +423,7 @@ describe('JHipster generator import jdl', () => {
         });
     });
 
-    describe('imports single app and entities with --no-fork', () => {
+    describe('imports single app and entities', () => {
         let oldCwd;
         const options = { skipInstall: true, noInsight: true, skipGit: false, creationTimestamp: '2019-01-01' };
         beforeEach(() => {
@@ -422,7 +431,7 @@ describe('JHipster generator import jdl', () => {
                 oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
                 fse.removeSync(`${dir}/.yo-rc.json`);
-                return loadImportJdl()(['single-app-and-entities.jdl'], { ...options, fork: false }, env);
+                return loadImportJdl()(['single-app-and-entities.jdl'], options, env);
             }, true);
         });
 
@@ -450,7 +459,7 @@ describe('JHipster generator import jdl', () => {
         });
     });
 
-    describe('imports single app and entities passed with --inline', () => {
+    describe('imports single app and entities passed with --inline and --fork', () => {
         let oldCwd;
         const options = {
             skipInstall: true,
@@ -461,7 +470,7 @@ describe('JHipster generator import jdl', () => {
         beforeEach(() => {
             return testInTempDir(dir => {
                 oldCwd = dir;
-                return loadImportJdl()([], options, env);
+                return loadImportJdl()([], { ...options, fork: true }, env);
             }, true);
         });
 
@@ -475,7 +484,7 @@ describe('JHipster generator import jdl', () => {
         });
         it('calls application generator', () => {
             expect(subGenCallParams.count).to.equal(1);
-            expect(subGenCallParams.commands).to.eql(['jhipster:app']);
+            expect(subGenCallParams.commands).to.eql(['app']);
             expect(subGenCallParams.options[0]).to.eql([
                 '--force',
                 '--with-entities',
@@ -490,7 +499,7 @@ describe('JHipster generator import jdl', () => {
         });
     });
 
-    describe('imports single app and entities passed with --inline and --no-fork', () => {
+    describe('imports single app and entities passed with --inline', () => {
         let oldCwd;
         const options = {
             skipInstall: true,
@@ -501,7 +510,7 @@ describe('JHipster generator import jdl', () => {
         beforeEach(() => {
             return testInTempDir(dir => {
                 oldCwd = dir;
-                return loadImportJdl()([], { ...options, fork: false }, env);
+                return loadImportJdl()([], options, env);
             }, true);
         });
 
@@ -528,7 +537,7 @@ describe('JHipster generator import jdl', () => {
         });
     });
 
-    describe('imports single app only', () => {
+    describe('imports single app only with --fork', () => {
         let oldCwd;
         const options = { skipInstall: true, noInsight: true, interactive: false, skipGit: false };
         beforeEach(() => {
@@ -536,7 +545,7 @@ describe('JHipster generator import jdl', () => {
                 oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
                 fse.removeSync(`${dir}/.yo-rc.json`);
-                return loadImportJdl()(['single-app-only.jdl'], options, env);
+                return loadImportJdl()(['single-app-only.jdl'], { ...options, fork: true }, env);
             }, true);
         });
 
@@ -547,7 +556,7 @@ describe('JHipster generator import jdl', () => {
         });
         it('calls application generator', () => {
             expect(subGenCallParams.count).to.equal(1);
-            expect(subGenCallParams.commands).to.eql(['jhipster:app']);
+            expect(subGenCallParams.commands).to.eql(['app']);
             expect(subGenCallParams.options[0]).to.eql([
                 '--force',
                 '--skip-install',
@@ -560,7 +569,7 @@ describe('JHipster generator import jdl', () => {
         });
     });
 
-    describe('imports single app only with --no-fork', () => {
+    describe('imports single app only', () => {
         let oldCwd;
         const options = { skipInstall: true, noInsight: true, interactive: false, skipGit: false };
         beforeEach(() => {
@@ -568,7 +577,7 @@ describe('JHipster generator import jdl', () => {
                 oldCwd = dir;
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
                 fse.removeSync(`${dir}/.yo-rc.json`);
-                return loadImportJdl()(['single-app-only.jdl'], { ...options, fork: false }, env);
+                return loadImportJdl()(['single-app-only.jdl'], options, env);
             }, true);
         });
 
@@ -624,7 +633,7 @@ describe('JHipster generator import jdl', () => {
         });
         it('calls application generator', () => {
             expect(subGenCallParams.count).to.equal(3);
-            expect(subGenCallParams.commands).to.eql(['jhipster:app', 'jhipster:app', 'jhipster:app']);
+            expect(subGenCallParams.commands).to.eql(['app', 'app', 'app']);
             expect(subGenCallParams.options[0]).to.eql([
                 '--force',
                 '--with-entities',
@@ -671,17 +680,10 @@ describe('JHipster generator import jdl', () => {
         });
         it('does not call application generator', () => {
             expect(subGenCallParams.count).to.equal(6);
-            expect(subGenCallParams.commands).to.eql([
-                'jhipster:entity A',
-                'jhipster:entity B',
-                'jhipster:entity E',
-                'jhipster:entity E',
-                'jhipster:entity F',
-                'jhipster:entity F',
-            ]);
+            expect(subGenCallParams.commands).to.eql(['entity A', 'entity B', 'entity E', 'entity E', 'entity F', 'entity F']);
             expect(subGenCallParams.options[0]).to.eql([
-                '--skip-install',
                 '--force',
+                '--skip-install',
                 '--ignore-application',
                 '--no-interactive',
                 '--no-skip-git',
@@ -713,7 +715,7 @@ describe('JHipster generator import jdl', () => {
             ]);
         });
         it('calls deployment generator', () => {
-            const invokedSubgens = ['jhipster:docker-compose', 'jhipster:kubernetes', 'jhipster:openshift'];
+            const invokedSubgens = ['docker-compose', 'kubernetes', 'openshift'];
             expect(subGenCallParams.commands).to.eql(invokedSubgens);
             expect(subGenCallParams.count).to.equal(invokedSubgens.length);
             expect(subGenCallParams.options[0]).to.eql([
@@ -745,13 +747,7 @@ describe('JHipster generator import jdl', () => {
 
             it('calls generator in order', () => {
                 expect(subGenCallParams.count).to.equal(5);
-                expect(subGenCallParams.commands).to.eql([
-                    'jhipster:app',
-                    'jhipster:app',
-                    'jhipster:app',
-                    'jhipster:docker-compose',
-                    'jhipster:kubernetes',
-                ]);
+                expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'docker-compose', 'kubernetes']);
                 expect(subGenCallParams.options[0]).to.eql([
                     '--force',
                     '--with-entities',
@@ -827,7 +823,7 @@ describe('JHipster generator import jdl', () => {
 
         it('calls generator in order', () => {
             expect(subGenCallParams.count).to.equal(3);
-            expect(subGenCallParams.commands).to.eql(['jhipster:app', 'jhipster:app', 'jhipster:app']);
+            expect(subGenCallParams.commands).to.eql(['app', 'app', 'app']);
             expect(subGenCallParams.options[0]).to.eql([
                 '--force',
                 '--with-entities',

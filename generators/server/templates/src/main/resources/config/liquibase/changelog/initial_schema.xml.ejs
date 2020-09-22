@@ -156,7 +156,7 @@
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
-        <dropDefaultValue tableName="<%= jhiTablePrefix %>_user" columnName="created_date" columnDataType="datetime"/>
+        <dropDefaultValue tableName="<%= jhiTablePrefix %>_user" columnName="created_date" columnDataType="${datetimeType}"/>
         <<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
                   file="config/liquibase/data/authority.csv"
                   separator=";"
