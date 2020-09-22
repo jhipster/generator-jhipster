@@ -96,16 +96,17 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     }
 
     _.defaults(entityWithConfig, {
-        entityNameCapitalized: _.upperFirst(entityWithConfig.name),
-        entityClass: _.upperFirst(entityWithConfig.name),
+        entityNameCapitalized: _.upperFirst(entityName),
+        entityClass: _.upperFirst(entityName),
         entityInstance: _.lowerFirst(entityName),
         entityTableName: generator.getTableName(entityName),
+        entityNamePlural: pluralize(entityName),
     });
 
     _.defaults(entityWithConfig, {
-        entityNamePluralizedAndSpinalCased: _.kebabCase(pluralize(entityName)),
-        entityClassPlural: pluralize(entityWithConfig.entityClass),
-        entityInstancePlural: pluralize(entityWithConfig.entityInstance),
+        entityNamePluralizedAndSpinalCased: _.kebabCase(entityWithConfig.entityNamePlural),
+        entityClassPlural: _.upperFirst(entityWithConfig.entityNamePlural),
+        entityInstancePlural: _.lowerFirst(entityWithConfig.entityNamePlural),
     });
 
     _.defaults(entityWithConfig, {
