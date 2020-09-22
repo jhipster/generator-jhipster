@@ -552,7 +552,7 @@ const serverFiles = {
                 {
                     file: 'package/security/oauth2/AuthorizationHeaderUtilTest.java',
                     renameTo: generator => `${generator.javaDir}security/oauth2/AuthorizationHeaderUtilTest.java`,
-                }
+                },
             ],
         },
         {
