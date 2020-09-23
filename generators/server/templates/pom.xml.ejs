@@ -640,6 +640,14 @@
         </dependency>
 <%_ } _%>
 <%_ if (reactive) { _%>
+    <%_ if (databaseType === 'mongodb') { _%>
+        <!-- Mongock doesn't support reactive yet, so this dependency is necessary. -->
+        <!-- See https://github.com/jhipster/generator-jhipster/pull/12536#issuecomment-696683592 for more information. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+    <%_ } _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
