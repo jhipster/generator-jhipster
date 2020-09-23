@@ -50,6 +50,20 @@
     <%_ } _%>
 
     window.onload = function () {
+
+        // Automatically click all 'Try it out' buttons
+        var mutationObserver = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                document.querySelectorAll(".btn.try-out__btn:not(.cancel)").forEach(div => { div.click(); });
+            });
+        });
+
+        mutationObserver.observe(document.documentElement, {
+            attributes: true,
+            childList: true,
+            subtree: true
+        });
+
         var urls = [];
         axios.get("/swagger-resources").then(function (response) {
             response.data.forEach(function (resource) {
