@@ -132,7 +132,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %><%= instanceType %><% if (reactive) { %>><% } %> partialUpdate(<%= instanceType %> <%= instanceName %>) {
         log.debug("Request to partially update <%= entityClass %> : {}", <%= instanceName %>);
-<%- include('../../common/patch_template', {asEntity, asDto, isFieldWithContentType, isService: true, viaService: false}); -%>
+<%- include('../../common/patch_template', {asEntity, asDto, isService: true, viaService: false}); -%>
     }
 
     <%_ if (service !== 'serviceImpl') { _%>

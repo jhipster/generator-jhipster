@@ -285,7 +285,7 @@ public class <%= entityClass %>Resource {
             <%_ } _%>
         <%_ } _%>
 
-        <%- include('../../common/patch_template', {asEntity, asDto, isFieldWithContentType, isService: false, viaService: viaService}); -%>
+        <%- include('../../common/patch_template', {asEntity, asDto, isService: false, viaService: viaService}); -%>
             <%_ if (!reactive) { _%>
         return ResponseUtil.wrapOrNotFound(
             result,

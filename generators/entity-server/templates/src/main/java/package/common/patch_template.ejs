@@ -37,7 +37,7 @@ _%>
    if (<%= instanceName %>.get<%= field.fieldNameCapitalized %>() != null) {
       existing<%= entityClass %>.set<%= field.fieldNameCapitalized %>(<%= instanceName %>.get<%= field.fieldNameCapitalized %>());
    }
-   <%_ if (isFieldWithContentType(field)) { _%>
+   <%_ if (field.fieldWithContentType) { _%>
    if (<%= instanceName %>.get<%= field.fieldNameCapitalized %>ContentType() != null) {
       existing<%= entityClass %>.set<%= field.fieldNameCapitalized %>ContentType(<%= instanceName %>.get<%= field.fieldNameCapitalized %>ContentType());
    }
