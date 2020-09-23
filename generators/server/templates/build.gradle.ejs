@@ -400,7 +400,7 @@ dependencies {
     <%_ if (databaseType === 'mongodb' && reactive) { _%>
     // Mongock doesn't support reactive yet, so this dependency is necessary.
     // See https://github.com/jhipster/generator-jhipster/pull/12536#issuecomment-696683592 for more information.
-    testImplementation "org.springframework.boot:spring-boot-starter-data-mongodb"
+    implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
     <%_ } _%>
     <%_ if (databaseType === 'neo4j') { _%>
     implementation "org.neo4j.springframework.data:spring-data-neo4j-rx-spring-boot-starter"
