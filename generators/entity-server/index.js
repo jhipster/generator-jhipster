@@ -82,7 +82,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.relationships
                     .filter(relationship => relationship.relationshipOtherSideIgnore === undefined)
                     .forEach(relationship => {
-                        relationship.ignoreOtherSideProperty = !relationship.embedded && relationship.otherSideReferenceExists;
+                        relationship.ignoreOtherSideProperty = !relationship.embedded && !!relationship.otherEntity;
                     });
                 this.relationshipsContainOtherSideIgnore = this.relationships.some(relationship => relationship.ignoreOtherSideProperty);
             },
