@@ -43,6 +43,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     currentAccount: Account | null = null;
     users: User[] | null = null;
     userListSubscription?: Subscription;
+    isLoading = false;
     <%_ if (databaseType !== 'cassandra') { _%>
     totalItems = 0;
     itemsPerPage = ITEMS_PER_PAGE;
@@ -91,6 +92,10 @@ export class UserManagementComponent implements OnInit, OnDestroy {
         modalRef.componentInstance.user = user;
     }
 
+    handleSyncList(): void {
+        this.loadAll();
+    }
+
     <%_ if (databaseType !== 'cassandra') { _%>
     transition(): void {
         this.router.navigate(['./'], {
@@ -115,13 +120,18 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     <%_ } _%>
 
     private loadAll(): void {
-        this.userService.query(<% if (databaseType !== 'cassandra') { %>{
-            page: this.page - 1,
-            size: this.itemsPerPage,
-            sort: this.sort()
-        }<% } %>).subscribe(
-            (res: HttpResponse<User[]>) => this.onSuccess(res.body<% if (databaseType !== 'cassandra') { %>, res.headers<% } %>)
-        );
+      this.isLoading = true;
+      this.userService.query(<% if (databaseType !== 'cassandra') { %>{
+          page: this.page - 1,
+          size: this.itemsPerPage,
+          sort: this.sort()
+      }<% } %>).subscribe(
+          (res: HttpResponse<User[]>) => {
+              this.isLoading = false;
+              this.onSuccess(res.body<% if (databaseType !== 'cassandra') { %>, res.headers<% } %>);
+          }, () => {
+              this.isLoading = false;
+          });
     }
 
     <%_ if (databaseType !== 'cassandra') { _%>

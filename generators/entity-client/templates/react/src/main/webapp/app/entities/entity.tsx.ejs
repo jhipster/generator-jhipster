@@ -238,19 +238,36 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   <%_ } _%>
   <%_ } _%>
 
+  const handleSyncList = () => {
+    <% if (pagination === 'no') { %>
+      props.getEntities();
+    <% } %>
+    <% if (pagination === 'pagination') { %>
+      sortEntities();
+    <% } %>
+    <% if (pagination === 'infinite-scroll') { %>
+      resetAll();
+    <% } %>
+  };
+
   const { <%= entityInstance %>List, match, loading<% if (pagination === 'pagination') { %>, totalItems<% } %>} = props;
   return (
     <div>
       <h2 id="<%= entityFileName %>-heading" data-cy="<%= entityClass %>Heading">
         <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
-        <%_ if (!readOnly) { _%>
-        <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-          <FontAwesomeIcon icon="plus" />&nbsp;
-          <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
-            Create new <%= entityClassHumanized %>
-          </Translate>
-        </Link>
-        <%_ } _%>
+        <div className="d-flex justify-content-end">
+          <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
+            <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</Translate>
+          </Button>
+          <%_ if (!readOnly) { _%>
+            <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+              <FontAwesomeIcon icon="plus" />&nbsp;
+              <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
+                Create new <%= entityClassHumanized %>
+              </Translate>
+            </Link>
+          <%_ } _%>
+        </div>
       </h2>
       <%_ if (searchEngine !== false) { _%>
       <Row>

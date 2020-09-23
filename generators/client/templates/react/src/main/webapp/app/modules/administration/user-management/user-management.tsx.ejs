@@ -40,12 +40,16 @@ export interface IUserManagementProps extends StateProps, DispatchProps, RouteCo
 export const UserManagement = (props: IUserManagementProps) => {
   const [pagination, setPagination] = useState(overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE), props.location.search));
 
-  useEffect(() => {
+  const getUsersFromProps = () => {
     props.getUsers(pagination.activePage - 1, pagination.itemsPerPage, `${pagination.sort},${pagination.order}`);
     const endURL = `?page=${pagination.activePage}&sort=${pagination.sort},${pagination.order}`;
     if (props.location.search !== endURL) {
       props.history.push(`${props.location.pathname}${endURL}`);
     }
+  };
+
+  useEffect(() => {
+    getUsersFromProps();
   }, [pagination.activePage, pagination.order, pagination.sort]);
 
   useEffect(() => {
@@ -76,20 +80,29 @@ export const UserManagement = (props: IUserManagementProps) => {
       activePage: currentPage
     });
 
+  const handleSyncList = () => {
+    getUsersFromProps();
+  };
+
   const toggleActive = user => () =>
     props.updateUser({
       ...user,
       activated: !user.activated
     });
 
-  const { users, account, match, totalItems } = props;
+  const { users, account, match, totalItems, loading } = props;
   return (
     <div>
       <h2 id="user-management-page-heading" data-cy="userManagementPageHeading">
         <Translate contentKey="userManagement.home.title">Users</Translate>
-        <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity">
-          <FontAwesomeIcon icon="plus" /> <Translate contentKey="userManagement.home.createLabel">Create a new user</Translate>
-        </Link>
+        <div className="d-flex justify-content-end">
+          <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
+            <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="userManagement.home.refreshListLabel">Refresh List</Translate>
+          </Button>
+          <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity">
+            <FontAwesomeIcon icon="plus" /> <Translate contentKey="userManagement.home.createLabel">Create a new user</Translate>
+          </Link>
+        </div>
       </h2>
       <Table responsive striped>
         <thead>
@@ -211,6 +224,7 @@ export const UserManagement = (props: IUserManagementProps) => {
 };
 
 const mapStateToProps = (storeState: IRootState) => ({
+  loading: storeState.userManagement.loading,
   users: storeState.userManagement.users,
   totalItems: storeState.userManagement.totalItems,
   account: storeState.authentication.account

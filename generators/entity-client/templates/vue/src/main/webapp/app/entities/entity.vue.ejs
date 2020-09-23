@@ -2,14 +2,19 @@
     <div>
         <h2 id="page-heading" data-cy="<%= entityClass %>Heading">
             <span v-text="$t('<%= i18nKeyPrefix %>.home.title')" id="<%= entityFileName %>-heading"><%= entityClassPluralHumanized %></span>
-            <%_ if (!readOnly) { _%>
-            <router-link :to="{name: '<%= entityAngularName %>Create'}" tag="button" id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary float-right jh-create-entity create-<%= entityUrl %>">
-                <font-awesome-icon icon="plus"></font-awesome-icon>
-                <span  v-text="$t('<%= i18nKeyPrefix %>.home.createLabel')">
-                    Create a new <%= entityClassHumanized %>
-                </span>
-            </router-link>
-            <%_ } _%>
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
+                    <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span v-text="$t('userManagement.home.refreshListLabel')">Refresh List</span>
+                </button>
+                <%_ if (!readOnly) { _%>
+                <router-link :to="{name: '<%= entityAngularName %>Create'}" tag="button" id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%= entityUrl %>">
+                    <font-awesome-icon icon="plus"></font-awesome-icon>
+                    <span  v-text="$t('<%= i18nKeyPrefix %>.home.createLabel')">
+                        Create a new <%= entityClassHumanized %>
+                    </span>
+                </router-link>
+                <%_ } _%>
+            </div>
         </h2>
         <%_ if (searchEngine === 'elasticsearch') { _%>
         <div class="row">
@@ -36,8 +41,7 @@
             <span v-text="$t('<%= i18nKeyPrefix %>.home.notFound')">No <%=entityInstancePlural %> found</span>
         </div>
         <div class="table-responsive" v-if="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
-            <table class="table table-striped">
-                <caption><%= entityInstancePlural %></caption>
+            <table class="table table-striped" aria-describedby="<%= entityInstancePlural %>">
                 <thead>
                 <tr>
                     <th scope="row"<% if (pagination !== 'no') { %> v-on:click="changeOrder('id')"<% } %>><span v-text="$t('global.field.id')">ID</span><% if (pagination !== 'no') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
