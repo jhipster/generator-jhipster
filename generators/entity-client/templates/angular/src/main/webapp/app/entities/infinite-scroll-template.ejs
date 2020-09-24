@@ -18,6 +18,7 @@
 -%>
     <%= entityInstancePlural %>: I<%= entityAngularName %>[];
     eventSubscriber?: Subscription;
+    isLoading = false;
     itemsPerPage: number;
     links: any;
     page: number;
@@ -56,6 +57,7 @@
     }
 
     loadAll(): void {
+        this.isLoading = true;
         <%_ if (searchEngine !== false) { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
@@ -64,7 +66,13 @@
                 size: this.itemsPerPage,
                 sort: this.sort()
             }).subscribe(
-                (res: HttpResponse<I<%= entityAngularName %>[]>) => this.paginate<%= entityClassPlural %>(res.body, res.headers)
+                (res: HttpResponse<I<%= entityAngularName %>[]>) => {
+                    this.isLoading = false;
+                    this.paginate<%= entityClassPlural %>(res.body, res.headers);
+                },
+                () => {
+                    this.isLoading = false;
+                }
             );
             return;
         }
@@ -75,7 +83,13 @@
             size: this.itemsPerPage,
             sort: this.sort()
         }).subscribe(
-            (res: HttpResponse<I<%= entityAngularName %>[]>) => this.paginate<%= entityClassPlural %>(res.body, res.headers)
+            (res: HttpResponse<I<%= entityAngularName %>[]>) => {
+                this.isLoading = false;
+                this.paginate<%= entityClassPlural %>(res.body, res.headers);
+            },
+            () => {
+                this.isLoading = false;
+            }
         );
     }
 
@@ -88,6 +102,10 @@
     loadPage(page: number): void {
         this.page = page;
         this.loadAll();
+    }
+
+    handleSyncList(): void {
+        this.reset();
     }
 
     <%_ if (searchEngine !== false) { _%>

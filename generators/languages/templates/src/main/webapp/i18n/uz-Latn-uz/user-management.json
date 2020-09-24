@@ -2,6 +2,7 @@
     "userManagement": {
         "home": {
             "title": "Foydalanuvchi",
+            "refreshListLabel": "Refresh list",
             "createLabel": "Yangi foydalanuvchi qo'shish",
             "createOrEditLabel": "Foydalanuvchini tahrirlash"
         },

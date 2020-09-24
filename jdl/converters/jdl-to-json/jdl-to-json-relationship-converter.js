@@ -132,20 +132,14 @@ function setRelationshipsToEntity(relatedRelationships, entityName) {
             convertedRelationship.javadoc = relationshipToConvert.commentInTo;
         }
         const splitField = extractField(relationshipToConvert.injectedFieldInTo);
-        if (relationshipToConvert.type === ONE_TO_ONE) {
-            convertedRelationship.relationshipName = camelCase(splitField.relationshipName);
+        convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.from);
+        convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
+        if (relationshipToConvert.type === ONE_TO_ONE || relationshipToConvert.type === MANY_TO_MANY) {
             convertedRelationship.ownerSide = false;
         } else if (relationshipToConvert.type === ONE_TO_MANY) {
             relationshipToConvert.injectedFieldInTo = relationshipToConvert.injectedFieldInTo || lowerFirst(relationshipToConvert.from);
-            convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.from);
-            convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
         } else if (relationshipToConvert.type === MANY_TO_ONE && relationshipToConvert.injectedFieldInTo) {
-            convertedRelationship.relationshipName = camelCase(splitField.relationshipName);
             convertedRelationship.relationshipType = 'one-to-many';
-        } else if (relationshipToConvert.type === MANY_TO_MANY) {
-            convertedRelationship.relationshipName = camelCase(splitField.relationshipName);
-            convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
-            convertedRelationship.ownerSide = false;
         }
         setOptionsForRelationship(relationshipToConvert, convertedRelationship);
         const convertedEntityRelationships = convertedRelationships.get(entityName);

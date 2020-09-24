@@ -148,6 +148,10 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
     });
   }
 
+  public handleSyncList(): void {
+    this.clear();
+  }
+
   <%_ if (!readOnly) { _%>
   public prepareRemove(instance: I<%= entityAngularName %>) : void {
     this.removeId = instance.id;

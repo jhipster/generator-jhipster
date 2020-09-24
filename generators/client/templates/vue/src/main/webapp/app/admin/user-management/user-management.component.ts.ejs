@@ -18,6 +18,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends Vu
   public propOrder = 'id';
   public reverse = false;
   public totalItems = 0;
+  public isLoading = false;
   public removeId: <% if (pkType === 'String' || pkType === 'UUID') { %>string<% } else { %>number<% } %> = null;
 
   public mounted(): void {
@@ -40,16 +41,26 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends Vu
   }
 
   public loadAll(): void {
+    this.isLoading = true;
+
     this.userManagementService().retrieve(<% if (databaseType !== 'cassandra') { %>{
         page: this.page - 1,
         size: this.itemsPerPage,
         sort: this.sort()}<% } %>).then(res => {
+      this.isLoading = false;
       this.users = res.data;
       <%_ if (databaseType !== 'cassandra') { _%>
       this.totalItems = Number(res.headers['x-total-count']);
       this.queryCount = this.totalItems;
       <%_ } _%>
+    })
+    .catch(() => {
+      this.isLoading = false;
     });
+  }
+
+  public handleSyncList(): void {
+    this.loadAll();
   }
 
   <%_ if (databaseType !== 'cassandra') { _%>

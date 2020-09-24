@@ -60,7 +60,7 @@ description = ""
 
 sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
-assert System.properties["java.specification.version"] == "1.8" || "1.9" || "10" || "11" || "12" || "13" || "14"
+assert System.properties["java.specification.version"] == "1.8" || "1.9" || "10" || "11" || "12" || "13" || "14" || "15"
 
 apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
@@ -396,6 +396,11 @@ dependencies {
     <%_ } _%>
     <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-<%= databaseType %><% if (reactive) { %>-reactive<% } %>"
+    <%_ } _%>
+    <%_ if (databaseType === 'mongodb' && reactive) { _%>
+    // Mongock doesn't support reactive yet, so this dependency is necessary.
+    // See https://github.com/jhipster/generator-jhipster/pull/12536#issuecomment-696683592 for more information.
+    implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
     <%_ } _%>
     <%_ if (databaseType === 'neo4j') { _%>
     implementation "org.neo4j.springframework.data:spring-data-neo4j-rx-spring-boot-starter"
