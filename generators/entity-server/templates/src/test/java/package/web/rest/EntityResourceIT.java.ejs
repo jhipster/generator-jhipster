@@ -1405,57 +1405,36 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%_ } _%>
     }
 
+    <%
+        const prepareFieldForPatchTest = (field, includeCb) => {
+            const includeField = includeCb();
+            const fieldNameUnderscoreUppercased = field.fieldNameUnderscored.toUpperCase();
+            const updateWithValue = includeField ? `UPDATED_${fieldNameUnderscoreUppercased}` : 'null';
+            const testWithConstant = includeField ? `UPDATED_${fieldNameUnderscoreUppercased}` : `DEFAULT_${fieldNameUnderscoreUppercased}`;
+            return { includeField, updateWithValue, testWithConstant, ...field};
+        };
+    %>
     @Test<%= transactionalAnnotation %>
-    void partialUpdate<%= entityClass %>() throws Exception {
-        // Initialize the database
-        <%_ if (databaseType === 'cassandra') { _%>
-            <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
-        <%_ } _%>
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
+    void partialUpdate<%= entityClass %>WithPatch() throws Exception {
+<% const fieldsToIncludeInPartialPatchTest = fields.map(field => prepareFieldForPatchTest(field, () => faker.random.boolean())); %>
+<%- include('../../common/patch_test_template', {fields: fieldsToIncludeInPartialPatchTest, saveMethod, asEntity, callBlock, callListBlock}); -%>
+    }
 
-        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+    @Test<%= transactionalAnnotation %>
+    void fullUpdate<%= entityClass %>WithPatch() throws Exception {
+<% const fieldsToIncludeInFullPatchTest = fields.map(field => prepareFieldForPatchTest(field, () => true)); %>
+<%- include('../../common/patch_test_template', {fields: fieldsToIncludeInFullPatchTest, saveMethod, asEntity, callBlock, callListBlock}); -%>
+    }
 
-        // Update the <%= entityInstance %> using partial update
-        <%= asEntity(entityClass) %> partialUpdated<%= asEntity(entityClass) %> = <%= entityInstance %>Repository.findById(<%= asEntity(entityInstance) %>.getId()).get() %>;
-        <%_ if (databaseType === 'sql') { _%>
-        // Disconnect from session so that the updates on updated<%= asEntity(entityClass) %> are not directly saved in db
-        em.detach(partialUpdated<%= asEntity(entityClass) %>);
-        <%_ } _%>
-        <%_ if (fluentMethods && fields.length > 0) { _%>
-        partialUpdated<%= asEntity(entityClass) %><% for (idx in fields) { %>
-            .<%= fields[idx].fieldName %>(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>)<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>
-            .<%= fields[idx].fieldName %>ContentType(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<% } %><% } %>;
-        <%_ } else { _%>
-            <%_ for (idx in fields) { _%>
-        partialUpdated<%= asEntity(entityClass) %>.set<%= fields[idx].fieldInJavaBeanMethod %>(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
-                <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-        partialUpdated<%= asEntity(entityClass) %>.set<%= fields[idx].fieldInJavaBeanMethod %>ContentType(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
-                <%_ } _%>
-            <%_ } _%>
-        <%_ } _%>
-
+    @Test<%= transactionalAnnotation %>
+    void partialUpdate<%= entityClass %>ShouldThrown() throws Exception {
+        // Update the <%= entityInstance %> without id should throw
+        <%= asEntity(entityClass) %> partialUpdated<%= asEntity(entityClass) %> = new <%= asEntity(entityClass) %>();
 
         rest<%= entityClass %>MockMvc.perform(patch("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
-            .contentType("application/merge-patch+json")
-            .content(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>)))
-            .andExpect(status().isOk());
-
-
-        // Validate the <%= entityClass %> in the database
-        <%_ if (databaseType === 'couchbase') { _%>
-        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
-        <%_ } _%>
-        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
-        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
-        <%= asEntity(entityClass) %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
-        <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
-        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
-        <%_ } else if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
-        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>ContentType()).isEqualTo(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
-        <%_ } else { _%>
-        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
-        <%_ } } _%>
+        .contentType("application/merge-patch+json")
+        .content(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>)))
+        .andExpect(status().isBadRequest());
     }
 
     @Test<%= transactionalAnnotation %>
