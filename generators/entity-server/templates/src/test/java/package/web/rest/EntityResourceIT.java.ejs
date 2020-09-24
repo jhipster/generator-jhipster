@@ -1417,13 +1417,13 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void partialUpdate<%= entityClass %>WithPatch() throws Exception {
 <% const fieldsToIncludeInPartialPatchTest = fields.map(field => prepareFieldForPatchTest(field, () => faker.random.boolean())); %>
-<%- include('../../common/patch_test_template', {fields: fieldsToIncludeInPartialPatchTest, saveMethod, asEntity, callBlock, callListBlock}); -%>
+<%- include('../../../../../../partials/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInPartialPatchTest, saveMethod, asEntity, callBlock, callListBlock}); -%>
     }
 
     @Test<%= transactionalAnnotation %>
     void fullUpdate<%= entityClass %>WithPatch() throws Exception {
 <% const fieldsToIncludeInFullPatchTest = fields.map(field => prepareFieldForPatchTest(field, () => true)); %>
-<%- include('../../common/patch_test_template', {fields: fieldsToIncludeInFullPatchTest, saveMethod, asEntity, callBlock, callListBlock}); -%>
+<%- include('../../../../../../partials/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInFullPatchTest, saveMethod, asEntity, callBlock, callListBlock}); -%>
     }
 
     @Test<%= transactionalAnnotation %>
