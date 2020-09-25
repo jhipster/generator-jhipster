@@ -912,6 +912,15 @@ const serverFiles = {
                 },
             ],
         },
+        {
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/GeneratedByJHipster.java',
+                    renameTo: generator => `${generator.javaDir}GeneratedByJHipster.java`,
+                },
+            ],
+        },
     ],
     serverJavaConfig: [
         {
