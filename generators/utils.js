@@ -238,6 +238,11 @@ function copyWebResource(source, dest, regex, type, generator, opt = {}, templat
  * @param {function} cb callback function
  */
 function renderContent(source, generator, context, options, cb) {
+    options = {
+        root: generator.templatePath(),
+        context: generator,
+        ...options,
+    };
     ejs.renderFile(generator.templatePath(source), context, options, (err, res) => {
         if (!err) {
             cb(res);
