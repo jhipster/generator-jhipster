@@ -2,7 +2,7 @@
     "userManagement": {
         "home": {
             "title": "使用者",
-            "refreshListLabel": "Refresh list",
+            "refreshListLabel": "重新整理清單",
             "createLabel": "建立新使用者",
             "createOrEditLabel": "建立或編輯使用者"
         },
