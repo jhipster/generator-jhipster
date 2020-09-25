@@ -121,6 +121,22 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
 
     <%_ if (service !== 'serviceImpl') { _%>
     /**
+     * Partially udpates a <%= entityInstance %>.
+     *
+     * @param <%= instanceName %> the entity to update partially.
+     * @return the persisted entity.
+     */
+    <%_ } _%>
+    <%_ if (service === 'serviceImpl') { _%>
+    @Override
+    <%_ } _%>
+    public <% if (reactive) { %>Mono<<% } %><%= instanceType %><% if (reactive) { %>><% } %> partialUpdate(<%= instanceType %> <%= instanceName %>) {
+        log.debug("Request to partially update <%= entityClass %> : {}", <%= instanceName %>);
+<%- include('../../common/patch_template', {asEntity, asDto, isService: true, viaService: false}); -%>
+    }
+
+    <%_ if (service !== 'serviceImpl') { _%>
+    /**
      * Get all the <%= entityInstancePlural %>.
      *<% if (pagination !== 'no') { %>
      * @param pageable the pagination information.<% } %>

@@ -256,7 +256,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     private String <%= fieldName %>;
     <%_ } _%>
 
-    <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
+    <%_ if (fields[idx].fieldWithContentType) { _%>
       <%_ if ((databaseType === 'sql' && !reactive) || databaseType === 'cassandra') { _%>
     @Column(<% if (databaseType !== 'cassandra') { %>name = <% } %>"<%- fieldNameAsDatabaseColumn %>_content_type"<% if (required && databaseType !== 'cassandra') { %>, nullable = false<% } %>)
         <%_ if (required && databaseType === 'cassandra') { _%>
@@ -495,7 +495,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         this.<%= fieldName %> = <%= fieldName %>;
     <%_ } _%>
     }
-    <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
+    <%_ if (fields[idx].fieldWithContentType) { _%>
 
     public String get<%= fieldInJavaBeanMethod %>ContentType() {
         return <%= fieldName %>ContentType;
@@ -669,7 +669,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
                 const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
                 const isNumeric = ['integer', 'long', 'float', 'double', 'bigdecimal'].includes(fieldType.toLowerCase()); _%>
             ", <%= fieldName %>=<% if (! isNumeric) { %>'<% } %>" + get<%= fieldInJavaBeanMethod %>() <% if (! isNumeric) { %>+ "'" <% } %>+
-                <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
+                <%_ if (fields[idx].fieldWithContentType) { _%>
             ", <%= fieldName %>ContentType='" + get<%= fieldInJavaBeanMethod %>ContentType() + "'" +
                 <%_ } _%>
             <%_ } _%>
