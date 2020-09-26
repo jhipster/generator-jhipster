@@ -48,9 +48,7 @@
         "ejs-lint": "mocha test/ejslint.js",
         "ejslint": "ejslint",
         "pretest": "npm run lint",
-        "test": "npm run cli:test & npm run noncli:test",
-        "cli:test": "mocha test/cli --no-insight --forbid-only",
-        "noncli:test": "mocha --ignore 'test/cli/*' --no-insight --forbid-only -p",
+        "test": "mocha --no-insight --forbid-only --parallel",
         "jsdoc": "jsdoc --configure jsdoc-conf.json",
         "jdl:test": "mocha test/jdl --no-insight --forbid-only -p",
         "jdl:test-watch": "npm run jdl:test -- --watch"
