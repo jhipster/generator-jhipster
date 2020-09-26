@@ -74,7 +74,6 @@ const BASE_TEMPLATE_DATA = {
 
 function prepareEntityForTemplates(entityWithConfig, generator) {
     const entityName = entityWithConfig.name;
-    const entityNamePluralizedAndSpinalCased = _.kebabCase(pluralize(entityName));
     _.defaults(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
 
     entityWithConfig.changelogDateForRecent = parseLiquibaseChangelogDate(entityWithConfig.changelogDate);
@@ -82,7 +81,6 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     entityWithConfig.resetFakerSeed = (suffix = '') =>
         entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
 
-    entityWithConfig.entityTableName = entityWithConfig.entityTableName || generator.getTableName(entityName);
     entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix;
     if (entityWithConfig.entityAngularJSSuffix && !entityWithConfig.entityAngularJSSuffix.startsWith('-')) {
         entityWithConfig.entityAngularJSSuffix = `-${entityWithConfig.entityAngularJSSuffix}`;
@@ -97,19 +95,26 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         entityWithConfig.skipServer = true;
     }
 
-    entityWithConfig.entityNameCapitalized = _.upperFirst(entityWithConfig.name);
-    entityWithConfig.entityClass = entityWithConfig.entityNameCapitalized;
-    entityWithConfig.entityClassPlural = pluralize(entityWithConfig.entityClass);
+    _.defaults(entityWithConfig, {
+        entityNameCapitalized: _.upperFirst(entityName),
+        entityClass: _.upperFirst(entityName),
+        entityInstance: _.lowerFirst(entityName),
+        entityTableName: generator.getTableName(entityName),
+        entityNamePlural: pluralize(entityName),
+    });
 
-    // Used for i18n
-    entityWithConfig.entityClassHumanized = entityWithConfig.entityClassHumanized || _.startCase(entityWithConfig.entityNameCapitalized);
-    entityWithConfig.entityClassPluralHumanized =
-        entityWithConfig.entityClassPluralHumanized || _.startCase(entityWithConfig.entityClassPlural);
-    // Implement i18n variant ex: 'male', 'female' when applied
-    entityWithConfig.entityI18nVariant = entityWithConfig.entityI18nVariant || 'default';
+    _.defaults(entityWithConfig, {
+        entityNamePluralizedAndSpinalCased: _.kebabCase(entityWithConfig.entityNamePlural),
+        entityClassPlural: _.upperFirst(entityWithConfig.entityNamePlural),
+        entityInstancePlural: _.lowerFirst(entityWithConfig.entityNamePlural),
+    });
 
-    entityWithConfig.entityInstance = _.lowerFirst(entityName);
-    entityWithConfig.entityInstancePlural = pluralize(entityWithConfig.entityInstance);
+    _.defaults(entityWithConfig, {
+        // Implement i18n variant ex: 'male', 'female' when applied
+        entityI18nVariant: 'default',
+        entityClassHumanized: _.startCase(entityWithConfig.entityNameCapitalized),
+        entityClassPluralHumanized: _.startCase(entityWithConfig.entityClassPlural),
+    });
 
     entityWithConfig.entityFileName = _.kebabCase(
         entityWithConfig.entityNameCapitalized + _.upperFirst(entityWithConfig.entityAngularJSSuffix)
@@ -117,14 +122,14 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     entityWithConfig.entityFolderName = generator.getEntityFolderName(entityWithConfig.clientRootFolder, entityWithConfig.entityFileName);
     entityWithConfig.entityModelFileName = entityWithConfig.entityFolderName;
     entityWithConfig.entityParentPathAddition = generator.getEntityParentPathAddition(entityWithConfig.clientRootFolder);
-    entityWithConfig.entityPluralFileName = entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix;
+    entityWithConfig.entityPluralFileName = entityWithConfig.entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix;
     entityWithConfig.entityServiceFileName = entityWithConfig.entityFileName;
 
     entityWithConfig.entityAngularName =
         entityWithConfig.entityClass + generator.upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
     entityWithConfig.entityReactName = entityWithConfig.entityClass + generator.upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
 
-    entityWithConfig.entityApiUrl = entityNamePluralizedAndSpinalCased;
+    entityWithConfig.entityApiUrl = entityWithConfig.entityNamePluralizedAndSpinalCased;
     entityWithConfig.entityStateName = _.kebabCase(entityWithConfig.entityAngularName);
     entityWithConfig.entityUrl = entityWithConfig.entityStateName;
 
