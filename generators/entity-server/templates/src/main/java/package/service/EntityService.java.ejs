@@ -30,7 +30,7 @@ import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
 <%_ } else { _%>
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 <%_ } _%>
-<%_ if (pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
+<%_ if (pagination !== 'no' || relationshipsContainEagerLoad) { _%>
 
     <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
@@ -89,7 +89,7 @@ public interface <%= entityClass %>Service {
     <%= listOrFlux %><<%= instanceType %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();
 <%_ } } _%>
 
-    <%_ if (fieldsContainOwnerManyToMany === true) { _%>
+    <%_ if (relationshipsContainEagerLoad) { _%>
     /**
      * Get all the <%= entityInstancePlural %> with eager load of many-to-many relationships.
      *

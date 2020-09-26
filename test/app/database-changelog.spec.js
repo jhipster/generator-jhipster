@@ -13,10 +13,7 @@ describe('jhipster:app database changelogs', () => {
                     .create(require.resolve('../../generators/app'))
                     .doInDir(dir => {
                         fse.copySync(path.join(__dirname, '../templates/compose/05-cassandra'), dir);
-                        fse.copySync(
-                            path.join(__dirname, '../templates/export-jdl/.jhipster/Country.json'),
-                            path.join(dir, '.jhipster/Foo.json')
-                        );
+                        fse.copySync(path.join(__dirname, '../templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
                     })
                     .withOptions({ withEntities: true, force: true, skipClient: true })
                     .run()

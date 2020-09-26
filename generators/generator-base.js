@@ -135,6 +135,15 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     }
 
     /**
+     * Verify if the entity is a built-in Entity.
+     * @param {String} entityName - Entity name to verify.
+     * @return {boolean} true if the entity is built-in.
+     */
+    isBuiltInEntity(entityName) {
+        return this.isBuiltInUser(entityName) || this.isBuiltInAuthority(entityName);
+    }
+
+    /**
      * Verify if the application is using built-in User.
      * @return {boolean} true if the User is built-in.
      */
@@ -152,10 +161,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @return {boolean} true if the entity is User.
      */
     isUserEntity(entityName) {
-        if (_.upperFirst(entityName) === 'User') {
-            return true;
-        }
-        return false;
+        return _.upperFirst(entityName) === 'User';
     }
 
     /**
@@ -186,10 +192,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @return {boolean} true if the entity is Authority.
      */
     isAuthorityEntity(entityName) {
-        if (_.upperFirst(entityName) === 'Authority') {
-            return true;
-        }
-        return false;
+        return _.upperFirst(entityName) === 'Authority';
     }
 
     /**
@@ -2418,9 +2421,12 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     /**
      * Get all the generator configuration from the .yo-rc.json file
      * @param {string} entityName - Name of the entity to load.
+     * @param {boolean} create - Create storage if doesn't exists.
      */
-    getEntityConfig(entityName) {
-        return this.createStorage(this.destinationPath(JHIPSTER_CONFIG_DIR, `${_.upperFirst(entityName)}.json`));
+    getEntityConfig(entityName, create = false) {
+        const entityPath = this.destinationPath(JHIPSTER_CONFIG_DIR, `${_.upperFirst(entityName)}.json`);
+        if (!create && !this.fs.exists(entityPath)) return undefined;
+        return this.createStorage(entityPath);
     }
 
     /**

@@ -33,7 +33,7 @@ import org.springframework.data.couchbase.repository.ReactiveCouchbaseSortingRep
 import org.neo4j.springframework.data.repository.ReactiveNeo4jRepository;
 import org.neo4j.springframework.data.repository.query.Query;
 <%_ } _%>
-<%_ if (pagination !== 'no' || fieldsContainOwnerManyToMany === true || databaseType ==='sql') { _%>
+<%_ if (pagination !== 'no' || relationshipsContainEagerLoad || databaseType ==='sql') { _%>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
@@ -42,16 +42,16 @@ import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.data.relational.core.query.Criteria;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
-    <%_ if (fieldsContainOwnerManyToMany === true) { _%>
+    <%_ if (relationshipsContainEagerLoad) { _%>
 import org.springframework.data.mongodb.repository.Query;
     <%_ } _%>
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
-<%_ if (['couchbase', 'sql'].includes(databaseType) || pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
+<%_ if (['couchbase', 'sql'].includes(databaseType) || pagination !== 'no' || relationshipsContainEagerLoad) { _%>
 import reactor.core.publisher.Flux;
 <%_ } _%>
-<%_ if (fieldsContainOwnerManyToMany === true || databaseType === 'sql') { _%>
+<%_ if (relationshipsContainEagerLoad || databaseType === 'sql') { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
@@ -70,7 +70,7 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
 
     Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable);
     <%_ } _%>
-    <%_ if (fieldsContainOwnerManyToMany === true) { _%>
+    <%_ if (relationshipsContainEagerLoad) { _%>
         <%_ if (['couchbase', 'mongodb'].includes(databaseType)) { _%>
 
     @Query("<%= (databaseType === 'mongodb') ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
