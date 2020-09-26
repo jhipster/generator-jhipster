@@ -86,7 +86,7 @@ if (project.hasProperty("gae")) {
 
     dependencyManagement {
         imports {
-            mavenBom "io.github.jhipster:jhipster-dependencies:${jhipster_dependencies_version}"
+            mavenBom "io.github.jhipster:jhipster-dependencies:${jhipsterDependenciesVersion}"
         }
     }
     appengineStage.dependsOn thinResolve
@@ -236,7 +236,7 @@ gitProperties {
 }
 
 checkstyle {
-    toolVersion '${checkstyle_version}'
+    toolVersion '${checkstyleVersion}'
     configFile file("checkstyle.xml")
     checkstyleTest.enabled = false
 }
@@ -277,10 +277,10 @@ repositories {
 dependencies {
     // import JHipster dependencies BOM
     if (!project.hasProperty("gae")) {
-        implementation platform("io.github.jhipster:jhipster-dependencies:${jhipster_dependencies_version}")
+        implementation platform("io.github.jhipster:jhipster-dependencies:${jhipsterDependenciesVersion}")
     }
 
-    // Use ", version: jhipster_dependencies_version, changing: true" if you want
+    // Use ", version: jhipsterDependenciesVersion, changing: true" if you want
     // to use a SNAPSHOT release instead of a stable release
     implementation group: "io.github.jhipster", name: "jhipster-framework"<% if (reactive) { %>, {
         exclude group: "org.springframework", module: "spring-webmvc"
@@ -347,7 +347,7 @@ dependencies {
     implementation "commons-codec:commons-codec"
     <%_ } _%>
     <%_ if (enableSwaggerCodegen) { _%>
-    implementation "org.openapitools:jackson-databind-nullable:${jackson_databind_nullable_version}"
+    implementation "org.openapitools:jackson-databind-nullable:${jacksonDatabindNullableVersion}"
     <%_ } _%>
     implementation "javax.transaction:javax.transaction-api"
     <%_ if (databaseType === 'cassandra') { _%>
@@ -360,9 +360,9 @@ dependencies {
         <%_ } _%>
     <%_ } _%>
     <%_ if (cacheProvider === 'caffeine') { _%>
-    implementation "com.github.ben-manes.caffeine:caffeine:${caffeine_version}"
-    implementation "com.github.ben-manes.caffeine:jcache:${caffeine_version}"
-    implementation "com.typesafe:config:${typesafe_config_version}"
+    implementation "com.github.ben-manes.caffeine:caffeine:${caffeineVersion}"
+    implementation "com.github.ben-manes.caffeine:jcache:${caffeineVersion}"
+    implementation "com.typesafe:config:${typesafeConfigVersion}"
         <%_ if (enableHibernateCache) { _%>
     implementation "org.hibernate:hibernate-jcache"
         <%_ } _%>
@@ -375,7 +375,7 @@ dependencies {
     implementation "org.liquibase:liquibase-core"
         <%_ if (!reactive) { _%>
     liquibaseRuntime "org.liquibase:liquibase-core"
-    liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibase_hibernate5_version}"
+    liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibaseHibernate5Version}"
     liquibaseRuntime sourceSets.main.compileClasspath
         <%_ } _%>
     <%_ } _%>
@@ -505,7 +505,7 @@ dependencies {
     <%_ if (authenticationType === 'uaa') { _%>
     implementation "org.springframework.security.oauth:spring-security-oauth2"
     implementation "org.springframework.security:spring-security-jwt"
-    <% if (databaseType === 'sql') { %>implementation<% } else { %>runtimeOnly<% } %> "org.glassfish.jaxb:jaxb-runtime:${jaxb_runtime_version}"
+    <% if (databaseType === 'sql') { %>implementation<% } else { %>runtimeOnly<% } %> "org.glassfish.jaxb:jaxb-runtime:${jaxbRuntimeVersion}"
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
     implementation "com.github.cloudyrock.mongock:mongock-spring-v5"
@@ -540,7 +540,7 @@ dependencies {
         <%_ if (!reactive) { _%>
     liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
         <%_ } else { _%>
-        implementation "org.mariadb:r2dbc-mariadb:${r2dbc_mariadb_version}"
+        implementation "org.mariadb:r2dbc-mariadb:${r2dbcMariadbVersion}"
         <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mssql') { _%>
@@ -553,16 +553,16 @@ dependencies {
     implementation "io.r2dbc:r2dbc-mssql"
         <%_ } _%>
     <%_ } _%>
-    implementation "org.mapstruct:mapstruct:${mapstruct_version}"
-    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     <%_ if (databaseType === 'sql') { _%>
-    annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernate_version}"
-    annotationProcessor "org.glassfish.jaxb:jaxb-runtime:${jaxb_runtime_version}"
+    annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernateVersion}"
+    annotationProcessor "org.glassfish.jaxb:jaxb-runtime:${jaxbRuntimeVersion}"
     <%_ } _%>
     <%_ if (databaseType === 'cassandra') { _%>
-    annotationProcessor "com.datastax.oss:java-driver-mapper-processor:${cassandra_driver_version}"
+    annotationProcessor "com.datastax.oss:java-driver-mapper-processor:${cassandraDriverVersion}"
     <%_ } _%>
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
     <%_ if (databaseType === 'cassandra') { _%>
     testImplementation ("org.cassandraunit:cassandra-unit-spring") {
         exclude(group: "org.slf4j")
@@ -583,11 +583,11 @@ dependencies {
     testImplementation "org.springframework.boot:spring-boot-test"
     <%_ if (reactive) { _%>
     // Temporarily disabled see https://github.com/jhipster/generator-jhipster/issues/11599
-    // testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhound_junit_platform_version}"
-    // testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junit_platform_launcher_version}'
+    // testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhoundJunitPlatformVersion}"
+    // testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junitPlatformLauncherVersion}'
     <%_ } _%>
-    testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunit_junit5_version}"
-    testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunit_junit5_version}"
+    testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunitJunit5Version}"
+    testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}"
     <%_ if (databaseType === 'mongodb') { _%>
     testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo"
     <%_ } _%>
@@ -644,8 +644,8 @@ wrapper {
 
 if (project.hasProperty("nodeInstall")) {
     node {
-        version = "${node_version}"
-        npmVersion = "${npm_version}"
+        version = "${nodeVersion}"
+        npmVersion = "${npmVersion}"
         download = true
     }
 }
