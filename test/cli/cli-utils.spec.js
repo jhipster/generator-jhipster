@@ -139,16 +139,4 @@ describe('jhipster cli utils test', () => {
             });
         });
     });
-    describe('addKebabCase', () => {
-        describe('when called with undefined', () => {
-            it('returns empty object', () => {
-                expect(cliUtil.addKebabCase()).to.eql({});
-            });
-        });
-        describe('when called with object', () => {
-            it('returns object with a kebabCase option', () => {
-                expect(cliUtil.addKebabCase({ foo: 'bar', fooBar: true })).to.eql({ 'foo-bar': true, fooBar: true, foo: 'bar' });
-            });
-        });
-    });
 });

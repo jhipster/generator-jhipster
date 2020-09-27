@@ -174,14 +174,6 @@ const getCommand = (cmd, args, opts) => {
     return `${cmd}${cmdArgs ? ` ${cmdArgs}` : ''}`;
 };
 
-const addKebabCase = (options = {}) => {
-    const kebabCase = Object.keys(options).reduce((acc, key) => {
-        acc[_.kebabCase(key)] = options[key];
-        return acc;
-    }, {});
-    return { ...kebabCase, ...options };
-};
-
 const doneFactory = successMsg => {
     return errorOrMsg => {
         if (errorOrMsg instanceof Error) {
@@ -231,7 +223,6 @@ module.exports = {
     getArgs,
     getOptionsFromArgs,
     getCommand,
-    addKebabCase,
     doneFactory,
     done: doneFactory(SUCCESS_MESSAGE),
     printSuccess,
