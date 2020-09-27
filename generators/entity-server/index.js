@@ -67,14 +67,19 @@ module.exports = class extends BaseBlueprintGenerator {
                 } else {
                     this.domainName = undefined;
                 }
+                const portsPackage = 'infrastructure';
+                const repositoryPort = 'secondary';
+                const controllerPort = 'primary';
 
                 this.domainPackage = this.domainName ? `${this.packageName}.${this.domainName}` : this.packageName;
                 const domainRelativeModelPackage =
                     this.configOptions.domainRelativeModelPackage || this.domainName ? 'domain.model' : 'domain';
                 const domainRelativeRepositoryPackage =
-                    this.configOptions.domainRelativeRepositoryPackage || this.domainName ? 'adapter.repository' : 'repository';
+                    this.configOptions.domainRelativeRepositoryPackage || this.domainName
+                        ? `${portsPackage}.${repositoryPort}`
+                        : 'repository';
                 const domainRelativeWebPackage =
-                    this.configOptions.domainRelativeWebPackage || this.domainName ? 'adapter.web' : 'web.rest';
+                    this.configOptions.domainRelativeWebPackage || this.domainName ? `${portsPackage}.${controllerPort}` : 'web.rest';
                 const domainRelativeServicePackage =
                     this.configOptions.domainRelativeServicePackage || this.domainName ? 'domain.service' : 'service';
 
