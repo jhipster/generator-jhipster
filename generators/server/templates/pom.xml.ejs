@@ -1046,6 +1046,12 @@
                     <configuration>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
+                        <fork>true</fork>
+                        <compilerArgs>
+                            <compilerArg>-J-Duser.language=en</compilerArg>
+                            <compilerArg>-J-Duser.country=US</compilerArg>
+                            <compilerArg>-J-Dfile.encoding=UTF-8</compilerArg>
+                        </compilerArgs>
                         <annotationProcessorPaths>
                             <path>
                                 <groupId>org.springframework.boot</groupId>
