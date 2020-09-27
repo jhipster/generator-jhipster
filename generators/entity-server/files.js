@@ -254,10 +254,25 @@ const dtoFiles = {
     ],
 };
 
+const domainFiles = {
+    domainConfig: [
+        {
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/DomainConfiguration.java',
+                    renameTo: generator => `${generator.domainRepositoryFolder}/${generator.domainName}DomainConfiguration.java`,
+                },
+            ],
+        },
+    ],
+};
+
 module.exports = {
     writeFiles,
     serverFiles,
     dtoFiles,
+    domainFiles,
 };
 
 function writeFiles() {
@@ -278,6 +293,10 @@ function writeFiles() {
             // write dto files for the domain service
             if (this.dto === 'mapstruct') {
                 this.writeFilesToDisk(dtoFiles, this, false, this.fetchFromInstalledJHipster('entity-server/templates'));
+            }
+            // write domain files.
+            if (this.domainName) {
+                this.writeFilesToDisk(domainFiles, this, false, this.fetchFromInstalledJHipster('entity-server/templates'));
             }
 
             if (this.databaseType === 'sql') {
