@@ -3,7 +3,7 @@
 @skipClient
 @myCustomUnaryOption
 @myCustomBinaryOption(customValue)
-@myCustomBinaryOption(customValue)
+@myCustomArrayBinaryOption([value1, value2])
 entity A {
   @id @multiValue(value1) @multiValue(value2) @multiValue(value3) name String
   noAnnotation String
@@ -22,5 +22,5 @@ entity B
 entity C
 
 relationship OneToMany {
-  @id A{b required} to B{a}
+  @id @multiValue(value1) @multiValue(value2) @multiValue(value3) A{b required} to B{a}
 }

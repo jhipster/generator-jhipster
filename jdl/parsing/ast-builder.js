@@ -159,6 +159,13 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     }
 
     annotationDeclaration(context) {
+        if (context.list) {
+            return {
+                optionName: context.option[0].image,
+                optionValue: this.visit(context.list),
+                type: 'BINARY',
+            };
+        }
         if (!context.value) {
             return { optionName: context.option[0].image, type: 'UNARY' };
         }
