@@ -895,7 +895,8 @@ const serverFiles = {
     ],
     serverMicroserviceAndOauth: [
         {
-            condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType === 'microservice',
+            condition: generator =>
+                !generator.reactive && generator.authenticationType === 'oauth2' && generator.applicationType === 'microservice',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -905,7 +906,8 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType === 'microservice',
+            condition: generator =>
+                !generator.reactive && generator.authenticationType === 'oauth2' && generator.applicationType === 'microservice',
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
