@@ -900,9 +900,9 @@ const serverFiles = {
             templates: [
                 {
                     file: 'package/security/oauth2/CustomClaimConverter.java',
-                    renameTo: generator => `${generator.javaDir}security/oauth2/CustomClaimConverter.java`
-                }
-            ]
+                    renameTo: generator => `${generator.javaDir}security/oauth2/CustomClaimConverter.java`,
+                },
+            ],
         },
         {
             condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType === 'microservice',
@@ -910,10 +910,10 @@ const serverFiles = {
             templates: [
                 {
                     file: 'package/security/oauth2/CustomClaimConverterIT.java',
-                    renameTo: generator => `${generator.javaDir}security/oauth2/CustomClaimConverterIT.java`
-                }
-            ]
-        }
+                    renameTo: generator => `${generator.javaDir}security/oauth2/CustomClaimConverterIT.java`,
+                },
+            ],
+        },
     ],
     serverJavaApp: [
         {
