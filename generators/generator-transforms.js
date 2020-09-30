@@ -57,12 +57,14 @@ const generatedAnnotationTransform = generator => {
             const packageName = generator.jhipsterConfig.packageName;
             const content = file.contents.toString('utf8');
 
-            const newContent = content
-                // add the import statement just after the package statement, prettier will arrange it correctly
-                .replace(/(package [\w.]+;\n)/, `$1import ${packageName}.GeneratedByJHipster;\n`)
-                // add the annotation before any top level class or interface
-                .replace(/\n((public |protected |abstract |final )*(class|interface) )/, '\n@GeneratedByJHipster\n$1');
-            file.contents = Buffer.from(newContent);
+            if (!new RegExp(`import ${packageName.replace('.', '\\.')}.GeneratedByJHipster;`).test(content)) {
+                const newContent = content
+                    // add the import statement just after the package statement, prettier will arrange it correctly
+                    .replace(/(package [\w.]+;\n)/, `$1import ${packageName}.GeneratedByJHipster;\n`)
+                    // add the annotation before any top level class or interface
+                    .replace(/\n((public |protected |abstract |final )*(class|interface) )/, '\n@GeneratedByJHipster\n$1');
+                file.contents = Buffer.from(newContent);
+            }
         }
         this.push(file);
         callback();
