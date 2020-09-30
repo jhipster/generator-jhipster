@@ -893,6 +893,28 @@ const serverFiles = {
             templates: ['config/bootstrap.yml', 'config/bootstrap-prod.yml'],
         },
     ],
+    serverMicroserviceAndOauth: [
+        {
+            condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType === 'microservice',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/security/oauth2/CustomClaimConverter.java',
+                    renameTo: generator => `${generator.javaDir}security/oauth2/CustomClaimConverter.java`
+                }
+            ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType === 'microservice',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/security/oauth2/CustomClaimConverterIT.java',
+                    renameTo: generator => `${generator.javaDir}security/oauth2/CustomClaimConverterIT.java`
+                }
+            ]
+        }
+    ],
     serverJavaApp: [
         {
             path: SERVER_MAIN_SRC_DIR,
