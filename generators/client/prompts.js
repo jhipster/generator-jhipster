@@ -23,6 +23,7 @@ const { clientDefaultConfig } = require('../generator-defaults');
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
+const SVELTE = constants.SUPPORTED_CLIENT_FRAMEWORKS.SVELTE;
 
 module.exports = {
     askForModuleName,
@@ -54,6 +55,10 @@ function askForClient() {
         {
             value: VUE,
             name: 'Vue',
+        },
+        {
+            value: SVELTE,
+            name: 'SVELTE',
         },
         {
             value: 'no',

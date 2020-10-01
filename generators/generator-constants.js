@@ -119,6 +119,7 @@ const SUPPORTED_CLIENT_FRAMEWORKS = {
     ANGULAR: 'angularX',
     REACT: 'react',
     VUE: 'vue',
+    SVELTE: 'svelte',
 };
 
 // documentation constants
