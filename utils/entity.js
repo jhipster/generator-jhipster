@@ -87,7 +87,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     }
 
     entityWithConfig.useMicroserviceJson = entityWithConfig.useMicroserviceJson || entityWithConfig.microserviceName !== undefined;
-    if (entityWithConfig.applicationType === 'gateway' && entityWithConfig.useMicroserviceJson) {
+    if (generator.jhipsterConfig.applicationType === 'gateway' && entityWithConfig.useMicroserviceJson) {
         if (!entityWithConfig.microserviceName) {
             throw new Error('Microservice name for the entity is not found. Entity cannot be generated!');
         }
