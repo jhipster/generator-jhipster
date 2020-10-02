@@ -107,6 +107,18 @@ module.exports = class extends BaseBlueprintGenerator {
         return useBlueprints ? undefined : this._composing();
     }
 
+    _loading() {
+        return {
+            createUserManagementEntities() {
+                this.createUserManagementEntities();
+            },
+        };
+    }
+
+    get loading() {
+        return this._loading();
+    }
+
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
