@@ -69,9 +69,9 @@ let helpBlocks = 0; %>
 <%_ if (microserviceAppName) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "<%= Um %> novo <%= entityClassHumanized %> foi criado com o identificador {{ param }}",
-            "updated": "<%= Um %> <%= entityClassHumanized %> foi atualizado com o identificador {{ param }}",
-            "deleted": "<%= Um %> <%= entityClassHumanized %> foi excluído com o identificador {{ param }}"
+            "created": "<%= Um %> <%= novo %> <%= entityClassHumanized %> foi <%= criado %> com o identificador {{ param }}",
+            "updated": "<%= Um %> <%= entityClassHumanized %> foi <%= atualizado %> com o identificador {{ param }}",
+            "deleted": "<%= Um %> <%= entityClassHumanized %> foi <%= excluido %> com o identificador {{ param }}"
         }
     }
 <%_ } _%>
