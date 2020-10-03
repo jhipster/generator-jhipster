@@ -230,7 +230,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     getPrettierExtensions() {
         let prettierExtensions = 'md,json,yml';
         if (!this.skipClient && !this.jhipsterConfig.skipClient) {
-            prettierExtensions = `${prettierExtensions},js,ts,tsx,css,scss`;
+            prettierExtensions = `${prettierExtensions},js,ts,tsx,vue,css,scss`;
         }
         if (!this.skipServer && !this.jhipsterConfig.skipServer) {
             prettierExtensions = `${prettierExtensions},java`;
