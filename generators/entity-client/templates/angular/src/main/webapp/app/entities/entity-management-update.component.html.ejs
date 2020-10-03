@@ -101,6 +101,9 @@ _%>
         <%_ } else if (fieldTypeBlobContent === 'text') { _%>
                     <textarea class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>"
                               formControlName="<%= fieldName %>"></textarea>
+        <%_ } else if (fieldType === 'Boolean') { _%>
+                    <input type="<%= fieldInputType %>" class="form-check" name="<%= fieldName %>" id="field_<%= fieldName %>"
+                           data-cy="<%= fieldName %>" formControlName="<%= fieldName %>" />
         <%_ } else { _%>
                     <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>"
                            formControlName="<%= fieldName %>"/>
