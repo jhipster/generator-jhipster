@@ -71,8 +71,6 @@ module.exports = class extends BaseGenerator {
             defaults: false,
             description: 'Automatically configure CircleCI',
         });
-
-        this.registerPrettierTransform();
     }
 
     get initializing() {

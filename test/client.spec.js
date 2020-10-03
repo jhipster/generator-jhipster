@@ -155,22 +155,24 @@ describe('JHipster client generator', () => {
             it('should contains admin routing', () => {
                 runResult.assertFileContent(
                     `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
-                    '      {\n' +
-                        "        path: 'configuration',\n" +
-                        "        loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule)\n" +
-                        '      },\n' +
-                        '      {\n' +
-                        "        path: 'health',\n" +
-                        "        loadChildren: () => import('./health/health.module').then(m => m.HealthModule)\n" +
-                        '      },\n' +
-                        '      {\n' +
-                        "        path: 'logs',\n" +
-                        "        loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule)\n" +
-                        '      },\n' +
-                        '      {\n' +
-                        "        path: 'metrics',\n" +
-                        "        loadChildren: () => import('./metrics/metrics.module').then(m => m.MetricsModule)\n" +
-                        '      },'
+                    `
+      {
+        path: 'configuration',
+        loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule),
+      },
+      {
+        path: 'health',
+        loadChildren: () => import('./health/health.module').then(m => m.HealthModule),
+      },
+      {
+        path: 'logs',
+        loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule),
+      },
+      {
+        path: 'metrics',
+        loadChildren: () => import('./metrics/metrics.module').then(m => m.MetricsModule),
+      },
+`
                 );
             });
 
@@ -376,16 +378,18 @@ describe('JHipster client generator', () => {
 
                 runResult.assertFileContent(
                     `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
-                    'logs: {\n' +
-                        '    loggers: [] as any[]\n' +
-                        '  },\n' +
-                        '  health: {} as any,\n' +
-                        '  metrics: {} as any,\n' +
-                        '  threadDump: [],\n' +
-                        '  configuration: {\n' +
-                        '    configProps: {} as any,\n' +
-                        '    env: {} as any\n' +
-                        '  },'
+                    `
+  logs: {
+    loggers: [] as any[],
+  },
+  health: {} as any,
+  metrics: {} as any,
+  threadDump: [],
+  configuration: {
+    configProps: {} as any,
+    env: {} as any,
+  },
+`
                 );
 
                 runResult.assertFileContent(
@@ -402,10 +406,20 @@ describe('JHipster client generator', () => {
             it('Admin menu should contains admin entries', () => {
                 runResult.assertFileContent(
                     `${CLIENT_MAIN_SRC_DIR}app/shared/layout/menus/admin.tsx`,
-                    '    <MenuItem icon="tachometer-alt" to="/admin/metrics"><Translate contentKey="global.menu.admin.metrics">Metrics</Translate></MenuItem>\n' +
-                        '    <MenuItem icon="heart" to="/admin/health"><Translate contentKey="global.menu.admin.health">Health</Translate></MenuItem>\n' +
-                        '    <MenuItem icon="cogs" to="/admin/configuration"><Translate contentKey="global.menu.admin.configuration">Configuration</Translate></MenuItem>\n' +
-                        '    <MenuItem icon="tasks" to="/admin/logs"><Translate contentKey="global.menu.admin.logs">Logs</Translate></MenuItem>'
+                    `
+    <MenuItem icon="tachometer-alt" to="/admin/metrics">
+      <Translate contentKey="global.menu.admin.metrics">Metrics</Translate>
+    </MenuItem>
+    <MenuItem icon="heart" to="/admin/health">
+      <Translate contentKey="global.menu.admin.health">Health</Translate>
+    </MenuItem>
+    <MenuItem icon="cogs" to="/admin/configuration">
+      <Translate contentKey="global.menu.admin.configuration">Configuration</Translate>
+    </MenuItem>
+    <MenuItem icon="tasks" to="/admin/logs">
+      <Translate contentKey="global.menu.admin.logs">Logs</Translate>
+    </MenuItem>
+`
                 );
             });
         });

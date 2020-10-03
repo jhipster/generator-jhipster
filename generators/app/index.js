@@ -272,8 +272,6 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
 
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('app');
-
-        this.registerPrettierTransform();
     }
 
     _initializing() {

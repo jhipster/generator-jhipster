@@ -1431,6 +1431,10 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
 
         this.queueTask({
             method: () => {
+                if (this.env.rootGenerator() && this.env.rootGenerator() !== this) {
+                    return;
+                }
+
                 const prettierOptions = { plugins: [prettierPluginPackagejson] };
                 if (!this.skipServer && !this.jhipsterConfig.skipServer) {
                     prettierOptions.plugins.push(prettierPluginJava);

@@ -23,11 +23,6 @@ const AwsFactory = require('./lib/aws.js');
 const statistics = require('../statistics');
 
 module.exports = class extends BaseGenerator {
-    constructor(args, opts) {
-        super(args, opts);
-        this.registerPrettierTransform();
-    }
-
     get initializing() {
         return {
             initAws() {
