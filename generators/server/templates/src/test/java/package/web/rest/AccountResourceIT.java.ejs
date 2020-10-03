@@ -22,16 +22,11 @@ package <%= packageName %>.web.rest;
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-import <%= packageName %>.AbstractNeo4jIT;
-<%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
-import <%= packageName %>.RedisTestContainerExtension;
-<%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 import <%= packageName %>.ReactiveSqlTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
+import <%= packageName %>.<%= mainClass %>IntTest;
 import <%= packageName %>.config.TestSecurityConfiguration;
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.UserService;
@@ -40,16 +35,12 @@ import <%= packageName %>.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 <%_ } _%>
 import org.junit.jupiter.api.Test;
-<%_ if (databaseType === 'neo4j' || cacheProvider === 'redis' || (reactive && ['mysql', 'postgresql', 'mssql'].includes(prodDatabaseType))) { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (!reactive) { _%>
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 <%_ } else { _%>
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 <%_ } _%>
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 <%_ if (!reactive) { _%>
 import org.springframework.security.core.GrantedAuthority;
@@ -95,20 +86,14 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
  */
 <%_ if (reactiveSqlTestContainers) { _%>
 @ExtendWith(ReactiveSqlTestContainerExtension.class)
-<%_ } _%>  
+<%_ } _%>
 <%_ if (!reactive) { _%>
 @AutoConfigureMockMvc
 <%_ } else { _%>
 @AutoConfigureWebTestClient
 <%_ } _%>
 @WithMockUser(value = TEST_USER_LOGIN)
-@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
-<%_ if (cacheProvider === 'redis') { _%>
-@ExtendWith(RedisTestContainerExtension.class)
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-@ExtendWith(AbstractNeo4jIT.class)
-<%_ } _%>
+@<%= mainClass %>IntTest
 public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     static final String TEST_USER_LOGIN = "test";
@@ -189,21 +174,13 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-import <%= packageName %>.AbstractNeo4jIT;
-<%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
-import <%= packageName %>.RedisTestContainerExtension;
-<%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
+import <%= packageName %>.<%= mainClass %>IntTest;;
 <%_ if (reactive && searchEngine === 'elasticsearch') { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
 import org.junit.jupiter.api.Test;
-<%_ if (databaseType === 'neo4j' || cacheProvider === 'redis' || (reactive && ['mysql', 'postgresql', 'mssql'].includes(prodDatabaseType))) { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 import <%= packageName %>.ReactiveSqlTestContainerExtension;
 <%_ } _%>
@@ -213,7 +190,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 <%_ } else { _%>
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 <%_ } _%>
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (!reactive) { _%>
@@ -236,20 +212,14 @@ import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
  */
 <%_ if (reactiveSqlTestContainers) { _%>
 @ExtendWith(ReactiveSqlTestContainerExtension.class)
-<%_ } _%>  
+<%_ } _%>
 <%_ if (!reactive) { _%>
 @AutoConfigureMockMvc
 <%_ } else { _%>
 @AutoConfigureWebTestClient
 <%_ } _%>
 @WithMockUser(value = TEST_USER_LOGIN)
-@SpringBootTest(classes = <%= mainClass %>.class)
-<%_ if (cacheProvider === 'redis') { _%>
-@ExtendWith(RedisTestContainerExtension.class)
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-@ExtendWith(AbstractNeo4jIT.class)
-<%_ } _%>
+@<%= mainClass %>IntTest
 public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
     static final String TEST_USER_LOGIN = "test";
 
@@ -292,16 +262,11 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-import <%= packageName %>.AbstractNeo4jIT;
-<%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
-import <%= packageName %>.RedisTestContainerExtension;
-<%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 import <%= packageName %>.ReactiveSqlTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
+import <%= packageName %>.<%= mainClass %>IntTest;;
 import <%= packageName %>.config.Constants;
 <%_ if (authenticationType === 'session' && !reactive) { _%>
 import <%= packageName %>.domain.PersistentToken;
@@ -324,7 +289,7 @@ import <%= packageName %>.service.dto.<%= asDto('User') %>;
 import <%= packageName %>.web.rest.vm.KeyAndPasswordVM;
 import <%= packageName %>.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
-<%_ if (databaseType === 'neo4j' || cacheProvider === 'redis' || reactiveSqlTestContainers) { _%>
+<%_ if (reactiveSqlTestContainers) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 <%_ if (reactive && testsNeedCsrf || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
@@ -337,7 +302,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 <%_ } else { _%>
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 <%_ } _%>
-import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (reactive) { _%>
 import org.springframework.http.HttpStatus;
 <%_ } _%>
@@ -385,22 +349,13 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 /**
  * Integration tests for the {@link AccountResource} REST controller.
  */
-<%_ if (reactiveSqlTestContainers) { _%>
-@ExtendWith(ReactiveSqlTestContainerExtension.class)
-<%_ } _%>  
 <%_ if (!reactive) { _%>
 @AutoConfigureMockMvc
 <%_ } else { _%>
 @AutoConfigureWebTestClient
 <%_ } _%>
 @WithMockUser(value = TEST_USER_LOGIN)
-@SpringBootTest(classes = <%= mainClass %>.class)
-<%_ if (cacheProvider === 'redis') { _%>
-@ExtendWith(RedisTestContainerExtension.class)
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-@ExtendWith(AbstractNeo4jIT.class)
-<%_ } _%>
+@<%= mainClass %>IntTest
 class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
     static final String TEST_USER_LOGIN = "test";
 

@@ -1368,6 +1368,20 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator =>
+                generator.authenticationType === 'uaa' ||
+                generator.authenticationType === 'oauth2' ||
+                generator.databaseType === 'neo4j' ||
+                generator.cacheProvider === 'redis',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/IntTest.java',
+                    renameTo: generator => `${generator.testDir}/{generator.mainClass}IntTest.java`,
+                },
+            ],
+        },
+        {
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 { file: 'package/web/rest/TestUtil.java', renameTo: generator => `${generator.testDir}web/rest/TestUtil.java` },
