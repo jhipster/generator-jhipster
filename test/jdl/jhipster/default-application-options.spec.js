@@ -496,8 +496,8 @@ describe('DefaultApplicationOptions', () => {
             it('should set the package name to com.mycompany.myapp', () => {
                 expect(options.packageName).to.equal('com.mycompany.myapp');
             });
-            it('should set the production database type option to mysql', () => {
-                expect(options.prodDatabaseType).to.equal('mysql');
+            it('should set the production database type option to postgresql', () => {
+                expect(options.prodDatabaseType).to.equal('postgresql');
             });
             it('should set the search engine option to false', () => {
                 expect(options.searchEngine).to.be.false;
