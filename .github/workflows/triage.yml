@@ -29,4 +29,24 @@ jobs:
                   github-token: ${{secrets.GITHUB_TOKEN}}
                   script: |
                       const issue = { owner: context.issue.owner, repo: context.issue.repo, issue_number: context.issue.number }
-                      github.issues.addLabels({...issue, labels: ['area: triage', 'theme: undefined']})
+                      github.issues.listLabelsOnIssue({...issue}).then(response => {
+                        const labels = response.data
+                        let missingLabel = []
+                        let missingArea = true
+                        let missingTheme = true
+                        for (const label of labels) {
+                          if (label.name.includes('area: ')) {
+                            missingArea = false
+                          }
+                          if (label.name.includes('theme: ')) {
+                            missingTheme = false
+                          }
+                        }
+                        if (missingArea) {
+                          missingLabel.push('area: triage')
+                        }
+                        if (missingTheme) {
+                          missingLabel.push('theme: undefined')
+                        }
+                        github.issues.addLabels({...issue, labels: missingLabel})
+                      })
