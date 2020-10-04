@@ -39,7 +39,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -59,7 +59,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.jwtServer.map(applyCustomizers));
                 assert.file(expectedFiles.maven.map(applyCustomizers));
                 assert.file(expectedFiles.dockerServices.map(applyCustomizers));
-                assert.file(expectedFiles.mysql.map(applyCustomizers));
+                assert.file(expectedFiles.postgresql.map(applyCustomizers));
                 assert.file(expectedFiles.hibernateTimeZoneConfig.map(applyCustomizers));
                 assert.file(
                     getFilesForOptions(angularFiles, {
@@ -116,7 +116,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -136,7 +136,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.jwtServer.map(applyCustomizers));
                 assert.file(expectedFiles.maven.map(applyCustomizers));
                 assert.file(expectedFiles.dockerServices.map(applyCustomizers));
-                assert.file(expectedFiles.mysql.map(applyCustomizers));
+                assert.file(expectedFiles.postgresql.map(applyCustomizers));
                 assert.file(expectedFiles.hibernateTimeZoneConfig.map(applyCustomizers));
                 assert.file(
                     getFilesForOptions(reactFiles, {
