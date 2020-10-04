@@ -161,7 +161,7 @@ module.exports = options => ({
       template: './<%= CLIENT_MAIN_SRC_DIR %>index.html',
       chunksSortMode: 'auto',
       inject: 'body',
-      base: '/',
+      base: './',
     }),
     <%_ if (enableTranslation) { _%>
     new MergeJsonWebpackPlugin({

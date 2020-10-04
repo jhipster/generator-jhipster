@@ -107,6 +107,17 @@ module.exports = {
         // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
         { from: './<%= CLIENT_MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' },
       ]
+<<<<<<< HEAD
+=======
+    }),
+    // https://github.com/ampedandwired/html-webpack-plugin
+    new HtmlWebpackPlugin({
+      base: './',
+      template: './<%= MAIN_SRC_DIR %>index.html',
+      chunks: ['vendors', 'main', 'global'],
+      chunksSortMode: 'manual',
+      inject: true
+>>>>>>> fa18a5acbf (Use relative URLs for client app to enable context-based deployments)
     })<% if (enableTranslation) { %>,
     new MergeJsonWebpackPlugin({
       output: {
