@@ -510,7 +510,7 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                         nativeLanguage: 'en',
                         packageFolder: 'com/mathieu/sample',
                         packageName: 'com.mathieu.sample',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         searchEngine: false,
                         serverPort: '8080',
                         serviceDiscoveryType: false,
