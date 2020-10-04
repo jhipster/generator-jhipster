@@ -11,7 +11,7 @@ import {
   <%_ } _%>
 } from '../../support/entity';
 <%_
-const baseApi = (applicationType === 'gateway' && locals.microserviceName) ? microserviceName.toLowerCase() + '/api/' : 'api/';
+const baseApi = (applicationType === 'gateway' && locals.microserviceName) ? 'services/' + microserviceName.toLowerCase() + '/api/' : 'api/';
 let openBlockComment = ``;
 let closeBlockComment = ``;
 
