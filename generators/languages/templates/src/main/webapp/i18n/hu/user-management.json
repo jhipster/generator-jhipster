@@ -2,6 +2,7 @@
     "userManagement": {
         "home": {
             "title": "Felhasználók",
+            "refreshListLabel": "Refresh list",
             "createLabel": "Új felhasználó",
             "createOrEditLabel": "Felhasználó létrehozás vagy módosítás"
         },

@@ -7,8 +7,7 @@
 
       <span v-text="$t('logs.filter')">Filter</span> <input type="text" v-model="filtered" class="form-control" />
 
-      <table class="table table-sm table-striped table-bordered">
-        <caption>Logs</caption>
+      <table class="table table-sm table-striped table-bordered" aria-describedby="Logs">
         <thead>
           <tr title="click to order">
             <th v-on:click="changeOrder('name')" scope="col"><span v-text="$t('logs.table.name')">Name</span></th>

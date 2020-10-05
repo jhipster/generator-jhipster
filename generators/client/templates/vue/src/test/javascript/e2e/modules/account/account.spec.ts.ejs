@@ -383,9 +383,6 @@ describe('Account', () => {
         await detailsPage.email.sendKeys('ipster');
         await detailsPage.saveBtn.click();
 
-        await waitUntilDisplayed(detailsPage.infoAlert);
-        expect(await detailsPage.infoAlert.isDisplayed()).to.be.true;
-
         expect(await userManagementPage.getEmailColumnText('user_test')).to.eq('admin@localhost.jhipster');
       });
 
@@ -399,9 +396,6 @@ describe('Account', () => {
         await waitUntilHidden(deletePage.modal);
 
         expect(await isVisible(deletePage.modal)).to.be.false;
-
-        await waitUntilDisplayed(userManagementPage.dangerAlert);
-        expect(await userManagementPage.dangerAlert.isDisplayed()).to.be.true;
       });
     });
   });

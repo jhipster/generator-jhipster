@@ -76,12 +76,12 @@ jobs:
                 os: [ubuntu-20.04]
                 app-type:
                     - ngx-default
-                    - ngx-psql-es-noi18n-mapsid
+                    - ngx-mysql-es-noi18n-mapsid
                     - ngx-mariadb-oauth2-infinispan
                     - ngx-mongodb-kafka-cucumber
                     - ngx-h2mem-ws-nol2
                     - ngx-gradle-fr
-                    - ngx-gradle-psql-es-noi18n-mapsid
+                    - ngx-gradle-mysql-es-noi18n-mapsid
                     - ngx-gradle-mariadb-oauth2-infinispan
                     - ngx-gradle-mongodb-kafka-cucumber
                     - ngx-gradle-h2disk-ws-nocache
@@ -92,7 +92,7 @@ jobs:
                       war: 0
                       e2e: 1
                       testcontainers: 1
-                    - app-type: ngx-psql-es-noi18n-mapsid
+                    - app-type: ngx-mysql-es-noi18n-mapsid
                       entity: sqlfull
                       profile: prod
                       war: 0
@@ -122,7 +122,7 @@ jobs:
                       war: 0
                       e2e: 1
                       testcontainers: 0
-                    - app-type: ngx-gradle-psql-es-noi18n-mapsid
+                    - app-type: ngx-gradle-mysql-es-noi18n-mapsid
                       entity: sqlfull
                       profile: prod
                       war: 0
@@ -169,7 +169,7 @@ jobs:
                   mkdir -p base/app
                   mkdir -p base/uaa
               working-directory: ${{ github.workspace }}
-            - uses: actions/setup-node@v2.1.1
+            - uses: actions/setup-node@v2.1.2
               with:
                   node-version: ${{ matrix.node_version }}
             - uses: actions/setup-java@v1

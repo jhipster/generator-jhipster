@@ -130,7 +130,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         }
 
         const name = _.upperFirst(this.options.name).replace('.json', '');
-        this.entityStorage = this.getEntityConfig(name);
+        this.entityStorage = this.getEntityConfig(name, true);
         this.entityConfig = this.entityStorage.createProxy();
 
         const entityExisted = this.options.entityExisted !== undefined ? this.options.entityExisted : this.entityStorage.existed;
@@ -251,14 +251,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 }
             },
 
-            validateReactiveCompatibility() {
-                if (this.context.reactive && !['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(this.context.databaseType)) {
-                    throw new Error(
-                        `The entity generator doesn't support reactive apps with databases of type ${this.context.databaseType} at the moment`
-                    );
-                }
-            },
-
             validateEntityName() {
                 const validation = this._validateEntityName(this.context.name);
                 if (validation !== true) {
@@ -353,7 +345,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.entityConfig.pagination = 'no';
                 }
 
-                if (this.entityConfig.jpaMetamodelFiltering && (context.databaseType !== 'sql' || this.entityConfig.service === 'no')) {
+                if (
+                    this.entityConfig.jpaMetamodelFiltering &&
+                    (context.databaseType !== 'sql' || this.entityConfig.service === 'no' || context.reactive === true)
+                ) {
                     this.warning('Not compatible with jpaMetamodelFiltering, disabling');
                     this.entityConfig.jpaMetamodelFiltering = false;
                 }
@@ -472,6 +467,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     prepareFieldForTemplates(entity, field, this);
                 });
             },
+            shareEntity() {
+                this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
+                this.configOptions.sharedEntities[this.context.name] = this.context;
+            },
         };
     }
 
@@ -487,9 +486,54 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
             prepareRelationshipsForTemplates() {
                 this.context.relationships.forEach(relationship => {
+                    const otherEntityName = this._.upperFirst(relationship.otherEntityName);
+                    relationship.otherEntity = this.configOptions.sharedEntities[otherEntityName];
+
                     prepareRelationshipForTemplates(this.context, relationship, this);
+                    this._.defaults(relationship, {
+                        // otherEntityField should be id if not specified
+                        otherEntityField: 'id',
+                        // let ownerSide true when type is 'many-to-one' for convenience.
+                        // means that this side should control the reference.
+                        ownerSide:
+                            relationship.relationshipType !== 'one-to-many' &&
+                            (relationship.ownerSide || relationship.relationshipType === 'many-to-one'),
+                    });
                 });
             },
+
+            processCollectionRelationships() {
+                this.context.relationships.forEach(relationship => {
+                    relationship.relationshipCollection = ['one-to-many', 'many-to-many'].includes(relationship.relationshipType);
+                    relationship.relationshipReferenceField = relationship.relationshipCollection
+                        ? relationship.relationshipFieldNamePlural
+                        : relationship.relationshipFieldName;
+                });
+                this.context.entityContainsCollectionField = this.context.relationships.some(
+                    relationship => relationship.relationshipCollection
+                );
+            },
+
+            /**
+             * Process relationships that should be loaded eagerly.
+             */
+            processEagerLoadRelationships() {
+                this.context.relationships
+                    .filter(relationship => relationship.relationshipEagerLoad === undefined)
+                    .forEach(relationship => {
+                        relationship.relationshipEagerLoad =
+                            !relationship.embedded &&
+                            // Allows the entity to force earger load every relationship
+                            (this.context.eagerLoad ||
+                                (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === true));
+                    });
+                this.context.relationshipsContainEagerLoad = this.context.relationships.some(
+                    relationship => relationship.relationshipEagerLoad
+                );
+                this.context.eagerRelations = this.context.relationships.filter(rel => rel.relationshipEagerLoad);
+                this.context.regularEagerRelations = this.context.eagerRelations.filter(rel => rel.useJPADerivedIdentifier !== true);
+            },
+
             /*
              * Composed generators uses context ready for the templates.
              */

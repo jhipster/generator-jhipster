@@ -10,7 +10,7 @@
         "websocket": "spring-websocket",
         "databaseType": "sql",
         "devDatabaseType": "h2Disk",
-        "prodDatabaseType": "mysql",
+        "prodDatabaseType": "postgresql",
         "searchEngine": "elasticsearch",
         "buildTool": "gradle",
         "enableTranslation": false,

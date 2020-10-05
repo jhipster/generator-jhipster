@@ -57,6 +57,7 @@ module.exports = class JDLParser extends CstParser {
         this.enumProp();
         this.entityList();
         this.exclusion();
+        this.useOptionDeclaration();
         this.unaryOptionDeclaration();
         this.binaryOptionDeclaration();
         this.filterDef();
@@ -87,6 +88,7 @@ module.exports = class JDLParser extends CstParser {
                     { ALT: () => this.SUBRULE(this.relationDeclaration) },
                     { ALT: () => this.SUBRULE(this.enumDeclaration) },
                     { ALT: () => this.CONSUME(LexerTokens.JAVADOC) },
+                    { ALT: () => this.SUBRULE(this.useOptionDeclaration) },
                     { ALT: () => this.SUBRULE(this.unaryOptionDeclaration) },
                     { ALT: () => this.SUBRULE(this.binaryOptionDeclaration) },
                     { ALT: () => this.SUBRULE(this.applicationDeclaration) },
@@ -391,6 +393,25 @@ module.exports = class JDLParser extends CstParser {
         });
     }
 
+    useOptionDeclaration() {
+        this.RULE('useOptionDeclaration', () => {
+            this.CONSUME(LexerTokens.USE);
+            this.MANY({
+                GATE: () => this.LA(2).tokenType === LexerTokens.COMMA,
+                DEF: () => {
+                    this.CONSUME(LexerTokens.NAME);
+                    this.CONSUME(LexerTokens.COMMA);
+                },
+            });
+            this.CONSUME1(LexerTokens.NAME);
+            this.CONSUME(LexerTokens.FOR);
+            this.SUBRULE(this.filterDef);
+            this.OPTION(() => {
+                this.SUBRULE(this.exclusion);
+            });
+        });
+    }
+
     unaryOptionDeclaration() {
         this.RULE('unaryOptionDeclaration', () => {
             this.CONSUME(LexerTokens.UNARY_OPTION);
@@ -473,6 +494,7 @@ module.exports = class JDLParser extends CstParser {
                     { ALT: () => this.SUBRULE(this.applicationSubEntities) },
                     { ALT: () => this.SUBRULE(this.unaryOptionDeclaration) },
                     { ALT: () => this.SUBRULE(this.binaryOptionDeclaration) },
+                    { ALT: () => this.SUBRULE(this.useOptionDeclaration) },
                 ]);
             });
         });

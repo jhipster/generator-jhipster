@@ -16,6 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+
+<%_
+    let uuidConversionNeeded = (databaseType === 'sql' && reactive && !(prodDatabaseType === 'postgresql'));
+_%>
 package <%= packageName %>.config;
 
 import io.github.jhipster.config.JHipsterConstants;
@@ -27,8 +31,8 @@ import io.r2dbc.spi.ConnectionFactory;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import com.github.cloudyrock.mongock.driver.mongodb.springdata.v3.SpringDataMongo3Driver;
-import com.github.cloudyrock.spring.MongockSpring5;
-import com.github.cloudyrock.spring.MongockSpring5.MongockInitializingBeanRunner;
+import com.github.cloudyrock.spring.v5.MongockSpring5;
+import com.github.cloudyrock.spring.v5.MongockSpring5.MongockInitializingBeanRunner;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 
@@ -115,9 +119,13 @@ import org.springframework.data.convert.CustomConversions;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
+import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
 import org.springframework.data.r2dbc.dialect.DialectResolver;
 import org.springframework.data.r2dbc.dialect.R2dbcDialect;
+import org.springframework.data.r2dbc.query.UpdateMapper;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
+import org.springframework.data.relational.core.dialect.RenderContextFactory;
+import org.springframework.data.relational.core.sql.render.SqlRenderer;
     <%_ } else { _%>
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -128,13 +136,19 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import java.sql.SQLException;
 <%_ } } _%>
 <%_ if (databaseType === 'sql' && reactive) { _%>
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
+    <%_ if (uuidConversionNeeded) { _%>
+import java.util.UUID;
+    <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import java.util.ArrayList;
@@ -266,14 +280,13 @@ public class DatabaseConfiguration {
     @Bean
     public MongockInitializingBeanRunner mongockInitializingBeanRunner(ApplicationContext springContext,
               MongoTemplate mongoTemplate,
-              @Value("${mongock.lock.lockAcquiredForMinutes:5}") long lockAcquiredForMinutes,
-              @Value("${mongock.lock.maxWaitingForLockMinutes:3}") long maxWaitingForLockMinutes,
-              @Value("${mongock.lock.maxTries:3}") int maxTries) {
-        SpringDataMongo3Driver driver = new SpringDataMongo3Driver(mongoTemplate);
+              @Value("${mongock.lockAcquiredForMinutes:5}") long lockAcquiredForMinutes,
+              @Value("${mongock.maxWaitingForLockMinutes:3}") long maxWaitingForLockMinutes,
+              @Value("${mongock.maxTries:3}") int maxTries) {
+        SpringDataMongo3Driver driver = SpringDataMongo3Driver.withLockSetting(mongoTemplate, lockAcquiredForMinutes, maxWaitingForLockMinutes, maxTries);
         return MongockSpring5.builder()
             .setDriver(driver)
             .addChangeLogsScanPackage("<%= packageName %>.config.dbmigrations")
-            .setLockConfig(lockAcquiredForMinutes, maxWaitingForLockMinutes, maxTries)
             .setSpringContext(springContext)
             .buildInitializingBeanRunner();
     }
@@ -308,7 +321,6 @@ public class DatabaseConfiguration {
      */
     @WritingConverter
     public enum ZonedDateTimeToLongConverter implements Converter<ZonedDateTime, Long> {
-
         INSTANCE;
 
         @Override
@@ -322,7 +334,6 @@ public class DatabaseConfiguration {
      */
     @ReadingConverter
     public enum NumberToLocalDateTimeConverter implements Converter<Number, ZonedDateTime> {
-
         INSTANCE;
 
         @Override
@@ -392,13 +403,13 @@ public class DatabaseConfiguration {
             return Base64.decodeBase64(source);
         }
     }
-
-    /**
+<%_ } _%>
+<% if ((databaseType === 'couchbase') || uuidConversionNeeded) { %>
+   /**
     * Simple singleton to convert {@link UUID}s to their {@link String} representation.
     */
     @WritingConverter
     public enum UUIDToStringConverter implements Converter<UUID, String> {
-
         INSTANCE;
 
         @Override
@@ -412,7 +423,6 @@ public class DatabaseConfiguration {
     */
     @ReadingConverter
     public enum StringToUUIDConverter implements Converter<String, UUID> {
-
         INSTANCE;
 
         @Override
@@ -421,25 +431,51 @@ public class DatabaseConfiguration {
         }
 
     }
+
 <%_ } _%>
 <%_ if (databaseType === 'sql' && reactive) { _%>
     // LocalDateTime seems to be the only type that is supported across all drivers atm
     // See https://github.com/r2dbc/r2dbc-h2/pull/139 https://github.com/mirromutth/r2dbc-mysql/issues/105
     @Bean
-    public R2dbcCustomConversions r2dbcCustomConversions(ConnectionFactory connectionFactory) {
-        R2dbcDialect dialect = DialectResolver.getDialect(connectionFactory);
+    public R2dbcCustomConversions r2dbcCustomConversions(R2dbcDialect dialect) {
         List<Object> converters = new ArrayList<>(dialect.getConverters());
-        converters.add(new InstantWriteConverter());
-        converters.add(new InstantReadConverter());
+        converters.add(InstantWriteConverter.INSTANCE);
+        converters.add(InstantReadConverter.INSTANCE);
         converters.add(BitSetReadConverter.INSTANCE);
+        converters.add(DurationWriteConverter.INSTANCE);
+        converters.add(DurationReadConverter.INSTANCE);
+        converters.add(ZonedDateTimeReadConverter.INSTANCE);
+        converters.add(ZonedDateTimeWriteConverter.INSTANCE);
+        <%_ if (uuidConversionNeeded) { _%>
+        converters.add(StringToUUIDConverter.INSTANCE);
+        converters.add(UUIDToStringConverter.INSTANCE);
+        <%_ } _%>
         converters.addAll(R2dbcCustomConversions.STORE_CONVERTERS);
         return new R2dbcCustomConversions(
             CustomConversions.StoreConversions.of(dialect.getSimpleTypeHolder(), converters),
-            Collections.emptyList());
+            Collections.emptyList()
+        );
+    }
+
+    @Bean
+    public R2dbcDialect dialect(ConnectionFactory connectionFactory) {
+        return DialectResolver.getDialect(connectionFactory);
+    }
+
+    @Bean
+    public UpdateMapper updateMapper(R2dbcDialect dialect, ReactiveDataAccessStrategy dataAccessStrategy) {
+        return new UpdateMapper(dialect, dataAccessStrategy.getConverter());
+    }
+
+    @Bean
+    public SqlRenderer sqlRenderer(R2dbcDialect dialect) {
+        RenderContextFactory factory = new RenderContextFactory(dialect);
+        return SqlRenderer.create(factory.createRenderContext());
     }
 
     @WritingConverter
-    public static class InstantWriteConverter implements Converter<Instant, LocalDateTime> {
+    public enum InstantWriteConverter implements Converter<Instant, LocalDateTime> {
+        INSTANCE;
 
         public LocalDateTime convert(Instant source) {
             return LocalDateTime.ofInstant(source, ZoneOffset.UTC);
@@ -447,7 +483,8 @@ public class DatabaseConfiguration {
     }
 
     @ReadingConverter
-    public static class InstantReadConverter implements Converter<LocalDateTime, Instant> {
+    public enum InstantReadConverter implements Converter<LocalDateTime, Instant> {
+        INSTANCE;
 
         @Override
         public Instant convert(LocalDateTime localDateTime) {
@@ -462,6 +499,47 @@ public class DatabaseConfiguration {
         @Override
         public Boolean convert(BitSet bitSet) {
             return bitSet.get(0);
+        }
+    }
+
+    @ReadingConverter
+    public enum ZonedDateTimeReadConverter implements Converter<LocalDateTime, ZonedDateTime> {
+        INSTANCE;
+
+        @Override
+        public ZonedDateTime convert(LocalDateTime localDateTime) {
+            // Be aware - we are using the UTC timezone
+            return ZonedDateTime.of(localDateTime, ZoneOffset.UTC);
+        }
+    }
+
+    @WritingConverter
+    public enum ZonedDateTimeWriteConverter implements Converter<ZonedDateTime, LocalDateTime> {
+        INSTANCE;
+
+        @Override
+        public LocalDateTime convert(ZonedDateTime zonedDateTime) {
+            return zonedDateTime.toLocalDateTime();
+        }
+    }
+
+    @WritingConverter
+    public enum DurationWriteConverter implements Converter<Duration, Long> {
+        INSTANCE;
+
+        @Override
+        public Long convert(Duration source) {
+            return source != null ? source.toMillis() : null;
+        }
+    }
+
+    @ReadingConverter
+    public enum DurationReadConverter implements Converter<Long, Duration> {
+        INSTANCE;
+
+        @Override
+        public Duration convert(Long source) {
+            return source != null ? Duration.ofMillis(source) : null;
         }
     }
 

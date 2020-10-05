@@ -29,6 +29,7 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 const shouldSkipUserManagement = generator =>
     generator.skipUserManagement && (generator.applicationType !== 'monolith' || generator.authenticationType !== 'oauth2');
@@ -39,7 +40,7 @@ const shouldSkipUserManagement = generator =>
 const serverFiles = {
     jib: [
         {
-            path: 'src/main/jib/',
+            path: 'src/main/docker/jib/',
             templates: ['entrypoint.sh'],
         },
     ],
@@ -215,7 +216,19 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.clientFramework !== REACT,
+            condition: generator => generator.clientFramework === VUE,
+            path: SERVER_MAIN_RES_DIR,
+            templates: [
+                {
+                    file: 'banner-vue.txt',
+                    method: 'copy',
+                    noEjs: true,
+                    renameTo: () => 'banner.txt',
+                },
+            ],
+        },
+        {
+            condition: generator => generator.clientFramework !== REACT && generator.clientFramework !== VUE,
             path: SERVER_MAIN_RES_DIR,
             templates: [{ file: 'banner.txt', method: 'copy', noEjs: true }],
         },
@@ -526,6 +539,19 @@ const serverFiles = {
                 {
                     file: 'package/config/TestSecurityConfiguration.java',
                     renameTo: generator => `${generator.testDir}config/TestSecurityConfiguration.java`,
+                },
+            ],
+        },
+        {
+            condition: generator =>
+                !generator.reactive &&
+                generator.authenticationType === 'oauth2' &&
+                (generator.applicationType === 'microservice' || generator.applicationType === 'gateway'),
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/security/oauth2/AuthorizationHeaderUtilTest.java',
+                    renameTo: generator => `${generator.javaDir}security/oauth2/AuthorizationHeaderUtilTest.java`,
                 },
             ],
         },
@@ -1010,6 +1036,30 @@ const serverFiles = {
                 {
                     file: 'package/config/LiquibaseConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/LiquibaseConfiguration.java`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.databaseType === 'sql' && generator.reactive,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/service/ColumnConverter.java',
+                    renameTo: generator => `${generator.javaDir}service/ColumnConverter.java`,
+                },
+                {
+                    file: 'package/service/EntityManager.java',
+                    renameTo: generator => `${generator.javaDir}service/EntityManager.java`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.databaseType === 'sql' && generator.reactive && !generator.skipUserManagement,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/repository/rowmapper/UserRowMapper.java',
+                    renameTo: generator => `${generator.javaDir}repository/rowmapper/UserRowMapper.java`,
                 },
             ],
         },

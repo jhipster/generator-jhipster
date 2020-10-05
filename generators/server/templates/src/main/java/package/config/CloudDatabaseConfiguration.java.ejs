@@ -20,8 +20,8 @@ package <%= packageName %>.config;
 <%_ if (databaseType === 'mongodb') { _%>
 
 import com.github.cloudyrock.mongock.driver.mongodb.springdata.v3.SpringDataMongo3Driver;
-import com.github.cloudyrock.spring.MongockSpring5;
-import com.github.cloudyrock.spring.MongockSpring5.MongockInitializingBeanRunner;
+import com.github.cloudyrock.spring.v5.MongockSpring5;
+import com.github.cloudyrock.spring.v5.MongockSpring5.MongockInitializingBeanRunner;
 
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.domain.util.JSR310DateConverters.*;
@@ -108,14 +108,13 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
     @Bean
     public MongockInitializingBeanRunner mongockInitializingBeanRunner(ApplicationContext springContext,
               MongoTemplate mongoTemplate,
-              @Value("${mongock.lock.lockAcquiredForMinutes:5}") long lockAcquiredForMinutes,
-              @Value("${mongock.lock.maxWaitingForLockMinutes:3}") long maxWaitingForLockMinutes,
-              @Value("${mongock.lock.maxTries:3}") int maxTries) {
-        SpringDataMongo3Driver driver = new SpringDataMongo3Driver(mongoTemplate);
+              @Value("${mongock.lockAcquiredForMinutes:5}") long lockAcquiredForMinutes,
+              @Value("${mongock.maxWaitingForLockMinutes:3}") long maxWaitingForLockMinutes,
+              @Value("${mongock.maxTries:3}") int maxTries) {
+        SpringDataMongo3Driver driver = SpringDataMongo3Driver.withLockSetting(mongoTemplate, lockAcquiredForMinutes, maxWaitingForLockMinutes, maxTries);
         return MongockSpring5.builder()
             .setDriver(driver)
             .addChangeLogsScanPackage("<%= packageName %>.config.dbmigrations")
-            .setLockConfig(lockAcquiredForMinutes, maxWaitingForLockMinutes, maxTries)
             .setSpringContext(springContext)
             .buildInitializingBeanRunner();
     }

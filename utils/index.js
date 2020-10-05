@@ -18,5 +18,5 @@
  */
 
 module.exports = {
-    stringify: data => JSON.stringify(data, null, 4),
+    stringify: data => JSON.stringify(data, (key, value) => (key === 'otherEntity' && value ? `[${value.name} entity]` : value), 4),
 };
