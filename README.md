@@ -37,7 +37,7 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
       </td>
       <td align="center" valign="middle">
         <a href="https://dev.entando.org/jhipster" target="_blank">
-          <img width="200em" src="https://www.jhipster.tech/images/open-collective/Entando_E.png">
+          <img width="200em" src="https://www.jhipster.tech/images/open-collective/entandoe.png">
         </a>
       </td>
     </tr>
@@ -46,71 +46,9 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 ### Bronze sponsors
 
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="middle">
-        <a href="https://forsyslab.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/forsyslab.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://www.cuba-platform.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/cubaplatform.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://www.codefirst.co.uk" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/codefirst.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://blokt.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/blokt.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://clay.global/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/clay.png">
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center" valign="middle">
-        <a href="https://writersperhour.com/urgent-essay-writing-service" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/writersperhour.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://www.minitool.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/minitool.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://edubirdie.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/edubirdie.png">	
-        </a>
-      </td>
-      <td align="center" valign="middle">	
-        <a href="https://www.zadluzenia.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/zadluzenia.png">	
-        </a>
-      </td>
-      <td align="center" valign="middle">	
-        <a href="https://opencollective.com/jim-van-dam" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/jim-van-dam.png">	
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center" valign="middle">
-        <a href="https://casino-academia.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/casinoacademia.png">
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
+[![BronzeSponsors][bronze-sponsors-image]][bronze-sponsors-url]
+
+### Backers
 
 **Thank you to all our backers!**
 
@@ -187,6 +125,8 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [github-actions-url]: https://github.com/jhipster/generator-jhipster/actions
 [backers-image]: https://opencollective.com/generator-jhipster/tiers/backer.svg?avatarHeight=40&width=890
 [backers-url]: https://opencollective.com/generator-jhipster
+[bronze-sponsors-image]: https://opencollective.com/generator-jhipster/tiers/bronze-sponsor.svg?avatarHeight=80&width=890
+[bronze-sponsors-url]: https://opencollective.com/generator-jhipster
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md
 [npmcharts-image]: https://img.shields.io/npm/dm/generator-jhipster.svg?label=Downloads&style=flat
