@@ -20,7 +20,6 @@ const chalk = require('chalk');
 const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
-const pretty = require('js-object-pretty-print').pretty;
 const pluralize = require('pluralize');
 const { fork } = require('child_process');
 
@@ -141,7 +140,7 @@ const shouldGenerateDeployments = processor =>
 const generateDeploymentFiles = ({ processor, deployment, inFolder }) => {
     const deploymentType = getDeploymentType(deployment);
     logger.info(`Generating deployment ${deploymentType} in a new parallel process`);
-    logger.debug(`Generating deployment: ${pretty(deployment[GENERATOR_NAME])}`);
+    logger.debug(`Generating deployment: ${JSON.stringify(deployment[GENERATOR_NAME], null, 2)}`);
 
     const cwd = inFolder ? path.join(processor.pwd, deploymentType) : processor.pwd;
     logger.debug(`Child process will be triggered for ${jhipsterCli} with cwd: ${cwd}`);
@@ -158,7 +157,7 @@ const generateDeploymentFiles = ({ processor, deployment, inFolder }) => {
  */
 const generateApplicationFiles = ({ processor, applicationWithEntities, inFolder }) => {
     const baseName = applicationWithEntities.config.baseName;
-    logger.debug(`Generating application: ${pretty(applicationWithEntities.config)}`);
+    logger.debug(`Generating application: ${JSON.stringify(applicationWithEntities.config, null, 2)}`);
 
     const cwd = inFolder ? path.join(processor.pwd, baseName) : processor.pwd;
     const { fork = inFolder } = processor.options;
