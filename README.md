@@ -125,9 +125,9 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [github-actions-vue-image]: https://github.com/jhipster/generator-jhipster/workflows/Vue/badge.svg
 [github-actions-webflux-image]: https://github.com/jhipster/generator-jhipster/workflows/Webflux/badge.svg
 [github-actions-url]: https://github.com/jhipster/generator-jhipster/actions
-[backers-image]: https://opencollective.com/generator-jhipster/tiers/backer.svg?avatarHeight=40&width=890
+[backers-image]: https://opencollective.com/generator-jhipster/tiers/backer.svg?avatarHeight=70&width=890
 [backers-url]: https://opencollective.com/generator-jhipster
-[bronze-sponsors-image]: https://opencollective.com/generator-jhipster/tiers/bronze-sponsor.svg?avatarHeight=80&width=890
+[bronze-sponsors-image]: https://opencollective.com/generator-jhipster/tiers/bronze-sponsor.svg?avatarHeight=120&width=890
 [bronze-sponsors-url]: https://opencollective.com/generator-jhipster
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md
