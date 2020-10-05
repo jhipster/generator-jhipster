@@ -88,71 +88,71 @@ jobs:
                 include:
                     - app-type: ngx-default
                       entity: sql
-                      profile: prod
+                      environment: prod
                       war: 0
                       e2e: 1
                       testcontainers: 1
                     - app-type: ngx-mysql-es-noi18n-mapsid
                       entity: sqlfull
-                      profile: prod
+                      environment: prod
                       war: 0
                       e2e: 1
                       testcontainers: 0
                     - app-type: ngx-mariadb-oauth2-infinispan
                       entity: sqlfull
-                      profile: prod
+                      environment: prod
                       war: 0
                       e2e: 1
                       testcontainers: 0
                     - app-type: ngx-mongodb-kafka-cucumber
                       entity: mongodb
-                      profile: dev,webpack
+                      environment: dev
                       war: 0
                       e2e: 1
                       testcontainers: 0
                     - app-type: ngx-h2mem-ws-nol2
                       entity: sql
-                      profile: dev,webpack
+                      environment: dev
                       war: 0 # TODO: need change to 1, when maven+war is fixed
                       e2e: 1
                       testcontainers: 0
                     - app-type: ngx-gradle-fr
                       entity: sql
-                      profile: prod
+                      environment: prod
                       war: 0
                       e2e: 1
                       testcontainers: 0
                     - app-type: ngx-gradle-mysql-es-noi18n-mapsid
                       entity: sqlfull
-                      profile: prod
+                      environment: prod
                       war: 0
                       e2e: 1
                       testcontainers: 1
                     - app-type: ngx-gradle-mariadb-oauth2-infinispan
                       entity: sql
-                      profile: dev,webpack
+                      environment: dev
                       war: 0
                       e2e: 1
                       testcontainers: 1
                     - app-type: ngx-gradle-mongodb-kafka-cucumber
                       entity: mongodb
-                      profile: prod
+                      environment: prod
                       war: 0
                       e2e: 1
                       testcontainers: 0
                     - app-type: ngx-gradle-h2disk-ws-nocache
                       entity: sql
-                      profile: dev,webpack
+                      environment: dev
                       war: 1
                       e2e: 1
                       testcontainers: 0
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
-            JHI_PROFILE: ${{ matrix.profile }}
+            JHI_PROFILE: ${{ matrix.environment }}
             JHI_WAR: ${{ matrix.war }}
             JHI_E2E: ${{ matrix.e2e }}
-            JHI_TESTCONTAINERS: ${{ matrix.testcontainers }}
+            SPRING_PROFILES_ACTIVE: ${{ fromJson('["", "testcontainers"]')[matrix.testcontainers] }}
         steps:
             #----------------------------------------------------------------------
             # Install all tools and check configuration
@@ -268,16 +268,17 @@ jobs:
             #----------------------------------------------------------------------
             - name: 'TESTS: Start docker-compose containers'
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-              run: $JHI_SCRIPTS/20-docker-compose.sh
+              run: npm run ci:e2e:prepare:docker
             - name: 'TESTS: backend'
+              id: backend
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-              run: $JHI_SCRIPTS/21-tests-backend.sh
+              run: npm run ci:backend:test
             - name: 'TESTS: frontend'
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-              run: $JHI_SCRIPTS/22-tests-frontend.sh
+              run: npm run ci:frontend:test
             - name: 'TESTS: packaging'
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-              run: $JHI_SCRIPTS/23-package.sh
+              run: npm run ci:e2e:package
             - name: 'E2E: Synchronize chromedriver version'
               if: matrix.e2e == 1 && steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: npm run e2e:update-webdriver -- --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
@@ -285,13 +286,19 @@ jobs:
             - name: 'E2E: Run'
               id: e2e
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-              run: $JHI_SCRIPTS/24-tests-e2e.sh
+              run: npm run ci:e2e:run --if-present
+            - name: 'BACKEND: Store failure logs'
+              uses: actions/upload-artifact@v2
+              if: always() && steps.backend.outcome == 'failure'
+              with:
+                  name: log-${{ matrix.app-type }}
+                  path: ${{ github.workspace }}/app/build/test-results/**/*.xml
             - name: 'E2E: Store failure screenshots'
               uses: actions/upload-artifact@v2
               if: always() && steps.e2e.outcome == 'failure'
               with:
                   name: screenshots-${{ matrix.app-type }}
-                  path: ${{ github.workspace }}/app/target/cypress/screenshots
+                  path: ${{ github.workspace }}/app/*/cypress/screenshots
             - name: 'ANALYSIS: Sonar analysis'
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: $JHI_SCRIPTS/25-sonar-analyze.sh
