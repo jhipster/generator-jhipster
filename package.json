@@ -86,7 +86,7 @@
         "test": "^0.6.0",
         "then-request": "6.0.2",
         "through2": "4.0.2",
-        "uuid": "8.3.0",
+        "uuid": "8.3.1",
         "winston": "3.3.3",
         "yeoman-environment": "2.10.3",
         "yeoman-generator": "4.12.0"
