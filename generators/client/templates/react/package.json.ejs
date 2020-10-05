@@ -184,6 +184,9 @@ limitations under the License.
   "engines": {
     "node": ">=<%= NODE_VERSION %>"
   },
+  "config": {
+    "default_enviroment": "prod"
+  },
   "scripts": {
     "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
@@ -209,22 +212,23 @@ limitations under the License.
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
     <%_ } _%>
+    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config <%= CLIENT_TEST_SRC_DIR %>jest.conf.js",
+    "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
+    "start": "<%= clientPackageManager %> run webpack:dev",
+    "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
     <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
     <%_ } _%>
-    "start": "<%= clientPackageManager %> run webpack:dev",
-    "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
-    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config <%= CLIENT_TEST_SRC_DIR %>jest.conf.js",
-    "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
-    "test": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest",
+    "pretest": "<%= clientPackageManager %> run lint",
+    "test": "<%= clientPackageManager %> run jest",
     "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",
-    "test:watch": "<%= clientPackageManager %> test -- --watch",
+    "test:watch": "<%= clientPackageManager %> run jest -- --watch",
+    "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:$npm_package_config_default_enviroment",
+    "webpack:build:dev": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
+    "webpack:build:prod": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
     "webpack:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
-    "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
-    "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
-    "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
-    "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main",
+    "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:prod",
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"

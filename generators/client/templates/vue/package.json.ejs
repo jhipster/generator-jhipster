@@ -156,8 +156,11 @@ limitations under the License.
     "webpack-merge": "5.0.9"
   },
   "engines": {
-    "node": ">= 10.17.0",
+    "node": ">=<%= NODE_VERSION %>",
     "npm": ">= 6.13.4"
+  },
+  "config": {
+    "default_enviroment": "prod"
   },
   "scripts": {
     "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
@@ -191,17 +194,18 @@ limitations under the License.
     <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --no-cache --config <%= CLIENT_TEST_SRC_DIR %>jest.conf.js",
     "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
-    "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
-    "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --profile --env.stats=minimal",
-    "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile --env.stats=minimal",
-    "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main && <%= clientPackageManager %> run clean-www",
+    "pretest": "<%= clientPackageManager %> run lint",
+    "test": "<%= clientPackageManager %> run jest",
+    "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",
+    "test:watch": "<%= clientPackageManager %> run jest -- --watch",
+    "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:$npm_package_config_default_enviroment",
+    "webpack:build:dev": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --profile --env.stats=minimal",
+    "webpack:build:prod": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile --env.stats=minimal",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress --inline --env.stats=normal",
+    "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:prod && <%= clientPackageManager %> run clean-www",
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
-    "test": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest",
-    "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",
-    "test:watch": "<%= clientPackageManager %> run jest -- --watch"
+    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
   },
   "jestSonar": {
     "reportPath": "<%= BUILD_DIR %>test-results/jest",
