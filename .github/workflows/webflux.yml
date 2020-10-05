@@ -159,7 +159,7 @@ jobs:
                   mkdir -p base/app
                   mkdir -p base/uaa
               working-directory: ${{ github.workspace }}
-            - uses: actions/setup-node@v2.1.1
+            - uses: actions/setup-node@v2.1.2
               with:
                   node-version: ${{ matrix.node_version }}
             - uses: actions/setup-java@v1
