@@ -52,7 +52,7 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 **Thank you to all our backers!**
 
-[![Backers][backers-image]][backers-url]
+<object data="https://opencollective.com/generator-jhipster/tiers/backer.svg?avatarHeight=40&width=890&button=false" type="image/svg+xml"></object>
 
 ## Azure Builds
 
