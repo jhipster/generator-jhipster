@@ -129,7 +129,7 @@ const serverFiles = {
             templates: [
                 'consul.yml',
                 { file: 'config/git2consul.json', method: 'copy' },
-                { file: 'config/consul-config/application.yml', method: 'copy', renameTo: () => 'central-server-config/application.yml' },
+                { file: 'config/consul-config/application.yml', renameTo: () => 'central-server-config/application.yml' },
             ],
         },
         {
@@ -139,12 +139,10 @@ const serverFiles = {
                 'jhipster-registry.yml',
                 {
                     file: 'config/docker-config/application.yml',
-                    method: 'copy',
                     renameTo: () => 'central-server-config/docker-config/application.yml',
                 },
                 {
                     file: 'config/localhost-config/application.yml',
-                    method: 'copy',
                     renameTo: () => 'central-server-config/localhost-config/application.yml',
                 },
             ],
