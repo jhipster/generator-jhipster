@@ -80,7 +80,6 @@
         "randexp": "0.5.3",
         "semver": "7.3.2",
         "shelljs": "0.8.4",
-        "tabtab": "2.2.2",
         "then-request": "6.0.2",
         "through2": "4.0.2",
         "uuid": "8.3.1",
