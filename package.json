@@ -111,9 +111,6 @@
         "yeoman-assert": "3.1.1",
         "yeoman-test": "3.0.0"
     },
-    "resolutions": {
-        "inquirer": "6.3.1"
-    },
     "engines": {
         "node": ">=12.12.0",
         "npm": ">=6.14.4"
