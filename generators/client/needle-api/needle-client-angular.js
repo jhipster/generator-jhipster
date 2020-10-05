@@ -222,7 +222,7 @@ module.exports = class extends needleClientBase {
             if (!isSpecificEntityAlreadyGenerated) {
                 const modulePath = `./${entityFolderName}/${entityFileName}-routing.module`;
                 const moduleName = microServiceName
-                    ? `${this.generator.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`
+                    ? `${this.generator.upperFirstCamelCase(microServiceName)}${entityAngularName}RoutingModule`
                     : `${entityAngularName}RoutingModule`;
 
                 this._addRoute(entityUrl, modulePath, moduleName, 'jhipster-needle-add-entity-route', entityModulePath);
