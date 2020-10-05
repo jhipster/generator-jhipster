@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const microservicePrefix = locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : ''; _%>
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -27,7 +28,7 @@ import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>
 import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
 <%_ } _%>
 import { <%= entityAngularName %>RoutingResolveService } from './<%= entityFileName %>-routing-resolve.service';
-import { <%= entityAngularName %>Module } from './<%= entityFileName %>.module';
+import { <%= microservicePrefix %><%= entityAngularName %>Module } from './<%= entityFileName %>.module';
 
 const <%= entityInstance %>Route: Routes = [
     {
@@ -85,10 +86,10 @@ const <%= entityInstance %>Route: Routes = [
 @NgModule({
     imports: [
         RouterModule.forChild(<%= entityInstance %>Route),
-        <%= entityAngularName %>Module,
+        <%= microservicePrefix %><%= entityAngularName %>Module,
     ],
     exports: [
-        <%= entityAngularName %>Module,
+        <%= microservicePrefix %><%= entityAngularName %>Module,
     ],
 })
-export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : '' %><%= entityAngularName %>RoutingModule {}
+export class <%= microservicePrefix %><%= entityAngularName %>RoutingModule {}
