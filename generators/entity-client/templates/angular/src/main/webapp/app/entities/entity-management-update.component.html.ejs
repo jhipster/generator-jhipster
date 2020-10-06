@@ -55,7 +55,7 @@ _%>
     <%_ if (fields[idx].fieldIsEnum) { _%>
                     <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>">
         <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
-                        <option value><% if (enableTranslation) { %>{{ '<%= enumPrefix %>.null' | translate }}<% } %></option>
+                        <option [ngValue]="null"><% if (enableTranslation) { %>{{ '<%= enumPrefix %>.null' | translate }}<% } %></option>
         <%_ const values = fields[idx].enumValues;
             for (key in values) {
                 const enumValue = values[key]; _%>
