@@ -266,8 +266,8 @@ jobs:
             #----------------------------------------------------------------------
             # Launch tests
             #----------------------------------------------------------------------
-            - name: 'TESTS: Start docker-compose containers'
-              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
+            - name: 'TESTS: Start docker-compose containers for e2e and backend tests'
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true' && matrix.testcontainers == '0'
               run: npm run ci:e2e:prepare:docker
             - name: 'TESTS: backend'
               id: backend
@@ -283,6 +283,9 @@ jobs:
               if: matrix.e2e == 1 && steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: npm run e2e:update-webdriver -- --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
               working-directory: ${{ github.workspace }}/app
+            - name: 'TESTS: Start docker-compose containers for e2e tests'
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true' && matrix.testcontainers == '1'
+              run: npm run ci:e2e:prepare:docker
             - name: 'E2E: Run'
               id: e2e
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'

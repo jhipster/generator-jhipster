@@ -384,18 +384,24 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                     }
                 }
 
-                this.dockerOthers = [];
+                const dockerOthers = [];
+                const dockerBuild = [];
                 ['keycloak', 'elasticsearch', 'kafka', 'consul', 'redis', 'memcached', 'jhipster-registry', 'sonar'].forEach(
                     dockerConfig => {
                         const dockerFile = `src/main/docker/${dockerConfig}.yml`;
                         if (this.fs.exists(this.destinationPath(dockerFile))) {
+                            if (['cassandra', 'couchbase'].includes(dockerConfig)) {
+                                scriptsStorage.set(`docker:${dockerConfig}:build`, `docker-compose -f ${dockerFile} build`);
+                                dockerBuild.push(`npm run docker:${dockerConfig}:build`);
+                            }
                             scriptsStorage.set(`docker:${dockerConfig}`, `docker-compose -f ${dockerFile} up -d`);
-                            this.dockerOthers.push(`npm run docker:${dockerConfig}`);
+                            dockerOthers.push(`npm run docker:${dockerConfig}`);
                         }
                     }
                 );
                 scriptsStorage.set({
-                    'docker:others': this.dockerOthers.join(' && '),
+                    'predocker:others': dockerBuild.join(' && '),
+                    'docker:others': dockerOthers.join(' && '),
                     'ci:e2e:prepare:docker': 'npm run docker:db && npm run docker:others && docker ps -a',
                 });
             },
