@@ -687,7 +687,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         // Validate the User in the database
         assertPersistedUsers(users -> {
             assertThat(users).hasSize(databaseSizeBeforeUpdate);
-            <%= asEntity('User') %> testUser = users.get(users.size() - 1);
+            <%= asEntity('User') %> testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().get();
             assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
             assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
             assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
@@ -753,7 +753,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         // Validate the User in the database
         assertPersistedUsers(users -> {
             assertThat(users).hasSize(databaseSizeBeforeUpdate);
-            <%= asEntity('User') %> testUser = users.get(users.size() - 1);
+            <%= asEntity('User') %> testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().get();
             assertThat(testUser.getLogin()).isEqualTo(UPDATED_LOGIN);
             assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
             assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
