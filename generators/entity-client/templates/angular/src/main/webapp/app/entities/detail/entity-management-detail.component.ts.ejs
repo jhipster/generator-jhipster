@@ -16,31 +16,70 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit } from '@angular/core';
+import {
+    Component,
+    Input,
+<% if (!embeddableEntity) { %>
+    OnInit,
+<% } %>
+} from '@angular/core';
+<% if (!embeddableEntity) { %>
 import { ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
+<% } %>
 <%_ if (fieldsContainBlob) { _%>
 import { DataUtils } from 'app/core/util/data-util.service';
+<%_ } _%>
+
+<% if (!embeddableEntity) { %>
+import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+<%_ } _%>
+import {
+    I<%= entityAngularName %>,
+<% if (!embeddableEntity) { %>
+    <%= entityAngularName %>,
+<%_ } _%>
+} from '../<%= entityFileName %>.model';
+<% if (entityContainsEmbeddableRelationship) { %>
+<%_     _.sortedUniqBy(embeddableRelationships, relationship => relationship.otherEntityName).forEach(relationship => {
+    if (relationship.ownerSide || isBuiltInEntity(relationship.otherEntityName)) return; _%>
+import { I<%= relationship.otherEntity.entityAngularName %>, <%= relationship.otherEntity.entityAngularName %> } from 'app/entities/<%= relationship.otherEntity.entityFolderName %>/<%= relationship.otherEntity.entityFileName %>.model';
+import { <%= relationship.otherEntity.entityAngularName %>DeleteDialogComponent } from 'app/entities/<%= relationship.otherEntity.entityFolderName %>/delete/<%= relationship.otherEntity.entityFileName %>-delete-dialog.component';
+import { <%= relationship.otherEntity.entityAngularName %>DetailModalComponent } from 'app/entities/<%= relationship.otherEntity.entityFolderName %>/detail/<%= relationship.otherEntity.entityFileName %>-detail-modal.component';
+import { <%= relationship.otherEntity.entityAngularName %>UpdateModalComponent } from 'app/entities/<%= relationship.otherEntity.entityFolderName %>/update/<%= relationship.otherEntity.entityFileName %>-update-modal.component';
+<%_     }); _%>
 <%_ } _%>
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-detail',
     templateUrl: './<%= entityFileName %>-detail.component.html'
 })
-export class <%= entityAngularName %>DetailComponent implements OnInit {
-    <%= entityInstance %>: I<%= entityAngularName %> | null = null;
+export class <%= entityAngularName %>DetailComponent <% if (!embeddableEntity) { %>implements OnInit <% } %>{
+    @Input() <%= entityInstance %>?: I<%= entityAngularName %>;
 
+<% if (!embeddableEntity) { %>
     constructor(
+        private service: <%= entityAngularName %>Service,
         <%_ if (fieldsContainBlob) { _%>
         protected dataUtils: DataUtils,
         <%_ } _%>
-        protected activatedRoute: ActivatedRoute
+        protected activatedRoute: ActivatedRoute,
+        protected modalService: NgbModal,
     ) {}
 
     ngOnInit(): void {
         this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
             this.<%= entityInstance %> = <%= entityInstance %>;
+        });
+    }
+
+    reload(): void {
+        if (!this.<%= entityInstance %>?.<%= primaryKey.name %>) {
+	        return;
+	    }
+        this.service.find(this.<%= entityInstance %>.<%= primaryKey.name %>).subscribe(({ body }) => {
+            this.<%= entityInstance %> = body!;
         });
     }
 
@@ -57,5 +96,58 @@ export class <%= entityAngularName %>DetailComponent implements OnInit {
     previousState(): void {
         window.history.back();
     }
+<% if (entityContainsEmbeddableRelationship) { %>
+    <%_ embeddableRelationships.forEach(relationship => {
+        if (relationship.ownerSide || isBuiltInEntity(relationship.otherEntityName)) return; _%>
 
+    view<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.entityInstance %>: I<%= relationship.otherEntity.entityAngularName %>): void {
+        const modalRef = this.modalService.open(<%= relationship.otherEntity.entityAngularName %>DetailModalComponent, { size: 'lg', backdrop: 'static' });
+        modalRef.componentInstance.<%= relationship.otherEntity.entityInstance %> = <%= relationship.otherEntity.entityInstance %>;
+    }
+
+    add<%= relationship.relationshipNameCapitalized %>(): void {
+        const modalRef = this.modalService.open(<%= relationship.otherEntity.entityAngularName %>UpdateModalComponent, { size: 'lg', backdrop: 'static' });
+        const <%= relationship.otherEntity.entityInstance %> = new <%= relationship.otherEntity.entityAngularName %>();
+        <% if (relationship.otherRelationship.reference.collection) { %>
+        <%= relationship.otherEntity.entityInstance %>.<%= relationship.otherRelationship.reference.name %>!.push(this.<%= relationship.otherRelationship.relationshipName %>!);
+        <% } else { %>
+        <%= relationship.otherEntity.entityInstance %>.<%= relationship.otherRelationship.relationshipName %> = this.<%= relationship.otherRelationship.relationshipName %>;
+        <% } %>
+        modalRef.componentInstance.<%= relationship.otherEntity.entityInstance %> = <%= relationship.otherEntity.entityInstance %>;
+        modalRef.result.then((response?: I<%= relationship.otherEntity.entityAngularName %>) => {
+	        if (response != null) {
+                this.<%= entityInstance %>!.<%= relationship.relationshipReferenceField %>.push(response);
+                this.reload();
+            }
+        });
+    }
+
+  edit<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.entityInstance %>: I<%= relationship.otherEntity.entityAngularName %>): void {
+    const modalRef = this.modalService.open(<%= relationship.otherEntity.entityAngularName %>UpdateModalComponent, { size: 'lg', backdrop: 'static' });
+
+        <% if (relationship.otherRelationship.reference.collection) { %>
+        <%= relationship.otherEntity.entityInstance %>.<%= relationship.otherRelationship.reference.name %>!.push(new <%= entityAngularName %>(this.<%= entityInstance %>!.<%= primaryKey.name %>);
+        <% } else { %>
+        <%= relationship.otherEntity.entityInstance %>.<%= relationship.otherRelationship.relationshipName %> = new <%= entityAngularName %>(this.<%= entityInstance %>!.<%= primaryKey.name %>);
+        <% } %>
+
+        modalRef.componentInstance.<%= relationship.otherEntity.entityInstance %> = <%= relationship.otherEntity.entityInstance %>;
+        modalRef.result.then(() => {
+	        this.reload();
+        });
+  }
+
+    delete<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.entityInstance %>: I<%= relationship.otherEntity.entityAngularName %>, index: number): void {
+        const modalRef = this.modalService.open(<%= relationship.otherEntityNameCapitalized %>DeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+        modalRef.componentInstance.<%= relationship.otherEntity.entityInstance %> = <%= relationship.otherEntity.entityInstance %>;
+        modalRef.result.then(reason => {
+            if (reason === 'deleted') {
+                this.<%= entityInstance %>!.<%= relationship.relationshipReferenceField %>.splice(index, 1);
+                this.reload();
+            }
+        });
+    }
+       <%_ }); _%>
+    <%_ } _%>
+<%_ } _%>
 }

@@ -23,7 +23,7 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
 import { <%= entityAngularName %>Component } from '../list/<%= entityFileName %>.component';
 import { <%= entityAngularName %>DetailComponent } from '../detail/<%= entityFileName %>-detail.component';
 <%_ if (!readOnly) { _%>
-import { <%= entityAngularName %>UpdateComponent } from '../update/<%= entityFileName %>-update.component';
+import { <%= entityAngularName %>UpdateRouteComponent } from '../update/<%= entityFileName %>-update-route.component';
 <%_ } _%>
 import { <%= entityAngularName %>RoutingResolveService } from './<%= entityFileName %>-routing-resolve.service';
 
@@ -49,7 +49,7 @@ const <%= entityInstance %>Route: Routes = [
     <%_ if (!readOnly) { _%>
     {
         path: 'new',
-        component: <%= entityAngularName %>UpdateComponent,
+        component: <%= entityAngularName %>UpdateRouteComponent,
         resolve: {
             <%= entityInstance %>: <%= entityAngularName %>RoutingResolveService
         },
@@ -57,7 +57,7 @@ const <%= entityInstance %>Route: Routes = [
     },
     {
         path: ':id/edit',
-        component: <%= entityAngularName %>UpdateComponent,
+        component: <%= entityAngularName %>UpdateRouteComponent,
         resolve: {
             <%= entityInstance %>: <%= entityAngularName %>RoutingResolveService
         },

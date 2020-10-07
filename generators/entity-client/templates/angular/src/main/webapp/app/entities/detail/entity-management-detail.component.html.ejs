@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<% if (!embeddableEntity) { %>
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="<%= entityInstance %>">
@@ -27,7 +28,8 @@
 
             <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
 
-            <dl class="row-md jh-entity-details">
+<% } %>
+            <dl class="row-md jh-entity-details" *ngIf="<%= entityInstance %>">
                 <%_ for (idx in fields) {
                     const fieldName = fields[idx].fieldName;
                     const fieldType = fields[idx].fieldType;
@@ -73,14 +75,17 @@
                     const otherEntityStateName = relationships[idx].otherEntityStateName;
                     const otherEntityField = relationships[idx].otherEntityField;
                     const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
-                    if (relationshipType === 'many-to-one'
-                        || (relationshipType === 'one-to-one' && ownerSide === true)
-                        || (relationshipType === 'many-to-many' && ownerSide === true)) {
+                    if (relationships[idx].reference.owned || relationships[idx].cascade) {
                 _%>
-                <dt><span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.<%= relationshipName %>"><%= relationshipNameHumanized %></span></dt>
+                <dt>
+                    <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.<%= relationshipName %>"><%= relationshipNameHumanized %></span>
+                    <%_ if (!ownerSide && !isBuiltInEntity(relationships[idx].otherEntityName)) { _%>
+                    <a (click)="add<%= relationships[idx].relationshipNameCapitalized %>()" data-cy="entityDetailsAdd<%= relationships[idx].otherEntityNameCapitalized %>">+</a>
+                    <%_ } _%>
+                </dt>
                 <dd>
                     <%_ if (otherEntityName === 'user') { _%>
-                        <%_ if (relationshipType === 'many-to-many') { _%>
+                        <%_ if (relationshipType === 'many-to-many' || relationshipType === 'one-to-many') { _%>
                     <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
                         {{ <%= relationshipFieldName %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}
                     </span>
@@ -88,13 +93,31 @@
                     {{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}
                         <%_ } _%>
                     <%_ } else { _%>
-                        <%_ if (relationshipType === 'many-to-many') { _%>
-                    <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
-                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>?.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
+                        <%_ if (relationshipType === 'many-to-many' || relationshipType === 'one-to-many') { _%>
+                    <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; index as i; let last = last">
+                            <%_ if (!ownerSide && !isBuiltInEntity(relationships[idx].otherEntityName) && relationships[idx].relationshipType !== 'many-to-many') { _%>
+                        <div ngbDropdown class="d-inline-block">
+                            <div ngbDropdownToggle>{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</div>
+                            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                <button (click)="view<%= relationships[idx].relationshipNameCapitalized %>(<%= relationshipFieldName %>)" ngbDropdownItem  jhiTranslate="entity.action.view">View</button>
+                                <button (click)="edit<%= relationships[idx].relationshipNameCapitalized %>(<%= relationshipFieldName %>)" ngbDropdownItem jhiTranslate="entity.action.edit">Edit</button>
+                                <button (click)="delete<%= relationships[idx].relationshipNameCapitalized %>(<%= relationshipFieldName %>, i)" ngbDropdownItem jhiTranslate="entity.action.delete">Delete</button>
+                            </div>
+                        </div>
+                            <%_ } else { _%>
+                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>?.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>
+                            <%_ } _%>
+                        {{ last ? '' : ', ' }}
                     </span>
                         <%_ } else { _%>
                     <div *ngIf="<%= entityInstance + '.' + relationshipFieldName %>">
-                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + '.' + relationshipFieldName + '?.' + relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}</a>
+<% if (!embeddableEntity) { %>
+                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + '.' + relationshipFieldName + '?.' + relationship.otherEntity.primaryKey.name %>, 'view']">
+<% } %>
+                        {{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}
+<% if (!embeddableEntity) { %>
+                        </a>
+<% } %>
                     </div>
                         <%_ } _%>
                     <%_ } _%>
@@ -104,6 +127,7 @@
                 }
                 _%>
             </dl>
+<% if (!embeddableEntity) { %>
 
             <button type="submit"
                     (click)="previousState()"
@@ -122,3 +146,4 @@
         </div>
     </div>
 </div>
+<%_ } _%>

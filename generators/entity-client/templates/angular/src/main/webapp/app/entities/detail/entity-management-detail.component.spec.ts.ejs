@@ -21,6 +21,7 @@ const tsKeyId = generateTestEntityId(primaryKey.type);
 _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 import { of } from 'rxjs';
 
 import { <%= entityAngularName %> } from '../<%= entityFileName %>.model';
@@ -40,6 +41,7 @@ describe('Component Tests', () => {
 
         beforeEach(() => {
             TestBed.configureTestingModule({
+                imports: [HttpClientModule],
                 declarations: [<%= entityAngularName %>DetailComponent],
                 providers: [
                     {
@@ -56,6 +58,7 @@ describe('Component Tests', () => {
             dataUtils = TestBed.inject(DataUtils);
             <%_ } _%>
         });
+        <% if (!embeddableEntity) { %>
 
         describe('OnInit', () => {
             it('Should load <%= entityInstance %> on init', () => {
@@ -66,6 +69,7 @@ describe('Component Tests', () => {
                 expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({ <%- primaryKey.name %>: <%- tsKeyId %> }));
             });
         });
+        <% } %>
 
         <%_ if (fieldsContainBlob) { _%>
         describe('byteSize', () => {

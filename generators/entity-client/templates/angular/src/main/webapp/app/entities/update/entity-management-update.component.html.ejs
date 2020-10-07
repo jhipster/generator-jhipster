@@ -16,13 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<div class="row justify-content-center">
-    <div class="col-8">
-        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <h2 id="<%= jhiPrefixDashed %>-<%= entityFileName %>-heading" data-cy="<%= entityClass %>CreateUpdateHeading" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%= entityClassHumanized %></h2>
-
+        <form *ngIf="editForm != null" name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
             <div>
-                <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 <%_ for (idx in fields) {
     const fieldName = fields[idx].fieldName;
     const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
@@ -185,20 +180,20 @@ _%>
 _%>
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
 
-                <div class="form-group">
+                <div class="form-group" [hidden]="!editForm.get('<%= relationshipName %>')?.enabled">
                     <label class="form-control-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
-                    <select class="form-control" id="field_<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" formControlName="<%= relationshipFieldName %>">
+                    <select class="form-control" id="field_<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" formControlName="<%= relationshipFieldName %>" [attr.disabled]="modal ? '' : null">
             <%_ if (!relationshipRequired) { _%>
                         <option [ngValue]="null"></option>
             <%_ } else { _%>
                         <option *ngIf="!editForm.get('<%= relationshipName %>')!.value" [ngValue]="null" selected></option>
             <%_ } _%>
-                        <option [ngValue]="<%= otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %> === editForm.get('<%= relationshipFieldName %>')!.value?.<%= relationship.otherEntity.primaryKey.name %> ? editForm.get('<%= relationshipFieldName %>')!.value : <%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <%= otherEntityNamePlural.toLowerCase() %>; trackBy: track<%= relationships[idx].otherEntity.entityAngularName %>By<%= relationships[idx].otherEntity.primaryKey.nameCapitalized %>">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
+                        <option [ngValue]="<%= otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %> === editForm.get('<%= relationshipFieldName %>')!.value?.<%= relationship.otherEntity.primaryKey.name %> ? editForm.get('<%= relationshipFieldName %>')!.value : <%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <%= otherEntityNamePlural.toLowerCase() %>Collection; trackBy: track<%= relationships[idx].otherEntity.entityAngularName %>By<%= relationships[idx].otherEntity.primaryKey.nameCapitalized %>">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     </select>
                 </div>
     <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
 
-                <div class="form-group">
+                <div class="form-group" [hidden]="!editForm.get('<%= relationshipName %>')?.enabled">
                     <label class="form-control-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                     <select class="form-control" id="field_<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" formControlName="<%= relationshipName %>">
             <%_ if (!relationshipRequired) { _%>
@@ -206,7 +201,7 @@ _%>
             <%_ } else { _%>
                         <option *ngIf="editForm.get([<%- buildAngularFormPath(relationship.reference) %>])?.value == null" [ngValue]="null" selected></option>
             <%_ } _%>
-                        <option [ngValue]="<%= otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %> === editForm.get('<%= relationshipFieldName %>')!.value?.<%= relationship.otherEntity.primaryKey.name %> ? editForm.get('<%= relationshipFieldName %>')!.value : <%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <%= relationshipFieldNamePlural.toLowerCase() %>; trackBy: track<%= relationships[idx].otherEntity.entityAngularName %>By<%= relationships[idx].otherEntity.primaryKey.nameCapitalized %>">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
+                        <option [ngValue]="<%= otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %> === editForm.get('<%= relationshipFieldName %>')!.value?.<%= relationship.otherEntity.primaryKey.name %> ? editForm.get('<%= relationshipFieldName %>')!.value : <%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <%= relationshipFieldNamePlural.toLowerCase() %>Collection; trackBy: track<%= relationships[idx].otherEntity.entityAngularName %>By<%= relationships[idx].otherEntity.primaryKey.nameCapitalized %>">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     </select>
                 </div>
     <%_ } else if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
@@ -214,7 +209,7 @@ _%>
                 <div class="form-group">
                     <label <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipFieldNamePlural %>"><%= relationshipNameHumanized %></label>
                     <select class="form-control" id="field_<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipFieldNamePlural %>" formControlName="<%= relationshipFieldNamePlural %>">
-                        <option [ngValue]="getSelected<%= relationships[idx].otherEntity.entityAngularName %>(<%= otherEntityName %>Option, editForm.get('<%= relationshipFieldNamePlural %>')!.value)" *ngFor="let <%= otherEntityName %>Option of <%= otherEntityNamePlural.toLowerCase() %>; trackBy: track<%= relationships[idx].otherEntity.entityAngularName %>By<%= relationships[idx].otherEntity.primaryKey.nameCapitalized %>">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
+                        <option [ngValue]="getSelected<%= relationships[idx].otherEntity.entityAngularName %>(<%= otherEntityName %>Option, editForm.get('<%= relationshipFieldNamePlural %>')!.value)" *ngFor="let <%= otherEntityName %>Option of <%= otherEntityNamePlural.toLowerCase() %>Collection; trackBy: track<%= relationships[idx].otherEntity.entityAngularName %>By<%= relationships[idx].otherEntity.primaryKey.nameCapitalized %>">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     </select>
                 </div>
     <%_ } _%>
@@ -230,9 +225,34 @@ _%>
     <%_ } _%>
 <%_ } _%>
             </div>
+<%_ for (relationship of embeddableRelationships) {
+        if (relationship.relationshipType === 'one-to-many') { _%>
 
-            <div>
-                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+            <div class="form-group">
+                <label <%= jhiPrefixDashed %>Translate="jhipsterApp.<%= entityInstance %>.<%= relationship.relationshipName %>"><%= relationship.otherEntity.entityClassHumanized %></label>
+            </div>
+            <div class="row">
+                <div class="col my-3" *ngFor="let <%= relationship.relationshipName %>Form of <%= relationship.relationshipName %>FormControls; index as i">
+                    <div class="card h-100" style="width: 25rem;">
+                        <div class="card-body">
+                            <a (click)="remove<%= relationship.relationshipNameCapitalized %>(i)" style="float: right">&times;</a>
+                            <jhi-<%= relationship.otherEntity.entityFileName %>-update-nested [editForm]='<%= relationship.relationshipName %>Form' [<%= entityInstance %>]='<%= entityInstance %>'></jhi-<%= relationship.otherEntity.entityFileName %>-update-nested>
+                        </div>
+                    </div>
+                </div>
+                <div class="col my-3">
+                    <div class="card h-100" style="width: 25rem;">
+                        <div class="card-body">
+                            <a (click)="add<%= relationship.relationshipNameCapitalized %>()">&oplus;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<%_    }
+    } _%>
+
+            <div *ngIf="!embeddedForm && !modal">
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="callCancel()">
                     <fa-icon icon="ban"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.cancel">Cancel</span>
                 </button>
 
@@ -241,5 +261,3 @@ _%>
                 </button>
             </div>
         </form>
-    </div>
-</div>

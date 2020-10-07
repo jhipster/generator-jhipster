@@ -531,6 +531,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
             prepareRelationshipsForTemplates() {
                 this.context.relationships.forEach(relationship => {
                     prepareRelationshipForTemplates(this.context, relationship, this);
+                    relationship.cascade = relationship.cascade && !relationship.ownerSide;
                 });
             },
 
@@ -552,7 +553,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     ...this.context.fields.map(field => field.reference),
                     ...this.context.relationships
                         .map(relationship => relationship.reference)
-                        .filter(reference => reference.owned || reference.relationship.otherEntity.embedded),
+                        .filter(
+                            reference => reference.owned || reference.relationship.otherEntity.embedded || reference.relationship.cascade
+                        ),
                 ];
             },
         };
@@ -588,6 +591,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 );
             },
 
+            processEmbeddableRelationships() {
+                this.context.embeddableEntity = this.context.otherRelationships.some(otherRelationship => otherRelationship.cascade);
+                this.context.embeddableRelationships = this.context.relationships.filter(relationship => relationship.cascade);
+                this.context.relatedEmbeddableEntities = this.context.embeddableRelationships.map(relationship => relationship.otherEntity);
+                this.context.entityContainsEmbeddableRelationship = this.context.embeddableRelationships.length > 0;
+            },
+
             processCollectionRelationships() {
                 this.context.relationships.forEach(relationship => {
                     relationship.relationshipCollection = ['one-to-many', 'many-to-many'].includes(relationship.relationshipType);
@@ -608,12 +618,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     .filter(relationship => relationship.relationshipEagerLoad === undefined)
                     .forEach(relationship => {
                         relationship.relationshipEagerLoad =
-                            !relationship.embedded &&
-                            // Allows the entity to force earger load every relationship
-                            (this.context.eagerLoad ||
-                                (this.context.paginate !== 'pagination' &&
-                                    relationship.relationshipType === 'many-to-many' &&
-                                    relationship.ownerSide === true));
+                            (!relationship.embedded && relationship.cascade) ||
+                            this.context.eagerLoad ||
+                            (this.context.paginate !== 'pagination' &&
+                                relationship.relationshipType === 'many-to-many' &&
+                                relationship.ownerSide === true);
                     });
                 this.context.relationshipsContainEagerLoad = this.context.relationships.some(
                     relationship => relationship.relationshipEagerLoad

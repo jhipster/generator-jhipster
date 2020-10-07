@@ -18,10 +18,27 @@
 -%>
 <%
 const variablesWithTypes = generateEntityClientFields(primaryKey, fields, relationships, dto, undefined, embedded);
+const constructorVariablesWithTypes = generateEntityClientFields(primaryKey, fields, relationships, dto, undefined, embedded, true);
 const typeImports = generateEntityClientImports(relationships, dto);
 const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields);
 const enumImports = generateEntityClientEnumImports(fields);
-%>
+const hasValidationRule = fields.some(field =>
+        field.fieldValidate && (
+                field.fieldValidateRules.includes('required') ||
+                field.fieldValidateRules.includes('minlength') ||
+                field.fieldValidateRules.includes('maxlength') ||
+                field.fieldValidateRules.includes('min') ||
+                field.fieldValidateRules.includes('max') ||
+                field.fieldValidateRules.includes('pattern')
+        )
+);
+const hasRequiredRelationship = relationships.some(relationship => relationship.relationshipRequired);
+const isValidatorsRequired = hasValidationRule || hasRequiredRelationship;
+_%>
+
+<%_ if (isValidatorsRequired) { _%>
+import { Validators } from '@angular/forms';
+<%_ } _%>
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
 import * as dayjs from 'dayjs';
 <%_ } _%>
@@ -42,7 +59,7 @@ export interface I<%= entityAngularName %> {
 
 export class <%= entityAngularName %> implements I<%= entityAngularName %> {
     constructor(
-        <%_ variablesWithTypes.forEach(variablesWithType => { _%>
+        <%_ constructorVariablesWithTypes.forEach(variablesWithType => { _%>
         public <%- variablesWithType %>,
         <%_ }); _%>
     ) {
@@ -51,3 +68,25 @@ export class <%= entityAngularName %> implements I<%= entityAngularName %> {
         <%_ } _%>
     }
 }
+
+export const <%= entityInstance %>FormGroupDefinition = {
+<%_ for (idx in fields) {
+    const fieldName = fields[idx].fieldName;
+    const fieldType = fields[idx].fieldType;
+    const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+_%>
+    <%= fieldName %>: [<% if (fields[idx].fieldValidate === true) { %>null,[<% if (fields[idx].fieldValidateRules.includes('required')) { %>Validators.required,<% } %><% if (fields[idx].fieldValidateRules.includes('minlength')) { %>Validators.minLength(<%= fields[idx].fieldValidateRulesMinlength %>),<% } %><% if (fields[idx].fieldValidateRules.includes('maxlength')) { %>Validators.maxLength(<%= fields[idx].fieldValidateRulesMaxlength %>),<% } %><% if (fields[idx].fieldValidateRules.includes('min')) { %>Validators.min(<%= fields[idx].fieldValidateRulesMin %>),<% } %><% if (fields[idx].fieldValidateRules.includes('max')) { %>Validators.max(<%= fields[idx].fieldValidateRulesMax %>),<% } %><% if (fields[idx].fieldValidateRules.includes('pattern')) { %>Validators.pattern('<%= fields[idx].fieldValidateRulesPattern.replace(/\\/g, '\\\\') %>'),<% } %>]<% } %>],
+    <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
+    <%= fieldName %>ContentType: [],
+    <%_ } _%>
+<%_ } _%>
+<%_ for (idx in relationships) {
+const relationship = relationships[idx];
+const reference = relationship.reference;
+const relationshipRequired = relationship.relationshipRequired;
+_%>
+    <%_ if (reference.owned) { _%>
+    <%= reference.name %>: [<% if (relationshipRequired) { %>null,Validators.required<% } %>],
+    <%_ } _%>
+<%_ } _%>
+};

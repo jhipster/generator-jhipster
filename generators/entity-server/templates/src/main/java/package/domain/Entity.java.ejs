@@ -129,6 +129,12 @@ Object.keys(uniqueEnums).forEach(function(element) { _%>
 
 import <%= packageName %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
+<%_ if (dto === 'no' && entityContainsEmbeddableRelationship) { _%>
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+<%_ } _%>
+<%_ if (dto === 'no' && embeddableEntity) { _%>
+import com.fasterxml.jackson.annotation.JsonBackReference;
+<%_ } _%>
 
 <%_ if (databaseType === 'couchbase' && !embedded) { _%>
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
@@ -318,7 +324,15 @@ relationships.forEach((relationship, idx) => {
     if (relationshipType === 'one-to-many') {
         if (databaseType === 'sql' && !reactive) {
     _%>
-    @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
+    @OneToMany(
+        mappedBy = "<%= otherEntityRelationshipName %>"
+<%_ if (relationship.cascade) { _%>
+        , cascade = CascadeType.ALL, orphanRemoval = true
+<%_ } _%>
+    )
+<%_ if (dto === 'no' && relationship.cascade) { _%>
+    @JsonManagedReference
+<%_ } _%>
         <%_ if (enableHibernateCache) { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
         <%_ }
@@ -350,6 +364,9 @@ relationships.forEach((relationship, idx) => {
         if (databaseType === 'sql' && !reactive) {
     _%>
     @ManyToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
+        <%_ if (dto === 'no' && embeddableEntity) { _%>
+    @JsonBackReference
+        <%_ } _%>
         <%_ if (relationshipValidate) { _%>
     <%- include('relationship_validators', { relationships, idx }); -%>
         <%_ }

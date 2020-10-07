@@ -892,11 +892,11 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                 if (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName !== 'user') {
                     rxjsMapIsUsed = true;
                     variableName = relationship.relationshipFieldNamePlural.toLowerCase();
-                    if (variableName === entityInstance) {
+                    if (variableName === entityInstance || this.jhipsterConfig.clientFramework === ANGULAR) {
                         variableName += 'Collection';
                     }
                     const relationshipFieldName = `${relationship.relationshipFieldName}`;
-                    const relationshipFieldNameIdCheck = `!${entityInstance}.${relationshipFieldName} || !${entityInstance}.${relationshipFieldName}.id`;
+                    const relationshipIdGetter = `this.editForm.get(['${relationshipFieldName}', 'id'])?.value`;
 
                     filter = `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`;
                     if (relationship.jpaMetamodelFiltering) {
@@ -908,18 +908,18 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                             .query({${filter}})
                             .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => res.body ?? []))
                             .subscribe((resBody: I${relationship.otherEntityAngularName}[]) => {
-                                if (${relationshipFieldNameIdCheck}) {
+                                if (!${relationshipIdGetter}) {
                                     this.${variableName} = resBody;
                                 } else {
                                     this.${relationship.otherEntityName}Service
-                                        .find(${entityInstance}.${relationshipFieldName}.id)
+                                        .find(${relationshipIdGetter})
                                         .pipe(map((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) => subRes.body ? [subRes.body].concat(resBody) : resBody))
                                         .subscribe((concatRes: I${relationship.otherEntityAngularName}[]) => this.${variableName} = concatRes);
                                 }
                             });`;
                 } else {
                     variableName = relationship.otherEntityNameCapitalizedPlural.toLowerCase();
-                    if (variableName === entityInstance) {
+                    if (variableName === entityInstance || this.jhipsterConfig.clientFramework === ANGULAR) {
                         variableName += 'Collection';
                     }
                     query = `
@@ -989,7 +989,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      * @param {boolean} embedded - either the actual entity is embedded or not
      * @returns variablesWithTypes: Array
      */
-    generateEntityClientFields(primaryKey, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
+    generateEntityClientFields(primaryKey, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false, asConstructor) {
         const variablesWithTypes = [];
         if (!embedded && primaryKey) {
             const tsKeyType = this.getTypescriptKeyType(primaryKey);
@@ -1029,7 +1029,15 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                 fieldType = `I${relationship.otherEntityAngularName}`;
                 fieldName = relationship.relationshipFieldName;
             }
-            variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
+            if (relationship.cascade) {
+                if (asConstructor) {
+                    variablesWithTypes.push(`${fieldName}: ${fieldType} = []`);
+                } else {
+                    variablesWithTypes.push(`${fieldName}: ${fieldType}`);
+                }
+            } else {
+                variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
+            }
         });
         return variablesWithTypes;
     }

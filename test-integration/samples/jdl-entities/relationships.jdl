@@ -1,0 +1,13 @@
+@ChangelogDate(20200804100000)
+entity JdlRelationshipDTO {
+}
+
+entity JdlRelationshipCascadeDTO {
+  name String
+}
+
+relationship OneToMany {
+  JdlRelationshipDTO{oneToManyCascade} to JdlRelationshipCascadeDTO{oneToManyCascadeBack}
+}
+
+dto JdlRelationshipDTO, JdlRelationshipCascadeDTO with mapstruct

@@ -20,44 +20,35 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';  
 
 import { SharedModule } from 'app/shared/shared.module';
-<%_ for (relationship of embeddableRelationships.filter(rel => rel.relationshipType === 'one-to-many')) { _%>
-import { <%= relationship.otherEntity.entityAngularName %>SharedModule } from 'app/entities/<%= relationship.otherEntityPath %>/<%= relationship.otherEntityFileName %>-shared.module';
-<%_ } _%>
-import { <%= entityAngularName %>Component } from './list/<%= entityFileName %>.component';
 import { <%= entityAngularName %>DetailComponent } from './detail/<%= entityFileName %>-detail.component';
-<%_ if (!readOnly) { _%>
-import { <%= entityAngularName %>UpdateRouteComponent } from './update/<%= entityFileName %>-update-route.component';
+import { <%= entityAngularName %>DetailModalComponent } from './detail/<%= entityFileName %>-detail-modal.component';
 import { <%= entityAngularName %>UpdateComponent } from './update/<%= entityFileName %>-update.component';
-<%_ } _%>
-<%_ if (!readOnly) { _%>
+import { <%= entityAngularName %>UpdateNestedComponent } from './update/<%= entityFileName %>-update-nested.component';
+import { <%= entityAngularName %>UpdateModalComponent } from './update/<%= entityFileName %>-update-modal.component';
 import { <%= entityAngularName %>DeleteDialogComponent } from './delete/<%= entityFileName %>-delete-dialog.component';
-<%_ } _%>
-import { <%= entityAngularName %>RoutingModule } from './route/<%= entityFileName %>-routing.module';
 
 @NgModule({
     imports: [
         SharedModule,
         CommonModule,
-<%_ for (relationship of embeddableRelationships.filter(rel => rel.relationshipType === 'one-to-many')) { _%>
-        <%= relationship.otherEntity.entityAngularName %>SharedModule,
-<%_ } _%>
-        <%= entityAngularName %>RoutingModule,
     ],
     declarations: [
-        <%_ if (!embeddableEntity) { _%>
-        <%= entityAngularName %>Component,
-        <%_ } _%>
         <%= entityAngularName %>DetailComponent,
-        <%_ if (!readOnly) { _%>
+        <%= entityAngularName %>DetailModalComponent,
         <%= entityAngularName %>UpdateComponent,
-        <%= entityAngularName %>UpdateRouteComponent,
+        <%= entityAngularName %>UpdateNestedComponent,
+        <%= entityAngularName %>UpdateModalComponent,
         <%= entityAngularName %>DeleteDialogComponent,
-        <%_ } _%>
     ],
-    <%_ if (!readOnly) { _%>
+    exports: [
+        <%= entityAngularName %>DetailComponent,
+        <%= entityAngularName %>DetailModalComponent,
+        <%= entityAngularName %>UpdateComponent,
+        <%= entityAngularName %>UpdateNestedComponent,
+        <%= entityAngularName %>UpdateModalComponent,
+    ],
     entryComponents: [
         <%= entityAngularName %>DeleteDialogComponent
     ]
-    <%_ } _%>
 })
-export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : '' %><%= entityAngularName %>Module {}
+export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : '' %><%= entityAngularName %>SharedModule {}
