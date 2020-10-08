@@ -1439,7 +1439,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%_ } else { _%>
         webTestClient
             .patch()
-            .uri("/api/posts")
+            .uri("/api/<%= entityApiUrl %>")
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>))
             .exchange()
