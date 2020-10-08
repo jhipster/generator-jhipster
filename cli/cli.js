@@ -23,7 +23,6 @@ const didYouMean = require('didyoumean');
 const packageJson = require('../package.json');
 const { CLI_NAME, initHelp, logger, toString, getCommand, getCommandOptions, getArgs, done, buildCommanderOptions } = require('./utils');
 const EnvironmentBuilder = require('./environment-builder');
-const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
 const { packageNameToNamespace } = require('../generators/utils');
 
@@ -225,8 +224,5 @@ Object.entries(allCommands).forEach(([key, opts]) => {
 
 /* Generate useful help info during typos */
 initHelp(program, CLI_NAME);
-
-/* Enable autocompletion: This needs to right before parsing argv */
-initAutoCompletion(program, CLI_NAME);
 
 program.parse(process.argv);

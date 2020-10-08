@@ -66,11 +66,9 @@
         "glob": "7.1.6",
         "gulp-filter": "6.0.0",
         "insight": "0.10.3",
-        "js-object-pretty-print": "0.3.0",
         "js-yaml": "3.14.0",
         "lodash": "4.17.20",
         "meow": "7.1.1",
-        "mkdirp": "1.0.4",
         "normalize-path": "3.0.0",
         "ora": "5.1.0",
         "os-locale": "5.0.0",
@@ -82,8 +80,6 @@
         "randexp": "0.5.3",
         "semver": "7.3.2",
         "shelljs": "0.8.4",
-        "tabtab": "2.2.2",
-        "test": "^0.6.0",
         "then-request": "6.0.2",
         "through2": "4.0.2",
         "uuid": "8.3.1",
@@ -110,9 +106,6 @@
         "sinon-chai": "3.5.0",
         "yeoman-assert": "3.1.1",
         "yeoman-test": "3.0.0"
-    },
-    "resolutions": {
-        "inquirer": "6.3.1"
     },
     "engines": {
         "node": ">=12.12.0",
