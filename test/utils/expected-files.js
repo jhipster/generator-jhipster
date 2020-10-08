@@ -180,6 +180,7 @@ const expectedFiles = {
         `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
         `${SERVER_MAIN_RES_DIR}i18n/messages.properties`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/JhipsterApp.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/GeneratedByJHipster.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/aop/logging/LoggingAspect.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/ApplicationProperties.java`,

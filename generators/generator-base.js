@@ -79,6 +79,11 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     constructor(args, opts) {
         super(args, opts);
 
+        this.option('skip-generated-flag', {
+            desc: 'Skip adding a GeneratedByJhipster annotation to all generated java classes and interfaces',
+            type: Boolean,
+        });
+
         if (this.options.help) {
             return;
         }
@@ -112,8 +117,16 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
             this.config.set(this.options.localConfig);
         }
 
+        if (this.options.skipGeneratedFlag !== undefined) {
+            this.jhipsterConfig.skipGeneratedFlag = this.options.skipGeneratedFlag;
+        }
+
         // Load common runtime options.
         this.parseCommonRuntimeOptions();
+
+        if (!this.jhipsterConfig.skipGeneratedFlag) {
+            this.registerGeneratedAnnotationTransform();
+        }
     }
 
     /**
