@@ -51,7 +51,7 @@ rest<%= entityClass %>MockMvc.perform(patch("/api/<%= entityApiUrl %>")<% if (te
 <%_ } else { _%>
 webTestClient
 .patch()
-.uri("/api/posts")
+.uri("/api/<%= entityApiUrl %>")
 .contentType(MediaType.valueOf("application/merge-patch+json"))
 .bodyValue(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>))
 .exchange()
