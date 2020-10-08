@@ -55,7 +55,7 @@ export default class JhiNavbar extends Vue {
       if (logoutUrl.indexOf('/protocol') > -1) {
         logoutUrl = logoutUrl + '?redirect_uri=' + window.location.origin;
       } else {
-      // Okta
+        // Okta
         logoutUrl = logoutUrl + '?id_token_hint=' +
         data.idToken + '&post_logout_redirect_uri=' + window.location.origin;
       }
