@@ -410,7 +410,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
         // user-management will be handled by UAA app, oauth expects users to be managed in IpP
         if ((config.applicationType === 'gateway' && config.authenticationType === 'uaa') || config.authenticationType === 'oauth2') {
-            this.info('user-management will be handled by UAA app, oauth expects users to be managed in IpP');
             config.skipUserManagement = true;
         }
 
