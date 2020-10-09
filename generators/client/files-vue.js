@@ -61,11 +61,6 @@ const vueFiles = {
             path: CLIENT_MAIN_SRC_DIR,
             templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss'],
         },
-        {
-            condition: generator => generator.enableI18nRTL,
-            path: CLIENT_MAIN_SRC_DIR,
-            templates: ['content/scss/rtl.scss'],
-        },
     ],
     swagger: [
         {
