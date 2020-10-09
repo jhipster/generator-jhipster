@@ -52,8 +52,12 @@ jobs:
             run:
                 working-directory: ${{ github.workspace }}/app
         if: >-
-            (contains(github.event.head_commit.message, '[webflux]') ||
-                contains(github.event.pull_request.title, '[webflux]')) &&
+            !contains(github.event.head_commit.message, '[angular]') &&
+            !contains(github.event.head_commit.message, '[react]') &&
+            !contains(github.event.head_commit.message, '[vue]') &&
+            !contains(github.event.pull_request.title, '[angular]') &&
+            !contains(github.event.pull_request.title, '[react]') &&
+            !contains(github.event.pull_request.title, '[vue]') &&
             !contains(github.event.head_commit.message, '[ci skip]') &&
             !contains(github.event.head_commit.message, '[skip ci]') &&
             !contains(github.event.pull_request.title, '[skip ci]') &&
