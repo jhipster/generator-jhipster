@@ -40,6 +40,9 @@ import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 import <%= packageName %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
 import <%= packageName %>.service.ColumnConverter;
+<%_ regularEagerRelations.forEach(function(rel) { _%>
+import <%= packageName %>.domain.<%= rel.otherEntityNameCapitalized %>;
+<%_ }); _%> 
 
 import io.r2dbc.spi.Row;
 
@@ -72,7 +75,7 @@ public class <%= entityClass %>RowMapper implements BiFunction<Row, String, <%= 
         entity.set<%= field.fieldInJavaBeanMethod %>(converter.fromRow(row, prefix + "_<%= field.fieldNameAsDatabaseColumn %>", <%= fieldType %>.class));
         <%_ }); _%>
         <%_ regularEagerRelations.forEach(function(rel) { _%>
-        entity.set<%= rel.relationshipNameCapitalized %>Id(converter.fromRow(row, prefix + "_<%= getColumnName(rel.relationshipName) %>_id", Long.class));
+        entity.add<%= rel.relationshipNameCapitalized %>(converter.fromRow(row, prefix + "_<%= getColumnName(rel.relationshipName) %>_id", <%= rel.otherEntityNameCapitalized %>.class));
         <%_ }); _%> 
         return entity;
     }
