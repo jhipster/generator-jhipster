@@ -49,11 +49,6 @@ const files = {
         {
             templates: ['postcss.config.js'],
         },
-        {
-            condition: generator => generator.enableI18nRTL,
-            path: CLIENT_MAIN_SRC_DIR,
-            templates: ['app/rtl.scss'],
-        },
     ],
     swagger: [
         {

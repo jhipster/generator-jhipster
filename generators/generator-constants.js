@@ -27,16 +27,16 @@ const NODE_VERSION = '12.18.3';
 const NPM_VERSION = '6.14.8';
 
 const GRADLE_VERSION = '6.6';
-const JIB_VERSION = '2.5.0';
+const JIB_VERSION = '2.6.0';
 
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '3.10.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.3.3.RELEASE';
+const SPRING_BOOT_VERSION = '2.3.4.RELEASE';
 const LIQUIBASE_VERSION = '3.10.2';
 const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
 const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;
-const HIBERNATE_VERSION = '5.4.20.Final';
+const HIBERNATE_VERSION = '5.4.21.Final';
 
 const JACOCO_VERSION = '0.8.5';
 const KAFKA_VERSION = '5.5.1';
@@ -72,13 +72,13 @@ const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;
 const DOCKER_SONAR = 'sonarqube:8.4.2-community';
 const DOCKER_TRAEFIK = 'traefik:1.7.26'; // waiting for https://github.com/jhipster/generator-jhipster/issues/11198
 const DOCKER_CONSUL = 'consul:1.8.4';
-const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.3.1';
+const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.4.1';
 const DOCKER_PROMETHEUS = 'prom/prometheus:v2.20.1';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.21.0';
 const DOCKER_GRAFANA = 'grafana/grafana:7.1.5';
-const DOCKER_JENKINS = 'jenkins/jenkins:lts';
+const DOCKER_JENKINS = 'jenkins/jenkins:lts-jdk11';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
-const DOCKER_COMPOSE_FORMAT_VERSION = '2';
+const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
 const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.41.1';
 const DOCKER_GRAFANA_WATCHER = 'quay.io/coreos/grafana-watcher:v0.0.8';
 
@@ -125,22 +125,19 @@ const SUPPORTED_CLIENT_FRAMEWORKS = {
 const JHIPSTER_DOCUMENTATION_URL = 'https://www.jhipster.tech';
 const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
 
+const OFFICIAL_DATABASE_TYPE_NAMES = {
+    cassandra: 'Cassandra',
+    couchbase: 'Couchbase',
+    mongodb: 'MongoDB',
+    neo4j: 'Neo4j',
+    sql: 'SQL',
+};
+
 const R2DBC_DB_OPTIONS = [
-    {
-        value: 'mysql',
-        name: 'MySQL',
-    },
     {
         value: 'postgresql',
         name: 'PostgreSQL',
     },
-    {
-        value: 'mssql',
-        name: 'Microsoft SQL Server',
-    },
-];
-
-const SQL_DB_OPTIONS = [
     {
         value: 'mysql',
         name: 'MySQL',
@@ -150,8 +147,23 @@ const SQL_DB_OPTIONS = [
         name: 'MariaDB',
     },
     {
+        value: 'mssql',
+        name: 'Microsoft SQL Server',
+    },
+];
+
+const SQL_DB_OPTIONS = [
+    {
         value: 'postgresql',
         name: 'PostgreSQL',
+    },
+    {
+        value: 'mysql',
+        name: 'MySQL',
+    },
+    {
+        value: 'mariadb',
+        name: 'MariaDB',
     },
     {
         value: 'oracle',
@@ -326,6 +338,9 @@ const constants = {
     SERVER_MAIN_RES_DIR: `${MAIN_DIR}resources/`,
     SERVER_TEST_SRC_DIR: `${TEST_DIR}java/`,
     SERVER_TEST_RES_DIR: `${TEST_DIR}resources/`,
+
+    // server related
+    OFFICIAL_DATABASE_TYPE_NAMES,
 
     // entity related
     SUPPORTED_VALIDATION_RULES,

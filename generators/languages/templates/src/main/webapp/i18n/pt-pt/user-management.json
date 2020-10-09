@@ -2,6 +2,7 @@
     "userManagement": {
         "home": {
             "title": "Utilizadores",
+            "refreshListLabel": "Refresh list",
             "createLabel": "Adicionar",
             "createOrEditLabel": "Criar ou editar utilizador"
         },

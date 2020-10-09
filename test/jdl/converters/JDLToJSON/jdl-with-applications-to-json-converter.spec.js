@@ -958,6 +958,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 relationshipType: 'one-to-one',
                             },
                             {
+                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 relationshipName: 'b',
@@ -981,6 +982,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         ]);
                         expect(relationshipsForB).to.deep.equal([
                             {
+                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 ownerSide: false,
@@ -995,6 +997,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 relationshipType: 'many-to-one',
                             },
                             {
+                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 relationshipName: 'a',
@@ -1156,6 +1159,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         ]);
                         expect(relationshipsForB).to.deep.equal([
                             {
+                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 ownerSide: false,
@@ -1215,6 +1219,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         ]);
                         expect(relationshipsForB).to.deep.equal([
                             {
+                                otherEntityField: 'id',
                                 javadoc: 'A to B but in the destination',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
@@ -1306,6 +1311,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
 
                         it('should add the relationship for the source entity', () => {
                             expect(relationshipFromSourceToDestination).to.deep.equal({
+                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 relationshipName: 'b',
@@ -1467,6 +1473,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         });
                         it('should ignore it for the destination entity', () => {
                             expect(relationshipFromDestinationToSource).to.deep.equal({
+                                otherEntityField: 'name',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 ownerSide: false,
@@ -1510,6 +1517,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
 
                         it('should ignore it for the source entity', () => {
                             expect(relationshipFromSourceToDestination).to.deep.equal({
+                                otherEntityField: 'name',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 relationshipName: 'b',
@@ -1570,6 +1578,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         });
                         it('should ignore it for the source entity', () => {
                             expect(relationshipFromDestinationToSource).to.deep.equal({
+                                otherEntityField: 'name',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 relationshipName: 'a',

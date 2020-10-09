@@ -195,7 +195,7 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
         [LANGUAGES]: OptionValues[LANGUAGES],
         [MESSAGE_BROKER]: OptionValues[MESSAGE_BROKER].false,
         [NATIVE_LANGUAGE]: OptionValues[NATIVE_LANGUAGE],
-        [PROD_DATABASE_TYPE]: OptionValues[PROD_DATABASE_TYPE].mysql,
+        [PROD_DATABASE_TYPE]: OptionValues[PROD_DATABASE_TYPE].postgresql,
         [SEARCH_ENGINE]: OptionValues[SEARCH_ENGINE].false,
         [SKIP_CLIENT]: OptionValues[SKIP_CLIENT],
         [TEST_FRAMEWORKS]: [],

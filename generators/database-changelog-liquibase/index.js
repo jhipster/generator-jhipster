@@ -85,7 +85,7 @@ module.exports = class extends BaseGenerator {
     _writing() {
         return {
             setupReproducibility() {
-                if (this.jhipsterConfig.skipServer) {
+                if (this.jhipsterConfig.skipServer || this.entity.skipServer) {
                     return;
                 }
 
@@ -95,7 +95,7 @@ module.exports = class extends BaseGenerator {
 
             writeLiquibaseFiles() {
                 const config = this.jhipsterConfig;
-                if (config.skipServer || config.databaseType !== 'sql') {
+                if (config.skipServer || this.entity.skipServer || config.databaseType !== 'sql') {
                     return;
                 }
 
@@ -111,6 +111,7 @@ module.exports = class extends BaseGenerator {
                     authenticationType: this.entity.authenticationType,
                     jhiPrefix: this.entity.jhiPrefix,
                     skipFakeData: this.entity.skipFakeData || config.skipFakeData,
+                    reactive: config.reactive,
                 });
 
                 if (databaseChangelog.type === 'entity-new') {

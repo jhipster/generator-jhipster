@@ -10,7 +10,7 @@
         "websocket": false,
         "databaseType": "sql",
         "devDatabaseType": "h2Disk",
-        "prodDatabaseType": "mysql",
+        "prodDatabaseType": "postgresql",
         "searchEngine": false,
         "serviceDiscoveryType": "eureka",
         "buildTool": "maven",

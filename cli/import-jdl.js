@@ -20,7 +20,6 @@ const chalk = require('chalk');
 const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
-const prettifyJSObject = require('js-object-pretty-print').pretty;
 const pluralize = require('pluralize');
 const { fork } = require('child_process');
 
@@ -141,7 +140,7 @@ const shouldGenerateDeployments = processor =>
 const generateDeploymentFiles = ({ processor, deployment, inFolder }) => {
     const deploymentType = getDeploymentType(deployment);
     logger.info(`Generating deployment ${deploymentType} in a new parallel process`);
-    logger.debug(`Generating deployment: ${prettifyJSObject(deployment[GENERATOR_NAME])}`);
+    logger.debug(`Generating deployment: ${JSON.stringify(deployment[GENERATOR_NAME], null, 2)}`);
 
     const cwd = inFolder ? path.join(processor.pwd, deploymentType) : processor.pwd;
     logger.debug(`Child process will be triggered for ${jhipsterCli} with cwd: ${cwd}`);
@@ -158,7 +157,7 @@ const generateDeploymentFiles = ({ processor, deployment, inFolder }) => {
  */
 const generateApplicationFiles = ({ processor, applicationWithEntities, inFolder }) => {
     const baseName = applicationWithEntities.config.baseName;
-    logger.debug(`Generating application: ${prettifyJSObject(applicationWithEntities)}`);
+    logger.debug(`Generating application: ${JSON.stringify(applicationWithEntities.config, null, 2)}`);
 
     const cwd = inFolder ? path.join(processor.pwd, baseName) : processor.pwd;
     const { fork = inFolder } = processor.options;
@@ -253,8 +252,8 @@ class JDLProcessor {
 
     getConfig() {
         if (fs.existsSync('.yo-rc.json')) {
-            this.yoRC = loadYoRc('.yo-rc.json');
-            const configuration = this.yoRC['generator-jhipster'];
+            const yoRC = loadYoRc('.yo-rc.json');
+            const configuration = yoRC['generator-jhipster'];
             if (!configuration) {
                 return;
             }
@@ -284,7 +283,6 @@ class JDLProcessor {
             forceNoFiltering: this.options.force,
             creationTimestamp: this.options.creationTimestamp,
             skipFileGeneration: true,
-            application: this.yoRC,
         };
 
         let importer;

@@ -61,11 +61,6 @@ const vueFiles = {
             path: CLIENT_MAIN_SRC_DIR,
             templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss'],
         },
-        {
-            condition: generator => generator.enableI18nRTL,
-            path: CLIENT_MAIN_SRC_DIR,
-            templates: ['content/scss/rtl.scss'],
-        },
     ],
     swagger: [
         {
@@ -92,7 +87,6 @@ const vueFiles = {
                 'shared/config/config.ts',
                 'shared/config/config-bootstrap-vue.ts',
                 'shared/config/store/account-store.ts',
-                'shared/config/store/alert-store.ts',
                 'shared/security/authority.ts',
                 'router/index.ts',
                 'router/admin.ts',
@@ -126,8 +120,6 @@ const vueFiles = {
                 'shared/sort/jhi-sort-indicator.component.ts',
                 'shared/sort/jhi-sort-indicator.vue',
                 'shared/sort/sorts.ts',
-                'shared/alert/alert.service.ts',
-                'shared/alert/alert.mixin.ts',
                 'shared/data/data-utils.service.ts',
                 'shared/jhi-item-count.component.ts',
                 'shared/jhi-item-count.vue',
@@ -246,7 +238,6 @@ const vueFiles = {
                 'spec/app/core/error/error.component.spec.ts',
                 'spec/app/core/jhi-navbar/jhi-navbar.component.spec.ts',
                 'spec/app/core/ribbon/ribbon.component.spec.ts',
-                'spec/app/shared/alert/alert.service.spec.ts',
                 'spec/app/shared/config/axios-interceptor.spec.ts',
                 'spec/app/shared/data/data-utils.service.spec.ts',
                 'spec/app/admin/configuration/configuration.component.spec.ts',

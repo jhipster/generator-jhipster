@@ -52,8 +52,12 @@ jobs:
             run:
                 working-directory: ${{ github.workspace }}/app
         if: >-
-            (contains(github.event.head_commit.message, '[webflux]') ||
-                contains(github.event.pull_request.title, '[webflux]')) &&
+            !contains(github.event.head_commit.message, '[angular]') &&
+            !contains(github.event.head_commit.message, '[react]') &&
+            !contains(github.event.head_commit.message, '[vue]') &&
+            !contains(github.event.pull_request.title, '[angular]') &&
+            !contains(github.event.pull_request.title, '[react]') &&
+            !contains(github.event.pull_request.title, '[vue]') &&
             !contains(github.event.head_commit.message, '[ci skip]') &&
             !contains(github.event.head_commit.message, '[skip ci]') &&
             !contains(github.event.pull_request.title, '[skip ci]') &&
@@ -75,32 +79,39 @@ jobs:
                     #                    - webflux-couchbase
                     #                    - webflux-couchbase-es-oauth2
                     - webflux-psql
+                    - webflux-mysql
+                    - webflux-mariadb-gradle
                 include:
                     - app-type: webflux-mongodb
                       entity: mongodb
                       profile: prod
                       war: 0
                       e2e: 1
+                      testcontainers: 1
                     - app-type: webflux-mongodb-es-session
                       entity: mongodb
                       profile: prod
                       war: 0
                       e2e: 1
+                      testcontainers: 1
                     - app-type: webflux-mongodb-oauth2
                       entity: mongodb
                       profile: prod
                       war: 0
                       e2e: 1
+                      testcontainers: 1
                     - app-type: webflux-gateway-jwt
                       entity: none
                       profile: prod
                       war: 0
                       e2e: 1
+                      testcontainers: 1
                     - app-type: webflux-gateway-oauth2
                       entity: none
                       profile: prod
                       war: 0
                       e2e: 1
+                      testcontainers: 1
                     #                    - app-type: webflux-couchbase
                     #                      entity: couchbase
                     #                      profile: prod
@@ -112,15 +123,29 @@ jobs:
                     #                      war: 0
                     #                      e2e: 1
                     - app-type: webflux-psql
-                      entity: none
+                      entity: sql
+                      profile: prod
+                      war: 0
+                      protractor: 1
+                      testcontainers: 1
+                    - app-type: webflux-mysql
+                      entity: sqlfull
                       profile: prod
                       war: 0
                       e2e: 1
+                      testcontainers: 0
+                    - app-type: webflux-mariadb-gradle
+                      entity: sqlfull
+                      profile: prod
+                      war: 0
+                      e2e: 1
+                      testcontainers: 1
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
             JHI_PROFILE: ${{ matrix.profile }}
             JHI_WAR: ${{ matrix.war }}
+            JHI_TESTCONTAINERS: ${{ matrix.testcontainers }}
             JHI_E2E: ${{ matrix.e2e }}
         steps:
             #----------------------------------------------------------------------
@@ -138,7 +163,7 @@ jobs:
                   mkdir -p base/app
                   mkdir -p base/uaa
               working-directory: ${{ github.workspace }}
-            - uses: actions/setup-node@v2.1.1
+            - uses: actions/setup-node@v2.1.2
               with:
                   node-version: ${{ matrix.node_version }}
             - uses: actions/setup-java@v1

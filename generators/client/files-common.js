@@ -55,6 +55,11 @@ const commonFiles = {
                 { file: 'content/images/logo-jhipster.png', method: 'copy' },
             ],
         },
+        {
+            condition: generator => generator.enableI18nRTL,
+            path: CLIENT_MAIN_SRC_DIR,
+            templates: ['content/scss/rtl.scss'],
+        },
     ],
 };
 

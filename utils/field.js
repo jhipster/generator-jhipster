@@ -158,6 +158,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     const fieldType = field.fieldType;
 
     field.fieldIsEnum = fieldIsEnum(fieldType);
+    field.fieldWithContentType = (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text';
 
     if (field.fieldNameAsDatabaseColumn === undefined) {
         const fieldNameUnderscored = _.snakeCase(field.fieldName);

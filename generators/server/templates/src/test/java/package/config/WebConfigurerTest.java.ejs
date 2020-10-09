@@ -20,9 +20,6 @@ package <%= packageName %>.config;
 
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
-<%_ if (!skipClient) { _%>
-import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
-<%_ } _%>
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import org.h2.server.web.WebServlet;
 <%_ } _%>

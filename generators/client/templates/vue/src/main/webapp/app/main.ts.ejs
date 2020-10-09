@@ -4,6 +4,7 @@ import Vue from 'vue';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import App from './app.vue';
 import Vue2Filters from 'vue2-filters';
+import { ToastPlugin } from 'bootstrap-vue';
 import router from './router';
 import * as config from './shared/config/config';
 import * as bootstrapVueConfig from './shared/config/config-bootstrap-vue';
@@ -22,7 +23,6 @@ import LoginService from './account/login.service';
 import AccountService from './account/account.service';
 
 import '../content/scss/vendor.scss';
-import AlertService from '@/shared/alert/alert.service';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
@@ -42,7 +42,8 @@ Vue.config.productionTip = false;
 config.initVueApp(Vue);
 config.initFortAwesome(Vue);
 bootstrapVueConfig.initBootstrapVue(Vue);
-Vue.use(Vue2Filters)
+Vue.use(Vue2Filters);
+Vue.use(ToastPlugin);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('jhi-item-count', JhiItemCountComponent);
 Vue.component('jhi-sort-indicator', JhiSortIndicatorComponent);
@@ -52,7 +53,6 @@ const i18n = config.initI18N(Vue);
 <%_ } _%>
 const store = config.initVueXStore(Vue);
 
-const alertService = new AlertService(store);
 <%_ if (websocket === 'spring-websocket') { _%>
 const trackerService = new TrackerService(router);
 <%_ } _%>
@@ -106,7 +106,6 @@ new Vue({
     <%_ if (websocket === 'spring-websocket') { _%>
     trackerService: () => trackerService,
     <%_ } _%>
-    alertService: () => alertService,
     <%_ if (enableTranslation) { _%>
     translationService: () => translationService,
     <%_ } _%>

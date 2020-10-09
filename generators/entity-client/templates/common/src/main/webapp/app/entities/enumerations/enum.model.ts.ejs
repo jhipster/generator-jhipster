@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export const enum <%= enumName %> {
+export enum <%= enumName %> {
 <% enumValues.forEach((enumValue, index) => { %>
   <%= enumValue.name %> = '<%= enumValue.value %>'<% if (index < enumValues.length - 1) { %>,<% } %>
 <% }); %>

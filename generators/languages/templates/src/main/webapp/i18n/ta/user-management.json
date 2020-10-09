@@ -2,6 +2,7 @@
     "userManagement": {
         "home": {
             "title": "பயனர்கள்",
+            "refreshListLabel": "Refresh list",
             "createLabel": "புதிய பயனரை உருவாக்கு",
             "createOrEditLabel": "உருவாக்கு (அ) மாற்று பயனர்"
         },

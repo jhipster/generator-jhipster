@@ -1,0 +1,19 @@
+name: 'Close stale issues'
+on:
+    schedule:
+        - cron: '0 0 * * *'
+
+jobs:
+    stale:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/stale@v3
+              with:
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+                  stale-issue-message: |
+                      This issue is stale because it has been open 30 days with no activity.
+                      Our core developers tend to be more verbose on denying. If there is no negative comment, possibly this feature will be accepted.
+                      We are accepting PRs :smiley:.
+                      Comment or this will be closed in 7 days
+                  days-before-stale: 30
+                  days-before-close: 7

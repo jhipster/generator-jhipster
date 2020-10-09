@@ -81,6 +81,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                 // Make constants available in templates
                 this.MAIN_DIR = constants.MAIN_DIR;
                 this.TEST_DIR = constants.TEST_DIR;
+                this.DOCKER_DIR = constants.DOCKER_DIR;
                 this.LOGIN_REGEX = constants.LOGIN_REGEX;
                 this.CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
                 this.SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
@@ -409,7 +410,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
         // user-management will be handled by UAA app, oauth expects users to be managed in IpP
         if ((config.applicationType === 'gateway' && config.authenticationType === 'uaa') || config.authenticationType === 'oauth2') {
-            this.info('user-management will be handled by UAA app, oauth expects users to be managed in IpP');
             config.skipUserManagement = true;
         }
 

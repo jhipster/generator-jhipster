@@ -89,7 +89,7 @@ const connect = () => {
   }
 <%_ } _%>
   const socket = new SockJS(url);
-  stompClient = Stomp.over(socket);
+  stompClient = Stomp.over(socket, { protocols: ['v12.stomp'] });
 
   stompClient.connect(headers, () => {
     connectedPromise('success');

@@ -87,12 +87,12 @@ Run the following commands in two separate terminals to create a blissful develo
 auto-refreshes when files change on your hard drive.
 
 ```
-<% if (buildTool === 'maven') { %>
+<%_ if (buildTool === 'maven') { _%>
 ./mvnw
-<% } %>
-<% if (buildTool === 'gradle') { %>
+<%_ } _%>
+<%_ if (buildTool === 'gradle') { _%>
 ./gradlew -x webpack
-<% } %>
+<%_ } _%>
 <%= clientPackageManager %> start
 ```
 
@@ -140,7 +140,21 @@ docker-compose -f src/main/docker/jhipster-control-center.yml up
 
 ### Okta
 
-If you'd like to use Okta instead of Keycloak, you'll need to change a few things. First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta domain, that has a name like `https://dev-123456.okta.com`.
+If you'd like to use Okta instead of Keycloak, it's pretty quick using the [Okta CLI](https://cli.okta.com/). After you've installed it, run:
+
+```shell
+okta register
+```
+
+Then, in your JHipster app's directory, run `okta apps create` and select **JHipster**. This will set up an Okta app for you, create `ROLE_ADMIN` and `ROLE_USER` groups, create a `.okta.env` file with your Okta settings, and configure a `groups` claim in your ID token.
+
+Run `source .okta.env` and start your app with Maven or Gradle. You should be able to sign in with the credentials you registered with.
+
+If you're on Windows, you should install [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10) so the `source` command will work.
+
+If you'd like to configure things manually through the Okta developer console, see the instructions below.
+
+First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta domain, that has a name like `https://dev-123456.okta.com`.
 
 Modify `src/main/resources/config/application.yml` to use your Okta settings.
 
@@ -266,12 +280,12 @@ Refer to [Doing API-First development][] for more details.
 To build the final jar and optimize the <%= baseName %> application for production, run:
 
 ```
-<% if (buildTool === 'maven') { %>
+<%_ if (buildTool === 'maven') { _%>
 ./mvnw -Pprod clean verify
-<% } %>
-<% if (buildTool === 'gradle') { %>
+<%_ } _%>
+<%_ if (buildTool === 'gradle') { _%>
 ./gradlew -Pprod clean bootJar
-<% } %>
+<%_ } _%>
 ```
 
 <%_ if (!skipClient) { _%>
@@ -280,12 +294,12 @@ This will concatenate and minify the client CSS and JavaScript files. It will al
 To ensure everything worked, run:
 
 ```
-<% if (buildTool === 'maven') { %>
+<%_ if (buildTool === 'maven') { _%>
 java -jar target/*.jar
-<% } %>
-<% if (buildTool === 'gradle') { %>
+<%_ } _%>
+<%_ if (buildTool === 'gradle') { _%>
 java -jar build/libs/*.jar
-<% } %>
+<%_ } _%>
 ```
 
 <% if (!skipClient) { %>Then navigate to [http://localhost:<%= serverPort %>](http://localhost:<%= serverPort %>) in your browser.
@@ -297,12 +311,12 @@ Refer to [Using JHipster in production][] for more details.
 To package your application as a war in order to deploy it to an application server, run:
 
 ```
-<% if (buildTool === 'maven') { %>
+<%_ if (buildTool === 'maven') { _%>
 ./mvnw -Pprod,war clean verify
-<% } %>
-<% if (buildTool === 'gradle') { %>
+<%_ } _%>
+<%_ if (buildTool === 'gradle') { _%>
 ./gradlew -Pprod -Pwar clean bootWar
-<% } %>
+<%_ } _%>
 ```
 
 ## Testing

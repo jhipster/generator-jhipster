@@ -27,12 +27,15 @@ const exec = require('child_process').exec;
 const https = require('https');
 const filter = require('gulp-filter');
 const through = require('through2');
+const fs = require('fs');
+const minimatch = require('minimatch');
+const findUp = require('find-up');
 
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const { languageToJavaLanguage } = require('./utils');
-const { prettierTransform, prettierJavaOptions } = require('./generator-transforms');
+const { prettierTransform, prettierJavaOptions, generatedAnnotationTransform } = require('./generator-transforms');
 const JSONToJDLEntityConverter = require('../jdl/converters/json-to-jdl-entity-converter');
 const JSONToJDLOptionConverter = require('../jdl/converters/json-to-jdl-option-converter');
 
@@ -1044,15 +1047,11 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                 fieldName = relationship.relationshipFieldName;
             } else {
                 const relationshipFieldName = relationship.relationshipFieldName;
-                const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
                 const relationshipType = relationship.relationshipType;
                 const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
                 const ownerSide = relationship.ownerSide;
 
-                if (relationshipType === 'many-to-many' && ownerSide === true) {
-                    fieldType = `I${otherEntityFieldCapitalized}[]`;
-                    fieldName = relationshipFieldNamePlural;
-                } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
+                if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
                     if (otherEntityFieldCapitalized !== 'Id' && otherEntityFieldCapitalized !== '') {
                         fieldType = 'string';
                         fieldName = `${relationshipFieldName}${otherEntityFieldCapitalized}`;
@@ -1367,7 +1366,11 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             dbcUrl = `${protocol}:h2:file:${options.localDirectory}/${options.databaseName}`;
             extraOptions = ';DB_CLOSE_DELAY=-1';
         } else if (databaseType === 'h2Memory') {
-            dbcUrl = `${protocol}:h2:mem:${protocol === 'r2dbc' ? '///' : ''}${options.databaseName}`;
+            if (protocol === 'r2dbc') {
+                dbcUrl = `${protocol}:h2:mem:///${options.databaseName}`;
+            } else {
+                dbcUrl = `${protocol}:h2:mem:${options.databaseName}`;
+            }
             extraOptions = ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE';
         } else {
             throw new Error(`${databaseType} databaseType is not supported`);
@@ -1465,11 +1468,83 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
     }
 
+    registerGeneratedAnnotationTransform() {
+        this.registerTransformStream(generatedAnnotationTransform(this));
+    }
+
     registerForceEntitiesTransform() {
         this.registerTransformStream(
             through.obj(function (file, enc, cb) {
                 if (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster') {
                     file.conflicter = 'force';
+                }
+                this.push(file);
+                cb();
+            })
+        );
+    }
+
+    parseYoAttributesFile(yoAttributeFileName) {
+        let overridesContent;
+        try {
+            overridesContent = fs.readFileSync(yoAttributeFileName, 'utf-8');
+        } catch (error) {
+            this.warning(`Error loading yo attributes file ${yoAttributeFileName}, ${error}`);
+            return null;
+        }
+        const absoluteDir = path.dirname(yoAttributeFileName);
+
+        return Object.fromEntries(
+            overridesContent
+                .split(/\r?\n/)
+                .map(override => override.trim())
+                .map(override => override.split('#')[0].trim())
+                .filter(override => override)
+                .map(override => override.split(/\s+/))
+                .map(([pattern, status = 'skip']) => [path.join(absoluteDir, pattern), status])
+        );
+    }
+
+    getConflicterStatusForFile(filePath, yoAttributeFileName) {
+        const fileDir = path.dirname(filePath);
+        this.yoResolveByFile = this.yoResolveByFile || {};
+        const yoResolveFiles = [];
+        let foundYoAttributesFile = findUp.sync([yoAttributeFileName], { cwd: fileDir });
+        while (foundYoAttributesFile) {
+            yoResolveFiles.push(foundYoAttributesFile);
+            foundYoAttributesFile = findUp.sync([yoAttributeFileName], { cwd: path.join(path.dirname(foundYoAttributesFile), '..') });
+        }
+
+        let fileStatus;
+        if (yoResolveFiles) {
+            yoResolveFiles.forEach(yoResolveFile => {
+                if (this.yoResolveByFile[yoResolveFile] === undefined) {
+                    this.yoResolveByFile[yoResolveFile] = this.parseYoAttributesFile(yoResolveFile);
+                }
+            });
+            yoResolveFiles
+                .map(yoResolveFile => this.yoResolveByFile[yoResolveFile])
+                .map(attributes => attributes)
+                .find(yoResolve => {
+                    return Object.entries(yoResolve).some(([pattern, status]) => {
+                        if (minimatch(filePath, pattern)) {
+                            fileStatus = status;
+                            return true;
+                        }
+                        return false;
+                    });
+                });
+        }
+        return fileStatus;
+    }
+
+    registerConflicterAttributesTransform(yoAttributeFileName = '.yo-resolve') {
+        const generator = this;
+        this.registerTransformStream(
+            through.obj(function (file, enc, cb) {
+                const status = generator.getConflicterStatusForFile(file.path, yoAttributeFileName);
+                if (status) {
+                    file.conflicter = status;
                 }
                 this.push(file);
                 cb();

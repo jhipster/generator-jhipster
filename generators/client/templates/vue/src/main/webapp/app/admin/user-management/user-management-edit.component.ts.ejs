@@ -2,7 +2,6 @@ import { email, maxLength, minLength, required } from 'vuelidate/lib/validators'
 import { Component, Inject, Vue } from 'vue-property-decorator';
 import UserManagementService from './user-management.service';
 import { IUser, User } from '@/shared/model/user.model';
-import AlertService from '@/shared/alert/alert.service';
 
 const loginValidator = (value: string) => {
   if (!value) {
@@ -37,7 +36,6 @@ const validations: any = {
   validations
 })
 export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
-  @Inject('alertService') private alertService: () => AlertService;
   @Inject('userService') private userManagementService: () => UserManagementService;
   public userAccount: IUser;
   public isSaving = false;
@@ -82,7 +80,13 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
     if (this.userAccount.id) {
       this.userManagementService().update(this.userAccount).then((res) => {
         this.returnToList();
-        this.alertService().showAlert(this.getMessageFromHeader(res), 'info');
+        this.$root.$bvToast.toast(this.getMessageFromHeader(res).toString(), {
+          toaster: 'b-toaster-top-center',
+          title: 'Info',
+          variant: 'info',
+          solid: true,
+          autoHideDelay: 5000,
+        });
       });
     } else {
       <%_ if (!enableTranslation) { _%>
@@ -90,7 +94,13 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
       <%_ } _%>
       this.userManagementService().create(this.userAccount).then(res => {
         this.returnToList();
-        this.alertService().showAlert(this.getMessageFromHeader(res), 'success');
+        this.$root.$bvToast.toast(this.getMessageFromHeader(res).toString(), {
+          toaster: 'b-toaster-top-center',
+          title: 'Success',
+          variant: 'success',
+          solid: true,
+          autoHideDelay: 5000,
+        });
       });
     }
   }

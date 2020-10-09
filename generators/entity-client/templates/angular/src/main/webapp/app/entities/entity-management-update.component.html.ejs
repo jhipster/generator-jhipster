@@ -54,8 +54,9 @@ _%>
                     <label class="form-control-label" jhiTranslate="<%= translationKey %>" for="field_<%= fieldName %>"<% if (fields[idx].javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= fields[idx].javadoc %>"<% } } %>><%= fieldNameHumanized %></label>
     <%_ if (fields[idx].fieldIsEnum) { _%>
                     <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>">
-        <%_ const enumPrefix = frontendAppName + '.'+ fieldType;
-            const values = fields[idx].enumValues;
+        <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
+                        <option value><% if (enableTranslation) { %>{{ '<%= enumPrefix %>.null' | translate }}<% } %></option>
+        <%_ const values = fields[idx].enumValues;
             for (key in values) {
                 const enumValue = values[key]; _%>
                         <option value="<%= enumValue.name %>"><% if (enableTranslation) { %>{{ '<%= enumPrefix %>.<%= enumValue.name %>' | translate }}<% } else { %><%= enumValue.value %><% } %></option>
@@ -100,6 +101,9 @@ _%>
         <%_ } else if (fieldTypeBlobContent === 'text') { _%>
                     <textarea class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>"
                               formControlName="<%= fieldName %>"></textarea>
+        <%_ } else if (fieldType === 'Boolean') { _%>
+                    <input type="<%= fieldInputType %>" class="form-check" name="<%= fieldName %>" id="field_<%= fieldName %>"
+                           data-cy="<%= fieldName %>" formControlName="<%= fieldName %>" />
         <%_ } else { _%>
                     <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>"
                            formControlName="<%= fieldName %>"/>
