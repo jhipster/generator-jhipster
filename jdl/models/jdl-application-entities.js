@@ -40,6 +40,10 @@ module.exports = class JDLApplicationEntities {
         this.entityNames = new Set([...this.entityNames, ...filteredNames]);
     }
 
+    has(entityName) {
+        return this.entityNames.has(entityName);
+    }
+
     forEach(passedFunction) {
         if (!passedFunction) {
             return;

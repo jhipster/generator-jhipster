@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-const logger = require('../utils/objects/logger');
 const EntityValidator = require('./entity-validator');
 const FieldValidator = require('./field-validator');
 const FieldTypes = require('../jhipster/field-types');
@@ -31,13 +30,12 @@ const BinaryOptionValidator = require('./binary-option-validator');
 const { OptionNames } = require('../jhipster/application-options');
 const DatabaseTypes = require('../jhipster/database-types');
 const BinaryOptions = require('../jhipster/binary-options');
-const ApplicationValidator = require('./application-validator');
 
 const { isReservedFieldName } = require('../jhipster/reserved-keywords');
 const { isReservedTableName } = require('../jhipster/reserved-keywords');
 
 module.exports = {
-    createBusinessErrorChecker,
+    createValidator,
 };
 
 /**
@@ -48,29 +46,13 @@ module.exports = {
  * @param {String} applicationSettings.applicationType - the application type.
  * @param {String} applicationSettings.databaseType - the DB type.
  * @param {Boolean} applicationSettings.skippedUserManagement - whether user management is skipped.
+ * @param {Object} logger - the logger to use, default to the console.
  */
-function createBusinessErrorChecker(jdlObject, applicationSettings = {}) {
+function createValidator(jdlObject, applicationSettings = {}, logger = console) {
     if (!jdlObject) {
         throw new Error('A JDL object must be passed to check for business errors.');
     }
-    let specificErrorChecker;
-    if (jdlObject.getApplicationQuantity() === 0) {
-        specificErrorChecker = createBusinessErrorCheckerWithoutApplications();
-    } else {
-        specificErrorChecker = createBusinessErrorCheckerWithApplications();
-    }
 
-    return {
-        /**
-         * Checks the jdlObject's correctness against application parameters.
-         */
-        checkForErrors: () => {
-            specificErrorChecker.checkForErrors();
-        },
-    };
-}
-
-function createBusinessErrorCheckerWithoutApplications(jdlObject, applicationSettings) {
     return {
         checkForErrors: () => {
             checkForEntityErrors();
@@ -176,90 +158,34 @@ function createBusinessErrorCheckerWithoutApplications(jdlObject, applicationSet
             checkForPaginationInAppWithCassandra(option, applicationSettings);
         });
     }
-
-    function getTypeCheckingFunction(entityName, applicationSettings) {
-        if (applicationSettings.applicationType === ApplicationTypes.GATEWAY) {
-            return () => true;
-        }
-        return FieldTypes.getIsType(applicationSettings.databaseType);
-    }
-    function checkForAbsentEntities({ jdlRelationship, doesEntityExist, skippedUserManagementOption }) {
-        const absentEntities = [];
-        if (!doesEntityExist(jdlRelationship.from)) {
-            absentEntities.push(jdlRelationship.from);
-        }
-        if (!doesEntityExist(jdlRelationship.to) && (!isUserManagementEntity(jdlRelationship.to) || skippedUserManagementOption)) {
-            absentEntities.push(jdlRelationship.to);
-        }
-        if (absentEntities.length !== 0) {
-            throw new Error(
-                `In the relationship between ${jdlRelationship.from} and ${jdlRelationship.to}, ` +
-                    `${absentEntities.join(' and ')} ${absentEntities.length === 1 ? 'is' : 'are'} not declared.`
-            );
-        }
-    }
-    function isUserManagementEntity(entityName) {
-        return entityName.toLowerCase() === 'user' || entityName.toLowerCase() === 'authority';
-    }
-    function checkForPaginationInAppWithCassandra(jdlOption, applicationSettings) {
-        if (applicationSettings.databaseType === DatabaseTypes.CASSANDRA && jdlOption.name === BinaryOptions.Options.PAGINATION) {
-            throw new Error("Pagination isn't allowed when the application uses Cassandra.");
-        }
-    }
 }
 
-function createBusinessErrorCheckerWithApplications(jdlObject) {
-    const applicationsPerEntityName = getApplicationsPerEntityNames(jdlObject);
-
-    return {
-        checkForErrors: () => {
-            checkForApplicationErrors();
-        },
-    };
-    function checkForApplicationErrors() {
-        if (jdlObject.getApplicationQuantity() === 0) {
-            return;
-        }
-        const validator = new ApplicationValidator();
-        jdlObject.forEachApplication(jdlApplication => {
-            validator.validate(jdlApplication);
-        });
+function getTypeCheckingFunction(entityName, applicationSettings) {
+    if (applicationSettings.applicationType === ApplicationTypes.GATEWAY) {
+        return () => true;
     }
-
-    function checkForEntityErrors(jdlApplication) {
-        if (jdlObject.getEntityQuantity() === 0) {
-            return;
-        }
-        const validator = new EntityValidator();
-        jdlObject.forEachEntity(jdlEntity => {
-            validator.validate(jdlEntity);
-            if (applicationSettings.databaseType && isReservedTableName(jdlEntity.tableName, applicationSettings.databaseType)) {
-                logger.warn(
-                    `The table name '${jdlEntity.tableName}' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.`
-                );
-            } else if (
-                !applicationSettings.databaseType &&
-                isTableNameReserved(jdlEntity.tableName, applicationsPerEntityName[jdlEntity.name])
-            ) {
-                logger.warn(
-                    `The table name '${jdlEntity.tableName}' is a reserved keyword for at` +
-                        ` least one of these applications: ${applicationsPerEntityName[jdlEntity.name]
-                            .map(application => application.getConfigurationOptionValue('baseName'))
-                            .join(', ')}, so it will be prefixed with the value of 'jhiPrefix'.`
-                );
-            }
-            checkForFieldErrors(jdlEntity.name, jdlEntity.fields);
-        });
+    return FieldTypes.getIsType(applicationSettings.databaseType);
+}
+function checkForAbsentEntities({ jdlRelationship, doesEntityExist, skippedUserManagementOption }) {
+    const absentEntities = [];
+    if (!doesEntityExist(jdlRelationship.from)) {
+        absentEntities.push(jdlRelationship.from);
     }
-
-    function getApplicationsPerEntityNames(jdlObject) {
-        const applicationsPerEntityName = {};
-        jdlObject.forEachApplication(jdlApplication => {
-            jdlApplication.forEachEntityName(entityName => {
-                applicationsPerEntityName[entityName] = applicationsPerEntityName[entityName] || [];
-                applicationsPerEntityName[entityName].push(jdlApplication);
-            });
-        });
-        return applicationsPerEntityName;
+    if (!doesEntityExist(jdlRelationship.to) && (!isUserManagementEntity(jdlRelationship.to) || skippedUserManagementOption)) {
+        absentEntities.push(jdlRelationship.to);
+    }
+    if (absentEntities.length !== 0) {
+        throw new Error(
+            `In the relationship between ${jdlRelationship.from} and ${jdlRelationship.to}, ` +
+                `${absentEntities.join(' and ')} ${absentEntities.length === 1 ? 'is' : 'are'} not declared.`
+        );
+    }
+}
+function isUserManagementEntity(entityName) {
+    return entityName.toLowerCase() === 'user' || entityName.toLowerCase() === 'authority';
+}
+function checkForPaginationInAppWithCassandra(jdlOption, applicationSettings) {
+    if (applicationSettings.databaseType === DatabaseTypes.CASSANDRA && jdlOption.name === BinaryOptions.Options.PAGINATION) {
+        throw new Error("Pagination isn't allowed when the application uses Cassandra.");
     }
 }
