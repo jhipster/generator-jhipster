@@ -233,7 +233,7 @@ spring:
         username: SA
         password: yourStrong(!)Password
         <%_ } else if (devDatabaseType === 'h2Disk') { _%>
-        url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/db` }) %>
+        url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `././${BUILD_DIR}h2db/db` }) %>
         username: <%= baseName %>
         password:
         <%_ } else if (devDatabaseType === 'h2Memory') { _%>

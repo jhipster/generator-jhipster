@@ -1363,7 +1363,11 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             if (!options.localDirectory) {
                 throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
             }
-            dbcUrl = `${protocol}:h2:file:${options.localDirectory}/${options.databaseName}`;
+            if (protocol === 'r2dbc') {
+                dbcUrl = `${protocol}:h2:file://${options.localDirectory}/${options.databaseName}`;
+            } else {
+                dbcUrl = `${protocol}:h2:file:${options.localDirectory}/${options.databaseName}`;
+            }
             extraOptions = ';DB_CLOSE_DELAY=-1';
         } else if (databaseType === 'h2Memory') {
             if (protocol === 'r2dbc') {
