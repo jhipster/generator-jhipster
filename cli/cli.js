@@ -50,7 +50,8 @@ program
     .option('--dry-run', 'Print conflicts', false)
     .option('--whitespace', 'Whitespace changes will not trigger conflicts', false)
     .option('--bail', 'Fail on first conflict', false)
-    .option('--skip-regenerate', "Don't regenerate identical files", false);
+    .option('--skip-regenerate', "Don't regenerate identical files", false)
+    .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false);
 
 /* setup debugging */
 logger.init(program);
