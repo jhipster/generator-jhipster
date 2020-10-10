@@ -170,11 +170,11 @@ limitations under the License.
     "node": ">=<%= NODE_VERSION %>"
   },
   "config": {
-    "default_enviroment": "prod"
+    "default_environment": "prod"
   },
   "scripts": {
     "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
-    "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
+    "lint": "eslint . --ext .js,.ts",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "ngc": "ngc -p tsconfig.app.json",
     "cleanup": "rimraf <%= DIST_DIR %>",
@@ -210,7 +210,7 @@ limitations under the License.
     "pretest": "<%= clientPackageManager %> run lint",
     "test": "<%= clientPackageManager %> run jest",
     "test:watch": "<%= clientPackageManager %> run jest -- --watch",
-    "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:$npm_package_config_default_enviroment",
+    "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:$npm_package_config_default_environment",
     "webpack:build:dev": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
     "webpack:build:prod": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --hot --port=9060 --watch-content-base --env.stats=minimal",

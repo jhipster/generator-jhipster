@@ -313,7 +313,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
 
                 const packageJsonConfigStorage = packageJsonStorage.createStorage('config').createProxy();
                 if (process.env.JHI_PROFILE) {
-                    packageJsonConfigStorage.default_enviroment = process.env.JHI_PROFILE.includes('dev') ? 'dev' : 'prod';
+                    packageJsonConfigStorage.default_environment = process.env.JHI_PROFILE.includes('dev') ? 'dev' : 'prod';
                 }
 
                 const devDependencies = packageJsonStorage.createStorage('devDependencies');
@@ -323,10 +323,10 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
                 if (this.clientFramework === 'react') {
                     scriptsStorage.set(
                         'ci:frontend:test',
-                        'npm run webpack:build:$npm_package_config_default_enviroment && npm run test-ci'
+                        'npm run webpack:build:$npm_package_config_default_environment && npm run test-ci'
                     );
                 } else {
-                    scriptsStorage.set('ci:frontend:test', 'npm run webpack:build:$npm_package_config_default_enviroment && npm test');
+                    scriptsStorage.set('ci:frontend:test', 'npm run webpack:build:$npm_package_config_default_environment && npm test');
                 }
 
                 if (scriptsStorage.get('e2e')) {

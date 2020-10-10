@@ -350,7 +350,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                 packageJsonConfigStorage.backend_port = this.serverPort;
                 packageJsonConfigStorage.packaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
                 if (process.env.JHI_PROFILE) {
-                    packageJsonConfigStorage.default_enviroment = process.env.JHI_PROFILE.includes('dev') ? 'dev' : 'prod';
+                    packageJsonConfigStorage.default_environment = process.env.JHI_PROFILE.includes('dev') ? 'dev' : 'prod';
                 }
             },
             packageJsonDockerScripts() {
@@ -386,7 +386,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
                 const dockerOthers = [];
                 const dockerBuild = [];
-                ['keycloak', 'elasticsearch', 'kafka', 'consul', 'redis', 'memcached', 'jhipster-registry', 'sonar'].forEach(
+                ['keycloak', 'elasticsearch', 'kafka', 'consul', 'redis', 'memcached', 'jhipster-registry'].forEach(
                     dockerConfig => {
                         const dockerFile = `src/main/docker/${dockerConfig}.yml`;
                         if (this.fs.exists(this.destinationPath(dockerFile))) {
@@ -434,7 +434,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                         'java:jar': './gradlew bootJar -x test',
                         'java:war': './gradlew bootWar -Pwar -x test',
                         'java:docker': './gradlew bootJar jibDockerBuild',
-                        'backend:unit:test': `./gradlew test integrationTest ${excludeWebpack} -Ptestcontainers ${javaCommonLog} ${javaTestLog}`,
+                        'backend:unit:test': `./gradlew test integrationTest ${excludeWebpack} ${javaCommonLog} ${javaTestLog}`,
                         'postci:e2e:package': 'cp build/libs/*SNAPSHOT.$npm_package_config_packaging e2e.$npm_package_config_packaging',
                     });
                 }
@@ -448,9 +448,9 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                     'java:docker:prod': 'npm run java:docker -- -Pprod',
                     'ci:backend:test':
                         'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test',
-                    'server:package': 'npm run java:$npm_package_config_packaging:$npm_package_config_default_enviroment',
+                    'server:package': 'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment',
                     'ci:e2e:package':
-                        'npm run java:$npm_package_config_packaging:$npm_package_config_default_enviroment -- -Pe2e -Denforcer.skip=true',
+                        'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
                     'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=$npm_package_config_default_enviroment ${javaCommonLog} --logging.level.org.springframework.web=ERROR`,
                 });
             },
