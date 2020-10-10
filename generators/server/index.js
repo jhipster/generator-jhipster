@@ -371,7 +371,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                     const dockerFile = `src/main/docker/${databaseType}.yml`;
                     if (databaseType === 'cassandra') {
                         scriptsStorage.set({
-                            'docker:db:await': 'wait-on tcp:9042',
+                            'docker:db:await': 'wait-on tcp:9042 && sleep 20',
                         });
                     }
                     if (databaseType === 'couchbase' || databaseType === 'cassandra') {
