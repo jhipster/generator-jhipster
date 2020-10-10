@@ -28,21 +28,19 @@ module.exports = { convertApplications };
  * @param {Object} configuration - a configuration object.
  * @param {String} configuration.generatorVersion - the generator's version to use when converting applications.
  * @param {Number} configuration.creationTimestamp - a creation timestamp to use for entities.
- * @param {Array<String>} entityNames - the entity names.
  * @return {Array} the converted JDL applications.
  */
-function convertApplications(parsedApplications, configuration = {}, entityNames = []) {
+function convertApplications(parsedApplications, configuration = {}) {
     if (!parsedApplications) {
         throw new Error('Applications have to be passed so as to be converted.');
     }
     return parsedApplications.map(parsedApplication => {
         const applicationWithCustomValues = addCustomValuesToApplication(parsedApplication, configuration);
-        const applicationEntityNames = resolveApplicationEntityNames(parsedApplication, entityNames);
         const formattedApplicationConfiguration = formatApplicationConfigurationOptions(applicationWithCustomValues.config);
         const jdlApplication = createJDLApplication(formattedApplicationConfiguration);
-        jdlApplication.addEntityNames(applicationEntityNames);
+        jdlApplication.addEntityNames(parsedApplication.entities);
         const entityOptions = getEntityOptionsInApplication(parsedApplication);
-        checkEntityNamesInOptions(jdlApplication.getConfigurationOptionValue('baseName'), entityOptions, applicationEntityNames);
+        checkEntityNamesInOptions(jdlApplication.getConfigurationOptionValue('baseName'), entityOptions, parsedApplication.entities);
         entityOptions.forEach(option => jdlApplication.addOption(option));
         return jdlApplication;
     });
@@ -59,19 +57,6 @@ function addCustomValuesToApplication(parsedApplication, configuration) {
     return application;
 }
 
-function resolveApplicationEntityNames(application, entityNames) {
-    const { entityList, excluded } = application.entities;
-    let applicationEntities = entityList;
-    if (entityList.includes('*')) {
-        applicationEntities = entityNames;
-    }
-    checkEntityNamesInApplication(application.config.baseName, applicationEntities, entityNames);
-    if (excluded.length !== 0) {
-        applicationEntities = applicationEntities.filter(entity => !excluded.includes(entity));
-    }
-    return applicationEntities;
-}
-
 function formatApplicationConfigurationOptions(applicationConfiguration) {
     const formattedOptions = {};
     if (Array.isArray(applicationConfiguration.blueprints)) {
@@ -86,22 +71,6 @@ function formatApplicationConfigurationOptions(applicationConfiguration) {
         ...applicationConfiguration,
         ...formattedOptions,
     };
-}
-
-/**
- * Checks whether the entity names used in the application are present in the JDL content.
- * @param {String} applicationName - the application's name
- * @param {Array<String>} entityNamesInApplication - the entity names declared in the application
- * @param {Array<String>} entityNames - all the entity names
- */
-
-function checkEntityNamesInApplication(applicationName, entityNamesInApplication, entityNames) {
-    const entityNameSet = new Set(entityNames);
-    entityNamesInApplication.forEach(entityNameInApplication => {
-        if (!entityNameSet.has(entityNameInApplication)) {
-            throw new Error(`The entity ${entityNameInApplication} which is declared in ${applicationName}'s entity list doesn't exist.`);
-        }
-    });
 }
 
 function getEntityOptionsInApplication(parsedApplication) {

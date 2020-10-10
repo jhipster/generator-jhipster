@@ -69,10 +69,7 @@ MAX = 43`);
             it('should parse it', () => {
                 expect(application).to.deep.equal({
                     config: {},
-                    entities: {
-                        entityList: [],
-                        excluded: [],
-                    },
+                    entities: [],
                     options: {},
                     useOptions: [],
                 });
@@ -96,10 +93,7 @@ MAX = 43`);
                         config: {
                             applicationType: 'monolith',
                         },
-                        entities: {
-                            entityList: [],
-                            excluded: [],
-                        },
+                        entities: [],
                         options: {},
                         useOptions: [],
                     });
@@ -122,10 +116,7 @@ MAX = 43`);
                         config: {
                             baseName: 'toto',
                         },
-                        entities: {
-                            entityList: [],
-                            excluded: [],
-                        },
+                        entities: [],
                         options: {},
                         useOptions: [],
                     });
@@ -148,10 +139,7 @@ MAX = 43`);
                         config: {
                             blueprints: ['generator-jhipster-vuejs', 'generator-jhipster-nodejs'],
                         },
-                        entities: {
-                            entityList: [],
-                            excluded: [],
-                        },
+                        entities: [],
                         options: {},
                         useOptions: [],
                     });
@@ -186,10 +174,7 @@ application {
                             baseName: 'superApp2',
                             applicationType: 'monolith',
                         },
-                        entities: {
-                            entityList: [],
-                            excluded: [],
-                        },
+                        entities: [],
                         options: {},
                         useOptions: [],
                     },
@@ -198,10 +183,7 @@ application {
                             baseName: 'superApp1',
                             applicationType: 'monolith',
                         },
-                        entities: {
-                            entityList: [],
-                            excluded: [],
-                        },
+                        entities: [],
                         options: {},
                         useOptions: [],
                     },
@@ -219,12 +201,17 @@ application {
     applicationType monolith
   }
   entities A, B, C
-}`);
+}
+
+entity A
+entity B
+entity C
+`);
                     application = content.applications[0];
                 });
 
                 it('should parse them', () => {
-                    expect(application.entities.entityList).to.deep.equal(['A', 'B', 'C']);
+                    expect(application.entities).to.deep.equal(['A', 'B', 'C']);
                 });
             });
             context('with exclusions', () => {
@@ -238,15 +225,16 @@ application {
     applicationType monolith
   }
   entities all except A
-}`);
+}
+entity A
+entity B
+entity C
+`);
                         application = content.applications[0];
                     });
 
                     it('should parse the list', () => {
-                        expect(application.entities.entityList).to.deep.equal(['*']);
-                    });
-                    it('should parse the list', () => {
-                        expect(application.entities.excluded).to.deep.equal(['A']);
+                        expect(application.entities).to.deep.equal(['B', 'C']);
                     });
                 });
                 context("using the '*' keyword", () => {
@@ -259,15 +247,16 @@ application {
     applicationType monolith
   }
   entities * except A
-}`);
+}
+entity A
+entity B
+entity C
+`);
                         application = content.applications[0];
                     });
 
                     it('should parse the list', () => {
-                        expect(application.entities.entityList).to.deep.equal(['*']);
-                    });
-                    it('should parse the list', () => {
-                        expect(application.entities.excluded).to.deep.equal(['A']);
+                        expect(application.entities).to.deep.equal(['B', 'C']);
                     });
                 });
             });
@@ -285,7 +274,11 @@ application {
   readOnly B
   paginate A with pagination
   search * with couchbase except C
-}`);
+}
+entity A
+entity B
+entity C
+`);
                 application = content.applications[0];
             });
 
@@ -322,7 +315,11 @@ application {
   entities A, B, C
   use pagination for A
   use couchbase for * except C
-}`);
+}
+entity A
+entity B
+entity C
+`);
                 application = content.applications[0];
             });
 
