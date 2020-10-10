@@ -111,6 +111,44 @@ jobs:
                   CHROME_VERSION=$(google-chrome --version | cut -f 3 -d ' ' | cut -d '.' -f 1) \
                   && CHROMEDRIVER_VERSION=$(curl --location --fail --retry 3 http://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}) \
                   && echo "::set-output name=version::$CHROMEDRIVER_VERSION"
+            - name: 'SETUP: Get date'
+              id: get-date
+              run: |
+                  echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+            - name: 'SETUP: load npm cache'
+              uses: actions/cache@v2
+              with:
+                  path: ~/.npm
+                  key: ${{ runner.os }}-node-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json.ejs') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-
+            - name: 'SETUP: load maven cache'
+              uses: actions/cache@v2
+              with:
+                  path: ~/.m2/repository
+                  key: ${{ runner.os }}-maven-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
+                  restore-keys: |
+                      ${{ runner.os }}-maven-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-
+            - name: 'SETUP: load gradle cache'
+              if: contains(matrix.app-type, 'gradle')
+              uses: actions/cache@v2
+              with:
+                  path: |
+                      ~/.gradle/caches
+                      ~/.gradle/wrapper
+                  key: ${{ runner.os }}-gradle-${{ matrix.app-type }}-${{ hashFiles('generator-jhipster/**/build.gradle.ejs') }}
+                  restore-keys: |
+                      ${{ runner.os }}-gradle-${{ matrix.app-type }}-
+            - name: 'SETUP: load e2e cache'
+              if: matrix.e2e == 1
+              uses: actions/cache@v2
+              with:
+                  path: |
+                      ~/.cache/selenium/
+                      ~/.cache/Cypress/
+                  key: ${{ runner.os }}-e2e-${{ matrix.app-type }}-${{ steps.chromedriver-version.outputs.version }}-${{ hashFiles('generator-jhipster/**/package.json.ejs') }}
+                  restore-keys: |
+                      ${{ runner.os }}-e2e-${{ matrix.app-type }}-${{ steps.chromedriver-version.outputs.version }}-
             - name: 'ENV: display variables'
               run: $JHI_SCRIPTS/01-display-configuration.sh
             - name: 'TOOLS: configure tools installed by the system'
