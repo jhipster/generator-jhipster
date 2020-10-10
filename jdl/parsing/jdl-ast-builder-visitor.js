@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
 const JDLParser = require('./jdl-parser');
 const { deduplicate } = require('../utils/array-utils');
 
@@ -63,7 +62,7 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
         }
 
         if (context.relationDeclaration) {
-            ast.relationships = _.flatMap(context.relationDeclaration, item => this.visit(item));
+            ast.relationships = context.relationDeclaration.flatMap(this.visit, this);
         }
 
         if (context.enumDeclaration) {
@@ -599,7 +598,7 @@ function getUnaryOptionFromContext(context, visitor) {
 function getBinaryOptionFromContext(context, visitor) {
     const entityListWithOptionValue = visitor.visit(context.entityList);
     const optionValue = entityListWithOptionValue[entityListWithOptionValue.length - 1];
-    const list = _.dropRight(entityListWithOptionValue);
+    const list = entityListWithOptionValue.slice(0, entityListWithOptionValue.length - 1);
 
     let excluded = [];
     if (context.exclusion) {
