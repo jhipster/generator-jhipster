@@ -249,8 +249,9 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/swagger-ui.html**")
-            .addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler( "/swagger-ui/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/springfox-swagger-ui/")
+                .resourceChain(false);
 
         registry.addResourceHandler("/webjars/**")
             .addResourceLocations("classpath:/META-INF/resources/webjars/");

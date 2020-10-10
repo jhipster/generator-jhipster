@@ -31,7 +31,7 @@ const GRADLE_VERSION = '6.5';
 const JIB_VERSION = '2.4.0';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '3.9.0';
+const JHIPSTER_DEPENDENCIES_VERSION = '3.9.1-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
 const SPRING_BOOT_VERSION = '2.2.7.RELEASE';
 const LIQUIBASE_VERSION = '3.9.0';
