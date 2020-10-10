@@ -386,19 +386,17 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
                 const dockerOthers = [];
                 const dockerBuild = [];
-                ['keycloak', 'elasticsearch', 'kafka', 'consul', 'redis', 'memcached', 'jhipster-registry'].forEach(
-                    dockerConfig => {
-                        const dockerFile = `src/main/docker/${dockerConfig}.yml`;
-                        if (this.fs.exists(this.destinationPath(dockerFile))) {
-                            if (['cassandra', 'couchbase'].includes(dockerConfig)) {
-                                scriptsStorage.set(`docker:${dockerConfig}:build`, `docker-compose -f ${dockerFile} build`);
-                                dockerBuild.push(`npm run docker:${dockerConfig}:build`);
-                            }
-                            scriptsStorage.set(`docker:${dockerConfig}`, `docker-compose -f ${dockerFile} up -d`);
-                            dockerOthers.push(`npm run docker:${dockerConfig}`);
+                ['keycloak', 'elasticsearch', 'kafka', 'consul', 'redis', 'memcached', 'jhipster-registry'].forEach(dockerConfig => {
+                    const dockerFile = `src/main/docker/${dockerConfig}.yml`;
+                    if (this.fs.exists(this.destinationPath(dockerFile))) {
+                        if (['cassandra', 'couchbase'].includes(dockerConfig)) {
+                            scriptsStorage.set(`docker:${dockerConfig}:build`, `docker-compose -f ${dockerFile} build`);
+                            dockerBuild.push(`npm run docker:${dockerConfig}:build`);
                         }
+                        scriptsStorage.set(`docker:${dockerConfig}`, `docker-compose -f ${dockerFile} up -d`);
+                        dockerOthers.push(`npm run docker:${dockerConfig}`);
                     }
-                );
+                });
                 scriptsStorage.set({
                     'predocker:others': dockerBuild.join(' && '),
                     'docker:others': dockerOthers.join(' && '),
@@ -451,7 +449,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                     'server:package': 'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment',
                     'ci:e2e:package':
                         'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
-                    'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=$npm_package_config_default_enviroment ${javaCommonLog} --logging.level.org.springframework.web=ERROR`,
+                    'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=$npm_package_config_default_environment ${javaCommonLog} --logging.level.org.springframework.web=ERROR`,
                 });
             },
         };
