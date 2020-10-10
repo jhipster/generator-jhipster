@@ -369,6 +369,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                     }
                 } else {
                     const dockerFile = `src/main/docker/${databaseType}.yml`;
+                    if (databaseType === 'cassandra') {
+                        scriptsStorage.set({
+                            'docker:db:await': 'wait-on tcp:9042',
+                        });
+                    }
                     if (databaseType === 'couchbase' || databaseType === 'cassandra') {
                         scriptsStorage.set({
                             'docker:db:build': `docker-compose -f ${dockerFile} build`,
@@ -449,6 +454,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                     'server:package': 'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment',
                     'ci:e2e:package':
                         'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
+                    'preci:e2e:server:start': 'npm run docker:db:await --if-present && npm run docker:others:await --if-present',
                     'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=$npm_package_config_default_environment ${javaCommonLog} --logging.level.org.springframework.web=ERROR`,
                 });
             },
