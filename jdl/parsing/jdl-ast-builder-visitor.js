@@ -1,4 +1,5 @@
-/** Copyright 2013-2020 the original author or authors from the JHipster project.
+/**
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -15,21 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 const _ = require('lodash');
 const JDLParser = require('./jdl-parser');
 const { deduplicate } = require('../utils/array-utils');
-
-module.exports = {
-    buildAst,
-};
 
 const parser = JDLParser.getParser();
 parser.parse();
 
 const BaseJDLCSTVisitor = parser.getBaseCstVisitorConstructor();
 
-class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
+module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     constructor() {
         super();
         this.validateVisitor();
@@ -109,9 +105,7 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
         }
 
         if (context.useOptionDeclaration) {
-            context.useOptionDeclaration.map(this.visit, this).forEach(option => {
-                ast.useOptions.push(option);
-            });
+            ast.useOptions = context.useOptionDeclaration.map(this.visit, this);
         }
 
         return ast;
@@ -563,7 +557,7 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
         }
         return context.NAME.map(namePart => namePart.image, this);
     }
-}
+};
 
 function getOptionEntityAndExcludedEntityLists(astResult, option) {
     let entityList = astResult.list || [];
@@ -638,10 +632,4 @@ function getSpecialUnaryOptionDeclaration(context, visitor) {
 
 function trimComment(comment) {
     return comment.replace(/^\/[*]+/, '').replace(/[*]+\/$/, '');
-}
-
-const astBuilderVisitor = new JDLAstBuilderVisitor();
-
-function buildAst(cst) {
-    return astBuilderVisitor.visit(cst);
 }
