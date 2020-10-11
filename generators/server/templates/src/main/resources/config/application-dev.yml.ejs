@@ -199,7 +199,7 @@ spring:
             <%_ } else if (devDatabaseType === 'oracle') { _%>
         url: <%- getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
             <%_ } else if (devDatabaseType === 'h2Disk') { _%>
-        url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `${BUILD_DIR}h2db/db` }) %>
+        url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/db` }) %>
             <%_ } else if (devDatabaseType === 'h2Memory') { _%>
         url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
             <%_ } _%>

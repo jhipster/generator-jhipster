@@ -150,7 +150,7 @@
         <typesafe.version>1.4.0</typesafe.version>
 <%_ } _%>
 <%_ if (reactive && (applicationType === 'gateway' || applicationType === 'monolith')) { _%>
-        <springfox.version>3.0.0-SNAPSHOT</springfox.version>
+        <springfox.version>2.10.5</springfox.version>
 <%_ } _%>
         <!-- Plugin versions -->
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
@@ -357,6 +357,16 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-spring-webflux</artifactId>
             <version>${springfox.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-schema</artifactId>
+            <version>${springfox.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-bean-validators</artifactId>
+            <version>2.10.5</version>
         </dependency>
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
