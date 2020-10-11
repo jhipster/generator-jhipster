@@ -354,9 +354,6 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
 }
 
 class UserSqlHelper {
-    static String getColumnNames(String tableAlias, String columnPrefix) {
-        return String.format("%1$s.id as %2$s_id,%1$s.login as %2$s_login,%1$s.password_hash as %2$s_password,%1$s.first_name as %2$s_first_name,%1$s.last_name as %2$s_last_name,%1$s.email as %2$s_email,%1$s.activated as %2$s_activated,%1$s.lang_key as %2$s_lang_key,%1$s.image_url as %2$s_image_url,%1$s.activation_key as %2$s_activation_key,%1$s.reset_key as %2$s_reset_key,%1$s.reset_date as %2$s_reset_date", tableAlias, columnPrefix);
-    }
     static List<Expression> getColumns(Table table, String columnPrefix) {
         List<Expression> columns = new ArrayList<>();
         columns.add(Column.aliased("id", table, columnPrefix + "_id"));
