@@ -32,10 +32,10 @@ jobs:
           JHI_JDK: 11
           # if JHI_LIB_BRANCH value is release, use the release from Maven
           JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
-          JHI_LIB_BRANCH: master
+          JHI_LIB_BRANCH: main
           # if JHI_GEN_BRANCH value is release, use the release from NPM
           JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
-          JHI_GEN_BRANCH: master
+          JHI_GEN_BRANCH: main
           # specific config
           SPRING_OUTPUT_ANSI_ENABLED: NEVER
           SPRING_JPA_SHOW_SQL: false
