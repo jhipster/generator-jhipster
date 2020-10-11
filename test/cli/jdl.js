@@ -167,20 +167,20 @@ describe('jdl command test', () => {
                 });
                 it('should call https.get', () => {
                     return proxyquire('../../cli/jdl', { './import-jdl': importJdlStub })(
-                        ['https://raw.githubusercontent.com/jhipster/jdl-samples/master/foo.jdl'],
+                        ['https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jdl'],
                         { bar: 'foo', skipSampleRepository: true },
                         { env: 'foo' },
                         { fork: 'foo' }
                     ).then(() => {
                         expect(https.get.callCount).to.be.equal(1);
                         expect(https.get.getCall(0).args[0]).to.be.equal(
-                            'https://raw.githubusercontent.com/jhipster/jdl-samples/master/foo.jdl'
+                            'https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jdl'
                         );
                     });
                 });
                 it('should call importJdl', () => {
                     return proxyquire('../../cli/jdl', { './import-jdl': importJdlStub })(
-                        ['https://raw.githubusercontent.com/jhipster/jdl-samples/master/foo.jdl'],
+                        ['https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jdl'],
                         { bar: 'foo', skipSampleRepository: true },
                         { env: 'foo' },
                         { fork: 'foo' }
@@ -231,7 +231,7 @@ describe('jdl command test', () => {
                         `https://raw.githubusercontent.com/jhipster/jdl-samples/v${packageJson.version}/foo.jh`
                     );
                     expect(https.get.getCall(1).args[0]).to.be.equal(
-                        'https://raw.githubusercontent.com/jhipster/jdl-samples/master/foo.jh'
+                        'https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jh'
                     );
                 });
                 it('should pass foo.jh to importJdl', () => {
@@ -259,7 +259,7 @@ describe('jdl command test', () => {
                         `https://raw.githubusercontent.com/jhipster/jdl-samples/v${packageJson.version}/foo.jdl`
                     );
                     expect(https.get.getCall(1).args[0]).to.be.equal(
-                        'https://raw.githubusercontent.com/jhipster/jdl-samples/master/foo.jdl'
+                        'https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jdl'
                     );
                 });
                 it('should pass foo.jdl to importJdl', () => {
@@ -271,7 +271,7 @@ describe('jdl command test', () => {
             });
 
             describe('with a complete url', () => {
-                const url = 'https://raw.githubusercontent.com/jhipster/jdl-samples/master/bar.jdl';
+                const url = 'https://raw.githubusercontent.com/jhipster/jdl-samples/main/bar.jdl';
                 beforeEach(() => {
                     return proxyquire('../../cli/jdl', { './import-jdl': importJdlStub })([url]);
                 });
@@ -316,7 +316,7 @@ describe('jdl command test', () => {
                     proxyquire('../../cli/jdl', { './import-jdl': () => {} })(['foo.jh']).catch(error => {
                         assert.equal(
                             error.message,
-                            'Error downloading https://raw.githubusercontent.com/jhipster/jdl-samples/master/foo.jh: 404 - Custom message'
+                            'Error downloading https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jh: 404 - Custom message'
                         );
                         done();
                     });
