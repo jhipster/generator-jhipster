@@ -230,9 +230,7 @@ describe('jdl command test', () => {
                     expect(https.get.getCall(0).args[0]).to.be.equal(
                         `https://raw.githubusercontent.com/jhipster/jdl-samples/v${packageJson.version}/foo.jh`
                     );
-                    expect(https.get.getCall(1).args[0]).to.be.equal(
-                        'https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jh'
-                    );
+                    expect(https.get.getCall(1).args[0]).to.be.equal('https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jh');
                 });
                 it('should pass foo.jh to importJdl', () => {
                     expect(importJdlStub.getCall(0).args[0]).to.be.eql(['foo.jh']);
@@ -258,9 +256,7 @@ describe('jdl command test', () => {
                     expect(https.get.getCall(0).args[0]).to.be.equal(
                         `https://raw.githubusercontent.com/jhipster/jdl-samples/v${packageJson.version}/foo.jdl`
                     );
-                    expect(https.get.getCall(1).args[0]).to.be.equal(
-                        'https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jdl'
-                    );
+                    expect(https.get.getCall(1).args[0]).to.be.equal('https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jdl');
                 });
                 it('should pass foo.jdl to importJdl', () => {
                     expect(importJdlStub.getCall(0).args[0]).to.be.eql(['foo.jdl']);
