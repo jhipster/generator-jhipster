@@ -37,12 +37,15 @@ const prettierTransform = function (defaultOptions) {
                     // for better errors
                     filepath: file.relative,
                 };
+                const str = file.contents.toString('utf8');
                 try {
-                    const str = file.contents.toString('utf8');
                     const data = prettier.format(str, options);
                     file.contents = Buffer.from(data);
                 } catch (error) {
-                    callback(new Error(`Error parsing file ${file.relative}: ${error}`));
+                    callback(
+                        new Error(`Error parsing file ${file.relative}: ${error}
+                    At: ${str}`)
+                    );
                     return;
                 }
             }
