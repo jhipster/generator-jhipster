@@ -358,7 +358,7 @@ describe('JDLWithApplicationValidator', () => {
                 });
             });
         });
-        context('with relationships between multiple entities', () => {
+        context('with relationships between multiple applications', () => {
             let validator;
 
             before(() => {
