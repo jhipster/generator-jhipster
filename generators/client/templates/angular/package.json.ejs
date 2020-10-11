@@ -169,6 +169,9 @@ limitations under the License.
   "engines": {
     "node": ">=<%= NODE_VERSION %>"
   },
+  "config": {
+    "default_environment": "prod"
+  },
   "scripts": {
     "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
     "lint": "eslint . --ext .js,.ts",
@@ -180,7 +183,7 @@ limitations under the License.
     "e2e": "<%= clientPackageManager %> run e2e:protractor",
     "e2e:headless": "<%= clientPackageManager %> run e2e:protractor:headless",
     <%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
-    "e2e": "<%= clientPackageManager %> run cypress",
+    "e2e": "<%= clientPackageManager %> run e2e:cypress",
     "e2e:headless": "<%= clientPackageManager %> run e2e:cypress:headless",
     <%_ } _%>
     <%_ if (protractorTests) { _%>
@@ -188,28 +191,31 @@ limitations under the License.
     "e2e:protractor": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
     <%_ } _%>
     <%_ if (cypressTests) { _%>
-    "e2e:cypress:headless": "cypress run --browser chrome --headless",
+    "e2e:cypress:headless": "<%= clientPackageManager %> run e2e:cypress -- --headless",
+    "e2e:cypress": "cypress run --browser chrome",
     "cypress": "cypress open",
     <%_ } _%>
     <%_ if (protractorTests || cypressTests) { _%>
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
     <%_ } _%>
+    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config <%= CLIENT_TEST_SRC_DIR %>jest.conf.js",
     "start": "<%= clientPackageManager %> run webpack:dev",
+    "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
     <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
     <%_ } _%>
-    "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
     "serve": "<%= clientPackageManager %> run start",
     "build": "<%= clientPackageManager %> run webpack:prod",
-    "test": "<%= clientPackageManager %> run lint && jest --coverage --logHeapUsage -w=2 --config <%= CLIENT_TEST_SRC_DIR %>jest.conf.js",
-    "test:watch": "<%= clientPackageManager %> run test -- --watch",
+    "pretest": "<%= clientPackageManager %> run lint",
+    "test": "<%= clientPackageManager %> run jest",
+    "test:watch": "<%= clientPackageManager %> run jest -- --watch",
+    "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:$npm_package_config_default_environment",
+    "webpack:build:dev": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
+    "webpack:build:prod": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --hot --port=9060 --watch-content-base --env.stats=minimal",
     "webpack:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --hot --port=9060 --watch-content-base --profile --progress --env.stats=normal",
-    "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
-    "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
-    "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
-    "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main && <%= clientPackageManager %> run clean-www",
+    "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:prod && <%= clientPackageManager %> run clean-www",
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"

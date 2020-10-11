@@ -306,6 +306,40 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _postWriting() {
         return {
+            packageJsonScripts() {
+                if (this.skipClient) return;
+                const packageJsonStorage = this.createStorage('package.json');
+                const scriptsStorage = packageJsonStorage.createStorage('scripts');
+
+                const packageJsonConfigStorage = packageJsonStorage.createStorage('config').createProxy();
+                if (process.env.JHI_PROFILE) {
+                    packageJsonConfigStorage.default_environment = process.env.JHI_PROFILE.includes('dev') ? 'dev' : 'prod';
+                }
+
+                const devDependencies = packageJsonStorage.createStorage('devDependencies');
+                devDependencies.set('wait-on', 'VERSION_MANAGED_BY_CLIENT_COMMON');
+                devDependencies.set('concurrently', 'VERSION_MANAGED_BY_CLIENT_COMMON');
+
+                if (this.clientFramework === 'react') {
+                    scriptsStorage.set(
+                        'ci:frontend:test',
+                        'npm run webpack:build:$npm_package_config_default_environment && npm run test-ci'
+                    );
+                } else {
+                    scriptsStorage.set('ci:frontend:test', 'npm run webpack:build:$npm_package_config_default_environment && npm test');
+                }
+
+                if (scriptsStorage.get('e2e')) {
+                    scriptsStorage.set({
+                        'ci:server:await':
+                            'echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"',
+                        'pree2e:headless': 'npm run ci:server:await',
+                        'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
+                        'e2e:dev': 'concurrently -k -s first "./mvnw" "e2e:run"',
+                    });
+                }
+            },
+
             packageJson() {
                 if (this.skipClient) return;
                 this.replacePackageJsonVersions(

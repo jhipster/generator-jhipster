@@ -1884,6 +1884,30 @@
                 </pluginManagement>
             </build>
         </profile>
+<%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) { _%>
+        <profile>
+            <id>e2e</id>
+            <build>
+                <finalName>e2e</finalName>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-maven-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>repackage</id>
+                                    <goals>
+                                        <goal>repackage</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+<%_ } _%>
         <!-- jhipster-needle-maven-add-profile -->
     </profiles>
 </project>
