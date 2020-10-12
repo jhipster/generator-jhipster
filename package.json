@@ -2,12 +2,6 @@
     "name": "generator-jhipster",
     "version": "6.10.3",
     "description": "Spring Boot + Angular/React in one handy generator",
-    "files": [
-        "cli",
-        "generators",
-        "jdl",
-        "utils"
-    ],
     "keywords": [
         "yeoman-generator",
         "Java",
@@ -25,6 +19,15 @@
     ],
     "homepage": "https://www.jhipster.tech/",
     "bugs": "https://github.com/jhipster/generator-jhipster/issues",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/jhipster/generator-jhipster.git"
+    },
+    "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/generator-jhipster"
+    },
+    "license": "Apache-2.0",
     "author": {
         "name": "Julien Dubois",
         "email": "",
@@ -34,24 +37,26 @@
     "bin": {
         "jhipster": "./cli/jhipster.js"
     },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/jhipster/generator-jhipster.git"
-    },
+    "files": [
+        "cli",
+        "generators",
+        "jdl",
+        "utils"
+    ],
     "scripts": {
-        "prettier:format": "prettier --write \"{,**/}*.{js,json,md,yml,java}\"",
-        "prettier:check": "prettier --check \"{,**/}*.{js,json,md,yml,java}\"",
         "completion": "tabtab install --name jhipster --auto",
-        "lint": "npm run eslint && npm run ejs-lint",
-        "lint-fix": "npm run prettier:format && npm run eslint -- --fix",
-        "eslint": "eslint .",
         "ejs-lint": "mocha test/ejslint.js",
         "ejslint": "ejslint",
-        "pretest": "npm run lint",
-        "test": "mocha --no-insight --forbid-only --parallel",
-        "jsdoc": "jsdoc --configure jsdoc-conf.json",
+        "eslint": "eslint .",
         "jdl:test": "mocha test/jdl --no-insight --forbid-only -p",
-        "jdl:test-watch": "npm run jdl:test -- --watch"
+        "jdl:test-watch": "npm run jdl:test -- --watch",
+        "jsdoc": "jsdoc --configure jsdoc-conf.json",
+        "lint": "npm run eslint && npm run ejs-lint",
+        "lint-fix": "npm run prettier:format && npm run eslint -- --fix",
+        "prettier:check": "prettier --check \"{,**/}*.{js,json,md,yml,java}\"",
+        "prettier:format": "prettier --write \"{,**/}*.{js,json,md,yml,java}\"",
+        "pretest": "npm run lint",
+        "test": "mocha --no-insight --forbid-only --parallel"
     },
     "dependencies": {
         "aws-sdk": "2.771.0",
@@ -114,14 +119,9 @@
         "node": ">=12.12.0",
         "npm": ">=6.14.4"
     },
-    "license": "Apache-2.0",
     "collective": {
         "type": "opencollective",
         "url": "https://opencollective.com/generator-jhipster",
         "logo": "https://opencollective.com/opencollective/logo.txt"
-    },
-    "funding": {
-        "type": "opencollective",
-        "url": "https://opencollective.com/generator-jhipster"
     }
 }
