@@ -133,7 +133,6 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
     <%_ } _%>
 
     editForm = this.fb.group({
-        id: [],
     <%_ for (idx in fields) {
         const fieldName = fields[idx].fieldName;
         const fieldType = fields[idx].fieldType;
@@ -191,7 +190,7 @@ _%>
         }
         this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
             <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
-            if (!<%= entityInstance %>.id) {
+            if (<%= entityInstance %>.id == null) {
                 const today = dayjs().startOf('day');
             <%_ } _%>
             <%_ for (idx in fields) {
@@ -216,7 +215,6 @@ _%>
 
     updateForm(<%= entityInstance %>: I<%= entityAngularName %>): void {
         this.editForm.patchValue({
-            id: <%= entityInstance %>.id,
     <%_ for (idx in fields) {
         const fieldName = fields[idx].fieldName;
         const fieldType = fields[idx].fieldType;
@@ -301,7 +299,6 @@ _%>
     private createFromForm(): I<%= entityAngularName %> {
         return {
             ...new <%= entityAngularName %>(),
-            id: this.editForm.get(['id'])!.value,
     <%_ for (idx in fields) {
         const fieldName = fields[idx].fieldName;
         const fieldType = fields[idx].fieldType;

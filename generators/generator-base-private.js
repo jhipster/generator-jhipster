@@ -1017,7 +1017,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
         const variablesWithTypes = [];
         const tsKeyType = this.getTypescriptKeyType(pkType);
-        if (!embedded) {
+        if (!embedded && this.jhipsterConfig.clientFramework !== ANGULAR) {
             variablesWithTypes.push(`id?: ${tsKeyType}`);
         }
         fields.forEach(field => {

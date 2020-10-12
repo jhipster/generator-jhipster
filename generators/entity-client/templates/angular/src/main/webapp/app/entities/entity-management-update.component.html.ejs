@@ -24,16 +24,14 @@
             <div>
                 <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 
-                <div class="form-group" [hidden]="!editForm.get('id')!.value">
-                    <label for="id" jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
-                </div>
 <%_ for (idx in fields) {
     const fieldName = fields[idx].fieldName;
     const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
     const fieldNameHumanized = fields[idx].fieldNameHumanized;
     const fieldType = fields[idx].fieldType;
     const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+    const id = !!fields[idx].id;
+    const readonly = !!fields[idx].id || !!fields[idx].readonly;
     let fieldInputType = 'text';
     let ngModelOption = '';
     const translationKey = `${i18nKeyPrefix}.${fieldName}`;
@@ -50,7 +48,7 @@
     }
 _%>
 
-                <div class="form-group">
+                <div class="form-group"<% if (id) { %> [hidden]="editForm.get('<%= fieldName %>')!.value != null"<% } %>>
                     <label class="form-control-label" jhiTranslate="<%= translationKey %>" for="field_<%= fieldName %>"<% if (fields[idx].javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= fields[idx].javadoc %>"<% } } %>><%= fieldNameHumanized %></label>
     <%_ if (fields[idx].fieldIsEnum) { _%>
                     <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>">
@@ -106,7 +104,7 @@ _%>
                            data-cy="<%= fieldName %>" formControlName="<%= fieldName %>" />
         <%_ } else { _%>
                     <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>"
-                           formControlName="<%= fieldName %>"/>
+                           formControlName="<%= fieldName %>"<% if (readonly) { %> readonly<% } %>/>
             <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
                     <input type="hidden" class="form-control" name="<%= fieldName %>ContentType" id="field_<%= fieldName %>ContentType"
                            formControlName="<%= fieldName %>ContentType" />
