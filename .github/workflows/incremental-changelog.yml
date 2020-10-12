@@ -27,6 +27,7 @@ on:
         branches:
             - '*'
         paths:
+            - 'jdl/**'
             - 'utils/**'
             - 'test-integration/incremental-changelog-samples/**'
             - 'generators/entity/**'
