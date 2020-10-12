@@ -38,7 +38,6 @@ module.exports = {
  * Converts a JDLObject to ready-to-be exported JSON entities.
  * @param {Object} args - the configuration object, keys:
  * @param {JDLObject} args.jdlObject - the JDLObject to convert to JSON
- * @param {Date} args.creationTimestamp - the creation timestamp, for entities
  * @returns {Map} entities that can be exported to JSON
  */
 function convert(args = {}) {
@@ -51,7 +50,7 @@ function convert(args = {}) {
         const applicationNames = jdlObject.getApplications().map(jdlApplication => jdlApplication.getConfigurationOptionValue('baseName'));
         return new Map(applicationNames.map(applicationName => [applicationName, []]));
     }
-    setBasicEntityInformation(args.creationTimestamp);
+    setBasicEntityInformation();
     setFields();
     setRelationships();
     setApplicationToEntities();
@@ -86,8 +85,8 @@ function setEntitiesPerApplication() {
     });
 }
 
-function setBasicEntityInformation(creationTimestamp = new Date()) {
-    const convertedEntities = BasicEntityConverter.convert(jdlObject.getEntities(), creationTimestamp);
+function setBasicEntityInformation() {
+    const convertedEntities = BasicEntityConverter.convert(jdlObject.getEntities());
     convertedEntities.forEach((jsonEntity, entityName) => {
         entities[entityName] = jsonEntity;
     });

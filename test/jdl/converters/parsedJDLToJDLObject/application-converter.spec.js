@@ -66,23 +66,21 @@ describe('ApplicationConverter', () => {
                     let expectedApplication;
 
                     before(() => {
-                        convertedApplication = convertApplications(
-                            [
-                                {
-                                    config: {
-                                        applicationType: MONOLITH,
-                                        baseName: 'mono',
-                                    },
-                                    entities: {
-                                        entityList: [],
-                                        excluded: [],
-                                    },
-                                    options: {},
-                                    useOptions: [],
+                        convertedApplication = convertApplications([
+                            {
+                                config: {
+                                    applicationType: MONOLITH,
+                                    baseName: 'mono',
+                                    creationTimestamp: 42,
                                 },
-                            ],
-                            { creationTimestamp: 42 }
-                        );
+                                entities: {
+                                    entityList: [],
+                                    excluded: [],
+                                },
+                                options: {},
+                                useOptions: [],
+                            },
+                        ]);
                         expectedApplication = [
                             createJDLApplication({
                                 applicationType: MONOLITH,

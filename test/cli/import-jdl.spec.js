@@ -365,7 +365,7 @@ describe('JHipster generator import jdl', () => {
     });
 
     describe('imports single app and entities with --fork', () => {
-        const options = { skipInstall: true, noInsight: true, skipGit: false, creationTimestamp: '2019-01-01' };
+        const options = { skipInstall: true, noInsight: true, skipGit: false };
         beforeEach(() => {
             return testInTempDir(dir => {
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
@@ -381,16 +381,10 @@ describe('JHipster generator import jdl', () => {
             assert.JSONFileContent('.yo-rc.json', {
                 'generator-jhipster': { baseName: 'jhipsterApp' },
             });
-            assert.JSONFileContent('.yo-rc.json', {
-                'generator-jhipster': { creationTimestamp: 1546300800000 },
-            });
         });
         it('creates the entities', () => {
             const aFile = path.join('.jhipster', 'A.json');
             assert.file([aFile, path.join('.jhipster', 'B.json')]);
-            assert.JSONFileContent(aFile, {
-                changelogDate: '20190101000100',
-            });
         });
         it('calls application generator', () => {
             expect(subGenCallParams.count).to.equal(1);
@@ -401,8 +395,6 @@ describe('JHipster generator import jdl', () => {
                 '--skip-install',
                 '--no-insight',
                 '--no-skip-git',
-                '--creation-timestamp',
-                '2019-01-01',
                 '--from-cli',
                 '--local-config-only',
             ]);

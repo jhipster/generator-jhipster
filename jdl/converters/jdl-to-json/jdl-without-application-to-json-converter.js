@@ -40,7 +40,6 @@ module.exports = {
  * @param {String} args.applicationName - the application's name
  * @param {String} args.databaseType - the database type
  * @param {applicationType} args.applicationType - the application's type
- * @param {Date} args.creationTimestamp - the creation timestamp, for entities
  * @returns {Map} entities that can be exported to JSON
  */
 function convert(args = {}) {
@@ -48,7 +47,7 @@ function convert(args = {}) {
         throw new Error("The JDL object, the application's name and its the database type are mandatory.");
     }
     init(args);
-    setBasicEntityInformation(args.creationTimestamp);
+    setBasicEntityInformation();
     setOptions();
     setFields();
     setRelationships();
@@ -69,8 +68,8 @@ function resetState() {
     entities = null;
 }
 
-function setBasicEntityInformation(creationTimestamp = new Date()) {
-    const convertedEntities = BasicEntityConverter.convert(jdlObject.getEntities(), creationTimestamp);
+function setBasicEntityInformation() {
+    const convertedEntities = BasicEntityConverter.convert(jdlObject.getEntities());
     convertedEntities.forEach((jsonEntity, entityName) => {
         entities[entityName] = jsonEntity;
     });

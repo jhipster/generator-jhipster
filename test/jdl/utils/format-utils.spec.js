@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const { formatDateForLiquibase, formatComment } = require('../../../jdl/utils/format-utils');
+const { formatComment } = require('../../../jdl/utils/format-utils');
 
 describe('FormatUtils', () => {
     describe('formatComment', () => {
@@ -81,35 +81,6 @@ describe('FormatUtils', () => {
                 it(`should return ${buildTestTitle(expectedResult3)}`, () => {
                     expect(formatComment(multiLineComment3)).to.equal(expectedResult3);
                 });
-            });
-        });
-    });
-    describe('formatDateForLiquibase', () => {
-        context('when passing both arguments', () => {
-            let result;
-
-            before(() => {
-                result = formatDateForLiquibase({ date: new Date(Date.UTC(0, 0, 0, 0, 0, 0)), increment: 1 });
-            });
-
-            it('should use the increment with the passed date', () => {
-                expect(result).to.equal('18991231000100');
-            });
-        });
-        context('when not passing the date', () => {
-            it('should not fail', () => {
-                expect(formatDateForLiquibase().length).to.equal(14);
-            });
-        });
-        context('when not passing the increment', () => {
-            let result;
-
-            before(() => {
-                result = formatDateForLiquibase({ date: new Date(Date.UTC(0, 0, 0, 0, 0, 0)) });
-            });
-
-            it('should format the current time for liquibase with no increment', () => {
-                expect(result).to.equal('18991231000000');
             });
         });
     });
