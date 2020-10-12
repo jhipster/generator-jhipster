@@ -20,7 +20,7 @@ module.exports = { parseLiquibaseChangelogDate, formatDateForChangelog };
 
 function parseLiquibaseChangelogDate(changelogDate) {
     if (!changelogDate || changelogDate.length !== 14) {
-        throw new Error('A valid changelogDate is required to parse.');
+        throw new Error(`${changelogDate} is not a valid changelogDate.`);
     }
     const formatedDate = `${changelogDate.substring(0, 4)}-${changelogDate.substring(4, 6)}-${changelogDate.substring(
         6,
