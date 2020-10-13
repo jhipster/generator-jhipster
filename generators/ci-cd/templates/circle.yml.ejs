@@ -80,48 +80,43 @@ jobs:
                 key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
                     <%_ } _%>
 
+            - run:
+                name: Give Executable Power
             <%_ if (buildTool === 'maven') { _%>
-            - run:
-                name: Give Executable Power
                 command: 'chmod +x mvnw'
-            - run:
-                name: Run Style Checks
-                command: './mvnw -ntp checkstyle:check'
-            - run:
-                name: Clean and Verify
-                command: './mvnw -ntp clean verify'
             <%_ } else if (buildTool === 'gradle') { _%>
-            - run:
-                name: Give Executable Power
                 command: 'chmod +x gradlew'
-            - run:
-                name: Run Style Checks
-                command: './gradlew checkstyleNohttp --no-daemon'
-            - run:
-                name: Clean and Verify
-                command: './gradlew clean test integrationTest --no-daemon'
             <%_ } _%>
+            - run:
+                name: Backend tests
+                command: <%= clientPackageManager %> run ci:backend:test
             <%_ if (!skipClient) { _%>
             - run:
                 name: Run Front End Tests
-                command: <%= clientPackageManager %> run <%= frontTestCommand %>
+                command: <%= clientPackageManager %> run ci:frontend:test
             <%_ } _%>
             <%_ if (buildTool === 'maven') { _%>
-            - run:
-                name: Verify with Prod Profile
-                command: './mvnw -ntp verify -Pprod -DskipTests'
                 <%_ if (cicdIntegrations.includes('heroku')) { _%>
             - run:
                 name: Deploy to Heroku
                 command: './mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>'
                 <%_ } _%>
             <%_ } else if (buildTool === 'gradle') { _%>
-            - run:
-                name: Verify with Prod Profile
-                command: './gradlew bootJar -Pprod -x test --no-daemon'
                 <%_ if (cicdIntegrations.includes('heroku')) { _%>
             -run:
                 name: Deploy to Heroku
                 command: './gradlew deployHeroku --no-daemon'
                 <%_ } _%>
             <%_ } _%>
+            <%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) { _%>
+            -run:
+                name: 'E2E: Prepare'
+                command: <%= clientPackageManager %> run ci:e2e:prepare
+            -run:
+                name: 'E2E: Run'
+                command: <%= clientPackageManager %> run ci:e2e:run
+            -run:
+                name: 'E2E: Teardown'
+                command: <%= clientPackageManager %> run ci:e2e:teardown
+            <%_ } _%>
+            

@@ -299,7 +299,7 @@ jobs:
             #----------------------------------------------------------------------
             - name: 'TESTS: Start docker-compose containers for e2e and backend tests'
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true' && matrix.testcontainers != 1
-              run: npm run ci:e2e:prepare:docker
+              run: npm run ci:e2e:prepare
             - name: 'TESTS: backend'
               id: backend
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
@@ -316,7 +316,7 @@ jobs:
               working-directory: ${{ github.workspace }}/app
             - name: 'TESTS: Start docker-compose containers for e2e tests'
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true' && matrix.testcontainers == 1
-              run: npm run ci:e2e:prepare:docker
+              run: npm run ci:e2e:prepare
             - name: 'E2E: Run'
               id: e2e
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
@@ -327,6 +327,9 @@ jobs:
               with:
                   name: log-${{ matrix.app-type }}
                   path: ${{ github.workspace }}/app/build/test-results/**/*.xml
+            - name: 'E2E: Teardown'
+              if: always() && matrix.e2e == 1 && steps.tests-should-be-skipped.outputs.skip-tests != 'true'
+              run: npm run ci:e2e:teardown
             - name: 'E2E: Store failure screenshots'
               uses: actions/upload-artifact@v2
               if: always() && steps.e2e.outcome == 'failure'
