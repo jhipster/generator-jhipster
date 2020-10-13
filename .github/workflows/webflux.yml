@@ -272,7 +272,8 @@ jobs:
                   # File package-lock.json is not generated
                   # Verify if the generated source has changed
                   git add .
-                  git -c color.ui=always diff -R --cached --exit-code -- . ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12' || echo "::set-output name=has-changes::true"
+                  git -c color.ui=always diff -R --cached -- '.yo-rc.json' '.jhipster/**'
+                  git -c color.ui=always diff -R --cached --exit-code -- . ':!.yo-rc.json' ':!.jhipster/**' ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12' || echo "::set-output name=has-changes::true"
             - name: 'MERGE: merge project diff'
               continue-on-error: true
               id: merge-is-equal
@@ -286,7 +287,8 @@ jobs:
                   # File package-lock.json is not generated
                   # Verify if the generated source has changed
                   git add .
-                  git -c color.ui=always diff -R --cached --exit-code -- . ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12' || echo "::set-output name=has-changes::true"
+                  git -c color.ui=always diff -R --cached -- '.yo-rc.json' '.jhipster/**'
+                  git -c color.ui=always diff -R --cached --exit-code -- . ':!.yo-rc.json' ':!.jhipster/**' ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12' || echo "::set-output name=has-changes::true"
             - name: 'MERGE: tests should be skipped'
               id: tests-should-be-skipped
               if: >
