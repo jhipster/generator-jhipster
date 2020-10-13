@@ -173,9 +173,15 @@ function importOnlyEntities(jdlObject, configuration) {
         application = readJSONFile('.yo-rc.json');
     }
     if (application && application['generator-jhipster']) {
-        if (applicationType === undefined) applicationType = application['generator-jhipster'].applicationType;
-        if (applicationName === undefined) applicationName = application['generator-jhipster'].baseName;
-        if (databaseType === undefined) databaseType = application['generator-jhipster'].databaseType;
+        if (applicationType === undefined) {
+            applicationType = application['generator-jhipster'].applicationType;
+        }
+        if (applicationName === undefined) {
+            applicationName = application['generator-jhipster'].baseName;
+        }
+        if (databaseType === undefined) {
+            databaseType = application['generator-jhipster'].databaseType;
+        }
     }
 
     const entitiesPerApplicationMap = JDLWithoutApplicationToJSONConverter.convert({
