@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const chalk = require('chalk');
 const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
@@ -76,22 +75,5 @@ module.exports = class extends BaseBlueprintGenerator {
     get writing() {
         if (useBlueprints) return;
         return this._writing();
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _end() {
-        return {
-            end() {
-                if (!this.options.skipInstall && !this.skipClient) {
-                    this.rebuildClient();
-                }
-                this.log(chalk.bold.green(`Entity ${this.entityNameCapitalized} generated successfully.`));
-            },
-        };
-    }
-
-    get end() {
-        if (useBlueprints) return;
-        return this._end();
     }
 };
