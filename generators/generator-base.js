@@ -2350,8 +2350,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         if (options.recreateInitialChangelog) {
             this.configOptions.recreateInitialChangelog = options.recreateInitialChangelog;
         }
-        if (options.withAdminUi) {
-            this.configOptions.withAdminUi = options.withAdminUi;
+        if (options.withAdminUi !== undefined) {
+            this.jhipsterConfig.withAdminUi = options.withAdminUi;
         }
         if (options.skipClient) {
             this.skipClient = this.jhipsterConfig.skipClient = true;
@@ -2440,7 +2440,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         dest.experimental = config.experimental;
         dest.logo = config.logo;
         dest.backendName = config.backendName || 'Java';
-        dest.withAdminUi = config.withAdminUi;
     }
 
     /**
@@ -2468,6 +2467,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         dest.prettierJava = config.prettierJava;
         dest.pages = config.pages;
         dest.skipJhipsterDependencies = !!config.skipJhipsterDependencies;
+        dest.withAdminUi = config.withAdminUi;
 
         dest.testFrameworks = config.testFrameworks || [];
         dest.gatlingTests = dest.testFrameworks.includes('gatling');
