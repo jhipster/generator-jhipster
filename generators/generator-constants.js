@@ -24,7 +24,7 @@ const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the varia
 
 // Version of Node, NPM
 const NODE_VERSION = '12.18.3';
-const NPM_VERSION = '6.14.8';
+const NPM_VERSION = '7.0.0';
 
 const GRADLE_VERSION = '6.6';
 const JIB_VERSION = '2.6.0';
