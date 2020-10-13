@@ -18,7 +18,7 @@
  */
 
 const JSONEntity = require('../../jhipster/json-entity');
-const { formatComment, formatDateForLiquibase } = require('../../utils/format-utils');
+const { formatComment } = require('../../utils/format-utils');
 const { getTableNameFromEntityName } = require('../../jhipster/entity-table-name-creator');
 const logger = require('../../utils/objects/logger');
 
@@ -33,17 +33,16 @@ module.exports = {
 /**
  * Converts JDL entities to JSONEntity objects with basic information.
  * @param {Array<JDLEntity>} jdlEntities - the JDL entities to convert.
- * @param {Date} creationTimestamp - the creation timestamp to use when creating JSON entity, optional.
  * @return {Map<String, JSONEntity>} a map having for keys entity names and for values the corresponding JSON entities.
  */
-function convert(jdlEntities, creationTimestamp) {
+function convert(jdlEntities) {
     if (!jdlEntities) {
         throw new Error('JDL entities must be passed to get the basic entity information.');
     }
-    return createJSONEntities(jdlEntities, creationTimestamp || new Date());
+    return createJSONEntities(jdlEntities);
 }
 
-function createJSONEntities(jdlEntities, creationTimestamp) {
+function createJSONEntities(jdlEntities) {
     const convertedEntities = new Map();
     jdlEntities.forEach((jdlEntity, index) => {
         const entityName = jdlEntity.name;
@@ -64,7 +63,6 @@ function createJSONEntities(jdlEntities, creationTimestamp) {
             new JSONEntity({
                 entityName,
                 entityTableName: getTableNameFromEntityName(jdlEntity.tableName),
-                changelogDate: formatDateForLiquibase({ date: new Date(creationTimestamp), increment: index + 1 }),
                 javadoc: formatComment(jdlEntity.comment),
             })
         );

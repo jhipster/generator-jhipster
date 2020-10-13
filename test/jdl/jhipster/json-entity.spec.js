@@ -47,8 +47,6 @@ describe('JSONEntity', () => {
             });
 
             it('should set default values', () => {
-                expect(entity.changelogDate).not.to.be.undefined;
-                delete entity.changelogDate;
                 expect(entity).to.deep.equal({
                     name: 'Toto',
                     dto: 'no',
@@ -83,7 +81,6 @@ describe('JSONEntity', () => {
                     embedded: true,
                     relationships: [42, 43],
                     service: 'serviceClass',
-                    changelogDate: 'aaa',
                     microserviceName: 'nope',
                     angularJSSuffix: 'yes',
                     clientRootFolder: 'oh',
@@ -107,7 +104,6 @@ describe('JSONEntity', () => {
                     embedded: true,
                     relationships: [42, 43],
                     service: 'serviceClass',
-                    changelogDate: 'aaa',
                     microserviceName: 'nope',
                     angularJSSuffix: 'yes',
                     clientRootFolder: 'oh',
@@ -255,7 +251,6 @@ describe('JSONEntity', () => {
             before(() => {
                 jsonEntity = new JSONEntity({
                     entityName: 'Toto',
-                    changelogDate: 42,
                     javadoc: 'A comment',
                 });
                 jsonEntity.setOptions({
@@ -267,7 +262,6 @@ describe('JSONEntity', () => {
             it('should set them', () => {
                 expect(jsonEntity).to.deep.equal({
                     applications: [],
-                    changelogDate: 42,
                     dto: 'mapstruct',
                     embedded: false,
                     entityTableName: 'toto',
