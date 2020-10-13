@@ -131,11 +131,18 @@ function writeApplicationConfig(applicationWithEntities, basePath) {
 /**
  * Run the generator.
  * @param {string} command
+<<<<<<< HEAD
+=======
+ * @param {Object} generatorOptions
+>>>>>>> ba911932a2 (Implement entities generator.)
  * @param {Object} options
  * @param {string} options.cwd
  * @param {boolean} options.fork
  * @param {Environment} options.env
+<<<<<<< HEAD
  * @param {Object} generatorOptions
+=======
+>>>>>>> ba911932a2 (Implement entities generator.)
  * @param {Promise}
  */
 function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
