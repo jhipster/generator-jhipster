@@ -243,7 +243,8 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     });
 
     entityWithConfig.generateFakeData = type => {
-        const fieldEntries = entityWithConfig.fields.map(field => {
+        const fieldsToGenerate = type === 'cypress' ? entityWithConfig.fields.filter(field => !field.id) : entityWithConfig.fields;
+        const fieldEntries = fieldsToGenerate.map(field => {
             const fieldData = field.generateFakeData(type);
             if (!field.nullable && fieldData === null) return undefined;
             return [field.fieldName, fieldData];
