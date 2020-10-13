@@ -415,5 +415,111 @@ describe('JDLWithoutApplicationValidator', () => {
                 }).not.to.throw();
             });
         });
+        context('when having a relationship with the User entity as source', () => {
+            context('with skipUserManagement', () => {
+                let validator;
+
+                before(() => {
+                    const sourceEntity = new JDLEntity({
+                        name: 'User',
+                    });
+                    const destinationEntity = new JDLEntity({
+                        name: 'Destination',
+                    });
+                    const relationship = new JDLRelationship({
+                        from: sourceEntity.name,
+                        to: destinationEntity.name,
+                        type: RelationshipTypes.ONE_TO_ONE,
+                        injectedFieldInFrom: 'other',
+                    });
+                    const jdlObject = new JDLObject();
+                    jdlObject.addEntity(sourceEntity);
+                    jdlObject.addEntity(destinationEntity);
+                    jdlObject.addRelationship(relationship);
+                    validator = createValidator(jdlObject, { databaseType: DatabaseTypes.SQL, skippedUserManagement: true });
+                });
+
+                it('should not fail', () => {
+                    expect(() => validator.checkForErrors()).not.to.throw();
+                });
+            });
+            context('without skipUserManagement', () => {
+                let validator;
+
+                before(() => {
+                    const destinationEntity = new JDLEntity({
+                        name: 'Destination',
+                    });
+                    const relationship = new JDLRelationship({
+                        from: 'User',
+                        to: destinationEntity.name,
+                        type: RelationshipTypes.ONE_TO_ONE,
+                        injectedFieldInFrom: 'other',
+                    });
+                    const jdlObject = new JDLObject();
+                    jdlObject.addEntity(destinationEntity);
+                    jdlObject.addRelationship(relationship);
+                    validator = createValidator(jdlObject, { databaseType: DatabaseTypes.SQL, skippedUserManagement: false });
+                });
+
+                it('should fail', () => {
+                    expect(() => validator.checkForErrors()).to.throw(
+                        /^Relationships from the User entity is not supported in the declaration between 'User' and 'Destination'. You can have this by using the 'skipUserManagement' option.$/
+                    );
+                });
+            });
+        });
+        context('when having a relationship with the User entity as destination', () => {
+            context('with skipUserManagement', () => {
+                let validator;
+
+                before(() => {
+                    const sourceEntity = new JDLEntity({
+                        name: 'Source',
+                    });
+                    const destinationEntity = new JDLEntity({
+                        name: 'User',
+                    });
+                    const relationship = new JDLRelationship({
+                        from: sourceEntity.name,
+                        to: destinationEntity.name,
+                        type: RelationshipTypes.ONE_TO_ONE,
+                        injectedFieldInFrom: 'other',
+                    });
+                    const jdlObject = new JDLObject();
+                    jdlObject.addEntity(sourceEntity);
+                    jdlObject.addEntity(destinationEntity);
+                    jdlObject.addRelationship(relationship);
+                    validator = createValidator(jdlObject, { databaseType: DatabaseTypes.SQL, skippedUserManagement: true });
+                });
+
+                it('should not fail', () => {
+                    expect(() => validator.checkForErrors()).not.to.throw();
+                });
+            });
+            context('without skipUserManagement', () => {
+                let validator;
+
+                before(() => {
+                    const sourceEntity = new JDLEntity({
+                        name: 'Source',
+                    });
+                    const relationship = new JDLRelationship({
+                        from: sourceEntity.name,
+                        to: 'User',
+                        type: RelationshipTypes.ONE_TO_ONE,
+                        injectedFieldInFrom: 'other',
+                    });
+                    const jdlObject = new JDLObject();
+                    jdlObject.addEntity(sourceEntity);
+                    jdlObject.addRelationship(relationship);
+                    validator = createValidator(jdlObject, { databaseType: DatabaseTypes.SQL, skippedUserManagement: false });
+                });
+
+                it('should not fail', () => {
+                    expect(() => validator.checkForErrors()).not.to.throw();
+                });
+            });
+        });
     });
 });
