@@ -158,7 +158,7 @@ _%>
     public <%- returnType %> handle<%_ if (!reactive) { _%>MethodArgumentNotValid(MethodArgumentNotValidException<% } else { %>BindingResult(WebExchangeBindException<% } %> ex, @Nonnull <%= requestClass %> request) {
         BindingResult result = ex.getBindingResult();
         List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
-            .map(f -> new FieldErrorVM(f.getObjectName().replaceFirst("<%= dtoSuffix %>$", ""), f.getField(), f.getCode()))
+            .map(f -> new FieldErrorVM(f.getObjectName().replaceFirst("<%= dtoSuffix %>$", ""), f.getField(), StringUtils.isNotBlank(f.getDefaultMessage()) ? f.getDefaultMessage() : f.getCode()))
             .collect(Collectors.toList());
 
         Problem problem = Problem.builder()
