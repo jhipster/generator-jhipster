@@ -261,7 +261,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
 
     /**
      * Replace placeholders with versions from packageJsonSourceFile.
-     * @param {string} keyToPlace - PlaceHolder name.
+     * @param {string} keyToReplace - PlaceHolder name.
      * @param {string} packageJsonSourceFile - Package json filepath with actual versions.
      */
     replacePackageJsonVersions(keyToReplace, packageJsonSourceFile) {
@@ -297,6 +297,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * Add a new icon to icon imports.
      *
      * @param {string} iconName - The name of the Font Awesome icon.
+     * @param {string} clientFramework - The name of the client framework
      */
     addIcon(iconName, clientFramework) {
         if (clientFramework === ANGULAR) {
@@ -314,6 +315,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
+     * @param {string} translationKeyMenu - i18n key for entry in the menu
      */
     addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === ANGULAR) {
@@ -341,6 +343,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
+     * @param {string} translationKeyMenu - i18n key for entry in the admin menu
      */
     addElementToAdminMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === ANGULAR) {
@@ -358,6 +361,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
+     * @param {string} entityTranslationValue - i18n value for entity entry in menu
      */
     addEntityToMenu(
         routerName,
@@ -383,9 +387,10 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} entityName - Entity Name
      * @param {string} entityFolderName - Entity Folder Name
      * @param {string} entityFileName - Entity File Name
-     * @param {boolean} entityUrl - Entity router URL
+     * @param {string} entityUrl - Entity router URL
      * @param {string} clientFramework - The name of the client framework
      * @param {string} microServiceName - Microservice Name
+     * @param {boolean} readOnly - If the entity is read-only or not
      */
     addEntityToModule(
         entityInstance,
