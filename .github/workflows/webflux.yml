@@ -126,7 +126,7 @@ jobs:
                       entity: sql
                       profile: prod
                       war: 0
-                      protractor: 1
+                      e2e: 1
                       testcontainers: 1
                     - app-type: webflux-mysql
                       entity: sqlfull
