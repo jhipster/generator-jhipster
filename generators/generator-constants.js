@@ -38,7 +38,7 @@ const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
 const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;
 const HIBERNATE_VERSION = '5.4.21.Final';
 
-const JACOCO_VERSION = '0.8.5';
+const JACOCO_VERSION = '0.8.6';
 const KAFKA_VERSION = '5.5.1';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
 
