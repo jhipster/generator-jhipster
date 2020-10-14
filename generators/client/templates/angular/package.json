@@ -19,6 +19,6 @@
   },
   "devDependencies": {
     "@angular/cli": "10.1.6",
-    "webpack": "4.44.2"
+    "webpack": "5.1.0"
   }
 }
