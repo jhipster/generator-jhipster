@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+const chalk = require('chalk');
 const { Command, Option } = require('commander');
 
 class JHipsterCommand extends Command {
@@ -53,7 +54,7 @@ class JHipsterCommand extends Command {
 
     addGeneratorOption(optionName, optionDefinition, additionalDescription = '') {
         if (optionName === 'help') {
-            return undefined;
+            return;
         }
         let cmdString = '';
         if (optionDefinition.alias) {

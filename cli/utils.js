@@ -18,7 +18,6 @@
  */
 /* eslint-disable no-console */
 const chalk = require('chalk');
-const { Option } = require('commander');
 const _ = require('lodash');
 
 const CLI_NAME = 'jhipster';
