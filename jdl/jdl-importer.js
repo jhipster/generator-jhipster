@@ -26,7 +26,8 @@ const JHipsterApplicationExporter = require('./exporters/applications/jhipster-a
 const JHipsterApplicationFormatter = require('./exporters/applications/jhipster-application-formatter');
 const JHipsterDeploymentExporter = require('./exporters/jhipster-deployment-exporter');
 const JHipsterEntityExporter = require('./exporters/jhipster-entity-exporter');
-const BusinessErrorChecker = require('./validators/business-error-checker');
+const JDLWithApplicationValidator = require('./validators/jdl-with-application-validator');
+const JDLWithoutApplicationValidator = require('./validators/jdl-without-application-validator');
 
 module.exports = {
     createImporterFromContent,
@@ -157,12 +158,17 @@ function checkForErrors(jdlObject, configuration) {
         databaseType = configuration.application['generator-jhipster'].databaseType;
         skippedUserManagement = configuration.application['generator-jhipster'].skipUserManagement;
     }
-    const errorChecker = new BusinessErrorChecker(jdlObject, {
-        applicationType,
-        databaseType,
-        skippedUserManagement,
-    });
-    errorChecker.checkForErrors();
+    let validator;
+    if (jdlObject.getApplicationQuantity() === 0) {
+        validator = JDLWithoutApplicationValidator.createValidator(jdlObject, {
+            applicationType,
+            databaseType,
+            skippedUserManagement,
+        });
+    } else {
+        validator = JDLWithApplicationValidator.createValidator(jdlObject);
+    }
+    validator.checkForErrors();
 }
 
 function importOnlyEntities(jdlObject, configuration) {

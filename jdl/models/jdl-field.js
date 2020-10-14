@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-const { isReservedFieldName } = require('../jhipster/reserved-keywords');
 const { merge } = require('../utils/object-utils');
 
 module.exports = class JDLField {
@@ -25,9 +24,6 @@ module.exports = class JDLField {
         const merged = merge(defaults(), args);
         if (!merged.name || !merged.type) {
             throw new Error('The field name and type are mandatory to create a field.');
-        }
-        if (isReservedFieldName(merged.name)) {
-            throw new Error(`The field name cannot be a reserved keyword, got: ${merged.name}.`);
         }
         this.name = merged.name;
         this.type = merged.type;
