@@ -26,6 +26,9 @@ on:
     pull_request:
         branches:
             - '*'
+        paths-ignore:
+            - 'package*.json'
+            - 'generators/*client/**'
 env:
     JHI_RUN_APP: 1
     JHI_JDK: 11
