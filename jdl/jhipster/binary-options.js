@@ -30,14 +30,21 @@ const Options = {
 const optionNames = Object.values(Options);
 
 const Values = {
-    [Options.DTO]: { MAPSTRUCT: 'mapstruct' },
-    [Options.SERVICE]: { SERVICE_CLASS: 'serviceClass', SERVICE_IMPL: 'serviceImpl' },
+    [Options.DTO]: { MAPSTRUCT: 'mapstruct', NO: 'no' },
+    [Options.SERVICE]: { SERVICE_CLASS: 'serviceClass', SERVICE_IMPL: 'serviceImpl', NO: 'no' },
     [Options.PAGINATION]: {
         PAGINATION: 'pagination',
         'INFINITE-SCROLL': 'infinite-scroll',
+        NO: 'no',
     },
     [Options.SEARCH]: { ELASTICSEARCH: 'elasticsearch', COUCHBASE: 'couchbase' },
 };
+
+const DefaultValues = {
+    [Options.DTO]: Values[Options.DTO].NO,
+    [Options.SERVICE]: Values[Options.SERVICE].NO,
+    [Options.PAGINATION]: Values[Options.PAGINATION].NO,
+}
 
 function getOptionName(optionValue) {
     return optionNames.find(optionName => Values[optionName] && Values[optionName][optionValue]);
@@ -77,6 +84,7 @@ function exists(passedOption, passedValue) {
 module.exports = {
     Options,
     // TODO change the names
+    DefaultValues,
     OptionValues,
     Values,
     exists,

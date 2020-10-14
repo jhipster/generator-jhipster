@@ -17,27 +17,30 @@
  * limitations under the License.
  */
 const constants = require('./generator-constants');
-
+const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
+const applicationOptions = require('../jdl/jhipster/application-options');
+const { MONOLITH } = require('../jdl/jhipster/application-types');
+const binaryOptions = require('../jdl/jhipster/binary-options');
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
 /** Required config for prompts to be skipped */
 const appRequiredConfig = {
-    applicationType: 'monolith',
+    applicationType: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.APPLICATION_TYPE],
 };
 
 const appDefaultConfig = {
     ...appRequiredConfig,
-    skipClient: false,
-    skipServer: false,
-    skipUserManagement: false,
+    skipClient: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.SKIP_CLIENT],
+    skipServer: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.SKIP_SERVER],
+    skipUserManagement: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.SKIP_USER_MANAGEMENT],
     skipCheckLengthOfIdentifier: false,
     skipFakeData: false,
     withGeneratedFlag: false,
-    jhiPrefix: 'jhi',
-    entitySuffix: '',
-    dtoSuffix: 'DTO',
-    reactive: false,
-    clientPackageManager: 'npm',
+    jhiPrefix: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.JHI_PREFIX],
+    entitySuffix: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.ENTITY_SUFFIX],
+    dtoSuffix: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.DTO_SUFFIX],
+    reactive: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.REACTIVE],
+    clientPackageManager: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.CLIENT_PACKAGE_MANAGER],
     get testFrameworks() {
         return [];
     },
@@ -54,41 +57,41 @@ const appDefaultConfig = {
 
 /** Required config for prompts to be skipped */
 const serverRequiredConfig = {
-    packageName: 'com.mycompany.myapp',
-    cacheProvider: 'ehcache',
-    websocket: false,
-    databaseType: 'sql',
-    prodDatabaseType: 'postgresql',
-    devDatabaseType: 'h2Disk',
-    searchEngine: false,
-    buildTool: 'maven',
+    packageName: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.PACKAGE_NAME],
+    cacheProvider: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.CACHE_PROVIDER],
+    websocket: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.WEBSOCKET],
+    databaseType: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.DATABASE_TYPE],
+    prodDatabaseType: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.PROD_DATABASE_TYPE],
+    devDatabaseType: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.DEV_DATABASE_TYPE],
+    searchEngine: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.SEARCH_ENGINE],
+    buildTool: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.BUILD_TOOL],
 };
 
 const serverDefaultConfig = {
     ...serverRequiredConfig,
-    serverPort: 8080,
-    authenticationType: 'jwt',
-    serviceDiscoveryType: false,
+    serverPort: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.SERVER_PORT],
+    authenticationType: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.AUTHENTICATION_TYPE],
+    serviceDiscoveryType: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.SERVICE_DISCOVERY_TYPE],
     enableHibernateCache: true,
 };
 
 /** Required config for prompts to be skipped */
 const clientRequiredConfig = {
-    clientFramework: ANGULAR,
+    clientFramework: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.CLIENT_FRAMEWORK],
 };
 
 const clientDefaultConfig = {
     ...clientRequiredConfig,
-    clientTheme: 'none',
-    clientThemeVariant: 'primary',
-    useSass: true,
+    clientTheme: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.CLIENT_THEME],
+    clientThemeVariant: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.CLIENT_THEME_VARIANT],
+    useSass: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.USE_SASS],
 };
 
 const translationDefaultConfig = {
-    enableTranslation: true,
-    nativeLanguage: 'en',
+    enableTranslation: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.ENABLE_TRANSLATION],
+    nativeLanguage: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.NATIVE_LANGUAGE],
     get languages() {
-        return [];
+        return defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.LANGUAGES];
     },
 };
 
@@ -107,10 +110,10 @@ const defaultConfig = {
 };
 
 const entityDefaultConfig = {
-    pagination: 'no',
+    pagination: binaryOptions.DefaultValues[binaryOptions.Options.PAGINATION],
     validation: false,
-    dto: 'no',
-    service: 'no',
+    dto: binaryOptions.DefaultValues[binaryOptions.Options.DTO],
+    service: binaryOptions.DefaultValues[binaryOptions.Options.SERVICE],
     jpaMetamodelFiltering: false,
     readOnly: false,
     embedded: false,

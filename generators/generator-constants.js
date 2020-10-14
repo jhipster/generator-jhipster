@@ -18,6 +18,9 @@
  */
 const semver = require('semver');
 const packagejs = require('../package.json');
+const validationOptions = require('../jdl/jhipster/validations');
+const applicationOptions = require('../jdl/jhipster/application-options');
+const databaseTypes = require('../jdl/jhipster/database-types');
 
 // Version of Java
 const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the variable as it might be useful in the future.
@@ -112,12 +115,12 @@ const TEST_DIR = 'src/test/';
 // Note: this will be prepended with 'target/classes' for Maven, or with 'build/resources/main' for Gradle.
 const CLIENT_DIST_DIR = 'static/';
 
-const SUPPORTED_VALIDATION_RULES = ['required', 'unique', 'max', 'min', 'maxlength', 'minlength', 'maxbytes', 'minbytes', 'pattern'];
+const SUPPORTED_VALIDATION_RULES = [Object.keys(validationOptions)];
 
 const SUPPORTED_CLIENT_FRAMEWORKS = {
-    ANGULAR: 'angularX',
-    REACT: 'react',
-    VUE: 'vue',
+    ANGULAR: applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK].angularX,
+    REACT: applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK].react,
+    VUE: applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK].vue,
 };
 
 // documentation constants
@@ -134,42 +137,42 @@ const OFFICIAL_DATABASE_TYPE_NAMES = {
 
 const R2DBC_DB_OPTIONS = [
     {
-        value: 'postgresql',
+        value: databaseTypes.POSTGRESQL,
         name: 'PostgreSQL',
     },
     {
-        value: 'mysql',
+        value: databaseTypes.MYSQL,
         name: 'MySQL',
     },
     {
-        value: 'mariadb',
+        value: databaseTypes.MARIADB,
         name: 'MariaDB',
     },
     {
-        value: 'mssql',
+        value: databaseTypes.MSSQL,
         name: 'Microsoft SQL Server',
     },
 ];
 
 const SQL_DB_OPTIONS = [
     {
-        value: 'postgresql',
+        value: databaseTypes.POSTGRESQL,
         name: 'PostgreSQL',
     },
     {
-        value: 'mysql',
+        value: databaseTypes.MYSQL,
         name: 'MySQL',
     },
     {
-        value: 'mariadb',
+        value: databaseTypes.MARIADB,
         name: 'MariaDB',
     },
     {
-        value: 'oracle',
+        value: databaseTypes.ORACLE,
         name: 'Oracle',
     },
     {
-        value: 'mssql',
+        value: databaseTypes.MSSQL,
         name: 'Microsoft SQL Server',
     },
 ];

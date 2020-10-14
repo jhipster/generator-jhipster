@@ -64,7 +64,22 @@ module.exports = {
     getConfigForMicroserviceApplication,
     getConfigForUAAApplication,
     getDefaultConfigForNewApplication,
+    getConfigForApplicationType
 };
+
+function getConfigForApplicationType(applicationType = undefined, customOptions = {}) {
+    if (applicationType === MONOLITH) {
+        return getConfigForMonolithApplication(customOptions);
+    } else if (applicationType === GATEWAY) {
+        return getConfigForGatewayApplication();
+    } else if (applicationType === MICROSERVICE) {
+        return getConfigForMicroserviceApplication();
+    } else if (applicationType === UAA) {
+        return getConfigForUAAApplication();
+    } else {
+        return getDefaultConfigForNewApplication();
+    }
+}
 
 function getConfigForMonolithApplication(customOptions = {}) {
     const options = {
@@ -188,6 +203,7 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
         [BUILD_TOOL]: OptionValues[BUILD_TOOL].maven,
         [DATABASE_TYPE]: OptionValues[DATABASE_TYPE].sql,
         [DEV_DATABASE_TYPE]: OptionValues[DEV_DATABASE_TYPE].h2Disk,
+        [CACHE_PROVIDER]: OptionValues[CACHE_PROVIDER].ehcache,
         [ENABLE_HIBERNATE_CACHE]: OptionValues[ENABLE_HIBERNATE_CACHE],
         [ENABLE_SWAGGER_CODEGEN]: OptionValues[ENABLE_SWAGGER_CODEGEN],
         [ENABLE_TRANSLATION]: OptionValues[ENABLE_TRANSLATION],
@@ -221,11 +237,11 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
     if (!options[CLIENT_PACKAGE_MANAGER] && OptionValues[USE_NPM]) {
         options[CLIENT_PACKAGE_MANAGER] = OptionValues[CLIENT_PACKAGE_MANAGER].npm;
     }
-    if (typeof options[DTO_SUFFIX] === 'boolean') {
-        options[DTO_SUFFIX] = 'DTO';
+    if (typeof options[DTO_SUFFIX] === 'boolean' || typeof options[DTO_SUFFIX] !== 'string') {
+        options[DTO_SUFFIX] = OptionValues[DTO_SUFFIX];
     }
     if (typeof options[ENTITY_SUFFIX] === 'boolean') {
-        options[ENTITY_SUFFIX] = '';
+        options[ENTITY_SUFFIX] = OptionValues[ENTITY_SUFFIX];
     }
     if ([MONGODB, COUCHBASE, CASSANDRA, NO].includes(options[DATABASE_TYPE])) {
         options[DEV_DATABASE_TYPE] = options[DATABASE_TYPE];
@@ -236,6 +252,8 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
     }
     if (options[REACTIVE]) {
         options[CACHE_PROVIDER] = OptionValues[CACHE_PROVIDER].no;
+    } else {
+        options[REACTIVE] = OptionValues[REACTIVE];
     }
     return options;
 }
