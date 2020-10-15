@@ -22,6 +22,7 @@
     "autoprefixer": "9.8.4",
     "browser-sync": "2.26.12",
     "browser-sync-webpack-plugin": "2.2.2",
+    "codelyzer": "6.0.1",
     "copy-webpack-plugin": "6.2.1",
     "css-loader": "5.0.0",
     "eslint-loader": "4.0.2",
