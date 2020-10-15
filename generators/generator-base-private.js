@@ -30,12 +30,14 @@ const through = require('through2');
 const fs = require('fs');
 const minimatch = require('minimatch');
 const findUp = require('find-up');
+const prettierPluginJava = require('prettier-plugin-java');
+const prettierPluginPackagejson = require('prettier-plugin-packagejson');
 
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const { languageToJavaLanguage } = require('./utils');
-const { prettierTransform, prettierJavaOptions, generatedAnnotationTransform } = require('./generator-transforms');
+const { prettierTransform, generatedAnnotationTransform } = require('./generator-transforms');
 const JSONToJDLEntityConverter = require('../jdl/converters/json-to-jdl-entity-converter');
 const JSONToJDLOptionConverter = require('../jdl/converters/json-to-jdl-option-converter');
 
@@ -1461,9 +1463,9 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             return;
         }
 
-        let prettierOptions = {};
+        const prettierOptions = { plugins: [prettierPluginPackagejson] };
         if (!this.skipServer && !this.jhipsterConfig.skipServer) {
-            prettierOptions = prettierJavaOptions;
+            prettierOptions.plugins.push(prettierPluginJava);
         }
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
         const filterPatternForPrettier = `{,.,**/,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
