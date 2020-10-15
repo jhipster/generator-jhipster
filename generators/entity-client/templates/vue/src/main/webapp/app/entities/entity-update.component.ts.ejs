@@ -7,7 +7,7 @@ import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vu
   let fieldsContainedValidators = [];
   for (idx in fields) {
     if (fields[idx].fieldValidate === true) {
-      if (!fieldsContainedValidators.includes('numeric') && ['Integer', 'Long', 'Duration'].includes(fields[idx].fieldType)) {
+      if (!fieldsContainedValidators.includes('numeric') && ['Integer', 'Long'].includes(fields[idx].fieldType)) {
         fieldsContainedValidators.push('numeric');
       }
       if (!fieldsContainedValidators.includes('decimal') && ['Float', 'Double', 'BigDecimal'].includes(fields[idx].fieldType)) {
@@ -98,7 +98,7 @@ const validations: any = {
     <%_ if (fields[idx].fieldValidateRules.includes('maxlength')) { _%>
       maxLength: maxLength(<%= fields[idx].fieldValidateRulesMaxlength %>),
     <%_ } _%>
-    <%_ if (['Integer', 'Long', 'Duration'].includes(fieldType)) { _%>
+    <%_ if (['Integer', 'Long'].includes(fieldType)) { _%>
       numeric,
     <%_ } _%>
     <%_ if (['Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
