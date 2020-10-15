@@ -79,7 +79,7 @@ const DOCKER_GRAFANA = 'grafana/grafana:7.2.1';
 const DOCKER_JENKINS = 'jenkins/jenkins:lts-jdk11';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
-const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.41.1';
+const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.42.1';
 const DOCKER_GRAFANA_WATCHER = 'quay.io/coreos/grafana-watcher:v0.0.8';
 
 // Kubernetes versions
