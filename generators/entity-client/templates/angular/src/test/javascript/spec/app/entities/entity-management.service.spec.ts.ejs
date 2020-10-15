@@ -24,7 +24,7 @@ _%>
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 <%_ if (fieldsContainDate) { _%>
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { <% if (fieldsContainLocalDate) { %>DATE_FORMAT,<% } if (fieldsContainInstant || fieldsContainZonedDateTime) { %> DATE_TIME_FORMAT<% } %> } from 'app/shared/constants/input.constants';
 <%_ } _%>
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
@@ -41,7 +41,7 @@ describe('Service Tests', () => {
         let elemDefault: I<%= entityAngularName %>;
         let expectedResult: I<%= entityAngularName %> | I<%= entityAngularName %>[] | boolean | null;
         <%_ if (fieldsContainDate) { _%>
-        let currentDate: moment.Moment;
+        let currentDate: dayjs.Dayjs;
         <%_ } _%>
 
         beforeEach(() => {
@@ -55,7 +55,7 @@ describe('Service Tests', () => {
             service = injector.get(<%= entityAngularName %>Service);
             httpMock = injector.get(HttpTestingController);
             <%_ if (fieldsContainDate) { _%>
-            currentDate = moment();
+            currentDate = dayjs();
             <%_ } _%>
 
             elemDefault = new <%= entityAngularName %>(

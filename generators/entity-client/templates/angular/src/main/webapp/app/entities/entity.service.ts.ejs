@@ -27,7 +27,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 <%_ if (fieldsContainDate) { _%>
 import { map } from 'rxjs/operators';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 <%_ } _%>
 
 <%_ if (fieldsContainLocalDate) { _%>
@@ -115,7 +115,7 @@ export class <%= entityAngularName %>Service {
         if (res.body) {
         <%_ for (idx in fields) { _%>
             <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { _%>
-            res.body.<%= fields[idx].fieldName %> = res.body.<%= fields[idx].fieldName %> ? moment(res.body.<%= fields[idx].fieldName %>) : undefined;
+            res.body.<%= fields[idx].fieldName %> = res.body.<%= fields[idx].fieldName %> ? dayjs(res.body.<%= fields[idx].fieldName %>) : undefined;
             <%_ } _%>
         <%_ } _%>
         }
@@ -127,7 +127,7 @@ export class <%= entityAngularName %>Service {
             res.body.forEach ((<%= entityInstance %>: I<%= entityAngularName %>) => {
             <%_ for (idx in fields) { _%>
                 <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { _%>
-                <%= entityInstance %>.<%= fields[idx].fieldName %> = <%= entityInstance %>.<%= fields[idx].fieldName %> ? moment(<%= entityInstance %>.<%= fields[idx].fieldName %>) : undefined;
+                <%= entityInstance %>.<%= fields[idx].fieldName %> = <%= entityInstance %>.<%= fields[idx].fieldName %> ? dayjs(<%= entityInstance %>.<%= fields[idx].fieldName %>) : undefined;
                 <%_ } _%>
             <%_ } _%>
             });

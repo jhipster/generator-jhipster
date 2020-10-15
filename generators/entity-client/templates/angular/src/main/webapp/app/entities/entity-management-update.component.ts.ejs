@@ -47,7 +47,7 @@ import { map } from 'rxjs/operators';
 <%_ } _%>
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 <%_ } _%>
 <%_ if (fieldsContainBlob) { _%>
@@ -184,7 +184,7 @@ _%>
         this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
             <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
             if (!<%= entityInstance %>.id) {
-                const today = moment().startOf('day');
+                const today = dayjs().startOf('day');
             <%_ } _%>
             <%_ for (idx in fields) {
                 const fieldName = fields[idx].fieldName;
@@ -303,7 +303,7 @@ _%>
         const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
     _%>
         <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-            <%= fieldName %>: this.editForm.get(['<%= fieldName %>'])!.value ? moment(this.editForm.get(['<%= fieldName %>'])!.value, DATE_TIME_FORMAT) : undefined,
+            <%= fieldName %>: this.editForm.get(['<%= fieldName %>'])!.value ? dayjs(this.editForm.get(['<%= fieldName %>'])!.value, DATE_TIME_FORMAT) : undefined,
         <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
             <%= fieldName %>ContentType: this.editForm.get(['<%= fieldName %>ContentType'])!.value,
             <%= fieldName %>: this.editForm.get(['<%= fieldName %>'])!.value,

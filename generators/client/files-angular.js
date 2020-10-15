@@ -85,6 +85,8 @@ const files = {
                 'blocks/interceptor/error-handler.interceptor.ts',
                 'blocks/interceptor/notification.interceptor.ts',
                 'blocks/interceptor/auth-expired.interceptor.ts',
+                // config
+                'config/dayjs.ts',
             ],
         },
         {

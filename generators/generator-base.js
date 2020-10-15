@@ -589,13 +589,13 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     }
 
     /**
-     * return the momentLocaleId from the given language key (from constants.LANGUAGES)
-     * if no momentLocaleId is defined, return the language key (which is a localeId itself)
+     * return the dayjsLocaleId from the given language key (from constants.LANGUAGES)
+     * if no dayjsLocaleId is defined, return the language key (which is a localeId itself)
      * @param {string} language - language key
      */
-    getMomentLocaleId(language) {
+    getDayjsLocaleId(language) {
         const langObj = this.getAllSupportedLanguageOptions().find(langObj => langObj.value === language);
-        return langObj.momentLocaleId || language;
+        return langObj.dayjsLocaleId || language;
     }
 
     /**

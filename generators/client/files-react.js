@@ -79,6 +79,7 @@ const files = {
                 { file: 'routes.tsx', method: 'processJsx' },
                 'typings.d.ts',
                 'config/constants.ts',
+                'config/dayjs.ts',
                 'config/axios-interceptor.ts',
                 { file: 'config/devtools.tsx', method: 'processJsx' },
                 'config/error-middleware.ts',

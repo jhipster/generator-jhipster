@@ -22,7 +22,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const sass = require('sass');
 
 const utils = require('./utils.js');
@@ -107,11 +106,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
       // Options similar to the same options in webpackOptions.output
       filename: 'content/[name].[hash].css',
       chunkFilename: 'content/[name].[hash].css'
-    }),
-    new MomentLocalesPlugin({
-      localesToKeep: [
-        // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array
-      ]
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true,
