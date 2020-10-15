@@ -154,7 +154,7 @@ limitations under the License.
     <%_ } _%>
     "tslint": "6.1.2",
     "typescript": "VERSION_MANAGED_BY_CLIENT_COMMON",
-    <%_ if (protractorTests || cypressTests) { _%>
+    <%_ if (protractorTests) { _%>
     "webdriver-manager": "12.1.7",
     <%_ } _%>
     "webpack": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
@@ -195,7 +195,7 @@ limitations under the License.
     "e2e:cypress": "cypress run --browser chrome",
     "cypress": "cypress open",
     <%_ } _%>
-    <%_ if (protractorTests || cypressTests) { _%>
+    <%_ if (protractorTests) { _%>
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
     <%_ } _%>
