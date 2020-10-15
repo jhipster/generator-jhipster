@@ -30,6 +30,7 @@ const files = {
             templates: [
                 'package.json',
                 '.eslintrc.json',
+                '.eslint.react.json',
                 'tsconfig.json',
                 'tsconfig.test.json',
                 { file: '.editorconfig', method: 'copy', noEjs: true },

@@ -376,6 +376,7 @@ const expectedFiles = {
     client: [
         'angular.json',
         '.eslintrc.json',
+        '.eslint.common.js',
         'package.json',
         'postcss.config.js',
         'proxy.conf.json',
