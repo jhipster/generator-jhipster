@@ -239,7 +239,7 @@ function copyWebResource(source, dest, regex, type, generator, opt = {}, templat
  */
 function renderContent(source, generator, context, options, cb) {
     options = {
-        root: generator.templatePath(),
+        root: options.root || generator.jhipsterTemplatesFolders || generator.templatePath(),
         context: generator,
         ...options,
     };

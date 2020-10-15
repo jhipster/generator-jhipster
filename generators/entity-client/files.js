@@ -479,13 +479,8 @@ function writeFiles() {
                 return;
             }
 
-            const entityTemplatesDir = `entity-client/templates/${templatesDir}`;
-            this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster(entityTemplatesDir));
-
-            if (this.cypressTests) {
-                const cypressTemplatesDir = 'entity-client/templates/common';
-                this.writeFilesToDisk(commonFiles, this, false, this.fetchFromInstalledJHipster(cypressTemplatesDir));
-            }
+            this.writeFilesToDisk(files, templatesDir);
+            this.writeFilesToDisk(commonFiles, 'common');
 
             addEnumerationFiles(this, clientMainSrcDir);
 

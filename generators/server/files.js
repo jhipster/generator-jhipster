@@ -1916,7 +1916,7 @@ function writeFiles() {
         },
 
         writeFiles() {
-            this.writeFilesToDisk(serverFiles, this, false, this.fetchFromInstalledJHipster('server/templates'));
+            this.writeFilesToDisk(serverFiles);
         },
     };
 }

@@ -363,5 +363,5 @@ module.exports = {
 
 function writeFiles() {
     // write React files
-    this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/react'));
+    this.writeFilesToDisk(files, 'react');
 }
