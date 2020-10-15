@@ -39,7 +39,7 @@ const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}
 const HIBERNATE_VERSION = '5.4.21.Final';
 
 const JACOCO_VERSION = '0.8.6';
-const KAFKA_VERSION = '5.5.1';
+const KAFKA_VERSION = '5.5.2';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
 
 // NPM packages version
@@ -51,20 +51,21 @@ const PRETTIER_VERSION = packagejs.dependencies.prettier;
 const PRETTIER_JAVA_VERSION = packagejs.dependencies['prettier-plugin-java'];
 
 // Version of docker images
+const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.3.0';
 const DOCKER_JHIPSTER_CONTROL_CENTER = 'jhipster/jhipster-control-center:v0.1.O';
 const DOCKER_JAVA_JRE = 'adoptopenjdk:11-jre-hotspot';
 const DOCKER_MYSQL = 'mysql:8.0.21';
-const DOCKER_MARIADB = 'mariadb:10.5.5';
-const DOCKER_POSTGRESQL = 'postgres:12.4';
-const DOCKER_MONGODB = 'mongo:4.4.0';
+const DOCKER_MARIADB = 'mariadb:10.5.6';
+const DOCKER_POSTGRESQL = 'postgres:13.0';
+const DOCKER_MONGODB = 'mongo:4.4.1';
 const DOCKER_COUCHBASE = 'couchbase:6.6.0';
 const DOCKER_CASSANDRA = 'cassandra:3.11.8';
-const DOCKER_MSSQL = 'mcr.microsoft.com/mssql/server:2019-CU6-ubuntu-16.04';
-const DOCKER_NEO4J = 'neo4j:4.1.1';
+const DOCKER_MSSQL = 'mcr.microsoft.com/mssql/server:2019-CU8-ubuntu-16.04';
+const DOCKER_NEO4J = 'neo4j:4.1.3';
 const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:4.0.3';
-const DOCKER_MEMCACHED = 'memcached:1.6.6-alpine';
-const DOCKER_REDIS = 'redis:6.0.7';
+const DOCKER_MEMCACHED = 'memcached:1.6.7-alpine';
+const DOCKER_REDIS = 'redis:6.0.8';
 const DOCKER_KEYCLOAK = 'jboss/keycloak:11.0.1'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
 const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:7.6.2'; // The version should be coherent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
@@ -73,13 +74,12 @@ const DOCKER_SONAR = 'sonarqube:8.5.0-community';
 const DOCKER_TRAEFIK = 'traefik:1.7.26'; // waiting for https://github.com/jhipster/generator-jhipster/issues/11198
 const DOCKER_CONSUL = 'consul:1.8.4';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.4.1';
-const DOCKER_PROMETHEUS = 'prom/prometheus:v2.20.1';
+const DOCKER_PROMETHEUS = 'prom/prometheus:v2.22.0';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.21.0';
-const DOCKER_GRAFANA = 'grafana/grafana:7.1.5';
+const DOCKER_GRAFANA = 'grafana/grafana:7.2.1';
 const DOCKER_JENKINS = 'jenkins/jenkins:lts-jdk11';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
-const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
-const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.41.1';
+const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.42.1';
 const DOCKER_GRAFANA_WATCHER = 'quay.io/coreos/grafana-watcher:v0.0.8';
 
 // Kubernetes versions
