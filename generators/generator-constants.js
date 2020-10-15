@@ -51,6 +51,7 @@ const PRETTIER_VERSION = packagejs.dependencies.prettier;
 const PRETTIER_JAVA_VERSION = packagejs.dependencies['prettier-plugin-java'];
 
 // Version of docker images
+const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.3.0';
 const DOCKER_JHIPSTER_CONTROL_CENTER = 'jhipster/jhipster-control-center:v0.1.O';
 const DOCKER_JAVA_JRE = 'adoptopenjdk:11-jre-hotspot';
@@ -78,7 +79,6 @@ const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.21.0';
 const DOCKER_GRAFANA = 'grafana/grafana:7.2.1';
 const DOCKER_JENKINS = 'jenkins/jenkins:lts-jdk11';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
-const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
 const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.42.1';
 const DOCKER_GRAFANA_WATCHER = 'quay.io/coreos/grafana-watcher:v0.0.8';
 
