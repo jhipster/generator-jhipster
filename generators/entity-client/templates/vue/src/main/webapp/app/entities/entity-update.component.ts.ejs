@@ -7,8 +7,11 @@ import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vu
   let fieldsContainedValidators = [];
   for (idx in fields) {
     if (fields[idx].fieldValidate === true) {
-      if (!fieldsContainedValidators.includes('numeric') && ['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fields[idx].fieldType)) {
+      if (!fieldsContainedValidators.includes('numeric') && ['Integer', 'Long', 'Duration'].includes(fields[idx].fieldType)) {
         fieldsContainedValidators.push('numeric');
+      }
+      if (!fieldsContainedValidators.includes('decimal') && ['Float', 'Double', 'BigDecimal'].includes(fields[idx].fieldType)) {
+        fieldsContainedValidators.push('decimal');
       }
       if (!fieldsContainedValidators.includes('required') && fields[idx].fieldValidateRules.includes('required')) {
         fieldsContainedValidators.push('required');
@@ -95,14 +98,17 @@ const validations: any = {
     <%_ if (fields[idx].fieldValidateRules.includes('maxlength')) { _%>
       maxLength: maxLength(<%= fields[idx].fieldValidateRulesMaxlength %>),
     <%_ } _%>
-    <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
-    numeric,
+    <%_ if (['Integer', 'Long', 'Duration'].includes(fieldType)) { _%>
+      numeric,
+    <%_ } _%>
+    <%_ if (['Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+      decimal,
+    <%_ } _%>
     <%_ if (fields[idx].fieldValidateRules.includes('min')) { _%>
       min: minValue(<%= fields[idx].fieldValidateRulesMin %>),
     <%_ } _%>
     <%_ if (fields[idx].fieldValidateRules.includes('max')) { _%>
       max: maxValue(<%= fields[idx].fieldValidateRulesMax %>),
-    <%_ } _%>
     <%_ } _%>
 
     <%_ } _%>
