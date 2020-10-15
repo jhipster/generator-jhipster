@@ -23,7 +23,7 @@
     "browser-sync": "2.26.12",
     "browser-sync-webpack-plugin": "2.2.2",
     "copy-webpack-plugin": "6.2.1",
-    "css-loader": "3.6.0",
+    "css-loader": "5.0.0",
     "eslint-loader": "4.0.2",
     "file-loader": "6.1.1",
     "friendly-errors-webpack-plugin": "1.7.0",
