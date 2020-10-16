@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 const expect = require('chai').expect;
 const sinon = require('sinon');
+const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 
@@ -14,6 +15,19 @@ const BaseGenerator = Base.prototype;
 BaseGenerator.log = msg => {
     // eslint-disable-next-line no-console
     console.log(msg);
+};
+
+const fakeGenerator = custom => {
+    return {
+        debug: sinon.spy(),
+        warning: sinon.spy(),
+        copy: sinon.spy(),
+        processJs: sinon.spy(),
+        processHtml: sinon.spy(),
+        template: sinon.spy(),
+        templatePath: sinon.stub().callsFake((...dest) => path.join(...dest)),
+        ...custom,
+    };
 };
 
 describe('Generator Base', () => {
@@ -312,6 +326,158 @@ describe('Generator Base', () => {
                 filesToAssert = filesToAssert.sort();
                 const out = BaseGenerator.writeFilesToDisk(files, generator, true).sort();
                 expect(out).to.eql(filesToAssert);
+            });
+        });
+        describe('when called without jhipsterTemplatesFolders and without rootTemplatesPath', () => {
+            const files = { files: [{ templates: ['foo'] }] };
+            const generator = fakeGenerator();
+            let out;
+            before('should produce correct files', () => {
+                out = BaseGenerator.writeFilesToDisk(files, generator).sort();
+            });
+            it('should return template file names', () => {
+                expect(out).to.eql(['foo']);
+            });
+            it('should call template with file', () => {
+                expect(generator.template.calledOnce).to.be.true;
+                expect(generator.template.getCall(0).args[0]).to.be.eql('foo.ejs');
+            });
+        });
+        describe('when called with jhipsterTemplatesFolders', () => {
+            const fixturesPath = path.join(__dirname, 'fixtures', 'writeFilesToDisk');
+            let generator;
+            beforeEach(() => {
+                generator = fakeGenerator({
+                    jhipsterTemplatesFolders: [
+                        path.join(fixturesPath, 'templates', 'specific'),
+                        path.join(fixturesPath, 'templates', 'common'),
+                    ],
+                });
+            });
+            describe('exiting file in templates/specific and templates/common folders', () => {
+                const templates = ['all'];
+                const files = { files: [{ templates }] };
+                let out;
+                beforeEach('should produce correct files', () => {
+                    out = BaseGenerator.writeFilesToDisk(files, generator).sort();
+                });
+                it('should return template file names', () => {
+                    expect(out).to.eql(templates);
+                });
+                it('should call template with the file in templates/specific', () => {
+                    expect(generator.template.calledOnce).to.be.true;
+                    expect(generator.template.getCall(0).args[0]).to.be.eql(
+                        path.join(fixturesPath, 'templates', 'specific', `${templates[0]}.ejs`)
+                    );
+                });
+                it('should forward jhipsterTemplatesFolders as options.root', () => {
+                    expect(generator.template.getCall(0).args[3].root).to.be.eql(generator.jhipsterTemplatesFolders);
+                });
+            });
+            describe('exiting file only in templates/common folder', () => {
+                const templates = ['common'];
+                const files = { files: [{ templates }] };
+                let out;
+                beforeEach('should produce correct files', () => {
+                    out = BaseGenerator.writeFilesToDisk(files, generator).sort();
+                });
+                it('should return template file names', () => {
+                    expect(out).to.eql(templates);
+                });
+                it('should call template with the file in templates/common', () => {
+                    expect(generator.template.calledOnce).to.be.true;
+                    expect(generator.template.getCall(0).args[0]).to.be.eql(
+                        path.join(fixturesPath, 'templates', 'common', `${templates[0]}.ejs`)
+                    );
+                });
+                it('should forward jhipsterTemplatesFolders as options.root', () => {
+                    expect(generator.template.getCall(0).args[3].root).to.be.eql(generator.jhipsterTemplatesFolders);
+                });
+            });
+        });
+        describe('when called with jhipsterTemplatesFolders and rootTemplatesPath', () => {
+            const fixturesPath = path.join(__dirname, 'fixtures', 'writeFilesToDisk');
+            const rootTemplatesPath = ['specific', 'common'];
+            let generator;
+            beforeEach(() => {
+                generator = fakeGenerator({
+                    jhipsterTemplatesFolders: [path.join(fixturesPath, 'templates_override'), path.join(fixturesPath, 'templates')],
+                });
+            });
+            describe('exiting file in templates_override/specific, templates/specific, templates/common folders', () => {
+                const templates = ['all'];
+                const files = { files: [{ templates }] };
+                let out;
+                beforeEach('should produce correct files', () => {
+                    out = BaseGenerator.writeFilesToDisk(files, generator, rootTemplatesPath).sort();
+                });
+                it('should return template file names', () => {
+                    expect(out).to.eql(templates);
+                });
+                it('should call template with the file in templates_override/specific', () => {
+                    expect(generator.template.calledOnce).to.be.true;
+                    expect(generator.template.getCall(0).args[0]).to.be.eql(
+                        path.join(fixturesPath, 'templates_override', 'specific', `${templates[0]}.ejs`)
+                    );
+                });
+                it('should forward jhipsterTemplatesFolders concatenated with rootTemplatesPath as options.root', () => {
+                    expect(generator.template.getCall(0).args[3].root).to.be.eql([
+                        path.join(generator.jhipsterTemplatesFolders[0], rootTemplatesPath[0]),
+                        path.join(generator.jhipsterTemplatesFolders[0], rootTemplatesPath[1]),
+                        path.join(generator.jhipsterTemplatesFolders[1], rootTemplatesPath[0]),
+                        path.join(generator.jhipsterTemplatesFolders[1], rootTemplatesPath[1]),
+                    ]);
+                });
+            });
+            describe('exiting file only templates/specific folder', () => {
+                const templates = ['specific'];
+                const files = { files: [{ templates }] };
+                let out;
+                beforeEach('should produce correct files', () => {
+                    out = BaseGenerator.writeFilesToDisk(files, generator, rootTemplatesPath).sort();
+                });
+                it('should return template file names', () => {
+                    expect(out).to.eql(templates);
+                });
+                it('should call template with the file in templates/specific', () => {
+                    expect(generator.template.calledOnce).to.be.true;
+                    expect(generator.template.getCall(0).args[0]).to.be.eql(
+                        path.join(fixturesPath, 'templates', 'specific', `${templates[0]}.ejs`)
+                    );
+                });
+                it('should forward jhipsterTemplatesFolders concatenated with rootTemplatesPath as options.root', () => {
+                    expect(generator.template.getCall(0).args[3].root).to.be.eql([
+                        path.join(generator.jhipsterTemplatesFolders[0], rootTemplatesPath[0]),
+                        path.join(generator.jhipsterTemplatesFolders[0], rootTemplatesPath[1]),
+                        path.join(generator.jhipsterTemplatesFolders[1], rootTemplatesPath[0]),
+                        path.join(generator.jhipsterTemplatesFolders[1], rootTemplatesPath[1]),
+                    ]);
+                });
+            });
+            describe('exiting file only templates/common folder', () => {
+                const templates = ['common'];
+                const files = { files: [{ templates }] };
+                let out;
+                beforeEach('should produce correct files', () => {
+                    out = BaseGenerator.writeFilesToDisk(files, generator, rootTemplatesPath).sort();
+                });
+                it('should return template file names', () => {
+                    expect(out).to.eql(['common']);
+                });
+                it('should call template with the file in templates/common', () => {
+                    expect(generator.template.callCount).to.be.equal(1);
+                    expect(generator.template.getCall(0).args[0]).to.be.eql(
+                        path.join(fixturesPath, 'templates', 'common', `${templates[0]}.ejs`)
+                    );
+                });
+                it('should forward jhipsterTemplatesFolders concatenated with rootTemplatesPath as options.root', () => {
+                    expect(generator.template.getCall(0).args[3].root).to.be.eql([
+                        path.join(generator.jhipsterTemplatesFolders[0], rootTemplatesPath[0]),
+                        path.join(generator.jhipsterTemplatesFolders[0], rootTemplatesPath[1]),
+                        path.join(generator.jhipsterTemplatesFolders[1], rootTemplatesPath[0]),
+                        path.join(generator.jhipsterTemplatesFolders[1], rootTemplatesPath[1]),
+                    ]);
+                });
             });
         });
     });
