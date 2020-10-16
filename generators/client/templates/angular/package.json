@@ -35,7 +35,7 @@
     "optimize-css-assets-webpack-plugin": "5.0.4",
     "postcss-loader": "3.0.0",
     "sass": "1.27.0",
-    "sass-loader": "8.0.2",
+    "sass-loader": "10.0.3",
     "simple-progress-webpack-plugin": "1.1.2",
     "style-loader": "2.0.0",
     "terser-webpack-plugin": "4.2.3",
