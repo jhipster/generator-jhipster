@@ -15,7 +15,7 @@
     "rxjs": "6.6.3",
     "swagger-ui-dist": "3.35.1",
     "tslib": "2.0.3",
-    "zone.js": "0.11.1"
+    "zone.js": "0.10.3"
   },
   "devDependencies": {
     "@angular/cli": "10.1.6",
