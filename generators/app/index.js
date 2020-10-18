@@ -200,6 +200,11 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
             type: Boolean,
         });
 
+        this.option('legacy-relationship-table-name', {
+            desc: 'Generate relationship table name with jhipster 6 compatibility.',
+            type: Boolean,
+        });
+
         // Just constructing help, stop here
         if (this.options.help) {
             return;

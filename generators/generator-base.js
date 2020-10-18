@@ -20,6 +20,7 @@
 const path = require('path');
 const _ = require('lodash');
 const chalk = require('chalk');
+const crypto = require('crypto');
 const fs = require('fs');
 const shelljs = require('shelljs');
 const semver = require('semver');
@@ -1639,7 +1640,13 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} prodDatabaseType - database type
      */
     getJoinTableName(entityName, relationshipName, prodDatabaseType) {
-        const joinTableName = `${this.getTableName(entityName)}_${this.getTableName(relationshipName)}`;
+        const legacyRelationshipTableName = this.jhipsterConfig && this.jhipsterConfig.legacyRelationshipTableName;
+        const separator = legacyRelationshipTableName ? '_' : '__';
+        const prefix = legacyRelationshipTableName ? '' : 'rel_';
+        const suffix = legacyRelationshipTableName
+            ? ''
+            : `_${crypto.createHash('shake256', { outputLength: 1 }).update(`${entityName}.${relationshipName}`, 'utf8').digest('hex')}`;
+        const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
         let limit = 0;
         if (prodDatabaseType === 'oracle' && joinTableName.length > 30 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
@@ -1668,9 +1675,15 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
-            const entityTable = this.getTableName(entityName).substring(0, halfLimit);
-            const relationTable = this.getTableName(relationshipName).substring(0, limit - entityTable.length - 1);
-            return `${entityTable}_${relationTable}`;
+            const entityTable = this.getTableName(entityName).substring(
+                0,
+                halfLimit - (legacyRelationshipTableName ? 0 : separator.length)
+            );
+            const relationTable = this.getTableName(relationshipName).substring(
+                0,
+                limit - entityTable.length - separator.length - prefix.length - suffix.length
+            );
+            return `${prefix}${entityTable}${separator}${relationTable}${suffix}`;
         }
         return joinTableName;
     }
@@ -2410,6 +2423,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
         if (options.testFrameworks) {
             this.jhipsterConfig.testFrameworks = options.testFrameworks;
+        }
+        if (options.legacyRelationshipTableName !== undefined) {
+            this.jhipsterConfig.legacyRelationshipTableName = options.legacyRelationshipTableName;
         }
 
         if (options.creationTimestamp) {
