@@ -18,16 +18,9 @@ RUN \
     zip \
     bzip2 \
     fontconfig \
-    python \
-    g++ \
     libpng-dev \
-    build-essential \
-    software-properties-common \
-    sudo && \
-  # install OpenJDK 11
-  add-apt-repository ppa:openjdk-r/ppa && \
-  apt-get update && \
-  apt-get --no-install-recommends install -y openjdk-11-jdk && \
+    sudo \
+    openjdk-11-jdk && \
   update-java-alternatives -s java-1.11.0-openjdk-amd64 && \
   # install node.js
   wget https://nodejs.org/dist/v12.18.3/node-v12.18.3-linux-x64.tar.gz -O /tmp/node.tar.gz && \
