@@ -131,11 +131,11 @@ function writeApplicationConfig(applicationWithEntities, basePath) {
 /**
  * Run the generator.
  * @param {string} command
- * @param {Object} generatorOptions
  * @param {Object} options
  * @param {string} options.cwd
  * @param {boolean} options.fork
  * @param {Environment} options.env
+ * @param {Object} generatorOptions
  * @param {Promise}
  */
 function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
