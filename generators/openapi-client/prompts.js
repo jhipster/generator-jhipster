@@ -158,7 +158,6 @@ function askActionType() {
         props.generatorName = this.config.get('reactive') ? 'java' : 'spring';
 
         this.props = props;
-
         if (props.jhipsterEndpoint !== undefined) {
             return fetchSwaggerResources(props.jhipsterEndpoint).then(availableDocs => {
                 props.availableDocs = availableDocs;
