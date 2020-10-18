@@ -72,20 +72,21 @@ jobs:
       customCommand: ' run java:jar:prod'
     displayName: 'TESTS: packaging'
 <%_ } _%>
-<%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) { _%>
-  - task: Npm@1
-    inputs:
-      command: 'custom'
-      customCommand: ' run ci:e2e:prepare'
-    displayName: 'E2E: Prepare'
-  - task: Npm@1
-    inputs:
-      command: 'custom'
-      customCommand: ' run ci:e2e:run'
-    displayName: 'E2E: Run'
-  - task: Npm@1
-    inputs:
-      command: 'custom'
-      customCommand: ' run ci:e2e:teardown'
-    displayName: 'E2E: Teardown'
+<%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) {
+    const commented = applicationType === 'gateway' ? '# ' : ''; _%>
+  <%= commented %>- task: Npm@1
+  <%= commented %>  inputs:
+  <%= commented %>    command: 'custom'
+  <%= commented %>    customCommand: ' run ci:e2e:prepare'
+  <%= commented %>  displayName: 'E2E: Prepare'
+  <%= commented %>- task: Npm@1
+  <%= commented %>  inputs:
+  <%= commented %>    command: 'custom'
+  <%= commented %>    customCommand: ' run ci:e2e:run'
+  <%= commented %>  displayName: 'E2E: Run'
+  <%= commented %>- task: Npm@1
+  <%= commented %>  inputs:
+  <%= commented %>    command: 'custom'
+  <%= commented %>    customCommand: ' run ci:e2e:teardown'
+  <%= commented %>  displayName: 'E2E: Teardown'
 <%_ } _%>

@@ -123,11 +123,12 @@ jobs:
                   ./gradlew jib -Djib.to.image=<%= dockerImage %>${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}"
                   <%_ } _%>
               <%_ } _%>
-              <%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) { _%>
-            - name: 'E2E: Prepare'
-              run: <%= clientPackageManager %> run ci:e2e:prepare
-            - name: 'E2E: Run'
-              run: <%= clientPackageManager %> run ci:e2e:run
-            - name: 'E2E: Teardown'
-              run: <%= clientPackageManager %> run ci:e2e:teardown
+              <%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) {
+                  const commented = applicationType === 'gateway' ? '# ' : ''; _%>
+            <%= commented %>- name: 'E2E: Prepare'
+            <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:prepare
+            <%= commented %>- name: 'E2E: Run'
+            <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:run
+            <%= commented %>- name: 'E2E: Teardown'
+            <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:teardown
               <%_ } _%>

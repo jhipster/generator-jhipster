@@ -89,10 +89,11 @@ script:
   - ./gradlew deployHeroku
   <%_ } _%>
 <%_ } _%>
-<%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) { _%>
-  - <%= clientPackageManager %> run ci:e2e:prepare
-  - <%= clientPackageManager %> run ci:e2e:run
-  - <%= clientPackageManager %> run ci:e2e:teardown
+<%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) {
+    const commented = applicationType === 'gateway' ? '# ' : ''; _%>
+  <%= commented %>- <%= clientPackageManager %> run ci:e2e:prepare
+  <%= commented %>- <%= clientPackageManager %> run ci:e2e:run
+  <%= commented %>- <%= clientPackageManager %> run ci:e2e:teardown
 <%_ } _%>
 
 notifications:
