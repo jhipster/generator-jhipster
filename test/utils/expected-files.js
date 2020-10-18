@@ -818,7 +818,7 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}cypress/integration/account/reset-password-page.spec.ts`,
     ],
 
-    cypressWithOauth2: [`${CLIENT_TEST_SRC_DIR}cypress/support/keycloak-oauth2.ts`, `${CLIENT_TEST_SRC_DIR}cypress/support/utils.ts`],
+    cypressWithOauth2: [`${CLIENT_TEST_SRC_DIR}cypress/support/keycloak-oauth2.ts`],
 };
 
 module.exports = expectedFiles;
