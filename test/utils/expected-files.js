@@ -418,6 +418,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/auth-expired.interceptor.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/error-handler.interceptor.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/notification.interceptor.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/config/dayjs.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/entities/entity-routing.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/home/home.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/home/home.component.ts`,

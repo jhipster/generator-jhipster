@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TranslatorContext } from 'react-jhipster';
-import * as moment from 'moment';
+import dayjs from 'dayjs';
 
 export interface IDurationFormat {
   value: any;
@@ -17,5 +17,5 @@ export const DurationFormat = ({ value, blankOnInvalid, locale }: IDurationForma
     locale = TranslatorContext.context.locale;
   }
 
-  return <span title={value}>{moment.duration(value).locale(locale).humanize()}</span>;
+  return <span title={value}>{dayjs.duration(value).locale(locale || '<% if (enableTranslation) { %><%= nativeLanguage %><% } else { %>en<% } %>').humanize()}</span>;
 };

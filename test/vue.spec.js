@@ -158,6 +158,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/date/filters.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/config.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/config-bootstrap-vue.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/config/dayjs.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/store/account-store.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/jhi-item-count.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/jhi-item-count.component.ts`,

@@ -86,6 +86,7 @@ const vueFiles = {
                 'shared/config/axios-interceptor.ts',
                 'shared/config/config.ts',
                 'shared/config/config-bootstrap-vue.ts',
+                'shared/config/dayjs.ts',
                 'shared/config/store/account-store.ts',
                 'shared/security/authority.ts',
                 'router/index.ts',
