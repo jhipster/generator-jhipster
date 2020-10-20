@@ -84,7 +84,7 @@ function writeFiles() {
         writeFiles() {
             faker.seed(stringHashCode(this.jhipsterConfig.baseName || 'jhipsterSample'));
             this.faker = faker;
-            this.writeFilesToDisk(cypressFiles, this, false, this.fetchFromInstalledJHipster('cypress/templates'));
+            this.writeFilesToDisk(cypressFiles);
         },
     };
 }

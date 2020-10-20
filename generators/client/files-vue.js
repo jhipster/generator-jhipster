@@ -325,7 +325,7 @@ const vueFiles = {
 
 function writeFiles() {
     // write Vue files
-    this.writeFilesToDisk(vueFiles, this, false, this.fetchFromInstalledJHipster('client/templates/vue'));
+    this.writeFilesToDisk(vueFiles, 'vue');
 
     if (!this.enableTranslation) {
         utils.vueReplaceTranslation(this, [

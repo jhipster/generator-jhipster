@@ -88,7 +88,7 @@ module.exports = {
 
 function writeFiles() {
     // write client side files for Vue
-    this.writeFilesToDisk(vueFiles, this, false, `${CLIENT_VUE_TEMPLATES_DIR}`);
+    this.writeFilesToDisk(vueFiles, CLIENT_VUE_TEMPLATES_DIR);
 
     // Add page paths to routing system
     utils.vueAddPageToRouterImport(this, this.pageName, this.pageFolderName, this.pageFileName);

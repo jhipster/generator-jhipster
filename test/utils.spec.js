@@ -1,4 +1,5 @@
 const assert = require('yeoman-assert');
+const path = require('path');
 const sinon = require('sinon');
 const utils = require('../generators/utils');
 const { prepareTempDir } = require('./utils/utils');
@@ -284,6 +285,45 @@ describe('JHipster Utils', () => {
             const isGitInstalled = utils.isGitInstalled(callback);
             assert.strictEqual(isGitInstalled, true);
             sinon.assert.calledOnce(callback);
+        });
+    });
+    describe('::renderContent', () => {
+        const fixturesPath = path.join(__dirname, 'fixtures', 'renderContent');
+        it('should render the included content', done => {
+            utils.renderContent(
+                path.join(fixturesPath, 'include.ejs'),
+                { templatePath: tmpl => tmpl },
+                {},
+                { root: [path.join(fixturesPath, 'common')] },
+                res => {
+                    assert.equal(res, 'common');
+                    done();
+                }
+            );
+        });
+        it('when 2 roots are provided, first should have precedence', done => {
+            utils.renderContent(
+                path.join(fixturesPath, 'include.ejs'),
+                { templatePath: tmpl => tmpl },
+                {},
+                { root: [path.join(fixturesPath, 'specific'), path.join(fixturesPath, 'common')] },
+                res => {
+                    assert.equal(res, 'specific');
+                    done();
+                }
+            );
+        });
+        it('when 2 roots are provided, should find the template in the second folder if does not exists in the first', done => {
+            utils.renderContent(
+                path.join(fixturesPath, 'include_common.ejs'),
+                { templatePath: tmpl => tmpl },
+                {},
+                { root: [path.join(fixturesPath, 'specific'), path.join(fixturesPath, 'common')] },
+                res => {
+                    assert.equal(res, 'common');
+                    done();
+                }
+            );
         });
     });
 });
