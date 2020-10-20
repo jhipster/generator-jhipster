@@ -61,11 +61,6 @@ const vueFiles = {
             path: CLIENT_MAIN_SRC_DIR,
             templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss'],
         },
-        {
-            condition: generator => generator.enableI18nRTL,
-            path: CLIENT_MAIN_SRC_DIR,
-            templates: ['content/scss/rtl.scss'],
-        },
     ],
     swagger: [
         {
@@ -314,6 +309,7 @@ const vueFiles = {
                 'e2e/util/utils.ts',
                 'e2e/page-objects/navbar-page.ts',
                 'e2e/page-objects/signin-page.ts',
+                'e2e/page-objects/alert-page.ts',
                 'e2e/page-objects/administration-page.ts',
                 'protractor.conf.js',
             ],

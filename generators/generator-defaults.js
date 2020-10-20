@@ -57,7 +57,7 @@ const serverRequiredConfig = {
     cacheProvider: 'ehcache',
     websocket: false,
     databaseType: 'sql',
-    prodDatabaseType: 'mysql',
+    prodDatabaseType: 'postgresql',
     devDatabaseType: 'h2Disk',
     searchEngine: false,
     buildTool: 'maven',

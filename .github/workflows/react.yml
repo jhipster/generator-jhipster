@@ -76,76 +76,76 @@ jobs:
                 os: [ubuntu-20.04]
                 app-type:
                     - react-default
-                    - react-maven-psql-es-noi18n-mapsid
+                    - react-maven-mysql-es-noi18n-mapsid
                     - react-maven-h2mem-memcached
                     - react-maven-cassandra-session-redis
-                    #                    - react-maven-couchbase-caffeine
-                    - react-gradle-psql-es-noi18n-mapsid
+                    # - react-maven-couchbase-caffeine
+                    - react-gradle-mysql-es-noi18n-mapsid
                     - react-gradle-h2mem-memcached
                     - react-gradle-cassandra-session-redis
-                #                    - react-gradle-couchbase-caffeine
+                    # - react-gradle-couchbase-caffeine
                 include:
                     - app-type: react-default
                       entity: sql
-                      profile: prod
+                      environment: prod
                       war: 0
                       e2e: 1
                       testcontainers: 0
-                    - app-type: react-maven-psql-es-noi18n-mapsid
+                    - app-type: react-maven-mysql-es-noi18n-mapsid
                       entity: sqlfull
-                      profile: prod
+                      environment: prod
                       war: 0
                       e2e: 1
                       testcontainers: 1
                     - app-type: react-maven-h2mem-memcached
                       entity: sql
-                      profile: dev,webpack
+                      environment: dev
                       war: 0 # TODO: need change to 1, when maven+war is fixed
                       e2e: 1
                       testcontainers: 0
                     - app-type: react-maven-cassandra-session-redis
                       entity: cassandra
-                      profile: prod
+                      environment: prod
                       war: 0
                       e2e: 1
-                      testcontainers: 0
-                    #                    - app-type: react-maven-couchbase-caffeine
-                    #                      entity: couchbase
-                    #                      profile: prod
-                    #                      war: 0
-                    #                      e2e: 0
-                    #                      testcontainers: 0
-                    - app-type: react-gradle-psql-es-noi18n-mapsid
+                      testcontainers: 1
+                    # - app-type: react-maven-couchbase-caffeine
+                    #   entity: couchbase
+                    #   environment: prod
+                    #   war: 0
+                    #   e2e: 0
+                    #   testcontainers: 0
+                    - app-type: react-gradle-mysql-es-noi18n-mapsid
                       entity: sqlfull
-                      profile: prod
+                      environment: prod
                       war: 0
                       e2e: 1
                       testcontainers: 0
                     - app-type: react-gradle-h2mem-memcached
                       entity: sql
-                      profile: dev,webpack
+                      environment: dev
                       war: 1
                       e2e: 1
                       testcontainers: 0
                     - app-type: react-gradle-cassandra-session-redis
                       entity: cassandra
-                      profile: prod
+                      environment: prod
                       war: 0
                       e2e: 1
-                      testcontainers: 0
-        #                    - app-type: react-gradle-couchbase-caffeine
-        #                      entity: couchbase
-        #                      profile: prod
-        #                      war: 0
-        #                      e2e: 1
-        #                      testcontainers: 0
+                      testcontainers: 1
+                    # - app-type: react-gradle-couchbase-caffeine
+                    #   entity: couchbase
+                    #   environment: prod
+                    #   war: 0
+                    #   e2e: 1
+                    #   testcontainers: 0
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
-            JHI_PROFILE: ${{ matrix.profile }}
+            JHI_PROFILE: ${{ matrix.environment }}
             JHI_WAR: ${{ matrix.war }}
             JHI_E2E: ${{ matrix.e2e }}
-            JHI_TESTCONTAINERS: ${{ matrix.testcontainers }}
+            SPRING_PROFILES_ACTIVE: ${{ fromJson('["", "testcontainers"]')[matrix.testcontainers] }}
         steps:
             #----------------------------------------------------------------------
             # Install all tools and check configuration
@@ -162,7 +162,7 @@ jobs:
                   mkdir -p base/app
                   mkdir -p base/uaa
               working-directory: ${{ github.workspace }}
-            - uses: actions/setup-node@v2.1.1
+            - uses: actions/setup-node@v2.1.2
               with:
                   node-version: ${{ matrix.node_version }}
             - uses: actions/setup-java@v1
@@ -174,6 +174,44 @@ jobs:
                   CHROME_VERSION=$(google-chrome --version | cut -f 3 -d ' ' | cut -d '.' -f 1) \
                   && CHROMEDRIVER_VERSION=$(curl --location --fail --retry 3 http://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}) \
                   && echo "::set-output name=version::$CHROMEDRIVER_VERSION"
+            - name: 'SETUP: Get date'
+              id: get-date
+              run: |
+                  echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+            - name: 'SETUP: load npm cache'
+              uses: actions/cache@v2
+              with:
+                  path: ~/.npm
+                  key: ${{ runner.os }}-node-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json.ejs') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-
+            - name: 'SETUP: load maven cache'
+              uses: actions/cache@v2
+              with:
+                  path: ~/.m2/repository
+                  key: ${{ runner.os }}-maven-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
+                  restore-keys: |
+                      ${{ runner.os }}-maven-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-
+            - name: 'SETUP: load gradle cache'
+              if: contains(matrix.app-type, 'gradle')
+              uses: actions/cache@v2
+              with:
+                  path: |
+                      ~/.gradle/caches
+                      ~/.gradle/wrapper
+                  key: ${{ runner.os }}-gradle-${{ matrix.app-type }}-${{ hashFiles('generator-jhipster/**/build.gradle.ejs') }}
+                  restore-keys: |
+                      ${{ runner.os }}-gradle-${{ matrix.app-type }}-
+            - name: 'SETUP: load e2e cache'
+              if: matrix.e2e == 1
+              uses: actions/cache@v2
+              with:
+                  path: |
+                      ~/.cache/selenium/
+                      ~/.cache/Cypress/
+                  key: ${{ runner.os }}-e2e-${{ matrix.app-type }}-${{ steps.chromedriver-version.outputs.version }}-${{ hashFiles('generator-jhipster/**/package.json.ejs') }}
+                  restore-keys: |
+                      ${{ runner.os }}-e2e-${{ matrix.app-type }}-${{ steps.chromedriver-version.outputs.version }}-
             - name: 'ENV: display variables'
               run: $JHI_SCRIPTS/01-display-configuration.sh
             - name: 'TOOLS: configure tools installed by the system'
@@ -259,32 +297,42 @@ jobs:
             #----------------------------------------------------------------------
             # Launch tests
             #----------------------------------------------------------------------
-            - name: 'TESTS: Start docker-compose containers'
-              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-              run: $JHI_SCRIPTS/20-docker-compose.sh
+            - name: 'TESTS: Start docker-compose containers for e2e and backend tests'
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true' && matrix.testcontainers != 1
+              run: npm run ci:e2e:prepare:docker
             - name: 'TESTS: backend'
+              id: backend
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-              run: $JHI_SCRIPTS/21-tests-backend.sh
+              run: npm run ci:backend:test
             - name: 'TESTS: frontend'
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-              run: $JHI_SCRIPTS/22-tests-frontend.sh
+              run: npm run ci:frontend:test
             - name: 'TESTS: packaging'
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-              run: $JHI_SCRIPTS/23-package.sh
+              run: npm run ci:e2e:package
             - name: 'E2E: Synchronize chromedriver version'
               if: matrix.e2e == 1 && steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: npm run e2e:update-webdriver -- --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
               working-directory: ${{ github.workspace }}/app
+            - name: 'TESTS: Start docker-compose containers for e2e tests'
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true' && matrix.testcontainers == 1
+              run: npm run ci:e2e:prepare:docker
             - name: 'E2E: Run'
               id: e2e
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-              run: $JHI_SCRIPTS/24-tests-e2e.sh
+              run: npm run ci:e2e:run --if-present
+            - name: 'BACKEND: Store failure logs'
+              uses: actions/upload-artifact@v2
+              if: always() && steps.backend.outcome == 'failure'
+              with:
+                  name: log-${{ matrix.app-type }}
+                  path: ${{ github.workspace }}/app/build/test-results/**/*.xml
             - name: 'E2E: Store failure screenshots'
               uses: actions/upload-artifact@v2
               if: always() && steps.e2e.outcome == 'failure'
               with:
                   name: screenshots-${{ matrix.app-type }}
-                  path: ${{ github.workspace }}/app/target/cypress/screenshots
+                  path: ${{ github.workspace }}/app/*/cypress/screenshots
             - name: 'ANALYSIS: Sonar analysis'
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: $JHI_SCRIPTS/25-sonar-analyze.sh

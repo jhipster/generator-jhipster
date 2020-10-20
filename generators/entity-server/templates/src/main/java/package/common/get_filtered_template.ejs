@@ -20,6 +20,7 @@
 const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
 const mapper = entityInstance  + 'Mapper';
 const entityToDtoReference = mapper + '::' + 'toDto';
+const reactiveSql = (databaseType === 'sql' && reactive);
 for (const idx in relationships) { if (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide !== true) { %>
 
     /**
@@ -27,13 +28,21 @@ for (const idx in relationships) { if (relationships[idx].relationshipType === '
      *  @return the list of entities.
      */<% if (databaseType === 'sql') { %>
     @Transactional(readOnly = true) <% } %>
-    public List<<%= instanceType %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull() {
+    public <%= reactiveSql ? 'Flux' : 'List' %><<%= instanceType %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull() {
         log.debug("Request to get all <%= entityInstancePlural %> where <%= relationships[idx].relationshipNameCapitalized %> is null");
+        <%_ if (reactiveSql) { _%>
+        return <%= entityInstance %>Repository.findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull()<% if (dto === 'mapstruct') { _%>
+             .map(<%= entityToDtoReference %>)<%_ } _%>;
+        <%_ } else { _%>
         return StreamSupport
             .stream(<%= entityInstance %>Repository.findAll().spliterator(), false)
-            .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null)<% if (dto === 'mapstruct') { %>
+            .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null)
+            <%_ if (dto === 'mapstruct') { _%>
             .map(<%= entityToDtoReference %>)
-            .collect(Collectors.toCollection(LinkedList::new));<% } else { %>
-            .collect(Collectors.toList());<% } %>
+            .collect(Collectors.toCollection(LinkedList::new));
+            <%_ } else { _%>
+            .collect(Collectors.toList());
+            <%_ } _%>
+        <%_ } _%>
     }
 <% } } %>

@@ -2,6 +2,7 @@
     "userManagement": {
         "home": {
             "title": "ইউজার",
+            "refreshListLabel": "Refresh list",
             "createLabel": "নতুন ইউজার তৈরি",
             "createOrEditLabel": "ইউজার তৈরি ওঠবার পরিবর্তন"
         },

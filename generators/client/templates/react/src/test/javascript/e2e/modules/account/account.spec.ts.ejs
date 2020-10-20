@@ -90,7 +90,7 @@ describe('Account', () => {
       // Okta
       const error = element(by.css('.infobox-error'));
       await waitUntilDisplayed(error);
-      expect(await error.getText()).to.eq('Sign in failed!');
+      expect(await error.getText()).to.eq('Unable to sign in');
     }
     await signInPage.clearUserName();
     await signInPage.clearPassword();
@@ -115,7 +115,6 @@ describe('Account', () => {
     await navBarPage.autoSignOut();
       <%_ } _%>
     <%_ } else { _%>
-    // Keycloak credentials by default, change them to be able to use oauth2 with Okta
     await signInPage.loginWithOAuth(username, password);
     const success = element(by.className('alert-success'));
     await waitUntilDisplayed(success);

@@ -253,7 +253,7 @@ function fillUnaryAndBinaryOptions() {
             })
         );
     }
-    const convertedOptions = convertOptions(parsedContent.options);
+    const convertedOptions = convertOptions(parsedContent.options, parsedContent.useOptions);
     convertedOptions.forEach(convertedOption => {
         jdlObject.addOption(convertedOption);
     });

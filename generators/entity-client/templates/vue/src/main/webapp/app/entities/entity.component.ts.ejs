@@ -148,6 +148,10 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
     });
   }
 
+  public handleSyncList(): void {
+    this.clear();
+  }
+
   <%_ if (!readOnly) { _%>
   public prepareRemove(instance: I<%= entityAngularName %>) : void {
     this.removeId = instance.id;
@@ -164,6 +168,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
       const message = 'A <%= entityAngularName %> is deleted with identifier ' + this.removeId;
       <%_ } _%>
       this.$bvToast.toast(message.toString(), {
+        toaster: 'b-toaster-top-center',
         title: 'Info',
         variant: 'danger',
         solid: true,

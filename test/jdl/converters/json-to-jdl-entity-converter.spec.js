@@ -31,7 +31,7 @@ const {
         dto: { MAPSTRUCT },
         pagination,
         service: { SERVICE_CLASS },
-        search: { ELASTIC_SEARCH },
+        search: { ELASTICSEARCH },
     },
 } = require('../../../jdl/jhipster/binary-options');
 
@@ -117,7 +117,7 @@ describe('JSONToJDLEntityConverter', () => {
                         jdlObject
                             .getOptions()
                             .filter(
-                                option => option.name === SEARCH && option.value === ELASTIC_SEARCH && option.entityNames.has('Employee')
+                                option => option.name === SEARCH && option.value === ELASTICSEARCH && option.entityNames.has('Employee')
                             ).length
                     ).to.equal(1);
                     expect(

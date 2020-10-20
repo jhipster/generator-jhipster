@@ -21,6 +21,9 @@ const chalk = require('chalk');
 const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const {
+    SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR },
+} = require('../generator-constants');
 
 let useBlueprints;
 
@@ -59,7 +62,15 @@ module.exports = class extends BaseBlueprintGenerator {
 
     // Public API method used by the getter and also by Blueprints
     _writing() {
-        return { ...writeFiles(), ...super._missingPostWriting() };
+        return {
+            cleanup() {
+                if (this.isJhipsterVersionLessThan('7.0.0') && this.jhipsterConfig.clientFramework === ANGULAR) {
+                    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.route.ts`);
+                }
+            },
+            ...writeFiles(),
+            ...super._missingPostWriting(),
+        };
     }
 
     get writing() {

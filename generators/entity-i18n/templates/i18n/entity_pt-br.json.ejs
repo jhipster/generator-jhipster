@@ -18,20 +18,36 @@
 -%><%
 let helpBlocks = 0; %>
 {
-    <% // Male (default) variant
-    if (entityI18nVariant !== 'female') { %>
+    <%_ // Male (default) variant
+    let Um = 'Um';
+    let novo = 'novo';
+    let criado = 'criado';
+    let atualizado = 'atualizado';
+    let excluido = 'excluído';
+    let Nenhum = 'Nenhum';
+    let encontrado = 'encontrado';
+    if (entityI18nVariant === 'female') {
+        Um = 'Uma';
+        novo = 'nova';
+        criado = 'criada';
+        atualizado = 'atualizada';
+        excluido = 'excluída';
+        Nenhum = 'Nenhuma';
+        encontrado = 'encontrada';
+    } _%>
     "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
-                "createLabel": "Criar novo <%= entityClassHumanized %>",
+                "refreshListLabel": "Atualizar lista",
+                "createLabel": "Criar <%= novo %> <%= entityClassHumanized %>",
                 "createOrEditLabel": "Criar ou editar <%= entityClassHumanized %>"<% if (searchEngine !== false) { %>,
                 "search": "Pesquisar por <%= entityClassHumanized %>"<% } %>,
-                "notFound": "Nenhum <%= entityClassHumanized %> encontrado"
+                "notFound": "<%= Nenhum %> <%= entityClassHumanized %> <%= encontrado %>"
             },<% if (!microserviceAppName) { %>
-            "created": "Um novo <%= entityClassHumanized %> foi criado com o identificador {{ param }}",
-            "updated": "Um <%= entityClassHumanized %> foi atualizado com o identificador {{ param }}",
-            "deleted": "Um <%= entityClassHumanized %> foi excluído com o identificador {{ param }}",<% } %>
+            "created": "<%= Um %> <%= novo %> <%= entityClassHumanized %> foi <%= criado %> com o identificador {{ param }}",
+            "updated": "<%= Um %> <%= entityClassHumanized %> foi <%= atualizado %> com o identificador {{ param }}",
+            "deleted": "<%= Um %> <%= entityClassHumanized %> foi <%= excluido %> com o identificador {{ param }}",<% } %>
             "delete": {
                 "question": "Tem certeza de que deseja excluir <%= entityClassHumanized %> {{ id }}?"
             },
@@ -49,52 +65,14 @@ let helpBlocks = 0; %>
             } %>
             }<% } %>
         }
-    }<%     if (microserviceAppName) { %>,
+    }
+<%_ if (microserviceAppName) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "Um novo <%= entityClassHumanized %> foi criado com o identificador {{ param }}",
-            "updated": "Um <%= entityClassHumanized %> foi atualizado com o identificador {{ param }}",
-            "deleted": "Um <%= entityClassHumanized %> foi excluído com o identificador {{ param }}"
+            "created": "<%= Um %> <%= novo %> <%= entityClassHumanized %> foi <%= criado %> com o identificador {{ param }}",
+            "updated": "<%= Um %> <%= entityClassHumanized %> foi <%= atualizado %> com o identificador {{ param }}",
+            "deleted": "<%= Um %> <%= entityClassHumanized %> foi <%= excluido %> com o identificador {{ param }}"
         }
-    }<%     } %>
-    <% } else {
-      // Female variant %>
-    "<%= frontendAppName %>": {
-        "<%= entityTranslationKey %>" : {
-            "home": {
-                "title": "<%= entityClassPluralHumanized %>",
-                "createLabel": "Criar nova <%= entityClassHumanized %>",
-                "createOrEditLabel": "Criar ou editar <%= entityClassHumanized %>"<% if (searchEngine !== false) { %>,
-                "search": "Pesquisar por <%= entityClassHumanized %>"<% } %>,
-                "notFound": "Nenhuma <%= entityClassHumanized %> encontrada"
-            },<% if (!microserviceAppName) { %>
-            "created": "Uma nova <%= entityClassHumanized %> foi criada com o identificador {{ param }}",
-            "updated": "Uma <%= entityClassHumanized %> foi atualizada com o identificador {{ param }}",
-            "deleted": "Uma <%= entityClassHumanized %> foi excluída com o identificador {{ param }}",<% } %>
-            "delete": {
-                "question": "Tem certeza de que deseja excluir <%= entityClassHumanized %> {{ id }}?"
-            },
-            "detail": {
-                "title": "<%= entityClassHumanized %>"
-            }<% for (idx in fields) {
-            if (typeof fields[idx].javadoc !== 'undefined') ++helpBlocks; %>,
-            "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
-            "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
-            "help": {<% for (idx in fields) {
-                if (fields[idx].javadoc) {
-                    --helpBlocks; %>
-                "<%= fields[idx].fieldName %>": "<%= fields[idx].javadoc %>"<% if (helpBlocks > 0) { %>,<% }
-                }
-            } %>
-            }<% } %>
-        }
-    }<%     if (microserviceAppName) { %>,
-    "<%= microserviceAppName %>": {
-        "<%= entityTranslationKey %>" : {
-            "created": "Uma nova <%= entityClassHumanized %> foi criada com o identificador {{ param }}",
-            "updated": "Uma <%= entityClassHumanized %> foi atualizada com o identificador {{ param }}",
-            "deleted": "Uma <%= entityClassHumanized %> foi excluída com o identificador {{ param }}"
-        }
-    }<%     } %>
-    <% } %>
+    }
+<%_ } _%>
 }

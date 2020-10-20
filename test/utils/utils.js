@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const path = require('path');
 const os = require('os');
 const assert = require('yeoman-assert');
@@ -58,14 +59,14 @@ function getJHipsterCli() {
 
 function _prepareTempEnv() {
     const cwd = process.cwd();
-    const tempDir = path.join(os.tmpdir(), 'jhitemp');
+    const tempDir = path.join(os.tmpdir(), crypto.randomBytes(20).toString('hex'));
     process.chdir(os.tmpdir());
     if (fs.existsSync(tempDir)) {
         fs.rmdirSync(tempDir, { recursive: true });
     }
     fs.mkdirSync(tempDir, { recursive: true });
     process.chdir(tempDir);
-    return { cwd, tempDir };
+    return { cwd, tempDir: process.cwd() };
 }
 
 /**
@@ -75,31 +76,33 @@ function _prepareTempEnv() {
 function prepareTempDir() {
     const testEnv = _prepareTempEnv();
     return () => {
-        revertTempDir(testEnv.cwd);
-        fs.rmdirSync(testEnv.tempDir, { recursive: true });
+        revertTempDir(testEnv.cwd, testEnv.tempDir);
     };
 }
 
-function testInTempDir(cb, keepInTestDir) {
+function testInTempDir(cb) {
     const preparedEnv = _prepareTempEnv();
     const cwd = preparedEnv.cwd;
     const cbReturn = cb(preparedEnv.tempDir);
     if (cbReturn instanceof Promise) {
         return cbReturn.then(() => {
-            if (!keepInTestDir) {
-                revertTempDir(cwd);
-            }
             return cwd;
         });
-    }
-    if (!keepInTestDir) {
-        revertTempDir(cwd);
     }
     return cwd;
 }
 
-function revertTempDir(cwd) {
-    process.chdir(cwd);
+function revertTempDir(dest = path.join(__dirname, '..', '..'), tempDir) {
+    if (tempDir === undefined) {
+        const cwd = process.cwd();
+        if (cwd.includes(os.tmpdir())) {
+            tempDir = cwd;
+        }
+    }
+    if (tempDir && dest !== tempDir) {
+        fs.rmdirSync(tempDir, { recursive: true });
+    }
+    process.chdir(dest);
 }
 
 function copyTemplateBlueprints(destDir, ...blueprintNames) {

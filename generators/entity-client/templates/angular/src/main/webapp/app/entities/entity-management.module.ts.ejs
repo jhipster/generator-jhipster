@@ -26,15 +26,21 @@ import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>
 import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
 import { <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
-import { <%= entityInstance %>Route } from './<%= entityFileName %>.route';
 
 @NgModule({
     imports: [
         SharedModule,
-        RouterModule.forChild(<%= entityInstance %>Route)
+        RouterModule,
     ],
     declarations: [
         <%= entityAngularName %>Component,
+        <%= entityAngularName %>DetailComponent,
+        <%_ if (!readOnly) { _%>
+        <%= entityAngularName %>UpdateComponent,
+        <%= entityAngularName %>DeleteDialogComponent,
+        <%_ } %>
+    ],
+    exports: [
         <%= entityAngularName %>DetailComponent,
         <%_ if (!readOnly) { _%>
         <%= entityAngularName %>UpdateComponent,

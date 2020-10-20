@@ -73,7 +73,7 @@ describe('account', () => {
         } else {
             // Okta
             const error = element(by.css('.infobox-error'));
-            expect(await error.getText()).to.eq('Sign in failed!');
+            expect(await error.getText()).to.eq('Unable to sign in');
         }
     <%_ } _%>
     });

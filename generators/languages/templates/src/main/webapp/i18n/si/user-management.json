@@ -2,6 +2,7 @@
     "userManagement": {
         "home": {
             "title": "පරිශීලකයින්",
+            "refreshListLabel": "Refresh list",
             "createLabel": "නව පරිශීලකයෙකු සාදන්න",
             "createOrEditLabel": "පරිශීලකයෙකු සාදන්න හෝ සංස්කරණය කරන්න"
         },

@@ -8,14 +8,39 @@ services:
             - SPRING_DATASOURCE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
             - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
     mspsql-postgresql:
-        extends:
-            file: postgresql.yml
-            service: mspsql-postgresql
+        image: <%= DOCKER_POSTGRESQL %>
+        # volumes:
+        #     - ~/volumes/jhipster/mspsql/postgresql/:/var/lib/postgresql/
+        environment:
+            - POSTGRES_USER=mspsql
+            - POSTGRES_PASSWORD=
+        ports:
+            - 5432:5432
     mspsql-elasticsearch:
-        extends:
-            file: elasticsearch.yml
-            service: mspsql-elasticsearch
+        image: <%= DOCKER_ELASTICSEARCH %>
+        # volumes:
+        #     - ~/volumes/jhipster/mspsql/elasticsearch/:/usr/share/elasticsearch/data/
+        ports:
+            - 9200:9200
+            - 9300:9300
     jhipster-registry:
-        extends:
-            file: jhipster-registry.yml
-            service: jhipster-registry
+        image: <%= DOCKER_JHIPSTER_REGISTRY %>
+        volumes:
+            - ./central-server-config:/central-config
+        # By default the JHipster Registry runs with the "dev" and "native"
+        # Spring profiles.
+        # "native" profile means the filesystem is used to store data, see
+        # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+        environment:
+            - _JAVA_OPTIONS=-Xmx512m -Xms256m
+            - SPRING_PROFILES_ACTIVE=dev<% if (authenticationType === 'oauth2') { %>,oauth2<% } %><% if (authenticationType === 'uaa') { %>,uaa<% } %>
+            - SPRING_SECURITY_USER_PASSWORD=<%= adminPassword %>
+            - JHIPSTER_REGISTRY_PASSWORD=<%= adminPassword %>
+            - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+            - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
+            # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+            # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+            # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+        ports:
+            - 8761:8761
+

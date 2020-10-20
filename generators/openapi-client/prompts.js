@@ -18,7 +18,7 @@
  */
 const path = require('path');
 const shelljs = require('shelljs');
-const request = require('sync-request');
+const request = require('then-request');
 
 module.exports = {
     askActionType,
@@ -26,11 +26,11 @@ module.exports = {
     askGenerationInfos,
 };
 
-function fetchSwaggerResources(input) {
+async function fetchSwaggerResources(input) {
     const availableDocs = [];
 
     const baseUrl = input.replace(/\/$/, '');
-    const swaggerResources = request('GET', `${baseUrl}/swagger-resources`, {
+    const swaggerResources = await request('GET', `${baseUrl}/swagger-resources`, {
         // This header is needed to use the custom /swagger-resources controller
         // and not the default one that has only the gateway's swagger resource
         headers: { Accept: 'application/json, text/javascript;' },
@@ -49,10 +49,8 @@ function fetchSwaggerResources(input) {
 
 function askActionType() {
     if (this.options.regen) {
-        return;
+        return undefined;
     }
-
-    const done = this.async();
 
     const hasExistingApis = Object.keys(this.openApiClients).length !== 0;
 
@@ -95,9 +93,9 @@ function askActionType() {
             name: 'jhipsterEndpoint',
             message: 'Enter the URL of the running Jhipster instance',
             default: 'http://localhost:8080',
-            validate: input => {
+            validate: async input => {
                 try {
-                    const availableDocs = fetchSwaggerResources(input);
+                    const availableDocs = await fetchSwaggerResources(input);
 
                     if (availableDocs.length === 0) {
                         return `No live doc found at ${input}`;
@@ -135,10 +133,10 @@ function askActionType() {
             message: 'Where is your Swagger/OpenAPI spec (URL or path) ?',
             default: 'http://petstore.swagger.io/v2/swagger.json',
             store: true,
-            validate: input => {
+            validate: async input => {
                 try {
                     if (/^((http|https):\/\/)/.test(input)) {
-                        request('GET', `${input}`, {
+                        await request('GET', `${input}`, {
                             // headers: { Accept: 'application/json, text/javascript;' }
                         });
                     } else if (!shelljs.test('-f', input)) {
@@ -152,15 +150,7 @@ function askActionType() {
         },
     ];
 
-    this.prompt(prompts).then(props => {
-        if (props.jhipsterEndpoint !== undefined) {
-            props.availableDocs = fetchSwaggerResources(props.jhipsterEndpoint);
-        } else if (props.jhipsterDirectory !== undefined) {
-            props.inputSpec = `${props.jhipsterDirectory}/src/main/resources/swagger/api.yml`;
-        } else if (props.customEndpoint !== undefined) {
-            props.inputSpec = props.customEndpoint;
-        }
-
+    return this.prompt(prompts).then(props => {
         if (newClient) {
             props.action = 'new';
         }
@@ -168,15 +158,25 @@ function askActionType() {
         props.generatorName = this.config.get('reactive') ? 'java' : 'spring';
 
         this.props = props;
-        done();
+
+        if (props.jhipsterEndpoint !== undefined) {
+            return fetchSwaggerResources(props.jhipsterEndpoint).then(availableDocs => {
+                props.availableDocs = availableDocs;
+            });
+        }
+        if (props.jhipsterDirectory !== undefined) {
+            props.inputSpec = `${props.jhipsterDirectory}/src/main/resources/swagger/api.yml`;
+        } else if (props.customEndpoint !== undefined) {
+            props.inputSpec = props.customEndpoint;
+        }
+        return undefined;
     });
 }
 
 function askExistingAvailableDocs() {
     if (this.options.regen) {
-        return;
+        return undefined;
     }
-    const done = this.async();
 
     const prompts = [
         {
@@ -188,21 +188,19 @@ function askExistingAvailableDocs() {
         },
     ];
 
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         if (props.availableDoc !== undefined) {
             this.props.inputSpec = props.availableDoc.url;
             this.props.cliName = props.availableDoc.name === 'default' ? 'apidocs' : props.availableDoc.name; // "default" cannot be used as it's a keyword in java
         }
-        done();
     });
 }
 
 function askGenerationInfos() {
     if (this.options.regen) {
-        return;
+        return undefined;
     }
 
-    const done = this.async();
     const prompts = [
         {
             when:
@@ -255,12 +253,11 @@ function askGenerationInfos() {
         },
     ];
 
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         if (props.cliName !== undefined) {
             this.props.cliName = props.cliName;
         }
         this.props.saveConfig = props.saveConfig;
         this.props.selected = props.selected;
-        done();
     });
 }

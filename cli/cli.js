@@ -23,7 +23,6 @@ const didYouMean = require('didyoumean');
 const packageJson = require('../package.json');
 const { CLI_NAME, initHelp, logger, toString, getCommand, getCommandOptions, getArgs, done, buildCommanderOptions } = require('./utils');
 const EnvironmentBuilder = require('./environment-builder');
-const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
 const { packageNameToNamespace } = require('../generators/utils');
 
@@ -51,7 +50,8 @@ program
     .option('--dry-run', 'Print conflicts', false)
     .option('--whitespace', 'Whitespace changes will not trigger conflicts', false)
     .option('--bail', 'Fail on first conflict', false)
-    .option('--skip-regenerate', "Don't regenerate identical files", false);
+    .option('--skip-regenerate', "Don't regenerate identical files", false)
+    .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false);
 
 /* setup debugging */
 logger.init(program);
@@ -225,8 +225,5 @@ Object.entries(allCommands).forEach(([key, opts]) => {
 
 /* Generate useful help info during typos */
 initHelp(program, CLI_NAME);
-
-/* Enable autocompletion: This needs to right before parsing argv */
-initAutoCompletion(program, CLI_NAME);
 
 program.parse(process.argv);

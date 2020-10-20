@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const mkdirp = require('mkdirp');
 const cleanup = require('../cleanup');
 const constants = require('../generator-constants');
 
@@ -40,7 +39,7 @@ const shouldSkipUserManagement = generator =>
 const serverFiles = {
     jib: [
         {
-            path: 'src/main/jib/',
+            path: 'src/main/docker/jib/',
             templates: ['entrypoint.sh'],
         },
     ],
@@ -543,6 +542,19 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator =>
+                !generator.reactive &&
+                generator.authenticationType === 'oauth2' &&
+                (generator.applicationType === 'microservice' || generator.applicationType === 'gateway'),
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/security/oauth2/AuthorizationHeaderUtilTest.java',
+                    renameTo: generator => `${generator.javaDir}security/oauth2/AuthorizationHeaderUtilTest.java`,
+                },
+            ],
+        },
+        {
             condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType !== 'oauth2',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -899,6 +911,15 @@ const serverFiles = {
                 },
             ],
         },
+        {
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/GeneratedByJHipster.java',
+                    renameTo: generator => `${generator.javaDir}GeneratedByJHipster.java`,
+                },
+            ],
+        },
     ],
     serverJavaConfig: [
         {
@@ -1023,6 +1044,30 @@ const serverFiles = {
                 {
                     file: 'package/config/LiquibaseConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/LiquibaseConfiguration.java`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.databaseType === 'sql' && generator.reactive,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/service/ColumnConverter.java',
+                    renameTo: generator => `${generator.javaDir}service/ColumnConverter.java`,
+                },
+                {
+                    file: 'package/service/EntityManager.java',
+                    renameTo: generator => `${generator.javaDir}service/EntityManager.java`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.databaseType === 'sql' && generator.reactive && !generator.skipUserManagement,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/repository/rowmapper/UserRowMapper.java',
+                    renameTo: generator => `${generator.javaDir}repository/rowmapper/UserRowMapper.java`,
                 },
             ],
         },
@@ -1491,15 +1536,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => {
-                if (generator.gatlingTests) {
-                    mkdirp(`${TEST_DIR}gatling/user-files/data`);
-                    mkdirp(`${TEST_DIR}gatling/user-files/bodies`);
-                    mkdirp(`${TEST_DIR}gatling/user-files/simulations`);
-                    return true;
-                }
-                return false;
-            },
+            condition: generator => generator.gatlingTests,
             path: TEST_DIR,
             templates: [
                 // Create Gatling test files
@@ -1870,9 +1907,6 @@ function writeFiles() {
             this.javaDir = `${this.packageFolder}/`;
             this.testDir = `${this.packageFolder}/`;
 
-            // Create Java resource files
-            mkdirp(SERVER_MAIN_RES_DIR);
-            mkdirp(`${SERVER_TEST_SRC_DIR}/${this.testDir}`);
             this.generateKeyStore();
         },
 

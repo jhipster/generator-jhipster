@@ -72,11 +72,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
     <%_ } else { _%>
+
 import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.data.relational.core.query.Criteria;
+import org.springframework.data.relational.core.sql.Column;
+import org.springframework.data.relational.core.sql.Expression;
+import org.springframework.data.relational.core.sql.Table;
+
     <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
@@ -122,6 +127,8 @@ import java.util.Optional;
     <%_ if (authenticationType !== 'oauth2') { _%>
 import java.time.LocalDateTime;
     <%_ } _%>
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 <%_ } _%>
@@ -145,10 +152,14 @@ import static <%= packageName %>.config.Constants.ID_DELIMITER;
 <%_
     let optionalOrMono = reactive ? 'Mono' : 'Optional';
     let listOrFlux = reactive ? 'Flux' : 'List';
+    let userPkType = 'String';
+    if (databaseType === 'sql' && authenticationType !== 'oauth2') {
+        userPkType = 'Long';
+    }
 _%>
 <%_ if ((databaseType === 'sql' && !reactive) || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
 @Repository
-public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<<%= asEntity('User') %>, <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<<%= asEntity('User') %>, String><%if (searchEngine === 'couchbase') { %>, SearchCouchbaseRepository<<%= asEntity('User') %>, String><% } } %> {
+public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<<%= asEntity('User') %>, <%= userPkType %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<<%= asEntity('User') %>, String><%if (searchEngine === 'couchbase') { %>, SearchCouchbaseRepository<<%= asEntity('User') %>, String><% } } %> {
     <%_ if (cacheManagerIsAvailable === true) { _%>
 
     String USERS_BY_LOGIN_CACHE = "usersByLogin";
@@ -241,7 +252,7 @@ public interface UserRepository extends R2dbcRepository<User, <% if (authenticat
     Mono<Long> countAllByLoginNot(String anonymousUser);
 
     @Query("INSERT INTO <%= jhiTablePrefix %>_user_authority VALUES(:userId, :authority)")
-    Mono<Void> saveUserAuthority(<% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> userId, String authority);
+    Mono<Void> saveUserAuthority(<%= userPkType %> userId, String authority);
 
     @Query("DELETE FROM <%= jhiTablePrefix %>_user_authority")
     Mono<Void> deleteAllUserAuthorities();
@@ -341,6 +352,27 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
 
     <%_ } _%>
 }
+
+class UserSqlHelper {
+    static List<Expression> getColumns(Table table, String columnPrefix) {
+        List<Expression> columns = new ArrayList<>();
+        columns.add(Column.aliased("id", table, columnPrefix + "_id"));
+        columns.add(Column.aliased("login", table, columnPrefix + "_login"));
+        columns.add(Column.aliased("password_hash", table, columnPrefix + "_password"));
+        columns.add(Column.aliased("first_name", table, columnPrefix + "_first_name"));
+        columns.add(Column.aliased("last_name", table, columnPrefix + "_last_name"));
+        columns.add(Column.aliased("email", table, columnPrefix + "_email"));
+        columns.add(Column.aliased("activated", table, columnPrefix + "_activated"));
+        columns.add(Column.aliased("lang_key", table, columnPrefix + "_lang_key"));
+        columns.add(Column.aliased("image_url", table, columnPrefix + "_image_url"));
+        columns.add(Column.aliased("activation_key", table, columnPrefix + "_activation_key"));
+        columns.add(Column.aliased("reset_key", table, columnPrefix + "_reset_key"));
+        columns.add(Column.aliased("reset_date", table, columnPrefix + "_reset_date"));
+
+        return columns;
+    }
+}
+
 <%_ } else if (databaseType === 'cassandra') { _%>
 @Repository
 public class UserRepository {

@@ -57,6 +57,7 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
+                            otherEntityField: 'region',
                             relationshipType: 'one-to-many',
                             relationshipName: 'area',
                             otherEntityName: 'region',
@@ -120,6 +121,7 @@ describe('JDLImporter', () => {
                         {
                             relationshipType: 'one-to-many',
                             javadoc: 'A relationship',
+                            otherEntityField: 'id',
                             relationshipName: 'employee',
                             otherEntityName: 'employee',
                             otherEntityRelationshipName: 'department',
@@ -181,6 +183,7 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
+                            otherEntityField: 'id',
                             relationshipType: 'one-to-many',
                             relationshipName: 'job',
                             otherEntityName: 'job',
@@ -375,6 +378,7 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
+                            otherEntityField: 'id',
                             relationshipType: 'one-to-many',
                             relationshipName: 'country',
                             otherEntityName: 'country',
@@ -684,7 +688,7 @@ relationship OneToOne {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -720,7 +724,7 @@ relationship OneToOne {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -756,7 +760,7 @@ relationship OneToOne {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -787,7 +791,7 @@ relationship OneToOne {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -857,7 +861,7 @@ relationship OneToOne {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -893,7 +897,7 @@ relationship OneToOne {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -924,7 +928,7 @@ relationship OneToOne {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -1193,7 +1197,7 @@ relationship OneToOne {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -1229,7 +1233,7 @@ relationship OneToOne {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -1265,7 +1269,7 @@ relationship OneToOne {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -1296,7 +1300,7 @@ relationship OneToOne {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -1916,7 +1920,7 @@ paginate * with infinite-scroll
                             nativeLanguage: 'en',
                             packageFolder: 'com/mycompany/myapp',
                             packageName: 'com.mycompany.myapp',
-                            prodDatabaseType: 'mysql',
+                            prodDatabaseType: 'postgresql',
                             searchEngine: false,
                             serverPort: '8080',
                             serviceDiscoveryType: false,
@@ -1954,6 +1958,46 @@ relationship OneToMany {
 
             it('should not generate a bidirectional one-to-many relationship', () => {
                 expect(importState.exportedEntities[0].relationships).to.have.length(1);
+            });
+        });
+        context('when having the use-options', () => {
+            let importState;
+
+            before(() => {
+                const content = `application {
+  config {
+    baseName toto
+  }
+  entities A, B, C
+  use serviceImpl for * except C
+}
+
+entity A
+entity B
+entity C
+
+use mapstruct, elasticsearch for A, B except C`;
+                const importer = createImporterFromContent(content, {
+                    applicationName: 'toto',
+                    databaseType: 'sql',
+                });
+                importState = importer.import();
+            });
+            after(() => {
+                fse.removeSync('.jhipster');
+                fse.unlinkSync('.yo-rc.json');
+            });
+
+            it('should add the options', () => {
+                expect(importState.exportedEntities[0].dto).to.equal('mapstruct');
+                expect(importState.exportedEntities[1].dto).to.equal('mapstruct');
+                expect(importState.exportedEntities[2].dto).not.to.equal('mapstruct');
+                expect(importState.exportedEntities[0].service).to.equal('serviceImpl');
+                expect(importState.exportedEntities[1].service).to.equal('serviceImpl');
+                expect(importState.exportedEntities[2].service).not.to.equal('serviceImpl');
+                expect(importState.exportedEntities[0].searchEngine).to.equal('elasticsearch');
+                expect(importState.exportedEntities[1].searchEngine).to.equal('elasticsearch');
+                expect(importState.exportedEntities[2].searchEngine).not.to.equal('elasticsearch');
             });
         });
     });

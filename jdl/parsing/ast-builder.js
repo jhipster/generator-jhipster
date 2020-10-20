@@ -44,6 +44,7 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
             relationships: [],
             enums: [],
             options: {},
+            useOptions: [],
         };
 
         if (context.constantDeclaration) {
@@ -104,6 +105,12 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
                 const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
                 astResult.list = entityList;
                 astResult.excluded = excludedEntityList;
+            });
+        }
+
+        if (context.useOptionDeclaration) {
+            context.useOptionDeclaration.map(this.visit, this).forEach(option => {
+                ast.useOptions.push(option);
             });
         }
 
@@ -380,6 +387,10 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
         return getBinaryOptionFromContext(context, this);
     }
 
+    useOptionDeclaration(context) {
+        return getSpecialUnaryOptionDeclaration(context, this);
+    }
+
     filterDef(context) {
         let entityList = [];
         if (context.NAME) {
@@ -436,6 +447,7 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
             config: {},
             entities: { entityList: [], excluded: [] },
             options: {},
+            useOptions: [],
         };
 
         if (context.applicationSubConfig) {
@@ -479,6 +491,12 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
                 const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
                 astResult.list = entityList;
                 astResult.excluded = excludedEntityList;
+            });
+        }
+
+        if (context.useOptionDeclaration) {
+            context.useOptionDeclaration.map(this.visit, this).forEach(option => {
+                applicationSubDeclaration.useOptions.push(option);
             });
         }
 
@@ -597,6 +615,22 @@ function getBinaryOptionFromContext(context, visitor) {
     return {
         optionName: context.BINARY_OPTION[0].image,
         optionValue,
+        list,
+        excluded,
+    };
+}
+
+function getSpecialUnaryOptionDeclaration(context, visitor) {
+    const optionValues = context.NAME.map(name => name.image);
+    const list = visitor.visit(context.filterDef);
+
+    let excluded = [];
+    if (context.exclusion) {
+        excluded = visitor.visit(context.exclusion);
+    }
+
+    return {
+        optionValues,
         list,
         excluded,
     };

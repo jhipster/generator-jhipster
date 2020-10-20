@@ -741,11 +741,8 @@ describe('JHipster generator for entity', () => {
                     helpers
                         .run(require.resolve('../generators/entity'))
                         .inTmpDir(dir => {
-                            fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
-                            fse.copySync(
-                                path.join(__dirname, '../test/templates/export-jdl/.jhipster/Country.json'),
-                                path.join(dir, '.jhipster/Foo.json')
-                            );
+                            fse.copySync(path.join(__dirname, './templates/default-ng2'), dir);
+                            fse.copySync(path.join(__dirname, 'templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
                         })
                         .withArguments(['Foo'])
                         .withOptions({ regenerate: true, force: true })
@@ -770,10 +767,7 @@ describe('JHipster generator for entity', () => {
                         .run(require.resolve('../generators/entity'))
                         .inTmpDir(dir => {
                             fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
-                            fse.copySync(
-                                path.join(__dirname, '../test/templates/export-jdl/.jhipster/Country.json'),
-                                path.join(dir, '.jhipster/Foo.json')
-                            );
+                            fse.copySync(path.join(__dirname, 'templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
                         })
                         .withArguments(['Foo'])
                         .withOptions({ regenerate: true, force: true, skipDbChangelog: true })
@@ -799,10 +793,7 @@ describe('JHipster generator for entity', () => {
                         .run(require.resolve('../generators/entity'))
                         .inTmpDir(dir => {
                             fse.copySync(path.join(__dirname, '../test/templates/compose/05-cassandra'), dir);
-                            fse.copySync(
-                                path.join(__dirname, '../test/templates/export-jdl/.jhipster/Country.json'),
-                                path.join(dir, '.jhipster/Foo.json')
-                            );
+                            fse.copySync(path.join(__dirname, 'templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
                         })
                         .withArguments(['Foo'])
                         .withOptions({ regenerate: true, force: true, skipDbChangelog: true })
@@ -827,7 +818,7 @@ describe('JHipster generator for entity', () => {
                         .inTmpDir(dir => {
                             fse.copySync(path.join(__dirname, '../test/templates/default-microservice'), dir);
                             fse.copySync(
-                                path.join(__dirname, '../test/templates/export-jdl/.jhipster/Employee.json'),
+                                path.join(__dirname, 'templates/.jhipster/DtoServicePagination.json'),
                                 path.join(dir, '.jhipster/Foo.json')
                             );
                         })

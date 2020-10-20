@@ -102,9 +102,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator =>
-                (!generator.reactive || !['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(generator.databaseType)) &&
-                !generator.embedded,
+            condition: generator => !generator.reactive && !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -114,15 +112,26 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator =>
-                generator.reactive &&
-                ['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(generator.databaseType) &&
-                !generator.embedded,
+            condition: generator => generator.reactive && !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
                     file: 'package/repository/EntityReactiveRepository.java',
                     renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.reactive && generator.databaseType === 'sql' && !generator.embedded,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/repository/EntityReactiveRepositoryInternalImpl.java',
+                    renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}RepositoryInternalImpl.java`,
+                },
+                {
+                    file: 'package/repository/rowmapper/EntityRowMapper.java',
+                    renameTo: generator => `${generator.packageFolder}/repository/rowmapper/${generator.entityClass}RowMapper.java`,
                 },
             ],
         },

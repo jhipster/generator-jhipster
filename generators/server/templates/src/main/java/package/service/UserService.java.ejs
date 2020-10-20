@@ -226,7 +226,7 @@ public class UserService {
     <%_ } _%>
     public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> requestPasswordReset(String mail) {
         return userRepository.findOneByEmailIgnoreCase(mail)
-            .filter(<%= asEntity('User') %>::getActivated)
+            .filter(<%= asEntity('User') %>::isActivated)
             <%_ if (!reactive) { _%>
             .map(user -> {
                 user.setResetKey(RandomUtil.generateResetKey());
@@ -309,7 +309,7 @@ public class UserService {
     <%_ } else { // reactive _%>
         return userRepository.findOneByLogin(userDTO.getLogin().toLowerCase())
             .flatMap(existingUser -> {
-                if (!existingUser.getActivated()) {
+                if (!existingUser.isActivated()) {
                     <%_ if (cacheManagerIsAvailable === true) { _%>
                     this.clearUserCaches(existingUser);
                     <%_ } _%>
@@ -320,7 +320,7 @@ public class UserService {
             })
             .then(userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()))
             .flatMap(existingUser -> {
-                if (!existingUser.getActivated()) {
+                if (!existingUser.isActivated()) {
                     <%_ if (cacheManagerIsAvailable === true) { _%>
                     this.clearUserCaches(existingUser);
                     <%_ } _%>
@@ -380,7 +380,7 @@ public class UserService {
 
     <%_ if (!reactive) { _%>
     private boolean removeNonActivatedUser(<%= asEntity('User') %> existingUser) {
-        if (existingUser.getActivated()) {
+        if (existingUser.isActivated()) {
              return false;
         }
         userRepository.delete(existingUser);
