@@ -2136,7 +2136,9 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         } else {
             rootTemplatesPath = Array.isArray(rootTemplatesPath) ? rootTemplatesPath : [rootTemplatesPath];
             rootTemplatesAbsolutePath = _this.jhipsterTemplatesFolders
-                .map(templateFolder => rootTemplatesPath.map(relativePath => path.join(templateFolder, relativePath)))
+                .map(templateFolder =>
+                    rootTemplatesPath.map(relativePath => (relativePath ? path.join(templateFolder, relativePath) : templateFolder))
+                )
                 .flat();
         }
 

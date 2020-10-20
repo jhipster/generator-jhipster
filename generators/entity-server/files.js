@@ -270,7 +270,11 @@ function writeFiles() {
             if (this.skipServer) return;
 
             // write server side files
-            this.writeFilesToDisk(serverFiles);
+            if (this.reactive) {
+                this.writeFilesToDisk(serverFiles, ['reactive', '']);
+            } else {
+                this.writeFilesToDisk(serverFiles);
+            }
 
             if (this.databaseType === 'sql') {
                 if (['ehcache', 'caffeine', 'infinispan', 'redis'].includes(this.cacheProvider) && this.enableHibernateCache) {
