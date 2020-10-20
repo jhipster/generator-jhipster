@@ -66,25 +66,18 @@ install:
 script:
 <%_ if (buildTool === 'maven') { _%>
   - chmod +x mvnw
-  - ./mvnw -ntp checkstyle:check
-  - ./mvnw -ntp clean verify
 <%_ } else if (buildTool === 'gradle') { _%>
   - chmod +x gradlew
-  - ./gradlew checkstyleNohttp
-  - ./gradlew clean test integrationTest
 <%_ } _%>
+  - <%= clientPackageManager %> run ci:backend:test
 <%_ if (!skipClient) { _%>
-  <%_ if (buildTool === 'maven') { _%>
-  - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>' -Dmaven.repo.local=$MAVEN_USER_HOME
-  <%_ } else if (buildTool === 'gradle') { _%>
-  - ./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon
-  <%_ } _%>
+  - <%= clientPackageManager %> run ci:frontend:test
 <%_ } _%>
+  - <%= clientPackageManager %> run java:jar:prod
 <%_ if (buildTool === 'maven') { _%>
   <%_ if (cicdIntegrations.includes('sonar')) { _%>
   - if [ $TRAVIS_PULL_REQUEST == "false" ]; then ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN; fi
   <%_ } _%>
-  - ./mvnw -ntp verify -Pprod -DskipTests
   <%_ if (cicdIntegrations.includes('heroku')) { _%>
   - ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
   <%_ } _%>
@@ -92,11 +85,17 @@ script:
   <%_ if (cicdIntegrations.includes('sonar')) { _%>
   - if [ $TRAVIS_PULL_REQUEST == "false" ]; then ./gradlew sonarqube --no-daemon <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN; fi
   <%_ } _%>
-  - ./gradlew bootJar -Pprod -x test
   <%_ if (cicdIntegrations.includes('heroku')) { _%>
   - ./gradlew deployHeroku
   <%_ } _%>
 <%_ } _%>
+<%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) {
+    const commented = applicationType === 'gateway' ? '# ' : ''; _%>
+  <%= commented %>- <%= clientPackageManager %> run ci:e2e:prepare
+  <%= commented %>- <%= clientPackageManager %> run ci:e2e:run
+  <%= commented %>- <%= clientPackageManager %> run ci:e2e:teardown
+<%_ } _%>
+
 notifications:
   webhooks:
     on_success: change  # options: [always|never|change] default: always

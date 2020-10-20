@@ -7,8 +7,11 @@ import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vu
   let fieldsContainedValidators = [];
   for (idx in fields) {
     if (fields[idx].fieldValidate === true) {
-      if (!fieldsContainedValidators.includes('numeric') && ['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fields[idx].fieldType)) {
+      if (!fieldsContainedValidators.includes('numeric') && ['Integer', 'Long'].includes(fields[idx].fieldType)) {
         fieldsContainedValidators.push('numeric');
+      }
+      if (!fieldsContainedValidators.includes('decimal') && ['Float', 'Double', 'BigDecimal'].includes(fields[idx].fieldType)) {
+        fieldsContainedValidators.push('decimal');
       }
       if (!fieldsContainedValidators.includes('required') && fields[idx].fieldValidateRules.includes('required')) {
         fieldsContainedValidators.push('required');
@@ -39,17 +42,14 @@ import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vu
   _%>import {<%= validators %>} from 'vuelidate/lib/validators';
 <%_ } _%>
 <%_
-    let dateFnsIncluded = false;
+    let dayJsIncluded = false;
     for (idx in fields) {
         const fieldName = fields[ idx ].fieldName;
         const fieldType = fields[idx].fieldType;
-        if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType) && !dateFnsIncluded) {
-            dateFnsIncluded = true;
+        if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType) && !dayJsIncluded) {
+            dayJsIncluded = true;
 _%>
-import format from 'date-fns/format';
-import isValid from 'date-fns/isValid';
-import parse from 'date-fns/parse';
-import parseISO from 'date-fns/parseISO';
+import dayjs from 'dayjs';
 import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
     <%_ } } _%>
 
@@ -95,14 +95,17 @@ const validations: any = {
     <%_ if (fields[idx].fieldValidateRules.includes('maxlength')) { _%>
       maxLength: maxLength(<%= fields[idx].fieldValidateRulesMaxlength %>),
     <%_ } _%>
-    <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
-    numeric,
+    <%_ if (['Integer', 'Long'].includes(fieldType)) { _%>
+      numeric,
+    <%_ } _%>
+    <%_ if (['Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+      decimal,
+    <%_ } _%>
     <%_ if (fields[idx].fieldValidateRules.includes('min')) { _%>
       min: minValue(<%= fields[idx].fieldValidateRulesMin %>),
     <%_ } _%>
     <%_ if (fields[idx].fieldValidateRules.includes('max')) { _%>
       max: maxValue(<%= fields[idx].fieldValidateRulesMax %>),
-    <%_ } _%>
     <%_ } _%>
 
     <%_ } _%>
@@ -227,15 +230,15 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
             dateFunctionIncluded = true;
   _%>
     public convertDateTimeFromServer(date: Date): string {
-      if (date && isValid(date)) {
-        return format(date, DATE_TIME_LONG_FORMAT);
+      if (date && dayjs(date).isValid()) {
+        return dayjs(date).format(DATE_TIME_LONG_FORMAT);
       }
       return null;
     }
 
     public updateInstantField(field, event) {
       if (event.target.value) {
-        this.<%= entityInstance %>[field] = parse(event.target.value, DATE_TIME_LONG_FORMAT, new Date());
+        this.<%= entityInstance %>[field] = dayjs(event.target.value, DATE_TIME_LONG_FORMAT);
       } else {
         this.<%= entityInstance %>[field] = null;
       }
@@ -243,7 +246,7 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
 
     public updateZonedDateTimeField(field, event) {
       if (event.target.value) {
-        this.<%= entityInstance %>[field] = parse(event.target.value, DATE_TIME_LONG_FORMAT, new Date())
+        this.<%= entityInstance %>[field] = dayjs(event.target.value, DATE_TIME_LONG_FORMAT);
       } else {
         this.<%= entityInstance %>[field] = null;
       }

@@ -206,10 +206,17 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
         <%_ }) _%>
       <%_ } _%>
 
+      const cloneEntity = Object.assign({}, entity);
+      for (const property in entity) {
+        if (entity[property] === '') {
+          cloneEntity[property] = null;
+        }
+      }
+
       if (isNew) {
-        props.createEntity(entity);
+        props.createEntity(cloneEntity);
       } else {
-        props.updateEntity(entity);
+        props.updateEntity(cloneEntity);
       }
     }
   }

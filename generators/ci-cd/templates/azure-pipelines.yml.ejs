@@ -48,30 +48,45 @@ jobs:
 <%_ } _%>
   <%_ if (!skipServer) { _%>
     <%_ if (buildTool === 'maven') { _%>
-  - script: |
-      chmod +x mvnw
-      ./mvnw -ntp checkstyle:check
-      ./mvnw -ntp clean verify -P-webpack
-  <%_ } else if (buildTool === 'gradle') { _%>
-  - script: |
-      chmod +x gradlew
-      ./gradlew checkstyleNohttp
-      ./gradlew clean test integrationTest
+  - script: chmod +x mvnw
+    <%_ } else if (buildTool === 'gradle') { _%>
+  - script: chmod +x gradlew
     <%_ } _%>
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:backend:test'
     displayName: 'TESTS: backend'
   <%_ } _%>
 <%_ if (!skipClient) { _%>
   - task: Npm@1
     inputs:
       command: 'custom'
-      customCommand: 'run <%= frontTestCommand %>'
+      customCommand: ' run ci:frontend:test'
     displayName: 'TESTS: frontend'
 <%_ } _%>
 <%_ if (!skipServer) { _%>
-  <%_ if (buildTool === 'maven') { _%>
-  - script: ./mvnw -ntp verify -Pprod -DskipTests
-  <%_ } else if (buildTool === 'gradle') { _%>
-  - script: ./gradlew bootJar -Pprod -x test
-  <%_ } _%>
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run java:jar:prod'
     displayName: 'TESTS: packaging'
+<%_ } _%>
+<%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) {
+    const commented = applicationType === 'gateway' ? '# ' : ''; _%>
+  <%= commented %>- task: Npm@1
+  <%= commented %>  inputs:
+  <%= commented %>    command: 'custom'
+  <%= commented %>    customCommand: ' run ci:e2e:prepare'
+  <%= commented %>  displayName: 'E2E: Prepare'
+  <%= commented %>- task: Npm@1
+  <%= commented %>  inputs:
+  <%= commented %>    command: 'custom'
+  <%= commented %>    customCommand: ' run ci:e2e:run'
+  <%= commented %>  displayName: 'E2E: Run'
+  <%= commented %>- task: Npm@1
+  <%= commented %>  inputs:
+  <%= commented %>    command: 'custom'
+  <%= commented %>    customCommand: ' run ci:e2e:teardown'
+  <%= commented %>  displayName: 'E2E: Teardown'
 <%_ } _%>

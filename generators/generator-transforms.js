@@ -19,11 +19,6 @@
 const path = require('path');
 const through = require('through2');
 const prettier = require('prettier');
-const prettierJava = require('prettier-plugin-java');
-
-const prettierJavaOptions = {
-    plugins: [prettierJava],
-};
 
 const prettierTransform = function (defaultOptions) {
     return through.obj((file, encoding, callback) => {
@@ -76,6 +71,5 @@ const generatedAnnotationTransform = generator => {
 
 module.exports = {
     prettierTransform,
-    prettierJavaOptions,
     generatedAnnotationTransform,
 };

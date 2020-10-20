@@ -90,7 +90,7 @@ class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends Abs
              .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_VALIDATION))
              .andExpect(jsonPath("$.fieldErrors.[0].objectName").value("test"))
              .andExpect(jsonPath("$.fieldErrors.[0].field").value("test"))
-             .andExpect(jsonPath("$.fieldErrors.[0].message").value("NotNull"));
+             .andExpect(jsonPath("$.fieldErrors.[0].message").value("must not be null"));
     }
 
     @Test
@@ -216,7 +216,7 @@ class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends Abs
              .jsonPath("$.message").isEqualTo(ErrorConstants.ERR_VALIDATION)
              .jsonPath("$.fieldErrors.[0].objectName").isEqualTo("test")
              .jsonPath("$.fieldErrors.[0].field").isEqualTo("test")
-             .jsonPath("$.fieldErrors.[0].message").isEqualTo("NotNull");
+             .jsonPath("$.fieldErrors.[0].message").isEqualTo("must not be null");
     }
 
     @Test

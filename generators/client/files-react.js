@@ -30,6 +30,7 @@ const files = {
             templates: [
                 'package.json',
                 '.eslintrc.json',
+                '.eslint.react.js',
                 'tsconfig.json',
                 'tsconfig.test.json',
                 { file: '.editorconfig', method: 'copy', noEjs: true },
@@ -78,6 +79,7 @@ const files = {
                 { file: 'routes.tsx', method: 'processJsx' },
                 'typings.d.ts',
                 'config/constants.ts',
+                'config/dayjs.ts',
                 'config/axios-interceptor.ts',
                 { file: 'config/devtools.tsx', method: 'processJsx' },
                 'config/error-middleware.ts',
@@ -363,5 +365,5 @@ module.exports = {
 
 function writeFiles() {
     // write React files
-    this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/react'));
+    this.writeFilesToDisk(files, 'react');
 }

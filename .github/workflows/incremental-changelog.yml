@@ -27,6 +27,7 @@ on:
         branches:
             - '*'
         paths:
+            - 'jdl/**'
             - 'utils/**'
             - 'test-integration/incremental-changelog-samples/**'
             - 'generators/entity/**'
@@ -36,9 +37,9 @@ env:
     JHI_RUN_APP: 1
     JHI_JDK: 11
     JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
-    JHI_LIB_BRANCH: master
+    JHI_LIB_BRANCH: main
     JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
-    JHI_GEN_BRANCH: master
+    JHI_GEN_BRANCH: main
     SPRING_OUTPUT_ANSI_ENABLED: ALWAYS
     SPRING_JPA_SHOW_SQL: false
     JHI_DISABLE_WEBPACK_LOGS: true
@@ -105,12 +106,6 @@ jobs:
             - uses: actions/setup-java@v1
               with:
                   java-version: '11.x'
-            - name: 'SETUP: Get chrome/chromedriver version'
-              id: chromedriver-version
-              run: |
-                  CHROME_VERSION=$(google-chrome --version | cut -f 3 -d ' ' | cut -d '.' -f 1) \
-                  && CHROMEDRIVER_VERSION=$(curl --location --fail --retry 3 http://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}) \
-                  && echo "::set-output name=version::$CHROMEDRIVER_VERSION"
             - name: 'SETUP: Get date'
               id: get-date
               run: |
@@ -143,12 +138,10 @@ jobs:
               if: matrix.e2e == 1
               uses: actions/cache@v2
               with:
-                  path: |
-                      ~/.cache/selenium/
-                      ~/.cache/Cypress/
-                  key: ${{ runner.os }}-e2e-${{ matrix.app-type }}-${{ steps.chromedriver-version.outputs.version }}-${{ hashFiles('generator-jhipster/**/package.json.ejs') }}
+                  path: ~/.cache/Cypress/
+                  key: ${{ runner.os }}-e2e-${{ matrix.app-type }}-${{ hashFiles('generator-jhipster/**/package.json.ejs') }}
                   restore-keys: |
-                      ${{ runner.os }}-e2e-${{ matrix.app-type }}-${{ steps.chromedriver-version.outputs.version }}-
+                      ${{ runner.os }}-e2e-${{ matrix.app-type }}-
             - name: 'ENV: display variables'
               run: $JHI_SCRIPTS/01-display-configuration.sh
             - name: 'TOOLS: configure tools installed by the system'
@@ -190,10 +183,6 @@ jobs:
               run: $JHI_SCRIPTS/22-tests-frontend.sh
             - name: 'TESTS: packaging'
               run: $JHI_SCRIPTS/23-package.sh
-            - name: 'E2E: Synchronize chromedriver version'
-              if: matrix.e2e == 1
-              run: npm run e2e:update-webdriver -- --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
-              working-directory: ${{ github.workspace }}/app
             - name: 'E2E: Run'
               id: e2e
               run: $JHI_SCRIPTS/24-tests-e2e.sh

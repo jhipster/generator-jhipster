@@ -18,7 +18,7 @@
  */
 
 const { merge } = require('../utils/object-utils');
-const { formatDateForLiquibase, formatComment } = require('../utils/format-utils');
+const { formatComment } = require('../utils/format-utils');
 const { upperFirst } = require('../utils/string-utils');
 const { getTableNameFromEntityName } = require('./entity-table-name-creator');
 
@@ -32,7 +32,6 @@ class JSONEntity {
      *        - entityName, the entity name (mandatory)
      *        - fields, a field iterable
      *        - relationships, a relationship iterable
-     *        - changelogDate,
      *        - javadoc,
      *        - entityTableName, defaults to the snake-cased entity name,
      *        - dto, defaults to 'no',
@@ -52,7 +51,6 @@ class JSONEntity {
         this.name = merged.name;
         this.fields = merged.fields;
         this.relationships = merged.relationships;
-        this.changelogDate = merged.changelogDate;
         this.javadoc = merged.javadoc;
         this.entityTableName = merged.entityTableName;
         this.dto = merged.dto;
@@ -120,7 +118,6 @@ function defaults(entityName) {
         name: upperFirst(entityName),
         fields: [],
         relationships: [],
-        changelogDate: formatDateForLiquibase(),
         javadoc: formatComment(),
         entityTableName: getTableNameFromEntityName(entityName),
         dto: 'no',

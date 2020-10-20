@@ -18,7 +18,10 @@
  */
 const constants = require('../generator-constants');
 
-const { CLIENT_MAIN_SRC_DIR } = constants;
+const {
+    CLIENT_MAIN_SRC_DIR,
+    SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT },
+} = constants;
 
 module.exports = {
     writeFiles,
@@ -28,6 +31,10 @@ const commonFiles = {
     common: [
         {
             templates: ['.eslintignore', `${CLIENT_MAIN_SRC_DIR}manifest.webapp`],
+        },
+        {
+            condition: generator => [ANGULAR, REACT].includes(generator.jhipsterConfig.clientFramework),
+            templates: ['.eslint.common.js'],
         },
         {
             path: CLIENT_MAIN_SRC_DIR,
@@ -64,5 +71,5 @@ const commonFiles = {
 };
 
 function writeFiles() {
-    this.writeFilesToDisk(commonFiles, this, false, this.fetchFromInstalledJHipster('client/templates/common'));
+    this.writeFilesToDisk(commonFiles, 'common');
 }

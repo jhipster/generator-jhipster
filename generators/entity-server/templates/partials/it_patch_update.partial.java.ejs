@@ -43,12 +43,21 @@ partialUpdated<%= asEntity(entityClass) %>.setId(<%= asEntity(entityInstance) %>
 <%_ } _%>
 <%_ } _%>
 
-
+<%_ if (!reactive) { _%>
 rest<%= entityClass %>MockMvc.perform(patch("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
 .contentType("application/merge-patch+json")
 .content(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>)))
 .andExpect(status().isOk());
-
+<%_ } else { _%>
+webTestClient
+.patch()
+.uri("/api/<%= entityApiUrl %>")
+.contentType(MediaType.valueOf("application/merge-patch+json"))
+.bodyValue(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>))
+.exchange()
+.expectStatus()
+.isOk();
+<%_ } _%>
 
 // Validate the <%= entityClass %> in the database
 <%_ if (databaseType === 'couchbase') { _%>
@@ -62,6 +71,8 @@ assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
 <%_ } else if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { _%>
     assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
     assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>ContentType()).isEqualTo(<%= field.testWithConstant %>_CONTENT_TYPE);
+<%_ } else if (field.fieldType === 'BigDecimal'){ _%>
+    assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualByComparingTo(<%= field.testWithConstant %>);
 <%_ } else { _%>
     assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
 <%_ } } _%>

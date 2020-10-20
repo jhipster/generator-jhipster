@@ -30,18 +30,21 @@ const through = require('through2');
 const fs = require('fs');
 const minimatch = require('minimatch');
 const findUp = require('find-up');
+const prettierPluginJava = require('prettier-plugin-java');
+const prettierPluginPackagejson = require('prettier-plugin-packagejson');
 
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const { languageToJavaLanguage } = require('./utils');
-const { prettierTransform, prettierJavaOptions, generatedAnnotationTransform } = require('./generator-transforms');
+const { prettierTransform, generatedAnnotationTransform } = require('./generator-transforms');
 const JSONToJDLEntityConverter = require('../jdl/converters/json-to-jdl-entity-converter');
 const JSONToJDLOptionConverter = require('../jdl/converters/json-to-jdl-option-converter');
 
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 /**
  * This is the Generator base private class.
@@ -366,26 +369,27 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
 
     /**
-     * Update Moment Locales to keep in webpack prod build
+     * Update DayJS Locales to keep in dayjs.ts config file
      *
      * @param languages
      */
-    updateLanguagesInMomentWebpackNgx(languages) {
-        const fullPath = 'webpack/webpack.prod.js';
+    updateLanguagesInDayjsConfiguation(languages) {
+        const fullPath =
+            this.clientFramework === VUE
+                ? `${this.CLIENT_MAIN_SRC_DIR}app/shared/config/dayjs.ts`
+                : `${this.CLIENT_MAIN_SRC_DIR}app/config/dayjs.ts`;
         try {
-            let content = 'localesToKeep: [\n';
-            languages.forEach((language, i) => {
-                content += `                    '${this.getMomentLocaleId(language)}'${i !== languages.length - 1 ? ',' : ''}\n`;
-            });
-            content +=
-                '                    // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n' +
-                '                ]';
+            const content = languages.reduce(
+                (content, language) => `${content}import 'dayjs/locale/${this.getDayjsLocaleId(language)}'\n`,
+                '// jhipster-needle-i18n-language-dayjs-imports - JHipster will import languages from dayjs here\n'
+            );
 
             jhipsterUtils.replaceContent(
                 {
                     file: fullPath,
-                    pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
-                    content,
+                    // match needle until // DAYJS CONFIGURATION (excluded)
+                    pattern: /\/\/ jhipster-needle-i18n-language-dayjs-imports[\s\S]+?(?=\/\/ DAYJS CONFIGURATION)/g,
+                    content: `${content}\n`,
                 },
                 this
             );
@@ -393,42 +397,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             this.log(
                 chalk.yellow('\nUnable to find ') +
                     fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
-                    languages +
-                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Update Moment Locales to keep in webpack prod build
-     *
-     * @param languages
-     */
-    updateLanguagesInMomentWebpackReact(languages) {
-        const fullPath = 'webpack/webpack.prod.js';
-        try {
-            let content = 'localesToKeep: [\n';
-            languages.forEach((language, i) => {
-                content += `        '${this.getMomentLocaleId(language)}'${i !== languages.length - 1 ? ',' : ''}\n`;
-            });
-            content +=
-                '        // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n      ]';
-
-            jhipsterUtils.replaceContent(
-                {
-                    file: fullPath,
-                    pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
-                    content,
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
+                    chalk.yellow(' or missing required jhipster-needle. DayJS language task not updated with languages: ') +
                     languages +
                     chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
             );
@@ -1004,7 +973,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      * @param {boolean} embedded - either the actual entity is embedded or not
      * @returns variablesWithTypes: Array
      */
-    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment', embedded = false) {
+    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
         const variablesWithTypes = [];
         const tsKeyType = this.getTypescriptKeyType(pkType);
         if (!embedded) {
@@ -1363,7 +1332,11 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             if (!options.localDirectory) {
                 throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
             }
-            dbcUrl = `${protocol}:h2:file:${options.localDirectory}/${options.databaseName}`;
+            if (protocol === 'r2dbc') {
+                dbcUrl = `${protocol}:h2:file://${options.localDirectory}/${options.databaseName}`;
+            } else {
+                dbcUrl = `${protocol}:h2:file:${options.localDirectory}/${options.databaseName}`;
+            }
             extraOptions = ';DB_CLOSE_DELAY=-1';
         } else if (databaseType === 'h2Memory') {
             if (protocol === 'r2dbc') {
@@ -1457,9 +1430,9 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             return;
         }
 
-        let prettierOptions = {};
+        const prettierOptions = { plugins: [prettierPluginPackagejson] };
         if (!this.skipServer && !this.jhipsterConfig.skipServer) {
-            prettierOptions = prettierJavaOptions;
+            prettierOptions.plugins.push(prettierPluginJava);
         }
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
         const filterPatternForPrettier = `{,.,**/,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;

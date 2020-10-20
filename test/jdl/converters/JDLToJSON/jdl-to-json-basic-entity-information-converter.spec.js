@@ -28,7 +28,6 @@ const { expect } = require('chai');
 const JDLEntity = require('../../../../jdl/models/jdl-entity');
 const { convert } = require('../../../../jdl/converters/jdl-to-json/jdl-to-json-basic-entity-converter');
 const logger = require('../../../../jdl/utils/objects/logger');
-const { formatDateForLiquibase } = require('../../../../jdl/utils/format-utils');
 
 describe('JDLToJSONBasicEntityConverter', () => {
     describe('convert', () => {
@@ -99,7 +98,6 @@ describe('JDLToJSONBasicEntityConverter', () => {
                 it('should convert the entity', () => {
                     expect(convertedEntity).to.deep.equal({
                         applications: [],
-                        changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
                         dto: 'no',
                         embedded: false,
                         entityTableName: 'entity_a',

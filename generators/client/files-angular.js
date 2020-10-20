@@ -85,6 +85,8 @@ const files = {
                 'blocks/interceptor/error-handler.interceptor.ts',
                 'blocks/interceptor/notification.interceptor.ts',
                 'blocks/interceptor/auth-expired.interceptor.ts',
+                // config
+                'config/dayjs.ts',
             ],
         },
         {
@@ -456,5 +458,5 @@ module.exports = {
 
 function writeFiles() {
     // write angular 2.x and above files
-    this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/angular'));
+    this.writeFilesToDisk(files, 'angular');
 }

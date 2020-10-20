@@ -306,8 +306,6 @@ services:
             - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-registry
             - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
             <%_ } _%>
-            - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-            - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config/docker-config/
         # If you want to expose these ports outside your dev PC, 
         # remove the "127.0.0.1:" prefix
         ports:

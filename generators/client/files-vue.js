@@ -86,6 +86,7 @@ const vueFiles = {
                 'shared/config/axios-interceptor.ts',
                 'shared/config/config.ts',
                 'shared/config/config-bootstrap-vue.ts',
+                'shared/config/dayjs.ts',
                 'shared/config/store/account-store.ts',
                 'shared/security/authority.ts',
                 'router/index.ts',
@@ -324,7 +325,7 @@ const vueFiles = {
 
 function writeFiles() {
     // write Vue files
-    this.writeFilesToDisk(vueFiles, this, false, this.fetchFromInstalledJHipster('client/templates/vue'));
+    this.writeFilesToDisk(vueFiles, 'vue');
 
     if (!this.enableTranslation) {
         utils.vueReplaceTranslation(this, [

@@ -261,7 +261,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
 
     /**
      * Replace placeholders with versions from packageJsonSourceFile.
-     * @param {string} keyToPlace - PlaceHolder name.
+     * @param {string} keyToReplace - PlaceHolder name.
      * @param {string} packageJsonSourceFile - Package json filepath with actual versions.
      */
     replacePackageJsonVersions(keyToReplace, packageJsonSourceFile) {
@@ -297,6 +297,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * Add a new icon to icon imports.
      *
      * @param {string} iconName - The name of the Font Awesome icon.
+     * @param {string} clientFramework - The name of the client framework
      */
     addIcon(iconName, clientFramework) {
         if (clientFramework === ANGULAR) {
@@ -314,6 +315,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
+     * @param {string} translationKeyMenu - i18n key for entry in the menu
      */
     addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === ANGULAR) {
@@ -341,6 +343,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
+     * @param {string} translationKeyMenu - i18n key for entry in the admin menu
      */
     addElementToAdminMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === ANGULAR) {
@@ -358,6 +361,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
+     * @param {string} entityTranslationValue - i18n value for entity entry in menu
      */
     addEntityToMenu(
         routerName,
@@ -383,9 +387,10 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} entityName - Entity Name
      * @param {string} entityFolderName - Entity Folder Name
      * @param {string} entityFileName - Entity File Name
-     * @param {boolean} entityUrl - Entity router URL
+     * @param {string} entityUrl - Entity router URL
      * @param {string} clientFramework - The name of the client framework
      * @param {string} microServiceName - Microservice Name
+     * @param {boolean} readOnly - If the entity is read-only or not
      */
     addEntityToModule(
         entityInstance,
@@ -584,13 +589,13 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     }
 
     /**
-     * return the momentLocaleId from the given language key (from constants.LANGUAGES)
-     * if no momentLocaleId is defined, return the language key (which is a localeId itself)
+     * return the dayjsLocaleId from the given language key (from constants.LANGUAGES)
+     * if no dayjsLocaleId is defined, return the language key (which is a localeId itself)
      * @param {string} language - language key
      */
-    getMomentLocaleId(language) {
+    getDayjsLocaleId(language) {
         const langObj = this.getAllSupportedLanguageOptions().find(langObj => langObj.value === language);
-        return langObj.momentLocaleId || language;
+        return langObj.dayjsLocaleId || language;
     }
 
     /**
@@ -2043,22 +2048,55 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * write the given files using provided config.
      *
      * @param {object} files - files to write
-     * @param {object} generator - the generator instance to use
-     * @param {boolean} returnFiles - weather to return the generated file list or to write them
-     * @param {string} prefix - pefix to add to path
+     * @param {object} [generator = this] - the generator instance to use
+     * @param {boolean} [returnFiles = false] - weather to return the generated file list or to write them
+     * @param {string|string[]} [rootTemplatesPath] - path(s) to look for templates.
+     *        Single absolute path or relative path(s) between the templates folder and template path.
      */
-    writeFilesToDisk(files, generator, returnFiles, prefix) {
+    writeFilesToDisk(files, generator = this, returnFiles = false, rootTemplatesPath) {
+        if (typeof generator === 'string' || Array.isArray(generator)) {
+            rootTemplatesPath = generator;
+            generator = this;
+        } else if (typeof generator === 'boolean') {
+            rootTemplatesPath = returnFiles;
+            returnFiles = generator;
+            generator = this;
+        } else if (typeof returnFiles === 'string' || Array.isArray(returnFiles)) {
+            rootTemplatesPath = returnFiles;
+            returnFiles = false;
+        }
         const _this = generator || this;
         const filesOut = [];
         const startTime = new Date();
-        // using the fastest method for iterations
-        for (let i = 0, blocks = Object.keys(files); i < blocks.length; i++) {
-            for (let j = 0, blockTemplates = files[blocks[i]]; j < blockTemplates.length; j++) {
-                const blockTemplate = blockTemplates[j];
+
+        /* Build lookup order first has preference.
+         * Example
+         * rootTemplatesPath = ['reactive', 'common']
+         * jhipsterTemplatesFolders = ['/.../generator-jhispter-blueprint/server/templates', '/.../generator-jhispter/server/templates']
+         *
+         * /.../generator-jhispter-blueprint/server/templates/reactive/templatePath
+         * /.../generator-jhispter-blueprint/server/templates/common/templatePath
+         * /.../generator-jhispter/server/templates/reactive/templatePath
+         * /.../generator-jhispter/server/templates/common/templatePath
+         */
+        let rootTemplatesAbsolutePath;
+        if (!rootTemplatesPath) {
+            rootTemplatesAbsolutePath = _this.jhipsterTemplatesFolders;
+        } else if (typeof rootTemplatesPath === 'string' && path.isAbsolute(rootTemplatesPath)) {
+            rootTemplatesAbsolutePath = rootTemplatesPath;
+        } else {
+            rootTemplatesPath = Array.isArray(rootTemplatesPath) ? rootTemplatesPath : [rootTemplatesPath];
+            rootTemplatesAbsolutePath = _this.jhipsterTemplatesFolders
+                .map(templateFolder => rootTemplatesPath.map(relativePath => path.join(templateFolder, relativePath)))
+                .flat();
+        }
+
+        Object.values(files).forEach(blockTemplates => {
+            blockTemplates.forEach(blockTemplate => {
                 if (!blockTemplate.condition || blockTemplate.condition(_this)) {
-                    const path = blockTemplate.path || '';
+                    const blockPath = blockTemplate.path || '';
                     blockTemplate.templates.forEach(templateObj => {
-                        let templatePath = path;
+                        let templatePath = blockPath;
                         let method = 'template';
                         let useTemplate = false;
                         let options = {};
@@ -2073,10 +2111,10 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
                             }
                             method = templateObj.method ? templateObj.method : method;
                             useTemplate = templateObj.template ? templateObj.template : useTemplate;
-                            options = templateObj.options ? templateObj.options : options;
+                            options = templateObj.options ? { ...templateObj.options } : options;
                         }
                         if (templateObj && templateObj.renameTo) {
-                            templatePathTo = path + templateObj.renameTo(_this);
+                            templatePathTo = blockPath + templateObj.renameTo(_this);
                         } else {
                             // remove the .ejs suffix
                             templatePathTo = templatePath.replace('.ejs', '');
@@ -2100,24 +2138,53 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
 
                         filesOut.push(templatePathTo);
                         if (!returnFiles) {
-                            let templatePathFrom = prefix ? `${prefix}/${templatePath}` : templatePath;
-                            if (
+                            const ejs =
                                 !templateObj.noEjs &&
-                                !templatePathFrom.endsWith('.png') &&
-                                !templatePathFrom.endsWith('.jpg') &&
-                                !templatePathFrom.endsWith('.gif') &&
-                                !templatePathFrom.endsWith('.svg') &&
-                                !templatePathFrom.endsWith('.ico')
-                            ) {
+                                !templatePath.endsWith('.png') &&
+                                !templatePath.endsWith('.jpg') &&
+                                !templatePath.endsWith('.gif') &&
+                                !templatePath.endsWith('.svg') &&
+                                !templatePath.endsWith('.ico');
+
+                            let templatePathFrom;
+                            if (Array.isArray(rootTemplatesAbsolutePath)) {
+                                // Look for existing templates
+                                const existingTemplates = rootTemplatesAbsolutePath
+                                    .map(rootPath => _this.templatePath(rootPath, templatePath))
+                                    .filter(templateFile => fs.existsSync(ejs ? `${templateFile}.ejs` : templateFile));
+
+                                if (existingTemplates.length > 1) {
+                                    const moreThanOneMessage = `Multiples templates were found for file ${templatePath}, using the first
+templates: ${JSON.stringify(existingTemplates, null, 2)}`;
+                                    if (existingTemplates.length > 2) {
+                                        generator.warning(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
+                                    } else {
+                                        generator.debug(moreThanOneMessage);
+                                    }
+                                }
+                                templatePathFrom = existingTemplates.shift();
+
+                                if (templatePathFrom === undefined) {
+                                    throw new Error(`Template file ${templatePath} was not found at ${rootTemplatesAbsolutePath}`);
+                                }
+                            } else if (rootTemplatesAbsolutePath) {
+                                templatePathFrom = generator.templatePath(rootTemplatesAbsolutePath, templatePath);
+                            } else {
+                                templatePathFrom = generator.templatePath(templatePath);
+                            }
+                            if (ejs) {
                                 templatePathFrom = `${templatePathFrom}.ejs`;
                             }
+                            // Set root for ejs to lookup for partials.
+                            options.root = rootTemplatesAbsolutePath;
+
                             // if (method === 'template')
                             _this[method](templatePathFrom, templatePathTo, _this, options, useTemplate);
                         }
                     });
                 }
-            }
-        }
+            });
+        });
         this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
         return filesOut;
     }

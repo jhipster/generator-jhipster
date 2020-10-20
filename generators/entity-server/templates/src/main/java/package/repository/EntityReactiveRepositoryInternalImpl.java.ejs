@@ -52,7 +52,7 @@ import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.sql.Column;
 import org.springframework.data.relational.core.sql.Expression;
 import org.springframework.data.relational.core.sql.Select;
-import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJoin<% if (eagerRelations.length > 0) { %>Condition<% } %>;
+import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJoin<% if (reactiveEagerRelations.length > 0) { %>Condition<% } %>;
 import org.springframework.data.relational.core.sql.Table;
 <%_ } _%>
 
@@ -67,7 +67,7 @@ import <%= packageName %>.domain.<%= asEntity(rel.otherEntityNameCapitalized) %>
 import <%= packageName %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
 
-<%_ uniqueEntityTypes.forEach(function(element) { _%>
+<%_ reactiveUniqueEntityTypes.forEach(function(element) { _%>
 import <%= packageName %>.repository.rowmapper.<%= element %>RowMapper;
 <%_ }); _%>
 import <%= packageName %>.service.EntityManager;
@@ -87,12 +87,12 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
     private final ReactiveDataAccessStrategy dataAccessStrategy;
     private final EntityManager entityManager;
 
-<%_ uniqueEntityTypes.forEach(function(element) { _%>
+<%_ reactiveUniqueEntityTypes.forEach(function(element) { _%>
     private final <%= element %>RowMapper <%= element.toLowerCase() %>Mapper;
 <%_ }); _%>
 
     private final static Table entityTable = Table.aliased("<%= entityTableName %>", EntityManager.ENTITY_ALIAS);
-        <%_ eagerRelations.forEach(function(rel) { _%>
+        <%_ reactiveEagerRelations.forEach(function(rel) { _%>
     private final static Table <%= rel.relationshipName %>Table = Table.aliased("<%= rel.otherEntityTableName %>", "<%= _generateSqlSafeName(rel.relationshipName) %>");
         <%_ }); _%>
 
@@ -105,11 +105,11 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
         }); _%>
 
     public <%= entityClass %>RepositoryInternalImpl(DatabaseClient db, ReactiveDataAccessStrategy dataAccessStrategy, EntityManager entityManager<%_ 
-            uniqueEntityTypes.forEach(function(element) { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>) {
+            reactiveUniqueEntityTypes.forEach(function(element) { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>) {
         this.db = db;
         this.dataAccessStrategy = dataAccessStrategy;
         this.entityManager = entityManager;
-        <%_ uniqueEntityTypes.forEach(function(element) { _%>
+        <%_ reactiveUniqueEntityTypes.forEach(function(element) { _%>
         this.<%= element.toLowerCase() %>Mapper = <%= element.toLowerCase() %>Mapper;
         <%_ }); _%>
     }
@@ -126,10 +126,10 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
 
     RowsFetchSpec<<%= asEntity(entityClass) %>> createQuery(Pageable pageable, Criteria criteria) {
         List<Expression> columns = <%= asEntity(entityClass) %>SqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
-        <%_ eagerRelations.forEach(function(rel) { _%>
+        <%_ reactiveEagerRelations.forEach(function(rel) { _%>
         columns.addAll(<%= rel.otherEntityNameCapitalized %>SqlHelper.getColumns(<%= rel.relationshipName %>Table, "<%= rel.relationshipName %>"));
         <%_ }); _%>
-        SelectFromAndJoin<% if (eagerRelations.length > 0) { %>Condition<% } %> selectFrom = Select.builder().select(columns).from(entityTable)<%_ eagerRelations.forEach(function(rel) { 
+        SelectFromAndJoin<% if (reactiveEagerRelations.length > 0) { %>Condition<% } %> selectFrom = Select.builder().select(columns).from(entityTable)<%_ reactiveEagerRelations.forEach(function(rel) { 
             const colName = _getJoinColumnName(rel); %>
             .leftOuterJoin(<%= rel.relationshipName %>Table).on(Column.create("<%= colName %>", entityTable)).equals(Column.create("id", <%= rel.relationshipName %>Table ))<%_ }); _%>;
 
@@ -168,7 +168,7 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
     <%_ } _%>
     private <%= asEntity(entityClass) %> process(Row row, RowMetadata metadata) {
         <%= asEntity(entityClass) %> entity = <%= entityClass.toLowerCase() %>Mapper.apply(row, "e");
-        <%_ eagerRelations.forEach(function(rel) { _%>
+        <%_ reactiveEagerRelations.forEach(function(rel) { _%>
         entity.set<%= rel.relationshipNameCapitalized %>(<%= rel.otherEntityNameCapitalized.toLowerCase() %>Mapper.apply(row, "<%= rel.relationshipName %>"));
         <%_ }); _%>
         return entity;
@@ -198,7 +198,7 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
 
     @Override
     public Mono<Integer> update(<%= asEntity(entityClass) %> entity) {
-        <%_ if (fields.length + eagerRelations.length > 0) { _%>
+        <%_ if (fields.length + reactiveEagerRelations.length > 0) { _%>
         return db.update().table(<%= asEntity(entityClass) %>.class).using(entity).fetch().rowsUpdated();
         <%_ } else { _%>
         // What can we update on this field?
@@ -256,7 +256,7 @@ class <%= entityClass %>SqlHelper {
    <%_  } _%>
 <%_ }); _%>
 
-<%_ regularEagerRelations.forEach(function(rel) { _%>
+<%_ reactiveRegularEagerRelations.forEach(function(rel) { _%>
         columns.add(Column.aliased("<%= getColumnName(rel.relationshipName) %>_id", table, columnPrefix + "_<%= getColumnName(rel.relationshipName) %>_id"));
 <%_ }); _%>
         return columns;

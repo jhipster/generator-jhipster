@@ -11,11 +11,17 @@ import {
 describe('/admin', () => {
   <%_ if (authenticationType === 'oauth2') { _%>
   beforeEach(() => {
+    cy.getOauth2Data();
+    cy.get('@oauth2Data').then(oauth2Data => {
+      cy.keycloackLogin(oauth2Data, 'user');
+    });
+  });
+
+  afterEach(() => {
+    cy.get('@oauth2Data').then(oauth2Data => {
+      cy.keycloackLogout(oauth2Data);
+    });
     cy.clearCache();
-    cy.keycloackLogout();
-    cy.visit('/');
-    cy.keycloackLogin('user');
-    cy.clickOnLoginItem();
   });
   <%_ } else { _%>
   before(() => {

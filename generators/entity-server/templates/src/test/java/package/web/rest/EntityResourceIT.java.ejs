@@ -1431,10 +1431,21 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         // Update the <%= entityInstance %> without id should throw
         <%= asEntity(entityClass) %> partialUpdated<%= asEntity(entityClass) %> = new <%= asEntity(entityClass) %>();
 
+        <%_ if (!reactive) { _%>
         rest<%= entityClass %>MockMvc.perform(patch("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
         .contentType("application/merge-patch+json")
         .content(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>)))
         .andExpect(status().isBadRequest());
+        <%_ } else { _%>
+        webTestClient
+            .patch()
+            .uri("/api/<%= entityApiUrl %>")
+            .contentType(MediaType.valueOf("application/merge-patch+json"))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+        <%_ } _%>
     }
 
     @Test<%= transactionalAnnotation %>

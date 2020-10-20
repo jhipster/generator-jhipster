@@ -35,11 +35,22 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
 
+        // Add base template folder.
+        this.jhipsterTemplatesFolders = [this.templatePath()];
+
         this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
 
         if (this.fromBlueprint) {
             this.blueprintStorage = this._getStorage();
             this.blueprintConfig = this.blueprintStorage.createProxy();
+
+            // jhipsterContext is the original generator
+            this.jhipsterContext = opts.jhipsterContext;
+
+            if (this.jhipsterContext) {
+                // Fallback to the original generator if the file does not exists in the blueprint.
+                this.jhipsterTemplatesFolders.push(this.jhipsterContext.templatePath());
+            }
         }
     }
 
@@ -211,9 +222,14 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
         if (blueprints && blueprints.length > 0) {
             blueprints.forEach(blueprint => {
                 const blueprintGenerator = this._composeBlueprint(blueprint.name, subGen, extraOptions);
-                // If the blueprints sets sbsBlueprint property, then don't ignore the normal workflow.
-                if (blueprintGenerator && !blueprintGenerator.sbsBlueprint) {
-                    useBlueprints = true;
+                if (blueprintGenerator) {
+                    if (blueprintGenerator.sbsBlueprint) {
+                        // If sbsBlueprint, add templatePath to the original generator templatesFolder.
+                        this.jhipsterTemplatesFolders.unshift(blueprintGenerator.templatePath());
+                    } else {
+                        // If the blueprints does not sets sbsBlueprint property, ignore normal workflow.
+                        useBlueprints = true;
+                    }
                 }
             });
         }

@@ -532,6 +532,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 );
                 this.context.eagerRelations = this.context.relationships.filter(rel => rel.relationshipEagerLoad);
                 this.context.regularEagerRelations = this.context.eagerRelations.filter(rel => rel.useJPADerivedIdentifier !== true);
+
+                this.context.reactiveEagerRelations = this.context.relationships.filter(
+                    rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true)
+                );
+                this.context.reactiveRegularEagerRelations = this.context.reactiveEagerRelations.filter(
+                    rel => rel.useJPADerivedIdentifier !== true
+                );
             },
 
             /*

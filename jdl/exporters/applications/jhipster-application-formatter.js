@@ -41,24 +41,20 @@ function formatApplicationsToExport(applications, configuration) {
 /**
  * Exports JDL a application to a JDL file in the current directory.
  * @param {Object} application - the JDL application to export.
- * @param {Object} configuration - the configuration object.
- * @param {Integer} configuration.creationTimestampConfig - date representation to be written to creationTimestamp at .yo-rc.json.
  * @return {Object} the exported application in its final form.
  */
 function formatApplicationToExport(application, configuration = {}) {
     return setUpApplicationStructure(application, configuration);
 }
 
-function setUpApplicationStructure(application, { creationTimestampConfig }) {
+function setUpApplicationStructure(application) {
     let applicationToExport = {
         [GENERATOR_NAME]: {},
     };
     applicationToExport[GENERATOR_NAME] = getApplicationConfig(application);
     applicationToExport.entities = application.getEntityNames();
     if (application.hasConfigurationOption('creationTimestamp')) {
-        applicationToExport[GENERATOR_NAME].creationTimestamp = application.getConfigurationOptionValue('creationTimestamp');
-    } else if (creationTimestampConfig) {
-        applicationToExport[GENERATOR_NAME].creationTimestamp = creationTimestampConfig;
+        applicationToExport[GENERATOR_NAME].creationTimestamp = parseInt(application.getConfigurationOptionValue('creationTimestamp'), 10);
     }
     applicationToExport = cleanUpOptions(applicationToExport);
     return applicationToExport;

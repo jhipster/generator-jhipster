@@ -23,7 +23,7 @@ const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields, 'r
 const enumImports = generateEntityClientEnumImports(fields);
 %>
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
-import { Moment } from 'moment';
+import dayjs from 'dayjs';
 <%_ } _%>
 <%_ typeImports.forEach( (importedPath, importedType) => { _%>
     <%_ if (importedType !== `I${entityReactName}`) { _%>

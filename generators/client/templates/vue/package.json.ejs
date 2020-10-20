@@ -36,8 +36,7 @@ limitations under the License.
     <%_ if (clientTheme !== 'none') { _%>
     "bootswatch": "4.5.0",
     <%_ } _%>
-    "date-fns": "2.15.0",
-    "duration-fns": "2.0.1",
+    "dayjs": "VERSION_MANAGED_BY_CLIENT_COMMON",
     "swagger-ui-dist": "3.25.4",
     <%_ if (websocket === 'spring-websocket') { _%>
     "sockjs-client": "1.1.4",
@@ -146,7 +145,7 @@ limitations under the License.
     "vue-jest": "3.0.6",
     "vue-loader": "15.9.3",
     "vue-template-compiler": "2.6.12",
-    <%_ if (protractorTests || cypressTests) { _%>
+    <%_ if (protractorTests) { _%>
     "webdriver-manager": "12.1.7",
     <%_ } _%>
     "webpack": "VERSION_MANAGED_BY_CLIENT_VUE",
@@ -188,7 +187,7 @@ limitations under the License.
     "e2e:cypress": "cypress run --browser chrome",
     "cypress": "cypress open",
     <%_ } _%>
-    <%_ if (protractorTests || cypressTests) { _%>
+    <%_ if (protractorTests) { _%>
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
     <%_ } _%>
