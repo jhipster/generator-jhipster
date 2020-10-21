@@ -34,6 +34,7 @@ import { RouterModule } from '@angular/router';
           }
         },
         <%_ } _%>
+        <%_ if (withAdminUi) { _%>
         {
           path: 'configuration',
           loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule)
@@ -42,12 +43,6 @@ import { RouterModule } from '@angular/router';
           path: 'docs',
           loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule)
         },
-        <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-        {
-          path: 'gateway',
-          loadChildren: () => import('./gateway/gateway.module').then(m => m.GatewayModule)
-        },
-        <%_ } _%>
         {
           path: 'health',
           loadChildren: () => import('./health/health.module').then(m => m.HealthModule)
@@ -56,16 +51,23 @@ import { RouterModule } from '@angular/router';
           path: 'logs',
           loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule)
         },
+        {
+          path: 'metrics',
+          loadChildren: () => import('./metrics/metrics.module').then(m => m.MetricsModule)
+        },
+        <%_ } _%>
+        <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+        {
+          path: 'gateway',
+          loadChildren: () => import('./gateway/gateway.module').then(m => m.GatewayModule)
+        },
+        <%_ } _%>
         <%_ if (websocket === 'spring-websocket') { _%>
         {
           path: 'tracker',
           loadChildren: () => import('./tracker/tracker.module').then(m => m.TrackerModule)
         },
         <%_ } _%>
-        {
-          path: 'metrics',
-          loadChildren: () => import('./metrics/metrics.module').then(m => m.MetricsModule)
-        },
         /* jhipster-needle-add-admin-route - JHipster will add admin routes here */
       ]
     )

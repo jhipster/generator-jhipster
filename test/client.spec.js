@@ -124,4 +124,56 @@ describe('JHipster client generator', () => {
             });
         });
     });
+
+    describe('--with-admin-ui', () => {
+        [ANGULAR].forEach(clientFramework => {
+            describe(`selected and ${clientFramework}`, () => {
+                let runResult;
+                before(() => {
+                    return helpers
+                        .create(require.resolve('../generators/client'))
+                        .withOptions({
+                            fromCli: true,
+                            skipInstall: true,
+                            defaultLocalConfig: { ...appDefaultConfig, clientFramework },
+                            withAdminUi: true,
+                        })
+                        .run()
+                        .then(result => {
+                            runResult = result;
+                        });
+                });
+
+                after(() => runResult.cleanup());
+
+                it('should have admin ui components', () => {
+                    runResult.assertFile(expectedFiles.clientAdmin);
+                });
+            });
+
+            describe(`not selected and ${clientFramework}`, () => {
+                let runResult;
+                before(() => {
+                    return helpers
+                        .create(require.resolve('../generators/client'))
+                        .withOptions({
+                            fromCli: true,
+                            skipInstall: true,
+                            defaultLocalConfig: { ...appDefaultConfig, clientFramework },
+                            withAdminUi: false,
+                        })
+                        .run()
+                        .then(result => {
+                            runResult = result;
+                        });
+                });
+
+                after(() => runResult.cleanup());
+
+                it('should not have admin ui components', () => {
+                    runResult.assertNoFile(expectedFiles.clientAdmin);
+                });
+            });
+        });
+    });
 });

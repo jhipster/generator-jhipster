@@ -202,8 +202,12 @@ const files = {
     angularAdminModule: [
         {
             path: ANGULAR_DIR,
+            templates: [{ file: 'admin/admin-routing.module.ts', method: 'processJs' }],
+        },
+        {
+            condition: generator => generator.withAdminUi,
+            path: ANGULAR_DIR,
             templates: [
-                { file: 'admin/admin-routing.module.ts', method: 'processJs' },
                 // admin modules
                 { file: 'admin/configuration/configuration.route.ts', method: 'processJs' },
                 { file: 'admin/configuration/configuration.module.ts', method: 'processJs' },
@@ -349,9 +353,9 @@ const files = {
     ],
     clientTestFw: [
         {
+            condition: generator => generator.withAdminUi,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
-                'jest.conf.js',
                 'spec/app/admin/configuration/configuration.component.spec.ts',
                 'spec/app/admin/configuration/configuration.service.spec.ts',
                 'spec/app/admin/health/health.component.spec.ts',
@@ -359,6 +363,12 @@ const files = {
                 'spec/app/admin/logs/logs.service.spec.ts',
                 'spec/app/admin/metrics/metrics.component.spec.ts',
                 'spec/app/admin/metrics/metrics.service.spec.ts',
+            ],
+        },
+        {
+            path: CLIENT_TEST_SRC_DIR,
+            templates: [
+                'jest.conf.js',
                 'spec/app/core/user/account.service.spec.ts',
                 'spec/app/home/home.component.spec.ts',
                 'spec/app/layouts/main/main.component.spec.ts',
