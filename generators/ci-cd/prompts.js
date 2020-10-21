@@ -84,7 +84,7 @@ async function askPipeline() {
     this.pipeline = props.pipeline;
 }
 
-function askIntegrations() {
+async function askIntegrations() {
     if (this.abort || !this.pipeline || this.pipeline === 'azure') return;
     if (this.autoconfigureTravis) {
         this.cicdIntegrations = [];
@@ -140,7 +140,6 @@ function askIntegrations() {
     }
     const defaultDockerImage = `jhipster/${this.dasherizedBaseName}`;
 
-    const done = this.async();
     const prompts = [
         {
             when: this.pipeline === 'jenkins',
@@ -235,25 +234,23 @@ function askIntegrations() {
             default: `${this.herokuAppName}`,
         },
     ];
-    this.prompt(prompts).then(props => {
-        this.cicdIntegrations = props.cicdIntegrations;
+    const props = await this.prompt(prompts);
 
-        this.artifactorySnapshotsId = props.artifactorySnapshotsId;
-        this.artifactorySnapshotsUrl = props.artifactorySnapshotsUrl;
-        this.artifactoryReleasesId = props.artifactoryReleasesId;
-        this.artifactoryReleasesUrl = props.artifactoryReleasesUrl;
+    this.cicdIntegrations = props.cicdIntegrations;
 
-        this.sonarName = props.sonarName;
-        this.sonarUrl = props.sonarUrl;
-        this.sonarOrga = props.sonarOrga;
+    this.artifactorySnapshotsId = props.artifactorySnapshotsId;
+    this.artifactorySnapshotsUrl = props.artifactorySnapshotsUrl;
+    this.artifactoryReleasesId = props.artifactoryReleasesId;
+    this.artifactoryReleasesUrl = props.artifactoryReleasesUrl;
 
-        this.publishDocker = props.publishDocker;
-        this.dockerImage = props.dockerImage;
+    this.sonarName = props.sonarName;
+    this.sonarUrl = props.sonarUrl;
+    this.sonarOrga = props.sonarOrga;
 
-        this.insideDocker = props.insideDocker;
+    this.publishDocker = props.publishDocker;
+    this.dockerImage = props.dockerImage;
 
-        this.sendBuildToGitlab = props.sendBuildToGitlab;
+    this.insideDocker = props.insideDocker;
 
-        done();
-    });
+    this.sendBuildToGitlab = props.sendBuildToGitlab;
 }
