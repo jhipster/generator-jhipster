@@ -173,7 +173,7 @@ async function prompting() {
         },
     ];
 
-    const props = await this.prompt(prompts)
+    const props = await this.prompt(prompts);
     this.applicationName = _.kebabCase(props.applicationName);
     this.environmentName = _.kebabCase(props.environmentName);
     this.bucketName = _.kebabCase(props.bucketName);
