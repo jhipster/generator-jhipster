@@ -81,7 +81,6 @@ async function askForKubernetesServiceType() {
 
 async function askForIngressType() {
     if (this.regenerate) return;
-    const done = this.async();
     const kubernetesServiceType = this.kubernetesServiceType;
 
     const prompts = [
