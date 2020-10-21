@@ -23,7 +23,7 @@ module.exports = {
     askIntegrations,
 };
 
-function askPipeline() {
+async function askPipeline() {
     if (this.abort) return;
     if (this.autoconfigureTravis) {
         this.log('Auto-configuring Travis CI');
@@ -64,7 +64,6 @@ function askPipeline() {
         return;
     }
 
-    const done = this.async();
     const prompts = [
         {
             type: 'list',
@@ -81,10 +80,8 @@ function askPipeline() {
             ],
         },
     ];
-    this.prompt(prompts).then(props => {
-        this.pipeline = props.pipeline;
-        done();
-    });
+    const props = await this.prompt(prompts);
+    this.pipeline = props.pipeline;
 }
 
 function askIntegrations() {
