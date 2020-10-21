@@ -16,35 +16,43 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+jest.mock('@ng-bootstrap/ng-bootstrap');
+
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { LoginService } from 'app/core/login/login.service';
 import { LoginModalComponent } from 'app/core/login/login-modal.component';
-import { TestModule } from '../../../test.module';
-import { MockLoginService } from '../../../helpers/mock-login.service';
-import { MockRouter } from '../../../helpers/mock-route.service';
-import { MockActiveModal } from '../../../helpers/mock-active-modal.service';
 
 describe('Component Tests', () => {
     describe('LoginModalComponent', () => {
         let comp: LoginModalComponent;
         let fixture: ComponentFixture<LoginModalComponent>;
-        let mockLoginService: MockLoginService;
-        let mockRouter: MockRouter;
-        let mockActiveModal: MockActiveModal;
+        let mockLoginService: LoginService;
+        let mockRouter: Router;
+        let mockActiveModal: NgbActiveModal;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [TestModule],
                 declarations: [LoginModalComponent],
                 providers : [
                     FormBuilder,
+                    NgbActiveModal,
                     {
                         provide: LoginService,
-                        useClass: MockLoginService
+                        useValue: {
+                            login: jest.fn(() => of({}))
+                        }
+                    },
+                    {
+                        provide: Router,
+                        useValue: {
+                            url: '/admin/metrics',
+                            navigate: jest.fn(() => undefined)
+                        }
                     }
                 ]
             })
@@ -55,9 +63,9 @@ describe('Component Tests', () => {
         beforeEach(() => {
             fixture = TestBed.createComponent(LoginModalComponent);
             comp = fixture.componentInstance;
-            mockLoginService = TestBed.get(LoginService);
-            mockRouter = TestBed.get(Router);
-            mockActiveModal = TestBed.get(NgbActiveModal);
+            mockLoginService = TestBed.inject(LoginService);
+            mockRouter = TestBed.inject(Router);
+            mockActiveModal = TestBed.inject(NgbActiveModal);
         });
 
         it('should authenticate the user',
@@ -75,8 +83,6 @@ describe('Component Tests', () => {
                         password: 'admin',
                         rememberMe: true
                     });
-                    mockLoginService.setResponse({});
-                    mockRouter.url = '/admin/metrics';
 
                     // WHEN/
                     comp.login();
@@ -84,8 +90,8 @@ describe('Component Tests', () => {
 
                     // THEN
                     expect(comp.authenticationError).toEqual(false);
-                    expect(mockActiveModal.closeSpy).toHaveBeenCalled();
-                    expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentials);
+                    expect(mockActiveModal.close).toHaveBeenCalled();
+                    expect(mockLoginService.login).toHaveBeenCalledWith(credentials);
                 })
             )
         );
@@ -111,7 +117,7 @@ describe('Component Tests', () => {
             expect(comp.loginForm.get('username')!.value).toEqual(expected.username);
             expect(comp.loginForm.get('password')!.value).toEqual(expected.password);
             expect(comp.loginForm.get('rememberMe')!.value).toEqual(expected.rememberMe);
-            expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('cancel');
+            expect(mockActiveModal.dismiss).toHaveBeenCalledWith('cancel');
         });
 
         it('should redirect user when register', () => {
@@ -119,8 +125,8 @@ describe('Component Tests', () => {
             comp.register();
 
             // THEN
-            expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('to state register');
-            expect(mockRouter.navigateSpy).toHaveBeenCalledWith(['/account/register']);
+            expect(mockActiveModal.dismiss).toHaveBeenCalledWith('to state register');
+            expect(mockRouter.navigate).toHaveBeenCalledWith(['/account/register']);
         });
 
         it('should redirect user when request password', () => {
@@ -128,8 +134,8 @@ describe('Component Tests', () => {
             comp.requestResetPassword();
 
             // THEN
-            expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('to state requestReset');
-            expect(mockRouter.navigateSpy).toHaveBeenCalledWith(['/account/reset', 'request']);
+            expect(mockActiveModal.dismiss).toHaveBeenCalledWith('to state requestReset');
+            expect(mockRouter.navigate).toHaveBeenCalledWith(['/account/reset', 'request']);
         });
     });
 });

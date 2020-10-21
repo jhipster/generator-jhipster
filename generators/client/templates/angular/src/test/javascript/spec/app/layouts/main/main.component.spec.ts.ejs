@@ -16,17 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+jest.mock('app/core/auth/account.service');
+
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { Subject<% if (enableTranslation) { %>, of<% } %> } from 'rxjs';
+import { Subject, of } from 'rxjs';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule, TranslateService, LangChangeEvent } from '@ngx-translate/core';
 <%_ } _%>
 
 import { MainComponent } from 'app/layouts/main/main.component';
-import { TestModule } from '../../../test.module';
-import { MockRouter } from '../../../helpers/mock-route.service';
+import { AccountService } from 'app/core/auth/account.service';
 <%_ if (enableI18nRTL) { _%>
 import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-key.pipe';
 <%_ } _%>
@@ -35,17 +36,21 @@ describe('Component Tests', () => {
   describe('MainComponent', () => {
     let comp: MainComponent;
     let fixture: ComponentFixture<MainComponent>;
-    let router: MockRouter;
-    const routerEventsSubject = new Subject<RouterEvent>();
     let titleService: Title;
     <%_ if (enableTranslation) { _%>
     let translateService: TranslateService;
     <%_ } _%>
+    let mockAccountService: AccountService;
+    const routerEventsSubject = new Subject<RouterEvent>();
+    const routerState: any = { snapshot: { root: {} } };
+    class MockRouter {
+      events = routerEventsSubject;
+      routerState = routerState;
+    }
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [
-          TestModule,
           <%_ if (enableTranslation) { _%>
           TranslateModule.forRoot(),
           <%_ } _%>
@@ -56,6 +61,11 @@ describe('Component Tests', () => {
           <%_ if (enableI18nRTL) { _%>
           FindLanguageFromKeyPipe,
           <%_ } _%>
+          AccountService,
+          {
+            provide: Router,
+            useClass: MockRouter
+          }
         ]
       })
         .overrideTemplate(MainComponent, '')
@@ -65,16 +75,16 @@ describe('Component Tests', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(MainComponent);
       comp = fixture.componentInstance;
-      router = TestBed.get(Router);
-      router.setEvents(routerEventsSubject.asObservable());
-      titleService = TestBed.get(Title);
+      titleService = TestBed.inject(Title);
       <%_ if (enableTranslation) { _%>
-      translateService = TestBed.get(TranslateService);
+      translateService = TestBed.inject(TranslateService);
       <%_ } _%>
+      mockAccountService = TestBed.inject(AccountService);
+      mockAccountService.identity = jest.fn(() => of(null));
+      mockAccountService.getAuthenticationState = jest.fn(() => of(null));
     });
 
     describe('page title', () => {
-      let routerState: any;
       const defaultPageTitle = '<% if (enableTranslation) { %>global.title<% } else { %><%= capitalizedBaseName %><% } %>';
       const parentRoutePageTitle = 'parentTitle';
       const childRoutePageTitle = 'childTitle';
@@ -84,8 +94,7 @@ describe('Component Tests', () => {
       <%_ } _%>
 
       beforeEach(() => {
-        routerState = { snapshot: { root: {} } };
-        router.setRouterState(routerState);
+        routerState.snapshot.root = {};
         <%_ if (enableTranslation) { _%>
         spyOn(translateService, 'get').and.callFake((key: string) => {
           return of(key + ' translated');

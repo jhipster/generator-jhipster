@@ -17,9 +17,9 @@ distributed under the License is distributed on an "AS IS" BASIS,
 limitations under the License.
 -%>
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 
-import { TestModule } from '../../../test.module';
 import { ConfigurationComponent } from 'app/admin/configuration/configuration.component';
 import { ConfigurationService, Bean, PropertySource } from 'app/admin/configuration/configuration.service';
 
@@ -31,7 +31,7 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [TestModule],
+                imports: [HttpClientTestingModule],
                 declarations: [ConfigurationComponent],
                 providers: [ConfigurationService]
             })
@@ -42,7 +42,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             fixture = TestBed.createComponent(ConfigurationComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(ConfigurationService);
+            service = TestBed.inject(ConfigurationService);
         });
 
         describe('OnInit', () => {

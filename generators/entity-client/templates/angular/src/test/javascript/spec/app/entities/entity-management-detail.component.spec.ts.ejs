@@ -26,7 +26,6 @@ import { of } from 'rxjs';
 import { JhiDataUtils } from 'ng-jhipster';
 <%_ } _%>
 
-import { TestModule } from '../../../<%= entityParentPathAddition %>test.module';
 import { <%= entityAngularName %>DetailComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.component';
 import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 
@@ -37,14 +36,15 @@ describe('Component Tests', () => {
         <%_ if (fieldsContainBlob) { _%>
         let dataUtils: JhiDataUtils;
         <%_ } _%>
-        const route = ({ data: of({ <%= entityInstance %>: new <%= entityAngularName %>(<%- tsKeyId %>) }) } as any) as ActivatedRoute;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
-                imports: [TestModule],
                 declarations: [<%= entityAngularName %>DetailComponent],
                 providers: [
-                    { provide: ActivatedRoute, useValue: route }
+                    {
+                        provide: ActivatedRoute,
+                        useValue: { data: of({ <%= entityInstance %>: new <%= entityAngularName %>(<%- tsKeyId %>) }) }
+                    }
                 ]
             })
             .overrideTemplate(<%= entityAngularName %>DetailComponent, '')
@@ -52,7 +52,7 @@ describe('Component Tests', () => {
             fixture = TestBed.createComponent(<%= entityAngularName %>DetailComponent);
             comp = fixture.componentInstance;
             <%_ if (fieldsContainBlob) { _%>
-            dataUtils = fixture.debugElement.injector.get(JhiDataUtils);
+            dataUtils = TestBed.inject(JhiDataUtils);
             <%_ } _%>
         });
 
