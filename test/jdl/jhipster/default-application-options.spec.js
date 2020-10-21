@@ -479,10 +479,8 @@ describe('DefaultApplicationOptions', () => {
             it('should set the jhipster prefix option to jhi', () => {
                 expect(options.jhiPrefix).to.equal('jhi');
             });
-            it('should set the languages option to en and fr', () => {
-                expect(options.languages).to.have.lengthOf(2);
-                expect(options.languages).to.include('en');
-                expect(options.languages).to.include('fr');
+            it('should set the languages option to empty', () => {
+                expect(options.languages).to.have.lengthOf(0);
             });
             it('should set the message broker option to false', () => {
                 expect(options.messageBroker).to.be.false;
