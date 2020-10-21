@@ -30,6 +30,7 @@
         "enableTranslation": false,
         "clientPackageManager": "npm",
         "skipClient": true,
+        "nativeLanguage": "en",
         "skipUserManagement": true
     }
 }

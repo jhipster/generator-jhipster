@@ -485,9 +485,6 @@ describe('DefaultApplicationOptions', () => {
             it('should set the message broker option to false', () => {
                 expect(options.messageBroker).to.be.false;
             });
-            it('should set the native language option to en', () => {
-                expect(options.nativeLanguage).to.equal('en');
-            });
             it('should set the package folder to com/mycompany/myapp', () => {
                 expect(options.packageFolder).to.equal('com/mycompany/myapp');
             });

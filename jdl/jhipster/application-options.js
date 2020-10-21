@@ -149,7 +149,6 @@ const optionValues = {
         kafka: 'kafka',
         false: false,
     },
-    [optionNames.NATIVE_LANGUAGE]: 'en',
     [optionNames.NPM]: true,
     [optionNames.OTHER_MODULES]: [],
     [optionNames.PACKAGE_FOLDER]: 'com/mycompany/myapp',

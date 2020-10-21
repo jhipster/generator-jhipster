@@ -52,7 +52,7 @@ describe('JHipsterApplicationExporter', () => {
                             jhipsterVersion: '4.9.0',
                             languages: [],
                             messageBroker: false,
-                            nativeLanguage: 'en',
+
                             packageFolder: 'com/mathieu/sample',
                             packageName: 'com.mathieu.sample',
                             prodDatabaseType: 'mysql',
@@ -118,7 +118,7 @@ describe('JHipsterApplicationExporter', () => {
                             jhipsterVersion: '4.9.0',
                             languages: [],
                             messageBroker: false,
-                            nativeLanguage: 'en',
+
                             packageFolder: 'com/mathieu/sample',
                             packageName: 'com.mathieu.sample',
                             prodDatabaseType: 'mysql',
@@ -166,7 +166,7 @@ describe('JHipsterApplicationExporter', () => {
                             jhipsterVersion: '4.9.0',
                             languages: [],
                             messageBroker: false,
-                            nativeLanguage: 'en',
+
                             packageFolder: 'com/mathieu/sample',
                             packageName: 'com.mathieu.sample',
                             prodDatabaseType: 'mysql',
@@ -221,7 +221,7 @@ describe('JHipsterApplicationExporter', () => {
                             jhipsterVersion: '4.9.0',
                             languages: [],
                             messageBroker: false,
-                            nativeLanguage: 'en',
+
                             packageFolder: 'com/mathieu/toto',
                             packageName: 'com.mathieu.toto',
                             prodDatabaseType: 'mysql',
@@ -259,7 +259,7 @@ describe('JHipsterApplicationExporter', () => {
                             jhipsterVersion: '4.9.0',
                             languages: [],
                             messageBroker: false,
-                            nativeLanguage: 'en',
+
                             packageFolder: 'com/mathieu/titi',
                             packageName: 'com.mathieu.titi',
                             prodDatabaseType: 'mysql',
