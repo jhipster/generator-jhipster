@@ -11,7 +11,7 @@ const {
     SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT, VUE },
 } = require('../generators/generator-constants');
 
-const { CLIENT_TEST_SRC_DIR } = constants;
+const { CLIENT_TEST_SRC_DIR, CLIENT_MAIN_SRC_DIR } = constants;
 
 describe('JHipster client generator', () => {
     describe('generate client with React', () => {
@@ -153,6 +153,32 @@ describe('JHipster client generator', () => {
                     runResult.assertFile(expectedFiles.clientAdmin);
                 });
 
+                it('should contains admin routing', () => {
+                    runResult.assertFileContent(
+                        `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
+                        '        {\n' +
+                            "          path: 'configuration',\n" +
+                            "          loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule)\n" +
+                            '        },\n' +
+                            '        {\n' +
+                            "          path: 'docs',\n" +
+                            "          loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule)\n" +
+                            '        },\n' +
+                            '        {\n' +
+                            "          path: 'health',\n" +
+                            "          loadChildren: () => import('./health/health.module').then(m => m.HealthModule)\n" +
+                            '        },\n' +
+                            '        {\n' +
+                            "          path: 'logs',\n" +
+                            "          loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule)\n" +
+                            '        },\n' +
+                            '        {\n' +
+                            "          path: 'metrics',\n" +
+                            "          loadChildren: () => import('./metrics/metrics.module').then(m => m.MetricsModule)\n" +
+                            '        },'
+                    );
+                });
+
                 it('should contains admin ui cypress tests', () => {
                     assert.fileContent(
                         `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
@@ -224,6 +250,32 @@ describe('JHipster client generator', () => {
 
                 it('should not have admin ui components', () => {
                     runResult.assertNoFile(expectedFiles.clientAdmin);
+                });
+
+                it('should not contains admin routing', () => {
+                    runResult.assertNoFileContent(
+                        `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
+                        '        {\n' +
+                            "          path: 'configuration',\n" +
+                            "          loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule)\n" +
+                            '        },\n' +
+                            '        {\n' +
+                            "          path: 'docs',\n" +
+                            "          loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule)\n" +
+                            '        },\n' +
+                            '        {\n' +
+                            "          path: 'health',\n" +
+                            "          loadChildren: () => import('./health/health.module').then(m => m.HealthModule)\n" +
+                            '        },\n' +
+                            '        {\n' +
+                            "          path: 'logs',\n" +
+                            "          loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule)\n" +
+                            '        },\n' +
+                            '        {\n' +
+                            "          path: 'metrics',\n" +
+                            "          loadChildren: () => import('./metrics/metrics.module').then(m => m.MetricsModule)\n" +
+                            '        },'
+                    );
                 });
 
                 it('should not contains admin ui cypress tests', () => {
