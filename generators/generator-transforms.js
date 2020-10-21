@@ -51,7 +51,12 @@ const prettierTransform = function (defaultOptions) {
 
 const generatedAnnotationTransform = generator => {
     return through.obj(function (file, encoding, callback) {
-        if (path.extname(file.path) === '.java' && file.state !== 'deleted' && !file.path.endsWith('GeneratedByJHipster.java')) {
+        if (
+            !generator.options.skipGeneratedFlag &&
+            path.extname(file.path) === '.java' &&
+            file.state !== 'deleted' &&
+            !file.path.endsWith('GeneratedByJHipster.java')
+        ) {
             const packageName = generator.jhipsterConfig.packageName;
             const content = file.contents.toString('utf8');
 

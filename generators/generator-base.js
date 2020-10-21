@@ -117,16 +117,10 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
             this.config.set(this.options.localConfig);
         }
 
-        if (this.options.skipGeneratedFlag !== undefined) {
-            this.jhipsterConfig.skipGeneratedFlag = this.options.skipGeneratedFlag;
-        }
-
         // Load common runtime options.
         this.parseCommonRuntimeOptions();
 
-        if (!this.jhipsterConfig.skipGeneratedFlag) {
-            this.registerGeneratedAnnotationTransform();
-        }
+        this.registerGeneratedAnnotationTransform();
 
         // Register .yo-resolve file
         if (!this.options.skipYoResolve) {
