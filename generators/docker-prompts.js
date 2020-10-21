@@ -188,8 +188,6 @@ async function askForClustersMode() {
     });
     if (clusteredDbApps.length === 0) return;
 
-    const done = this.async();
-
     const prompts = [
         {
             type: 'checkbox',
@@ -332,7 +330,7 @@ async function askForDockerRepositoryName() {
         },
     ];
 
-    const props = await this.prompt(prompts)
+    const props = await this.prompt(prompts);
     this.dockerRepositoryName = props.dockerRepositoryName;
 }
 
