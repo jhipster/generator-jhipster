@@ -697,7 +697,6 @@ relationship OneToOne {
                         clientFramework: 'angularX',
                         clientTheme: 'none',
                         clientThemeVariant: '',
-
                         skipUserManagement: false,
                         skipClient: false,
                         skipServer: false,
@@ -732,7 +731,6 @@ relationship OneToOne {
                         clientFramework: 'angularX',
                         clientTheme: 'none',
                         clientThemeVariant: '',
-
                         skipUserManagement: false,
                         skipClient: false,
                         skipServer: false,
@@ -763,7 +761,6 @@ relationship OneToOne {
                         messageBroker: false,
                         serviceDiscoveryType: 'eureka',
                         clientPackageManager: 'npm',
-
                         skipUserManagement: true,
                         skipClient: true,
                     },
@@ -797,7 +794,6 @@ relationship OneToOne {
                         clientFramework: 'angularX',
                         clientTheme: 'none',
                         clientThemeVariant: '',
-
                         skipUserManagement: false,
                         skipClient: false,
                         skipServer: false,
@@ -863,7 +859,6 @@ relationship OneToOne {
                         clientFramework: 'angularX',
                         clientTheme: 'yeti',
                         clientThemeVariant: 'primary',
-
                         skipUserManagement: false,
                         skipClient: false,
                         skipServer: false,
@@ -894,7 +889,6 @@ relationship OneToOne {
                         messageBroker: false,
                         serviceDiscoveryType: 'eureka',
                         clientPackageManager: 'npm',
-
                         skipUserManagement: true,
                         skipClient: true,
                     },
@@ -924,7 +918,6 @@ relationship OneToOne {
                         messageBroker: false,
                         serviceDiscoveryType: 'eureka',
                         clientPackageManager: 'npm',
-
                         skipUserManagement: true,
                         skipClient: true,
                     },
@@ -1186,7 +1179,6 @@ relationship OneToOne {
                         clientFramework: 'angularX',
                         clientTheme: 'none',
                         clientThemeVariant: '',
-
                         skipUserManagement: false,
                         skipClient: false,
                         skipServer: false,
@@ -1221,7 +1213,6 @@ relationship OneToOne {
                         clientFramework: 'angularX',
                         clientTheme: 'none',
                         clientThemeVariant: '',
-
                         skipUserManagement: false,
                         skipClient: false,
                         skipServer: false,
@@ -1252,7 +1243,6 @@ relationship OneToOne {
                         messageBroker: false,
                         serviceDiscoveryType: 'eureka',
                         clientPackageManager: 'npm',
-
                         skipUserManagement: true,
                         skipClient: true,
                     },
@@ -1286,7 +1276,6 @@ relationship OneToOne {
                         clientFramework: 'angularX',
                         clientTheme: 'none',
                         clientThemeVariant: '',
-
                         skipUserManagement: false,
                         skipClient: false,
                         skipServer: false,
@@ -1426,7 +1415,6 @@ relationship OneToOne {
                         jhiPrefix: 'jhi',
                         languages: [],
                         messageBroker: false,
-
                         packageName: 'com.jhipster.demo.store',
                         packageFolder: 'com/jhipster/demo/store',
                         prodDatabaseType: 'mysql',
@@ -1470,7 +1458,6 @@ relationship OneToOne {
                         jhiPrefix: 'jhi',
                         languages: [],
                         messageBroker: false,
-
                         packageName: 'com.jhipster.demo.product',
                         packageFolder: 'com/jhipster/demo/product',
                         prodDatabaseType: 'mysql',
@@ -1500,7 +1487,6 @@ relationship OneToOne {
                         jhiPrefix: 'jhi',
                         languages: [],
                         messageBroker: false,
-
                         packageName: 'com.jhipster.demo.invoice',
                         packageFolder: 'com/jhipster/demo/invoice',
                         prodDatabaseType: 'mysql',
@@ -1530,7 +1516,6 @@ relationship OneToOne {
                         jhiPrefix: 'jhi',
                         languages: [],
                         messageBroker: false,
-
                         packageName: 'com.jhipster.demo.notification',
                         packageFolder: 'com/jhipster/demo/notification',
                         prodDatabaseType: 'mongodb',
@@ -1862,7 +1847,6 @@ paginate * with infinite-scroll
                             jhiPrefix: 'jhi',
                             languages: [],
                             messageBroker: false,
-
                             packageFolder: 'com/mycompany/myapp',
                             packageName: 'com.mycompany.myapp',
                             prodDatabaseType: 'postgresql',
