@@ -103,7 +103,7 @@
     }
 
     protected handleNavigation(): void {
-        combineLatest(this.activatedRoute.data, this.activatedRoute.queryParamMap, (data: Data, params: ParamMap) => {
+        combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
             const page = params.get('page');
             const pageNumber = page !== null ? +page : 1;
             const sort = (params.get('sort') ?? data['defaultSort']).split(',');
@@ -114,5 +114,5 @@
               this.ascending = ascending;
               this.loadPage(pageNumber, true);
             }
-        }).subscribe();
+        });
     }
