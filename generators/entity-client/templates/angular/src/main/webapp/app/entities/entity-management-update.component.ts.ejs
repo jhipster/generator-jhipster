@@ -253,10 +253,11 @@ _%>
     }
 
     setFileData(event: any, field: string, isImage: boolean): void {
-        this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe(null, (err: JhiFileLoadError) => {
-            this.eventManager.broadcast(
-                new JhiEventWithContent<AlertError>('<%= frontendAppName %>.error', { <% if (enableTranslation) { %>...err, key: 'error.file.' + err.key<% } else { %>message: err.message<% } %> })
-            );
+        this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+            error: (err: JhiFileLoadError) =>
+                this.eventManager.broadcast(
+                    new JhiEventWithContent<AlertError>('<%= frontendAppName %>.error', { <% if (enableTranslation) { %>...err, key: 'error.file.' + err.key<% } else { %>message: err.message<% } %> })
+                )
         });
     }
 
