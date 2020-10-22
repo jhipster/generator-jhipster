@@ -19,21 +19,21 @@
 <div>
     <div class="row justify-content-center">
         <div class="col-6">
-            <h1 jhiTranslate="login.title">Sign in</h1>
-            <div class="alert alert-danger" *ngIf="authenticationError" jhiTranslate="login.messages.error.authentication">
+            <h1 jhiTranslate="login.title" data-cy="loginTitle">Sign in</h1>
+            <div class="alert alert-danger" *ngIf="authenticationError" jhiTranslate="login.messages.error.authentication" data-cy="loginError">
                 <strong>Failed to sign in!</strong> Please check your credentials and try again.
             </div>
             <form class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
                 <div class="form-group">
                     <label class="username-label" for="username" jhiTranslate="global.form.username.label">Login</label>
                     <input type="text" class="form-control" name="username" id="username" placeholder="{{ 'global.form.username.placeholder' | translate }}"
-                            formControlName="username" #username>
+                            formControlName="username" #username data-cy="username">
                 </div>
 
                 <div class="form-group">
                     <label for="password" jhiTranslate="login.form.password">Password</label>
                     <input type="password" class="form-control" name="password" id="password" placeholder="{{ 'login.form.password.placeholder' | translate }}"
-                            formControlName="password">
+                            formControlName="password" data-cy="password">
                 </div>
 
                 <div class="form-check">
@@ -43,17 +43,18 @@
                     </label>
                 </div>
 
-                <button type="submit" class="btn btn-primary" jhiTranslate="login.form.button">Sign in</button>
+                <button type="submit" class="btn btn-primary" jhiTranslate="login.form.button" data-cy="submit">Sign in</button>
             </form>
-
+            <%_ if (!skipUserManagement) { _%>
             <div class="mt-3 alert alert-warning">
-                <a class="alert-link" routerLink="/account/reset/request" jhiTranslate="login.password.forgot">Did you forget your password?</a>
+                <a class="alert-link" routerLink="/account/reset/request" jhiTranslate="login.password.forgot" data-cy="forgetYourPasswordSelector">Did you forget your password?</a>
             </div>
 
             <div class="alert alert-warning">
                 <span jhiTranslate="global.messages.info.register.noaccount">You don't have an account yet?</span>
                 <a class="alert-link" routerLink="/account/register" jhiTranslate="global.messages.info.register.link">Register a new account</a>
             </div>
+            <%_ } _%>
         </div>
     </div>
 </div>
