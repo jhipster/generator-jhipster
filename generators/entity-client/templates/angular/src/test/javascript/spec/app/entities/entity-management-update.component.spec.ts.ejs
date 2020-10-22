@@ -19,12 +19,15 @@
 <%_
 const tsKeyId = generateTestEntityId(primaryKeyType);
 _%>
+jest.mock('@angular/router');
+
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
-import { TestModule } from '../../../<%= entityParentPathAddition %>test.module';
 import { <%= entityAngularName %>UpdateComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
@@ -37,16 +40,16 @@ describe('Component Tests', () => {
 
         beforeEach(() => {
             TestBed.configureTestingModule({
-                imports: [TestModule],
+                imports: [HttpClientTestingModule],
                 declarations: [<%= entityAngularName %>UpdateComponent],
-                providers: [FormBuilder]
+                providers: [FormBuilder, ActivatedRoute]
             })
             .overrideTemplate(<%= entityAngularName %>UpdateComponent, '')
             .compileComponents();
 
             fixture = TestBed.createComponent(<%= entityAngularName %>UpdateComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(<%= entityAngularName %>Service);
+            service = TestBed.inject(<%= entityAngularName %>Service);
         });
 
         describe('save', () => {

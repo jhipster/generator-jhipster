@@ -30,9 +30,8 @@ module.exports = {
     ...dockerPrompts,
 };
 
-function askForKubernetesNamespace() {
+async function askForKubernetesNamespace() {
     if (this.regenerate) return;
-    const done = this.async();
 
     const prompts = [
         {
@@ -43,15 +42,12 @@ function askForKubernetesNamespace() {
         },
     ];
 
-    this.prompt(prompts).then(props => {
-        this.kubernetesNamespace = props.kubernetesNamespace;
-        done();
-    });
+    const props = await this.prompt(prompts);
+    this.kubernetesNamespace = props.kubernetesNamespace;
 }
 
-function askForKubernetesServiceType() {
+async function askForKubernetesServiceType() {
     if (this.regenerate) return;
-    const done = this.async();
 
     const istio = this.istio;
 
@@ -79,15 +75,12 @@ function askForKubernetesServiceType() {
         },
     ];
 
-    this.prompt(prompts).then(props => {
-        this.kubernetesServiceType = props.kubernetesServiceType;
-        done();
-    });
+    const props = await this.prompt(prompts);
+    this.kubernetesServiceType = props.kubernetesServiceType;
 }
 
-function askForIngressType() {
+async function askForIngressType() {
     if (this.regenerate) return;
-    const done = this.async();
     const kubernetesServiceType = this.kubernetesServiceType;
 
     const prompts = [
@@ -110,15 +103,12 @@ function askForIngressType() {
         },
     ];
 
-    this.prompt(prompts).then(props => {
-        this.ingressType = props.ingressType;
-        done();
-    });
+    const props = await this.prompt(prompts);
+    this.ingressType = props.ingressType;
 }
 
-function askForIngressDomain() {
+async function askForIngressDomain() {
     if (this.regenerate) return;
-    const done = this.async();
     const kubernetesServiceType = this.kubernetesServiceType;
     const istio = this.istio;
     this.ingressDomain = this.ingressDomain && this.ingressDomain.startsWith('.') ? this.ingressDomain.substring(1) : this.ingressDomain;
@@ -179,23 +169,20 @@ function askForIngressDomain() {
         },
     ];
 
-    this.prompt(prompts).then(props => {
-        if (props.ingressDomain === 'none') {
-            this.ingressDomain = '';
-        } else {
-            this.ingressDomain = props.ingressDomain ? props.ingressDomain : '';
-        }
-        done();
-    });
+    const props = await this.prompt(prompts);
+    if (props.ingressDomain === 'none') {
+        this.ingressDomain = '';
+    } else {
+        this.ingressDomain = props.ingressDomain ? props.ingressDomain : '';
+    }
 }
 
-function askForIstioSupport() {
+async function askForIstioSupport() {
     if (this.regenerate) return;
     if (this.deploymentApplicationType === 'monolith') {
         this.istio = false;
         return;
     }
-    const done = this.async();
 
     const prompts = [
         {
@@ -216,15 +203,12 @@ function askForIstioSupport() {
         },
     ];
 
-    this.prompt(prompts).then(props => {
-        this.istio = props.istio;
-        done();
-    });
+    const props = await this.prompt(prompts);
+    this.istio = props.istio;
 }
 
-function askForPersistentStorage() {
+async function askForPersistentStorage() {
     if (this.regenerate) return;
-    const done = this.async();
     let usingDataBase = false;
     this.appConfigs.forEach((appConfig, index) => {
         if (appConfig.prodDatabaseType !== 'no') {
@@ -252,15 +236,12 @@ function askForPersistentStorage() {
         },
     ];
 
-    this.prompt(prompts).then(props => {
-        this.kubernetesUseDynamicStorage = props.kubernetesUseDynamicStorage;
-        done();
-    });
+    const props = await this.prompt(prompts);
+    this.kubernetesUseDynamicStorage = props.kubernetesUseDynamicStorage;
 }
 
-function askForStorageClassName() {
+async function askForStorageClassName() {
     if (this.regenerate) return;
-    const done = this.async();
     const kubernetesUseDynamicStorage = this.kubernetesUseDynamicStorage;
 
     const prompts = [
@@ -273,11 +254,9 @@ function askForStorageClassName() {
         },
     ];
 
-    this.prompt(prompts).then(props => {
-        // Add the StorageClass value only if dynamic storage is enabled
-        if (kubernetesUseDynamicStorage) {
-            this.kubernetesStorageClassName = props.kubernetesStorageClassName.trim();
-        }
-        done();
-    });
+    const props = await this.prompt(prompts);
+    // Add the StorageClass value only if dynamic storage is enabled
+    if (kubernetesUseDynamicStorage) {
+        this.kubernetesStorageClassName = props.kubernetesStorageClassName.trim();
+    }
 }

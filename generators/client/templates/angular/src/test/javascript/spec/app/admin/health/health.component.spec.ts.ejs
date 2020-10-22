@@ -18,9 +18,9 @@
 -%>
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of, throwError } from 'rxjs';
 
-import { TestModule } from '../../../test.module';
 import { HealthComponent } from 'app/admin/health/health.component';
 import { HealthService, Health } from 'app/admin/health/health.service';
 
@@ -32,7 +32,7 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [TestModule],
+                imports: [HttpClientTestingModule],
                 declarations: [HealthComponent]
             })
             .overrideTemplate(HealthComponent, '')
@@ -42,7 +42,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             fixture = TestBed.createComponent(HealthComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(HealthService);
+            service = TestBed.inject(HealthService);
         });
 
         describe('getBadgeClass', () => {

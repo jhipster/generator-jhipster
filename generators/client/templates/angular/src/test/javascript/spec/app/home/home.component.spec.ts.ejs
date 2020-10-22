@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { of } from 'rxjs';
 
-import { TestModule } from '../../test.module';
 import { HomeComponent } from 'app/home/home.component';
 import { AccountService } from 'app/core/auth/account.service';
 
@@ -13,14 +13,13 @@ describe('Component Tests', () => {
     describe('Home Component', () => {
         let comp: HomeComponent;
         let fixture: ComponentFixture<HomeComponent>;
-        let accountService: AccountService;
+        let mockAccountService: AccountService;
         <%_ if (authenticationType !== 'oauth2') { _%>
         let mockRouter: MockRouter;
         <%_ } _%>
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [TestModule],
                 declarations: [HomeComponent]
             })
             .overrideTemplate(HomeComponent, '')
@@ -30,7 +29,9 @@ describe('Component Tests', () => {
         beforeEach(() => {
             fixture = TestBed.createComponent(HomeComponent);
             comp = fixture.componentInstance;
-            accountService = TestBed.get(AccountService);
+            mockAccountService = TestBed.inject(AccountService);
+            mockAccountService.identity = jest.fn(() => of(null));
+            mockAccountService.getAuthenticationState = jest.fn(() => of(null));
             <%_ if (authenticationType !== 'oauth2') { _%>
                 mockRouter = TestBed.get(Router);
             <%_ } _%>
@@ -42,7 +43,7 @@ describe('Component Tests', () => {
             comp.ngOnInit();
 
             // THEN
-            expect(accountService.getAuthenticationState).toHaveBeenCalled();
+            expect(mockAccountService.getAuthenticationState).toHaveBeenCalled();
         });
         <%_ } _%>
 
@@ -51,7 +52,7 @@ describe('Component Tests', () => {
             comp.isAuthenticated();
 
             // THEN
-            expect(accountService.isAuthenticated).toHaveBeenCalled();
+            expect(mockAccountService.isAuthenticated).toHaveBeenCalled();
         });
 
         <%_ if (authenticationType !== 'oauth2') { _%>

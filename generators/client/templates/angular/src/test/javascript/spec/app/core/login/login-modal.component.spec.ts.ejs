@@ -1,0 +1,141 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+jest.mock('@ng-bootstrap/ng-bootstrap');
+
+import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
+import { of } from 'rxjs';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+
+import { LoginService } from 'app/core/login/login.service';
+import { LoginModalComponent } from 'app/core/login/login-modal.component';
+
+describe('Component Tests', () => {
+    describe('LoginModalComponent', () => {
+        let comp: LoginModalComponent;
+        let fixture: ComponentFixture<LoginModalComponent>;
+        let mockLoginService: LoginService;
+        let mockRouter: Router;
+        let mockActiveModal: NgbActiveModal;
+
+        beforeEach(async(() => {
+            TestBed.configureTestingModule({
+                declarations: [LoginModalComponent],
+                providers : [
+                    FormBuilder,
+                    NgbActiveModal,
+                    {
+                        provide: LoginService,
+                        useValue: {
+                            login: jest.fn(() => of({}))
+                        }
+                    },
+                    {
+                        provide: Router,
+                        useValue: {
+                            url: '/admin/metrics',
+                            navigate: jest.fn(() => undefined)
+                        }
+                    }
+                ]
+            })
+            .overrideTemplate(LoginModalComponent, '')
+            .compileComponents();
+        }));
+
+        beforeEach(() => {
+            fixture = TestBed.createComponent(LoginModalComponent);
+            comp = fixture.componentInstance;
+            mockLoginService = TestBed.inject(LoginService);
+            mockRouter = TestBed.inject(Router);
+            mockActiveModal = TestBed.inject(NgbActiveModal);
+        });
+
+        it('should authenticate the user',
+            inject([],
+                fakeAsync(() => {
+                    // GIVEN
+                    const credentials = {
+                        username: 'admin',
+                        password: 'admin',
+                        rememberMe: true
+                    };
+
+                    comp.loginForm.patchValue({
+                        username: 'admin',
+                        password: 'admin',
+                        rememberMe: true
+                    });
+
+                    // WHEN/
+                    comp.login();
+                    tick(); // simulate async
+
+                    // THEN
+                    expect(comp.authenticationError).toEqual(false);
+                    expect(mockActiveModal.close).toHaveBeenCalled();
+                    expect(mockLoginService.login).toHaveBeenCalledWith(credentials);
+                })
+            )
+        );
+
+        it('should empty the credentials upon cancel', () => {
+            // GIVEN
+            comp.loginForm.patchValue({
+                username: 'admin',
+                password: 'admin'
+            });
+
+            const expected = {
+                username: '',
+                password: '',
+                rememberMe: false
+            };
+
+            // WHEN
+            comp.cancel();
+
+            // THEN
+            expect(comp.authenticationError).toEqual(false);
+            expect(comp.loginForm.get('username')!.value).toEqual(expected.username);
+            expect(comp.loginForm.get('password')!.value).toEqual(expected.password);
+            expect(comp.loginForm.get('rememberMe')!.value).toEqual(expected.rememberMe);
+            expect(mockActiveModal.dismiss).toHaveBeenCalledWith('cancel');
+        });
+
+        it('should redirect user when register', () => {
+            // WHEN
+            comp.register();
+
+            // THEN
+            expect(mockActiveModal.dismiss).toHaveBeenCalledWith('to state register');
+            expect(mockRouter.navigate).toHaveBeenCalledWith(['/account/register']);
+        });
+
+        it('should redirect user when request password', () => {
+            // WHEN
+            comp.requestResetPassword();
+
+            // THEN
+            expect(mockActiveModal.dismiss).toHaveBeenCalledWith('to state requestReset');
+            expect(mockRouter.navigate).toHaveBeenCalledWith(['/account/reset', 'request']);
+        });
+    });
+});

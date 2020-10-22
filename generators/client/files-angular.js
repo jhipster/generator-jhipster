@@ -363,7 +363,6 @@ const files = {
                 'jest.conf.js',
                 'jest.ts',
                 'jest-global-mocks.ts',
-                'spec/test.module.ts',
                 'spec/app/admin/configuration/configuration.component.spec.ts',
                 'spec/app/admin/configuration/configuration.service.spec.ts',
                 'spec/app/admin/health/health.component.spec.ts',
@@ -423,16 +422,6 @@ const files = {
             condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
             path: CLIENT_TEST_SRC_DIR,
             templates: ['spec/app/account/sessions/sessions.component.spec.ts'],
-        },
-        {
-            condition: generator => generator.enableTranslation,
-            path: CLIENT_TEST_SRC_DIR,
-            templates: ['spec/helpers/mock-language.service.ts'],
-        },
-        {
-            condition: generator => generator.websocket === 'spring-websocket',
-            path: CLIENT_TEST_SRC_DIR,
-            templates: ['spec/helpers/mock-tracker.service.ts'],
         },
         {
             condition: generator => generator.protractorTests,
