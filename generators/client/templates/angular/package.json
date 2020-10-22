@@ -20,7 +20,7 @@
   "devDependencies": {
     "@angular/cli": "10.1.7",
     "autoprefixer": "9.8.6",
-    "browser-sync": "2.26.12",
+    "browser-sync": "2.26.13",
     "browser-sync-webpack-plugin": "2.2.2",
     "codelyzer": "6.0.1",
     "copy-webpack-plugin": "6.2.1",
