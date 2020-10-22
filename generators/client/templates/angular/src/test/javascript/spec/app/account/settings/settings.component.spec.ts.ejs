@@ -21,7 +21,7 @@ jest.mock('ng-jhipster');
 <%_ } _%>
 jest.mock('app/core/auth/account.service');
 
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { throwError, of } from 'rxjs';
@@ -49,7 +49,7 @@ describe('Component Tests', () => {
             imageUrl: ''
         };
 
-        beforeEach(async(() => {
+        beforeEach(waitForAsync(() => {
             TestBed.configureTestingModule({
                 imports: [HttpClientTestingModule],
                 declarations: [SettingsComponent],
