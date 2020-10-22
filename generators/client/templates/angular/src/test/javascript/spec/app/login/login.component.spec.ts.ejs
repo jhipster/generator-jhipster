@@ -21,7 +21,6 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { LoginService } from 'app/core/login/login.service';
-import { TestModule } from '../../test.module';
 import { MockLoginService } from '../../helpers/mock-login.service';
 import { MockRouter } from '../../helpers/mock-route.service';
 import { LoginComponent } from 'app/login/login.component';
@@ -38,7 +37,6 @@ describe('Component Tests', () => {
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
-        imports: [TestModule],
         declarations: [LoginComponent],
         providers: [
           FormBuilder,
