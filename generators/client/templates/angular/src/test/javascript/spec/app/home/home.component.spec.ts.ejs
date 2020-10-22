@@ -1,25 +1,34 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+jest.mock('app/core/auth/account.service');
+<%_ if (authenticationType !== 'oauth2') { _%>
+jest.mock('app/core/login/login-modal.service');
+<% } else { %>
+jest.mock('app/core/login/login.service');
+<%_ } _%>
 
-import { TestModule } from '../../test.module';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { of } from 'rxjs';
+
 import { HomeComponent } from 'app/home/home.component';
 import { AccountService } from 'app/core/auth/account.service';
 <%_ if (authenticationType !== 'oauth2') { _%>
 import { LoginModalService } from 'app/core/login/login-modal.service';
+<% } else { %>
+import { LoginService } from 'app/core/login/login.service';
 <%_ } _%>
 
 describe('Component Tests', () => {
     describe('Home Component', () => {
         let comp: HomeComponent;
         let fixture: ComponentFixture<HomeComponent>;
-        let accountService: AccountService;
+        let mockAccountService: AccountService;
         <%_ if (authenticationType !== 'oauth2') { _%>
-        let loginModalService: LoginModalService;
+        let mockLoginModalService: LoginModalService;
         <%_ } _%>
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [TestModule],
-                declarations: [HomeComponent]
+                declarations: [HomeComponent],
+                providers: [AccountService, <% if (authenticationType !== 'oauth2') { %>LoginModalService<% } else { %>LoginService<% } %>]
             })
             .overrideTemplate(HomeComponent, '')
             .compileComponents();
@@ -28,9 +37,11 @@ describe('Component Tests', () => {
         beforeEach(() => {
             fixture = TestBed.createComponent(HomeComponent);
             comp = fixture.componentInstance;
-            accountService = TestBed.get(AccountService);
+            mockAccountService = TestBed.inject(AccountService);
+            mockAccountService.identity = jest.fn(() => of(null));
+            mockAccountService.getAuthenticationState = jest.fn(() => of(null));
             <%_ if (authenticationType !== 'oauth2') { _%>
-            loginModalService = TestBed.get(LoginModalService);
+            mockLoginModalService = TestBed.inject(LoginModalService);
             <%_ } _%>
         });
 
@@ -40,7 +51,7 @@ describe('Component Tests', () => {
             comp.ngOnInit();
 
             // THEN
-            expect(accountService.getAuthenticationState).toHaveBeenCalled();
+            expect(mockAccountService.getAuthenticationState).toHaveBeenCalled();
         });
         <%_ } _%>
 
@@ -49,7 +60,7 @@ describe('Component Tests', () => {
             comp.isAuthenticated();
 
             // THEN
-            expect(accountService.isAuthenticated).toHaveBeenCalled();
+            expect(mockAccountService.isAuthenticated).toHaveBeenCalled();
         });
 
         <%_ if (authenticationType !== 'oauth2') { _%>
@@ -58,7 +69,7 @@ describe('Component Tests', () => {
             comp.login();
 
             // THEN
-            expect(loginModalService.open).toHaveBeenCalled();
+            expect(mockLoginModalService.open).toHaveBeenCalled();
         });
         <%_ } _%>
     });

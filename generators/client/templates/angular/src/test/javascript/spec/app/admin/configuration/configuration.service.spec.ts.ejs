@@ -34,8 +34,8 @@ describe('Service Tests', () => {
             });
 
             expectedResult = null;
-            service = TestBed.get(ConfigurationService);
-            httpMock = TestBed.get(HttpTestingController);
+            service = TestBed.inject(ConfigurationService);
+            httpMock = TestBed.inject(HttpTestingController);
         });
 
         afterEach(() => {

@@ -17,9 +17,9 @@ distributed under the License is distributed on an "AS IS" BASIS,
 limitations under the License.
 -%>
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 
-import { TestModule } from '../../../test.module';
 import { MetricsComponent } from 'app/admin/metrics/metrics.component';
 import { MetricsService } from 'app/admin/metrics/metrics.service';
 
@@ -31,7 +31,7 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [TestModule],
+                imports: [HttpClientTestingModule],
                 declarations: [MetricsComponent]
             })
                 .overrideTemplate(MetricsComponent, '')
@@ -41,7 +41,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             fixture = TestBed.createComponent(MetricsComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(MetricsService);
+            service = TestBed.inject(MetricsService);
         });
 
         describe('refresh', () => {

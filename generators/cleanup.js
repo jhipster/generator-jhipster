@@ -123,6 +123,8 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.service.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/test.module.ts`);
+            generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/helpers`);
         } else if (generator.jhipsterConfig.clientFramework === REACT) {
             generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx.ejs`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/enzyme-setup.ts`);

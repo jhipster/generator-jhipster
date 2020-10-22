@@ -14,8 +14,8 @@ describe('Service Tests', () => {
         let modalService: NgbModal;
 
         beforeEach(() => {
-            service = TestBed.get(LoginModalService);
-            modalService = TestBed.get(NgbModal);
+            service = TestBed.inject(LoginModalService);
+            modalService = TestBed.inject(NgbModal);
         });
 
         describe('Service methods', () => {
