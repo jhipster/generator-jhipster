@@ -67,6 +67,9 @@ function createValidator(jdlObject, applicationSettings = {}, logger = console) 
         if (jdlObject.getEntityQuantity() === 0) {
             return;
         }
+        if (!applicationSettings.databaseType) {
+            throw new Error('Database type is required to validate entities.');
+        }
         const validator = new EntityValidator();
         jdlObject.forEachEntity(jdlEntity => {
             validator.validate(jdlEntity);
@@ -166,6 +169,7 @@ function getTypeCheckingFunction(entityName, applicationSettings) {
     }
     return FieldTypes.getIsType(applicationSettings.databaseType);
 }
+
 function checkForAbsentEntities({ jdlRelationship, doesEntityExist, skippedUserManagementOption }) {
     const absentEntities = [];
     if (!doesEntityExist(jdlRelationship.from)) {

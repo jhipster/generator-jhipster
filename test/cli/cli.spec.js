@@ -100,14 +100,6 @@ describe('jhipster cli', () => {
         });
 
         const commonTests = () => {
-            it('should pass a truthy fromCli', done => {
-                callback = (_command, options) => {
-                    expect(options.fromCli).to.be.true;
-                    expect(options.fromCli).to.be.true;
-                    done();
-                };
-                proxyquire('../../cli/cli', { './commands': commands });
-            });
             it('should pass a defined command', done => {
                 callback = (command, _options) => {
                     expect(command).to.not.be.undefined;
@@ -188,14 +180,6 @@ describe('jhipster cli', () => {
         });
 
         const commonTests = () => {
-            it('should pass a truthy fromCli', done => {
-                const cb = (_args, options, _env) => {
-                    expect(options.fromCli).to.be.true;
-                    expect(options.fromCli).to.be.true;
-                    done();
-                };
-                proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
-            });
             it('should pass a defined environment', done => {
                 const cb = (_args, _options, env) => {
                     expect(env).to.not.be.undefined;

@@ -98,6 +98,9 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         /* JHipster config using proxy mode used as a plain object instead of using get/set. */
         this.jhipsterConfig = this.config.createProxy();
 
+        /* Register generator for compose once */
+        this.registerComposedGenerator(this.options.namespace);
+
         /*
          * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the
          * generator and then executes generator.config.defaults(localConfig).
@@ -1419,6 +1422,20 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     }
 
     /**
+     * Register the composed generator for compose once.
+     * @param {string} namespace - jhipster generator.
+     * @return {boolean} false if already composed
+     */
+    registerComposedGenerator(namespace) {
+        this.configOptions.composedWith = this.configOptions.composedWith || [];
+        if (this.configOptions.composedWith.includes(namespace)) {
+            return false;
+        }
+        this.configOptions.composedWith.push(namespace);
+        return true;
+    }
+
+    /**
      * Compose with a jhipster generator using default jhipster config.
      * @param {string} generator - jhipster generator.
      * @param {object} [options] - options to pass
@@ -1426,15 +1443,13 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @return {object} the composed generator
      */
     composeWithJHipster(generator, options = {}, once = false) {
+        const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
         if (options === true || once) {
-            this.configOptions.composedWith = this.configOptions.composedWith || [];
-            if (this.configOptions.composedWith.includes(generator)) {
+            if (!this.registerComposedGenerator(namespace)) {
                 return undefined;
             }
-            this.configOptions.composedWith.push(generator);
         }
 
-        const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
         if (this.env.get(namespace)) {
             generator = namespace;
         } else {
@@ -1483,6 +1498,13 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      */
     getMicroserviceAppName(microserviceName) {
         return _.camelCase(microserviceName) + (microserviceName.endsWith('App') ? '' : 'App');
+    }
+
+    /**
+     * get sorted list of entitiy names according to changelog date (i.e. the order in which they were added)
+     */
+    getExistingEntityNames() {
+        return this.getExistingEntities().map(entity => entity.name);
     }
 
     /**

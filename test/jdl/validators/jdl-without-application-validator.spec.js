@@ -51,7 +51,7 @@ describe('JDLWithoutApplicationValidator', () => {
                         name: 'Continue',
                     })
                 );
-                validator = createValidator(jdlObject);
+                validator = createValidator(jdlObject, { databaseType: DatabaseTypes.SQL });
             });
 
             it('should fail', () => {
