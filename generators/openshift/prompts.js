@@ -24,9 +24,8 @@ module.exports = {
     ...dockerPrompts,
 };
 
-function askForOpenShiftNamespace() {
+async function askForOpenShiftNamespace() {
     if (this.regenerate) return;
-    const done = this.async();
 
     const prompts = [
         {
@@ -37,15 +36,12 @@ function askForOpenShiftNamespace() {
         },
     ];
 
-    this.prompt(prompts).then(props => {
-        this.openshiftNamespace = props.openshiftNamespace;
-        done();
-    });
+    const props = await this.prompt(prompts);
+    this.openshiftNamespace = props.openshiftNamespace;
 }
 
-function askForStorageType() {
+async function askForStorageType() {
     if (this.regenerate) return;
-    const done = this.async();
 
     let storageEnabled = false;
     this.appConfigs.some((appConfig, index) => {
@@ -57,7 +53,6 @@ function askForStorageType() {
     });
 
     if (storageEnabled === false) {
-        done();
         return;
     }
 
@@ -81,8 +76,6 @@ function askForStorageType() {
         },
     ];
 
-    this.prompt(prompts).then(props => {
-        this.storageType = props.storageType;
-        done();
-    });
+    const props = await this.prompt(prompts);
+    this.storageType = props.storageType;
 }
