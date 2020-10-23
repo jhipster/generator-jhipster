@@ -432,12 +432,44 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 });
                 this.entityConfig.relationships = relationships;
             },
+
+            addToYoRc() {
+                if (this.jhipsterConfig.entities === undefined) {
+                    this.jhipsterConfig.entities = [];
+                }
+                if (!this.jhipsterConfig.entities.find(entityName => entityName === this.context.name)) {
+                    this.jhipsterConfig.entities = this.jhipsterConfig.entities.concat([this.context.name]);
+                }
+            },
         };
     }
 
     get configuring() {
         if (useBlueprints) return;
         return this._configuring();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _composing() {
+        return {
+            composeEntities() {
+                // We need to compose with others entities to update relationships.
+                this.composeWithJHipster(
+                    'entities',
+                    {
+                        composedEntities: [this.context.name],
+                        skipDbChangelog: this.options.skipDbChangelog,
+                        skipInstall: this.options.skipInstall,
+                    },
+                    true
+                );
+            },
+        };
+    }
+
+    get composing() {
+        if (useBlueprints) return;
+        return this._composing();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -601,15 +633,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 }
             },
 
-            databaseChangelog() {
-                if (this.options.skipDbChangelog) {
-                    return;
-                }
-                this.composeWithJHipster('database-changelog', {
-                    arguments: [this.context.name],
-                });
-            },
-
             ...super._missingPostWriting(),
         };
     }
@@ -623,7 +646,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
     _install() {
         return {
             afterRunHook() {
-                const done = this.async();
                 try {
                     const modules = this.getModuleHooks();
                     if (modules.length > 0) {
@@ -631,6 +653,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         // form the data to be passed to modules
                         const context = this.context;
 
+                        const done = this.async();
                         // run through all post entity creation module hooks
                         this.callHooks(
                             'entity',
@@ -641,13 +664,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             },
                             done
                         );
-                    } else {
-                        done();
                     }
                 } catch (err) {
                     this.log(`\n${chalk.bold.red('Running post run module hooks failed. No modification done to the generated entity.')}`);
                     this.debug('Error:', err);
-                    done();
                 }
             },
         };
@@ -656,6 +676,20 @@ class EntityGenerator extends BaseBlueprintGenerator {
     get install() {
         if (useBlueprints) return;
         return this._install();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _end() {
+        return {
+            end() {
+                this.log(chalk.bold.green(`Entity ${this.context.entityNameCapitalized} generated successfully.`));
+            },
+        };
+    }
+
+    get end() {
+        if (useBlueprints) return;
+        return this._end();
     }
 
     /**

@@ -150,16 +150,26 @@ function getJDLObject(parsedJDLContent, configuration) {
 }
 
 function checkForErrors(jdlObject, configuration) {
-    let applicationType = configuration.applicationType;
-    let databaseType = configuration.databaseType;
-    let skippedUserManagement = false;
-    if (configuration.application) {
-        applicationType = configuration.application['generator-jhipster'].applicationType;
-        databaseType = configuration.application['generator-jhipster'].databaseType;
-        skippedUserManagement = configuration.application['generator-jhipster'].skipUserManagement;
-    }
     let validator;
     if (jdlObject.getApplicationQuantity() === 0) {
+        let application = configuration.application;
+        if (!application && doesFileExist('.yo-rc.json')) {
+            application = readJSONFile('.yo-rc.json');
+        }
+        let applicationType = configuration.applicationType;
+        let databaseType = configuration.databaseType;
+        let skippedUserManagement = configuration.skipUserManagement;
+        if (application && application['generator-jhipster']) {
+            if (applicationType === undefined) {
+                applicationType = application['generator-jhipster'].applicationType;
+            }
+            if (databaseType === undefined) {
+                databaseType = application['generator-jhipster'].databaseType;
+            }
+            if (skippedUserManagement === undefined) {
+                skippedUserManagement = application['generator-jhipster'].skipUserManagement;
+            }
+        }
         validator = JDLWithoutApplicationValidator.createValidator(jdlObject, {
             applicationType,
             databaseType,

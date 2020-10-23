@@ -197,7 +197,6 @@ Object.entries(allCommands).forEach(([key, opts]) => {
                 ...getCommandOptions(packageJson, unknownArgs),
                 ...program.opts(),
                 ...cmdOptions,
-                fromCli: true,
             };
 
             if (opts.cliOnly) {
