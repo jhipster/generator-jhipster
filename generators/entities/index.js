@@ -25,12 +25,6 @@ module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
-
         this.option('skip-db-changelog', {
             desc: 'Skip the generation of database changelog (liquibase for sql databases)',
             type: Boolean,

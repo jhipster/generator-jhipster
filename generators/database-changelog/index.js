@@ -31,19 +31,10 @@ module.exports = class extends BaseGenerator {
     constructor(args, options) {
         super(args, options);
 
-        this.configOptions = this.options.configOptions || {};
-
         this.argument('entities', {
             desc: 'Which entities to generate a new changelog',
             type: Array,
             required: true,
-        });
-
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
         });
 
         if (this.options.help) {
