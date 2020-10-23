@@ -25,6 +25,17 @@ class JHipsterCommand extends Command {
         return new JHipsterCommand(name);
     }
 
+    prepareOptions(prepareOptionsCallBack) {
+        this._prepareOptionsCallBack = prepareOptionsCallBack;
+    }
+
+    _parseCommand(operands, unknown) {
+        if (this._prepareOptionsCallBack) {
+            this._prepareOptionsCallBack();
+        }
+        return super._parseCommand(operands, unknown);
+    }
+
     addOption(option) {
         const result = super.addOption(option);
         // Add a hidden `--no` option for boolean options

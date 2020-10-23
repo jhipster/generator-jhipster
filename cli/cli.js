@@ -85,31 +85,35 @@ Object.entries(allCommands).forEach(([key, opts]) => {
     if (!opts.cliOnly || key === 'jdl') {
         if (opts.blueprint) {
             // Blueprint only command.
-            command.addAllGeneratorOptions(
-                env.create(`${packageNameToNamespace(opts.blueprint)}:${key}`, { options: { help: true } })._options
-            );
+            command.prepareOptions(() => {
+                command.addAllGeneratorOptions(
+                    env.create(`${packageNameToNamespace(opts.blueprint)}:${key}`, { options: { help: true } })._options
+                );
+            });
         } else {
-            const generator = key === 'jdl' ? 'app' : key;
-            // Register jhipster upstream options.
-            command.addAllGeneratorOptions(env.create(`${JHIPSTER_NS}:${generator}`, { options: { help: true } })._options);
+            command.prepareOptions(() => {
+                const generator = key === 'jdl' ? 'app' : key;
+                // Register jhipster upstream options.
+                command.addAllGeneratorOptions(env.create(`${JHIPSTER_NS}:${generator}`, { options: { help: true } })._options);
 
-            // Register blueprint specific options.
-            envBuilder.getBlueprintsNamespaces().forEach(blueprintNamespace => {
-                const generatorNamespace = `${blueprintNamespace}:${generator}`;
-                if (!env.get(generatorNamespace)) {
-                    return;
-                }
-                const blueprintName = blueprintNamespace.replace(/^jhipster-/, '');
-                try {
-                    command.addAllGeneratorOptions(
-                        env.create(generatorNamespace, { options: { help: true } })._options,
-                        chalk.yellow(` (blueprint option: ${blueprintName})`)
-                    );
-                } catch (error) {
-                    logger.info(
-                        `Error parsing options for generator ${generatorNamespace}, unknown option will lead to error at jhipster 7`
-                    );
-                }
+                // Register blueprint specific options.
+                envBuilder.getBlueprintsNamespaces().forEach(blueprintNamespace => {
+                    const generatorNamespace = `${blueprintNamespace}:${generator}`;
+                    if (!env.get(generatorNamespace)) {
+                        return;
+                    }
+                    const blueprintName = blueprintNamespace.replace(/^jhipster-/, '');
+                    try {
+                        command.addAllGeneratorOptions(
+                            env.create(generatorNamespace, { options: { help: true } })._options,
+                            chalk.yellow(` (blueprint option: ${blueprintName})`)
+                        );
+                    } catch (error) {
+                        logger.info(
+                            `Error parsing options for generator ${generatorNamespace}, unknown option will lead to error at jhipster 7`
+                        );
+                    }
+                });
             });
         }
     }
