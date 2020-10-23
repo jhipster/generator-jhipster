@@ -44,8 +44,7 @@ const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
 
 // NPM packages version
 const HUSKY_VERSION = '4.2.5';
-// Not using the latest version because of https://github.com/jhipster/generator-jhipster/issues/11131
-const LINT_STAGED_VERSION = '8.2.1';
+const LINT_STAGED_VERSION = '10.4.2';
 // The installed prettier version should be the same that the one used during JHipster generation to avoid formatting differences
 const PRETTIER_VERSION = packagejs.dependencies.prettier;
 const PRETTIER_JAVA_VERSION = packagejs.dependencies['prettier-plugin-java'];
