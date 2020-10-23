@@ -19,7 +19,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { <%_ if (pagination !== 'no') { _%>HttpHeaders, <% } %>HttpResponse } from '@angular/common/http';
 <%_ if (pagination === 'pagination') { _%>
-import { ActivatedRoute, ParamMap, Router, Data } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 <%_ } else if (searchEngine !== false) { _%>
 import { ActivatedRoute } from '@angular/router';
 <%_ } _%>

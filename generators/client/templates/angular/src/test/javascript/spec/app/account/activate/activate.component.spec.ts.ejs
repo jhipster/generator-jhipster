@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { TestBed, async, tick, fakeAsync, inject } from '@angular/core/testing';
+import { TestBed, waitForAsync, tick, fakeAsync, inject } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
@@ -28,7 +28,7 @@ describe('Component Tests', () => {
     describe('ActivateComponent', () => {
         let comp: ActivateComponent;
 
-        beforeEach(async(() => {
+        beforeEach(waitForAsync(() => {
             TestBed.configureTestingModule({
                 imports: [HttpClientTestingModule],
                 declarations: [ActivateComponent],

@@ -21,7 +21,7 @@ import { HttpResponse, <%_ if (prodDatabaseType !== 'cassandra') { _%> HttpHeade
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription, combineLatest } from 'rxjs';
 <%_ if (prodDatabaseType !== 'cassandra') { _%>
-import { ActivatedRoute, ParamMap, Router, Data } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
@@ -108,14 +108,14 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     }
 
     private handleNavigation(): void {
-        combineLatest(this.activatedRoute.data, this.activatedRoute.queryParamMap, (data: Data, params: ParamMap) => {
+        combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
             const page = params.get('page');
             this.page = page !== null ? +page : 1;
             const sort = (params.get('sort') ?? data['defaultSort']).split(',');
             this.predicate = sort[0];
             this.ascending = sort[1] === 'asc';
             this.loadAll();
-        }).subscribe();
+        });
     }
     <%_ } _%>
 
