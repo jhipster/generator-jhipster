@@ -75,7 +75,11 @@ class JHipsterCommand extends Command {
         if (optionDefinition.type === String) {
             cmdString = `${cmdString} <value>`;
         }
-        this.addOption(new Option(cmdString, optionDefinition.description + additionalDescription).default(optionDefinition.default));
+        this.addOption(
+            new Option(cmdString, optionDefinition.description + additionalDescription)
+                .default(optionDefinition.default)
+                .hideHelp(optionDefinition.hide)
+        );
     }
 }
 
