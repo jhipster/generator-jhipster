@@ -25,8 +25,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 import org.springframework.dao.ConcurrencyFailureException;
-<%_ } _%>
 import org.springframework.dao.DataAccessException;
+<%_ } _%>
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 <%_ if (reactive && databaseType === 'sql') { _%>
@@ -221,6 +221,7 @@ _%>
                         .map(this::toProblem)
                         .orElse(null));
             }
+            <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
     
             if (throwable instanceof DataAccessException) {
                 return Problem.builder()
@@ -233,7 +234,8 @@ _%>
                         .map(this::toProblem)
                         .orElse(null));
             }
-    
+            <%_ } _%>
+
             if (containsPackageName(throwable.getMessage())) {
                 return Problem.builder()
                     .withType(type)
