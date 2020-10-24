@@ -18,7 +18,7 @@
 -%>
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "@typescript-eslint/tslint"],
+  "plugins": ["@angular-eslint/eslint-plugin", "@typescript-eslint"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -38,6 +38,31 @@
     "project": "./tsconfig.json"
   },
   "rules": {
+    "@angular-eslint/component-class-suffix": "error",
+    "@angular-eslint/component-selector": [
+      "error",
+      {
+        "type": "element",
+        "prefix": "<%= jhiPrefixDashed %>",
+        "style": "kebab-case"
+      }
+    ],
+    "@angular-eslint/directive-class-suffix": "error",
+    "@angular-eslint/directive-selector": [
+      "error",
+      {
+        "type": "attribute",
+        "prefix": "<%= jhiPrefix %>",
+        "style": "camelCase"
+      }
+    ],
+    "@angular-eslint/no-host-metadata-property": "error",
+    "@angular-eslint/no-input-rename": "error",
+    "@angular-eslint/no-inputs-metadata-property": "error",
+    "@angular-eslint/no-output-rename": "error",
+    "@angular-eslint/no-outputs-metadata-property": "error",
+    "@angular-eslint/use-lifecycle-interface": "error",
+    "@angular-eslint/use-pipe-transform-interface": "error",
     "@typescript-eslint/member-ordering": [
       "error",
       {
@@ -62,7 +87,7 @@
         ignoreRestSiblings: false
       }
     ],
-    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/ban-types": [
       "error",
@@ -74,12 +99,6 @@
       }
     ],
     "@typescript-eslint/unbound-method": "off",
-    "@typescript-eslint/tslint/config": [
-      "error",
-      {
-        "lintFile": "./tslint.json"
-      }
-    ],
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-shadow": ["error"],
     "@typescript-eslint/no-floating-promises": "off",
