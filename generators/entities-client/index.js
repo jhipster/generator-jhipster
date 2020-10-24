@@ -51,6 +51,19 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
+    _loading() {
+        return {
+            loadSharedConfig() {
+                this.loadClientConfig();
+            },
+        };
+    }
+
+    get loading() {
+        return useBlueprints ? undefined : this._loading();
+    }
+
+    // Public API method used by the getter and also by Blueprints
     _end() {
         return {
             end() {
