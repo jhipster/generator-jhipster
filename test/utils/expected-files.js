@@ -500,7 +500,6 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert-error.component.spec.ts`,
         'tsconfig.app.json',
         'tsconfig.json',
-        'tslint.json',
         'webpack/logo-jhipster.png',
         'webpack/utils.js',
         'webpack/webpack.common.js',

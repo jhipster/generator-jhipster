@@ -32,7 +32,6 @@ const files = {
                 'proxy.conf.json',
                 'tsconfig.json',
                 'tsconfig.app.json',
-                'tslint.json',
                 '.eslintrc.json',
                 'angular.json',
                 'webpack/utils.js',

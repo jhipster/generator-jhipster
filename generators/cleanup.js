@@ -125,6 +125,7 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/test.module.ts`);
             generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/helpers`);
+            generator.removeFile('tslint.json');
         } else if (generator.jhipsterConfig.clientFramework === REACT) {
             generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx.ejs`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/enzyme-setup.ts`);
