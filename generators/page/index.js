@@ -44,7 +44,7 @@ module.exports = class extends BaseBlueprintGenerator {
             hide: true,
             defaults: false,
         });
-        this.argument('recreate', {
+        this.option('recreate', {
             type: Boolean,
             required: false,
             description: 'Recreate the page',

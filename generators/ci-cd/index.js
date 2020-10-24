@@ -31,42 +31,42 @@ module.exports = class extends BaseGenerator {
         super(args, opts);
 
         // Automatically configure Travis
-        this.argument('autoconfigure-travis', {
+        this.option('autoconfigure-travis', {
             type: Boolean,
             defaults: false,
             description: 'Automatically configure Travis',
         });
 
         // Automatically configure Jenkins
-        this.argument('autoconfigure-jenkins', {
+        this.option('autoconfigure-jenkins', {
             type: Boolean,
             defaults: false,
             description: 'Automatically configure Jenkins',
         });
 
         // Automatically configure Gitlab
-        this.argument('autoconfigure-gitlab', {
+        this.option('autoconfigure-gitlab', {
             type: Boolean,
             defaults: false,
             description: 'Automatically configure Gitlab',
         });
 
         // Automatically configure Azure
-        this.argument('autoconfigure-azure', {
+        this.option('autoconfigure-azure', {
             type: Boolean,
             defaults: false,
             description: 'Automatically configure Azure',
         });
 
         // Automatically configure GitHub Actions
-        this.argument('autoconfigure-github', {
+        this.option('autoconfigure-github', {
             type: Boolean,
             defaults: false,
             description: 'Automatically configure GitHub Actions',
         });
 
         // Automatically configure CircleCI
-        this.argument('autoconfigure-circle', {
+        this.option('autoconfigure-circle', {
             type: Boolean,
             defaults: false,
             description: 'Automatically configure CircleCI',
