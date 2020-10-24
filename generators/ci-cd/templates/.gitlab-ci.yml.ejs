@@ -296,7 +296,7 @@ webpack-build:
     stage: build
     script:
         - <%= clientPackageManager %> install
-        - <%= clientPackageManager %> run webpack:build
+        - <%= clientPackageManager %> run ci:webpack:build
     artifacts:
         paths:
             - build/
