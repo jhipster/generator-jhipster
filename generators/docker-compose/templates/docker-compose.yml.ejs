@@ -49,6 +49,9 @@ services:
         # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
         environment:
             - _JAVA_OPTIONS=-Xmx512m -Xms256m
+            <%_ if (authenticationType === 'oauth2') { _%>
+            - JHIPSTER_SLEEP=20
+            <%_ } _%>
             - SPRING_PROFILES_ACTIVE=dev<% if (authenticationType === 'oauth2') { %>,oauth2<% } %><% if (authenticationType === 'uaa') { %>,uaa<% } %>
             - SPRING_SECURITY_USER_PASSWORD=<%= adminPassword %>
             - JHIPSTER_REGISTRY_PASSWORD=<%= adminPassword %>
