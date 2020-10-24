@@ -54,7 +54,19 @@ class JHipsterCommand extends Command {
         this.addOption(new Option(opt.option, opt.desc + additionalDescription).default(opt.default));
     }
 
-    addAllGeneratorOptions(options, blueprintOptionDescription) {
+    addGeneratorArguments(generatorArgs = []) {
+        if (!generatorArgs) return this;
+        const args = generatorArgs
+            .map(argument => {
+                const argName = argument.type === Array ? `${argument.name}...` : argument.name;
+                return argument.required ? `<${argName}>` : `[${argName}]`;
+            })
+            .join(' ');
+        this.arguments(args);
+        return this;
+    }
+
+    addAllGeneratorOptions(options = {}, blueprintOptionDescription) {
         Object.entries(options).forEach(([key, value]) => {
             if (this._findOption(key)) {
                 return;
@@ -74,6 +86,8 @@ class JHipsterCommand extends Command {
         cmdString = `${cmdString}--${optionName}`;
         if (optionDefinition.type === String) {
             cmdString = `${cmdString} <value>`;
+        } else if (optionDefinition.type === Array) {
+            cmdString = `${cmdString} <value...>`;
         }
         this.addOption(
             new Option(cmdString, optionDefinition.description + additionalDescription)

@@ -117,23 +117,6 @@ const getArgs = opts => {
     return '';
 };
 
-/**
- * Get options from arguments
- */
-const getOptionsFromArgs = (args = []) => {
-    const options = [];
-    args.forEach(item => {
-        if (typeof item == 'string') {
-            options.push(item);
-        } else if (typeof item == 'object') {
-            if (Array.isArray(item)) {
-                options.push(...item);
-            }
-        }
-    });
-    return options;
-};
-
 /* Convert option objects to command line args */
 const getOptionAsArgs = (options = {}) => {
     options = Object.fromEntries(
@@ -160,17 +143,14 @@ const getOptionAsArgs = (options = {}) => {
 /**
  *  Get options for the command
  */
-const getCommand = (cmd, args, opts) => {
-    let options = [];
-    if (opts && opts.argument && opts.argument.length > 0) {
+const getCommand = (cmd, args = []) => {
+    let cmdArgs;
+    if (args && args.length > 0) {
         logger.debug('Arguments found');
-        options = getOptionsFromArgs(args);
+        args = args.flat();
+        cmdArgs = args.join(' ').trim();
+        logger.debug(`cmdArgs: ${cmdArgs}`);
     }
-    if (args && args.length === 1) {
-        logger.debug('No Arguments found.');
-    }
-    const cmdArgs = options.join(' ').trim();
-    logger.debug(`cmdArgs: ${cmdArgs}`);
     return `${cmd}${cmdArgs ? ` ${cmdArgs}` : ''}`;
 };
 
@@ -201,7 +181,6 @@ module.exports = {
     logger,
     initHelp,
     getArgs,
-    getOptionsFromArgs,
     getCommand,
     doneFactory,
     done: doneFactory(SUCCESS_MESSAGE),

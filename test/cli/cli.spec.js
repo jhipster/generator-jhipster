@@ -78,6 +78,7 @@ describe('jhipster cli', () => {
 
     describe('with mocked generator command', () => {
         const commands = { mocked: {} };
+        const generator = { mocked: {} };
         let oldArgv;
         let callback;
         before(() => {
@@ -87,24 +88,21 @@ describe('jhipster cli', () => {
             process.argv = oldArgv;
         });
         beforeEach(() => {
-            commands.mocked = {
-                desc: 'Mocked command',
-                options: [
-                    {
-                        option: '--foo',
-                        desc: 'Foo',
+            generator.mocked = {
+                _options: {
+                    foo: {
+                        description: 'Foo',
                     },
-                    {
-                        option: '--foo-bar',
-                        desc: 'Foo bar',
+                    'foo-bar': {
+                        description: 'Foo bar',
                     },
-                ],
+                },
             };
             sinon.stub(Environment.prototype, 'run').callsFake((...args) => {
                 callback(...args);
                 return Promise.resolve();
             });
-            sinon.stub(Environment.prototype, 'create').returns({ _options: {} });
+            sinon.stub(Environment.prototype, 'create').returns(generator.mocked);
         });
         afterEach(() => {
             Environment.prototype.run.restore();
@@ -141,7 +139,7 @@ describe('jhipster cli', () => {
 
         describe('with argument', () => {
             beforeEach(() => {
-                commands.mocked.argument = ['name'];
+                generator.mocked._arguments = [{ name: 'name' }];
                 process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--foo', '--foo-bar'];
             });
 
@@ -160,7 +158,7 @@ describe('jhipster cli', () => {
 
         describe('with variable arguments', () => {
             beforeEach(() => {
-                commands.mocked.argument = ['name...'];
+                generator.mocked._arguments = [{ name: 'name', type: Array }];
                 process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', 'Bar', '--foo', '--foo-bar'];
             });
 

@@ -42,36 +42,6 @@ describe('jhipster cli utils test', () => {
             });
         });
     });
-    describe('getOptionsFromArgs', () => {
-        describe('when called with undefined args', () => {
-            it('returns an empty array', () => {
-                expect(cliUtil.getOptionsFromArgs()).to.eql([]);
-            });
-        });
-        describe('when called with empty args', () => {
-            it('returns an empty array', () => {
-                expect(cliUtil.getOptionsFromArgs([])).to.eql([]);
-            });
-        });
-        describe('when called with string arguments', () => {
-            const argument = ['test', 'foo'];
-            it('returns an array with strings', () => {
-                expect(cliUtil.getOptionsFromArgs(argument)).to.eql(['test', 'foo']);
-            });
-        });
-        describe('when called with array & string argument', () => {
-            const argument = [['bar', 'test'], 'foo'];
-            it('returns an array with strings', () => {
-                expect(cliUtil.getOptionsFromArgs(argument)).to.eql(['bar', 'test', 'foo']);
-            });
-        });
-        describe('when called with array & object argument', () => {
-            const argument = [['bar'], { foo: 'foo' }];
-            it('returns an array with valid strings', () => {
-                expect(cliUtil.getOptionsFromArgs(argument)).to.eql(['bar']);
-            });
-        });
-    });
     describe('getOptionAsArgs', () => {
         describe('when called with empty args', () => {
             it('returns a default string array', () => {

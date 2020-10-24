@@ -49,11 +49,9 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
         desc: 'Create all required Docker deployment configuration for the selected applications',
     },
     entity: {
-        argument: ['name'],
         desc: 'Create a new JHipster entity: JPA entity, Spring server-side components and Angular client-side components',
     },
     'export-jdl': {
-        argument: ['jdlFile'],
         desc: 'Create a JDL file from the existing entities',
     },
     gae: {
@@ -155,23 +153,19 @@ Example:
         desc: 'Deploy the current application to Kubernetes using knative constructs',
     },
     languages: {
-        argument: ['languages...'],
         desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder',
     },
     openshift: {
         desc: 'Deploy the current application to OpenShift',
     },
     page: {
-        argument: ['pageName'],
         desc: 'Create a new page. (Supports vue clients)',
     },
     'spring-service': {
         alias: 'service',
-        argument: ['name'],
         desc: 'Create a new Spring service bean',
     },
     'spring-controller': {
-        argument: ['name'],
         desc: 'Create a new Spring controller',
     },
     'openapi-client': {

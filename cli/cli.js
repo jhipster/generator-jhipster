@@ -75,26 +75,38 @@ const allCommands = { ...SUB_GENERATORS, ...envBuilder.getBlueprintCommands() };
 
 /* create commands */
 Object.entries(allCommands).forEach(([key, opts]) => {
-    const command = program.command(`${key} ${getArgs(opts)}`, '', { isDefault: key === 'app' });
+    const command = program.command(key, '', { isDefault: key === 'app' });
     if (opts.alias) {
         command.alias(opts.alias);
     }
 
     command.addAllCommandOptions(opts.options);
 
+    if (opts.cliOnly) {
+        command.arguments(getArgs(opts));
+    }
     if (!opts.cliOnly || key === 'jdl') {
         if (opts.blueprint) {
             // Blueprint only command.
             command.prepareOptions(() => {
-                command.addAllGeneratorOptions(
-                    env.create(`${packageNameToNamespace(opts.blueprint)}:${key}`, { options: { help: true } })._options
-                );
+                const generator = env.create(`${packageNameToNamespace(opts.blueprint)}:${key}`, { options: { help: true } });
+                command.addGeneratorArguments(generator._arguments).addAllGeneratorOptions(generator._options);
+                opts.argument = generator._arguments.map(generatorArgument => generatorArgument.name);
             });
         } else {
             command.prepareOptions(() => {
                 const generator = key === 'jdl' ? 'app' : key;
                 // Register jhipster upstream options.
-                command.addAllGeneratorOptions(env.create(`${JHIPSTER_NS}:${generator}`, { options: { help: true } })._options);
+                if (key === 'jdl') {
+                    const generator = env.create(`${JHIPSTER_NS}:app`, { options: { help: true } });
+                    command.addAllGeneratorOptions(generator._options);
+                } else {
+                    const generator = env.create(`${JHIPSTER_NS}:${key}`, { options: { help: true } });
+                    if (generator._arguments) {
+                        opts.argument = generator._arguments.map(generatorArgument => generatorArgument.name);
+                    }
+                    command.addGeneratorArguments(generator._arguments).addAllGeneratorOptions(generator._options);
+                }
 
                 // Register blueprint specific options.
                 envBuilder.getBlueprintsNamespaces().forEach(blueprintNamespace => {
