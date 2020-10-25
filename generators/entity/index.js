@@ -509,6 +509,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
         return {
             ...super._missingPreDefault(),
 
+            loadUserManagementEntities() {
+                if (!this.configOptions.sharedEntities) return;
+                // Make user entity available to templates.
+                this.context.user = this.configOptions.sharedEntities.User;
+            },
+
             prepareRelationshipsForTemplates() {
                 this.context.relationships.forEach(relationship => {
                     const otherEntityName = this._.upperFirst(relationship.otherEntityName);

@@ -249,6 +249,12 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         return {
             ...super._missingPreDefault(),
 
+            loadUserManagementEntities() {
+                if (!this.configOptions.sharedEntities) return;
+                // Make user entity available to templates.
+                this.user = this.configOptions.sharedEntities.User;
+            },
+
             insight() {
                 statistics.sendSubGenEvent('generator', 'client', {
                     app: {
