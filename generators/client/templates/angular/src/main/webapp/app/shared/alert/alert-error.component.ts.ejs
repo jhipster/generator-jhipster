@@ -58,11 +58,11 @@ export class AlertErrorComponent implements OnDestroy {
 
                 case 400: {
                     const arr = httpErrorResponse.headers.keys();
-                    let errorHeader = null;
+                    let errorHeader: string | null = null;
                     <%_ if (enableTranslation) { _%>
-                    let entityKey = null;
+                    let entityKey: string | null = null;
                     <%_ } _%>
-                    arr.forEach((entry) => {
+                    for (const entry of arr) {
                         if (entry.toLowerCase().endsWith('app-error')) {
                             errorHeader = httpErrorResponse.headers.get(entry);
                         <%_ if (enableTranslation) { _%>
@@ -70,12 +70,12 @@ export class AlertErrorComponent implements OnDestroy {
                             entityKey = httpErrorResponse.headers.get(entry);
                         <%_ } _%>
                         }
-                    });
+                    }
                     if (errorHeader) {
                         <%_ if (enableTranslation) { _%>
-                        const entityName = translateService.instant(`global.menu.entities.${entityKey}`);
+                        const alertData = entityKey ? { entityName: translateService.instant(`global.menu.entities.${entityKey}`) } : undefined;
                         <%_ } _%>
-                        this.addErrorAlert(errorHeader<% if (enableTranslation) { %>, errorHeader, { entityName }<% } %>);
+                        this.addErrorAlert(errorHeader<% if (enableTranslation) { %>, errorHeader, alertData<% } %>);
                     } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
                         const fieldErrors = httpErrorResponse.error.fieldErrors;
                         for (const fieldError of fieldErrors) {
@@ -86,12 +86,12 @@ export class AlertErrorComponent implements OnDestroy {
                             const convertedField: string = fieldError.field.replace(/\[\d*\]/g, '[]');
                             const fieldName: string =
                                 <%_ if (enableTranslation) { _%>
-                                translateService.instant(`<%= frontendAppName %>.${fieldError.objectName}.${convertedField}`);
+                                translateService.instant(`<%= frontendAppName %>.${fieldError.objectName as string}.${convertedField}`);
                                 <%_ } else { _%>
                                 convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
                                 <%_ } _%>
                             this.addErrorAlert(
-                                `Error on field "${fieldName}"`<% if (enableTranslation) { %>, `error.${fieldError.message}`, { fieldName }<% } %>);
+                                `Error on field "${fieldName}"`<% if (enableTranslation) { %>, `error.${fieldError.message as string}`, { fieldName }<% } %>);
                         }
                     } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
                         this.addErrorAlert(httpErrorResponse.error.message<% if (enableTranslation) { %>, httpErrorResponse.error.message, httpErrorResponse.error.params<% } %>);

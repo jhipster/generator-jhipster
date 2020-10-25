@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+const tsKeyId = generateTestEntityId(pkType);
+_%>
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
@@ -36,7 +39,7 @@ describe('Component Tests', () => {
                     {
                         provide: ActivatedRoute,
                         useValue: {
-                            data: of({ user: new User(1, 'user', 'first', 'last', 'first@last.com', true, 'en', [Authority.USER], 'admin') })
+                            data: of({ user: new User(<%- tsKeyId %>, 'user', 'first', 'last', 'first@last.com', true, 'en', [Authority.USER], 'admin') })
                         }
                     }
                 ]
@@ -59,7 +62,7 @@ describe('Component Tests', () => {
 
                 // THEN
                 expect(comp.user).toEqual(jasmine.objectContaining({
-                    id: 1,
+                    id: <%- tsKeyId %>,
                     login: 'user',
                     firstName: 'first',
                     lastName: 'last',

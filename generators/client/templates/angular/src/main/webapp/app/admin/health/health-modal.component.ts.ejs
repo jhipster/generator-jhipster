@@ -44,7 +44,7 @@ export class HealthModalComponent {
         if (typeof value === 'object') {
             return JSON.stringify(value);
         } else {
-            return value.toString();
+            return String(value);
         }
     }
 

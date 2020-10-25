@@ -63,6 +63,17 @@
     "@angular-eslint/no-outputs-metadata-property": "error",
     "@angular-eslint/use-lifecycle-interface": "error",
     "@angular-eslint/use-pipe-transform-interface": "error",
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "extendDefaults": true,
+        "types": {
+          "{}": false
+        }
+      }
+    ],
+    "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/member-ordering": [
       "error",
       {
@@ -75,53 +86,29 @@
         ]
       }
     ],
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-parameter-properties": [
       "warn",
       { allows: ["public", "private", "protected"] }
     ],
-    "@typescript-eslint/no-unused-vars": [
-      "warn",
-      {
-        vars: "all",
-        args: "after-used",
-        ignoreRestSiblings: false
-      }
-    ],
-    "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],
-    "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/ban-types": [
-      "error",
-      {
-        "extendDefaults": true,
-        "types": {
-          "{}": false
-        }
-      }
-    ],
-    "@typescript-eslint/unbound-method": "off",
-    "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-shadow": ["error"],
-    "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/no-unsafe-assignment": "off",
     "@typescript-eslint/no-unsafe-call": "off",
     "@typescript-eslint/no-unsafe-member-access": "off",
-    "@typescript-eslint/no-unsafe-return": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/restrict-template-expressions": "off",
-    "spaced-comment": ["warn", "always"],
-    "guard-for-in": "error",
-    "no-labels": "error",
-    "no-caller": "error",
-    "no-bitwise": "error",
-    "no-console": ["error", { allow: ["warn", "error"] }],
-    "no-new-wrappers": "error",
-    "no-eval": "error",
-    "no-shadow": "off",
-    "no-new": "error",
-    "no-var": "error",
-    "radix": "error",
+    "@typescript-eslint/unbound-method": "off",
     "eqeqeq": ["error", "always", { null: "ignore" }],
-    "prefer-const": "error",
-    "object-shorthand": ["error", "always", { avoidExplicitReturnArrows: true }]
+    "guard-for-in": "error",
+    "no-bitwise": "error",
+    "no-caller": "error",
+    "no-console": ["error", { allow: ["warn", "error"] }],
+    "no-eval": "error",
+    "no-labels": "error",
+    "no-new": "error",
+    "no-new-wrappers": "error",
+    "object-shorthand": ["error", "always", { avoidExplicitReturnArrows: true }],
+    "radix": "error",
+    "spaced-comment": ["warn", "always"]
   }
 }
