@@ -16,9 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-
+<%_
+  const idType = getTypescriptKeyType(pkType);
+_%>
 export interface IUser {
-    id?: any;
+    id?: <%= idType %>;
     login?: string;
     firstName?: string;
     lastName?: string;
@@ -35,7 +37,7 @@ export interface IUser {
 
 export class User implements IUser {
     constructor(
-        public id?: any,
+        public id?: <%= idType %>,
         public login?: string,
         public firstName?: string,
         public lastName?: string,

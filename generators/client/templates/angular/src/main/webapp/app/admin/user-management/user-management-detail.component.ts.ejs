@@ -33,6 +33,8 @@ export class UserManagementDetailComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.route.data.subscribe(({ user }) => this.user = user);
+        this.route.data.subscribe(({ user }) => {
+            this.user = user;
+        });
     }
 }

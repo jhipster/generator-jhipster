@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+const tsKeyId = generateTestEntityId(pkType);
+_%>
 import { TestBed } from '@angular/core/testing';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
@@ -66,7 +69,7 @@ describe('Service Tests', () => {
                 });
 
                 const req = httpMock.expectOne({ method: 'GET' });
-                req.flush(new User(1, 'user'));
+                req.flush(new User(<%- tsKeyId %>, 'user'));
                 expect(expectedResult).toEqual('user');
             });
 

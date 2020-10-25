@@ -46,7 +46,7 @@ describe('Component Tests', () => {
                     {
                         provide: ActivatedRoute,
                         useValue: {
-                            data: of({ user: new User(1, 'user', 'first', 'last', 'first@last.com', true, 'en', [Authority.USER], 'admin') })
+                            data: of({ user: new User(<%- tsKeyId %>, 'user', 'first', 'last', 'first@last.com', true, 'en', [Authority.USER], 'admin') })
                         }
                     }
                 ]
