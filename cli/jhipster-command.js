@@ -45,13 +45,14 @@ class JHipsterCommand extends Command {
         return result;
     }
 
-    addAllCommandOptions(opts = []) {
+    addCommandOptions(opts = []) {
         opts.forEach(opt => this.addCommandOption(opt));
+        return this;
     }
 
     addCommandOption(opt) {
         const additionalDescription = opt.blueprint ? chalk.yellow(` (blueprint option: ${opt.blueprint})`) : '';
-        this.addOption(new Option(opt.option, opt.desc + additionalDescription).default(opt.default));
+        return this.addOption(new Option(opt.option, opt.desc + additionalDescription).default(opt.default));
     }
 
     addGeneratorArguments(generatorArgs = []) {
@@ -66,13 +67,14 @@ class JHipsterCommand extends Command {
         return this;
     }
 
-    addAllGeneratorOptions(options = {}, blueprintOptionDescription) {
+    addGeneratorOptions(options = {}, blueprintOptionDescription) {
         Object.entries(options).forEach(([key, value]) => {
             if (this._findOption(key)) {
                 return;
             }
             this.addGeneratorOption(key, value, blueprintOptionDescription);
         });
+        return this;
     }
 
     addGeneratorOption(optionName, optionDefinition, additionalDescription = '') {
@@ -89,7 +91,7 @@ class JHipsterCommand extends Command {
         } else if (optionDefinition.type === Array) {
             cmdString = `${cmdString} <value...>`;
         }
-        this.addOption(
+        return this.addOption(
             new Option(cmdString, optionDefinition.description + additionalDescription)
                 .default(optionDefinition.default)
                 .hideHelp(optionDefinition.hide)

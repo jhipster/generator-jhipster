@@ -80,7 +80,7 @@ Object.entries(allCommands).forEach(([key, opts]) => {
         command.alias(opts.alias);
     }
 
-    command.addAllCommandOptions(opts.options);
+    command.addCommandOptions(opts.options);
 
     if (opts.cliOnly) {
         command.arguments(getArgs(opts));
@@ -90,7 +90,7 @@ Object.entries(allCommands).forEach(([key, opts]) => {
             // Blueprint only command.
             command.prepareOptions(() => {
                 const generator = env.create(`${packageNameToNamespace(opts.blueprint)}:${key}`, { options: { help: true } });
-                command.addGeneratorArguments(generator._arguments).addAllGeneratorOptions(generator._options);
+                command.addGeneratorArguments(generator._arguments).addGeneratorOptions(generator._options);
                 opts.argument = generator._arguments.map(generatorArgument => generatorArgument.name);
             });
         } else {
@@ -99,13 +99,13 @@ Object.entries(allCommands).forEach(([key, opts]) => {
                 // Register jhipster upstream options.
                 if (key === 'jdl') {
                     const generator = env.create(`${JHIPSTER_NS}:app`, { options: { help: true } });
-                    command.addAllGeneratorOptions(generator._options);
+                    command.addGeneratorOptions(generator._options);
                 } else {
                     const generator = env.create(`${JHIPSTER_NS}:${key}`, { options: { help: true } });
                     if (generator._arguments) {
                         opts.argument = generator._arguments.map(generatorArgument => generatorArgument.name);
                     }
-                    command.addGeneratorArguments(generator._arguments).addAllGeneratorOptions(generator._options);
+                    command.addGeneratorArguments(generator._arguments).addGeneratorOptions(generator._options);
                 }
 
                 // Register blueprint specific options.
@@ -116,7 +116,7 @@ Object.entries(allCommands).forEach(([key, opts]) => {
                     }
                     const blueprintName = blueprintNamespace.replace(/^jhipster-/, '');
                     try {
-                        command.addAllGeneratorOptions(
+                        command.addGeneratorOptions(
                             env.create(generatorNamespace, { options: { help: true } })._options,
                             chalk.yellow(` (blueprint option: ${blueprintName})`)
                         );
