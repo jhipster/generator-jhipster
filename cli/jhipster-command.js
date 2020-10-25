@@ -25,8 +25,15 @@ class JHipsterCommand extends Command {
         return new JHipsterCommand(name);
     }
 
+    /**
+     * Register a callback to be executed before _parseCommand.
+     * Used to lazy load options.
+     * @param {Function} prepareOptionsCallBack
+     * @return {JHipsterCommand} this;
+     */
     prepareOptions(prepareOptionsCallBack) {
         this._prepareOptionsCallBack = prepareOptionsCallBack;
+        return this;
     }
 
     _parseCommand(operands, unknown) {
@@ -36,6 +43,11 @@ class JHipsterCommand extends Command {
         return super._parseCommand(operands, unknown);
     }
 
+    /**
+     * Override addOption to register a negative alternative for every option.
+     * @param {Option} option
+     * @return {JHipsterCommand} this;
+     */
     addOption(option) {
         const result = super.addOption(option);
         // Add a hidden `--no` option for boolean options
@@ -45,16 +57,26 @@ class JHipsterCommand extends Command {
         return result;
     }
 
+    /**
+     * Register options using cli/commands.js structure.
+     * @param {object[]} prepareOptionsCallBack
+     * @return {JHipsterCommand} this;
+     */
     addCommandOptions(opts = []) {
-        opts.forEach(opt => this.addCommandOption(opt));
+        opts.forEach(opt => this._addCommandOption(opt));
         return this;
     }
 
-    addCommandOption(opt) {
+    _addCommandOption(opt) {
         const additionalDescription = opt.blueprint ? chalk.yellow(` (blueprint option: ${opt.blueprint})`) : '';
         return this.addOption(new Option(opt.option, opt.desc + additionalDescription).default(opt.default));
     }
 
+    /**
+     * Register arguments using generator._arguments structure.
+     * @param {object[]} generatorArgs
+     * @return {JHipsterCommand} this;
+     */
     addGeneratorArguments(generatorArgs = []) {
         if (!generatorArgs) return this;
         const args = generatorArgs
@@ -67,19 +89,25 @@ class JHipsterCommand extends Command {
         return this;
     }
 
+    /**
+     * Register options using generator._options structure.
+     * @param {object} options
+     * @param {string} blueprintOptionDescription - description of the blueprint that adds the option
+     * @return {JHipsterCommand} this;
+     */
     addGeneratorOptions(options = {}, blueprintOptionDescription) {
         Object.entries(options).forEach(([key, value]) => {
             if (this._findOption(key)) {
                 return;
             }
-            this.addGeneratorOption(key, value, blueprintOptionDescription);
+            this._addGeneratorOption(key, value, blueprintOptionDescription);
         });
         return this;
     }
 
-    addGeneratorOption(optionName, optionDefinition, additionalDescription = '') {
+    _addGeneratorOption(optionName, optionDefinition, additionalDescription = '') {
         if (optionName === 'help') {
-            return;
+            return undefined;
         }
         let cmdString = '';
         if (optionDefinition.alias) {
