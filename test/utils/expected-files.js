@@ -500,6 +500,8 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/layouts/navbar/navbar.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert-error.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/shared/base.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/shared/base.directive.spec.ts`,
         'tsconfig.app.json',
         'tsconfig.spec.json',
         'tsconfig.json',

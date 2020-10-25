@@ -17,9 +17,10 @@
  limitations under the License.
 -%>
 import { Directive, Input, TemplateRef, ViewContainerRef, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { AccountService } from 'app/core/auth/account.service';
+import { BaseDirective } from '../base.directive';
 
 /**
  * @whatItDoes Conditionally includes an HTML element if current user has any
