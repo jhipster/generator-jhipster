@@ -375,10 +375,10 @@ const expectedFiles = {
 
     client: [
         'angular.json',
+        'ngsw-config.json',
         '.eslintrc.json',
         'package.json',
-        'postcss.config.js',
-        'proxy.conf.json',
+        '.browserslistrc',
         `${CLIENT_MAIN_SRC_DIR}404.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.component.html`,
@@ -480,9 +480,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}robots.txt`,
         `${CLIENT_MAIN_SRC_DIR}swagger-ui/dist/images/throbber.gif`,
         `${CLIENT_MAIN_SRC_DIR}swagger-ui/index.html`,
-        `${CLIENT_TEST_SRC_DIR}jest.ts`,
         `${CLIENT_TEST_SRC_DIR}jest.conf.js`,
-        `${CLIENT_TEST_SRC_DIR}jest-global-mocks.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/configuration/configuration.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/configuration/configuration.service.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/health/health.component.spec.ts`,
@@ -499,12 +497,11 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert-error.component.spec.ts`,
         'tsconfig.app.json',
+        'tsconfig.spec.json',
         'tsconfig.json',
         'webpack/logo-jhipster.png',
-        'webpack/utils.js',
-        'webpack/webpack.common.js',
-        'webpack/webpack.dev.js',
-        'webpack/webpack.prod.js',
+        'webpack/proxy.conf.js',
+        'webpack/webpack.custom.js',
     ],
 
     clientCommon: [

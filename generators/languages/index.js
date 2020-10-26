@@ -237,11 +237,11 @@ module.exports = class extends BaseBlueprintGenerator {
                     if (this.clientFramework === ANGULAR) {
                         this.updateLanguagesInLanguagePipe(this.languages);
                         this.updateLanguagesInLanguageConstantNG2(this.languages);
-                        this.updateLanguagesInWebpack(this.languages);
+                        this.updateLanguagesInWebpackAngular(this.languages);
                     }
                     if (this.clientFramework === REACT) {
                         this.updateLanguagesInLanguagePipe(this.languages);
-                        this.updateLanguagesInWebpack(this.languages);
+                        this.updateLanguagesInWebpackReact(this.languages);
                     }
                     if (this.clientFramework === VUE) {
                         this.vueUpdateLanguagesInTranslationStore(this.languages);

@@ -1,0 +1,32 @@
+function setupProxy() {
+    const tls = process.env.TLS;
+    const conf = [{
+        context: [
+            '/api',
+            '/services',
+            '/management',
+            '/swagger-resources',
+            '/v2/api-docs',
+            '/v3/api-docs',
+            '/h2-console',
+            <%_ if (authenticationType === 'oauth2') { _%>
+            '/oauth2',
+            '/login',
+            <%_ } _%>
+            '/auth',
+            '/health'
+        ],
+        target: `http${tls ? 's' : ''}://localhost:<%= serverPort %>`,
+        secure: false,
+        changeOrigin: tls
+    }<% if (websocket === 'spring-websocket') { %>,{
+        context: [
+            '/websocket'
+        ],
+        target: 'ws://127.0.0.1:<%= serverPort %>',
+        ws: true
+    }<% } %>];
+    return conf;
+}
+
+module.exports = setupProxy();
