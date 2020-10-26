@@ -63,7 +63,7 @@
         "axios": "0.20.0",
         "chalk": "4.1.0",
         "chevrotain": "7.0.2",
-        "commander": "6.1.0",
+        "commander": "6.2.0",
         "conf": "7.1.2",
         "didyoumean": "1.2.1",
         "ejs": "3.1.5",
