@@ -62,9 +62,14 @@ const CUSTOM_PRIORITIES = [
         before: 'loading',
     },
     {
+        priorityName: 'preConflicts',
+        queueName: 'jhipster:preConflicts',
+        before: 'conflicts',
+    },
+    {
         priorityName: 'postWriting',
         queueName: 'jhipster:postWriting',
-        before: 'conflicts',
+        before: 'preConflicts',
     },
 ];
 

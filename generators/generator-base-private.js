@@ -1501,7 +1501,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                 });
             },
             taskName: 'priorityFiles',
-            queueName: 'jhipster:postWriting',
+            queueName: 'jhipster:preConflicts',
         });
     }
 
