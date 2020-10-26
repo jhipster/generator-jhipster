@@ -132,7 +132,7 @@ export class AlertErrorComponent implements OnDestroy {
         }
     }
 
-    addErrorAlert(message: string<% if (enableTranslation) { %>, key?: string, data?: any<% } %>): void {
+    addErrorAlert(message: string<% if (enableTranslation) { %>, key?: string, data?: { [key: string]: unknown }<% } %>): void {
         <%_ if (enableTranslation) { _%>
         message = (key && key !== null) ? key : message;
         <%_ } _%>

@@ -1020,23 +1020,20 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         fields.forEach(field => {
             const fieldType = field.fieldType;
             const fieldName = field.fieldName;
-            let tsType;
+            let tsType = 'any';
             if (field.fieldIsEnum) {
                 tsType = fieldType;
             } else if (fieldType === 'Boolean') {
                 tsType = 'boolean';
-            } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) {
+            } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
                 tsType = 'number';
-            } else if (fieldType === 'String' || fieldType === 'UUID') {
+            } else if (['String', 'UUID', 'Duration', 'byte[]', 'ByteBuffer'].includes(fieldType)) {
                 tsType = 'string';
-            } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
-                tsType = customDateType;
-            } else {
-                // (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate'
-                tsType = 'any';
                 if (['byte[]', 'ByteBuffer'].includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
                     variablesWithTypes.push(`${fieldName}ContentType?: string`);
                 }
+            } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
+                tsType = customDateType;
             }
             variablesWithTypes.push(`${fieldName}?: ${tsType}`);
         });

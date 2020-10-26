@@ -77,6 +77,25 @@ import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%=
         }
     }
 });
+let selectableEntitiesIdType = getTypescriptKeyType(getPkType(databaseType));
+if (databaseType === 'sql' && authenticationType === 'oauth2') {
+    let existsUserSelectableEntity = false;
+    let existsOtherSelectableEntity = false;
+    for (selectableEntity of selectableEntities) {
+        if (selectableEntity === 'IUser') {
+            existsUserSelectableEntity = true;
+        } else {
+            existsOtherSelectableEntity = true;
+        }
+    }
+    if (existsUserSelectableEntity) {
+        if (existsOtherSelectableEntity) {
+            selectableEntitiesIdType = 'number | string';
+        } else {
+            selectableEntitiesIdType = 'string';
+        }
+    }
+}
 let selectableEntitiesType = '';
 if (selectableEntities.length === 1) {
     selectableEntitiesType = selectableEntities[0];
@@ -112,14 +131,6 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
     <%_ for (const idx in variables) { _%>
     <%- variables[idx] %>
     <%_ } _%>
-<%_ for (idx in fields) {
-    const fieldName = fields[idx].fieldName;
-    const fieldType = fields[idx].fieldType;
-_%>
-    <%_ if ( fieldType === 'LocalDate' ) { _%>
-    <%= fieldName %>Dp: any;
-    <%_ } _%>
-<%_ } _%>
 
     editForm = this.fb.group({
         id: [],
@@ -251,7 +262,7 @@ _%>
         this.dataUtils.openFile(contentType, base64String);
     }
 
-    setFileData(event: any, field: string, isImage: boolean): void {
+    setFileData(event: Event, field: string, isImage: boolean): void {
         this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
             error: (err: JhiFileLoadError) =>
                 this.eventManager.broadcast(
@@ -344,8 +355,8 @@ _%>
     }
 
     <%_ if (selectableEntitiesType) { _%>
-    trackById(index: number, item: <%= selectableEntitiesType %>): any {
-        return item.id;
+    trackById(index: number, item: <%= selectableEntitiesType %>): <%= selectableEntitiesIdType %> {
+        return item.id!;
     }
     <%_ } _%>
 
