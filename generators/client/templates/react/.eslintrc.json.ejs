@@ -46,7 +46,7 @@
     "@typescript-eslint/member-ordering": [
       "error",
       {
-        default: [
+        "default": [
           "static-field",
           "instance-field",
           "constructor",
@@ -57,7 +57,7 @@
     ],
     "@typescript-eslint/no-parameter-properties": [
       "warn",
-      { allows: ["public", "private", "protected"] }
+      { "allows": ["public", "private", "protected"] }
     ],
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/explicit-member-accessibility": "off",
@@ -66,8 +66,8 @@
     "@typescript-eslint/ban-types": [
       "error",
       {
-        types: {
-          Object: "Use {} instead."
+        "types": {
+          "Object": "Use {} instead."
         }
       }
     ],
@@ -80,16 +80,16 @@
     "no-labels": "error",
     "no-caller": "error",
     "no-bitwise": "error",
-    "no-console": ["error", { allow: ["warn", "error"] }],
+    "no-console": ["error", { "allow": ["warn", "error"] }],
     "no-new-wrappers": "error",
     "no-eval": "error",
     "no-shadow": "error",
     "no-new": "error",
     "no-var": "error",
     "radix": "error",
-    "eqeqeq": ["error", "always", { null: "ignore" }],
+    "eqeqeq": ["error", "always", { "null": "ignore" }],
     "prefer-const": "error",
-    "object-shorthand": ["error", "always", { avoidExplicitReturnArrows: true }],
+    "object-shorthand": ["error", "always", { "avoidExplicitReturnArrows": true }],
     "default-case": "error",
     "complexity": ["error", 40],
     "no-invalid-this": "off",
