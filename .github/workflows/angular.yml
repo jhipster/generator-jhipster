@@ -74,6 +74,7 @@ jobs:
             matrix:
                 node_version: [12.18.3]
                 os: [ubuntu-20.04]
+                frontend: [angular]
                 app-type:
                     - ngx-default
                     - ngx-mysql-es-noi18n-mapsid
@@ -186,6 +187,7 @@ jobs:
                   key: ${{ runner.os }}-node-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json.ejs') }}
                   restore-keys: |
                       ${{ runner.os }}-node-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-
+                      ${{ runner.os }}-node-${{ matrix.frontend }}-${{ steps.get-date.outputs.date }}
             - name: 'SETUP: load maven cache'
               uses: actions/cache@v2
               with:
