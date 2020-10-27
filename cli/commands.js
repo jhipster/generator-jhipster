@@ -59,7 +59,7 @@ const defaultCommands = {
     },
     jdl: {
         alias: 'import-jdl',
-        argument: ['jdlFiles...'],
+        argument: ['[jdlFiles...]'],
         cliOnly: true,
         options: [
             {

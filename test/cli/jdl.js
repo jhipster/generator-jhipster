@@ -38,7 +38,7 @@ describe('jdl command test', () => {
                 process.argv = oldArgv;
             });
             it('should call jdl.js with foo.jdl arg', () => {
-                expect(jdlStub.getCall(0).args[0]).to.be.eql(['foo.jdl']);
+                expect(jdlStub.getCall(0).args[0]).to.be.eql([['foo.jdl']]);
             });
             it('should forward options to jdl.js', () => {
                 expect(jdlStub.getCall(0).args[1].jsonOnly).to.be.true;
@@ -57,7 +57,7 @@ describe('jdl command test', () => {
                 process.argv = oldArgv;
             });
             it('should call jdl.js with foo.jdl and bar.jdl arguments', () => {
-                expect(jdlStub.getCall(0).args[0]).to.be.eql(['foo.jdl', 'bar.jdl']);
+                expect(jdlStub.getCall(0).args[0]).to.be.eql([['foo.jdl', 'bar.jdl']]);
             });
             it('should forward options to jdl.js', () => {
                 expect(jdlStub.getCall(0).args[1].jsonOnly).to.be.true;
@@ -87,7 +87,7 @@ describe('jdl command test', () => {
             const env = { env: 'foo' };
             const fork = { fork: 'foo' };
             beforeEach(() => {
-                return proxyquire('../../cli/jdl', { './import-jdl': importJdlStub })(['foo.jdl'], options, env, fork).then(jdlFiles => {
+                return proxyquire('../../cli/jdl', { './import-jdl': importJdlStub })([['foo.jdl']], options, env, fork).then(jdlFiles => {
                     resolved = jdlFiles;
                 });
             });
@@ -111,7 +111,7 @@ describe('jdl command test', () => {
             const env = { env: 'foo' };
             const fork = { fork: 'foo' };
             beforeEach(() => {
-                return proxyquire('../../cli/jdl', { './import-jdl': importJdlStub })(['foo.jdl', 'bar.jdl'], options, env, fork);
+                return proxyquire('../../cli/jdl', { './import-jdl': importJdlStub })([['foo.jdl', 'bar.jdl']], options, env, fork);
             });
             it('should not call https.get', () => {
                 expect(https.get.callCount).to.be.equal(0);
@@ -132,7 +132,7 @@ describe('jdl command test', () => {
                 });
                 it('should return file not found', () => {
                     return proxyquire('../../cli/jdl', {})(
-                        ['foo.jdl'],
+                        [['foo.jdl']],
                         { bar: 'foo', skipSampleRepository: true },
                         { env: 'foo' },
                         { fork: 'foo' }
@@ -165,7 +165,7 @@ describe('jdl command test', () => {
                 });
                 it('should call https.get', () => {
                     return proxyquire('../../cli/jdl', { './import-jdl': importJdlStub })(
-                        ['https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jdl'],
+                        [['https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jdl']],
                         { bar: 'foo', skipSampleRepository: true },
                         { env: 'foo' },
                         { fork: 'foo' }
@@ -178,7 +178,7 @@ describe('jdl command test', () => {
                 });
                 it('should call importJdl', () => {
                     return proxyquire('../../cli/jdl', { './import-jdl': importJdlStub })(
-                        ['https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jdl'],
+                        [['https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jdl']],
                         { bar: 'foo', skipSampleRepository: true },
                         { env: 'foo' },
                         { fork: 'foo' }
@@ -220,9 +220,11 @@ describe('jdl command test', () => {
                 const env = { env: 'foo' };
                 const fork = { fork: 'foo' };
                 beforeEach(() => {
-                    return proxyquire('../../cli/jdl', { './import-jdl': importJdlStub })(['foo.jh'], options, env, fork).then(jdlFiles => {
-                        resolved = jdlFiles;
-                    });
+                    return proxyquire('../../cli/jdl', { './import-jdl': importJdlStub })([['foo.jh']], options, env, fork).then(
+                        jdlFiles => {
+                            resolved = jdlFiles;
+                        }
+                    );
                 });
                 it('should pass to https.get with jdl-sample repository', () => {
                     expect(https.get.getCall(0).args[0]).to.be.equal(
@@ -248,7 +250,7 @@ describe('jdl command test', () => {
 
             describe('when passing foo', () => {
                 beforeEach(() => {
-                    return proxyquire('../../cli/jdl', { './import-jdl': importJdlStub })(['foo']);
+                    return proxyquire('../../cli/jdl', { './import-jdl': importJdlStub })([['foo']]);
                 });
                 it('should append jdl extension and pass to https.get with jdl-sample repository', () => {
                     expect(https.get.getCall(0).args[0]).to.be.equal(
@@ -267,7 +269,7 @@ describe('jdl command test', () => {
             describe('with a complete url', () => {
                 const url = 'https://raw.githubusercontent.com/jhipster/jdl-samples/main/bar.jdl';
                 beforeEach(() => {
-                    return proxyquire('../../cli/jdl', { './import-jdl': importJdlStub })([url]);
+                    return proxyquire('../../cli/jdl', { './import-jdl': importJdlStub })([[url]]);
                 });
                 it('should forward the url to get', () => {
                     expect(https.get.getCall(0).args[0]).to.be.equal(url);
@@ -300,14 +302,14 @@ describe('jdl command test', () => {
                 });
 
                 it('should not create the destination file', done => {
-                    proxyquire('../../cli/jdl', { './import-jdl': () => {} })(['foo.jh']).catch(error => {
+                    proxyquire('../../cli/jdl', { './import-jdl': () => {} })([['foo.jh']]).catch(error => {
                         assert.noFile('foo.jh');
                         done();
                     });
                 });
 
                 it('should print error message', done => {
-                    proxyquire('../../cli/jdl', { './import-jdl': () => {} })(['foo.jh']).catch(error => {
+                    proxyquire('../../cli/jdl', { './import-jdl': () => {} })([['foo.jh']]).catch(error => {
                         assert.equal(
                             error.message,
                             'Error downloading https://raw.githubusercontent.com/jhipster/jdl-samples/main/foo.jh: 404 - Custom message'

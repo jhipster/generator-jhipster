@@ -65,6 +65,7 @@ const runYoCommand = (cmd, args, options, opts) => {
     logger.debug(`cmd: ${toString(cmd)}`);
     logger.debug(`args: ${toString(args)}`);
     logger.debug(`opts: ${toString(opts)}`);
+    // Let the generator parse arguments by name. Revert to simple 'command arg1 arg2 ...'.
     const command = getCommand(cmd, args, opts);
     logger.info(chalk.yellow(`Executing ${command}`));
     logger.debug(chalk.yellow(`Options: ${toString(options)}`));
@@ -168,8 +169,6 @@ Object.entries(allCommands).forEach(([key, opts]) => {
             return;
         }
         const args = everything;
-
-        // Get unknown options and parse.
         const options = {
             ...program.opts(),
             ...cmdOptions,
@@ -177,14 +176,8 @@ Object.entries(allCommands).forEach(([key, opts]) => {
 
         if (opts.cliOnly) {
             logger.debug('Executing CLI only script');
-            if (args.length > 0 && Array.isArray(args[args.length - 1])) {
-                // Convert the variadic argument into a argument for backward compatibility.
-                // Remove for jhipster 7
-                args.push(...args.pop());
-            }
-            /* eslint-disable global-require, import/no-dynamic-require */
+            /* eslint-disable-next-line global-require, import/no-dynamic-require */
             require(`./${key}`)(args, options, env);
-            /* eslint-enable */
         } else {
             const namespace = opts.blueprint ? `${packageNameToNamespace(opts.blueprint)}:${key}` : `${JHIPSTER_NS}:${key}`;
             runYoCommand(namespace, args, options, opts);

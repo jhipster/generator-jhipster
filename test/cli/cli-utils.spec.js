@@ -36,9 +36,9 @@ describe('jhipster cli utils test', () => {
             });
         });
         describe('when called with argument array', () => {
-            const argument = ['test', 'foo'];
+            const argument = ['[test]', '[foo]'];
             it('returns a joined string', () => {
-                expect(cliUtil.getArgs({ argument })).to.equal('[test foo]');
+                expect(cliUtil.getArgs({ argument })).to.equal('[test] [foo]');
             });
         });
     });

@@ -97,6 +97,7 @@ describe('jhipster cli', () => {
                         description: 'Foo bar',
                     },
                 },
+                sourceRoot: () => '',
             };
             sinon.stub(Environment.prototype, 'run').callsFake((...args) => {
                 callback(...args);
@@ -224,7 +225,7 @@ describe('jhipster cli', () => {
         describe('with argument', () => {
             beforeEach(() => {
                 commands.mocked.desc = 'Mocked command';
-                commands.mocked.argument = ['name'];
+                commands.mocked.argument = ['<name>'];
                 commands.mocked.cliOnly = true;
                 process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--foo', '--foo-bar'];
             });
@@ -245,7 +246,7 @@ describe('jhipster cli', () => {
         describe('with negate argument', () => {
             beforeEach(() => {
                 commands.mocked.desc = 'Mocked command';
-                commands.mocked.argument = ['name'];
+                commands.mocked.argument = ['<name>'];
                 commands.mocked.cliOnly = true;
                 process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--no-foo', '--no-foo-bar'];
             });
@@ -266,7 +267,7 @@ describe('jhipster cli', () => {
         describe('with variable arguments', () => {
             beforeEach(() => {
                 commands.mocked.desc = 'Mocked command';
-                commands.mocked.argument = ['name...'];
+                commands.mocked.argument = ['<name...>'];
                 commands.mocked.cliOnly = true;
                 process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', 'Bar', '--foo', '--foo-bar'];
             });
@@ -275,7 +276,7 @@ describe('jhipster cli', () => {
 
             it('should forward argument and options', done => {
                 const cb = (args, options, env) => {
-                    expect(args).to.eql(['Foo', 'Bar']);
+                    expect(args).to.eql([['Foo', 'Bar']]);
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
                     done();

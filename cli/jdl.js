@@ -59,21 +59,22 @@ const downloadFile = (url, filename) => {
 };
 /**
  * JDL command
- * @param {any} args arguments passed for import-jdl
+ * @param {string[][]} args arguments passed for import-jdl
+ * @param {string[]} args[0] jdl files
  * @param {any} options options passed from CLI
  * @param {any} env the yeoman environment
  * @param {function} forkProcess the method to use for process forking
  */
-module.exports = (args, options = {}, env, forkProcess) => {
+module.exports = ([jdlFiles = []], options = {}, env, forkProcess) => {
     logger.debug('cmd: import-jdl from ./import-jdl');
-    logger.debug(`args: ${toString(args)}`);
+    logger.debug(`jdlFiles: ${toString(jdlFiles)}`);
     if (options.inline) {
-        return importJdl(args, options, env, forkProcess);
+        return importJdl(jdlFiles, options, env, forkProcess);
     }
-    if (!args || args.length === 0) {
+    if (!jdlFiles || jdlFiles.length === 0) {
         logger.fatal(chalk.red('\nAt least one jdl file is required.\n'));
     }
-    const promises = args.map(toJdlFile).map(filename => {
+    const promises = jdlFiles.map(toJdlFile).map(filename => {
         if (!fs.existsSync(filename)) {
             let url;
             try {
