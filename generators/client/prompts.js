@@ -27,6 +27,7 @@ const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 module.exports = {
     askForModuleName,
     askForClient,
+    askForAdminUi,
     askForClientTheme,
     askForClientThemeVariant,
 };
@@ -186,5 +187,25 @@ function askForClientThemeVariant() {
 
     return this.prompt(PROMPT).then(prompt => {
         this.clientThemeVariant = this.jhipsterConfig.clientThemeVariant = prompt.clientThemeVariant;
+    });
+}
+
+function askForAdminUi() {
+    if (this.existingProject) {
+        return undefined;
+    }
+
+    const skipClient = this.skipClient;
+
+    const PROMPT = {
+        type: 'confirm',
+        name: 'withAdminUi',
+        when: () => !skipClient,
+        message: 'Do you want to generate the admin UI?',
+        default: clientDefaultConfig.withAdminUi,
+    };
+
+    return this.prompt(PROMPT).then(prompt => {
+        this.withAdminUi = this.jhipsterConfig.withAdminUi = prompt.withAdminUi;
     });
 }

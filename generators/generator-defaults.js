@@ -81,6 +81,7 @@ const clientDefaultConfig = {
     clientTheme: 'none',
     clientThemeVariant: 'primary',
     useSass: true,
+    withAdminUi: true,
 };
 
 const translationDefaultConfig = {

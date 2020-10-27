@@ -128,7 +128,7 @@ describe('JHipster client generator', () => {
         });
     });
 
-    describe('--with-admin-ui', () => {
+    describe('Admin UI', () => {
         [ANGULAR].forEach(clientFramework => {
             describe(`selected and ${clientFramework}`, () => {
                 let runResult;
@@ -138,8 +138,7 @@ describe('JHipster client generator', () => {
                         .withOptions({
                             fromCli: true,
                             skipInstall: true,
-                            defaultLocalConfig: { ...appDefaultConfig, clientFramework, testFrameworks: ['cypress'] },
-                            withAdminUi: true,
+                            defaultLocalConfig: { ...appDefaultConfig, clientFramework, testFrameworks: ['cypress'], },
                         })
                         .run()
                         .then(result => {
@@ -237,8 +236,7 @@ describe('JHipster client generator', () => {
                         .withOptions({
                             fromCli: true,
                             skipInstall: true,
-                            defaultLocalConfig: { ...appDefaultConfig, clientFramework, testFrameworks: ['cypress'] },
-                            withAdminUi: false,
+                            defaultLocalConfig: { ...appDefaultConfig, clientFramework, testFrameworks: ['cypress'], withAdminUi: false },
                         })
                         .run()
                         .then(result => {

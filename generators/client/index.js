@@ -57,12 +57,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
             type: Boolean,
         });
 
-        // This adds support for a `--with-admin-ui` flag which can be used to generate the admin UI pages
-        this.option('with-admin-ui', {
-            desc: 'Generate the UI admin pages. By default this feature is supported by the JHipster Control Center.',
-            type: Boolean,
-        });
-
         if (this.options.help) {
             return;
         }
@@ -111,6 +105,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         return {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
+            askForAdminUi: prompts.askForAdminUi,
             askForClientTheme: prompts.askForClientTheme,
             askForClientThemeVariant: prompts.askForClientThemeVariant,
         };
