@@ -364,6 +364,53 @@ describe('JHipster client generator', () => {
                     /* eslint-enable no-template-curly-in-string */
                 );
             });
+
+            it('admin reducer should contains admin component related code', () => {
+                runResult.assertFileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
+                    "  FETCH_LOGS: 'administration/FETCH_LOGS',\n" +
+                        "  FETCH_LOGS_CHANGE_LEVEL: 'administration/FETCH_LOGS_CHANGE_LEVEL',\n" +
+                        "  FETCH_HEALTH: 'administration/FETCH_HEALTH',\n" +
+                        "  FETCH_METRICS: 'administration/FETCH_METRICS',\n" +
+                        "  FETCH_THREAD_DUMP: 'administration/FETCH_THREAD_DUMP',\n" +
+                        "  FETCH_CONFIGURATIONS: 'administration/FETCH_CONFIGURATIONS',\n" +
+                        "  FETCH_ENV: 'administration/FETCH_ENV',"
+                );
+
+                runResult.assertFileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
+                    'logs: {\n' +
+                        '    loggers: [] as any[]\n' +
+                        '  },\n' +
+                        '  health: {} as any,\n' +
+                        '  metrics: {} as any,\n' +
+                        '  threadDump: [],\n' +
+                        '  configuration: {\n' +
+                        '    configProps: {} as any,\n' +
+                        '    env: {} as any\n' +
+                        '  },'
+                );
+
+                runResult.assertFileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
+                    'case REQUEST(ACTION_TYPES.FETCH_METRICS):\n' +
+                        '    case REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP):\n' +
+                        '    case REQUEST(ACTION_TYPES.FETCH_LOGS):\n' +
+                        '    case REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS):\n' +
+                        '    case REQUEST(ACTION_TYPES.FETCH_ENV):\n' +
+                        '    case REQUEST(ACTION_TYPES.FETCH_HEALTH):'
+                );
+            });
+
+            it('Admin menu should contains admin entries', () => {
+                runResult.assertFileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/shared/layout/menus/admin.tsx`,
+                    '    <MenuItem icon="tachometer-alt" to="/admin/metrics"><Translate contentKey="global.menu.admin.metrics">Metrics</Translate></MenuItem>\n' +
+                        '    <MenuItem icon="heart" to="/admin/health"><Translate contentKey="global.menu.admin.health">Health</Translate></MenuItem>\n' +
+                        '    <MenuItem icon="cogs" to="/admin/configuration"><Translate contentKey="global.menu.admin.configuration">Configuration</Translate></MenuItem>\n' +
+                        '    <MenuItem icon="tasks" to="/admin/logs"><Translate contentKey="global.menu.admin.logs">Logs</Translate></MenuItem>'
+                );
+            });
         });
 
         describe('not selected and React', () => {
@@ -403,6 +450,53 @@ describe('JHipster client generator', () => {
                         '    <ErrorBoundaryRoute exact path={`${match.url}/configuration`} component={Configuration} />\n' +
                         '    <ErrorBoundaryRoute exact path={`${match.url}/logs`} component={Logs} />'
                     /* eslint-enable no-template-curly-in-string */
+                );
+            });
+
+            it('admin reducer should not contains admin component related code', () => {
+                runResult.assertNoFileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
+                    "  FETCH_LOGS: 'administration/FETCH_LOGS',\n" +
+                        "  FETCH_LOGS_CHANGE_LEVEL: 'administration/FETCH_LOGS_CHANGE_LEVEL',\n" +
+                        "  FETCH_HEALTH: 'administration/FETCH_HEALTH',\n" +
+                        "  FETCH_METRICS: 'administration/FETCH_METRICS',\n" +
+                        "  FETCH_THREAD_DUMP: 'administration/FETCH_THREAD_DUMP',\n" +
+                        "  FETCH_CONFIGURATIONS: 'administration/FETCH_CONFIGURATIONS',\n" +
+                        "  FETCH_ENV: 'administration/FETCH_ENV',"
+                );
+
+                runResult.assertNoFileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
+                    'logs: {\n' +
+                        '    loggers: [] as any[]\n' +
+                        '  },\n' +
+                        '  health: {} as any,\n' +
+                        '  metrics: {} as any,\n' +
+                        '  threadDump: [],\n' +
+                        '  configuration: {\n' +
+                        '    configProps: {} as any,\n' +
+                        '    env: {} as any\n' +
+                        '  },'
+                );
+
+                runResult.assertNoFileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
+                    'case REQUEST(ACTION_TYPES.FETCH_METRICS):\n' +
+                        '    case REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP):\n' +
+                        '    case REQUEST(ACTION_TYPES.FETCH_LOGS):\n' +
+                        '    case REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS):\n' +
+                        '    case REQUEST(ACTION_TYPES.FETCH_ENV):\n' +
+                        '    case REQUEST(ACTION_TYPES.FETCH_HEALTH):'
+                );
+            });
+
+            it('Admin menu should not contains admin entries', () => {
+                runResult.assertNoFileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/shared/layout/menus/admin.tsx`,
+                    '    <MenuItem icon="tachometer-alt" to="/admin/metrics"><Translate contentKey="global.menu.admin.metrics">Metrics</Translate></MenuItem>\n' +
+                        '    <MenuItem icon="heart" to="/admin/health"><Translate contentKey="global.menu.admin.health">Health</Translate></MenuItem>\n' +
+                        '    <MenuItem icon="cogs" to="/admin/configuration"><Translate contentKey="global.menu.admin.configuration">Configuration</Translate></MenuItem>\n' +
+                        '    <MenuItem icon="tasks" to="/admin/logs"><Translate contentKey="global.menu.admin.logs">Logs</Translate></MenuItem>'
                 );
             });
         });
