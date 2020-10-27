@@ -129,7 +129,7 @@ describe('JHipster client generator', () => {
     });
 
     describe('Admin UI', () => {
-        describe(`selected and Angular`, () => {
+        describe('selected and Angular', () => {
             let runResult;
             before(() => {
                 return helpers
@@ -227,7 +227,7 @@ describe('JHipster client generator', () => {
             });
         });
 
-        describe(`not selected and Angular`, () => {
+        describe('not selected and Angular', () => {
             let runResult;
             before(() => {
                 return helpers
@@ -235,7 +235,12 @@ describe('JHipster client generator', () => {
                     .withOptions({
                         fromCli: true,
                         skipInstall: true,
-                        defaultLocalConfig: { ...appDefaultConfig, clientFramework: ANGULAR, testFrameworks: ['cypress'], withAdminUi: false },
+                        defaultLocalConfig: {
+                            ...appDefaultConfig,
+                            clientFramework: ANGULAR,
+                            testFrameworks: ['cypress'],
+                            withAdminUi: false,
+                        },
                     })
                     .run()
                     .then(result => {
@@ -325,7 +330,7 @@ describe('JHipster client generator', () => {
             });
         });
 
-        describe(`selected and React`, () => {
+        describe('selected and React', () => {
             let runResult;
             before(() => {
                 return helpers
@@ -333,7 +338,7 @@ describe('JHipster client generator', () => {
                     .withOptions({
                         fromCli: true,
                         skipInstall: true,
-                        defaultLocalConfig: { ...appDefaultConfig, clientFramework: REACT, testFrameworks: ['cypress'], },
+                        defaultLocalConfig: { ...appDefaultConfig, clientFramework: REACT, testFrameworks: ['cypress'] },
                     })
                     .run()
                     .then(result => {
@@ -346,9 +351,22 @@ describe('JHipster client generator', () => {
             it('should have admin ui components', () => {
                 runResult.assertFile(expectedFiles.clientAdminReact);
             });
+
+            it('index.tsx should contains routes', () => {
+                runResult.assertFileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/modules/administration/index.tsx`,
+                    /* eslint-disable no-template-curly-in-string */
+                    '    <ErrorBoundaryRoute exact path={`${match.url}/health`} component={Health} />\n' +
+                        '    <ErrorBoundaryRoute exact path={`${match.url}/metrics`} component={Metrics} />\n' +
+                        '    <ErrorBoundaryRoute exact path={`${match.url}/docs`} component={Docs} />\n' +
+                        '    <ErrorBoundaryRoute exact path={`${match.url}/configuration`} component={Configuration} />\n' +
+                        '    <ErrorBoundaryRoute exact path={`${match.url}/logs`} component={Logs} />'
+                    /* eslint-enable no-template-curly-in-string */
+                );
+            });
         });
 
-        describe(`not selected and React`, () => {
+        describe('not selected and React', () => {
             let runResult;
             before(() => {
                 return helpers
@@ -356,7 +374,12 @@ describe('JHipster client generator', () => {
                     .withOptions({
                         fromCli: true,
                         skipInstall: true,
-                        defaultLocalConfig: { ...appDefaultConfig, clientFramework: REACT, testFrameworks: ['cypress'], withAdminUi: false },
+                        defaultLocalConfig: {
+                            ...appDefaultConfig,
+                            clientFramework: REACT,
+                            testFrameworks: ['cypress'],
+                            withAdminUi: false,
+                        },
                     })
                     .run()
                     .then(result => {
@@ -368,6 +391,19 @@ describe('JHipster client generator', () => {
 
             it('should not have admin ui components', () => {
                 runResult.assertNoFile(expectedFiles.clientAdminReact);
+            });
+
+            it('index.tsx should contains routes', () => {
+                runResult.assertNoFileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/modules/administration/index.tsx`,
+                    /* eslint-disable no-template-curly-in-string */
+                    '    <ErrorBoundaryRoute exact path={`${match.url}/health`} component={Health} />\n' +
+                        '    <ErrorBoundaryRoute exact path={`${match.url}/metrics`} component={Metrics} />\n' +
+                        '    <ErrorBoundaryRoute exact path={`${match.url}/docs`} component={Docs} />\n' +
+                        '    <ErrorBoundaryRoute exact path={`${match.url}/configuration`} component={Configuration} />\n' +
+                        '    <ErrorBoundaryRoute exact path={`${match.url}/logs`} component={Logs} />'
+                    /* eslint-enable no-template-curly-in-string */
+                );
             });
         });
     });
