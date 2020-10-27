@@ -98,6 +98,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
                 );
             }
             _.defaults(relationship, {
+                otherRelationship,
                 otherEntityRelationshipName: otherRelationship.relationshipName,
                 otherEntityRelationshipNamePlural: otherRelationship.relationshipNamePlural,
                 otherEntityRelationshipNameCapitalized: otherRelationship.relationshipNameCapitalized,
