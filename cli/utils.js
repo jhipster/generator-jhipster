@@ -145,7 +145,7 @@ const getOptionAsArgs = (options = {}) => {
  */
 const getCommand = (cmd, args = []) => {
     let cmdArgs;
-    if (args && args.length > 0) {
+    if (args.length > 0) {
         logger.debug('Arguments found');
         args = args.flat();
         cmdArgs = args.join(' ').trim();
