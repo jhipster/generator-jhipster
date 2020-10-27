@@ -2,7 +2,7 @@
     "generator-jhipster": {
         "applicationType": "monolith",
         "baseName": "sampleCassandra",
-        "packageName": "io.github.jhipster.sample",
+        "packageName": "tech.jhipster.sample",
         "packageFolder": "io/github/jhipster/sample",
         "authenticationType": "session",
         "cacheProvider": "no",

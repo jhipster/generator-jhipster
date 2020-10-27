@@ -34,8 +34,8 @@
 logging:
     level:
         ROOT: INFO
-        io.github.jhipster: INFO
-        <%_ if (packageName !== 'io.github.jhipster') { _%>
+        tech.jhipster: INFO
+        <%_ if (packageName !== 'tech.jhipster') { _%>
         <%= packageName %>: INFO
         <%_ } _%>
         <%_ if (databaseType === 'neo4j') { _%>
@@ -119,7 +119,7 @@ spring:
         <%_ } _%>
     jpa:
         <%_ if (prodDatabaseType === 'postgresql') { _%>
-        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
+        database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
         <%_ } _%>
         show-sql: false
     <%_ } _%>
