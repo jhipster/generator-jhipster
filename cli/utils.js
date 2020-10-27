@@ -107,16 +107,6 @@ const initHelp = (program, cliName) => {
     });
 };
 
-/**
- * Get arguments
- */
-const getArgs = opts => {
-    if (opts.argument) {
-        return `${opts.argument.join(' ')}`;
-    }
-    return '';
-};
-
 /* Convert option objects to command line args */
 const getOptionAsArgs = (options = {}) => {
     options = Object.fromEntries(
@@ -180,7 +170,6 @@ module.exports = {
     toString,
     logger,
     initHelp,
-    getArgs,
     getCommand,
     doneFactory,
     done: doneFactory(SUCCESS_MESSAGE),
