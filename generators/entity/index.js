@@ -126,17 +126,20 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.entityStorage = this.getEntityConfig(name, true);
         this.entityConfig = this.entityStorage.createProxy();
 
-        const entityExisted = this.options.entityExisted !== undefined ? this.options.entityExisted : this.entityStorage.existed;
+        const configExisted = this.entityStorage.existed;
+        const filename = this.destinationPath(JHIPSTER_CONFIG_DIR, `${name}.json`);
+        const entityExisted = fs.existsSync(filename);
 
         this.context = {
             name,
+            configExisted,
             entityExisted,
         };
 
         this._setupEntityOptions(this, this, this.context);
         this.registerPrettierTransform();
 
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity', { entityExisted, arguments: [name] });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity', { entityExisted, configExisted, arguments: [name] });
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -349,7 +352,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 // Validate root entity json content
                 if (this.entityConfig.changelogDate === undefined) {
                     const currentDate = this.dateFormatForLiquibase();
-                    this.info(`changelogDate is missing in .jhipster/${this.entityConfig.name}.json, using ${currentDate} as fallback`);
+                    if (this.context.entityExisted) {
+                        this.info(`changelogDate is missing in .jhipster/${this.entityConfig.name}.json, using ${currentDate} as fallback`);
+                    }
                     context.changelogDate = this.entityConfig.changelogDate = currentDate;
                 }
 
