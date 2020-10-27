@@ -495,7 +495,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}content/images/logo-jhipster.png`,
     ],
 
-    clientAdmin: [
+    clientAdminAngular: [
         `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.route.ts`,
@@ -531,6 +531,16 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/logs/logs.service.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics.service.spec.ts`,
+    ],
+
+    clientAdminReact: [
+        `${CLIENT_MAIN_SRC_DIR}app/modules/administration/configuration/configuration.tsx`,
+        `${CLIENT_MAIN_SRC_DIR}app/modules/administration/docs/docs.tsx`,
+        `${CLIENT_MAIN_SRC_DIR}app/modules/administration/docs/docs.scss`,
+        `${CLIENT_MAIN_SRC_DIR}app/modules/administration/health/health.tsx`,
+        `${CLIENT_MAIN_SRC_DIR}app/modules/administration/health/health-modal.tsx`,
+        `${CLIENT_MAIN_SRC_DIR}app/modules/administration/metrics/metrics.tsx`,
+        `${CLIENT_MAIN_SRC_DIR}app/modules/administration/logs/logs.tsx`,
     ],
 
     i18n: [

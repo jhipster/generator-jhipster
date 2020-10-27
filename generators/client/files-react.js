@@ -182,8 +182,14 @@ const files = {
         {
             path: REACT_DIR,
             templates: [
-                // admin modules
                 { file: 'modules/administration/index.tsx', method: 'processJsx' },
+                'modules/administration/administration.reducer.ts',
+            ],
+        },
+        {
+            condition: generator => generator.withAdminUi,
+            path: REACT_DIR,
+            templates: [
                 { file: 'modules/administration/configuration/configuration.tsx', method: 'processJsx' },
                 { file: 'modules/administration/docs/docs.tsx', method: 'processJsx' },
                 'modules/administration/docs/docs.scss',
@@ -191,7 +197,6 @@ const files = {
                 { file: 'modules/administration/health/health-modal.tsx', method: 'processJsx' },
                 { file: 'modules/administration/logs/logs.tsx', method: 'processJsx' },
                 { file: 'modules/administration/metrics/metrics.tsx', method: 'processJsx' },
-                'modules/administration/administration.reducer.ts',
             ],
         },
         {

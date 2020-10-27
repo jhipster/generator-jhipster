@@ -129,201 +129,245 @@ describe('JHipster client generator', () => {
     });
 
     describe('Admin UI', () => {
-        [ANGULAR].forEach(clientFramework => {
-            describe(`selected and ${clientFramework}`, () => {
-                let runResult;
-                before(() => {
-                    return helpers
-                        .create(require.resolve('../generators/client'))
-                        .withOptions({
-                            fromCli: true,
-                            skipInstall: true,
-                            defaultLocalConfig: { ...appDefaultConfig, clientFramework, testFrameworks: ['cypress'], },
-                        })
-                        .run()
-                        .then(result => {
-                            runResult = result;
-                        });
-                });
-
-                after(() => runResult.cleanup());
-
-                it('should have admin ui components', () => {
-                    runResult.assertFile(expectedFiles.clientAdmin);
-                });
-
-                it('should contains admin routing', () => {
-                    runResult.assertFileContent(
-                        `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
-                        '        {\n' +
-                            "          path: 'configuration',\n" +
-                            "          loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule)\n" +
-                            '        },\n' +
-                            '        {\n' +
-                            "          path: 'docs',\n" +
-                            "          loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule)\n" +
-                            '        },\n' +
-                            '        {\n' +
-                            "          path: 'health',\n" +
-                            "          loadChildren: () => import('./health/health.module').then(m => m.HealthModule)\n" +
-                            '        },\n' +
-                            '        {\n' +
-                            "          path: 'logs',\n" +
-                            "          loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule)\n" +
-                            '        },\n' +
-                            '        {\n' +
-                            "          path: 'metrics',\n" +
-                            "          loadChildren: () => import('./metrics/metrics.module').then(m => m.MetricsModule)\n" +
-                            '        },'
-                    );
-                });
-
-                it('should contains admin ui cypress tests', () => {
-                    assert.fileContent(
-                        `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
-                        '  metricsPageHeadingSelector,\n' +
-                            '  healthPageHeadingSelector,\n' +
-                            '  logsPageHeadingSelector,\n' +
-                            '  configurationPageHeadingSelector,'
-                    );
-
-                    assert.fileContent(
-                        `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
-                        "  describe('/metrics', () => {\n" +
-                            "    it('should load the page', () => {\n" +
-                            "      cy.clickOnAdminMenuItem('metrics');\n" +
-                            "      cy.get(metricsPageHeadingSelector).should('be.visible');\n" +
-                            '    });\n' +
-                            '  });\n' +
-                            '\n' +
-                            "  describe('/health', () => {\n" +
-                            "    it('should load the page', () => {\n" +
-                            "      cy.clickOnAdminMenuItem('health');\n" +
-                            "      cy.get(healthPageHeadingSelector).should('be.visible');\n" +
-                            '    });\n' +
-                            '  });\n' +
-                            '\n' +
-                            "  describe('/logs', () => {\n" +
-                            "    it('should load the page', () => {\n" +
-                            "      cy.clickOnAdminMenuItem('logs');\n" +
-                            "      cy.get(logsPageHeadingSelector).should('be.visible');\n" +
-                            '    });\n' +
-                            '  });\n' +
-                            '\n' +
-                            "  describe('/configuration', () => {\n" +
-                            "    it('should load the page', () => {\n" +
-                            "      cy.clickOnAdminMenuItem('configuration');\n" +
-                            "      cy.get(configurationPageHeadingSelector).should('be.visible');\n" +
-                            '    });\n' +
-                            '  });'
-                    );
-
-                    assert.fileContent(
-                        `${CLIENT_TEST_SRC_DIR}cypress/support/commands.ts`,
-                        'export const metricsPageHeadingSelector = \'[data-cy="metricsPageHeading"]\';\n' +
-                            'export const healthPageHeadingSelector = \'[data-cy="healthPageHeading"]\';\n' +
-                            'export const logsPageHeadingSelector = \'[data-cy="logsPageHeading"]\';\n' +
-                            'export const configurationPageHeadingSelector = \'[data-cy="configurationPageHeading"]\';'
-                    );
-                });
+        describe(`selected and Angular`, () => {
+            let runResult;
+            before(() => {
+                return helpers
+                    .create(require.resolve('../generators/client'))
+                    .withOptions({
+                        fromCli: true,
+                        skipInstall: true,
+                        defaultLocalConfig: { ...appDefaultConfig, clientFramework: ANGULAR, testFrameworks: ['cypress'] },
+                    })
+                    .run()
+                    .then(result => {
+                        runResult = result;
+                    });
             });
 
-            describe(`not selected and ${clientFramework}`, () => {
-                let runResult;
-                before(() => {
-                    return helpers
-                        .create(require.resolve('../generators/client'))
-                        .withOptions({
-                            fromCli: true,
-                            skipInstall: true,
-                            defaultLocalConfig: { ...appDefaultConfig, clientFramework, testFrameworks: ['cypress'], withAdminUi: false },
-                        })
-                        .run()
-                        .then(result => {
-                            runResult = result;
-                        });
-                });
+            after(() => runResult.cleanup());
 
-                after(() => runResult.cleanup());
+            it('should have admin ui components', () => {
+                runResult.assertFile(expectedFiles.clientAdminAngular);
+            });
 
-                it('should not have admin ui components', () => {
-                    runResult.assertNoFile(expectedFiles.clientAdmin);
-                });
-
-                it('should not contains admin routing', () => {
-                    runResult.assertNoFileContent(
-                        `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
+            it('should contains admin routing', () => {
+                runResult.assertFileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
+                    '        {\n' +
+                        "          path: 'configuration',\n" +
+                        "          loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule)\n" +
+                        '        },\n' +
                         '        {\n' +
-                            "          path: 'configuration',\n" +
-                            "          loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule)\n" +
-                            '        },\n' +
-                            '        {\n' +
-                            "          path: 'docs',\n" +
-                            "          loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule)\n" +
-                            '        },\n' +
-                            '        {\n' +
-                            "          path: 'health',\n" +
-                            "          loadChildren: () => import('./health/health.module').then(m => m.HealthModule)\n" +
-                            '        },\n' +
-                            '        {\n' +
-                            "          path: 'logs',\n" +
-                            "          loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule)\n" +
-                            '        },\n' +
-                            '        {\n' +
-                            "          path: 'metrics',\n" +
-                            "          loadChildren: () => import('./metrics/metrics.module').then(m => m.MetricsModule)\n" +
-                            '        },'
-                    );
-                });
+                        "          path: 'docs',\n" +
+                        "          loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule)\n" +
+                        '        },\n' +
+                        '        {\n' +
+                        "          path: 'health',\n" +
+                        "          loadChildren: () => import('./health/health.module').then(m => m.HealthModule)\n" +
+                        '        },\n' +
+                        '        {\n' +
+                        "          path: 'logs',\n" +
+                        "          loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule)\n" +
+                        '        },\n' +
+                        '        {\n' +
+                        "          path: 'metrics',\n" +
+                        "          loadChildren: () => import('./metrics/metrics.module').then(m => m.MetricsModule)\n" +
+                        '        },'
+                );
+            });
 
-                it('should not contains admin ui cypress tests', () => {
-                    assert.noFileContent(
-                        `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
-                        '  metricsPageHeadingSelector,\n' +
-                            '  healthPageHeadingSelector,\n' +
-                            '  logsPageHeadingSelector,\n' +
-                            '  configurationPageHeadingSelector,'
-                    );
+            it('should contains admin ui cypress tests', () => {
+                assert.fileContent(
+                    `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
+                    '  metricsPageHeadingSelector,\n' +
+                        '  healthPageHeadingSelector,\n' +
+                        '  logsPageHeadingSelector,\n' +
+                        '  configurationPageHeadingSelector,'
+                );
 
-                    assert.noFileContent(
-                        `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
-                        "  describe('/metrics', () => {\n" +
-                            "    it('should load the page', () => {\n" +
-                            "      cy.clickOnAdminMenuItem('metrics');\n" +
-                            "      cy.get(metricsPageHeadingSelector).should('be.visible');\n" +
-                            '    });\n' +
-                            '  });\n' +
-                            '\n' +
-                            "  describe('/health', () => {\n" +
-                            "    it('should load the page', () => {\n" +
-                            "      cy.clickOnAdminMenuItem('health');\n" +
-                            "      cy.get(healthPageHeadingSelector).should('be.visible');\n" +
-                            '    });\n' +
-                            '  });\n' +
-                            '\n' +
-                            "  describe('/logs', () => {\n" +
-                            "    it('should load the page', () => {\n" +
-                            "      cy.clickOnAdminMenuItem('logs');\n" +
-                            "      cy.get(logsPageHeadingSelector).should('be.visible');\n" +
-                            '    });\n' +
-                            '  });\n' +
-                            '\n' +
-                            "  describe('/configuration', () => {\n" +
-                            "    it('should load the page', () => {\n" +
-                            "      cy.clickOnAdminMenuItem('configuration');\n" +
-                            "      cy.get(configurationPageHeadingSelector).should('be.visible');\n" +
-                            '    });\n' +
-                            '  });'
-                    );
+                assert.fileContent(
+                    `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
+                    "  describe('/metrics', () => {\n" +
+                        "    it('should load the page', () => {\n" +
+                        "      cy.clickOnAdminMenuItem('metrics');\n" +
+                        "      cy.get(metricsPageHeadingSelector).should('be.visible');\n" +
+                        '    });\n' +
+                        '  });\n' +
+                        '\n' +
+                        "  describe('/health', () => {\n" +
+                        "    it('should load the page', () => {\n" +
+                        "      cy.clickOnAdminMenuItem('health');\n" +
+                        "      cy.get(healthPageHeadingSelector).should('be.visible');\n" +
+                        '    });\n' +
+                        '  });\n' +
+                        '\n' +
+                        "  describe('/logs', () => {\n" +
+                        "    it('should load the page', () => {\n" +
+                        "      cy.clickOnAdminMenuItem('logs');\n" +
+                        "      cy.get(logsPageHeadingSelector).should('be.visible');\n" +
+                        '    });\n' +
+                        '  });\n' +
+                        '\n' +
+                        "  describe('/configuration', () => {\n" +
+                        "    it('should load the page', () => {\n" +
+                        "      cy.clickOnAdminMenuItem('configuration');\n" +
+                        "      cy.get(configurationPageHeadingSelector).should('be.visible');\n" +
+                        '    });\n' +
+                        '  });'
+                );
 
-                    assert.noFileContent(
-                        `${CLIENT_TEST_SRC_DIR}cypress/support/commands.ts`,
-                        'export const metricsPageHeadingSelector = \'[data-cy="metricsPageHeading"]\';\n' +
-                            'export const healthPageHeadingSelector = \'[data-cy="healthPageHeading"]\';\n' +
-                            'export const logsPageHeadingSelector = \'[data-cy="logsPageHeading"]\';\n' +
-                            'export const configurationPageHeadingSelector = \'[data-cy="configurationPageHeading"]\';'
-                    );
-                });
+                assert.fileContent(
+                    `${CLIENT_TEST_SRC_DIR}cypress/support/commands.ts`,
+                    'export const metricsPageHeadingSelector = \'[data-cy="metricsPageHeading"]\';\n' +
+                        'export const healthPageHeadingSelector = \'[data-cy="healthPageHeading"]\';\n' +
+                        'export const logsPageHeadingSelector = \'[data-cy="logsPageHeading"]\';\n' +
+                        'export const configurationPageHeadingSelector = \'[data-cy="configurationPageHeading"]\';'
+                );
+            });
+        });
+
+        describe(`not selected and Angular`, () => {
+            let runResult;
+            before(() => {
+                return helpers
+                    .create(require.resolve('../generators/client'))
+                    .withOptions({
+                        fromCli: true,
+                        skipInstall: true,
+                        defaultLocalConfig: { ...appDefaultConfig, clientFramework: ANGULAR, testFrameworks: ['cypress'], withAdminUi: false },
+                    })
+                    .run()
+                    .then(result => {
+                        runResult = result;
+                    });
+            });
+
+            after(() => runResult.cleanup());
+
+            it('should not have admin ui components', () => {
+                runResult.assertNoFile(expectedFiles.clientAdminAngular);
+            });
+
+            it('should not contains admin routing', () => {
+                runResult.assertNoFileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
+                    '        {\n' +
+                        "          path: 'configuration',\n" +
+                        "          loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule)\n" +
+                        '        },\n' +
+                        '        {\n' +
+                        "          path: 'docs',\n" +
+                        "          loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule)\n" +
+                        '        },\n' +
+                        '        {\n' +
+                        "          path: 'health',\n" +
+                        "          loadChildren: () => import('./health/health.module').then(m => m.HealthModule)\n" +
+                        '        },\n' +
+                        '        {\n' +
+                        "          path: 'logs',\n" +
+                        "          loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule)\n" +
+                        '        },\n' +
+                        '        {\n' +
+                        "          path: 'metrics',\n" +
+                        "          loadChildren: () => import('./metrics/metrics.module').then(m => m.MetricsModule)\n" +
+                        '        },'
+                );
+            });
+
+            it('should not contains admin ui cypress tests', () => {
+                assert.noFileContent(
+                    `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
+                    '  metricsPageHeadingSelector,\n' +
+                        '  healthPageHeadingSelector,\n' +
+                        '  logsPageHeadingSelector,\n' +
+                        '  configurationPageHeadingSelector,'
+                );
+
+                assert.noFileContent(
+                    `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
+                    "  describe('/metrics', () => {\n" +
+                        "    it('should load the page', () => {\n" +
+                        "      cy.clickOnAdminMenuItem('metrics');\n" +
+                        "      cy.get(metricsPageHeadingSelector).should('be.visible');\n" +
+                        '    });\n' +
+                        '  });\n' +
+                        '\n' +
+                        "  describe('/health', () => {\n" +
+                        "    it('should load the page', () => {\n" +
+                        "      cy.clickOnAdminMenuItem('health');\n" +
+                        "      cy.get(healthPageHeadingSelector).should('be.visible');\n" +
+                        '    });\n' +
+                        '  });\n' +
+                        '\n' +
+                        "  describe('/logs', () => {\n" +
+                        "    it('should load the page', () => {\n" +
+                        "      cy.clickOnAdminMenuItem('logs');\n" +
+                        "      cy.get(logsPageHeadingSelector).should('be.visible');\n" +
+                        '    });\n' +
+                        '  });\n' +
+                        '\n' +
+                        "  describe('/configuration', () => {\n" +
+                        "    it('should load the page', () => {\n" +
+                        "      cy.clickOnAdminMenuItem('configuration');\n" +
+                        "      cy.get(configurationPageHeadingSelector).should('be.visible');\n" +
+                        '    });\n' +
+                        '  });'
+                );
+
+                assert.noFileContent(
+                    `${CLIENT_TEST_SRC_DIR}cypress/support/commands.ts`,
+                    'export const metricsPageHeadingSelector = \'[data-cy="metricsPageHeading"]\';\n' +
+                        'export const healthPageHeadingSelector = \'[data-cy="healthPageHeading"]\';\n' +
+                        'export const logsPageHeadingSelector = \'[data-cy="logsPageHeading"]\';\n' +
+                        'export const configurationPageHeadingSelector = \'[data-cy="configurationPageHeading"]\';'
+                );
+            });
+        });
+
+        describe(`selected and React`, () => {
+            let runResult;
+            before(() => {
+                return helpers
+                    .create(require.resolve('../generators/client'))
+                    .withOptions({
+                        fromCli: true,
+                        skipInstall: true,
+                        defaultLocalConfig: { ...appDefaultConfig, clientFramework: REACT, testFrameworks: ['cypress'], },
+                    })
+                    .run()
+                    .then(result => {
+                        runResult = result;
+                    });
+            });
+
+            after(() => runResult.cleanup());
+
+            it('should have admin ui components', () => {
+                runResult.assertFile(expectedFiles.clientAdminReact);
+            });
+        });
+
+        describe(`not selected and React`, () => {
+            let runResult;
+            before(() => {
+                return helpers
+                    .create(require.resolve('../generators/client'))
+                    .withOptions({
+                        fromCli: true,
+                        skipInstall: true,
+                        defaultLocalConfig: { ...appDefaultConfig, clientFramework: REACT, testFrameworks: ['cypress'], withAdminUi: false },
+                    })
+                    .run()
+                    .then(result => {
+                        runResult = result;
+                    });
+            });
+
+            after(() => runResult.cleanup());
+
+            it('should not have admin ui components', () => {
+                runResult.assertNoFile(expectedFiles.clientAdminReact);
             });
         });
     });
