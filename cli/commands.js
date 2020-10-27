@@ -20,12 +20,6 @@
 const defaultCommands = {
     app: {
         desc: '[Default] Create a new JHipster application based on the selected options',
-        help: `
-Example:
-    jhipster
-
-This will compose jhipster:client, jhipster:server and jhipster:languages to scaffold a full application
-`,
     },
     aws: {
         desc: 'Deploy the current application to Amazon Web Services',

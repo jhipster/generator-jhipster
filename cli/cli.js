@@ -19,6 +19,8 @@
 const chalk = require('chalk');
 const didYouMean = require('didyoumean');
 const { Option } = require('commander');
+const fs = require('fs');
+const path = require('path');
 
 const JHipsterCommand = require('./jhipster-command');
 const packageJson = require('../package.json');
@@ -83,7 +85,9 @@ Object.entries(allCommands).forEach(([key, opts]) => {
     }
 
     command.addCommandOptions(opts.options);
-
+    if (opts.help) {
+        command.addHelpText('after', opts.help);
+    }
     if (opts.cliOnly) {
         command.arguments(getArgs(opts));
     }
@@ -105,6 +109,11 @@ Object.entries(allCommands).forEach(([key, opts]) => {
                         opts.argument = generator._arguments.map(generatorArgument => generatorArgument.name);
                     }
                     command.addGeneratorArguments(generator._arguments).addGeneratorOptions(generator._options);
+
+                    const usagePath = path.resolve(generator.sourceRoot(), '../USAGE');
+                    if (fs.existsSync(usagePath)) {
+                        command.addHelpText('after', `\n${fs.readFileSync(usagePath, 'utf8')}`);
+                    }
                 }
                 if (key === 'jdl' || program.opts().fromJdl) {
                     const generator = env.create(`${JHIPSTER_NS}:app`, { options: { help: true } });
@@ -134,61 +143,53 @@ Object.entries(allCommands).forEach(([key, opts]) => {
     }
 
     const additionalCommandDescription = opts.blueprint ? chalk.yellow(` (blueprint: ${opts.blueprint})`) : '';
-    command
-        .description(opts.desc + additionalCommandDescription)
-        .action((...everything) => {
-            // [args, opts, extraArgs]
-            const cmdOptions = everything.pop();
-            if (Array.isArray(cmdOptions)) {
-                // if extraArgs exists: Unknown commands or unknown argument.
-                const cmd = cmdOptions[0];
-                if (key !== 'app') {
-                    logger.fatal(
-                        `${chalk.yellow(key)} command doesn't take ${chalk.yellow(cmd)} argument. See '${chalk.white(
-                            `${CLI_NAME} ${key} --help`
-                        )}'.`
-                    );
-                    return;
-                }
-                const availableCommands = program.commands.map(c => c._name);
-
-                const suggestion = didYouMean(cmd, availableCommands);
-                if (suggestion) {
-                    logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
-                }
-
-                logger.fatal(`${chalk.yellow(cmd)} is not a known command. See '${chalk.white(`${CLI_NAME} --help`)}'.`);
+    command.description(opts.desc + additionalCommandDescription).action((...everything) => {
+        // [args, opts, extraArgs]
+        const cmdOptions = everything.pop();
+        if (Array.isArray(cmdOptions)) {
+            // if extraArgs exists: Unknown commands or unknown argument.
+            const cmd = cmdOptions[0];
+            if (key !== 'app') {
+                logger.fatal(
+                    `${chalk.yellow(key)} command doesn't take ${chalk.yellow(cmd)} argument. See '${chalk.white(
+                        `${CLI_NAME} ${key} --help`
+                    )}'.`
+                );
                 return;
             }
-            const args = everything;
+            const availableCommands = program.commands.map(c => c._name);
 
-            // Get unknown options and parse.
-            const options = {
-                ...program.opts(),
-                ...cmdOptions,
-            };
+            const suggestion = didYouMean(cmd, availableCommands);
+            if (suggestion) {
+                logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
+            }
 
-            if (opts.cliOnly) {
-                logger.debug('Executing CLI only script');
-                if (args.length > 0 && Array.isArray(args[args.length - 1])) {
-                    // Convert the variadic argument into a argument for backward compatibility.
-                    // Remove for jhipster 7
-                    args.push(...args.pop());
-                }
-                /* eslint-disable global-require, import/no-dynamic-require */
-                require(`./${key}`)(args, options, env);
-                /* eslint-enable */
-            } else {
-                const namespace = opts.blueprint ? `${packageNameToNamespace(opts.blueprint)}:${key}` : `${JHIPSTER_NS}:${key}`;
-                runYoCommand(namespace, args, options, opts);
+            logger.fatal(`${chalk.yellow(cmd)} is not a known command. See '${chalk.white(`${CLI_NAME} --help`)}'.`);
+            return;
+        }
+        const args = everything;
+
+        // Get unknown options and parse.
+        const options = {
+            ...program.opts(),
+            ...cmdOptions,
+        };
+
+        if (opts.cliOnly) {
+            logger.debug('Executing CLI only script');
+            if (args.length > 0 && Array.isArray(args[args.length - 1])) {
+                // Convert the variadic argument into a argument for backward compatibility.
+                // Remove for jhipster 7
+                args.push(...args.pop());
             }
-        })
-        .on('--help', () => {
-            if (opts.help) {
-                /* eslint-disable-next-line no-console */
-                console.log(opts.help);
-            }
-        });
+            /* eslint-disable global-require, import/no-dynamic-require */
+            require(`./${key}`)(args, options, env);
+            /* eslint-enable */
+        } else {
+            const namespace = opts.blueprint ? `${packageNameToNamespace(opts.blueprint)}:${key}` : `${JHIPSTER_NS}:${key}`;
+            runYoCommand(namespace, args, options, opts);
+        }
+    });
 });
 
 /* Generate useful help info during typos */
