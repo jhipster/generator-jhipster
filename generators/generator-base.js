@@ -79,6 +79,12 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     constructor(args, opts) {
         super(args, opts);
 
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            hide: true,
+        });
         this.option('skip-generated-flag', {
             desc: 'Skip adding a GeneratedByJhipster annotation to all generated java classes and interfaces',
             type: Boolean,

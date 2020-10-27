@@ -339,6 +339,7 @@ class JDLProcessor {
             applicationName: this.options.baseName,
             databaseType: this.options.databaseType,
             applicationType: this.options.applicationType,
+            skipUserManagement: this.options.skipUserManagement,
             generatorVersion: packagejs.version,
             forceNoFiltering: this.options.force,
             skipFileGeneration: true,

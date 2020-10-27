@@ -1,6 +1,5 @@
 const expect = require('chai').expect;
 const cliUtil = require('../../cli/utils');
-const packageJson = require('../../package.json');
 
 describe('jhipster cli utils test', () => {
     describe('toString', () => {
@@ -40,36 +39,6 @@ describe('jhipster cli utils test', () => {
             const argument = ['test', 'foo'];
             it('returns a joined string', () => {
                 expect(cliUtil.getArgs({ argument })).to.equal('[test foo]');
-            });
-        });
-    });
-    describe('getOptionsFromArgs', () => {
-        describe('when called with undefined args', () => {
-            it('returns an empty array', () => {
-                expect(cliUtil.getOptionsFromArgs()).to.eql([]);
-            });
-        });
-        describe('when called with empty args', () => {
-            it('returns an empty array', () => {
-                expect(cliUtil.getOptionsFromArgs([])).to.eql([]);
-            });
-        });
-        describe('when called with string arguments', () => {
-            const argument = ['test', 'foo'];
-            it('returns an array with strings', () => {
-                expect(cliUtil.getOptionsFromArgs(argument)).to.eql(['test', 'foo']);
-            });
-        });
-        describe('when called with array & string argument', () => {
-            const argument = [['bar', 'test'], 'foo'];
-            it('returns an array with strings', () => {
-                expect(cliUtil.getOptionsFromArgs(argument)).to.eql(['bar', 'test', 'foo']);
-            });
-        });
-        describe('when called with array & object argument', () => {
-            const argument = [['bar'], { foo: 'foo' }];
-            it('returns an array with valid strings', () => {
-                expect(cliUtil.getOptionsFromArgs(argument)).to.eql(['bar']);
             });
         });
     });
@@ -137,57 +106,6 @@ describe('jhipster cli utils test', () => {
             const argument = [['bar', 'foo']];
             it('returns a command with argument', () => {
                 expect(cliUtil.getCommand('app', argument, { argument })).to.eql('app bar foo');
-            });
-        });
-    });
-    describe('addKebabCase', () => {
-        describe('when called with undefined', () => {
-            it('returns empty object', () => {
-                expect(cliUtil.addKebabCase()).to.eql({});
-            });
-        });
-        describe('when called with object', () => {
-            it('returns object with a kebabCase option', () => {
-                expect(cliUtil.addKebabCase({ foo: 'bar', fooBar: true })).to.eql({ 'foo-bar': true, fooBar: true, foo: 'bar' });
-            });
-        });
-    });
-    describe('getCommandOptions', () => {
-        describe('when called with empty argv', () => {
-            it('returns the default object', () => {
-                expect(cliUtil.getCommandOptions(packageJson, [])).to.eql({});
-            });
-        });
-        describe('when called with argv flags', () => {
-            const argv = ['--force', '--skip-install'];
-            it('returns an object with camelcase and dashcase keys', () => {
-                expect(cliUtil.getCommandOptions(packageJson, argv)).to.eql({
-                    force: true,
-                    'skip-install': true,
-                    skipInstall: true,
-                });
-            });
-        });
-        describe('when called with argv flags with value', () => {
-            const argv = ['--force', '--skip-install', '--foo', 'bar'];
-            it('returns an object with camelcase and dashcase keys', () => {
-                expect(cliUtil.getCommandOptions(packageJson, argv)).to.eql({
-                    force: true,
-                    'skip-install': true,
-                    skipInstall: true,
-                    foo: 'bar',
-                });
-            });
-        });
-        describe('when called with argv flags with value array', () => {
-            const argv = ['--force', '--skip-install', '--foo', 'bar,who'];
-            it('returns an object with camelcase and dashcase keys', () => {
-                expect(cliUtil.getCommandOptions(packageJson, argv)).to.eql({
-                    force: true,
-                    'skip-install': true,
-                    skipInstall: true,
-                    foo: 'bar,who',
-                });
             });
         });
     });

@@ -33,13 +33,6 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-            hide: true,
-        });
         this.option('defaults', {
             desc: 'Execute jhipster with default config',
             type: Boolean,
