@@ -42,7 +42,6 @@ describe('jdl command test', () => {
             });
             it('should forward options to jdl.js', () => {
                 expect(jdlStub.getCall(0).args[1].jsonOnly).to.be.true;
-                expect(jdlStub.getCall(0).args[1].jsonOnly).to.be.true;
             });
         });
         describe('with 2 argument and options', () => {
@@ -61,7 +60,6 @@ describe('jdl command test', () => {
                 expect(jdlStub.getCall(0).args[0]).to.be.eql(['foo.jdl', 'bar.jdl']);
             });
             it('should forward options to jdl.js', () => {
-                expect(jdlStub.getCall(0).args[1].jsonOnly).to.be.true;
                 expect(jdlStub.getCall(0).args[1].jsonOnly).to.be.true;
             });
         });
