@@ -26,6 +26,18 @@ class JHipsterCommand extends Command {
     }
 
     /**
+     * Alternative for alias() accepting chaining with undefined value.
+     * @param {String} alias
+     * @return {JHipsterCommand} this;
+     */
+    addAlias(alias) {
+        if (alias) {
+            this.alias(alias);
+        }
+        return this;
+    }
+
+    /**
      * Register a callback to be executed before _parseCommand.
      * Used to lazy load options.
      * @param {Function} prepareOptionsCallBack
@@ -63,6 +75,18 @@ class JHipsterCommand extends Command {
             super.addOption(new Option(option.long.replace(/^--/, '--no-')).hideHelp());
         }
         return result;
+    }
+
+    /**
+     * Register arguments using cli/commands.js structure.
+     * @param {String[]} args
+     * @return {JHipsterCommand} this;
+     */
+    addCommandArguments(args) {
+        if (Array.isArray(args)) {
+            this.arguments(`${args.join(' ')}`);
+        }
+        return this;
     }
 
     /**
@@ -105,9 +129,6 @@ class JHipsterCommand extends Command {
      */
     addGeneratorOptions(options = {}, blueprintOptionDescription) {
         Object.entries(options).forEach(([key, value]) => {
-            if (this._findOption(key)) {
-                return;
-            }
             this._addGeneratorOption(key, value, blueprintOptionDescription);
         });
         return this;
@@ -117,11 +138,17 @@ class JHipsterCommand extends Command {
         if (optionName === 'help') {
             return undefined;
         }
+        const longOption = `--${optionName}`;
+        const existingOption = this._findOption(longOption);
+        if (this._findOption(longOption)) {
+            return existingOption;
+        }
+
         let cmdString = '';
         if (optionDefinition.alias) {
             cmdString = `-${optionDefinition.alias}, `;
         }
-        cmdString = `${cmdString}--${optionName}`;
+        cmdString = `${cmdString}${longOption}`;
         if (optionDefinition.type === String) {
             cmdString = `${cmdString} <value>`;
         } else if (optionDefinition.type === Array) {

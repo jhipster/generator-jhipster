@@ -24,7 +24,7 @@ const path = require('path');
 
 const JHipsterCommand = require('./jhipster-command');
 const packageJson = require('../package.json');
-const { CLI_NAME, initHelp, logger, toString, getCommand, getArgs, done } = require('./utils');
+const { CLI_NAME, initHelp, logger, toString, getCommand, done } = require('./utils');
 const EnvironmentBuilder = require('./environment-builder');
 const SUB_GENERATORS = require('./commands');
 const { packageNameToNamespace } = require('../generators/utils');
@@ -80,35 +80,27 @@ const allCommands = { ...SUB_GENERATORS, ...envBuilder.getBlueprintCommands() };
 
 /* create commands */
 Object.entries(allCommands).forEach(([key, opts]) => {
-    const command = program.command(key, '', { isDefault: key === 'app' });
-    if (opts.alias) {
-        command.alias(opts.alias);
-    }
+    const command = program
+        .command(key, '', { isDefault: key === 'app' })
+        .description(opts.desc + (opts.blueprint ? chalk.yellow(` (blueprint: ${opts.blueprint})`) : ''))
+        .addCommandArguments(opts.argument)
+        .addCommandOptions(opts.options)
+        .addHelpText('after', opts.help)
+        .addAlias(opts.alias);
 
-    command.addCommandOptions(opts.options);
-    if (opts.help) {
-        command.addHelpText('after', opts.help);
-    }
-    if (opts.cliOnly) {
-        command.arguments(getArgs(opts));
-    }
     if (!opts.cliOnly || key === 'jdl') {
         if (opts.blueprint) {
             // Blueprint only command.
             command.prepareOptions(() => {
                 const generator = env.create(`${packageNameToNamespace(opts.blueprint)}:${key}`, { options: { help: true } });
                 command.addGeneratorArguments(generator._arguments).addGeneratorOptions(generator._options);
-                opts.argument = generator._arguments.map(generatorArgument => generatorArgument.name);
             });
         } else {
             command.prepareOptions(() => {
-                const generator = key === 'jdl' ? 'app' : key;
+                const generatorName = key === 'jdl' ? 'app' : key;
                 // Register jhipster upstream options.
                 if (key !== 'jdl') {
                     const generator = env.create(`${JHIPSTER_NS}:${key}`, { options: { help: true } });
-                    if (generator._arguments) {
-                        opts.argument = generator._arguments.map(generatorArgument => generatorArgument.name);
-                    }
                     command.addGeneratorArguments(generator._arguments).addGeneratorOptions(generator._options);
 
                     const usagePath = path.resolve(generator.sourceRoot(), '../USAGE');
@@ -123,7 +115,7 @@ Object.entries(allCommands).forEach(([key, opts]) => {
 
                 // Register blueprint specific options.
                 envBuilder.getBlueprintsNamespaces().forEach(blueprintNamespace => {
-                    const generatorNamespace = `${blueprintNamespace}:${generator}`;
+                    const generatorNamespace = `${blueprintNamespace}:${generatorName}`;
                     if (!env.get(generatorNamespace)) {
                         return;
                     }
@@ -143,8 +135,7 @@ Object.entries(allCommands).forEach(([key, opts]) => {
         }
     }
 
-    const additionalCommandDescription = opts.blueprint ? chalk.yellow(` (blueprint: ${opts.blueprint})`) : '';
-    command.description(opts.desc + additionalCommandDescription).action((...everything) => {
+    command.action((...everything) => {
         // [args, opts, extraArgs]
         const cmdOptions = everything.pop();
         if (Array.isArray(cmdOptions)) {

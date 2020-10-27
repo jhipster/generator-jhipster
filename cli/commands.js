@@ -94,6 +94,10 @@ const defaultCommands = {
                 option: '--inline <value>',
                 desc: 'Pass JDL content inline. Argument can be skipped when passing this',
             },
+            {
+                option: '--skip-user-management',
+                desc: 'Skip the user management module during app generation',
+            },
         ],
         desc: `Create entities from the JDL file/content passed in argument.
   By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.`,

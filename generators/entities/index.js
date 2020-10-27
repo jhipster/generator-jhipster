@@ -33,6 +33,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('composed-entities', {
             desc: 'Entities to be that already have been composed',
             type: Array,
+            hide: true,
             defaults: [],
         });
 
