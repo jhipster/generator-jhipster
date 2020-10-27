@@ -42,6 +42,11 @@ const defaultCommands = {
     'docker-compose': {
         desc: 'Create all required Docker deployment configuration for the selected applications',
     },
+    download: {
+        desc: 'Download jdl file from template repository',
+        cliOnly: true,
+        argument: ['<jdlFiles...>'],
+    },
     entity: {
         desc: 'Create a new JHipster entity: JPA entity, Spring server-side components and Angular client-side components',
     },
