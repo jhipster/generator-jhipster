@@ -4,7 +4,7 @@
         "reactive": true,
         "baseName": "reactiveGateway",
         "packageName": "tech.jhipster.gateway",
-        "packageFolder": "io/github/jhipster/gateway",
+        "packageFolder": "tech/jhipster/gateway",
         "authenticationType": "jwt",
         "cacheProvider": "no",
         "enableHibernateCache": false,

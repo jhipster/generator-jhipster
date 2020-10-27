@@ -3,7 +3,7 @@
         "applicationType": "monolith",
         "baseName": "sampleMongoKafka",
         "packageName": "tech.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageFolder": "tech/jhipster/sample",
         "authenticationType": "jwt",
         "cacheProvider": "ehcache",
         "enableHibernateCache": false,

@@ -4,7 +4,7 @@
         "reactive": true,
         "baseName": "sampleWebfluxMongodb",
         "packageName": "tech.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageFolder": "tech/jhipster/sample",
         "authenticationType": "jwt",
         "cacheProvider": "no",
         "enableHibernateCache": false,
