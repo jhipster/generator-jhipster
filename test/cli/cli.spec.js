@@ -7,10 +7,26 @@ const proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 const sinon = require('sinon');
 const Environment = require('yeoman-environment');
 
+const { createProgram, buildCommands } = require('../../cli/program');
 const { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('../utils/utils');
 const { logger } = require('../../cli/utils');
 
 const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'cli', 'cli.js'));
+
+const mockCliOnly = (argv, commands = { entity: { cliOnly: true }, app: { cliOnly: true } }) => {
+    const program = createProgram().exitOverride();
+
+    buildCommands({
+        program,
+        commands,
+        loadCommand: key => {
+            console.log(key);
+            return commands[key].command;
+        },
+    });
+
+    return program.parseAsync(argv).catch(error => logger.fatal(error.message));
+};
 
 describe('jhipster cli', () => {
     let cleanup;
@@ -51,26 +67,22 @@ describe('jhipster cli', () => {
     });
 
     describe('with an unknown command', () => {
-        let oldArgv;
         before(() => {
-            oldArgv = process.argv;
-            process.argv = ['jhipster', 'jhipster', 'entitt'];
             sinon.stub(logger, 'fatal');
             sinon.stub(logger, 'info');
         });
         after(() => {
-            process.argv = oldArgv;
             logger.fatal.restore();
             logger.info.restore();
         });
-        it('should print did you mean message', () => {
-            proxyquire('../../cli/cli', {});
+        it('should print did you mean message', async () => {
+            await mockCliOnly(['jhipster', 'jhipster', 'entitt']);
             expect(logger.info.getCall(0).args[0]).to.include('Did you mean');
             expect(logger.info.getCall(0).args[0]).to.include('entity');
         });
 
-        it('should print error message', () => {
-            proxyquire('../../cli/cli', {});
+        it('should print error message', async () => {
+            await mockCliOnly(['jhipster', 'jhipster', 'entitt']);
             expect(logger.fatal.getCall(0).args[0]).to.include('entitt');
             expect(logger.fatal.getCall(0).args[0]).to.include('is not a known command');
         });

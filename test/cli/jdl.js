@@ -32,7 +32,7 @@ describe('jdl command test', () => {
                 oldArgv = process.argv;
                 process.argv = ['jhipster', 'jhipster', 'jdl', 'foo.jdl', '--json-only'];
                 jdlStub = sinon.stub();
-                proxyquire('../../cli/cli', { './jdl': jdlStub });
+                return proxyquire('../../cli/cli', { './jdl': jdlStub });
             });
             afterEach(() => {
                 process.argv = oldArgv;
@@ -45,16 +45,16 @@ describe('jdl command test', () => {
             });
         });
         describe('with 2 argument and options', () => {
-            let oldArgv;
+            let sandbox;
             let jdlStub;
             beforeEach(() => {
-                oldArgv = process.argv;
-                process.argv = ['jhipster', 'jhipster', 'jdl', 'foo.jdl', 'bar.jdl', '--json-only'];
+                sandbox = sinon.createSandbox();
+                sandbox.stub(process, 'argv').value(['jhipster', 'jhipster', 'jdl', 'foo.jdl', 'bar.jdl', '--json-only']);
                 jdlStub = sinon.stub();
-                proxyquire('../../cli/cli', { './jdl': jdlStub });
+                return proxyquire('../../cli/cli', { './jdl': jdlStub });
             });
             afterEach(() => {
-                process.argv = oldArgv;
+                sandbox.restore();
             });
             it('should call jdl.js with foo.jdl and bar.jdl arguments', () => {
                 expect(jdlStub.getCall(0).args[0]).to.be.eql([['foo.jdl', 'bar.jdl']]);
