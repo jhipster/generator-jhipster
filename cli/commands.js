@@ -82,10 +82,6 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
                 desc: 'Run generation in series so that questions can be interacted with',
             },
             {
-                option: '--db <value>',
-                desc: 'Provide DB option for the application when using skip-server flag',
-            },
-            {
                 option: '--json-only',
                 desc: 'Generate only the JSON files and skip entity regeneration',
                 default: false,
@@ -98,16 +94,6 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
             {
                 option: '--ignore-deployments',
                 desc: 'Ignores deployments generation',
-                default: false,
-            },
-            {
-                option: '--skip-ui-grouping',
-                desc: 'Disable the UI grouping behavior for entity client side code',
-                default: false,
-            },
-            {
-                option: '--skip-db-changelog',
-                desc: 'Disable generation of database changelogs',
                 default: false,
             },
             {
