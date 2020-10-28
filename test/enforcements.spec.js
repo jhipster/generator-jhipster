@@ -95,10 +95,7 @@ describe('Enforce some developments patterns', () => {
                     content = fse.readFileSync(file, 'utf-8');
                 });
 
-                [
-                    ['src/main/webapp', '<%= CLIENT_MAIN_SRC_DIR %>'],
-                    ['src/test/javascript', '<%= CLIENT_TEST_SRC_DIR %>'],
-                ].forEach(([notSpected, replacement]) => {
+                ['src/main/webapp', 'src/test/javascript'].forEach(notSpected => {
                     const regex = new RegExp(notSpected, 'g');
                     it(`should not contain ${notSpected}`, () => {
                         assert(!regex.test(content), `file ${file} should not contain ${notSpected}`);
