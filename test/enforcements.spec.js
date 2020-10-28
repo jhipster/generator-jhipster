@@ -46,6 +46,7 @@ describe('Enforce some developments patterns', () => {
             ...readDir(path.join(__dirname, '..', 'generators', 'cypress')),
             ...readDir(path.join(__dirname, '..', 'generators', 'entity-i18n')),
             ...readDir(path.join(__dirname, '..', 'generators', 'entity-client')),
+            ...readDir(path.join(__dirname, '..', 'generators', 'entities-client')),
         ];
         filesToTest.forEach(file => {
             describe(`file ${path.basename(file)}`, () => {
@@ -81,4 +82,32 @@ describe('Enforce some developments patterns', () => {
             });
         });
     });
+
+    describe('at generators base', () => {
+        const filesToTest = [
+            path.join(__dirname, '..', 'generators', 'generator-base-private.js'),
+            path.join(__dirname, '..', 'generators', 'generator-base.js'),
+        ];
+        filesToTest.forEach(file => {
+            describe(`file ${path.basename(file)}`, () => {
+                let content;
+                before(() => {
+                    content = fse.readFileSync(file, 'utf-8');
+                });
+
+                [
+                    ['src/main/webapp', '<%= CLIENT_MAIN_SRC_DIR %>'],
+                    ['src/test/javascript', '<%= CLIENT_TEST_SRC_DIR %>'],
+                ].forEach(([notSpected, replacement]) => {
+                    const regex = new RegExp(notSpected, 'g');
+                    before(() => {
+                        if (!process.argv.includes('--fix-enforcements') || !replacement) return;
+                    });
+                    it(`should not contain ${notSpected}`, () => {
+                        assert(!regex.test(content), `file ${file} should not contain ${notSpected}`);
+                    });
+                });
+            });
+        }); 
+    }); 
 });

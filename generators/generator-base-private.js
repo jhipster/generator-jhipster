@@ -340,7 +340,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         try {
             let content = 'groupBy: [\n';
             languages.forEach((language, i) => {
-                content += `                    { pattern: "./src/main/webapp/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${
+                content += `                    { pattern: "./${this.CLIENT_MAIN_SRC_DIR}/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${
                     i !== languages.length - 1 ? ',' : ''
                 }\n`;
             });
@@ -378,7 +378,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         try {
             let content = 'groupBy: [\n';
             languages.forEach((language, i) => {
-                content += `                    { pattern: "./src/main/webapp/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${
+                content += `                    { pattern: "./${this.CLIENT_MAIN_SRC_DIR}/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${
                     i !== languages.length - 1 ? ',' : ''
                 }\n`;
             });
@@ -1645,7 +1645,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         try {
             let content = 'groupBy: [\n';
             languages.forEach((language, i) => {
-                content += `          { pattern: './src/main/webapp/i18n/${language}/*.json', fileName: './i18n/${language}.json' }${
+                content += `          { pattern: './${this.CLIENT_MAIN_SRC_DIR}/i18n/${language}/*.json', fileName: './i18n/${language}.json' }${
                     i !== languages.length - 1 ? ',' : ''
                 }\n`;
             });
