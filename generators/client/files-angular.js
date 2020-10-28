@@ -314,9 +314,6 @@ const files = {
                 'shared/alert/alert-error.model.ts',
                 // dates
                 'core/date/datepicker-adapter.ts',
-                // base
-                'shared/base.component.ts',
-                'shared/base.directive.ts',
             ],
         },
         {
@@ -372,8 +369,6 @@ const files = {
                 'spec/app/home/home.component.spec.ts',
                 'spec/app/layouts/main/main.component.spec.ts',
                 'spec/app/layouts/navbar/navbar.component.spec.ts',
-                'spec/app/shared/base.component.spec.ts',
-                'spec/app/shared/base.directive.spec.ts',
             ],
         },
         {
