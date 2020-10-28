@@ -100,14 +100,11 @@ describe('Enforce some developments patterns', () => {
                     ['src/test/javascript', '<%= CLIENT_TEST_SRC_DIR %>'],
                 ].forEach(([notSpected, replacement]) => {
                     const regex = new RegExp(notSpected, 'g');
-                    before(() => {
-                        if (!process.argv.includes('--fix-enforcements') || !replacement) return;
-                    });
                     it(`should not contain ${notSpected}`, () => {
                         assert(!regex.test(content), `file ${file} should not contain ${notSpected}`);
                     });
                 });
             });
-        }); 
-    }); 
+        });
+    });
 });
