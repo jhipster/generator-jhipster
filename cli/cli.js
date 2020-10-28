@@ -40,7 +40,6 @@ const program = new JHipsterCommand()
     .storeOptionsAsProperties(false)
     .passCommandToAction(false)
     .version(version)
-    .usage('[command] [options]')
     .addHelpText('after', moreInfo)
     // JHipster common options
     .option(
