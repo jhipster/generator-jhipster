@@ -96,6 +96,7 @@
     },
     "devDependencies": {
         "chai": "4.2.0",
+        "enzimes": "3.10.7",
         "ejs-lint": "1.1.0",
         "eslint": "7.12.0",
         "eslint-config-airbnb-base": "14.2.0",
