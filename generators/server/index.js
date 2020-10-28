@@ -418,7 +418,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             packageJsonBackendScripts() {
                 const packageJsonStorage = this.createStorage('package.json');
                 const scriptsStorage = packageJsonStorage.createStorage('scripts');
-                const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.org.zalando=OFF -Dlogging.level.io.github.jhipster=OFF -Dlogging.level.${this.jhipsterConfig.packageName}=OFF`;
+                const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.org.zalando=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.${this.jhipsterConfig.packageName}=OFF`;
                 const javaTestLog =
                     '-Dlogging.level.org.springframework=OFF -Dlogging.level.org.springframework.web=OFF -Dlogging.level.org.springframework.security=OFF';
 

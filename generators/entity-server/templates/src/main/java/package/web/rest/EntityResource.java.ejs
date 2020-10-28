@@ -58,11 +58,11 @@ import <%= packageName %>.service.dto.<%= entityClass %>Criteria;
 import <%= packageName %>.service.<%= entityClass %>QueryService;
 <%_ } _%>
 
-import io.github.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.HeaderUtil;
 <%_ if (pagination !== 'no') { _%>
-import io.github.jhipster.web.util.PaginationUtil;
+import tech.jhipster.web.util.PaginationUtil;
 <%_ } _%>
-import io.github.jhipster.web.util.<% if (reactive) { %>reactive.<% } %>ResponseUtil;
+import tech.jhipster.web.util.<% if (reactive) { %>reactive.<% } %>ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
