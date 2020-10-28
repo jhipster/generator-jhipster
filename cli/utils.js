@@ -99,14 +99,6 @@ const toString = item => {
     return item ? item.toString() : item;
 };
 
-const initHelp = (program, cliName) => {
-    program.on('--help', () => {
-        logger.debug('Adding additional help info');
-        logger.info(`  For more info visit ${chalk.blue('https://www.jhipster.tech')}`);
-        logger.info('');
-    });
-};
-
 /* Convert option objects to command line args */
 const getOptionAsArgs = (options = {}) => {
     options = Object.fromEntries(
@@ -169,7 +161,6 @@ module.exports = {
     GENERATOR_NAME,
     toString,
     logger,
-    initHelp,
     getCommand,
     doneFactory,
     done: doneFactory(SUCCESS_MESSAGE),

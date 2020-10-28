@@ -24,7 +24,7 @@ const path = require('path');
 
 const JHipsterCommand = require('./jhipster-command');
 const packageJson = require('../package.json');
-const { CLI_NAME, initHelp, logger, toString, getCommand, done } = require('./utils');
+const { CLI_NAME, logger, toString, getCommand, done } = require('./utils');
 const EnvironmentBuilder = require('./environment-builder');
 const SUB_GENERATORS = require('./commands');
 const { packageNameToNamespace } = require('../generators/utils');
@@ -34,12 +34,14 @@ const JHIPSTER_NS = CLI_NAME;
 
 const envBuilder = EnvironmentBuilder.createDefaultBuilder();
 const env = envBuilder.getEnvironment();
+const moreInfo = `\n  For more info visit ${chalk.blue('https://www.jhipster.tech')}\n`;
 
 const program = new JHipsterCommand()
     .storeOptionsAsProperties(false)
     .passCommandToAction(false)
     .version(version)
     .usage('[command] [options]')
+    .addHelpText('after', moreInfo)
     // JHipster common options
     .option(
         '--blueprints <value>',
@@ -131,6 +133,7 @@ Object.entries(allCommands).forEach(([key, opts]) => {
                         );
                     }
                 });
+                command.addHelpText('after', moreInfo);
             });
         }
     }
@@ -175,9 +178,6 @@ Object.entries(allCommands).forEach(([key, opts]) => {
         }
     });
 });
-
-/* Generate useful help info during typos */
-initHelp(program, CLI_NAME);
 
 program.parse(process.argv);
 
