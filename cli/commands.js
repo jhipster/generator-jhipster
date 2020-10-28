@@ -69,11 +69,6 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
         cliOnly: true,
         options: [
             {
-                option: '--skip-install',
-                desc: 'Do not automatically install dependencies',
-                default: false,
-            },
-            {
                 option: '--fork',
                 desc: 'Run generators using fork',
             },
