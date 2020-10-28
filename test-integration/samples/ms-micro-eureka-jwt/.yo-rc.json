@@ -3,7 +3,7 @@
         "applicationType": "microservice",
         "baseName": "samplesMicroserviceEureka",
         "packageName": "tech.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageFolder": "tech/jhipster/sample",
         "authenticationType": "jwt",
         "cacheProvider": "hazelcast",
         "enableHibernateCache": true,

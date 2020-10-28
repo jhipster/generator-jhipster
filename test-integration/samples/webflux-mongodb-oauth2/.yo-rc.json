@@ -4,7 +4,7 @@
         "reactive": true,
         "baseName": "sampleWebfluxMongodbOauth2",
         "packageName": "tech.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageFolder": "tech/jhipster/sample",
         "authenticationType": "oauth2",
         "cacheProvider": "no",
         "enableHibernateCache": false,
