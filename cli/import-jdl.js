@@ -149,6 +149,7 @@ function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
         ignoreDeployments: undefined,
         inline: undefined,
         skipSampleRepository: undefined,
+        fromJdl: true,
     };
 
     if (!fork) {

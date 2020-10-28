@@ -18,8 +18,9 @@
  */
 const chalk = require('chalk');
 const didYouMean = require('didyoumean');
-const JHipsterCommand = require('./jhipster-command');
+const { Option } = require('commander');
 
+const JHipsterCommand = require('./jhipster-command');
 const packageJson = require('../package.json');
 const { CLI_NAME, initHelp, logger, toString, getCommand, getArgs, done } = require('./utils');
 const EnvironmentBuilder = require('./environment-builder');
@@ -49,7 +50,8 @@ const program = new JHipsterCommand()
     .option('--whitespace', 'Whitespace changes will not trigger conflicts', false)
     .option('--bail', 'Fail on first conflict', false)
     .option('--skip-regenerate', "Don't regenerate identical files", false)
-    .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false);
+    .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false)
+    .addOption(new Option('--from-jdl', 'Allow every option jdl forwards').default(false).hideHelp());
 
 /* setup debugging */
 logger.init(program);
@@ -97,15 +99,16 @@ Object.entries(allCommands).forEach(([key, opts]) => {
             command.prepareOptions(() => {
                 const generator = key === 'jdl' ? 'app' : key;
                 // Register jhipster upstream options.
-                if (key === 'jdl') {
-                    const generator = env.create(`${JHIPSTER_NS}:app`, { options: { help: true } });
-                    command.addGeneratorOptions(generator._options);
-                } else {
+                if (key !== 'jdl') {
                     const generator = env.create(`${JHIPSTER_NS}:${key}`, { options: { help: true } });
                     if (generator._arguments) {
                         opts.argument = generator._arguments.map(generatorArgument => generatorArgument.name);
                     }
                     command.addGeneratorArguments(generator._arguments).addGeneratorOptions(generator._options);
+                }
+                if (key === 'jdl' || program.opts().fromJdl) {
+                    const generator = env.create(`${JHIPSTER_NS}:app`, { options: { help: true } });
+                    command.addGeneratorOptions(generator._options, chalk.gray(' (application)'));
                 }
 
                 // Register blueprint specific options.
