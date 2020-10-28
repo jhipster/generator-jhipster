@@ -216,10 +216,6 @@ jhipster:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>
 <%_ } _%>
-    metrics:
-        logs: # Reports metrics in the logs
-            enabled: true
-            report-frequency: 60 # in seconds
 <%_ if (messageBroker === 'kafka') { _%>
 kafka:
     bootstrap-servers: localhost:9092
