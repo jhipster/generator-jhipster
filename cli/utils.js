@@ -64,18 +64,9 @@ const init = function (program) {
     program.option('-d, --debug', 'enable debugger');
 
     this.debugEnabled = process.argv.includes('-d') || process.argv.includes('--debug'); // Need this early
-
-    const self = this;
-    // Option event fallback.
-    program.on('option:debug', function () {
-        if (self.debugEnabled) {
-            return;
-        }
-        self.debugEnabled = this.debug;
-        if (self.debugEnabled) {
-            info('Debug logging is on');
-        }
-    });
+    if (this.debugEnabled) {
+        info('Debug logging is on');
+    }
 };
 
 const logger = {
