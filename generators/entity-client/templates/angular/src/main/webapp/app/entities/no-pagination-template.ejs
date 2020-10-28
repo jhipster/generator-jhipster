@@ -51,7 +51,7 @@
                 }).subscribe(
                     (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                         this.isLoading = false;
-                        this.<%= entityInstancePlural %> = res.body || [];
+                        this.<%= entityInstancePlural %> = res.body ?? [];
                     },
                     () => {
                         this.isLoading = false;
@@ -64,7 +64,7 @@
         this.<%= entityInstance %>Service.query().subscribe(
             (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                 this.isLoading = false;
-                this.<%= entityInstancePlural %> = res.body || [];
+                this.<%= entityInstancePlural %> = res.body ?? [];
             },
             () => {
                 this.isLoading = false;

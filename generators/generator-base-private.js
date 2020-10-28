@@ -926,7 +926,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                         this.${relationship.otherEntityName}Service
                             .query({${filter}})
                             .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
-                                return res.body || [];
+                                return res.body ?? [];
                             }))
                             .subscribe((resBody: I${relationship.otherEntityAngularName}[]) => {
                                 if (${relationshipFieldNameIdCheck}) {
@@ -949,7 +949,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                     }
                     query = `
                         this.${relationship.otherEntityName}Service.query()
-                            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body || []);`;
+                            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body ?? []);`;
                 }
             }
             if (variableName && !queries.includes(query)) {
@@ -981,7 +981,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                 if (clientFramework === REACT) {
                     defaultVariablesValues[fieldName] = `${fieldName}: false,`;
                 } else {
-                    defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} || false;`;
+                    defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} ?? false;`;
                 }
             }
         });

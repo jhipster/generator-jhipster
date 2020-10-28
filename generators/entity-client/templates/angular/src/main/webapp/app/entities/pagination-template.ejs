@@ -49,7 +49,7 @@
 
     loadPage(page?: number, dontNavigate?: boolean): void {
         this.isLoading = true;
-        const pageToLoad: number = page || this.page || 1;
+        const pageToLoad: number = page ?? this.page ?? 1;
 
         <%_ if (searchEngine !== false) { _%>
         if (this.currentSearch) {
