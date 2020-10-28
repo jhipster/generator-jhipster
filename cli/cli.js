@@ -129,9 +129,9 @@ Object.entries(allCommands).forEach(([key, opts]) => {
                             );
                         }
                     });
-                    command.addHelpText('after', moreInfo);
                 }
             }
+            command.addHelpText('after', moreInfo);
         });
 
     command.action((...everything) => {
