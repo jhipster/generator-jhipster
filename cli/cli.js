@@ -54,6 +54,27 @@ const runYoCommand = (cmd, args, options, opts) => {
     }
 };
 
+const rejectExtraArgs = (cmd, extraArgs) => {
+    // if extraArgs exists: Unknown commands or unknown argument.
+    const first = extraArgs[0];
+    if (cmd !== 'app') {
+        return Promise.reject(
+            new Error(
+                `${chalk.yellow(cmd)} command doesn't take ${chalk.yellow(first)} argument. See '${chalk.white(
+                    `${CLI_NAME} ${cmd} --help`
+                )}'.`
+            )
+        );
+    }
+    const availableCommands = program.commands.map(c => c._name);
+
+    const suggestion = didYouMean(first, availableCommands);
+    if (suggestion) {
+        logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
+    }
+
+    return Promise.reject(new Error(`${chalk.yellow(first)} is not a known command. See '${chalk.white(`${CLI_NAME} --help`)}'.`));
+};
 const allCommands = { ...SUB_GENERATORS, ...envBuilder.getBlueprintCommands() };
 
 /* create commands */
@@ -109,47 +130,27 @@ Object.entries(allCommands).forEach(([key, opts]) => {
                 }
             }
             command.addHelpText('after', moreInfo);
-        });
-
-    command.action((...everything) => {
-        // [args, opts, extraArgs]
-        const cmdOptions = everything.pop();
-        if (Array.isArray(cmdOptions)) {
-            // if extraArgs exists: Unknown commands or unknown argument.
-            const cmd = cmdOptions[0];
-            if (key !== 'app') {
-                return Promise.reject(
-                    new Error(
-                        `${chalk.yellow(key)} command doesn't take ${chalk.yellow(cmd)} argument. See '${chalk.white(
-                            `${CLI_NAME} ${key} --help`
-                        )}'.`
-                    )
-                );
+        })
+        .action((...everything) => {
+            // [args, opts, extraArgs]
+            const cmdOptions = everything.pop();
+            if (Array.isArray(cmdOptions)) {
+                return rejectExtraArgs(key, cmdOptions);
             }
-            const availableCommands = program.commands.map(c => c._name);
+            const args = everything;
+            const options = {
+                ...program.opts(),
+                ...cmdOptions,
+            };
 
-            const suggestion = didYouMean(cmd, availableCommands);
-            if (suggestion) {
-                logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
+            if (opts.cliOnly) {
+                logger.debug('Executing CLI only script');
+                /* eslint-disable-next-line global-require, import/no-dynamic-require */
+                return require(`./${key}`)(args, options, env);
             }
-
-            return Promise.reject(new Error(`${chalk.yellow(cmd)} is not a known command. See '${chalk.white(`${CLI_NAME} --help`)}'.`));
-        }
-        const args = everything;
-        const options = {
-            ...program.opts(),
-            ...cmdOptions,
-        };
-
-        if (opts.cliOnly) {
-            logger.debug('Executing CLI only script');
-            /* eslint-disable-next-line global-require, import/no-dynamic-require */
-            return require(`./${key}`)(args, options, env);
-        } else {
             const namespace = opts.blueprint ? `${packageNameToNamespace(opts.blueprint)}:${key}` : `${JHIPSTER_NS}:${key}`;
             return runYoCommand(namespace, args, options, opts);
-        }
-    });
+        });
 });
 
 module.exports = program.parseAsync(process.argv).catch(error => logger.fatal(error.message));
