@@ -49,9 +49,17 @@ class JHipsterCommand extends Command {
      * @return {JHipsterCommand} this;
      */
     addOption(option) {
+        if (!option.long || option.required || option.optional) {
+            return super.addOption(option);
+        }
+        if (option.negate) {
+            // Add a affirmative option for negative boolean options.
+            // Should be done before, because commander adds a non working affirmative by itself.
+            super.addOption(new Option(option.long.replace(/^--no-/, '--')).hideHelp());
+        }
         const result = super.addOption(option);
-        // Add a hidden `--no` option for boolean options
-        if (option.long && !option.required && !option.negate && !option.optional) {
+        if (!option.negate) {
+            // Add a hidden negative option for affirmative boolean options.
             super.addOption(new Option(option.long.replace(/^--/, '--no-')).hideHelp());
         }
         return result;

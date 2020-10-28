@@ -85,8 +85,14 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
             type: Boolean,
             hide: true,
         });
+
         this.option('skip-generated-flag', {
             desc: 'Skip adding a GeneratedByJhipster annotation to all generated java classes and interfaces',
+            type: Boolean,
+        });
+
+        this.option('skip-prompts', {
+            desc: 'Skip prompts',
             type: Boolean,
         });
 
@@ -2302,6 +2308,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
         if (options.experimental !== undefined) {
             dest.experimental = options.experimental;
+        }
+        if (options.skipPrompts !== undefined) {
+            dest.skipPrompts = options.skipPrompts;
         }
         if (options.skipClient !== undefined) {
             dest.skipClient = options.skipClient;
