@@ -40,17 +40,17 @@ class JHipsterCommand extends Command {
     /**
      * Register a callback to be executed before _parseCommand.
      * Used to lazy load options.
-     * @param {Function} prepareOptionsCallBack
+     * @param {Function} lazyBuildCommandCallBack
      * @return {JHipsterCommand} this;
      */
-    prepareOptions(prepareOptionsCallBack) {
-        this._prepareOptionsCallBack = prepareOptionsCallBack;
+    lazyBuildCommand(lazyBuildCommandCallBack) {
+        this._lazyBuildCommandCallBack = lazyBuildCommandCallBack;
         return this;
     }
 
     _parseCommand(operands, unknown) {
-        if (this._prepareOptionsCallBack) {
-            this._prepareOptionsCallBack();
+        if (this._lazyBuildCommandCallBack) {
+            this._lazyBuildCommandCallBack();
         }
         return super._parseCommand(operands, unknown);
     }
@@ -91,7 +91,7 @@ class JHipsterCommand extends Command {
 
     /**
      * Register options using cli/commands.js structure.
-     * @param {object[]} prepareOptionsCallBack
+     * @param {object[]} lazyBuildCommandCallBack
      * @return {JHipsterCommand} this;
      */
     addCommandOptions(opts = []) {

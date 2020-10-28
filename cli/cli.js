@@ -88,7 +88,7 @@ Object.entries(allCommands).forEach(([key, opts]) => {
         .addCommandOptions(opts.options)
         .addHelpText('after', opts.help)
         .addAlias(opts.alias)
-        .prepareOptions(() => {
+        .lazyBuildCommand(() => {
             if (!opts.cliOnly || key === 'jdl') {
                 if (opts.blueprint) {
                     // Blueprint only command.
