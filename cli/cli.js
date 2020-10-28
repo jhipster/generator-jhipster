@@ -42,7 +42,7 @@ const program = new JHipsterCommand()
         '--blueprints <value>',
         'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs'
     )
-    .option('--no-insight', 'Disable insight', false)
+    .option('--no-insight', 'Disable insight')
     // Conflicter options
     .option('--force', 'Override every file', false)
     .option('--dry-run', 'Print conflicts', false)

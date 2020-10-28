@@ -50,9 +50,14 @@ class JHipsterCommand extends Command {
      */
     addOption(option) {
         const result = super.addOption(option);
-        // Add a hidden `--no` option for boolean options
-        if (option.long && !option.required && !option.negate && !option.optional) {
-            super.addOption(new Option(option.long.replace(/^--/, '--no-')).hideHelp());
+        // Add a hidden negate option for boolean options
+        if (option.long && !option.required && !option.optional) {
+            if (option.negate) {
+                option.default(undefined);
+                super.addOption(new Option(option.long.replace(/^--no-/, '--')).hideHelp());
+            } else {
+                super.addOption(new Option(option.long.replace(/^--/, '--no-')).hideHelp());
+            }
         }
         return result;
     }
