@@ -124,17 +124,13 @@ export class AlertErrorComponent implements OnDestroy {
     }
 
     ngOnDestroy(): void {
-        if (this.errorListener) {
-            this.eventManager.destroy(this.errorListener);
-        }
-        if (this.httpErrorListener) {
-            this.eventManager.destroy(this.httpErrorListener);
-        }
+        this.eventManager.destroy(this.errorListener);
+        this.eventManager.destroy(this.httpErrorListener);
     }
 
-    addErrorAlert(message: string<% if (enableTranslation) { %>, key?: string, data?: any<% } %>): void {
+    addErrorAlert(message: string<% if (enableTranslation) { %>, key?: string, data?: { [key: string]: unknown }<% } %>): void {
         <%_ if (enableTranslation) { _%>
-        message = (key && key !== null) ? key : message;
+        message = key ?? message;
         <%_ } _%>
 
         const newAlert: JhiAlert = {

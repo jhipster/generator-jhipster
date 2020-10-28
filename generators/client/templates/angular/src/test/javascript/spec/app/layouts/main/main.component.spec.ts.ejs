@@ -42,7 +42,7 @@ describe('Component Tests', () => {
     <%_ } _%>
     let mockAccountService: AccountService;
     const routerEventsSubject = new Subject<RouterEvent>();
-    const routerState: any = { snapshot: { root: {} } };
+    const routerState: any = { snapshot: { root: {  data: {} } } };
     class MockRouter {
       events = routerEventsSubject;
       routerState = routerState;
@@ -94,11 +94,9 @@ describe('Component Tests', () => {
       <%_ } _%>
 
       beforeEach(() => {
-        routerState.snapshot.root = {};
+        routerState.snapshot.root = { data: {} };
         <%_ if (enableTranslation) { _%>
-        spyOn(translateService, 'get').and.callFake((key: string) => {
-          return of(key + ' translated');
-        });
+        spyOn(translateService, 'get').and.callFake((key: string) => of(key + ' translated'));
         translateService.currentLang = '<%= nativeLanguage %>';
         <%_ } _%>
         spyOn(titleService, 'setTitle');
@@ -160,21 +158,6 @@ describe('Component Tests', () => {
           <%_ } _%>
           expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
         });
-
-        it('should set page title to parent route pageTitle if child routes exists but data is not set for child route', () => {
-          // GIVEN
-          routerState.snapshot.root.data = { pageTitle: parentRoutePageTitle };
-          routerState.snapshot.root.firstChild = {};
-
-          // WHEN
-          routerEventsSubject.next(navigationEnd);
-
-          // THEN
-          <%_ if (enableTranslation) { _%>
-          expect(translateService.get).toHaveBeenCalledWith(parentRoutePageTitle);
-          <%_ } _%>
-          expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
-        });
       });
 
       <%_ if (enableTranslation) { _%>
@@ -217,19 +200,6 @@ describe('Component Tests', () => {
           // GIVEN
           routerState.snapshot.root.data = { pageTitle: parentRoutePageTitle };
           routerState.snapshot.root.firstChild = { data: {} };
-
-          // WHEN
-          translateService.onLangChange.emit(langChangeEvent);
-
-          // THEN
-          expect(translateService.get).toHaveBeenCalledWith(parentRoutePageTitle);
-          expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle + ' translated');
-        });
-
-        it('should set page title to parent route pageTitle if child routes exists but data is not set for child route', () => {
-          // GIVEN
-          routerState.snapshot.root.data = { pageTitle: parentRoutePageTitle };
-          routerState.snapshot.root.firstChild = {};
 
           // WHEN
           translateService.onLangChange.emit(langChangeEvent);

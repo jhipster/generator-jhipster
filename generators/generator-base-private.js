@@ -927,18 +927,16 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                     query = `
                         this.${relationship.otherEntityName}Service
                             .query({${filter}})
-                            .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
-                                return res.body || [];
-                            }))
+                            .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => res.body ?? []))
                             .subscribe((resBody: I${relationship.otherEntityAngularName}[]) => {
                                 if (${relationshipFieldNameIdCheck}) {
                                     this.${variableName} = resBody;
                                 } else {
                                     this.${relationship.otherEntityName}Service
                                         .find(${entityInstance}.${relationshipFieldName}${dto !== 'no' ? 'Id' : '.id'})
-                                        .pipe(map((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) => {
-                                            return subRes.body ? [subRes.body].concat(resBody) : resBody;
-                                        }))
+                                        .pipe(map((subRes: HttpResponse<I${
+                                            relationship.otherEntityAngularName
+                                        }>) => subRes.body ? [subRes.body].concat(resBody) : resBody))
                                         .subscribe((concatRes: I${
                                             relationship.otherEntityAngularName
                                         }[]) => this.${variableName} = concatRes);
@@ -951,7 +949,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                     }
                     query = `
                         this.${relationship.otherEntityName}Service.query()
-                            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body || []);`;
+                            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body ?? []);`;
                 }
             }
             if (variableName && !queries.includes(query)) {
@@ -983,7 +981,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                 if (clientFramework === REACT) {
                     defaultVariablesValues[fieldName] = `${fieldName}: false,`;
                 } else {
-                    defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} || false;`;
+                    defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} ?? false;`;
                 }
             }
         });
@@ -1022,23 +1020,20 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         fields.forEach(field => {
             const fieldType = field.fieldType;
             const fieldName = field.fieldName;
-            let tsType;
+            let tsType = 'any';
             if (field.fieldIsEnum) {
                 tsType = fieldType;
             } else if (fieldType === 'Boolean') {
                 tsType = 'boolean';
-            } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) {
+            } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
                 tsType = 'number';
-            } else if (fieldType === 'String' || fieldType === 'UUID') {
+            } else if (['String', 'UUID', 'Duration', 'byte[]', 'ByteBuffer'].includes(fieldType)) {
                 tsType = 'string';
-            } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
-                tsType = customDateType;
-            } else {
-                // (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate'
-                tsType = 'any';
                 if (['byte[]', 'ByteBuffer'].includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
                     variablesWithTypes.push(`${fieldName}ContentType?: string`);
                 }
+            } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
+                tsType = customDateType;
             }
             variablesWithTypes.push(`${fieldName}?: ${tsType}`);
         });

@@ -101,10 +101,10 @@ export class <%= entityAngularName %>Service {
         const copy: I<%= entityAngularName %> = Object.assign({}, <%= entityInstance %>, {
     <%_ for (idx in fields) { _%>
         <%_ if ( ['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType) ) { _%>
-        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %> && <%= entityInstance %>.<%= fields[idx].fieldName %>.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.toJSON() : undefined,
+        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %>?.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.toJSON() : undefined,
         <%_ } _%>
         <%_ if ( fields[idx].fieldType === 'LocalDate' ) { _%>
-        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %> && <%= entityInstance %>.<%= fields[idx].fieldName %>.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.format(DATE_FORMAT) : undefined,
+        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %>?.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.format(DATE_FORMAT) : undefined,
         <%_ } _%>
     <%_ } _%>
         });

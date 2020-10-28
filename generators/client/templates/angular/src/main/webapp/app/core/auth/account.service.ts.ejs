@@ -71,7 +71,7 @@ export class AccountService {
     }
 
     hasAnyAuthority(authorities: string[] | string): boolean {
-        if (!this.userIdentity || !this.userIdentity.authorities) {
+        if (!this.userIdentity) {
             return false;
         }
         if (!Array.isArray(authorities)) {
@@ -83,17 +83,15 @@ export class AccountService {
     identity(force?: boolean): Observable<Account | null> {
         if (!this.accountCache$ || force || !this.isAuthenticated()) {
             this.accountCache$ = this.fetch().pipe(
-                catchError(() => {
-                    return of(null);
-                }),
+                catchError(() => of(null)),
                 tap((account: Account | null) => {
                     this.authenticate(account);
 
                     <%_ if (enableTranslation) { _%>
                     // After retrieve the account info, the language will be changed to
                     // the user's preferred language configured in the account setting
-                    if (account && account.langKey) {
-                        const langKey = this.sessionStorage.retrieve('locale') || account.langKey;
+                    if (account?.langKey) {
+                        const langKey = this.sessionStorage.retrieve('locale') ?? account.langKey;
                         this.languageService.changeLanguage(langKey);
                     }
                     <%_ } _%>

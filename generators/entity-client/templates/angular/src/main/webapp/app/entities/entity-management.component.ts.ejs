@@ -120,7 +120,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
                 }
             });
         }
-        this.<%= entityInstancePlural %> = data || [];
+        this.<%= entityInstancePlural %> = data ?? [];
         this.ngbPaginationPage = this.page;
     }
 

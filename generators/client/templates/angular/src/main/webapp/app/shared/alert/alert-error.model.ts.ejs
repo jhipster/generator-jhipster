@@ -21,7 +21,7 @@ export class AlertError {
         public message: string,
         <%_ if (enableTranslation) { _%>
         public key?: string,
-        public params?: any
+        public params?: { [key: string]: unknown }
         <%_ } _%>
     ) {}
 }
