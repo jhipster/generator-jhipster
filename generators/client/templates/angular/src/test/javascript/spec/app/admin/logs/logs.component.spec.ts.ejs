@@ -71,7 +71,7 @@ describe('Component Tests', () => {
 
                 // THEN
                 expect(service.findAll).toHaveBeenCalled();
-                expect(comp.loggers && comp.loggers[0]).toEqual(jasmine.objectContaining(log));
+                expect(comp.loggers?.[0]).toEqual(jasmine.objectContaining(log));
             });
         });
 
@@ -96,7 +96,7 @@ describe('Component Tests', () => {
                 // THEN
                 expect(service.changeLevel).toHaveBeenCalled();
                 expect(service.findAll).toHaveBeenCalled();
-                expect(comp.loggers && comp.loggers[0]).toEqual(jasmine.objectContaining(log));
+                expect(comp.loggers?.[0]).toEqual(jasmine.objectContaining(log));
             });
         });
     });

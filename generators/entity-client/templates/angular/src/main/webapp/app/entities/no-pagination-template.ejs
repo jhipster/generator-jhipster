@@ -37,7 +37,7 @@
         <%_ } _%>
     ) {
         <%_ if (searchEngine !== false) { _%>
-        this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search'] ?
+        this.currentSearch = this.activatedRoute.snapshot?.queryParams['search'] ?
             this.activatedRoute.snapshot.queryParams['search'] : '';
         <%_ } _%>
     }

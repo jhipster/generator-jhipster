@@ -91,7 +91,7 @@ describe('Component Tests', () => {
 
             // THEN
             expect(service.query).toHaveBeenCalled();
-            expect(comp.<%= entityInstancePlural %> && comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
+            expect(comp.<%= entityInstancePlural %>?.[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
         });
 
     <%_ if (pagination !== 'no') { _%>
@@ -112,7 +112,7 @@ describe('Component Tests', () => {
 
             // THEN
             expect(service.query).toHaveBeenCalled();
-            expect(comp.<%= entityInstancePlural %> && comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
+            expect(comp.<%= entityInstancePlural %>?.[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
         });
 
         <%_ if (pagination === 'infinite-scroll') { _%>
@@ -136,7 +136,7 @@ describe('Component Tests', () => {
             // THEN
             expect(comp.page).toEqual(0);
             expect(service.query).toHaveBeenCalledTimes(2);
-            expect(comp.<%= entityInstancePlural %> && comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
+            expect(comp.<%= entityInstancePlural %>?.[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
         });
 
         it('should calculate the sort attribute for an id', () => {
