@@ -190,7 +190,9 @@ _%>
     ) {}
 
     ngOnInit(): void {
-        if (this.activeModal) return;
+        if (this.activeModal) {
+          return;
+        }
         this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
             <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
             if (!<%= entityInstance %>.id) {
