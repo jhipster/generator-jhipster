@@ -22,14 +22,14 @@ package <%= packageName %>.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 <%_ } _%>
 <%_ if (!skipClient || ['h2Disk', 'h2Memory'].includes(devDatabaseType) && !reactive) { _%>
-import io.github.jhipster.config.JHipsterConstants;
+import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
-import io.github.jhipster.config.JHipsterProperties;
+import tech.jhipster.config.JHipsterProperties;
 <%_ if (['h2Disk', 'h2Memory'].includes(devDatabaseType) && !reactive) { _%>
-import io.github.jhipster.config.h2.H2ConfigurationHelper;
+import tech.jhipster.config.h2.H2ConfigurationHelper;
 <%_ } _%>
 <%_ if (!skipClient && reactive) { _%>
-import io.github.jhipster.web.filter.<% if (reactive) { %>reactive.<% } %>CachingHttpHeadersFilter;
+import tech.jhipster.web.filter.<% if (reactive) { %>reactive.<% } %>CachingHttpHeadersFilter;
 <%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

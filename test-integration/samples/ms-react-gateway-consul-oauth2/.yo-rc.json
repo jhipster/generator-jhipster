@@ -2,8 +2,8 @@
     "generator-jhipster": {
         "applicationType": "gateway",
         "baseName": "sampleGateway",
-        "packageName": "io.github.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageName": "tech.jhipster.sample",
+        "packageFolder": "tech/jhipster/sample",
         "authenticationType": "oauth2",
         "cacheProvider": "hazelcast",
         "enableHibernateCache": true,

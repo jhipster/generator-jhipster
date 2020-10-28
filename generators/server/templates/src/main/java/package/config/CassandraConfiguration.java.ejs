@@ -21,7 +21,7 @@ package <%= packageName %>.config;
 import com.datastax.oss.driver.api.core.data.TupleValue;
 import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.core.type.TupleType;
-import io.github.jhipster.config.JHipsterConstants;
+import tech.jhipster.config.JHipsterConstants;
 <%_ if (applicationType === 'gateway' && databaseType !== 'cassandra') { _%>
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 <%_ } _%>

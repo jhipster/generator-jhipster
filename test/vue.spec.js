@@ -484,7 +484,7 @@ describe('Vue applications', () => {
                 })
                 .withPrompts({
                     baseName: 'sampleWebsocket',
-                    packageName: 'io.github.jhipster.sample',
+                    packageName: 'tech.jhipster.sample',
                     applicationType: 'monolith',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Disk',

@@ -42,12 +42,12 @@ import <%= packageName %>.web.rest.errors.EmailAlreadyUsedException;
 import <%= packageName %>.web.rest.errors.LoginAlreadyUsedException;
 <%_ } _%>
 
-import io.github.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.HeaderUtil;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
-import io.github.jhipster.web.util.PaginationUtil;
+import tech.jhipster.web.util.PaginationUtil;
 <%_ } _%>
 <%_ if (!reactive) { _%>
-import io.github.jhipster.web.util.ResponseUtil;
+import tech.jhipster.web.util.ResponseUtil;
 <%_ } _%>
 
 import org.slf4j.Logger;
