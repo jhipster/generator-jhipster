@@ -87,55 +87,52 @@ Object.entries(allCommands).forEach(([key, opts]) => {
         .addCommandArguments(opts.argument)
         .addCommandOptions(opts.options)
         .addHelpText('after', opts.help)
-        .addAlias(opts.alias);
-
-    if (!opts.cliOnly || key === 'jdl') {
-        if (opts.blueprint) {
-            // Blueprint only command.
-            command.prepareOptions(() => {
-                const generator = env.create(`${packageNameToNamespace(opts.blueprint)}:${key}`, { options: { help: true } });
-                command.addGeneratorArguments(generator._arguments).addGeneratorOptions(generator._options);
-            });
-        } else {
-            command.prepareOptions(() => {
-                const generatorName = key === 'jdl' ? 'app' : key;
-                // Register jhipster upstream options.
-                if (key !== 'jdl') {
-                    const generator = env.create(`${JHIPSTER_NS}:${key}`, { options: { help: true } });
+        .addAlias(opts.alias)
+        .prepareOptions(() => {
+            if (!opts.cliOnly || key === 'jdl') {
+                if (opts.blueprint) {
+                    // Blueprint only command.
+                    const generator = env.create(`${packageNameToNamespace(opts.blueprint)}:${key}`, { options: { help: true } });
                     command.addGeneratorArguments(generator._arguments).addGeneratorOptions(generator._options);
+                } else {
+                    const generatorName = key === 'jdl' ? 'app' : key;
+                    // Register jhipster upstream options.
+                    if (key !== 'jdl') {
+                        const generator = env.create(`${JHIPSTER_NS}:${key}`, { options: { help: true } });
+                        command.addGeneratorArguments(generator._arguments).addGeneratorOptions(generator._options);
 
-                    const usagePath = path.resolve(generator.sourceRoot(), '../USAGE');
-                    if (fs.existsSync(usagePath)) {
-                        command.addHelpText('after', `\n${fs.readFileSync(usagePath, 'utf8')}`);
+                        const usagePath = path.resolve(generator.sourceRoot(), '../USAGE');
+                        if (fs.existsSync(usagePath)) {
+                            command.addHelpText('after', `\n${fs.readFileSync(usagePath, 'utf8')}`);
+                        }
                     }
-                }
-                if (key === 'jdl' || program.opts().fromJdl) {
-                    const generator = env.create(`${JHIPSTER_NS}:app`, { options: { help: true } });
-                    command.addGeneratorOptions(generator._options, chalk.gray(' (application)'));
-                }
+                    if (key === 'jdl' || program.opts().fromJdl) {
+                        const generator = env.create(`${JHIPSTER_NS}:app`, { options: { help: true } });
+                        command.addGeneratorOptions(generator._options, chalk.gray(' (application)'));
+                    }
 
-                // Register blueprint specific options.
-                envBuilder.getBlueprintsNamespaces().forEach(blueprintNamespace => {
-                    const generatorNamespace = `${blueprintNamespace}:${generatorName}`;
-                    if (!env.get(generatorNamespace)) {
-                        return;
-                    }
-                    const blueprintName = blueprintNamespace.replace(/^jhipster-/, '');
-                    try {
-                        command.addGeneratorOptions(
-                            env.create(generatorNamespace, { options: { help: true } })._options,
-                            chalk.yellow(` (blueprint option: ${blueprintName})`)
-                        );
-                    } catch (error) {
-                        logger.info(
-                            `Error parsing options for generator ${generatorNamespace}, unknown option will lead to error at jhipster 7`
-                        );
-                    }
-                });
-                command.addHelpText('after', moreInfo);
-            });
-        }
-    }
+                    // Register blueprint specific options.
+                    envBuilder.getBlueprintsNamespaces().forEach(blueprintNamespace => {
+                        const generatorNamespace = `${blueprintNamespace}:${generatorName}`;
+                        if (!env.get(generatorNamespace)) {
+                            return;
+                        }
+                        const blueprintName = blueprintNamespace.replace(/^jhipster-/, '');
+                        try {
+                            command.addGeneratorOptions(
+                                env.create(generatorNamespace, { options: { help: true } })._options,
+                                chalk.yellow(` (blueprint option: ${blueprintName})`)
+                            );
+                        } catch (error) {
+                            logger.info(
+                                `Error parsing options for generator ${generatorNamespace}, unknown option will lead to error at jhipster 7`
+                            );
+                        }
+                    });
+                    command.addHelpText('after', moreInfo);
+                }
+            }
+        });
 
     command.action((...everything) => {
         // [args, opts, extraArgs]
