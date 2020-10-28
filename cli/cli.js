@@ -18,44 +18,21 @@
  */
 const chalk = require('chalk');
 const didYouMean = require('didyoumean');
-const { Option } = require('commander');
 const fs = require('fs');
 const path = require('path');
 
-const JHipsterCommand = require('./jhipster-command');
-const packageJson = require('../package.json');
+const { createProgram, moreInfo } = require('./program');
 const { CLI_NAME, logger, toString, getCommand, done } = require('./utils');
 const EnvironmentBuilder = require('./environment-builder');
 const SUB_GENERATORS = require('./commands');
 const { packageNameToNamespace } = require('../generators/utils');
 
-const version = packageJson.version;
 const JHIPSTER_NS = CLI_NAME;
 
 const envBuilder = EnvironmentBuilder.createDefaultBuilder();
 const env = envBuilder.getEnvironment();
-const moreInfo = `\n  For more info visit ${chalk.blue('https://www.jhipster.tech')}\n`;
 
-const program = new JHipsterCommand()
-    .storeOptionsAsProperties(false)
-    .passCommandToAction(false)
-    .version(version)
-    .addHelpText('after', moreInfo)
-    // JHipster common options
-    .option(
-        '--blueprints <value>',
-        'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs'
-    )
-    .option('--no-insight', 'Disable insight')
-    // Conflicter options
-    .option('--force', 'Override every file', false)
-    .option('--dry-run', 'Print conflicts', false)
-    .option('--whitespace', 'Whitespace changes will not trigger conflicts', false)
-    .option('--bail', 'Fail on first conflict', false)
-    .option('--skip-regenerate', "Don't regenerate identical files", false)
-    .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false)
-    .addOption(new Option('--from-jdl', 'Allow every option jdl forwards').default(false).hideHelp());
-
+const program = createProgram();
 /* setup debugging */
 logger.init(program);
 
@@ -141,12 +118,13 @@ Object.entries(allCommands).forEach(([key, opts]) => {
             // if extraArgs exists: Unknown commands or unknown argument.
             const cmd = cmdOptions[0];
             if (key !== 'app') {
-                logger.fatal(
-                    `${chalk.yellow(key)} command doesn't take ${chalk.yellow(cmd)} argument. See '${chalk.white(
-                        `${CLI_NAME} ${key} --help`
-                    )}'.`
+                return Promise.reject(
+                    new Error(
+                        `${chalk.yellow(key)} command doesn't take ${chalk.yellow(cmd)} argument. See '${chalk.white(
+                            `${CLI_NAME} ${key} --help`
+                        )}'.`
+                    )
                 );
-                return;
             }
             const availableCommands = program.commands.map(c => c._name);
 
@@ -155,8 +133,7 @@ Object.entries(allCommands).forEach(([key, opts]) => {
                 logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
             }
 
-            logger.fatal(`${chalk.yellow(cmd)} is not a known command. See '${chalk.white(`${CLI_NAME} --help`)}'.`);
-            return;
+            return Promise.reject(new Error(`${chalk.yellow(cmd)} is not a known command. See '${chalk.white(`${CLI_NAME} --help`)}'.`));
         }
         const args = everything;
         const options = {
@@ -167,16 +144,17 @@ Object.entries(allCommands).forEach(([key, opts]) => {
         if (opts.cliOnly) {
             logger.debug('Executing CLI only script');
             /* eslint-disable-next-line global-require, import/no-dynamic-require */
-            require(`./${key}`)(args, options, env);
+            return require(`./${key}`)(args, options, env);
         } else {
             const namespace = opts.blueprint ? `${packageNameToNamespace(opts.blueprint)}:${key}` : `${JHIPSTER_NS}:${key}`;
-            runYoCommand(namespace, args, options, opts);
+            return runYoCommand(namespace, args, options, opts);
         }
     });
 });
 
-program.parse(process.argv);
+module.exports = program.parseAsync(process.argv).catch(error => logger.fatal(error.message));
 
 process.on('unhandledRejection', up => {
     throw up;
 });
+

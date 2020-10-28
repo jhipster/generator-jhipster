@@ -160,6 +160,20 @@ class JHipsterCommand extends Command {
                 .hideHelp(optionDefinition.hide)
         );
     }
+
+    /**
+     * Override to reject errors instead of throwing and add command to error.
+     * @return promise this
+     */
+    parseAsync(argv, parseOptions) {
+        try {
+            this.parse(argv, parseOptions);
+        } catch (commanderError) {
+            commanderError.command = this;
+            return Promise.reject(commanderError);
+        }
+        return Promise.all(this._actionResults).then(() => this);
+    }
 }
 
 module.exports = JHipsterCommand;
