@@ -71,7 +71,7 @@ export class AccountService {
     }
 
     hasAnyAuthority(authorities: string[] | string): boolean {
-        if (!this.userIdentity || !this.userIdentity.authorities) {
+        if (!this.userIdentity) {
             return false;
         }
         if (!Array.isArray(authorities)) {

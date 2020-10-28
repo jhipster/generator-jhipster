@@ -24,7 +24,7 @@
     isLoading = false;
     totalItems = 0;
     itemsPerPage = ITEMS_PER_PAGE;
-    page!: number;
+    page?: number;
     predicate!: string;
     ascending!: boolean;
     ngbPaginationPage = 1;
@@ -42,8 +42,7 @@
         <%_ } _%>
     ) {
         <%_ if (searchEngine !== false) { _%>
-        this.currentSearch = this.activatedRoute.snapshot?.queryParams['search'] ?
-            this.activatedRoute.snapshot.queryParams['search'] : '';
+        this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
         <%_ } _%>
     }
 
