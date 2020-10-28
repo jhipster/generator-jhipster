@@ -96,9 +96,7 @@ describe('Component Tests', () => {
       beforeEach(() => {
         routerState.snapshot.root = {};
         <%_ if (enableTranslation) { _%>
-        spyOn(translateService, 'get').and.callFake((key: string) => {
-          return of(key + ' translated');
-        });
+        spyOn(translateService, 'get').and.callFake((key: string) => of(key + ' translated'));
         translateService.currentLang = '<%= nativeLanguage %>';
         <%_ } _%>
         spyOn(titleService, 'setTitle');

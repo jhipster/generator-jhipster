@@ -925,18 +925,16 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                     query = `
                         this.${relationship.otherEntityName}Service
                             .query({${filter}})
-                            .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
-                                return res.body ?? [];
-                            }))
+                            .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => res.body ?? []))
                             .subscribe((resBody: I${relationship.otherEntityAngularName}[]) => {
                                 if (${relationshipFieldNameIdCheck}) {
                                     this.${variableName} = resBody;
                                 } else {
                                     this.${relationship.otherEntityName}Service
                                         .find(${entityInstance}.${relationshipFieldName}${dto !== 'no' ? 'Id' : '.id'})
-                                        .pipe(map((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) => {
-                                            return subRes.body ? [subRes.body].concat(resBody) : resBody;
-                                        }))
+                                        .pipe(map((subRes: HttpResponse<I${
+                                            relationship.otherEntityAngularName
+                                        }>) => subRes.body ? [subRes.body].concat(resBody) : resBody))
                                         .subscribe((concatRes: I${
                                             relationship.otherEntityAngularName
                                         }[]) => this.${variableName} = concatRes);
