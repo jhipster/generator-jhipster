@@ -19,20 +19,19 @@
 import { Component, OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
+import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { takeUntil } from 'rxjs/operators';
-
-import { BaseComponent } from 'app/shared/base.component';
 <%_ } _%>
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-error',
     templateUrl: './error.component.html'
 })
-export class ErrorComponent<% if (enableTranslation) { %> extends BaseComponent<% } %> implements OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> {
+export class ErrorComponent implements OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> {
     errorMessage?: string;
     <%_ if (enableTranslation) { _%>
     errorKey?: string;
+    langChangeSubscription?: Subscription;
     <%_ } _%>
 
     constructor(
@@ -40,11 +39,7 @@ export class ErrorComponent<% if (enableTranslation) { %> extends BaseComponent<
         private translateService: TranslateService,
         <%_ } _%>
         private route: ActivatedRoute
-    ) {
-        <%_ if (enableTranslation) { _%>
-        super();
-        <%_ } _%>
-    }
+    ) {}
 
     ngOnInit(): void {
         this.route.data.subscribe((routeData) => {
@@ -52,7 +47,7 @@ export class ErrorComponent<% if (enableTranslation) { %> extends BaseComponent<
                 <%_ if (enableTranslation) { _%>
                 this.errorKey = routeData.errorMessage;
                 this.getErrorMessageTranslation();
-                this.translateService.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => this.getErrorMessageTranslation());
+                this.langChangeSubscription = this.translateService.onLangChange.subscribe(() => this.getErrorMessageTranslation());
                 <%_ } else { _%>
                 this.errorMessage = routeData.errorMessage;
                 <%_ } _%>
@@ -62,7 +57,9 @@ export class ErrorComponent<% if (enableTranslation) { %> extends BaseComponent<
 
     <%_ if (enableTranslation) { _%>
     ngOnDestroy(): void {
-        super.ngOnDestroy();
+        if (this.langChangeSubscription) {
+            this.langChangeSubscription.unsubscribe();
+        }
     }
 
     private getErrorMessageTranslation(): void {

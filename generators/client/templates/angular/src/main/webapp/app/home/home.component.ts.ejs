@@ -16,8 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
+import { Component, OnInit<%_ if (authenticationType !== 'oauth2') { _%>, OnDestroy <%_ } _%> } from '@angular/core';
+<%_ if (authenticationType !== 'oauth2') { _%>
+import { Subscription } from 'rxjs';
+<%_ } _%>
 
 <%_ if (authenticationType !== 'oauth2') { _%>
 import { LoginModalService } from 'app/core/login/login-modal.service';
@@ -26,7 +28,6 @@ import { LoginService } from 'app/core/login/login.service';
 <%_ } _%>
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
-import { BaseComponent } from 'app/shared/base.component';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-home',
@@ -36,8 +37,11 @@ import { BaseComponent } from 'app/shared/base.component';
     ]
 
 })
-export class HomeComponent extends BaseComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit <%_ if (authenticationType !== 'oauth2') { _%>, OnDestroy <%_ } _%> {
     account: Account | null = null;
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    authSubscription?: Subscription;
+    <%_ } _%>
 
     constructor(
         private accountService: AccountService,
@@ -46,15 +50,13 @@ export class HomeComponent extends BaseComponent implements OnInit, OnDestroy {
         <%_ } else { _%>
         private loginService: LoginService
         <%_ } _%>
-    ) {
-        super();
-    }
+    ) {}
 
     ngOnInit(): void {
         <%_ if (authenticationType === 'oauth2') { _%>
-        this.accountService.identity().pipe(takeUntil(this.destroy$)).subscribe(account => (this.account = account));
+        this.accountService.identity().subscribe(account => (this.account = account));
         <%_ } else { _%>
-        this.accountService.getAuthenticationState().pipe(takeUntil(this.destroy$)).subscribe(account => (this.account = account));
+        this.authSubscription = this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
         <%_ } _%>
     }
 
@@ -70,7 +72,11 @@ export class HomeComponent extends BaseComponent implements OnInit, OnDestroy {
         <%_ } _%>
     }
 
+    <%_ if (authenticationType !== 'oauth2') { _%>
     ngOnDestroy(): void {
-        super.ngOnDestroy();
+        if (this.authSubscription) {
+            this.authSubscription.unsubscribe();
+        }
     }
+    <%_ } _%>
 }

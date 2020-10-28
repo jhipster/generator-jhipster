@@ -17,10 +17,9 @@
  limitations under the License.
 -%>
 import { Directive, Input, TemplateRef, ViewContainerRef, OnDestroy } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
-import { BaseDirective } from '../base.directive';
 
 /**
  * @whatItDoes Conditionally includes an HTML element if current user has any
@@ -36,23 +35,24 @@ import { BaseDirective } from '../base.directive';
 @Directive({
     selector: '[<%= jhiPrefix %>HasAnyAuthority]'
 })
-export class HasAnyAuthorityDirective extends BaseDirective implements OnDestroy {
+export class HasAnyAuthorityDirective implements OnDestroy {
     private authorities: string[] = [];
+    private authenticationSubscription?: Subscription;
 
-    constructor(private accountService: AccountService, private templateRef: TemplateRef<any>, private viewContainerRef: ViewContainerRef) {
-        super();
-    }
+    constructor(private accountService: AccountService, private templateRef: TemplateRef<any>, private viewContainerRef: ViewContainerRef) {}
 
     @Input()
     set <%= jhiPrefix %>HasAnyAuthority(value: string|string[]) {
         this.authorities = typeof value === 'string' ? [ value ] : value;
         this.updateView();
         // Get notified each time authentication state changes.
-        this.accountService.getAuthenticationState().pipe(takeUntil(this.destroy$)).subscribe(() => this.updateView());
+        this.authenticationSubscription = this.accountService.getAuthenticationState().subscribe(() => this.updateView());
     }
 
     ngOnDestroy(): void {
-        super.ngOnDestroy();
+        if (this.authenticationSubscription) {
+            this.authenticationSubscription.unsubscribe();
+        }
     }
 
     private updateView(): void {
