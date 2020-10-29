@@ -1468,6 +1468,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                 const stream = this.env.sharedFs
                     .stream()
                     .pipe(filter(['.prettierrc', '.prettierignore']))
+                    .pipe(generator.createConflicterAttributesTransform())
                     .pipe(
                         through.obj(function (file, enc, cb) {
                             const stream = this;
@@ -1595,18 +1596,20 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         return fileStatus;
     }
 
-    registerConflicterAttributesTransform(yoAttributeFileName = '.yo-resolve') {
+    createConflicterAttributesTransform(yoAttributeFileName = '.yo-resolve') {
         const generator = this;
-        this.registerTransformStream(
-            through.obj(function (file, enc, cb) {
-                const status = generator.getConflicterStatusForFile(file.path, yoAttributeFileName);
-                if (status) {
-                    file.conflicter = status;
-                }
-                this.push(file);
-                cb();
-            })
-        );
+        return through.obj(function (file, enc, cb) {
+            const status = generator.getConflicterStatusForFile(file.path, yoAttributeFileName);
+            if (status) {
+                file.conflicter = status;
+            }
+            this.push(file);
+            cb();
+        });
+    }
+
+    registerConflicterAttributesTransform(yoAttributeFileName) {
+        this.registerTransformStream(this.createConflicterAttributesTransform(yoAttributeFileName));
     }
 
     /**
