@@ -232,7 +232,6 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('app');
 
         this.registerPrettierTransform();
-        this.registerForceEntitiesTransform();
     }
 
     _initializing() {
@@ -334,20 +333,24 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     _composing() {
         return {
             /**
-             * Composing with others generators, must be runned after `configuring` priority to let blueprints
-             * `configuring` tasks to run.
-             * But must be the first task to run at `default` priority.
-             * When mixing blueprints with sbs-blueprints, sbs-blueprints must be called after, otherwise the
-             * priority will run before this `composing` task and the configuration will not be settled.
+             * Composing with others generators, must be executed after `configuring` priority to let others
+             * generators `configuring` priority to run.
+             *
+             * Generators `server`, `client`, `common`, `languages` depends on each other.
+             * We are composing in the same task so every priority are executed in parallel.
+             * - compose (app) -> initializing (common) -> initializing (server) -> ...
+             *
+             * When composing in different tasks the result would be:
+             * - composeCommon (app) -> initializing (common) -> prompting (common) -> ... -> composeServer (app) -> initializing (server) -> ...
              */
-            composing() {
+            compose() {
+                this.composeWithJHipster('common', true);
                 if (!this.skipServer) {
                     this.composeWithJHipster('server', true);
                 }
                 if (!this.skipClient) {
                     this.composeWithJHipster('client', true);
                 }
-                this.composeWithJHipster('common', true);
                 if (!this.configOptions.skipI18n) {
                     this.composeWithJHipster(
                         'languages',
@@ -361,16 +364,10 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
             askForTestOpts: prompts.askForTestOpts,
 
             askForMoreModules: prompts.askForMoreModules,
-        };
-    }
 
-    get composing() {
-        if (useBlueprints) return;
-        return this._composing();
-    }
-
-    _loading() {
-        return {
+            /**
+             * At this point every other generator should already be configured, so, enforce defaults fallback.
+             */
             saveConfigWithDefaults() {
                 this.setConfigDefaults();
 
@@ -383,12 +380,29 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
                 this.blueprintVersion && (config.blueprintVersion = this.blueprintVersion);
                 this.config.set(config);
             },
+
+            composeEntities() {
+                if (!this.withEntities) return;
+                this.composeWithJHipster('entities', { skipInstall: true }, true);
+            },
+
+            composePages() {
+                if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0 || this.configOptions.skipComposePage) return;
+                this.configOptions.skipComposePage = true;
+                this.jhipsterConfig.pages.forEach(page => {
+                    this.composeWithJHipster(page.generator || 'page', {
+                        skipInstall: true,
+                        arguments: [page.name],
+                        page,
+                    });
+                });
+            },
         };
     }
 
-    get loading() {
+    get composing() {
         if (useBlueprints) return;
-        return this._loading();
+        return this._composing();
     }
 
     _default() {
@@ -422,23 +436,6 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
             cleanup() {
                 cleanup.cleanupOldFiles(this);
                 cleanup.upgradeFiles(this);
-            },
-
-            composeEntities() {
-                if (!this.withEntities) return;
-                this.composeWithJHipster('entities', { skipInstall: true }, true);
-            },
-
-            regeneratePages() {
-                if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0 || this.configOptions.skipComposePage) return;
-                this.configOptions.skipComposePage = true;
-                this.jhipsterConfig.pages.forEach(page => {
-                    this.composeWithJHipster(page.generator || 'page', {
-                        skipInstall: true,
-                        arguments: [page.name],
-                        page,
-                    });
-                });
             },
 
             ...super._missingPostWriting(),

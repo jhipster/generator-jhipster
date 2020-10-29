@@ -62,9 +62,14 @@ const CUSTOM_PRIORITIES = [
         before: 'loading',
     },
     {
+        priorityName: 'preConflicts',
+        queueName: 'jhipster:preConflicts',
+        before: 'conflicts',
+    },
+    {
         priorityName: 'postWriting',
         queueName: 'jhipster:postWriting',
-        before: 'conflicts',
+        before: 'preConflicts',
     },
 ];
 
@@ -139,6 +144,8 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         // Load common runtime options.
         this.parseCommonRuntimeOptions();
 
+        this.registerCommitPriorityFilesTask();
+
         if (!this.jhipsterConfig.skipGeneratedFlag) {
             this.registerGeneratedAnnotationTransform();
         }
@@ -147,6 +154,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         if (!this.options.skipYoResolve) {
             this.registerConflicterAttributesTransform();
         }
+        this.registerForceEntitiesTransform();
     }
 
     /**

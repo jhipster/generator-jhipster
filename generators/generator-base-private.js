@@ -1457,6 +1457,56 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
 
     /**
+     * Some files are required to be written to disk before everything else.
+     * Example '.prettierc' and '.prettierignore' are used by prettier transform.
+     * @param {any} generator
+     */
+    registerCommitPriorityFilesTask(generator = this) {
+        this.queueTask({
+            method: () => {
+                if (this.env.rootGenerator() !== this) return;
+                const stream = this.env.sharedFs
+                    .stream()
+                    .pipe(filter(['.prettierrc', '.prettierignore']))
+                    .pipe(generator.createConflicterAttributesTransform())
+                    .pipe(
+                        through.obj(function (file, enc, cb) {
+                            const stream = this;
+
+                            // If the file has no state requiring action, move on
+                            if (file.state === null) {
+                                cb();
+                                return;
+                            }
+
+                            generator.conflicter.checkForCollision(file, (err, status) => {
+                                if (err) {
+                                    cb(err);
+                                    return;
+                                }
+
+                                if (status === 'skip') {
+                                    delete file.state;
+                                } else {
+                                    stream.push(file);
+                                }
+
+                                cb();
+                            });
+                            generator.conflicter.resolve();
+                        })
+                    );
+                const done = generator.async();
+                generator.fs.commit([], stream, () => {
+                    done();
+                });
+            },
+            taskName: 'priorityFiles',
+            queueName: 'jhipster:preConflicts',
+        });
+    }
+
+    /**
      * Register prettier as transform stream for prettifying files during generation
      * @param {any} generator
      */
@@ -1546,18 +1596,20 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         return fileStatus;
     }
 
-    registerConflicterAttributesTransform(yoAttributeFileName = '.yo-resolve') {
+    createConflicterAttributesTransform(yoAttributeFileName = '.yo-resolve') {
         const generator = this;
-        this.registerTransformStream(
-            through.obj(function (file, enc, cb) {
-                const status = generator.getConflicterStatusForFile(file.path, yoAttributeFileName);
-                if (status) {
-                    file.conflicter = status;
-                }
-                this.push(file);
-                cb();
-            })
-        );
+        return through.obj(function (file, enc, cb) {
+            const status = generator.getConflicterStatusForFile(file.path, yoAttributeFileName);
+            if (status) {
+                file.conflicter = status;
+            }
+            this.push(file);
+            cb();
+        });
+    }
+
+    registerConflicterAttributesTransform(yoAttributeFileName) {
+        this.registerTransformStream(this.createConflicterAttributesTransform(yoAttributeFileName));
     }
 
     /**

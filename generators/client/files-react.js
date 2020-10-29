@@ -32,7 +32,6 @@ const files = {
                 '.eslintrc.json',
                 'tsconfig.json',
                 'tsconfig.test.json',
-                { file: '.editorconfig', method: 'copy', noEjs: true },
                 'webpack/logo-jhipster.png',
                 'webpack/webpack.common.js',
                 'webpack/webpack.dev.js',
