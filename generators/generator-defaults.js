@@ -16,12 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const constants = require('./generator-constants');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 const applicationOptions = require('../jdl/jhipster/application-options');
 const { MONOLITH } = require('../jdl/jhipster/application-types');
 const binaryOptions = require('../jdl/jhipster/binary-options');
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
 /** Required config for prompts to be skipped */
 const appRequiredConfig = {
@@ -32,7 +30,9 @@ const appDefaultConfig = {
     ...appRequiredConfig,
     skipClient: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.SKIP_CLIENT],
     skipServer: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.SKIP_SERVER],
-    skipUserManagement: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.SKIP_USER_MANAGEMENT],
+    skipUserManagement: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[
+        applicationOptions.OptionNames.SKIP_USER_MANAGEMENT
+    ],
     skipCheckLengthOfIdentifier: false,
     skipFakeData: false,
     withGeneratedFlag: false,
@@ -71,7 +71,9 @@ const serverDefaultConfig = {
     ...serverRequiredConfig,
     serverPort: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.SERVER_PORT],
     authenticationType: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.AUTHENTICATION_TYPE],
-    serviceDiscoveryType: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.SERVICE_DISCOVERY_TYPE],
+    serviceDiscoveryType: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[
+        applicationOptions.OptionNames.SERVICE_DISCOVERY_TYPE
+    ],
     enableHibernateCache: true,
 };
 
@@ -83,7 +85,9 @@ const clientRequiredConfig = {
 const clientDefaultConfig = {
     ...clientRequiredConfig,
     clientTheme: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.CLIENT_THEME],
-    clientThemeVariant: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.CLIENT_THEME_VARIANT],
+    clientThemeVariant: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[
+        applicationOptions.OptionNames.CLIENT_THEME_VARIANT
+    ],
     useSass: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.USE_SASS],
 };
 

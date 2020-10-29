@@ -64,21 +64,23 @@ module.exports = {
     getConfigForMicroserviceApplication,
     getConfigForUAAApplication,
     getDefaultConfigForNewApplication,
-    getConfigForApplicationType
+    getConfigForApplicationType,
 };
 
 function getConfigForApplicationType(applicationType = undefined, customOptions = {}) {
     if (applicationType === MONOLITH) {
         return getConfigForMonolithApplication(customOptions);
-    } else if (applicationType === GATEWAY) {
-        return getConfigForGatewayApplication();
-    } else if (applicationType === MICROSERVICE) {
-        return getConfigForMicroserviceApplication();
-    } else if (applicationType === UAA) {
-        return getConfigForUAAApplication();
-    } else {
-        return getDefaultConfigForNewApplication();
     }
+    if (applicationType === GATEWAY) {
+        return getConfigForGatewayApplication();
+    }
+    if (applicationType === MICROSERVICE) {
+        return getConfigForMicroserviceApplication();
+    }
+    if (applicationType === UAA) {
+        return getConfigForUAAApplication();
+    }
+    return getDefaultConfigForNewApplication();
 }
 
 function getConfigForMonolithApplication(customOptions = {}) {
@@ -240,7 +242,7 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
     if (typeof options[DTO_SUFFIX] === 'boolean' || typeof options[DTO_SUFFIX] !== 'string') {
         options[DTO_SUFFIX] = OptionValues[DTO_SUFFIX];
     }
-    if (typeof options[ENTITY_SUFFIX] === 'boolean') {
+    if (typeof options[ENTITY_SUFFIX] === 'boolean' || typeof options[ENTITY_SUFFIX] !== 'string') {
         options[ENTITY_SUFFIX] = OptionValues[ENTITY_SUFFIX];
     }
     if ([MONGODB, COUCHBASE, CASSANDRA, NO].includes(options[DATABASE_TYPE])) {

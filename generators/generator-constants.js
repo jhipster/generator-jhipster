@@ -115,7 +115,7 @@ const TEST_DIR = 'src/test/';
 // Note: this will be prepended with 'target/classes' for Maven, or with 'build/resources/main' for Gradle.
 const CLIENT_DIST_DIR = 'static/';
 
-const SUPPORTED_VALIDATION_RULES = [Object.keys(validationOptions)];
+const SUPPORTED_VALIDATION_RULES = [Object.keys(validationOptions).map(key => validationOptions[key])];
 
 const SUPPORTED_CLIENT_FRAMEWORKS = {
     ANGULAR: applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK].angularX,

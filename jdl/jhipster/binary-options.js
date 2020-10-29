@@ -44,7 +44,7 @@ const DefaultValues = {
     [Options.DTO]: Values[Options.DTO].NO,
     [Options.SERVICE]: Values[Options.SERVICE].NO,
     [Options.PAGINATION]: Values[Options.PAGINATION].NO,
-}
+};
 
 function getOptionName(optionValue) {
     return optionNames.find(optionName => Values[optionName] && Values[optionName][optionValue]);

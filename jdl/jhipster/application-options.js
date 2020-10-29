@@ -144,7 +144,7 @@ const optionValues = {
     [optionNames.JHI_PREFIX]: 'jhi',
     [optionNames.JHIPSTER_VERSION]: '',
     [optionNames.JWT_SECRET_KEY]: '',
-    [optionNames.LANGUAGES]: ['en'],
+    [optionNames.LANGUAGES]: ['en', 'fr'],
     [optionNames.MESSAGE_BROKER]: {
         kafka: 'kafka',
         false: false,

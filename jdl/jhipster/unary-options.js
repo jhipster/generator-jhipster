@@ -16,7 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const applicationOptions = require('./application-options')
+const applicationOptions = require('./application-options');
+
 const Options = {
     SKIP_CLIENT: applicationOptions.OptionNames.SKIP_CLIENT,
     SKIP_SERVER: applicationOptions.OptionNames.SKIP_SERVER,

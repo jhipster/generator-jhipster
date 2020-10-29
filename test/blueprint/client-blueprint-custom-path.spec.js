@@ -78,7 +78,7 @@ describe('JHipster client generator with blueprint with path customizer', () => 
                         clientFramework: 'angularX',
                         enableTranslation: true,
                         nativeLanguage: 'en',
-                        languages: ['fr'],
+                        languages: ['en', 'fr'],
                     })
                     .on('end', done);
             });
