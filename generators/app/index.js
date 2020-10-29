@@ -232,7 +232,6 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('app');
 
         this.registerPrettierTransform();
-        this.registerForceEntitiesTransform();
     }
 
     _initializing() {
