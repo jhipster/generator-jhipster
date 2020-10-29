@@ -31,7 +31,6 @@ const vueFiles = {
             templates: [
                 'package.json',
                 'tsconfig.json',
-                '.huskyrc',
                 '.postcssrc.js',
                 'tslint.json',
                 'config/index.js',
