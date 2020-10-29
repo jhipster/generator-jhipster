@@ -1559,7 +1559,6 @@ relationship OneToOne {
                         skipUserManagement: true,
                         clientPackageManager: 'npm',
                         cacheProvider: 'ehcache',
-                        creationTimestamp: 1546300800000,
                     },
                     entities: ['Invoice', 'Shipment'],
                 },
