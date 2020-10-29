@@ -77,7 +77,7 @@ describe('JHipster client generator with blueprint', () => {
                         clientFramework: ANGULAR,
                         enableTranslation: true,
                         nativeLanguage: 'en',
-                        languages: ['fr'],
+                        languages: ['fr', 'en'],
                     })
                     .on('end', done);
             });
@@ -109,7 +109,7 @@ describe('JHipster client generator with blueprint', () => {
                     clientFramework: ANGULAR,
                     enableTranslation: true,
                     nativeLanguage: 'en',
-                    languages: ['fr'],
+                    languages: ['fr', 'en'],
                 })
                 .on('end', done);
         });

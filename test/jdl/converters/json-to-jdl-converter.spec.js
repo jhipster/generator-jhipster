@@ -66,6 +66,7 @@ describe('JSONToJDLConverter', () => {
     otherModules []
     packageName com.mycompany.myapp
     prodDatabaseType mysql
+    reactive false
     searchEngine false
     serverPort 8081
     serviceDiscoveryType eureka
@@ -114,6 +115,7 @@ describe('JSONToJDLConverter', () => {
     otherModules []
     packageName com.mycompany.myapp
     prodDatabaseType mysql
+    reactive false
     searchEngine false
     serverPort 8081
     serviceDiscoveryType eureka
@@ -243,6 +245,7 @@ paginate Country with pager
     otherModules []
     packageName com.mycompany.app1
     prodDatabaseType mysql
+    reactive false
     searchEngine false
     serverPort 8081
     serviceDiscoveryType eureka
@@ -277,6 +280,7 @@ application {
     otherModules []
     packageName com.mycompany.app2
     prodDatabaseType mysql
+    reactive false
     searchEngine false
     serverPort 8081
     serviceDiscoveryType eureka
@@ -311,6 +315,7 @@ application {
     otherModules []
     packageName com.mycompany.app3
     prodDatabaseType mysql
+    reactive false
     searchEngine false
     serverPort 8081
     serviceDiscoveryType eureka
