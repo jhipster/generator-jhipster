@@ -50,6 +50,9 @@ const defaultCommands = {
     entity: {
         desc: 'Create a new JHipster entity: JPA entity, Spring server-side components and Angular client-side components',
     },
+    entities: {
+        desc: 'Regenerate entities',
+    },
     'export-jdl': {
         desc: 'Create a JDL file from the existing entities',
     },

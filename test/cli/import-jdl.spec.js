@@ -88,7 +88,6 @@ function testDocumentsRelationships() {
         expect(subGenCallParams.commands).to.eql(['jhipster:entities']);
         expect(subGenCallParams.options[0]).to.eql({
             ...defaultAddedOptions,
-            regenerate: true,
             fromJdl: true,
         });
     });
@@ -190,7 +189,6 @@ describe('JHipster generator import jdl', () => {
                     ...options,
                     ...defaultAddedOptions,
                     skipInstall: true,
-                    regenerate: true,
                     interactive: false,
                 });
             });
@@ -226,7 +224,6 @@ describe('JHipster generator import jdl', () => {
             expect(subGenCallParams.options[0]).to.eql({
                 ...options,
                 ...defaultAddedOptions,
-                regenerate: true,
                 fromJdl: true,
             });
         });
@@ -266,7 +263,6 @@ describe('JHipster generator import jdl', () => {
             expect(subGenCallParams.options[0]).to.eql({
                 ...options,
                 ...defaultAddedOptions,
-                regenerate: true,
                 fromJdl: true,
             });
         });
@@ -292,7 +288,6 @@ describe('JHipster generator import jdl', () => {
             expect(subGenCallParams.options[0]).to.eql({
                 ...options,
                 ...defaultAddedOptions,
-                regenerate: true,
                 fromJdl: true,
             });
         });
@@ -570,7 +565,7 @@ describe('JHipster generator import jdl', () => {
         it('does not call application generator', () => {
             expect(subGenCallParams.count).to.equal(3);
             expect(subGenCallParams.commands).to.eql(['entities', 'entities', 'entities']);
-            expect(subGenCallParams.options[0]).to.eql(['--force', '--skip-install', '--no-skip-git', '--regenerate', '--from-jdl']);
+            expect(subGenCallParams.options[0]).to.eql(['--force', '--skip-install', '--no-skip-git', '--from-jdl']);
         });
     });
 

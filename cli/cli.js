@@ -17,27 +17,11 @@
  * limitations under the License.
  */
 
-const { createProgram, buildCommands } = require('./program');
-const { logger, done } = require('./utils');
-const EnvironmentBuilder = require('./environment-builder');
-const SUB_GENERATORS = require('./commands');
+const { runJHipster } = require('./program');
+const { done } = require('./utils');
 
-const envBuilder = EnvironmentBuilder.createDefaultBuilder();
-const env = envBuilder.getEnvironment();
-
-const program = createProgram();
-
-/* setup debugging */
-logger.init(program);
-
-const allCommands = { ...SUB_GENERATORS, ...envBuilder.getBlueprintCommands() };
-
-/* eslint-disable-next-line global-require, import/no-dynamic-require */
-buildCommands({ program, commands: allCommands, envBuilder, env, loadCommand: key => require(`./${key}`) });
-
-module.exports = program.parseAsync(process.argv).catch(done);
+module.exports = runJHipster().catch(done);
 
 process.on('unhandledRejection', up => {
     throw up;
 });
-

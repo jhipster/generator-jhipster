@@ -23,6 +23,8 @@ const didYouMean = require('didyoumean');
 const fs = require('fs');
 const path = require('path');
 
+const EnvironmentBuilder = require('./environment-builder');
+const SUB_GENERATORS = require('./commands');
 const JHipsterCommand = require('./jhipster-command');
 const { CLI_NAME, logger, getCommand, done } = require('./utils');
 const { version } = require('../package.json');
@@ -60,12 +62,8 @@ const rejectExtraArgs = (program, cmd, extraArgs) => {
     // if extraArgs exists: Unknown commands or unknown argument.
     const first = extraArgs[0];
     if (cmd !== 'app') {
-        return Promise.reject(
-            new Error(
-                `${chalk.yellow(cmd)} command doesn't take ${chalk.yellow(first)} argument. See '${chalk.white(
-                    `${CLI_NAME} ${cmd} --help`
-                )}'.`
-            )
+        logger.fatal(
+            `${chalk.yellow(cmd)} command doesn't take ${chalk.yellow(first)} argument. See '${chalk.white(`${CLI_NAME} ${cmd} --help`)}'.`
         );
     }
     const availableCommands = program.commands.map(c => c._name);
@@ -75,7 +73,8 @@ const rejectExtraArgs = (program, cmd, extraArgs) => {
         logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
     }
 
-    return Promise.reject(new Error(`${chalk.yellow(first)} is not a known command. See '${chalk.white(`${CLI_NAME} --help`)}'.`));
+    const message = `${chalk.yellow(first)} is not a known command. See '${chalk.white(`${CLI_NAME} --help`)}'.`;
+    logger.fatal(message);
 };
 
 const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand }) => {
@@ -155,7 +154,30 @@ const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand })
     });
 };
 
+const buildJHipster = ({
+    program = createProgram(),
+    envBuilder = EnvironmentBuilder.createDefaultBuilder(),
+    commands = { ...SUB_GENERATORS, ...envBuilder.getBlueprintCommands() },
+    env = envBuilder.getEnvironment(),
+    /* eslint-disable-next-line global-require, import/no-dynamic-require */
+    loadCommand = key => require(`./${key}`),
+} = {}) => {
+    /* setup debugging */
+    logger.init(program);
+
+    buildCommands({ program, commands, envBuilder, env, loadCommand });
+
+    return program;
+};
+
+const runJHipster = (args = {}) => {
+    const { argv = process.argv } = args;
+    return buildJHipster(args).parseAsync(argv);
+};
+
 module.exports = {
     createProgram,
     buildCommands,
+    buildJHipster,
+    runJHipster,
 };

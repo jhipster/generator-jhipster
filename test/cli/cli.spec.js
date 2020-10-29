@@ -1,31 +1,24 @@
 /* eslint-disable no-unused-expressions, no-console */
 
+const assert = require('assert');
 const expect = require('chai').expect;
 const { exec, fork } = require('child_process');
 const path = require('path');
-const proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 const sinon = require('sinon');
 const Environment = require('yeoman-environment');
 
-const { createProgram, buildCommands } = require('../../cli/program');
+const { createProgram, buildJHipster } = require('../../cli/program');
 const { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('../utils/utils');
 const { logger } = require('../../cli/utils');
 
 const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'cli', 'cli.js'));
 
-const mockCliOnly = (argv, commands = { entity: { cliOnly: true }, app: { cliOnly: true } }) => {
-    const program = createProgram().exitOverride();
-
-    buildCommands({
-        program,
-        commands,
-        loadCommand: key => {
-            console.log(key);
-            return commands[key].command;
-        },
-    });
-
-    return program.parseAsync(argv).catch(error => logger.fatal(error.message));
+const mockCli = (opts = {}) => {
+    opts = { ...opts, program: createProgram() };
+    opts.loadCommand = key => opts[`./${key}`];
+    const program = buildJHipster(opts);
+    const { argv } = opts;
+    return program.parseAsync(argv);
 };
 
 describe('jhipster cli', () => {
@@ -67,24 +60,35 @@ describe('jhipster cli', () => {
     });
 
     describe('with an unknown command', () => {
+        let sandbox;
         before(() => {
-            sinon.stub(logger, 'fatal');
-            sinon.stub(logger, 'info');
+            sandbox = sinon.createSandbox();
+            sandbox.stub(logger, 'fatal').callsFake(message => {
+                throw new Error(message);
+            });
+            sandbox.stub(logger, 'info');
         });
         after(() => {
-            logger.fatal.restore();
-            logger.info.restore();
+            sandbox.restore();
         });
         it('should print did you mean message', async () => {
-            await mockCliOnly(['jhipster', 'jhipster', 'entitt']);
-            expect(logger.info.getCall(0).args[0]).to.include('Did you mean');
-            expect(logger.info.getCall(0).args[0]).to.include('entity');
+            try {
+                await mockCli({ argv: ['jhipster', 'jhipster', 'entitt'] });
+                assert.fail();
+            } catch (error) {
+                expect(logger.info.getCall(0).args[0]).to.include('Did you mean');
+                expect(logger.info.getCall(0).args[0]).to.include('entity');
+            }
         });
 
         it('should print error message', async () => {
-            await mockCliOnly(['jhipster', 'jhipster', 'entitt']);
-            expect(logger.fatal.getCall(0).args[0]).to.include('entitt');
-            expect(logger.fatal.getCall(0).args[0]).to.include('is not a known command');
+            try {
+                await mockCli({ argv: ['jhipster', 'jhipster', 'entitt'] });
+                assert.fail();
+            } catch (error) {
+                expect(logger.fatal.getCall(0).args[0]).to.include('entitt');
+                expect(logger.fatal.getCall(0).args[0]).to.include('is not a known command');
+            }
         });
     });
 
@@ -128,7 +132,7 @@ describe('jhipster cli', () => {
                     expect(command).to.not.be.undefined;
                     done();
                 };
-                proxyquire('../../cli/cli', { './commands': commands });
+                return mockCli({ commands });
             });
         };
 
@@ -146,7 +150,7 @@ describe('jhipster cli', () => {
                     expect(options.fooBar).to.be.true;
                     done();
                 };
-                proxyquire('../../cli/cli', { './commands': commands });
+                return mockCli({ commands });
             });
         });
 
@@ -165,7 +169,7 @@ describe('jhipster cli', () => {
                     expect(options.fooBar).to.be.true;
                     done();
                 };
-                proxyquire('../../cli/cli', { './commands': commands });
+                return mockCli({ commands });
             });
         });
 
@@ -184,7 +188,7 @@ describe('jhipster cli', () => {
                     expect(options.fooBar).to.be.true;
                     done();
                 };
-                proxyquire('../../cli/cli', { './commands': commands });
+                return mockCli({ commands });
             });
         });
     });
@@ -230,7 +234,7 @@ describe('jhipster cli', () => {
                     expect(env).to.not.be.undefined;
                     done();
                 };
-                proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
+                return mockCli({ commands, './mocked': cb });
             });
         };
 
@@ -251,7 +255,7 @@ describe('jhipster cli', () => {
                     expect(options.fooBar).to.be.true;
                     done();
                 };
-                proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
+                return mockCli({ commands, './mocked': cb });
             });
         });
 
@@ -272,7 +276,7 @@ describe('jhipster cli', () => {
                     expect(options.fooBar).to.be.false;
                     done();
                 };
-                proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
+                return mockCli({ commands, './mocked': cb });
             });
         });
 
@@ -293,7 +297,7 @@ describe('jhipster cli', () => {
                     expect(options.fooBar).to.be.true;
                     done();
                 };
-                proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
+                return mockCli({ commands, './mocked': cb });
             });
         });
 
@@ -313,7 +317,7 @@ describe('jhipster cli', () => {
                     expect(options.fooBar).to.be.true;
                     done();
                 };
-                proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
+                return mockCli({ commands, './mocked': cb });
             });
         });
     });

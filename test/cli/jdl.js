@@ -8,10 +8,18 @@ const proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 const sinon = require('sinon');
 
 const { testInTempDir, revertTempDir } = require('../utils/utils');
+const { buildJHipster } = require('../../cli/program');
 const packageJson = require('../../package.json');
 const cliUtils = require('../../cli/utils');
 
 const { logger } = cliUtils;
+
+const mockCli = (opts = {}) => {
+    opts.loadCommand = key => opts[`./${key}`];
+    const program = buildJHipster(opts);
+    const { argv } = opts;
+    return program.parseAsync(argv);
+};
 
 describe('jdl command test', () => {
     let originalCwd;
@@ -32,7 +40,7 @@ describe('jdl command test', () => {
                 oldArgv = process.argv;
                 process.argv = ['jhipster', 'jhipster', 'jdl', 'foo.jdl', '--json-only'];
                 jdlStub = sinon.stub();
-                return proxyquire('../../cli/cli', { './jdl': jdlStub });
+                return mockCli({ './jdl': jdlStub });
             });
             afterEach(() => {
                 process.argv = oldArgv;
@@ -51,7 +59,7 @@ describe('jdl command test', () => {
                 sandbox = sinon.createSandbox();
                 sandbox.stub(process, 'argv').value(['jhipster', 'jhipster', 'jdl', 'foo.jdl', 'bar.jdl', '--json-only']);
                 jdlStub = sinon.stub();
-                return proxyquire('../../cli/cli', { './jdl': jdlStub });
+                return mockCli({ './jdl': jdlStub });
             });
             afterEach(() => {
                 sandbox.restore();
