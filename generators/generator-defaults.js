@@ -20,27 +20,30 @@ const defaultApplicationOptions = require('../jdl/jhipster/default-application-o
 const applicationOptions = require('../jdl/jhipster/application-options');
 const { MONOLITH } = require('../jdl/jhipster/application-types');
 const binaryOptions = require('../jdl/jhipster/binary-options');
+const optionNames = applicationOptions.OptionNames;
+const defaultNewApplicationOptions = defaultApplicationOptions.getConfigForApplicationType();
+const defaultMonolithOptions = defaultApplicationOptions.getConfigForApplicationType(MONOLITH);
 
 /** Required config for prompts to be skipped */
 const appRequiredConfig = {
-    applicationType: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.APPLICATION_TYPE],
+    applicationType: defaultMonolithOptions[optionNames.APPLICATION_TYPE],
 };
+
 
 const appDefaultConfig = {
     ...appRequiredConfig,
-    skipClient: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.SKIP_CLIENT],
-    skipServer: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.SKIP_SERVER],
-    skipUserManagement: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[
-        applicationOptions.OptionNames.SKIP_USER_MANAGEMENT
+    skipClient: defaultNewApplicationOptions[optionNames.SKIP_CLIENT],
+    skipServer: defaultNewApplicationOptions[optionNames.SKIP_SERVER],
+    skipUserManagement: defaultMonolithOptions[
+        optionNames.SKIP_USER_MANAGEMENT
     ],
     skipCheckLengthOfIdentifier: false,
     skipFakeData: false,
-    withGeneratedFlag: false,
-    jhiPrefix: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.JHI_PREFIX],
-    entitySuffix: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.ENTITY_SUFFIX],
-    dtoSuffix: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.DTO_SUFFIX],
-    reactive: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.REACTIVE],
-    clientPackageManager: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.CLIENT_PACKAGE_MANAGER],
+    jhiPrefix: defaultNewApplicationOptions[optionNames.JHI_PREFIX],
+    entitySuffix: defaultNewApplicationOptions[optionNames.ENTITY_SUFFIX],
+    dtoSuffix: defaultNewApplicationOptions[optionNames.DTO_SUFFIX],
+    reactive: defaultNewApplicationOptions[optionNames.REACTIVE],
+    clientPackageManager: defaultNewApplicationOptions[optionNames.CLIENT_PACKAGE_MANAGER],
     get testFrameworks() {
         return [];
     },
@@ -57,45 +60,45 @@ const appDefaultConfig = {
 
 /** Required config for prompts to be skipped */
 const serverRequiredConfig = {
-    packageName: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.PACKAGE_NAME],
-    cacheProvider: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.CACHE_PROVIDER],
-    websocket: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.WEBSOCKET],
-    databaseType: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.DATABASE_TYPE],
-    prodDatabaseType: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.PROD_DATABASE_TYPE],
-    devDatabaseType: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.DEV_DATABASE_TYPE],
-    searchEngine: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.SEARCH_ENGINE],
-    buildTool: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.BUILD_TOOL],
+    packageName: defaultNewApplicationOptions[optionNames.PACKAGE_NAME],
+    cacheProvider: defaultNewApplicationOptions[optionNames.CACHE_PROVIDER],
+    websocket: defaultNewApplicationOptions[optionNames.WEBSOCKET],
+    databaseType: defaultNewApplicationOptions[optionNames.DATABASE_TYPE],
+    prodDatabaseType: defaultNewApplicationOptions[optionNames.PROD_DATABASE_TYPE],
+    devDatabaseType: defaultNewApplicationOptions[optionNames.DEV_DATABASE_TYPE],
+    searchEngine: defaultNewApplicationOptions[optionNames.SEARCH_ENGINE],
+    buildTool: defaultNewApplicationOptions[optionNames.BUILD_TOOL],
 };
 
 const serverDefaultConfig = {
     ...serverRequiredConfig,
-    serverPort: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.SERVER_PORT],
-    authenticationType: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.AUTHENTICATION_TYPE],
-    serviceDiscoveryType: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[
-        applicationOptions.OptionNames.SERVICE_DISCOVERY_TYPE
+    serverPort: defaultMonolithOptions[optionNames.SERVER_PORT],
+    authenticationType: defaultMonolithOptions[optionNames.AUTHENTICATION_TYPE],
+    serviceDiscoveryType: defaultMonolithOptions[
+        optionNames.SERVICE_DISCOVERY_TYPE
     ],
     enableHibernateCache: true,
 };
 
 /** Required config for prompts to be skipped */
 const clientRequiredConfig = {
-    clientFramework: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.CLIENT_FRAMEWORK],
+    clientFramework: defaultMonolithOptions[optionNames.CLIENT_FRAMEWORK],
 };
 
 const clientDefaultConfig = {
     ...clientRequiredConfig,
-    clientTheme: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.CLIENT_THEME],
-    clientThemeVariant: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[
-        applicationOptions.OptionNames.CLIENT_THEME_VARIANT
+    clientTheme: defaultMonolithOptions[optionNames.CLIENT_THEME],
+    clientThemeVariant: defaultMonolithOptions[
+        optionNames.CLIENT_THEME_VARIANT
     ],
-    useSass: defaultApplicationOptions.getConfigForApplicationType(MONOLITH)[applicationOptions.OptionNames.USE_SASS],
+    useSass: defaultMonolithOptions[optionNames.USE_SASS],
 };
 
 const translationDefaultConfig = {
-    enableTranslation: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.ENABLE_TRANSLATION],
-    nativeLanguage: defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.NATIVE_LANGUAGE],
+    enableTranslation: defaultNewApplicationOptions[optionNames.ENABLE_TRANSLATION],
+    nativeLanguage: defaultNewApplicationOptions[optionNames.NATIVE_LANGUAGE],
     get languages() {
-        return defaultApplicationOptions.getConfigForApplicationType()[applicationOptions.OptionNames.LANGUAGES];
+        return defaultNewApplicationOptions[optionNames.LANGUAGES];
     },
 };
 
