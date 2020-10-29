@@ -45,10 +45,9 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
 
     relationship.otherEntityIsEmbedded = otherEntityData.embedded;
 
-    relationship.otherEntityPrimaryKeyType =
-        generator.isBuiltInUser(otherEntityName) && entityWithConfig.authenticationType === 'oauth2'
-            ? 'String'
-            : generator.getPkType(entityWithConfig.databaseType);
+    if (relationship.otherEntity) {
+        relationship.otherEntityPrimaryKeyType = relationship.otherEntity.primaryKeyType;
+    }
 
     // Look for fields at the other other side of the relationship
     if (otherEntityData.relationships) {

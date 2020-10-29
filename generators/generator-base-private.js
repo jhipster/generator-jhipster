@@ -1302,20 +1302,6 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
 
     /**
-     * Returns the primary key data type based on authentication type, DB and given association
-     *
-     * @param {string} authenticationType - the auth type
-     * @param {string} databaseType - the database type
-     * @param {T[]} relationships - relationships
-     */
-    getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships) {
-        const derivedRelationship = relationships.find(relationship => relationship.useJPADerivedIdentifier === true);
-        return derivedRelationship && this.isUserEntity(derivedRelationship.otherEntityName) && authenticationType === 'oauth2'
-            ? 'String'
-            : this.getPkType(databaseType);
-    }
-
-    /**
      * Returns the JDBC URL for a databaseType
      *
      * @param {string} databaseType

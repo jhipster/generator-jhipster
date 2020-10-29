@@ -155,11 +155,25 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         hasBuiltInUserField &&
         entityWithConfig.dto === 'no';
 
-    entityWithConfig.primaryKeyType = generator.getPkTypeBasedOnDBAndAssociation(
-        entityWithConfig.authenticationType,
-        entityWithConfig.databaseType,
-        entityWithConfig.relationships
-    );
+    entityWithConfig.derivedPrimaryKey = entityWithConfig.relationships.some(relationship => relationship.useJPADerivedIdentifier === true);
+
+    if (!entityWithConfig.derivedPrimaryKey) {
+        entityWithConfig.idFields = entityWithConfig.fields.filter(field => field.options && field.options.id);
+        if (entityWithConfig.idFields.length > 0) {
+            if (entityWithConfig.idFields.length === 1) {
+                const idField = entityWithConfig.idFields[0];
+                // Allow ids type to be empty and fallback to default type for the database.
+                if (!idField.fieldType) {
+                    idField.fieldType = generator.getPkType(entityWithConfig.databaseType);
+                }
+                entityWithConfig.primaryKeyType = idField.fieldType;
+            } else {
+                throw new Error('Composite id not implemented');
+            }
+        } else {
+            entityWithConfig.primaryKeyType = generator.getPkType(entityWithConfig.databaseType);
+        }
+    }
 
     entityWithConfig.fields.forEach(field => {
         const fieldType = field.fieldType;
