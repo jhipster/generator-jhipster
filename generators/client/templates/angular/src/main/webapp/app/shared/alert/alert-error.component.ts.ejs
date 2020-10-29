@@ -128,14 +128,14 @@ export class AlertErrorComponent implements OnDestroy {
         this.eventManager.destroy(this.httpErrorListener);
     }
 
-    addErrorAlert(message: string<% if (enableTranslation) { %>, key?: string, data?: { [key: string]: unknown }<% } %>): void {
-        <%_ if (enableTranslation) { _%>
-        message = key ?? message;
-        <%_ } _%>
+    close(alert: JhiAlert): void {
+        alert.close?.(this.alerts);
+    }
 
+    private addErrorAlert(message: string<% if (enableTranslation) { %>, key?: string, data?: { [key: string]: unknown }<% } %>): void {
         const newAlert: JhiAlert = {
             type: 'danger',
-            msg: message,
+            msg: <% if (enableTranslation) { %>key ?? <% } %>message,
             <%_ if (enableTranslation) { _%>
             params: data,
             <%_ } _%>
@@ -145,9 +145,5 @@ export class AlertErrorComponent implements OnDestroy {
         };
 
         this.alerts.push(this.alertService.addAlert(newAlert, this.alerts));
-    }
-
-    close(alert: JhiAlert): void {
-        alert.close?.(this.alerts);
     }
 }
