@@ -20,6 +20,7 @@ const defaultApplicationOptions = require('../jdl/jhipster/default-application-o
 const applicationOptions = require('../jdl/jhipster/application-options');
 const { MONOLITH } = require('../jdl/jhipster/application-types');
 const binaryOptions = require('../jdl/jhipster/binary-options');
+
 const optionNames = applicationOptions.OptionNames;
 const defaultNewApplicationOptions = defaultApplicationOptions.getConfigForApplicationType();
 const defaultMonolithOptions = defaultApplicationOptions.getConfigForApplicationType(MONOLITH);
@@ -29,14 +30,11 @@ const appRequiredConfig = {
     applicationType: defaultMonolithOptions[optionNames.APPLICATION_TYPE],
 };
 
-
 const appDefaultConfig = {
     ...appRequiredConfig,
     skipClient: defaultNewApplicationOptions[optionNames.SKIP_CLIENT],
     skipServer: defaultNewApplicationOptions[optionNames.SKIP_SERVER],
-    skipUserManagement: defaultMonolithOptions[
-        optionNames.SKIP_USER_MANAGEMENT
-    ],
+    skipUserManagement: defaultMonolithOptions[optionNames.SKIP_USER_MANAGEMENT],
     skipCheckLengthOfIdentifier: false,
     skipFakeData: false,
     jhiPrefix: defaultNewApplicationOptions[optionNames.JHI_PREFIX],
@@ -74,9 +72,7 @@ const serverDefaultConfig = {
     ...serverRequiredConfig,
     serverPort: defaultMonolithOptions[optionNames.SERVER_PORT],
     authenticationType: defaultMonolithOptions[optionNames.AUTHENTICATION_TYPE],
-    serviceDiscoveryType: defaultMonolithOptions[
-        optionNames.SERVICE_DISCOVERY_TYPE
-    ],
+    serviceDiscoveryType: defaultMonolithOptions[optionNames.SERVICE_DISCOVERY_TYPE],
     enableHibernateCache: true,
 };
 
@@ -88,9 +84,7 @@ const clientRequiredConfig = {
 const clientDefaultConfig = {
     ...clientRequiredConfig,
     clientTheme: defaultMonolithOptions[optionNames.CLIENT_THEME],
-    clientThemeVariant: defaultMonolithOptions[
-        optionNames.CLIENT_THEME_VARIANT
-    ],
+    clientThemeVariant: defaultMonolithOptions[optionNames.CLIENT_THEME_VARIANT],
     useSass: defaultMonolithOptions[optionNames.USE_SASS],
 };
 
