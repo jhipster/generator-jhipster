@@ -255,7 +255,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                     this.cacheProvider
                 );
                 this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.authenticationType);
-                this.pkType = this.getPkType(this.databaseType);
 
                 this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
 

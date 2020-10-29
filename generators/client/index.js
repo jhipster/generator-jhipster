@@ -220,7 +220,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
 
                 this.styleSheetExt = 'scss';
-                this.pkType = this.getPkType(this.databaseType);
                 this.apiUaaPath = `${this.authenticationType === 'uaa' ? `services/${this.uaaBaseName.toLowerCase()}/` : ''}`;
                 this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.buildTool) + constants.CLIENT_DIST_DIR;
 
