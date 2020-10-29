@@ -148,7 +148,11 @@ task integrationTest(type: Test) {
 
 <%_ if (databaseType === 'sql') { _%>
     if (project.hasProperty('testcontainers')) {
+        <%_ if (!reactive) { _%>
         environment 'spring.profiles.active', 'testcontainers'
+        <%_ } else { _%>
+        environment 'SPRING_PROFILES_ACTIVE', 'testcontainers'
+        <%_ } _%>
     }
 <%_ } _%>
 
