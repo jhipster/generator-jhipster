@@ -145,18 +145,6 @@ _%>
                             This field cannot be more than <%= fields[idx].fieldValidateRulesMax %>.
                         </small>
         <%_ } _%>
-        <%_ if (fields[idx].fieldValidateRules.includes('minbytes')) { _%>
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.minbytes" jhiTranslate="entity.validation.minbytes" [translateValues]="{ min: <%= fields[idx].fieldValidateRulesMinbytes %> }">
-                            This field should be at least <%= fields[idx].fieldValidateRulesMinbytes %>.
-                        </small>
-        <%_ } _%>
-        <%_ if (fields[idx].fieldValidateRules.includes('maxbytes')) { _%>
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.maxbytes" jhiTranslate="entity.validation.maxbytes" [translateValues]="{ max: <%= fields[idx].fieldValidateRulesMaxbytes %> }">
-                            This field cannot be more than <%= fields[idx].fieldValidateRulesMaxbytes %>.
-                        </small>
-        <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.includes('pattern')) { _%>
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('<%= fieldName %>')?.errors?.pattern" jhiTranslate="entity.validation.pattern" [translateValues]="{ pattern: '<%= fieldNameHumanized %>' }">

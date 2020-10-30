@@ -17,7 +17,9 @@
  limitations under the License.
 -%>
 jest.mock('@angular/router');
+<%_ if (enableTranslation) { _%>
 jest.mock('ng-jhipster');
+<%_ } _%>
 jest.mock('app/core/auth/state-storage.service');
 <%_ if (websocket === 'spring-websocket') { _%>
 jest.mock('app/core/tracker/tracker.service');
@@ -26,11 +28,9 @@ jest.mock('app/core/tracker/tracker.service');
 import { Router } from '@angular/router';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { JhiDateUtils
 <%_ if (enableTranslation) { _%>
-    ,JhiLanguageService
+import { JhiLanguageService } from 'ng-jhipster';
 <%_ } _%>
-} from 'ng-jhipster';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 
 import { SERVER_API_URL } from 'app/app.constants';
@@ -72,7 +72,6 @@ describe('Service Tests', () => {
                     NgxWebstorageModule.forRoot()
                 ],
                 providers: [
-                    JhiDateUtils,
                     <%_ if (enableTranslation) { _%>
                     JhiLanguageService,
                     <%_ } _%>
