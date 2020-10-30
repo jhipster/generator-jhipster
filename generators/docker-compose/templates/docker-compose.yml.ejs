@@ -63,8 +63,6 @@ services:
             <%_ if (monitoring === 'elk') { _%>
             - JHIPSTER_LOGGING_LOGSTASH_ENABLED=true
             - JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash
-            - JHIPSTER_METRICS_LOGS_ENABLED=true
-            - JHIPSTER_METRICS_LOGS_REPORTFREQUENCY=60
             <%_ } _%>
             <%_ if (monitoring === 'prometheus') { _%>
             - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
