@@ -232,6 +232,10 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                 this.loadServerConfig();
                 this.loadTranslationConfig();
             },
+
+            createUserManagementEntities() {
+                this.createUserManagementEntities();
+            },
         };
     }
 
