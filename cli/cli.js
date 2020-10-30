@@ -195,3 +195,7 @@ Object.entries(allCommands).forEach(([key, opts]) => {
 initHelp(program, CLI_NAME);
 
 program.parse(process.argv);
+
+process.on('unhandledRejection', up => {
+    throw up;
+});
