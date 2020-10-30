@@ -36,7 +36,7 @@ const prettierPluginPackagejson = require('prettier-plugin-packagejson');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
-const { appDefaultConfig } = require('./generator-defaults');
+const { defaultConfig } = require('./generator-defaults');
 const { languageToJavaLanguage } = require('./utils');
 const { prettierTransform, generatedAnnotationTransform } = require('./generator-transforms');
 const JSONToJDLEntityConverter = require('../jdl/converters/json-to-jdl-entity-converter');
@@ -1754,7 +1754,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
 
         loadRequiredConfigIntoEntity(user, this.jhipsterConfig);
         // Fallback to defaults for test cases.
-        loadRequiredConfigIntoEntity(user, appDefaultConfig);
+        loadRequiredConfigIntoEntity(user, defaultConfig);
 
         const userIdType =
             user.authenticationType === 'oauth2' || user.databaseType !== 'sql' ? 'String' : this.getPkType(user.databaseType);
