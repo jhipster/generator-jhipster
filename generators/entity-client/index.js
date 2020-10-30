@@ -40,6 +40,9 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             setup() {
                 this.tsKeyType = this.getTypescriptKeyType(this.primaryKeyType);
+                if (this.idFields && this.jhipsterConfig.clientFramework === ANGULAR) {
+                    this.fields = this.idFields.concat(this.fields);
+                }
             },
         };
     }

@@ -495,6 +495,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.context.fields.forEach(field => {
                     prepareFieldForTemplates(entity, field, this);
                 });
+                this.context.fieldsNoId = this.context.fields.filter(field => !field.id);
             },
         };
     }
@@ -530,6 +531,14 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (!derivedRelationship) {
                     throw new Error(`Error creating primary key for entity ${this.context.name}`);
                 }
+                if (derivedRelationship.otherEntity.idFields.length > 1) {
+                    throw new Error(`Error creating primary key for entity ${this.context.name} only single id is supported for derivedId`);
+                }
+                const idFields = derivedRelationship.otherEntity.idFields.map(field => {
+                    return { ...field, fieldName: 'id', fieldNameHumanized: 'ID' };
+                });
+                this.context.idFields = idFields;
+                this.context.fields.unshift(...idFields);
                 this.context.primaryKeyType = derivedRelationship.otherEntity.primaryKeyType;
             },
 

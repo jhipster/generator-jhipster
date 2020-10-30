@@ -1763,7 +1763,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             {
                 fieldName: 'id',
                 fieldType: userIdType,
-                columnType: userIdType === 'Long' ? 'bigint' : 'varchar(100)',
+                fieldValidateRulesMaxlength: 100,
                 options: {
                     fieldNameHumanized: 'ID',
                     id: true,
