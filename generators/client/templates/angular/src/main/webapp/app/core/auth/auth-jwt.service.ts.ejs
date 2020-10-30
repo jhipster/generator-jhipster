@@ -58,7 +58,9 @@ export class AuthServerProvider {
     <%_ } else { _%>
 
     getToken(): string {
-        return this.$localStorage.retrieve('authenticationToken') || this.$sessionStorage.retrieve('authenticationToken') || '';
+        const tokenInLocalStorage: string | null = this.$localStorage.retrieve('authenticationToken');
+        const tokenInSessionStorage: string | null = this.$sessionStorage.retrieve('authenticationToken');
+        return tokenInLocalStorage ?? tokenInSessionStorage ?? '';
     }
 
     login(credentials: Login): Observable<void> {

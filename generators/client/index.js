@@ -38,12 +38,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
         // This adds support for a `--auth` flag
         this.option('auth', {
             desc: 'Provide authentication type for the application',
@@ -326,7 +320,8 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
                         'npm run webpack:build:$npm_package_config_default_environment && npm run test-ci'
                     );
                 } else {
-                    scriptsStorage.set('ci:frontend:test', 'npm run webpack:build:$npm_package_config_default_environment && npm test');
+                    scriptsStorage.set('ci:frontend:build', 'npm run webpack:build:$npm_package_config_default_environment');
+                    scriptsStorage.set('ci:frontend:test', 'npm run ci:frontend:build && npm test');
                 }
 
                 if (scriptsStorage.get('e2e')) {

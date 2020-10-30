@@ -46,5 +46,7 @@ jobs:
                         if (missingTheme) {
                           missingLabel.push('theme: undefined')
                         }
-                        github.issues.addLabels({...issue, labels: missingLabel})
+                        if (missingArea || missingTheme) {
+                            github.issues.addLabels({...issue, labels: missingLabel})
+                        }
                       })

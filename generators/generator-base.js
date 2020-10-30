@@ -62,9 +62,14 @@ const CUSTOM_PRIORITIES = [
         before: 'loading',
     },
     {
+        priorityName: 'preConflicts',
+        queueName: 'jhipster:preConflicts',
+        before: 'conflicts',
+    },
+    {
         priorityName: 'postWriting',
         queueName: 'jhipster:postWriting',
-        before: 'conflicts',
+        before: 'preConflicts',
     },
 ];
 
@@ -79,8 +84,20 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     constructor(args, opts) {
         super(args, opts);
 
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            hide: true,
+        });
+
         this.option('skip-generated-flag', {
             desc: 'Skip adding a GeneratedByJhipster annotation to all generated java classes and interfaces',
+            type: Boolean,
+        });
+
+        this.option('skip-prompts', {
+            desc: 'Skip prompts',
             type: Boolean,
         });
 
@@ -127,6 +144,8 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         // Load common runtime options.
         this.parseCommonRuntimeOptions();
 
+        this.registerCommitPriorityFilesTask();
+
         if (!this.jhipsterConfig.skipGeneratedFlag) {
             this.registerGeneratedAnnotationTransform();
         }
@@ -135,6 +154,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         if (!this.options.skipYoResolve) {
             this.registerConflicterAttributesTransform();
         }
+        this.registerForceEntitiesTransform();
     }
 
     /**
@@ -2296,6 +2316,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
         if (options.experimental !== undefined) {
             dest.experimental = options.experimental;
+        }
+        if (options.skipPrompts !== undefined) {
+            dest.skipPrompts = options.skipPrompts;
         }
         if (options.skipClient !== undefined) {
             dest.skipClient = options.skipClient;

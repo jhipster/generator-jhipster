@@ -78,6 +78,7 @@ describe('jhipster cli', () => {
 
     describe('with mocked generator command', () => {
         const commands = { mocked: {} };
+        const generator = { mocked: {} };
         let oldArgv;
         let callback;
         before(() => {
@@ -87,12 +88,21 @@ describe('jhipster cli', () => {
             process.argv = oldArgv;
         });
         beforeEach(() => {
-            commands.mocked = { desc: 'Mocked command' };
+            generator.mocked = {
+                _options: {
+                    foo: {
+                        description: 'Foo',
+                    },
+                    'foo-bar': {
+                        description: 'Foo bar',
+                    },
+                },
+            };
             sinon.stub(Environment.prototype, 'run').callsFake((...args) => {
                 callback(...args);
                 return Promise.resolve();
             });
-            sinon.stub(Environment.prototype, 'create').returns({ _options: {} });
+            sinon.stub(Environment.prototype, 'create').returns(generator.mocked);
         });
         afterEach(() => {
             Environment.prototype.run.restore();
@@ -129,7 +139,7 @@ describe('jhipster cli', () => {
 
         describe('with argument', () => {
             beforeEach(() => {
-                commands.mocked.argument = ['name'];
+                generator.mocked._arguments = [{ name: 'name' }];
                 process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--foo', '--foo-bar'];
             });
 
@@ -148,7 +158,7 @@ describe('jhipster cli', () => {
 
         describe('with variable arguments', () => {
             beforeEach(() => {
-                commands.mocked.argument = ['name...'];
+                generator.mocked._arguments = [{ name: 'name', type: Array }];
                 process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', 'Bar', '--foo', '--foo-bar'];
             });
 
@@ -168,7 +178,9 @@ describe('jhipster cli', () => {
 
     describe('with mocked cliOnly commands', () => {
         let oldArgv;
-        const commands = { mocked: {} };
+        const commands = {
+            mocked: {},
+        };
         before(() => {
             oldArgv = process.argv;
         });
@@ -176,7 +188,27 @@ describe('jhipster cli', () => {
             process.argv = oldArgv;
         });
         beforeEach(() => {
-            commands.mocked = { cb: () => {} };
+            commands.mocked = {
+                cb: () => {},
+                options: [
+                    {
+                        option: '--foo',
+                        desc: 'Foo',
+                    },
+                    {
+                        option: '--no-foo',
+                        desc: 'No foo',
+                    },
+                    {
+                        option: '--foo-bar',
+                        desc: 'Foo bar',
+                    },
+                    {
+                        option: '--no-foo-bar',
+                        desc: 'No foo bar',
+                    },
+                ],
+            };
         });
 
         const commonTests = () => {
@@ -379,9 +411,12 @@ describe('jhipster cli', () => {
                     });
                 });
 
+                it('should print foo command', () => {
+                    expect(stdout.includes('Create a new foo. (blueprint: generator-jhipster-cli)')).to.be.true;
+                });
+
                 it('should print foo options', () => {
                     expect(stdout.includes('--foo')).to.be.true;
-                    expect(stdout.includes('foo description (blueprint option: generator-jhipster-cli)')).to.be.true;
                 });
             });
 

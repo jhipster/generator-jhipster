@@ -34,15 +34,15 @@ export class NotificationInterceptor implements HttpInterceptor {
                 let alertParams: string | null = null;
                 <%_ } _%>
 
-                event.headers.keys().forEach((entry) => {
-                    if (entry.toLowerCase().endsWith('app-alert')) {
-                        alert = event.headers.get(entry);
+                for (const headerKey of event.headers.keys()) {
+                    if (headerKey.toLowerCase().endsWith('app-alert')) {
+                        alert = event.headers.get(headerKey);
                     <%_ if (enableTranslation) { _%>
-                    } else if (entry.toLowerCase().endsWith('app-params')) {
-                        alertParams = decodeURIComponent(event.headers.get(entry)!.replace(/\+/g, ' '));
+                    } else if (headerKey.toLowerCase().endsWith('app-params')) {
+                        alertParams = decodeURIComponent(event.headers.get(headerKey)!.replace(/\+/g, ' '));
                     <%_ } _%>
                     }
-                });
+                }
 
                 if (alert) {
                     this.alertService.success(alert<% if (enableTranslation) { %>, { param : alertParams }<% } %>);

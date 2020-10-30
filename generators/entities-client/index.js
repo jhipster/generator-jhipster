@@ -24,12 +24,6 @@ module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
-
         if (this.options.help) return;
 
         this.clientEntities = this.options.clientEntities;
@@ -48,6 +42,19 @@ module.exports = class extends BaseBlueprintGenerator {
 
     get initializing() {
         return useBlueprints ? undefined : this._initializing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _loading() {
+        return {
+            loadSharedConfig() {
+                this.loadClientConfig();
+            },
+        };
+    }
+
+    get loading() {
+        return useBlueprints ? undefined : this._loading();
     }
 
     // Public API method used by the getter and also by Blueprints

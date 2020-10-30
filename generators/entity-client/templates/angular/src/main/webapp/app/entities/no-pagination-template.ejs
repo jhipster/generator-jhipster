@@ -37,8 +37,7 @@
         <%_ } _%>
     ) {
         <%_ if (searchEngine !== false) { _%>
-        this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search'] ?
-            this.activatedRoute.snapshot.queryParams['search'] : '';
+        this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
         <%_ } _%>
     }
 
@@ -51,7 +50,7 @@
                 }).subscribe(
                     (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                         this.isLoading = false;
-                        this.<%= entityInstancePlural %> = res.body || [];
+                        this.<%= entityInstancePlural %> = res.body ?? [];
                     },
                     () => {
                         this.isLoading = false;
@@ -64,7 +63,7 @@
         this.<%= entityInstance %>Service.query().subscribe(
             (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                 this.isLoading = false;
-                this.<%= entityInstancePlural %> = res.body || [];
+                this.<%= entityInstancePlural %> = res.body ?? [];
             },
             () => {
                 this.isLoading = false;

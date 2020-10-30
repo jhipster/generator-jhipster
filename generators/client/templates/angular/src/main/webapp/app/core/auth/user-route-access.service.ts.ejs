@@ -40,13 +40,9 @@ export class UserRouteAccessService implements CanActivate {
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
         const authorities = route.data['authorities'];
-        // We need to call the checkLogin / and so the accountService.identity() function, to ensure,
+        // We need to call the accountService.identity() function, to ensure,
         // that the client has a principal too, if they already logged in by the server.
         // This could happen on a page refresh.
-        return this.checkLogin(authorities, state.url);
-    }
-
-    checkLogin(authorities: string[], url: string): Observable<boolean> {
         return this.accountService.identity().pipe(map((account) => {
             if (!authorities || authorities.length === 0) {
                 return true;
@@ -64,7 +60,7 @@ export class UserRouteAccessService implements CanActivate {
                 return false;
             }
 
-            this.stateStorageService.storeUrl(url);
+            this.stateStorageService.storeUrl(state.url);
             <%_ if (authenticationType !== 'oauth2') { _%>
             this.router.navigate(['/login']);
             <%_ } else { _%>

@@ -19,9 +19,9 @@ const TEST_DIR = constants.TEST_DIR;
 describe('JHipster generator', () => {
     context('Default configuration with', () => {
         describe('AngularX', () => {
-            before(done => {
-                helpers
-                    .run(path.join(__dirname, '../generators/app'))
+            before(() => {
+                return helpers
+                    .create(path.join(__dirname, '../generators/app'))
                     .withOptions({ fromCli: true, skipInstall: true, skipChecks: true, jhiPrefix: 'test' })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -44,7 +44,7 @@ describe('JHipster generator', () => {
                         skipUserManagement: false,
                         serverSideOptions: [],
                     })
-                    .on('end', done);
+                    .run();
             });
 
             it('creates expected default files for angularX', () => {
@@ -76,7 +76,7 @@ describe('JHipster generator', () => {
             });
             it('uses correct prettier formatting', () => {
                 // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
-                assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
+                assert.fileContent('webpack/webpack.custom.js', / {2}\/\/ RULES/);
             });
             it('uses correct prettier formatting for Java file', () => {
                 // tabWidth = 4 (see generators/common/templates/.prettierrc.ejs)

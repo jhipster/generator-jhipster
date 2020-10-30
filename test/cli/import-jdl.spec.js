@@ -89,6 +89,7 @@ function testDocumentsRelationships() {
         expect(subGenCallParams.options[0]).to.eql({
             ...defaultAddedOptions,
             regenerate: true,
+            fromJdl: true,
         });
     });
 }
@@ -122,8 +123,8 @@ describe('JHipster generator import jdl', () => {
         it('calls generator in order', () => {
             expect(subGenCallParams.count).to.equal(5);
             expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'docker-compose', 'kubernetes']);
-            expect(subGenCallParams.options[0]).to.eql(['--force', '--with-entities', '--skip-install', '--no-insight']);
-            expect(subGenCallParams.options[3]).to.eql(['--force', '--skip-install', '--no-insight', '--skip-prompts']);
+            expect(subGenCallParams.options[0]).to.eql(['--force', '--with-entities', '--skip-install', '--no-insight', '--from-jdl']);
+            expect(subGenCallParams.options[3]).to.eql(['--force', '--skip-install', '--no-insight', '--skip-prompts', '--from-jdl']);
         });
     });
 
@@ -226,6 +227,7 @@ describe('JHipster generator import jdl', () => {
                 ...options,
                 ...defaultAddedOptions,
                 regenerate: true,
+                fromJdl: true,
             });
         });
     });
@@ -265,6 +267,7 @@ describe('JHipster generator import jdl', () => {
                 ...options,
                 ...defaultAddedOptions,
                 regenerate: true,
+                fromJdl: true,
             });
         });
     });
@@ -290,6 +293,7 @@ describe('JHipster generator import jdl', () => {
                 ...options,
                 ...defaultAddedOptions,
                 regenerate: true,
+                fromJdl: true,
             });
         });
     });
@@ -319,7 +323,14 @@ describe('JHipster generator import jdl', () => {
         it('calls application generator', () => {
             expect(subGenCallParams.count).to.equal(1);
             expect(subGenCallParams.commands).to.eql(['app']);
-            expect(subGenCallParams.options[0]).to.eql(['--force', '--with-entities', '--skip-install', '--no-insight', '--no-skip-git']);
+            expect(subGenCallParams.options[0]).to.eql([
+                '--force',
+                '--with-entities',
+                '--skip-install',
+                '--no-insight',
+                '--no-skip-git',
+                '--from-jdl',
+            ]);
         });
     });
 
@@ -354,6 +365,7 @@ describe('JHipster generator import jdl', () => {
                 withEntities: true,
                 force: true,
                 applicationWithEntities: undefined,
+                fromJdl: true,
             });
         });
     });
@@ -382,7 +394,14 @@ describe('JHipster generator import jdl', () => {
         it('calls application generator', () => {
             expect(subGenCallParams.count).to.equal(1);
             expect(subGenCallParams.commands).to.eql(['app']);
-            expect(subGenCallParams.options[0]).to.eql(['--force', '--with-entities', '--skip-install', '--no-insight', '--no-skip-git']);
+            expect(subGenCallParams.options[0]).to.eql([
+                '--force',
+                '--with-entities',
+                '--skip-install',
+                '--no-insight',
+                '--no-skip-git',
+                '--from-jdl',
+            ]);
         });
     });
 
@@ -419,6 +438,7 @@ describe('JHipster generator import jdl', () => {
                 ...defaultAddedOptions,
                 withEntities: true,
                 force: true,
+                fromJdl: true,
                 applicationWithEntities: undefined,
             });
         });
@@ -442,7 +462,7 @@ describe('JHipster generator import jdl', () => {
         it('calls application generator', () => {
             expect(subGenCallParams.count).to.equal(1);
             expect(subGenCallParams.commands).to.eql(['app']);
-            expect(subGenCallParams.options[0]).to.eql(['--force', '--skip-install', '--no-insight', '--no-skip-git']);
+            expect(subGenCallParams.options[0]).to.eql(['--force', '--skip-install', '--no-insight', '--no-skip-git', '--from-jdl']);
         });
     });
 
@@ -470,6 +490,7 @@ describe('JHipster generator import jdl', () => {
                 ...defaultAddedOptions,
                 force: true,
                 applicationWithEntities: undefined,
+                fromJdl: true,
             });
         });
     });
@@ -506,7 +527,14 @@ describe('JHipster generator import jdl', () => {
         it('calls application generator', () => {
             expect(subGenCallParams.count).to.equal(3);
             expect(subGenCallParams.commands).to.eql(['app', 'app', 'app']);
-            expect(subGenCallParams.options[0]).to.eql(['--force', '--with-entities', '--skip-install', '--no-insight', '--no-skip-git']);
+            expect(subGenCallParams.options[0]).to.eql([
+                '--force',
+                '--with-entities',
+                '--skip-install',
+                '--no-insight',
+                '--no-skip-git',
+                '--from-jdl',
+            ]);
         });
     });
 
@@ -542,7 +570,7 @@ describe('JHipster generator import jdl', () => {
         it('does not call application generator', () => {
             expect(subGenCallParams.count).to.equal(3);
             expect(subGenCallParams.commands).to.eql(['entities', 'entities', 'entities']);
-            expect(subGenCallParams.options[0]).to.eql(['--force', '--skip-install', '--no-skip-git', '--regenerate']);
+            expect(subGenCallParams.options[0]).to.eql(['--force', '--skip-install', '--no-skip-git', '--regenerate', '--from-jdl']);
         });
     });
 
@@ -568,7 +596,7 @@ describe('JHipster generator import jdl', () => {
             const invokedSubgens = ['docker-compose', 'kubernetes', 'openshift'];
             expect(subGenCallParams.commands).to.eql(invokedSubgens);
             expect(subGenCallParams.count).to.equal(invokedSubgens.length);
-            expect(subGenCallParams.options[0]).to.eql(['--force', '--skip-install', '--no-skip-git', '--skip-prompts']);
+            expect(subGenCallParams.options[0]).to.eql(['--force', '--skip-install', '--no-skip-git', '--skip-prompts', '--from-jdl']);
         });
     });
 
@@ -594,6 +622,7 @@ describe('JHipster generator import jdl', () => {
                     '--skip-install',
                     '--no-insight',
                     '--no-skip-git',
+                    '--from-jdl',
                 ]);
                 expect(subGenCallParams.options[3]).to.eql([
                     '--force',
@@ -601,6 +630,7 @@ describe('JHipster generator import jdl', () => {
                     '--no-insight',
                     '--no-skip-git',
                     '--skip-prompts',
+                    '--from-jdl',
                 ]);
             });
         });
@@ -654,7 +684,14 @@ describe('JHipster generator import jdl', () => {
         it('calls generator in order', () => {
             expect(subGenCallParams.count).to.equal(3);
             expect(subGenCallParams.commands).to.eql(['app', 'app', 'app']);
-            expect(subGenCallParams.options[0]).to.eql(['--force', '--with-entities', '--skip-install', '--no-insight', '--no-skip-git']);
+            expect(subGenCallParams.options[0]).to.eql([
+                '--force',
+                '--with-entities',
+                '--skip-install',
+                '--no-insight',
+                '--no-skip-git',
+                '--from-jdl',
+            ]);
         });
     });
 

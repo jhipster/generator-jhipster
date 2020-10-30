@@ -19,7 +19,7 @@
 <%_
 const tsKeyId = generateTestEntityId(pkType);
 _%>
-import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync, inject, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
@@ -37,7 +37,7 @@ describe('Component Tests', () => {
         let fixture: ComponentFixture<UserManagementUpdateComponent>;
         let service: UserService;
 
-        beforeEach(async(() => {
+        beforeEach(waitForAsync(() => {
             TestBed.configureTestingModule({
                 imports: [HttpClientTestingModule],
                 declarations: [UserManagementUpdateComponent],
@@ -46,7 +46,7 @@ describe('Component Tests', () => {
                     {
                         provide: ActivatedRoute,
                         useValue: {
-                            data: of({ user: new User(1, 'user', 'first', 'last', 'first@last.com', true, 'en', [Authority.USER], 'admin') })
+                            data: of({ user: new User(<%- tsKeyId %>, 'user', 'first', 'last', 'first@last.com', true, 'en', [Authority.USER], 'admin') })
                         }
                     }
                 ]

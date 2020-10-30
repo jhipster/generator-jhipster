@@ -24,14 +24,14 @@ import * as dayjs from 'dayjs';
 
 @Injectable()
 export class NgbDateDayjsAdapter extends NgbDateAdapter<dayjs.Dayjs> {
-    fromModel(date: dayjs.Dayjs): NgbDateStruct | null {
+    fromModel(date: dayjs.Dayjs | null): NgbDateStruct | null {
         if (date && dayjs.isDayjs(date) && date.isValid()) {
             return { year: date.year(), month: date.month() + 1, day: date.date() };
         }
         return null;
     }
 
-    toModel(date: NgbDateStruct): dayjs.Dayjs | null {
-        return date ? dayjs(date.year + '-' + date.month + '-' + date.day) : null;
+    toModel(date: NgbDateStruct | null): dayjs.Dayjs | null {
+        return date ? dayjs(`${date.year}-${date.month}-${date.day}`) : null;
     }
 }

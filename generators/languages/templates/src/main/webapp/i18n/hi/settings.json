@@ -1,6 +1,6 @@
 {
     "settings": {
-        "title": "[<strong>{{username}}</strong>] के लिए User सेटिंग्स",
+        "title": "[<strong>{{username}}</strong>] के लिए उपयोगकर्ता की सेटिंग्स",
         "form": {
             "firstname": "प्रथम नाम",
             "firstname.placeholder": "प्रथम नाम",
@@ -18,13 +18,13 @@
             "validate": {
                 "firstname": {
                     "required": "अपने प्रथम नाम आवश्यक है.",
-                    "minlength": "आपका पहला नाम कम से कम 1 character हो के लिए आवश्यक है",
-                    "maxlength": "आपका पहला नाम 50 characters से अधिक नहीं हो सकता"
+                    "minlength": "आपका पहला नाम कम से कम १ अक्षर का होना आवश्यक है",
+                    "maxlength": "आपका पहला नाम ५० अक्षर बतौर मात्रा से अधिक नहीं हो सकता"
                 },
                 "lastname": {
                     "required": "अपने अंतिम नाम आवश्यक है.",
-                    "minlength": "आपका अंतिम नाम कम से कम 1 character हो के लिए आवश्यक है",
-                    "maxlength": "आपका अंतिम नाम 50 characters से अधिक नहीं हो सकता"
+                    "minlength": "आपका अंतिम नाम कम से कम १ अक्षर का होना आवश्यक है",
+                    "maxlength": "आपका अंतिम नाम ५० अक्षर बतौर मात्रा से अधिक नहीं हो सकता"
                 }
             }
         }

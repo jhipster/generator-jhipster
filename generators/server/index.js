@@ -35,13 +35,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
-
         // This adds support for a `--experimental` flag which can be used to enable experimental features
         this.option('experimental', {
             desc:
@@ -425,7 +418,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             packageJsonBackendScripts() {
                 const packageJsonStorage = this.createStorage('package.json');
                 const scriptsStorage = packageJsonStorage.createStorage('scripts');
-                const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.org.zalando=OFF -Dlogging.level.io.github.jhipster=OFF -Dlogging.level.${this.jhipsterConfig.packageName}=OFF`;
+                const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.org.zalando=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.${this.jhipsterConfig.packageName}=OFF`;
                 const javaTestLog =
                     '-Dlogging.level.org.springframework=OFF -Dlogging.level.org.springframework.web=OFF -Dlogging.level.org.springframework.security=OFF';
 
@@ -465,7 +458,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                     'java:docker:prod': 'npm run java:docker -- -Pprod',
                     'ci:backend:test':
                         'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test',
-                    'server:package': 'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment',
+                    'ci:server:package': 'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment',
                     'ci:e2e:package':
                         'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
                     'preci:e2e:server:start': 'npm run docker:db:await --if-present && npm run docker:others:await --if-present',

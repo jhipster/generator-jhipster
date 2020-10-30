@@ -335,12 +335,52 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      *
      * @param languages
      */
-    updateLanguagesInWebpack(languages) {
+    updateLanguagesInWebpackAngular(languages) {
+        const fullPath = 'webpack/webpack.custom.js';
+        try {
+            let content = 'groupBy: [\n';
+            // prettier-ignore
+            languages.forEach((language, i) => {
+                content += `                    { pattern: "./${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${
+                    i !== languages.length - 1 ? ',' : ''
+                }\n`;
+            });
+            content +=
+                '                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
+                '                ]';
+
+            jhipsterUtils.replaceContent(
+                {
+                    file: fullPath,
+                    pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
+                    content,
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
+                    languages +
+                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
+     * Update Languages In Webpack React
+     *
+     * @param languages
+     */
+    updateLanguagesInWebpackReact(languages) {
         const fullPath = 'webpack/webpack.common.js';
         try {
             let content = 'groupBy: [\n';
+            // prettier-ignore
             languages.forEach((language, i) => {
-                content += `                    { pattern: "./src/main/webapp/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${
+                content += `                    { pattern: "./${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${
                     i !== languages.length - 1 ? ',' : ''
                 }\n`;
             });
@@ -887,18 +927,16 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                     query = `
                         this.${relationship.otherEntityName}Service
                             .query({${filter}})
-                            .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
-                                return res.body || [];
-                            }))
+                            .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => res.body ?? []))
                             .subscribe((resBody: I${relationship.otherEntityAngularName}[]) => {
                                 if (${relationshipFieldNameIdCheck}) {
                                     this.${variableName} = resBody;
                                 } else {
                                     this.${relationship.otherEntityName}Service
                                         .find(${entityInstance}.${relationshipFieldName}${dto !== 'no' ? 'Id' : '.id'})
-                                        .pipe(map((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) => {
-                                            return subRes.body ? [subRes.body].concat(resBody) : resBody;
-                                        }))
+                                        .pipe(map((subRes: HttpResponse<I${
+                                            relationship.otherEntityAngularName
+                                        }>) => subRes.body ? [subRes.body].concat(resBody) : resBody))
                                         .subscribe((concatRes: I${
                                             relationship.otherEntityAngularName
                                         }[]) => this.${variableName} = concatRes);
@@ -911,7 +949,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                     }
                     query = `
                         this.${relationship.otherEntityName}Service.query()
-                            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body || []);`;
+                            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body ?? []);`;
                 }
             }
             if (variableName && !queries.includes(query)) {
@@ -943,7 +981,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                 if (clientFramework === REACT) {
                     defaultVariablesValues[fieldName] = `${fieldName}: false,`;
                 } else {
-                    defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} || false;`;
+                    defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} ?? false;`;
                 }
             }
         });
@@ -982,23 +1020,20 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         fields.forEach(field => {
             const fieldType = field.fieldType;
             const fieldName = field.fieldName;
-            let tsType;
+            let tsType = 'any';
             if (field.fieldIsEnum) {
                 tsType = fieldType;
             } else if (fieldType === 'Boolean') {
                 tsType = 'boolean';
-            } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) {
+            } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
                 tsType = 'number';
-            } else if (fieldType === 'String' || fieldType === 'UUID') {
+            } else if (['String', 'UUID', 'Duration', 'byte[]', 'ByteBuffer'].includes(fieldType)) {
                 tsType = 'string';
-            } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
-                tsType = customDateType;
-            } else {
-                // (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate'
-                tsType = 'any';
                 if (['byte[]', 'ByteBuffer'].includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
                     variablesWithTypes.push(`${fieldName}ContentType?: string`);
                 }
+            } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
+                tsType = customDateType;
             }
             variablesWithTypes.push(`${fieldName}?: ${tsType}`);
         });
@@ -1422,6 +1457,56 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
 
     /**
+     * Some files are required to be written to disk before everything else.
+     * Example '.prettierc' and '.prettierignore' are used by prettier transform.
+     * @param {any} generator
+     */
+    registerCommitPriorityFilesTask(generator = this) {
+        this.queueTask({
+            method: () => {
+                if (this.env.rootGenerator() !== this) return;
+                const stream = this.env.sharedFs
+                    .stream()
+                    .pipe(filter(['.prettierrc', '.prettierignore']))
+                    .pipe(generator.createConflicterAttributesTransform())
+                    .pipe(
+                        through.obj(function (file, enc, cb) {
+                            const stream = this;
+
+                            // If the file has no state requiring action, move on
+                            if (file.state === null) {
+                                cb();
+                                return;
+                            }
+
+                            generator.conflicter.checkForCollision(file, (err, status) => {
+                                if (err) {
+                                    cb(err);
+                                    return;
+                                }
+
+                                if (status === 'skip') {
+                                    delete file.state;
+                                } else {
+                                    stream.push(file);
+                                }
+
+                                cb();
+                            });
+                            generator.conflicter.resolve();
+                        })
+                    );
+                const done = generator.async();
+                generator.fs.commit([], stream, () => {
+                    done();
+                });
+            },
+            taskName: 'priorityFiles',
+            queueName: 'jhipster:preConflicts',
+        });
+    }
+
+    /**
      * Register prettier as transform stream for prettifying files during generation
      * @param {any} generator
      */
@@ -1511,18 +1596,20 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         return fileStatus;
     }
 
-    registerConflicterAttributesTransform(yoAttributeFileName = '.yo-resolve') {
+    createConflicterAttributesTransform(yoAttributeFileName = '.yo-resolve') {
         const generator = this;
-        this.registerTransformStream(
-            through.obj(function (file, enc, cb) {
-                const status = generator.getConflicterStatusForFile(file.path, yoAttributeFileName);
-                if (status) {
-                    file.conflicter = status;
-                }
-                this.push(file);
-                cb();
-            })
-        );
+        return through.obj(function (file, enc, cb) {
+            const status = generator.getConflicterStatusForFile(file.path, yoAttributeFileName);
+            if (status) {
+                file.conflicter = status;
+            }
+            this.push(file);
+            cb();
+        });
+    }
+
+    registerConflicterAttributesTransform(yoAttributeFileName) {
+        this.registerTransformStream(this.createConflicterAttributesTransform(yoAttributeFileName));
     }
 
     /**
@@ -1606,8 +1693,9 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         const fullPath = 'webpack/webpack.common.js';
         try {
             let content = 'groupBy: [\n';
+            // prettier-ignore
             languages.forEach((language, i) => {
-                content += `          { pattern: './src/main/webapp/i18n/${language}/*.json', fileName: './i18n/${language}.json' }${
+                content += `          { pattern: './${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/*.json', fileName: './i18n/${language}.json' }${
                     i !== languages.length - 1 ? ',' : ''
                 }\n`;
             });

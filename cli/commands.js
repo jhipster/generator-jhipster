@@ -49,11 +49,9 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
         desc: 'Create all required Docker deployment configuration for the selected applications',
     },
     entity: {
-        argument: ['name'],
         desc: 'Create a new JHipster entity: JPA entity, Spring server-side components and Angular client-side components',
     },
     'export-jdl': {
-        argument: ['jdlFile'],
         desc: 'Create a JDL file from the existing entities',
     },
     gae: {
@@ -71,21 +69,12 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
         cliOnly: true,
         options: [
             {
-                option: '--skip-install',
-                desc: 'Do not automatically install dependencies',
-                default: false,
-            },
-            {
                 option: '--fork',
                 desc: 'Run generators using fork',
             },
             {
                 option: '--interactive',
                 desc: 'Run generation in series so that questions can be interacted with',
-            },
-            {
-                option: '--db <value>',
-                desc: 'Provide DB option for the application when using skip-server flag',
             },
             {
                 option: '--json-only',
@@ -100,16 +89,6 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
             {
                 option: '--ignore-deployments',
                 desc: 'Ignores deployments generation',
-                default: false,
-            },
-            {
-                option: '--skip-ui-grouping',
-                desc: 'Disable the UI grouping behavior for entity client side code',
-                default: false,
-            },
-            {
-                option: '--skip-db-changelog',
-                desc: 'Disable generation of database changelogs',
                 default: false,
             },
             {
@@ -155,23 +134,19 @@ Example:
         desc: 'Deploy the current application to Kubernetes using knative constructs',
     },
     languages: {
-        argument: ['languages...'],
         desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder',
     },
     openshift: {
         desc: 'Deploy the current application to OpenShift',
     },
     page: {
-        argument: ['pageName'],
         desc: 'Create a new page. (Supports vue clients)',
     },
     'spring-service': {
         alias: 'service',
-        argument: ['name'],
         desc: 'Create a new Spring service bean',
     },
     'spring-controller': {
-        argument: ['name'],
         desc: 'Create a new Spring controller',
     },
     'openapi-client': {

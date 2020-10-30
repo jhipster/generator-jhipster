@@ -22,7 +22,7 @@ import { Location } from '@angular/common';
 
 <%_ } else { _%>
 import { Observable } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 
 import { Account } from 'app/core/user/account.model';
 import { AccountService } from 'app/core/auth/account.service';
@@ -57,7 +57,7 @@ export class LoginService {
     }
     <%_ } else { _%>
     login(credentials: Login): Observable<Account | null> {
-        return this.authServerProvider.login(credentials).pipe(flatMap(() => this.accountService.identity(true)));
+        return this.authServerProvider.login(credentials).pipe(mergeMap(() => this.accountService.identity(true)));
     }
     <%_ } _%>
 
@@ -88,7 +88,7 @@ export class LoginService {
             window.location.href = logoutUrl;
         });
         <%_ } else { _%>
-        this.authServerProvider.logout().subscribe(null, null, () => this.accountService.authenticate(null));
+        this.authServerProvider.logout().subscribe({ complete: () => this.accountService.authenticate(null) });
         <%_ } _%>
     }
 }

@@ -50,13 +50,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
             description: 'Entity name',
         });
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
-
         // This method adds support for a `--[no-]regenerate` flag
         this.option('regenerate', {
             desc: 'Regenerate the entity without presenting an option to update it',

@@ -38,7 +38,6 @@ const isValidatorsRequired = hasValidationRule || hasRequiredRelationship;
 _%>
 import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %>, Optional } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder,<%_ if (isValidatorsRequired) { _%> Validators<%_ } _%> } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -78,6 +77,25 @@ import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%=
         }
     }
 });
+let selectableEntitiesIdType = getTypescriptKeyType(getPkType(databaseType));
+if (databaseType === 'sql' && authenticationType === 'oauth2') {
+    let existsUserSelectableEntity = false;
+    let existsOtherSelectableEntity = false;
+    for (selectableEntity of selectableEntities) {
+        if (selectableEntity === 'IUser') {
+            existsUserSelectableEntity = true;
+        } else {
+            existsOtherSelectableEntity = true;
+        }
+    }
+    if (existsUserSelectableEntity) {
+        if (existsOtherSelectableEntity) {
+            selectableEntitiesIdType = 'number | string';
+        } else {
+            selectableEntitiesIdType = 'string';
+        }
+    }
+}
 let selectableEntitiesType = '';
 if (selectableEntities.length === 1) {
     selectableEntitiesType = selectableEntities[0];
@@ -113,14 +131,6 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
     <%_ for (const idx in variables) { _%>
     <%- variables[idx] %>
     <%_ } _%>
-<%_ for (idx in fields) {
-    const fieldName = fields[idx].fieldName;
-    const fieldType = fields[idx].fieldType;
-_%>
-    <%_ if ( fieldType === 'LocalDate' ) { _%>
-    <%= fieldName %>Dp: any;
-    <%_ } _%>
-<%_ } _%>
 
     editForm = this.fb.group({
         id: [],
@@ -180,7 +190,9 @@ _%>
     ) {}
 
     ngOnInit(): void {
-        if (this.activeModal) return;
+        if (this.activeModal) {
+          return;
+        }
         this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
             <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
             if (!<%= entityInstance %>.id) {
@@ -252,11 +264,12 @@ _%>
         this.dataUtils.openFile(contentType, base64String);
     }
 
-    setFileData(event: any, field: string, isImage: boolean): void {
-        this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe(null, (err: JhiFileLoadError) => {
-            this.eventManager.broadcast(
-                new JhiEventWithContent<AlertError>('<%= frontendAppName %>.error', { <% if (enableTranslation) { %>...err, key: 'error.file.' + err.key<% } else { %>message: err.message<% } %> })
-            );
+    setFileData(event: Event, field: string, isImage: boolean): void {
+        this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+            error: (err: JhiFileLoadError) =>
+                this.eventManager.broadcast(
+                    new JhiEventWithContent<AlertError>('<%= frontendAppName %>.error', { <% if (enableTranslation) { %>...err, key: 'error.file.' + err.key<% } else { %>message: err.message<% } %> })
+                )
         });
     }
 
@@ -266,7 +279,7 @@ _%>
             [field]: null,
             [fieldContentType]: null
         });
-        if (this.elementRef && idInput && this.elementRef.nativeElement.querySelector('#' + idInput)) {
+        if (idInput && this.elementRef.nativeElement.querySelector('#' + idInput)) {
             this.elementRef.nativeElement.querySelector('#' + idInput).value = null;
         }
     }
@@ -344,18 +357,16 @@ _%>
     }
 
     <%_ if (selectableEntitiesType) { _%>
-    trackById(index: number, item: <%= selectableEntitiesType %>): any {
-        return item.id;
+    trackById(index: number, item: <%= selectableEntitiesType %>): <%= selectableEntitiesIdType %> {
+        return item.id!;
     }
     <%_ } _%>
 
     <%_ if (selectableManyToManyEntitiesType) { _%>
     getSelected(selectedVals: <%= selectableManyToManyEntitiesType %>[], option: <%= selectableManyToManyEntitiesType %>): <%= selectableManyToManyEntitiesType %> {
-        if (selectedVals) {
-            for (let i = 0; i < selectedVals.length; i++) {
-                if (option.id === selectedVals[i].id) {
-                    return selectedVals[i];
-                }
+        for (let i = 0; i < selectedVals.length; i++) {
+            if (option.id === selectedVals[i].id) {
+                return selectedVals[i];
             }
         }
         return option;

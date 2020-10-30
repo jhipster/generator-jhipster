@@ -148,6 +148,8 @@ function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
         ignoreApplication: undefined,
         ignoreDeployments: undefined,
         inline: undefined,
+        skipSampleRepository: undefined,
+        fromJdl: true,
     };
 
     if (!fork) {
@@ -286,7 +288,6 @@ const generateEntityFiles = (processor, exportedEntities, env) => {
         ...processor.options,
         regenerate: true,
     };
-    const command = 'entities';
 
     const callGenerator = baseName => {
         const cwd = inFolder && baseName ? path.join(processor.pwd, baseName) : processor.pwd;
@@ -306,7 +307,7 @@ const generateEntityFiles = (processor, exportedEntities, env) => {
         logger.info(`Generating entities for application ${baseName} in a new parallel process`);
 
         logger.debug(`Child process will be triggered for ${jhipsterCli} with cwd: ${cwd}`);
-        return runGenerator(command, { cwd, env, fork }, generatorOptions);
+        return runGenerator('entities', { cwd, env, fork }, generatorOptions);
     };
 
     if (fork) {
@@ -339,6 +340,7 @@ class JDLProcessor {
             applicationName: this.options.baseName,
             databaseType: this.options.databaseType,
             applicationType: this.options.applicationType,
+            skipUserManagement: this.options.skipUserManagement,
             generatorVersion: packagejs.version,
             forceNoFiltering: this.options.force,
             skipFileGeneration: true,
