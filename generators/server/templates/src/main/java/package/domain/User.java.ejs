@@ -99,7 +99,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
     <%_ if (!reactive) { _%>
 @Entity
     <%_ } _%>
-@Table(<% if (!reactive) { %>name = <% } %>"<%= jhiTablePrefix %>_user")
+@Table(<% if (!reactive) { %>name = <% } %>"<%= user.entityTableName %>")
 <%_ } _%>
 <%_ if (enableHibernateCache) { _%>
 @Cache(usage = CacheConcurrencyStrategy.<% if (cacheProvider !== 'infinispan') { %>NONSTRICT_<% } %>READ_WRITE)
@@ -108,7 +108,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 @org.springframework.data.mongodb.core.mapping.Document(collection = "<%= jhiTablePrefix %>_user")
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
-@Node("<%= jhiTablePrefix %>_user")
+@Node("<%= user.entityTableName %>")
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 @Document
@@ -141,14 +141,12 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     <%_ if (searchEngine === 'elasticsearch' && authenticationType === 'oauth2') { _%>
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     <%_ } _%>
-    private <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id;
 <%_ } else if (databaseType === 'neo4j') { _%>
     @Id
     <%_ if (authenticationType !== 'oauth2') { _%>
     @GeneratedValue(UUIDStringGenerator.class)
     <%_ } _%>
     @Property("user_id")
-    private String id;
 <%_ } else { _%>
     <%_ if (databaseType === 'couchbase') { _%>
     public static final String PREFIX = "user";
@@ -172,8 +170,8 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     <%_ if (searchEngine === 'elasticsearch') { _%>
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     <%_ } _%>
-    private String id;
 <%_ } _%>
+    private <%= user.primaryKeyType %> id;
 
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
@@ -347,7 +345,7 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @ManyToMany
     @JoinTable(
-        name = "<%= jhiTablePrefix %>_user_authority",
+        name = "<%= user.entityTableName %>_authority",
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
         <%_ if (enableHibernateCache) { if (cacheProvider === 'infinispan') { _%>
