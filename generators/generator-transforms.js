@@ -22,9 +22,15 @@ const prettier = require('prettier');
 
 const prettierTransform = function (defaultOptions) {
     return through.obj((file, encoding, callback) => {
+        if (file.state === 'deleted') {
+            callback(null, file);
+            return;
+        }
         /* resolve from the projects config */
-        prettier.resolveConfig(file.relative).then(resolvedDestinationFileOptions => {
-            if (file.state !== 'deleted') {
+        let fileContent;
+        prettier
+            .resolveConfig(file.relative)
+            .then(function (resolvedDestinationFileOptions) {
                 const options = {
                     ...defaultOptions,
                     // Config from disk
@@ -32,20 +38,18 @@ const prettierTransform = function (defaultOptions) {
                     // for better errors
                     filepath: file.relative,
                 };
-                const str = file.contents.toString('utf8');
-                try {
-                    const data = prettier.format(str, options);
-                    file.contents = Buffer.from(data);
-                } catch (error) {
-                    callback(
-                        new Error(`Error parsing file ${file.relative}: ${error}
-                    At: ${str}`)
-                    );
-                    return;
-                }
-            }
-            callback(null, file);
-        });
+                fileContent = file.contents.toString('utf8');
+                const data = prettier.format(fileContent, options);
+                file.contents = Buffer.from(data);
+                callback(null, file);
+            })
+            .catch(error => {
+                callback(
+                    new Error(`Error parsing file ${file.relative}: ${error}
+
+At: ${fileContent}`)
+                );
+            });
     });
 };
 
