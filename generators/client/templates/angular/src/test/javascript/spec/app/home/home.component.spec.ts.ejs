@@ -18,10 +18,8 @@
 -%>
 jest.mock('app/core/auth/account.service');
 <%_ if (authenticationType !== 'oauth2') { _%>
-jest.mock('app/core/login/login-modal.service');
-<% } else { %>
-jest.mock('app/core/login/login.service');
-<%_ } _%>
+jest.mock('@angular/router');
+<% } %>
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { of } from 'rxjs';
@@ -31,7 +29,6 @@ import { AccountService } from 'app/core/auth/account.service';
 
 <%_ if (authenticationType !== 'oauth2') { _%>
 import { Router } from '@angular/router';
-import { MockRouter } from '../../helpers/mock-route.service';
 <%_ } _%>
 
 describe('Component Tests', () => {
@@ -40,7 +37,7 @@ describe('Component Tests', () => {
         let fixture: ComponentFixture<HomeComponent>;
         let mockAccountService: AccountService;
         <%_ if (authenticationType !== 'oauth2') { _%>
-        let mockRouter: MockRouter;
+        let mockRouter: Router;
         <%_ } _%>
 
         beforeEach(waitForAsync(() => {
@@ -58,7 +55,7 @@ describe('Component Tests', () => {
             mockAccountService.identity = jest.fn(() => of(null));
             mockAccountService.getAuthenticationState = jest.fn(() => of(null));
             <%_ if (authenticationType !== 'oauth2') { _%>
-                mockRouter = TestBed.get(Router);
+                mockRouter = TestBed.inject(Router);
             <%_ } _%>
         });
 
@@ -86,7 +83,7 @@ describe('Component Tests', () => {
             comp.login();
 
             // THEN
-            expect(mockRouter.navigateSpy).toHaveBeenCalledWith(['/login']);
+            expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
         });
         <%_ } _%>
     });

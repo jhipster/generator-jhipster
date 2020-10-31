@@ -16,54 +16,67 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
+jest.mock('@angular/router');
+jest.mock('app/core/auth/account.service');
+jest.mock('app/core/login/login.service');
+
+import { ComponentFixture, TestBed, waitForAsync, inject, fakeAsync, tick } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
+import { of } from 'rxjs';
 import { Router } from '@angular/router';
 
 import { LoginService } from 'app/core/login/login.service';
-import { MockLoginService } from '../../helpers/mock-login.service';
-import { MockRouter } from '../../helpers/mock-route.service';
 import { LoginComponent } from 'app/login/login.component';
 import { AccountService } from 'app/core/auth/account.service';
-import { MockAccountService } from '../../helpers/mock-account.service';
 
 describe('Component Tests', () => {
   describe('LoginComponent', () => {
     let comp: LoginComponent;
     let fixture: ComponentFixture<LoginComponent>;
-    let mockLoginService: MockLoginService;
-    let mockRouter: MockRouter;
-    let accountService: MockAccountService;
+    let mockRouter: Router;
+    let mockAccountService: AccountService;
+    let mockLoginService: LoginService;
 
-    beforeEach(async(() => {
-      TestBed.configureTestingModule({
-        declarations: [LoginComponent],
-        providers: [
-          FormBuilder,
-          {
-            provide: LoginService,
-            useClass: MockLoginService
-          }
-        ]
+    beforeEach(
+      waitForAsync(() => {
+        TestBed.configureTestingModule({
+          declarations: [LoginComponent],
+          providers: [
+            FormBuilder,
+            AccountService,
+            Router,
+            {
+                provide: LoginService,
+                useValue: {
+                    login: jest.fn(() => of({}))
+                }
+            }
+          ],
+        })
+          .overrideTemplate(LoginComponent, '')
+          .compileComponents();
       })
-        .overrideTemplate(LoginComponent, '')
-        .compileComponents();
-    }));
+    );
 
     beforeEach(() => {
       fixture = TestBed.createComponent(LoginComponent);
       comp = fixture.componentInstance;
-      mockLoginService = TestBed.get(LoginService);
-      mockRouter = TestBed.get(Router);
-      accountService = TestBed.get(AccountService);
+      mockRouter = TestBed.inject(Router);
+      mockLoginService = TestBed.inject(LoginService);
+      mockAccountService = TestBed.inject(AccountService);
     });
 
     it('Should call accountService.identity on Init', () => {
+      // GIVEN
+      mockAccountService.identity = jest.fn(() => of(null));
+      mockAccountService.getAuthenticationState = jest.fn(() => of(null));
+
       // WHEN
       comp.ngOnInit();
+      mockAccountService.identity().subscribe();
 
       // THEN
-      expect(accountService.identitySpy).toHaveBeenCalled();
+      expect(mockAccountService.identity).toHaveBeenCalled();
     });
 
     it('Should call accountService.isAuthenticated', () => {
@@ -71,18 +84,20 @@ describe('Component Tests', () => {
       comp.isAuthenticated();
 
       // THEN
-      expect(accountService.isAuthenticated).toHaveBeenCalled();
+      expect(mockAccountService.isAuthenticated).toHaveBeenCalled();
     });
 
     it('should navigate to home page on Init if authenticated=true', () => {
       // GIVEN
       spyOn(comp, 'isAuthenticated').and.returnValue(true);
+      mockAccountService.identity = jest.fn(() => of(null));
+      mockAccountService.getAuthenticationState = jest.fn(() => of(null));
 
       // WHEN
       comp.ngOnInit();
 
       // THEN
-      expect(mockRouter.navigateSpy).toHaveBeenCalledWith(['']);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['']);
     });
 
     it('should authenticate the user and navigate to home page', inject(
@@ -100,7 +115,6 @@ describe('Component Tests', () => {
           password: 'admin',
           rememberMe: true,
         });
-        mockLoginService.setResponse({});
 
         // WHEN/
         comp.login();
@@ -108,10 +122,9 @@ describe('Component Tests', () => {
 
         // THEN
         expect(comp.authenticationError).toEqual(false);
-        expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentials);
-        expect(mockRouter.navigateSpy).toHaveBeenCalledWith(['']);
+        expect(mockLoginService.login).toHaveBeenCalledWith(credentials);
+        expect(mockRouter.navigate).toHaveBeenCalledWith(['']);
       })
     ));
-
   });
 });
