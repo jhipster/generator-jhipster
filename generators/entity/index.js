@@ -473,6 +473,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 Object.assign(this.context, this.entityStorage.getAll());
                 loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
             },
+            shareEntity() {
+                this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
+                this.configOptions.sharedEntities[this.context.name] = this.context;
+            },
         };
     }
 
@@ -491,10 +495,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.context.fields.forEach(field => {
                     prepareFieldForTemplates(entity, field, this);
                 });
-            },
-            shareEntity() {
-                this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
-                this.configOptions.sharedEntities[this.context.name] = this.context;
             },
         };
     }
