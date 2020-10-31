@@ -12,7 +12,7 @@
         "messages": {
             "error": {
                 "fail": "<strong>कोई त्रुटि उत्पन्न हुई!</strong> सेटिंग्स को सहेजा नहीं जा सका।",
-                "emailexists": "<strong>ई-मेल उपयोग में पहले से ही है!</strong> कृपया कोई अन्य नाम चुनें। "
+                "emailexists": "<strong>ई-मेल उपयोग में पहले से ही है!</strong> कृपया कोई अन्य नाम चुनें।"
             },
             "success": "<strong>सहेजी गई सेटिंग्स!</strong>",
             "validate": {
