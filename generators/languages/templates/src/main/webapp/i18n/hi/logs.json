@@ -1,7 +1,7 @@
 {
     "logs": {
         "title": "लॉग",
-        "nbloggers": "वहाँ कुल {{ total }} लॉगर्स हैं .",
+        "nbloggers": "वहाँ कुल {{ total }} लॉगर्स हैं।",
         "filter": "छन्नी करें",
         "table": {
             "name": "नाम",
