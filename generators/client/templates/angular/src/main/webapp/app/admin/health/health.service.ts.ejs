@@ -40,6 +40,8 @@ export type HealthKey =
     | 'diskSpace'
     | 'mail'
     | 'ping'
+    | 'livenessState'
+    | 'readinessState'
     <%_ if (searchEngine === 'elasticsearch') { _%>
     | 'elasticsearch'
     <%_ } _%>
