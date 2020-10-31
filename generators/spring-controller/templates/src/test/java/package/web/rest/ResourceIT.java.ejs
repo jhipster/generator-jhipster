@@ -52,7 +52,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ if (cacheProvider === 'redis') { _%>
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
-public class <%= controllerClass %>IT {
+class <%= controllerClass %>IT {
 
     private MockMvc restMockMvc;
 
@@ -71,7 +71,7 @@ public class <%= controllerClass %>IT {
      * Test <%= controllerActions[idx].actionName %>
      */
     @Test
-    public void test<%= controllerActions[idx].actionNameUF %>() throws Exception {
+    void test<%= controllerActions[idx].actionNameUF %>() throws Exception {
         restMockMvc.perform(<%= controllerActions[idx].actionMethod.toLowerCase() %>("/api/<%= apiPrefix %>/<%= controllerActions[idx].actionPath %>"))
             .andExpect(status().isOk());
     }

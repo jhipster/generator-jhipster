@@ -55,7 +55,7 @@ import static org.mockito.Mockito.when;
  * @see OAuth2AuthenticationService
  */
 @ExtendWith(SpringExtension.class)
-public class OAuth2AuthenticationServiceTest {
+class OAuth2AuthenticationServiceTest {
     public static final String CLIENT_AUTHORIZATION = "Basic d2ViX2FwcDpjaGFuZ2VpdA==";
     public static final String ACCESS_TOKEN_VALUE = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQyNzI4NDQsInVzZXJfbmFtZSI6InVzZXIiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiNzc1ZTJkYWUtYWYzZi00YTdhLWExOTktNzNiZTU1MmIxZDVkIiwiY2xpZW50X2lkIjoid2ViX2FwcCIsInNjb3BlIjpbIm9wZW5pZCJdfQ.gEK0YcX2IpkpxnkxXXHQ4I0xzTjcy7edqb89ukYE0LPe7xUcZVwkkCJF_nBxsGJh2jtA6NzNLfY5zuL6nP7uoAq3fmvsyrcyR2qPk8JuuNzGtSkICx3kPDRjAT4ST8SZdeh7XCbPVbySJ7ZmPlRWHyedzLA1wXN0NUf8yZYS4ELdUwVBYIXSjkNoKqfWm88cwuNr0g0teypjPtjDqCnXFt1pibwdfIXn479Y1neNAdvSpHcI4Ost-c7APCNxW2gqX-0BItZQearxRgKDdBQ7CGPAIky7dA0gPuKUpp_VCoqowKCXqkE9yKtRQGIISewtj2UkDRZePmzmYrUBXRzfYw";
     public static final String REFRESH_TOKEN_VALUE = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJ1c2VyIiwic2NvcGUiOlsib3BlbmlkIl0sImF0aSI6Ijc3NWUyZGFlLWFmM2YtNGE3YS1hMTk5LTczYmU1NTJiMWQ1ZCIsImV4cCI6MTQ5Njg2NDc0MywiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImp0aSI6IjhmYjI2YTllLTdjYzQtNDFlMi1hNzBjLTk4MDc0N2U2YWFiOSIsImNsaWVudF9pZCI6IndlYl9hcHAifQ.q1-Df9_AFO6TJNiLKV2YwTjRbnd7qcXv52skXYnog5siHYRoR6cPtm6TNQ04iDAoIHljTSTNnD6DS3bHk41mV55gsSVxGReL8VCb_R8ZmhVL4-5yr90sfms0wFp6lgD2bPmZ-TXiS2Oe9wcbNWagy5RsEplZ-sbXu3tjmDao4FN35ojPsXmUs84XnNQH3Y_-PY9GjZG0JEfLQIvE0J5BkXS18Z015GKyA6GBIoLhAGBQQYyG9m10ld_a9fD5SmCyCF72Jad_pfP1u8Z_WyvO-wrlBvm2x-zBthreVrXU5mOb9795wJEP-xaw3dXYGjht_grcW4vKUFtj61JgZk98CQ";
@@ -146,7 +146,7 @@ public class OAuth2AuthenticationServiceTest {
     }
 
     @Test
-    public void testAuthenticationCookies() {
+    void testAuthenticationCookies() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setServerName("www.test.com");
         request.addHeader("Authorization", CLIENT_AUTHORIZATION);
@@ -165,7 +165,7 @@ public class OAuth2AuthenticationServiceTest {
     }
 
     @Test
-    public void testAuthenticationNoRememberMe() {
+    void testAuthenticationNoRememberMe() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setServerName("www.test.com");
         Map<String, String> params = new HashMap<>();
@@ -183,7 +183,7 @@ public class OAuth2AuthenticationServiceTest {
     }
 
     @Test
-    public void testInvalidPassword() {
+    void testInvalidPassword() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setServerName("www.test.com");
         Map<String, String> params = new HashMap<>();
@@ -195,7 +195,7 @@ public class OAuth2AuthenticationServiceTest {
     }
 
     @Test
-    public void testRefreshGrant() {
+    void testRefreshGrant() {
         MockHttpServletRequest request = createMockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
         HttpServletRequest newRequest = refreshTokenFilter.refreshTokensIfExpiring(request, response);
@@ -208,7 +208,7 @@ public class OAuth2AuthenticationServiceTest {
     }
 
     @Test
-    public void testSessionExpired() {
+    void testSessionExpired() {
         MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET.name(), "http://www.test.com");
         Cookie accessTokenCookie = new Cookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_VALUE);
         Cookie refreshTokenCookie = new Cookie(OAuth2CookieHelper.SESSION_TOKEN_COOKIE, EXPIRED_SESSION_TOKEN_VALUE);
@@ -231,7 +231,7 @@ public class OAuth2AuthenticationServiceTest {
      * If no refresh token is found and the access token has expired, then expect an exception.
      */
     @Test
-    public void testRefreshGrantNoRefreshToken() {
+    void testRefreshGrantNoRefreshToken() {
         MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET.name(), "http://www.test.com");
         Cookie accessTokenCookie = new Cookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_VALUE);
         request.setCookies(accessTokenCookie);
@@ -240,7 +240,7 @@ public class OAuth2AuthenticationServiceTest {
     }
 
     @Test
-    public void testLogout() {
+    void testLogout() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         Cookie accessTokenCookie = new Cookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_VALUE);
         Cookie refreshTokenCookie = new Cookie(OAuth2CookieHelper.REFRESH_TOKEN_COOKIE, REFRESH_TOKEN_VALUE);
@@ -254,7 +254,7 @@ public class OAuth2AuthenticationServiceTest {
     }
 
     @Test
-    public void testStripTokens() {
+    void testStripTokens() {
         MockHttpServletRequest request = createMockHttpServletRequest();
         HttpServletRequest newRequest = authenticationService.stripTokens(request);
         CookieCollection cookies = new CookieCollection(newRequest.getCookies());

@@ -869,7 +869,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     }
     <% if (fieldsContainOwnerManyToMany === true) { %>
     @SuppressWarnings({"unchecked"})
-    public void getAll<%= entityClassPlural %>WithEagerRelationshipsIsEnabled() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%= entityClassPlural %>WithEagerRelationshipsIsEnabled() <% if (!reactive) { %>throws Exception <% } %>{
         <%_ if (service !== 'no') { _%>
         when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (!reactive) { %>new PageImpl(new ArrayList<>())<% } else { %>Flux.empty()<% }%>);
         <%_ } else { _%>
@@ -893,7 +893,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     }
 
     @SuppressWarnings({"unchecked"})
-    public void getAll<%= entityClassPlural %>WithEagerRelationshipsIsNotEnabled() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%= entityClassPlural %>WithEagerRelationshipsIsNotEnabled() <% if (!reactive) { %>throws Exception <% } %>{
         <%_ if (service !== 'no') { _%>
         when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (!reactive) { %>new PageImpl(new ArrayList<>())<% } else { %>Flux.empty()<% }%>);
         <%_ } else { _%>
