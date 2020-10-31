@@ -28,7 +28,7 @@ _%>
 import java.util.UUID;
 <%_ } _%>
 
-public class <%= entityClass %>MapperTest {
+class <%= entityClass %>MapperTest {
 
     private <%= entityClass %>Mapper <%= entityInstance %>Mapper;
 
@@ -39,7 +39,7 @@ public class <%= entityClass %>MapperTest {
 
     <%_if (!embedded) { _%>
     @Test
-    public void testEntityFromId() {
+    void testEntityFromId() {
         <%= primaryKeyType %> id = <%- id %>;
         assertThat(<%= entityInstance %>Mapper.fromId(id).getId()).isEqualTo(id);
         assertThat(<%= entityInstance %>Mapper.fromId(null)).isNull();

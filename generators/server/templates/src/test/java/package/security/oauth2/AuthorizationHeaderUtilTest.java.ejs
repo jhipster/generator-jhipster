@@ -56,7 +56,7 @@ import static org.mockito.Mockito.*;
 /**
  * Test class for the {@link AuthorizationHeaderUtil} utility class.
  */
-public class AuthorizationHeaderUtilTest {
+class AuthorizationHeaderUtilTest {
 
     public static final String VALID_REGISTRATION_ID = "OIDC";
     public static final String SUB_VALUE = "123456";
@@ -76,7 +76,7 @@ public class AuthorizationHeaderUtilTest {
     }
 
     @Test
-    public void getAuthorizationHeader_Authentication() {
+    void getAuthorizationHeader_Authentication() {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("principal", "credentials");
         doReturn(authenticationToken).when(securityContext).getAuthentication();
 
@@ -86,7 +86,7 @@ public class AuthorizationHeaderUtilTest {
     }
 
     @Test
-    public void getAuthorizationHeader_JwtAuthentication() {
+    void getAuthorizationHeader_JwtAuthentication() {
         JwtAuthenticationToken jwtToken = new JwtAuthenticationToken(new Jwt("tokenVal", Instant.now(),
             Instant.now().plus(Duration.ofMinutes(3)), Map.of("alg", "HS256"), Map.of("sub",SUB_VALUE)));
         doReturn(jwtToken).when(securityContext).getAuthentication();
@@ -97,7 +97,7 @@ public class AuthorizationHeaderUtilTest {
     }
 
     @Test
-    public void getAuthorizationHeader_OAuth2Authentication_InvalidClient() {
+    void getAuthorizationHeader_OAuth2Authentication_InvalidClient() {
         OAuth2AuthenticationToken oauth2Token = getTestOAuth2AuthenticationToken("INVALID");
         OAuth2AuthorizedClient authorizedClient = getTestOAuth2AuthorizedClient();
 
@@ -111,7 +111,7 @@ public class AuthorizationHeaderUtilTest {
     }
 
     @Test
-    public void getAuthorizationHeader_OAuth2Authentication() {
+    void getAuthorizationHeader_OAuth2Authentication() {
         OAuth2AuthenticationToken oauth2Token = getTestOAuth2AuthenticationToken(VALID_REGISTRATION_ID);
         OAuth2AuthorizedClient authorizedClient = getTestOAuth2AuthorizedClient();
 
@@ -123,7 +123,7 @@ public class AuthorizationHeaderUtilTest {
     }
 
     @Test
-    public void getAuthorizationHeader_OAuth2Authentication_RefreshToken() {
+    void getAuthorizationHeader_OAuth2Authentication_RefreshToken() {
         OAuth2AuthenticationToken oauth2Token = getTestOAuth2AuthenticationToken(VALID_REGISTRATION_ID);
         OAuth2AuthorizedClient authorizedClient = getTestOAuth2AuthorizedClient(true);
 
@@ -140,7 +140,7 @@ public class AuthorizationHeaderUtilTest {
     }
 
     @Test
-    public void getAuthorizationHeader_OAuth2Authentication_RefreshToken_NoRefreshToken() {
+    void getAuthorizationHeader_OAuth2Authentication_RefreshToken_NoRefreshToken() {
         OAuth2AuthenticationToken oauth2Token = getTestOAuth2AuthenticationToken(VALID_REGISTRATION_ID);
         OAuth2AuthorizedClient authorizedClient = getTestOAuth2AuthorizedClient(true);
 
@@ -157,7 +157,7 @@ public class AuthorizationHeaderUtilTest {
     }
 
     @Test
-    public void getAuthorizationHeader_OAuth2Authentication_RefreshTokenFails() {
+    void getAuthorizationHeader_OAuth2Authentication_RefreshTokenFails() {
         OAuth2AuthenticationToken oauth2Token = getTestOAuth2AuthenticationToken(VALID_REGISTRATION_ID);
         OAuth2AuthorizedClient authorizedClient = getTestOAuth2AuthorizedClient(true);
 
