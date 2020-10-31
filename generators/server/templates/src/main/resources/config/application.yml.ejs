@@ -119,6 +119,8 @@ management:
         health:
             show-details: when_authorized
             roles: "ROLE_ADMIN"
+            probes:
+                enabled: true
         jhimetrics:
             enabled: true
     info:
@@ -130,8 +132,6 @@ management:
                 include: livenessState
             readiness:
                 include: readinessState<% if (databaseType === 'sql') { %>,datasource<% } %>
-        probes:
-            enabled: true
         mail:
             enabled: false # When using the MailService, configure an SMTP server and set this to true
     metrics:
