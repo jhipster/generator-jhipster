@@ -16,23 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Injectable } from '@angular/core';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Route } from '@angular/router';
+import { LoginComponent } from './login.component';
 
-import { LoginModalComponent } from 'app/core/login/login-modal.component';
-
-@Injectable({ providedIn: 'root' })
-export class LoginModalService {
-    private isOpen = false;
-
-    constructor(private modalService: NgbModal) {}
-
-    open(): void {
-        if (this.isOpen) {
-            return;
-        }
-        this.isOpen = true;
-        const modalRef: NgbModalRef = this.modalService.open(LoginModalComponent);
-        modalRef.result.finally(() => (this.isOpen = false));
-    }
-}
+export const LOGIN_ROUTE: Route = {
+  path: '',
+  component: LoginComponent,
+  data: {
+    authorities: [],
+    pageTitle: 'login.title'
+  }
+};

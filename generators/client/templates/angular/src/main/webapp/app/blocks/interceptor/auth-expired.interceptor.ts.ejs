@@ -23,9 +23,6 @@ import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 import { LoginService } from 'app/core/login/login.service';
-<%_ if (['session', 'jwt', 'uaa'].includes(authenticationType)) { _%>
-import { LoginModalService } from 'app/core/login/login-modal.service';
-<%_ } _%>
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 import { AccountService } from '../../core/auth/account.service';
 
@@ -33,9 +30,6 @@ import { AccountService } from '../../core/auth/account.service';
 export class AuthExpiredInterceptor implements HttpInterceptor {
     constructor(
         private loginService: LoginService,
-        <%_ if (['session', 'jwt', 'uaa'].includes(authenticationType)) { _%>
-        private loginModalService: LoginModalService,
-        <%_ } _%>
         private stateStorageService: StateStorageService,
         private router: Router,
         private accountService: AccountService
@@ -55,14 +49,12 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
                         this.stateStorageService.storeUrl(this.router.routerState.snapshot.url);
                         <%_ if (['session', 'jwt', 'uaa'].includes(authenticationType)) { _%>
                         this.loginService.logout();
-                        this.router.navigate(['']);
-                        this.loginModalService.open();
+                        this.router.navigate(['/login']);
                         <%_ } else { _%>
                         this.loginService.login();
                         <%_ } _%>
                     }
                 }
-            })
-        );
+        }));
     }
 }

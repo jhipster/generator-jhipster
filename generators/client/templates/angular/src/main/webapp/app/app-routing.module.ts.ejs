@@ -48,6 +48,12 @@ const LAYOUT_ROUTES = [
                     loadChildren: () => import('./account/account.module').then(m => m.AccountModule)
                 },
                 <%_ } _%>
+                <%_ if (authenticationType !== 'oauth2') { _%>
+                {
+                    path: 'login',
+                    loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
+                },
+                <%_ } _%>
                 ...LAYOUT_ROUTES
             ],
             { enableTracing: DEBUG_INFO_ENABLED }

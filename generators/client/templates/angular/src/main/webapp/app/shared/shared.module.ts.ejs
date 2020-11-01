@@ -23,9 +23,6 @@ import { FindLanguageFromKeyPipe } from './language/find-language-from-key.pipe'
 <%_ } _%>
 import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
-<%_ if (authenticationType !== 'oauth2') { _%>
-import { LoginModalComponent } from '../core/login/login-modal.component';
-<%_ } _%>
 import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
 import { DurationPipe } from './duration.pipe';
 
@@ -39,15 +36,9 @@ import { DurationPipe } from './duration.pipe';
         <%_ } _%>
         AlertComponent,
         AlertErrorComponent,
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        LoginModalComponent,
-        <%_ } _%>
         HasAnyAuthorityDirective,
         DurationPipe
     ],
-    <%_ if (authenticationType !== 'oauth2') { _%>
-    entryComponents: [LoginModalComponent],
-    <%_ } _%>
     exports: [
         SharedLibsModule,
         <%_ if (enableTranslation) { _%>
@@ -55,9 +46,6 @@ import { DurationPipe } from './duration.pipe';
         <%_ } _%>
         AlertComponent,
         AlertErrorComponent,
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        LoginModalComponent,
-        <%_ } _%>
         HasAnyAuthorityDirective,
         DurationPipe
     ]

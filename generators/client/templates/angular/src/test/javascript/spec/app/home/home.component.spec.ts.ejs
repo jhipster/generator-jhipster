@@ -18,7 +18,7 @@
 -%>
 jest.mock('app/core/auth/account.service');
 <%_ if (authenticationType !== 'oauth2') { _%>
-jest.mock('app/core/login/login-modal.service');
+jest.mock('@angular/router');
 <% } else { %>
 jest.mock('app/core/login/login.service');
 <%_ } _%>
@@ -28,8 +28,9 @@ import { of } from 'rxjs';
 
 import { HomeComponent } from 'app/home/home.component';
 import { AccountService } from 'app/core/auth/account.service';
+
 <%_ if (authenticationType !== 'oauth2') { _%>
-import { LoginModalService } from 'app/core/login/login-modal.service';
+import { Router } from '@angular/router';
 <% } else { %>
 import { LoginService } from 'app/core/login/login.service';
 <%_ } _%>
@@ -40,13 +41,15 @@ describe('Component Tests', () => {
         let fixture: ComponentFixture<HomeComponent>;
         let mockAccountService: AccountService;
         <%_ if (authenticationType !== 'oauth2') { _%>
-        let mockLoginModalService: LoginModalService;
+        let mockRouter: Router;
+        <% } else { %>
+        let mockLoginService: LoginService;
         <%_ } _%>
 
         beforeEach(waitForAsync(() => {
             TestBed.configureTestingModule({
                 declarations: [HomeComponent],
-                providers: [AccountService, <% if (authenticationType !== 'oauth2') { %>LoginModalService<% } else { %>LoginService<% } %>]
+                providers: [AccountService, <% if (authenticationType !== 'oauth2') { %>Router<% } else { %>LoginService<% } %>]
             })
             .overrideTemplate(HomeComponent, '')
             .compileComponents();
@@ -59,7 +62,9 @@ describe('Component Tests', () => {
             mockAccountService.identity = jest.fn(() => of(null));
             mockAccountService.getAuthenticationState = jest.fn(() => of(null));
             <%_ if (authenticationType !== 'oauth2') { _%>
-            mockLoginModalService = TestBed.inject(LoginModalService);
+            mockRouter = TestBed.inject(Router);
+            <% } else { %>
+            mockLoginService = TestBed.inject(LoginService);
             <%_ } _%>
         });
 
@@ -82,12 +87,20 @@ describe('Component Tests', () => {
         });
 
         <%_ if (authenticationType !== 'oauth2') { _%>
-        it('Should call loginModalService.open on login', () => {
+        it('Should navigate to /login on login', () => {
             // WHEN
             comp.login();
 
             // THEN
-            expect(mockLoginModalService.open).toHaveBeenCalled();
+            expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
+        });
+        <% } else { %>
+        it('Should call loginService.login on login', () => {
+            // WHEN
+            comp.login();
+
+            // THEN
+            expect(mockLoginService.login).toHaveBeenCalled();
         });
         <%_ } _%>
     });

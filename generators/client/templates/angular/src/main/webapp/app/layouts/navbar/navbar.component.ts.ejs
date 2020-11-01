@@ -28,9 +28,6 @@ import { VERSION } from 'app/app.constants';
 import { LANGUAGES } from 'app/core/language/language.constants';
 <%_ } _%>
 import { AccountService } from 'app/core/auth/account.service';
-<%_ if (authenticationType !== 'oauth2') { _%>
-import { LoginModalService } from 'app/core/login/login-modal.service';
-<%_ } _%>
 import { LoginService } from 'app/core/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 
@@ -57,9 +54,6 @@ export class NavbarComponent implements OnInit {
         private sessionStorage: SessionStorageService,
         <%_ } _%>
         private accountService: AccountService,
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        private loginModalService: LoginModalService,
-        <%_ } _%>
         private profileService: ProfileService,
         private router: Router
     ) {
@@ -90,7 +84,7 @@ export class NavbarComponent implements OnInit {
 
     login(): void {
         <%_ if (authenticationType !== 'oauth2') { _%>
-        this.loginModalService.open();
+        this.router.navigate(['/login']);
         <%_ } else { _%>
         this.loginService.login();
         <%_ } _%>
