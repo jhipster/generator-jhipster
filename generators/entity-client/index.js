@@ -29,7 +29,12 @@ let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
-        utils.copyObjectProps(this, opts.context);
+        this.entity = opts.context;
+
+        // Remove fields with custom ids, drop once templates supports them
+        this.entity = { ...this.entity, fields: this.entity.fieldsNoId };
+
+        utils.copyObjectProps(this, this.entity);
         this.jhipsterContext = opts.jhipsterContext || opts.context;
 
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-client', { context: opts.context });
@@ -40,9 +45,6 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             setup() {
                 this.tsKeyType = this.getTypescriptKeyType(this.primaryKeyType);
-                if (this.idFields && this.jhipsterConfig.clientFramework === ANGULAR) {
-                    this.fields = this.idFields.concat(this.fields);
-                }
             },
         };
     }
