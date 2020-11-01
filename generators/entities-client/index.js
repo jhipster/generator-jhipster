@@ -58,6 +58,21 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
+    _default() {
+        return {
+            loadUserManagementEntities() {
+                if (!this.configOptions.sharedEntities) return;
+                // Make user entity available to templates.
+                this.user = this.configOptions.sharedEntities.User;
+            },
+        };
+    }
+
+    get default() {
+        return useBlueprints ? undefined : this._default();
+    }
+
+    // Public API method used by the getter and also by Blueprints
     _end() {
         return {
             end() {

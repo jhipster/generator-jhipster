@@ -17,11 +17,7 @@
  limitations under the License.
 -%>
 <%_
-  let userPkType = 'String';
-  if (databaseType === 'sql' && authenticationType !== 'oauth2') {
-    userPkType = 'Long';
-  }
-  const idType = getTypescriptKeyType(userPkType);
+  const idType = getTypescriptKeyType(user.primaryKeyType);
 _%>
 export interface IUser {
     id?: <%= idType %>;

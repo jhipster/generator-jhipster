@@ -83,7 +83,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
         this.userService.update({ ...user, activated: isActivated }).subscribe(() => this.loadAll());
     }
 
-    trackIdentity(index: number, item: User): <%= getTypescriptKeyType(pkType) %> {
+    trackIdentity(index: number, item: User): <%= getTypescriptKeyType(user.primaryKeyType) %> {
         return item.id!;
     }
 

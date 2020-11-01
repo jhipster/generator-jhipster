@@ -509,11 +509,32 @@ class EntityGenerator extends BaseBlueprintGenerator {
         return {
             ...super._missingPreDefault(),
 
-            prepareRelationshipsForTemplates() {
+            loadUserManagementEntities() {
+                if (!this.configOptions.sharedEntities) return;
+                // Make user entity available to templates.
+                this.context.user = this.configOptions.sharedEntities.User;
+            },
+
+            loadOtherEntity() {
                 this.context.relationships.forEach(relationship => {
                     const otherEntityName = this._.upperFirst(relationship.otherEntityName);
                     relationship.otherEntity = this.configOptions.sharedEntities[otherEntityName];
+                });
+            },
 
+            processPrimaryKeyWithRelationships() {
+                if (!this.context.derivedPrimaryKey) {
+                    return;
+                }
+                const derivedRelationship = this.context.relationships.find(relationship => relationship.useJPADerivedIdentifier === true);
+                if (!derivedRelationship) {
+                    throw new Error(`Error creating primary key for entity ${this.context.name}`);
+                }
+                this.context.primaryKeyType = derivedRelationship.otherEntity.primaryKeyType;
+            },
+
+            prepareRelationshipsForTemplates() {
+                this.context.relationships.forEach(relationship => {
                     prepareRelationshipForTemplates(this.context, relationship, this);
                     this._.defaults(relationship, {
                         // otherEntityField should be id if not specified

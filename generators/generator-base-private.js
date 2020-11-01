@@ -36,10 +36,14 @@ const prettierPluginPackagejson = require('prettier-plugin-packagejson');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
+const { defaultConfig } = require('./generator-defaults');
 const { languageToJavaLanguage } = require('./utils');
 const { prettierTransform, generatedAnnotationTransform } = require('./generator-transforms');
 const JSONToJDLEntityConverter = require('../jdl/converters/json-to-jdl-entity-converter');
 const JSONToJDLOptionConverter = require('../jdl/converters/json-to-jdl-option-converter');
+const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../utils/entity');
+const { prepareFieldForTemplates } = require('../utils/field');
+const { formatDateForChangelog } = require('../utils/liquibase');
 
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
@@ -1298,20 +1302,6 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
 
     /**
-     * Returns the primary key data type based on authentication type, DB and given association
-     *
-     * @param {string} authenticationType - the auth type
-     * @param {string} databaseType - the database type
-     * @param {T[]} relationships - relationships
-     */
-    getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships) {
-        const derivedRelationship = relationships.find(relationship => relationship.useJPADerivedIdentifier === true);
-        return derivedRelationship && this.isUserEntity(derivedRelationship.otherEntityName) && authenticationType === 'oauth2'
-            ? 'String'
-            : this.getPkType(databaseType);
-    }
-
-    /**
      * Returns the JDBC URL for a databaseType
      *
      * @param {string} databaseType
@@ -1741,5 +1731,54 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         }
         config += '\n';
         return config;
+    }
+
+    createUserManagementEntities() {
+        this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
+        if (
+            this.configOptions.sharedEntities.User ||
+            (this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.authenticationType !== 'oauth2')
+        ) {
+            return;
+        }
+
+        const changelogDateDate = this.jhipsterConfig.creationTimestamp ? new Date(this.jhipsterConfig.creationTimestamp) : new Date();
+        const changelogDate = formatDateForChangelog(changelogDateDate);
+        // Create entity definition for built-in entity to make easier to deal with relationships.
+        const user = {
+            name: 'User',
+            entityTableName: `${this.getTableName(this.jhipsterConfig.jhiPrefix)}_user`,
+            relationships: [],
+            changelogDate,
+        };
+
+        loadRequiredConfigIntoEntity(user, this.jhipsterConfig);
+        // Fallback to defaults for test cases.
+        loadRequiredConfigIntoEntity(user, defaultConfig);
+
+        const userIdType =
+            user.authenticationType === 'oauth2' || user.databaseType !== 'sql' ? 'String' : this.getPkType(user.databaseType);
+
+        user.fields = [
+            {
+                fieldName: 'id',
+                fieldType: userIdType,
+                columnType: userIdType === 'Long' ? 'bigint' : 'varchar(100)',
+                options: {
+                    fieldNameHumanized: 'ID',
+                    id: true,
+                },
+            },
+            {
+                fieldName: 'login',
+                fieldType: 'String',
+            },
+        ];
+
+        prepareEntityForTemplates(user, this);
+        user.fields.forEach(field => {
+            prepareFieldForTemplates(user, field, this);
+        });
+        this.configOptions.sharedEntities.User = user;
     }
 };

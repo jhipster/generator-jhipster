@@ -42,8 +42,8 @@
     -->
     <changeSet id="00000000000001" author="jhipster">
 <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
-        <createTable tableName="<%= jhiTablePrefix %>_user">
-            <%_ if (authenticationType === 'oauth2') { _%>
+        <createTable tableName="<%= user.entityTableName %>">
+            <%_ if (user.primaryKeyType !== 'Long') { _%>
             <column name="id" type="varchar(100)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -91,7 +91,7 @@
             </column>
         </createTable>
 
-        <createTable tableName="<%= jhiTablePrefix %>_user_authority">
+        <createTable tableName="<%= user.entityTableName %>_authority">
             <column name="user_id" type="<%_ if (authenticationType === 'oauth2') { _%>varchar(100)<%_ } else { _%>bigint<%_ } _%>">
                 <constraints nullable="false"/>
             </column>
@@ -100,7 +100,7 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="user_id, authority_name" tableName="<%= jhiTablePrefix %>_user_authority"/>
+        <addPrimaryKey columnNames="user_id, authority_name" tableName="<%= user.entityTableName %>_authority"/>
     <%_ if (authenticationType === 'session') { _%>
 
         <createTable tableName="<%= jhiTablePrefix %>_persistent_token">
@@ -118,21 +118,21 @@
     <%_ } _%>
 
         <addForeignKeyConstraint baseColumnNames="authority_name"
-                                 baseTableName="<%= jhiTablePrefix %>_user_authority"
+                                 baseTableName="<%= user.entityTableName %>_authority"
                                  constraintName="fk_authority_name"
                                  referencedColumnNames="name"
                                  referencedTableName="<%= jhiTablePrefix %>_authority"/>
 
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="<%= jhiTablePrefix %>_user_authority"
+                                 baseTableName="<%= user.entityTableName %>_authority"
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="<%= jhiTablePrefix %>_user"/>
+                                 referencedTableName="<%= user.entityTableName %>"/>
 
     <%_ if (authenticationType !== 'oauth2') { _%>
         <addNotNullConstraint   columnName="password_hash"
                                 columnDataType="varchar(60)"
-                                tableName="<%= jhiTablePrefix %>_user"/>
+                                tableName="<%= user.entityTableName %>"/>
     <%_ } _%>
     <%_ if (authenticationType === 'session') { _%>
 
@@ -140,7 +140,7 @@
                                  baseTableName="<%= jhiTablePrefix %>_persistent_token"
                                  constraintName="fk_user_persistent_token"
                                  referencedColumnNames="id"
-                                 referencedTableName="<%= jhiTablePrefix %>_user"/>
+                                 referencedTableName="<%= user.entityTableName %>"/>
     <%_ } _%>
     <%_ if (authenticationType !== 'oauth2' || (authenticationType === 'oauth2' && applicationType !== 'microservice')) { _%>
         <<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
@@ -149,14 +149,14 @@
                   <%_ if (prodDatabaseType === 'mssql') { _%>
                   identityInsertEnabled="true"
                   <%_ } _%>
-                  tableName="<%= jhiTablePrefix %>_user">
+                  tableName="<%= user.entityTableName %>">
             <%_ if (prodDatabaseType === 'postgresql') { _%>
             <column name="id" type="numeric"/>
             <%_ } _%>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
-        <dropDefaultValue tableName="<%= jhiTablePrefix %>_user" columnName="created_date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="<%= user.entityTableName %>" columnName="created_date" columnDataType="${datetimeType}"/>
         <<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
                   file="config/liquibase/data/authority.csv"
                   separator=";"

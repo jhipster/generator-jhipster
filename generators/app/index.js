@@ -405,6 +405,19 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         return this._composing();
     }
 
+    _loading() {
+        return {
+            createUserManagementEntities() {
+                this.createUserManagementEntities();
+            },
+        };
+    }
+
+    get loading() {
+        if (useBlueprints) return;
+        return this._loading();
+    }
+
     _default() {
         return {
             ...super._missingPreDefault(),

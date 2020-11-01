@@ -232,6 +232,10 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                 this.loadServerConfig();
                 this.loadTranslationConfig();
             },
+
+            createUserManagementEntities() {
+                this.createUserManagementEntities();
+            },
         };
     }
 
@@ -255,7 +259,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                     this.cacheProvider
                 );
                 this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.authenticationType);
-                this.pkType = this.getPkType(this.databaseType);
 
                 this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
 
@@ -298,6 +301,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     _default() {
         return {
             ...super._missingPreDefault(),
+
+            loadUserManagementEntities() {
+                if (!this.configOptions.sharedEntities) return;
+                // Make user entity available to templates.
+                this.user = this.configOptions.sharedEntities.User;
+            },
 
             insight() {
                 statistics.sendSubGenEvent('generator', 'server', {
