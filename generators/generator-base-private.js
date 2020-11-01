@@ -1758,8 +1758,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         // Fallback to defaults for test cases.
         loadRequiredConfigIntoEntity(user, defaultConfig);
 
-        const userIdType =
-            user.authenticationType === 'oauth2' || user.databaseType !== 'sql' ? 'String' : this.getPkType(user.databaseType);
+        const userIdType = user.authenticationType === 'oauth2' ? 'String' : this.getPkType(user.databaseType);
 
         user.fields = [
             {
