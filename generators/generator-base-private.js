@@ -1060,17 +1060,15 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                 const relationshipType = relationship.relationshipType;
                 const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
                 const ownerSide = relationship.ownerSide;
+                fieldType = this.getTypescriptKeyType(relationship.otherEntity.primaryKeyType);
 
                 if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
-                    if (otherEntityFieldCapitalized !== 'Id' && otherEntityFieldCapitalized !== '') {
-                        fieldType = 'string';
+                    if (relationship.relatedField) {
                         fieldName = `${relationshipFieldName}${otherEntityFieldCapitalized}`;
-                        variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
+                        variablesWithTypes.push(`${fieldName}?: ${this.getTypescriptKeyType(relationship.relatedField.fieldType)}`);
                     }
-                    fieldType = tsKeyType; // review: added for mongodb-with-relations
                     fieldName = `${relationshipFieldName}Id`;
                 } else {
-                    fieldType = tsKeyType;
                     fieldName = `${relationship.relationshipFieldName}Id`;
                 }
             }
