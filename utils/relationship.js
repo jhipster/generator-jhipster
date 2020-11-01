@@ -110,6 +110,11 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         } else {
             generator.debug(`Entity ${entityName}: Could not find the other side of the relationship ${stringify(relationship)}`);
         }
+        relationship.otherRelationship = otherRelationship;
+    }
+
+    if (relationship.otherEntity && relationship.otherEntityField && relationship.otherEntityField !== 'id') {
+        relationship.relatedField = relationship.otherEntity.fields.find(field => field.fieldName === relationship.otherEntityField);
     }
 
     if (relationship.otherEntityRelationshipName !== undefined) {
