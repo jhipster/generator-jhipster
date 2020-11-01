@@ -331,6 +331,7 @@ jhipster:
     from: <%= baseName %>@localhost
   api-docs:
     default-include-pattern: /api/.*
+    management-include-pattern: "${server.servlet.context-path:}/management/.*"
     title: <%= baseName %> API
     description: <%= baseName %> API documentation
     version: 0.0.1
