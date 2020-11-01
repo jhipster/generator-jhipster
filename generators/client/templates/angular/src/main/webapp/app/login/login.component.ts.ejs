@@ -16,24 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ViewChild, OnInit, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit, ElementRef } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { LoginService } from 'app/core/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
-import { Account } from 'app/core/user/account.model';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-login',
   templateUrl: './login.component.html'
 })
-export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
-  account: Account | null = null;
+export class LoginComponent implements OnInit, AfterViewInit {
   @ViewChild('username', { static: false })
   username?: ElementRef;
-
-  authSubscription?: Subscription;
   authenticationError = false;
 
   loginForm = this.fb.group({
@@ -45,10 +40,9 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private accountService: AccountService, private loginService: LoginService, private router: Router, private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    // try to log in automatically
-    this.authSubscription = this.accountService.identity(true).subscribe(account => {
-      this.account = account;
-      if (this.isAuthenticated()) {
+    // if already authenticated then navigate to home page
+    this.accountService.identity().subscribe(() => {
+      if (this.accountService.isAuthenticated()) {
         this.router.navigate(['']);
       }
     });
@@ -75,19 +69,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
             this.router.navigate(['']);
          }
         },
-        () => {
-          this.authenticationError = true;
-        }
+        () => this.authenticationError = true
       );
-  }
-
-  isAuthenticated(): boolean {
-    return this.accountService.isAuthenticated();
-  }
-
-  ngOnDestroy(): void {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
   }
 }

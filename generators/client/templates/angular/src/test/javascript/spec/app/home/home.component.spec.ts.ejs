@@ -19,7 +19,9 @@
 jest.mock('app/core/auth/account.service');
 <%_ if (authenticationType !== 'oauth2') { _%>
 jest.mock('@angular/router');
-<% } %>
+<% } else { %>
+jest.mock('app/core/login/login.service');
+<%_ } _%>
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { of } from 'rxjs';
@@ -29,6 +31,8 @@ import { AccountService } from 'app/core/auth/account.service';
 
 <%_ if (authenticationType !== 'oauth2') { _%>
 import { Router } from '@angular/router';
+<% } else { %>
+import { LoginService } from 'app/core/login/login.service';
 <%_ } _%>
 
 describe('Component Tests', () => {
@@ -38,11 +42,14 @@ describe('Component Tests', () => {
         let mockAccountService: AccountService;
         <%_ if (authenticationType !== 'oauth2') { _%>
         let mockRouter: Router;
+        <% } else { %>
+        let mockLoginService: LoginService;
         <%_ } _%>
 
         beforeEach(waitForAsync(() => {
             TestBed.configureTestingModule({
-                declarations: [HomeComponent]
+                declarations: [HomeComponent],
+                providers: [AccountService, <% if (authenticationType !== 'oauth2') { %>Router<% } else { %>LoginService<% } %>]
             })
             .overrideTemplate(HomeComponent, '')
             .compileComponents();
@@ -55,7 +62,9 @@ describe('Component Tests', () => {
             mockAccountService.identity = jest.fn(() => of(null));
             mockAccountService.getAuthenticationState = jest.fn(() => of(null));
             <%_ if (authenticationType !== 'oauth2') { _%>
-                mockRouter = TestBed.inject(Router);
+            mockRouter = TestBed.inject(Router);
+            <% } else { %>
+            mockLoginService = TestBed.inject(LoginService);
             <%_ } _%>
         });
 
@@ -84,6 +93,14 @@ describe('Component Tests', () => {
 
             // THEN
             expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
+        });
+        <% } else { %>
+        it('Should call loginService.login on login', () => {
+            // WHEN
+            comp.login();
+
+            // THEN
+            expect(mockLoginService.login).toHaveBeenCalled();
         });
         <%_ } _%>
     });

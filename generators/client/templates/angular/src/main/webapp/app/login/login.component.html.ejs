@@ -36,7 +36,7 @@
                             formControlName="password" data-cy="password">
                 </div>
 
-                <div class="form-check">
+                <div class="form-check"<% if (authenticationType === 'session' && databaseType === 'no') { %> hidden<% } %>>
                     <label class="form-check-label" for="rememberMe">
                         <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe">
                         <span jhiTranslate="login.form.rememberme">Remember me</span>
