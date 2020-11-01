@@ -363,11 +363,13 @@ _%>
     <%_ } _%>
 
     <%_ if (selectableManyToManyEntitiesType) { _%>
-    getSelected(selectedVals: <%= selectableManyToManyEntitiesType %>[], option: <%= selectableManyToManyEntitiesType %>): <%= selectableManyToManyEntitiesType %> {
-        for (let i = 0; i < selectedVals.length; i++) {
-            if (option.id === selectedVals[i].id) {
-                return selectedVals[i];
-            }
+    getSelected(option: <%= selectableManyToManyEntitiesType %>, selectedVals?: <%= selectableManyToManyEntitiesType %>[]): <%= selectableManyToManyEntitiesType %> {
+        if (selectedVals) {
+          for (let i = 0; i < selectedVals.length; i++) {
+              if (option.id === selectedVals[i].id) {
+                  return selectedVals[i];
+              }
+          }
         }
         return option;
     }
