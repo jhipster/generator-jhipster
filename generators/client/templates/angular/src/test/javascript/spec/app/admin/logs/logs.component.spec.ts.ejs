@@ -50,7 +50,7 @@ describe('Component Tests', () => {
             it('should set all default values correctly', () => {
                 expect(comp.filter).toBe('');
                 expect(comp.orderProp).toBe('name');
-                expect(comp.reverse).toBe(false);
+                expect(comp.ascending).toBe(true);
             });
 
             it('Should call load all on init', () => {
