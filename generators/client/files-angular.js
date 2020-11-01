@@ -118,6 +118,8 @@ const files = {
                 { file: 'layouts/error/error.route.ts', method: 'processJs' },
                 { file: 'layouts/error/error.component.ts', method: 'processJs' },
                 { file: 'layouts/error/error.component.html', method: 'processHtml' },
+                // login
+                'login/login.service.ts',
             ],
         },
         {
@@ -138,7 +140,13 @@ const files = {
                 { file: 'login/login.route.ts', method: 'processJs' },
                 { file: 'login/login.component.ts', method: 'processJs' },
                 { file: 'login/login.component.html', method: 'processHtml' },
+                'login/login.model.ts',
             ],
+        },
+        {
+            path: ANGULAR_DIR,
+            condition: generator => generator.authenticationType === 'oauth2',
+            templates: ['login/logout.model.ts'],
         },
     ],
     angularAccountModule: [
@@ -273,26 +281,11 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 'core/core.module.ts',
-                // login
-                'core/login/login.service.ts',
                 'core/user/account.model.ts',
 
                 // icons
                 'core/icons/font-awesome-icons.ts',
             ],
-        },
-        {
-            path: ANGULAR_DIR,
-            condition: generator => generator.authenticationType !== 'oauth2',
-            templates: [
-                // login
-                'core/login/login.model.ts',
-            ],
-        },
-        {
-            path: ANGULAR_DIR,
-            condition: generator => generator.authenticationType === 'oauth2',
-            templates: ['core/login/logout.model.ts'],
         },
         {
             condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',

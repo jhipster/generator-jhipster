@@ -18,7 +18,7 @@
 -%>
 <div>
     <div class="row justify-content-center">
-        <div class="col-6">
+        <div class="col-lg-6 col-md-8">
             <h1 jhiTranslate="login.title" data-cy="loginTitle">Sign in</h1>
             <div class="alert alert-danger" *ngIf="authenticationError" jhiTranslate="login.messages.error.authentication" data-cy="loginError">
                 <strong>Failed to sign in!</strong> Please check your credentials and try again.
@@ -27,13 +27,13 @@
                 <div class="form-group">
                     <label class="username-label" for="username" jhiTranslate="global.form.username.label">Login</label>
                     <input type="text" class="form-control" name="username" id="username" placeholder="{{ 'global.form.username.placeholder' | translate }}"
-                            formControlName="username" #username data-cy="username">
+                           formControlName="username" #username data-cy="username">
                 </div>
 
                 <div class="form-group">
                     <label for="password" jhiTranslate="login.form.password">Password</label>
                     <input type="password" class="form-control" name="password" id="password" placeholder="{{ 'login.form.password.placeholder' | translate }}"
-                            formControlName="password" data-cy="password">
+                           formControlName="password" data-cy="password">
                 </div>
 
                 <div class="form-check"<% if (authenticationType === 'session' && databaseType === 'no') { %> hidden<% } %>>

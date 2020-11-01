@@ -22,7 +22,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
-import { LoginService } from 'app/core/login/login.service';
+import { LoginService } from 'app/login/login.service';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 import { AccountService } from '../../core/auth/account.service';
 
@@ -55,6 +55,7 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
                         <%_ } _%>
                     }
                 }
-        }));
+            })
+        );
     }
 }
