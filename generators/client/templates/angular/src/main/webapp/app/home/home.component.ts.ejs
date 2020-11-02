@@ -24,7 +24,7 @@ import { Subscription } from 'rxjs';
 <%_ if (authenticationType !== 'oauth2') { _%>
 import { Router } from '@angular/router';
 <%_ } else { _%>
-import { LoginService } from 'app/core/login/login.service';
+import { LoginService } from 'app/login/login.service';
 <%_ } _%>
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';

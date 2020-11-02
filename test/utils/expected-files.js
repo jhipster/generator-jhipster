@@ -462,8 +462,8 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/duration.pipe.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/core/login/login.model.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/core/login/login.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/login/login.model.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/login/login.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/util/request-util.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/date/datepicker-adapter.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/shared-libs.module.ts`,
@@ -584,7 +584,7 @@ const expectedFiles = {
         `${DOCKER_DIR}keycloak.yml`,
     ],
 
-    oauth2Client: [`${CLIENT_MAIN_SRC_DIR}app/core/login/logout.model.ts`],
+    oauth2Client: [`${CLIENT_MAIN_SRC_DIR}app/login/logout.model.ts`],
 
     messageBroker: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/KafkaProperties.java`,

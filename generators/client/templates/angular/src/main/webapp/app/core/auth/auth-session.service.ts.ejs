@@ -25,9 +25,9 @@ import { map } from 'rxjs/operators';
 
 import { SERVER_API_URL } from 'app/app.constants';
 <%_ if (authenticationType === 'oauth2') { _%>
-import { Logout } from 'app/core/login/logout.model';
+import { Logout } from 'app/login/logout.model';
 <%_ } else { _%>
-import { Login } from 'app/core/login/login.model';
+import { Login } from 'app/login/login.model';
 
 export const LOGOUT_URL = SERVER_API_URL + 'api/logout';
 <%_ } _%>

@@ -119,7 +119,7 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.html`);
             generator.removeFile(`${ANGULAR_DIR}core/auth/user-route-access-service.ts`);
-            generator.removeFile(`${ANGULAR_DIR}core/login/login-modal.component.ts.ejs`);
+            generator.removeFolder(`${ANGULAR_DIR}core/login`);
             generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.common.js`);
             generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.dev.js`);
             generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.prod.js`);
@@ -138,7 +138,7 @@ function cleanupOldFiles(generator) {
             generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/helpers`);
             generator.removeFile('tslint.json');
         } else if (generator.jhipsterConfig.clientFramework === REACT) {
-            generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx.ejs`);
+            generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/enzyme-setup.ts`);
         } else if (generator.jhipsterConfig.clientFramework === VUE) {
             generator.removeFile(`${VUE_DIR}admin/audits/audits.component.ts`);

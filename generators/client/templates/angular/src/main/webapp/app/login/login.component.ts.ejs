@@ -19,7 +19,7 @@
 import { Component, ViewChild, OnInit, AfterViewInit, ElementRef } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoginService } from 'app/core/login/login.service';
+import { LoginService } from 'app/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
@@ -29,6 +29,7 @@ import { AccountService } from 'app/core/auth/account.service';
 export class LoginComponent implements OnInit, AfterViewInit {
   @ViewChild('username', { static: false })
   username?: ElementRef;
+
   authenticationError = false;
 
   loginForm = this.fb.group({
@@ -63,11 +64,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
       })
       .subscribe(
         () => {
-          this.authenticationError = false;          
+          this.authenticationError = false;
           if (!this.router.getCurrentNavigation()) {
             // There were no routing during login (eg from navigationToStoredUrl)
             this.router.navigate(['']);
-         }
+          }
         },
         () => this.authenticationError = true
       );

@@ -22,7 +22,7 @@ jest.mock('ngx-webstorage');
 jest.mock('ng-jhipster');
 <% } %>
 jest.mock('app/core/auth/account.service');
-jest.mock('app/core/login/login.service');
+jest.mock('app/login/login.service');
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -37,7 +37,7 @@ import { ProfileInfo } from 'app/layouts/profiles/profile-info.model';
 import { NavbarComponent } from 'app/layouts/navbar/navbar.component';
 import { AccountService } from 'app/core/auth/account.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
-import { LoginService } from 'app/core/login/login.service';
+import { LoginService } from 'app/login/login.service';
 
 describe('Component Tests', () => {
     describe('Navbar Component', () => {

@@ -20,19 +20,19 @@ jest.mock('app/core/auth/account.service');
 <%_ if (authenticationType !== 'oauth2') { _%>
 jest.mock('@angular/router');
 <% } else { %>
-jest.mock('app/core/login/login.service');
+jest.mock('app/login/login.service');
 <%_ } _%>
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+<%_ if (authenticationType !== 'oauth2') { _%>
+import { Router } from '@angular/router';
+<% } %>
 import { of } from 'rxjs';
 
 import { HomeComponent } from 'app/home/home.component';
 import { AccountService } from 'app/core/auth/account.service';
-
-<%_ if (authenticationType !== 'oauth2') { _%>
-import { Router } from '@angular/router';
-<% } else { %>
-import { LoginService } from 'app/core/login/login.service';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { LoginService } from 'app/login/login.service';
 <%_ } _%>
 
 describe('Component Tests', () => {
