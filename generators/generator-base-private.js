@@ -1045,29 +1045,12 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             let fieldType;
             let fieldName;
             const relationshipType = relationship.relationshipType;
-            const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
             if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
                 fieldType = `I${relationship.otherEntityAngularName}[]`;
                 fieldName = relationship.relationshipFieldNamePlural;
-            } else if (dto === 'no' || otherEntityIsEmbedded) {
+            } else {
                 fieldType = `I${relationship.otherEntityAngularName}`;
                 fieldName = relationship.relationshipFieldName;
-            } else {
-                const relationshipFieldName = relationship.relationshipFieldName;
-                const relationshipType = relationship.relationshipType;
-                const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
-                const ownerSide = relationship.ownerSide;
-                fieldType = this.getTypescriptKeyType(relationship.otherEntity.primaryKeyType);
-
-                if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
-                    if (relationship.relatedField) {
-                        fieldName = `${relationshipFieldName}${otherEntityFieldCapitalized}`;
-                        variablesWithTypes.push(`${fieldName}?: ${this.getTypescriptKeyType(relationship.relatedField.fieldType)}`);
-                    }
-                    fieldName = `${relationshipFieldName}Id`;
-                } else {
-                    fieldName = `${relationship.relationshipFieldName}Id`;
-                }
             }
             variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
         });
@@ -1085,31 +1068,15 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     generateEntityClientImports(relationships, dto, clientFramework = this.clientFramework) {
         const typeImports = new Map();
         relationships.forEach(relationship => {
-            const relationshipType = relationship.relationshipType;
-            const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
-            let toBeImported = false;
-            if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many' || otherEntityIsEmbedded) {
-                toBeImported = true;
-            } else if (dto === 'no') {
-                toBeImported = true;
+            const otherEntityAngularName = relationship.otherEntityAngularName;
+            const importType = `I${otherEntityAngularName}`;
+            let importPath;
+            if (this.isBuiltInUser(otherEntityAngularName)) {
+                importPath = clientFramework === ANGULAR ? 'app/core/user/user.model' : 'app/shared/model/user.model';
             } else {
-                const ownerSide = relationship.ownerSide;
-
-                if (relationshipType === 'many-to-many' && ownerSide === true) {
-                    toBeImported = true;
-                }
+                importPath = `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
             }
-            if (toBeImported) {
-                const otherEntityAngularName = relationship.otherEntityAngularName;
-                const importType = `I${otherEntityAngularName}`;
-                let importPath;
-                if (this.isBuiltInUser(otherEntityAngularName)) {
-                    importPath = clientFramework === ANGULAR ? 'app/core/user/user.model' : 'app/shared/model/user.model';
-                } else {
-                    importPath = `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
-                }
-                typeImports.set(importType, importPath);
-            }
+            typeImports.set(importType, importPath);
         });
         return typeImports;
     }

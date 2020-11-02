@@ -152,11 +152,7 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
     const relationshipRequired = relationships[idx].relationshipRequired;
 _%>
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-        <%_ if (dto === 'no') { _%>
         <%= relationshipName %>: [<% if (relationshipRequired) { %>null,Validators.required<% } %>],
-        <%_ } else { _%>
-        <%= relationshipName %>Id: [<% if (relationshipRequired) { %>null,Validators.required<% } %>],
-        <%_ } _%>
     <%_ } else if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
         <%= relationshipFieldNamePlural %>: [<% if (relationshipRequired) { %>null,Validators.required<% } %>],
     <%_ } _%>
@@ -243,11 +239,7 @@ _%>
         const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
     _%>
         <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-            <%_ if (dto === 'no') { _%>
             <%= relationshipName %>: <%= entityInstance %>.<%= relationshipFieldName %>,
-            <%_ } else { _%>
-            <%= relationshipName %>Id: <%= entityInstance %>.<%= relationshipFieldName %>Id,
-            <%_ } _%>
         <%_ } else if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
             <%= relationshipFieldNamePlural %>: <%= entityInstance %>.<%= relationshipFieldNamePlural %>,
         <%_ } _%>
@@ -331,11 +323,7 @@ _%>
         const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
     _%>
         <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-            <%_ if (dto === 'no') { _%>
             <%= relationshipName %>: this.editForm.get(['<%= relationshipName %>'])!.value,
-            <%_ } else { _%>
-            <%= relationshipName %>Id: this.editForm.get(['<%= relationshipName %>Id'])!.value,
-            <%_ } _%>
         <%_ } else if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
             <%= relationshipFieldNamePlural %>: this.editForm.get(['<%= relationshipFieldNamePlural %>'])!.value,
         <%_ } _%>
