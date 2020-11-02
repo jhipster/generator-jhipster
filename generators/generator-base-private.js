@@ -340,7 +340,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      * @param languages
      */
     updateLanguagesInWebpackAngular(languages) {
-        const fullPath = 'webpack/webpack.custom.js';
+        const fullPath = this.destinationPath('webpack/webpack.custom.js');
         try {
             let content = 'groupBy: [\n';
             // prettier-ignore
@@ -379,7 +379,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      * @param languages
      */
     updateLanguagesInWebpackReact(languages) {
-        const fullPath = 'webpack/webpack.common.js';
+        const fullPath = this.destinationPath('webpack/webpack.common.js');
         try {
             let content = 'groupBy: [\n';
             // prettier-ignore
@@ -1680,7 +1680,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
 
     vueUpdateLanguagesInWebpack(languages) {
-        const fullPath = 'webpack/webpack.common.js';
+        const fullPath = this.destinationPath('webpack/webpack.common.js');
         try {
             let content = 'groupBy: [\n';
             // prettier-ignore
