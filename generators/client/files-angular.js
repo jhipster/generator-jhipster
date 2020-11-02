@@ -266,13 +266,13 @@ const files = {
                 // config
                 'core/config/uib-pagination.config.ts',
                 'core/config/dayjs.ts',
+                'core/config/datepicker-adapter.ts',
+                'core/config/font-awesome-icons.ts',
+
                 // interceptors
                 'core/interceptor/error-handler.interceptor.ts',
                 'core/interceptor/notification.interceptor.ts',
                 'core/interceptor/auth-expired.interceptor.ts',
-
-                // icons
-                'core/icons/font-awesome-icons.ts',
             ],
         },
         {
@@ -288,7 +288,7 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
-            templates: ['core/language/language.constants.ts'],
+            templates: ['core/config/language.constants.ts'],
         },
     ],
     angularShared: [
@@ -308,8 +308,6 @@ const files = {
                 'shared/alert/alert.component.ts',
                 'shared/alert/alert-error.component.ts',
                 'shared/alert/alert-error.model.ts',
-                // dates
-                'core/date/datepicker-adapter.ts',
             ],
         },
         {

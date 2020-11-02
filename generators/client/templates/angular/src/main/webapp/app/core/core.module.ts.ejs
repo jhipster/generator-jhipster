@@ -19,7 +19,7 @@ import {
 } from 'app/shared/language/find-language-from-key.pipe';
 <%_ } _%>
 import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
-import { NgbDateDayjsAdapter } from 'app/core/date/datepicker-adapter';
+import { NgbDateDayjsAdapter } from 'app/core/config/datepicker-adapter';
 
 <%_ if (authenticationType === 'jwt') { _%>
 import { AuthInterceptor } from 'app/core/interceptor/auth.interceptor';
@@ -28,7 +28,7 @@ import { AuthExpiredInterceptor } from 'app/core/interceptor/auth-expired.interc
 import { ErrorHandlerInterceptor } from 'app/core/interceptor/error-handler.interceptor';
 import { NotificationInterceptor } from 'app/core/interceptor/notification.interceptor';
 
-import { fontAwesomeIcons } from './icons/font-awesome-icons';
+import { fontAwesomeIcons } from 'app/core/config/font-awesome-icons';
 
 @NgModule({
     imports: [

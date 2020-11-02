@@ -120,6 +120,9 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${ANGULAR_DIR}core/auth/user-route-access-service.ts`);
             generator.removeFolder(`${ANGULAR_DIR}core/login`);
             generator.removeFolder(`${ANGULAR_DIR}blocks`);
+            generator.removeFolder(`${ANGULAR_DIR}core/date`);
+            generator.removeFolder(`${ANGULAR_DIR}core/icons`);
+            generator.removeFolder(`${ANGULAR_DIR}core/language`);
             generator.removeFile(`${ANGULAR_DIR}config/dayjs.ts`);
             generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.common.js`);
             generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.dev.js`);
