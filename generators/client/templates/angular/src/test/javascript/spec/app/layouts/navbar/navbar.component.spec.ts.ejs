@@ -20,7 +20,7 @@ jest.mock('@angular/router');
 <%_ if (enableTranslation) { _%>
 jest.mock('ngx-webstorage');
 jest.mock('ng-jhipster');
-<% } %>
+<%_ } _%>
 jest.mock('app/core/auth/account.service');
 jest.mock('app/login/login.service');
 
@@ -31,7 +31,7 @@ import { of } from 'rxjs';
 <%_ if (enableTranslation) { _%>
 import { SessionStorageService } from 'ngx-webstorage';
 import { JhiLanguageService } from 'ng-jhipster';
-<% } %>
+<%_ } _%>
 
 import { ProfileInfo } from 'app/layouts/profiles/profile-info.model';
 import { NavbarComponent } from 'app/layouts/navbar/navbar.component';
