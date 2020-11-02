@@ -358,7 +358,6 @@ describe('JHipster client generator', () => {
                     /* eslint-disable no-template-curly-in-string */
                     '    <ErrorBoundaryRoute exact path={`${match.url}/health`} component={Health} />\n' +
                         '    <ErrorBoundaryRoute exact path={`${match.url}/metrics`} component={Metrics} />\n' +
-                        '    <ErrorBoundaryRoute exact path={`${match.url}/docs`} component={Docs} />\n' +
                         '    <ErrorBoundaryRoute exact path={`${match.url}/configuration`} component={Configuration} />\n' +
                         '    <ErrorBoundaryRoute exact path={`${match.url}/logs`} component={Logs} />'
                     /* eslint-enable no-template-curly-in-string */

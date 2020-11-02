@@ -535,8 +535,6 @@ const expectedFiles = {
 
     clientAdminReact: [
         `${CLIENT_MAIN_SRC_DIR}app/modules/administration/configuration/configuration.tsx`,
-        `${CLIENT_MAIN_SRC_DIR}app/modules/administration/docs/docs.tsx`,
-        `${CLIENT_MAIN_SRC_DIR}app/modules/administration/docs/docs.scss`,
         `${CLIENT_MAIN_SRC_DIR}app/modules/administration/health/health.tsx`,
         `${CLIENT_MAIN_SRC_DIR}app/modules/administration/health/health-modal.tsx`,
         `${CLIENT_MAIN_SRC_DIR}app/modules/administration/metrics/metrics.tsx`,

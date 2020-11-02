@@ -184,6 +184,8 @@ const files = {
             templates: [
                 { file: 'modules/administration/index.tsx', method: 'processJsx' },
                 'modules/administration/administration.reducer.ts',
+                { file: 'modules/administration/docs/docs.tsx', method: 'processJsx' },
+                'modules/administration/docs/docs.scss',
             ],
         },
         {
@@ -191,8 +193,6 @@ const files = {
             path: REACT_DIR,
             templates: [
                 { file: 'modules/administration/configuration/configuration.tsx', method: 'processJsx' },
-                { file: 'modules/administration/docs/docs.tsx', method: 'processJsx' },
-                'modules/administration/docs/docs.scss',
                 { file: 'modules/administration/health/health.tsx', method: 'processJsx' },
                 { file: 'modules/administration/health/health-modal.tsx', method: 'processJsx' },
                 { file: 'modules/administration/logs/logs.tsx', method: 'processJsx' },
