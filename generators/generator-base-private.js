@@ -920,10 +920,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                         variableName += 'Collection';
                     }
                     const relationshipFieldName = `${relationship.relationshipFieldName}`;
-                    const relationshipFieldNameIdCheck =
-                        dto === 'no'
-                            ? `!${entityInstance}.${relationshipFieldName} || !${entityInstance}.${relationshipFieldName}.id`
-                            : `!${entityInstance}.${relationshipFieldName}Id`;
+                    const relationshipFieldNameIdCheck = `!${entityInstance}.${relationshipFieldName} || !${entityInstance}.${relationshipFieldName}.id`;
 
                     filter = `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`;
                     if (relationship.jpaMetamodelFiltering) {
@@ -1780,5 +1777,31 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             prepareFieldForTemplates(user, field, this);
         });
         this.configOptions.sharedEntities.User = user;
+    }
+
+    // Handle the specific case when the second letter is capitalized
+    // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
+    javaBeanCase(beanName) {
+        const secondLetter = beanName.charAt(1);
+        if (secondLetter === secondLetter.toUpperCase()) {
+            return beanName;
+        }
+        return _.upperFirst(beanName);
+    }
+
+    buildJavaGet(reference) {
+        return reference.path.map(partialPath => `get${this.javaBeanCase(partialPath)}()`).join('.');
+    }
+
+    buildReferencePath(reference) {
+        return reference.path.join('.');
+    }
+
+    buildJavaGetter(reference, type = reference.type) {
+        return `${type} get${this.javaBeanCase(reference.name)}()`;
+    }
+
+    buildJavaSetter(reference, value = `${reference.type} ${reference.name}`) {
+        return `set${this.javaBeanCase(reference.name)}(${value})`;
     }
 };

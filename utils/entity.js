@@ -52,6 +52,14 @@ const BASE_TEMPLATE_DATA = {
     fieldsContainEmbedded: false,
     fieldsIsReactAvField: false,
 
+    get otherRelationships() {
+        return [];
+    },
+
+    get idFields() {
+        return [];
+    },
+
     get enums() {
         return [];
     },

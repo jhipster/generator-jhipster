@@ -28,6 +28,15 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     const otherEntityName = relationship.otherEntityName;
     const jhiTablePrefix = entityWithConfig.jhiTablePrefix || generator.getTableName(entityWithConfig.jhiPrefix);
 
+    _.defaults(relationship, {
+        // otherEntityField should be id if not specified
+        otherEntityField: 'id',
+        // let ownerSide true when type is 'many-to-one' for convenience.
+        // means that this side should control the reference.
+        ownerSide:
+            relationship.relationshipType !== 'one-to-many' && (relationship.ownerSide || relationship.relationshipType === 'many-to-one'),
+    });
+
     relationship.otherSideReferenceExists = false;
 
     const otherEntityData = relationship.otherEntity;
@@ -237,7 +246,28 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         entityWithConfig.differentRelationships[entityType] = [];
     }
     entityWithConfig.differentRelationships[entityType].push(relationship);
+    relationship.reference = relationshipToReference(entityWithConfig, relationship);
     return relationship;
 }
 
-module.exports = { prepareRelationshipForTemplates };
+function relationshipToReference(entity, relationship, pathPrefix = []) {
+    const collection = relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many';
+    const name = collection ? relationship.relationshipNamePlural : relationship.relationshipName;
+    const reference = {
+        id: relationship.id,
+        entity,
+        relationship,
+        owned: relationship.ownerSide,
+        collection,
+        doc: relationship.javaDoc,
+        name,
+        nameCapitalized: collection ? relationship.relationshipNameCapitalizedPlural : relationship.relationshipNameCapitalized,
+        type: relationship.otherEntity.primaryKeyType,
+        path: [...pathPrefix, name],
+        idReferences: relationship.otherEntity.idFields ? [relationship.otherEntity.idFields.map(field => field.reference)] : [],
+        valueReference: relationship.otherEntityField && relationship.otherEntityField.reference,
+    };
+    return reference;
+}
+
+module.exports = { prepareRelationshipForTemplates, relationshipToReference };

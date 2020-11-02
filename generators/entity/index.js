@@ -545,16 +545,14 @@ class EntityGenerator extends BaseBlueprintGenerator {
             prepareRelationshipsForTemplates() {
                 this.context.relationships.forEach(relationship => {
                     prepareRelationshipForTemplates(this.context, relationship, this);
-                    this._.defaults(relationship, {
-                        // otherEntityField should be id if not specified
-                        otherEntityField: 'id',
-                        // let ownerSide true when type is 'many-to-one' for convenience.
-                        // means that this side should control the reference.
-                        ownerSide:
-                            relationship.relationshipType !== 'one-to-many' &&
-                            (relationship.ownerSide || relationship.relationshipType === 'many-to-one'),
-                    });
                 });
+                this.context.dtoReferences = this.context.fields
+                    .map(field => field.reference)
+                    .concat(
+                        this.context.relationships
+                            .map(relationship => relationship.reference)
+                            .filter(reference => reference.owned || reference.relationship.otherEntity.embedded)
+                    );
             },
 
             processCollectionRelationships() {
