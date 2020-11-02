@@ -26,7 +26,7 @@ jest.mock('app/login/login.service');
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 <%_ if (authenticationType !== 'oauth2') { _%>
 import { Router } from '@angular/router';
-<% } %>
+<%_ } _%>
 import { of } from 'rxjs';
 
 import { HomeComponent } from 'app/home/home.component';

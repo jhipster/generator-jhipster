@@ -18,12 +18,11 @@
 -%>
 import { Component, OnInit<%_ if (authenticationType !== 'oauth2') { _%>, OnDestroy <%_ } _%> } from '@angular/core';
 <%_ if (authenticationType !== 'oauth2') { _%>
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 <%_ } _%>
 
-<%_ if (authenticationType !== 'oauth2') { _%>
-import { Router } from '@angular/router';
-<%_ } else { _%>
+<%_ if (authenticationType === 'oauth2') { _%>
 import { LoginService } from 'app/login/login.service';
 <%_ } _%>
 import { AccountService } from 'app/core/auth/account.service';
