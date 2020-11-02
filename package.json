@@ -99,7 +99,7 @@
         "ejs-lint": "1.1.0",
         "eslint": "7.12.0",
         "eslint-config-airbnb-base": "14.2.0",
-        "eslint-config-prettier": "6.14.0",
+        "eslint-config-prettier": "6.15.0",
         "eslint-plugin-chai-friendly": "^0.6.0",
         "eslint-plugin-import": "2.22.1",
         "eslint-plugin-mocha": "8.0.0",
