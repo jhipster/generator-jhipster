@@ -21,10 +21,11 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable<% if (authenticationType !== 'oauth2' && databaseType !== 'sql' && databaseType !== 'mongodb' && databaseType !== 'couchbase') { %>, of<% } %> } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
-import { createRequestOption, Pagination } from 'app/shared/util/request-util';
+import { createRequestOption } from 'app/core/request/request-util';
+import { Pagination } from 'app/core/request/request.model';
 import { IUser } from './user.model';
 <%_ if (authenticationType !== 'oauth2' && databaseType !== 'sql' && databaseType !== 'mongodb' && databaseType !== 'couchbase') { _%>
-import { Authority } from 'app/shared/constants/authority.constants';
+import { Authority } from 'app/core/config/authority.constants';
 <%_ } _%>
 
 

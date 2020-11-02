@@ -268,11 +268,19 @@ const files = {
                 'core/config/dayjs.ts',
                 'core/config/datepicker-adapter.ts',
                 'core/config/font-awesome-icons.ts',
+                'core/config/error.constants.ts',
+                'core/config/input.constants.ts',
+                'core/config/pagination.constants.ts',
+                'core/config/authority.constants.ts',
 
                 // interceptors
                 'core/interceptor/error-handler.interceptor.ts',
                 'core/interceptor/notification.interceptor.ts',
                 'core/interceptor/auth-expired.interceptor.ts',
+
+                // request
+                'core/request/request-util.ts',
+                'core/request/request.model.ts',
             ],
         },
         {
@@ -297,13 +305,7 @@ const files = {
             templates: [
                 'shared/shared.module.ts',
                 'shared/shared-libs.module.ts',
-                'shared/constants/error.constants.ts',
-                'shared/constants/input.constants.ts',
-                'shared/constants/pagination.constants.ts',
-                'shared/constants/authority.constants.ts',
                 'shared/duration.pipe.ts',
-                // models
-                'shared/util/request-util.ts',
                 // alert service code
                 'shared/alert/alert.component.ts',
                 'shared/alert/alert-error.component.ts',
@@ -313,7 +315,7 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
-            templates: ['shared/language/find-language-from-key.pipe.ts'],
+            templates: ['shared/find-language-from-key.pipe.ts'],
         },
     ],
     angularAuthService: [
@@ -322,7 +324,7 @@ const files = {
             templates: [
                 'core/auth/csrf.service.ts',
                 'core/auth/state-storage.service.ts',
-                'shared/auth/has-any-authority.directive.ts',
+                'shared/has-any-authority.directive.ts',
                 'core/auth/account.service.ts',
                 'core/auth/user-route-access.service.ts',
             ],

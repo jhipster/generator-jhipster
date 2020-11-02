@@ -47,7 +47,7 @@ import { map } from 'rxjs/operators';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
 import * as dayjs from 'dayjs';
-import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
+import { DATE_TIME_FORMAT } from 'app/core/config/input.constants';
 <%_ } _%>
 <%_ if (fieldsContainBlob) { _%>
 import { JhiDataUtils, JhiFileLoadError, JhiEventManager, JhiEventWithContent } from 'ng-jhipster';

@@ -123,6 +123,10 @@ function cleanupOldFiles(generator) {
             generator.removeFolder(`${ANGULAR_DIR}core/date`);
             generator.removeFolder(`${ANGULAR_DIR}core/icons`);
             generator.removeFolder(`${ANGULAR_DIR}core/language`);
+            generator.removeFolder(`${ANGULAR_DIR}shared/auth`);
+            generator.removeFolder(`${ANGULAR_DIR}shared/language`);
+            generator.removeFolder(`${ANGULAR_DIR}shared/constants`);
+            generator.removeFolder(`${ANGULAR_DIR}shared/util`);
             generator.removeFile(`${ANGULAR_DIR}config/dayjs.ts`);
             generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.common.js`);
             generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.dev.js`);

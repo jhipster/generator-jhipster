@@ -24,7 +24,7 @@ import { Subscription<% if (databaseType !== 'cassandra') { %>, combineLatest<% 
 import { ActivatedRoute, Router } from '@angular/router';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
+import { ITEMS_PER_PAGE } from 'app/core/config/pagination.constants';
 <%_ } else { _%>
 import { JhiEventManager } from 'ng-jhipster';
 

@@ -16,12 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+export interface Pagination {
+  page: number;
+  size: number;
+  sort: string[];
+}
 
-import { InjectionToken } from '@angular/core';
+export interface Search {
+  query: string;
+}
 
-export const i18nBundlePrefix = new InjectionToken<string>('i18n.bundle.prefix');
-export const i18nBundleSuffix = new InjectionToken<string>('i18n.bundle.suffix');
-
-// admin module bundle
-export const i18nAdminModuleBundlePrefix = 'i18n/admin/';
-export const i18nBundleSuffixValue = `.json?buildTimestamp=${process.env.BUILD_TIMESTAMP}`;
+export interface SearchWithPagination extends Search, Pagination {}
