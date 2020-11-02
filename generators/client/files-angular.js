@@ -202,7 +202,14 @@ const files = {
     angularAdminModule: [
         {
             path: ANGULAR_DIR,
-            templates: [{ file: 'admin/admin-routing.module.ts', method: 'processJs' }],
+            templates: [
+                { file: 'admin/admin-routing.module.ts', method: 'processJs' },
+                { file: 'admin/docs/docs.route.ts', method: 'processJs' },
+                { file: 'admin/docs/docs.module.ts', method: 'processJs' },
+                { file: 'admin/docs/docs.component.ts', method: 'processJs' },
+                'admin/docs/docs.component.html',
+                'admin/docs/docs.scss',
+            ],
         },
         {
             condition: generator => generator.withAdminUi,
@@ -214,11 +221,6 @@ const files = {
                 { file: 'admin/configuration/configuration.component.ts', method: 'processJs' },
                 { file: 'admin/configuration/configuration.component.html', method: 'processHtml' },
                 'admin/configuration/configuration.service.ts',
-                { file: 'admin/docs/docs.route.ts', method: 'processJs' },
-                { file: 'admin/docs/docs.module.ts', method: 'processJs' },
-                { file: 'admin/docs/docs.component.ts', method: 'processJs' },
-                'admin/docs/docs.component.html',
-                'admin/docs/docs.scss',
                 { file: 'admin/health/health.route.ts', method: 'processJs' },
                 { file: 'admin/health/health.module.ts', method: 'processJs' },
                 { file: 'admin/health/health.component.ts', method: 'processJs' },

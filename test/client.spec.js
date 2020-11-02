@@ -154,13 +154,13 @@ describe('JHipster client generator', () => {
             it('should contains admin routing', () => {
                 runResult.assertFileContent(
                     `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
-                    '        {\n' +
-                        "          path: 'configuration',\n" +
-                        "          loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule)\n" +
-                        '        },\n' +
-                        '        {\n' +
+                    '{\n' +
                         "          path: 'docs',\n" +
                         "          loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule)\n" +
+                        '        },\n' +
+                        '        {\n' +
+                        "          path: 'configuration',\n" +
+                        "          loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule)\n" +
                         '        },\n' +
                         '        {\n' +
                         "          path: 'health',\n" +

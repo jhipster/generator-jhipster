@@ -105,13 +105,13 @@
                             <span jhiTranslate="global.menu.admin.logs">Logs</span>
                         </a>
                     </li>
+                    <%_ } _%>
                     <li *ngIf="openAPIEnabled">
                         <a class="dropdown-item" routerLink="admin/docs" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="book" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.admin.apidocs">API</span>
                         </a>
                     </li>
-                    <%_ } _%>
                     <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
                     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory' || devDatabaseType === 'couchbase') { _%>
                     <li *ngIf="!inProduction">

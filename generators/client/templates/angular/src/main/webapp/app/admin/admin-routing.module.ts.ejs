@@ -34,14 +34,14 @@ import { RouterModule } from '@angular/router';
           }
         },
         <%_ } _%>
+        {
+          path: 'docs',
+          loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule)
+        },
         <%_ if (withAdminUi) { _%>
         {
           path: 'configuration',
           loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule)
-        },
-        {
-          path: 'docs',
-          loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule)
         },
         {
           path: 'health',
