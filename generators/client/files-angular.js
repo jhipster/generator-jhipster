@@ -70,27 +70,7 @@ const files = {
     angularApp: [
         {
             path: ANGULAR_DIR,
-            templates: [
-                'app.main.ts',
-                'app.module.ts',
-                'app-routing.module.ts',
-                'app.constants.ts',
-                'polyfills.ts',
-                'vendor.ts',
-                'blocks/config/prod.config.ts',
-                'blocks/config/uib-pagination.config.ts',
-                // interceptors
-                'blocks/interceptor/error-handler.interceptor.ts',
-                'blocks/interceptor/notification.interceptor.ts',
-                'blocks/interceptor/auth-expired.interceptor.ts',
-                // config
-                'config/dayjs.ts',
-            ],
-        },
-        {
-            condition: generator => generator.authenticationType === 'jwt',
-            path: ANGULAR_DIR,
-            templates: ['blocks/interceptor/auth.interceptor.ts'],
+            templates: ['app.main.ts', 'app.module.ts', 'app-routing.module.ts', 'app.constants.ts', 'polyfills.ts', 'vendor.ts'],
         },
     ],
     angularMain: [
@@ -283,9 +263,22 @@ const files = {
                 'core/core.module.ts',
                 'core/user/account.model.ts',
 
+                // config
+                'core/config/uib-pagination.config.ts',
+                'core/config/dayjs.ts',
+                // interceptors
+                'core/interceptor/error-handler.interceptor.ts',
+                'core/interceptor/notification.interceptor.ts',
+                'core/interceptor/auth-expired.interceptor.ts',
+
                 // icons
                 'core/icons/font-awesome-icons.ts',
             ],
+        },
+        {
+            condition: generator => generator.authenticationType === 'jwt',
+            path: ANGULAR_DIR,
+            templates: ['core/interceptor/auth.interceptor.ts'],
         },
         {
             condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',

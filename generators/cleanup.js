@@ -113,13 +113,14 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.route.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.module.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.service.ts`);
-            generator.removeFile(`${ANGULAR_DIR}blocks/interceptor/errorhandler.interceptor.ts`);
             generator.removeFile(`${ANGULAR_DIR}entities/entity.module.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/util/datepicker-adapter.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.html`);
             generator.removeFile(`${ANGULAR_DIR}core/auth/user-route-access-service.ts`);
             generator.removeFolder(`${ANGULAR_DIR}core/login`);
+            generator.removeFolder(`${ANGULAR_DIR}blocks`);
+            generator.removeFile(`${ANGULAR_DIR}config/dayjs.ts`);
             generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.common.js`);
             generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.dev.js`);
             generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.prod.js`);

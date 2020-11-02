@@ -22,11 +22,11 @@ import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap'
 import { NgbDateDayjsAdapter } from 'app/core/date/datepicker-adapter';
 
 <%_ if (authenticationType === 'jwt') { _%>
-import { AuthInterceptor } from 'app/blocks/interceptor/auth.interceptor';
+import { AuthInterceptor } from 'app/core/interceptor/auth.interceptor';
 <%_ } _%>
-import { AuthExpiredInterceptor } from 'app/blocks/interceptor/auth-expired.interceptor';
-import { ErrorHandlerInterceptor } from 'app/blocks/interceptor/error-handler.interceptor';
-import { NotificationInterceptor } from 'app/blocks/interceptor/notification.interceptor';
+import { AuthExpiredInterceptor } from 'app/core/interceptor/auth-expired.interceptor';
+import { ErrorHandlerInterceptor } from 'app/core/interceptor/error-handler.interceptor';
+import { NotificationInterceptor } from 'app/core/interceptor/notification.interceptor';
 
 import { fontAwesomeIcons } from './icons/font-awesome-icons';
 
