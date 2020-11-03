@@ -95,7 +95,7 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
  */
 <%_ if (reactiveSqlTestContainers) { _%>
 @ExtendWith(ReactiveSqlTestContainerExtension.class)
-<%_ } _%>  
+<%_ } _%>
 <%_ if (!reactive) { _%>
 @AutoConfigureMockMvc
 <%_ } else { _%>
@@ -109,7 +109,7 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 <%_ if (databaseType === 'neo4j') { _%>
 @ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
-public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     static final String TEST_USER_LOGIN = "test";
 
@@ -137,7 +137,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     <%_ } _%>
     @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
-    public void testGetExistingAccount() <% if (!reactive) { %>throws Exception <% } %>{
+    void testGetExistingAccount() <% if (!reactive) { %>throws Exception <% } %>{
     <%_ if (!reactive) { _%>
         Map<String, Object> userDetails = new HashMap<>();
         userDetails.put("sub", TEST_USER_LOGIN);
@@ -171,7 +171,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     }
 
     @Test
-    public void testGetUnknownAccount() <% if (!reactive) { %>throws Exception <% } %>{
+    void testGetUnknownAccount() <% if (!reactive) { %>throws Exception <% } %>{
     <%_ if (!reactive) { _%>
         restAccountMockMvc.perform(get("/api/account")
             .accept(MediaType.APPLICATION_JSON))
@@ -236,7 +236,7 @@ import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
  */
 <%_ if (reactiveSqlTestContainers) { _%>
 @ExtendWith(ReactiveSqlTestContainerExtension.class)
-<%_ } _%>  
+<%_ } _%>
 <%_ if (!reactive) { _%>
 @AutoConfigureMockMvc
 <%_ } else { _%>
@@ -250,7 +250,7 @@ import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 <%_ if (databaseType === 'neo4j') { _%>
 @ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
-public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
     static final String TEST_USER_LOGIN = "test";
 
     @Autowired
@@ -267,7 +267,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test
     @WithMockUser(username = TEST_USER_LOGIN, authorities = AuthoritiesConstants.ADMIN)
-    public void testGetExistingAccount() <% if (!reactive) { %>throws Exception <% } %>{
+    void testGetExistingAccount() <% if (!reactive) { %>throws Exception <% } %>{
         <%_ if (!reactive) { _%>
         restAccountMockMvc.perform(get("/api/account")
             .accept(MediaType.APPLICATION_JSON))
@@ -387,7 +387,7 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
  */
 <%_ if (reactiveSqlTestContainers) { _%>
 @ExtendWith(ReactiveSqlTestContainerExtension.class)
-<%_ } _%>  
+<%_ } _%>
 <%_ if (!reactive) { _%>
 @AutoConfigureMockMvc
 <%_ } else { _%>

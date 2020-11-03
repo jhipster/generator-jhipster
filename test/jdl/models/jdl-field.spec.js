@@ -66,13 +66,6 @@ describe('JDLField', () => {
                 expect(field).to.satisfy(matchField);
             });
         });
-        context('when passing a reserved keyword as name', () => {
-            it('should fail', () => {
-                expect(() => {
-                    new JDLField({ name: 'class', type: 'String' });
-                }).to.throw('The field name cannot be a reserved keyword, got: class.');
-            });
-        });
     });
     describe('addValidation', () => {
         let field;

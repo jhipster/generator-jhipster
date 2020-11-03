@@ -213,12 +213,8 @@ objects:
               value: 'org.apache.kafka.common.serialization.StringDeserializer'
             <%_ } _%>
             <%_ if (monitoring === 'prometheus') { _%>
-            - name: JHIPSTER_METRICS_LOGS_ENABLED
-              value: "true"
             - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
               value: "true"
-            - name: JHIPSTER_METRICS_PROMETHEUS_ENDPOINT
-              value: "/prometheusMetrics"
             <%_ } _%>
             ports:
             - name: http

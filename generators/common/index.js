@@ -28,13 +28,6 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
-
         if (this.options.help) {
             return;
         }
@@ -107,11 +100,6 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
     _default() {
         return {
             ...super._missingPreDefault(),
-
-            writePrettierConfig() {
-                // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work
-                this.writeFilesToDisk(prettierConfigFiles, this, false, this.fetchFromInstalledJHipster('common/templates'));
-            },
         };
     }
 
@@ -122,7 +110,14 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
 
     // Public API method used by the getter and also by Blueprints
     _writing() {
-        return { ...writeFiles(), ...super._missingPostWriting() };
+        return {
+            writePrettierConfig() {
+                // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work
+                this.writeFilesToDisk(prettierConfigFiles);
+            },
+            ...writeFiles(),
+            ...super._missingPostWriting(),
+        };
     }
 
     get writing() {

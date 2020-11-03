@@ -270,7 +270,7 @@ function writeFiles() {
             if (this.skipServer) return;
 
             // write server side files
-            this.writeFilesToDisk(serverFiles, this, false, this.fetchFromInstalledJHipster('entity-server/templates'));
+            this.writeFilesToDisk(serverFiles);
 
             if (this.databaseType === 'sql') {
                 if (['ehcache', 'caffeine', 'infinispan', 'redis'].includes(this.cacheProvider) && this.enableHibernateCache) {

@@ -89,7 +89,7 @@ module.exports = (args, options = {}, env, forkProcess) => {
             }
             return downloadFile(url, filename).catch(error => {
                 logger.info(error.message);
-                url = new URL(filename, 'https://raw.githubusercontent.com/jhipster/jdl-samples/master/').toString();
+                url = new URL(filename, 'https://raw.githubusercontent.com/jhipster/jdl-samples/main/').toString();
                 return downloadFile(url, filename);
             });
         }

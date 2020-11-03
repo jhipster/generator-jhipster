@@ -25,7 +25,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 import { AccountService } from 'app/core/auth/account.service';
 <%_ if (enableI18nRTL) { _%>
-import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-key.pipe';
+import { FindLanguageFromKeyPipe } from 'app/shared/find-language-from-key.pipe';
 <%_ } _%>
 
 @Component({
@@ -81,7 +81,7 @@ export class MainComponent implements OnInit {
     }
 
     private getPageTitle(routeSnapshot: ActivatedRouteSnapshot): string {
-        let title: string = (routeSnapshot.data && routeSnapshot.data['pageTitle']) ? routeSnapshot.data['pageTitle'] : '';
+        let title: string = routeSnapshot.data['pageTitle'] ?? '';
         if (routeSnapshot.firstChild) {
             title = this.getPageTitle(routeSnapshot.firstChild) || title;
         }

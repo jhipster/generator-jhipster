@@ -22,14 +22,14 @@ package <%= packageName %>.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 <%_ } _%>
 <%_ if (!skipClient || ['h2Disk', 'h2Memory'].includes(devDatabaseType) && !reactive) { _%>
-import io.github.jhipster.config.JHipsterConstants;
+import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
-import io.github.jhipster.config.JHipsterProperties;
+import tech.jhipster.config.JHipsterProperties;
 <%_ if (['h2Disk', 'h2Memory'].includes(devDatabaseType) && !reactive) { _%>
-import io.github.jhipster.config.h2.H2ConfigurationHelper;
+import tech.jhipster.config.h2.H2ConfigurationHelper;
 <%_ } _%>
 <%_ if (!skipClient && reactive) { _%>
-import io.github.jhipster.web.filter.<% if (reactive) { %>reactive.<% } %>CachingHttpHeadersFilter;
+import tech.jhipster.web.filter.<% if (reactive) { %>reactive.<% } %>CachingHttpHeadersFilter;
 <%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,21 +134,8 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
      */
     @Override
     public void customize(WebServerFactory server) {
-        setMimeMappings(server);
         // When running in an IDE or with <% if (buildTool === 'gradle') { %>./gradlew bootRun<% } else { %>./mvnw spring-boot:run<% } %>, set location of the static web assets.
         setLocationForStaticAssets(server);
-    }
-
-    private void setMimeMappings(WebServerFactory server) {
-        if (server instanceof ConfigurableServletWebServerFactory) {
-            MimeMappings mappings = new MimeMappings(MimeMappings.DEFAULT);
-            // IE issue, see https://github.com/jhipster/generator-jhipster/pull/711
-            mappings.add("html", MediaType.TEXT_HTML_VALUE + ";charset=" + StandardCharsets.UTF_8.name().toLowerCase());
-            // CloudFoundry issue, see https://github.com/cloudfoundry/gorouter/issues/64
-            mappings.add("json", MediaType.TEXT_HTML_VALUE + ";charset=" + StandardCharsets.UTF_8.name().toLowerCase());
-            ConfigurableServletWebServerFactory servletWebServer = (ConfigurableServletWebServerFactory) server;
-            servletWebServer.setMimeMappings(mappings);
-        }
     }
 
     private void setLocationForStaticAssets(WebServerFactory server) {

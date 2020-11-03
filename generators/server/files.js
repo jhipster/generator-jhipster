@@ -128,7 +128,7 @@ const serverFiles = {
             templates: [
                 'consul.yml',
                 { file: 'config/git2consul.json', method: 'copy' },
-                { file: 'config/consul-config/application.yml', method: 'copy', renameTo: () => 'central-server-config/application.yml' },
+                { file: 'config/consul-config/application.yml', renameTo: () => 'central-server-config/application.yml' },
             ],
         },
         {
@@ -138,12 +138,10 @@ const serverFiles = {
                 'jhipster-registry.yml',
                 {
                     file: 'config/docker-config/application.yml',
-                    method: 'copy',
                     renameTo: () => 'central-server-config/docker-config/application.yml',
                 },
                 {
                     file: 'config/localhost-config/application.yml',
-                    method: 'copy',
                     renameTo: () => 'central-server-config/localhost-config/application.yml',
                 },
             ],
@@ -809,10 +807,7 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                !generator.reactive &&
-                generator.authenticationType === 'oauth2' &&
-                generator.applicationType === 'gateway' &&
-                generator.serviceDiscoveryType,
+                !generator.reactive && generator.authenticationType === 'oauth2' && generator.applicationType === 'gateway',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1921,7 +1916,7 @@ function writeFiles() {
         },
 
         writeFiles() {
-            this.writeFilesToDisk(serverFiles, this, false, this.fetchFromInstalledJHipster('server/templates'));
+            this.writeFilesToDisk(serverFiles);
         },
     };
 }

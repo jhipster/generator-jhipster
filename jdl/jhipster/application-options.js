@@ -119,7 +119,6 @@ const optionValues = {
     },
     [optionNames.CLIENT_THEME]: 'none',
     [optionNames.CLIENT_THEME_VARIANT]: { none: '', default: 'primary' },
-    [optionNames.CREATION_TIMESTAMP]: new Date().getTime(),
     [optionNames.DATABASE_TYPE]: {
         [SQL]: SQL,
         [MONGODB]: MONGODB,

@@ -71,7 +71,7 @@ const cypressFiles = {
         {
             condition: generator => generator.cypressTests && generator.authenticationType === 'oauth2',
             path: TEST_SRC_DIR,
-            templates: ['cypress/support/keycloak-oauth2.ts', 'cypress/support/utils.ts'],
+            templates: ['cypress/support/keycloak-oauth2.ts'],
         },
     ],
 };
@@ -84,7 +84,7 @@ function writeFiles() {
         writeFiles() {
             faker.seed(stringHashCode(this.jhipsterConfig.baseName || 'jhipsterSample'));
             this.faker = faker;
-            this.writeFilesToDisk(cypressFiles, this, false, this.fetchFromInstalledJHipster('cypress/templates'));
+            this.writeFilesToDisk(cypressFiles);
         },
     };
 }

@@ -19,12 +19,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse, <%_ if (prodDatabaseType !== 'cassandra') { _%> HttpHeaders <%_ } _%>} from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription, combineLatest } from 'rxjs';
+import { Subscription<% if (databaseType !== 'cassandra') { %>, combineLatest<% } %> } from 'rxjs';
 <%_ if (prodDatabaseType !== 'cassandra') { _%>
-import { ActivatedRoute, ParamMap, Router, Data } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
+import { ITEMS_PER_PAGE } from 'app/core/config/pagination.constants';
 <%_ } else { _%>
 import { JhiEventManager } from 'ng-jhipster';
 
@@ -83,8 +83,8 @@ export class UserManagementComponent implements OnInit, OnDestroy {
         this.userService.update({ ...user, activated: isActivated }).subscribe(() => this.loadAll());
     }
 
-    trackIdentity(index: number, item: User): any {
-        return item.id;
+    trackIdentity(index: number, item: User): <%= getTypescriptKeyType(user.primaryKeyType) %> {
+        return item.id!;
     }
 
     deleteUser(user: User): void {
@@ -108,14 +108,14 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     }
 
     private handleNavigation(): void {
-        combineLatest(this.activatedRoute.data, this.activatedRoute.queryParamMap, (data: Data, params: ParamMap) => {
+        combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
             const page = params.get('page');
             this.page = page !== null ? +page : 1;
             const sort = (params.get('sort') ?? data['defaultSort']).split(',');
             this.predicate = sort[0];
             this.ascending = sort[1] === 'asc';
             this.loadAll();
-        }).subscribe();
+        });
     }
     <%_ } _%>
 

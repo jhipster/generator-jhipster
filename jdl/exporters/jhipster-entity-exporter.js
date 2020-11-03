@@ -105,7 +105,7 @@ function updateEntityToGenerateWithExistingOne(filePath, entity) {
         const fileOnDisk = readJSONFile(filePath);
         if (fileOnDisk && fileOnDisk.changelogDate) {
             entity.changelogDate = fileOnDisk.changelogDate;
-            return { ...fileOnDisk, ...entity, changelogDate: fileOnDisk.changelogDate };
+            return { ...fileOnDisk, ...entity };
         }
     }
     return entity;

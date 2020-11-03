@@ -32,7 +32,6 @@ const files = {
                 '.eslintrc.json',
                 'tsconfig.json',
                 'tsconfig.test.json',
-                { file: '.editorconfig', method: 'copy', noEjs: true },
                 'webpack/logo-jhipster.png',
                 'webpack/webpack.common.js',
                 'webpack/webpack.dev.js',
@@ -78,6 +77,7 @@ const files = {
                 { file: 'routes.tsx', method: 'processJsx' },
                 'typings.d.ts',
                 'config/constants.ts',
+                'config/dayjs.ts',
                 'config/axios-interceptor.ts',
                 { file: 'config/devtools.tsx', method: 'processJsx' },
                 'config/error-middleware.ts',
@@ -289,17 +289,6 @@ const files = {
                 'spec/app/shared/layout/header/header.spec.tsx',
                 'spec/app/shared/layout/menus/account.spec.tsx',
                 'spec/app/modules/administration/administration.reducer.spec.ts',
-                // 'spec/app/account/activate/_activate.component.spec.js',
-                // 'spec/app/account/password/_password.component.spec.js',
-                // 'spec/app/account/password/_password-strength-bar.component.spec.js',
-                // 'spec/app/account/password-reset/init/_password-reset-init.component.spec.js',
-                // 'spec/app/account/password-reset/finish/_password-reset-finish.component.spec.js',
-                // 'spec/app/account/settings/_settings.component.spec.js',
-                // 'spec/app/admin/health/_health.component.spec.js',
-                // 'spec/helpers/_spyobject.js',
-                // 'spec/helpers/_mock-account.service.js',
-                // 'spec/helpers/_mock-principal.service.js',
-                // 'spec/helpers/_mock-route.service.js'
             ],
         },
         {
@@ -363,5 +352,5 @@ module.exports = {
 
 function writeFiles() {
     // write React files
-    this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/react'));
+    this.writeFilesToDisk(files, 'react');
 }

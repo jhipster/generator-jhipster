@@ -18,13 +18,16 @@
 const { uniqBy } = require('lodash');
 const JDLReader = require('./readers/jdl-reader');
 const ParsedJDLToJDLObjectConverter = require('./converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter');
+const { readJSONFile } = require('./readers/json-file-reader');
+const { doesFileExist } = require('./utils/file-utils');
 const JDLWithoutApplicationToJSONConverter = require('./converters/jdl-to-json/jdl-without-application-to-json-converter');
 const JDLWithApplicationsToJSONConverter = require('./converters/jdl-to-json/jdl-with-applications-to-json-converter');
 const JHipsterApplicationExporter = require('./exporters/applications/jhipster-application-exporter');
 const JHipsterApplicationFormatter = require('./exporters/applications/jhipster-application-formatter');
 const JHipsterDeploymentExporter = require('./exporters/jhipster-deployment-exporter');
 const JHipsterEntityExporter = require('./exporters/jhipster-entity-exporter');
-const BusinessErrorChecker = require('./validators/business-error-checker');
+const JDLWithApplicationValidator = require('./validators/jdl-with-application-validator');
+const JDLWithoutApplicationValidator = require('./validators/jdl-without-application-validator');
 
 module.exports = {
     createImporterFromContent,
@@ -46,7 +49,6 @@ module.exports = {
  * @param {String} configuration.generatorVersion - deprecated, the generator's version, optional if parsing applications
  * @param {String} configuration.forceNoFiltering - whether to force filtering
  * @param {Boolean} configuration.skipFileGeneration - whether not to generate the .yo-rc.json file
- * @param {Date} configuration.creationTimestamp - the creation timestamp to use when generating entities
  * @returns {Object} a JDL importer.
  * @throws {Error} if files aren't passed.
  */
@@ -73,7 +75,6 @@ function createImporterFromFiles(files, configuration) {
  * @param {String} configuration.generatorVersion - deprecated, the generator's version, optional if parsing applications
  * @param {String} configuration.forceNoFiltering - whether to force filtering
  * @param {Boolean} configuration.skipFileGeneration - whether not to generate the .yo-rc.json file
- * @param {Date} configuration.creationTimestamp - the creation timestamp to use when generating entities
  * @returns {Object} a JDL importer.
  * @throws {Error} if the content isn't passed.
  */
@@ -102,7 +103,6 @@ function makeJDLImporter(content, configuration) {
          *          - exportedEntities: the exported entities, or an empty list
          */
         import: () => {
-            configuration.creationTimestampConfig = getCreationTimestampToUse(configuration.creationTimestamp);
             const jdlObject = getJDLObject(content, configuration);
             checkForErrors(jdlObject, configuration);
             if (jdlObject.getApplicationQuantity() === 0 && jdlObject.getEntityQuantity() > 0) {
@@ -120,19 +120,6 @@ function makeJDLImporter(content, configuration) {
     };
 }
 
-function getCreationTimestampToUse(passedCreationTimestamp) {
-    let creationTimestampConfig = new Date();
-    // We don't need seconds precision, discard it.
-    creationTimestampConfig.setSeconds(0);
-    if (passedCreationTimestamp) {
-        const parsedTimestamp = Date.parse(passedCreationTimestamp);
-        if (parsedTimestamp) {
-            creationTimestampConfig = new Date(parsedTimestamp);
-        }
-    }
-    return creationTimestampConfig.getTime();
-}
-
 function parseFiles(files) {
     return JDLReader.parseFromFiles(files);
 }
@@ -141,7 +128,6 @@ function getJDLObject(parsedJDLContent, configuration) {
     let baseName = configuration.applicationName;
     let applicationType = configuration.applicationType;
     let generatorVersion = configuration.generatorVersion;
-    let creationTimestamp = configuration.creationTimestampConfig;
     let databaseType = configuration.databaseType;
     let skippedUserManagement = false;
 
@@ -149,7 +135,6 @@ function getJDLObject(parsedJDLContent, configuration) {
         baseName = configuration.application['generator-jhipster'].baseName;
         applicationType = configuration.application['generator-jhipster'].applicationType;
         generatorVersion = configuration.application['generator-jhipster'].jhipsterVersion;
-        creationTimestamp = configuration.application['generator-jhipster'].creationTimestamp;
         skippedUserManagement = configuration.application['generator-jhipster'].skipUserManagement;
         databaseType = configuration.application['generator-jhipster'].databaseType;
     }
@@ -159,44 +144,66 @@ function getJDLObject(parsedJDLContent, configuration) {
         applicationType,
         applicationName: baseName,
         generatorVersion,
-        creationTimestamp,
         skippedUserManagement,
         databaseType,
     });
 }
 
 function checkForErrors(jdlObject, configuration) {
-    let applicationType = configuration.applicationType;
-    let databaseType = configuration.databaseType;
-    let skippedUserManagement = false;
-    if (configuration.application) {
-        applicationType = configuration.application['generator-jhipster'].applicationType;
-        databaseType = configuration.application['generator-jhipster'].databaseType;
-        skippedUserManagement = configuration.application['generator-jhipster'].skipUserManagement;
+    let validator;
+    if (jdlObject.getApplicationQuantity() === 0) {
+        let application = configuration.application;
+        if (!application && doesFileExist('.yo-rc.json')) {
+            application = readJSONFile('.yo-rc.json');
+        }
+        let applicationType = configuration.applicationType;
+        let databaseType = configuration.databaseType;
+        let skippedUserManagement = configuration.skipUserManagement;
+        if (application && application['generator-jhipster']) {
+            if (applicationType === undefined) {
+                applicationType = application['generator-jhipster'].applicationType;
+            }
+            if (databaseType === undefined) {
+                databaseType = application['generator-jhipster'].databaseType;
+            }
+            if (skippedUserManagement === undefined) {
+                skippedUserManagement = application['generator-jhipster'].skipUserManagement;
+            }
+        }
+        validator = JDLWithoutApplicationValidator.createValidator(jdlObject, {
+            applicationType,
+            databaseType,
+            skippedUserManagement,
+        });
+    } else {
+        validator = JDLWithApplicationValidator.createValidator(jdlObject);
     }
-    const errorChecker = new BusinessErrorChecker(jdlObject, {
-        applicationType,
-        databaseType,
-        skippedUserManagement,
-    });
-    errorChecker.checkForErrors();
+    validator.checkForErrors();
 }
 
 function importOnlyEntities(jdlObject, configuration) {
-    let { applicationName, applicationType, databaseType, creationTimestamp } = configuration;
+    let { applicationName, applicationType, databaseType } = configuration;
 
-    if (configuration.application) {
-        applicationType = configuration.application['generator-jhipster'].applicationType;
-        applicationName = configuration.application['generator-jhipster'].baseName;
-        databaseType = configuration.application['generator-jhipster'].databaseType;
-        creationTimestamp = configuration.application['generator-jhipster'].creationTimestamp;
+    let application = configuration.application;
+    if (!configuration.application && doesFileExist('.yo-rc.json')) {
+        application = readJSONFile('.yo-rc.json');
+    }
+    if (application && application['generator-jhipster']) {
+        if (applicationType === undefined) {
+            applicationType = application['generator-jhipster'].applicationType;
+        }
+        if (applicationName === undefined) {
+            applicationName = application['generator-jhipster'].baseName;
+        }
+        if (databaseType === undefined) {
+            databaseType = application['generator-jhipster'].databaseType;
+        }
     }
 
     const entitiesPerApplicationMap = JDLWithoutApplicationToJSONConverter.convert({
         jdlObject,
         applicationName,
         applicationType,
-        creationTimestamp,
         databaseType,
     });
     const jsonEntities = entitiesPerApplicationMap.get(applicationName);
@@ -204,7 +211,7 @@ function importOnlyEntities(jdlObject, configuration) {
 }
 
 function importOneApplicationAndEntities(jdlObject, configuration) {
-    const { creationTimestamp, skipFileGeneration } = configuration;
+    const { skipFileGeneration } = configuration;
 
     const importState = {
         exportedApplications: [],
@@ -221,7 +228,6 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
     const applicationName = jdlApplication.getConfigurationOptionValue('baseName');
     const entitiesPerApplicationMap = JDLWithApplicationsToJSONConverter.convert({
         jdlObject,
-        creationTimestamp,
     });
     const jsonEntities = entitiesPerApplicationMap.get(applicationName);
     importState.exportedApplicationsWithEntities[applicationName] = {
@@ -242,7 +248,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
 }
 
 function importApplicationsAndEntities(jdlObject, configuration) {
-    const { creationTimestamp, skipFileGeneration } = configuration;
+    const { skipFileGeneration } = configuration;
 
     const importState = {
         exportedApplications: [],
@@ -258,7 +264,6 @@ function importApplicationsAndEntities(jdlObject, configuration) {
     }
     const entitiesPerApplicationMap = JDLWithApplicationsToJSONConverter.convert({
         jdlObject,
-        creationTimestamp,
     });
     entitiesPerApplicationMap.forEach((jsonEntities, applicationName) => {
         const jdlApplication = jdlObject.getApplication(applicationName);

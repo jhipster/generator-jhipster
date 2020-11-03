@@ -25,15 +25,14 @@ import sinon, { SinonStubbedInstance } from 'sinon';
 import Router from 'vue-router';
 
 <%_
-    let dateFnsIncluded = false;
+    let dayJsIncluded = false;
     for (idx in fields) {
         const fieldName = fields[ idx ].fieldName;
         const fieldType = fields[idx].fieldType;
-        if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType) && !dateFnsIncluded) {
-            dateFnsIncluded = true;
+        if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType) && !dayJsIncluded) {
+            dayJsIncluded = true;
 _%>
-import format from 'date-fns/format';
-import parseISO from 'date-fns/parseISO';
+import dayjs from 'dayjs';
 import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
 <%_ } } _%>
 
@@ -130,7 +129,7 @@ describe('Component Tests', () => {
         const convertedDate = comp.convertDateTimeFromServer(date);
 
         // THEN
-        expect(convertedDate).toEqual(format(date, DATE_TIME_LONG_FORMAT));
+        expect(convertedDate).toEqual(dayjs(date).format(DATE_TIME_LONG_FORMAT));
       });
 
       it('Should not convert date if date is not present', () => {

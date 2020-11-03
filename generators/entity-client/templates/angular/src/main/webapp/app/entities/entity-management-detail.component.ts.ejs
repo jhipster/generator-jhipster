@@ -39,7 +39,9 @@ export class <%= entityAngularName %>DetailComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => this.<%= entityInstance %> = <%= entityInstance %>);
+        this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
+            this.<%= entityInstance %> = <%= entityInstance %>;
+        });
     }
 
     <%_ if (fieldsContainBlob) { _%>

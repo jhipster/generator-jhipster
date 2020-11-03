@@ -18,4 +18,6 @@
 -%>
 import 'zone.js/dist/zone';
 import '@angular/localize/init';
-require('../manifest.webapp');
+
+// Fix needed for SockJS, see https://github.com/sockjs/sockjs-client/issues/439
+(window as any).global = window;

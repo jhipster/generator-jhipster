@@ -17,7 +17,7 @@ export class NavBarPage {
     passwordMenu = element(by.css('[routerLink="account/password"]'));
     settingsMenu = element(by.css('[routerLink="account/settings"]'));
 
-    constructor(asAdmin?: Boolean) {
+    constructor(asAdmin?: boolean) {
         if (asAdmin) {
             this.adminMenu = element(by.id('admin-menu'));
         }

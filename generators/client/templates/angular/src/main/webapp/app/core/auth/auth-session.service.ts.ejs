@@ -25,9 +25,9 @@ import { map } from 'rxjs/operators';
 
 import { SERVER_API_URL } from 'app/app.constants';
 <%_ if (authenticationType === 'oauth2') { _%>
-import { Logout } from 'app/core/login/logout.model';
+import { Logout } from 'app/login/logout.model';
 <%_ } else { _%>
-import { Login } from 'app/core/login/login.model';
+import { Login } from 'app/login/login.model';
 
 export const LOGOUT_URL = SERVER_API_URL + 'api/logout';
 <%_ } _%>
@@ -44,7 +44,7 @@ export class AuthServerProvider {
         const data =
             `username=${encodeURIComponent(credentials.username)}` +
             `&password=${encodeURIComponent(credentials.password)}` +
-            `&remember-me=${credentials.rememberMe}` +
+            `&remember-me=${credentials.rememberMe ? 'true' : 'false'}` +
             '&submit=Login';
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');

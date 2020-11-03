@@ -18,13 +18,12 @@
 -%>
 import { Component, OnInit<%_ if (authenticationType !== 'oauth2') { _%>, OnDestroy <%_ } _%> } from '@angular/core';
 <%_ if (authenticationType !== 'oauth2') { _%>
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 <%_ } _%>
 
-<%_ if (authenticationType !== 'oauth2') { _%>
-import { LoginModalService } from 'app/core/login/login-modal.service';
-<%_ } else { _%>
-import { LoginService } from 'app/core/login/login.service';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { LoginService } from 'app/login/login.service';
 <%_ } _%>
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
@@ -46,7 +45,7 @@ export class HomeComponent implements OnInit <%_ if (authenticationType !== 'oau
     constructor(
         private accountService: AccountService,
         <%_ if (authenticationType !== 'oauth2') { _%>
-        private loginModalService: LoginModalService
+        private router: Router
         <%_ } else { _%>
         private loginService: LoginService
         <%_ } _%>
@@ -66,7 +65,7 @@ export class HomeComponent implements OnInit <%_ if (authenticationType !== 'oau
 
     login(): void {
         <%_ if (authenticationType !== 'oauth2') { _%>
-        this.loginModalService.open();
+        this.router.navigate(['/login']);
         <%_ } else { _%>
         this.loginService.login();
         <%_ } _%>

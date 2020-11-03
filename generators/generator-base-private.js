@@ -30,18 +30,25 @@ const through = require('through2');
 const fs = require('fs');
 const minimatch = require('minimatch');
 const findUp = require('find-up');
+const prettierPluginJava = require('prettier-plugin-java');
+const prettierPluginPackagejson = require('prettier-plugin-packagejson');
 
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
+const { defaultConfig } = require('./generator-defaults');
 const { languageToJavaLanguage } = require('./utils');
-const { prettierTransform, prettierJavaOptions, generatedAnnotationTransform } = require('./generator-transforms');
+const { prettierTransform, generatedAnnotationTransform } = require('./generator-transforms');
 const JSONToJDLEntityConverter = require('../jdl/converters/json-to-jdl-entity-converter');
 const JSONToJDLOptionConverter = require('../jdl/converters/json-to-jdl-option-converter');
+const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../utils/entity');
+const { prepareFieldForTemplates } = require('../utils/field');
+const { formatDateForChangelog } = require('../utils/liquibase');
 
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 /**
  * This is the Generator base private class.
@@ -228,7 +235,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         if (this.clientFramework !== ANGULAR) {
             return;
         }
-        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`;
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/core/config/language.constants.ts`;
         try {
             let content = 'export const LANGUAGES: string[] = [\n';
             languages.forEach((language, i) => {
@@ -298,7 +305,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     updateLanguagesInLanguagePipe(languages) {
         const fullPath =
             this.clientFramework === ANGULAR
-                ? `${this.CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
+                ? `${this.CLIENT_MAIN_SRC_DIR}app/shared/find-language-from-key.pipe.ts`
                 : `${this.CLIENT_MAIN_SRC_DIR}/app/config/translation.ts`;
         try {
             let content = '{\n';
@@ -332,12 +339,13 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      *
      * @param languages
      */
-    updateLanguagesInWebpack(languages) {
-        const fullPath = 'webpack/webpack.common.js';
+    updateLanguagesInWebpackAngular(languages) {
+        const fullPath = 'webpack/webpack.custom.js';
         try {
             let content = 'groupBy: [\n';
+            // prettier-ignore
             languages.forEach((language, i) => {
-                content += `                    { pattern: "./src/main/webapp/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${
+                content += `                    { pattern: "./${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${
                     i !== languages.length - 1 ? ',' : ''
                 }\n`;
             });
@@ -366,25 +374,28 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
 
     /**
-     * Update Moment Locales to keep in webpack prod build
+     * Update Languages In Webpack React
      *
      * @param languages
      */
-    updateLanguagesInMomentWebpackNgx(languages) {
-        const fullPath = 'webpack/webpack.prod.js';
+    updateLanguagesInWebpackReact(languages) {
+        const fullPath = 'webpack/webpack.common.js';
         try {
-            let content = 'localesToKeep: [\n';
+            let content = 'groupBy: [\n';
+            // prettier-ignore
             languages.forEach((language, i) => {
-                content += `                    '${this.getMomentLocaleId(language)}'${i !== languages.length - 1 ? ',' : ''}\n`;
+                content += `                    { pattern: "./${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${
+                    i !== languages.length - 1 ? ',' : ''
+                }\n`;
             });
             content +=
-                '                    // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n' +
+                '                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
                 '                ]';
 
             jhipsterUtils.replaceContent(
                 {
                     file: fullPath,
-                    pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
+                    pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
                     content,
                 },
                 this
@@ -402,25 +413,29 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
 
     /**
-     * Update Moment Locales to keep in webpack prod build
+     * Update DayJS Locales to keep in dayjs.ts config file
      *
      * @param languages
      */
-    updateLanguagesInMomentWebpackReact(languages) {
-        const fullPath = 'webpack/webpack.prod.js';
+    updateLanguagesInDayjsConfiguation(languages) {
+        let fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/config/dayjs.ts`;
+        if (this.clientFramework === VUE) {
+            fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/shared/config/dayjs.ts`;
+        } else if (this.clientFramework === ANGULAR) {
+            fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/core/config/dayjs.ts`;
+        }
         try {
-            let content = 'localesToKeep: [\n';
-            languages.forEach((language, i) => {
-                content += `        '${this.getMomentLocaleId(language)}'${i !== languages.length - 1 ? ',' : ''}\n`;
-            });
-            content +=
-                '        // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n      ]';
+            const content = languages.reduce(
+                (content, language) => `${content}import 'dayjs/locale/${this.getDayjsLocaleId(language)}'\n`,
+                '// jhipster-needle-i18n-language-dayjs-imports - JHipster will import languages from dayjs here\n'
+            );
 
             jhipsterUtils.replaceContent(
                 {
                     file: fullPath,
-                    pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
-                    content,
+                    // match needle until // DAYJS CONFIGURATION (excluded)
+                    pattern: /\/\/ jhipster-needle-i18n-language-dayjs-imports[\s\S]+?(?=\/\/ DAYJS CONFIGURATION)/g,
+                    content: `${content}\n`,
                 },
                 this
             );
@@ -428,7 +443,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             this.log(
                 chalk.yellow('\nUnable to find ') +
                     fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
+                    chalk.yellow(' or missing required jhipster-needle. DayJS language task not updated with languages: ') +
                     languages +
                     chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
             );
@@ -918,18 +933,16 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                     query = `
                         this.${relationship.otherEntityName}Service
                             .query({${filter}})
-                            .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
-                                return res.body || [];
-                            }))
+                            .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => res.body ?? []))
                             .subscribe((resBody: I${relationship.otherEntityAngularName}[]) => {
                                 if (${relationshipFieldNameIdCheck}) {
                                     this.${variableName} = resBody;
                                 } else {
                                     this.${relationship.otherEntityName}Service
                                         .find(${entityInstance}.${relationshipFieldName}${dto !== 'no' ? 'Id' : '.id'})
-                                        .pipe(map((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) => {
-                                            return subRes.body ? [subRes.body].concat(resBody) : resBody;
-                                        }))
+                                        .pipe(map((subRes: HttpResponse<I${
+                                            relationship.otherEntityAngularName
+                                        }>) => subRes.body ? [subRes.body].concat(resBody) : resBody))
                                         .subscribe((concatRes: I${
                                             relationship.otherEntityAngularName
                                         }[]) => this.${variableName} = concatRes);
@@ -942,7 +955,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                     }
                     query = `
                         this.${relationship.otherEntityName}Service.query()
-                            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body || []);`;
+                            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body ?? []);`;
                 }
             }
             if (variableName && !queries.includes(query)) {
@@ -974,7 +987,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                 if (clientFramework === REACT) {
                     defaultVariablesValues[fieldName] = `${fieldName}: false,`;
                 } else {
-                    defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} || false;`;
+                    defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} ?? false;`;
                 }
             }
         });
@@ -1004,7 +1017,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      * @param {boolean} embedded - either the actual entity is embedded or not
      * @returns variablesWithTypes: Array
      */
-    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment', embedded = false) {
+    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
         const variablesWithTypes = [];
         const tsKeyType = this.getTypescriptKeyType(pkType);
         if (!embedded) {
@@ -1013,23 +1026,20 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         fields.forEach(field => {
             const fieldType = field.fieldType;
             const fieldName = field.fieldName;
-            let tsType;
+            let tsType = 'any';
             if (field.fieldIsEnum) {
                 tsType = fieldType;
             } else if (fieldType === 'Boolean') {
                 tsType = 'boolean';
-            } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) {
+            } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
                 tsType = 'number';
-            } else if (fieldType === 'String' || fieldType === 'UUID') {
+            } else if (['String', 'UUID', 'Duration', 'byte[]', 'ByteBuffer'].includes(fieldType)) {
                 tsType = 'string';
-            } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
-                tsType = customDateType;
-            } else {
-                // (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate'
-                tsType = 'any';
                 if (['byte[]', 'ByteBuffer'].includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
                     variablesWithTypes.push(`${fieldName}ContentType?: string`);
                 }
+            } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
+                tsType = customDateType;
             }
             variablesWithTypes.push(`${fieldName}?: ${tsType}`);
         });
@@ -1294,20 +1304,6 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
 
     /**
-     * Returns the primary key data type based on authentication type, DB and given association
-     *
-     * @param {string} authenticationType - the auth type
-     * @param {string} databaseType - the database type
-     * @param {T[]} relationships - relationships
-     */
-    getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships) {
-        const derivedRelationship = relationships.find(relationship => relationship.useJPADerivedIdentifier === true);
-        return derivedRelationship && this.isUserEntity(derivedRelationship.otherEntityName) && authenticationType === 'oauth2'
-            ? 'String'
-            : this.getPkType(databaseType);
-    }
-
-    /**
      * Returns the JDBC URL for a databaseType
      *
      * @param {string} databaseType
@@ -1363,7 +1359,11 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             if (!options.localDirectory) {
                 throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
             }
-            dbcUrl = `${protocol}:h2:file:${options.localDirectory}/${options.databaseName}`;
+            if (protocol === 'r2dbc') {
+                dbcUrl = `${protocol}:h2:file://${options.localDirectory}/${options.databaseName}`;
+            } else {
+                dbcUrl = `${protocol}:h2:file:${options.localDirectory}/${options.databaseName}`;
+            }
             extraOptions = ';DB_CLOSE_DELAY=-1';
         } else if (databaseType === 'h2Memory') {
             if (protocol === 'r2dbc') {
@@ -1449,6 +1449,56 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
 
     /**
+     * Some files are required to be written to disk before everything else.
+     * Example '.prettierc' and '.prettierignore' are used by prettier transform.
+     * @param {any} generator
+     */
+    registerCommitPriorityFilesTask(generator = this) {
+        this.queueTask({
+            method: () => {
+                if (this.env.rootGenerator() !== this) return;
+                const stream = this.env.sharedFs
+                    .stream()
+                    .pipe(filter(['.prettierrc', '.prettierignore']))
+                    .pipe(generator.createConflicterAttributesTransform())
+                    .pipe(
+                        through.obj(function (file, enc, cb) {
+                            const stream = this;
+
+                            // If the file has no state requiring action, move on
+                            if (file.state === null) {
+                                cb();
+                                return;
+                            }
+
+                            generator.conflicter.checkForCollision(file, (err, status) => {
+                                if (err) {
+                                    cb(err);
+                                    return;
+                                }
+
+                                if (status === 'skip') {
+                                    delete file.state;
+                                } else {
+                                    stream.push(file);
+                                }
+
+                                cb();
+                            });
+                            generator.conflicter.resolve();
+                        })
+                    );
+                const done = generator.async();
+                generator.fs.commit([], stream, () => {
+                    done();
+                });
+            },
+            taskName: 'priorityFiles',
+            queueName: 'jhipster:preConflicts',
+        });
+    }
+
+    /**
      * Register prettier as transform stream for prettifying files during generation
      * @param {any} generator
      */
@@ -1457,9 +1507,9 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             return;
         }
 
-        let prettierOptions = {};
+        const prettierOptions = { plugins: [prettierPluginPackagejson] };
         if (!this.skipServer && !this.jhipsterConfig.skipServer) {
-            prettierOptions = prettierJavaOptions;
+            prettierOptions.plugins.push(prettierPluginJava);
         }
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
         const filterPatternForPrettier = `{,.,**/,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
@@ -1538,18 +1588,20 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         return fileStatus;
     }
 
-    registerConflicterAttributesTransform(yoAttributeFileName = '.yo-resolve') {
+    createConflicterAttributesTransform(yoAttributeFileName = '.yo-resolve') {
         const generator = this;
-        this.registerTransformStream(
-            through.obj(function (file, enc, cb) {
-                const status = generator.getConflicterStatusForFile(file.path, yoAttributeFileName);
-                if (status) {
-                    file.conflicter = status;
-                }
-                this.push(file);
-                cb();
-            })
-        );
+        return through.obj(function (file, enc, cb) {
+            const status = generator.getConflicterStatusForFile(file.path, yoAttributeFileName);
+            if (status) {
+                file.conflicter = status;
+            }
+            this.push(file);
+            cb();
+        });
+    }
+
+    registerConflicterAttributesTransform(yoAttributeFileName) {
+        this.registerTransformStream(this.createConflicterAttributesTransform(yoAttributeFileName));
     }
 
     /**
@@ -1633,8 +1685,9 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         const fullPath = 'webpack/webpack.common.js';
         try {
             let content = 'groupBy: [\n';
+            // prettier-ignore
             languages.forEach((language, i) => {
-                content += `          { pattern: './src/main/webapp/i18n/${language}/*.json', fileName: './i18n/${language}.json' }${
+                content += `          { pattern: './${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/*.json', fileName: './i18n/${language}.json' }${
                     i !== languages.length - 1 ? ',' : ''
                 }\n`;
             });
@@ -1680,5 +1733,54 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         }
         config += '\n';
         return config;
+    }
+
+    createUserManagementEntities() {
+        this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
+        if (
+            this.configOptions.sharedEntities.User ||
+            (this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.authenticationType !== 'oauth2')
+        ) {
+            return;
+        }
+
+        const changelogDateDate = this.jhipsterConfig.creationTimestamp ? new Date(this.jhipsterConfig.creationTimestamp) : new Date();
+        const changelogDate = formatDateForChangelog(changelogDateDate);
+        // Create entity definition for built-in entity to make easier to deal with relationships.
+        const user = {
+            name: 'User',
+            entityTableName: `${this.getTableName(this.jhipsterConfig.jhiPrefix)}_user`,
+            relationships: [],
+            changelogDate,
+        };
+
+        loadRequiredConfigIntoEntity(user, this.jhipsterConfig);
+        // Fallback to defaults for test cases.
+        loadRequiredConfigIntoEntity(user, defaultConfig);
+
+        const userIdType =
+            user.authenticationType === 'oauth2' || user.databaseType !== 'sql' ? 'String' : this.getPkType(user.databaseType);
+
+        user.fields = [
+            {
+                fieldName: 'id',
+                fieldType: userIdType,
+                columnType: userIdType === 'Long' ? 'bigint' : 'varchar(100)',
+                options: {
+                    fieldNameHumanized: 'ID',
+                    id: true,
+                },
+            },
+            {
+                fieldName: 'login',
+                fieldType: 'String',
+            },
+        ];
+
+        prepareEntityForTemplates(user, this);
+        user.fields.forEach(field => {
+            prepareFieldForTemplates(user, field, this);
+        });
+        this.configOptions.sharedEntities.User = user;
     }
 };

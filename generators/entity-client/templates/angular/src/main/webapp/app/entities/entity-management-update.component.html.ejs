@@ -55,7 +55,7 @@ _%>
     <%_ if (fields[idx].fieldIsEnum) { _%>
                     <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>">
         <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
-                        <option value><% if (enableTranslation) { %>{{ '<%= enumPrefix %>.null' | translate }}<% } %></option>
+                        <option [ngValue]="null"><% if (enableTranslation) { %>{{ '<%= enumPrefix %>.null' | translate }}<% } %></option>
         <%_ const values = fields[idx].enumValues;
             for (key in values) {
                 const enumValue = values[key]; _%>
@@ -143,18 +143,6 @@ _%>
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('<%= fieldName %>')?.errors?.max" jhiTranslate="entity.validation.max" [translateValues]="{ max: <%= fields[idx].fieldValidateRulesMax %> }">
                             This field cannot be more than <%= fields[idx].fieldValidateRulesMax %>.
-                        </small>
-        <%_ } _%>
-        <%_ if (fields[idx].fieldValidateRules.includes('minbytes')) { _%>
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.minbytes" jhiTranslate="entity.validation.minbytes" [translateValues]="{ min: <%= fields[idx].fieldValidateRulesMinbytes %> }">
-                            This field should be at least <%= fields[idx].fieldValidateRulesMinbytes %>.
-                        </small>
-        <%_ } _%>
-        <%_ if (fields[idx].fieldValidateRules.includes('maxbytes')) { _%>
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.maxbytes" jhiTranslate="entity.validation.maxbytes" [translateValues]="{ max: <%= fields[idx].fieldValidateRulesMaxbytes %> }">
-                            This field cannot be more than <%= fields[idx].fieldValidateRulesMaxbytes %>.
                         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.includes('pattern')) { _%>
@@ -247,7 +235,7 @@ _%>
                 <div class="form-group">
                     <label jhiTranslate="<%= translationKey %>" for="field_<%= relationshipFieldNamePlural %>"><%= relationshipNameHumanized %></label>
                     <select class="form-control" id="field_<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipFieldNamePlural %>" formControlName="<%= relationshipFieldNamePlural %>">
-                        <option [ngValue]="getSelected(editForm.get('<%= relationshipFieldNamePlural %>')!.value, <%= otherEntityName %>Option)" *ngFor="let <%= otherEntityName %>Option of <%= otherEntityNamePlural.toLowerCase() %>; trackBy: trackById">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
+                        <option [ngValue]="getSelected(<%= otherEntityName %>Option, editForm.get('<%= relationshipFieldNamePlural %>')!.value)" *ngFor="let <%= otherEntityName %>Option of <%= otherEntityNamePlural.toLowerCase() %>; trackBy: trackById">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     </select>
                 </div>
     <%_ } _%>

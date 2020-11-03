@@ -101,7 +101,7 @@ import <%= packageName %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized 
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
 <%_ } _%>
-<%_ if (service !== 'no') { _%>
+<%_ if (service !== 'no' && fieldsContainOwnerManyToMany === true) { _%>
 import <%= packageName %>.service.<%= entityClass %>Service;
 <%_ } _%>
 <%_ if (dto === 'mapstruct') { _%>
@@ -436,9 +436,6 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Mock
     private <%= entityClass %>Service <%= entityInstance %>ServiceMock;
     <%_ } _%>
-
-    @Autowired
-    private <%= entityClass %>Service <%= entityInstance %>Service;
     <%_ } if (searchEngine === 'elasticsearch') { _%>
 
     /**
@@ -685,11 +682,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void update<%= entityClass %>MapsIdAssociationWithNewId() throws Exception {
         // Initialize the database
-<%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
-        <%= entityInstance %>Service.save(<%= asEntity(entityInstance) %>)<%= callBlock %>;
-<%_ } else { _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
-<%_ } _%>
         <%_ const alreadyGeneratedEntities = []; _%>
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
 
@@ -752,11 +745,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-            <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
-        verify(mock<%= entityClass %>SearchRepository, times(2)).save(<%= asEntity(entityInstance) %>);
-            <%_ } else { _%>
-        verify(mock<%= entityClass %>SearchRepository, times(1)).save(<%= asEntity(entityInstance) %>);
-            <%_ } _%>
+        verify(mock<%= entityClass %>SearchRepository).save(<%= asEntity(entityInstance) %>);
         <%_ } _%>
     }
 <%_ } _%>
@@ -880,7 +869,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     }
     <% if (fieldsContainOwnerManyToMany === true) { %>
     @SuppressWarnings({"unchecked"})
-    public void getAll<%= entityClassPlural %>WithEagerRelationshipsIsEnabled() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%= entityClassPlural %>WithEagerRelationshipsIsEnabled() <% if (!reactive) { %>throws Exception <% } %>{
         <%_ if (service !== 'no') { _%>
         when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (!reactive) { %>new PageImpl(new ArrayList<>())<% } else { %>Flux.empty()<% }%>);
         <%_ } else { _%>
@@ -904,7 +893,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     }
 
     @SuppressWarnings({"unchecked"})
-    public void getAll<%= entityClassPlural %>WithEagerRelationshipsIsNotEnabled() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%= entityClassPlural %>WithEagerRelationshipsIsNotEnabled() <% if (!reactive) { %>throws Exception <% } %>{
         <%_ if (service !== 'no') { _%>
         when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (!reactive) { %>new PageImpl(new ArrayList<>())<% } else { %>Flux.empty()<% }%>);
         <%_ } else { _%>
@@ -1304,11 +1293,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
-<%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
-        <%= entityInstance %>Service.save(<%= asEntity(entityInstance) %>)<%= callBlock %>;
-<%_ } else { _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
-<%_ } _%>
 
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
 
@@ -1365,7 +1350,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(<%= service !== 'no' && dto !== 'mapstruct' ? '2' : '1' %>)).save(test<%= entityClass %>);
+        verify(mock<%= entityClass %>SearchRepository).save(test<%= entityClass %>);
         <%_ } _%>
     }
 
@@ -1431,10 +1416,21 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         // Update the <%= entityInstance %> without id should throw
         <%= asEntity(entityClass) %> partialUpdated<%= asEntity(entityClass) %> = new <%= asEntity(entityClass) %>();
 
+        <%_ if (!reactive) { _%>
         rest<%= entityClass %>MockMvc.perform(patch("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
         .contentType("application/merge-patch+json")
         .content(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>)))
         .andExpect(status().isBadRequest());
+        <%_ } else { _%>
+        webTestClient
+            .patch()
+            .uri("/api/<%= entityApiUrl %>")
+            .contentType(MediaType.valueOf("application/merge-patch+json"))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+        <%_ } _%>
     }
 
     @Test<%= transactionalAnnotation %>
@@ -1451,11 +1447,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
-<%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
-        <%= entityInstance %>Service.save(<%= asEntity(entityInstance) %>)<%= callBlock %>;
-<%_ } else { _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
-<%_ } _%>
 
         int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
 
@@ -1502,11 +1494,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
-<%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
-        <%= entityInstance %>Service.save(<%= asEntity(entityInstance) %>)<%= callBlock %>;
-<%_ } else { _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
-<%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
     <%_ if (reactive) { _%>
         when(mock<%= entityClass %>SearchRepository.search("id:" + <%= asEntity(entityInstance) %>.getId()<%_ if (pagination !== 'no') { _%>, PageRequest.of(0, 20)<% }%>))

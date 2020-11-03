@@ -69,6 +69,13 @@ module.exports = class JDLApplication {
         return this.entityNames.toArray();
     }
 
+    hasEntityName(entityName) {
+        if (!entityName) {
+            return false;
+        }
+        return this.entityNames.has(entityName);
+    }
+
     forEachEntityName(passedFunction) {
         this.entityNames.forEach(passedFunction);
     }

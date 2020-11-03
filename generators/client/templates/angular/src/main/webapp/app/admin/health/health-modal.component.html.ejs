@@ -43,7 +43,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let healthDetail of health.value.details | keys">
+                    <tr *ngFor="let healthDetail of health.value.details! | keyvalue">
                         <td class="text-left">{{ healthDetail.key }}</td>
                         <td class="text-left">{{ readableValue(healthDetail.value) }}</td>
                     </tr>

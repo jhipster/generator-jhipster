@@ -77,11 +77,11 @@ spring:
         <%_ } else if (prodDatabaseType === 'mariadb') { _%>
         database-platform: org.hibernate.dialect.MariaDB103Dialect
         <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
+        database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
         <%_ } else if (prodDatabaseType === 'oracle') { _%>
         database-platform: org.hibernate.dialect.Oracle12cDialect
         <%_ } else if (prodDatabaseType === 'mssql') { _%>
         database-platform: org.hibernate.dialect.SQLServer2012Dialect
         <%_ } else { _%>
-        database-platform: io.github.jhipster.domain.util.FixedH2Dialect
+        database-platform: tech.jhipster.domain.util.FixedH2Dialect
         <%_ } _%>

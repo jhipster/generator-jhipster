@@ -80,7 +80,7 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 <%_ if (reactiveSqlTestContainers) { _%>
 @ExtendWith(ReactiveSqlTestContainerExtension.class)
 <%_ } _%>
-public class LogoutResourceIT {
+class LogoutResourceIT {
 
     @Autowired
     private <% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository registrations;
@@ -118,7 +118,7 @@ public class LogoutResourceIT {
     }
 
     @Test
-    public void getLogoutInformation() <% if (!reactive) { %>throws Exception <% } %>{
+    void getLogoutInformation() <% if (!reactive) { %>throws Exception <% } %>{
     <%_ if (!reactive) { _%>
         String logoutUrl = this.registrations.findByRegistrationId("oidc").getProviderDetails()
             .getConfigurationMetadata().get("end_session_endpoint").toString();

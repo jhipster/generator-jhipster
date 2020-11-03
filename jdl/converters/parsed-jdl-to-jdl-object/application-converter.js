@@ -27,7 +27,6 @@ module.exports = { convertApplications };
  * @param {Array<Object>} parsedApplications - the parsed applications.
  * @param {Object} configuration - a configuration object.
  * @param {String} configuration.generatorVersion - the generator's version to use when converting applications.
- * @param {Number} configuration.creationTimestamp - a creation timestamp to use for entities.
  * @return {Array} the converted JDL applications.
  */
 function convertApplications(parsedApplications, configuration = {}) {
@@ -50,9 +49,6 @@ function addCustomValuesToApplication(parsedApplication, configuration) {
     const application = { ...parsedApplication };
     if (configuration.generatorVersion) {
         application.config.jhipsterVersion = configuration.generatorVersion;
-    }
-    if (configuration.creationTimestamp) {
-        application.config.creationTimestamp = configuration.creationTimestamp;
     }
     return application;
 }

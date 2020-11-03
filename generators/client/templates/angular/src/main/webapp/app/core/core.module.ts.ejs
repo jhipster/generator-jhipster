@@ -12,23 +12,23 @@ import { NgJhipsterModule<% if (enableTranslation) { %>, translatePartialLoader,
 <%_ const localeId = getLocaleId(nativeLanguage); _%>
 import locale from '@angular/common/locales/<%= localeId %>';
 
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 <%_ if (enableI18nRTL) { _%>
 import {
     FindLanguageFromKeyPipe
-} from 'app/shared/language/find-language-from-key.pipe';
+} from 'app/shared/find-language-from-key.pipe';
 <%_ } _%>
 import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
-import { NgbDateMomentAdapter } from 'app/core/date/datepicker-adapter';
+import { NgbDateDayjsAdapter } from 'app/core/config/datepicker-adapter';
 
 <%_ if (authenticationType === 'jwt') { _%>
-import { AuthInterceptor } from 'app/blocks/interceptor/auth.interceptor';
+import { AuthInterceptor } from 'app/core/interceptor/auth.interceptor';
 <%_ } _%>
-import { AuthExpiredInterceptor } from 'app/blocks/interceptor/auth-expired.interceptor';
-import { ErrorHandlerInterceptor } from 'app/blocks/interceptor/error-handler.interceptor';
-import { NotificationInterceptor } from 'app/blocks/interceptor/notification.interceptor';
+import { AuthExpiredInterceptor } from 'app/core/interceptor/auth-expired.interceptor';
+import { ErrorHandlerInterceptor } from 'app/core/interceptor/error-handler.interceptor';
+import { NotificationInterceptor } from 'app/core/interceptor/notification.interceptor';
 
-import { fontAwesomeIcons } from './icons/font-awesome-icons';
+import { fontAwesomeIcons } from 'app/core/config/font-awesome-icons';
 
 @NgModule({
     imports: [
@@ -69,7 +69,7 @@ import { fontAwesomeIcons } from './icons/font-awesome-icons';
             useValue: '<%= localeId %>'
             <%_ } _%>
         },
-        { provide: NgbDateAdapter, useClass: NgbDateMomentAdapter },
+        { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
         <%_ if (enableI18nRTL) { _%>
         FindLanguageFromKeyPipe,
         <%_ } _%>
@@ -102,7 +102,7 @@ export class CoreModule {
     constructor(iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig<% if (enableTranslation) { %>, languageService: JhiLanguageService<% } %>) {
         registerLocaleData(locale);
         iconLibrary.addIcons(...fontAwesomeIcons);
-        dpConfig.minDate = { year: moment().year() - 100, month: 1, day: 1 };
+        dpConfig.minDate = { year: dayjs().subtract(100, 'year').year(), month: 1, day: 1 };
         <%_ if (enableTranslation) { _%>
         languageService.init();
         <%_ } _%>

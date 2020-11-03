@@ -24,7 +24,7 @@
     isLoading = false;
     totalItems = 0;
     itemsPerPage = ITEMS_PER_PAGE;
-    page!: number;
+    page?: number;
     predicate!: string;
     ascending!: boolean;
     ngbPaginationPage = 1;
@@ -42,14 +42,13 @@
         <%_ } _%>
     ) {
         <%_ if (searchEngine !== false) { _%>
-        this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search'] ?
-            this.activatedRoute.snapshot.queryParams['search'] : '';
+        this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
         <%_ } _%>
     }
 
     loadPage(page?: number, dontNavigate?: boolean): void {
         this.isLoading = true;
-        const pageToLoad: number = page || this.page || 1;
+        const pageToLoad: number = page ?? this.page ?? 1;
 
         <%_ if (searchEngine !== false) { _%>
         if (this.currentSearch) {
@@ -103,7 +102,7 @@
     }
 
     protected handleNavigation(): void {
-        combineLatest(this.activatedRoute.data, this.activatedRoute.queryParamMap, (data: Data, params: ParamMap) => {
+        combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
             const page = params.get('page');
             const pageNumber = page !== null ? +page : 1;
             const sort = (params.get('sort') ?? data['defaultSort']).split(',');
@@ -114,5 +113,5 @@
               this.ascending = ascending;
               this.loadPage(pageNumber, true);
             }
-        }).subscribe();
+        });
     }

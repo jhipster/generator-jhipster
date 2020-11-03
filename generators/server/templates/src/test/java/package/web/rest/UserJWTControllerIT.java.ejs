@@ -134,7 +134,7 @@ class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends Abstr
         LoginVM login = new LoginVM();
         login.setUsername("user-jwt-controller");
 <%_ } else { _%>
-    public void testAuthorize() throws Exception {
+    void testAuthorize() throws Exception {
         LoginVM login = new LoginVM();
         login.setUsername("test");
 <%_ } _%>

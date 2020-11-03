@@ -143,7 +143,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
     });
 
     it('icon imports contains a new icon added by a new menu method of needle api ', () => {
-        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/core/icons/font-awesome-icons.ts`, '  faIconName1');
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/core/config/font-awesome-icons.ts`, '  faIconName1');
     });
 
     it('admin menu contains the admin element added by needle api', () => {
@@ -159,7 +159,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
     });
 
     it('icon imports contains a new icon added by a new admin menu method of needle api ', () => {
-        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/core/icons/font-awesome-icons.ts`, '  faIconName2');
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/core/config/font-awesome-icons.ts`, '  faIconName2');
     });
 
     it('entity menu contains the entity added by needle api', () => {

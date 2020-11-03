@@ -22,10 +22,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { AccountService } from 'app/core/auth/account.service';
-<%_ if (authenticationType !== 'oauth2') { _%>
-import { LoginModalService } from 'app/core/login/login-modal.service';
-<%_ } else { _%>
-import { LoginService } from 'app/core/login/login.service';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { LoginService } from 'app/login/login.service';
 <%_ } _%>
 import { StateStorageService } from './state-storage.service';
 
@@ -33,9 +31,7 @@ import { StateStorageService } from './state-storage.service';
 export class UserRouteAccessService implements CanActivate {
     constructor(
         private router: Router,
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        private loginModalService: LoginModalService,
-        <%_ } else { _%>
+        <%_ if (authenticationType === 'oauth2') { _%>
         private loginService: LoginService,
         <%_ } _%>
         private accountService: AccountService,
@@ -44,13 +40,9 @@ export class UserRouteAccessService implements CanActivate {
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
         const authorities = route.data['authorities'];
-        // We need to call the checkLogin / and so the accountService.identity() function, to ensure,
+        // We need to call the accountService.identity() function, to ensure,
         // that the client has a principal too, if they already logged in by the server.
         // This could happen on a page refresh.
-        return this.checkLogin(authorities, state.url);
-    }
-
-    checkLogin(authorities: string[], url: string): Observable<boolean> {
         return this.accountService.identity().pipe(map((account) => {
             if (!authorities || authorities.length === 0) {
                 return true;
@@ -68,10 +60,9 @@ export class UserRouteAccessService implements CanActivate {
                 return false;
             }
 
-            this.stateStorageService.storeUrl(url);
+            this.stateStorageService.storeUrl(state.url);
             <%_ if (authenticationType !== 'oauth2') { _%>
-            this.router.navigate(['']);
-            this.loginModalService.open();
+            this.router.navigate(['/login']);
             <%_ } else { _%>
             this.loginService.login();
             <%_ } _%>

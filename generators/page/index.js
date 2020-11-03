@@ -38,20 +38,13 @@ module.exports = class extends BaseBlueprintGenerator {
             description: 'Page name',
         });
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            hide: true,
-            defaults: false,
-        });
         this.option('skip-prompts', {
             desc: 'Skip prompts',
             type: Boolean,
             hide: true,
             defaults: false,
         });
-        this.argument('recreate', {
+        this.option('recreate', {
             type: Boolean,
             required: false,
             description: 'Recreate the page',

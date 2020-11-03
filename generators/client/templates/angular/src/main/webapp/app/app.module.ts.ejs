@@ -18,6 +18,7 @@
 -%>
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 import './vendor';
 import { SharedModule } from 'app/shared/shared.module';
@@ -43,8 +44,10 @@ import { ErrorComponent } from './layouts/error/error.component';
         HomeModule,
         // jhipster-needle-angular-add-module JHipster will add new module here
         EntityRoutingModule,
-        AppRoutingModule
-    ],
+        AppRoutingModule,
+        // Set this to true to enable service worker (PWA)
+        ServiceWorkerModule.register('ngsw-worker.js', { enabled: false })
+],
     declarations: [
         MainComponent,
         NavbarComponent,

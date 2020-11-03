@@ -66,8 +66,8 @@ if [ -f "mvnw" ]; then
         -Dlogging.level.ROOT=OFF \
         -Dlogging.level.org.testcontainers=INFO \
         -Dlogging.level.org.zalando=OFF \
-        -Dlogging.level.io.github.jhipster=OFF \
-        -Dlogging.level.io.github.jhipster.sample=OFF \
+        -Dlogging.level.tech.jhipster=OFF \
+        -Dlogging.level.tech.jhipster.sample=OFF \
         -Dlogging.level.org.springframework=OFF \
         -Dlogging.level.org.springframework.web=OFF \
         -Dlogging.level.org.springframework.security=OFF
@@ -77,8 +77,8 @@ elif [ -f "gradlew" ]; then
         -Dlogging.level.ROOT=OFF \
         -Dlogging.level.org.testcontainers=INFO \
         -Dlogging.level.org.zalando=OFF \
-        -Dlogging.level.io.github.jhipster=OFF \
-        -Dlogging.level.io.github.jhipster.sample=OFF \
+        -Dlogging.level.tech.jhipster=OFF \
+        -Dlogging.level.tech.jhipster.sample=OFF \
         -Dlogging.level.org.springframework=OFF \
         -Dlogging.level.org.springframework.web=OFF \
         -Dlogging.level.org.springframework.security=OFF

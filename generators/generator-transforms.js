@@ -19,11 +19,6 @@
 const path = require('path');
 const through = require('through2');
 const prettier = require('prettier');
-const prettierJava = require('prettier-plugin-java');
-
-const prettierJavaOptions = {
-    plugins: [prettierJava],
-};
 
 const prettierTransform = function (defaultOptions) {
     return through.obj((file, encoding, callback) => {
@@ -37,12 +32,15 @@ const prettierTransform = function (defaultOptions) {
                     // for better errors
                     filepath: file.relative,
                 };
+                const str = file.contents.toString('utf8');
                 try {
-                    const str = file.contents.toString('utf8');
                     const data = prettier.format(str, options);
                     file.contents = Buffer.from(data);
                 } catch (error) {
-                    callback(new Error(`Error parsing file ${file.relative}: ${error}`));
+                    callback(
+                        new Error(`Error parsing file ${file.relative}: ${error}
+                    At: ${str}`)
+                    );
                     return;
                 }
             }
@@ -53,7 +51,14 @@ const prettierTransform = function (defaultOptions) {
 
 const generatedAnnotationTransform = generator => {
     return through.obj(function (file, encoding, callback) {
-        if (path.extname(file.path) === '.java' && file.state !== 'deleted' && !file.path.endsWith('GeneratedByJHipster.java')) {
+        if (
+            !generator.configOptions.skipGeneratedFlag &&
+            !file.path.endsWith('package-info.java') &&
+            !file.path.endsWith('MavenWrapperDownloader.java') &&
+            path.extname(file.path) === '.java' &&
+            file.state !== 'deleted' &&
+            !file.path.endsWith('GeneratedByJHipster.java')
+        ) {
             const packageName = generator.jhipsterConfig.packageName;
             const content = file.contents.toString('utf8');
 
@@ -73,6 +78,5 @@ const generatedAnnotationTransform = generator => {
 
 module.exports = {
     prettierTransform,
-    prettierJavaOptions,
     generatedAnnotationTransform,
 };

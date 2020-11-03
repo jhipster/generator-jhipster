@@ -64,5 +64,5 @@ const commonFiles = {
 };
 
 function writeFiles() {
-    this.writeFilesToDisk(commonFiles, this, false, this.fetchFromInstalledJHipster('client/templates/common'));
+    this.writeFilesToDisk(commonFiles, 'common');
 }

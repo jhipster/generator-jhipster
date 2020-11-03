@@ -17,11 +17,8 @@
  * limitations under the License.
  */
 
-const { merge } = require('./object-utils');
-
 module.exports = {
     formatComment,
-    formatDateForLiquibase,
 };
 
 /**
@@ -47,58 +44,4 @@ function formatComment(comment) {
         }
         return previousValue.concat(delimiter, currentValue.trim().replace(/[*]*\s*/, ''));
     }, '');
-}
-
-/**
- * Formats an optional date to be used by Liquibase.
- * @param {Object} args - the function's arguments.
- * @param {Date} args.date - the date to format, optional.
- * @param {Number} args.increment - an increment to be used to set minutes, optional.
- * @return {string} the formatted Date.
- */
-function formatDateForLiquibase(args) {
-    if (args && args.date) {
-        // to safely handle the date, we create a copy of the date
-        args.date = new Date(args.date.getTime());
-    }
-    const merged = merge(defaultsForLiquibaseDateFormatting(), args);
-    merged.date.setMinutes(merged.date.getMinutes() + merged.increment);
-
-    const nowUtc = new Date(
-        merged.date.getUTCFullYear(),
-        merged.date.getUTCMonth(),
-        merged.date.getUTCDate(),
-        merged.date.getUTCHours(),
-        merged.date.getUTCMinutes(),
-        merged.date.getUTCSeconds()
-    );
-    const year = `${nowUtc.getFullYear()}`;
-    let month = `${nowUtc.getMonth() + 1}`;
-    if (month.length === 1) {
-        month = `0${month}`;
-    }
-    let day = `${nowUtc.getDate()}`;
-    if (day.length === 1) {
-        day = `0${day}`;
-    }
-    let hour = `${nowUtc.getHours()}`;
-    if (hour.length === 1) {
-        hour = `0${hour}`;
-    }
-    let minute = `${nowUtc.getMinutes()}`;
-    if (minute.length === 1) {
-        minute = `0${minute}`;
-    }
-    let second = `${nowUtc.getSeconds()}`;
-    if (second.length === 1) {
-        second = `0${second}`;
-    }
-    return `${year}${month}${day}${hour}${minute}${second}`;
-}
-
-function defaultsForLiquibaseDateFormatting() {
-    return {
-        date: new Date(),
-        increment: 0,
-    };
 }

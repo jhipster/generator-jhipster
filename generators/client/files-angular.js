@@ -29,17 +29,15 @@ const files = {
         {
             templates: [
                 'package.json',
-                'proxy.conf.json',
                 'tsconfig.json',
                 'tsconfig.app.json',
-                'tslint.json',
+                'tsconfig.spec.json',
                 '.eslintrc.json',
                 'angular.json',
-                'webpack/utils.js',
-                'webpack/webpack.common.js',
-                'webpack/webpack.dev.js',
-                'webpack/webpack.prod.js',
-                'postcss.config.js',
+                'ngsw-config.json',
+                'webpack/proxy.conf.js',
+                'webpack/webpack.custom.js',
+                '.browserslistrc',
                 { file: 'webpack/logo-jhipster.png', method: 'copy' },
             ],
         },
@@ -72,25 +70,7 @@ const files = {
     angularApp: [
         {
             path: ANGULAR_DIR,
-            templates: [
-                'app.main.ts',
-                'app.module.ts',
-                'app-routing.module.ts',
-                'app.constants.ts',
-                'polyfills.ts',
-                'vendor.ts',
-                'blocks/config/prod.config.ts',
-                'blocks/config/uib-pagination.config.ts',
-                // interceptors
-                'blocks/interceptor/error-handler.interceptor.ts',
-                'blocks/interceptor/notification.interceptor.ts',
-                'blocks/interceptor/auth-expired.interceptor.ts',
-            ],
-        },
-        {
-            condition: generator => generator.authenticationType === 'jwt',
-            path: ANGULAR_DIR,
-            templates: ['blocks/interceptor/auth.interceptor.ts'],
+            templates: ['app.main.ts', 'app.module.ts', 'app-routing.module.ts', 'app.constants.ts', 'polyfills.ts', 'vendor.ts'],
         },
     ],
     angularMain: [
@@ -118,6 +98,8 @@ const files = {
                 { file: 'layouts/error/error.route.ts', method: 'processJs' },
                 { file: 'layouts/error/error.component.ts', method: 'processJs' },
                 { file: 'layouts/error/error.component.html', method: 'processHtml' },
+                // login
+                'login/login.service.ts',
             ],
         },
         {
@@ -128,6 +110,23 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: ['layouts/profiles/page-ribbon.scss', 'layouts/navbar/navbar.scss', 'home/home.scss'],
+        },
+        // login
+        {
+            path: ANGULAR_DIR,
+            condition: generator => generator.authenticationType !== 'oauth2',
+            templates: [
+                { file: 'login/login.module.ts', method: 'processJs' },
+                { file: 'login/login.route.ts', method: 'processJs' },
+                { file: 'login/login.component.ts', method: 'processJs' },
+                { file: 'login/login.component.html', method: 'processHtml' },
+                'login/login.model.ts',
+            ],
+        },
+        {
+            path: ANGULAR_DIR,
+            condition: generator => generator.authenticationType === 'oauth2',
+            templates: ['login/logout.model.ts'],
         },
     ],
     angularAccountModule: [
@@ -191,6 +190,7 @@ const files = {
                 { file: 'admin/configuration/configuration.component.ts', method: 'processJs' },
                 { file: 'admin/configuration/configuration.component.html', method: 'processHtml' },
                 'admin/configuration/configuration.service.ts',
+                'admin/configuration/configuration.model.ts',
                 { file: 'admin/docs/docs.route.ts', method: 'processJs' },
                 { file: 'admin/docs/docs.module.ts', method: 'processJs' },
                 { file: 'admin/docs/docs.component.ts', method: 'processJs' },
@@ -203,6 +203,7 @@ const files = {
                 'admin/health/health-modal.component.ts',
                 { file: 'admin/health/health-modal.component.html', method: 'processHtml' },
                 'admin/health/health.service.ts',
+                'admin/health/health.model.ts',
                 { file: 'admin/logs/logs.route.ts', method: 'processJs' },
                 { file: 'admin/logs/logs.module.ts', method: 'processJs' },
                 'admin/logs/log.model.ts',
@@ -214,6 +215,7 @@ const files = {
                 { file: 'admin/metrics/metrics.component.ts', method: 'processJs' },
                 { file: 'admin/metrics/metrics.component.html', method: 'processHtml', template: true },
                 'admin/metrics/metrics.service.ts',
+                'admin/metrics/metrics.model.ts',
             ],
         },
         {
@@ -262,27 +264,32 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 'core/core.module.ts',
-                // login
-                'core/login/login.service.ts',
                 'core/user/account.model.ts',
+                'core/user/authority.model.ts',
 
-                // icons
-                'core/icons/font-awesome-icons.ts',
+                // config
+                'core/config/uib-pagination.config.ts',
+                'core/config/dayjs.ts',
+                'core/config/datepicker-adapter.ts',
+                'core/config/font-awesome-icons.ts',
+                'core/config/error.constants.ts',
+                'core/config/input.constants.ts',
+                'core/config/pagination.constants.ts',
+
+                // interceptors
+                'core/interceptor/error-handler.interceptor.ts',
+                'core/interceptor/notification.interceptor.ts',
+                'core/interceptor/auth-expired.interceptor.ts',
+
+                // request
+                'core/request/request-util.ts',
+                'core/request/request.model.ts',
             ],
         },
         {
+            condition: generator => generator.authenticationType === 'jwt',
             path: ANGULAR_DIR,
-            condition: generator => generator.authenticationType !== 'oauth2',
-            templates: [
-                // login
-                'core/login/login.model.ts',
-                'core/login/login-modal.service.ts',
-            ],
-        },
-        {
-            path: ANGULAR_DIR,
-            condition: generator => generator.authenticationType === 'oauth2',
-            templates: ['core/login/logout.model.ts'],
+            templates: ['core/interceptor/auth.interceptor.ts'],
         },
         {
             condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
@@ -292,7 +299,7 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
-            templates: ['core/language/language.constants.ts'],
+            templates: ['core/config/language.constants.ts'],
         },
     ],
     angularShared: [
@@ -301,34 +308,17 @@ const files = {
             templates: [
                 'shared/shared.module.ts',
                 'shared/shared-libs.module.ts',
-                'shared/constants/error.constants.ts',
-                'shared/constants/input.constants.ts',
-                'shared/constants/pagination.constants.ts',
-                'shared/constants/authority.constants.ts',
                 'shared/duration.pipe.ts',
-                // models
-                'shared/util/request-util.ts',
                 // alert service code
                 'shared/alert/alert.component.ts',
                 'shared/alert/alert-error.component.ts',
                 'shared/alert/alert-error.model.ts',
-                // dates
-                'core/date/datepicker-adapter.ts',
-            ],
-        },
-        {
-            path: ANGULAR_DIR,
-            condition: generator => generator.authenticationType !== 'oauth2',
-            templates: [
-                // login
-                'core/login/login-modal.component.ts',
-                { file: 'core/login/login-modal.component.html', method: 'processHtml' },
             ],
         },
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
-            templates: ['shared/language/find-language-from-key.pipe.ts'],
+            templates: ['shared/find-language-from-key.pipe.ts'],
         },
     ],
     angularAuthService: [
@@ -337,7 +327,7 @@ const files = {
             templates: [
                 'core/auth/csrf.service.ts',
                 'core/auth/state-storage.service.ts',
-                'shared/auth/has-any-authority.directive.ts',
+                'shared/has-any-authority.directive.ts',
                 'core/auth/account.service.ts',
                 'core/auth/user-route-access.service.ts',
             ],
@@ -358,9 +348,6 @@ const files = {
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 'jest.conf.js',
-                'jest.ts',
-                'jest-global-mocks.ts',
-                'spec/test.module.ts',
                 'spec/app/admin/configuration/configuration.component.spec.ts',
                 'spec/app/admin/configuration/configuration.service.spec.ts',
                 'spec/app/admin/health/health.component.spec.ts',
@@ -372,15 +359,6 @@ const files = {
                 'spec/app/home/home.component.spec.ts',
                 'spec/app/layouts/main/main.component.spec.ts',
                 'spec/app/layouts/navbar/navbar.component.spec.ts',
-                'spec/helpers/spyobject.ts',
-                'spec/helpers/mock-account.service.ts',
-                'spec/helpers/mock-route.service.ts',
-                'spec/helpers/mock-login.service.ts',
-                'spec/helpers/mock-login-modal.service.ts',
-                'spec/helpers/mock-event-manager.service.ts',
-                'spec/helpers/mock-active-modal.service.ts',
-                'spec/helpers/mock-state-storage.service.ts',
-                'spec/helpers/mock-alert.service.ts',
             ],
         },
         {
@@ -400,10 +378,9 @@ const files = {
             condition: generator => generator.authenticationType !== 'oauth2',
             path: CLIENT_TEST_SRC_DIR,
             templates: [
-                'spec/app/core/login/login-modal.component.spec.ts',
+                'spec/app/login/login.component.spec.ts',
                 'spec/app/shared/alert/alert.component.spec.ts',
                 'spec/app/shared/alert/alert-error.component.spec.ts',
-                'spec/app/core/login/login-modal.service.spec.ts',
             ],
         },
         {
@@ -422,16 +399,6 @@ const files = {
             condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
             path: CLIENT_TEST_SRC_DIR,
             templates: ['spec/app/account/sessions/sessions.component.spec.ts'],
-        },
-        {
-            condition: generator => generator.enableTranslation,
-            path: CLIENT_TEST_SRC_DIR,
-            templates: ['spec/helpers/mock-language.service.ts'],
-        },
-        {
-            condition: generator => generator.websocket === 'spring-websocket',
-            path: CLIENT_TEST_SRC_DIR,
-            templates: ['spec/helpers/mock-tracker.service.ts'],
         },
         {
             condition: generator => generator.protractorTests,
@@ -457,5 +424,5 @@ module.exports = {
 
 function writeFiles() {
     // write angular 2.x and above files
-    this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/angular'));
+    this.writeFilesToDisk(files, 'angular');
 }

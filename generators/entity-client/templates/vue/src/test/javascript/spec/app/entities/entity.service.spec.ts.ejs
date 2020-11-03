@@ -23,7 +23,7 @@ _%>
 /* tslint:disable max-line-length */
 import axios from 'axios';
 <%_ if (fieldsContainDate) { _%>
-import { format } from 'date-fns';
+import dayjs from 'dayjs';
 <%_ } _%>
 
 import * as config from '@/shared/config/config';
@@ -77,7 +77,9 @@ describe('Service Tests', () => {
         <%= fieldType + '.' + field.enumValues[0].name %>,
             <%_ } else if (fieldType === 'Boolean') { _%>
         false,
-            <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
+            <%_ } else if (fieldType === 'Duration') { _%>
+        'PT1S',
+            <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
         0,
             <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
         'AAAAAAA',
@@ -99,9 +101,9 @@ describe('Service Tests', () => {
 <%_ fields.forEach((field) => {
     const fieldType = field.fieldType; _%>
     <%_ if (['LocalDate'].includes(fieldType)) { _%>
-          <%= field.fieldName%>: format(currentDate, DATE_FORMAT),
+          <%= field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-          <%= field.fieldName%>: format(currentDate, DATE_TIME_FORMAT),
+          <%= field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
     <%_ } _%>
 <%_ }) _%>
         }, elemDefault);
@@ -133,9 +135,9 @@ describe('Service Tests', () => {
   <%_ fields.forEach((field) => {
       const fieldType = field.fieldType; _%>
       <%_ if (['LocalDate'].includes(fieldType)) { _%>
-          <%= field.fieldName%>: format(currentDate, DATE_FORMAT),
+          <%= field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
       <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-          <%= field.fieldName%>: format(currentDate, DATE_TIME_FORMAT),
+          <%= field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
       <%_ } _%>
   <%_ }) _%>
         }, elemDefault);
@@ -172,14 +174,16 @@ describe('Service Tests', () => {
       const fieldType = field.fieldType; _%>
       <%_ if (fieldType === 'Boolean') { _%>
           <%= field.fieldName%>: true,
-      <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
+      <%_ } else if (fieldType === 'Duration') { _%>
+          <%= field.fieldName%>: 'PT2S',
+      <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
           <%= field.fieldName%>: 1,
       <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
           <%= field.fieldName%>: 'BBBBBB',
       <%_ } else if (['LocalDate'].includes(fieldType)) { _%>
-          <%= field.fieldName%>: format(currentDate, DATE_FORMAT),
+          <%= field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
       <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-          <%= field.fieldName%>: format(currentDate, DATE_TIME_FORMAT),
+          <%= field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
       <%_ } else { _%>
           <%= field.fieldName%>: 'BBBBBB',
       <%_ } _%>
@@ -220,14 +224,16 @@ describe('Service Tests', () => {
         const fieldType = field.fieldType; _%>
         <%_ if (fieldType === 'Boolean') { _%>
           <%= field.fieldName%>: true,
-        <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
+        <%_ } else if (fieldType === 'Duration') { _%>
+          <%= field.fieldName%>: 'PT2S',
+        <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
           <%= field.fieldName%>: 1,
         <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
           <%= field.fieldName%>: 'BBBBBB',
         <%_ } else if (['LocalDate'].includes(fieldType)) { _%>
-          <%= field.fieldName%>: format(currentDate, DATE_FORMAT),
+          <%= field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-          <%= field.fieldName%>: format(currentDate, DATE_TIME_FORMAT),
+          <%= field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
         <%_ } else { // (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate' _%>
           <%= field.fieldName%>: 'BBBBBB',
         <%_ } _%>

@@ -16,18 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { ComponentFixture, TestBed, async, inject, tick, fakeAsync } from '@angular/core/testing';
+<%_ if (enableTranslation) { _%>
+jest.mock('ng-jhipster');
+<%_ } _%>
+
+import { ComponentFixture, TestBed, waitForAsync, inject, tick, fakeAsync } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
 <%_ } _%>
 
-<%_ if (enableTranslation) { _%>
-import { MockLanguageService } from '../../../helpers/mock-language.service';
-<%_ } _%>
-import { TestModule } from '../../../test.module';
-import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/shared/constants/error.constants';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/core/config/error.constants';
 import { RegisterService } from 'app/account/register/register.service';
 import { RegisterComponent } from 'app/account/register/register.component';
 
@@ -36,11 +37,11 @@ describe('Component Tests', () => {
         let fixture: ComponentFixture<RegisterComponent>;
         let comp: RegisterComponent;
 
-        beforeEach(async(() => {
+        beforeEach(waitForAsync(() => {
             TestBed.configureTestingModule({
-                imports: [TestModule],
+                imports: [HttpClientTestingModule],
                 declarations: [RegisterComponent],
-                providers : [FormBuilder]
+                providers : [FormBuilder<% if (enableTranslation) { %>, JhiLanguageService<% } %>]
             })
             .overrideTemplate(RegisterComponent, '')
             .compileComponents();
@@ -64,8 +65,11 @@ describe('Component Tests', () => {
 
         it('should update success to true after creating an account',
             inject([RegisterService<% if (enableTranslation) { %>, JhiLanguageService<% } %>],
-                fakeAsync((service: RegisterService<% if (enableTranslation) { %>, mockTranslate: MockLanguageService<% } %>) => {
+                fakeAsync((service: RegisterService<% if (enableTranslation) { %>, mockLanguageService: JhiLanguageService<% } %>) => {
                     spyOn(service, 'save').and.returnValue(of({}));
+                    <%_ if (enableTranslation) { _%>
+                    spyOn(mockLanguageService, 'getCurrentLanguage').and.returnValue('<%= nativeLanguage %>');
+                    <%_ } _%>
                     comp.registerForm.patchValue({
                         password: 'password',
                         confirmPassword: 'password'
@@ -82,7 +86,7 @@ describe('Component Tests', () => {
                     });
                     expect(comp.success).toBe(true);
                     <%_ if (enableTranslation) { _%>
-                    expect(mockTranslate.getCurrentLanguageSpy).toHaveBeenCalled();
+                    expect(mockLanguageService.getCurrentLanguage).toHaveBeenCalled();
                     <%_ } _%>
                     expect(comp.errorUserExists).toBe(false);
                     expect(comp.errorEmailExists).toBe(false);

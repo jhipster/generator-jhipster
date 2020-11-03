@@ -19,7 +19,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { <%_ if (pagination !== 'no') { _%>HttpHeaders, <% } %>HttpResponse } from '@angular/common/http';
 <%_ if (pagination === 'pagination') { _%>
-import { ActivatedRoute, ParamMap, Router, Data } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 <%_ } else if (searchEngine !== false) { _%>
 import { ActivatedRoute } from '@angular/router';
 <%_ } _%>
@@ -31,7 +31,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 <%_ if (pagination !== 'no') { %>
-import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
+import { ITEMS_PER_PAGE } from 'app/core/config/pagination.constants';
 <%_ } _%>
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 <%_ if (!readOnly) { _%>
@@ -58,7 +58,6 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     }
 
     trackId(index: number, item: I<%= entityAngularName %>): <%= tsKeyType %> {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         return item.id!;
     }
 
@@ -121,7 +120,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
                 }
             });
         }
-        this.<%= entityInstancePlural %> = data || [];
+        this.<%= entityInstancePlural %> = data ?? [];
         this.ngbPaginationPage = this.page;
     }
 

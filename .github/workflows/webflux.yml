@@ -26,13 +26,16 @@ on:
     pull_request:
         branches:
             - '*'
+        paths-ignore:
+            - 'package*.json'
+            - 'generators/*client/**'
 env:
     JHI_RUN_APP: 1
     JHI_JDK: 11
-    JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
-    JHI_LIB_BRANCH: master
+    JHI_LIB_REPO: https://github.com/jhipster/jhipster-bom.git
+    JHI_LIB_BRANCH: main
     JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
-    JHI_GEN_BRANCH: master
+    JHI_GEN_BRANCH: main
     SPRING_OUTPUT_ANSI_ENABLED: ALWAYS
     SPRING_JPA_SHOW_SQL: false
     JHI_DISABLE_WEBPACK_LOGS: true
@@ -79,7 +82,7 @@ jobs:
                     #                    - webflux-couchbase
                     #                    - webflux-couchbase-es-oauth2
                     - webflux-psql
-                    - webflux-mysql
+                    #- webflux-mysql
                     - webflux-mariadb-gradle
                 include:
                     - app-type: webflux-mongodb
@@ -126,14 +129,14 @@ jobs:
                       entity: sql
                       profile: prod
                       war: 0
-                      protractor: 1
-                      testcontainers: 1
-                    - app-type: webflux-mysql
-                      entity: sqlfull
-                      profile: prod
-                      war: 0
                       e2e: 1
-                      testcontainers: 0
+                      testcontainers: 1
+                    #- app-type: webflux-mysql
+                    #  entity: sql
+                    #  profile: prod
+                    #  war: 0
+                    #  e2e: 1
+                    #  testcontainers: 1
                     - app-type: webflux-mariadb-gradle
                       entity: sqlfull
                       profile: prod
@@ -169,12 +172,42 @@ jobs:
             - uses: actions/setup-java@v1
               with:
                   java-version: '11.x'
-            - name: 'SETUP: Get chrome/chromedriver version'
-              id: chromedriver-version
+            - name: 'SETUP: Get date'
+              id: get-date
               run: |
-                  CHROME_VERSION=$(google-chrome --version | cut -f 3 -d ' ' | cut -d '.' -f 1) \
-                  && CHROMEDRIVER_VERSION=$(curl --location --fail --retry 3 http://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}) \
-                  && echo "::set-output name=version::$CHROMEDRIVER_VERSION"
+                  echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+            - name: 'SETUP: load npm cache'
+              uses: actions/cache@v2
+              with:
+                  path: ~/.npm
+                  key: ${{ runner.os }}-node-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json.ejs') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-
+            - name: 'SETUP: load maven cache'
+              uses: actions/cache@v2
+              with:
+                  path: ~/.m2/repository
+                  key: ${{ runner.os }}-maven-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
+                  restore-keys: |
+                      ${{ runner.os }}-maven-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-
+            - name: 'SETUP: load gradle cache'
+              if: contains(matrix.app-type, 'gradle')
+              uses: actions/cache@v2
+              with:
+                  path: |
+                      ~/.gradle/caches
+                      ~/.gradle/wrapper
+                  key: ${{ runner.os }}-gradle-${{ matrix.app-type }}-${{ hashFiles('generator-jhipster/**/build.gradle.ejs') }}
+                  restore-keys: |
+                      ${{ runner.os }}-gradle-${{ matrix.app-type }}-
+            - name: 'SETUP: load e2e cache'
+              if: matrix.e2e == 1
+              uses: actions/cache@v2
+              with:
+                  path: ~/.cache/Cypress/
+                  key: ${{ runner.os }}-e2e-${{ matrix.app-type }}-${{ hashFiles('generator-jhipster/**/package.json.ejs') }}
+                  restore-keys: |
+                      ${{ runner.os }}-e2e-${{ matrix.app-type }}-
             - name: 'ENV: display variables'
               run: $JHI_SCRIPTS/01-display-configuration.sh
             - name: 'TOOLS: configure tools installed by the system'
@@ -234,7 +267,8 @@ jobs:
                   # File package-lock.json is not generated
                   # Verify if the generated source has changed
                   git add .
-                  git -c color.ui=always diff -R --cached --exit-code -- . ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12' || echo "::set-output name=has-changes::true"
+                  git -c color.ui=always diff -R --cached -- '.yo-rc.json' '.jhipster/**'
+                  git -c color.ui=always diff -R --cached --exit-code -- . ':!.yo-rc.json' ':!.jhipster/**' ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12' || echo "::set-output name=has-changes::true"
             - name: 'MERGE: merge project diff'
               continue-on-error: true
               id: merge-is-equal
@@ -248,7 +282,8 @@ jobs:
                   # File package-lock.json is not generated
                   # Verify if the generated source has changed
                   git add .
-                  git -c color.ui=always diff -R --cached --exit-code -- . ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12' || echo "::set-output name=has-changes::true"
+                  git -c color.ui=always diff -R --cached -- '.yo-rc.json' '.jhipster/**'
+                  git -c color.ui=always diff -R --cached --exit-code -- . ':!.yo-rc.json' ':!.jhipster/**' ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12' || echo "::set-output name=has-changes::true"
             - name: 'MERGE: tests should be skipped'
               id: tests-should-be-skipped
               if: >
@@ -272,10 +307,6 @@ jobs:
             - name: 'TESTS: packaging'
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: $JHI_SCRIPTS/23-package.sh
-            - name: 'E2E: Synchronize chromedriver version'
-              if: matrix.e2e == 1 && steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-              run: npm run e2e:update-webdriver -- --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
-              working-directory: ${{ github.workspace }}/app
             - name: 'E2E: Run'
               id: e2e
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'

@@ -158,6 +158,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/date/filters.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/config.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/config-bootstrap-vue.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/config/dayjs.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/store/account-store.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/jhi-item-count.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/jhi-item-count.component.ts`,
@@ -483,7 +484,7 @@ describe('Vue applications', () => {
                 })
                 .withPrompts({
                     baseName: 'sampleWebsocket',
-                    packageName: 'io.github.jhipster.sample',
+                    packageName: 'tech.jhipster.sample',
                     applicationType: 'monolith',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Disk',
@@ -582,9 +583,9 @@ describe('Vue applications', () => {
         });
     });
     describe('Client theme', () => {
-        before(done => {
-            helpers
-                .run(path.join(__dirname, '../generators/app'))
+        before(() => {
+            return helpers
+                .create(path.join(__dirname, '../generators/app'))
                 .withOptions({
                     fromCli: true,
                     skipInstall: true,
@@ -607,7 +608,7 @@ describe('Vue applications', () => {
                     clientTheme: 'lux',
                     clientThemeVariant: 'primary',
                 })
-                .on('end', done);
+                .run();
         });
         it('creates expected files from jhipster Vue generator', () => {
             assert.file(expectedFiles.i18n);

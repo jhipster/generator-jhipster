@@ -1,29 +1,48 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+jest.mock('@angular/router');
+<%_ if (enableTranslation) { _%>
+jest.mock('ng-jhipster');
+<%_ } _%>
+jest.mock('app/core/auth/state-storage.service');
+<%_ if (websocket === 'spring-websocket') { _%>
+jest.mock('app/core/tracker/tracker.service');
+<%_ } _%>
+
 import { Router } from '@angular/router';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { JhiDateUtils
 <%_ if (enableTranslation) { _%>
-    ,JhiLanguageService
+import { JhiLanguageService } from 'ng-jhipster';
 <%_ } _%>
-} from 'ng-jhipster';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
-import { Authority } from 'app/shared/constants/authority.constants';
+import { Authority } from 'app/core/user/authority.model';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
-<%_ if (enableTranslation) { _%>
-import { MockLanguageService } from '../../../helpers/mock-language.service';
-<%_ } _%>
 <%_ if (websocket === 'spring-websocket') { _%>
 import { TrackerService } from 'app/core/tracker/tracker.service';
-import { MockTrackerService } from '../../../helpers/mock-tracker.service';
 <%_ } _%>
-import { MockRouter } from '../../../helpers/mock-route.service';
-import { MockStateStorageService } from '../../../helpers/mock-state-storage.service';
 
-function accountWithAuthorities(authorities: string[]): Account {
+function accountWithAuthorities(authorities: Authority[]): Account {
     return {
         activated: true,
         authorities,
@@ -40,10 +59,10 @@ describe('Service Tests', () => {
     describe('Account Service', () => {
         let service: AccountService;
         let httpMock: HttpTestingController;
-        let storageService: MockStateStorageService;
-        let router: MockRouter;
+        let mockStorageService: StateStorageService;
+        let mockRouter: Router;
         <%_ if (websocket === 'spring-websocket') { _%>
-        let trackerService: TrackerService;
+        let mockTrackerService: TrackerService;
         <%_ } _%>
 
         beforeEach(() => {
@@ -53,36 +72,23 @@ describe('Service Tests', () => {
                     NgxWebstorageModule.forRoot()
                 ],
                 providers: [
-                    JhiDateUtils,
                     <%_ if (enableTranslation) { _%>
-                    {
-                        provide: JhiLanguageService,
-                        useClass: MockLanguageService
-                    },
+                    JhiLanguageService,
                     <%_ } _%>
                     <%_ if (websocket === 'spring-websocket') { _%>
-                    {
-                        provide: TrackerService,
-                        useClass: MockTrackerService
-                    },
+                    TrackerService,
                     <%_ } _%>
-                    {
-                        provide: StateStorageService,
-                        useClass: MockStateStorageService
-                    },
-                    {
-                        provide: Router,
-                        useClass: MockRouter
-                    }
+                    StateStorageService,
+                    Router
                 ]
             });
 
-            service = TestBed.get(AccountService);
-            httpMock = TestBed.get(HttpTestingController);
-            storageService = TestBed.get(StateStorageService);
-            router = TestBed.get(Router);
+            service = TestBed.inject(AccountService);
+            httpMock = TestBed.inject(HttpTestingController);
+            mockStorageService = TestBed.inject(StateStorageService);
+            mockRouter = TestBed.inject(Router);
             <%_ if (websocket === 'spring-websocket') { _%>
-            trackerService = TestBed.get(TrackerService);
+            mockTrackerService = TestBed.inject(TrackerService);
             <%_ } _%>
         });
 
@@ -103,8 +109,8 @@ describe('Service Tests', () => {
                 expect(userIdentity).toBeNull();
                 expect(service.isAuthenticated()).toBe(false);
                 <%_ if (websocket === 'spring-websocket') { _%>
-                expect(trackerService.disconnect).toHaveBeenCalled();
-                expect(trackerService.connect).not.toHaveBeenCalled();
+                expect(mockTrackerService.disconnect).toHaveBeenCalled();
+                expect(mockTrackerService.connect).not.toHaveBeenCalled();
                 <%_ } _%>
             });
 
@@ -121,8 +127,8 @@ describe('Service Tests', () => {
                 expect(userIdentity).toEqual(expectedResult);
                 expect(service.isAuthenticated()).toBe(true);
                 <%_ if (websocket === 'spring-websocket') { _%>
-                expect(trackerService.connect).toHaveBeenCalled();
-                expect(trackerService.disconnect).not.toHaveBeenCalled();
+                expect(mockTrackerService.connect).toHaveBeenCalled();
+                expect(mockTrackerService.disconnect).not.toHaveBeenCalled();
                 <%_ } _%>
             });
         });
@@ -159,16 +165,16 @@ describe('Service Tests', () => {
             describe('navigateToStoredUrl', () => {
                 it('should navigate to the previous stored url post successful authentication', () => {
                     // GIVEN
-                    storageService.setResponse('admin/users?page=0');
+                    mockStorageService.getUrl = jest.fn(() => 'admin/users?page=0');
 
                     // WHEN
                     service.identity().subscribe();
                     httpMock.expectOne({ method: 'GET' }).flush({});
 
                     // THEN
-                    expect(storageService.getUrlSpy).toHaveBeenCalledTimes(1);
-                    expect(storageService.clearUrlSpy).toHaveBeenCalledTimes(1);
-                    expect(router.navigateByUrlSpy).toHaveBeenCalledWith('admin/users?page=0');
+                    expect(mockStorageService.getUrl).toHaveBeenCalledTimes(1);
+                    expect(mockStorageService.clearUrl).toHaveBeenCalledTimes(1);
+                    expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('admin/users?page=0');
                 });
 
                 it('should not navigate to the previous stored url when authentication fails', () => {
@@ -177,23 +183,23 @@ describe('Service Tests', () => {
                     httpMock.expectOne({ method: 'GET' }).error(new ErrorEvent(''));
 
                     // THEN
-                    expect(storageService.getUrlSpy).not.toHaveBeenCalled();
-                    expect(storageService.clearUrlSpy).not.toHaveBeenCalled();
-                    expect(router.navigateByUrlSpy).not.toHaveBeenCalled();
+                    expect(mockStorageService.getUrl).not.toHaveBeenCalled();
+                    expect(mockStorageService.clearUrl).not.toHaveBeenCalled();
+                    expect(mockRouter.navigateByUrl).not.toHaveBeenCalled();
                 });
 
                 it('should not navigate to the previous stored url when no such url exists post successful authentication', () => {
                     // GIVEN
-                    storageService.setResponse(null);
+                    mockStorageService.getUrl = jest.fn(() => null);
 
                     // WHEN
                     service.identity().subscribe();
                     httpMock.expectOne({ method: 'GET' }).flush({});
 
                     // THEN
-                    expect(storageService.getUrlSpy).toHaveBeenCalledTimes(1);
-                    expect(storageService.clearUrlSpy).not.toHaveBeenCalled();
-                    expect(router.navigateByUrlSpy).not.toHaveBeenCalled();
+                    expect(mockStorageService.getUrl).toHaveBeenCalledTimes(1);
+                    expect(mockStorageService.clearUrl).not.toHaveBeenCalled();
+                    expect(mockRouter.navigateByUrl).not.toHaveBeenCalled();
                 });
             });
         });

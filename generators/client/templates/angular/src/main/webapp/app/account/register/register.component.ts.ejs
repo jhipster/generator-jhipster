@@ -23,8 +23,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { JhiLanguageService } from 'ng-jhipster';
 <%_ } _%>
 
-import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/shared/constants/error.constants';
-import { LoginModalService } from 'app/core/login/login-modal.service';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/core/config/error.constants';
 import { RegisterService } from './register.service';
 
 @Component({
@@ -52,7 +51,6 @@ export class RegisterComponent implements AfterViewInit {
         <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
         <%_ } _%>
-        private loginModalService: LoginModalService,
         private registerService: RegisterService,
         private fb: FormBuilder
     ) {}
@@ -79,10 +77,6 @@ export class RegisterComponent implements AfterViewInit {
                 .save({ login, email, password, langKey: <% if (enableTranslation) { %>this.languageService.getCurrentLanguage()<% } else { %>'en'<% } %> })
                 .subscribe(() => (this.success = true), response => this.processError(response));
         }
-    }
-
-    openLogin(): void {
-        this.loginModalService.open();
     }
 
     private processError(response: HttpErrorResponse): void {

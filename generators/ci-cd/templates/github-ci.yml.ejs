@@ -60,29 +60,23 @@ jobs:
               with:
                   java-version: '11.x'
               <%_ }
-              if (prodDatabaseType === 'mysql') { _%>
-            - name: Stop MySQL server
-              run: sudo /etc/init.d/mysql stop
-              <%_ }
               if (!skipClient) { _%>
             - name: Install node.js packages
               run: <%= clientPackageManager %> install
               <%_ }
               if (!skipServer) { _%>
             - name: Run backend test
-              <%_ if (buildTool === 'maven') { _%>
               run: |
+                  <%_ if (buildTool === 'maven') { _%>
                   chmod +x mvnw
-                  ./mvnw -ntp clean verify<% if (!skipClient) { %> -P-webpack<% } %>
-              <%_ } else if (buildTool === 'gradle') { _%>
-              run: |
+                  <%_ } else if (buildTool === 'gradle') { _%>
                   chmod +x gradlew
-                  ./gradlew clean test integrationTest<% if (!skipClient) { %> -x webpack<% } %>
-              <%_ }
-               }
-              if (!skipClient) { _%>
+                  <%_ } _%>
+                  <%= clientPackageManager %> run ci:backend:test
+                  <%_ if (!skipClient) { _%>
             - name: Run frontend test
-              run: <%= clientPackageManager %> run <%= frontTestCommand %>
+              run: <%= clientPackageManager %> run ci:frontend:test
+                  <%_ } _%>
               <%_ } _%>
               <%_ if (cicdIntegrations.includes('sonar')) { _%>
             - name: Analyze code with SonarQube
@@ -101,21 +95,14 @@ jobs:
                   fi
               <%_ } _%>
             - name: Package application
-              <%_ if (!skipServer) {
-              if (buildTool === 'maven') { _%>
-              run: ./mvnw -ntp package <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests
-              <%_ } else if (buildTool === 'gradle') { _%>
-              run: ./gradlew bootJar -Pprod -x test -x integrationTest
-              <%_ }
-              }
-              if (skipServer && !skipClient) {
-              _%>
+              <%_ if (!skipServer) { _%>
+              run: <%= clientPackageManager %> run java:jar:prod
+              <%_ } else { _%>
               run: <%= clientPackageManager %> run build
-              <%_
-              }
+              <%_ }
               if (cicdIntegrations.includes('heroku')) { _%>
             - name: Deploy to Heroku
-              if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+              if: github.event_name == 'push' && github.ref == 'refs/heads/main'
               env:
                   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
                   <%_ if (buildTool === 'maven') { _%>
@@ -126,13 +113,22 @@ jobs:
               <%_ } _%>
               <%_ if (cicdIntegrations.includes('publishDocker')) { _%>
             - name: Build and publish docker image
-              if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
+              if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
               run: |
                   GIT_TAG=:${GITHUB_REF#refs/tags/}
-                  DOCKER_TAG=${GIT_TAG#:refs/heads/master}
+                  DOCKER_TAG=${GIT_TAG#:refs/heads/main}
                   <%_ if (buildTool === 'maven') { _%>
                   ./mvnw -ntp jib:build -Djib.to.image=<%= dockerImage %>${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}"
                   <%_ } else if (buildTool === 'gradle') { _%>
                   ./gradlew jib -Djib.to.image=<%= dockerImage %>${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}"
                   <%_ } _%>
+              <%_ } _%>
+              <%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) {
+                  const commented = applicationType === 'gateway' ? '# ' : ''; _%>
+            <%= commented %>- name: 'E2E: Prepare'
+            <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:prepare
+            <%= commented %>- name: 'E2E: Run'
+            <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:run
+            <%= commented %>- name: 'E2E: Teardown'
+            <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:teardown
               <%_ } _%>

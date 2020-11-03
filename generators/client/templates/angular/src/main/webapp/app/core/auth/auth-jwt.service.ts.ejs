@@ -25,7 +25,7 @@ import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
 
 import { SERVER_API_URL } from 'app/app.constants';
-import { Login } from 'app/core/login/login.model';
+import { Login } from 'app/login/login.model';
 
 <%_ if (authenticationType !== 'uaa') { _%>
 type JwtToken = {
@@ -58,7 +58,9 @@ export class AuthServerProvider {
     <%_ } else { _%>
 
     getToken(): string {
-        return this.$localStorage.retrieve('authenticationToken') || this.$sessionStorage.retrieve('authenticationToken') || '';
+        const tokenInLocalStorage: string | null = this.$localStorage.retrieve('authenticationToken');
+        const tokenInSessionStorage: string | null = this.$sessionStorage.retrieve('authenticationToken');
+        return tokenInLocalStorage ?? tokenInSessionStorage ?? '';
     }
 
     login(credentials: Login): Observable<void> {

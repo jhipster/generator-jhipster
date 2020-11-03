@@ -39,11 +39,10 @@ describe('<%= entityClass %> e2e test', () => {
 
   <%_ if (authenticationType === 'oauth2') { _%>
   beforeEach(() => {
-    cy.clearCache();
-    cy.keycloackLogout();
-    cy.visit('/');
-    cy.keycloackLogin('user');
-    cy.clickOnLoginItem();
+    cy.getOauth2Data();
+    cy.get('@oauth2Data').then(oauth2Data => {
+      cy.keycloackLogin(oauth2Data, 'user');
+    });
     cy.server();
     cy.route('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
     cy.visit('');
@@ -52,6 +51,13 @@ describe('<%= entityClass %> e2e test', () => {
       startingEntitiesCount = array.length;
     });
     cy.visit('/');
+  });
+
+  afterEach(() => {
+    cy.get('@oauth2Data').then(oauth2Data => {
+      cy.keycloackLogout(oauth2Data);
+    });
+    cy.clearCache();
   });
   <%_ } else { _%>
   before(() => {

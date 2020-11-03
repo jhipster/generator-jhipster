@@ -33,13 +33,6 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-            hide: true,
-        });
         this.option('defaults', {
             desc: 'Execute jhipster with default config',
             type: Boolean,
@@ -239,7 +232,6 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('app');
 
         this.registerPrettierTransform();
-        this.registerForceEntitiesTransform();
     }
 
     _initializing() {
@@ -341,20 +333,24 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     _composing() {
         return {
             /**
-             * Composing with others generators, must be runned after `configuring` priority to let blueprints
-             * `configuring` tasks to run.
-             * But must be the first task to run at `default` priority.
-             * When mixing blueprints with sbs-blueprints, sbs-blueprints must be called after, otherwise the
-             * priority will run before this `composing` task and the configuration will not be settled.
+             * Composing with others generators, must be executed after `configuring` priority to let others
+             * generators `configuring` priority to run.
+             *
+             * Generators `server`, `client`, `common`, `languages` depends on each other.
+             * We are composing in the same task so every priority are executed in parallel.
+             * - compose (app) -> initializing (common) -> initializing (server) -> ...
+             *
+             * When composing in different tasks the result would be:
+             * - composeCommon (app) -> initializing (common) -> prompting (common) -> ... -> composeServer (app) -> initializing (server) -> ...
              */
-            composing() {
+            compose() {
+                this.composeWithJHipster('common', true);
                 if (!this.skipServer) {
                     this.composeWithJHipster('server', true);
                 }
                 if (!this.skipClient) {
                     this.composeWithJHipster('client', true);
                 }
-                this.composeWithJHipster('common', true);
                 if (!this.configOptions.skipI18n) {
                     this.composeWithJHipster(
                         'languages',
@@ -368,16 +364,10 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
             askForTestOpts: prompts.askForTestOpts,
 
             askForMoreModules: prompts.askForMoreModules,
-        };
-    }
 
-    get composing() {
-        if (useBlueprints) return;
-        return this._composing();
-    }
-
-    _loading() {
-        return {
+            /**
+             * At this point every other generator should already be configured, so, enforce defaults fallback.
+             */
             saveConfigWithDefaults() {
                 this.setConfigDefaults();
 
@@ -389,6 +379,36 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
                 this.blueprints && (config.blueprints = this.blueprints);
                 this.blueprintVersion && (config.blueprintVersion = this.blueprintVersion);
                 this.config.set(config);
+            },
+
+            composeEntities() {
+                if (!this.withEntities) return;
+                this.composeWithJHipster('entities', { skipInstall: true }, true);
+            },
+
+            composePages() {
+                if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0 || this.configOptions.skipComposePage) return;
+                this.configOptions.skipComposePage = true;
+                this.jhipsterConfig.pages.forEach(page => {
+                    this.composeWithJHipster(page.generator || 'page', {
+                        skipInstall: true,
+                        arguments: [page.name],
+                        page,
+                    });
+                });
+            },
+        };
+    }
+
+    get composing() {
+        if (useBlueprints) return;
+        return this._composing();
+    }
+
+    _loading() {
+        return {
+            createUserManagementEntities() {
+                this.createUserManagementEntities();
             },
         };
     }
@@ -429,46 +449,6 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
             cleanup() {
                 cleanup.cleanupOldFiles(this);
                 cleanup.upgradeFiles(this);
-            },
-
-            regenerateEntities() {
-                if (this.withEntities && !this.configOptions.skipComposeEntity) {
-                    this.configOptions.skipComposeEntity = true;
-                    this.getExistingEntities().forEach(entity => {
-                        this.composeWithJHipster('entity', {
-                            regenerate: true,
-                            skipDbChangelog: this.jhipsterConfig.databaseType === 'sql',
-                            skipInstall: true,
-                            arguments: [entity.name],
-                        });
-                    });
-                }
-            },
-
-            regeneratePages() {
-                if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0 || this.configOptions.skipComposePage) return;
-                this.configOptions.skipComposePage = true;
-                this.jhipsterConfig.pages.forEach(page => {
-                    this.composeWithJHipster(page.generator || 'page', {
-                        skipInstall: true,
-                        arguments: [page.name],
-                        page,
-                    });
-                });
-            },
-
-            databaseChangelog() {
-                if (this.skipServer || this.jhipsterConfig.databaseType !== 'sql') {
-                    return;
-                }
-                const existingEntities = this.getExistingEntities();
-                if (existingEntities.length === 0) {
-                    return;
-                }
-
-                this.composeWithJHipster('database-changelog', {
-                    arguments: existingEntities.map(entity => entity.name),
-                });
             },
 
             ...super._missingPostWriting(),

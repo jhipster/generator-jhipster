@@ -21,7 +21,7 @@ import { RouterModule } from '@angular/router';
 import { errorRoute } from './layouts/error/error.route';
 import { navbarRoute } from './layouts/navbar/navbar.route';
 import { DEBUG_INFO_ENABLED } from 'app/app.constants';
-import { Authority } from 'app/shared/constants/authority.constants';
+import { Authority } from 'app/core/user/authority.model';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 
@@ -46,6 +46,12 @@ const LAYOUT_ROUTES = [
                 {
                     path: 'account',
                     loadChildren: () => import('./account/account.module').then(m => m.AccountModule)
+                },
+                <%_ } _%>
+                <%_ if (authenticationType !== 'oauth2') { _%>
+                {
+                    path: 'login',
+                    loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
                 },
                 <%_ } _%>
                 ...LAYOUT_ROUTES
