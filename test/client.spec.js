@@ -73,6 +73,7 @@ describe('JHipster client generator', () => {
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.i18nJson);
+            assert.file(expectedFiles.i18nAdminJson);
             assert.file(expectedFiles.clientCommon);
             assert.file(
                 getFilesForOptions(angularFiles, {
@@ -248,6 +249,7 @@ describe('JHipster client generator', () => {
 
             it('should not have admin ui components', () => {
                 runResult.assertNoFile(expectedFiles.clientAdminAngular);
+                assert.noFile(expectedFiles.i18nAdminJson);
             });
 
             it('should not contains admin routing', () => {
@@ -433,6 +435,7 @@ describe('JHipster client generator', () => {
 
             it('should not have admin ui components', () => {
                 runResult.assertNoFile(expectedFiles.clientAdminReact);
+                assert.noFile(expectedFiles.i18nAdminJson);
             });
 
             it('index.tsx should contains routes', () => {
