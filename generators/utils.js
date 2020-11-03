@@ -86,8 +86,7 @@ function rewriteFile(args, generator) {
  * @param {object} generator reference to the generator
  */
 function replaceContent(args, generator) {
-    args.path = args.path || process.cwd();
-    const fullPath = path.join(args.path, args.file);
+    const fullPath = generator.destinationPath(args.file);
 
     const re = args.regex ? new RegExp(args.pattern, 'g') : args.pattern;
 
