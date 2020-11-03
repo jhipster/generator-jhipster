@@ -31,6 +31,7 @@
         "dtoSuffix": "DTO",
         "otherModules": [],
         "blueprints": [],
+        "withAdminUi": false,
         "creationTimestamp": 1596513172471
     }
 }
