@@ -19,7 +19,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { combineLatest } from 'rxjs';
 
-import { MetricsService, Metrics, MetricsKey, Thread } from './metrics.service';
+import { MetricsService } from './metrics.service';
+import { Metrics, MetricsKey, Thread } from './metrics.model';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-metrics',

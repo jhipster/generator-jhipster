@@ -190,6 +190,7 @@ const files = {
                 { file: 'admin/configuration/configuration.component.ts', method: 'processJs' },
                 { file: 'admin/configuration/configuration.component.html', method: 'processHtml' },
                 'admin/configuration/configuration.service.ts',
+                'admin/configuration/configuration.model.ts',
                 { file: 'admin/docs/docs.route.ts', method: 'processJs' },
                 { file: 'admin/docs/docs.module.ts', method: 'processJs' },
                 { file: 'admin/docs/docs.component.ts', method: 'processJs' },
@@ -202,6 +203,7 @@ const files = {
                 'admin/health/health-modal.component.ts',
                 { file: 'admin/health/health-modal.component.html', method: 'processHtml' },
                 'admin/health/health.service.ts',
+                'admin/health/health.model.ts',
                 { file: 'admin/logs/logs.route.ts', method: 'processJs' },
                 { file: 'admin/logs/logs.module.ts', method: 'processJs' },
                 'admin/logs/log.model.ts',
@@ -213,6 +215,7 @@ const files = {
                 { file: 'admin/metrics/metrics.component.ts', method: 'processJs' },
                 { file: 'admin/metrics/metrics.component.html', method: 'processHtml', template: true },
                 'admin/metrics/metrics.service.ts',
+                'admin/metrics/metrics.model.ts',
             ],
         },
         {

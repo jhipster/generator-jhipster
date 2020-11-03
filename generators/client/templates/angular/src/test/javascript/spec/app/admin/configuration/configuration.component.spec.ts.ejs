@@ -21,7 +21,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 
 import { ConfigurationComponent } from 'app/admin/configuration/configuration.component';
-import { ConfigurationService, Bean, PropertySource } from 'app/admin/configuration/configuration.service';
+import { ConfigurationService } from 'app/admin/configuration/configuration.service';
+import { Bean, PropertySource } from 'app/admin/configuration/configuration.model';
 
 describe('Component Tests', () => {
     describe('ConfigurationComponent', () => {
