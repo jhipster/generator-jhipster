@@ -27,27 +27,25 @@ import { HasAnyAuthorityDirective } from './has-any-authority.directive';
 import { DurationPipe } from './duration.pipe';
 
 @NgModule({
-    imports: [
-        SharedLibsModule
-    ],
-    declarations: [
-        <%_ if (enableTranslation) { _%>
-        FindLanguageFromKeyPipe,
-        <%_ } _%>
-        AlertComponent,
-        AlertErrorComponent,
-        HasAnyAuthorityDirective,
-        DurationPipe
-    ],
-    exports: [
-        SharedLibsModule,
-        <%_ if (enableTranslation) { _%>
-        FindLanguageFromKeyPipe,
-        <%_ } _%>
-        AlertComponent,
-        AlertErrorComponent,
-        HasAnyAuthorityDirective,
-        DurationPipe
-    ]
+  imports: [SharedLibsModule],
+  declarations: [
+    <%_ if (enableTranslation) { _%>
+    FindLanguageFromKeyPipe,
+    <%_ } _%>
+    AlertComponent,
+    AlertErrorComponent,
+    HasAnyAuthorityDirective,
+    DurationPipe,
+  ],
+  exports: [
+    SharedLibsModule,
+    <%_ if (enableTranslation) { _%>
+    FindLanguageFromKeyPipe,
+    <%_ } _%>
+    AlertComponent,
+    AlertErrorComponent,
+    HasAnyAuthorityDirective,
+    DurationPipe,
+  ],
 })
 export class SharedModule {}

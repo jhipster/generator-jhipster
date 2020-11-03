@@ -27,123 +27,122 @@ import { Subscription } from 'rxjs';
 import { AlertError } from './alert-error.model';
 
 @Component({
-    selector: '<%= jhiPrefixDashed %>-alert-error',
-    template: `
-        <div class="alerts" role="alert">
-            <div *ngFor="let alert of alerts" [ngClass]="setClasses(alert)">
-                <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="alert.type" (close)="close(alert)">
-                    <pre [innerHTML]="alert.msg"></pre>
-                </ngb-alert>
-            </div>
-        </div>`
+  selector: '<%= jhiPrefixDashed %>-alert-error',
+  template: `
+    <div class="alerts" role="alert">
+      <div *ngFor="let alert of alerts" [ngClass]="setClasses(alert)">
+        <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="alert.type" (close)="close(alert)">
+          <pre [innerHTML]="alert.msg"></pre>
+        </ngb-alert>
+      </div>
+    </div>`,
 })
 export class AlertErrorComponent implements OnDestroy {
-    alerts: JhiAlert[] = [];
-    errorListener: Subscription;
-    httpErrorListener: Subscription;
+  alerts: JhiAlert[] = [];
+  errorListener: Subscription;
+  httpErrorListener: Subscription;
 
-    constructor(private alertService: JhiAlertService, private eventManager: JhiEventManager<% if (enableTranslation) { %>, translateService: TranslateService<% } %>) {
-        this.errorListener = eventManager.subscribe('<%= frontendAppName %>.error', (response: JhiEventWithContent<AlertError>) => {
-            const errorResponse = response.content;
-            this.addErrorAlert(errorResponse.message<% if (enableTranslation) { %>, errorResponse.key, errorResponse.params<% } %>);
-        });
+  constructor(private alertService: JhiAlertService, private eventManager: JhiEventManager<% if (enableTranslation) { %>, translateService: TranslateService<% } %>) {
+    this.errorListener = eventManager.subscribe('<%= frontendAppName %>.error', (response: JhiEventWithContent<AlertError>) => {
+      const errorResponse = response.content;
+      this.addErrorAlert(errorResponse.message<% if (enableTranslation) { %>, errorResponse.key, errorResponse.params<% } %>);
+    });
 
-        this.httpErrorListener = eventManager.subscribe('<%= frontendAppName %>.httpError', (response: JhiEventWithContent<HttpErrorResponse>) => {
-            const httpErrorResponse = response.content;
-            switch (httpErrorResponse.status) {
-                // connection refused, server not reachable
-                case 0:
-                    this.addErrorAlert('Server not reachable'<% if (enableTranslation) { %>, 'error.server.not.reachable'<% } %>);
-                    break;
+    this.httpErrorListener = eventManager.subscribe('<%= frontendAppName %>.httpError', (response: JhiEventWithContent<HttpErrorResponse>) => {
+      const httpErrorResponse = response.content;
+      switch (httpErrorResponse.status) {
+        // connection refused, server not reachable
+        case 0:
+          this.addErrorAlert('Server not reachable'<% if (enableTranslation) { %>, 'error.server.not.reachable'<% } %>);
+          break;
 
-                case 400: {
-                    const arr = httpErrorResponse.headers.keys();
-                    let errorHeader: string | null = null;
-                    <%_ if (enableTranslation) { _%>
-                    let entityKey: string | null = null;
-                    <%_ } _%>
-                    for (const entry of arr) {
-                        if (entry.toLowerCase().endsWith('app-error')) {
-                            errorHeader = httpErrorResponse.headers.get(entry);
-                        <%_ if (enableTranslation) { _%>
-                        } else if (entry.toLowerCase().endsWith('app-params')) {
-                            entityKey = httpErrorResponse.headers.get(entry);
-                        <%_ } _%>
-                        }
-                    }
-                    if (errorHeader) {
-                        <%_ if (enableTranslation) { _%>
-                        const alertData = entityKey ? { entityName: translateService.instant(`global.menu.entities.${entityKey}`) } : undefined;
-                        <%_ } _%>
-                        this.addErrorAlert(errorHeader<% if (enableTranslation) { %>, errorHeader, alertData<% } %>);
-                    } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
-                        const fieldErrors = httpErrorResponse.error.fieldErrors;
-                        for (const fieldError of fieldErrors) {
-                            if (['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(fieldError.message)) {
-                                fieldError.message = 'Size';
-                            }
-                            // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
-                            const convertedField: string = fieldError.field.replace(/\[\d*\]/g, '[]');
-                            const fieldName: string =
-                                <%_ if (enableTranslation) { _%>
-                                translateService.instant(`<%= frontendAppName %>.${fieldError.objectName as string}.${convertedField}`);
-                                <%_ } else { _%>
-                                convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
-                                <%_ } _%>
-                            this.addErrorAlert(
-                                `Error on field "${fieldName}"`<% if (enableTranslation) { %>, `error.${fieldError.message as string}`, { fieldName }<% } %>);
-                        }
-                    } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-                        this.addErrorAlert(httpErrorResponse.error.message<% if (enableTranslation) { %>, httpErrorResponse.error.message, httpErrorResponse.error.params<% } %>);
-                    } else {
-                        this.addErrorAlert(httpErrorResponse.error);
-                    }
-                    break;
-                }
-
-                case 404:
-                    this.addErrorAlert('Not found'<% if (enableTranslation) { %>, 'error.url.not.found'<% } %>);
-                    break;
-
-                default:
-                    if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-                        this.addErrorAlert(httpErrorResponse.error.message);
-                    } else {
-                        this.addErrorAlert(httpErrorResponse.error);
-                    }
-            }
-        });
-    }
-
-    setClasses(alert: JhiAlert): { [key: string]: boolean } {
-        const classes = { 'jhi-toast': Boolean(alert.toast) };
-        if (alert.position) {
-            return { ...classes, [alert.position]: true };
-        }
-        return classes;
-    }
-
-    ngOnDestroy(): void {
-        this.eventManager.destroy(this.errorListener);
-        this.eventManager.destroy(this.httpErrorListener);
-    }
-
-    close(alert: JhiAlert): void {
-        alert.close?.(this.alerts);
-    }
-
-    private addErrorAlert(message: string<% if (enableTranslation) { %>, key?: string, data?: { [key: string]: unknown }<% } %>): void {
-        const newAlert: JhiAlert = {
-            type: 'danger',
-            msg: <% if (enableTranslation) { %>key ?? <% } %>message,
+        case 400: {
+          const arr = httpErrorResponse.headers.keys();
+          let errorHeader: string | null = null;
+          <%_ if (enableTranslation) { _%>
+          let entityKey: string | null = null;
+          <%_ } _%>
+          for (const entry of arr) {
+            if (entry.toLowerCase().endsWith('app-error')) {
+              errorHeader = httpErrorResponse.headers.get(entry);
             <%_ if (enableTranslation) { _%>
-            params: data,
+            } else if (entry.toLowerCase().endsWith('app-params')) {
+              entityKey = httpErrorResponse.headers.get(entry);
             <%_ } _%>
-            timeout: 5000,
-            toast: this.alertService.isToast(),
-            scoped: true
-        };
+            }
+          }
+          if (errorHeader) {
+            <%_ if (enableTranslation) { _%>
+            const alertData = entityKey ? { entityName: translateService.instant(`global.menu.entities.${entityKey}`) } : undefined;
+            <%_ } _%>
+            this.addErrorAlert(errorHeader<% if (enableTranslation) { %>, errorHeader, alertData<% } %>);
+          } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
+            const fieldErrors = httpErrorResponse.error.fieldErrors;
+            for (const fieldError of fieldErrors) {
+              if (['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(fieldError.message)) {
+                fieldError.message = 'Size';
+              }
+              // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
+              const convertedField: string = fieldError.field.replace(/\[\d*\]/g, '[]');
+              const fieldName: string =
+                <%_ if (enableTranslation) { _%>
+                translateService.instant(`<%= frontendAppName %>.${fieldError.objectName as string}.${convertedField}`);
+                <%_ } else { _%>
+                convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
+                <%_ } _%>
+              this.addErrorAlert(`Error on field "${fieldName}"`<% if (enableTranslation) { %>, `error.${fieldError.message as string}`, { fieldName }<% } %>);
+            }
+          } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
+            this.addErrorAlert(httpErrorResponse.error.message<% if (enableTranslation) { %>, httpErrorResponse.error.message, httpErrorResponse.error.params<% } %>);
+          } else {
+            this.addErrorAlert(httpErrorResponse.error);
+          }
+          break;
+        }
 
-        this.alerts.push(this.alertService.addAlert(newAlert, this.alerts));
+        case 404:
+          this.addErrorAlert('Not found'<% if (enableTranslation) { %>, 'error.url.not.found'<% } %>);
+          break;
+
+        default:
+          if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
+            this.addErrorAlert(httpErrorResponse.error.message);
+          } else {
+            this.addErrorAlert(httpErrorResponse.error);
+          }
+      }
+    });
+  }
+
+  setClasses(alert: JhiAlert): { [key: string]: boolean } {
+    const classes = { 'jhi-toast': Boolean(alert.toast) };
+    if (alert.position) {
+      return { ...classes, [alert.position]: true };
     }
+    return classes;
+  }
+
+  ngOnDestroy(): void {
+    this.eventManager.destroy(this.errorListener);
+    this.eventManager.destroy(this.httpErrorListener);
+  }
+
+  close(alert: JhiAlert): void {
+    alert.close?.(this.alerts);
+  }
+
+  private addErrorAlert(message: string<% if (enableTranslation) { %>, key?: string, data?: { [key: string]: unknown }<% } %>): void {
+    const newAlert: JhiAlert = {
+      type: 'danger',
+      msg: <% if (enableTranslation) { %>key ?? <% } %>message,
+      <%_ if (enableTranslation) { _%>
+      params: data,
+      <%_ } _%>
+      timeout: 5000,
+      toast: this.alertService.isToast(),
+      scoped: true,
+    };
+
+    this.alerts.push(this.alertService.addAlert(newAlert, this.alerts));
+  }
 }
