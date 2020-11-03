@@ -86,15 +86,16 @@
             </thead>
             <tbody<% if (pagination === 'infinite-scroll') { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0"<% } %>>
                 <tr *ngFor="let <%= entityInstance %> of <%= entityInstancePlural %>; trackBy: trackId" data-cy="entityTable">
-                <%_ for (idx in fields) {
+                <%_
+                const keys = idFields.map(idField => `${entityInstance}.${idField.fieldName}`);
+                const routerLink = idFields.length === 0 ? '' : ` [routerLink]="['/${ entityUrl }', ${ keys.join(', ') }, 'view']"`;
+                for ([idx, field] of fields.entries()) {
                     const fieldName = fields[idx].fieldName;
                     const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
                     const fieldType = fields[idx].fieldType;
                     const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
                 _%>
-                    <%_ if (idx === 0) { _%>
-                    <td><a [routerLink]="['/<%= entityUrl %>', <% for (idField in idFields) { %><%= entityInstance %>.<%= idField.fieldName %>, <% } %>'view']">{{ <%= entityInstance %>.<%= fieldName %> }}</a></td>
-                    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
+                    <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
                     <td>
                         <a *ngIf="<%= entityInstance %>.<%= fieldName %>" (click)="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
                             <img [src]="'data:' + <%= entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-height: 30px;" alt="<%= entityInstance %> image"/>
@@ -107,7 +108,7 @@
                         <span *ngIf="<%= entityInstance %>.<%= fieldName %>">{{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}</span>
                     </td>
                     <%_ } else if (fields[idx].fieldIsEnum) { _%>
-                    <td jhiTranslate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}</td>
+                    <td<% if (field.id) { %>><a<%- routerLink %><% } %> jhiTranslate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
                     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                     <td>{{ <%= entityInstance %>.<%= fieldName %> | date:'medium' }}</td>
                     <%_ } else if (fieldType === 'LocalDate') { _%>
@@ -115,7 +116,7 @@
                     <%_ } else if (fieldType === 'Duration') { _%>
                     <td title="{{ <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> | duration }}</td>
                     <%_ } else { _%>
-                    <td>{{ <%= entityInstance %>.<%= fieldName %> }}</td>
+                    <td<% if (field.id) { %>><a<%- routerLink %><% } %>>{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
                     <%_ } _%>
                 <%_ } _%>
                 <%_ for (idx in relationships) {
