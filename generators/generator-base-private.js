@@ -1759,12 +1759,13 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         loadRequiredConfigIntoEntity(user, defaultConfig);
 
         const userIdType = user.authenticationType === 'oauth2' ? 'String' : this.getPkType(user.databaseType);
+        const fieldValidateRulesMaxlength = userIdType === 'String' ? 100 : undefined;
 
         user.fields = [
             {
                 fieldName: 'id',
                 fieldType: userIdType,
-                columnType: userIdType === 'Long' ? 'bigint' : 'varchar(100)',
+                fieldValidateRulesMaxlength,
                 options: {
                     fieldNameHumanized: 'ID',
                     id: true,
