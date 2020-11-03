@@ -162,4 +162,24 @@ describe('JDLReader', () => {
             });
         });
     });
+    context('when parsing a JDL application', () => {
+        let parsed;
+
+        before(() => {
+            parsed = JDLReader.parseFromContent(`application {
+    config {
+        baseName toto
+    }
+    entities * except A
+}
+entity A
+entity B
+entity C
+`);
+        });
+
+        it('should resolve the entity names inside the application', () => {
+            expect(parsed.applications[0].entities).to.deep.equal(['B', 'C']);
+        });
+    });
 });
