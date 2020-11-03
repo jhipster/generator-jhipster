@@ -15,14 +15,10 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/locale/translation.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/store/translation-store.ts`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/activate.json`,
-        `${CLIENT_MAIN_SRC_DIR}i18n/en/configuration.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/error.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`,
-        `${CLIENT_MAIN_SRC_DIR}i18n/en/health.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/login.json`,
-        `${CLIENT_MAIN_SRC_DIR}i18n/en/logs.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/home.json`,
-        `${CLIENT_MAIN_SRC_DIR}i18n/en/metrics.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/password.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/register.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/sessions.json`,
@@ -30,20 +26,27 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/en/reset.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/user-management.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/activate.json`,
-        `${CLIENT_MAIN_SRC_DIR}i18n/fr/configuration.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/error.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`,
-        `${CLIENT_MAIN_SRC_DIR}i18n/fr/health.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/login.json`,
-        `${CLIENT_MAIN_SRC_DIR}i18n/fr/logs.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/home.json`,
-        `${CLIENT_MAIN_SRC_DIR}i18n/fr/metrics.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/password.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/register.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/sessions.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/settings.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/reset.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/user-management.json`,
+    ],
+
+    i18nAdmin: [
+        `${CLIENT_MAIN_SRC_DIR}i18n/en/configuration.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/en/health.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/en/logs.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/en/metrics.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/fr/configuration.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/fr/health.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/fr/metrics.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/fr/logs.json`,
     ],
 
     common: [
@@ -245,6 +248,7 @@ describe('Vue applications', () => {
         });
         it('creates expected files from jhipster Vue generator', () => {
             assert.file(expectedFiles.i18n);
+            assert.file(expectedFiles.i18nAdmin);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.admin);
             assert.file(expectedFiles.app);
@@ -299,6 +303,7 @@ describe('Vue applications', () => {
         });
         it('creates expected files from jhipster Vue generator', () => {
             assert.file(expectedFiles.i18n);
+            assert.file(expectedFiles.i18nAdmin);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.admin);
             assert.file(expectedFiles.app);
@@ -353,6 +358,7 @@ describe('Vue applications', () => {
         });
         it('creates expected files from jhipster Vue generator', () => {
             assert.noFile(expectedFiles.i18n);
+            assert.noFile(expectedFiles.i18nAdmin);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.admin);
             assert.file(expectedFiles.app);
@@ -406,6 +412,7 @@ describe('Vue applications', () => {
         });
         it('creates expected files from jhipster Vue generator', () => {
             assert.noFile(expectedFiles.i18n);
+            assert.noFile(expectedFiles.i18nAdmin);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.admin);
             assert.file(expectedFiles.app);
@@ -462,6 +469,7 @@ describe('Vue applications', () => {
         });
         it('creates expected files from jhipster Vue generator', () => {
             assert.file(expectedFiles.i18n);
+            assert.file(expectedFiles.i18nAdmin);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.admin);
             assert.file(expectedFiles.app);
@@ -518,6 +526,7 @@ describe('Vue applications', () => {
         });
         it('creates expected files from jhipster Vue generator', () => {
             assert.file(expectedFiles.i18n);
+            assert.file(expectedFiles.i18nAdmin);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.admin);
             assert.file(expectedFiles.app);
@@ -573,6 +582,7 @@ describe('Vue applications', () => {
         });
         it('creates expected files from jhipster Vue generator', () => {
             assert.file(expectedFiles.i18n);
+            assert.file(expectedFiles.i18nAdmin);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.admin);
             assert.file(expectedFiles.app);
@@ -628,6 +638,7 @@ describe('Vue applications', () => {
         });
         it('creates expected files from jhipster Vue generator', () => {
             assert.file(expectedFiles.i18n);
+            assert.file(expectedFiles.i18nAdmin);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.admin);
             assert.file(expectedFiles.app);
@@ -685,6 +696,7 @@ describe('Vue applications', () => {
 
         it('should have admin ui components', () => {
             assert.file(expectedFiles.i18n);
+            assert.file(expectedFiles.i18nAdmin);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.admin);
             assert.file(expectedFiles.app);
@@ -861,6 +873,7 @@ describe('Vue applications', () => {
 
         it('should not have admin ui components', () => {
             assert.file(expectedFiles.i18n);
+            assert.noFile(expectedFiles.i18nAdmin);
             assert.file(expectedFiles.common);
             assert.noFile(expectedFiles.admin);
             assert.file(expectedFiles.app);
