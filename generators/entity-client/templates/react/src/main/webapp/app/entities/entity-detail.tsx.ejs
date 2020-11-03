@@ -143,11 +143,7 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
           )
       ) : null
     }                  <%_ } else { _%>
-                        <%_ if (dto === 'no') { _%>
                 {(<%= entityInstance + "Entity." + relationshipFieldName %>) ? <%= entityInstance + "Entity." + relationshipFieldName + "." + otherEntityField %> : ''}
-                            <%_ } else { _%>
-                {<%= entityInstance + "Entity." + relationshipFieldName + otherEntityFieldCapitalized %> ? <%= entityInstance + "Entity." + relationshipFieldName + otherEntityFieldCapitalized %> : ''}
-                        <%_ } _%>
                     <%_ } _%>
                 <%_ } else { _%>
                     <%_ if (relationshipType === 'many-to-many') { _%>
@@ -159,11 +155,7 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
         ) : null
     }
                     <%_ } else { _%>
-                        <%_ if (dto === 'no') { _%>
                 {(<%= entityInstance + "Entity." + relationshipFieldName %>) ? <%= entityInstance + "Entity." + relationshipFieldName + "." + otherEntityField %> : ''}
-                        <%_ } else { _%>
-                {<%= entityInstance + "Entity." + relationshipFieldName + otherEntityFieldCapitalized %> ? <%= entityInstance + "Entity." + relationshipFieldName + otherEntityFieldCapitalized %> : ''}
-                        <%_ } _%>
                     <%_ } _%>
                 <%_ } _%>
             </dd>

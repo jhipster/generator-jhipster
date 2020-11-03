@@ -26,6 +26,7 @@ const { entityDefaultConfig } = require('../generators/generator-defaults');
 const { stringHashCode } = require('../generators/utils');
 
 const BASE_TEMPLATE_DATA = {
+    primaryKeyType: undefined,
     skipUiGrouping: false,
     haveFieldWithJavadoc: false,
     existingEnum: false,
@@ -50,6 +51,14 @@ const BASE_TEMPLATE_DATA = {
     fieldsContainManyToOne: false,
     fieldsContainEmbedded: false,
     fieldsIsReactAvField: false,
+
+    get otherRelationships() {
+        return [];
+    },
+
+    get idFields() {
+        return [];
+    },
 
     get enums() {
         return [];
@@ -155,9 +164,17 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         hasBuiltInUserField &&
         entityWithConfig.dto === 'no';
 
+    entityWithConfig.fields
+        .filter(field => field.options)
+        .forEach(field => {
+            _.defaults(field, {
+                id: field.options.id,
+            });
+        });
+
     entityWithConfig.derivedPrimaryKey = entityWithConfig.relationships.some(relationship => relationship.useJPADerivedIdentifier === true);
 
-    if (!entityWithConfig.derivedPrimaryKey) {
+    if (!entityWithConfig.embedded && !entityWithConfig.derivedPrimaryKey) {
         entityWithConfig.idFields = entityWithConfig.fields.filter(field => field.options && field.options.id);
         if (entityWithConfig.idFields.length > 0) {
             if (entityWithConfig.idFields.length === 1) {
@@ -172,6 +189,17 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
             }
         } else {
             entityWithConfig.primaryKeyType = generator.getPkType(entityWithConfig.databaseType);
+            const idField = {
+                fieldName: 'id',
+                fieldType: entityWithConfig.primaryKeyType,
+                id: true,
+                options: {
+                    fieldNameHumanized: 'ID',
+                    id: true,
+                },
+            };
+            entityWithConfig.idFields.push(idField);
+            entityWithConfig.fields.unshift(idField);
         }
     }
 
@@ -223,7 +251,8 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     });
 
     entityWithConfig.generateFakeData = type => {
-        const fieldEntries = entityWithConfig.fields.map(field => {
+        const fieldsToGenerate = type === 'cypress' ? entityWithConfig.fields.filter(field => !field.id) : entityWithConfig.fields;
+        const fieldEntries = fieldsToGenerate.map(field => {
             const fieldData = field.generateFakeData(type);
             if (!field.nullable && fieldData === null) return undefined;
             return [field.fieldName, fieldData];

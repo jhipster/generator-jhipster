@@ -60,21 +60,16 @@ import java.util.UUID;
 @Mapper(componentModel = "spring", uses = {<%= existingMappings.map(otherEntityNameCapitalized => otherEntityNameCapitalized + 'Mapper.class').join(', ') %>})
 public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityClass) %>, <%= asEntity(entityClass) %>> {
 
-<%_
-if (!embedded) {
-// entity -> DTO mapping
-var renMapAnotEnt = false; //Render Mapping Annotation during Entity to DTO conversion?
-for (idx in relationships) {
-    const relationshipType = relationships[idx].relationshipType;
-    const relationshipName = relationships[idx].relationshipName;
-    const ownerSide = relationships[idx].ownerSide || false;
-    if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
-        renMapAnotEnt = true;
-_%>
-    @Mapping(source = "<%= relationshipName %>.id", target = "<%= relationships[idx].relationshipFieldName %>Id")
-            <%_ if (relationships[idx].otherEntityFieldCapitalized !='Id' && relationships[idx].otherEntityFieldCapitalized !== '') { _%>
-    @Mapping(source = "<%= relationshipName %>.<%= relationships[idx].otherEntityField %>", target = "<%= relationships[idx].relationshipFieldName %><%= relationships[idx].otherEntityFieldCapitalized %>")
-            <%_ } _%>
+<%_ if (!embedded) {
+        // entity -> DTO mapping
+        var renMapAnotEnt = false; //Render Mapping Annotation during Entity to DTO conversion?
+        for (idx in relationships) {
+            const relationshipType = relationships[idx].relationshipType;
+            const relationshipName = relationships[idx].relationshipName;
+            const ownerSide = relationships[idx].ownerSide || false;
+            if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
+                renMapAnotEnt = true; _%>
+    @Mapping(target = "<%= relationships[idx].relationshipFieldName %>", source = "<%= relationships[idx].relationshipFieldName %>", qualifiedByName="<%= relationships[idx].otherEntityField || relationships[idx].entity.primaryKeyName %>")
         <%_ } _%>
     <%_ } _%>
     <%_ if (renMapAnotEnt === true) { _%>
@@ -82,47 +77,49 @@ _%>
     <%_ } _%>
 
 <%_ } _%>
-<%_
-
-if (!embedded) {
-// DTO -> entity mapping
-var renMapAnotDto = false;  //Render Mapping Annotation during DTO to Entity conversion?
-// var hasOAuthUser = false; // if OAuthUser, use a String id in fromId() method
-for (idx in relationships) {
-    const relationshipType = relationships[idx].relationshipType;
-    const relationshipName = relationships[idx].relationshipName;
-    const relationshipNamePlural = relationships[idx].relationshipNamePlural;
-    const relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
-    const ownerSide = relationships[idx].ownerSide;
-    if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
-        renMapAnotDto = true;
-_%>
-    @Mapping(source = "<%= relationshipName %>Id", target = "<%= relationshipName %>")
-            <%_ } else if (relationshipType === 'many-to-many' && ownerSide === false) { renMapAnotDto = true; _%>
+<%_ if (!embedded) {
+        // DTO -> entity mapping
+        var renMapAnotDto = false;  //Render Mapping Annotation during DTO to Entity conversion?
+        if(idFields.length > 1) {
+            renMapAnotDto = true;
+            idFields.map(field => field.reference).forEach(reference => { _%>
+    @Mapping(target = "id.<%= reference.name %>", source = "<%= buildReferencePath(reference) %>")
+        <%_ })
+        }
+        for (idx in relationships) {
+            const relationshipType = relationships[idx].relationshipType;
+            const relationshipName = relationships[idx].relationshipName;
+            const relationshipNamePlural = relationships[idx].relationshipNamePlural;
+            const relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
+            const ownerSide = relationships[idx].ownerSide;
+            if (relationshipType === 'many-to-many' && ownerSide === false) {
+                renMapAnotDto = true; _%>
     @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)
-            <%_ } else if (relationshipType === 'one-to-many') { renMapAnotDto = true; _%>
+        <%_ } else if (relationshipType === 'one-to-many') {
+                renMapAnotDto = true; _%>
     @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)
-            <%_ } else if (relationshipType === 'one-to-one' && ownerSide === false) { renMapAnotDto = true; _%>
+        <%_ } else if (relationshipType === 'one-to-one' && ownerSide === false) {
+                renMapAnotDto = true; _%>
     @Mapping(target = "<%= relationshipName %>", ignore = true)
-            <%_ }
-    if ((relationshipType === 'one-to-many' || relationshipType === 'many-to-many') && fluentMethods) { _%>
+        <%_ }
+            if ((relationshipType === 'one-to-many' || relationshipType === 'many-to-many') && fluentMethods) {
+                renMapAnotDto = true; _%>
     @Mapping(target = "remove<%= relationshipNameCapitalized %>", ignore = true)
-    <%_ } _%>
+        <%_ } _%>
     <%_ } _%>
     <%_ if (renMapAnotDto === true) { _%>
     <%= asEntity(entityClass) %> toEntity(<%= asDto(entityClass) %> <%= asDto(entityInstance) %>);
     <%_ } _%>
-    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && !embedded) { _%>
-
-    default <%= asEntity(entityClass) %> fromId(<%= primaryKeyType %> id) {
-        if (id == null) {
-            return null;
-        }
-        <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %> = new <%= asEntity(entityClass) %>();
-        <%= asEntity(entityInstance) %>.setId(id);
-        return <%= asEntity(entityInstance) %>;
-    }
-<%_ } _%>
+    <%_ if (otherRelationships) {
+            for (mapperName of new Set(otherRelationships.filter(r => r.ownerSide).map(r => r.otherEntityField))) { _%>
+    @Named("<%= mapperName %>")
+    @BeanMapping(ignoreByDefault = true)
+            <%_ dtoReferences.filter(reference => reference.id || reference.name === mapperName).forEach(reference => { _%>
+    @Mapping(target = "<%= reference.name %>", source = "<%= reference.name %>")
+            <%_ }); _%>
+    <%= asDto(entityClass) %> toDto<%= _.upperFirst(mapperName) %>(<%= asEntity(entityClass) %> <%= asEntity(entityInstance) %>);
+        <%_ }
+        }; _%>
     <%_ if (uuidMapMethod) { _%>
 
     default String map(UUID value) {

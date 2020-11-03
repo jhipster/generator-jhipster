@@ -114,7 +114,7 @@ const validations: any = {
     <%_
     for (idx in relationships) {
       if (relationships[idx].relationshipValidate === true) { _%>
-    <%= relationships[idx].relationshipFieldName %><%_ if (dto !== 'no') { _%>Id<%_ } _%>: {
+    <%= relationships[idx].relationshipFieldName %>: {
       required
     },
     <%_ } _%>

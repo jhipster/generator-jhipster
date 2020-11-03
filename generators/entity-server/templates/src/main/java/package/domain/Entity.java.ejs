@@ -213,7 +213,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         if (fieldValidateRules.includes('unique')) {
             unique = true;
         } _%>
-    <%- include('../common/field_validators'); -%>
+    <%- include('../common/field_validators', {field: fields[idx]}); -%>
     <%_ } _%>
     <%_ if (!hasDto && typeof fields[idx].javadoc != 'undefined') { _%>
     @ApiModelProperty(value = "<%- formatAsApiDescription(fields[idx].javadoc) %>"<% if (required) { %>, required = true<% } %>)

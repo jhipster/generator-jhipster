@@ -74,12 +74,6 @@ export * from './entityFolderName/entityFileName.state';`;
                     otherEntityAngularName: 'AnEntity',
                 },
             ];
-            describe('when called with dto option', () => {
-                it('return an empty Map', () => {
-                    const imports = BaseGenerator.generateEntityClientImports(relationships, 'yes');
-                    expect(imports.size).to.eql(0);
-                });
-            });
             describe('when called with 2 distinct relationships without dto option', () => {
                 it('return a Map with 2 imports', () => {
                     const imports = BaseGenerator.generateEntityClientImports(relationships, 'no');

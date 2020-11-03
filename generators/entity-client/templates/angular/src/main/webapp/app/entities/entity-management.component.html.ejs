@@ -77,7 +77,7 @@
                         <%_ if (relationships[idx].relationshipType === 'many-to-one'
                                 || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
                                 || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
-                            const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;
+                            const fieldName = "." + relationships[idx].otherEntityField;
                         _%>
                     <th scope="col" <% if (pagination !== 'no') { %> jhiSortBy="<%= relationships[idx].relationshipName + (fieldName) %>"<% } %>><span jhiTranslate="<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
                         <%_ } _%>
@@ -139,11 +139,7 @@
                             {{ <%= relationshipFieldName %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}
                         </span>
                             <%_ } else { _%>
-                                <%_ if (dto === 'no') { _%>
                         {{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}
-                                <%_ } else { _%>
-                        {{ <%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> }}
-                                <%_ } _%>
                             <%_ } _%>
                         <%_ } else { _%>
                             <%_ if (relationshipType === 'many-to-many') { _%>
@@ -151,15 +147,9 @@
                             <a class="form-control-static" [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>?.id, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
                         </span>
                             <%_ } else { _%>
-                                <%_ if (dto === 'no') { _%>
                         <div *ngIf="<%= entityInstance + "." + relationshipFieldName %>">
                             <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "?.id" %>, 'view']" >{{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}</a>
                         </div>
-                            <%_ } else { _%>
-                        <div *ngIf="<%= entityInstance + "." + relationshipFieldName + "Id" %>">
-                            <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "Id" %> %>, 'view']" >{{ <%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> }}</a>
-                        </div>
-                                <%_ } _%>
                             <%_ } _%>
                         <%_ } _%>
                     </td>

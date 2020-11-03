@@ -473,6 +473,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 Object.assign(this.context, this.entityStorage.getAll());
                 loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
             },
+            shareEntity() {
+                this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
+                this.configOptions.sharedEntities[this.context.name] = this.context;
+            },
         };
     }
 
@@ -491,10 +495,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.context.fields.forEach(field => {
                     prepareFieldForTemplates(entity, field, this);
                 });
-            },
-            shareEntity() {
-                this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
-                this.configOptions.sharedEntities[this.context.name] = this.context;
+                this.context.fieldsNoId = this.context.fields.filter(field => !field.id);
             },
         };
     }
@@ -530,22 +531,28 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (!derivedRelationship) {
                     throw new Error(`Error creating primary key for entity ${this.context.name}`);
                 }
+                if (derivedRelationship.otherEntity.idFields.length > 1) {
+                    throw new Error(`Error creating primary key for entity ${this.context.name} only single id is supported for derivedId`);
+                }
+                const idFields = derivedRelationship.otherEntity.idFields.map(field => {
+                    return { ...field, fieldName: 'id', fieldNameHumanized: 'ID' };
+                });
+                this.context.idFields = idFields;
+                this.context.fields.unshift(...idFields);
                 this.context.primaryKeyType = derivedRelationship.otherEntity.primaryKeyType;
             },
 
             prepareRelationshipsForTemplates() {
                 this.context.relationships.forEach(relationship => {
                     prepareRelationshipForTemplates(this.context, relationship, this);
-                    this._.defaults(relationship, {
-                        // otherEntityField should be id if not specified
-                        otherEntityField: 'id',
-                        // let ownerSide true when type is 'many-to-one' for convenience.
-                        // means that this side should control the reference.
-                        ownerSide:
-                            relationship.relationshipType !== 'one-to-many' &&
-                            (relationship.ownerSide || relationship.relationshipType === 'many-to-one'),
-                    });
                 });
+                this.context.dtoReferences = this.context.fields
+                    .map(field => field.reference)
+                    .concat(
+                        this.context.relationships
+                            .map(relationship => relationship.reference)
+                            .filter(reference => reference.owned || reference.relationship.otherEntity.embedded)
+                    );
             },
 
             processCollectionRelationships() {
