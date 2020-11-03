@@ -31,8 +31,6 @@ module.exports = class extends BaseBlueprintGenerator {
         super(args, opts);
 
         this.entity = opts.context;
-        // Remove fields with custom ids, drop once templates supports them
-        this.entity = { ...this.entity, fields: this.entity.fieldsNoId };
 
         utils.copyObjectProps(this, this.entity);
         this.jhipsterContext = opts.jhipsterContext || opts.context;
