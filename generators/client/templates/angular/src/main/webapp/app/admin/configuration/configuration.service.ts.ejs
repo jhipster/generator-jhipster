@@ -26,21 +26,21 @@ import { Bean, Beans, ConfigProps, Env, PropertySource } from './configuration.m
 
 @Injectable({ providedIn: 'root' })
 export class ConfigurationService {
-    constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-    getBeans(): Observable<Bean[]> {
-        return this.http.get<ConfigProps>(SERVER_API_URL + 'management/configprops').pipe(
-            map(configProps =>
-                Object.values(
-                    Object.values(configProps.contexts)
-                        .map(context => context.beans)
-                        .reduce((allBeans: Beans, contextBeans: Beans) => ({ ...allBeans, ...contextBeans }))
-                )
-            )
-        );
-    }
+  getBeans(): Observable<Bean[]> {
+    return this.http.get<ConfigProps>(SERVER_API_URL + 'management/configprops').pipe(
+      map(configProps =>
+        Object.values(
+          Object.values(configProps.contexts)
+            .map(context => context.beans)
+            .reduce((allBeans: Beans, contextBeans: Beans) => ({ ...allBeans, ...contextBeans }))
+        )
+      )
+    );
+  }
 
-    getPropertySources(): Observable<PropertySource[]> {
-        return this.http.get<Env>(SERVER_API_URL + 'management/env').pipe(map(env => env.propertySources));
-    }
+  getPropertySources(): Observable<PropertySource[]> {
+    return this.http.get<Env>(SERVER_API_URL + 'management/env').pipe(map(env => env.propertySources));
+  }
 }
