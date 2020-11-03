@@ -16,22 +16,43 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+export interface ConfigProps {
+  contexts: Contexts;
+}
 
-import { SERVER_API_URL } from 'app/app.constants';
-import { Metrics, ThreadDump } from './metrics.model';
+export interface Contexts {
+  [key: string]: Context;
+}
 
-@Injectable({ providedIn: 'root' })
-export class MetricsService {
-    constructor(private http: HttpClient) {}
+export interface Context {
+  beans: Beans;
+  parentId?: any;
+}
 
-    getMetrics(): Observable<Metrics> {
-        return this.http.get<Metrics>(SERVER_API_URL + 'management/jhimetrics');
-    }
+export interface Beans {
+  [key: string]: Bean;
+}
 
-    threadDump(): Observable<ThreadDump> {
-        return this.http.get<ThreadDump>(SERVER_API_URL + 'management/threaddump');
-    }
+export interface Bean {
+  prefix: string;
+  properties: any;
+}
+
+export interface Env {
+  activeProfiles?: string[];
+  propertySources: PropertySource[];
+}
+
+export interface PropertySource {
+  name: string;
+  properties: Properties;
+}
+
+export interface Properties {
+  [key: string]: Property;
+}
+
+export interface Property {
+  value: string;
+  origin?: string;
 }
