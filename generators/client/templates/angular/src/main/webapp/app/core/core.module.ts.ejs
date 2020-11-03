@@ -1,3 +1,21 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { DatePipe, registerLocaleData } from '@angular/common';
 import { <% if (enableTranslation) { %>HttpClient, <% } %>HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -14,97 +32,95 @@ import locale from '@angular/common/locales/<%= localeId %>';
 
 import * as dayjs from 'dayjs';
 <%_ if (enableI18nRTL) { _%>
-import {
-    FindLanguageFromKeyPipe
-} from 'app/shared/language/find-language-from-key.pipe';
+import { FindLanguageFromKeyPipe } from 'app/shared/find-language-from-key.pipe';
 <%_ } _%>
 import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
-import { NgbDateDayjsAdapter } from 'app/core/date/datepicker-adapter';
+import { NgbDateDayjsAdapter } from 'app/core/config/datepicker-adapter';
 
 <%_ if (authenticationType === 'jwt') { _%>
-import { AuthInterceptor } from 'app/blocks/interceptor/auth.interceptor';
+import { AuthInterceptor } from 'app/core/interceptor/auth.interceptor';
 <%_ } _%>
-import { AuthExpiredInterceptor } from 'app/blocks/interceptor/auth-expired.interceptor';
-import { ErrorHandlerInterceptor } from 'app/blocks/interceptor/error-handler.interceptor';
-import { NotificationInterceptor } from 'app/blocks/interceptor/notification.interceptor';
+import { AuthExpiredInterceptor } from 'app/core/interceptor/auth-expired.interceptor';
+import { ErrorHandlerInterceptor } from 'app/core/interceptor/error-handler.interceptor';
+import { NotificationInterceptor } from 'app/core/interceptor/notification.interceptor';
 
-import { fontAwesomeIcons } from './icons/font-awesome-icons';
+import { fontAwesomeIcons } from 'app/core/config/font-awesome-icons';
 
 @NgModule({
-    imports: [
-        HttpClientModule,
-        NgxWebstorageModule.forRoot({ prefix: '<%= jhiPrefixDashed %>', separator: '-' }),
-        NgJhipsterModule.forRoot({
-            // set below to true to make alerts look like toast
-            alertAsToast: false,
-            alertTimeout: 5000,
-            <%_ if (enableTranslation) { _%>
-            i18nEnabled: true,
-            defaultI18nLang: '<%= nativeLanguage %>'
-            <%_ } _%>
-        }),
-        <%_ if (enableTranslation) { _%>
-        TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: translatePartialLoader,
-                deps: [HttpClient]
-            },
-            missingTranslationHandler: {
-                provide: MissingTranslationHandler,
-                useFactory: missingTranslationHandler,
-                deps: [JhiConfigService]
-            }
-        })
-        <%_ } _%>
-    ],
-    providers: [
-        Title,
-        CookieService,
-        {
-            provide: LOCALE_ID,
-            <%_ if (skipLanguageForLocale(nativeLanguage)) { _%>
-            useValue: 'en'
-            <%_ } else { _%>
-            useValue: '<%= localeId %>'
-            <%_ } _%>
-        },
-        { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
-        <%_ if (enableI18nRTL) { _%>
-        FindLanguageFromKeyPipe,
-        <%_ } _%>
-        DatePipe,
-        <%_ if (authenticationType === 'jwt') { _%>
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: AuthInterceptor,
-            multi: true
-        },
-        <%_ } _%>
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: AuthExpiredInterceptor,
-            multi: true
-        },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: ErrorHandlerInterceptor,
-            multi: true
-        },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: NotificationInterceptor,
-            multi: true
-        }
-    ]
+  imports: [
+    HttpClientModule,
+    NgxWebstorageModule.forRoot({ prefix: '<%= jhiPrefixDashed %>', separator: '-' }),
+    NgJhipsterModule.forRoot({
+      // set below to true to make alerts look like toast
+      alertAsToast: false,
+      alertTimeout: 5000,
+      <%_ if (enableTranslation) { _%>
+      i18nEnabled: true,
+      defaultI18nLang: '<%= nativeLanguage %>',
+      <%_ } _%>
+    }),
+    <%_ if (enableTranslation) { _%>
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: translatePartialLoader,
+        deps: [HttpClient],
+      },
+      missingTranslationHandler: {
+        provide: MissingTranslationHandler,
+        useFactory: missingTranslationHandler,
+        deps: [JhiConfigService],
+      },
+    }),
+    <%_ } _%>
+  ],
+  providers: [
+    Title,
+    CookieService,
+    {
+      provide: LOCALE_ID,
+      <%_ if (skipLanguageForLocale(nativeLanguage)) { _%>
+      useValue: 'en',
+      <%_ } else { _%>
+      useValue: '<%= localeId %>',
+      <%_ } _%>
+    },
+    { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
+    <%_ if (enableI18nRTL) { _%>
+    FindLanguageFromKeyPipe,
+    <%_ } _%>
+    DatePipe,
+    <%_ if (authenticationType === 'jwt') { _%>
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+    <%_ } _%>
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthExpiredInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorHandlerInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: NotificationInterceptor,
+      multi: true,
+    },
+  ],
 })
 export class CoreModule {
-    constructor(iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig<% if (enableTranslation) { %>, languageService: JhiLanguageService<% } %>) {
-        registerLocaleData(locale);
-        iconLibrary.addIcons(...fontAwesomeIcons);
-        dpConfig.minDate = { year: dayjs().subtract(100, 'year').year(), month: 1, day: 1 };
-        <%_ if (enableTranslation) { _%>
-        languageService.init();
-        <%_ } _%>
-    }
+  constructor(iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig<% if (enableTranslation) { %>, languageService: JhiLanguageService<% } %>) {
+    registerLocaleData(locale);
+    iconLibrary.addIcons(...fontAwesomeIcons);
+    dpConfig.minDate = { year: dayjs().subtract(100, 'year').year(), month: 1, day: 1 };
+    <%_ if (enableTranslation) { _%>
+    languageService.init();
+    <%_ } _%>
+  }
 }

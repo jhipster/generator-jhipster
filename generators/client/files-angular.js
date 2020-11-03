@@ -70,27 +70,7 @@ const files = {
     angularApp: [
         {
             path: ANGULAR_DIR,
-            templates: [
-                'app.main.ts',
-                'app.module.ts',
-                'app-routing.module.ts',
-                'app.constants.ts',
-                'polyfills.ts',
-                'vendor.ts',
-                'blocks/config/prod.config.ts',
-                'blocks/config/uib-pagination.config.ts',
-                // interceptors
-                'blocks/interceptor/error-handler.interceptor.ts',
-                'blocks/interceptor/notification.interceptor.ts',
-                'blocks/interceptor/auth-expired.interceptor.ts',
-                // config
-                'config/dayjs.ts',
-            ],
-        },
-        {
-            condition: generator => generator.authenticationType === 'jwt',
-            path: ANGULAR_DIR,
-            templates: ['blocks/interceptor/auth.interceptor.ts'],
+            templates: ['app.main.ts', 'app.module.ts', 'app-routing.module.ts', 'app.constants.ts', 'polyfills.ts', 'vendor.ts'],
         },
     ],
     angularMain: [
@@ -221,6 +201,7 @@ const files = {
                 { file: 'admin/configuration/configuration.component.ts', method: 'processJs' },
                 { file: 'admin/configuration/configuration.component.html', method: 'processHtml' },
                 'admin/configuration/configuration.service.ts',
+                'admin/configuration/configuration.model.ts',
                 { file: 'admin/health/health.route.ts', method: 'processJs' },
                 { file: 'admin/health/health.module.ts', method: 'processJs' },
                 { file: 'admin/health/health.component.ts', method: 'processJs' },
@@ -228,6 +209,7 @@ const files = {
                 'admin/health/health-modal.component.ts',
                 { file: 'admin/health/health-modal.component.html', method: 'processHtml' },
                 'admin/health/health.service.ts',
+                'admin/health/health.model.ts',
                 { file: 'admin/logs/logs.route.ts', method: 'processJs' },
                 { file: 'admin/logs/logs.module.ts', method: 'processJs' },
                 'admin/logs/log.model.ts',
@@ -239,6 +221,7 @@ const files = {
                 { file: 'admin/metrics/metrics.component.ts', method: 'processJs' },
                 { file: 'admin/metrics/metrics.component.html', method: 'processHtml', template: true },
                 'admin/metrics/metrics.service.ts',
+                'admin/metrics/metrics.model.ts',
             ],
         },
         {
@@ -288,10 +271,31 @@ const files = {
             templates: [
                 'core/core.module.ts',
                 'core/user/account.model.ts',
+                'core/user/authority.model.ts',
 
-                // icons
-                'core/icons/font-awesome-icons.ts',
+                // config
+                'core/config/uib-pagination.config.ts',
+                'core/config/dayjs.ts',
+                'core/config/datepicker-adapter.ts',
+                'core/config/font-awesome-icons.ts',
+                'core/config/error.constants.ts',
+                'core/config/input.constants.ts',
+                'core/config/pagination.constants.ts',
+
+                // interceptors
+                'core/interceptor/error-handler.interceptor.ts',
+                'core/interceptor/notification.interceptor.ts',
+                'core/interceptor/auth-expired.interceptor.ts',
+
+                // request
+                'core/request/request-util.ts',
+                'core/request/request.model.ts',
             ],
+        },
+        {
+            condition: generator => generator.authenticationType === 'jwt',
+            path: ANGULAR_DIR,
+            templates: ['core/interceptor/auth.interceptor.ts'],
         },
         {
             condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
@@ -301,7 +305,7 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
-            templates: ['core/language/language.constants.ts'],
+            templates: ['core/config/language.constants.ts'],
         },
     ],
     angularShared: [
@@ -310,25 +314,17 @@ const files = {
             templates: [
                 'shared/shared.module.ts',
                 'shared/shared-libs.module.ts',
-                'shared/constants/error.constants.ts',
-                'shared/constants/input.constants.ts',
-                'shared/constants/pagination.constants.ts',
-                'shared/constants/authority.constants.ts',
                 'shared/duration.pipe.ts',
-                // models
-                'shared/util/request-util.ts',
                 // alert service code
                 'shared/alert/alert.component.ts',
                 'shared/alert/alert-error.component.ts',
                 'shared/alert/alert-error.model.ts',
-                // dates
-                'core/date/datepicker-adapter.ts',
             ],
         },
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
-            templates: ['shared/language/find-language-from-key.pipe.ts'],
+            templates: ['shared/find-language-from-key.pipe.ts'],
         },
     ],
     angularAuthService: [
@@ -337,7 +333,7 @@ const files = {
             templates: [
                 'core/auth/csrf.service.ts',
                 'core/auth/state-storage.service.ts',
-                'shared/auth/has-any-authority.directive.ts',
+                'shared/has-any-authority.directive.ts',
                 'core/auth/account.service.ts',
                 'core/auth/user-route-access.service.ts',
             ],

@@ -16,12 +16,24 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { HttpParams } from '@angular/common/http';
 
-import { InjectionToken } from '@angular/core';
+export const createRequestOption = (req?: any): HttpParams => {
+  let options: HttpParams = new HttpParams();
 
-export const i18nBundlePrefix = new InjectionToken<string>('i18n.bundle.prefix');
-export const i18nBundleSuffix = new InjectionToken<string>('i18n.bundle.suffix');
+  if (req) {
+    Object.keys(req).forEach(key => {
+      if (key !== 'sort') {
+        options = options.set(key, req[key]);
+      }
+    });
 
-// admin module bundle
-export const i18nAdminModuleBundlePrefix = 'i18n/admin/';
-export const i18nBundleSuffixValue = `.json?buildTimestamp=${process.env.BUILD_TIMESTAMP}`;
+    if (req.sort) {
+      req.sort.forEach((val: string) => {
+        options = options.append('sort', val);
+      });
+    }
+  }
+
+  return options;
+};

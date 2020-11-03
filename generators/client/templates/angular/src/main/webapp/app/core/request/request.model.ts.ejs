@@ -16,12 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { enableProdMode } from '@angular/core';
-import { DEBUG_INFO_ENABLED } from 'app/app.constants';
-
-export function ProdConfig(): void {
-    // disable debug data on prod profile to improve performance
-    if (!DEBUG_INFO_ENABLED) {
-        enableProdMode();
-    }
+export interface Pagination {
+  page: number;
+  size: number;
+  sort: string[];
 }
+
+export interface Search {
+  query: string;
+}
+
+export interface SearchWithPagination extends Search, Pagination {}

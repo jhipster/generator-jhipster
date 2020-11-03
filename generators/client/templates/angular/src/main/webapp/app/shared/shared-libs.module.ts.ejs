@@ -28,17 +28,17 @@ import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 @NgModule({
-    exports: [
-        FormsModule,
-        CommonModule,
-        NgbModule,
-        NgJhipsterModule,
-        InfiniteScrollModule,
-        FontAwesomeModule,
-        ReactiveFormsModule,
-        <%_ if (enableTranslation) { _%>
-        TranslateModule
-        <%_ } _%>
-    ]
+  exports: [
+    FormsModule,
+    CommonModule,
+    NgbModule,
+    NgJhipsterModule,
+    InfiniteScrollModule,
+    FontAwesomeModule,
+    ReactiveFormsModule,
+    <%_ if (enableTranslation) { _%>
+    TranslateModule,
+    <%_ } _%>
+  ],
 })
 export class SharedLibsModule {}

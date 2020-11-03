@@ -24,11 +24,11 @@ import { SERVER_API_URL } from 'app/app.constants';
 
 @Injectable({ providedIn: 'root' })
 export class ActivateService {
-    constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-    get(key: string): Observable<{}> {
-        return this.http.get(SERVER_API_URL + '<%- apiUaaPath %>api/activate', {
-            params: new HttpParams().set('key', key)
-        });
-    }
+  get(key: string): Observable<{}> {
+    return this.http.get(SERVER_API_URL + '<%- apiUaaPath %>api/activate', {
+      params: new HttpParams().set('key', key),
+    });
+  }
 }

@@ -121,7 +121,7 @@ module.exports = class extends needleClientBase {
     }
 
     addIcon(iconName) {
-        const iconsPath = `${this.CLIENT_MAIN_SRC_DIR}app/core/icons/font-awesome-icons.ts`;
+        const iconsPath = `${this.CLIENT_MAIN_SRC_DIR}app/core/config/font-awesome-icons.ts`;
         const iconImport = `fa${this.generator.upperFirstCamelCase(iconName)}`;
         if (!jhipsterUtils.checkRegexInFile(iconsPath, new RegExp(`\\b${iconImport}\\b`), this.generator)) {
             try {

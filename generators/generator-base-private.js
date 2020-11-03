@@ -235,7 +235,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         if (this.clientFramework !== ANGULAR) {
             return;
         }
-        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`;
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/core/config/language.constants.ts`;
         try {
             let content = 'export const LANGUAGES: string[] = [\n';
             languages.forEach((language, i) => {
@@ -305,7 +305,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     updateLanguagesInLanguagePipe(languages) {
         const fullPath =
             this.clientFramework === ANGULAR
-                ? `${this.CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
+                ? `${this.CLIENT_MAIN_SRC_DIR}app/shared/find-language-from-key.pipe.ts`
                 : `${this.CLIENT_MAIN_SRC_DIR}/app/config/translation.ts`;
         try {
             let content = '{\n';
@@ -418,10 +418,12 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      * @param languages
      */
     updateLanguagesInDayjsConfiguation(languages) {
-        const fullPath =
-            this.clientFramework === VUE
-                ? `${this.CLIENT_MAIN_SRC_DIR}app/shared/config/dayjs.ts`
-                : `${this.CLIENT_MAIN_SRC_DIR}app/config/dayjs.ts`;
+        let fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/config/dayjs.ts`;
+        if (this.clientFramework === VUE) {
+            fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/shared/config/dayjs.ts`;
+        } else if (this.clientFramework === ANGULAR) {
+            fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/core/config/dayjs.ts`;
+        }
         try {
             const content = languages.reduce(
                 (content, language) => `${content}import 'dayjs/locale/${this.getDayjsLocaleId(language)}'\n`,

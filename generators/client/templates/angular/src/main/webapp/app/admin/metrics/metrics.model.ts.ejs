@@ -16,16 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Injectable } from '@angular/core';
-import { NgbPaginationConfig } from '@ng-bootstrap/ng-bootstrap';
-import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
+export type MetricsKey = 'jvm' | 'http.server.requests' | 'cache' | 'services' | 'databases' | 'garbageCollector' | 'processMetrics';
 
-@Injectable({ providedIn: 'root' })
-export class PaginationConfig {
-    constructor(config: NgbPaginationConfig) {
-        config.boundaryLinks = true;
-        config.maxSize = 5;
-        config.pageSize = ITEMS_PER_PAGE;
-        config.size = 'sm';
-    }
-}
+export type Metrics = { [key in MetricsKey]: any };
+
+export type Thread = any;
+
+export type ThreadDump = { threads: Thread[] };

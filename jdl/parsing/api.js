@@ -18,10 +18,10 @@
 
 const _ = require('lodash');
 const { EOF } = require('chevrotain');
+const JDLAstBuilderVisitor = require('./jdl-ast-builder-visitor');
 const { JDLLexer, tokens } = require('./lexer/lexer');
 const JDLParser = require('./jdl-parser');
 const { performAdditionalSyntaxChecks } = require('./validator');
-const { buildAst } = require('./ast-builder');
 const { checkTokens } = require('./self-checks/parsing-system-checker');
 
 module.exports = {
@@ -36,7 +36,9 @@ const rules = parserSingleton.getGAstProductions();
 checkTokens(Object.values(tokens), Object.values(rules));
 
 function parse(input, startRule = 'prog') {
-    return buildAst(getCst(input, startRule));
+    const cst = getCst(input, startRule);
+    const astBuilderVisitor = new JDLAstBuilderVisitor();
+    return astBuilderVisitor.visit(cst);
 }
 
 function getCst(input, startRule = 'prog') {

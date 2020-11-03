@@ -24,7 +24,7 @@ import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-login',
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit, AfterViewInit {
   @ViewChild('username', { static: false })
@@ -35,10 +35,15 @@ export class LoginComponent implements OnInit, AfterViewInit {
   loginForm = this.fb.group({
     username: [null, [Validators.required]],
     password: [null, [Validators.required]],
-    rememberMe: [false]
+    rememberMe: [false],
   });
 
-  constructor(private accountService: AccountService, private loginService: LoginService, private router: Router, private fb: FormBuilder) {}
+  constructor(
+    private accountService: AccountService,
+    private loginService: LoginService,
+    private router: Router,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     // if already authenticated then navigate to home page

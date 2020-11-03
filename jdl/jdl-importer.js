@@ -17,9 +17,9 @@
  */
 const { uniqBy } = require('lodash');
 const JDLReader = require('./readers/jdl-reader');
+const ParsedJDLToJDLObjectConverter = require('./converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter');
 const { readJSONFile } = require('./readers/json-file-reader');
 const { doesFileExist } = require('./utils/file-utils');
-const DocumentParser = require('./converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter');
 const JDLWithoutApplicationToJSONConverter = require('./converters/jdl-to-json/jdl-without-application-to-json-converter');
 const JDLWithApplicationsToJSONConverter = require('./converters/jdl-to-json/jdl-with-applications-to-json-converter');
 const JHipsterApplicationExporter = require('./exporters/applications/jhipster-application-exporter');
@@ -139,7 +139,7 @@ function getJDLObject(parsedJDLContent, configuration) {
         databaseType = configuration.application['generator-jhipster'].databaseType;
     }
 
-    return DocumentParser.parseFromConfigurationObject({
+    return ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
         parsedContent: parsedJDLContent,
         applicationType,
         applicationName: baseName,
