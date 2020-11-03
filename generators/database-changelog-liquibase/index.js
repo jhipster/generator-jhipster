@@ -20,6 +20,7 @@ const assert = require('assert');
 
 const BaseGenerator = require('../generator-base');
 const { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } = require('./files');
+const { stringify } = require('../../utils');
 
 const constants = require('../generator-constants');
 
@@ -66,9 +67,33 @@ module.exports = class extends BaseGenerator {
                         .map(field => prepareFieldForTemplates(this.entity, field, this))
                         .map(field => this._prepareFieldForTemplates(this.entity, field));
                     this.addedRelationships = this.databaseChangelog.addedRelationships
+                        .map(relationship => {
+                            const otherEntityName = this._.upperFirst(relationship.otherEntityName);
+                            relationship.otherEntity = this.configOptions.sharedEntities[otherEntityName];
+                            if (!relationship.otherEntity) {
+                                throw new Error(
+                                    `Error at entity ${this.entity.name}: could not find the entity of the relationship ${stringify(
+                                        relationship
+                                    )}`
+                                );
+                            }
+                            return relationship;
+                        })
                         .map(relationship => prepareRelationshipForTemplates(this.entity, relationship, this))
                         .map(relationship => this._prepareRelationshipForTemplates(this.entity, relationship));
                     this.removedRelationships = this.databaseChangelog.removedRelationships
+                        .map(relationship => {
+                            const otherEntityName = this._.upperFirst(relationship.otherEntityName);
+                            relationship.otherEntity = this.configOptions.oldSharedEntities[otherEntityName];
+                            if (!relationship.otherEntity) {
+                                throw new Error(
+                                    `Error at entity ${this.entity.name}: could not find the entity of the relationship ${stringify(
+                                        relationship
+                                    )}`
+                                );
+                            }
+                            return relationship;
+                        })
                         .map(relationship => prepareRelationshipForTemplates(this.entity, relationship, this, true))
                         .map(relationship => this._prepareRelationshipForTemplates(this.entity, relationship));
                 }

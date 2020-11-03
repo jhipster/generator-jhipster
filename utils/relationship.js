@@ -30,18 +30,12 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
 
     relationship.otherSideReferenceExists = false;
 
-    let otherEntityData = relationship.otherEntity;
+    const otherEntityData = relationship.otherEntity;
     if (!otherEntityData) {
-        const entityStorage = generator.getEntityConfig(otherEntityName);
-        if (entityStorage) {
-            otherEntityData = entityStorage.getAll();
-            relationship.otherEntity = otherEntityData;
-        }
-    }
-    if (!otherEntityData && !generator.isBuiltInEntity(otherEntityName)) {
         throw new Error(`Error at entity ${entityName}: could not find the entity of the relationship ${stringify(relationship)}`);
     }
-    otherEntityData = otherEntityData || {};
+    otherEntityData.otherRelationships = otherEntityData.otherRelationships || [];
+    otherEntityData.otherRelationships.push(relationship);
 
     relationship.otherEntityIsEmbedded = otherEntityData.embedded;
 
