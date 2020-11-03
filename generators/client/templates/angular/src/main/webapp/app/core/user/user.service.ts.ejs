@@ -28,43 +28,42 @@ import { IUser } from './user.model';
 import { Authority } from 'app/core/user/authority.model';
 <%_ } _%>
 
-
 @Injectable({ providedIn: 'root' })
 export class UserService {
-    public resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/users';
+  public resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/users';
 
-    constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-    <%_ if (authenticationType !== 'oauth2') { _%>
-    create(user: IUser): Observable<IUser> {
-        return this.http.post<IUser>(this.resourceUrl, user);
-    }
+  <%_ if (authenticationType !== 'oauth2') { _%>
+  create(user: IUser): Observable<IUser> {
+    return this.http.post<IUser>(this.resourceUrl, user);
+  }
 
-    update(user: IUser): Observable<IUser> {
-        return this.http.put<IUser>(this.resourceUrl, user);
-    }
+  update(user: IUser): Observable<IUser> {
+    return this.http.put<IUser>(this.resourceUrl, user);
+  }
 
-    find(login: string): Observable<IUser> {
-        return this.http.get<IUser>(`${this.resourceUrl}/${login}`);
-    }
+  find(login: string): Observable<IUser> {
+    return this.http.get<IUser>(`${this.resourceUrl}/${login}`);
+  }
+  <%_ } _%>
+
+  query(req?: Pagination): Observable<HttpResponse<IUser[]>> {
+    const options = createRequestOption(req);
+    return this.http.get<IUser[]>(this.resourceUrl, { params: options, observe: 'response' });
+  }
+
+  <%_ if (authenticationType !== 'oauth2') { _%>
+  delete(login: string): Observable<{}> {
+    return this.http.delete(`${this.resourceUrl}/${login}`);
+  }
+
+  authorities(): Observable<string[]> {
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    return this.http.get<string[]>(SERVER_API_URL + '<%- apiUaaPath %>api/users/authorities');
+    <%_ } else { _%>
+    return of([Authority.ADMIN, Authority.USER]);
     <%_ } _%>
-
-    query(req?: Pagination): Observable<HttpResponse<IUser[]>> {
-        const options = createRequestOption(req);
-        return this.http.get<IUser[]>(this.resourceUrl, { params: options, observe: 'response' });
-    }
-
-    <%_ if (authenticationType !== 'oauth2') { _%>
-    delete(login: string): Observable<{}> {
-        return this.http.delete(`${this.resourceUrl}/${login}`);
-    }
-
-    authorities(): Observable<string[]> {
-        <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-        return this.http.get<string[]>(SERVER_API_URL + '<%- apiUaaPath %>api/users/authorities');
-        <%_ } else { _%>
-        return of([Authority.ADMIN, Authority.USER]);
-        <%_ } _%>
-    }
-    <%_ } _%>
+  }
+  <%_ } _%>
 }
