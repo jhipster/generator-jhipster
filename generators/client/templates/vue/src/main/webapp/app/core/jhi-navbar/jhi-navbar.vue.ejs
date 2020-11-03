@@ -65,6 +65,7 @@
             <span v-text="$t('global.menu.admin.tracker')">User tracker</span>
           </b-dropdown-item>
           <%_ } _%>
+          <%_ if (withAdminUi) { _%>
           <b-dropdown-item  to="/admin/metrics" active-class="active">
             <font-awesome-icon icon="tachometer-alt" />
             <span v-text="$t('global.menu.admin.metrics')">Metrics</span>
@@ -81,6 +82,7 @@
             <font-awesome-icon icon="tasks" />
             <span v-text="$t('global.menu.admin.logs')">Logs</span>
           </b-dropdown-item>
+          <%_ } _%>
           <b-dropdown-item v-if="openAPIEnabled"  to="/admin/docs" active-class="active">
             <font-awesome-icon icon="book" />
             <span v-text="$t('global.menu.admin.apidocs')">API</span>
