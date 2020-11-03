@@ -25,9 +25,9 @@ import { GatewayRoute } from './gateway-route.model';
 
 @Injectable()
 export class GatewayRoutesService {
-    constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-    findAll(): Observable<GatewayRoute[]> {
-        return this.http.get<GatewayRoute[]>(SERVER_API_URL + 'api/gateway/routes/');
-    }
+  findAll(): Observable<GatewayRoute[]> {
+    return this.http.get<GatewayRoute[]>(SERVER_API_URL + 'api/gateway/routes/');
+  }
 }

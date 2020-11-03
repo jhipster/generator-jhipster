@@ -29,18 +29,20 @@ import { sessionsRoute } from './sessions/sessions.route';
 import { settingsRoute } from './settings/settings.route';
 
 const ACCOUNT_ROUTES = [
-    activateRoute,
-    passwordRoute,
-    passwordResetFinishRoute,
-    passwordResetInitRoute,
-    registerRoute,
-    <%_ if (authenticationType === 'session') { _%>
-    sessionsRoute,
-    <%_ } _%>
-    settingsRoute
+  activateRoute,
+  passwordRoute,
+  passwordResetFinishRoute,
+  passwordResetInitRoute,
+  registerRoute,
+  <%_ if (authenticationType === 'session') { _%>
+  sessionsRoute,
+  <%_ } _%>
+  settingsRoute,
 ];
 
-export const accountState: Routes = [{
+export const accountState: Routes = [
+  {
     path: '',
-    children: ACCOUNT_ROUTES
-}];
+    children: ACCOUNT_ROUTES,
+  },
+];

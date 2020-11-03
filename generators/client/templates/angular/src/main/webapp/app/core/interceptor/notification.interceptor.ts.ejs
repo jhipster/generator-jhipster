@@ -24,30 +24,32 @@ import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class NotificationInterceptor implements HttpInterceptor {
-    constructor(private alertService: JhiAlertService) {}
+  constructor(private alertService: JhiAlertService) {}
 
-    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(request).pipe(tap((event: HttpEvent<any>) => {
-            if (event instanceof HttpResponse) {
-                let alert: string | null = null;
-                <%_ if (enableTranslation) { _%>
-                let alertParams: string | null = null;
-                <%_ } _%>
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    return next.handle(request).pipe(
+      tap((event: HttpEvent<any>) => {
+        if (event instanceof HttpResponse) {
+          let alert: string | null = null;
+          <%_ if (enableTranslation) { _%>
+          let alertParams: string | null = null;
+          <%_ } _%>
 
-                for (const headerKey of event.headers.keys()) {
-                    if (headerKey.toLowerCase().endsWith('app-alert')) {
-                        alert = event.headers.get(headerKey);
-                    <%_ if (enableTranslation) { _%>
-                    } else if (headerKey.toLowerCase().endsWith('app-params')) {
-                        alertParams = decodeURIComponent(event.headers.get(headerKey)!.replace(/\+/g, ' '));
-                    <%_ } _%>
-                    }
-                }
-
-                if (alert) {
-                    this.alertService.success(alert<% if (enableTranslation) { %>, { param : alertParams }<% } %>);
-                }
+          for (const headerKey of event.headers.keys()) {
+            if (headerKey.toLowerCase().endsWith('app-alert')) {
+              alert = event.headers.get(headerKey);
+            <%_ if (enableTranslation) { _%>
+            } else if (headerKey.toLowerCase().endsWith('app-params')) {
+              alertParams = decodeURIComponent(event.headers.get(headerKey)!.replace(/\+/g, ' '));
+            <%_ } _%>
             }
-        }));
-    }
+          }
+
+          if (alert) {
+            this.alertService.success(alert<% if (enableTranslation) { %>, { param: alertParams }<% } %>);
+          }
+        }
+      })
+    );
+  }
 }

@@ -1,11 +1,13 @@
 <%#
  Copyright 2013-2020 the original author or authors from the JHipster project.
+
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
+
       http://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
@@ -17,21 +19,21 @@
 import { HttpParams } from '@angular/common/http';
 
 export const createRequestOption = (req?: any): HttpParams => {
-    let options: HttpParams = new HttpParams();
+  let options: HttpParams = new HttpParams();
 
-    if (req) {
-        Object.keys(req).forEach((key) => {
-            if (key !== 'sort') {
-                options = options.set(key, req[key]);
-            }
-        });
+  if (req) {
+    Object.keys(req).forEach(key => {
+      if (key !== 'sort') {
+        options = options.set(key, req[key]);
+      }
+    });
 
-        if (req.sort) {
-            req.sort.forEach((val: string) => {
-                options = options.append('sort', val);
-            });
-        }
+    if (req.sort) {
+      req.sort.forEach((val: string) => {
+        options = options.append('sort', val);
+      });
     }
+  }
 
-    return options;
+  return options;
 };
