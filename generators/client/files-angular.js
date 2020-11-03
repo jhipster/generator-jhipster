@@ -262,6 +262,7 @@ const files = {
             templates: [
                 'core/core.module.ts',
                 'core/user/account.model.ts',
+                'core/user/authority.model.ts',
 
                 // config
                 'core/config/uib-pagination.config.ts',
@@ -271,7 +272,6 @@ const files = {
                 'core/config/error.constants.ts',
                 'core/config/input.constants.ts',
                 'core/config/pagination.constants.ts',
-                'core/config/authority.constants.ts',
 
                 // interceptors
                 'core/interceptor/error-handler.interceptor.ts',
