@@ -375,11 +375,11 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     <%_ } _%>
     private Set<PersistentToken> persistentTokens = new HashSet<>();<% } %>
 
-    public <% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>Long<% } else { %>String<% } %> getId() {
+    public <%= user.primaryKeyType %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>Long<% } else { %>String<% } %> id) {
+    public void setId(<%= user.primaryKeyType %> id) {
         this.id = id;
     }
 
