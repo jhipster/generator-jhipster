@@ -22,12 +22,15 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import <%= packageName %>.web.rest.TestUtil;
 <%_
-let id1 = getPrimaryKeyValue(primaryKeyType, databaseType, '1');
-let id2 = getPrimaryKeyValue(primaryKeyType, databaseType, '2');
-_%>
-<%_ if (id1.includes('UUID')) { _%>
+let id1;
+let id2;
+if (!embedded) { 
+    id1 = getPrimaryKeyValue(primaryKeyType, databaseType, '1');
+    id2 = getPrimaryKeyValue(primaryKeyType, databaseType, '2');
+    if (id1.includes('UUID')) { _%>
 import java.util.UUID;
-<%_ } _%>
+    <%_ }
+} _%>
 
 class <%= asDto(entityClass) %>Test {
 
@@ -36,14 +39,14 @@ class <%= asDto(entityClass) %>Test {
         TestUtil.equalsVerifier(<%= asDto(entityClass) %>.class);
         <%_if (!embedded) { _%>
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %>1 = new <%= asDto(entityClass) %>();
-        <%= asDto(entityInstance) %>1.setId(<%- id1 %>);
+        <%= asDto(entityInstance) %>1.set<%= primaryKey.nameCapitalized %>(<%- id1 %>);
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %>2 = new <%= asDto(entityClass) %>();
         assertThat(<%= asDto(entityInstance) %>1).isNotEqualTo(<%= asDto(entityInstance) %>2);
-        <%= asDto(entityInstance) %>2.setId(<%= asDto(entityInstance) %>1.getId());
+        <%= asDto(entityInstance) %>2.set<%= primaryKey.nameCapitalized %>(<%= asDto(entityInstance) %>1.get<%= primaryKey.nameCapitalized %>());
         assertThat(<%= asDto(entityInstance) %>1).isEqualTo(<%= asDto(entityInstance) %>2);
-        <%= asDto(entityInstance) %>2.setId(<%- id2 %>);
+        <%= asDto(entityInstance) %>2.set<%= primaryKey.nameCapitalized %>(<%- id2 %>);
         assertThat(<%= asDto(entityInstance) %>1).isNotEqualTo(<%= asDto(entityInstance) %>2);
-        <%= asDto(entityInstance) %>1.setId(null);
+        <%= asDto(entityInstance) %>1.set<%= primaryKey.nameCapitalized %>(null);
         assertThat(<%= asDto(entityInstance) %>1).isNotEqualTo(<%= asDto(entityInstance) %>2);
         <%_} _%>
     }

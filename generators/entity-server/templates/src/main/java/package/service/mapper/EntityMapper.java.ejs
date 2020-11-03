@@ -76,7 +76,7 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityC
     if (!embedded && otherIdReferences.length > 0) {
         if (otherIdReferences.some(r => !r.collection)) { %>
 
-    @Named("id")
+    @Named("<%= primaryKey.name %>")
     @BeanMapping(ignoreByDefault = true)
         <%_ let renMapAnotEnt = false; //Render Mapping Annotation during Entity to DTO conversion?
             for (reference of dtoReferences.filter(reference => reference.id)) {
@@ -89,7 +89,7 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityC
     <%_ } %>
     <%_ if (otherIdReferences.some(r => r.collection)) { %>
 
-    @Named("idSet")
+    @Named("<%= primaryKey.name %>Set")
     @BeanMapping(ignoreByDefault = true)
         <%_ let renMapAnotEnt = false; //Render Mapping Annotation during Entity to DTO conversion?
             for (reference of dtoReferences.filter(reference => reference.id)) {

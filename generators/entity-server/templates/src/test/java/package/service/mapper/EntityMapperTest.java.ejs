@@ -22,11 +22,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 <%_
-let id = getPrimaryKeyValue(primaryKeyType, databaseType, '1');
-_%>
-<%_ if (id.includes('UUID')) { _%>
+let id;
+if (!embedded) {
+    id = getPrimaryKeyValue(primaryKeyType, databaseType, '1');
+    if (id.includes('UUID')) { _%>
 import java.util.UUID;
-<%_ } _%>
+    <%_ }
+} _%>
 
 class <%= entityClass %>MapperTest {
 
