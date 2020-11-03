@@ -86,6 +86,9 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+<%_ if (user.primaryKeyType === 'UUID') { _%>
+import java.util.UUID;
+<%_ } _%>
 
 <%_ if (databaseType === 'couchbase') { _%>
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
