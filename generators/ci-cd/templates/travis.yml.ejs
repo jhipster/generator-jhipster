@@ -91,6 +91,7 @@ script:
 <%_ } _%>
 <%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) {
     const commented = applicationType === 'gateway' ? '# ' : ''; _%>
+  <%= commented %>- <%= clientPackageManager %> run ci:e2e:package
   <%= commented %>- <%= clientPackageManager %> run ci:e2e:prepare
   <%= commented %>- <%= clientPackageManager %> run ci:e2e:run
   <%= commented %>- <%= clientPackageManager %> run ci:e2e:teardown

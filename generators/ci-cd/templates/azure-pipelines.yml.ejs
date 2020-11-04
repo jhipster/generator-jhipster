@@ -77,6 +77,11 @@ jobs:
   <%= commented %>- task: Npm@1
   <%= commented %>  inputs:
   <%= commented %>    command: 'custom'
+  <%= commented %>    customCommand: ' run ci:e2e:package'
+  <%= commented %>  displayName: 'E2E: Package'
+  <%= commented %>- task: Npm@1
+  <%= commented %>  inputs:
+  <%= commented %>    command: 'custom'
   <%= commented %>    customCommand: ' run ci:e2e:prepare'
   <%= commented %>  displayName: 'E2E: Prepare'
   <%= commented %>- task: Npm@1

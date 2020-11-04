@@ -130,6 +130,8 @@ jobs:
               <%_ } _%>
               <%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) {
                   const commented = applicationType === 'gateway' ? '# ' : ''; _%>
+            <%= commented %>- name: 'E2E: Package'
+            <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:package
             <%= commented %>- name: 'E2E: Prepare'
             <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:prepare
             <%= commented %>- name: 'E2E: Run'
