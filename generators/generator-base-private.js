@@ -1747,8 +1747,15 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         this.configOptions.sharedEntities.User = user;
     }
 
-    // Handle the specific case when the second letter is capitalized
-    // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
+    /**
+     * Convert to Java bean name case
+     *
+     * Handle the specific case when the second letter is capitalized
+     * See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
+     *
+     * @param {string} beanName
+     * @return {string}
+     */
     javaBeanCase(beanName) {
         const secondLetter = beanName.charAt(1);
         if (secondLetter === secondLetter.toUpperCase()) {
@@ -1757,19 +1764,57 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         return _.upperFirst(beanName);
     }
 
+    /**
+     * Create a java getter of reference.
+     *
+     * @param {object} reference
+     * @return {string}
+     */
     buildJavaGet(reference) {
         return reference.path.map(partialPath => `get${this.javaBeanCase(partialPath)}()`).join('.');
     }
 
+    /**
+     * Create a dotted path of reference.
+     *
+     * @param {object} reference
+     * @return {string}
+     */
     buildReferencePath(reference) {
         return reference.path.join('.');
     }
 
+    /**
+     * Create a java getter method of reference.
+     *
+     * @param {object} reference
+     * @param {string} type
+     * @return {string}
+     */
     buildJavaGetter(reference, type = reference.type) {
         return `${type} get${this.javaBeanCase(reference.name)}()`;
     }
 
-    buildJavaSetter(reference, value = `${reference.type} ${reference.name}`) {
-        return `set${this.javaBeanCase(reference.name)}(${value})`;
+    /**
+     * Create a java getter method of reference.
+     *
+     * @param {object} reference
+     * @param {string} valueDefinition
+     * @return {string}
+     */
+    buildJavaSetter(reference, valueDefinition = `${reference.type} ${reference.name}`) {
+        return `set${this.javaBeanCase(reference.name)}(${valueDefinition})`;
+    }
+
+    /**
+     * Create a angular form path getter method of reference.
+     *
+     * @param {object} reference
+     * @param {string[]} valueDefinition
+     * @return {string}
+     */
+    buildAngularFormPath(reference, prefix = []) {
+        const formPath = [...prefix, ...reference.path].join("', '");
+        return `'${formPath}'`;
     }
 };

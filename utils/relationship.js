@@ -264,7 +264,7 @@ function relationshipToReference(entity, relationship, pathPrefix = []) {
         nameCapitalized: collection ? relationship.relationshipNameCapitalizedPlural : relationship.relationshipNameCapitalized,
         type: relationship.otherEntity.primaryKeyType,
         path: [...pathPrefix, name],
-        idReferences: relationship.otherEntity.idFields ? [relationship.otherEntity.idFields.map(field => field.reference)] : [],
+        idReferences: relationship.otherEntity.idFields ? relationship.otherEntity.idFields.map(field => field.reference) : [],
         valueReference: relationship.otherEntityField && relationship.otherEntityField.reference,
     };
     return reference;
