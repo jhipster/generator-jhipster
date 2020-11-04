@@ -68,8 +68,8 @@ const fakeStringTemplateForFieldName = columnName => {
 
 const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => {
     let data;
-    if (field.options && field.options.fakerTemplate) {
-        data = faker.faker(field.options.fakerTemplate);
+    if (field.fakerTemplate) {
+        data = faker.faker(field.fakerTemplate);
     } else if (field.fieldValidate && field.fieldValidateRules.includes('pattern')) {
         const generated = field.createRandexp().gen();
         if (type === 'csv') {
@@ -149,11 +149,10 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
 };
 
 function prepareFieldForTemplates(entityWithConfig, field, generator) {
-    const fieldOptions = field.options || {};
     _.defaults(field, {
         fieldNameCapitalized: _.upperFirst(field.fieldName),
         fieldNameUnderscored: _.snakeCase(field.fieldName),
-        fieldNameHumanized: fieldOptions.fieldNameHumanized || _.startCase(field.fieldName),
+        fieldNameHumanized: _.startCase(field.fieldName),
     });
     const fieldType = field.fieldType;
 
@@ -316,4 +315,4 @@ function fieldToReference(entity, field, pathPrefix = []) {
     };
 }
 
-module.exports = { prepareFieldForTemplates, fieldIsEnum, getEnumValuesWithCustomValues, fieldToReference };
+module.exports = { prepareFieldForTemplates, fieldIsEnum, getEnumValuesWithCustomValues };

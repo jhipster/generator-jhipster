@@ -164,18 +164,10 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         hasBuiltInUserField &&
         entityWithConfig.dto === 'no';
 
-    entityWithConfig.fields
-        .filter(field => field.options)
-        .forEach(field => {
-            _.defaults(field, {
-                id: field.options.id,
-            });
-        });
-
     entityWithConfig.derivedPrimaryKey = entityWithConfig.relationships.some(relationship => relationship.useJPADerivedIdentifier === true);
 
     if (!entityWithConfig.embedded && !entityWithConfig.derivedPrimaryKey) {
-        entityWithConfig.idFields = entityWithConfig.fields.filter(field => field.options && field.options.id);
+        entityWithConfig.idFields = entityWithConfig.fields.filter(field => field.id);
         if (entityWithConfig.idFields.length > 0) {
             if (entityWithConfig.idFields.length === 1) {
                 const idField = entityWithConfig.idFields[0];
@@ -193,10 +185,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
                 fieldName: 'id',
                 fieldType: entityWithConfig.primaryKeyType,
                 id: true,
-                options: {
-                    fieldNameHumanized: 'ID',
-                    id: true,
-                },
+                fieldNameHumanized: 'ID',
             };
             entityWithConfig.idFields.push(idField);
             entityWithConfig.fields.unshift(idField);

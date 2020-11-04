@@ -472,6 +472,24 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 // Update current context with config from file.
                 Object.assign(this.context, this.entityStorage.getAll());
                 loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
+
+                if (this.context.fields) {
+                    this.context.fields
+                        .filter(field => field.options)
+                        .forEach(field => {
+                            // Load jdl annotations as default values.
+                            Object.assign(field, field.options);
+                        });
+                }
+
+                if (this.context.relationships) {
+                    this.context.relationships
+                        .filter(relationship => relationship.options)
+                        .forEach(relationship => {
+                            // Load jdl annotations as default values.
+                            Object.assign(relationship, relationship.options);
+                        });
+                }
             },
             shareEntity() {
                 this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};

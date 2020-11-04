@@ -24,7 +24,6 @@ const { stringify } = require('.');
 
 function prepareRelationshipForTemplates(entityWithConfig, relationship, generator, ignoreMissingRequiredRelationship) {
     const entityName = entityWithConfig.name;
-    const relationshipOptions = relationship.options || {};
     const otherEntityName = relationship.otherEntityName;
     const jhiTablePrefix = entityWithConfig.jhiTablePrefix || generator.getTableName(entityWithConfig.jhiPrefix);
 
@@ -135,7 +134,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         relationshipNamePlural: pluralize(relationshipName),
         relationshipFieldName: _.lowerFirst(relationshipName),
         relationshipNameCapitalized: _.upperFirst(relationshipName),
-        relationshipNameHumanized: relationshipOptions.relationshipNameHumanized || _.startCase(relationshipName),
+        relationshipNameHumanized: _.startCase(relationshipName),
         columnName: generator.getColumnName(relationshipName),
         otherEntityNamePlural: pluralize(otherEntityName),
         otherEntityNameCapitalized: _.upperFirst(otherEntityName),
