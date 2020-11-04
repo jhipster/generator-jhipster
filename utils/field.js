@@ -153,6 +153,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
         fieldNameCapitalized: _.upperFirst(field.fieldName),
         fieldNameUnderscored: _.snakeCase(field.fieldName),
         fieldNameHumanized: _.startCase(field.fieldName),
+        fieldTranslationKey: `${entityWithConfig.i18nKeyPrefix}.${field.fieldName}`,
     });
     const fieldType = field.fieldType;
 

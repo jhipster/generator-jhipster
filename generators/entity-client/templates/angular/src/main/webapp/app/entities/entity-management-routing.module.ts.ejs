@@ -39,7 +39,7 @@ const <%= entityInstance %>Route: Routes = [
             <%_ if (pagination === 'pagination') { _%>
             defaultSort: 'id,asc',
             <%_ } _%>
-            pageTitle: <% if (enableTranslation) { %>'<%= frontendAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
+            pageTitle: <% if (enableTranslation) { %>'<%= i18nKeyPrefix %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
     },
@@ -51,7 +51,7 @@ const <%= entityInstance %>Route: Routes = [
         },
         data: {
             authorities: [Authority.USER],
-            pageTitle: <% if (enableTranslation) { %>'<%= frontendAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
+            pageTitle: <% if (enableTranslation) { %>'<%= i18nKeyPrefix %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
     },
@@ -64,7 +64,7 @@ const <%= entityInstance %>Route: Routes = [
         },
         data: {
             authorities: [Authority.USER],
-            pageTitle: <% if (enableTranslation) { %>'<%= frontendAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
+            pageTitle: <% if (enableTranslation) { %>'<%= i18nKeyPrefix %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
     },
@@ -76,7 +76,7 @@ const <%= entityInstance %>Route: Routes = [
         },
         data: {
             authorities: [Authority.USER],
-            pageTitle: <% if (enableTranslation) { %>'<%= frontendAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
+            pageTitle: <% if (enableTranslation) { %>'<%= i18nKeyPrefix %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
     },

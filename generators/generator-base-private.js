@@ -1729,6 +1729,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                 fieldName: 'id',
                 fieldType: userIdType,
                 fieldValidateRulesMaxlength,
+                fieldTranslationKey: 'global.field.id',
                 fieldNameHumanized: 'ID',
                 id: true,
             },

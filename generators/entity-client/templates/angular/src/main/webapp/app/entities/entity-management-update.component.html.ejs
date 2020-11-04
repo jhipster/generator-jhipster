@@ -34,7 +34,7 @@
     const readonly = !!fields[idx].id || !!fields[idx].readonly;
     let fieldInputType = 'text';
     let ngModelOption = '';
-    const translationKey = `${i18nKeyPrefix}.${fieldName}`;
+    const translationKey = fields[idx].fieldTranslationKey;
     if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
         fieldInputType = 'number';
     } else if (fieldType === 'LocalDate') {

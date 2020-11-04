@@ -186,6 +186,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
                 fieldType: entityWithConfig.primaryKeyType,
                 id: true,
                 fieldNameHumanized: 'ID',
+                fieldTranslationKey: 'global.field.id',
             };
             entityWithConfig.idFields.push(idField);
             entityWithConfig.fields.unshift(idField);
