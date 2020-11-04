@@ -46,11 +46,11 @@ describe('Component Tests', () => {
             AccountService,
             Router,
             {
-                provide: LoginService,
-                useValue: {
-                    login: jest.fn(() => of({}))
-                }
-            }
+              provide: LoginService,
+              useValue: {
+                login: jest.fn(() => of({})),
+              },
+            },
           ],
         })
           .overrideTemplate(LoginComponent, '')

@@ -40,46 +40,48 @@ import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { LoginService } from 'app/login/login.service';
 
 describe('Component Tests', () => {
-    describe('Navbar Component', () => {
-        let comp: NavbarComponent;
-        let fixture: ComponentFixture<NavbarComponent>;
-        let mockAccountService: AccountService;
-        let profileService: ProfileService;
+  describe('Navbar Component', () => {
+    let comp: NavbarComponent;
+    let fixture: ComponentFixture<NavbarComponent>;
+    let mockAccountService: AccountService;
+    let profileService: ProfileService;
 
-        beforeEach(waitForAsync(() => {
-            TestBed.configureTestingModule({
-                imports: [HttpClientTestingModule],
-                declarations: [NavbarComponent],
-                providers: [AccountService, <% if (enableTranslation) { %>SessionStorageService, JhiLanguageService, <% } %>Router, LoginService]
-            })
-            .overrideTemplate(NavbarComponent, '')
-            .compileComponents();
-        }));
+    beforeEach(
+      waitForAsync(() => {
+        TestBed.configureTestingModule({
+          imports: [HttpClientTestingModule],
+          declarations: [NavbarComponent],
+          providers: [AccountService, <% if (enableTranslation) { %>SessionStorageService, JhiLanguageService, <% } %>Router, LoginService],
+        })
+          .overrideTemplate(NavbarComponent, '')
+          .compileComponents();
+      })
+    );
 
-        beforeEach(() => {
-            fixture = TestBed.createComponent(NavbarComponent);
-            comp = fixture.componentInstance;
-            mockAccountService = TestBed.inject(AccountService);
-            profileService = TestBed.inject(ProfileService);
-        });
-
-        it('Should call profileService.getProfileInfo on init', () => {
-            // GIVEN
-            spyOn(profileService, 'getProfileInfo').and.returnValue(of(new ProfileInfo()));
-
-            // WHEN
-            comp.ngOnInit();
-
-            // THEN
-            expect(profileService.getProfileInfo).toHaveBeenCalled();
-        });
-
-        it('Should call accountService.isAuthenticated on authentication', () => {
-            // WHEN
-            comp.isAuthenticated();
-
-            // THEN
-            expect(mockAccountService.isAuthenticated).toHaveBeenCalled();
-        });
+    beforeEach(() => {
+      fixture = TestBed.createComponent(NavbarComponent);
+      comp = fixture.componentInstance;
+      mockAccountService = TestBed.inject(AccountService);
+      profileService = TestBed.inject(ProfileService);
     });
+
+    it('Should call profileService.getProfileInfo on init', () => {
+      // GIVEN
+      spyOn(profileService, 'getProfileInfo').and.returnValue(of(new ProfileInfo()));
+
+      // WHEN
+      comp.ngOnInit();
+
+      // THEN
+      expect(profileService.getProfileInfo).toHaveBeenCalled();
+    });
+
+    it('Should call accountService.isAuthenticated on authentication', () => {
+      // WHEN
+      comp.isAuthenticated();
+
+      // THEN
+      expect(mockAccountService.isAuthenticated).toHaveBeenCalled();
+    });
+  });
 });
