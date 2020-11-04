@@ -1805,4 +1805,16 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     buildJavaSetter(reference, valueDefinition = `${reference.type} ${reference.name}`) {
         return `set${this.javaBeanCase(reference.name)}(${valueDefinition})`;
     }
+
+    /**
+     * Create a angular form path getter method of reference.
+     *
+     * @param {object} reference
+     * @param {string[]} valueDefinition
+     * @return {string}
+     */
+    buildAngularFormPath(reference, prefix = []) {
+        const formPath = [...prefix, ...reference.path].join("', '");
+        return `'${formPath}'`;
+    }
 };
