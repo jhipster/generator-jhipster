@@ -120,6 +120,9 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
         if (this._isPriorityMissing('preparing', 'default')) {
             tasks = { ...tasks, ...this._preparing() };
         }
+        if (this._isPriorityMissing('preparingRelationships', 'default')) {
+            tasks = { ...tasks, ...this._preparingRelationships() };
+        }
         return tasks;
     }
 
