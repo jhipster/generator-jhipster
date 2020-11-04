@@ -83,7 +83,7 @@ module.exports = (args, options = {}, env, forkProcess) => {
                 if (options.skipSampleRepository) {
                     return Promise.reject(new Error(`Could not find ${filename}, make sure the path is correct.`));
                 }
-                url = new URL(filename, 'https://raw.githubusercontent.com/jhipster/jdl-samples/master/').toString();
+                url = new URL(filename, 'https://raw.githubusercontent.com/jhipster/jdl-samples/main/').toString();
                 filename = path.basename(filename);
             }
             return downloadFile(url, filename);
