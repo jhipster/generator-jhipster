@@ -71,6 +71,23 @@ describe('ApplicationValidator', () => {
                     }).to.throw(/^The application applicationType, authenticationType, baseName and buildTool options are required\.$/);
                 });
             });
+            context('being an UAA application', () => {
+                context('without any uaaBaseName option', () => {
+                    it('should fail', () => {
+                        expect(() =>
+                            validator.validate(
+                                new JDLApplication({
+                                    config: {
+                                        ...basicValidApplicationConfig,
+                                        baseName: 'test_app',
+                                        applicationType: UAA,
+                                    },
+                                })
+                            )
+                        ).to.throw(/^The UAA base name option is required for the UAA application test_app\.$/);
+                    });
+                });
+            });
             context('with no chosen language', () => {
                 it('should fail', () => {
                     expect(() =>
@@ -390,7 +407,12 @@ describe('ApplicationValidator', () => {
                         expect(() =>
                             validator.validate(
                                 new JDLApplication({
-                                    config: { ...basicValidApplicationConfig, baseName: 'test_app', applicationType: UAA },
+                                    config: {
+                                        ...basicValidApplicationConfig,
+                                        baseName: 'test_app',
+                                        applicationType: UAA,
+                                        uaaBaseName: 'test',
+                                    },
                                 })
                             )
                         ).to.throw(
