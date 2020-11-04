@@ -468,7 +468,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _loading() {
         return {
-            loadConfig() {
+            loadEntity() {
                 // Update current context with config from file.
                 Object.assign(this.context, this.entityStorage.getAll());
                 loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
@@ -515,12 +515,67 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 });
                 this.context.fieldsNoId = this.context.fields.filter(field => !field.id);
             },
+
+            loadRelationships() {
+                this.context.relationships.forEach(relationship => {
+                    const otherEntityName = this._.upperFirst(relationship.otherEntityName);
+                    const otherEntity = this.configOptions.sharedEntities[otherEntityName];
+                    if (!otherEntity) {
+                        throw new Error(`Error looking for otherEntity ${otherEntityName}`);
+                    }
+                    relationship.otherEntity = otherEntity;
+                    otherEntity.otherRelationships = otherEntity.otherRelationships || [];
+                    otherEntity.otherRelationships.push(relationship);
+                });
+            },
         };
     }
 
     get preparing() {
         if (useBlueprints) return;
         return this._preparing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _preparingRelationships() {
+        return {
+            prepareRelationshipsForTemplates() {
+                this.context.relationships.forEach(relationship => {
+                    prepareRelationshipForTemplates(this.context, relationship, this);
+                });
+            },
+
+            processDerivedPrimaryKey() {
+                if (!this.context.derivedPrimaryKey) {
+                    return;
+                }
+                this.context.primaryKey = this.context.derivedPrimaryKey.otherEntity.primaryKey;
+                this.context.primaryKeyType = this.context.derivedPrimaryKey.otherEntity.primaryKeyType;
+                const idFields = this.context.derivedPrimaryKey.otherEntity.idFields.map(field => {
+                    return { ...field, fieldName: 'id', fieldNameHumanized: 'ID' };
+                });
+                this.context.idFields = idFields;
+                this.context.fields.unshift(...idFields);
+            },
+
+            prepareReferences() {
+                this.context.allReferences = [
+                    ...this.context.fields.map(field => field.reference),
+                    ...this.context.relationships.map(relationship => relationship.reference),
+                ];
+                this.context.dtoReferences = [
+                    ...this.context.fields.map(field => field.reference),
+                    ...this.context.relationships
+                        .map(relationship => relationship.reference)
+                        .filter(reference => reference.owned || reference.relationship.otherEntity.embedded),
+                ];
+            },
+        };
+    }
+
+    get preparingRelationships() {
+        if (useBlueprints) return;
+        return this._preparingRelationships();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -534,43 +589,18 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.context.user = this.configOptions.sharedEntities.User;
             },
 
-            loadOtherEntity() {
-                this.context.relationships.forEach(relationship => {
-                    const otherEntityName = this._.upperFirst(relationship.otherEntityName);
-                    relationship.otherEntity = this.configOptions.sharedEntities[otherEntityName];
-                });
-            },
+            processOtherReferences() {
+                this.context.otherReferences = this.context.otherRelationships.map(relationship => relationship.reference);
+                this.context.allReferences
+                    .filter(reference => reference.relationship && reference.relationship.relatedField)
+                    .forEach(reference => {
+                        reference.relatedReference = reference.relationship.relatedField.reference;
+                    });
 
-            processPrimaryKeyWithRelationships() {
-                if (!this.context.derivedPrimaryKey) {
-                    return;
-                }
-                const derivedRelationship = this.context.relationships.find(relationship => relationship.useJPADerivedIdentifier === true);
-                if (!derivedRelationship) {
-                    throw new Error(`Error creating primary key for entity ${this.context.name}`);
-                }
-                if (derivedRelationship.otherEntity.idFields.length > 1) {
-                    throw new Error(`Error creating primary key for entity ${this.context.name} only single id is supported for derivedId`);
-                }
-                const idFields = derivedRelationship.otherEntity.idFields.map(field => {
-                    return { ...field, fieldName: 'id', fieldNameHumanized: 'ID' };
-                });
-                this.context.idFields = idFields;
-                this.context.fields.unshift(...idFields);
-                this.context.primaryKeyType = derivedRelationship.otherEntity.primaryKeyType;
-            },
-
-            prepareRelationshipsForTemplates() {
-                this.context.relationships.forEach(relationship => {
-                    prepareRelationshipForTemplates(this.context, relationship, this);
-                });
-                this.context.dtoReferences = this.context.fields
-                    .map(field => field.reference)
-                    .concat(
-                        this.context.relationships
-                            .map(relationship => relationship.reference)
-                            .filter(reference => reference.owned || reference.relationship.otherEntity.embedded)
-                    );
+                // Get all required back references for dto.
+                this.context.otherDtoReferences = this.context.otherReferences.filter(reference =>
+                    reference.entity.dtoReferences.includes(reference)
+                );
             },
 
             processCollectionRelationships() {
@@ -596,7 +626,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             !relationship.embedded &&
                             // Allows the entity to force earger load every relationship
                             (this.context.eagerLoad ||
-                                (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === true));
+                                (this.context.paginate !== 'pagination' &&
+                                    relationship.relationshipType === 'many-to-many' &&
+                                    relationship.ownerSide === true));
                     });
                 this.context.relationshipsContainEagerLoad = this.context.relationships.some(
                     relationship => relationship.relationshipEagerLoad
