@@ -113,7 +113,7 @@ jobs:
                       ./gradlew deployHeroku --no-daemon
                   <%_ } _%>
                   else
-                      echo No SONAR_TOKEN, skipping...
+                      echo No HEROKU_API_KEY, skipping...
                   fi
               <%_ } _%>
               <%_ if (cicdIntegrations.includes('publishDocker')) { _%>
