@@ -16,9 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+  const localeId = getLocaleId(nativeLanguage);
+_%>
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { DatePipe, registerLocaleData } from '@angular/common';
-import { <% if (enableTranslation) { %>HttpClient, <% } %>HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { <% if (enableTranslation) { %>HttpClient, <% } %>HttpClientModule } from '@angular/common/http';
+import locale from '@angular/common/locales/<%= localeId %>';
 import { Title } from '@angular/platform-browser';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { CookieService } from 'ngx-cookie-service';
@@ -27,24 +31,15 @@ import { TranslateModule, TranslateLoader, MissingTranslationHandler } from '@ng
 <%_ } _%>
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { NgJhipsterModule<% if (enableTranslation) { %>, translatePartialLoader, missingTranslationHandler, JhiConfigService, JhiLanguageService<% } %> } from 'ng-jhipster';
-<%_ const localeId = getLocaleId(nativeLanguage); _%>
-import locale from '@angular/common/locales/<%= localeId %>';
-
 import * as dayjs from 'dayjs';
+import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
+
+import { NgbDateDayjsAdapter } from 'app/core/config/datepicker-adapter';
+import { fontAwesomeIcons } from 'app/core/config/font-awesome-icons';
+import { httpInterceptorProviders } from './interceptor/index';
 <%_ if (enableI18nRTL) { _%>
 import { FindLanguageFromKeyPipe } from 'app/shared/find-language-from-key.pipe';
 <%_ } _%>
-import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
-import { NgbDateDayjsAdapter } from 'app/core/config/datepicker-adapter';
-
-<%_ if (authenticationType === 'jwt') { _%>
-import { AuthInterceptor } from 'app/core/interceptor/auth.interceptor';
-<%_ } _%>
-import { AuthExpiredInterceptor } from 'app/core/interceptor/auth-expired.interceptor';
-import { ErrorHandlerInterceptor } from 'app/core/interceptor/error-handler.interceptor';
-import { NotificationInterceptor } from 'app/core/interceptor/notification.interceptor';
-
-import { fontAwesomeIcons } from 'app/core/config/font-awesome-icons';
 
 @NgModule({
   imports: [
@@ -90,28 +85,7 @@ import { fontAwesomeIcons } from 'app/core/config/font-awesome-icons';
     FindLanguageFromKeyPipe,
     <%_ } _%>
     DatePipe,
-    <%_ if (authenticationType === 'jwt') { _%>
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    },
-    <%_ } _%>
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthExpiredInterceptor,
-      multi: true,
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorHandlerInterceptor,
-      multi: true,
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: NotificationInterceptor,
-      multi: true,
-    },
+    httpInterceptorProviders,
   ],
 })
 export class CoreModule {
