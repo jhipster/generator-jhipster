@@ -105,11 +105,16 @@ jobs:
               if: github.event_name == 'push' && github.ref == 'refs/heads/main'
               env:
                   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+              run: |
+                  if [ ! -z "$HEROKU_API_KEY" ]; then
                   <%_ if (buildTool === 'maven') { _%>
-              run: ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
+                      ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
                   <%_ } else if (buildTool === 'gradle') { _%>
-              run: ./gradlew deployHeroku --no-daemon
+                      ./gradlew deployHeroku --no-daemon
                   <%_ } _%>
+                  else
+                      echo No SONAR_TOKEN, skipping...
+                  fi
               <%_ } _%>
               <%_ if (cicdIntegrations.includes('publishDocker')) { _%>
             - name: Build and publish docker image
