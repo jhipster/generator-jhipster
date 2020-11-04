@@ -84,7 +84,7 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
               run: |
-                  if [ -n $SONAR_TOKEN ]; then
+                  if [ ! -z "$SONAR_TOKEN" ]; then
                   <%_ if (buildTool === 'maven') { _%>
                       ./mvnw -ntp initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %>
                   <%_ } else if (buildTool === 'gradle') { _%>
