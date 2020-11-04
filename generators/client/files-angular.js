@@ -280,6 +280,7 @@ const files = {
                 'core/interceptor/error-handler.interceptor.ts',
                 'core/interceptor/notification.interceptor.ts',
                 'core/interceptor/auth-expired.interceptor.ts',
+                'core/interceptor/index.ts',
 
                 // request
                 'core/request/request-util.ts',
