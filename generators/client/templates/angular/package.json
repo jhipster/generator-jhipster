@@ -22,7 +22,7 @@
     "@angular-builders/custom-webpack": "10.0.1",
     "browser-sync": "2.26.13",
     "browser-sync-webpack-plugin": "2.2.2",
-    "copy-webpack-plugin": "6.2.1",
+    "copy-webpack-plugin": "6.3.0",
     "eslint-loader": "4.0.2",
     "friendly-errors-webpack-plugin": "1.7.0",
     "merge-jsons-webpack-plugin": "1.0.21",
