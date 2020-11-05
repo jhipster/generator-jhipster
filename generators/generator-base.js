@@ -92,7 +92,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         });
 
         this.option('with-generated-flag', {
-            desc: 'Adding a GeneratedByJHipster annotation to all generated java classes and interfaces',
+            desc: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
             type: Boolean,
         });
 
@@ -2362,9 +2362,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         if (options.skipFakeData) {
             this.jhipsterConfig.skipFakeData = true;
         }
-        if (options.withGeneratedFlag) {
-            this.jhipsterConfig.withGeneratedFlag = true;
-        }
         if (options.skipUserManagement) {
             this.jhipsterConfig.skipUserManagement = true;
         }
@@ -2456,7 +2453,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         dest.reactive = config.reactive;
         dest.jhiPrefix = config.jhiPrefix;
         dest.skipFakeData = config.skipFakeData;
-        dest.withGeneratedFlag = config.withGeneratedFlag;
         dest.entitySuffix = config.entitySuffix;
         dest.dtoSuffix = config.dtoSuffix;
         dest.skipUserManagement = config.skipUserManagement;
