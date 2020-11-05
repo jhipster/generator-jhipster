@@ -91,8 +91,8 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
             hide: true,
         });
 
-        this.option('skip-generated-flag', {
-            desc: 'Skip adding a GeneratedByJhipster annotation to all generated java classes and interfaces',
+        this.option('with-generated-flag', {
+            desc: 'Adding a GeneratedByJHipster annotation to all generated java classes and interfaces',
             type: Boolean,
         });
 
@@ -137,8 +137,8 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
             this.config.set(this.options.localConfig);
         }
 
-        if (this.options.skipGeneratedFlag !== undefined) {
-            this.jhipsterConfig.skipGeneratedFlag = this.options.skipGeneratedFlag;
+        if (this.options.withGeneratedFlag !== undefined) {
+            this.jhipsterConfig.withGeneratedFlag = this.options.withGeneratedFlag;
         }
 
         // Load common runtime options.
@@ -146,7 +146,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
 
         this.registerCommitPriorityFilesTask();
 
-        if (!this.jhipsterConfig.skipGeneratedFlag) {
+        if (this.jhipsterConfig.withGeneratedFlag) {
             this.registerGeneratedAnnotationTransform();
         }
 
@@ -2362,6 +2362,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         if (options.skipFakeData) {
             this.jhipsterConfig.skipFakeData = true;
         }
+        if (options.withGeneratedFlag) {
+            this.jhipsterConfig.withGeneratedFlag = true;
+        }
         if (options.skipUserManagement) {
             this.jhipsterConfig.skipUserManagement = true;
         }
@@ -2453,6 +2456,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         dest.reactive = config.reactive;
         dest.jhiPrefix = config.jhiPrefix;
         dest.skipFakeData = config.skipFakeData;
+        dest.withGeneratedFlag = config.withGeneratedFlag;
         dest.entitySuffix = config.entitySuffix;
         dest.dtoSuffix = config.dtoSuffix;
         dest.skipUserManagement = config.skipUserManagement;

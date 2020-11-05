@@ -52,7 +52,7 @@ const prettierTransform = function (defaultOptions) {
 const generatedAnnotationTransform = generator => {
     return through.obj(function (file, encoding, callback) {
         if (
-            !generator.configOptions.skipGeneratedFlag &&
+            generator.jhipsterConfig.withGeneratedFlag &&
             !file.path.endsWith('package-info.java') &&
             !file.path.endsWith('MavenWrapperDownloader.java') &&
             path.extname(file.path) === '.java' &&

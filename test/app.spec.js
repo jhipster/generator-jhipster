@@ -22,7 +22,7 @@ describe('JHipster generator', () => {
             before(() => {
                 return helpers
                     .create(path.join(__dirname, '../generators/app'))
-                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true, jhiPrefix: 'test' })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true, jhiPrefix: 'test', withGeneratedFlag: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         clientFramework: ANGULAR,
@@ -2155,7 +2155,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true, skipGeneratedFlag: true })
+                    .withOptions({ fromCli: true, skipInstall: true, skipChecks: true, withGeneratedFlag: false })
                     .withPrompts({
                         applicationType: 'microservice',
                         baseName: 'jhipster',
