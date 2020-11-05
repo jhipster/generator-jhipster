@@ -34,7 +34,7 @@
     const readonly = !!fields[idx].id || !!fields[idx].readonly;
     let fieldInputType = 'text';
     let ngModelOption = '';
-    const translationKey = `${i18nKeyPrefix}.${fieldName}`;
+    const translationKey = fields[idx].fieldTranslationKey;
     if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
         fieldInputType = 'number';
     } else if (fieldType === 'LocalDate') {
@@ -48,7 +48,7 @@
     }
 _%>
 
-                <div class="form-group">
+                <div class="form-group"<% if (id) { %> [hidden]="editForm.get('<%= fieldName %>')?.value == null"<% } %>>
                     <label class="form-control-label" jhiTranslate="<%= translationKey %>" for="field_<%= fieldName %>"<% if (fields[idx].javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= fields[idx].javadoc %>"<% } } %>><%= fieldNameHumanized %></label>
     <%_ if (fields[idx].fieldIsEnum) { _%>
                     <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>">
