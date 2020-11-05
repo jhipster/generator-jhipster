@@ -68,9 +68,9 @@
     <div class="table-responsive" id="entities" *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
-                <tr<% if (pagination !== 'no') { %> jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="<%= pagination !== 'infinite-scroll' ? 'loadPage.bind(this)' : 'reset.bind(this)'%>"<% } %>>
+                <tr<% if (pagination !== 'no') { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="<%= pagination !== 'infinite-scroll' ? 'loadPage.bind(this)' : 'reset.bind(this)'%>"<% } %>>
                     <%_ for (idx in fields) { _%>
-                    <th scope="col" <% if (pagination !== 'no') { %> jhiSortBy="<%= fields[idx].fieldName %>"<% } %>><span jhiTranslate="<%= fields[idx].fieldTranslationKey %>"><%= fields[idx].fieldNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                    <th scope="col"<% if (pagination !== 'no') { %> <%= jhiPrefix %>SortBy="<%= fields[idx].fieldName %>"<% } %>><span jhiTranslate="<%= fields[idx].fieldTranslationKey %>"><%= fields[idx].fieldNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
                     <%_ } _%>
                     <%_ for (idx in relationships) { _%>
                         <%_ if (relationships[idx].relationshipType === 'many-to-one'
@@ -78,7 +78,7 @@
                                 || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
                             const fieldName = "." + relationships[idx].otherEntityField;
                         _%>
-                    <th scope="col" <% if (pagination !== 'no') { %> jhiSortBy="<%= relationships[idx].relationshipName + (fieldName) %>"<% } %>><span jhiTranslate="<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                    <th scope="col" <% if (pagination !== 'no') { %> <%= jhiPrefix %>SortBy="<%= relationships[idx].relationshipName + (fieldName) %>"<% } %>><span jhiTranslate="<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
                         <%_ } _%>
                     <%_ } _%>
                     <th scope="col"></th>

@@ -25,6 +25,8 @@ import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
 import { HasAnyAuthorityDirective } from './has-any-authority.directive';
 import { DurationPipe } from './duration.pipe';
+import { SortByDirective } from './sort/sort-by.directive';
+import { SortDirective } from './sort/sort.directive';
 
 @NgModule({
   imports: [SharedLibsModule],
@@ -36,6 +38,8 @@ import { DurationPipe } from './duration.pipe';
     AlertErrorComponent,
     HasAnyAuthorityDirective,
     DurationPipe,
+    SortByDirective,
+    SortDirective,
   ],
   exports: [
     SharedLibsModule,
@@ -46,6 +50,8 @@ import { DurationPipe } from './duration.pipe';
     AlertErrorComponent,
     HasAnyAuthorityDirective,
     DurationPipe,
+    SortByDirective,
+    SortDirective,
   ],
 })
 export class SharedModule {}

@@ -1,92 +1,102 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { JhiSortDirective } from '../../src/directive/sort.directive';
+import { SortDirective } from 'app/shared/sort/sort.directive';
 
 @Component({
-    template: `
+  template: `
     <table>
-        <thead>
-            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            </tr>
-        </thead>
+      <thead>
+        <tr <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)"></tr>
+      </thead>
     </table>
-    `
+  `,
 })
-class TestJhiSortDirectiveComponent {
-    predicate: string;
-    reverse: boolean;
-    transition() {
-    }
+class TestSortDirectiveComponent {
+  predicate?: string;
+  ascending?: boolean;
+  transition = jest.fn();
 }
 
-describe('Directive: JhiSortDirective', () => {
-    let component: TestJhiSortDirectiveComponent;
-    let fixture: ComponentFixture<TestJhiSortDirectiveComponent>;
-    let tableRow: DebugElement;
+describe('Directive: SortDirective', () => {
+  let component: TestSortDirectiveComponent;
+  let fixture: ComponentFixture<TestSortDirectiveComponent>;
+  let tableRow: DebugElement;
 
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            declarations: [TestJhiSortDirectiveComponent, JhiSortDirective]
-        });
-        fixture = TestBed.createComponent(TestJhiSortDirectiveComponent);
-        component = fixture.componentInstance;
-        tableRow = fixture.debugElement.query(By.directive(JhiSortDirective));
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [TestSortDirectiveComponent, SortDirective],
     });
+    fixture = TestBed.createComponent(TestSortDirectiveComponent);
+    component = fixture.componentInstance;
+    tableRow = fixture.debugElement.query(By.directive(SortDirective));
+  });
 
-    it('should update predicate, order and invoke callback function', () => {
+  it('should update predicate, order and invoke callback function', () => {
+    // GIVEN
+    const sortDirective = tableRow.injector.get(SortDirective);
 
-        // GIVEN
-        spyOn(component, 'transition').and.callThrough();
-        const sortDirective = tableRow.injector.get(JhiSortDirective);
+    // WHEN
+    fixture.detectChanges();
+    sortDirective.sort('ID');
 
-        // WHEN
-        fixture.detectChanges();
-        sortDirective.sort('ID');
+    // THEN
+    expect(component.predicate).toEqual('ID');
+    expect(component.ascending).toEqual(true);
+    expect(component.transition).toHaveBeenCalled();
+    expect(component.transition).toHaveBeenCalledTimes(1);
+  });
 
-        // THEN
-        expect(component.predicate).toEqual('ID');
-        expect(component.reverse).toEqual(true);
-        expect(component.transition).toHaveBeenCalled();
-        expect(component.transition).toHaveBeenCalledTimes(1);
-    });
+  it('should change sort order to descending when same field is sorted again', () => {
+    // GIVEN
+    const sortDirective = tableRow.injector.get(SortDirective);
 
-    it('should change sort order to descending when same field is sorted again', () => {
+    // WHEN
+    fixture.detectChanges();
+    sortDirective.sort('ID');
+    // sort again
+    sortDirective.sort('ID');
 
-        // GIVEN
-        spyOn(component, 'transition').and.callThrough();
-        const sortDirective = tableRow.injector.get(JhiSortDirective);
+    // THEN
+    expect(component.predicate).toEqual('ID');
+    expect(component.ascending).toEqual(false);
+    expect(component.transition).toHaveBeenCalled();
+    expect(component.transition).toHaveBeenCalledTimes(2);
+  });
 
-        // WHEN
-        fixture.detectChanges();
-        sortDirective.sort('ID');
-        // sort again
-        sortDirective.sort('ID');
+  it('should change sort order to ascending when different field is sorted', () => {
+    // GIVEN
+    const sortDirective = tableRow.injector.get(SortDirective);
 
-        // THEN
-        expect(component.predicate).toEqual('ID');
-        expect(component.reverse).toEqual(false);
-        expect(component.transition).toHaveBeenCalled();
-        expect(component.transition).toHaveBeenCalledTimes(2);
-    });
+    // WHEN
+    fixture.detectChanges();
+    sortDirective.sort('ID');
+    // sort again
+    sortDirective.sort('NAME');
 
-    it('should change sort order to ascending when different field is sorted', () => {
-
-        // GIVEN
-        spyOn(component, 'transition').and.callThrough();
-        const sortDirective = tableRow.injector.get(JhiSortDirective);
-
-        // WHEN
-        fixture.detectChanges();
-        sortDirective.sort('ID');
-        // sort again
-        sortDirective.sort('NAME');
-
-        // THEN
-        expect(component.predicate).toEqual('NAME');
-        expect(component.reverse).toEqual(true);
-        expect(component.transition).toHaveBeenCalled();
-        expect(component.transition).toHaveBeenCalledTimes(2);
-    });
+    // THEN
+    expect(component.predicate).toEqual('NAME');
+    expect(component.ascending).toEqual(true);
+    expect(component.transition).toHaveBeenCalled();
+    expect(component.transition).toHaveBeenCalledTimes(2);
+  });
 });

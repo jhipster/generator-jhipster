@@ -310,6 +310,8 @@ const files = {
                 'shared/shared.module.ts',
                 'shared/shared-libs.module.ts',
                 'shared/duration.pipe.ts',
+                'shared/sort/sort.directive.ts',
+                'shared/sort/sort-by.directive.ts',
                 // alert service code
                 'shared/alert/alert.component.ts',
                 'shared/alert/alert-error.component.ts',
@@ -382,6 +384,8 @@ const files = {
                 'spec/app/login/login.component.spec.ts',
                 'spec/app/shared/alert/alert.component.spec.ts',
                 'spec/app/shared/alert/alert-error.component.spec.ts',
+                'spec/app/shared/sort/sort.directive.spec.ts',
+                'spec/app/shared/sort/sort-by.directive.spec.ts',
             ],
         },
         {

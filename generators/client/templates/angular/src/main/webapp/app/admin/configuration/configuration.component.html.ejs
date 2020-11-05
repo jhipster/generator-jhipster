@@ -25,8 +25,8 @@
 
     <table class="table table-striped table-bordered table-responsive d-table" aria-describedby="spring-configuration">
         <thead>
-            <tr jhiSort predicate="prefix" [(ascending)]="beansAscending" [callback]="filterAndSortBeans.bind(this)">
-                <th jhiSortBy="prefix" scope="col" class="w-40"><span jhiTranslate="configuration.table.prefix">Prefix</span> <fa-icon icon="sort"></fa-icon></th>
+            <tr <%= jhiPrefix %>Sort predicate="prefix" [(ascending)]="beansAscending" [callback]="filterAndSortBeans.bind(this)">
+                <th <%= jhiPrefix %>SortBy="prefix" scope="col" class="w-40"><span jhiTranslate="configuration.table.prefix">Prefix</span> <fa-icon icon="sort"></fa-icon></th>
                 <th scope="col" class="w-60"><span jhiTranslate="configuration.table.properties">Properties</span></th>
             </tr>
         </thead>
