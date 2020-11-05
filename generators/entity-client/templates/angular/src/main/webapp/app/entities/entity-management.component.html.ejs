@@ -70,7 +70,7 @@
             <thead>
                 <tr<% if (pagination !== 'no') { %> jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="<%= pagination !== 'infinite-scroll' ? 'loadPage.bind(this)' : 'reset.bind(this)'%>"<% } %>>
                     <%_ for (idx in fields) { _%>
-                    <th scope="col" <% if (pagination !== 'no') { %> jhiSortBy="<%= fields[idx].fieldName %>"<% } %>><span jhiTranslate="<%= `${i18nKeyPrefix}.${fields[idx].fieldName}` %>"><%= fields[idx].fieldNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                    <th scope="col" <% if (pagination !== 'no') { %> jhiSortBy="<%= fields[idx].fieldName %>"<% } %>><span jhiTranslate="<%= fields[idx].fieldTranslationKey %>"><%= fields[idx].fieldNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
                     <%_ } _%>
                     <%_ for (idx in relationships) { _%>
                         <%_ if (relationships[idx].relationshipType === 'many-to-one'
