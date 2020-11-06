@@ -27,14 +27,14 @@ limitations under the License.
   ],
   "dependencies": {
     "@openapitools/openapi-generator-cli": "1.0.13-4.3.1",
-    "@fortawesome/fontawesome-svg-core": "1.2.30",
-    "@fortawesome/free-solid-svg-icons": "5.14.0",
-    "@fortawesome/vue-fontawesome": "0.1.10",
-    "axios": "0.19.2",
-    "bootstrap": "4.5.0",
-    "bootstrap-vue": "2.14.0",
+    "@fortawesome/fontawesome-svg-core": "1.2.32",
+    "@fortawesome/free-solid-svg-icons": "5.15.1",
+    "@fortawesome/vue-fontawesome": "2.0.0",
+    "axios": "0.21.0",
+    "bootstrap": "4.5.3",
+    "bootstrap-vue": "2.18.1",
     <%_ if (clientTheme !== 'none') { _%>
-    "bootswatch": "4.5.0",
+    "bootswatch": "4.5.3",
     <%_ } _%>
     "dayjs": "VERSION_MANAGED_BY_CLIENT_COMMON",
     "swagger-ui-dist": "3.25.4",
@@ -43,14 +43,14 @@ limitations under the License.
     "webstomp-client": "1.2.0",
     <%_ } _%>
     "vue": "2.6.12",
-    "vue-class-component": "7.2.5",
+    "vue-class-component": "7.2.6",
     "vue-cookie": "1.1.4",
-    "vue-i18n": "8.21.0",
+    "vue-i18n": "8.22.1",
     "vue-infinite-loading": "2.4.5",
-    "vue-property-decorator": "9.0.0",
-    "vue-router": "3.4.3",
+    "vue-property-decorator": "9.0.2",
+    "vue-router": "3.4.9",
     "vue2-filters": "0.11.0",
-    "vuelidate": "0.7.5",
+    "vuelidate": "0.7.6",
     "vuex": "3.5.1"
   },
   "devDependencies": {
@@ -69,21 +69,26 @@ limitations under the License.
     <%_ } _%>
     "@types/sinon": "9.0.3",
     "@types/vuelidate": "0.7.13",
-    "@vue/cli-plugin-typescript": "4.5.4",
-    "@vue/cli-service": "4.5.4",
-    "@vue/test-utils": "1.0.4",
-    "autoprefixer": "9.8.0",
-    "browser-sync": "2.26.7",
+    "@typescript-eslint/eslint-plugin": "4.6.1",
+    "@typescript-eslint/parser": "4.6.1",
+    "@vue/cli-plugin-eslint": "4.5.8",
+    "@vue/cli-plugin-typescript": "4.5.8",
+    "@vue/cli-service": "4.5.8",
+    "@vue/eslint-config-prettier": "6.0.0",
+    "@vue/eslint-config-typescript": "7.0.0",
+    "@vue/test-utils": "1.1.1",
+    "autoprefixer": "10.0.1",
+    "browser-sync": "2.26.13",
     "browser-sync-webpack-plugin": "2.2.2",
     <%_ if (protractorTests) { _%>
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
     "chai-string": "1.5.0",
     <%_ } _%>
-    "copy-webpack-plugin": "6.0.1",
+    "copy-webpack-plugin": "6.0.2",
     "css-loader": "3.5.3",
-    "file-loader": "6.0.0",
-    "fork-ts-checker-webpack-plugin": "4.1.4",
+    "file-loader": "6.2.0",
+    "fork-ts-checker-webpack-plugin": "4.1.6",
     "friendly-errors-webpack-plugin": "1.7.0",
 <%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= packagejs.version %>",
@@ -93,7 +98,7 @@ limitations under the License.
 } _%>
     "html-webpack-plugin": "4.3.0",
     <%_ if (!skipCommitHook) { _%>
-    "husky": "4.2.5",
+    "husky": "4.3.0",
     <%_ } _%>
     "jest": "26.4.2",
     "jest-junit": "11.1.0",
@@ -101,20 +106,21 @@ limitations under the License.
     "jest-sonar-reporter": "2.0.0",
     "jest-vue-preprocessor": "1.7.1",
     <%_ if (!skipCommitHook) { _%>
-    "lint-staged": "10.2.4",
+    "lint-staged": "10.2.9",
     <%_ } _%>
     "merge-jsons-webpack-plugin": "1.0.21",
     <%_ if (protractorTests) { _%>
     "mocha": "7.1.2",
     <%_ } _%>
     "mini-css-extract-plugin": "0.9.0",
-    "node-notifier": "7.0.0",
+    "node-notifier": "8.0.0",
     "numeral": "2.0.6",
-    "optimize-css-assets-webpack-plugin": "5.0.3",
-    "portfinder": "1.0.26",
-    "postcss-import": "12.0.1",
-    "postcss-loader": "3.0.0",
-    "postcss-url": "8.0.0",
+    "optimize-css-assets-webpack-plugin": "5.0.4",
+    "portfinder": "1.0.28",
+    "postcss": "8.1.6",
+    "postcss-import": "13.0.0",
+    "postcss-loader": "4.0.4",
+    "postcss-url": "10.1.0",
     "prettier": "<%= PRETTIER_VERSION %>",
     <%_ if (!skipServer) { _%>
     "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
@@ -126,19 +132,21 @@ limitations under the License.
     "cypress": "VERSION_MANAGED_BY_CLIENT_COMMON",
     <%_ } _%>
     "rimraf": "3.0.2",
-    "sass": "1.26.5",
-    "sass-loader": "8.0.2",
-    "sinon": "9.0.2",
-    "terser-webpack-plugin": "3.0.1",
+    "sass": "1.29.0",
+    "sass-loader": "10.0.5",
+    "sinon": "9.2.1",
+    "terser-webpack-plugin": "3.1.0",
     "ts-jest": "26.2.0",
     "ts-loader": "7.0.4",
     <%_ if (protractorTests) { _%>
     "ts-node": "8.10.1",
     <%_ } _%>
     "tslib": "2.0.0",
-    "tslint": "6.1.2",
+    "eslint": "7.12.1",
     "tslint-config-prettier": "1.18.0",
+    "eslint-plugin-prettier": "3.1.4",
     "tslint-eslint-rules": "5.4.0",
+    "eslint-plugin-vue": "6.2.2",
     "tslint-loader": "3.6.0",
     "typescript": "VERSION_MANAGED_BY_CLIENT_COMMON",
     "url-loader": "4.1.0",
@@ -149,22 +157,22 @@ limitations under the License.
     "webdriver-manager": "12.1.7",
     <%_ } _%>
     "webpack": "VERSION_MANAGED_BY_CLIENT_VUE",
-    "webpack-bundle-analyzer": "3.8.0",
+    "webpack-bundle-analyzer": "3.9.0",
     "webpack-cli": "3.3.11",
     "webpack-dev-server": "3.11.0",
     "webpack-merge": "5.0.9"
   },
   "engines": {
     "node": ">=<%= NODE_VERSION %>",
-    "npm": ">= 6.13.4"
+    "npm": ">= 6.14.4"
   },
   "config": {
     "default_environment": "prod"
   },
   "scripts": {
     "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
-    "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
-    "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
+    "lint": "vue-cli-service lint --no-fix",
+    "lint:fix": "vue-cli-service lint",
     "cleanup": "rimraf <%= DIST_DIR %>",
     "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
     "start": "<%= clientPackageManager %> run webpack:dev",

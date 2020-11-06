@@ -78,10 +78,10 @@ export default class JhiDataUtils extends Vue {
    */
   clearInputImage(entity, elementRef, field, fieldContentType, idInput) {
     if (entity && field && fieldContentType) {
-      if (entity.hasOwnProperty(field)) {
+      if (Object.prototype.hasOwnProperty.call(entity, field)) {
         entity[field] = null;
       }
-      if (entity.hasOwnProperty(fieldContentType)) {
+      if (Object.prototype.hasOwnProperty.call(entity, fieldContentType)) {
         entity[fieldContentType] = null;
       }
       if (elementRef && idInput && elementRef.nativeElement.querySelector('#' + idInput)) {
