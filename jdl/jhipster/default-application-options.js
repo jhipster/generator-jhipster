@@ -72,15 +72,15 @@ function getConfigForApplicationType(applicationType = undefined, customOptions 
         return getConfigForMonolithApplication(customOptions);
     }
     if (applicationType === GATEWAY) {
-        return getConfigForGatewayApplication();
+        return getConfigForGatewayApplication(customOptions);
     }
     if (applicationType === MICROSERVICE) {
-        return getConfigForMicroserviceApplication();
+        return getConfigForMicroserviceApplication(customOptions);
     }
     if (applicationType === UAA) {
-        return getConfigForUAAApplication();
+        return getConfigForUAAApplication(customOptions);
     }
-    return getDefaultConfigForNewApplication();
+    return getDefaultConfigForNewApplication(customOptions);
 }
 
 function getConfigForMonolithApplication(customOptions = {}) {

@@ -29,6 +29,7 @@ const OracleReservedKeywords = require('./reserved-keywords/oracle');
 const MsSQLReservedKeywords = require('./reserved-keywords/mssql');
 const Neo4JReservedKeywords = require('./reserved-keywords/neo4j');
 const applicationOptions = require('./application-options');
+const clientFrameworks = applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK];
 
 const ReservedWords = {
     JHIPSTER: JHipsterReservedKeywords,
@@ -67,11 +68,11 @@ function isReservedTableName(keyword, databaseType) {
 
 function isReservedFieldName(keyword, clientFramework) {
     if (clientFramework) {
-        if (clientFramework === applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK].angularX) {
+        if (clientFramework === clientFrameworks.angularX) {
             // Angular client framework
             return isReserved(keyword, 'ANGULAR') || isReserved(keyword, 'TYPESCRIPT') || isReserved(keyword, 'JAVA');
         }
-        if (clientFramework === applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK].react) {
+        if (clientFramework === clientFrameworks.react) {
             // React client framework
             return isReserved(keyword, 'TYPESCRIPT') || isReserved(keyword, 'JAVA');
         }
