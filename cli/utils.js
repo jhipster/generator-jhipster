@@ -64,18 +64,9 @@ const init = function (program) {
     program.option('-d, --debug', 'enable debugger');
 
     this.debugEnabled = process.argv.includes('-d') || process.argv.includes('--debug'); // Need this early
-
-    const self = this;
-    // Option event fallback.
-    program.on('option:debug', function () {
-        if (self.debugEnabled) {
-            return;
-        }
-        self.debugEnabled = this.debug;
-        if (self.debugEnabled) {
-            info('Debug logging is on');
-        }
-    });
+    if (this.debugEnabled) {
+        info('Debug logging is on');
+    }
 };
 
 const logger = {
@@ -97,24 +88,6 @@ const toString = item => {
             .join(', ');
     }
     return item ? item.toString() : item;
-};
-
-const initHelp = (program, cliName) => {
-    program.on('--help', () => {
-        logger.debug('Adding additional help info');
-        logger.info(`  For more info visit ${chalk.blue('https://www.jhipster.tech')}`);
-        logger.info('');
-    });
-};
-
-/**
- * Get arguments
- */
-const getArgs = opts => {
-    if (opts.argument) {
-        return `[${opts.argument.join(' ')}]`;
-    }
-    return '';
 };
 
 /* Convert option objects to command line args */
@@ -179,8 +152,6 @@ module.exports = {
     GENERATOR_NAME,
     toString,
     logger,
-    initHelp,
-    getArgs,
     getCommand,
     doneFactory,
     done: doneFactory(SUCCESS_MESSAGE),

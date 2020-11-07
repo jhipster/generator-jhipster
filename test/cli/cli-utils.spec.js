@@ -29,19 +29,6 @@ describe('jhipster cli utils test', () => {
             });
         });
     });
-    describe('getArgs', () => {
-        describe('when called without argument', () => {
-            it('returns an empty string', () => {
-                expect(cliUtil.getArgs({})).to.equal('');
-            });
-        });
-        describe('when called with argument array', () => {
-            const argument = ['test', 'foo'];
-            it('returns a joined string', () => {
-                expect(cliUtil.getArgs({ argument })).to.equal('[test foo]');
-            });
-        });
-    });
     describe('getOptionAsArgs', () => {
         describe('when called with empty args', () => {
             it('returns a default string array', () => {
