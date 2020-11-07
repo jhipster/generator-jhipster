@@ -30,7 +30,7 @@ public class DateTimeWrapper implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+    <%_ if (prodDatabaseType === 'mysql') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     <%_ } else { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")

@@ -24,13 +24,10 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-<%= LIQUIBASE_DTD_VERSION %>.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <% const isAutoIncrementDB = reactive || ['mysql', 'mariadb'].includes(prodDatabaseType);
-       const isSequenceDB = !reactive && ['postgresql', 'oracle', 'mssql'].includes(prodDatabaseType);
-    _%>
+    <% const isAutoIncrementDB = reactive || prodDatabaseType === 'mysql'; _%>
     <%_ if (isAutoIncrementDB) { _%>
     <property name="autoIncrement" value="true"/>
-    <%_ } _%>
-    <%_ if (isSequenceDB) { _%>
+    <%_ } else { _%>
     <changeSet id="00000000000000" author="jhipster">
         <createSequence sequenceName="sequence_generator" startValue="1050" incrementBy="50"/>
     </changeSet>
