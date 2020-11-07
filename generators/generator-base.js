@@ -1723,6 +1723,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
             ? constraintName
             : this.calculateDbNameWithLimit(entityName, columnOrRelationName, limit - 1, {
                   separator,
+                  noSnakeCase,
                   prefix,
                   legacyRelationshipTableName,
               });
