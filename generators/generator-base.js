@@ -1670,25 +1670,9 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
 
             limit = 64;
         }
-        if (limit > 0 && (joinTableName.length > limit || legacyRelationshipTableName)) {
-            const suffix = legacyRelationshipTableName
-                ? ''
-                : `_${crypto
-                      .createHash('shake256', { outputLength: 1 })
-                      .update(`${entityName}.${relationshipName}`, 'utf8')
-                      .digest('hex')}`;
-            const halfLimit = Math.floor(limit / 2);
-            const entityTable = this.getTableName(entityName).substring(
-                0,
-                halfLimit - (legacyRelationshipTableName ? 0 : separator.length)
-            );
-            const relationTable = this.getTableName(relationshipName).substring(
-                0,
-                limit - entityTable.length - separator.length - prefix.length - suffix.length
-            );
-            return `${prefix}${entityTable}${separator}${relationTable}${suffix}`;
-        }
-        return joinTableName;
+        return limit === 0
+            ? joinTableName
+            : this.calculateDbNameWithLimit(entityName, relationshipName, limit, { prefix, separator, legacyRelationshipTableName });
     }
 
     /**
@@ -1698,14 +1682,16 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} columnOrRelationName - name of the column or related entity
      * @param {string} prodDatabaseType - database type
      * @param {boolean} noSnakeCase - do not convert names to snakecase
-     * @param {string} constraintNamePrefix - constraintName prefix for the constraintName
+     * @param {string} prefix - constraintName prefix for the constraintName
      */
-    getConstraintNameWithLimit(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, constraintNamePrefix = '') {
+    getConstraintNameWithLimit(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '') {
         let constraintName;
+        const legacyRelationshipTableName = this.jhipsterConfig && this.jhipsterConfig.legacyRelationshipTableName;
+        const separator = legacyRelationshipTableName ? '_' : '__';
         if (noSnakeCase) {
-            constraintName = `${constraintNamePrefix}${entityName}_${columnOrRelationName}`;
+            constraintName = `${prefix}${entityName}${separator}${columnOrRelationName}`;
         } else {
-            constraintName = `${constraintNamePrefix}${this.getTableName(entityName)}_${this.getTableName(columnOrRelationName)}`;
+            constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}`;
         }
         let limit = 0;
         if (prodDatabaseType === 'oracle' && constraintName.length >= 27 && !this.skipCheckLengthOfIdentifier) {
@@ -1733,15 +1719,41 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
 
             limit = 62;
         }
-        if (limit > 0) {
-            const halfLimit = Math.floor(limit / 2);
-            const entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : this.getTableName(entityName).substring(0, halfLimit);
-            const otherTable = noSnakeCase
-                ? columnOrRelationName.substring(0, limit - entityTable.length - 2)
-                : this.getTableName(columnOrRelationName).substring(0, limit - entityTable.length - 2);
-            return `${entityTable}_${otherTable}`;
-        }
-        return constraintName;
+        return limit === 0
+            ? constraintName
+            : this.calculateDbNameWithLimit(entityName, columnOrRelationName, limit - 1, {
+                  separator,
+                  prefix,
+                  legacyRelationshipTableName,
+              });
+    }
+
+    /**
+     * get a constraint name for tables in JHipster preferred style after applying any length limits required.
+     *
+     * @param {string} entityName - name of the entity
+     * @param {string} columnOrRelationName - name of the column or related entity
+     * @param {object} options - database type
+     * @param {boolean} options.noSnakeCase - do not convert names to snakecase
+     * @param {string} options.prefix - constraintName prefix for the constraintName
+     */
+    calculateDbNameWithLimit(entityName, columnOrRelationName, limit, options) {
+        const { noSnakeCase, prefix, separator, legacyRelationshipTableName } = options;
+        const halfLimit = Math.floor(limit / 2);
+        const suffix = legacyRelationshipTableName
+            ? ''
+            : `_${crypto
+                  .createHash('shake256', { outputLength: 1 })
+                  .update(`${entityName}.${columnOrRelationName}`, 'utf8')
+                  .digest('hex')}`;
+
+        let entityTable = noSnakeCase ? entityName : this.getTableName(entityName);
+        let otherTable = noSnakeCase ? columnOrRelationName : this.getTableName(columnOrRelationName);
+
+        entityTable = entityTable.substring(0, halfLimit - (legacyRelationshipTableName ? 0 : separator.length));
+        otherTable = otherTable.substring(0, limit - entityTable.length - separator.length - prefix.length - suffix.length);
+
+        return `${prefix}${entityTable}${separator}${otherTable}${suffix}`;
     }
 
     /**
