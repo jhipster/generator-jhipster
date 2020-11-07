@@ -1640,9 +1640,9 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} prodDatabaseType - database type
      */
     getJoinTableName(entityName, relationshipName, prodDatabaseType) {
-        const legacyRelationshipTableName = this.jhipsterConfig && this.jhipsterConfig.legacyRelationshipTableName;
-        const separator = legacyRelationshipTableName ? '_' : '__';
-        const prefix = legacyRelationshipTableName ? '' : 'rel_';
+        const legacyDbNames = this.jhipsterConfig && this.jhipsterConfig.legacyDbNames;
+        const separator = legacyDbNames ? '_' : '__';
+        const prefix = legacyDbNames ? '' : 'rel_';
         const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
         let limit = 0;
         if (prodDatabaseType === 'oracle' && joinTableName.length > 30 && !this.skipCheckLengthOfIdentifier) {
@@ -1672,7 +1672,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         }
         return limit === 0
             ? joinTableName
-            : this.calculateDbNameWithLimit(entityName, relationshipName, limit, { prefix, separator, legacyRelationshipTableName });
+            : this.calculateDbNameWithLimit(entityName, relationshipName, limit, { prefix, separator, legacyDbNames });
     }
 
     /**
@@ -1686,8 +1686,8 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      */
     getConstraintNameWithLimit(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '') {
         let constraintName;
-        const legacyRelationshipTableName = this.jhipsterConfig && this.jhipsterConfig.legacyRelationshipTableName;
-        const separator = legacyRelationshipTableName ? '_' : '__';
+        const legacyDbNames = this.jhipsterConfig && this.jhipsterConfig.legacyDbNames;
+        const separator = legacyDbNames ? '_' : '__';
         if (noSnakeCase) {
             constraintName = `${prefix}${entityName}${separator}${columnOrRelationName}`;
         } else {
@@ -1725,7 +1725,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
                   separator,
                   noSnakeCase,
                   prefix,
-                  legacyRelationshipTableName,
+                  legacyDbNames,
               });
     }
 
@@ -1739,9 +1739,9 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} options.prefix - constraintName prefix for the constraintName
      */
     calculateDbNameWithLimit(entityName, columnOrRelationName, limit, options) {
-        const { noSnakeCase, prefix, separator, legacyRelationshipTableName } = options;
+        const { noSnakeCase, prefix, separator, legacyDbNames } = options;
         const halfLimit = Math.floor(limit / 2);
-        const suffix = legacyRelationshipTableName
+        const suffix = legacyDbNames
             ? ''
             : `_${crypto
                   .createHash('shake256', { outputLength: 1 })
@@ -1751,7 +1751,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         let entityTable = noSnakeCase ? entityName : this.getTableName(entityName);
         let otherTable = noSnakeCase ? columnOrRelationName : this.getTableName(columnOrRelationName);
 
-        entityTable = entityTable.substring(0, halfLimit - (legacyRelationshipTableName ? 0 : separator.length));
+        entityTable = entityTable.substring(0, halfLimit - (legacyDbNames ? 0 : separator.length));
         otherTable = otherTable.substring(0, limit - entityTable.length - separator.length - prefix.length - suffix.length);
 
         return `${prefix}${entityTable}${separator}${otherTable}${suffix}`;
@@ -2440,8 +2440,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         if (options.testFrameworks) {
             this.jhipsterConfig.testFrameworks = options.testFrameworks;
         }
-        if (options.legacyRelationshipTableName !== undefined) {
-            this.jhipsterConfig.legacyRelationshipTableName = options.legacyRelationshipTableName;
+        if (options.legacyDbNames !== undefined) {
+            this.jhipsterConfig.legacyDbNames = options.legacyDbNames;
         }
 
         if (options.creationTimestamp) {
