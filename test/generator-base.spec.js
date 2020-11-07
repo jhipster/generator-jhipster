@@ -72,7 +72,7 @@ describe('Generator Base', () => {
             });
         });
     });
-    describe.only('getJoinTableName', () => {
+    describe('getJoinTableName', () => {
         describe('when called with a value', () => {
             it('returns a join table name', () => {
                 expect(BaseGenerator.getJoinTableName('entityName', 'relationshipName', 'postgresql')).to.equal(

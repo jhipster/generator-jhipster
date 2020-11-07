@@ -1643,9 +1643,6 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         const legacyRelationshipTableName = this.jhipsterConfig && this.jhipsterConfig.legacyRelationshipTableName;
         const separator = legacyRelationshipTableName ? '_' : '__';
         const prefix = legacyRelationshipTableName ? '' : 'rel_';
-        const suffix = legacyRelationshipTableName
-            ? ''
-            : `_${crypto.createHash('shake256', { outputLength: 1 }).update(`${entityName}.${relationshipName}`, 'utf8').digest('hex')}`;
         const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
         let limit = 0;
         if (prodDatabaseType === 'oracle' && joinTableName.length > 30 && !this.skipCheckLengthOfIdentifier) {
@@ -1673,7 +1670,13 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
 
             limit = 64;
         }
-        if (limit > 0) {
+        if (limit > 0 && (joinTableName.length > limit || legacyRelationshipTableName)) {
+            const suffix = legacyRelationshipTableName
+                ? ''
+                : `_${crypto
+                      .createHash('shake256', { outputLength: 1 })
+                      .update(`${entityName}.${relationshipName}`, 'utf8')
+                      .digest('hex')}`;
             const halfLimit = Math.floor(limit / 2);
             const entityTable = this.getTableName(entityName).substring(
                 0,
