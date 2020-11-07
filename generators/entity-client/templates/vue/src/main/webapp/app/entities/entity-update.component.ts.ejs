@@ -274,10 +274,10 @@ _%>
   <%_ if (fieldsContainBlob && fieldsContainImageBlob) { _%>
   public clearInputImage(field, fieldContentType, idInput) : void {
     if (this.<%= entityInstance %> && field && fieldContentType) {
-      if (this.<%= entityInstance %>.hasOwnProperty(field)) {
+      if (Object.prototype.hasOwnProperty.call(this.<%= entityInstance %>, field)) {
         this.<%= entityInstance %>[field] = null;
       }
-      if (this.<%= entityInstance %>.hasOwnProperty(fieldContentType)) {
+      if (Object.prototype.hasOwnProperty.call(this.<%= entityInstance %>, fieldContentType)) {
         this.<%= entityInstance %>[fieldContentType] = null;
       }
       if (idInput) {
