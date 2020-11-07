@@ -151,8 +151,6 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
             : entityWithConfig.entityStateName
     );
 
-    entityWithConfig.reactiveRepositories = entityWithConfig.reactive;
-
     entityWithConfig.differentTypes.push(entityWithConfig.entityClass);
     entityWithConfig.i18nToLoad.push(entityWithConfig.entityInstance);
     entityWithConfig.i18nKeyPrefix = `${entityWithConfig.frontendAppName}.${entityWithConfig.entityTranslationKey}`;
