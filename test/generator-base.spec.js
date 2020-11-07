@@ -94,7 +94,7 @@ describe('Generator Base', () => {
                 TestClass.prototype = Object.create(Base.prototype);
                 TestClass.prototype.jhipsterConfig = { legacyRelationshipTableName: true };
                 expect(TestClass.prototype.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle')).to.equal(
-                    'entity_name_lon_relationship_n'
+                    'rel_entity_name_l__relation_be'
                 );
                 expect(TestClass.prototype.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle')).to.have.length(30);
             });
