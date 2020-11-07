@@ -553,10 +553,6 @@
             <version>${liquibase.version}</version>
         </dependency>
 <%_ } _%>
-        <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
-        </dependency>
 <%_ if (databaseType === 'mongodb') { _%>
         <dependency>
             <groupId>com.github.cloudyrock.mongock</groupId>
@@ -606,10 +602,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 <%_ if (databaseType === 'sql') { _%>
     <%_ if (!reactive) { _%>
