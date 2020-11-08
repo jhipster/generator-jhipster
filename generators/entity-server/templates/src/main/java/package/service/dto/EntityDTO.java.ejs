@@ -50,7 +50,7 @@ import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.Set;
 <%_ } _%>
-<%_ if (databaseType === 'cassandra' || fieldsContainUUID === true) { _%>
+<%_ if (primaryKeyType === 'UUID' || fieldsContainUUID === true) { _%>
 import java.util.UUID;
 <%_ } _%>
 <%_ if (fieldsContainBlob && databaseType === 'sql') { _%>

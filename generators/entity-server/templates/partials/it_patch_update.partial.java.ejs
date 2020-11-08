@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 // Initialize the database
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (primaryKeyType === 'UUID') { _%>
     <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
 <%_ } _%>
 <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;

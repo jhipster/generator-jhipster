@@ -472,7 +472,7 @@ relationships.forEach((relationship, idx) => {
     }
 
     <%_ if (fluentMethods) { _%>
-    public <%= asEntity(entityClass) %> id(<% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> id) {
+    public <%= asEntity(entityClass) %> id(<%= primaryKeyType %> id) {
         this.id = id;
         return this;
     }
