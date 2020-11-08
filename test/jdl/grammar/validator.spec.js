@@ -503,6 +503,33 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 });
             });
         });
+        context('and using for withAdminUi', () => {
+            context('a valid value', () => {
+                it('should not report a syntax error', () => {
+                    expect(() =>
+                        parse(`
+            application {
+              config {
+                withAdminUi true
+              }
+            }`)
+                    ).not.to.throw();
+                });
+            });
+
+            context('an invalid value', () => {
+                it('should report a syntax error', () => {
+                    expect(() =>
+                        parse(`
+            application {
+              config {
+                withAdminUi 666
+              }
+            }`)
+                    ).to.throw(new RegExp('^A boolean literal is expected, but found: "666"'));
+                });
+            });
+        });
         context('and using for clientPackageManager', () => {
             context('a valid value', () => {
                 context('with only letters', () => {

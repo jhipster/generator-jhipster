@@ -676,6 +676,7 @@ relationship OneToOne {
                         packageFolder: 'com/mathieu/tata',
                         authenticationType: 'jwt',
                         websocket: false,
+                        withAdminUi: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
                         dtoSuffix: 'DTO',
@@ -712,6 +713,7 @@ relationship OneToOne {
                         packageFolder: 'com/mathieu/titi',
                         authenticationType: 'jwt',
                         websocket: false,
+                        withAdminUi: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
                         dtoSuffix: 'DTO',
@@ -780,6 +782,7 @@ relationship OneToOne {
                         packageFolder: 'com/mathieu/tutu',
                         authenticationType: 'jwt',
                         websocket: false,
+                        withAdminUi: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
                         dtoSuffix: 'DTO',
@@ -873,6 +876,7 @@ relationship OneToOne {
                         reactive: false,
                         skipClient: false,
                         skipServer: false,
+                        withAdminUi: true,
                     },
                 },
                 {
@@ -1201,6 +1205,7 @@ relationship OneToOne {
                         skipUserManagement: false,
                         skipClient: false,
                         skipServer: false,
+                        withAdminUi: true,
                     },
                 },
                 {
@@ -1237,6 +1242,7 @@ relationship OneToOne {
                         skipUserManagement: false,
                         skipClient: false,
                         skipServer: false,
+                        withAdminUi: true,
                     },
                 },
                 {
@@ -1305,6 +1311,7 @@ relationship OneToOne {
                         skipUserManagement: false,
                         skipClient: false,
                         skipServer: false,
+                        withAdminUi: true,
                     },
                 },
                 {
@@ -1464,6 +1471,7 @@ relationship OneToOne {
                         skipUserManagement: false,
                         clientPackageManager: 'npm',
                         serverPort: '8080',
+                        withAdminUi: true,
                     },
                     entities: [
                         'Customer',
@@ -1898,6 +1906,7 @@ paginate * with infinite-scroll
                             skipUserManagement: false,
                             testFrameworks: [],
                             websocket: false,
+                            withAdminUi: true,
                         },
                     },
                 ]);

@@ -117,6 +117,7 @@ function getConfigForGatewayApplication(customOptions = {}) {
         [SERVER_PORT]: OptionValues[SERVER_PORT],
         [SERVICE_DISCOVERY_TYPE]: OptionValues[SERVICE_DISCOVERY_TYPE].eureka,
         [SKIP_USER_MANAGEMENT]: OptionValues[SKIP_USER_MANAGEMENT],
+        [WITH_ADMIN_UI]: true,
         ...customOptions,
     };
     if (!options[CLIENT_THEME]) {
