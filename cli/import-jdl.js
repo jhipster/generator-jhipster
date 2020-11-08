@@ -131,7 +131,6 @@ function writeApplicationConfig(applicationWithEntities, basePath) {
 /**
  * Run the generator.
  * @param {string} command
- * @param {Object} generatorOptions
  * @param {Object} options
  * @param {string} options.cwd
  * @param {boolean} options.fork
@@ -346,7 +345,6 @@ class JDLProcessor {
             skipUserManagement: this.options.skipUserManagement,
             generatorVersion: packagejs.version,
             skipFileGeneration: true,
-            application: this.yoRC,
         };
 
         let importer;
