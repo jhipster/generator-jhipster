@@ -198,7 +198,7 @@ public class <%= entityClass %>Resource {
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.getId()<% if (primaryKeyType !== 'String') { %>.toString()<% } %>))
             .body(result);
         <%_ } else { _%>
-<%- include('../../common/save_reactive_template', {asEntity, asDto, viaService: viaService, returnDirectly: false}); -%>
+<%- include('../../common/save_template_reactive', {asEntity, asDto, viaService: viaService, returnDirectly: false}); -%>
             .map(result -> {
                 try {
                     return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
@@ -245,7 +245,7 @@ public class <%= entityClass %>Resource {
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%= instanceName %>.getId()<% if (primaryKeyType !== 'String') { %>.toString()<% } %>))
             .body(result);
     <%_ } else { _%>
-<%- include('../../common/save_reactive_template', {asEntity, asDto, viaService: viaService, returnDirectly: false}); -%>
+<%- include('../../common/save_template_reactive', {asEntity, asDto, viaService: viaService, returnDirectly: false}); -%>
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
             .map(result -> ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.getId()<% if (primaryKeyType !== 'String') { %>.toString()<% } %>))

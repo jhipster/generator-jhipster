@@ -116,7 +116,7 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/repository/EntityReactiveRepository.java',
+                    file: 'package/repository/EntityRepository_reactive.java',
                     renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`,
                 },
             ],
@@ -126,7 +126,7 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/repository/EntityReactiveRepositoryInternalImpl.java',
+                    file: 'package/repository/EntityRepositoryInternalImpl_reactive.java',
                     renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}RepositoryInternalImpl.java`,
                 },
                 {
