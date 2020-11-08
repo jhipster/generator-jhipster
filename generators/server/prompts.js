@@ -100,16 +100,16 @@ function askForServerSideOpts() {
                         name: 'JWT authentication (stateless, with a token)',
                     },
                 ];
+                opts.push({
+                    value: 'oauth2',
+                    name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)',
+                });
                 if (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka') {
                     opts.push({
                         value: 'session',
                         name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)',
                     });
                 }
-                opts.push({
-                    value: 'oauth2',
-                    name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)',
-                });
                 if (!reactive) {
                     if (['gateway', 'microservice'].includes(applicationType)) {
                         opts.push({
