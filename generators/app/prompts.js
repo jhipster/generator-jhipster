@@ -51,12 +51,12 @@ async function askForApplicationType() {
             name: 'Monolithic application (recommended for simple projects)',
         },
         {
-            value: 'microservice',
-            name: 'Microservice application',
+            value: 'gateway',
+            name: 'Gateway application',
         },
         {
-            value: 'gateway',
-            name: 'Microservice gateway',
+            value: 'microservice',
+            name: 'Microservice application',
         },
         {
             value: 'uaa',
