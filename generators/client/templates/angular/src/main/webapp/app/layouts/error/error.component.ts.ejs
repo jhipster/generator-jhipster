@@ -19,6 +19,7 @@
 import { Component, OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
+import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
