@@ -16,7 +16,6 @@
         "buildTool": "gradle",
         "enableSocialSignIn": false,
         "rememberMeKey": "MTBlZDY1OTk5Yjc2MjRkZDY3ZDkwZTE1ZWY1Nzg5MTQ0NWU0MjA4OTcxZDMyMTUzZTcxOGFhM2UwMWIyYjlkZmQ3OTljZTkwNThlYmViZDM0M2Y2OWFiM2JhNWY5ZDZkYzBhODg3ZDkwOGQyYmY1ZTFiYzFkNDhkNjhjZGFmNDE=",
-        "useSass": false,
         "applicationType": "monolith",
         "testFrameworks": [],
         "jhiPrefix": "jhi",

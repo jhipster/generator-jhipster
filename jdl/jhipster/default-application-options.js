@@ -53,7 +53,6 @@ const {
     SKIP_USER_MANAGEMENT,
     TEST_FRAMEWORKS,
     USE_NPM,
-    USE_SASS,
     WEBSOCKET,
 } = OptionNames;
 
@@ -101,9 +100,6 @@ function getConfigForMonolithApplication(customOptions = {}) {
     if (options[AUTHENTICATION_TYPE] === OptionValues[AUTHENTICATION_TYPE].oauth2) {
         options[SKIP_USER_MANAGEMENT] = true;
     }
-    if (typeof options[USE_SASS] !== 'boolean') {
-        options[USE_SASS] = true;
-    }
 
     return {
         ...options,
@@ -130,9 +126,6 @@ function getConfigForGatewayApplication(customOptions = {}) {
     if (options[AUTHENTICATION_TYPE] === OptionValues[AUTHENTICATION_TYPE].oauth2) {
         options[SKIP_USER_MANAGEMENT] = true;
     }
-    if (typeof options[USE_SASS] !== 'boolean') {
-        options[USE_SASS] = true;
-    }
     if (options[SERVICE_DISCOVERY_TYPE] === false) {
         options[SERVICE_DISCOVERY_TYPE] = OptionValues[SERVICE_DISCOVERY_TYPE].eureka;
     }
@@ -158,7 +151,6 @@ function getConfigForMicroserviceApplication(customOptions = {}) {
     delete options[CLIENT_FRAMEWORK];
     delete options[CLIENT_THEME];
     delete options[CLIENT_THEME_VARIANT];
-    delete options[USE_SASS];
     delete options[SKIP_SERVER];
     if (typeof options[SKIP_USER_MANAGEMENT] !== 'boolean') {
         options[SKIP_USER_MANAGEMENT] = true;
@@ -187,7 +179,6 @@ function getConfigForUAAApplication(customOptions = {}) {
     delete options[CLIENT_FRAMEWORK];
     delete options[CLIENT_THEME];
     delete options[CLIENT_THEME_VARIANT];
-    delete options[USE_SASS];
     delete options[SKIP_SERVER];
     return {
         ...options,

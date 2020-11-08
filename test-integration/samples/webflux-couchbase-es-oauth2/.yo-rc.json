@@ -26,7 +26,6 @@
         "messageBroker": false,
         "serviceDiscoveryType": false,
         "embeddableLaunchScript": false,
-        "useSass": true,
         "clientTheme": "none",
         "creationTimestamp": 1580314672693,
         "entitySuffix": "",

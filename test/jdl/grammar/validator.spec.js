@@ -1405,33 +1405,6 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 });
             });
         });
-        context('and using for useSass', () => {
-            context('a valid value', () => {
-                it('should not report a syntax error', () => {
-                    expect(() =>
-                        parse(`
-            application {
-              config {
-                useSass true
-              }
-            }`)
-                    ).not.to.throw();
-                });
-            });
-
-            context('an invalid value', () => {
-                it('should report a syntax error', () => {
-                    expect(() =>
-                        parse(`
-            application {
-              config {
-                useSass 666
-              }
-            }`)
-                    ).to.throw(new RegExp('^A boolean literal is expected, but found: "666"'));
-                });
-            });
-        });
         context('and using for websocket', () => {
             context('a valid value', () => {
                 context('with only letters', () => {

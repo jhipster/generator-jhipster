@@ -74,7 +74,6 @@ const optionNames = {
     SKIP_USER_MANAGEMENT: 'skipUserManagement',
     TEST_FRAMEWORKS: 'testFrameworks',
     UAA_BASE_NAME: 'uaaBaseName',
-    USE_SASS: 'useSass',
     WEBSOCKET: 'websocket',
     WITH_ENTITIES: 'withEntities',
 };
@@ -188,7 +187,6 @@ const optionValues = {
     },
     [optionNames.UAA_BASE_NAME]: '../uaa',
     [optionNames.USE_NPM]: true,
-    [optionNames.USE_SASS]: false,
     [optionNames.WEBSOCKET]: {
         'spring-websocket': 'spring-websocket',
         false: false,
@@ -244,7 +242,6 @@ const optionTypes = {
     [optionNames.TEST_FRAMEWORKS]: { type: ApplicationOptionTypes.LIST },
     [optionNames.UAA_BASE_NAME]: { type: ApplicationOptionTypes.STRING },
     [optionNames.USE_NPM]: { type: ApplicationOptionTypes.BOOLEAN },
-    [optionNames.USE_SASS]: { type: ApplicationOptionTypes.BOOLEAN },
     [optionNames.WEBSOCKET]: { type: ApplicationOptionTypes.STRING },
     [optionNames.WITH_ENTITIES]: { type: ApplicationOptionTypes.BOOLEAN },
 };

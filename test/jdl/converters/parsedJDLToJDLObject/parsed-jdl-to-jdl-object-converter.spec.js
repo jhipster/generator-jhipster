@@ -516,7 +516,6 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                         skipClient: false,
                         skipServer: false,
                         skipUserManagement: false,
-                        useSass: true,
                         websocket: false,
                     });
                 });
