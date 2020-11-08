@@ -209,6 +209,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         this.option('native-language', {
             desc: 'Set application native language',
             type: String,
+            required: false,
         });
 
         this.option('language', {

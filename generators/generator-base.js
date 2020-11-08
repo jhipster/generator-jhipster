@@ -2422,9 +2422,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             this.jhipsterConfig.languages = [...this.jhipsterConfig.languages, ...languages];
         }
         if (options.nativeLanguage) {
-            this.jhipsterConfig.nativeLanguage = options.nativeLanguage;
-            if (!this.jhipsterConfig.languages) {
-                this.jhipsterConfig.languages = [options.nativeLanguage];
+            if (typeof options.nativeLanguage === 'string') {
+                this.jhipsterConfig.nativeLanguage = options.nativeLanguage;
+                if (!this.jhipsterConfig.languages) {
+                    this.jhipsterConfig.languages = [options.nativeLanguage];
+                }
             }
         }
 
