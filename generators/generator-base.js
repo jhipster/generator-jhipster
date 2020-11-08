@@ -20,7 +20,6 @@
 const path = require('path');
 const _ = require('lodash');
 const chalk = require('chalk');
-const crypto = require('crypto');
 const fs = require('fs');
 const shelljs = require('shelljs');
 const semver = require('semver');
@@ -35,6 +34,7 @@ const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig } = require('./generator-defaults');
 const { formatDateForChangelog } = require('../utils/liquibase');
+const { calculateDbNameWithLimit } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
@@ -1672,7 +1672,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         }
         return limit === 0
             ? joinTableName
-            : this.calculateDbNameWithLimit(entityName, relationshipName, limit, { prefix, separator, appendHash: !legacyDbNames });
+            : calculateDbNameWithLimit(entityName, relationshipName, limit, { prefix, separator, appendHash: !legacyDbNames });
     }
 
     /**
@@ -1721,42 +1721,12 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         }
         return limit === 0
             ? constraintName
-            : this.calculateDbNameWithLimit(entityName, columnOrRelationName, limit - 1, {
+            : calculateDbNameWithLimit(entityName, columnOrRelationName, limit - 1, {
                   separator,
                   noSnakeCase,
                   prefix,
                   appendHash: !legacyDbNames,
               });
-    }
-
-    /**
-     * get a constraint name for tables in JHipster preferred style after applying any length limits required.
-     *
-     * @param {string} entityName - name of the entity
-     * @param {string} columnOrRelationName - name of the column or related entity
-     * @param {object} options
-     * @param {boolean} options.noSnakeCase - do not convert names to snakecase
-     * @param {string} options.prefix
-     * @param {string} options.separator
-     * @param {boolean} options.appendHash - adds a calculated hash based on entityName and columnOrRelationName to prevent trimming conflict.
-     */
-    calculateDbNameWithLimit(entityName, columnOrRelationName, limit, options) {
-        const { noSnakeCase, prefix, separator, appendHash } = options;
-        const halfLimit = Math.floor(limit / 2);
-        const suffix = !appendHash
-            ? ''
-            : `_${crypto
-                  .createHash('shake256', { outputLength: 1 })
-                  .update(`${entityName}.${columnOrRelationName}`, 'utf8')
-                  .digest('hex')}`;
-
-        let entityTable = noSnakeCase ? entityName : this.getTableName(entityName);
-        let otherTable = noSnakeCase ? columnOrRelationName : this.getTableName(columnOrRelationName);
-
-        entityTable = entityTable.substring(0, halfLimit - (!appendHash ? 0 : separator.length));
-        otherTable = otherTable.substring(0, limit - entityTable.length - separator.length - prefix.length - suffix.length);
-
-        return `${prefix}${entityTable}${separator}${otherTable}${suffix}`;
     }
 
     /**
