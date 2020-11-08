@@ -140,7 +140,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.TestSecurityContextHolder;
 <%_ } _%>
 import org.springframework.security.test.context.support.WithMockUser;
-<%_ if (reactiveRepositories) { _%>
+<%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
 <%_ if (!reactive) { _%>
@@ -159,7 +159,7 @@ import reactor.core.publisher.Mono;
 <%_ if (databaseType === 'sql' && !reactive) { _%>
 import javax.persistence.EntityManager;<% } %><% if (fieldsContainBigDecimal === true) { %>
 import java.math.BigDecimal;<% } %><% if (fieldsContainBlob === true && databaseType === 'cassandra') { %>
-import java.nio.ByteBuffer;<% } %><% if (reactiveRepositories || fieldsContainDuration === true) { %>
+import java.nio.ByteBuffer;<% } %><% if (reactive || fieldsContainDuration === true) { %>
 import java.time.Duration;<% } %><% if (fieldsContainLocalDate === true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainInstant === true || fieldsContainZonedDateTime === true) { %>
 import java.time.Instant;<% } %><% if (fieldsContainZonedDateTime === true) { %>
@@ -786,7 +786,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     }
 <%_ } } } _%>
 <%_ } _%>
-<%_ if (reactiveRepositories && pagination === 'no') { _%>
+<%_ if (reactive && pagination === 'no') { _%>
 
     @Test
     void getAll<%= entityClassPlural %>AsStream() {

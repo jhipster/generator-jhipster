@@ -82,10 +82,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
     <%_ } else { _%>
 import org.springframework.web.util.UriComponentsBuilder;
     <%_ } _%>
-<%_ } else if (reactiveRepositories) { _%>
+<%_ } else if (reactive) { _%>
 import org.springframework.http.HttpStatus;
 <%_ } _%>
-<%_ if (reactiveRepositories) { _%>
+<%_ if (reactive) { _%>
 import org.springframework.http.MediaType;
 <%_ } _%>
 import org.springframework.http.ResponseEntity;
@@ -93,7 +93,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 import org.springframework.web.bind.annotation.*;
-<%_ if (reactiveRepositories) { _%>
+<%_ if (reactive) { _%>
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -327,7 +327,7 @@ public class <%= entityClass %>Resource {
     <%_ } _%>
 <%- include('../../common/get_all_template', {asEntity, asDto, viaService}); -%>
 
-    <%_ if (reactiveRepositories && pagination === 'no') { _%>
+    <%_ if (reactive && pagination === 'no') { _%>
     /**
      * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityInstancePlural %> as a stream.
      * @return the {@link Flux} of <%= entityInstancePlural %>.
