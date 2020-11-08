@@ -149,7 +149,9 @@ const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand })
                     return loadCommand(cmdName)(args, options, env);
                 }
                 const namespace = opts.blueprint ? `${packageNameToNamespace(opts.blueprint)}:${cmdName}` : `${JHIPSTER_NS}:${cmdName}`;
-                return env.run(getCommand(namespace, args, opts), options).then(done, done);
+                const command = getCommand(namespace, args, opts);
+                logger.debug(`Executing generator ${command} with options ${JSON.stringify(options)}`);
+                return env.run(command, options).then(done, done);
             });
     });
 };
