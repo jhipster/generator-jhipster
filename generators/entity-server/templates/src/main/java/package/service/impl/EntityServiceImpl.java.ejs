@@ -115,7 +115,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
         <%_ if (!reactive) { _%>
 <%- include('../../common/save_template', {asEntity, asDto, viaService: false, returnDirectly: true, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
         <%_ } else { _%>
-<%- include('../../common/save_reactive_template', {asEntity, asDto, viaService: false, returnDirectly: true}); -%>
+<%- include('../../common/save_template_reactive', {asEntity, asDto, viaService: false, returnDirectly: true}); -%>
         <%_ } _%>
     }
 

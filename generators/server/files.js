@@ -1033,7 +1033,7 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: generator => `package/config/database/${generator.databaseType}DatabaseConfiguration.java`,
+                    file: generator => `package/config/DatabaseConfiguration_${generator.databaseType}.java`,
                     renameTo: generator => `${generator.javaDir}config/DatabaseConfiguration.java`,
                 },
             ],
@@ -1111,11 +1111,11 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/repository/reactive/ReactiveN1qlCouchbaseRepository.java',
+                    file: 'package/repository/ReactiveN1qlCouchbaseRepository.java',
                     renameTo: generator => `${generator.javaDir}repository/ReactiveN1qlCouchbaseRepository.java`,
                 },
                 {
-                    file: 'package/repository/reactive/CustomReactiveN1qlCouchbaseRepository.java',
+                    file: 'package/repository/CustomReactiveN1qlCouchbaseRepository.java',
                     renameTo: generator => `${generator.javaDir}repository/CustomReactiveN1qlCouchbaseRepository.java`,
                 },
             ],
