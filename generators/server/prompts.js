@@ -87,23 +87,6 @@ function askForServerSideOpts() {
             default: 'eureka',
         },
         {
-            when: applicationType === 'monolith',
-            type: 'list',
-            name: 'serviceDiscoveryType',
-            message: 'Do you want to use the JHipster Registry to configure, monitor and scale your application?',
-            choices: [
-                {
-                    value: false,
-                    name: 'No',
-                },
-                {
-                    value: 'eureka',
-                    name: 'Yes',
-                },
-            ],
-            default: serverDefaultConfig.serviceDiscoveryType,
-        },
-        {
             when: response =>
                 (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka') ||
                 ['gateway', 'microservice'].includes(applicationType),
@@ -299,6 +282,23 @@ function askForServerSideOpts() {
                 },
             ],
             default: serverDefaultConfig.buildTool,
+        },
+        {
+            when: applicationType === 'monolith',
+            type: 'list',
+            name: 'serviceDiscoveryType',
+            message: 'Do you want to use the JHipster Registry to configure, monitor and scale your application?',
+            choices: [
+                {
+                    value: false,
+                    name: 'No',
+                },
+                {
+                    value: 'eureka',
+                    name: 'Yes',
+                },
+            ],
+            default: serverDefaultConfig.serviceDiscoveryType,
         },
     ];
 
