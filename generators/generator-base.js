@@ -2630,4 +2630,24 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             creationTimestamp,
         });
     }
+
+    /**
+     * Returns the JDBC URL for a databaseType
+     *
+     * @param {string} databaseType
+     * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
+     */
+    getJDBCUrl(databaseType, options = {}) {
+        return this.getDBCUrl(databaseType, 'jdbc', options);
+    }
+
+    /**
+     * Returns the R2DBC URL for a databaseType
+     *
+     * @param {string} databaseType
+     * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
+     */
+    getR2DBCUrl(databaseType, options = {}) {
+        return this.getDBCUrl(databaseType, 'r2dbc', options);
+    }
 };
