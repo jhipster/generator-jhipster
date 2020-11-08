@@ -1266,26 +1266,6 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
 
     /**
-     * Returns the JDBC URL for a databaseType
-     *
-     * @param {string} databaseType
-     * @param {*} options
-     */
-    getJDBCUrl(databaseType, options = {}) {
-        return this.getDBCUrl(databaseType, 'jdbc', options);
-    }
-
-    /**
-     * Returns the R2DBC URL for a databaseType
-     *
-     * @param {string} databaseType
-     * @param {*} options
-     */
-    getR2DBCUrl(databaseType, options = {}) {
-        return this.getDBCUrl(databaseType, 'r2dbc', options);
-    }
-
-    /**
      * Returns the URL for a particular databaseType and protocol
      *
      * @param {string} databaseType
