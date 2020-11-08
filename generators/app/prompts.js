@@ -93,14 +93,14 @@ async function askForTestOpts() {
     if (this.existingProject) return undefined;
 
     const choices = [];
+    if (!this.skipClient) {
+        // all client side test frameworks should be added here
+        choices.push({ name: 'Cypress', value: 'cypress' });
+        choices.push({ name: 'Protractor (deprecated)', value: 'protractor' });
+    }
     if (!this.skipServer) {
         // all server side test frameworks should be added here
         choices.push({ name: 'Gatling', value: 'gatling' }, { name: 'Cucumber', value: 'cucumber' });
-    }
-    if (!this.skipClient) {
-        // all client side test frameworks should be added here
-        choices.push({ name: 'Protractor **Deprecated**', value: 'protractor' });
-        choices.push({ name: 'Cypress', value: 'cypress' });
     }
     const PROMPT = {
         type: 'checkbox',
