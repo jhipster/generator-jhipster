@@ -20,30 +20,35 @@
 const crypto = require('crypto');
 
 /**
- * get a constraint name for tables in JHipster preferred style after applying any length limits required.
+ * get for tables/constraints in JHipster preferred style after applying any length limits required.
  *
- * @param {string} entityName - name of the entity
- * @param {string} columnOrRelationName - name of the column or related entity
- * @param {object} options
- * @param {boolean} options.noSnakeCase - do not convert names to snakecase
- * @param {string} options.prefix
- * @param {string} options.separator
- * @param {boolean} options.appendHash - adds a calculated hash based on entityName and columnOrRelationName to prevent trimming conflict.
+ * @param {string} tableOrEntityName - name of the table or entity
+ * @param {string} columnOrRelationshipName - name of the column or relationship
+ * @param {number} limit - max length of the returned db reference name
+ * @param {object} [options]
+ * @param {boolean} [options.noSnakeCase = false] - do not convert names to snakecase
+ * @param {string} [options.prefix = '']
+ * @param {string} [options.separator = '__']
+ * @param {boolean} [options.appendHash = true] - adds a calculated hash based on tableOrEntityName and columnOrRelationshipName to prevent trimming conflict.
+ * @return {string} db referente name
  */
-function calculateDbNameWithLimit(entityName, columnOrRelationName, limit, options) {
-    const { noSnakeCase, prefix, separator, appendHash } = options;
+function calculateDbNameWithLimit(tableOrEntityName, columnOrRelationshipName, limit, options = {}) {
+    const { noSnakeCase = false, prefix = '', separator = '__', appendHash = true } = options;
     const halfLimit = Math.floor(limit / 2);
     const suffix = !appendHash
         ? ''
-        : `_${crypto.createHash('shake256', { outputLength: 1 }).update(`${entityName}.${columnOrRelationName}`, 'utf8').digest('hex')}`;
+        : `_${crypto
+              .createHash('shake256', { outputLength: 1 })
+              .update(`${tableOrEntityName}.${columnOrRelationshipName}`, 'utf8')
+              .digest('hex')}`;
 
-    let entityTable = noSnakeCase ? entityName : this.getTableName(entityName);
-    let otherTable = noSnakeCase ? columnOrRelationName : this.getTableName(columnOrRelationName);
+    let formattedName = noSnakeCase ? tableOrEntityName : this.getTableName(tableOrEntityName);
+    formattedName = formattedName.substring(0, halfLimit - (!appendHash ? 0 : separator.length));
 
-    entityTable = entityTable.substring(0, halfLimit - (!appendHash ? 0 : separator.length));
-    otherTable = otherTable.substring(0, limit - entityTable.length - separator.length - prefix.length - suffix.length);
+    let otherFormattedName = noSnakeCase ? columnOrRelationshipName : this.getTableName(columnOrRelationshipName);
+    otherFormattedName = otherFormattedName.substring(0, limit - formattedName.length - separator.length - prefix.length - suffix.length);
 
-    return `${prefix}${entityTable}${separator}${otherTable}${suffix}`;
+    return `${prefix}${formattedName}${separator}${otherFormattedName}${suffix}`;
 }
 
 module.exports = { calculateDbNameWithLimit };
