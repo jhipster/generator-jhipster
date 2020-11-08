@@ -29,6 +29,7 @@ const OracleReservedKeywords = require('./reserved-keywords/oracle');
 const MsSQLReservedKeywords = require('./reserved-keywords/mssql');
 const Neo4JReservedKeywords = require('./reserved-keywords/neo4j');
 const applicationOptions = require('./application-options');
+
 const clientFrameworks = applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK];
 
 const ReservedWords = {
