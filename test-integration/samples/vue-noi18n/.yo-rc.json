@@ -39,7 +39,6 @@
         "nativeLanguage": "en",
         "jwtSecretKey": "YWQzOWQ1NDg4MTczMTQxMmQxM2FjY2M4NmI4NmE5Mjg3NzYwNGQwMGE4NjAxYTkzOTIxZDgzZDU0N2FlYTY2ODM0NDg0OGZkMjY5ODc2ZGQzYjVlYThlYzAxNzdiMmMzMGRlMzA1NGM4ZmVlMTNlZWEyMjAxNmEzYmMyYTg1Y2M=",
         "clientThemeVariant": "primary",
-        "useSass": true,
         "languages": []
     }
 }

@@ -42,7 +42,7 @@ import java.util.List;
 
 @Configuration<% if (applicationType === 'gateway' && databaseType !== 'cassandra') { %>
 @ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")<% } %>
-public class CassandraConfiguration {
+public class DatabaseConfiguration {
 
     @Bean
     public CassandraCustomConversions cassandraCustomConversions() {

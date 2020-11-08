@@ -9,7 +9,6 @@ application {
     cacheProvider hazelcast,
     buildTool gradle,
     clientFramework react,
-    useSass true,
     testFrameworks [protractor]
   }
   entities *

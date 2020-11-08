@@ -41,6 +41,7 @@ module.exports = class extends BaseGenerator {
             return;
         }
         this.info(`Creating changelog for entities ${this.options.entities}`);
+        this.configOptions.oldSharedEntities = this.configOptions.oldSharedEntities || [];
     }
 
     _default() {
@@ -119,6 +120,9 @@ module.exports = class extends BaseGenerator {
             this._debug(`Calculating diffs for ${entityName}`);
 
             const oldConfig = JSON.parse(fs.readFileSync(filename));
+            // Share old entity
+            this.configOptions.oldSharedEntities[entityName] = oldConfig;
+
             const oldFields = oldConfig.fields || [];
             const oldFieldNames = oldFields.map(field => field.fieldName);
             const newFieldNames = newFields.map(field => field.fieldName);

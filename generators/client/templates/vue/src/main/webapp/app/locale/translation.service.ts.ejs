@@ -4,10 +4,10 @@ import { Store } from 'vuex';
 import { BUILD_TIMESTAMP } from '@/constants';
 
 export default class TranslationService {
-  private store: Store<{}>;
+  private store: Store<unknown>;
   private i18n: VueI18n;
 
-  constructor(store: Store<{}>, i18n: VueI18n) {
+  constructor(store: Store<unknown>, i18n: VueI18n) {
     this.store = store;
     this.i18n = i18n;
   }

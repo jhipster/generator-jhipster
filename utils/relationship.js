@@ -24,24 +24,26 @@ const { stringify } = require('.');
 
 function prepareRelationshipForTemplates(entityWithConfig, relationship, generator, ignoreMissingRequiredRelationship) {
     const entityName = entityWithConfig.name;
-    const relationshipOptions = relationship.options || {};
     const otherEntityName = relationship.otherEntityName;
     const jhiTablePrefix = entityWithConfig.jhiTablePrefix || generator.getTableName(entityWithConfig.jhiPrefix);
 
+    _.defaults(relationship, {
+        // otherEntityField should be id if not specified
+        otherEntityField: 'id',
+        // let ownerSide true when type is 'many-to-one' for convenience.
+        // means that this side should control the reference.
+        ownerSide:
+            relationship.relationshipType !== 'one-to-many' && (relationship.ownerSide || relationship.relationshipType === 'many-to-one'),
+    });
+
     relationship.otherSideReferenceExists = false;
 
-    let otherEntityData = relationship.otherEntity;
+    const otherEntityData = relationship.otherEntity;
     if (!otherEntityData) {
-        const entityStorage = generator.getEntityConfig(otherEntityName);
-        if (entityStorage) {
-            otherEntityData = entityStorage.getAll();
-            relationship.otherEntity = otherEntityData;
-        }
-    }
-    if (!otherEntityData && !generator.isBuiltInEntity(otherEntityName)) {
         throw new Error(`Error at entity ${entityName}: could not find the entity of the relationship ${stringify(relationship)}`);
     }
-    otherEntityData = otherEntityData || {};
+    otherEntityData.otherRelationships = otherEntityData.otherRelationships || [];
+    otherEntityData.otherRelationships.push(relationship);
 
     relationship.otherEntityIsEmbedded = otherEntityData.embedded;
 
@@ -110,6 +112,11 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         } else {
             generator.debug(`Entity ${entityName}: Could not find the other side of the relationship ${stringify(relationship)}`);
         }
+        relationship.otherRelationship = otherRelationship;
+    }
+
+    if (relationship.otherEntity && relationship.otherEntityField && relationship.otherEntityField !== 'id') {
+        relationship.relatedField = relationship.otherEntity.fields.find(field => field.fieldName === relationship.otherEntityField);
     }
 
     if (relationship.otherEntityRelationshipName !== undefined) {
@@ -127,7 +134,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         relationshipNamePlural: pluralize(relationshipName),
         relationshipFieldName: _.lowerFirst(relationshipName),
         relationshipNameCapitalized: _.upperFirst(relationshipName),
-        relationshipNameHumanized: relationshipOptions.relationshipNameHumanized || _.startCase(relationshipName),
+        relationshipNameHumanized: _.startCase(relationshipName),
         columnName: generator.getColumnName(relationshipName),
         otherEntityNamePlural: pluralize(otherEntityName),
         otherEntityNameCapitalized: _.upperFirst(otherEntityName),
@@ -238,7 +245,28 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         entityWithConfig.differentRelationships[entityType] = [];
     }
     entityWithConfig.differentRelationships[entityType].push(relationship);
+    relationship.reference = relationshipToReference(entityWithConfig, relationship);
     return relationship;
 }
 
-module.exports = { prepareRelationshipForTemplates };
+function relationshipToReference(entity, relationship, pathPrefix = []) {
+    const collection = relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many';
+    const name = collection ? relationship.relationshipNamePlural : relationship.relationshipName;
+    const reference = {
+        id: relationship.id,
+        entity,
+        relationship,
+        owned: relationship.ownerSide,
+        collection,
+        doc: relationship.javaDoc,
+        name,
+        nameCapitalized: collection ? relationship.relationshipNameCapitalizedPlural : relationship.relationshipNameCapitalized,
+        type: relationship.otherEntity.primaryKeyType,
+        path: [...pathPrefix, name],
+        idReferences: relationship.otherEntity.idFields ? relationship.otherEntity.idFields.map(field => field.reference) : [],
+        valueReference: relationship.otherEntityField && relationship.otherEntityField.reference,
+    };
+    return reference;
+}
+
+module.exports = { prepareRelationshipForTemplates, relationshipToReference };

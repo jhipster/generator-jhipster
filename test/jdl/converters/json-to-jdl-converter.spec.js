@@ -60,12 +60,13 @@ describe('JSONToJDLConverter', () => {
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages [en, fr]
+    languages []
     messageBroker false
     nativeLanguage en
     otherModules []
     packageName com.mycompany.myapp
     prodDatabaseType mysql
+    reactive false
     searchEngine false
     serverPort 8081
     serviceDiscoveryType eureka
@@ -108,12 +109,13 @@ describe('JSONToJDLConverter', () => {
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages [en, fr]
+    languages []
     messageBroker false
     nativeLanguage en
     otherModules []
     packageName com.mycompany.myapp
     prodDatabaseType mysql
+    reactive false
     searchEngine false
     serverPort 8081
     serviceDiscoveryType eureka
@@ -237,12 +239,13 @@ paginate Country with pager
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages [en, fr]
+    languages []
     messageBroker false
     nativeLanguage en
     otherModules []
     packageName com.mycompany.app1
     prodDatabaseType mysql
+    reactive false
     searchEngine false
     serverPort 8081
     serviceDiscoveryType eureka
@@ -271,12 +274,13 @@ application {
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages [en, fr]
+    languages []
     messageBroker false
     nativeLanguage en
     otherModules []
     packageName com.mycompany.app2
     prodDatabaseType mysql
+    reactive false
     searchEngine false
     serverPort 8081
     serviceDiscoveryType eureka
@@ -305,12 +309,13 @@ application {
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages [en, fr]
+    languages []
     messageBroker false
     nativeLanguage en
     otherModules []
     packageName com.mycompany.app3
     prodDatabaseType mysql
+    reactive false
     searchEngine false
     serverPort 8081
     serviceDiscoveryType eureka

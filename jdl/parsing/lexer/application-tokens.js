@@ -49,7 +49,6 @@ const applicationConfigTokens = [
     { name: 'UAA_BASE_NAME', pattern: 'uaaBaseName' },
     { name: 'LANGUAGES', pattern: 'languages' },
     { name: 'SERVER_PORT', pattern: 'serverPort' },
-    { name: 'USE_SASS', pattern: 'useSass' },
     { name: 'JHI_PREFIX', pattern: 'jhiPrefix' },
     { name: 'JWT_SECRET_KEY', pattern: 'jwtSecretKey' },
     { name: 'JHIPSTER_VERSION', pattern: 'jhipsterVersion' },

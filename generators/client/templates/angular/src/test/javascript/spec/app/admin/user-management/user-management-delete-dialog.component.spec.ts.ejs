@@ -29,49 +29,50 @@ import { UserManagementDeleteDialogComponent } from 'app/admin/user-management/u
 import { UserService } from 'app/core/user/user.service';
 
 describe('Component Tests', () => {
-    describe('User Management Delete Component', () => {
-        let comp: UserManagementDeleteDialogComponent;
-        let fixture: ComponentFixture<UserManagementDeleteDialogComponent>;
-        let service: UserService;
-        let mockEventManager: JhiEventManager;
-        let mockActiveModal: NgbActiveModal;
+  describe('User Management Delete Component', () => {
+    let comp: UserManagementDeleteDialogComponent;
+    let fixture: ComponentFixture<UserManagementDeleteDialogComponent>;
+    let service: UserService;
+    let mockEventManager: JhiEventManager;
+    let mockActiveModal: NgbActiveModal;
 
-        beforeEach(waitForAsync(() => {
-            TestBed.configureTestingModule({
-                imports: [HttpClientTestingModule],
-                declarations: [UserManagementDeleteDialogComponent],
-                providers: [NgbActiveModal, JhiEventManager]
-            })
-            .overrideTemplate(UserManagementDeleteDialogComponent, '')
-            .compileComponents();
-        }));
+    beforeEach(
+      waitForAsync(() => {
+        TestBed.configureTestingModule({
+          imports: [HttpClientTestingModule],
+          declarations: [UserManagementDeleteDialogComponent],
+          providers: [NgbActiveModal, JhiEventManager],
+        })
+          .overrideTemplate(UserManagementDeleteDialogComponent, '')
+          .compileComponents();
+      })
+    );
 
-        beforeEach(() => {
-            fixture = TestBed.createComponent(UserManagementDeleteDialogComponent);
-            comp = fixture.componentInstance;
-            service = TestBed.inject(UserService);
-            mockEventManager = TestBed.inject(JhiEventManager);
-            mockActiveModal = TestBed.inject(NgbActiveModal);
-        });
-
-        describe('confirmDelete', () => {
-            it('Should call delete service on confirmDelete',
-                inject([],
-                    fakeAsync(() => {
-                        // GIVEN
-                        spyOn(service, 'delete').and.returnValue(of({}));
-
-                        // WHEN
-                        comp.confirmDelete('user');
-                        tick();
-
-                        // THEN
-                        expect(service.delete).toHaveBeenCalledWith('user');
-                        expect(mockActiveModal.close).toHaveBeenCalled();
-                        expect(mockEventManager.broadcast).toHaveBeenCalled();
-                    })
-                )
-            );
-        });
+    beforeEach(() => {
+      fixture = TestBed.createComponent(UserManagementDeleteDialogComponent);
+      comp = fixture.componentInstance;
+      service = TestBed.inject(UserService);
+      mockEventManager = TestBed.inject(JhiEventManager);
+      mockActiveModal = TestBed.inject(NgbActiveModal);
     });
+
+    describe('confirmDelete', () => {
+      it('Should call delete service on confirmDelete', inject(
+        [],
+        fakeAsync(() => {
+          // GIVEN
+          spyOn(service, 'delete').and.returnValue(of({}));
+
+          // WHEN
+          comp.confirmDelete('user');
+          tick();
+
+          // THEN
+          expect(service.delete).toHaveBeenCalledWith('user');
+          expect(mockActiveModal.close).toHaveBeenCalled();
+          expect(mockEventManager.broadcast).toHaveBeenCalled();
+        })
+      ));
+    });
+  });
 });

@@ -507,7 +507,6 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                         enableTranslation: false,
                         jhiPrefix: 'jhi',
                         messageBroker: false,
-                        nativeLanguage: 'en',
                         packageFolder: 'com/mathieu/sample',
                         packageName: 'com.mathieu.sample',
                         prodDatabaseType: 'postgresql',
@@ -517,7 +516,6 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                         skipClient: false,
                         skipServer: false,
                         skipUserManagement: false,
-                        useSass: true,
                         websocket: false,
                     });
                 });

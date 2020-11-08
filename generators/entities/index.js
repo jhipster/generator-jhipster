@@ -30,9 +30,21 @@ module.exports = class extends BaseBlueprintGenerator {
             type: Boolean,
         });
 
+        this.option('base-name', {
+            desc: 'Application base name',
+            type: String,
+        });
+
+        this.option('defaults', {
+            desc: 'Execute jhipster with default config',
+            type: Boolean,
+            defaults: false,
+        });
+
         this.option('composed-entities', {
             desc: 'Entities to be that already have been composed',
             type: Array,
+            hide: true,
             defaults: [],
         });
 
@@ -56,6 +68,15 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.fs.writeJSON(this.destinationPath(JHIPSTER_CONFIG_DIR, `${entity.name}.json`), entity);
             });
             this.jhipsterConfig.entities = entities;
+        }
+        if (this.options.baseName !== undefined) {
+            this.jhipsterConfig.baseName = this.options.baseName;
+        }
+        if (this.options.defaults) {
+            if (!this.jhipsterConfig.baseName) {
+                this.jhipsterConfig.baseName = this.getDefaultAppName();
+            }
+            this.setConfigDefaults(this.getDefaultConfigForApplicationType());
         }
     }
 

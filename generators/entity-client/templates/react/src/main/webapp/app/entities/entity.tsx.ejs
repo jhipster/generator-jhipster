@@ -311,7 +311,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                       <%_ if (relationships[idx].relationshipType === 'many-to-one'
                       || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
                       || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
-                      const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized; _%>
+                      const fieldName = "." + relationships[idx].otherEntityField; _%>
                   <th<% if (pagination !== 'no') { %> <% } %>><Translate contentKey="<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>"><%= relationships[idx].relationshipNameHumanized %></Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
                       <%_ } _%>
                   <%_ } _%>
@@ -395,11 +395,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                         ) : null
                       }
                         <%_ } else { _%>
-                          <%_ if (dto === 'no') { _%>
                       {<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
-                          <%_ } else { _%>
-                      {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> ? <%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> : ''}
-                            <%_ } _%>
                         <%_ } _%>
                         <%_ } else { _%>
                           <%_ if (relationshipType === 'many-to-many') { _%>
@@ -411,17 +407,10 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                           ) : null
                         }
                           <%_ } else { _%>
-                              <%_ if (dto === 'no') { _%>
                         {<%= entityInstance + "." + relationshipFieldName %> ?
                         <Link to={`<%= otherEntityStateName %>/${<%= entityInstance + "." + relationshipFieldName + ".id}" %>`}>
                           {<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}
                         </Link> : ''}
-                              <%_ } else { _%>
-                        {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> ?
-                        <Link to={`<%= otherEntityStateName %>/${<%= entityInstance + "." + relationshipFieldName + "Id}" %>`}>
-                          {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}
-                        </Link> : ''}
-                              <%_ } _%>
                           <%_ } _%>
                         <%_ } _%>
                       </td>

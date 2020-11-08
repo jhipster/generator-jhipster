@@ -35,7 +35,6 @@ class ApplicationValidator extends Validator {
         }
         checkRequiredOptionsAreSet(jdlApplication);
         checkBaseNameAgainstApplicationType(jdlApplication);
-        checkLanguageOptions(jdlApplication);
         checkForValidValues(jdlApplication);
         checkForInvalidDatabaseCombinations(jdlApplication);
         checkApplicationOptions(jdlApplication);
@@ -53,6 +52,11 @@ function checkRequiredOptionsAreSet(jdlApplication) {
     ) {
         throw new Error('The application applicationType, authenticationType, baseName and buildTool options are required.');
     }
+    if (jdlApplication.getConfigurationOptionValue('applicationType') === UAA && !jdlApplication.hasConfigurationOption('uaaBaseName')) {
+        throw new Error(
+            `The UAA base name option is required for the UAA application ${jdlApplication.getConfigurationOptionValue('baseName')}.`
+        );
+    }
 }
 
 function checkBaseNameAgainstApplicationType(jdlApplication) {
@@ -60,17 +64,6 @@ function checkBaseNameAgainstApplicationType(jdlApplication) {
     const applicationType = jdlApplication.getConfigurationOptionValue('applicationType');
     if (applicationBaseName.includes('_') && (applicationType === UAA || applicationType === MICROSERVICE)) {
         throw new Error("An application name can't contain underscores if the application is a microservice or a UAA application.");
-    }
-}
-
-function checkLanguageOptions(jdlApplication) {
-    const presentTranslationOption = jdlApplication.hasConfigurationOption('enableTranslation');
-    if (presentTranslationOption) {
-        const translationEnabled = jdlApplication.getConfigurationOptionValue('enableTranslation');
-        const presentNativeLanguage = jdlApplication.hasConfigurationOption('nativeLanguage');
-        if (translationEnabled && !presentNativeLanguage) {
-            throw new Error('No chosen language.');
-        }
     }
 }
 

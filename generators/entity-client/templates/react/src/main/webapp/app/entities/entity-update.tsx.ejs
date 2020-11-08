@@ -200,7 +200,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
         , <%= rel.relationshipFieldNamePlural %>: mapIdList(values.<%= rel.relationshipFieldNamePlural %>)
         <%_ }) _%>
       }
-      <%_ if (uniqueRelationFields.has('users') && authenticationType === 'oauth2' && applicationType === 'gateway' && dto !== 'mapstruct') { _%>
+      <%_ if (uniqueRelationFields.has('users') && authenticationType === 'oauth2' && applicationType === 'gateway') { _%>
         <%_ relationships.filter(rel => rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName === 'user').forEach(rel => { _%>
       entity.<%= rel.relationshipFieldName %> = users.find(user => user.id.toString() === values.<%= rel.relationshipFieldName %>.id.toString());
         <%_ }) _%>
@@ -410,7 +410,6 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             <Label for="<%= entityFileName %>-<%= relationshipName %>">
               <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
             </Label>
-            <%_ if (dto === 'no') { _%>
                 <%_ if (!relationshipRequired) { _%>
             <AvInput
               id="<%= entityFileName %>-<%= relationshipName %>"
@@ -430,28 +429,6 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                 ) : null
               }
             </AvInput>
-              <%_ } else { _%>
-            <AvInput
-              id="<%= entityFileName %>-<%= relationshipName %>"
-              data-cy="<%= relationshipFieldName %>"
-              type="select"
-              className="form-control"
-              name="<%= relationshipFieldName %>.id"
-              value={isNew ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : <%= entityInstance %>Entity.<%= relationshipName %>?.id}
-              required
-            >
-              {
-                <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                  <option
-                    value={otherEntity.id}
-                    key={otherEntity.id}>
-                    {otherEntity.<%= otherEntityField %>}
-                  </option>
-                ) : null
-              }
-            </AvInput>
-            <AvFeedback><Translate contentKey="entity.validation.required">This field is required.</Translate></AvFeedback>
-            <%_ } _%>
             <%_ } else { _%>
               <%_ if (!relationshipRequired) { _%>
                 <AvInput
@@ -500,7 +477,6 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             <Label for="<%= entityFileName %>-<%= relationshipName %>">
               <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
             </Label>
-              <%_ if (dto === 'no') { _%>
                 <AvInput
                   id="<%= entityFileName %>-<%= relationshipName %>"
                   data-cy="<%= relationshipFieldName %>"
@@ -519,26 +495,6 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                     ) : null
                   }
                 </AvInput>
-              <%_ } else { _%>
-                <AvInput
-                  id="<%= entityFileName %>-<%= relationshipName %>"
-                  data-cy="<%= relationshipFieldName %>"
-                  type="select"
-                  className="form-control"
-                  name="<%= relationshipFieldName %>Id"
-                >
-                  <option value="" key="0" />
-                  {
-                    <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                      <option
-                        value={otherEntity.id}
-                        key={otherEntity.id}>
-                        {otherEntity.<%= otherEntityField %>}
-                      </option>
-                    ) : null
-                  }
-                </AvInput>
-              <%_ } _%>
           </AvGroup>
               <%_ } else if (relationshipType === 'many-to-many' && rel.ownerSide === true) { _%>
           <AvGroup>

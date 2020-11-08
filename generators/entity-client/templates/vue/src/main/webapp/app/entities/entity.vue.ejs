@@ -52,7 +52,7 @@
                         <%_ if (relationships[idx].relationshipType === 'many-to-one'
                         || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
                         || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
-                            const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
+                            const fieldName = "." + relationships[idx].otherEntityField; _%>
                     <th scope="row"<% if (pagination !== 'no') { %> v-on:click="changeOrder('<%=relationships[idx].relationshipName + (fieldName)%>')"<% } %>><span v-text="$t('<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>')"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%=relationships[idx].relationshipName + (fieldName)%>'"></jhi-sort-indicator><% } %></th>
                         <%_ } _%>
                     <%_ } _%>
@@ -117,11 +117,7 @@
                             {{<%= relationshipFieldName %>.<%= otherEntityField %>}}
                         </span>
                                 <%_ } else { _%>
-                                    <%_ if (dto === 'no') { _%>
                         {{<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField%> : ''}}
-                                    <%_ } else { _%>
-                        {{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}
-                                    <%_ } _%>
                                 <%_ } _%>
                             <%_ } else { _%>
                                 <%_ if (relationshipType === 'many-to-many') { _%>
@@ -129,15 +125,9 @@
                             <router-link class="form-control-static" :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= relationshipFieldName %>.id}}">{{<%= relationshipFieldName + "." + otherEntityField %>}}</router-link>
                         </span>
                                 <%_ } else { _%>
-                                    <%_ if (dto === 'no') { _%>
                         <div v-if="<%= entityInstance + "." + relationshipFieldName %>">
                             <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= entityInstance + "." + relationshipFieldName %>.id}}">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</router-link>
                         </div>
-                                    <%_ } else { _%>
-                        <div v-if="<%= entityInstance + "." + relationshipFieldName + "Id" %>">
-                            <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= entityInstance + "." + relationshipFieldName + "Id" %>}}">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</router-link>
-                        </div>
-                                    <%_ } _%>
                                 <%_ } _%>
                             <%_ } _%>
                     </td>

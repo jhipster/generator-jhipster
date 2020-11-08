@@ -19,7 +19,6 @@
         "enableSwaggerCodegen": false,
         "jwtSecretKey": "Njc1MTI5MjM2OWNhMDUyNjI4ZmNhOWU0YTQ1OTYwMmU0YWZhNDI1YmZlMmQ2MDM3Mjc1YjdiMTBkNThiOWExZWNhNjI4ODE3ZTZkMDM0MDcxOTkzOWRkN2IzMjdmODljZjIxZmRkOGY0OGU0NDBjMDU5ZWQ3MGJhMjhjZWM2OWU=",
         "embeddableLaunchScript": false,
-        "useSass": true,
         "clientPackageManager": "npm",
         "clientFramework": "angularX",
         "clientTheme": "none",

@@ -31,6 +31,7 @@ const {
     CLIENT_PACKAGE_MANAGER,
     CLIENT_THEME,
     CLIENT_THEME_VARIANT,
+    WITH_ADMIN_UI,
     DATABASE_TYPE,
     DEV_DATABASE_TYPE,
     DTO_SUFFIX,
@@ -41,7 +42,6 @@ const {
     JHI_PREFIX,
     LANGUAGES,
     MESSAGE_BROKER,
-    NATIVE_LANGUAGE,
     PACKAGE_FOLDER,
     PACKAGE_NAME,
     PROD_DATABASE_TYPE,
@@ -54,7 +54,6 @@ const {
     SKIP_USER_MANAGEMENT,
     TEST_FRAMEWORKS,
     USE_NPM,
-    USE_SASS,
     WEBSOCKET,
 } = OptionNames;
 
@@ -64,7 +63,24 @@ module.exports = {
     getConfigForMicroserviceApplication,
     getConfigForUAAApplication,
     getDefaultConfigForNewApplication,
+    getConfigForApplicationType,
 };
+
+function getConfigForApplicationType(applicationType = undefined, customOptions = {}) {
+    if (applicationType === MONOLITH) {
+        return getConfigForMonolithApplication(customOptions);
+    }
+    if (applicationType === GATEWAY) {
+        return getConfigForGatewayApplication(customOptions);
+    }
+    if (applicationType === MICROSERVICE) {
+        return getConfigForMicroserviceApplication(customOptions);
+    }
+    if (applicationType === UAA) {
+        return getConfigForUAAApplication(customOptions);
+    }
+    return getDefaultConfigForNewApplication(customOptions);
+}
 
 function getConfigForMonolithApplication(customOptions = {}) {
     const options = {
@@ -74,6 +90,7 @@ function getConfigForMonolithApplication(customOptions = {}) {
         [SERVER_PORT]: OptionValues[SERVER_PORT],
         [SERVICE_DISCOVERY_TYPE]: false,
         [SKIP_USER_MANAGEMENT]: OptionValues[SKIP_USER_MANAGEMENT],
+        [WITH_ADMIN_UI]: true,
         ...customOptions,
     };
     if (!options[CLIENT_THEME]) {
@@ -84,9 +101,6 @@ function getConfigForMonolithApplication(customOptions = {}) {
     }
     if (options[AUTHENTICATION_TYPE] === OptionValues[AUTHENTICATION_TYPE].oauth2) {
         options[SKIP_USER_MANAGEMENT] = true;
-    }
-    if (typeof options[USE_SASS] !== 'boolean') {
-        options[USE_SASS] = true;
     }
 
     return {
@@ -114,9 +128,6 @@ function getConfigForGatewayApplication(customOptions = {}) {
     if (options[AUTHENTICATION_TYPE] === OptionValues[AUTHENTICATION_TYPE].oauth2) {
         options[SKIP_USER_MANAGEMENT] = true;
     }
-    if (typeof options[USE_SASS] !== 'boolean') {
-        options[USE_SASS] = true;
-    }
     if (options[SERVICE_DISCOVERY_TYPE] === false) {
         options[SERVICE_DISCOVERY_TYPE] = OptionValues[SERVICE_DISCOVERY_TYPE].eureka;
     }
@@ -142,7 +153,6 @@ function getConfigForMicroserviceApplication(customOptions = {}) {
     delete options[CLIENT_FRAMEWORK];
     delete options[CLIENT_THEME];
     delete options[CLIENT_THEME_VARIANT];
-    delete options[USE_SASS];
     delete options[SKIP_SERVER];
     if (typeof options[SKIP_USER_MANAGEMENT] !== 'boolean') {
         options[SKIP_USER_MANAGEMENT] = true;
@@ -171,7 +181,6 @@ function getConfigForUAAApplication(customOptions = {}) {
     delete options[CLIENT_FRAMEWORK];
     delete options[CLIENT_THEME];
     delete options[CLIENT_THEME_VARIANT];
-    delete options[USE_SASS];
     delete options[SKIP_SERVER];
     return {
         ...options,
@@ -188,13 +197,13 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
         [BUILD_TOOL]: OptionValues[BUILD_TOOL].maven,
         [DATABASE_TYPE]: OptionValues[DATABASE_TYPE].sql,
         [DEV_DATABASE_TYPE]: OptionValues[DEV_DATABASE_TYPE].h2Disk,
+        [CACHE_PROVIDER]: OptionValues[CACHE_PROVIDER].ehcache,
         [ENABLE_HIBERNATE_CACHE]: OptionValues[ENABLE_HIBERNATE_CACHE],
         [ENABLE_SWAGGER_CODEGEN]: OptionValues[ENABLE_SWAGGER_CODEGEN],
         [ENABLE_TRANSLATION]: OptionValues[ENABLE_TRANSLATION],
         [JHI_PREFIX]: OptionValues[JHI_PREFIX],
         [LANGUAGES]: OptionValues[LANGUAGES],
         [MESSAGE_BROKER]: OptionValues[MESSAGE_BROKER].false,
-        [NATIVE_LANGUAGE]: OptionValues[NATIVE_LANGUAGE],
         [PROD_DATABASE_TYPE]: OptionValues[PROD_DATABASE_TYPE].postgresql,
         [SEARCH_ENGINE]: OptionValues[SEARCH_ENGINE].false,
         [SKIP_CLIENT]: OptionValues[SKIP_CLIENT],
@@ -221,11 +230,11 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
     if (!options[CLIENT_PACKAGE_MANAGER] && OptionValues[USE_NPM]) {
         options[CLIENT_PACKAGE_MANAGER] = OptionValues[CLIENT_PACKAGE_MANAGER].npm;
     }
-    if (typeof options[DTO_SUFFIX] === 'boolean') {
-        options[DTO_SUFFIX] = 'DTO';
+    if (typeof options[DTO_SUFFIX] === 'boolean' || typeof options[DTO_SUFFIX] !== 'string') {
+        options[DTO_SUFFIX] = OptionValues[DTO_SUFFIX];
     }
-    if (typeof options[ENTITY_SUFFIX] === 'boolean') {
-        options[ENTITY_SUFFIX] = '';
+    if (typeof options[ENTITY_SUFFIX] === 'boolean' || typeof options[ENTITY_SUFFIX] !== 'string') {
+        options[ENTITY_SUFFIX] = OptionValues[ENTITY_SUFFIX];
     }
     if ([MONGODB, COUCHBASE, CASSANDRA, NO].includes(options[DATABASE_TYPE])) {
         options[DEV_DATABASE_TYPE] = options[DATABASE_TYPE];
@@ -236,6 +245,8 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
     }
     if (options[REACTIVE]) {
         options[CACHE_PROVIDER] = OptionValues[CACHE_PROVIDER].no;
+    } else {
+        options[REACTIVE] = OptionValues[REACTIVE];
     }
     return options;
 }

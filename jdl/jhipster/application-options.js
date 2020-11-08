@@ -39,6 +39,7 @@ const optionNames = {
     CLIENT_PACKAGE_MANAGER: 'clientPackageManager',
     CLIENT_THEME: 'clientTheme',
     CLIENT_THEME_VARIANT: 'clientThemeVariant',
+    WITH_ADMIN_UI: 'withAdminUi',
     CREATION_TIMESTAMP: 'creationTimestamp',
     DATABASE_TYPE: 'databaseType',
     DEV_DATABASE_TYPE: 'devDatabaseType',
@@ -74,7 +75,6 @@ const optionNames = {
     SKIP_USER_MANAGEMENT: 'skipUserManagement',
     TEST_FRAMEWORKS: 'testFrameworks',
     UAA_BASE_NAME: 'uaaBaseName',
-    USE_SASS: 'useSass',
     WEBSOCKET: 'websocket',
     WITH_ENTITIES: 'withEntities',
 };
@@ -144,12 +144,11 @@ const optionValues = {
     [optionNames.JHI_PREFIX]: 'jhi',
     [optionNames.JHIPSTER_VERSION]: '',
     [optionNames.JWT_SECRET_KEY]: '',
-    [optionNames.LANGUAGES]: ['en', 'fr'],
+    [optionNames.LANGUAGES]: [],
     [optionNames.MESSAGE_BROKER]: {
         kafka: 'kafka',
         false: false,
     },
-    [optionNames.NATIVE_LANGUAGE]: 'en',
     [optionNames.NPM]: true,
     [optionNames.OTHER_MODULES]: [],
     [optionNames.PACKAGE_FOLDER]: 'com/mycompany/myapp',
@@ -189,7 +188,6 @@ const optionValues = {
     },
     [optionNames.UAA_BASE_NAME]: '../uaa',
     [optionNames.USE_NPM]: true,
-    [optionNames.USE_SASS]: false,
     [optionNames.WEBSOCKET]: {
         'spring-websocket': 'spring-websocket',
         false: false,
@@ -245,7 +243,6 @@ const optionTypes = {
     [optionNames.TEST_FRAMEWORKS]: { type: ApplicationOptionTypes.LIST },
     [optionNames.UAA_BASE_NAME]: { type: ApplicationOptionTypes.STRING },
     [optionNames.USE_NPM]: { type: ApplicationOptionTypes.BOOLEAN },
-    [optionNames.USE_SASS]: { type: ApplicationOptionTypes.BOOLEAN },
     [optionNames.WEBSOCKET]: { type: ApplicationOptionTypes.STRING },
     [optionNames.WITH_ENTITIES]: { type: ApplicationOptionTypes.BOOLEAN },
 };

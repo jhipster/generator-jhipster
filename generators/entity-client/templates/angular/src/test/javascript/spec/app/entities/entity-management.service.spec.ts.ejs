@@ -57,11 +57,6 @@ describe('Service Tests', () => {
             <%_ } _%>
 
             elemDefault = new <%= entityAngularName %>(
-                <%_ if (tsKeyType === 'string') { _%>
-                'ID',
-                <%_ } else { _%>
-                0,
-                <%_ } _%>
             <%_ fields.forEach((field) => {
                 const fieldType = field.fieldType;
             _%>

@@ -17,17 +17,11 @@
  limitations under the License.
 -%>
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-        "outDir": "<%= BUILD_DIR %>out-tsc/spec",
-        "types": [
-            "jest", "node"
-        ]
-    },
-    "files": [
-        "<%= MAIN_SRC_DIR %>app/polyfills.ts"
-    ],
-    "include": [
-        "<%= CLIENT_TEST_SRC_DIR %>**/*.spec.ts"
-    ]
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "<%= BUILD_DIR %>out-tsc/spec",
+    "types": ["jest", "node"]
+  },
+  "files": ["<%= MAIN_SRC_DIR %>app/polyfills.ts"],
+  "include": ["<%= CLIENT_TEST_SRC_DIR %>**/*.spec.ts"]
 }

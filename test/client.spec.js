@@ -24,7 +24,7 @@ describe('JHipster client generator', () => {
                     serviceDiscoveryType: false,
                     enableTranslation: true,
                     nativeLanguage: 'en',
-                    languages: ['fr'],
+                    languages: ['fr', 'en'],
                     clientFramework: REACT,
                 })
                 .on('end', done);
@@ -62,7 +62,7 @@ describe('JHipster client generator', () => {
                     serviceDiscoveryType: false,
                     enableTranslation: true,
                     nativeLanguage: 'en',
-                    languages: ['fr'],
+                    languages: ['fr', 'en'],
                     clientFramework: ANGULAR,
                 })
                 .on('end', done);
