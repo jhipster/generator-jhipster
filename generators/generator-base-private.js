@@ -692,35 +692,6 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
 
     /**
-     * get hibernate SnakeCase in JHipster preferred style.
-     *
-     * @param {string} value - table column name or table name string
-     * @see org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
-     * @returns hibernate SnakeCase in JHipster preferred style
-     */
-    hibernateSnakeCase(value) {
-        let res = '';
-        if (value) {
-            value = value.replace('.', '_');
-            res = value[0];
-            for (let i = 1, len = value.length - 1; i < len; i++) {
-                if (
-                    value[i - 1] !== value[i - 1].toUpperCase() &&
-                    value[i] !== value[i].toLowerCase() &&
-                    value[i + 1] !== value[i + 1].toUpperCase()
-                ) {
-                    res += `_${value[i]}`;
-                } else {
-                    res += value[i];
-                }
-            }
-            res += value[value.length - 1];
-            res = res.toLowerCase();
-        }
-        return res;
-    }
-
-    /**
      * Function to issue a https get request, and process the result
      *
      *  @param {string} url - the url to fetch

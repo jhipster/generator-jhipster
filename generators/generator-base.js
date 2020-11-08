@@ -34,6 +34,7 @@ const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig } = require('./generator-defaults');
 const { formatDateForChangelog } = require('../utils/liquibase');
+const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 const databaseTypes = require('../jdl/jhipster/database-types');
 
@@ -1620,7 +1621,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} value - table name string
      */
     getTableName(value) {
-        return this.hibernateSnakeCase(value);
+        return hibernateSnakeCase(value);
     }
 
     /**
@@ -1629,7 +1630,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} value - table column name string
      */
     getColumnName(value) {
-        return this.hibernateSnakeCase(value);
+        return hibernateSnakeCase(value);
     }
 
     /**
@@ -1640,7 +1641,10 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} prodDatabaseType - database type
      */
     getJoinTableName(entityName, relationshipName, prodDatabaseType) {
-        const joinTableName = `${this.getTableName(entityName)}_${this.getTableName(relationshipName)}`;
+        const legacyDbNames = this.jhipsterConfig && this.jhipsterConfig.legacyDbNames;
+        const separator = legacyDbNames ? '_' : '__';
+        const prefix = legacyDbNames ? '' : 'rel_';
+        const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
         let limit = 0;
         if (prodDatabaseType === 'oracle' && joinTableName.length > 30 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
@@ -1667,13 +1671,9 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
 
             limit = 64;
         }
-        if (limit > 0) {
-            const halfLimit = Math.floor(limit / 2);
-            const entityTable = this.getTableName(entityName).substring(0, halfLimit);
-            const relationTable = this.getTableName(relationshipName).substring(0, limit - entityTable.length - 1);
-            return `${entityTable}_${relationTable}`;
-        }
-        return joinTableName;
+        return limit === 0
+            ? joinTableName
+            : calculateDbNameWithLimit(entityName, relationshipName, limit, { prefix, separator, appendHash: !legacyDbNames });
     }
 
     /**
@@ -1683,14 +1683,16 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} columnOrRelationName - name of the column or related entity
      * @param {string} prodDatabaseType - database type
      * @param {boolean} noSnakeCase - do not convert names to snakecase
-     * @param {string} constraintNamePrefix - constraintName prefix for the constraintName
+     * @param {string} prefix - constraintName prefix for the constraintName
      */
-    getConstraintNameWithLimit(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, constraintNamePrefix = '') {
+    getConstraintNameWithLimit(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '') {
         let constraintName;
+        const legacyDbNames = this.jhipsterConfig && this.jhipsterConfig.legacyDbNames;
+        const separator = legacyDbNames ? '_' : '__';
         if (noSnakeCase) {
-            constraintName = `${constraintNamePrefix}${entityName}_${columnOrRelationName}`;
+            constraintName = `${prefix}${entityName}${separator}${columnOrRelationName}`;
         } else {
-            constraintName = `${constraintNamePrefix}${this.getTableName(entityName)}_${this.getTableName(columnOrRelationName)}`;
+            constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}`;
         }
         let limit = 0;
         if (prodDatabaseType === databaseTypes.ORACLE && constraintName.length >= 27 && !this.skipCheckLengthOfIdentifier) {
@@ -1718,15 +1720,14 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
 
             limit = 62;
         }
-        if (limit > 0) {
-            const halfLimit = Math.floor(limit / 2);
-            const entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : this.getTableName(entityName).substring(0, halfLimit);
-            const otherTable = noSnakeCase
-                ? columnOrRelationName.substring(0, limit - entityTable.length - 2)
-                : this.getTableName(columnOrRelationName).substring(0, limit - entityTable.length - 2);
-            return `${entityTable}_${otherTable}`;
-        }
-        return constraintName;
+        return limit === 0
+            ? constraintName
+            : calculateDbNameWithLimit(entityName, columnOrRelationName, limit - 1, {
+                  separator,
+                  noSnakeCase,
+                  prefix,
+                  appendHash: !legacyDbNames,
+              });
     }
 
     /**
@@ -2411,6 +2412,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
         if (options.testFrameworks) {
             this.jhipsterConfig.testFrameworks = options.testFrameworks;
+        }
+        if (options.legacyDbNames !== undefined) {
+            this.jhipsterConfig.legacyDbNames = options.legacyDbNames;
         }
 
         if (options.creationTimestamp) {

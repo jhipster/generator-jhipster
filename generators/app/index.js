@@ -200,6 +200,11 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
             type: Boolean,
         });
 
+        this.option('legacy-db-names', {
+            desc: 'Generate database names with jhipster 6 compatibility.',
+            type: Boolean,
+        });
+
         // Just constructing help, stop here
         if (this.options.help) {
             return;
