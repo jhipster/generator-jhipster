@@ -4,7 +4,7 @@ const helpers = require('yeoman-test');
 const ClientGenerator = require('../../generators/client');
 const constants = require('../../generators/generator-constants');
 
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const { ANGULAR, VUE, REACT } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 const assetFrom = 'source';
 const assetTo = 'target';
@@ -50,9 +50,9 @@ const mockBlueprintSubGen = class extends ClientGenerator {
 };
 
 describe('needle API Webpack: JHipster client generator with blueprint', () => {
-    before(done => {
-        helpers
-            .run(path.join(__dirname, '../../generators/client'))
+    function generateAppWithClientFramework(clientFramework) {
+        return helpers
+            .create(path.join(__dirname, '../../generators/client'))
             .withOptions({
                 fromCli: true,
                 build: 'maven',
@@ -65,14 +65,24 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
             .withPrompts({
                 baseName: 'jhipster',
-                clientFramework: ANGULAR,
+                clientFramework,
                 enableTranslation: true,
                 nativeLanguage: 'en',
                 languages: ['en', 'fr'],
             })
-            .on('end', done);
+            .run();
+    }
+
+    it('Assert external asset is added to webpack.custom.js if framework is Angular', async () => {
+        await generateAppWithClientFramework(ANGULAR);
+        assert.fileContent(`${CLIENT_WEBPACK_DIR}webpack.custom.js`, `{ from: '${assetFrom}', to: '${assetTo}' },`);
     });
-    it('Assert external asset is added to webpack.common.js', () => {
-        assert.fileContent(`${CLIENT_WEBPACK_DIR}/webpack.common.js`, `{ from: '${assetFrom}', to: '${assetTo}' },`);
+    it('Assert external asset is added to webpack.common.js if framework is React', async () => {
+        await generateAppWithClientFramework(REACT);
+        assert.fileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, `{ from: '${assetFrom}', to: '${assetTo}' },`);
+    });
+    it('Assert external asset is added to webpack.common.js if framework is Vue', async () => {
+        await generateAppWithClientFramework(VUE);
+        assert.fileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, `{ from: '${assetFrom}', to: '${assetTo}' },`);
     });
 });

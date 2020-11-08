@@ -20,7 +20,7 @@
     eventSubscriber?: Subscription;
     isLoading = false;
     itemsPerPage: number;
-    links: any;
+    links: { [key: string]: number };
     page: number;
     predicate: string;
     ascending: boolean;
@@ -51,8 +51,7 @@
         this.predicate = 'id';
         this.ascending = true;
         <%_ if (searchEngine !== false) { _%>
-        this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search'] ?
-            this.activatedRoute.snapshot.queryParams['search'] : '';
+        this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
         <%_ } _%>
     }
 

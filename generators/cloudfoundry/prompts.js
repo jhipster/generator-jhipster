@@ -23,8 +23,7 @@ module.exports = {
     prompting,
 };
 
-function prompting() {
-    const done = this.async();
+async function prompting() {
     const databaseType = this.databaseType;
     const prompts = [
         {
@@ -62,16 +61,15 @@ function prompting() {
         },
     ];
 
-    this.prompt(prompts).then(props => {
-        this.cloudfoundryDeployedName = _.kebabCase(props.cloudfoundryDeployedName).split('-').join('');
-        this.cloudfoundryProfile = props.cloudfoundryProfile;
-        this.cloudfoundryDatabaseServiceName = props.cloudfoundryDatabaseServiceName;
-        this.cloudfoundryDatabaseServicePlan = props.cloudfoundryDatabaseServicePlan;
+    const props = await this.prompt(prompts);
 
-        if ((this.devDatabaseType === 'h2Disk' || this.devDatabaseType === 'h2Memory') && this.cloudfoundryProfile === 'dev') {
-            this.log(chalk.yellow('\nH2 database will not work with development profile. Setting production profile.'));
-            this.cloudfoundryProfile = 'prod';
-        }
-        done();
-    });
+    this.cloudfoundryDeployedName = _.kebabCase(props.cloudfoundryDeployedName).split('-').join('');
+    this.cloudfoundryProfile = props.cloudfoundryProfile;
+    this.cloudfoundryDatabaseServiceName = props.cloudfoundryDatabaseServiceName;
+    this.cloudfoundryDatabaseServicePlan = props.cloudfoundryDatabaseServicePlan;
+
+    if ((this.devDatabaseType === 'h2Disk' || this.devDatabaseType === 'h2Memory') && this.cloudfoundryProfile === 'dev') {
+        this.log(chalk.yellow('\nH2 database will not work with development profile. Setting production profile.'));
+        this.cloudfoundryProfile = 'prod';
+    }
 }

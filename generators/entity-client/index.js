@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const chalk = require('chalk');
 const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
@@ -30,7 +29,14 @@ let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
-        utils.copyObjectProps(this, opts.context);
+        this.entity = opts.context;
+
+        if (this.jhipsterConfig.clientFramework !== ANGULAR) {
+            // Remove fields with custom ids, drop once templates supports them
+            this.entity = { ...this.entity, fields: this.entity.fieldsNoId };
+        }
+
+        utils.copyObjectProps(this, this.entity);
         this.jhipsterContext = opts.jhipsterContext || opts.context;
 
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-client', { context: opts.context });
@@ -76,22 +82,5 @@ module.exports = class extends BaseBlueprintGenerator {
     get writing() {
         if (useBlueprints) return;
         return this._writing();
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _end() {
-        return {
-            end() {
-                if (!this.options.skipInstall && !this.skipClient) {
-                    this.rebuildClient();
-                }
-                this.log(chalk.bold.green(`Entity ${this.entityNameCapitalized} generated successfully.`));
-            },
-        };
-    }
-
-    get end() {
-        if (useBlueprints) return;
-        return this._end();
     }
 };

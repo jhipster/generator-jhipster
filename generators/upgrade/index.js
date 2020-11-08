@@ -42,12 +42,7 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
+
         // This adds support for a `--target-version` flag
         this.option('target-version', {
             desc: 'Upgrade to a specific version instead of the latest',

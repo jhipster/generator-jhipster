@@ -54,7 +54,7 @@
                                         <div *ngIf="!instance.instanceInfo" class="badge badge-warning">?</div>
                                     </td>
                                     <td>
-                                        <span *ngFor="let entry of (instance.metadata | keys )">
+                                        <span *ngFor="let entry of (instance.metadata | keyvalue )">
                                             <span class="badge badge-default font-weight-normal">
                                                 <span class="badge badge-pill badge-info font-weight-normal">{{ entry.key }}</span>
                                                 {{ entry.value }}

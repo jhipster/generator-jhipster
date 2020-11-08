@@ -65,11 +65,7 @@
                             {{<%= relationshipFieldName %>.<%= otherEntityField %>}}
                         </span>
                                 <%_ } else { _%>
-                                    <%_ if (dto === 'no') { _%>
                         {{<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField%> : ''}}
-                                    <%_ } else { _%>
-                        {{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}
-                                    <%_ } _%>
                                 <%_ } _%>
                             <%_ } else { _%>
                                 <%_ if (relationshipType === 'many-to-many') { _%>
@@ -77,15 +73,9 @@
                             <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= relationshipFieldName %>.id}}">{{<%= relationshipFieldName + "." + otherEntityField %>}}</router-link>
                         </span>
                                 <%_ } else { _%>
-                                    <%_ if (dto === 'no') { _%>
                         <div v-if="<%= entityInstance + '.' + relationshipFieldName %>">
                             <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= entityInstance + "." + relationshipFieldName %>.id}}">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</router-link>
                         </div>
-                                    <%_ } else { _%>
-                        <div v-if="<%= entityInstance + '.' + relationshipFieldName + "Id" %>">
-                            <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= entityInstance + "." + relationshipFieldName + "Id" %>}}">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</router-link>
-                        </div>
-                                    <%_ } _%>
                                 <%_ } _%>
                             <%_ } _%>
                     </dd>

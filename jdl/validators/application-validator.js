@@ -52,6 +52,11 @@ function checkRequiredOptionsAreSet(jdlApplication) {
     ) {
         throw new Error('The application applicationType, authenticationType, baseName and buildTool options are required.');
     }
+    if (jdlApplication.getConfigurationOptionValue('applicationType') === UAA && !jdlApplication.hasConfigurationOption('uaaBaseName')) {
+        throw new Error(
+            `The UAA base name option is required for the UAA application ${jdlApplication.getConfigurationOptionValue('baseName')}.`
+        );
+    }
 }
 
 function checkBaseNameAgainstApplicationType(jdlApplication) {

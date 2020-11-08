@@ -19,47 +19,33 @@
 import { NgModule } from '@angular/core';
 import { SharedLibsModule } from './shared-libs.module';
 <%_ if (enableTranslation) { _%>
-import { FindLanguageFromKeyPipe } from './language/find-language-from-key.pipe';
+import { FindLanguageFromKeyPipe } from './find-language-from-key.pipe';
 <%_ } _%>
 import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
-<%_ if (authenticationType !== 'oauth2') { _%>
-import { LoginModalComponent } from '../core/login/login-modal.component';
-<%_ } _%>
-import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
+import { HasAnyAuthorityDirective } from './has-any-authority.directive';
 import { DurationPipe } from './duration.pipe';
 
 @NgModule({
-    imports: [
-        SharedLibsModule
-    ],
-    declarations: [
-        <%_ if (enableTranslation) { _%>
-        FindLanguageFromKeyPipe,
-        <%_ } _%>
-        AlertComponent,
-        AlertErrorComponent,
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        LoginModalComponent,
-        <%_ } _%>
-        HasAnyAuthorityDirective,
-        DurationPipe
-    ],
-    <%_ if (authenticationType !== 'oauth2') { _%>
-    entryComponents: [LoginModalComponent],
+  imports: [SharedLibsModule],
+  declarations: [
+    <%_ if (enableTranslation) { _%>
+    FindLanguageFromKeyPipe,
     <%_ } _%>
-    exports: [
-        SharedLibsModule,
-        <%_ if (enableTranslation) { _%>
-        FindLanguageFromKeyPipe,
-        <%_ } _%>
-        AlertComponent,
-        AlertErrorComponent,
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        LoginModalComponent,
-        <%_ } _%>
-        HasAnyAuthorityDirective,
-        DurationPipe
-    ]
+    AlertComponent,
+    AlertErrorComponent,
+    HasAnyAuthorityDirective,
+    DurationPipe,
+  ],
+  exports: [
+    SharedLibsModule,
+    <%_ if (enableTranslation) { _%>
+    FindLanguageFromKeyPipe,
+    <%_ } _%>
+    AlertComponent,
+    AlertErrorComponent,
+    HasAnyAuthorityDirective,
+    DurationPipe,
+  ],
 })
 export class SharedModule {}

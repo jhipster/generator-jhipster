@@ -10,6 +10,6 @@ export class DurationPipe implements PipeTransform {
     if (value) {
       return dayjs.duration(value).humanize();
     }
-    return "";
+    return '';
   }
 }

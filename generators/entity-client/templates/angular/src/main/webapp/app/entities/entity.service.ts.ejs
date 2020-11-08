@@ -31,10 +31,13 @@ import * as dayjs from 'dayjs';
 <%_ } _%>
 
 <%_ if (fieldsContainLocalDate) { _%>
-import { DATE_FORMAT } from 'app/shared/constants/input.constants';
+import { DATE_FORMAT } from 'app/core/config/input.constants';
 <%_ } _%>
 import { SERVER_API_URL } from 'app/app.constants';
-import { createRequestOption<% if (searchEngine !== false) { %>, <%= searchType %><% } %> } from 'app/shared/util/request-util';
+import { createRequestOption } from 'app/core/request/request-util';
+<%_ if (searchEngine !== false) { _%>
+import { <%= searchType %> } from 'app/core/request/request.model';
+<%_ } _%>
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 type EntityResponseType = HttpResponse<I<%= entityAngularName %>>;
@@ -101,10 +104,10 @@ export class <%= entityAngularName %>Service {
         const copy: I<%= entityAngularName %> = Object.assign({}, <%= entityInstance %>, {
     <%_ for (idx in fields) { _%>
         <%_ if ( ['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType) ) { _%>
-        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %> && <%= entityInstance %>.<%= fields[idx].fieldName %>.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.toJSON() : undefined,
+        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %>?.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.toJSON() : undefined,
         <%_ } _%>
         <%_ if ( fields[idx].fieldType === 'LocalDate' ) { _%>
-        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %> && <%= entityInstance %>.<%= fields[idx].fieldName %>.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.format(DATE_FORMAT) : undefined,
+        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %>?.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.format(DATE_FORMAT) : undefined,
         <%_ } _%>
     <%_ } _%>
         });

@@ -92,7 +92,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.searchEngine === 'elasticsearch',
+            condition: generator => generator.searchEngine === 'elasticsearch' && !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -198,7 +198,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.searchEngine === 'elasticsearch',
+            condition: generator => generator.searchEngine === 'elasticsearch' && !generator.embedded,
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {

@@ -20,7 +20,7 @@
 const constants = require('./generator-constants');
 const { languageSnakeCase, languageToJavaLanguage } = require('./utils');
 
-const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR } = constants;
+const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR, CLIENT_WEBPACK_DIR } = constants;
 
 const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
@@ -113,18 +113,40 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.route.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.module.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.service.ts`);
-            generator.removeFile(`${ANGULAR_DIR}blocks/interceptor/errorhandler.interceptor.ts`);
             generator.removeFile(`${ANGULAR_DIR}entities/entity.module.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/util/datepicker-adapter.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.html`);
             generator.removeFile(`${ANGULAR_DIR}core/auth/user-route-access-service.ts`);
-            generator.removeFile(`${ANGULAR_DIR}tsconfig.base.json`);
+            generator.removeFolder(`${ANGULAR_DIR}core/login`);
+            generator.removeFolder(`${ANGULAR_DIR}blocks`);
+            generator.removeFolder(`${ANGULAR_DIR}core/date`);
+            generator.removeFolder(`${ANGULAR_DIR}core/icons`);
+            generator.removeFolder(`${ANGULAR_DIR}core/language`);
+            generator.removeFolder(`${ANGULAR_DIR}shared/auth`);
+            generator.removeFolder(`${ANGULAR_DIR}shared/language`);
+            generator.removeFolder(`${ANGULAR_DIR}shared/constants`);
+            generator.removeFolder(`${ANGULAR_DIR}shared/util`);
+            generator.removeFile(`${ANGULAR_DIR}config/dayjs.ts`);
+            generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.common.js`);
+            generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.dev.js`);
+            generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.prod.js`);
+            generator.removeFile(`${CLIENT_WEBPACK_DIR}utils.js`);
+            generator.removeFile('tsconfig.base.json');
+            generator.removeFile('postcss.config.js');
+            generator.removeFile('proxy.conf.json');
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/login/login-modal.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/login/login-modal.service.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.service.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/test.module.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest-global-mocks.ts`);
+            generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/helpers`);
+            generator.removeFile('tslint.json');
         } else if (generator.jhipsterConfig.clientFramework === REACT) {
-            generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx.ejs`);
+            generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/enzyme-setup.ts`);
         } else if (generator.jhipsterConfig.clientFramework === VUE) {
             generator.removeFile(`${VUE_DIR}admin/audits/audits.component.ts`);

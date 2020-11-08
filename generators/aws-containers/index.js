@@ -65,12 +65,6 @@ module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
         // This adds support for a `--skip-build` flag
         this.option('skip-build', {
             desc: 'Disables the project build step',

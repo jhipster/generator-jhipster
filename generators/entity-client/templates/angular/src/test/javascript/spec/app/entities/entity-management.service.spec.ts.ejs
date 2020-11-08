@@ -21,11 +21,11 @@ const tsKeyId = generateTestEntityId(primaryKeyType);
 const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto, undefined, embedded);
 const enumImports = generateEntityClientEnumImports(fields);
 _%>
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 <%_ if (fieldsContainDate) { _%>
 import * as dayjs from 'dayjs';
-import { <% if (fieldsContainLocalDate) { %>DATE_FORMAT,<% } if (fieldsContainInstant || fieldsContainZonedDateTime) { %> DATE_TIME_FORMAT<% } %> } from 'app/shared/constants/input.constants';
+import { <% if (fieldsContainLocalDate) { %>DATE_FORMAT,<% } if (fieldsContainInstant || fieldsContainZonedDateTime) { %> DATE_TIME_FORMAT<% } %> } from 'app/core/config/input.constants';
 <%_ } _%>
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
@@ -35,7 +35,6 @@ import { <%- importedType %> } from '<%- importedPath %>';
 
 describe('Service Tests', () => {
     describe('<%= entityAngularName %> Service', () => {
-        let injector: TestBed;
         let service: <%= entityAngularName %>Service;
         let httpMock: HttpTestingController;
         let elemDefault: I<%= entityAngularName %>;
@@ -51,19 +50,13 @@ describe('Service Tests', () => {
                 ]
             });
             expectedResult = null;
-            injector = getTestBed();
-            service = injector.get(<%= entityAngularName %>Service);
-            httpMock = injector.get(HttpTestingController);
+            service = TestBed.inject(<%= entityAngularName %>Service);
+            httpMock = TestBed.inject(HttpTestingController);
             <%_ if (fieldsContainDate) { _%>
             currentDate = dayjs();
             <%_ } _%>
 
             elemDefault = new <%= entityAngularName %>(
-                <%_ if (tsKeyType === 'string') { _%>
-                'ID',
-                <%_ } else { _%>
-                0,
-                <%_ } _%>
             <%_ fields.forEach((field) => {
                 const fieldType = field.fieldType;
             _%>
@@ -71,7 +64,9 @@ describe('Service Tests', () => {
                 <%= fieldType + '.' + field.enumValues[0].name %>,
                 <%_ } else if (fieldType === 'Boolean') { _%>
                 false,
-                <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
+                <%_ } else if (fieldType === 'Duration') { _%>
+                'PT1S',
+                <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
                 0,
                 <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
                 'AAAAAAA',

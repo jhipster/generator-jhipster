@@ -18,11 +18,11 @@
 -%>
 package <%= packageName %>.config;
 
-import io.github.jhipster.config.JHipsterConstants;
+import tech.jhipster.config.JHipsterConstants;
 <%_ if (!reactive) { _%>
-import io.github.jhipster.config.liquibase.SpringLiquibaseUtil;
+import tech.jhipster.config.liquibase.SpringLiquibaseUtil;
 <%_ } else { _%>
-import io.github.jhipster.config.liquibase.AsyncSpringLiquibase;
+import tech.jhipster.config.liquibase.AsyncSpringLiquibase;
 <%_ } _%>
 import liquibase.integration.spring.SpringLiquibase;
 import org.slf4j.Logger;

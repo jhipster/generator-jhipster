@@ -20,12 +20,6 @@
 const defaultCommands = {
     app: {
         desc: '[Default] Create a new JHipster application based on the selected options',
-        help: `
-Example:
-    jhipster
-
-This will compose jhipster:client, jhipster:server and jhipster:languages to scaffold a full application
-`,
     },
     aws: {
         desc: 'Deploy the current application to Amazon Web Services',
@@ -48,12 +42,18 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
     'docker-compose': {
         desc: 'Create all required Docker deployment configuration for the selected applications',
     },
+    download: {
+        desc: 'Download jdl file from template repository',
+        cliOnly: true,
+        argument: ['<jdlFiles...>'],
+    },
     entity: {
-        argument: ['name'],
         desc: 'Create a new JHipster entity: JPA entity, Spring server-side components and Angular client-side components',
     },
+    entities: {
+        desc: 'Regenerate entities',
+    },
     'export-jdl': {
-        argument: ['jdlFile'],
         desc: 'Create a JDL file from the existing entities',
     },
     gae: {
@@ -67,14 +67,9 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
     },
     jdl: {
         alias: 'import-jdl',
-        argument: ['jdlFiles...'],
+        argument: ['[jdlFiles...]'],
         cliOnly: true,
         options: [
-            {
-                option: '--skip-install',
-                desc: 'Do not automatically install dependencies',
-                default: false,
-            },
             {
                 option: '--fork',
                 desc: 'Run generators using fork',
@@ -82,10 +77,6 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
             {
                 option: '--interactive',
                 desc: 'Run generation in series so that questions can be interacted with',
-            },
-            {
-                option: '--db <value>',
-                desc: 'Provide DB option for the application when using skip-server flag',
             },
             {
                 option: '--json-only',
@@ -103,16 +94,6 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
                 default: false,
             },
             {
-                option: '--skip-ui-grouping',
-                desc: 'Disable the UI grouping behavior for entity client side code',
-                default: false,
-            },
-            {
-                option: '--skip-db-changelog',
-                desc: 'Disable generation of database changelogs',
-                default: false,
-            },
-            {
                 option: '--skip-sample-repository',
                 desc: 'Disable fetching sample files when the file is not a URL',
                 default: false,
@@ -120,6 +101,10 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
             {
                 option: '--inline <value>',
                 desc: 'Pass JDL content inline. Argument can be skipped when passing this',
+            },
+            {
+                option: '--skip-user-management',
+                desc: 'Skip the user management module during app generation',
             },
         ],
         desc: `Create entities from the JDL file/content passed in argument.
@@ -155,23 +140,19 @@ Example:
         desc: 'Deploy the current application to Kubernetes using knative constructs',
     },
     languages: {
-        argument: ['languages...'],
         desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder',
     },
     openshift: {
         desc: 'Deploy the current application to OpenShift',
     },
     page: {
-        argument: ['pageName'],
         desc: 'Create a new page. (Supports vue clients)',
     },
     'spring-service': {
         alias: 'service',
-        argument: ['name'],
         desc: 'Create a new Spring service bean',
     },
     'spring-controller': {
-        argument: ['name'],
         desc: 'Create a new Spring controller',
     },
     'openapi-client': {

@@ -20,7 +20,7 @@ import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
@@ -33,7 +33,7 @@ export class <%= entityAngularName %>RoutingResolveService implements Resolve<I<
         const id = route.params['id'];
         if (id) {
             return this.service.find(id).pipe(
-                flatMap((<%= entityInstance %>: HttpResponse<<%= entityAngularName %>>) => {
+                mergeMap((<%= entityInstance %>: HttpResponse<<%= entityAngularName %>>) => {
                     if (<%= entityInstance %>.body) {
                         return of(<%= entityInstance %>.body);
                     } else {

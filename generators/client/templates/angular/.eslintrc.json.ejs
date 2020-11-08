@@ -17,26 +17,95 @@
  limitations under the License.
 -%>
 {
-  "plugins": ["@typescript-eslint/tslint"],
-  "extends": ["./.eslint.common.js"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@angular-eslint/eslint-plugin", "@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:@angular-eslint/recommended",
+    "prettier",
+    "prettier/@typescript-eslint",
+    "eslint-config-prettier"
+  ],
+  "env": {
+    "browser": true,
+    "es6": true,
+    "commonjs": true
+  },
   "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module",
     "project": "./tsconfig.json"
   },
   "rules": {
-    "@typescript-eslint/tslint/config": [
+    "@angular-eslint/component-selector": [
       "error",
       {
-        "lintFile": "./tslint.json"
+        "type": "element",
+        "prefix": "<%= jhiPrefixDashed %>",
+        "style": "kebab-case"
       }
     ],
-    "@typescript-eslint/no-unused-vars": [
-      "warn",
+    "@angular-eslint/directive-selector": [
+      "error",
       {
-        "vars": "all",
-        "args": "after-used",
-        "ignoreRestSiblings": false
+        "type": "attribute",
+        "prefix": "<%= jhiPrefix %>",
+        "style": "camelCase"
       }
     ],
-    "@typescript-eslint/no-non-null-assertion": "off"
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "extendDefaults": true,
+        "types": {
+          "{}": false
+        }
+      }
+    ],
+    "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/member-ordering": [
+      "error",
+      {
+        "default": [
+          "static-field",
+          "instance-field",
+          "constructor",
+          "static-method",
+          "instance-method"
+        ]
+      }
+    ],
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-parameter-properties": [
+      "warn",
+      { "allows": ["public", "private", "protected"] }
+    ],
+    "@typescript-eslint/no-shadow": ["error"],
+    "@typescript-eslint/no-unnecessary-condition": "error",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/prefer-nullish-coalescing": "error",
+    "@typescript-eslint/prefer-optional-chain": "error",
+    "@typescript-eslint/unbound-method": "off",
+    "arrow-body-style": "error",
+    "curly": "error",
+    "eqeqeq": ["error", "always", { "null": "ignore" }],
+    "guard-for-in": "error",
+    "no-bitwise": "error",
+    "no-caller": "error",
+    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "no-eval": "error",
+    "no-labels": "error",
+    "no-new": "error",
+    "no-new-wrappers": "error",
+    "object-shorthand": ["error", "always", { "avoidExplicitReturnArrows": true }],
+    "radix": "error",
+    "spaced-comment": ["warn", "always"]
   }
 }

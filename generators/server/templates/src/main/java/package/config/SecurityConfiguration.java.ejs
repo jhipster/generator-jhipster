@@ -26,13 +26,13 @@ import <%= packageName %>.security.jwt.*;
     <%_ if (authenticationType === 'session') { _%>
 
         <%_ if (!skipUserManagement) { _%>
-import io.github.jhipster.config.JHipsterProperties;
+import tech.jhipster.config.JHipsterProperties;
         <%_ } _%>
-import io.github.jhipster.security.*;
+import tech.jhipster.security.*;
     <%_ } _%>
 
     <%_ if (authenticationType === 'oauth2') { _%>
-import io.github.jhipster.config.JHipsterProperties;
+import tech.jhipster.config.JHipsterProperties;
     <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -277,6 +277,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/websocket/**").permitAll()
     <%_ } _%>
             .antMatchers("/management/health").permitAll()
+            .antMatchers("/management/health/**").permitAll()
             .antMatchers("/management/info").permitAll()
             .antMatchers("/management/prometheus").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)<%_ if (authenticationType === 'session') { %>;<% } %>
@@ -426,6 +427,7 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
+            .antMatchers("/management/health/**").permitAll()
             .antMatchers("/management/info").permitAll()
             .antMatchers("/management/prometheus").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);

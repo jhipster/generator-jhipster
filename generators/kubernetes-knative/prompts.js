@@ -23,10 +23,9 @@ module.exports = {
     ...k8sPrompts,
 };
 
-function askForGeneratorType() {
+async function askForGeneratorType() {
     if (this.regenerate) return;
 
-    const done = this.async();
     const prompts = [
         {
             type: 'list',
@@ -46,8 +45,6 @@ function askForGeneratorType() {
         },
     ];
 
-    this.prompt(prompts).then(props => {
-        this.generatorType = props.generatorType;
-        done();
-    });
+    const props = await this.prompt(prompts);
+    this.generatorType = props.generatorType;
 }

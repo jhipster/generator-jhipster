@@ -62,9 +62,14 @@ const CUSTOM_PRIORITIES = [
         before: 'loading',
     },
     {
+        priorityName: 'preConflicts',
+        queueName: 'jhipster:preConflicts',
+        before: 'conflicts',
+    },
+    {
         priorityName: 'postWriting',
         queueName: 'jhipster:postWriting',
-        before: 'conflicts',
+        before: 'preConflicts',
     },
 ];
 
@@ -79,8 +84,20 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     constructor(args, opts) {
         super(args, opts);
 
-        this.option('skip-generated-flag', {
-            desc: 'Skip adding a GeneratedByJhipster annotation to all generated java classes and interfaces',
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            hide: true,
+        });
+
+        this.option('with-generated-flag', {
+            desc: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
+            type: Boolean,
+        });
+
+        this.option('skip-prompts', {
+            desc: 'Skip prompts',
             type: Boolean,
         });
 
@@ -97,6 +114,9 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         this.config = this._getStorage('generator-jhipster');
         /* JHipster config using proxy mode used as a plain object instead of using get/set. */
         this.jhipsterConfig = this.config.createProxy();
+
+        /* Register generator for compose once */
+        this.registerComposedGenerator(this.options.namespace);
 
         /*
          * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the
@@ -117,14 +137,16 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
             this.config.set(this.options.localConfig);
         }
 
-        if (this.options.skipGeneratedFlag !== undefined) {
-            this.jhipsterConfig.skipGeneratedFlag = this.options.skipGeneratedFlag;
+        if (this.options.withGeneratedFlag !== undefined) {
+            this.jhipsterConfig.withGeneratedFlag = this.options.withGeneratedFlag;
         }
 
         // Load common runtime options.
         this.parseCommonRuntimeOptions();
 
-        if (!this.jhipsterConfig.skipGeneratedFlag) {
+        this.registerCommitPriorityFilesTask();
+
+        if (this.jhipsterConfig.withGeneratedFlag) {
             this.registerGeneratedAnnotationTransform();
         }
 
@@ -132,6 +154,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         if (!this.options.skipYoResolve) {
             this.registerConflicterAttributesTransform();
         }
+        this.registerForceEntitiesTransform();
     }
 
     /**
@@ -1419,6 +1442,20 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     }
 
     /**
+     * Register the composed generator for compose once.
+     * @param {string} namespace - jhipster generator.
+     * @return {boolean} false if already composed
+     */
+    registerComposedGenerator(namespace) {
+        this.configOptions.composedWith = this.configOptions.composedWith || [];
+        if (this.configOptions.composedWith.includes(namespace)) {
+            return false;
+        }
+        this.configOptions.composedWith.push(namespace);
+        return true;
+    }
+
+    /**
      * Compose with a jhipster generator using default jhipster config.
      * @param {string} generator - jhipster generator.
      * @param {object} [options] - options to pass
@@ -1426,15 +1463,13 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @return {object} the composed generator
      */
     composeWithJHipster(generator, options = {}, once = false) {
+        const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
         if (options === true || once) {
-            this.configOptions.composedWith = this.configOptions.composedWith || [];
-            if (this.configOptions.composedWith.includes(generator)) {
+            if (!this.registerComposedGenerator(namespace)) {
                 return undefined;
             }
-            this.configOptions.composedWith.push(generator);
         }
 
-        const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
         if (this.env.get(namespace)) {
             generator = namespace;
         } else {
@@ -1483,6 +1518,13 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      */
     getMicroserviceAppName(microserviceName) {
         return _.camelCase(microserviceName) + (microserviceName.endsWith('App') ? '' : 'App');
+    }
+
+    /**
+     * get sorted list of entitiy names according to changelog date (i.e. the order in which they were added)
+     */
+    getExistingEntityNames() {
+        return this.getExistingEntities().map(entity => entity.name);
     }
 
     /**
@@ -2274,6 +2316,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
         if (options.experimental !== undefined) {
             dest.experimental = options.experimental;
+        }
+        if (options.skipPrompts !== undefined) {
+            dest.skipPrompts = options.skipPrompts;
         }
         if (options.skipClient !== undefined) {
             dest.skipClient = options.skipClient;

@@ -50,13 +50,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
             description: 'Entity name',
         });
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
-
         // This method adds support for a `--[no-]regenerate` flag
         this.option('regenerate', {
             desc: 'Regenerate the entity without presenting an option to update it',
@@ -432,6 +425,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 });
                 this.entityConfig.relationships = relationships;
             },
+
+            addToYoRc() {
+                if (this.jhipsterConfig.entities === undefined) {
+                    this.jhipsterConfig.entities = [];
+                }
+                if (!this.jhipsterConfig.entities.find(entityName => entityName === this.context.name)) {
+                    this.jhipsterConfig.entities = this.jhipsterConfig.entities.concat([this.context.name]);
+                }
+            },
         };
     }
 
@@ -441,12 +443,57 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
+    _composing() {
+        return {
+            composeEntities() {
+                // We need to compose with others entities to update relationships.
+                this.composeWithJHipster(
+                    'entities',
+                    {
+                        composedEntities: [this.context.name],
+                        skipDbChangelog: this.options.skipDbChangelog,
+                        skipInstall: this.options.skipInstall,
+                    },
+                    true
+                );
+            },
+        };
+    }
+
+    get composing() {
+        if (useBlueprints) return;
+        return this._composing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
     _loading() {
         return {
             loadConfig() {
                 // Update current context with config from file.
                 Object.assign(this.context, this.entityStorage.getAll());
                 loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
+
+                if (this.context.fields) {
+                    this.context.fields
+                        .filter(field => field.options)
+                        .forEach(field => {
+                            // Load jdl annotations as default values.
+                            Object.assign(field, field.options);
+                        });
+                }
+
+                if (this.context.relationships) {
+                    this.context.relationships
+                        .filter(relationship => relationship.options)
+                        .forEach(relationship => {
+                            // Load jdl annotations as default values.
+                            Object.assign(relationship, relationship.options);
+                        });
+                }
+            },
+            shareEntity() {
+                this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
+                this.configOptions.sharedEntities[this.context.name] = this.context;
             },
         };
     }
@@ -466,10 +513,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.context.fields.forEach(field => {
                     prepareFieldForTemplates(entity, field, this);
                 });
-            },
-            shareEntity() {
-                this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
-                this.configOptions.sharedEntities[this.context.name] = this.context;
+                this.context.fieldsNoId = this.context.fields.filter(field => !field.id);
             },
         };
     }
@@ -484,22 +528,49 @@ class EntityGenerator extends BaseBlueprintGenerator {
         return {
             ...super._missingPreDefault(),
 
-            prepareRelationshipsForTemplates() {
+            loadUserManagementEntities() {
+                if (!this.configOptions.sharedEntities) return;
+                // Make user entity available to templates.
+                this.context.user = this.configOptions.sharedEntities.User;
+            },
+
+            loadOtherEntity() {
                 this.context.relationships.forEach(relationship => {
                     const otherEntityName = this._.upperFirst(relationship.otherEntityName);
                     relationship.otherEntity = this.configOptions.sharedEntities[otherEntityName];
-
-                    prepareRelationshipForTemplates(this.context, relationship, this);
-                    this._.defaults(relationship, {
-                        // otherEntityField should be id if not specified
-                        otherEntityField: 'id',
-                        // let ownerSide true when type is 'many-to-one' for convenience.
-                        // means that this side should control the reference.
-                        ownerSide:
-                            relationship.relationshipType !== 'one-to-many' &&
-                            (relationship.ownerSide || relationship.relationshipType === 'many-to-one'),
-                    });
                 });
+            },
+
+            processPrimaryKeyWithRelationships() {
+                if (!this.context.derivedPrimaryKey) {
+                    return;
+                }
+                const derivedRelationship = this.context.relationships.find(relationship => relationship.useJPADerivedIdentifier === true);
+                if (!derivedRelationship) {
+                    throw new Error(`Error creating primary key for entity ${this.context.name}`);
+                }
+                if (derivedRelationship.otherEntity.idFields.length > 1) {
+                    throw new Error(`Error creating primary key for entity ${this.context.name} only single id is supported for derivedId`);
+                }
+                const idFields = derivedRelationship.otherEntity.idFields.map(field => {
+                    return { ...field, fieldName: 'id', fieldNameHumanized: 'ID' };
+                });
+                this.context.idFields = idFields;
+                this.context.fields.unshift(...idFields);
+                this.context.primaryKeyType = derivedRelationship.otherEntity.primaryKeyType;
+            },
+
+            prepareRelationshipsForTemplates() {
+                this.context.relationships.forEach(relationship => {
+                    prepareRelationshipForTemplates(this.context, relationship, this);
+                });
+                this.context.dtoReferences = this.context.fields
+                    .map(field => field.reference)
+                    .concat(
+                        this.context.relationships
+                            .map(relationship => relationship.reference)
+                            .filter(reference => reference.owned || reference.relationship.otherEntity.embedded)
+                    );
             },
 
             processCollectionRelationships() {
@@ -601,15 +672,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 }
             },
 
-            databaseChangelog() {
-                if (this.options.skipDbChangelog) {
-                    return;
-                }
-                this.composeWithJHipster('database-changelog', {
-                    arguments: [this.context.name],
-                });
-            },
-
             ...super._missingPostWriting(),
         };
     }
@@ -623,7 +685,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
     _install() {
         return {
             afterRunHook() {
-                const done = this.async();
                 try {
                     const modules = this.getModuleHooks();
                     if (modules.length > 0) {
@@ -631,6 +692,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         // form the data to be passed to modules
                         const context = this.context;
 
+                        const done = this.async();
                         // run through all post entity creation module hooks
                         this.callHooks(
                             'entity',
@@ -641,13 +703,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             },
                             done
                         );
-                    } else {
-                        done();
                     }
                 } catch (err) {
                     this.log(`\n${chalk.bold.red('Running post run module hooks failed. No modification done to the generated entity.')}`);
                     this.debug('Error:', err);
-                    done();
                 }
             },
         };
@@ -656,6 +715,20 @@ class EntityGenerator extends BaseBlueprintGenerator {
     get install() {
         if (useBlueprints) return;
         return this._install();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _end() {
+        return {
+            end() {
+                this.log(chalk.bold.green(`Entity ${this.context.entityNameCapitalized} generated successfully.`));
+            },
+        };
+    }
+
+    get end() {
+        if (useBlueprints) return;
+        return this._end();
     }
 
     /**

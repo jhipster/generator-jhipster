@@ -84,7 +84,7 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
               run: |
-                  if [ -n $SONAR_TOKEN ]; then
+                  if [ ! -z "$SONAR_TOKEN" ]; then
                   <%_ if (buildTool === 'maven') { _%>
                       ./mvnw -ntp initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %>
                   <%_ } else if (buildTool === 'gradle') { _%>
@@ -105,11 +105,16 @@ jobs:
               if: github.event_name == 'push' && github.ref == 'refs/heads/main'
               env:
                   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+              run: |
+                  if [ ! -z "$HEROKU_API_KEY" ]; then
                   <%_ if (buildTool === 'maven') { _%>
-              run: ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
+                      ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
                   <%_ } else if (buildTool === 'gradle') { _%>
-              run: ./gradlew deployHeroku --no-daemon
+                      ./gradlew deployHeroku --no-daemon
                   <%_ } _%>
+                  else
+                      echo No HEROKU_API_KEY, skipping...
+                  fi
               <%_ } _%>
               <%_ if (cicdIntegrations.includes('publishDocker')) { _%>
             - name: Build and publish docker image
@@ -125,6 +130,8 @@ jobs:
               <%_ } _%>
               <%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) {
                   const commented = applicationType === 'gateway' ? '# ' : ''; _%>
+            <%= commented %>- name: 'E2E: Package'
+            <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:package
             <%= commented %>- name: 'E2E: Prepare'
             <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:prepare
             <%= commented %>- name: 'E2E: Run'

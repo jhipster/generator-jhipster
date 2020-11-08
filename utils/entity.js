@@ -26,6 +26,7 @@ const { entityDefaultConfig } = require('../generators/generator-defaults');
 const { stringHashCode } = require('../generators/utils');
 
 const BASE_TEMPLATE_DATA = {
+    primaryKeyType: undefined,
     skipUiGrouping: false,
     haveFieldWithJavadoc: false,
     existingEnum: false,
@@ -50,6 +51,14 @@ const BASE_TEMPLATE_DATA = {
     fieldsContainManyToOne: false,
     fieldsContainEmbedded: false,
     fieldsIsReactAvField: false,
+
+    get otherRelationships() {
+        return [];
+    },
+
+    get idFields() {
+        return [];
+    },
 
     get enums() {
         return [];
@@ -142,8 +151,6 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
             : entityWithConfig.entityStateName
     );
 
-    entityWithConfig.reactiveRepositories = entityWithConfig.reactive;
-
     entityWithConfig.differentTypes.push(entityWithConfig.entityClass);
     entityWithConfig.i18nToLoad.push(entityWithConfig.entityInstance);
     entityWithConfig.i18nKeyPrefix = `${entityWithConfig.frontendAppName}.${entityWithConfig.entityTranslationKey}`;
@@ -155,11 +162,34 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         hasBuiltInUserField &&
         entityWithConfig.dto === 'no';
 
-    entityWithConfig.primaryKeyType = generator.getPkTypeBasedOnDBAndAssociation(
-        entityWithConfig.authenticationType,
-        entityWithConfig.databaseType,
-        entityWithConfig.relationships
-    );
+    entityWithConfig.derivedPrimaryKey = entityWithConfig.relationships.some(relationship => relationship.useJPADerivedIdentifier === true);
+
+    if (!entityWithConfig.embedded && !entityWithConfig.derivedPrimaryKey) {
+        entityWithConfig.idFields = entityWithConfig.fields.filter(field => field.id);
+        if (entityWithConfig.idFields.length > 0) {
+            if (entityWithConfig.idFields.length === 1) {
+                const idField = entityWithConfig.idFields[0];
+                // Allow ids type to be empty and fallback to default type for the database.
+                if (!idField.fieldType) {
+                    idField.fieldType = generator.getPkType(entityWithConfig.databaseType);
+                }
+                entityWithConfig.primaryKeyType = idField.fieldType;
+            } else {
+                throw new Error('Composite id not implemented');
+            }
+        } else {
+            entityWithConfig.primaryKeyType = generator.getPkType(entityWithConfig.databaseType);
+            const idField = {
+                fieldName: 'id',
+                fieldType: entityWithConfig.primaryKeyType,
+                id: true,
+                fieldNameHumanized: 'ID',
+                fieldTranslationKey: 'global.field.id',
+            };
+            entityWithConfig.idFields.push(idField);
+            entityWithConfig.fields.unshift(idField);
+        }
+    }
 
     entityWithConfig.fields.forEach(field => {
         const fieldType = field.fieldType;
@@ -209,7 +239,8 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     });
 
     entityWithConfig.generateFakeData = type => {
-        const fieldEntries = entityWithConfig.fields.map(field => {
+        const fieldsToGenerate = type === 'cypress' ? entityWithConfig.fields.filter(field => !field.id) : entityWithConfig.fields;
+        const fieldEntries = fieldsToGenerate.map(field => {
             const fieldData = field.generateFakeData(type);
             if (!field.nullable && fieldData === null) return undefined;
             return [field.fieldName, fieldData];

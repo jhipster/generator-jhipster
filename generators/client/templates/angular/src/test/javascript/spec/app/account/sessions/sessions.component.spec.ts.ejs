@@ -16,111 +16,108 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+jest.mock('app/core/auth/account.service');
+
 import { ComponentFixture, TestBed, inject, tick, fakeAsync } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of, throwError } from 'rxjs';
 
-import { TestModule } from '../../../test.module';
 import { Session } from 'app/account/sessions/session.model';
 import { SessionsComponent } from 'app/account/sessions/sessions.component';
 import { SessionsService } from 'app/account/sessions/sessions.service';
-import { MockAccountService } from '../../../helpers/mock-account.service';
 import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/user/account.model';
 
 describe('Component Tests', () => {
-    let sessions: Session[];
-    let fixture: ComponentFixture<SessionsComponent>;
-    let comp: SessionsComponent;
+  let fixture: ComponentFixture<SessionsComponent>;
+  let comp: SessionsComponent;
+  const sessions: Session[] = [new Session('xxxxxx==', new Date(2015, 10, 15), '0:0:0:0:0:0:0:1', 'Mozilla/5.0')];
+  const account: Account = {
+    firstName: 'John',
+    lastName: 'Doe',
+    activated: true,
+    email: 'john.doe@mail.com',
+    langKey: '<%= nativeLanguage %>',
+    login: 'john',
+    authorities: [],
+    imageUrl: '',
+  };
 
-    describe('SessionsComponent', () => {
-        beforeEach(() => {
-            sessions = [new Session('xxxxxx==', new Date(2015, 10, 15), '0:0:0:0:0:0:0:1', 'Mozilla/5.0')];
-
-            fixture = TestBed.configureTestingModule({
-                imports: [TestModule],
-                declarations: [SessionsComponent]
-            })
-            .overrideTemplate(SessionsComponent, '')
-            .createComponent(SessionsComponent);
-            comp = fixture.componentInstance;
-        });
-
-        it('should define its initial state',
-            inject([AccountService, SessionsService],
-                fakeAsync((mockAccountService: MockAccountService, service: SessionsService) => {
-                    mockAccountService.spy('identity').and.returnValue(of({
-                        id: 'fuzzer'
-                    }));
-                    spyOn(service, 'findAll').and.returnValue(of(sessions));
-
-                    comp.ngOnInit();
-                    tick();
-
-                    expect(mockAccountService.identitySpy).toHaveBeenCalled();
-                    expect(service.findAll).toHaveBeenCalled();
-                    expect(comp.success).toBe(false);
-                    expect(comp.error).toBe(false);
-                    expect(comp.account).toEqual({
-                        id: 'fuzzer'
-                    });
-                    expect(comp.sessions).toEqual(sessions);
-                })
-            )
-        );
-
-        it('should call delete on Sessions to invalidate a session',
-            inject([AccountService, SessionsService],
-                fakeAsync((mockAccountService: MockAccountService, service: SessionsService) => {
-                    mockAccountService.spy('identity').and.returnValue(of({
-                        id: 'fuzzer'
-                    }));
-                    spyOn(service, 'findAll').and.returnValue(of(sessions));
-                    spyOn(service, 'delete').and.returnValue(of({}));
-
-                    comp.ngOnInit();
-                    comp.invalidate('xyz');
-                    tick();
-
-                    expect(service.delete).toHaveBeenCalledWith('xyz');
-                })
-            )
-        );
-
-        it('should call delete on Sessions and notify of error',
-            inject([AccountService, SessionsService],
-                fakeAsync((mockAccountService: MockAccountService, service: SessionsService) => {
-                    mockAccountService.spy('identity').and.returnValue(of({
-                        id: 'fuzzer'
-                    }));
-                    spyOn(service, 'findAll').and.returnValue(of(sessions));
-                    spyOn(service, 'delete').and.returnValue(throwError({}));
-
-                    comp.ngOnInit();
-                    comp.invalidate('xyz');
-                    tick();
-
-                    expect(comp.success).toBe(false);
-                    expect(comp.error).toBe(true);
-                })
-            )
-        );
-
-        it('should call notify of success upon session invalidation',
-            inject([AccountService, SessionsService],
-                fakeAsync((mockAccountService: MockAccountService, service: SessionsService) => {
-                    mockAccountService.spy('identity').and.returnValue(of({
-                        id: 'fuzzer'
-                    }));
-                    spyOn(service, 'findAll').and.returnValue(of(sessions));
-                    spyOn(service, 'delete').and.returnValue(of({}));
-
-                    comp.ngOnInit();
-                    comp.invalidate('xyz');
-                    tick();
-
-                    expect(comp.error).toBe(false);
-                    expect(comp.success).toBe(true);
-                })
-            )
-        );
+  describe('SessionsComponent', () => {
+    beforeEach(() => {
+      fixture = TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule],
+        declarations: [SessionsComponent],
+        providers: [AccountService],
+      })
+        .overrideTemplate(SessionsComponent, '')
+        .createComponent(SessionsComponent);
+      comp = fixture.componentInstance;
     });
+
+    it('should define its initial state', inject(
+      [AccountService, SessionsService],
+      fakeAsync((mockAccountService: AccountService, service: SessionsService) => {
+        mockAccountService.identity = jest.fn(() => of(account));
+        spyOn(service, 'findAll').and.returnValue(of(sessions));
+
+        comp.ngOnInit();
+        tick();
+
+        expect(mockAccountService.identity).toHaveBeenCalled();
+        expect(service.findAll).toHaveBeenCalled();
+        expect(comp.success).toBe(false);
+        expect(comp.error).toBe(false);
+        expect(comp.account).toEqual(account);
+        expect(comp.sessions).toEqual(sessions);
+      })
+    ));
+
+    it('should call delete on Sessions to invalidate a session', inject(
+      [AccountService, SessionsService],
+      fakeAsync((mockAccountService: AccountService, service: SessionsService) => {
+        mockAccountService.identity = jest.fn(() => of(account));
+        spyOn(service, 'findAll').and.returnValue(of(sessions));
+        spyOn(service, 'delete').and.returnValue(of({}));
+
+        comp.ngOnInit();
+        comp.invalidate('xyz');
+        tick();
+
+        expect(service.delete).toHaveBeenCalledWith('xyz');
+      })
+    ));
+
+    it('should call delete on Sessions and notify of error', inject(
+      [AccountService, SessionsService],
+      fakeAsync((mockAccountService: AccountService, service: SessionsService) => {
+        mockAccountService.identity = jest.fn(() => of(account));
+        spyOn(service, 'findAll').and.returnValue(of(sessions));
+        spyOn(service, 'delete').and.returnValue(throwError({}));
+
+        comp.ngOnInit();
+        comp.invalidate('xyz');
+        tick();
+
+        expect(comp.success).toBe(false);
+        expect(comp.error).toBe(true);
+      })
+    ));
+
+    it('should call notify of success upon session invalidation', inject(
+      [AccountService, SessionsService],
+      fakeAsync((mockAccountService: AccountService, service: SessionsService) => {
+        mockAccountService.identity = jest.fn(() => of(account));
+        spyOn(service, 'findAll').and.returnValue(of(sessions));
+        spyOn(service, 'delete').and.returnValue(of({}));
+
+        comp.ngOnInit();
+        comp.invalidate('xyz');
+        tick();
+
+        expect(comp.error).toBe(false);
+        expect(comp.success).toBe(true);
+      })
+    ));
+  });
 });

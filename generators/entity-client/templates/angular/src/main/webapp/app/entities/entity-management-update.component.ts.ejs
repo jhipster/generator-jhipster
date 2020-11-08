@@ -38,7 +38,6 @@ const isValidatorsRequired = hasValidationRule || hasRequiredRelationship;
 _%>
 import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %>, Optional } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder,<%_ if (isValidatorsRequired) { _%> Validators<%_ } _%> } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -48,7 +47,7 @@ import { map } from 'rxjs/operators';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
 import * as dayjs from 'dayjs';
-import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
+import { DATE_TIME_FORMAT } from 'app/core/config/input.constants';
 <%_ } _%>
 <%_ if (fieldsContainBlob) { _%>
 import { JhiDataUtils, JhiFileLoadError, JhiEventManager, JhiEventWithContent } from 'ng-jhipster';
@@ -78,6 +77,25 @@ import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%=
         }
     }
 });
+let selectableEntitiesIdType = getTypescriptKeyType(getPkType(databaseType));
+if (databaseType === 'sql' && authenticationType === 'oauth2') {
+    let existsUserSelectableEntity = false;
+    let existsOtherSelectableEntity = false;
+    for (selectableEntity of selectableEntities) {
+        if (selectableEntity === 'IUser') {
+            existsUserSelectableEntity = true;
+        } else {
+            existsOtherSelectableEntity = true;
+        }
+    }
+    if (existsUserSelectableEntity) {
+        if (existsOtherSelectableEntity) {
+            selectableEntitiesIdType = 'number | string';
+        } else {
+            selectableEntitiesIdType = 'string';
+        }
+    }
+}
 let selectableEntitiesType = '';
 if (selectableEntities.length === 1) {
     selectableEntitiesType = selectableEntities[0];
@@ -113,17 +131,8 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
     <%_ for (const idx in variables) { _%>
     <%- variables[idx] %>
     <%_ } _%>
-<%_ for (idx in fields) {
-    const fieldName = fields[idx].fieldName;
-    const fieldType = fields[idx].fieldType;
-_%>
-    <%_ if ( fieldType === 'LocalDate' ) { _%>
-    <%= fieldName %>Dp: any;
-    <%_ } _%>
-<%_ } _%>
 
     editForm = this.fb.group({
-        id: [],
     <%_ for (idx in fields) {
         const fieldName = fields[idx].fieldName;
         const fieldType = fields[idx].fieldType;
@@ -142,11 +151,7 @@ _%>
     const relationshipRequired = relationships[idx].relationshipRequired;
 _%>
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-        <%_ if (dto === 'no') { _%>
         <%= relationshipName %>: [<% if (relationshipRequired) { %>null,Validators.required<% } %>],
-        <%_ } else { _%>
-        <%= relationshipName %>Id: [<% if (relationshipRequired) { %>null,Validators.required<% } %>],
-        <%_ } _%>
     <%_ } else if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
         <%= relationshipFieldNamePlural %>: [<% if (relationshipRequired) { %>null,Validators.required<% } %>],
     <%_ } _%>
@@ -180,10 +185,12 @@ _%>
     ) {}
 
     ngOnInit(): void {
-        if (this.activeModal) return;
+        if (this.activeModal) {
+          return;
+        }
         this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
             <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
-            if (!<%= entityInstance %>.id) {
+            if (<%= entityInstance %>.id == null) {
                 const today = dayjs().startOf('day');
             <%_ } _%>
             <%_ for (idx in fields) {
@@ -208,7 +215,6 @@ _%>
 
     updateForm(<%= entityInstance %>: I<%= entityAngularName %>): void {
         this.editForm.patchValue({
-            id: <%= entityInstance %>.id,
     <%_ for (idx in fields) {
         const fieldName = fields[idx].fieldName;
         const fieldType = fields[idx].fieldType;
@@ -231,11 +237,7 @@ _%>
         const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
     _%>
         <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-            <%_ if (dto === 'no') { _%>
             <%= relationshipName %>: <%= entityInstance %>.<%= relationshipFieldName %>,
-            <%_ } else { _%>
-            <%= relationshipName %>Id: <%= entityInstance %>.<%= relationshipFieldName %>Id,
-            <%_ } _%>
         <%_ } else if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
             <%= relationshipFieldNamePlural %>: <%= entityInstance %>.<%= relationshipFieldNamePlural %>,
         <%_ } _%>
@@ -252,11 +254,12 @@ _%>
         this.dataUtils.openFile(contentType, base64String);
     }
 
-    setFileData(event: any, field: string, isImage: boolean): void {
-        this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe(null, (err: JhiFileLoadError) => {
-            this.eventManager.broadcast(
-                new JhiEventWithContent<AlertError>('<%= frontendAppName %>.error', { <% if (enableTranslation) { %>...err, key: 'error.file.' + err.key<% } else { %>message: err.message<% } %> })
-            );
+    setFileData(event: Event, field: string, isImage: boolean): void {
+        this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+            error: (err: JhiFileLoadError) =>
+                this.eventManager.broadcast(
+                    new JhiEventWithContent<AlertError>('<%= frontendAppName %>.error', { <% if (enableTranslation) { %>...err, key: 'error.file.' + err.key<% } else { %>message: err.message<% } %> })
+                )
         });
     }
 
@@ -266,7 +269,7 @@ _%>
             [field]: null,
             [fieldContentType]: null
         });
-        if (this.elementRef && idInput && this.elementRef.nativeElement.querySelector('#' + idInput)) {
+        if (idInput && this.elementRef.nativeElement.querySelector('#' + idInput)) {
             this.elementRef.nativeElement.querySelector('#' + idInput).value = null;
         }
     }
@@ -296,7 +299,6 @@ _%>
     private createFromForm(): I<%= entityAngularName %> {
         return {
             ...new <%= entityAngularName %>(),
-            id: this.editForm.get(['id'])!.value,
     <%_ for (idx in fields) {
         const fieldName = fields[idx].fieldName;
         const fieldType = fields[idx].fieldType;
@@ -318,11 +320,7 @@ _%>
         const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
     _%>
         <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-            <%_ if (dto === 'no') { _%>
             <%= relationshipName %>: this.editForm.get(['<%= relationshipName %>'])!.value,
-            <%_ } else { _%>
-            <%= relationshipName %>Id: this.editForm.get(['<%= relationshipName %>Id'])!.value,
-            <%_ } _%>
         <%_ } else if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
             <%= relationshipFieldNamePlural %>: this.editForm.get(['<%= relationshipFieldNamePlural %>'])!.value,
         <%_ } _%>
@@ -344,19 +342,19 @@ _%>
     }
 
     <%_ if (selectableEntitiesType) { _%>
-    trackById(index: number, item: <%= selectableEntitiesType %>): any {
-        return item.id;
+    trackById(index: number, item: <%= selectableEntitiesType %>): <%= selectableEntitiesIdType %> {
+        return item.id!;
     }
     <%_ } _%>
 
     <%_ if (selectableManyToManyEntitiesType) { _%>
-    getSelected(selectedVals: <%= selectableManyToManyEntitiesType %>[], option: <%= selectableManyToManyEntitiesType %>): <%= selectableManyToManyEntitiesType %> {
+    getSelected(option: <%= selectableManyToManyEntitiesType %>, selectedVals?: <%= selectableManyToManyEntitiesType %>[]): <%= selectableManyToManyEntitiesType %> {
         if (selectedVals) {
-            for (let i = 0; i < selectedVals.length; i++) {
-                if (option.id === selectedVals[i].id) {
-                    return selectedVals[i];
-                }
-            }
+          for (let i = 0; i < selectedVals.length; i++) {
+              if (option.id === selectedVals[i].id) {
+                  return selectedVals[i];
+              }
+          }
         }
         return option;
     }

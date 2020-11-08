@@ -77,7 +77,7 @@ spring:
             write-durations-as-timestamps: false
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     jpa:
-        database-platform: io.github.jhipster.domain.util.FixedH2Dialect
+        database-platform: tech.jhipster.domain.util.FixedH2Dialect
         open-in-view: false
         show-sql: false
         hibernate:
@@ -216,10 +216,6 @@ jhipster:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>
 <%_ } _%>
-    metrics:
-        logs: # Reports metrics in the logs
-            enabled: true
-            report-frequency: 60 # in seconds
 <%_ if (messageBroker === 'kafka') { _%>
 kafka:
     bootstrap-servers: localhost:9092

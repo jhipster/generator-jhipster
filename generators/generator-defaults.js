@@ -32,6 +32,7 @@ const appDefaultConfig = {
     skipUserManagement: false,
     skipCheckLengthOfIdentifier: false,
     skipFakeData: false,
+    withGeneratedFlag: false,
     jhiPrefix: 'jhi',
     entitySuffix: '',
     dtoSuffix: 'DTO',

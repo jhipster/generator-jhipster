@@ -77,7 +77,9 @@ describe('Service Tests', () => {
         <%= fieldType + '.' + field.enumValues[0].name %>,
             <%_ } else if (fieldType === 'Boolean') { _%>
         false,
-            <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
+            <%_ } else if (fieldType === 'Duration') { _%>
+        'PT1S',
+            <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
         0,
             <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
         'AAAAAAA',
@@ -172,7 +174,9 @@ describe('Service Tests', () => {
       const fieldType = field.fieldType; _%>
       <%_ if (fieldType === 'Boolean') { _%>
           <%= field.fieldName%>: true,
-      <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
+      <%_ } else if (fieldType === 'Duration') { _%>
+          <%= field.fieldName%>: 'PT2S',
+      <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
           <%= field.fieldName%>: 1,
       <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
           <%= field.fieldName%>: 'BBBBBB',
@@ -220,7 +224,9 @@ describe('Service Tests', () => {
         const fieldType = field.fieldType; _%>
         <%_ if (fieldType === 'Boolean') { _%>
           <%= field.fieldName%>: true,
-        <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
+        <%_ } else if (fieldType === 'Duration') { _%>
+          <%= field.fieldName%>: 'PT2S',
+        <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
           <%= field.fieldName%>: 1,
         <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
           <%= field.fieldName%>: 'BBBBBB',

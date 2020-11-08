@@ -152,14 +152,10 @@ import static <%= packageName %>.config.Constants.ID_DELIMITER;
 <%_
     let optionalOrMono = reactive ? 'Mono' : 'Optional';
     let listOrFlux = reactive ? 'Flux' : 'List';
-    let userPkType = 'String';
-    if (databaseType === 'sql' && authenticationType !== 'oauth2') {
-        userPkType = 'Long';
-    }
 _%>
 <%_ if ((databaseType === 'sql' && !reactive) || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
 @Repository
-public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<<%= asEntity('User') %>, <%= userPkType %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<<%= asEntity('User') %>, String><%if (searchEngine === 'couchbase') { %>, SearchCouchbaseRepository<<%= asEntity('User') %>, String><% } } %> {
+public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<<%= asEntity('User') %>, <%= user.primaryKeyType %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<<%= asEntity('User') %>, String><%if (searchEngine === 'couchbase') { %>, SearchCouchbaseRepository<<%= asEntity('User') %>, String><% } } %> {
     <%_ if (cacheManagerIsAvailable === true) { _%>
 
     String USERS_BY_LOGIN_CACHE = "usersByLogin";
@@ -252,7 +248,7 @@ public interface UserRepository extends R2dbcRepository<User, <% if (authenticat
     Mono<Long> countAllByLoginNot(String anonymousUser);
 
     @Query("INSERT INTO <%= jhiTablePrefix %>_user_authority VALUES(:userId, :authority)")
-    Mono<Void> saveUserAuthority(<%= userPkType %> userId, String authority);
+    Mono<Void> saveUserAuthority(<%= user.primaryKeyType %> userId, String authority);
 
     @Query("DELETE FROM <%= jhiTablePrefix %>_user_authority")
     Mono<Void> deleteAllUserAuthorities();

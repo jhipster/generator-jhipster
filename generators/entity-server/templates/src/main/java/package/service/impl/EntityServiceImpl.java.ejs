@@ -61,7 +61,7 @@ import org.springframework.stereotype.Service;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
-<%_ if (reactiveRepositories) { _%>
+<%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 <%_ } _%>
