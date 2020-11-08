@@ -20,9 +20,6 @@ import { Component, OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> } fro
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
-import { takeUntil } from 'rxjs/operators';
-
-import { BaseComponent } from 'app/shared/base.component';
 <%_ } _%>
 
 @Component({
