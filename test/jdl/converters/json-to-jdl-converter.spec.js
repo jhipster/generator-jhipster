@@ -60,7 +60,7 @@ describe('JSONToJDLConverter', () => {
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages [en, fr]
+    languages []
     messageBroker false
     nativeLanguage en
     otherModules []
@@ -108,7 +108,7 @@ describe('JSONToJDLConverter', () => {
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages [en, fr]
+    languages []
     messageBroker false
     nativeLanguage en
     otherModules []
@@ -237,7 +237,7 @@ paginate Country with pager
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages [en, fr]
+    languages []
     messageBroker false
     nativeLanguage en
     otherModules []
@@ -271,7 +271,7 @@ application {
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages [en, fr]
+    languages []
     messageBroker false
     nativeLanguage en
     otherModules []
@@ -305,7 +305,7 @@ application {
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages [en, fr]
+    languages []
     messageBroker false
     nativeLanguage en
     otherModules []
