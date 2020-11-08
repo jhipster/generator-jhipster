@@ -20,6 +20,35 @@
 const crypto = require('crypto');
 
 /**
+ * get hibernate SnakeCase in JHipster preferred style.
+ *
+ * @param {string} value - table column name or table name string
+ * @see org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+ * @returns hibernate SnakeCase in JHipster preferred style
+ */
+function hibernateSnakeCase(value) {
+    let res = '';
+    if (value) {
+        value = value.replace('.', '_');
+        res = value[0];
+        for (let i = 1, len = value.length - 1; i < len; i++) {
+            if (
+                value[i - 1] !== value[i - 1].toUpperCase() &&
+                value[i] !== value[i].toLowerCase() &&
+                value[i + 1] !== value[i + 1].toUpperCase()
+            ) {
+                res += `_${value[i]}`;
+            } else {
+                res += value[i];
+            }
+        }
+        res += value[value.length - 1];
+        res = res.toLowerCase();
+    }
+    return res;
+}
+
+/**
  * get for tables/constraints in JHipster preferred style after applying any length limits required.
  *
  * @param {string} tableOrEntityName - name of the table or entity
@@ -42,13 +71,13 @@ function calculateDbNameWithLimit(tableOrEntityName, columnOrRelationshipName, l
               .update(`${tableOrEntityName}.${columnOrRelationshipName}`, 'utf8')
               .digest('hex')}`;
 
-    let formattedName = noSnakeCase ? tableOrEntityName : this.getTableName(tableOrEntityName);
+    let formattedName = noSnakeCase ? tableOrEntityName : hibernateSnakeCase(tableOrEntityName);
     formattedName = formattedName.substring(0, halfLimit - (!appendHash ? 0 : separator.length));
 
-    let otherFormattedName = noSnakeCase ? columnOrRelationshipName : this.getTableName(columnOrRelationshipName);
+    let otherFormattedName = noSnakeCase ? columnOrRelationshipName : hibernateSnakeCase(columnOrRelationshipName);
     otherFormattedName = otherFormattedName.substring(0, limit - formattedName.length - separator.length - prefix.length - suffix.length);
 
     return `${prefix}${formattedName}${separator}${otherFormattedName}${suffix}`;
 }
 
-module.exports = { calculateDbNameWithLimit };
+module.exports = { calculateDbNameWithLimit, hibernateSnakeCase };

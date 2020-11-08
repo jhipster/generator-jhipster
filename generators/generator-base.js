@@ -34,7 +34,7 @@ const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig } = require('./generator-defaults');
 const { formatDateForChangelog } = require('../utils/liquibase');
-const { calculateDbNameWithLimit } = require('../utils/db');
+const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
@@ -1620,7 +1620,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} value - table name string
      */
     getTableName(value) {
-        return this.hibernateSnakeCase(value);
+        return hibernateSnakeCase(value);
     }
 
     /**
@@ -1629,7 +1629,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} value - table column name string
      */
     getColumnName(value) {
-        return this.hibernateSnakeCase(value);
+        return hibernateSnakeCase(value);
     }
 
     /**
