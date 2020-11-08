@@ -75,7 +75,7 @@ import java.util.List;
 <%_ if (!reactive) { _%>
 import java.util.Optional;
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (primaryKeyType === 'UUID') { _%>
 import java.util.UUID;
 <%_ } _%>
 <%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && ((searchEngine !== false) || dto === 'mapstruct'))) { _%>

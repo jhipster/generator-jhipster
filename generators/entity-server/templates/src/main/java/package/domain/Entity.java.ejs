@@ -38,18 +38,24 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.cassandra.core.mapping.Column;
     <%_ } _%>
 import org.springframework.data.cassandra.core.mapping.Table;
-<%_ } if (relationshipsContainOtherSideIgnore === true) { _%>
+<%_ } _%>
+<%_ if (relationshipsContainOtherSideIgnore === true) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-<%_ } if (!hasDto && typeof javadoc != 'undefined') { _%>
+<%_ } _%>
+<%_ if (!hasDto && typeof javadoc != 'undefined') { _%>
 import io.swagger.annotations.ApiModel;
-<%_ } if (!hasDto && importApiModelProperty === true) { _%>
+<%_ } _%>
+<%_ if (!hasDto && importApiModelProperty === true) { _%>
 import io.swagger.annotations.ApiModelProperty;
-<%_ } if (enableHibernateCache) { _%>
+<%_ } _%>
+<%_ if (enableHibernateCache) { _%>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-<%_ } if (!reactive && (hasTextBlob === true || (fieldsContainUUID === true && ['mysql', 'mariadb'].includes(prodDatabaseType)))) { _%>
+<%_ } _%>
+<%_ if (!reactive && (hasTextBlob === true || (fieldsContainUUID === true && ['mysql', 'mariadb'].includes(prodDatabaseType)))) { _%>
 import org.hibernate.annotations.Type;
-<%_ } if (databaseType === 'mongodb') {
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') {
         if (!embedded) { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -116,7 +122,7 @@ import java.util.Set;
 <%_ } if (databaseType === 'couchbase' && hasRelationship) { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
-<%_ if (databaseType === 'cassandra' || fieldsContainUUID === true) { _%>
+<%_ if (primaryKeyType === 'UUID' || fieldsContainUUID === true) { _%>
 import java.util.UUID;
 <%_ }
 Object.keys(uniqueEnums).forEach(function(element) { _%>
@@ -149,17 +155,19 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     <%_ } _%>
   <%_ } _%>
-<%_ } if (!embedded) {
-    if (databaseType === 'mongodb') { _%>
+<%_ } _%>
+<%_ if (!embedded) { _%>
+    <%_ if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= entityTableName %>")
-<%_ } if (databaseType === 'neo4j') { _%>
+    <%_ } else if (databaseType === 'neo4j') { _%>
 @Node
-<%_ } if (databaseType === 'couchbase') { _%>
+    <%_ } else if (databaseType === 'couchbase') { _%>
 @Document
-<%_ }
-} if (databaseType === 'cassandra') { _%>
+    <%_ } else if (databaseType === 'cassandra') { _%>
 @Table("<%= entityInstance %>")
-<%_ } if (searchEngine === 'elasticsearch') { _%>
+    <%_ } _%>
+<%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "<%= entityInstance.toLowerCase() %>")
 <%_ } _%>
 public class <%= asEntity(entityClass) %> implements Serializable {
@@ -182,11 +190,9 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
         <%_ } _%>
-    <%_ } _%>
-    <%_ if (databaseType === 'couchbase' && !embedded) { _%>
+    <%_ } else if (databaseType === 'couchbase' && !embedded) { _%>
     @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
-    <%_ } _%>
-    <%_ if (databaseType === 'neo4j') { _%>
+    <%_ } else if (databaseType === 'neo4j') { _%>
     @GeneratedValue(UUIDStringGenerator.class)
     <%_ } _%>
     private <%= primaryKeyType %> id;
@@ -456,23 +462,22 @@ relationships.forEach((relationship, idx) => {
 <%_ }
 }); _%>
     // jhipster-needle-entity-add-field - JHipster will add fields here
-<%_
-if (!embedded) { _%>
-    public <% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'neo4j') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> getId() {
+<%_ if (!embedded) { _%>
+    public <%= primaryKeyType %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> id) {
+    public void setId(<%= primaryKeyType %> id) {
         this.id = id;
     }
 
-<%_ if (fluentMethods) { _%>
-    public <%= asEntity(entityClass) %> id(<% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> id) {
+    <%_ if (fluentMethods) { _%>
+    public <%= asEntity(entityClass) %> id(<%= primaryKeyType %> id) {
         this.id = id;
         return this;
     }
-<%_ }
-} _%>
+    <%_ } _%>
+<%_ } _%>
 <%_ for (idx in fields) {
         const fieldType = fields[idx].fieldType;
         const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;

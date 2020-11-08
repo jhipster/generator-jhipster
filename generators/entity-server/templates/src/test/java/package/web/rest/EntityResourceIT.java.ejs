@@ -157,16 +157,33 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 <%_ } _%>
 <%_ if (databaseType === 'sql' && !reactive) { _%>
-import javax.persistence.EntityManager;<% } %><% if (fieldsContainBigDecimal === true) { %>
-import java.math.BigDecimal;<% } %><% if (fieldsContainBlob === true && databaseType === 'cassandra') { %>
-import java.nio.ByteBuffer;<% } %><% if (reactive || fieldsContainDuration === true) { %>
-import java.time.Duration;<% } %><% if (fieldsContainLocalDate === true) { %>
-import java.time.LocalDate;<% } %><% if (fieldsContainInstant === true || fieldsContainZonedDateTime === true) { %>
-import java.time.Instant;<% } %><% if (fieldsContainZonedDateTime === true) { %>
+import javax.persistence.EntityManager;
+<%_ } _%>
+<%_ if (fieldsContainBigDecimal === true) { _%>
+import java.math.BigDecimal;
+<%_ } _%>
+<%_ if (fieldsContainBlob === true && databaseType === 'cassandra') { _%>
+import java.nio.ByteBuffer;
+<%_ } _%>
+<%_ if (reactive || fieldsContainDuration === true) { _%>
+import java.time.Duration;
+<%_ } _%>
+<%_ if (fieldsContainLocalDate === true) { _%>
+import java.time.LocalDate;
+<%_ } _%>
+<%_ if (fieldsContainInstant === true || fieldsContainZonedDateTime === true) { _%>
+import java.time.Instant;
+<%_ } _%>
+<%_ if (fieldsContainZonedDateTime === true) { _%>
 import java.time.ZonedDateTime;
-import java.time.ZoneOffset;<% } %><% if (fieldsContainLocalDate === true || fieldsContainZonedDateTime === true) { %>
-import java.time.ZoneId;<% } %><% if (fieldsContainInstant === true) { %>
-import java.time.temporal.ChronoUnit;<% } %>
+import java.time.ZoneOffset;
+<%_ } _%>
+<%_ if (fieldsContainLocalDate === true || fieldsContainZonedDateTime === true) { _%>
+import java.time.ZoneId;
+<%_ } _%>
+<%_ if (fieldsContainInstant === true) { _%>
+import java.time.temporal.ChronoUnit;
+<%_ } _%>
 <%_ if (fieldsContainOwnerManyToMany) { _%>
 import java.util.ArrayList;
 <%_ } _%>
@@ -174,7 +191,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 <%_ } _%>
 import java.util.List;
-<%_ if (databaseType === 'cassandra' || fieldsContainUUID === true || (databaseType === 'sql' && hasOauthUser === true)) { _%>
+<%_ if (primaryKeyType === 'UUID' || fieldsContainUUID === true || (databaseType === 'sql' && hasOauthUser === true)) { _%>
 import java.util.UUID;
 <%_ } _%>
 
@@ -579,8 +596,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     public void initTest() {
         <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || databaseType === 'neo4j') { _%>
         <%= entityInstance %>Repository.deleteAll()<%= callBlock %>;
-        <%_ } _%>
-        <%_ if (databaseType === 'sql' && reactive) {  _%>
+        <%_ } else if (databaseType === 'sql' && reactive) {  _%>
         deleteEntities(em);
         <%_ } _%>
         <%= asEntity(entityInstance) %> = createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
@@ -646,7 +662,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
 
         // Create the <%= entityClass %> with an existing ID
-        <%= asEntity(entityInstance) %>.setId(<% if (databaseType === 'sql' && hasOauthUser === true) { %>UUID.randomUUID().toString()<% } else if (databaseType === 'sql') { %>1L<% } else if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>"existing_id"<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID()<% } %>);
+        <%= asEntity(entityInstance) %>.setId(<% if (databaseType === 'sql' && hasOauthUser === true) { %>UUID.randomUUID().toString()<% } else if (primaryKeyType === 'Long') { %>1L<% } else if (primaryKeyType === 'String') { %>"existing_id"<% } else if (primaryKeyType === 'UUID') { %>UUID.randomUUID()<% } %>);
         <%_ if (dto === 'mapstruct') { _%>
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);
         <%_ } _%>
@@ -791,7 +807,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test
     void getAll<%= entityClassPlural %>AsStream() {
         // Initialize the database
-        <%_ if (databaseType === 'cassandra') { _%>
+        <%_ if (primaryKeyType === 'UUID') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
         <%= entityInstance %>Repository.save(<%= asEntity(entityInstance) %>)<%= callBlock %>;
@@ -829,7 +845,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%_ if (databaseType === 'cassandra') { _%>
+        <%_ if (primaryKeyType === 'UUID') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
@@ -920,7 +936,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void get<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%_ if (databaseType === 'cassandra') { _%>
+        <%_ if (primaryKeyType === 'UUID') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
@@ -1271,10 +1287,10 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     void getNonExisting<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Get the <%= entityInstance %>
         <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <% if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { %>Long.MAX_VALUE<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID().toString()<% } %>))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <% if (['Long', 'String'].includes(primaryKeyType)) { %>Long.MAX_VALUE<% } else if (primaryKeyType === 'UUID') { %>UUID.randomUUID().toString()<% } %>))
             .andExpect(status().isNotFound());
         <%_ } else { _%>
-        webTestClient.get().uri("/api/<%= entityApiUrl %>/{id}", <% if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { %>Long.MAX_VALUE<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID().toString()<% } %>)
+        webTestClient.get().uri("/api/<%= entityApiUrl %>/{id}", <% if (['Long', 'String'].includes(primaryKeyType)) { %>Long.MAX_VALUE<% } else if (primaryKeyType === 'UUID') { %>UUID.randomUUID().toString()<% } %>)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isNotFound();
@@ -1290,7 +1306,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
     <%_ } _%>
         // Initialize the database
-        <%_ if (databaseType === 'cassandra') { _%>
+        <%_ if (primaryKeyType === 'UUID') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
@@ -1444,7 +1460,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         when(mock<%= entityClass %>SearchRepository.deleteById(any<%= primaryKeyType %>())).thenReturn(Mono.empty());
 <%_ } _%>
         // Initialize the database
-        <%_ if (databaseType === 'cassandra') { _%>
+        <%_ if (primaryKeyType === 'UUID') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
@@ -1491,7 +1507,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     <%_ } _%>
 <%_ } _%>
         // Initialize the database
-        <%_ if (databaseType === 'cassandra') { _%>
+        <%_ if (primaryKeyType === 'UUID') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
