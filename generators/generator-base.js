@@ -2416,6 +2416,17 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         if (options.legacyDbNames !== undefined) {
             this.jhipsterConfig.legacyDbNames = options.legacyDbNames;
         }
+        if (options.language) {
+            // workaround double options parsing, remove once generator supports skipping parse options
+            const languages = options.language.flat();
+            this.jhipsterConfig.languages = [...this.jhipsterConfig.languages, ...languages];
+        }
+        if (options.nativeLanguage) {
+            this.jhipsterConfig.nativeLanguage = options.nativeLanguage;
+            if (!this.jhipsterConfig.languages) {
+                this.jhipsterConfig.languages = [options.nativeLanguage];
+            }
+        }
 
         if (options.creationTimestamp) {
             const creationTimestamp = this.parseCreationTimestamp(options.creationTimestamp);

@@ -189,6 +189,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
             desc: 'Recreate the initial database changelog based on the current config',
             type: Boolean,
         });
+
         this.option('skip-jhipster-dependencies', {
             desc: "Don't write jhipster dependencies.",
             type: Boolean,
@@ -203,6 +204,16 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         this.option('legacy-db-names', {
             desc: 'Generate database names with jhipster 6 compatibility.',
             type: Boolean,
+        });
+
+        this.option('native-language', {
+            desc: 'Set application native language',
+            type: String,
+        });
+
+        this.option('language', {
+            desc: 'Language to be added to application (existing languages are not removed)',
+            type: Array,
         });
 
         // Just constructing help, stop here
