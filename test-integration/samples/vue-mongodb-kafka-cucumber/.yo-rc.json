@@ -39,7 +39,6 @@
         "prodDatabaseType": "mongodb",
         "enableHibernateCache": false,
         "clientThemeVariant": "primary",
-        "useSass": true,
         "languages": ["en"]
     }
 }

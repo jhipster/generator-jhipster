@@ -25,7 +25,6 @@
         "clientFramework": "angularX",
         "jwtSecretKey": "OTNiNTU1YzgyNjA3NjUwNDRhYWM1OTBiMGI3YmY1ODk3NWFiZWIyMmZiNzFhM2JiOWY4OWY0OTc1YTllNTkzZWExNjk5NWMzZGQxZTEwODNhZWFlNjc2M2IzNGViODg2NWRlNjM0ZDdkNDkxYjdhZThhODY1ZGJmODRhYWM4OTk=",
         "embeddableLaunchScript": false,
-        "useSass": true,
         "clientTheme": "none",
         "entitySuffix": "",
         "dtoSuffix": "DTO",
