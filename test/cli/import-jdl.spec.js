@@ -189,6 +189,7 @@ describe('JHipster generator import jdl', () => {
                     ...options,
                     ...defaultAddedOptions,
                     skipInstall: true,
+                    regenerate: true,
                     interactive: false,
                 });
             });

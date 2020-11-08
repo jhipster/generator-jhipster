@@ -35,6 +35,7 @@ const NeedleApi = require('./needle-api');
 const { defaultConfig } = require('./generator-defaults');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
+const databaseTypes = require('../jdl/jhipster/database-types');
 
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -1692,25 +1693,25 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
             constraintName = `${constraintNamePrefix}${this.getTableName(entityName)}_${this.getTableName(columnOrRelationName)}`;
         }
         let limit = 0;
-        if (prodDatabaseType === 'oracle' && constraintName.length >= 27 && !this.skipCheckLengthOfIdentifier) {
+        if (prodDatabaseType === databaseTypes.ORACLE && constraintName.length >= 27 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
                 `The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 character limit). It will be truncated!`
             );
 
             limit = 28;
-        } else if (prodDatabaseType === 'mysql' && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+        } else if (prodDatabaseType === databaseTypes.MYSQL && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
                 `The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
             );
 
             limit = 62;
-        } else if (prodDatabaseType === 'postgresql' && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
+        } else if (prodDatabaseType === databaseTypes.POSTGRESQL && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
                 `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 character limit). It will be truncated!`
             );
 
             limit = 61;
-        } else if (prodDatabaseType === 'mariadb' && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+        } else if (prodDatabaseType === databaseTypes.MARIADB && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
                 `The generated constraint name "${constraintName}" is too long for MariaDB (which has a 64 character limit). It will be truncated!`
             );

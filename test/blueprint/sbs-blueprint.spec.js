@@ -49,7 +49,7 @@ describe('JHipster client generator with sbs blueprint', () => {
                 clientFramework: ANGULAR,
                 enableTranslation: true,
                 nativeLanguage: 'en',
-                languages: ['fr'],
+                languages: ['fr', 'en'],
             })
             .on('end', done);
     });

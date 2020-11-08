@@ -108,7 +108,7 @@ describe('JHipster generator languages', () => {
                     .withPrompts({
                         enableTranslation: true,
                         nativeLanguage: 'fr',
-                        languages: [],
+                        languages: ['fr'],
                     })
                     .on('end', done);
             });
@@ -119,7 +119,7 @@ describe('JHipster generator languages', () => {
                 helpers
                     .run(require.resolve('../generators/languages'))
                     .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr' })
-                    .withOptions({ skipInstall: true, languages: [] })
+                    .withOptions({ skipInstall: true, languages: ['fr'] })
                     .on('end', done);
             });
             containsLanguageFiles('fr');
@@ -128,7 +128,7 @@ describe('JHipster generator languages', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/languages'))
-                    .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: [] })
+                    .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'] })
                     .withOptions({ skipInstall: true })
                     .on('end', done);
             });
@@ -144,7 +144,7 @@ describe('JHipster generator languages', () => {
                     .withPrompts({
                         enableTranslation: true,
                         nativeLanguage: 'fr',
-                        languages: ['en'],
+                        languages: ['en', 'fr'],
                     })
                     .on('end', done);
             });
@@ -156,7 +156,7 @@ describe('JHipster generator languages', () => {
                 helpers
                     .run(require.resolve('../generators/languages'))
                     .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr' })
-                    .withOptions({ skipInstall: true, languages: ['en'] })
+                    .withOptions({ skipInstall: true, languages: ['en', 'fr'] })
                     .on('end', done);
             });
             containsLanguageFiles('fr');
@@ -166,7 +166,7 @@ describe('JHipster generator languages', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/languages'))
-                    .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en'] })
+                    .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
                     .withOptions({ skipInstall: true })
                     .on('end', done);
             });
