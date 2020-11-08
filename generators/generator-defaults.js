@@ -90,9 +90,9 @@ const clientDefaultConfig = {
 
 const translationDefaultConfig = {
     enableTranslation: defaultNewApplicationOptions[optionNames.ENABLE_TRANSLATION],
-    nativeLanguage: defaultNewApplicationOptions[optionNames.NATIVE_LANGUAGE],
+    nativeLanguage: 'en',
     get languages() {
-        return defaultNewApplicationOptions[optionNames.LANGUAGES];
+        return ['en', 'fr'];
     },
 };
 
