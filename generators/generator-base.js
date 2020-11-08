@@ -1672,7 +1672,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         }
         return limit === 0
             ? joinTableName
-            : this.calculateDbNameWithLimit(entityName, relationshipName, limit, { prefix, separator, legacyDbNames });
+            : this.calculateDbNameWithLimit(entityName, relationshipName, limit, { prefix, separator, appendHash: !legacyDbNames });
     }
 
     /**
@@ -1725,7 +1725,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
                   separator,
                   noSnakeCase,
                   prefix,
-                  legacyDbNames,
+                  appendHash: !legacyDbNames,
               });
     }
 
@@ -1734,14 +1734,16 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      *
      * @param {string} entityName - name of the entity
      * @param {string} columnOrRelationName - name of the column or related entity
-     * @param {object} options - database type
+     * @param {object} options
      * @param {boolean} options.noSnakeCase - do not convert names to snakecase
-     * @param {string} options.prefix - constraintName prefix for the constraintName
+     * @param {string} options.prefix
+     * @param {string} options.separator
+     * @param {boolean} options.appendHash - adds a calculated hash based on entityName and columnOrRelationName to prevent trimming conflict.
      */
     calculateDbNameWithLimit(entityName, columnOrRelationName, limit, options) {
-        const { noSnakeCase, prefix, separator, legacyDbNames } = options;
+        const { noSnakeCase, prefix, separator, appendHash } = options;
         const halfLimit = Math.floor(limit / 2);
-        const suffix = legacyDbNames
+        const suffix = !appendHash
             ? ''
             : `_${crypto
                   .createHash('shake256', { outputLength: 1 })
@@ -1751,7 +1753,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         let entityTable = noSnakeCase ? entityName : this.getTableName(entityName);
         let otherTable = noSnakeCase ? columnOrRelationName : this.getTableName(columnOrRelationName);
 
-        entityTable = entityTable.substring(0, halfLimit - (legacyDbNames ? 0 : separator.length));
+        entityTable = entityTable.substring(0, halfLimit - (!appendHash ? 0 : separator.length));
         otherTable = otherTable.substring(0, limit - entityTable.length - separator.length - prefix.length - suffix.length);
 
         return `${prefix}${entityTable}${separator}${otherTable}${suffix}`;
