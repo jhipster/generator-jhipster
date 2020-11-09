@@ -96,7 +96,7 @@ async function askForTestOpts() {
     if (!this.skipClient) {
         // all client side test frameworks should be added here
         choices.push({ name: 'Cypress', value: 'cypress' });
-        choices.push({ name: 'Protractor (deprecated)', value: 'protractor' });
+        choices.push({ name: '[DEPRECATED] Protractor', value: 'protractor' });
     }
     if (!this.skipServer) {
         // all server side test frameworks should be added here
