@@ -115,7 +115,7 @@ describe('JHipster Heroku Sub Generator', () => {
                     ''
                 );
                 stub.withArgs(`heroku buildpacks:add heroku/java --app ${herokuAppName}`).yields(false, '', '');
-                stub.withArgs('git push heroku HEAD:master').yields(false, '', '');
+                stub.withArgs('git push heroku HEAD:main').yields(false, '', '');
                 helpers
                     .run(require.resolve('../generators/heroku'))
                     .inTmpDir(dir => {

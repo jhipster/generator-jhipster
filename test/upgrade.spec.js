@@ -75,11 +75,11 @@ describe('JHipster upgrade generator', function () {
         it('generates expected number of commits', () => {
             const commitsCount = shelljs.exec('git rev-list --count HEAD', { silent: false }).stdout.replace('\n', '');
             // Expecting 5 commits in history (because we used `force` option):
-            //   - master: initial commit
+            //   - main: initial commit
             //   - jhipster_upgrade; initial generation
-            //   - master: block-merge commit of jhipster_upgrade
+            //   - main: block-merge commit of jhipster_upgrade
             //   - jhipster_upgrade: new generation in jhipster_upgrade
-            //   - master: merge commit of jhipster_upgrade
+            //   - main: merge commit of jhipster_upgrade
             expect(commitsCount).to.equal('5');
         });
 

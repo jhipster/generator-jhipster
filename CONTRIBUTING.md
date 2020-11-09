@@ -99,7 +99,7 @@ Before you submit your pull request consider the following guidelines:
 -   Make your changes in a new git branch
 
     ```shell
-    git checkout -b my-fix-branch master
+    git checkout -b my-fix-branch main
     ```
 
 -   Create your patch, **including appropriate test cases**.
@@ -133,7 +133,7 @@ Before you submit your pull request consider the following guidelines:
     git push origin my-fix-branch
     ```
 
--   In GitHub, send a pull request to `jhipster/generator-jhipster:master`.
+-   In GitHub, send a pull request to `jhipster/generator-jhipster:main`.
 -   If we suggest changes then
 
     -   Make the required updates.
@@ -141,7 +141,7 @@ Before you submit your pull request consider the following guidelines:
     -   Rebase your branch and force push to your GitHub repository (this will update your Pull Request):
 
         ```shell
-        git rebase master -i
+        git rebase main -i
         git push -f
         ```
 
@@ -149,18 +149,18 @@ That's it! Thank you for your contribution!
 
 #### Resolving merge conflicts ("This branch has conflicts that must be resolved")
 
-Sometimes your PR will have merge conflicts with the upstream repository's master branch. There are several ways to solve this but if not done correctly this can end up as a true nightmare. So here is one method that works quite well.
+Sometimes your PR will have merge conflicts with the upstream repository's main branch. There are several ways to solve this but if not done correctly this can end up as a true nightmare. So here is one method that works quite well.
 
--   First, fetch the latest information from the master
+-   First, fetch the latest information from the main
 
     ```shell
     git fetch upstream
     ```
 
--   Rebase your branch against the upstream/master
+-   Rebase your branch against the upstream/main
 
     ```shell
-    git rebase upstream/master
+    git rebase upstream/main
     ```
 
 -   Git will stop rebasing at the first merge conflict and indicate which file is in conflict. Edit the file, resolve the conflict then
@@ -189,10 +189,10 @@ from the main (upstream) repository:
     git push origin --delete my-fix-branch
     ```
 
--   Check out the master branch:
+-   Check out the main branch:
 
     ```shell
-    git checkout master -f
+    git checkout main -f
     ```
 
 -   Delete the local branch:
