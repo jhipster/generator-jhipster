@@ -88,6 +88,10 @@
                 <%_ if (authenticationType === 'session' || authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
                 requestInterceptor: function(req) {
                     req.headers['X-XSRF-TOKEN'] = getCSRF();
+                    // Remove the sample Swagger UI request body if present
+                    if (req.method === 'GET' && req.body === '{"additionalProp1":"string","additionalProp2":"string","additionalProp3":"string"}') {
+                        req.body = undefined;
+                    }
                     return req;
                 }
                 <%_ } _%>
@@ -97,6 +101,10 @@
                         || sessionStorage.getItem("<%=jhiPrefixDashed %>-authenticationToken");
                     if (authToken) {
                         req.headers['Authorization'] = "Bearer " + authToken;
+                    }
+                    // Remove the sample Swagger UI request body if present
+                    if (req.method === 'GET' && req.body === '{"additionalProp1":"string","additionalProp2":"string","additionalProp3":"string"}') {
+                        req.body = undefined;
                     }
                     return req;
                 }
