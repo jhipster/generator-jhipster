@@ -47,9 +47,6 @@ const JACOCO_VERSION = '0.8.6';
 const KAFKA_VERSION = '5.5.2';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
 
-// NPM packages version
-const HUSKY_VERSION = '4.3.0';
-const LINT_STAGED_VERSION = '10.5.1';
 // The installed prettier version should be the same that the one used during JHipster generation to avoid formatting differences
 const PRETTIER_VERSION = packagejs.dependencies.prettier;
 const PRETTIER_JAVA_VERSION = packagejs.dependencies['prettier-plugin-java'];
@@ -399,8 +396,6 @@ const constants = {
     JACKSON_DATABIND_NULLABLE_VERSION,
 
     // NPM
-    HUSKY_VERSION,
-    LINT_STAGED_VERSION,
     PRETTIER_VERSION,
     PRETTIER_JAVA_VERSION,
 

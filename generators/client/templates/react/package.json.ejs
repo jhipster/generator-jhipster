@@ -116,16 +116,14 @@ limitations under the License.
         <%_ });
     } _%>
     "html-webpack-plugin": "4.3.0",
-    <%_ if (!skipCommitHook) { _%>
-    "husky": "<%= HUSKY_VERSION %>",
-    <%_ } _%>
     "identity-obj-proxy": "3.0.0",
     "jest": "26.4.2",
     "jest-junit": "11.1.0",
     "jest-sonar-reporter": "2.0.0",
     "json-loader": "0.5.7",
     <%_ if (!skipCommitHook) { _%>
-    "lint-staged": "<%= LINT_STAGED_VERSION %>",
+    "husky": "VERSION_MANAGED_BY_CLIENT_COMMON",
+    "lint-staged": "VERSION_MANAGED_BY_CLIENT_COMMON,
     <%_ } _%>
     <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "1.0.21",

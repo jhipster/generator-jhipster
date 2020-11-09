@@ -98,16 +98,14 @@ limitations under the License.
 } _%>
     "html-webpack-plugin": "4.5.0",
     <%_ if (!skipCommitHook) { _%>
-    "husky": "<%= HUSKY_VERSION %>",
+    "husky": "VERSION_MANAGED_BY_CLIENT_COMMON",
+    "lint-staged": "VERSION_MANAGED_BY_CLIENT_COMMON,
     <%_ } _%>
     "jest": "26.4.2",
     "jest-junit": "11.1.0",
     "jest-serializer-vue": "2.0.2",
     "jest-sonar-reporter": "2.0.0",
     "jest-vue-preprocessor": "1.7.1",
-    <%_ if (!skipCommitHook) { _%>
-    "lint-staged": "<%= LINT_STAGED_VERSION %>",
-    <%_ } _%>
     "merge-jsons-webpack-plugin": "1.0.21",
     <%_ if (protractorTests) { _%>
     "mocha": "7.1.2",
