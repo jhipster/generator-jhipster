@@ -27,14 +27,14 @@ limitations under the License.
   ],
   "dependencies": {
     "@openapitools/openapi-generator-cli": "1.0.13-4.3.1",
-    "@fortawesome/fontawesome-svg-core": "1.2.32",
-    "@fortawesome/free-solid-svg-icons": "5.15.1",
-    "@fortawesome/vue-fontawesome": "2.0.0",
-    "axios": "0.21.0",
-    "bootstrap": "4.5.3",
-    "bootstrap-vue": "2.18.1",
+    "@fortawesome/fontawesome-svg-core": "VERSION_MANAGED_BY_CLIENT_VUE",
+    "@fortawesome/free-solid-svg-icons": "VERSION_MANAGED_BY_CLIENT_VUE",
+    "@fortawesome/vue-fontawesome": "VERSION_MANAGED_BY_CLIENT_VUE",
+    "axios": "VERSION_MANAGED_BY_CLIENT_VUE",
+    "bootstrap": "VERSION_MANAGED_BY_CLIENT_VUE",
+    "bootstrap-vue": "VERSION_MANAGED_BY_CLIENT_VUE",
     <%_ if (clientTheme !== 'none') { _%>
-    "bootswatch": "4.5.3",
+    "bootswatch": "VERSION_MANAGED_BY_CLIENT_VUE",
     <%_ } _%>
     "dayjs": "VERSION_MANAGED_BY_CLIENT_COMMON",
     "swagger-ui-dist": "3.25.4",
@@ -45,7 +45,7 @@ limitations under the License.
     "vue": "2.6.12",
     "vue-class-component": "7.2.6",
     "vue-cookie": "1.1.4",
-    "vue-i18n": "8.22.1",
+    "vue-i18n": "VERSION_MANAGED_BY_CLIENT_VUE",
     "vue-infinite-loading": "2.4.5",
     "vue-property-decorator": "9.0.2",
     "vue-router": "3.4.9",
@@ -67,10 +67,10 @@ limitations under the License.
     <%_ if (protractorTests) { _%>
     "@types/selenium-webdriver": "4.0.9",
     <%_ } _%>
-    "@types/sinon": "9.0.3",
+    "@types/sinon": "9.0.8",
     "@types/vuelidate": "0.7.13",
-    "@typescript-eslint/eslint-plugin": "4.6.1",
-    "@typescript-eslint/parser": "4.6.1",
+    "@typescript-eslint/eslint-plugin": "4.7.0",
+    "@typescript-eslint/parser": "4.7.0",
     "@vue/cli-plugin-eslint": "4.5.8",
     "@vue/cli-plugin-typescript": "4.5.8",
     "@vue/cli-service": "4.5.8",
@@ -85,7 +85,7 @@ limitations under the License.
     "chai-as-promised": "7.1.1",
     "chai-string": "1.5.0",
     <%_ } _%>
-    "copy-webpack-plugin": "6.0.2",
+    "copy-webpack-plugin": "6.3.0",
     "css-loader": "3.5.3",
     "file-loader": "6.2.0",
     "fork-ts-checker-webpack-plugin": "4.1.6",
@@ -96,9 +96,9 @@ limitations under the License.
     "<%= module.name %>": "<%= module.version %>",
     <%_ });
 } _%>
-    "html-webpack-plugin": "4.3.0",
+    "html-webpack-plugin": "4.5.0",
     <%_ if (!skipCommitHook) { _%>
-    "husky": "4.3.0",
+    "husky": "<%= HUSKY_VERSION %>",
     <%_ } _%>
     "jest": "26.4.2",
     "jest-junit": "11.1.0",
@@ -106,7 +106,7 @@ limitations under the License.
     "jest-sonar-reporter": "2.0.0",
     "jest-vue-preprocessor": "1.7.1",
     <%_ if (!skipCommitHook) { _%>
-    "lint-staged": "10.2.9",
+    "lint-staged": "<%= LINT_STAGED_VERSION %>",
     <%_ } _%>
     "merge-jsons-webpack-plugin": "1.0.21",
     <%_ if (protractorTests) { _%>
@@ -135,32 +135,32 @@ limitations under the License.
     "sass": "1.29.0",
     "sass-loader": "10.0.5",
     "sinon": "9.2.1",
-    "terser-webpack-plugin": "3.1.0",
+    "terser-webpack-plugin": "4.2.3",
     "ts-jest": "26.2.0",
     "ts-loader": "7.0.4",
     <%_ if (protractorTests) { _%>
     "ts-node": "8.10.1",
     <%_ } _%>
     "tslib": "2.0.0",
-    "eslint": "7.12.1",
+    "eslint": "7.13.0",
     "tslint-config-prettier": "1.18.0",
     "eslint-plugin-prettier": "3.1.4",
     "tslint-eslint-rules": "5.4.0",
     "eslint-plugin-vue": "6.2.2",
     "tslint-loader": "3.6.0",
     "typescript": "VERSION_MANAGED_BY_CLIENT_COMMON",
-    "url-loader": "4.1.0",
-    "vue-jest": "3.0.6",
-    "vue-loader": "15.9.3",
+    "url-loader": "4.1.1",
+    "vue-jest": "VERSION_MANAGED_BY_CLIENT_VUE",
+    "vue-loader": "VERSION_MANAGED_BY_CLIENT_VUE",
     "vue-template-compiler": "2.6.12",
     <%_ if (protractorTests) { _%>
     "webdriver-manager": "12.1.7",
     <%_ } _%>
     "webpack": "VERSION_MANAGED_BY_CLIENT_VUE",
-    "webpack-bundle-analyzer": "3.9.0",
+    "webpack-bundle-analyzer": "VERSION_MANAGED_BY_CLIENT_VUE",
     "webpack-cli": "3.3.11",
     "webpack-dev-server": "3.11.0",
-    "webpack-merge": "5.0.9"
+    "webpack-merge": "5.3.0"
   },
   "engines": {
     "node": ">=<%= NODE_VERSION %>",
