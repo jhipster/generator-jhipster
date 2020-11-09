@@ -41,7 +41,7 @@ describe('Generator Base', () => {
     describe('isSupportedLanguage', () => {
         describe('when called with valid language', () => {
             it('returns true', () => {
-                expect(BaseGenerator.isSupportedLanguage('en')).to.equal(true);
+                expect(BaseGenerator.isSupportedLanguage('en')).to.be.true;
             });
         });
         describe('when called with invalid language', () => {

@@ -61,7 +61,7 @@ describe('DefaultApplicationOptions', () => {
                 expect(options.clientThemeVariant).to.equal('');
             });
             it('should set withAdminUI option to true', () => {
-                expect(options.withAdminUi).to.equal(true);
+                expect(options.withAdminUi).to.be.true;
             });
         });
         context('when passing a custom client theme and no variant', () => {
@@ -137,7 +137,7 @@ describe('DefaultApplicationOptions', () => {
                 expect(options.clientThemeVariant).to.equal('');
             });
             it('should set the withAdminUi option to true', () => {
-                expect(options.withAdminUi).to.equal(true);
+                expect(options.withAdminUi).to.be.true;
             });
             it('should set the service discovery type to eureka', () => {
                 expect(options.serviceDiscoveryType).to.equal('eureka');
