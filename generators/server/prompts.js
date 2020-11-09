@@ -234,8 +234,7 @@ function askForServerSideOpts() {
                 },
                 {
                     value: 'hazelcast',
-                    name:
-                        'Hazelcast (distributed cache, for multiple nodes, supports rate-limiting for gateway applications)',
+                    name: 'Hazelcast (distributed cache, for multiple nodes, supports rate-limiting for gateway applications)',
                 },
                 {
                     value: 'infinispan',
