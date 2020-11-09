@@ -18,17 +18,16 @@
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse<%_ if (prodDatabaseType !== 'cassandra') { %>, HttpHeaders <% } %>} from '@angular/common/http';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription<% if (databaseType !== 'cassandra') { %>, combineLatest<% } %> } from 'rxjs';
 <%_ if (prodDatabaseType !== 'cassandra') { _%>
 import { ActivatedRoute, Router } from '@angular/router';
-import { JhiEventManager } from 'ng-jhipster';
-
-import { ITEMS_PER_PAGE } from 'app/core/config/pagination.constants';
-<%_ } else { _%>
-import { JhiEventManager } from 'ng-jhipster';
-
 <%_ } _%>
+import { Subscription<% if (databaseType !== 'cassandra') { %>, combineLatest<% } %> } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
+<%_ if (prodDatabaseType !== 'cassandra') { _%>
+import { ITEMS_PER_PAGE } from 'app/core/config/pagination.constants';
+<%_ } _%>
+import { EventManager } from 'app/core/event-manager/event-manager.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
 import { UserService } from 'app/core/user/user.service';
@@ -59,7 +58,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     <%_ } _%>
-    private eventManager: JhiEventManager,
+    private eventManager: EventManager,
     private modalService: NgbModal
   ) {}
 

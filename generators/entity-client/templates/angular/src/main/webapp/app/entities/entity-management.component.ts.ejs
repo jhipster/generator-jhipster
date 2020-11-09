@@ -24,7 +24,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 <%_ } _%>
 import { Subscription<% if (pagination === 'pagination') { %>, combineLatest<% } %> } from 'rxjs';
-import { JhiEventManager <% if (pagination === 'infinite-scroll') { %>, JhiParseLinks <% } %><% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
+<%_ if (pagination === 'infinite-scroll' || fieldsContainBlob) { _%>
+import { <% if (pagination === 'infinite-scroll') { %>JhiParseLinks, <% } %><% if (fieldsContainBlob) { %>JhiDataUtils, <% } %>} from 'ng-jhipster';
+<%_ } _%>
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
@@ -37,6 +39,7 @@ import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service
 <%_ if (!readOnly) { _%>
 import { <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
+import { EventManager } from 'app/core/event-manager/event-manager.service';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',

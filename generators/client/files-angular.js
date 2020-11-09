@@ -311,6 +311,10 @@ const files = {
                 // request
                 'core/request/request-util.ts',
                 'core/request/request.model.ts',
+
+                // event-manager
+                'core/event-manager/event-manager.service.ts',
+                'core/event-manager/event-with-content.model.ts',
             ],
         },
         {
@@ -385,6 +389,7 @@ const files = {
                 'spec/app/admin/metrics/metrics.component.spec.ts',
                 'spec/app/admin/metrics/metrics.service.spec.ts',
                 'spec/app/core/user/account.service.spec.ts',
+                'spec/app/core/event-manager/event-manager.service.spec.ts',
                 'spec/app/home/home.component.spec.ts',
                 'spec/app/layouts/main/main.component.spec.ts',
                 'spec/app/layouts/navbar/navbar.component.spec.ts',

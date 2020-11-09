@@ -18,10 +18,10 @@
 -%>
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
+import { EventManager } from 'app/core/event-manager/event-manager.service';
 
 @Component({
     templateUrl: './<%= entityFileName %>-delete-dialog.component.html'
@@ -32,7 +32,7 @@ export class <%= entityAngularName %>DeleteDialogComponent {
     constructor(
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
         public activeModal: NgbActiveModal,
-        protected eventManager: JhiEventManager
+        protected eventManager: EventManager
     ) {}
 
     cancel(): void {
