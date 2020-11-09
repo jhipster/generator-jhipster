@@ -91,6 +91,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
 
         // This adds support for a `--with-entities` flag
         this.option('with-entities', {
+            alias: 'e',
             desc: 'Regenerate the existing entities if any',
             type: Boolean,
         });
