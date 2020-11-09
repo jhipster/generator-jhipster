@@ -30,7 +30,7 @@
     "eslint-config-prettier": "6.15.0",
     "eslint-loader": "4.0.2",
     "friendly-errors-webpack-plugin": "1.7.0",
-    "jest": "26.4.2",
+    "jest": "26.6.3",
     "jest-date-mock": "1.0.8",
     "jest-junit": "11.1.0",
     "jest-sonar-reporter": "2.0.0",
