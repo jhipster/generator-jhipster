@@ -1996,35 +1996,31 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      *
      * @param {object} generator - generator instance to use
      */
-    askModuleName(generator) {
-        const done = generator.async();
+    async askModuleName(generator) {
         const defaultAppBaseName = this.getDefaultAppName();
-        generator
-            .prompt({
-                type: 'input',
-                name: 'baseName',
-                validate: input => {
-                    if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
-                        return 'Your base name cannot contain special characters or a blank space';
-                    }
-                    if ((generator.applicationType === 'microservice' || generator.applicationType === 'uaa') && /_/.test(input)) {
-                        return 'Your base name cannot contain underscores as this does not meet the URI spec';
-                    }
-                    if (generator.applicationType === 'uaa' && input === 'auth') {
-                        return "Your UAA base name cannot be named 'auth' as it conflicts with the gateway login routes";
-                    }
-                    if (input === 'application') {
-                        return "Your base name cannot be named 'application' as this is a reserved name for Spring Boot";
-                    }
-                    return true;
-                },
-                message: 'What is the base name of your application?',
-                default: defaultAppBaseName,
-            })
-            .then(prompt => {
-                generator.baseName = generator.jhipsterConfig.baseName = prompt.baseName;
-                done();
-            });
+        const answers = await generator.prompt({
+            type: 'input',
+            name: 'baseName',
+            validate: input => {
+                if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
+                    return 'Your base name cannot contain special characters or a blank space';
+                }
+                if ((generator.applicationType === 'microservice' || generator.applicationType === 'uaa') && /_/.test(input)) {
+                    return 'Your base name cannot contain underscores as this does not meet the URI spec';
+                }
+                if (generator.applicationType === 'uaa' && input === 'auth') {
+                    return "Your UAA base name cannot be named 'auth' as it conflicts with the gateway login routes";
+                }
+                if (input === 'application') {
+                    return "Your base name cannot be named 'application' as this is a reserved name for Spring Boot";
+                }
+                return true;
+            },
+            message: 'What is the base name of your application?',
+            default: defaultAppBaseName,
+        });
+
+        generator.baseName = generator.jhipsterConfig.baseName = answers.baseName;
     }
 
     /**
