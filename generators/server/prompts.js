@@ -222,37 +222,37 @@ function askForServerSideOpts() {
             when: () => !reactive,
             type: 'list',
             name: 'cacheProvider',
-            message: 'Do you want to use the Spring cache abstraction?',
+            message: 'Which cache do you want to use? (Spring cache abstraction)',
             choices: [
                 {
                     value: 'ehcache',
-                    name: 'Yes, with the Ehcache implementation (local cache, for a single node)',
+                    name: 'Ehcache (local cache, for a single node)',
                 },
                 {
                     value: 'caffeine',
-                    name: 'Yes, with the Caffeine implementation (local cache, for a single node)',
+                    name: 'Caffeine (local cache, for a single node)',
                 },
                 {
                     value: 'hazelcast',
                     name:
-                        'Yes, with the Hazelcast implementation (distributed cache, for multiple nodes, supports rate-limiting for gateway applications)',
+                        'Hazelcast (distributed cache, for multiple nodes, supports rate-limiting for gateway applications)',
                 },
                 {
                     value: 'infinispan',
-                    name: '[BETA] Yes, with the Infinispan implementation (hybrid cache, for multiple nodes)',
+                    name: '[BETA] Infinispan (hybrid cache, for multiple nodes)',
                 },
                 {
                     value: 'memcached',
                     name:
-                        'Yes, with Memcached (distributed cache) - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
+                        'Memcached (distributed cache) - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
                 },
                 {
                     value: 'redis',
-                    name: 'Yes, with the Redis implementation',
+                    name: 'Redis (distributed cache)',
                 },
                 {
                     value: 'no',
-                    name: 'No - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
+                    name: 'No cache - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
                 },
             ],
             default: applicationType === 'microservice' || applicationType === 'uaa' ? 2 : serverDefaultConfig.cacheProvider,
@@ -330,13 +330,13 @@ function askForOptionalItems() {
     const defaultChoice = [];
     if (['sql', 'mongodb', 'neo4j'].includes(databaseType)) {
         choices.push({
-            name: 'Search engine using Elasticsearch',
+            name: 'Elasticsearch as search engine',
             value: 'searchEngine:elasticsearch',
         });
     }
     if (databaseType === 'couchbase') {
         choices.push({
-            name: 'Search engine using Couchbase FTS',
+            name: 'Couchbase FTS as search engine',
             value: 'searchEngine:couchbase',
         });
     }
@@ -349,7 +349,7 @@ function askForOptionalItems() {
         }
     }
     choices.push({
-        name: 'Asynchronous messages using Apache Kafka',
+        name: 'Apache Kafka as asynchronous messages',
         value: 'messageBroker:kafka',
     });
     choices.push({
