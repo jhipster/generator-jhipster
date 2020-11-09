@@ -83,7 +83,7 @@ export default (state: AdministrationState = initialState, action): Administrati
     case REQUEST(ACTION_TYPES.FETCH_ENV):
     case REQUEST(ACTION_TYPES.FETCH_HEALTH):
   <%_ } _%>
-  <%_ if (withAdminUi ||  (applicationType === 'gateway' && serviceDiscoveryType)) { _%>
+  <%_ if (withAdminUi || (applicationType === 'gateway' && serviceDiscoveryType)) { _%>
       return {
         ...state,
         errorMessage: null,
@@ -101,7 +101,7 @@ export default (state: AdministrationState = initialState, action): Administrati
     case FAILURE(ACTION_TYPES.FETCH_ENV):
     case FAILURE(ACTION_TYPES.FETCH_HEALTH):
   <%_ } _%>
-  <%_ if (withAdminUi ||  (applicationType === 'gateway' && serviceDiscoveryType)) { _%>
+  <%_ if (withAdminUi || (applicationType === 'gateway' && serviceDiscoveryType)) { _%>
       return {
         ...state,
         loading: false,
