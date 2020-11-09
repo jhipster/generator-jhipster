@@ -1,4 +1,4 @@
-/*
+<%#
  Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
@@ -8,92 +8,66 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
- http://www.apache.org/licenses/LICENSE-2.0
+      http://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
- */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
-import { JhiItemCountComponent } from '../../src/component/jhi-item-count.component';
-import { JhiTranslateDirective } from '../../src/language/jhi-translate.directive';
-import { JhiConfigService } from '../../src/config.service';
+-%>
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+<%_ if (enableTranslation) { _%>
+import { JhiTranslateDirective } from 'ng-jhipster';
+<%_ } _%>
 
-function getElementHtml(
-    element: ComponentFixture<JhiItemCountComponent>
-): string {
-    const res = element.nativeElement.querySelector('.jhi-item-count');
-    return res && res.innerHTML ? res.innerHTML.trim() : '';
-}
+import { ItemCountComponent } from 'app/shared/item-count.component';
 
-describe('JhiItemCountComponent test', () => {
-    let comp: JhiItemCountComponent;
-    let fixture: ComponentFixture<JhiItemCountComponent>;
+describe('ItemCountComponent test', () => {
+  let comp: ItemCountComponent;
+  let fixture: ComponentFixture<ItemCountComponent>;
 
-    beforeEach(async(() => {
-        TestBed.configureTestingModule({
-            declarations: [JhiItemCountComponent, JhiTranslateDirective],
-            imports: [TranslateModule.forRoot()],
-            providers: [
-                {
-                    provide: JhiConfigService,
-                    useValue: new JhiConfigService({
-                        defaultI18nLang: 'en',
-                        i18nEnabled: true
-                    })
-                }
-            ]
-        }).compileComponents();
-    }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          ItemCountComponent,
+          <%_ if (enableTranslation) { _%>
+          JhiTranslateDirective,
+          <%_ } _%>
+        ],
+      }).compileComponents();
+    })
+  );
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(JhiItemCountComponent);
-        comp = fixture.componentInstance;
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ItemCountComponent);
+    comp = fixture.componentInstance;
+  });
+
+  describe('UI logic tests', () => {
+    it('should initialize with undefined', () => {
+      expect(comp.first).toBeUndefined();
+      expect(comp.second).toBeUndefined();
+      expect(comp.total).toBeUndefined();
     });
 
-    describe('UI logic tests', () => {
-        it('should initialize with undefined', () => {
-            expect(comp.page).toBeUndefined();
-            expect(comp.itemsPerPage).toBeUndefined();
-            expect(comp.total).toBeUndefined();
-        });
+    it('should change the content on page change', () => {
+      // GIVEN
+      comp.params = { page: 1, totalItems: 100, itemsPerPage: 10 };
 
-        it('should change the content on page change', () => {
-            comp.page = 1;
-            comp.itemsPerPage = 10;
-            comp.total = 100;
-            fixture.detectChanges();
+      // THEN
+      expect(comp.first).toBe(1);
+      expect(comp.second).toBe(10);
+      expect(comp.total).toBe(100);
 
-            expect(comp.i18nValues()).toEqual({
-                first: 1,
-                second: 10,
-                total: 100
-            });
+      // GIVEN
+      comp.params = { page: 2, totalItems: 100, itemsPerPage: 10 };
 
-            comp.page = 2;
-            fixture.detectChanges();
-
-            expect(comp.i18nValues()).toEqual({
-                first: 11,
-                second: 20,
-                total: 100
-            });
-        });
-
-        it('should not translate the content', () => {
-            comp.i18nEnabled = false;
-            comp.page = 1;
-            comp.itemsPerPage = 10;
-            comp.total = 100;
-            fixture.detectChanges();
-            expect(getElementHtml(fixture)).toBe(``);
-
-            comp.page = 2;
-            fixture.detectChanges();
-            expect(getElementHtml(fixture)).toBe(``);
-        });
+      // THEN
+      expect(comp.first).toBe(11);
+      expect(comp.second).toBe(20);
+      expect(comp.total).toBe(100);
     });
+  });
 });
