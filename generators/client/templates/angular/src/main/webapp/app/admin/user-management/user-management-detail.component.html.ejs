@@ -27,16 +27,8 @@
                 <dt><span jhiTranslate="userManagement.login">Login</span></dt>
                 <dd>
                     <span>{{ user.login }}</span>
-                    <jhi-boolean
-                        [value]="user.activated ? true : false"
-                    <%_ if (enableTranslation) { _%>
-                        [textTrue]="'userManagement.activated' | translate"
-                        [textFalse]="'userManagement.deactivated' | translate">
-                    <%_ } else { _%>
-                        textTrue="Activated"
-                        textFalse="Deactivated">
-                    <%_ } _%>
-                    </jhi-boolean>
+                    <span *ngIf="user.activated" class="badge badge-success" jhiTranslate="userManagement.activated">Activated</span>
+                    <span *ngIf="!user.activated" class="badge badge-danger" jhiTranslate="userManagement.deactivated">Deactivated</span>
                 </dd>
 
                 <dt><span jhiTranslate="userManagement.firstName">First Name</span></dt>
