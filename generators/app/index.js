@@ -207,12 +207,14 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         });
 
         this.option('native-language', {
+            alias: 'n',
             desc: 'Set application native language',
             type: String,
             required: false,
         });
 
         this.option('language', {
+            alias: 'l',
             desc: 'Language to be added to application (existing languages are not removed)',
             type: Array,
         });
