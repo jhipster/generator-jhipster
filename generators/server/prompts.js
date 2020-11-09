@@ -348,7 +348,7 @@ function askForOptionalItems() {
         }
     }
     choices.push({
-        name: 'Apache Kafka as asynchronous messages',
+        name: 'Apache Kafka as asynchronous messages broker',
         value: 'messageBroker:kafka',
     });
     choices.push({
