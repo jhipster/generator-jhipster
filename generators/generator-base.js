@@ -33,6 +33,7 @@ const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig } = require('./generator-defaults');
+const { detectLanguage } = require('../utils/language');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
@@ -2427,6 +2428,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
                 if (!this.jhipsterConfig.languages) {
                     this.jhipsterConfig.languages = [options.nativeLanguage];
                 }
+            } else if (options.nativeLanguage === true) {
+                this.jhipsterConfig.nativeLanguage = detectLanguage();
             }
         }
 
