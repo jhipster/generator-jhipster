@@ -659,16 +659,16 @@ relationships.forEach((relationship, idx) => {
         <%_ if (relationship.otherRelationship) { _%>
         if (this.<%= relationshipFieldName %> != null) {
             <%_ if (relationship.otherRelationship.reference.collection) { _%>
-            this.<%= relationshipFieldName %>.remove<%= otherEntityRelationshipNameCapitalized %>(this));
+            this.<%= relationshipFieldName %>.remove<%= otherEntityRelationshipNameCapitalized %>(this);
             <%_ } else { _%>
-            this.<%= relationshipFieldName %>.set<%= otherEntityRelationshipNameCapitalized %>(null));
+            this.<%= relationshipFieldName %>.set<%= otherEntityRelationshipNameCapitalized %>(null);
             <%_ } _%>
         }
         if (<%= relationshipFieldName %> != null) {
             <%_ if (relationship.otherRelationship.reference.collection) { _%>
-            <%= relationshipFieldName %>.add<%= otherEntityRelationshipNameCapitalized %>(this));
+            <%= relationshipFieldName %>.add<%= otherEntityRelationshipNameCapitalized %>(this);
             <%_ } else { _%>
-            <%= relationshipFieldName %>.set<%= otherEntityRelationshipNameCapitalized %>(this));
+            <%= relationshipFieldName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
             <%_ } _%>
         }
         <%_ } _%>
