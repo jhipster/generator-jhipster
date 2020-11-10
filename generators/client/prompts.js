@@ -20,9 +20,7 @@ const chalk = require('chalk');
 const constants = require('../generator-constants');
 const { clientDefaultConfig } = require('../generator-defaults');
 
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
-const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
+const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 module.exports = {
     askForModuleName,
