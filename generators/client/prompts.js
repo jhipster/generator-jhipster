@@ -84,43 +84,23 @@ async function askForClientTheme() {
 
     const self = this;
     const skipClient = this.skipClient;
-    const defaultChoices = [
+    const defaultJHipsterChoices = [
         {
             value: 'none',
             name: 'Default JHipster',
         },
-        { value: 'cerulean', name: 'Cerulean' },
-        { value: 'cosmo', name: 'Cosmo' },
-        { value: 'cerulean', name: 'Cyborg' },
-        { value: 'darkly', name: 'Darkly' },
-        { value: 'flatly', name: 'Flatly' },
-        { value: 'journal', name: 'Journal' },
-        { value: 'litera', name: 'Litera' },
-        { value: 'lumen', name: 'Lumen' },
-        { value: 'lux', name: 'Lux' },
-        { value: 'materia', name: 'Materia' },
-        { value: 'minty', name: 'Minty' },
-        { value: 'pulse', name: 'Pulse' },
-        { value: 'sandstone', name: 'Sandstone' },
-        { value: 'simplex', name: 'Simplex' },
-        { value: 'sketchy', name: 'Sketchy' },
-        { value: 'slate', name: 'Slate' },
-        { value: 'solar', name: 'Solar' },
-        { value: 'spacelab', name: 'Spacelab' },
-        { value: 'superhero', name: 'Superhero' },
-        { value: 'united', name: 'United' },
-        { value: 'yeti', name: 'Yeti' },
     ];
 
-    const bootSwatchChoices = await retrieveBootswatchThemes(self).catch(() =>
-        self.warning('Could not fetch bootswatch themes from API. Using default ones.')
-    );
+    const bootswatchChoices = await retrieveOnlineBootswatchThemes(self).catch(errorMessage => {
+        self.warning(errorMessage);
+        return retrieveLocalBootswatchThemes();
+    });
     const answers = await this.prompt({
         type: 'list',
         name: 'clientTheme',
         when: () => !skipClient,
         message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
-        choices: bootSwatchChoices || defaultChoices,
+        choices: [...defaultJHipsterChoices, ...bootswatchChoices],
         default: clientDefaultConfig.clientTheme,
     });
 
@@ -174,33 +154,62 @@ async function askForAdminUi() {
     this.withAdminUi = this.jhipsterConfig.withAdminUi = answers.withAdminUi;
 }
 
-async function retrieveBootswatchThemes(generator) {
+async function retrieveOnlineBootswatchThemes(generator) {
+    return _retrieveBootswatchThemes(generator, true);
+}
+
+async function retrieveLocalBootswatchThemes(generator) {
+    return _retrieveBootswatchThemes(generator, false);
+}
+
+async function _retrieveBootswatchThemes(generator, useApi) {
+    const errorMessage = 'Could not fetch bootswatch themes from API. Using default ones.';
+    if (!useApi) {
+        return [
+            { value: 'cerulean', name: 'Cerulean' },
+            { value: 'cosmo', name: 'Cosmo' },
+            { value: 'cerulean', name: 'Cyborg' },
+            { value: 'darkly', name: 'Darkly' },
+            { value: 'flatly', name: 'Flatly' },
+            { value: 'journal', name: 'Journal' },
+            { value: 'litera', name: 'Litera' },
+            { value: 'lumen', name: 'Lumen' },
+            { value: 'lux', name: 'Lux' },
+            { value: 'materia', name: 'Materia' },
+            { value: 'minty', name: 'Minty' },
+            { value: 'pulse', name: 'Pulse' },
+            { value: 'sandstone', name: 'Sandstone' },
+            { value: 'simplex', name: 'Simplex' },
+            { value: 'sketchy', name: 'Sketchy' },
+            { value: 'slate', name: 'Slate' },
+            { value: 'solar', name: 'Solar' },
+            { value: 'spacelab', name: 'Spacelab' },
+            { value: 'superhero', name: 'Superhero' },
+            { value: 'united', name: 'United' },
+            { value: 'yeti', name: 'Yeti' },
+        ];
+    }
+
     return new Promise((resolve, reject) => {
         generator.httpsGet(
             'https://bootswatch.com/api/4.json',
-            // eslint-disable-next-line consistent-return
+
             body => {
-                let choices;
                 try {
                     const { themes } = JSON.parse(body);
 
-                    choices = [
-                        {
-                            value: 'none',
-                            name: 'Default JHipster',
-                        },
-                        ...themes.map(theme => ({
-                            value: theme.name.toLowerCase(),
-                            name: theme.name,
-                        })),
-                    ];
+                    const bootswatchChoices = themes.map(theme => ({
+                        value: theme.name.toLowerCase(),
+                        name: theme.name,
+                    }));
+
+                    resolve(bootswatchChoices);
                 } catch (err) {
-                    reject();
+                    reject(errorMessage);
                 }
-                resolve(choices);
             },
             () => {
-                reject();
+                reject(errorMessage);
             }
         );
     });
