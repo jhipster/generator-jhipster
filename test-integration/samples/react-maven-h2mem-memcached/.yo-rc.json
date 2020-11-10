@@ -32,6 +32,7 @@
         "nativeLanguage": "en",
         "languages": ["en"],
         "blueprints": [],
+        "withAdminUi": false,
         "creationTimestamp": 1596513172471
     }
 }

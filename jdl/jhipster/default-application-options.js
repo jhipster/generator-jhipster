@@ -31,6 +31,7 @@ const {
     CLIENT_PACKAGE_MANAGER,
     CLIENT_THEME,
     CLIENT_THEME_VARIANT,
+    WITH_ADMIN_UI,
     DATABASE_TYPE,
     DEV_DATABASE_TYPE,
     DTO_SUFFIX,
@@ -89,6 +90,7 @@ function getConfigForMonolithApplication(customOptions = {}) {
         [SERVER_PORT]: OptionValues[SERVER_PORT],
         [SERVICE_DISCOVERY_TYPE]: false,
         [SKIP_USER_MANAGEMENT]: OptionValues[SKIP_USER_MANAGEMENT],
+        [WITH_ADMIN_UI]: true,
         ...customOptions,
     };
     if (!options[CLIENT_THEME]) {
@@ -115,6 +117,7 @@ function getConfigForGatewayApplication(customOptions = {}) {
         [SERVER_PORT]: OptionValues[SERVER_PORT],
         [SERVICE_DISCOVERY_TYPE]: OptionValues[SERVICE_DISCOVERY_TYPE].eureka,
         [SKIP_USER_MANAGEMENT]: OptionValues[SKIP_USER_MANAGEMENT],
+        [WITH_ADMIN_UI]: true,
         ...customOptions,
     };
     if (!options[CLIENT_THEME]) {

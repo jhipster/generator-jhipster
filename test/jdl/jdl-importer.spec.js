@@ -676,6 +676,7 @@ relationship OneToOne {
                         packageFolder: 'com/mathieu/tata',
                         authenticationType: 'jwt',
                         websocket: false,
+                        withAdminUi: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
                         dtoSuffix: 'DTO',
@@ -712,6 +713,7 @@ relationship OneToOne {
                         packageFolder: 'com/mathieu/titi',
                         authenticationType: 'jwt',
                         websocket: false,
+                        withAdminUi: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
                         dtoSuffix: 'DTO',
@@ -780,6 +782,7 @@ relationship OneToOne {
                         packageFolder: 'com/mathieu/tutu',
                         authenticationType: 'jwt',
                         websocket: false,
+                        withAdminUi: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
                         dtoSuffix: 'DTO',
@@ -873,6 +876,7 @@ relationship OneToOne {
                         reactive: false,
                         skipClient: false,
                         skipServer: false,
+                        withAdminUi: true,
                     },
                 },
                 {
@@ -1105,17 +1109,17 @@ relationship OneToOne {
             it('sets the options', () => {
                 expect(returned.exportedEntities[0].service).to.equal('serviceClass');
                 expect(returned.exportedEntities[0].dto).to.equal('mapstruct');
-                expect(returned.exportedEntities[0].skipClient).to.equal(true);
-                expect(returned.exportedEntities[0].myCustomUnaryOption).to.equal(true);
+                expect(returned.exportedEntities[0].skipClient).to.be.true;
+                expect(returned.exportedEntities[0].myCustomUnaryOption).to.be.true;
                 expect(returned.exportedEntities[0].myCustomBinaryOption).to.equal('customValue');
                 expect(returned.exportedEntities[1].pagination).to.equal('pagination');
                 expect(returned.exportedEntities[1].dto).to.equal('mapstruct');
                 expect(returned.exportedEntities[1].service).to.equal('serviceClass');
-                expect(returned.exportedEntities[2].skipClient).to.equal(true);
-                expect(returned.exportedEntities[2].jpaMetamodelFiltering).to.equal(true);
+                expect(returned.exportedEntities[2].skipClient).to.be.true;
+                expect(returned.exportedEntities[2].jpaMetamodelFiltering).to.be.true;
                 expect(returned.exportedEntities[2].pagination).to.equal('pagination');
                 expect(returned.exportedEntities[2].myCustomBinaryOption).to.equal('customValue2');
-                expect(returned.exportedEntities[0].fields[0].options.id).to.equal(true);
+                expect(returned.exportedEntities[0].fields[0].options.id).to.be.true;
                 expect(returned.exportedEntities[0].fields[0].options.multiValue).to.deep.equal(['value1', 'value2', 'value3']);
             });
         });
@@ -1201,6 +1205,7 @@ relationship OneToOne {
                         skipUserManagement: false,
                         skipClient: false,
                         skipServer: false,
+                        withAdminUi: true,
                     },
                 },
                 {
@@ -1237,6 +1242,7 @@ relationship OneToOne {
                         skipUserManagement: false,
                         skipClient: false,
                         skipServer: false,
+                        withAdminUi: true,
                     },
                 },
                 {
@@ -1305,6 +1311,7 @@ relationship OneToOne {
                         skipUserManagement: false,
                         skipClient: false,
                         skipServer: false,
+                        withAdminUi: true,
                     },
                 },
                 {
@@ -1464,6 +1471,7 @@ relationship OneToOne {
                         skipUserManagement: false,
                         clientPackageManager: 'npm',
                         serverPort: '8080',
+                        withAdminUi: true,
                     },
                     entities: [
                         'Customer',
@@ -1898,6 +1906,7 @@ paginate * with infinite-scroll
                             skipUserManagement: false,
                             testFrameworks: [],
                             websocket: false,
+                            withAdminUi: true,
                         },
                     },
                 ]);

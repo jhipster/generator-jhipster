@@ -64,6 +64,7 @@ describe('JHipsterApplicationExporter', () => {
                             testFrameworks: [],
                             websocket: false,
                             jwtSecretKey: '1234',
+                            withAdminUi: true,
                         },
                     });
                     content = fs.readFileSync(path.join('.yo-rc.json'), { encoding: 'utf8' });
@@ -128,6 +129,7 @@ describe('JHipsterApplicationExporter', () => {
                             testFrameworks: [],
                             websocket: false,
                             jwtSecretKey: '1234',
+                            withAdminUi: true,
                         },
                     });
                     content = JSON.parse(fs.readFileSync(path.join('.yo-rc.json'), { encoding: 'utf8' }));
@@ -175,6 +177,7 @@ describe('JHipsterApplicationExporter', () => {
                             websocket: false,
                             jwtSecretKey: '1234',
                             creationTimestamp: 'old',
+                            withAdminUi: true,
                         },
                     });
                 });
@@ -227,6 +230,7 @@ describe('JHipsterApplicationExporter', () => {
                             testFrameworks: [],
                             websocket: false,
                             jwtSecretKey: '1234',
+                            withAdminUi: true,
                         },
                     },
 
@@ -263,6 +267,7 @@ describe('JHipsterApplicationExporter', () => {
                             testFrameworks: [],
                             websocket: false,
                             jwtSecretKey: '1234',
+                            withAdminUi: true,
                         },
                     },
                 ]);

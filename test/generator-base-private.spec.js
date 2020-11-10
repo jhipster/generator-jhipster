@@ -150,7 +150,7 @@ export * from './entityFolderName/entityFileName.state';`;
         });
         describe('when called with languages ar-ly', () => {
             it('return true', () => {
-                expect(BaseGenerator.skipLanguageForLocale('ar-ly')).to.equal(true);
+                expect(BaseGenerator.skipLanguageForLocale('ar-ly')).to.be.true;
             });
         });
     });

@@ -57,6 +57,7 @@ const applicationConfigTokens = [
     { name: 'CLIENT_FRAMEWORK', pattern: 'clientFramework' },
     { name: 'CLIENT_THEME_VARIANT', pattern: 'clientThemeVariant' },
     { name: 'CLIENT_THEME', pattern: 'clientTheme' },
+    { name: 'WITH_ADMIN_UI', pattern: 'withAdminUi' },
     { name: 'NATIVE_LANGUAGE', pattern: 'nativeLanguage' },
     { name: 'FRONT_END_BUILDER', pattern: 'frontendBuilder' },
     { name: 'SKIP_USER_MANAGEMENT', pattern: 'skipUserManagement' },

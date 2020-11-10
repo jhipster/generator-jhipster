@@ -85,6 +85,7 @@ const clientDefaultConfig = {
     ...clientRequiredConfig,
     clientTheme: defaultMonolithOptions[optionNames.CLIENT_THEME],
     clientThemeVariant: defaultMonolithOptions[optionNames.CLIENT_THEME_VARIANT],
+    withAdminUi: defaultMonolithOptions[optionNames.WITH_ADMIN_UI],
 };
 
 const translationDefaultConfig = {

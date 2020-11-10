@@ -29,6 +29,7 @@ import administration, {
   <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
   gatewayRoutes,
   <%_ } _%>
+<%_ if (withAdminUi) { _%>
   systemHealth,
   systemMetrics,
   systemThreadDump,
@@ -36,6 +37,7 @@ import administration, {
   changeLogLevel,
   getConfigurations,
   getEnv
+<%_ } _%>
 } from 'app/modules/administration/administration.reducer';
 
 describe('Administration reducer tests', () => {
@@ -58,8 +60,10 @@ describe('Administration reducer tests', () => {
     <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
     expect(isEmpty(state.gateway.routes));
     <%_ } _%>
+    <%_ if (withAdminUi) { _%>
     expect(isEmpty(state.logs.loggers));
     expect(isEmpty(state.threadDump));
+    <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
     expect(isEmpty(state.tracker.activities));
     <%_ } _%>
@@ -84,12 +88,14 @@ describe('Administration reducer tests', () => {
           <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
           REQUEST(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
           <%_ } _%>
+          <%_ if (withAdminUi) { _%>
           REQUEST(ACTION_TYPES.FETCH_LOGS),
           REQUEST(ACTION_TYPES.FETCH_HEALTH),
           REQUEST(ACTION_TYPES.FETCH_METRICS),
           REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP),
           REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS),
           REQUEST(ACTION_TYPES.FETCH_ENV)
+          <%_ } _%>
         ],
         {},
         state => {
@@ -109,12 +115,14 @@ describe('Administration reducer tests', () => {
           <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
           FAILURE(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
           <%_ } _%>
+        <%_ if (withAdminUi) { _%>
           FAILURE(ACTION_TYPES.FETCH_LOGS),
           FAILURE(ACTION_TYPES.FETCH_HEALTH),
           FAILURE(ACTION_TYPES.FETCH_METRICS),
           FAILURE(ACTION_TYPES.FETCH_THREAD_DUMP),
           FAILURE(ACTION_TYPES.FETCH_CONFIGURATIONS),
           FAILURE(ACTION_TYPES.FETCH_ENV)
+        <%_ } _%>
         ],
         'something happened',
         state => {
@@ -139,6 +147,7 @@ describe('Administration reducer tests', () => {
       });
     });
     <%_ } _%>
+    <%_ if (withAdminUi) { _%>
     it('should update state according to a successful fetch logs request', () => {
       const payload = { data: {
           loggers: {
@@ -211,7 +220,7 @@ describe('Administration reducer tests', () => {
         }
       });
     });
-
+    <%_ } _%>
   });
 <%_ if (websocket === 'spring-websocket') { _%>
   describe('Websocket Message Handling', () => {
@@ -271,6 +280,7 @@ describe('Administration reducer tests', () => {
       await store.dispatch(gatewayRoutes()).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
     <%_ } _%>
+    <%_ if (withAdminUi) { _%>
     it('dispatches FETCH_HEALTH_PENDING and FETCH_HEALTH_FULFILLED actions', async () => {
       const expectedActions = [
         {
@@ -362,5 +372,6 @@ describe('Administration reducer tests', () => {
       ];
       await store.dispatch(getEnv()).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
+  <%_ } _%>
   });
 });
