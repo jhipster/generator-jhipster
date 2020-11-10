@@ -647,7 +647,7 @@ relationships.forEach((relationship, idx) => {
         <%_ if (fluentMethods) { _%>
 
     public <%= asEntity(entityClass) %> <%= relationshipFieldName %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
-        this.<%= relationshipFieldName %> = <%= otherEntityName %>;
+        this.set<%= relationshipNameCapitalized %>(<%= otherEntityName %>);
             <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationshipWithId) { _%>
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
             <%_ } _%>
@@ -656,6 +656,22 @@ relationships.forEach((relationship, idx) => {
         <%_ } _%>
 
     public void set<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
+        <%_ if (relationship.otherRelationship) { _%>
+        if (this.<%= relationshipFieldName %> != null) {
+            <%_ if (relationship.otherRelationship.reference.collection) { _%>
+            this.<%= relationshipFieldName %>.remove<%= otherEntityRelationshipNameCapitalized %>(this));
+            <%_ } else { _%>
+            this.<%= relationshipFieldName %>.set<%= otherEntityRelationshipNameCapitalized %>(null));
+            <%_ } _%>
+        }
+        if (<%= relationshipFieldName %> != null) {
+            <%_ if (relationship.otherRelationship.reference.collection) { _%>
+            <%= relationshipFieldName %>.add<%= otherEntityRelationshipNameCapitalized %>(this));
+            <%_ } else { _%>
+            <%= relationshipFieldName %>.set<%= otherEntityRelationshipNameCapitalized %>(this));
+            <%_ } _%>
+        }
+        <%_ } _%>
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
         <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationshipWithId) { _%>
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
