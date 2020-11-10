@@ -489,7 +489,7 @@ relationships.forEach((relationship, idx) => {
     <%_ } else { _%>
     public String get<%= fieldInJavaBeanMethod %>() {
     <%_ } _%>
-        return <%= fieldName %>;
+        return this.<%= fieldName %>;
     }
     <%_ if (fluentMethods) { _%>
 
@@ -521,7 +521,7 @@ relationships.forEach((relationship, idx) => {
     <%_ if (fields[idx].fieldWithContentType) { _%>
 
     public String get<%= fieldInJavaBeanMethod %>ContentType() {
-        return <%= fieldName %>ContentType;
+        return this.<%= fieldName %>ContentType;
     }
     <%_ if (fluentMethods) { _%>
 
@@ -538,6 +538,7 @@ relationships.forEach((relationship, idx) => {
 <%_ } _%>
 <%_
     for (idx in relationships) {
+        const relationship = relationships[idx];
         const relationshipFieldName = relationships[idx].relationshipFieldName;
         const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
         const relationshipType = relationships[idx].relationshipType;
@@ -563,12 +564,12 @@ relationships.forEach((relationship, idx) => {
     <%_ if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') { _%>
 
     public Set<<%= asEntity(otherEntityNameCapitalized) %>> get<%= relationshipNameCapitalizedPlural %>() {
-        return <%= relationshipFieldNamePlural %>;
+        return this.<%= relationshipFieldNamePlural %>;
     }
         <%_ if (fluentMethods) { _%>
 
     public <%= asEntity(entityClass) %> <%= relationshipFieldNamePlural %>(Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= otherEntityNamePlural %>) {
-        this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
+        this.set<%= relationshipNameCapitalizedPlural %>(<%= otherEntityNamePlural %>);
             <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
         this.<%= relationshipFieldName %>Ids = <%= otherEntityNamePlural %>.stream()
             .map(<%= asEntity(otherEntityNameCapitalized) %>::getId)
@@ -615,6 +616,22 @@ relationships.forEach((relationship, idx) => {
         <%_ } _%>
 
     public void set<%= relationshipNameCapitalizedPlural %>(Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= otherEntityNamePlural %>) {
+        <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
+        if (this.<%= relationshipFieldNamePlural %> != null) {
+            <%_ if (relationship.otherRelationship.reference.collection) { _%>
+            this.<%= relationshipFieldNamePlural %>.forEach(<%= otherEntityName %> -> <%= otherEntityName %>.remove<%= otherEntityRelationshipNameCapitalized %>(this));
+            <%_ } else { _%>
+            this.<%= relationshipFieldNamePlural %>.forEach(<%= otherEntityName %> -> <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(null));
+            <%_ } _%>
+        }
+        if (<%= otherEntityNamePlural %> != null) {
+            <%_ if (relationship.otherRelationship.reference.collection) { _%>
+            <%= otherEntityNamePlural %>.forEach(<%= otherEntityName %> -> <%= otherEntityName %>.add<%= otherEntityRelationshipNameCapitalized %>(this));
+            <%_ } else { _%>
+            <%= otherEntityNamePlural %>.forEach(<%= otherEntityName %> -> <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(this));
+            <%_ } _%>
+        }
+        <%_ } _%>
         this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
         <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
         this.<%= relationshipFieldName %>Ids = <%= otherEntityNamePlural %>.stream()
@@ -625,12 +642,12 @@ relationships.forEach((relationship, idx) => {
     <%_ } else { _%>
 
     public <%= asEntity(otherEntityNameCapitalized) %> get<%= relationshipNameCapitalized %>() {
-        return <%= relationshipFieldName %>;
+        return this.<%= relationshipFieldName %>;
     }
         <%_ if (fluentMethods) { _%>
 
     public <%= asEntity(entityClass) %> <%= relationshipFieldName %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
-        this.<%= relationshipFieldName %> = <%= otherEntityName %>;
+        this.set<%= relationshipNameCapitalized %>(<%= otherEntityName %>);
             <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationshipWithId) { _%>
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
             <%_ } _%>
@@ -639,6 +656,22 @@ relationships.forEach((relationship, idx) => {
         <%_ } _%>
 
     public void set<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
+        <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
+        if (this.<%= relationshipFieldName %> != null) {
+            <%_ if (relationship.otherRelationship.reference.collection) { _%>
+            this.<%= relationshipFieldName %>.remove<%= otherEntityRelationshipNameCapitalized %>(this);
+            <%_ } else { _%>
+            this.<%= relationshipFieldName %>.set<%= otherEntityRelationshipNameCapitalized %>(null);
+            <%_ } _%>
+        }
+        if (<%= relationshipFieldName %> != null) {
+            <%_ if (relationship.otherRelationship.reference.collection) { _%>
+            <%= relationshipFieldName %>.add<%= otherEntityRelationshipNameCapitalized %>(this);
+            <%_ } else { _%>
+            <%= relationshipFieldName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
+            <%_ } _%>
+        }
+        <%_ } _%>
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
         <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationshipWithId) { _%>
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
