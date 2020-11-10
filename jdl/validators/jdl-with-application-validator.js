@@ -53,7 +53,7 @@ function createValidator(jdlObject, logger = console) {
             checkForApplicationErrors();
             jdlObject.forEachApplication(jdlApplication => {
                 const blueprints = jdlApplication.getConfigurationOptionValue('blueprints');
-                if (!blueprints || blueprints.length > 0) {
+                if (blueprints && blueprints.length > 0) {
                     logger.warn('Generating application with blueprint, skipping jdl validation');
                     return;
                 }
