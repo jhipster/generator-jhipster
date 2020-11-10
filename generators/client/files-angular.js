@@ -293,6 +293,7 @@ const files = {
                 'core/user/account.model.ts',
                 'core/user/authority.model.ts',
                 'core/util/data-util.service.ts',
+                'core/util/parse-links.service.ts',
 
                 // config
                 'core/config/uib-pagination.config.ts',
@@ -393,6 +394,7 @@ const files = {
                 'spec/app/core/user/account.service.spec.ts',
                 'spec/app/core/event-manager/event-manager.service.spec.ts',
                 'spec/app/core/util/data-util.service.spec.ts',
+                'spec/app/core/util/parse-links.service.spec.ts',
                 'spec/app/home/home.component.spec.ts',
                 'spec/app/layouts/main/main.component.spec.ts',
                 'spec/app/layouts/navbar/navbar.component.spec.ts',

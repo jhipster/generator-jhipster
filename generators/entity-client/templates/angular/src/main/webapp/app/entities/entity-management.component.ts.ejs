@@ -24,9 +24,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 <%_ } _%>
 import { Subscription<% if (pagination === 'pagination') { %>, combineLatest<% } %> } from 'rxjs';
-<%_ if (pagination === 'infinite-scroll') { _%>
-import { JhiParseLinks } from 'ng-jhipster';
-<%_ } _%>
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
@@ -42,6 +39,9 @@ import { <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileN
 import { EventManager } from 'app/core/event-manager/event-manager.service';
 <%_ if (fieldsContainBlob) { _%>
 import { DataUtils } from 'app/core/util/data-util.service';
+<%_ } _%>
+<%_ if (pagination === 'infinite-scroll') { _%>
+import { ParseLinks } from 'app/core/util/parse-links.service';
 <%_ } _%>
 
 @Component({
@@ -137,8 +137,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     <%_ } else if (pagination === 'infinite-scroll') { _%>
 
     protected paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders): void {
-        const headersLink = headers.get('link');
-        this.links = this.parseLinks.parse(headersLink ? headersLink : '');
+        this.links = this.parseLinks.parse(headers.get('link') ?? '');
         if (data) {
             for (let i = 0; i < data.length; i++) {
                 this.<%= entityInstancePlural %>.push(data[i]);
