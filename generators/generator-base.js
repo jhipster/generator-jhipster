@@ -33,6 +33,7 @@ const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig } = require('./generator-defaults');
+const { detectLanguage } = require('../utils/language');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
@@ -2415,6 +2416,21 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
         if (options.legacyDbNames !== undefined) {
             this.jhipsterConfig.legacyDbNames = options.legacyDbNames;
+        }
+        if (options.language) {
+            // workaround double options parsing, remove once generator supports skipping parse options
+            const languages = options.language.flat();
+            this.jhipsterConfig.languages = [...this.jhipsterConfig.languages, ...languages];
+        }
+        if (options.nativeLanguage) {
+            if (typeof options.nativeLanguage === 'string') {
+                this.jhipsterConfig.nativeLanguage = options.nativeLanguage;
+                if (!this.jhipsterConfig.languages) {
+                    this.jhipsterConfig.languages = [options.nativeLanguage];
+                }
+            } else if (options.nativeLanguage === true) {
+                this.jhipsterConfig.nativeLanguage = detectLanguage();
+            }
         }
 
         if (options.creationTimestamp) {

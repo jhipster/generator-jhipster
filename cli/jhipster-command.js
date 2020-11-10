@@ -150,9 +150,9 @@ class JHipsterCommand extends Command {
         }
         cmdString = `${cmdString}${longOption}`;
         if (optionDefinition.type === String) {
-            cmdString = `${cmdString} <value>`;
+            cmdString = optionDefinition.required !== false ? `${cmdString} <value>` : `${cmdString} [value]`;
         } else if (optionDefinition.type === Array) {
-            cmdString = `${cmdString} <value...>`;
+            cmdString = optionDefinition.required !== false ? `${cmdString} <value...>` : `${cmdString} [value...]`;
         }
         return this.addOption(
             new Option(cmdString, optionDefinition.description + additionalDescription)
