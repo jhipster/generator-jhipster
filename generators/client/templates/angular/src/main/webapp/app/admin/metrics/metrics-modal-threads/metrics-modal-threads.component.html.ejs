@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <div class="modal-header">
-    <h4 class="modal-title" jhiTranslate="metrics.jvm.threads.dump.title">Threads dump</h4>
+    <h4 class="modal-title" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.title">Threads dump</h4>
 
     <button type="button" class="close" (click)="activeModal.dismiss()">&times;</button>
 </div>
@@ -57,8 +57,8 @@
             &nbsp;{{ entry.value.threadName }} (ID {{ entry.value.threadId }})
 
             <a (click)="entry.value.showThreadDump = !entry.value.showThreadDump" href="javascript:void(0);">
-                <span [hidden]="entry.value.showThreadDump" jhiTranslate="metrics.jvm.threads.dump.show">Show StackTrace</span>
-                <span [hidden]="!entry.value.showThreadDump" jhiTranslate="metrics.jvm.threads.dump.hide">Hide StackTrace</span>
+                <span [hidden]="entry.value.showThreadDump" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.show">Show StackTrace</span>
+                <span [hidden]="!entry.value.showThreadDump" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.hide">Hide StackTrace</span>
             </a>
         </h6>
 
@@ -73,11 +73,11 @@
         <table class="table table-sm table-responsive">
             <thead>
                 <tr>
-                    <th jhiTranslate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>
-                    <th jhiTranslate="metrics.jvm.threads.dump.blockedcount">Blocked Count</th>
-                    <th jhiTranslate="metrics.jvm.threads.dump.waitedtime">Waited Time</th>
-                    <th jhiTranslate="metrics.jvm.threads.dump.waitedcount">Waited Count</th>
-                    <th jhiTranslate="metrics.jvm.threads.dump.lockname">Lock Name</th>
+                    <th <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>
+                    <th <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.blockedcount">Blocked Count</th>
+                    <th <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.waitedtime">Waited Time</th>
+                    <th <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.waitedcount">Waited Count</th>
+                    <th <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.lockname">Lock Name</th>
                 </tr>
             </thead>
             <tbody>

@@ -20,6 +20,7 @@ import { NgModule } from '@angular/core';
 import { SharedLibsModule } from './shared-libs.module';
 <%_ if (enableTranslation) { _%>
 import { FindLanguageFromKeyPipe } from './find-language-from-key.pipe';
+import { TranslateDirective } from './translate.directive';
 <%_ } _%>
 import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
@@ -34,6 +35,7 @@ import { ItemCountComponent } from './item-count.component';
   declarations: [
     <%_ if (enableTranslation) { _%>
     FindLanguageFromKeyPipe,
+    TranslateDirective,
     <%_ } _%>
     AlertComponent,
     AlertErrorComponent,
@@ -47,6 +49,7 @@ import { ItemCountComponent } from './item-count.component';
     SharedLibsModule,
     <%_ if (enableTranslation) { _%>
     FindLanguageFromKeyPipe,
+    TranslateDirective,
     <%_ } _%>
     AlertComponent,
     AlertErrorComponent,

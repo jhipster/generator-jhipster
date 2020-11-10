@@ -22,7 +22,7 @@ import { NavBarPage, SignInPage<% if (!skipUserManagement) { %>, PasswordPage, S
 <%_
 let elementGetter = `getText()`;
 if (enableTranslation) {
-  elementGetter = `getAttribute('jhiTranslate')`;
+  elementGetter = `getAttribute('${jhiPrefix}Translate')`;
 }
 _%>
 

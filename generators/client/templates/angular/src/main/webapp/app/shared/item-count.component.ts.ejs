@@ -22,10 +22,10 @@ import { Component, Input } from '@angular/core';
  * A component that will take care of item count statistics of a pagination.
  */
 @Component({
-  selector: '<%= jhiPrefixDashed %>-item-count-new',
+  selector: '<%= jhiPrefixDashed %>-item-count',
   template: `
     <%_ if (enableTranslation) { _%>
-    <div jhiTranslate="global.item-count" [translateValues]="{ first: first, second: second, total: total }"></div>
+    <div <%= jhiPrefix %>Translate="global.item-count" [translateValues]="{ first: first, second: second, total: total }"></div>
     <%_ } else { _%>
     <div>Showing {{ first }} - {{ second }} of {{ total }} items.</div>
     <%_ } _%>

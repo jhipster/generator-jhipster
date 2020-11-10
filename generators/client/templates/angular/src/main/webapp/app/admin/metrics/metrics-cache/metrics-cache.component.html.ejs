@@ -16,21 +16,21 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<h3 jhiTranslate="metrics.cache.title">Cache statistics</h3>
+<h3 <%= jhiPrefix %>Translate="metrics.cache.title">Cache statistics</h3>
 
 <div class="table-responsive" *ngIf="!updating && cacheMetrics">
     <table class="table table-striped">
         <thead>
             <tr>
-                <th jhiTranslate="metrics.cache.cachename">Cache name</th>
-                <th class="text-right" data-translate="metrics.cache.hits">Cache Hits</th>
-                <th class="text-right" data-translate="metrics.cache.misses">Cache Misses</th>
-                <th class="text-right" data-translate="metrics.cache.gets">Cache Gets</th>
-                <th class="text-right" data-translate="metrics.cache.puts">Cache Puts</th>
-                <th class="text-right" data-translate="metrics.cache.removals">Cache Removals</th>
-                <th class="text-right" data-translate="metrics.cache.evictions">Cache Evictions</th>
-                <th class="text-right" data-translate="metrics.cache.hitPercent">Cache Hit %</th>
-                <th class="text-right" data-translate="metrics.cache.missPercent">Cache Miss %</th>
+                <th <%= jhiPrefix %>Translate="metrics.cache.cachename">Cache name</th>
+                <th class="text-right" <%= jhiPrefix %>Translate="metrics.cache.hits">Cache Hits</th>
+                <th class="text-right" <%= jhiPrefix %>Translate="metrics.cache.misses">Cache Misses</th>
+                <th class="text-right" <%= jhiPrefix %>Translate="metrics.cache.gets">Cache Gets</th>
+                <th class="text-right" <%= jhiPrefix %>Translate="metrics.cache.puts">Cache Puts</th>
+                <th class="text-right" <%= jhiPrefix %>Translate="metrics.cache.removals">Cache Removals</th>
+                <th class="text-right" <%= jhiPrefix %>Translate="metrics.cache.evictions">Cache Evictions</th>
+                <th class="text-right" <%= jhiPrefix %>Translate="metrics.cache.hitPercent">Cache Hit %</th>
+                <th class="text-right" <%= jhiPrefix %>Translate="metrics.cache.missPercent">Cache Miss %</th>
             </tr>
         </thead>
         <tbody>

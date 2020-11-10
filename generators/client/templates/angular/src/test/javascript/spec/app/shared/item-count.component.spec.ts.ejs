@@ -18,10 +18,13 @@
 -%>
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 <%_ if (enableTranslation) { _%>
-import { JhiTranslateDirective } from 'ng-jhipster';
+import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 import { ItemCountComponent } from 'app/shared/item-count.component';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/translate.directive';
+<%_ } _%>
 
 describe('ItemCountComponent test', () => {
   let comp: ItemCountComponent;
@@ -30,10 +33,13 @@ describe('ItemCountComponent test', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
+        <%_ if (enableTranslation) { _%>
+        imports: [TranslateModule.forRoot()],
+        <%_ } _%>
         declarations: [
           ItemCountComponent,
           <%_ if (enableTranslation) { _%>
-          JhiTranslateDirective,
+          TranslateDirective,
           <%_ } _%>
         ],
       }).compileComponents();

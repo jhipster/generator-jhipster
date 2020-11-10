@@ -38,14 +38,15 @@ limitations under the License.
     "@fortawesome/fontawesome-svg-core": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "@fortawesome/free-solid-svg-icons": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "@ng-bootstrap/ng-bootstrap": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+<%_ if (enableTranslation) { _%>
     "@ngx-translate/core": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "@ngx-translate/http-loader": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+<%_ } _%>
     "bootstrap": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     <%_ if (clientTheme !== 'none') { _%>
     "bootswatch": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#bootstrap",
     <%_ } _%>
     "dayjs": "VERSION_MANAGED_BY_CLIENT_COMMON",
-    "ng-jhipster": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "ngx-cookie-service": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "ngx-infinite-scroll": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "ngx-webstorage": "VERSION_MANAGED_BY_CLIENT_ANGULAR",

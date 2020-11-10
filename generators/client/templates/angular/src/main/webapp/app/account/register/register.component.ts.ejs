@@ -20,7 +20,7 @@ import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from 'ng-jhipster';
+import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/core/config/error.constants';
@@ -49,7 +49,7 @@ export class RegisterComponent implements AfterViewInit {
 
   constructor(
     <%_ if (enableTranslation) { _%>
-    private languageService: JhiLanguageService,
+    private translateService: TranslateService,
     <%_ } _%>
     private registerService: RegisterService,
     private fb: FormBuilder
@@ -74,7 +74,7 @@ export class RegisterComponent implements AfterViewInit {
       const login = this.registerForm.get(['login'])!.value;
       const email = this.registerForm.get(['email'])!.value;
       this.registerService
-        .save({ login, email, password, langKey: <% if (enableTranslation) { %>this.languageService.getCurrentLanguage()<% } else { %>'en'<% } %> })
+        .save({ login, email, password, langKey: <% if (enableTranslation) { %>this.translateService.currentLang<% } else { %>'en'<% } %> })
         .subscribe(() => (this.success = true), response => this.processError(response));
     }
   }

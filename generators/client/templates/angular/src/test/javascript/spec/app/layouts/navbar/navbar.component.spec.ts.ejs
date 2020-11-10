@@ -19,7 +19,7 @@
 jest.mock('@angular/router');
 <%_ if (enableTranslation) { _%>
 jest.mock('ngx-webstorage');
-jest.mock('ng-jhipster');
+jest.mock('@ngx-translate/core');
 <%_ } _%>
 jest.mock('app/core/auth/account.service');
 jest.mock('app/login/login.service');
@@ -30,7 +30,7 @@ import { Router } from '@angular/router';
 import { of } from 'rxjs';
 <%_ if (enableTranslation) { _%>
 import { SessionStorageService } from 'ngx-webstorage';
-import { JhiLanguageService } from 'ng-jhipster';
+import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
 import { ProfileInfo } from 'app/layouts/profiles/profile-info.model';
@@ -51,7 +51,7 @@ describe('Component Tests', () => {
         TestBed.configureTestingModule({
           imports: [HttpClientTestingModule],
           declarations: [NavbarComponent],
-          providers: [AccountService, <% if (enableTranslation) { %>SessionStorageService, JhiLanguageService, <% } %>Router, LoginService],
+          providers: [AccountService, <% if (enableTranslation) { %>SessionStorageService, TranslateService, <% } %>Router, LoginService],
         })
           .overrideTemplate(NavbarComponent, '')
           .compileComponents();

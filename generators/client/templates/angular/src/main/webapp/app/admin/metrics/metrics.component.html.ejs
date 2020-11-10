@@ -18,66 +18,66 @@
 -%>
 <div>
     <h2>
-        <span id="metrics-page-heading" jhiTranslate="metrics.title" data-cy="metricsPageHeading">Application Metrics</span>
+        <span id="metrics-page-heading" <%= jhiPrefix %>Translate="metrics.title" data-cy="metricsPageHeading">Application Metrics</span>
 
         <button class="btn btn-primary float-right" (click)="refresh()">
-            <fa-icon icon="sync"></fa-icon> <span jhiTranslate="metrics.refresh.button">Refresh</span>
+            <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="metrics.refresh.button">Refresh</span>
         </button>
     </h2>
 
-    <h3 jhiTranslate="metrics.jvm.title">JVM Metrics</h3>
+    <h3 <%= jhiPrefix %>Translate="metrics.jvm.title">JVM Metrics</h3>
 
     <div class="row" *ngIf="metrics && !updatingMetrics">
-        <<%= jhiPrefixDashed %>-jvm-memory-new
+        <<%= jhiPrefixDashed %>-jvm-memory
             class="col-md-4"
             [updating]="updatingMetrics"
             [jvmMemoryMetrics]="metrics.jvm">
-        </<%= jhiPrefixDashed %>-jvm-memory-new>
+        </<%= jhiPrefixDashed %>-jvm-memory>
 
-        <<%= jhiPrefixDashed %>-jvm-threads-new
+        <<%= jhiPrefixDashed %>-jvm-threads
             class="col-md-4"
             [threads]="threads">
-        </<%= jhiPrefixDashed %>-jvm-threads-new>
+        </<%= jhiPrefixDashed %>-jvm-threads>
 
-        <<%= jhiPrefixDashed %>-metrics-system-new
+        <<%= jhiPrefixDashed %>-metrics-system
             class="col-md-4"
             [updating]="updatingMetrics"
             [systemMetrics]="metrics.processMetrics">
-        </<%= jhiPrefixDashed %>-metrics-system-new>
+        </<%= jhiPrefixDashed %>-metrics-system>
     </div>
 
     <div *ngIf="metrics && metricsKeyExists('garbageCollector')">
-        <h3 jhiTranslate="metrics.jvm.gc.title">Garbage collector statistics</h3>
+        <h3 <%= jhiPrefix %>Translate="metrics.jvm.gc.title">Garbage collector statistics</h3>
 
-        <<%= jhiPrefixDashed %>-metrics-garbagecollector-new
+        <<%= jhiPrefixDashed %>-metrics-garbagecollector
             [updating]="updatingMetrics"
             [garbageCollectorMetrics]="metrics.garbageCollector">
-        </<%= jhiPrefixDashed %>-metrics-garbagecollector-new>
+        </<%= jhiPrefixDashed %>-metrics-garbagecollector>
     </div>
 
-    <div class="well well-lg" *ngIf="updatingMetrics" jhiTranslate="metrics.updating">Updating...</div>
+    <div class="well well-lg" *ngIf="updatingMetrics" <%= jhiPrefix %>Translate="metrics.updating">Updating...</div>
 
-    <<%= jhiPrefixDashed %>-metrics-request-new
+    <<%= jhiPrefixDashed %>-metrics-request
         *ngIf="metrics && metricsKeyExists('http.server.requests')"
         [updating]="updatingMetrics"
         [requestMetrics]="metrics['http.server.requests']">
-    </<%= jhiPrefixDashed %>-metrics-request-new>
+    </<%= jhiPrefixDashed %>-metrics-request>
 
-    <<%= jhiPrefixDashed %>-metrics-endpoints-requests-new
+    <<%= jhiPrefixDashed %>-metrics-endpoints-requests
         *ngIf="metrics && metricsKeyExists('services')"
         [updating]="updatingMetrics"
         [endpointsRequestsMetrics]="metrics.services">
-    </<%= jhiPrefixDashed %>-metrics-endpoints-requests-new>
+    </<%= jhiPrefixDashed %>-metrics-endpoints-requests>
 
-    <<%= jhiPrefixDashed %>-metrics-cache-new
+    <<%= jhiPrefixDashed %>-metrics-cache
         *ngIf="metrics && metricsKeyExists('cache')"
         [updating]="updatingMetrics"
         [cacheMetrics]="metrics.cache">
-    </<%= jhiPrefixDashed %>-metrics-cache-new>
+    </<%= jhiPrefixDashed %>-metrics-cache>
 
-    <<%= jhiPrefixDashed %>-metrics-datasource-new
+    <<%= jhiPrefixDashed %>-metrics-datasource
         *ngIf="metrics && metricsKeyExistsAndObjectNotEmpty('databases')"
         [updating]="updatingMetrics"
         [datasourceMetrics]="metrics.databases">
-    </<%= jhiPrefixDashed %>-metrics-datasource-new>
+    </<%= jhiPrefixDashed %>-metrics-datasource>
 </div>

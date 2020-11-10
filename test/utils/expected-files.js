@@ -485,7 +485,9 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/core/config/pagination.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/duration.pipe.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/find-language-from-key.pipe.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/translate.directive.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/config/language.constants.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/config/translation.config.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/login/login.model.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/login/login.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/request/request-util.ts`,
@@ -533,6 +535,7 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert-error.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/sort/sort.directive.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/sort/sort-by.directive.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/shared/translate.directive.spec.ts`,
         'tsconfig.app.json',
         'tsconfig.spec.json',
         'tsconfig.json',
@@ -573,7 +576,9 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`,
         `${CLIENT_MAIN_SRC_DIR}app/core/config/language.constants.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/config/translation.config.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/find-language-from-key.pipe.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/translate.directive.ts`,
     ],
 
     i18nRtl: [

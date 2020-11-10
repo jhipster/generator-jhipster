@@ -18,14 +18,14 @@
 -%>
 <div>
     <h2>
-        <span id="user-management-page-heading" jhiTranslate="userManagement.home.title" data-cy="userManagementPageHeading">Users</span>
+        <span id="user-management-page-heading" <%= jhiPrefix %>Translate="userManagement.home.title" data-cy="userManagementPageHeading">Users</span>
 
         <div class="d-flex justify-content-end">
             <button class="btn btn-info mr-2" (click)="handleSyncList()" [disabled]="isLoading">
-                <fa-icon icon="sync" [spin]="isLoading"></fa-icon> <span jhiTranslate="userManagement.home.refreshListLabel">Refreh List</span>
+                <fa-icon icon="sync" [spin]="isLoading"></fa-icon> <span <%= jhiPrefix %>Translate="userManagement.home.refreshListLabel">Refreh List</span>
             </button>
             <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
-                <fa-icon icon="plus"></fa-icon> <span jhiTranslate="userManagement.home.createLabel">Create a new User</span>
+                <fa-icon icon="plus"></fa-icon> <span <%= jhiPrefix %>Translate="userManagement.home.createLabel">Create a new User</span>
             </button>
         </div>
     </h2>
@@ -38,18 +38,18 @@
         <table class="table table-striped" aria-describedby="user-management-page-heading">
             <thead>
                 <tr<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)"<% } %>>
-                    <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="id"<% } %>><span jhiTranslate="global.field.id">ID</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
-                    <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="login"<% } %>><span jhiTranslate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
-                    <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="email"<% } %>><span jhiTranslate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                    <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="id"<% } %>><span <%= jhiPrefix %>Translate="global.field.id">ID</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                    <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="login"<% } %>><span <%= jhiPrefix %>Translate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                    <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="email"<% } %>><span <%= jhiPrefix %>Translate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
                     <th scope="col"></th>
                     <%_ if (enableTranslation) { _%>
-                    <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="langKey"<% } %>> <span jhiTranslate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                    <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="langKey"<% } %>> <span <%= jhiPrefix %>Translate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
                     <%_ } _%>
-                    <th scope="col"><span jhiTranslate="userManagement.profiles">Profiles</span></th>
+                    <th scope="col"><span <%= jhiPrefix %>Translate="userManagement.profiles">Profiles</span></th>
                     <%_ if (databaseType !== 'cassandra') { _%>
-                    <th scope="col" <%= jhiPrefix %>SortBy="createdDate"><span jhiTranslate="userManagement.createdDate">Created Date</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedBy"><span jhiTranslate="userManagement.lastModifiedBy">Last Modified By</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedDate"><span jhiTranslate="userManagement.lastModifiedDate">Last Modified Date</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col" <%= jhiPrefix %>SortBy="createdDate"><span <%= jhiPrefix %>Translate="userManagement.createdDate">Created Date</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedBy"><span <%= jhiPrefix %>Translate="userManagement.lastModifiedBy">Last Modified By</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedDate"><span <%= jhiPrefix %>Translate="userManagement.lastModifiedDate">Last Modified Date</span> <fa-icon icon="sort"></fa-icon></th>
                     <%_ } _%>
                     <th scope="col"></th>
                 </tr>
@@ -61,9 +61,9 @@
                     <td>{{ user.email }}</td>
                     <td>
                         <button class="btn btn-danger btn-sm" (click)="setActive(user, true)" *ngIf="!user.activated"
-                                jhiTranslate="userManagement.deactivated">Deactivated</button>
+                                <%= jhiPrefix %>Translate="userManagement.deactivated">Deactivated</button>
                         <button class="btn btn-success btn-sm" (click)="setActive(user, false)" *ngIf="user.activated"
-                                [disabled]="!currentAccount || currentAccount.login === user.login" jhiTranslate="userManagement.activated">Activated</button>
+                                [disabled]="!currentAccount || currentAccount.login === user.login" <%= jhiPrefix %>Translate="userManagement.activated">Activated</button>
                     </td>
                     <%_ if (enableTranslation) { _%>
                     <td>{{ user.langKey }}</td>
@@ -84,7 +84,7 @@
                                     [routerLink]="['./', user.login, 'view']"
                                     class="btn btn-info btn-sm">
                                 <fa-icon icon="eye"></fa-icon>
-                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.view">View</span>
                             </button>
 
                             <button type="submit"
@@ -92,13 +92,13 @@
                                     queryParamsHandling="merge"
                                     class="btn btn-primary btn-sm">
                                 <fa-icon icon="pencil-alt"></fa-icon>
-                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.edit">Edit</span>
                             </button>
 
                             <button type="button" (click)="deleteUser(user)"
                                     class="btn btn-danger btn-sm" [disabled]="!currentAccount || currentAccount.login === user.login">
                                 <fa-icon icon="times"></fa-icon>
-                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.delete">Delete</span>
                             </button>
                         </div>
                     </td>
@@ -110,7 +110,7 @@
 
     <div *ngIf="users">
         <div class="row justify-content-center">
-            <<%= jhiPrefixDashed %>-item-count-new [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></<%= jhiPrefixDashed %>-item-count-new>
+            <<%= jhiPrefixDashed %>-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></<%= jhiPrefixDashed %>-item-count>
         </div>
 
         <div class="row justify-content-center">

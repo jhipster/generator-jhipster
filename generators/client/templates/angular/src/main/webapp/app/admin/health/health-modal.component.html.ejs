@@ -32,14 +32,14 @@
 
 <div class="modal-body pad">
     <div *ngIf="health">
-        <h5 jhiTranslate="health.details.properties">Properties</h5>
+        <h5 <%= jhiPrefix %>Translate="health.details.properties">Properties</h5>
 
         <div class="table-responsive">
             <table class="table table-striped" aria-describedby="showHealthLabel">
                 <thead>
                     <tr>
-                        <th scope="col" class="text-left" jhiTranslate="health.details.name">Name</th>
-                        <th scope="col" class="text-left" jhiTranslate="health.details.value">Value</th>
+                        <th scope="col" class="text-left" <%= jhiPrefix %>Translate="health.details.name">Name</th>
+                        <th scope="col" class="text-left" <%= jhiPrefix %>Translate="health.details.value">Value</th>
                     </tr>
                 </thead>
                 <tbody>

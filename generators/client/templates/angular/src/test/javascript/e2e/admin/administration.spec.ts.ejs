@@ -22,7 +22,7 @@ import { NavBarPage, SignInPage } from '../page-objects/jhi-page-objects';
 <%_
 let elementGetter = `getText()`;
 if (enableTranslation) {
-  elementGetter = `getAttribute('jhiTranslate')`;
+  elementGetter = `getAttribute('${jhiPrefix}Translate')`;
 }
 _%>
 

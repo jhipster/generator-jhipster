@@ -27,10 +27,9 @@ import { Title } from '@angular/platform-browser';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { CookieService } from 'ngx-cookie-service';
 <%_ if (enableTranslation) { _%>
-import { TranslateModule, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
+import { TranslateModule, TranslateService, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
 <%_ } _%>
 import { NgxWebstorageModule } from 'ngx-webstorage';
-import { NgJhipsterModule<% if (enableTranslation) { %>, translatePartialLoader, missingTranslationHandler, JhiConfigService, JhiLanguageService<% } %> } from 'ng-jhipster';
 import * as dayjs from 'dayjs';
 import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 
@@ -40,20 +39,14 @@ import { httpInterceptorProviders } from './interceptor/index';
 <%_ if (enableI18nRTL) { _%>
 import { FindLanguageFromKeyPipe } from 'app/shared/find-language-from-key.pipe';
 <%_ } _%>
+<%_ if (enableTranslation) { _%>
+import { translatePartialLoader, missingTranslationHandler } from 'app/core/config/translation.config';
+<%_ } _%>
 
 @NgModule({
   imports: [
     HttpClientModule,
     NgxWebstorageModule.forRoot({ prefix: '<%= jhiPrefixDashed %>', separator: '-' }),
-    NgJhipsterModule.forRoot({
-      // set below to true to make alerts look like toast
-      alertAsToast: false,
-      alertTimeout: 5000,
-      <%_ if (enableTranslation) { _%>
-      i18nEnabled: true,
-      defaultI18nLang: '<%= nativeLanguage %>',
-      <%_ } _%>
-    }),
     <%_ if (enableTranslation) { _%>
     TranslateModule.forRoot({
       loader: {
@@ -64,7 +57,6 @@ import { FindLanguageFromKeyPipe } from 'app/shared/find-language-from-key.pipe'
       missingTranslationHandler: {
         provide: MissingTranslationHandler,
         useFactory: missingTranslationHandler,
-        deps: [JhiConfigService],
       },
     }),
     <%_ } _%>
@@ -89,12 +81,13 @@ import { FindLanguageFromKeyPipe } from 'app/shared/find-language-from-key.pipe'
   ],
 })
 export class CoreModule {
-  constructor(iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig<% if (enableTranslation) { %>, languageService: JhiLanguageService<% } %>) {
+  constructor(iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig<% if (enableTranslation) { %>, translateService: TranslateService<% } %>) {
     registerLocaleData(locale);
     iconLibrary.addIcons(...fontAwesomeIcons);
     dpConfig.minDate = { year: dayjs().subtract(100, 'year').year(), month: 1, day: 1 };
     <%_ if (enableTranslation) { _%>
-    languageService.init();
+    translateService.setDefaultLang('<%= nativeLanguage %>');
+    translateService.use('<%= nativeLanguage %>');
     <%_ } _%>
   }
 }
