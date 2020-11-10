@@ -17,7 +17,8 @@
  limitations under the License.
 -%>
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { JhiAlertService, JhiAlert } from 'ng-jhipster';
+
+import { AlertService, Alert } from 'app/core/util/alert.service';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-alert',
@@ -31,15 +32,15 @@ import { JhiAlertService, JhiAlert } from 'ng-jhipster';
     </div>`
 })
 export class AlertComponent implements OnInit, OnDestroy {
-  alerts: JhiAlert[] = [];
+  alerts: Alert[] = [];
 
-  constructor(private alertService: JhiAlertService) {}
+  constructor(private alertService: AlertService) {}
 
   ngOnInit(): void {
     this.alerts = this.alertService.get();
   }
 
-  setClasses(alert: JhiAlert): { [key: string]: boolean } {
+  setClasses(alert: Alert): { [key: string]: boolean } {
     const classes = { 'jhi-toast': Boolean(alert.toast) };
     if (alert.position) {
       return { ...classes, [alert.position]: true };
@@ -51,7 +52,7 @@ export class AlertComponent implements OnInit, OnDestroy {
     this.alertService.clear();
   }
 
-  close(alert: JhiAlert): void {
+  close(alert: Alert): void {
     alert.close?.(this.alerts);
   }
 }
