@@ -159,6 +159,7 @@ function checkForErrors(jdlObject, configuration) {
         let applicationType = configuration.applicationType;
         let databaseType = configuration.databaseType;
         let skippedUserManagement = configuration.skipUserManagement;
+        let blueprints = configuration.blueprints;
         if (application && application['generator-jhipster']) {
             if (applicationType === undefined) {
                 applicationType = application['generator-jhipster'].applicationType;
@@ -169,11 +170,15 @@ function checkForErrors(jdlObject, configuration) {
             if (skippedUserManagement === undefined) {
                 skippedUserManagement = application['generator-jhipster'].skipUserManagement;
             }
+            if (blueprints === undefined) {
+                blueprints = application['generator-jhipster'].blueprints;
+            }
         }
         validator = JDLWithoutApplicationValidator.createValidator(jdlObject, {
             applicationType,
             databaseType,
             skippedUserManagement,
+            blueprints,
         });
     } else {
         validator = JDLWithApplicationValidator.createValidator(jdlObject);
