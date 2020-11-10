@@ -18,11 +18,11 @@
 -%>
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-<%_ if (fieldsContainBlob) { _%>
-import { JhiDataUtils } from 'ng-jhipster';
-<%_ } _%>
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+<%_ if (fieldsContainBlob) { _%>
+import { DataUtils } from 'app/core/util/data-util.service';
+<%_ } _%>
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-detail',
@@ -33,7 +33,7 @@ export class <%= entityAngularName %>DetailComponent implements OnInit {
 
     constructor(
         <%_ if (fieldsContainBlob) { _%>
-        protected dataUtils: JhiDataUtils,
+        protected dataUtils: DataUtils,
         <%_ } _%>
         protected activatedRoute: ActivatedRoute
     ) {}
