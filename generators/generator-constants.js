@@ -28,6 +28,8 @@ const clientFrameworks = applicationOptions.OptionValues[applicationOptions.Opti
 const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the variable as it might be useful in the future.
 
 // Version of Node, NPM
+const HUSKY_VERSION = '4.3.0';
+const LINT_STAGED_VERSION = '10.5.1';
 const NODE_VERSION = '12.18.3';
 const NPM_VERSION = '6.14.8';
 
@@ -396,6 +398,8 @@ const constants = {
     JACKSON_DATABIND_NULLABLE_VERSION,
 
     // NPM
+    HUSKY_VERSION,
+    LINT_STAGED_VERSION,
     PRETTIER_VERSION,
     PRETTIER_JAVA_VERSION,
 
