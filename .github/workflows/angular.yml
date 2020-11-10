@@ -72,7 +72,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                node_version: [12.18.3]
+                node_version: [14.15.0]
                 os: [ubuntu-20.04]
                 app-type:
                     - ngx-default

@@ -30,7 +30,7 @@ const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the varia
 // Version of Node, NPM
 const HUSKY_VERSION = '4.3.0';
 const LINT_STAGED_VERSION = '10.5.1';
-const NODE_VERSION = '12.18.3';
+const NODE_VERSION = '14.15.0';
 const NPM_VERSION = '6.14.8';
 
 const GRADLE_VERSION = '6.7';
