@@ -616,7 +616,7 @@ relationships.forEach((relationship, idx) => {
         <%_ } _%>
 
     public void set<%= relationshipNameCapitalizedPlural %>(Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= otherEntityNamePlural %>) {
-        <%_ if (relationship.otherRelationship) { _%>
+        <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
         if (this.<%= relationshipFieldNamePlural %> != null) {
             <%_ if (relationship.otherRelationship.reference.collection) { _%>
             this.<%= relationshipFieldNamePlural %>.forEach(<%= otherEntityName %> -> <%= otherEntityName %>.remove<%= otherEntityRelationshipNameCapitalized %>(this));
@@ -656,7 +656,7 @@ relationships.forEach((relationship, idx) => {
         <%_ } _%>
 
     public void set<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
-        <%_ if (relationship.otherRelationship) { _%>
+        <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
         if (this.<%= relationshipFieldName %> != null) {
             <%_ if (relationship.otherRelationship.reference.collection) { _%>
             this.<%= relationshipFieldName %>.remove<%= otherEntityRelationshipNameCapitalized %>(this);
