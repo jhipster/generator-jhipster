@@ -876,7 +876,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 jhiPrefix 42abc
               }
             }`)
-                        ).to.throw("MismatchedTokenException: Found the invalid token 'abc', at line: 4 and column: 29.");
+                        ).to.throw("MismatchedTokenException: Found an invalid token 'abc', at line: 4 and column: 29.");
                     });
                 });
                 context('when the prefix begins by a dash', () => {
@@ -917,7 +917,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 languages [fr, en, 42]
               }
             }`)
-                        ).to.throw(/^MismatchedTokenException: Found the invalid token '42', at line: \d+ and column: \d+\./);
+                        ).to.throw(/^MismatchedTokenException: Found an invalid token '42', at line: \d+ and column: \d+\./);
                     });
                 });
                 context('such as not a list', () => {
@@ -1389,7 +1389,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 testFrameworks [fr, en, 42]
               }
             }`)
-                        ).to.throw(/^MismatchedTokenException: Found the invalid token '42', at line: \d+ and column: \d+\./);
+                        ).to.throw(/^MismatchedTokenException: Found an invalid token '42', at line: \d+ and column: \d+\./);
                     });
                 });
                 context('such as not a list', () => {
@@ -1679,7 +1679,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 deployment {
                   ${type} [fr, en, @123]
               }`)
-                            ).to.throw(/^MismatchedTokenException: Found the invalid token '@', at line: \d+ and column: \d+\./);
+                            ).to.throw(/^MismatchedTokenException: Found an invalid token '@', at line: \d+ and column: \d+\./);
                         });
                     });
                     context('such as not a list', () => {

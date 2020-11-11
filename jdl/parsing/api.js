@@ -78,7 +78,7 @@ function throwParserError(errors) {
 
 function throwErrorAboutInvalidToken(parserError) {
     const { token } = parserError;
-    const errorMessageBeginning = `Found the invalid token '${token.image}'`;
+    const errorMessageBeginning = `Found an invalid token '${token.image}'`;
     const errorMessageLocation = token.tokenType !== EOF ? `, at line: ${token.startLine} and column: ${token.startColumn}` : '';
     const errorMessageComplement = 'Please make sure your JDL content does not use invalid characters, keywords or options.';
     throw Error(`${parserError.name}: ${errorMessageBeginning}${errorMessageLocation}.\n\t${errorMessageComplement}`);

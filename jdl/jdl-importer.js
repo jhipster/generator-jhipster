@@ -75,6 +75,7 @@ function createImporterFromFiles(files, configuration) {
  * @param {String} configuration.generatorVersion - deprecated, the generator's version, optional if parsing applications
  * @param {String} configuration.forceNoFiltering - whether to force filtering
  * @param {Boolean} configuration.skipFileGeneration - whether not to generate the .yo-rc.json file
+ * @param {Array} configuration.blueprints - the blueprints used.
  * @returns {Object} a JDL importer.
  * @throws {Error} if the content isn't passed.
  */
@@ -97,14 +98,15 @@ function makeJDLImporter(content, configuration) {
     return {
         /**
          * Processes JDL files and converts them to JSON.
+         * @param {Object} logger - the logger to use, default to the console.
          * @returns {object} the state of the process:
          *          - exportedDeployments: the exported deployments, or an empty list
          *          - exportedApplications: the exported applications, or an empty list
          *          - exportedEntities: the exported entities, or an empty list
          */
-        import: () => {
+        import: (logger = console) => {
             const jdlObject = getJDLObject(content, configuration);
-            checkForErrors(jdlObject, configuration);
+            checkForErrors(jdlObject, configuration, logger);
             if (jdlObject.getApplicationQuantity() === 0 && jdlObject.getEntityQuantity() > 0) {
                 importState.exportedEntities = importOnlyEntities(jdlObject, configuration);
             } else if (jdlObject.getApplicationQuantity() === 1) {
@@ -149,7 +151,7 @@ function getJDLObject(parsedJDLContent, configuration) {
     });
 }
 
-function checkForErrors(jdlObject, configuration) {
+function checkForErrors(jdlObject, configuration, logger = console) {
     let validator;
     if (jdlObject.getApplicationQuantity() === 0) {
         let application = configuration.application;
@@ -159,6 +161,7 @@ function checkForErrors(jdlObject, configuration) {
         let applicationType = configuration.applicationType;
         let databaseType = configuration.databaseType;
         let skippedUserManagement = configuration.skipUserManagement;
+        let blueprints = configuration.blueprints;
         if (application && application['generator-jhipster']) {
             if (applicationType === undefined) {
                 applicationType = application['generator-jhipster'].applicationType;
@@ -169,14 +172,22 @@ function checkForErrors(jdlObject, configuration) {
             if (skippedUserManagement === undefined) {
                 skippedUserManagement = application['generator-jhipster'].skipUserManagement;
             }
+            if (blueprints === undefined) {
+                blueprints = application['generator-jhipster'].blueprints;
+            }
         }
-        validator = JDLWithoutApplicationValidator.createValidator(jdlObject, {
-            applicationType,
-            databaseType,
-            skippedUserManagement,
-        });
+        validator = JDLWithoutApplicationValidator.createValidator(
+            jdlObject,
+            {
+                applicationType,
+                databaseType,
+                skippedUserManagement,
+                blueprints,
+            },
+            logger
+        );
     } else {
-        validator = JDLWithApplicationValidator.createValidator(jdlObject);
+        validator = JDLWithApplicationValidator.createValidator(jdlObject, logger);
     }
     validator.checkForErrors();
 }

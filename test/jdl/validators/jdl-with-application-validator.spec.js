@@ -675,5 +675,29 @@ describe('JDLWithApplicationValidator', () => {
                 });
             });
         });
+        context('when blueprints is used', () => {
+            let parameter;
+
+            before(() => {
+                const jdlObject = new JDLObject();
+                const application = createJDLApplication({
+                    applicationType: ApplicationTypes.MONOLITH,
+                    databaseType: DatabaseTypes.SQL,
+                    blueprints: ['generator-jhipster-nodejs', 'generator-jhipster-dotnetcore'],
+                });
+                jdlObject.addApplication(application);
+                const logger = {
+                    warn: callParameter => {
+                        parameter = callParameter;
+                    },
+                };
+                const validator = createValidator(jdlObject, logger);
+                validator.checkForErrors();
+            });
+
+            it('should warn about not performing jdl validation', () => {
+                expect(parameter).to.equal('Blueprints are being used, the JDL validation phase is skipped.');
+            });
+        });
     });
 });
