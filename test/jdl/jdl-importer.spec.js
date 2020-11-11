@@ -1870,8 +1870,8 @@ paginate * with infinite-scroll
                 ]);
             });
 
-            it('should not perform jdl validation', () => {
-                expect(parameter).to.equal('Generating application with blueprint, skipping jdl validation');
+            it('should warn about not performing jdl validation', () => {
+                expect(parameter).to.equal('Blueprints are being used, the JDL validation phase is skipped.');
             });
         });
         context('when choosing neo4j as database type', () => {

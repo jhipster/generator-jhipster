@@ -75,6 +75,7 @@ function createImporterFromFiles(files, configuration) {
  * @param {String} configuration.generatorVersion - deprecated, the generator's version, optional if parsing applications
  * @param {String} configuration.forceNoFiltering - whether to force filtering
  * @param {Boolean} configuration.skipFileGeneration - whether not to generate the .yo-rc.json file
+ * @param {Array} configuration.blueprints - the blueprints used.
  * @returns {Object} a JDL importer.
  * @throws {Error} if the content isn't passed.
  */
@@ -97,6 +98,7 @@ function makeJDLImporter(content, configuration) {
     return {
         /**
          * Processes JDL files and converts them to JSON.
+         * @param {Object} logger - the logger to use, default to the console.
          * @returns {object} the state of the process:
          *          - exportedDeployments: the exported deployments, or an empty list
          *          - exportedApplications: the exported applications, or an empty list
