@@ -745,7 +745,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
                         this.log(chalk.bold('\nDeploying application'));
 
-                        const herokuPush = execCmd('git push heroku HEAD:master', { maxBuffer: 1024 * 10000 });
+                        const herokuPush = execCmd('git push heroku HEAD:main', { maxBuffer: 1024 * 10000 });
 
                         herokuPush.child.stdout.on('data', data => {
                             this.log(data);

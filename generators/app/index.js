@@ -91,6 +91,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
 
         // This adds support for a `--with-entities` flag
         this.option('with-entities', {
+            alias: 'e',
             desc: 'Regenerate the existing entities if any',
             type: Boolean,
         });
@@ -189,9 +190,34 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
             desc: 'Recreate the initial database changelog based on the current config',
             type: Boolean,
         });
+
         this.option('skip-jhipster-dependencies', {
             desc: "Don't write jhipster dependencies.",
             type: Boolean,
+        });
+
+        // This adds support for a `--skip-commit-hook` flag
+        this.option('skip-commit-hook', {
+            desc: 'Skip adding husky commit hooks',
+            type: Boolean,
+        });
+
+        this.option('legacy-db-names', {
+            desc: 'Generate database names with jhipster 6 compatibility.',
+            type: Boolean,
+        });
+
+        this.option('native-language', {
+            alias: 'n',
+            desc: 'Set application native language',
+            type: String,
+            required: false,
+        });
+
+        this.option('language', {
+            alias: 'l',
+            desc: 'Language to be added to application (existing languages are not removed)',
+            type: Array,
         });
 
         // Just constructing help, stop here

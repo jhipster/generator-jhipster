@@ -26,7 +26,7 @@
 
     <% let autoIncrementValue = entity.primaryKeyType !== 'String';
         let databasePKType = entity.primaryKeyType !== 'String' ? 'bigint' : 'varchar(100)';
-        const isAutoIncrementDB = reactive || ['mysql', 'mariadb'].includes(prodDatabaseType);
+        const isAutoIncrementDB = reactive || prodDatabaseType === 'mysql';
     _%>
     <%_ if (isAutoIncrementDB) { _%>
     <property name="autoIncrement" value="<%- autoIncrementValue %>"/>

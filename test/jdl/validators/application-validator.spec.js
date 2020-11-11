@@ -88,13 +88,6 @@ describe('ApplicationValidator', () => {
                     });
                 });
             });
-            context('with no chosen language', () => {
-                it('should fail', () => {
-                    expect(() =>
-                        validator.validate(new JDLApplication({ config: { ...basicValidApplicationConfig, enableTranslation: true } }))
-                    ).to.throw(/^No chosen language\.$/);
-                });
-            });
             context('with invalid test framework values', () => {
                 it('should fail', () => {
                     expect(() => {

@@ -26,19 +26,31 @@ class JHipsterCommand extends Command {
     }
 
     /**
-     * Register a callback to be executed before _parseCommand.
-     * Used to lazy load options.
-     * @param {Function} prepareOptionsCallBack
+     * Alternative for alias() accepting chaining with undefined value.
+     * @param {String} alias
      * @return {JHipsterCommand} this;
      */
-    prepareOptions(prepareOptionsCallBack) {
-        this._prepareOptionsCallBack = prepareOptionsCallBack;
+    addAlias(alias) {
+        if (alias) {
+            this.alias(alias);
+        }
+        return this;
+    }
+
+    /**
+     * Register a callback to be executed before _parseCommand.
+     * Used to lazy load options.
+     * @param {Function} lazyBuildCommandCallBack
+     * @return {JHipsterCommand} this;
+     */
+    lazyBuildCommand(lazyBuildCommandCallBack) {
+        this._lazyBuildCommandCallBack = lazyBuildCommandCallBack;
         return this;
     }
 
     _parseCommand(operands, unknown) {
-        if (this._prepareOptionsCallBack) {
-            this._prepareOptionsCallBack();
+        if (this._lazyBuildCommandCallBack) {
+            this._lazyBuildCommandCallBack();
         }
         return super._parseCommand(operands, unknown);
     }
@@ -66,8 +78,20 @@ class JHipsterCommand extends Command {
     }
 
     /**
+     * Register arguments using cli/commands.js structure.
+     * @param {String[]} args
+     * @return {JHipsterCommand} this;
+     */
+    addCommandArguments(args) {
+        if (Array.isArray(args)) {
+            this.arguments(`${args.join(' ')}`);
+        }
+        return this;
+    }
+
+    /**
      * Register options using cli/commands.js structure.
-     * @param {object[]} prepareOptionsCallBack
+     * @param {object[]} lazyBuildCommandCallBack
      * @return {JHipsterCommand} this;
      */
     addCommandOptions(opts = []) {
@@ -105,9 +129,6 @@ class JHipsterCommand extends Command {
      */
     addGeneratorOptions(options = {}, blueprintOptionDescription) {
         Object.entries(options).forEach(([key, value]) => {
-            if (this._findOption(key)) {
-                return;
-            }
             this._addGeneratorOption(key, value, blueprintOptionDescription);
         });
         return this;
@@ -117,21 +138,41 @@ class JHipsterCommand extends Command {
         if (optionName === 'help') {
             return undefined;
         }
+        const longOption = `--${optionName}`;
+        const existingOption = this._findOption(longOption);
+        if (this._findOption(longOption)) {
+            return existingOption;
+        }
+
         let cmdString = '';
         if (optionDefinition.alias) {
             cmdString = `-${optionDefinition.alias}, `;
         }
-        cmdString = `${cmdString}--${optionName}`;
+        cmdString = `${cmdString}${longOption}`;
         if (optionDefinition.type === String) {
-            cmdString = `${cmdString} <value>`;
+            cmdString = optionDefinition.required !== false ? `${cmdString} <value>` : `${cmdString} [value]`;
         } else if (optionDefinition.type === Array) {
-            cmdString = `${cmdString} <value...>`;
+            cmdString = optionDefinition.required !== false ? `${cmdString} <value...>` : `${cmdString} [value...]`;
         }
         return this.addOption(
             new Option(cmdString, optionDefinition.description + additionalDescription)
                 .default(optionDefinition.default)
                 .hideHelp(optionDefinition.hide)
         );
+    }
+
+    /**
+     * Override to reject errors instead of throwing and add command to error.
+     * @return promise this
+     */
+    parseAsync(argv, parseOptions) {
+        try {
+            this.parse(argv, parseOptions);
+        } catch (commanderError) {
+            commanderError.command = this;
+            return Promise.reject(commanderError);
+        }
+        return Promise.all(this._actionResults).then(() => this);
     }
 }
 

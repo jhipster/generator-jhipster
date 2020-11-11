@@ -54,7 +54,7 @@ import reactor.core.publisher.Flux;
 <%_ if (relationshipsContainEagerLoad || databaseType === 'sql') { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (primaryKeyType === 'UUID') { _%>
 
 import java.util.UUID;
 <%_ } _%>
@@ -110,7 +110,7 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
 
         <%_ } _%>
 
-        <%_ for (idx in relationships) { 
+        <%_ for (idx in relationships) {
                   let relationshipType = relationships[idx].relationshipType;
                   let relationshipName = relationships[idx].relationshipName;
                   let ownerSide = relationships[idx].ownerSide;
@@ -121,7 +121,7 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
 
     @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= getColumnName(relationshipName) %>_id IS NULL")
     Flux<<%= asEntity(entityClass) %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();
-              <%_ } else if (relationshipType === 'many-to-many') { 
+              <%_ } else if (relationshipType === 'many-to-many') {
                   const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
                   _%>
 

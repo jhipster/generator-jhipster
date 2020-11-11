@@ -82,7 +82,7 @@
           </tr>
         </tbody>
       </table>
-      <b-modal ref="removeUser" id="removeUser" title="Confirm delete operation" v-bind:title="$t('entity.delete.title')" @ok="deleteUser()">
+      <b-modal ref="removeUser" id="removeUser" v-bind:title="$t('entity.delete.title')" @ok="deleteUser()">
           <div class="modal-body">
               <p id="<%= jhiPrefixDashed %>-delete-user-heading" v-text="$t('userManagement.delete.question', { 'login': removeId})">Are you sure you want to delete this user?</p>
           </div>

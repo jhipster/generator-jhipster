@@ -78,7 +78,7 @@ describe('JHipster client generator with blueprint with path customizer', () => 
                         clientFramework: 'angularX',
                         enableTranslation: true,
                         nativeLanguage: 'en',
-                        languages: ['fr'],
+                        languages: ['en', 'fr'],
                     })
                     .on('end', done);
             });
@@ -93,6 +93,13 @@ describe('JHipster client generator with blueprint with path customizer', () => 
                 );
                 assert.file(
                     expectedFiles.i18nJson.map(path => {
+                        path = path.replace(/^src\/main\/webapp([/$])/, 'src/main/webapp2$1');
+                        assert(!/^src\/main\/webapp([/$])/.test(path));
+                        return path;
+                    })
+                );
+                assert.file(
+                    expectedFiles.i18nAdminJson.map(path => {
                         path = path.replace(/^src\/main\/webapp([/$])/, 'src/main/webapp2$1');
                         assert(!/^src\/main\/webapp([/$])/.test(path));
                         return path;

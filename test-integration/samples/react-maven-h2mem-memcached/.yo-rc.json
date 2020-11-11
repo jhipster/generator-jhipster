@@ -19,7 +19,6 @@
         "enableSwaggerCodegen": false,
         "jwtSecretKey": "NTgzZTljNWEzZWM1OTJjNTE2NTM0ODAwYWM5ZjFmMmNiNjgwMzVmMjhjOGU2ZmQyZTA4MTJhMzJiZGUyMjc3Y2VjMzRhMWE1ZjUwOThiMzMzYThlYTk2NzhiMTU1NzFhMDE2MjNhODg2ZDIxYjg2MzgwMGRmZDhjNjA0ZmRlODE=",
         "embeddableLaunchScript": false,
-        "useSass": true,
         "clientPackageManager": "npm",
         "clientFramework": "react",
         "clientTheme": "none",
@@ -33,6 +32,7 @@
         "nativeLanguage": "en",
         "languages": ["en"],
         "blueprints": [],
+        "withAdminUi": false,
         "creationTimestamp": 1596513172471
     }
 }

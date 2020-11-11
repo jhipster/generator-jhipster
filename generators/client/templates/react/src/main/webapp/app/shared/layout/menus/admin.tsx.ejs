@@ -36,13 +36,15 @@ const adminMenuItems = (
   <%_ if (websocket === 'spring-websocket') { _%>
     <MenuItem icon="eye" to="/admin/tracker"><Translate contentKey="global.menu.admin.tracker">User tracker</Translate></MenuItem>
   <%_ } _%>
+  <%_ if (withAdminUi) { _%>
     <MenuItem icon="tachometer-alt" to="/admin/metrics"><Translate contentKey="global.menu.admin.metrics">Metrics</Translate></MenuItem>
     <MenuItem icon="heart" to="/admin/health"><Translate contentKey="global.menu.admin.health">Health</Translate></MenuItem>
     <MenuItem icon="cogs" to="/admin/configuration"><Translate contentKey="global.menu.admin.configuration">Configuration</Translate></MenuItem>
-  {/* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */}
     <MenuItem icon="tasks" to="/admin/logs"><Translate contentKey="global.menu.admin.logs">Logs</Translate></MenuItem>
+  <%_ } _%>
+    {/* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */}
   </>
-);
+  );
 
 const openAPIItem = (
   <MenuItem icon="book" to="/admin/docs"><Translate contentKey="global.menu.admin.apidocs">API</Translate></MenuItem>

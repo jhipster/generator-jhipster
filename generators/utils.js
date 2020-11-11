@@ -142,6 +142,11 @@ function rewrite(args) {
         }
     });
 
+    if (otherwiseLineIndex === -1) {
+        console.warn(`Needle ${args.needle} not found at file ${args.file}`);
+        return args.haystack;
+    }
+
     let spaces = 0;
     while (lines[otherwiseLineIndex].charAt(spaces) === ' ') {
         spaces += 1;

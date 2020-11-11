@@ -98,12 +98,14 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         if (generator.applicationType === 'gateway' && generator.serviceDiscoveryType) {
             generator.copyI18nFilesByName(generator, webappDir, 'gateway.json', lang);
         }
-        generator.copyI18nFilesByName(generator, webappDir, 'configuration.json', lang);
+        if (generator.withAdminUi) {
+            generator.copyI18nFilesByName(generator, webappDir, 'configuration.json', lang);
+            generator.copyI18nFilesByName(generator, webappDir, 'logs.json', lang);
+            generator.copyI18nFilesByName(generator, webappDir, 'metrics.json', lang);
+        }
         generator.copyI18nFilesByName(generator, webappDir, 'error.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'login.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'home.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'metrics.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'logs.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'password.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'register.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'sessions.json', lang);
@@ -118,7 +120,9 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         // Templates
         generator.template(`${prefix}/${webappDir}i18n/${lang}/activate.json.ejs`, `${webappDir}i18n/${lang}/activate.json`);
         generator.template(`${prefix}/${webappDir}i18n/${lang}/global.json.ejs`, `${webappDir}i18n/${lang}/global.json`);
-        generator.template(`${prefix}/${webappDir}i18n/${lang}/health.json.ejs`, `${webappDir}i18n/${lang}/health.json`);
+        if (generator.withAdminUi) {
+            generator.template(`${prefix}/${webappDir}i18n/${lang}/health.json.ejs`, `${webappDir}i18n/${lang}/health.json`);
+        }
         generator.template(`${prefix}/${webappDir}i18n/${lang}/reset.json.ejs`, `${webappDir}i18n/${lang}/reset.json`);
     }
 
@@ -692,35 +696,6 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
 
     /**
-     * get hibernate SnakeCase in JHipster preferred style.
-     *
-     * @param {string} value - table column name or table name string
-     * @see org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
-     * @returns hibernate SnakeCase in JHipster preferred style
-     */
-    hibernateSnakeCase(value) {
-        let res = '';
-        if (value) {
-            value = value.replace('.', '_');
-            res = value[0];
-            for (let i = 1, len = value.length - 1; i < len; i++) {
-                if (
-                    value[i - 1] !== value[i - 1].toUpperCase() &&
-                    value[i] !== value[i].toLowerCase() &&
-                    value[i + 1] !== value[i + 1].toUpperCase()
-                ) {
-                    res += `_${value[i]}`;
-                } else {
-                    res += value[i];
-                }
-            }
-            res += value[value.length - 1];
-            res = res.toLowerCase();
-        }
-        return res;
-    }
-
-    /**
      * Function to issue a https get request, and process the result
      *
      *  @param {string} url - the url to fetch
@@ -1263,26 +1238,6 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                 break;
         }
         return pk;
-    }
-
-    /**
-     * Returns the JDBC URL for a databaseType
-     *
-     * @param {string} databaseType
-     * @param {*} options
-     */
-    getJDBCUrl(databaseType, options = {}) {
-        return this.getDBCUrl(databaseType, 'jdbc', options);
-    }
-
-    /**
-     * Returns the R2DBC URL for a databaseType
-     *
-     * @param {string} databaseType
-     * @param {*} options
-     */
-    getR2DBCUrl(databaseType, options = {}) {
-        return this.getDBCUrl(databaseType, 'r2dbc', options);
     }
 
     /**

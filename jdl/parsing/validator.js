@@ -98,6 +98,7 @@ const configPropsValidations = {
         pattern: ALPHANUMERIC,
         msg: 'clientThemeVariant property',
     },
+    WITH_ADMIN_UI: { type: 'BOOLEAN' },
     CLIENT_PACKAGE_MANAGER: {
         type: 'NAME',
         pattern: ALPHANUMERIC,
@@ -199,7 +200,6 @@ const configPropsValidations = {
         msg: 'testFrameworks property',
     },
     UAA_BASE_NAME: { type: 'STRING' },
-    USE_SASS: { type: 'BOOLEAN' },
     WEBSOCKET: {
         type: 'NAME',
         pattern: ALPHANUMERIC_DASH,

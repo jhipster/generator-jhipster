@@ -22,7 +22,6 @@
         "clientPackageManager": "npm",
         "clientFramework": "angularX",
         "embeddableLaunchScript": false,
-        "useSass": true,
         "clientTheme": "none",
         "entitySuffix": "",
         "dtoSuffix": "DTO",

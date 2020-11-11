@@ -49,7 +49,7 @@ describe('JHipster client generator with sbs blueprint', () => {
                 clientFramework: ANGULAR,
                 enableTranslation: true,
                 nativeLanguage: 'en',
-                languages: ['fr'],
+                languages: ['fr', 'en'],
             })
             .on('end', done);
     });
@@ -57,6 +57,7 @@ describe('JHipster client generator with sbs blueprint', () => {
     it('creates expected files from jhipster client generator', () => {
         assert.file(expectedFiles.client);
         assert.file(expectedFiles.i18nJson);
+        assert.file(expectedFiles.i18nAdminJson);
     });
 
     it('contains the specific change added by the blueprint', () => {

@@ -18,11 +18,18 @@
  */
 const semver = require('semver');
 const packagejs = require('../package.json');
+const validationOptions = require('../jdl/jhipster/validations');
+const applicationOptions = require('../jdl/jhipster/application-options');
+const databaseTypes = require('../jdl/jhipster/database-types');
+
+const clientFrameworks = applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK];
 
 // Version of Java
 const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the variable as it might be useful in the future.
 
 // Version of Node, NPM
+const HUSKY_VERSION = '4.3.0';
+const LINT_STAGED_VERSION = '10.5.1';
 const NODE_VERSION = '12.18.3';
 const NPM_VERSION = '6.14.8';
 
@@ -30,7 +37,7 @@ const GRADLE_VERSION = '6.7';
 const JIB_VERSION = '2.6.0';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '0.2.0-SNAPSHOT';
+const JHIPSTER_DEPENDENCIES_VERSION = '7.0.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
 const SPRING_BOOT_VERSION = '2.3.5.RELEASE';
 const LIQUIBASE_VERSION = '4.1.1';
@@ -42,9 +49,6 @@ const JACOCO_VERSION = '0.8.6';
 const KAFKA_VERSION = '5.5.2';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
 
-// NPM packages version
-const HUSKY_VERSION = '4.2.5';
-const LINT_STAGED_VERSION = '10.4.2';
 // The installed prettier version should be the same that the one used during JHipster generation to avoid formatting differences
 const PRETTIER_VERSION = packagejs.dependencies.prettier;
 const PRETTIER_JAVA_VERSION = packagejs.dependencies['prettier-plugin-java'];
@@ -112,12 +116,14 @@ const TEST_DIR = 'src/test/';
 // Note: this will be prepended with 'target/classes' for Maven, or with 'build/resources/main' for Gradle.
 const CLIENT_DIST_DIR = 'static/';
 
-const SUPPORTED_VALIDATION_RULES = ['required', 'unique', 'max', 'min', 'maxlength', 'minlength', 'maxbytes', 'minbytes', 'pattern'];
+const SUPPORTED_VALIDATION_RULES = Object.keys(validationOptions)
+    .map(key => validationOptions[key])
+    .filter(e => typeof e === 'string');
 
 const SUPPORTED_CLIENT_FRAMEWORKS = {
-    ANGULAR: 'angularX',
-    REACT: 'react',
-    VUE: 'vue',
+    ANGULAR: clientFrameworks.angularX,
+    REACT: clientFrameworks.react,
+    VUE: clientFrameworks.vue,
 };
 
 // documentation constants
@@ -134,42 +140,42 @@ const OFFICIAL_DATABASE_TYPE_NAMES = {
 
 const R2DBC_DB_OPTIONS = [
     {
-        value: 'postgresql',
+        value: databaseTypes.POSTGRESQL,
         name: 'PostgreSQL',
     },
     {
-        value: 'mysql',
+        value: databaseTypes.MYSQL,
         name: 'MySQL',
     },
     {
-        value: 'mariadb',
+        value: databaseTypes.MARIADB,
         name: 'MariaDB',
     },
     {
-        value: 'mssql',
+        value: databaseTypes.MSSQL,
         name: 'Microsoft SQL Server',
     },
 ];
 
 const SQL_DB_OPTIONS = [
     {
-        value: 'postgresql',
+        value: databaseTypes.POSTGRESQL,
         name: 'PostgreSQL',
     },
     {
-        value: 'mysql',
+        value: databaseTypes.MYSQL,
         name: 'MySQL',
     },
     {
-        value: 'mariadb',
+        value: databaseTypes.MARIADB,
         name: 'MariaDB',
     },
     {
-        value: 'oracle',
+        value: databaseTypes.ORACLE,
         name: 'Oracle',
     },
     {
-        value: 'mssql',
+        value: databaseTypes.MSSQL,
         name: 'Microsoft SQL Server',
     },
 ];

@@ -25,12 +25,12 @@
         "clientFramework": "angularX",
         "jwtSecretKey": "Mjk3ZDFjNTgyYTRkOGU3NDdjOWI2M2NiNzk3MmYwNjFiMWI3MzQ5Y2RjYTM2ZDUyMmM3MjY1OWJiY2ViNmUzODdmZTNiYmMwMDFlMzM1NTc4N2NiMGRhNWZiMjBjNDA5NDlhOWMyYTk5YmM5MzIwYzEyOGJmMmEwOWJiZjI3ZTk=",
         "embeddableLaunchScript": false,
-        "useSass": true,
         "clientTheme": "none",
         "entitySuffix": "",
         "dtoSuffix": "DTO",
         "otherModules": [],
         "blueprints": [],
+        "withAdminUi": false,
         "creationTimestamp": 1596513172471
     }
 }
