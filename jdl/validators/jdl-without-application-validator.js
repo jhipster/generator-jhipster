@@ -46,11 +46,20 @@ module.exports = {
  * @param {String} applicationSettings.applicationType - the application type.
  * @param {String} applicationSettings.databaseType - the DB type.
  * @param {Boolean} applicationSettings.skippedUserManagement - whether user management is skipped.
+ * @param {Array} applicationSettings.blueprints - the blueprints used.
  * @param {Object} logger - the logger to use, default to the console.
  */
 function createValidator(jdlObject, applicationSettings = {}, logger = console) {
     if (!jdlObject) {
         throw new Error('A JDL object must be passed to check for business errors.');
+    }
+
+    if (applicationSettings.blueprints && applicationSettings.blueprints.length !== 0) {
+        return {
+            checkForErrors: () => {
+                logger.warn('Blueprints are being used, the JDL validation phase is skipped.');
+            },
+        };
     }
 
     return {

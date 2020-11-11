@@ -1860,10 +1860,16 @@ paginate * with infinite-scroll
         });
         context('when importing a JDL application with blueprints', () => {
             let importState;
+            let parameter;
 
             before(() => {
                 const importer = createImporterFromFiles([path.join(__dirname, 'test-files', 'application_with_blueprints.jdl')]);
-                importState = importer.import();
+                const logger = {
+                    warn: callParameter => {
+                        parameter = callParameter;
+                    },
+                };
+                importState = importer.import(logger);
             });
             after(() => {
                 fse.removeSync('.yo-rc.json');
@@ -1910,6 +1916,10 @@ paginate * with infinite-scroll
                         },
                     },
                 ]);
+            });
+
+            it('should warn about not performing jdl validation', () => {
+                expect(parameter).to.equal('Blueprints are being used, the JDL validation phase is skipped.');
             });
         });
         context('when choosing neo4j as database type', () => {
