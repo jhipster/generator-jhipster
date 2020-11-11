@@ -521,5 +521,27 @@ describe('JDLWithoutApplicationValidator', () => {
                 });
             });
         });
+        context('when blueprints is used', () => {
+            let parameter;
+
+            before(() => {
+                const jdlObject = new JDLObject();
+                const logger = {
+                    warn: callParameter => {
+                        parameter = callParameter;
+                    },
+                };
+                const validator = createValidator(
+                    jdlObject,
+                    { blueprints: ['generator-jhipster-nodejs', 'generator-jhipster-dotnetcore'] },
+                    logger
+                );
+                validator.checkForErrors();
+            });
+
+            it('should not perform jdl validation', () => {
+                expect(parameter).to.equal('Generating application with blueprint, skipping jdl validation');
+            });
+        });
     });
 });

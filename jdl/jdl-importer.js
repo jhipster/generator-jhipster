@@ -102,9 +102,9 @@ function makeJDLImporter(content, configuration) {
          *          - exportedApplications: the exported applications, or an empty list
          *          - exportedEntities: the exported entities, or an empty list
          */
-        import: () => {
+        import: (logger = console) => {
             const jdlObject = getJDLObject(content, configuration);
-            checkForErrors(jdlObject, configuration);
+            checkForErrors(jdlObject, configuration, logger);
             if (jdlObject.getApplicationQuantity() === 0 && jdlObject.getEntityQuantity() > 0) {
                 importState.exportedEntities = importOnlyEntities(jdlObject, configuration);
             } else if (jdlObject.getApplicationQuantity() === 1) {
@@ -149,7 +149,7 @@ function getJDLObject(parsedJDLContent, configuration) {
     });
 }
 
-function checkForErrors(jdlObject, configuration) {
+function checkForErrors(jdlObject, configuration, logger = console) {
     let validator;
     if (jdlObject.getApplicationQuantity() === 0) {
         let application = configuration.application;
@@ -174,14 +174,18 @@ function checkForErrors(jdlObject, configuration) {
                 blueprints = application['generator-jhipster'].blueprints;
             }
         }
-        validator = JDLWithoutApplicationValidator.createValidator(jdlObject, {
-            applicationType,
-            databaseType,
-            skippedUserManagement,
-            blueprints,
-        });
+        validator = JDLWithoutApplicationValidator.createValidator(
+            jdlObject,
+            {
+                applicationType,
+                databaseType,
+                skippedUserManagement,
+                blueprints,
+            },
+            logger
+        );
     } else {
-        validator = JDLWithApplicationValidator.createValidator(jdlObject);
+        validator = JDLWithApplicationValidator.createValidator(jdlObject, logger);
     }
     validator.checkForErrors();
 }
