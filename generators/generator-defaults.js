@@ -136,4 +136,5 @@ module.exports = {
     defaultConfig,
     requiredDefaultConfig,
     entityDefaultConfig,
+    translationDefaultConfig,
 };
