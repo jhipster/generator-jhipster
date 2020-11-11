@@ -126,7 +126,7 @@ jobs:
                     #                      war: 0
                     #                      e2e: 1
                     - app-type: webflux-psql
-                      entity: sql
+                      entity: sqlfull
                       profile: prod
                       war: 0
                       e2e: 1
@@ -138,7 +138,7 @@ jobs:
                     #  e2e: 1
                     #  testcontainers: 1
                     - app-type: webflux-mariadb-gradle
-                      entity: sqlfull
+                      entity: sql
                       profile: prod
                       war: 0
                       e2e: 1
