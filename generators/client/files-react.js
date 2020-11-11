@@ -125,6 +125,13 @@ const files = {
             ],
         },
         {
+            condition: generator => generator.authenticationType === 'oauth2',
+            path: REACT_DIR,
+            templates: [
+                { file: 'modules/login/login-redirect.tsx', method: 'processJsx' },
+            ],
+        },
+        {
             path: REACT_DIR,
             templates: ['modules/home/home.scss'],
         },
