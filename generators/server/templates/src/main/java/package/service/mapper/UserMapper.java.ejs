@@ -29,6 +29,8 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 /**
@@ -126,6 +128,8 @@ public class UserMapper {
     }
 
     @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
     public <%= asDto('User') %> toDtoId(<%= asEntity('User') %> user) {
         if (user == null) {
             return null;
@@ -136,6 +140,8 @@ public class UserMapper {
     }
 
     @Named("idSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
     public Set<<%= asDto('User') %>> toDtoIdSet(Set<<%= asEntity('User') %>> users) {
         if ( users == null ) {
             return null;
@@ -150,6 +156,9 @@ public class UserMapper {
     }
 
     @Named("login")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "login", source = "login")
     public <%= asDto('User') %> toDtoLogin(<%= asEntity('User') %> user) {
         if (user == null) {
             return null;
@@ -161,6 +170,9 @@ public class UserMapper {
     }
 
     @Named("loginSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "login", source = "login")
     public Set<<%= asDto('User') %>> toDtoLoginSet(Set<<%= asEntity('User') %>> users) {
         if ( users == null ) {
             return null;
