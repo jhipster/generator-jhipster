@@ -2379,7 +2379,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             this.jhipsterConfig.baseName = this.options.baseName;
         }
         if (options.db) {
-            this.jhipsterConfig.databaseType = this.getDBTypeFromDBValue(this.options.db);
+            const databaseType = this.getDBTypeFromDBValue(this.options.db);
+            if (databaseType) {
+                this.jhipsterConfig.databaseType = databaseType;
+            } else if (!this.jhipsterConfig.databaseType) {
+                throw new Error(`Could not detect databaseType for database ${this.options.db}`);
+            }
             this.jhipsterConfig.devDatabaseType = options.db;
             this.jhipsterConfig.prodDatabaseType = options.db;
         }
