@@ -381,6 +381,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
                     this.composeWithJHipster(
                         'languages',
                         {
+                            regenerate: true,
                             skipPrompts: this.options.withEntities || this.existingProject || this.options.defaults,
                         },
                         true
