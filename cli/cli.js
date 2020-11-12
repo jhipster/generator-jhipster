@@ -18,10 +18,11 @@
  */
 
 const { runJHipster } = require('./program');
-const { done } = require('./utils');
+const { done, logger } = require('./utils');
 
 module.exports = runJHipster().catch(done);
 
 process.on('unhandledRejection', up => {
-    throw up;
+    logger.error('Unhandled promise rejection at:');
+    logger.fatal(up);
 });
