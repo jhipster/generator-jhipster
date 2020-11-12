@@ -1987,5 +1987,34 @@ use mapstruct, elasticsearch for A, B except C`;
                 expect(importState.exportedEntities[2].searchEngine).not.to.equal('elasticsearch');
             });
         });
+        context('when parsing a JDL content with invalid tokens', () => {
+            let caughtError;
+
+            before(() => {
+                const content = `application {
+  config {
+    baseName toto
+    databaseType sql
+    unknownOption toto
+  }
+  entities A
+}
+
+entity A
+`;
+                try {
+                    const importer = createImporterFromContent(content);
+                    importer.import();
+                } catch (error) {
+                    caughtError = error;
+                }
+            });
+
+            it('should report it', () => {
+                expect(caughtError.message).to.equal(
+                    "MismatchedTokenException: Found an invalid token 'unknownOption', at line: 5 and column: 5.\n\tPlease make sure your JDL content does not use invalid characters, keywords or options."
+                );
+            });
+        });
     });
 });
