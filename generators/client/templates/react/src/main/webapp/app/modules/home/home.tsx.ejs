@@ -18,19 +18,28 @@
 -%>
 import './home.<%= styleSheetExt %>';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
 import { connect } from 'react-redux';
 import { Row, Col, Alert } from 'reactstrap';
 
 <%_ if (authenticationType === 'oauth2') { _%>
-import { getLoginUrl } from 'app/shared/util/url-utils';
+import { getLoginUrl, REDIRECT_URL } from 'app/shared/util/url-utils';
 <%_ } _%>
 
 export type IHomeProp = StateProps;
 
 export const Home = (props: IHomeProp) => {
+<%_ if (authenticationType === 'oauth2') { _%>
+  useEffect(() => {
+    const redirectURL = localStorage.getItem(REDIRECT_URL);
+    if (redirectURL) {
+      localStorage.removeItem(REDIRECT_URL);
+      location.href = `${location.origin}${redirectURL}`;
+    }
+  });
+<%_ } _%>
 
   const { account } = props;
 
