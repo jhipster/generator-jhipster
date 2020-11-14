@@ -199,8 +199,8 @@ module.exports = class extends BaseGenerator {
         const commandPrefix = 'npm show';
         const pkgInfo = shelljs.exec(`${commandPrefix} ${packageName} version`, { silent: this.silent });
         if (pkgInfo.stderr) {
-            this.warning(`Something went wrong fetching the latest ${packageName} version number...\n${pkgInfo.stderr}`);
-            this.error('Exiting process');
+            this.warning(pkgInfo.stderr);
+            throw new Error(`Something went wrong fetching the latest ${packageName} version number...\n${pkgInfo.stderr}`);
         }
         const msg = pkgInfo.stdout;
         return msg.replace('\n', '');
@@ -211,7 +211,7 @@ module.exports = class extends BaseGenerator {
         const commandPrefix = 'npm install';
         const devDependencyParam = '--save-dev';
         const noPackageLockParam = '--no-package-lock';
-        const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} ${noPackageLockParam} --ignore-scripts`;
+        const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} ${noPackageLockParam} --ignore-scripts --legacy-peer-deps`;
         this.info(generatorCommand);
 
         const npmIntall = shelljs.exec(generatorCommand, { silent: this.silent });
@@ -324,8 +324,8 @@ module.exports = class extends BaseGenerator {
                 const gitStatus = this.gitExec(['status', '--porcelain'], { silent: this.silent });
                 if (gitStatus.code !== 0) this.error(`Unable to check for local changes:\n${gitStatus.stdout} ${gitStatus.stderr}`);
                 if (gitStatus.stdout) {
-                    this.warning(' local changes found.\n\tPlease commit/stash them before upgrading');
-                    this.error('Exiting process');
+                    this.warning(gitStatus.stdout);
+                    throw new Error(' local changes found.\n\tPlease commit/stash them before upgrading');
                 }
             },
 
