@@ -93,6 +93,7 @@ spring:
             hibernate.generate_statistics: false
             hibernate.hbm2ddl.auto: validate
             hibernate.jdbc.time_zone: UTC
+            hibernate.query.fail_on_pagination_over_collection_fetch: true
     <%_ } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
     data:
