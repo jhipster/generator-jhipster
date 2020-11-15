@@ -31,7 +31,7 @@
           data-cy="entity">
           <span slot="button-content" class="navbar-dropdown-menu">
             <font-awesome-icon icon="th-list" />
-            <span v-text="$t('global.menu.entities.main')">Entities</span>
+            <span class="no-bold" v-text="$t('global.menu.entities.main')">Entities</span>
           </span>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
         </b-nav-item-dropdown>
@@ -45,7 +45,7 @@
           data-cy="adminMenu">
           <span slot="button-content" class="navbar-dropdown-menu">
             <font-awesome-icon icon="users-cog" />
-            <span v-text="$t('global.menu.admin.main')">Administration</span>
+            <span class="no-bold" v-text="$t('global.menu.admin.main')">Administration</span>
           </span>
           <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
           <b-dropdown-item to="/admin/gateway" active-class="active">
@@ -98,7 +98,7 @@
         <b-nav-item-dropdown id="languagesnavBarDropdown" right v-if="languages && Object.keys(languages).length > 1">
           <span slot="button-content">
             <font-awesome-icon icon="flag" />
-            <span v-text="$t('global.menu.language')">Language</span>
+            <span class="no-bold" v-text="$t('global.menu.language')">Language</span>
           </span>
           <b-dropdown-item v-for="(value, key) in languages" :key="`lang-${key}`" v-on:click="changeLanguage(key);"
               :class="{ active: isActiveLanguage(key)}">
@@ -116,7 +116,7 @@
           data-cy="accountMenu">
           <span slot="button-content" class="navbar-dropdown-menu">
             <font-awesome-icon icon="user" />
-            <span v-text="$t('global.menu.account.main')">
+            <span class="no-bold" v-text="$t('global.menu.account.main')">
               Account
             </span>
           </span>
@@ -202,7 +202,7 @@
     margin-left: 1.5rem;
   }
 
-  .jh-navbar a.nav-link {
+  .jh-navbar a.nav-link, .jh-navbar .no-bold  {
     font-weight: 400;
   }
 
