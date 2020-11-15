@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+const _ = require('lodash');
 const JDLObject = require('../../models/jdl-object');
 const JDLEntity = require('../../models/jdl-entity');
 const JDLUnaryOption = require('../../models/jdl-unary-option');
@@ -139,20 +139,21 @@ function addOptionsFromEntityAnnotations() {
         const entityName = entity.name;
         const annotations = entity.annotations;
         annotations.forEach(annotation => {
+            let annotationName = _.lowerFirst(annotation.optionName);
             if (annotation.type === 'UNARY') {
                 jdlObject.addOption(
                     new JDLUnaryOption({
-                        name: annotation.optionName,
+                        name: annotationName,
                         entityNames: [entityName],
                     })
                 );
             } else if (annotation.type === 'BINARY') {
-                if (annotation.optionName === 'paginate') {
-                    annotation.optionName = BinaryOptions.Options.PAGINATION;
+                if (annotationName === 'paginate') {
+                    annotationName = BinaryOptions.Options.PAGINATION;
                 }
                 jdlObject.addOption(
                     new JDLBinaryOption({
-                        name: annotation.optionName,
+                        name: annotationName,
                         value: annotation.optionValue,
                         entityNames: [entityName],
                     })
@@ -207,18 +208,19 @@ function fillAssociations() {
 function convertAnnotationsToOptions(annotations) {
     const result = {};
     annotations.forEach(annotation => {
+        const annotationName = _.lowerFirst(annotation.optionName);
         const value = annotation.optionValue ? annotation.optionValue : true;
-        if (annotation.optionName in result) {
-            const previousValue = result[annotation.optionName];
+        if (annotationName in result) {
+            const previousValue = result[annotationName];
             if (Array.isArray(previousValue)) {
                 if (!previousValue.includes(value)) {
                     previousValue.push(value);
                 }
             } else if (value !== previousValue) {
-                result[annotation.optionName] = [previousValue, value];
+                result[annotationName] = [previousValue, value];
             }
         } else {
-            result[annotation.optionName] = value;
+            result[annotationName] = value;
         }
     });
     return result;
