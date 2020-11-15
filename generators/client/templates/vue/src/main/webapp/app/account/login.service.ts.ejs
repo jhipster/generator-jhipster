@@ -18,6 +18,9 @@ export default class LoginService {
     if (contextPath.endsWith('accessdenied')) {
       contextPath = contextPath.substring(0, contextPath.indexOf('accessdenied'));
     }
+    if (contextPath.endsWith('forbidden')) {
+      contextPath = contextPath.substring(0, contextPath.indexOf('forbidden'));
+    }
     if (!contextPath.endsWith('/')) {
       contextPath = contextPath + '/';
     }
