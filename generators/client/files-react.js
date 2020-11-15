@@ -32,11 +32,11 @@ const files = {
                 '.eslintrc.json',
                 'tsconfig.json',
                 'tsconfig.test.json',
-                'webpack/logo-jhipster.png',
                 'webpack/webpack.common.js',
                 'webpack/webpack.dev.js',
                 'webpack/webpack.prod.js',
                 'webpack/utils.js',
+                { file: 'webpack/logo-jhipster.png', method: 'copy' },
             ],
         },
         {
