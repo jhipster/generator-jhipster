@@ -40,7 +40,6 @@ const appDefaultConfig = {
     jhiPrefix: defaultNewApplicationOptions[optionNames.JHI_PREFIX],
     entitySuffix: defaultNewApplicationOptions[optionNames.ENTITY_SUFFIX],
     dtoSuffix: defaultNewApplicationOptions[optionNames.DTO_SUFFIX],
-    reactive: defaultNewApplicationOptions[optionNames.REACTIVE],
     get testFrameworks() {
         return [];
     },
@@ -73,6 +72,7 @@ const serverDefaultConfig = {
     authenticationType: defaultMonolithOptions[optionNames.AUTHENTICATION_TYPE],
     serviceDiscoveryType: defaultMonolithOptions[optionNames.SERVICE_DISCOVERY_TYPE],
     enableHibernateCache: true,
+    reactive: defaultNewApplicationOptions[optionNames.REACTIVE],
 };
 
 /** Required config for prompts to be skipped */
