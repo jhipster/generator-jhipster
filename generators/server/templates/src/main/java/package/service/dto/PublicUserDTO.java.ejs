@@ -1,0 +1,95 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.service.dto;
+
+<%_
+    let userPk = (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') ? "String" : "Long";
+_%>
+<%_ if (databaseType !== 'no') { _%>
+import <%= packageName %>.domain.<%= asEntity('User') %>;
+<%_ } _%>
+
+/**
+ * A DTO representing a user, with all the public attributes.
+ */
+public class <%= asDto('PublicUser') %> {
+
+    private <%= userPk %> id;
+    private String login;
+
+    private String firstName;
+
+    private String lastName;
+
+    <%_ if (databaseType !== 'no') { _%>
+    public <%= asDto('PublicUser') %>() {
+        // Empty constructor needed for Jackson.
+    }
+
+    public <%= asDto('PublicUser') %>(User user) {
+        this.id = user.getId();
+        this.login = user.getLogin();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+    }
+
+    <%_ } _%>
+    public <%= userPk %> getId() {
+        return id;
+    }
+
+    public void setId(<%= userPk %> id) {
+        this.id = id;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    // prettier-ignore
+    @Override
+    public String toString() {
+        return "<%= asDto('PublicUser') %>{" +
+            "login='" + login + '\'' +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            "}";
+    }
+
+}

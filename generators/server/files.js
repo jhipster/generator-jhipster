@@ -1645,6 +1645,10 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}service/dto/package-info.java`,
                 },
                 {
+                    file: 'package/service/dto/PublicUserDTO.java',
+                    renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('PublicUser')}.java`,
+                },
+                {
                     file: 'package/service/dto/UserDTO.java',
                     renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('User')}.java`,
                 },
@@ -1787,6 +1791,10 @@ const serverFiles = {
                 {
                     file: 'package/service/dto/UserDTO.java',
                     renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('User')}.java`,
+                },
+                {
+                    file: 'package/service/dto/PublicUserDTO.java',
+                    renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('PublicUser')}.java`,
                 },
                 {
                     file: 'package/service/dto/PasswordChangeDTO.java',

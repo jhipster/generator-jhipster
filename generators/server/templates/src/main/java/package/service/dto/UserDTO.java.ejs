@@ -18,6 +18,9 @@
 -%>
 package <%= packageName %>.service.dto;
 
+<%_
+    let userPk = (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') ? "String" : "Long";
+ _%>
 import <%= packageName %>.config.Constants;
 <% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { %>
 import <%= packageName %>.domain.Authority;<% } %>
@@ -39,7 +42,7 @@ import java.util.stream.Collectors;
  */
 public class <%= asDto('User') %> {
 
-    private <% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id;
+    private <%= userPk %> id;
 
     @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
@@ -110,11 +113,11 @@ public class <%= asDto('User') %> {
     }
 
     <%_ } _%>
-    public <% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> getId() {
+    public <%= userPk %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id) {
+    public void setId(<%= userPk %> id) {
         this.id = id;
     }
 

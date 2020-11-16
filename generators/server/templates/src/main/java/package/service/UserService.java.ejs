@@ -39,6 +39,7 @@ import <%= packageName %>.security.AuthoritiesConstants;
     <%_ } _%>
 import <%= packageName %>.security.SecurityUtils;
 <%_ } _%>
+import <%= packageName %>.service.dto.<%= asDto('PublicUser') %>;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 <%_ if (authenticationType !== 'oauth2') { _%>
 
@@ -740,6 +741,14 @@ public class UserService {
     public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= asDto('User') %>> getAllManagedUsers(Pageable pageable) {
         return userRepository.findAll<% if (reactive) { %>ByIdNotNull<% } %>(pageable).map(<%= asDto('User') %>::new);
     }
+
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional(readOnly = true)
+    <%_ } _%>
+    public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= asDto('PublicUser') %>> getAllPublicUsers(Pageable pageable) {
+        return userRepository.findAllByIdNotNullAndActivatedIsTrue(pageable).map(<%= asDto('PublicUser') %>::new);
+    }
+
         <%_ if (reactive) { _%>
 
     <%_ if (databaseType === 'sql') { _%>
@@ -753,6 +762,13 @@ public class UserService {
     public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asDto('User') %>> getAllManagedUsers() {
         return userRepository.findAll()<% if (!reactive) { %>.stream()<% } %>
             .map(<%= asDto('User') %>::new)<% if (!reactive) { %>
+            .collect(Collectors.toList())<% } %>;
+    }
+
+    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asDto('PublicUser') %>> getAllPublicUsers() {
+        return userRepository.findAll()<% if (!reactive) { %>.stream()<% } %>
+            .filter(user -> user.isActivated())
+            .map(<%= asDto('PublicUser') %>::new)<% if (!reactive) { %>
             .collect(Collectors.toList())<% } %>;
     }
     <%_ } _%>

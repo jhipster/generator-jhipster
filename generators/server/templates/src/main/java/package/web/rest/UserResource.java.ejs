@@ -35,6 +35,7 @@ import org.springframework.data.domain.Sort;
 import java.util.Collections;
 <%_ } _%>
 import <%= packageName %>.service.UserService;
+import <%= packageName %>.service.dto.<%= asDto('PublicUser') %>;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%= packageName %>.web.rest.errors.BadRequestAlertException;
@@ -163,7 +164,7 @@ public class UserResource {
 
 <%_ if (authenticationType !== 'oauth2') { _%>
     /**
-     * {@code POST  /users}  : Creates a new user.
+     * {@code POST  /admin/users}  : Creates a new user.
      * <p>
      * Creates a new user if the login and email are not already used, and sends an
      * mail with an activation link.
@@ -176,7 +177,7 @@ public class UserResource {
     <%_ } _%>
      * @throws BadRequestAlertException {@code 400 (Bad Request)} if the login or email is already in use.
      */
-    @PostMapping("/users")
+    @PostMapping("/admin/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public <% if (reactive) { %>Mono<ResponseEntity<<%= asEntity('User') %>>><% } else { %>ResponseEntity<<%= asEntity('User') %>><% } %> createUser(@Valid @RequestBody <%= asDto('User') %> userDTO)<% if (!reactive) { %> throws URISyntaxException<% } %> {
         log.debug("REST request to save User : {}", userDTO);
@@ -192,7 +193,7 @@ public class UserResource {
         } else {
             <%= asEntity('User') %> newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
-            return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
+            return ResponseEntity.created(new URI("/api/admin/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(applicationName, <% if (enableTranslation) { %> "userManagement.created"<% } else { %> "A user is created with identifier " + newUser.getLogin()<% } %>, newUser.getLogin()))
                 .body(newUser);
         }
@@ -216,7 +217,7 @@ public class UserResource {
             .doOnSuccess(mailService::sendCreationEmail)
             .map(user -> {
                 try {
-                    return ResponseEntity.created(new URI("/api/users/" + user.getLogin()))
+                    return ResponseEntity.created(new URI("/api/admin/users/" + user.getLogin()))
                         .headers(HeaderUtil.createAlert(applicationName, "userManagement.created", user.getLogin()))
                         .body(user);
                 } catch (URISyntaxException e) {
@@ -227,14 +228,14 @@ public class UserResource {
     }
 
     /**
-     * {@code PUT /users} : Updates an existing User.
+     * {@code PUT /admin/users} : Updates an existing User.
      *
      * @param userDTO the user to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated user.
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already in use.
      * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already in use.
      */
-    @PutMapping("/users")
+    @PutMapping("/admin/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     <%_ if (!reactive) { _%>
     public ResponseEntity<<%= asDto('User') %>> updateUser(@Valid @RequestBody <%= asDto('User') %> userDTO) {
@@ -281,7 +282,7 @@ public class UserResource {
 
 <%_ } _%>
     /**
-     * {@code GET /users} : get all users.
+     * {@code GET /admin/users} : get all users with all the details - calling this are only allowed for the administrators.
      *<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType == 'neo4j' || databaseType === 'couchbase') { %>
         <%_ if (reactive) { _%>
      * @param request a {@link ServerHttpRequest} request.
@@ -289,7 +290,8 @@ public class UserResource {
      * @param pageable the pagination information.<% } %>
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
      */
-    @GetMapping("/users")
+    @GetMapping("/admin/users")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
         <%_ if (!reactive) { _%>
     public ResponseEntity<List<<%= asDto('User') %>>> getAllUsers(Pageable pageable) {
@@ -317,6 +319,44 @@ public class UserResource {
         <%_ } _%>
     }
 
+
+    /**
+     * {@code GET /users} : get all users with only the public informations - calling this are allowed for anyone.
+     *<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType == 'neo4j' || databaseType === 'couchbase') { %>
+        <%_ if (reactive) { _%>
+     * @param request a {@link ServerHttpRequest} request.
+        <%_ } _%>
+     * @param pageable the pagination information.<% } %>
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
+     */
+    @GetMapping("/users")
+        <%_ if (!reactive) { _%>
+    public ResponseEntity<List<<%= asDto('PublicUser') %>>> getAllPublicUsers(Pageable pageable) {
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        if (!onlyContainsAllowedProperties(pageable)) {
+            return ResponseEntity.badRequest().build();
+        }
+        <%_ } _%>
+
+        final Page<<%= asDto('PublicUser') %>> page = userService.getAllPublicUsers(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+        <%_ } else { _%>
+    public Mono<ResponseEntity<Flux<<%= asDto('PublicUser') %>>>> getAllPublicUsers(ServerHttpRequest request, Pageable pageable) {
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        if (!onlyContainsAllowedProperties(pageable)) {
+            return Mono.just(ResponseEntity.badRequest().build());
+        }
+        <%_ } _%>
+
+        return userService.countManagedUsers()
+            .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
+            .map(page -> PaginationUtil.generatePaginationHttpHeaders(UriComponentsBuilder.fromHttpRequest(request), page))
+            .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllManagedUsers(pageable)));
+    }
+        <%_ } _%>
+
     <%_ if (authenticationType !== 'oauth2') { _%>
     private boolean onlyContainsAllowedProperties(Pageable pageable) {
         return pageable.getSort().stream().map(Sort.Order::getProperty).allMatch(ALLOWED_ORDERED_PROPERTIES::contains);
@@ -336,15 +376,21 @@ public class UserResource {
     public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asDto('User') %>> getAllUsers() {
         return userService.getAllManagedUsers();
     }
+
+    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asDto('PublicUser') %>> getAllPublicUsers() {
+        return userService.getAllPublicUsers();
+    }
+
     <%_ } _%>
 
     /**
-     * {@code GET /users/:login} : get the "login" user.
+     * {@code GET /admin/users/:login} : get the "login" user.
      *
      * @param login the login of the user to find.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the "login" user, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/users/{login}")
+    @GetMapping("/admin/users/{login}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     <%_ if (!reactive) { _%>
     public ResponseEntity<<%= asDto('User') %>> getUser(@PathVariable @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         log.debug("REST request to get User : {}", login);
@@ -362,12 +408,12 @@ public class UserResource {
 <%_ if (authenticationType !== 'oauth2') { _%>
 
     /**
-     * {@code DELETE /users/:login} : delete the "login" User.
+     * {@code DELETE /admin/users/:login} : delete the "login" User.
      *
      * @param login the login of the user to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/users/{login}")
+    @DeleteMapping("/admin/users/{login}")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     <%_ if (!reactive) { _%>
     public ResponseEntity<Void> deleteUser(@PathVariable @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
