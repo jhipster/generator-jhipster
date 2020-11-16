@@ -41,7 +41,6 @@ const appDefaultConfig = {
     entitySuffix: defaultNewApplicationOptions[optionNames.ENTITY_SUFFIX],
     dtoSuffix: defaultNewApplicationOptions[optionNames.DTO_SUFFIX],
     reactive: defaultNewApplicationOptions[optionNames.REACTIVE],
-    clientPackageManager: defaultNewApplicationOptions[optionNames.CLIENT_PACKAGE_MANAGER],
     get testFrameworks() {
         return [];
     },
@@ -83,6 +82,7 @@ const clientRequiredConfig = {
 
 const clientDefaultConfig = {
     ...clientRequiredConfig,
+    clientPackageManager: defaultNewApplicationOptions[optionNames.CLIENT_PACKAGE_MANAGER],
     clientTheme: defaultMonolithOptions[optionNames.CLIENT_THEME],
     clientThemeVariant: defaultMonolithOptions[optionNames.CLIENT_THEME_VARIANT],
     withAdminUi: defaultMonolithOptions[optionNames.WITH_ADMIN_UI],
@@ -136,4 +136,5 @@ module.exports = {
     defaultConfig,
     requiredDefaultConfig,
     entityDefaultConfig,
+    translationDefaultConfig,
 };
