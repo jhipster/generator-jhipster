@@ -1334,23 +1334,6 @@ const serverFiles = {
             ],
         },
     ],
-    serverTestReactive: [
-        {
-            condition: generator => generator.reactive,
-            path: SERVER_TEST_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/config/JHipsterBlockHoundIntegration.java',
-                    renameTo: generator => `${generator.testDir}config/JHipsterBlockHoundIntegration.java`,
-                },
-            ],
-        },
-        {
-            condition: generator => generator.reactive,
-            path: SERVER_TEST_RES_DIR,
-            templates: ['META-INF/services/reactor.blockhound.integration.BlockHoundIntegration'],
-        },
-    ],
     serverTestFw: [
         {
             condition: generator => generator.databaseType === 'cassandra',

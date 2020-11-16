@@ -584,8 +584,9 @@ dependencies {
     testImplementation "org.springframework.security:spring-security-test"
     testImplementation "org.springframework.boot:spring-boot-test"
     <%_ if (reactive) { _%>
-    testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhoundJunitPlatformVersion}"
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junitPlatformLauncherVersion}'
+    // Temporarily disabled see https://github.com/jhipster/generator-jhipster/issues/11599
+    // testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhoundJunitPlatformVersion}"
+    // testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junitPlatformLauncherVersion}'
     <%_ } _%>
     testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunitJunit5Version}"
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}"
