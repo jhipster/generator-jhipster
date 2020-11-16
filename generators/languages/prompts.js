@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 const { detectLanguage } = require('../../utils/language');
-const { translationDefaultConfig } = require('../generator-defaults');
 
 module.exports = {
     askForLanguages,
@@ -56,7 +55,6 @@ function askForLanguages() {
             type: 'checkbox',
             name: 'languages',
             message: 'Please choose additional languages to install',
-            default: () => translationDefaultConfig.languages.filter(l => l !== this.jhipsterConfig.nativeLanguage),
             choices: () => {
                 const languageOptions = this.getAllSupportedLanguageOptions();
                 const nativeLanguage = this.jhipsterConfig.nativeLanguage;
