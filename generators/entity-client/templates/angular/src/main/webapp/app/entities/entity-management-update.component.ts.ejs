@@ -49,14 +49,14 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import * as dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/core/config/input.constants';
 <%_ } _%>
-<%_ if (fieldsContainBlob) { _%>
-import { JhiDataUtils, JhiFileLoadError, JhiEventManager, JhiEventWithContent } from 'ng-jhipster';
-<%_ } _%>
 
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 <%_ if (fieldsContainBlob) { _%>
 import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager } from 'app/core/event-manager/event-manager.service';
+import { EventWithContent } from 'app/core/event-manager/event-with-content.model';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 <%_ } _%>
 <%_
 Object.keys(differentRelationships).forEach(key => {
@@ -160,8 +160,8 @@ _%>
 
     constructor(
         <%_ if (fieldsContainBlob) { _%>
-        protected dataUtils: JhiDataUtils,
-        protected eventManager: JhiEventManager,
+        protected dataUtils: DataUtils,
+        protected eventManager: EventManager,
         <%_ } _%>
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
 <%_
@@ -256,9 +256,9 @@ _%>
 
     setFileData(event: Event, field: string, isImage: boolean): void {
         this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
-            error: (err: JhiFileLoadError) =>
+            error: (err: FileLoadError) =>
                 this.eventManager.broadcast(
-                    new JhiEventWithContent<AlertError>('<%= frontendAppName %>.error', { <% if (enableTranslation) { %>...err, key: 'error.file.' + err.key<% } else { %>message: err.message<% } %> })
+                    new EventWithContent<AlertError>('<%= frontendAppName %>.error', { <% if (enableTranslation) { %>...err, key: 'error.file.' + err.key<% } else { %>message: err.message<% } %> })
                 )
         });
     }

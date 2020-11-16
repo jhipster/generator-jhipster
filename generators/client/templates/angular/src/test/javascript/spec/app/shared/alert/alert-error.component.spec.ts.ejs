@@ -18,19 +18,20 @@
 -%>
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { JhiAlertService, JhiAlert, JhiEventManager } from 'ng-jhipster';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 import { AlertErrorComponent } from 'app/shared/alert/alert-error.component';
+import { EventManager } from 'app/core/event-manager/event-manager.service';
+import { AlertService, Alert } from 'app/core/util/alert.service';
 
 describe('Component Tests', () => {
   describe('Alert Error Component', () => {
     let comp: AlertErrorComponent;
     let fixture: ComponentFixture<AlertErrorComponent>;
-    let eventManager: JhiEventManager;
-    let alertService: JhiAlertService;
+    let eventManager: EventManager;
+    let alertService: AlertService;
 
     beforeEach(
       waitForAsync(() => {
@@ -39,7 +40,7 @@ describe('Component Tests', () => {
           imports: [TranslateModule.forRoot()],
           <%_ } _%>
           declarations: [AlertErrorComponent],
-          providers: [JhiEventManager, JhiAlertService],
+          providers: [EventManager, AlertService],
         })
           .overrideTemplate(AlertErrorComponent, '')
           .compileComponents();
@@ -49,9 +50,9 @@ describe('Component Tests', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(AlertErrorComponent);
       comp = fixture.componentInstance;
-      eventManager = TestBed.inject(JhiEventManager);
-      alertService = TestBed.inject(JhiAlertService);
-      alertService.addAlert = (alert: JhiAlert) => alert;
+      eventManager = TestBed.inject(EventManager);
+      alertService = TestBed.inject(AlertService);
+      alertService.addAlert = (alert: Alert) => alert;
     });
 
     describe('Error Handling', () => {

@@ -19,7 +19,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from 'ng-jhipster';
+import { TranslateService } from '@ngx-translate/core';
 import { SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
 
@@ -48,7 +48,7 @@ export class NavbarComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     <%_ if (enableTranslation) { _%>
-    private languageService: JhiLanguageService,
+    private translateService: TranslateService,
     private sessionStorage: SessionStorageService,
     <%_ } _%>
     private accountService: AccountService,
@@ -68,7 +68,7 @@ export class NavbarComponent implements OnInit {
   <%_ if (enableTranslation) { _%>
   changeLanguage(languageKey: string): void {
     this.sessionStorage.store('locale', languageKey);
-    this.languageService.changeLanguage(languageKey);
+    this.translateService.use(languageKey);
   }
   <%_ } _%>
 

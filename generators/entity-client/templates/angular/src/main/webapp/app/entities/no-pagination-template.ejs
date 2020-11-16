@@ -26,9 +26,9 @@
     constructor(
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
         <%_ if (fieldsContainBlob) { _%>
-        protected dataUtils: JhiDataUtils,
+        protected dataUtils: DataUtils,
         <%_ } _%>
-        protected eventManager: JhiEventManager,
+        protected eventManager: EventManager,
         <%_ if (!readOnly) { _%>
         protected modalService: NgbModal,
         <%_ } _%>

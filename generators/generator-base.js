@@ -345,7 +345,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      */
     addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === ANGULAR) {
-            this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu);
+            this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu, this.jhiPrefix);
         } else if (clientFramework === REACT) {
             // React
             // TODO:
@@ -373,7 +373,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      */
     addElementToAdminMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === ANGULAR) {
-            this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu);
+            this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu, this.jhiPrefix);
         } else if (clientFramework === REACT) {
             // React
             // TODO:
@@ -397,7 +397,13 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         entityTranslationValue = _.startCase(routerName)
     ) {
         if (this.clientFramework === ANGULAR) {
-            this.needleApi.clientAngular.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
+            this.needleApi.clientAngular.addEntityToMenu(
+                routerName,
+                enableTranslation,
+                entityTranslationKeyMenu,
+                entityTranslationValue,
+                this.jhiPrefix
+            );
         } else if (this.clientFramework === REACT) {
             this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
         } else if (this.clientFramework === VUE) {
@@ -1201,7 +1207,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
             case 'stripHtml':
                 regex = new RegExp(
                     [
-                        /([\s\n\r]+(data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/, // data-translate or jhiTranslate
+                        /([\s\n\r]+[a-z][a-zA-Z]*Translate="[a-zA-Z0-9 +{}'_!?.]+")/, // jhiTranslate
                         /([\s\n\r]+\[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
                         /([\s\n\r]+translate-compile)/, // translate-compile
                         /([\s\n\r]+translate-value-max="[0-9{}()|]*")/, // translate-value-max
@@ -1214,19 +1220,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
                 jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, opt, template);
                 break;
             case 'stripJs':
-                regex = new RegExp(
-                    [
-                        /(,[\s]*(resolve):[\s]*[{][\s]*(translatePartialLoader)['a-zA-Z0-9$,(){.<%=\->;\s:[\]]*(;[\s]*\}\][\s]*\}))/, // ng1 resolve block
-                        /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s["|']ng-jhipster["|'];)/, // ng2 import jhiLanguageService
-                        /(,?\s?JhiLanguageService,?\s?)/, // ng2 import jhiLanguageService
-                        /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?:\s?JhiLanguageService\s?,*[\s]*)/, // ng2 jhiLanguageService constructor argument
-                    ]
-                        .map(r => r.source)
-                        .join('|'),
-                    'g'
-                );
-
-                jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, opt, template);
+                jhipsterUtils.copyWebResource(source, dest, null, 'js', _this, opt, template);
                 break;
             case 'stripJsx':
                 regex = new RegExp(

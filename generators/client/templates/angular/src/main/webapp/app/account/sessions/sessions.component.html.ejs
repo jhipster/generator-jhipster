@@ -17,13 +17,13 @@
  limitations under the License.
 -%>
 <div>
-    <h2 id="session-page-heading" jhiTranslate="sessions.title" [translateValues]="{ username: account.login }" *ngIf="account">Active sessions for [<b>{{ account.login }}</b>]</h2>
+    <h2 id="session-page-heading" <%= jhiPrefix %>Translate="sessions.title" [translateValues]="{ username: account.login }" *ngIf="account">Active sessions for [<b>{{ account.login }}</b>]</h2>
 
-    <div class="alert alert-success" *ngIf="success" jhiTranslate="sessions.messages.success">
+    <div class="alert alert-success" *ngIf="success" <%= jhiPrefix %>Translate="sessions.messages.success">
         <strong>Session invalidated!</strong>
     </div>
 
-    <div class="alert alert-danger" *ngIf="error" jhiTranslate="sessions.messages.error">
+    <div class="alert alert-danger" *ngIf="error" <%= jhiPrefix %>Translate="sessions.messages.error">
         <strong>An error has occurred!</strong> The session could not be invalidated.
     </div>
 
@@ -31,9 +31,9 @@
         <table class="table table-striped" aria-describedby="session-page-heading">
             <thead>
                 <tr>
-                    <th scope="col" jhiTranslate="sessions.table.ipaddress">IP Address</th>
-                    <th scope="col" jhiTranslate="sessions.table.useragent">User agent</th>
-                    <th scope="col" jhiTranslate="sessions.table.date">Date</th>
+                    <th scope="col" <%= jhiPrefix %>Translate="sessions.table.ipaddress">IP Address</th>
+                    <th scope="col" <%= jhiPrefix %>Translate="sessions.table.useragent">User agent</th>
+                    <th scope="col" <%= jhiPrefix %>Translate="sessions.table.date">Date</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -46,7 +46,7 @@
                         <button type="submit"
                                 class="btn btn-primary"
                                 (click)="invalidate(session.series)"
-                                jhiTranslate="sessions.table.button">
+                                <%= jhiPrefix %>Translate="sessions.table.button">
                             Invalidate
                         </button>
                     </td>

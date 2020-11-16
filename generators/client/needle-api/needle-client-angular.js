@@ -146,7 +146,13 @@ module.exports = class extends needleClientBase {
         }
     }
 
-    addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue = _.startCase(routerName)) {
+    addEntityToMenu(
+        routerName,
+        enableTranslation,
+        entityTranslationKeyMenu,
+        entityTranslationValue = _.startCase(routerName),
+        jhiPrefix = 'jhi'
+    ) {
         const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
         const entityMenuPath = `${this.CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
         const entityEntry =
@@ -154,7 +160,7 @@ module.exports = class extends needleClientBase {
             this.generator.stripMargin(`|<li>
                              |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                              |                            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-                             |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${entityTranslationValue}</span>
+                             |                            <span${enableTranslation ? ` ${jhiPrefix}Translate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${entityTranslationValue}</span>
                              |                        </a>
                              |                    </li>`);
         const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-entity-to-menu', entityEntry);
@@ -162,14 +168,14 @@ module.exports = class extends needleClientBase {
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
 
-    addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu = routerName) {
+    addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu = routerName, jhiPrefix = 'jhi') {
         const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
         const entityMenuPath = `${this.CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
         // prettier-ignore
         const entityEntry = `<li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                                 <a class="nav-link" routerLink="${routerName}" (click)="collapseNavbar()">
                                     <fa-icon icon="${iconName}" [fixedWidth]="true"></fa-icon>
-                                    <span${enableTranslation ? ` jhiTranslate="global.menu.${translationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
+                                    <span${enableTranslation ? ` ${jhiPrefix}Translate="global.menu.${translationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
                                 </a>
                             </li>`;
         const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-element-to-menu', entityEntry);
@@ -178,14 +184,14 @@ module.exports = class extends needleClientBase {
         this.addIcon(iconName);
     }
 
-    addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu = routerName) {
+    addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu = routerName, jhiPrefix = 'jhi') {
         const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to admin menu.\n')}`;
         const navbarAdminPath = `${this.CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
         // prettier-ignore
         const entityEntry = `<li>
                         <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="${iconName}" [fixedWidth]="true"></fa-icon>
-                            <span${enableTranslation ? ` jhiTranslate="global.menu.admin.${translationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
+                            <span${enableTranslation ? ` ${jhiPrefix}Translate="global.menu.admin.${translationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
                         </a>
                     </li>`;
         const rewriteFileModel = this.generateFileModel(navbarAdminPath, 'jhipster-needle-add-element-to-admin-menu', entityEntry);

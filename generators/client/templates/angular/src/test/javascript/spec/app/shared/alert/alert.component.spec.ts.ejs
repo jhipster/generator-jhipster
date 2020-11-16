@@ -16,24 +16,24 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-jest.mock('ng-jhipster');
+jest.mock('app/core/util/alert.service');
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { JhiAlertService } from 'ng-jhipster';
 
+import { AlertService } from 'app/core/util/alert.service';
 import { AlertComponent } from 'app/shared/alert/alert.component';
 
 describe('Component Tests', () => {
   describe('Alert Component', () => {
     let comp: AlertComponent;
     let fixture: ComponentFixture<AlertComponent>;
-    let mockAlertService: JhiAlertService;
+    let mockAlertService: AlertService;
 
     beforeEach(
       waitForAsync(() => {
         TestBed.configureTestingModule({
           declarations: [AlertComponent],
-          providers: [JhiAlertService],
+          providers: [AlertService],
         })
           .overrideTemplate(AlertComponent, '')
           .compileComponents();
@@ -43,7 +43,7 @@ describe('Component Tests', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(AlertComponent);
       comp = fixture.componentInstance;
-      mockAlertService = TestBed.inject(JhiAlertService);
+      mockAlertService = TestBed.inject(AlertService);
     });
 
     it('Should call alertService.get on init', () => {
