@@ -2637,7 +2637,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         return { ...defaultAppTypeConfig, ...defaultConfig };
     }
 
-    setConfigDefaults(defaults = defaultConfig) {
+    setConfigDefaults(defaults) {
         const jhipsterVersion = packagejs.version;
         const baseName = this.getDefaultAppName();
         const creationTimestamp = new Date().getTime();
