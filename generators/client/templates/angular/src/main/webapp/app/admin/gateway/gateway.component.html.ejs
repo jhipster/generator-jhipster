@@ -18,22 +18,22 @@
 -%>
 <div>
     <h2>
-        <span id="gateway-page-heading" jhiTranslate="gateway.title">Gateway</span>
+        <span id="gateway-page-heading" <%= jhiPrefix %>Translate="gateway.title">Gateway</span>
 
         <button class="btn btn-primary float-right" (click)="refresh()" (disabled)="updatingRoutes">
-            <fa-icon icon="sync"></fa-icon> <span jhiTranslate="gateway.refresh.button">Refresh</span>
+            <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="gateway.refresh.button">Refresh</span>
         </button>
     </h2>
 
-    <h3 jhiTranslate="gateway.routes.title">Current routes</h3>
+    <h3 <%= jhiPrefix %>Translate="gateway.routes.title">Current routes</h3>
 
     <div class="table-responsive">
         <table class="table table-striped" aria-describedby="gateway-page-heading">
             <thead>
                 <tr>
-                    <th scope="col" jhiTranslate="gateway.routes.url">URL</th>
-                    <th scope="col" jhiTranslate="gateway.routes.service">Service</th>
-                    <th scope="col" jhiTranslate="gateway.routes.servers">Available servers</th>
+                    <th scope="col" <%= jhiPrefix %>Translate="gateway.routes.url">URL</th>
+                    <th scope="col" <%= jhiPrefix %>Translate="gateway.routes.service">Service</th>
+                    <th scope="col" <%= jhiPrefix %>Translate="gateway.routes.servers">Available servers</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,7 +41,7 @@
                     <td>{{ route.path }}</td>
                     <td>{{ route.serviceId }}</td>
                     <td>
-                        <div *ngIf="route.serviceInstances.length === 0" class="label label-danger" jhiTranslate="gateway.routes.error">
+                        <div *ngIf="route.serviceInstances.length === 0" class="label label-danger" <%= jhiPrefix %>Translate="gateway.routes.error">
                             Warning: no server available!
                         </div>
 

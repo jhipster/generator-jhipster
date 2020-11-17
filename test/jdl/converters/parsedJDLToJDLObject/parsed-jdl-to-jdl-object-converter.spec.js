@@ -517,6 +517,7 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                         skipServer: false,
                         skipUserManagement: false,
                         websocket: false,
+                        withAdminUi: true,
                     });
                 });
 

@@ -33,10 +33,10 @@
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
         protected activatedRoute: ActivatedRoute,
         <%_ if (fieldsContainBlob) { _%>
-        protected dataUtils: JhiDataUtils,
+        protected dataUtils: DataUtils,
         <%_ } _%>
         protected router: Router,
-        protected eventManager: JhiEventManager,
+        protected eventManager: EventManager,
         <%_ if (!readOnly) { _%>
         protected modalService: NgbModal
         <%_ } _%>

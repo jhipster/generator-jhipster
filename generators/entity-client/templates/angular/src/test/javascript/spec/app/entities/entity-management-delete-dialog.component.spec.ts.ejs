@@ -19,38 +19,38 @@
 <%_
 const tsKeyId = generateTestEntityId(primaryKeyType);
 _%>
-jest.mock('ng-jhipster');
 jest.mock('@ng-bootstrap/ng-bootstrap');
+jest.mock('app/core/event-manager/event-manager.service');
 
 import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
 
 import { <%= entityAngularName %>DeleteDialogComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-delete-dialog.component';
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import { EventManager } from 'app/core/event-manager/event-manager.service';
 
 describe('Component Tests', () => {
     describe('<%= entityAngularName %> Management Delete Component', () => {
         let comp: <%= entityAngularName %>DeleteDialogComponent;
         let fixture: ComponentFixture<<%= entityAngularName %>DeleteDialogComponent>;
         let service: <%= entityAngularName %>Service;
-        let mockEventManager: JhiEventManager;
+        let mockEventManager: EventManager;
         let mockActiveModal: NgbActiveModal;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [HttpClientTestingModule],
                 declarations: [<%= entityAngularName %>DeleteDialogComponent],
-                providers: [NgbActiveModal, JhiEventManager]
+                providers: [NgbActiveModal, EventManager]
             })
             .overrideTemplate(<%= entityAngularName %>DeleteDialogComponent, '')
             .compileComponents();
             fixture = TestBed.createComponent(<%= entityAngularName %>DeleteDialogComponent);
             comp = fixture.componentInstance;
             service = TestBed.inject(<%= entityAngularName %>Service);
-            mockEventManager = TestBed.inject(JhiEventManager);
+            mockEventManager = TestBed.inject(EventManager);
             mockActiveModal = TestBed.inject(NgbActiveModal);
         });
 

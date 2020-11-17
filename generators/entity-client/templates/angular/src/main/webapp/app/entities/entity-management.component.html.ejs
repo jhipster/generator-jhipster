@@ -18,18 +18,18 @@
 -%>
 <div>
     <h2 id="page-heading" data-cy="<%= entityClass %>Heading">
-        <span jhiTranslate="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></span>
+        <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></span>
 
         <div class="d-flex justify-content-end">
             <button class="btn btn-info mr-2" (click)="handleSyncList()" [disabled]="isLoading">
                 <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-                <span jhiTranslate="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</span>
+                <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</span>
             </button>
             <%_ if (!readOnly) { _%>
 
             <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityUrl %>/new']">
                 <fa-icon icon="plus"></fa-icon>
-                <span <% if (searchEngine !== false) { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= i18nKeyPrefix %>.home.createLabel">
+                <span <% if (searchEngine !== false) { %>class="hidden-sm-down" <% } %> <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.createLabel">
                 Create a new <%= entityClassHumanized %>
                 </span>
             </button>
@@ -62,15 +62,15 @@
     <%_ } _%>
 
     <div class="alert alert-warning" id="no-result" *ngIf="<%= entityInstancePlural %>?.length === 0">
-        <span jhiTranslate="<%= i18nKeyPrefix %>.home.notFound">No <%= entityInstancePlural %> found</span>
+        <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.notFound">No <%= entityInstancePlural %> found</span>
     </div>
 
     <div class="table-responsive" id="entities" *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
-                <tr<% if (pagination !== 'no') { %> jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="<%= pagination !== 'infinite-scroll' ? 'loadPage.bind(this)' : 'reset.bind(this)'%>"<% } %>>
+                <tr<% if (pagination !== 'no') { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="<%= pagination !== 'infinite-scroll' ? 'loadPage.bind(this)' : 'reset.bind(this)'%>"<% } %>>
                     <%_ for (idx in fields) { _%>
-                    <th scope="col" <% if (pagination !== 'no') { %> jhiSortBy="<%= fields[idx].fieldName %>"<% } %>><span jhiTranslate="<%= fields[idx].fieldTranslationKey %>"><%= fields[idx].fieldNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                    <th scope="col"<% if (pagination !== 'no') { %> <%= jhiPrefix %>SortBy="<%= fields[idx].fieldName %>"<% } %>><span <%= jhiPrefix %>Translate="<%= fields[idx].fieldTranslationKey %>"><%= fields[idx].fieldNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
                     <%_ } _%>
                     <%_ for (idx in relationships) { _%>
                         <%_ if (relationships[idx].relationshipType === 'many-to-one'
@@ -78,7 +78,7 @@
                                 || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
                             const fieldName = "." + relationships[idx].otherEntityField;
                         _%>
-                    <th scope="col" <% if (pagination !== 'no') { %> jhiSortBy="<%= relationships[idx].relationshipName + (fieldName) %>"<% } %>><span jhiTranslate="<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                    <th scope="col" <% if (pagination !== 'no') { %> <%= jhiPrefix %>SortBy="<%= relationships[idx].relationshipName + (fieldName) %>"<% } %>><span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
                         <%_ } _%>
                     <%_ } _%>
                     <th scope="col"></th>
@@ -104,11 +104,11 @@
                     </td>
                     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'any') { _%>
                     <td>
-                        <a *ngIf="<%= entityInstance %>.<%= fieldName %>" (click)="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" jhiTranslate="entity.action.open">open</a>
+                        <a *ngIf="<%= entityInstance %>.<%= fieldName %>" (click)="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" <%= jhiPrefix %>Translate="entity.action.open">open</a>
                         <span *ngIf="<%= entityInstance %>.<%= fieldName %>">{{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}</span>
                     </td>
                     <%_ } else if (fields[idx].fieldIsEnum) { _%>
-                    <td<% if (field.id) { %>><a<%- routerLink %><% } %> jhiTranslate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
+                    <td<% if (field.id) { %>><a<%- routerLink %><% } %> <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
                     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                     <td>{{ <%= entityInstance %>.<%= fieldName %> | date:'medium' }}</td>
                     <%_ } else if (fieldType === 'LocalDate') { _%>
@@ -163,7 +163,7 @@
                                     class="btn btn-info btn-sm"
                                     data-cy="entityDetailsButton">
                                 <fa-icon icon="eye"></fa-icon>
-                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.view">View</span>
                             </button>
                             <%_ if (!readOnly) { _%>
 
@@ -172,14 +172,14 @@
                                     class="btn btn-primary btn-sm"
                                     data-cy="entityEditButton">
                                 <fa-icon icon="pencil-alt"></fa-icon>
-                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.edit">Edit</span>
                             </button>
 
                             <button type="submit" (click)="delete(<%= entityInstance %>)"
                                     class="btn btn-danger btn-sm"
                                     data-cy="entityDeleteButton">
                                 <fa-icon icon="times"></fa-icon>
-                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.delete">Delete</span>
                             </button>
                             <%_ } _%>
                         </div>
@@ -192,7 +192,7 @@
 
     <div *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
         <div class="row justify-content-center">
-            <jhi-item-count [page]="page!" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+            <<%= jhiPrefixDashed %>-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></<%= jhiPrefixDashed %>-item-count>
         </div>
 
         <div class="row justify-content-center">

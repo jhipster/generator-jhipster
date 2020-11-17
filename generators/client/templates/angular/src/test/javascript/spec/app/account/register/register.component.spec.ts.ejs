@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ if (enableTranslation) { _%>
-jest.mock('ng-jhipster');
+jest.mock('@ngx-translate/core');
 <%_ } _%>
 
 import { ComponentFixture, TestBed, waitForAsync, inject, tick, fakeAsync } from '@angular/core/testing';
@@ -25,7 +25,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from 'ng-jhipster';
+import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/core/config/error.constants';
@@ -42,7 +42,7 @@ describe('Component Tests', () => {
         TestBed.configureTestingModule({
           imports: [HttpClientTestingModule],
           declarations: [RegisterComponent],
-          providers: [FormBuilder<% if (enableTranslation) { %>, JhiLanguageService<% } %>],
+          providers: [FormBuilder<% if (enableTranslation) { %>, TranslateService<% } %>],
         })
           .overrideTemplate(RegisterComponent, '')
           .compileComponents();
@@ -66,11 +66,11 @@ describe('Component Tests', () => {
     });
 
     it('should update success to true after creating an account', inject(
-      [RegisterService<% if (enableTranslation) { %>, JhiLanguageService<% } %>],
-      fakeAsync((service: RegisterService<% if (enableTranslation) { %>, mockLanguageService: JhiLanguageService<% } %>) => {
+      [RegisterService<% if (enableTranslation) { %>, TranslateService<% } %>],
+      fakeAsync((service: RegisterService<% if (enableTranslation) { %>, mockLanguageService: TranslateService<% } %>) => {
         spyOn(service, 'save').and.returnValue(of({}));
         <%_ if (enableTranslation) { _%>
-        spyOn(mockLanguageService, 'getCurrentLanguage').and.returnValue('<%= nativeLanguage %>');
+        mockLanguageService.currentLang = '<%= nativeLanguage %>';
         <%_ } _%>
         comp.registerForm.patchValue({
           password: 'password',
@@ -87,9 +87,6 @@ describe('Component Tests', () => {
           langKey: '<%= nativeLanguage %>',
         });
         expect(comp.success).toBe(true);
-        <%_ if (enableTranslation) { _%>
-        expect(mockLanguageService.getCurrentLanguage).toHaveBeenCalled();
-        <%_ } _%>
         expect(comp.errorUserExists).toBe(false);
         expect(comp.errorEmailExists).toBe(false);
         expect(comp.error).toBe(false);

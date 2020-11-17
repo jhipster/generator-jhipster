@@ -2,10 +2,12 @@ import {
   <%_ if (!skipUserManagement) { _%>
   userManagementPageHeadingSelector,
   <%_ } _%>
+  <%_ if (withAdminUi) { _%>
   metricsPageHeadingSelector,
   healthPageHeadingSelector,
   logsPageHeadingSelector,
   configurationPageHeadingSelector,
+  <%_ } _%>
 } from '../../support/commands';
 
 describe('/admin', () => {
@@ -44,6 +46,7 @@ describe('/admin', () => {
   });
   <%_ } _%>
 
+  <%_ if (withAdminUi) { _%>
   describe('/metrics', () => {
     it('should load the page', () => {
       cy.clickOnAdminMenuItem('metrics');
@@ -71,4 +74,5 @@ describe('/admin', () => {
       cy.get(configurationPageHeadingSelector).should('be.visible');
     });
   });
+<%_ } _%>
 });

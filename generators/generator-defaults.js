@@ -40,8 +40,6 @@ const appDefaultConfig = {
     jhiPrefix: defaultNewApplicationOptions[optionNames.JHI_PREFIX],
     entitySuffix: defaultNewApplicationOptions[optionNames.ENTITY_SUFFIX],
     dtoSuffix: defaultNewApplicationOptions[optionNames.DTO_SUFFIX],
-    reactive: defaultNewApplicationOptions[optionNames.REACTIVE],
-    clientPackageManager: defaultNewApplicationOptions[optionNames.CLIENT_PACKAGE_MANAGER],
     get testFrameworks() {
         return [];
     },
@@ -74,6 +72,7 @@ const serverDefaultConfig = {
     authenticationType: defaultMonolithOptions[optionNames.AUTHENTICATION_TYPE],
     serviceDiscoveryType: defaultMonolithOptions[optionNames.SERVICE_DISCOVERY_TYPE],
     enableHibernateCache: true,
+    reactive: defaultNewApplicationOptions[optionNames.REACTIVE],
 };
 
 /** Required config for prompts to be skipped */
@@ -83,8 +82,10 @@ const clientRequiredConfig = {
 
 const clientDefaultConfig = {
     ...clientRequiredConfig,
+    clientPackageManager: defaultNewApplicationOptions[optionNames.CLIENT_PACKAGE_MANAGER],
     clientTheme: defaultMonolithOptions[optionNames.CLIENT_THEME],
     clientThemeVariant: defaultMonolithOptions[optionNames.CLIENT_THEME_VARIANT],
+    withAdminUi: defaultMonolithOptions[optionNames.WITH_ADMIN_UI],
 };
 
 const translationDefaultConfig = {
@@ -135,4 +136,5 @@ module.exports = {
     defaultConfig,
     requiredDefaultConfig,
     entityDefaultConfig,
+    translationDefaultConfig,
 };

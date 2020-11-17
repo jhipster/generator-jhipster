@@ -39,6 +39,7 @@ const optionNames = {
     CLIENT_PACKAGE_MANAGER: 'clientPackageManager',
     CLIENT_THEME: 'clientTheme',
     CLIENT_THEME_VARIANT: 'clientThemeVariant',
+    WITH_ADMIN_UI: 'withAdminUi',
     CREATION_TIMESTAMP: 'creationTimestamp',
     DATABASE_TYPE: 'databaseType',
     DEV_DATABASE_TYPE: 'devDatabaseType',
@@ -192,6 +193,7 @@ const optionValues = {
         false: false,
     },
     [optionNames.WITH_ENTITIES]: false,
+    [optionNames.WITH_ADMIN_UI]: true,
 };
 
 const optionTypes = {
@@ -244,6 +246,7 @@ const optionTypes = {
     [optionNames.USE_NPM]: { type: ApplicationOptionTypes.BOOLEAN },
     [optionNames.WEBSOCKET]: { type: ApplicationOptionTypes.STRING },
     [optionNames.WITH_ENTITIES]: { type: ApplicationOptionTypes.BOOLEAN },
+    [optionNames.WITH_ADMIN_UI]: { type: ApplicationOptionTypes.BOOLEAN },
 };
 
 const QuotedOptionNames = [optionNames.JHIPSTER_VERSION, optionNames.REMEMBER_ME_KEY, optionNames.JWT_SECRET_KEY];

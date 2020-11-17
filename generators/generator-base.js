@@ -33,6 +33,7 @@ const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig } = require('./generator-defaults');
+const { detectLanguage } = require('../utils/language');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
@@ -350,7 +351,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      */
     addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === ANGULAR) {
-            this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu);
+            this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu, this.jhiPrefix);
         } else if (clientFramework === REACT) {
             // React
             // TODO:
@@ -378,7 +379,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      */
     addElementToAdminMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === ANGULAR) {
-            this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu);
+            this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu, this.jhiPrefix);
         } else if (clientFramework === REACT) {
             // React
             // TODO:
@@ -402,7 +403,13 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         entityTranslationValue = _.startCase(routerName)
     ) {
         if (this.clientFramework === ANGULAR) {
-            this.needleApi.clientAngular.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
+            this.needleApi.clientAngular.addEntityToMenu(
+                routerName,
+                enableTranslation,
+                entityTranslationKeyMenu,
+                entityTranslationValue,
+                this.jhiPrefix
+            );
         } else if (this.clientFramework === REACT) {
             this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
         } else if (this.clientFramework === VUE) {
@@ -1206,7 +1213,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
             case 'stripHtml':
                 regex = new RegExp(
                     [
-                        /([\s\n\r]+(data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/, // data-translate or jhiTranslate
+                        /([\s\n\r]+[a-z][a-zA-Z]*Translate="[a-zA-Z0-9 +{}'_!?.]+")/, // jhiTranslate
                         /([\s\n\r]+\[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
                         /([\s\n\r]+translate-compile)/, // translate-compile
                         /([\s\n\r]+translate-value-max="[0-9{}()|]*")/, // translate-value-max
@@ -1219,19 +1226,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
                 jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, opt, template);
                 break;
             case 'stripJs':
-                regex = new RegExp(
-                    [
-                        /(,[\s]*(resolve):[\s]*[{][\s]*(translatePartialLoader)['a-zA-Z0-9$,(){.<%=\->;\s:[\]]*(;[\s]*\}\][\s]*\}))/, // ng1 resolve block
-                        /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s["|']ng-jhipster["|'];)/, // ng2 import jhiLanguageService
-                        /(,?\s?JhiLanguageService,?\s?)/, // ng2 import jhiLanguageService
-                        /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?:\s?JhiLanguageService\s?,*[\s]*)/, // ng2 jhiLanguageService constructor argument
-                    ]
-                        .map(r => r.source)
-                        .join('|'),
-                    'g'
-                );
-
-                jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, opt, template);
+                jhipsterUtils.copyWebResource(source, dest, null, 'js', _this, opt, template);
                 break;
             case 'stripJsx':
                 regex = new RegExp(
@@ -2002,35 +1997,31 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      *
      * @param {object} generator - generator instance to use
      */
-    askModuleName(generator) {
-        const done = generator.async();
+    async askModuleName(generator) {
         const defaultAppBaseName = this.getDefaultAppName();
-        generator
-            .prompt({
-                type: 'input',
-                name: 'baseName',
-                validate: input => {
-                    if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
-                        return 'Your base name cannot contain special characters or a blank space';
-                    }
-                    if ((generator.applicationType === 'microservice' || generator.applicationType === 'uaa') && /_/.test(input)) {
-                        return 'Your base name cannot contain underscores as this does not meet the URI spec';
-                    }
-                    if (generator.applicationType === 'uaa' && input === 'auth') {
-                        return "Your UAA base name cannot be named 'auth' as it conflicts with the gateway login routes";
-                    }
-                    if (input === 'application') {
-                        return "Your base name cannot be named 'application' as this is a reserved name for Spring Boot";
-                    }
-                    return true;
-                },
-                message: 'What is the base name of your application?',
-                default: defaultAppBaseName,
-            })
-            .then(prompt => {
-                generator.baseName = generator.jhipsterConfig.baseName = prompt.baseName;
-                done();
-            });
+        const answers = await generator.prompt({
+            type: 'input',
+            name: 'baseName',
+            validate: input => {
+                if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
+                    return 'Your base name cannot contain special characters or a blank space';
+                }
+                if ((generator.applicationType === 'microservice' || generator.applicationType === 'uaa') && /_/.test(input)) {
+                    return 'Your base name cannot contain underscores as this does not meet the URI spec';
+                }
+                if (generator.applicationType === 'uaa' && input === 'auth') {
+                    return "Your UAA base name cannot be named 'auth' as it conflicts with the gateway login routes";
+                }
+                if (input === 'application') {
+                    return "Your base name cannot be named 'application' as this is a reserved name for Spring Boot";
+                }
+                return true;
+            },
+            message: 'What is the base name of your application?',
+            default: defaultAppBaseName,
+        });
+
+        generator.baseName = generator.jhipsterConfig.baseName = answers.baseName;
     }
 
     /**
@@ -2358,6 +2349,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         if (options.recreateInitialChangelog) {
             this.configOptions.recreateInitialChangelog = options.recreateInitialChangelog;
         }
+        if (options.withAdminUi !== undefined) {
+            this.jhipsterConfig.withAdminUi = options.withAdminUi;
+        }
         if (options.skipClient) {
             this.skipClient = this.jhipsterConfig.skipClient = true;
         }
@@ -2385,7 +2379,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             this.jhipsterConfig.baseName = this.options.baseName;
         }
         if (options.db) {
-            this.jhipsterConfig.databaseType = this.getDBTypeFromDBValue(this.options.db);
+            const databaseType = this.getDBTypeFromDBValue(this.options.db);
+            if (databaseType) {
+                this.jhipsterConfig.databaseType = databaseType;
+            } else if (!this.jhipsterConfig.databaseType) {
+                throw new Error(`Could not detect databaseType for database ${this.options.db}`);
+            }
             this.jhipsterConfig.devDatabaseType = options.db;
             this.jhipsterConfig.prodDatabaseType = options.db;
         }
@@ -2421,6 +2420,21 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
         if (options.legacyDbNames !== undefined) {
             this.jhipsterConfig.legacyDbNames = options.legacyDbNames;
+        }
+        if (options.language) {
+            // workaround double options parsing, remove once generator supports skipping parse options
+            const languages = options.language.flat();
+            this.jhipsterConfig.languages = [...this.jhipsterConfig.languages, ...languages];
+        }
+        if (options.nativeLanguage) {
+            if (typeof options.nativeLanguage === 'string') {
+                this.jhipsterConfig.nativeLanguage = options.nativeLanguage;
+                if (!this.jhipsterConfig.languages) {
+                    this.jhipsterConfig.languages = [options.nativeLanguage];
+                }
+            } else if (options.nativeLanguage === true) {
+                this.jhipsterConfig.nativeLanguage = detectLanguage();
+            }
         }
 
         if (options.creationTimestamp) {
@@ -2475,6 +2489,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         dest.prettierJava = config.prettierJava;
         dest.pages = config.pages;
         dest.skipJhipsterDependencies = !!config.skipJhipsterDependencies;
+        dest.withAdminUi = config.withAdminUi;
 
         dest.testFrameworks = config.testFrameworks || [];
         dest.gatlingTests = dest.testFrameworks.includes('gatling');

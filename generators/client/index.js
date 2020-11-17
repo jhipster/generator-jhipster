@@ -105,6 +105,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         return {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
+            askForAdminUi: prompts.askForAdminUi,
             askForClientTheme: prompts.askForClientTheme,
             askForClientThemeVariant: prompts.askForClientThemeVariant,
         };

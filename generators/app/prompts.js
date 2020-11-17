@@ -51,12 +51,12 @@ async function askForApplicationType() {
             name: 'Monolithic application (recommended for simple projects)',
         },
         {
-            value: 'microservice',
-            name: 'Microservice application',
+            value: 'gateway',
+            name: 'Gateway application',
         },
         {
-            value: 'gateway',
-            name: 'Microservice gateway',
+            value: 'microservice',
+            name: 'Microservice application',
         },
         {
             value: 'uaa',
@@ -72,16 +72,8 @@ async function askForApplicationType() {
             choices: applicationTypeChoices,
             default: generatorDefaults.applicationType,
         },
-        {
-            when: answers => ['gateway', 'monolith', 'microservice'].includes(answers.applicationType),
-            type: 'confirm',
-            name: 'reactive',
-            message: '[Beta] Do you want to make it reactive with Spring WebFlux?',
-            default: generatorDefaults.reactive,
-        },
     ]);
     this.applicationType = this.jhipsterConfig.applicationType = answers.applicationType;
-    this.reactive = this.jhipsterConfig.reactive = answers.reactive;
 }
 
 function askForModuleName() {
@@ -93,14 +85,14 @@ async function askForTestOpts() {
     if (this.existingProject) return undefined;
 
     const choices = [];
+    if (!this.skipClient) {
+        // all client side test frameworks should be added here
+        choices.push({ name: 'Cypress', value: 'cypress' });
+        choices.push({ name: '[DEPRECATED] Protractor', value: 'protractor' });
+    }
     if (!this.skipServer) {
         // all server side test frameworks should be added here
         choices.push({ name: 'Gatling', value: 'gatling' }, { name: 'Cucumber', value: 'cucumber' });
-    }
-    if (!this.skipClient) {
-        // all client side test frameworks should be added here
-        choices.push({ name: 'Protractor **Deprecated**', value: 'protractor' });
-        choices.push({ name: 'Cypress', value: 'cypress' });
     }
     const PROMPT = {
         type: 'checkbox',

@@ -18,7 +18,7 @@
 -%>
 jest.mock('@angular/router');
 <%_ if (enableTranslation) { _%>
-jest.mock('ng-jhipster');
+jest.mock('@ngx-translate/core');
 <%_ } _%>
 jest.mock('app/core/auth/state-storage.service');
 <%_ if (websocket === 'spring-websocket') { _%>
@@ -29,7 +29,7 @@ import { Router } from '@angular/router';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from 'ng-jhipster';
+import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import { NgxWebstorageModule } from 'ngx-webstorage';
 
@@ -70,7 +70,7 @@ describe('Service Tests', () => {
         imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()],
         providers: [
           <%_ if (enableTranslation) { _%>
-          JhiLanguageService,
+          TranslateService,
           <%_ } _%>
           <%_ if (websocket === 'spring-websocket') { _%>
           TrackerService,

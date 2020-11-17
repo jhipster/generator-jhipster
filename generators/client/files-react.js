@@ -32,11 +32,11 @@ const files = {
                 '.eslintrc.json',
                 'tsconfig.json',
                 'tsconfig.test.json',
-                'webpack/logo-jhipster.png',
                 'webpack/webpack.common.js',
                 'webpack/webpack.dev.js',
                 'webpack/webpack.prod.js',
                 'webpack/utils.js',
+                { file: 'webpack/logo-jhipster.png', method: 'copy' },
             ],
         },
         {
@@ -125,6 +125,11 @@ const files = {
             ],
         },
         {
+            condition: generator => generator.authenticationType === 'oauth2',
+            path: REACT_DIR,
+            templates: [{ file: 'modules/login/login-redirect.tsx', method: 'processJsx' }],
+        },
+        {
             path: REACT_DIR,
             templates: ['modules/home/home.scss'],
         },
@@ -182,16 +187,21 @@ const files = {
         {
             path: REACT_DIR,
             templates: [
-                // admin modules
                 { file: 'modules/administration/index.tsx', method: 'processJsx' },
-                { file: 'modules/administration/configuration/configuration.tsx', method: 'processJsx' },
+                'modules/administration/administration.reducer.ts',
                 { file: 'modules/administration/docs/docs.tsx', method: 'processJsx' },
                 'modules/administration/docs/docs.scss',
+            ],
+        },
+        {
+            condition: generator => generator.withAdminUi,
+            path: REACT_DIR,
+            templates: [
+                { file: 'modules/administration/configuration/configuration.tsx', method: 'processJsx' },
                 { file: 'modules/administration/health/health.tsx', method: 'processJsx' },
                 { file: 'modules/administration/health/health-modal.tsx', method: 'processJsx' },
                 { file: 'modules/administration/logs/logs.tsx', method: 'processJsx' },
                 { file: 'modules/administration/metrics/metrics.tsx', method: 'processJsx' },
-                'modules/administration/administration.reducer.ts',
             ],
         },
         {

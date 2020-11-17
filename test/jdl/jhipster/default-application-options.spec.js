@@ -60,6 +60,9 @@ describe('DefaultApplicationOptions', () => {
             it('should set the client theme variant option to none', () => {
                 expect(options.clientThemeVariant).to.equal('');
             });
+            it('should set withAdminUI option to true', () => {
+                expect(options.withAdminUi).to.be.true;
+            });
         });
         context('when passing a custom client theme and no variant', () => {
             let clientThemeVariantOption;
@@ -132,6 +135,9 @@ describe('DefaultApplicationOptions', () => {
             });
             it('should set the client theme variant option to none', () => {
                 expect(options.clientThemeVariant).to.equal('');
+            });
+            it('should set the withAdminUi option to true', () => {
+                expect(options.withAdminUi).to.be.true;
             });
             it('should set the service discovery type to eureka', () => {
                 expect(options.serviceDiscoveryType).to.equal('eureka');
@@ -241,6 +247,9 @@ describe('DefaultApplicationOptions', () => {
             it('should unset the client theme variant option', () => {
                 expect(options.clientThemeVariant).to.be.undefined;
             });
+            it('should unset the withAdminUi option', () => {
+                expect(options.withAdminUi).to.be.undefined;
+            });
             it('should unset the server skipping option', () => {
                 expect(options.skipServer).to.be.undefined;
             });
@@ -313,6 +322,9 @@ describe('DefaultApplicationOptions', () => {
             it('should remove the client theme variant option', () => {
                 expect(options.clientThemeVariant).to.be.undefined;
             });
+            it('should remove the withAdminUi option', () => {
+                expect(options.withAdminUi).to.be.undefined;
+            });
             it('should remove the server skipping option', () => {
                 expect(options.skipServer).to.be.undefined;
             });
@@ -353,6 +365,9 @@ describe('DefaultApplicationOptions', () => {
             it('should unset the client theme variant option', () => {
                 expect(options.clientThemeVariant).to.be.undefined;
             });
+            it('should unset the withAdminUi option', () => {
+                expect(options.withAdminUi).to.be.undefined;
+            });
             it('should unset the server skipping option', () => {
                 expect(options.skipServer).to.be.undefined;
             });
@@ -389,6 +404,9 @@ describe('DefaultApplicationOptions', () => {
             });
             it('should remove the client theme variant option', () => {
                 expect(options.clientThemeVariant).to.be.undefined;
+            });
+            it('should remove the withAdminUi option', () => {
+                expect(options.withAdminUi).to.be.undefined;
             });
             it('should remove the server skipping option', () => {
                 expect(options.skipServer).to.be.undefined;

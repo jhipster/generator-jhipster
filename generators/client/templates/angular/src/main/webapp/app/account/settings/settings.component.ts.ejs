@@ -19,7 +19,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from 'ng-jhipster';
+import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -51,7 +51,7 @@ export class SettingsComponent implements OnInit {
     private accountService: AccountService,
     private fb: FormBuilder,
     <%_ if (enableTranslation) { _%>
-    private languageService: JhiLanguageService
+    private translateService: TranslateService,
     <%_ } _%>
   ) {}
 
@@ -88,8 +88,8 @@ export class SettingsComponent implements OnInit {
       this.accountService.authenticate(this.account);
 
       <%_ if (enableTranslation) { _%>
-      if (this.account.langKey !== this.languageService.getCurrentLanguage()) {
-        this.languageService.changeLanguage(this.account.langKey);
+      if (this.account.langKey !== this.translateService.currentLang) {
+        this.translateService.use(this.account.langKey);
       }
       <%_ } _%>
     });

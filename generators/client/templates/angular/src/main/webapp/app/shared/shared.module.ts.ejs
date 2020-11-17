@@ -20,32 +20,44 @@ import { NgModule } from '@angular/core';
 import { SharedLibsModule } from './shared-libs.module';
 <%_ if (enableTranslation) { _%>
 import { FindLanguageFromKeyPipe } from './find-language-from-key.pipe';
+import { TranslateDirective } from './translate.directive';
 <%_ } _%>
 import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
 import { HasAnyAuthorityDirective } from './has-any-authority.directive';
 import { DurationPipe } from './duration.pipe';
+import { SortByDirective } from './sort/sort-by.directive';
+import { SortDirective } from './sort/sort.directive';
+import { ItemCountComponent } from './item-count.component';
 
 @NgModule({
   imports: [SharedLibsModule],
   declarations: [
     <%_ if (enableTranslation) { _%>
     FindLanguageFromKeyPipe,
+    TranslateDirective,
     <%_ } _%>
     AlertComponent,
     AlertErrorComponent,
     HasAnyAuthorityDirective,
     DurationPipe,
+    SortByDirective,
+    SortDirective,
+    ItemCountComponent,
   ],
   exports: [
     SharedLibsModule,
     <%_ if (enableTranslation) { _%>
     FindLanguageFromKeyPipe,
+    TranslateDirective,
     <%_ } _%>
     AlertComponent,
     AlertErrorComponent,
     HasAnyAuthorityDirective,
     DurationPipe,
+    SortByDirective,
+    SortDirective,
+    ItemCountComponent,
   ],
 })
 export class SharedModule {}

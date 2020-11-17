@@ -20,7 +20,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from 'ng-jhipster';
+import { TranslateService } from '@ngx-translate/core';
 import { SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
 import { Observable, ReplaySubject, of } from 'rxjs';
@@ -41,7 +41,7 @@ export class AccountService {
 
   constructor(
     <%_ if (enableTranslation) { _%>
-    private languageService: JhiLanguageService,
+    private translateService: TranslateService,
     private sessionStorage: SessionStorageService,
     <%_ } _%>
     private http: HttpClient,
@@ -92,7 +92,7 @@ export class AccountService {
           // the user's preferred language configured in the account setting
           if (account?.langKey) {
             const langKey = this.sessionStorage.retrieve('locale') ?? account.langKey;
-            this.languageService.changeLanguage(langKey);
+            this.translateService.use(langKey);
           }
           <%_ } _%>
 

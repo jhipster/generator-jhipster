@@ -52,6 +52,11 @@ function createValidator(jdlObject, logger = console) {
         checkForErrors: () => {
             checkForApplicationErrors();
             jdlObject.forEachApplication(jdlApplication => {
+                const blueprints = jdlApplication.getConfigurationOptionValue('blueprints');
+                if (blueprints && blueprints.length > 0) {
+                    logger.warn('Blueprints are being used, the JDL validation phase is skipped.');
+                    return;
+                }
                 checkForEntityErrors(jdlApplication);
                 checkForRelationshipErrors(jdlApplication);
                 checkForEnumErrors();

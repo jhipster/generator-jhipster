@@ -21,7 +21,7 @@ import { element, by, ElementFinder<% if (authenticationType === 'oauth2') { _%>
 <%_
 let elementGetter = `getText()`;
 if (enableTranslation) {
-  elementGetter = `getAttribute('jhiTranslate')`;
+  elementGetter = `getAttribute('${jhiPrefix}Translate')`;
 }
 _%>
 /* eslint @typescript-eslint/no-use-before-define: 0 */
