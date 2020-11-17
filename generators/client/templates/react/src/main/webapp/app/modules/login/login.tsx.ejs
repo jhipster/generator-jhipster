@@ -24,7 +24,7 @@ import { IRootState } from 'app/shared/reducers';
 import { login } from 'app/shared/reducers/authentication';
 import LoginModal from './login-modal';
 
-export interface ILoginProps extends StateProps, DispatchProps, RouteComponentProps<{}> {}
+export interface ILoginProps extends StateProps, DispatchProps, RouteComponentProps<any> {}
 
 export const Login = (props: ILoginProps) => {
   const [showModal, setShowModal] = useState(props.showModal);
