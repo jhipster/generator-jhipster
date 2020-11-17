@@ -49,6 +49,7 @@ describe('Component Tests', () => {
             .compileComponents();
             fixture = TestBed.createComponent(<%= entityAngularName %>DeleteDialogComponent);
             comp = fixture.componentInstance;
+            comp.eventName = 'myEventToBroadcast';
             service = TestBed.inject(<%= entityAngularName %>Service);
             mockEventManager = TestBed.inject(EventManager);
             mockActiveModal = TestBed.inject(NgbActiveModal);

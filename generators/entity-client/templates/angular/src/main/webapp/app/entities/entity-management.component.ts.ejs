@@ -94,6 +94,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     delete(<%= entityInstance %>: I<%= entityAngularName %>): void {
         const modalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent, { size: 'lg', backdrop: 'static' });
         modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
+        modalRef.componentInstance.eventName = '<%= entityInstance %>ListModification';
     }
     <%_ } _%>
 
