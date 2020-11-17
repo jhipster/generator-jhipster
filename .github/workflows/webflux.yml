@@ -83,7 +83,7 @@ jobs:
                     #                    - webflux-couchbase-es-oauth2
                     - webflux-psql
                     #- webflux-mysql
-                    - webflux-mariadb-gradle
+                    #- webflux-mariadb-gradle
                 include:
                     - app-type: webflux-mongodb
                       entity: mongodb
@@ -137,12 +137,12 @@ jobs:
                     #  war: 0
                     #  e2e: 1
                     #  testcontainers: 1
-                    - app-type: webflux-mariadb-gradle
-                      entity: sqlfull
-                      profile: prod
-                      war: 0
-                      e2e: 1
-                      testcontainers: 1
+                    #- app-type: webflux-mariadb-gradle
+                    #  entity: sqlfull
+                    #  profile: prod
+                    #  war: 0
+                    #  e2e: 1
+                    #  testcontainers: 1
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
