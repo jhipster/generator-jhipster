@@ -86,7 +86,7 @@ describe('JHipster generator', () => {
             });
             it('uses correct prettier formatting', () => {
                 // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
-                assert.fileContent('webpack/webpack.custom.js', / {2}\/\/ RULES/);
+                assert.fileContent('webpack/webpack.custom.js', / {2}\/\/ PLUGINS/);
             });
         });
 
