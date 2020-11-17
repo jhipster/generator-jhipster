@@ -27,12 +27,14 @@ export type AlertType = 'success' | 'danger' | 'warning' | 'info';
 export interface Alert {
   id?: number;
   type: AlertType;
-  msg: string;
-  params?: any;
+  message?: string;
+  <%_ if (enableTranslation) { _%>
+  translationKey?: string;
+  translationParams?: { [key: string]: unknown };
+  <%_ } _%>
   timeout?: number;
   toast?: boolean;
   position?: string;
-  scoped?: boolean;
   close?: (alerts: Alert[]) => void;
 }
 
@@ -40,11 +42,13 @@ export interface Alert {
   providedIn: 'root',
 })
 export class AlertService {
+  timeout = 5000;
+  toast = false;
+  position = 'top right';
+
   // unique id for each alert. Starts from 0.
   private alertId = 0;
   private alerts: Alert[] = [];
-  private timeout = 5000;
-  private toast = false;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -55,92 +59,61 @@ export class AlertService {
   ) {}
 
   clear(): void {
-    this.alerts.splice(0, this.alerts.length);
+    this.alerts = [];
   }
 
   get(): Alert[] {
     return this.alerts;
   }
 
-  success(msg: string, params?: any, position?: string): Alert {
-    return this.createAlert('success', msg, params, position);
-  }
+  /**
+   * Adds alert to alerts array and returns added alert.
+   * @param alert      Alert to add. If `timeout`, `toast` or `position` is missing then applying default value.
+   <%_ if (enableTranslation) { _%>
+   *                   If `translateKey` is available then it's translation else `message` is used for showing.
+   <%_ } _%>
+   * @param extAlerts  If missing then adding `alert` to `AlertService` internal array and alerts can be retrieved by `get()`.
+   *                   Else adding `alert` to `extAlerts`.
+   * @returns  Added alert
+   */
+  addAlert(alert: Alert, extAlerts?: Alert[]): Alert {
+    alert.id = this.alertId++;
 
-  error(msg: string, params?: any, position?: string): Alert {
-    return this.createAlert('danger', msg, params, position);
-  }
-
-  warning(msg: string, params?: any, position?: string): Alert {
-    return this.createAlert('warning', msg, params, position);
-  }
-
-  info(msg: string, params?: any, position?: string): Alert {
-    return this.createAlert('info', msg, params, position);
-  }
-
-  addAlert(alertOptions: Alert, extAlerts: Alert[]): Alert {
-    alertOptions.id = this.alertId++;
     <%_ if (enableTranslation) { _%>
-    if (alertOptions.msg) {
-      alertOptions.msg = this.translateService.instant(alertOptions.msg, alertOptions.params);
+    if (alert.translationKey) {
+      alert.message = this.translateService.instant(alert.translationKey, alert.translationParams);
     }
     <%_ } _%>
-    const alert = this.factory(alertOptions);
-    if (alertOptions.timeout && alertOptions.timeout > 0) {
+
+    alert.message = this.sanitizer.sanitize(SecurityContext.HTML, alert.message ?? '') ?? '';
+    alert.timeout = alert.timeout ?? this.timeout;
+    alert.toast = alert.toast ?? this.toast;
+    alert.position = alert.position ?? this.position;
+    alert.close = (alertsArray: Alert[]) => this.closeAlert(alert.id!, alertsArray);
+
+    (extAlerts ?? this.alerts).push(alert);
+
+    if (alert.timeout > 0) {
       // Workaround protractor waiting for setTimeout.
       // Reference https://www.protractortest.org/#/timeouts
       this.ngZone.runOutsideAngular(() => {
         setTimeout(() => {
           this.ngZone.run(() => {
-            this.closeAlert(alertOptions.id!, extAlerts);
+            this.closeAlert(alert.id!, extAlerts ?? this.alerts);
           });
-        }, alertOptions.timeout);
+        }, alert.timeout);
       });
     }
+
     return alert;
   }
 
-  closeAlert(id: number, extAlerts?: Alert[]): Alert[] {
-    const thisAlerts: Alert[] = extAlerts && extAlerts.length > 0 ? extAlerts : this.alerts;
-    return this.closeAlertByIndex(thisAlerts.map(e => e.id).indexOf(id), thisAlerts);
-  }
-
-  closeAlertByIndex(index: number, thisAlerts: Alert[]): Alert[] {
-    return thisAlerts.splice(index, 1);
-  }
-
-  isToast(): boolean {
-    return this.toast;
-  }
-
-  private factory(alertOptions: Alert): Alert {
-    const alert: Alert = {
-      type: alertOptions.type,
-      msg: this.sanitizer.sanitize(SecurityContext.HTML, alertOptions.msg) ?? '',
-      id: alertOptions.id,
-      timeout: alertOptions.timeout,
-      toast: alertOptions.toast,
-      position: alertOptions.position ?? 'top right',
-      scoped: alertOptions.scoped,
-      close: (alerts: Alert[]) => this.closeAlert(alertOptions.id!, alerts),
-    };
-    if (!alert.scoped) {
-      this.alerts.push(alert);
+  private closeAlert(alertId: number, extAlerts?: Alert[]): void {
+    const alerts = extAlerts ?? this.alerts;
+    const alertIndex = alerts.map(alert => alert.id).indexOf(alertId);
+    // if found alert then remove
+    if (alertIndex >= 0) {
+      alerts.splice(alertIndex, 1);
     }
-    return alert;
-  }
-
-  private createAlert(type: AlertType, msg: string, params?: any, position?: string): Alert {
-    return this.addAlert(
-      {
-        type,
-        msg,
-        params,
-        timeout: this.timeout,
-        toast: this.isToast(),
-        position,
-      },
-      []
-    );
   }
 }

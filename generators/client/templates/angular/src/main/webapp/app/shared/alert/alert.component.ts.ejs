@@ -22,14 +22,13 @@ import { AlertService, Alert } from 'app/core/util/alert.service';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-alert',
-  template: `
-    <div class="alerts" role="alert">
-      <div *ngFor="let alert of alerts" [ngClass]="setClasses(alert)">
-        <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="alert.type" (close)="close(alert)">
-          <pre [innerHTML]="alert.msg"></pre>
-        </ngb-alert>
-      </div>
-    </div>`
+  template: ` <div class="alerts" role="alert">
+    <div *ngFor="let alert of alerts" [ngClass]="setClasses(alert)">
+      <ngb-alert *ngIf="alert.message" [type]="alert.type" (closed)="close(alert)">
+        <pre [innerHTML]="alert.message"></pre>
+      </ngb-alert>
+    </div>
+  </div>`,
 })
 export class AlertComponent implements OnInit, OnDestroy {
   alerts: Alert[] = [];
