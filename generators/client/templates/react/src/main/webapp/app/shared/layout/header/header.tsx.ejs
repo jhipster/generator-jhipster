@@ -44,7 +44,7 @@ export interface IHeaderProps {
   isOpenAPIEnabled: boolean;
 <%_ if (enableTranslation) { _%>
   currentLocale: string;
-  onLocaleChange: Function;
+  onLocaleChange: (langKey: string) => void;
 <%_ } _%>
 }
 
