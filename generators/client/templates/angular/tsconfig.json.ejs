@@ -27,7 +27,6 @@
     "strict": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "suppressImplicitAnyIndexErrors": true,
     "skipLibCheck": true,
     "outDir": "<%= DIST_DIR %>app",
     "lib": ["es7", "dom"],
@@ -42,8 +41,8 @@
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
-    "fullTemplateTypeCheck": true,
     "strictTemplates": true,
+    "strictInputAccessModifiers": true,
     "preserveWhitespaces": true
   },
   "exclude": ["<%= CLIENT_TEST_SRC_DIR %>cypress"]

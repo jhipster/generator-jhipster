@@ -46,14 +46,14 @@ export class MetricsSystemComponent {
       second: 1000,
     };
     let timeString = '';
-    for (const key in times) {
-      if (Math.floor(ms / times[key]) > 0) {
+    for (const [key, value] of Object.entries(times)) {
+      if (Math.floor(ms / value) > 0) {
         let plural = '';
-        if (Math.floor(ms / times[key]) > 1) {
+        if (Math.floor(ms / value) > 1) {
           plural = 's';
         }
-        timeString += Math.floor(ms / times[key]).toString() + ' ' + key.toString() + plural + ' ';
-        ms = ms - times[key] * Math.floor(ms / times[key]);
+        timeString += Math.floor(ms / value).toString() + ' ' + key.toString() + plural + ' ';
+        ms = ms - value * Math.floor(ms / value);
       }
     }
     return timeString;

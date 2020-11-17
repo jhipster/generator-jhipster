@@ -27,8 +27,8 @@ import { SortDirective } from './sort.directive';
 @Directive({
   selector: '[<%= jhiPrefix %>SortBy]',
 })
-export class SortByDirective implements AfterContentInit, OnDestroy {
-  @Input() <%= jhiPrefix %>SortBy?: string;
+export class SortByDirective<T> implements AfterContentInit, OnDestroy {
+  @Input() <%= jhiPrefix %>SortBy?: T;
 
   @ContentChild(FaIconComponent, { static: true })
   iconComponent?: FaIconComponent;
@@ -39,7 +39,7 @@ export class SortByDirective implements AfterContentInit, OnDestroy {
 
   private readonly destroy$ = new Subject<void>();
 
-  constructor(@Host() private sort: SortDirective) {
+  constructor(@Host() private sort: SortDirective<T>) {
     sort.predicateChange.pipe(takeUntil(this.destroy$)).subscribe(() => this.updateIconDefinition());
     sort.ascendingChange.pipe(takeUntil(this.destroy$)).subscribe(() => this.updateIconDefinition());
   }
