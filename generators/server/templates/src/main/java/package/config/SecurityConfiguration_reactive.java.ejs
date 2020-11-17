@@ -265,6 +265,7 @@ public class SecurityConfiguration {
             .pathMatchers("/api/account/reset-password/finish").permitAll()
             <%_ } _%>
             .pathMatchers("/api/auth-info").permitAll()
+            .pathMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .pathMatchers("/api/**").authenticated()
             <%_ if (applicationType === 'monolith' || applicationType === 'gateway') { _%>
             .pathMatchers("/services/**", "/swagger-resources/**").authenticated()
