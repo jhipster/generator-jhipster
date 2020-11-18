@@ -51,6 +51,10 @@
                     </div>
                     <%_ } else if (['Duration'].includes(fieldType)) { _%>
                         {{ <%= entityInstance %>.<%= fieldName %> | duration }} ({{<%= entityInstance %>.<%= fieldName %> }})
+                    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+                    {{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}
+                    <%_ } else if (fieldType === 'LocalDate') { _%>
+                    {{ <%= entityInstance %>.<%= fieldName %> | formatMediumDate }}
                     <%_ } else { _%>
                     <span>{{ <%= entityInstance %>.<%= fieldName %> }}</span>
                     <%_ } _%>
