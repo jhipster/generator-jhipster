@@ -10,7 +10,7 @@
     "bootstrap-vue": "2.19.0"
   },
   "devDependencies": {
-    "webpack": "4.44.2",
+    "webpack": "5.5.0",
     "webpack-bundle-analyzer": "4.1.0",
     "vue-jest": "3.0.7",
     "vue-loader": "15.9.5"
