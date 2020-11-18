@@ -27,6 +27,9 @@
     "strict": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    <%_ if (protractorTests) { _%>
+    "skipLibCheck": true,
+    <%_ } _%>
     "outDir": "<%= DIST_DIR %>app",
     "lib": ["es7", "dom"],
     "baseUrl": "./",
