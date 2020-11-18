@@ -50,22 +50,22 @@
         </span>
     </div>
 
-    <div class="pad" *ngFor="let entry of getThreads() | keyvalue">
+    <div class="pad" *ngFor="let thread of getThreads()">
         <h6>
-            <span class="badge" [ngClass]="getBadgeClass(entry.value.threadState)">{{ entry.value.threadState }}</span>
+            <span class="badge" [ngClass]="getBadgeClass(thread.threadState)">{{ thread.threadState }}</span>
 
-            &nbsp;{{ entry.value.threadName }} (ID {{ entry.value.threadId }})
+            &nbsp;{{ thread.threadName }} (ID {{ thread.threadId }})
 
-            <a (click)="entry.value.showThreadDump = !entry.value.showThreadDump" href="javascript:void(0);">
-                <span [hidden]="entry.value.showThreadDump" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.show">Show StackTrace</span>
-                <span [hidden]="!entry.value.showThreadDump" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.hide">Hide StackTrace</span>
+            <a (click)="thread.showThreadDump = !thread.showThreadDump" href="javascript:void(0);">
+                <span [hidden]="thread.showThreadDump" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.show">Show StackTrace</span>
+                <span [hidden]="!thread.showThreadDump" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.hide">Hide StackTrace</span>
             </a>
         </h6>
 
-        <div class="card" [hidden]="!entry.value.showThreadDump">
+        <div class="card" [hidden]="!thread.showThreadDump">
             <div class="card-body">
-                <div *ngFor="let st of (entry.value.stackTrace | keyvalue)" class="break">
-                    <samp>{{ st.value.className }}.{{ st.value.methodName }}(<code>{{ st.value.fileName }}:{{ st.value.lineNumber }}</code>)</samp>
+                <div *ngFor="let st of thread.stackTrace" class="break">
+                    <samp>{{ st.className }}.{{ st.methodName }}(<code>{{ st.fileName }}:{{ st.lineNumber }}</code>)</samp>
                     <span class="mt-1"></span>
                 </div>
             </div>
@@ -82,12 +82,12 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ entry.value.blockedTime }}</td>
-                    <td>{{ entry.value.blockedCount }}</td>
-                    <td>{{ entry.value.waitedTime }}</td>
-                    <td>{{ entry.value.waitedCount }}</td>
-                    <td class="thread-dump-modal-lock" title="{{ entry.value.lockName }}">
-                        <code>{{ entry.value.lockName }}</code>
+                    <td>{{ thread.blockedTime }}</td>
+                    <td>{{ thread.blockedCount }}</td>
+                    <td>{{ thread.waitedTime }}</td>
+                    <td>{{ thread.waitedCount }}</td>
+                    <td class="thread-dump-modal-lock" title="{{ thread.lockName }}">
+                        <code>{{ thread.lockName }}</code>
                     </td>
                 </tr>
             </tbody>
