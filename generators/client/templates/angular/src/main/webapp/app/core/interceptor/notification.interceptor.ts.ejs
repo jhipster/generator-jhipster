@@ -47,7 +47,15 @@ export class NotificationInterceptor implements HttpInterceptor {
           }
 
           if (alert) {
-            this.alertService.success(alert<% if (enableTranslation) { %>, { param: alertParams }<% } %>);
+            this.alertService.addAlert({
+              type: 'success',
+              <%_ if (enableTranslation) { _%>
+              translationKey: alert,
+              translationParams: { param: alertParams },
+              <%_ } else { _%>
+              message: alert,
+              <%_ } _%>
+            });
           }
         }
       })

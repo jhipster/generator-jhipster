@@ -30,14 +30,13 @@ import { EventWithContent } from 'app/core/event-manager/event-with-content.mode
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-alert-error',
-  template: `
-    <div class="alerts" role="alert">
-      <div *ngFor="let alert of alerts" [ngClass]="setClasses(alert)">
-        <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="alert.type" (close)="close(alert)">
-          <pre [innerHTML]="alert.msg"></pre>
-        </ngb-alert>
-      </div>
-    </div>`,
+  template: ` <div class="alerts" role="alert">
+    <div *ngFor="let alert of alerts" [ngClass]="setClasses(alert)">
+      <ngb-alert *ngIf="alert.message" [type]="alert.type" (closed)="close(alert)">
+        <pre [innerHTML]="alert.message"></pre>
+      </ngb-alert>
+    </div>
+  </div>`,
 })
 export class AlertErrorComponent implements OnDestroy {
   alerts: Alert[] = [];
@@ -97,7 +96,7 @@ export class AlertErrorComponent implements OnDestroy {
           } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
             this.addErrorAlert(httpErrorResponse.error.message<% if (enableTranslation) { %>, httpErrorResponse.error.message, httpErrorResponse.error.params<% } %>);
           } else {
-            this.addErrorAlert(httpErrorResponse.error);
+            this.addErrorAlert(httpErrorResponse.error<% if (enableTranslation) { %>, httpErrorResponse.error<% } %>);
           }
           break;
         }
@@ -108,9 +107,9 @@ export class AlertErrorComponent implements OnDestroy {
 
         default:
           if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-            this.addErrorAlert(httpErrorResponse.error.message);
+            this.addErrorAlert(httpErrorResponse.error.message<% if (enableTranslation) { %>, httpErrorResponse.error.message<% } %>);
           } else {
-            this.addErrorAlert(httpErrorResponse.error);
+            this.addErrorAlert(httpErrorResponse.error<% if (enableTranslation) { %>, httpErrorResponse.error<% } %>);
           }
       }
     });
@@ -133,18 +132,7 @@ export class AlertErrorComponent implements OnDestroy {
     alert.close?.(this.alerts);
   }
 
-  private addErrorAlert(message: string<% if (enableTranslation) { %>, key?: string, data?: { [key: string]: unknown }<% } %>): void {
-    const newAlert: Alert = {
-      type: 'danger',
-      msg: <% if (enableTranslation) { %>key ?? <% } %>message,
-      <%_ if (enableTranslation) { _%>
-      params: data,
-      <%_ } _%>
-      timeout: 5000,
-      toast: this.alertService.isToast(),
-      scoped: true,
-    };
-
-    this.alerts.push(this.alertService.addAlert(newAlert, this.alerts));
+  private addErrorAlert(message?: string<% if (enableTranslation) { %>, translationKey?: string, translationParams?: { [key: string]: unknown }<% } %>): void {
+    this.alertService.addAlert({ type: 'danger', message<% if (enableTranslation) { %>, translationKey, translationParams<% } %> }, this.alerts);
   }
 }
