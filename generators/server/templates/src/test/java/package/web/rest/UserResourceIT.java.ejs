@@ -540,7 +540,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .returnResult(<%= asDto('User') %>.class).getResponseBody().blockFirst();
+            .returnResult(<%= asDto('PublicUser') %>.class).getResponseBody().blockFirst();
 
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(foundUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
