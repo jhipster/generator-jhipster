@@ -29,7 +29,9 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.mapstruct.*;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 /**
  * Mapper for the entity {@link <%= asEntity('User') %>} and its DTO called {@link <%= asDto('User') %>}.
@@ -137,6 +139,22 @@ public class UserMapper {
         return userDto;
     }
 
+    @Named("idSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    public Set<<%= asDto('User') %>> toDtoIdSet(Set<<%= asEntity('User') %>> users) {
+        if ( users == null ) {
+            return null;
+        }
+
+        Set<<%= asDto('User') %>> userSet = new HashSet<<%= asDto('User') %>>();
+        for ( <%= asEntity('User') %> userEntity : users ) {
+            userSet.add( this.toDtoId( userEntity ) );
+        }
+
+        return userSet;
+    }
+
     @Named("login")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
@@ -149,5 +167,22 @@ public class UserMapper {
         userDto.setId(user.getId());
         userDto.setLogin(user.getLogin());
         return userDto;
+    }
+
+    @Named("loginSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "login", source = "login")
+    public Set<<%= asDto('User') %>> toDtoLoginSet(Set<<%= asEntity('User') %>> users) {
+        if ( users == null ) {
+            return null;
+        }
+
+        Set<<%= asDto('User') %>> userSet = new HashSet<<%= asDto('User') %>>();
+        for ( <%= asEntity('User') %> userEntity : users ) {
+            userSet.add( this.toDtoLogin( userEntity ) );
+        }
+
+        return userSet;
     }
 }

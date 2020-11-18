@@ -48,11 +48,27 @@ const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
+// Reverse order.
 const CUSTOM_PRIORITIES = [
+    {
+        priorityName: 'preConflicts',
+        queueName: 'jhipster:preConflicts',
+        before: 'conflicts',
+    },
+    {
+        priorityName: 'postWriting',
+        queueName: 'jhipster:postWriting',
+        before: 'preConflicts',
+    },
+    {
+        priorityName: 'preparingRelationships',
+        queueName: 'jhipster:preparingRelationships',
+        before: 'default',
+    },
     {
         priorityName: 'preparing',
         queueName: 'jhipster:preparing',
-        before: 'default',
+        before: 'preparingRelationships',
     },
     {
         priorityName: 'loading',
@@ -63,16 +79,6 @@ const CUSTOM_PRIORITIES = [
         priorityName: 'composing',
         queueName: 'jhipster:composing',
         before: 'loading',
-    },
-    {
-        priorityName: 'preConflicts',
-        queueName: 'jhipster:preConflicts',
-        before: 'conflicts',
-    },
-    {
-        priorityName: 'postWriting',
-        queueName: 'jhipster:postWriting',
-        before: 'preConflicts',
     },
 ];
 

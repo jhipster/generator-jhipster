@@ -22,14 +22,17 @@ module.exports = {
         JSON.stringify(
             data,
             (key, value) => {
+                if (!value) {
+                    return value;
+                }
                 if (key === 'faker') {
                     return '[faker]';
                 }
-                if (key === 'otherEntity' && value) {
+                if (key === 'otherEntity') {
                     return `[${value.name} Entity]`;
                 }
-                if (key === 'otherRelationship' && value) {
-                    return '[otherRelationship]';
+                if (key === 'otherRelationship') {
+                    return `[${value.relationshipName} relationship]`;
                 }
                 return value;
             },

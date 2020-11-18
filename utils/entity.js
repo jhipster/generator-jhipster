@@ -162,32 +162,37 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         hasBuiltInUserField &&
         entityWithConfig.dto === 'no';
 
-    entityWithConfig.derivedPrimaryKey = entityWithConfig.relationships.some(relationship => relationship.useJPADerivedIdentifier === true);
-
-    if (!entityWithConfig.embedded && !entityWithConfig.derivedPrimaryKey) {
+    if (!entityWithConfig.embedded) {
         entityWithConfig.idFields = entityWithConfig.fields.filter(field => field.id);
-        if (entityWithConfig.idFields.length > 0) {
-            if (entityWithConfig.idFields.length === 1) {
-                const idField = entityWithConfig.idFields[0];
-                // Allow ids type to be empty and fallback to default type for the database.
-                if (!idField.fieldType) {
-                    idField.fieldType = generator.getPkType(entityWithConfig.databaseType);
-                }
-                entityWithConfig.primaryKeyType = idField.fieldType;
-            } else {
-                throw new Error('Composite id not implemented');
-            }
-        } else {
-            entityWithConfig.primaryKeyType = generator.getPkType(entityWithConfig.databaseType);
+        entityWithConfig.idRelationships = entityWithConfig.relationships.filter(
+            relationship => relationship.id || relationship.useJPADerivedIdentifier === true
+        );
+        let idCount = entityWithConfig.idFields.length + entityWithConfig.idRelationships.length;
+
+        if (idCount === 0) {
             const idField = {
                 fieldName: 'id',
-                fieldType: entityWithConfig.primaryKeyType,
                 id: true,
                 fieldNameHumanized: 'ID',
                 fieldTranslationKey: 'global.field.id',
             };
             entityWithConfig.idFields.push(idField);
             entityWithConfig.fields.unshift(idField);
+            idCount++;
+        }
+        if (idCount > 1) {
+            throw new Error('Composite id not implemented');
+        } else if (entityWithConfig.idRelationships.length === 1) {
+            entityWithConfig.derivedPrimaryKey = entityWithConfig.idRelationships[0];
+            entityWithConfig.derivedPrimaryKey.useJPADerivedIdentifier = true;
+        } else {
+            const idField = entityWithConfig.idFields[0];
+            // Allow ids type to be empty and fallback to default type for the database.
+            if (!idField.fieldType) {
+                idField.fieldType = generator.getPkType(entityWithConfig.databaseType);
+            }
+            entityWithConfig.primaryKey = { name: idField.fieldName, type: idField.fieldType };
+            entityWithConfig.primaryKeyType = idField.fieldType;
         }
     }
 

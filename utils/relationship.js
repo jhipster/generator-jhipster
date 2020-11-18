@@ -42,8 +42,6 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     if (!otherEntityData) {
         throw new Error(`Error at entity ${entityName}: could not find the entity of the relationship ${stringify(relationship)}`);
     }
-    otherEntityData.otherRelationships = otherEntityData.otherRelationships || [];
-    otherEntityData.otherRelationships.push(relationship);
 
     relationship.otherEntityIsEmbedded = otherEntityData.embedded;
 
@@ -98,6 +96,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
                 );
             }
             _.defaults(relationship, {
+                otherRelationship,
                 otherEntityRelationshipName: otherRelationship.relationshipName,
                 otherEntityRelationshipNamePlural: otherRelationship.relationshipNamePlural,
                 otherEntityRelationshipNameCapitalized: otherRelationship.relationshipNameCapitalized,
