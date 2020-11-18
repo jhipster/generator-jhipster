@@ -110,7 +110,7 @@
                     <%_ } else if (fields[idx].fieldIsEnum) { _%>
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %> <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
                     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-                    <td>{{ <%= entityInstance %>.<%= fieldName %> | formatMedium }}</td>
+                    <td>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}</td>
                     <%_ } else if (fieldType === 'LocalDate') { _%>
                     <td>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDate }}</td>
                     <%_ } else if (fieldType === 'Duration') { _%>
