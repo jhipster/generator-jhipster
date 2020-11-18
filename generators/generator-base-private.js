@@ -911,13 +911,9 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                                     this.${variableName} = resBody;
                                 } else {
                                     this.${relationship.otherEntityName}Service
-                                        .find(${entityInstance}.${relationshipFieldName}${dto !== 'no' ? 'Id' : '.id'})
-                                        .pipe(map((subRes: HttpResponse<I${
-                                            relationship.otherEntityAngularName
-                                        }>) => subRes.body ? [subRes.body].concat(resBody) : resBody))
-                                        .subscribe((concatRes: I${
-                                            relationship.otherEntityAngularName
-                                        }[]) => this.${variableName} = concatRes);
+                                        .find(${entityInstance}.${relationshipFieldName}.id)
+                                        .pipe(map((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) => subRes.body ? [subRes.body].concat(resBody) : resBody))
+                                        .subscribe((concatRes: I${relationship.otherEntityAngularName}[]) => this.${variableName} = concatRes);
                                 }
                             });`;
                 } else {
