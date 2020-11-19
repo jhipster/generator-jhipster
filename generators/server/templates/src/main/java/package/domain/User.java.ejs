@@ -506,7 +506,7 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
 
     @Override
     public int hashCode() {
-        return 31;
+        return getClass().hashCode();
     }
 
     // prettier-ignore
