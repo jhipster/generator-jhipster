@@ -261,19 +261,27 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
     }
     <%_ } _%>
 
-    @BeforeEach
-    public void initTest() {
+    /**
+     * Setups the database with one user.
+     */
+    public static <%= asEntity('User') %> initTestUser(UserRepository userRepository<% if (databaseType === 'sql' ) { %>, EntityManager em<% } _%>) {
         <%_ if (databaseType === 'sql' && reactive) { _%>
         userRepository.deleteAllUserAuthorities().block();
         <%_ } _%>
         <%_ if (databaseType !== 'sql' || reactive) { _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
         <%_ } _%>
-        user = createEntity(<% if (databaseType === 'sql' ) { %>em<% } _%>);
+        <%= asEntity('User') %> user = createEntity(<% if (databaseType === 'sql' ) { %>em<% } _%>);
         <%_ if (databaseType === 'sql') { _%>
         user.setLogin(DEFAULT_LOGIN);
         user.setEmail(DEFAULT_EMAIL);
         <%_ } _%>
+        return user;
+    }
+
+    @BeforeEach
+    public void initTest() {
+        user = initTestUser(userRepository<% if (databaseType === 'sql' ) { %>, em<% } _%>);
     }
 <%_ if (authenticationType !== 'oauth2') { _%>
 
@@ -511,65 +519,6 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         assertThat(foundUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
         <%_ } _%>
     }
-
-    @Test
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
-    @Transactional
-    <%_ } _%>
-    void getAllPublicUsers()<% if (!reactive) { %> throws Exception<% } %> {
-        // Initialize the database
-        userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-
-        // Get all the users
-        <%_ if (!reactive) { _%>
-        restUserMockMvc.perform(get("/api/users<% if (databaseType === 'sql') { %>?sort=id,desc<% } %>")
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))
-            .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRSTNAME)))
-            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LASTNAME)))
-            .andExpect(jsonPath("$.[*].email").doesNotExist())
-            <%_ if (databaseType !== 'cassandra') { _%>
-            .andExpect(jsonPath("$.[*].imageUrl").doesNotExist())
-            <%_ } _%>
-            .andExpect(jsonPath("$.[*].langKey").doesNotExist());
-        <%_ } else { _%>
-        <%= asDto('PublicUser') %> foundUser = webTestClient.get().uri("/api/users?sort=id,DESC")
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .returnResult(<%= asDto('PublicUser') %>.class).getResponseBody().blockFirst();
-
-        assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
-        assertThat(foundUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
-        assertThat(foundUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
-        <% } _%>
-    }
-
-    <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
-    @Test
-    <%_ if (!reactive) { _%>
-    @Transactional
-    <%_ } _%>
-    void getAllUsersSortedByParameters() throws Exception {
-        // Initialize the database
-        userRepository.<% if (reactive) { %>save<% } else { %>saveAndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-
-        <%_ if (!reactive) { _%>
-            restUserMockMvc.perform(get("/api/users?sort=resetKey,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
-            restUserMockMvc.perform(get("/api/users?sort=password,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
-            restUserMockMvc.perform(get("/api/users?sort=resetKey,id,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
-            restUserMockMvc.perform(get("/api/users?sort=id,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-        <%_ } else { _%>
-            webTestClient.get().uri("/api/users?sort=resetKey,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
-            webTestClient.get().uri("/api/users?sort=password,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
-            webTestClient.get().uri("/api/users?sort=resetKey,id,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
-            webTestClient.get().uri("/api/users?sort=id,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk();
-        <%_ } _%>
-    }
-    <%_ } _%>
 
     @Test
     <%_ if (databaseType === 'sql' && !reactive) { _%>
@@ -948,35 +897,6 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
 
         // Validate the database is empty
         assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeDelete - 1));
-    }
-    <%_ } _%>
-    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase')
-        && (!(authenticationType === 'oauth2' && applicationType === 'microservice'))) { _%>
-
-    @Test
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
-    @Transactional
-    <%_ } _%>
-    void getAllAuthorities()<% if (!reactive) { %> throws Exception<% } %> {
-        <%_ if (!reactive) { _%>
-        restUserMockMvc.perform(get("/api/users/authorities")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$").value(hasItems(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
-        <%_ } else { _%>
-        webTestClient.get().uri("/api/users/authorities")
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
-            .expectBody()
-            .jsonPath("$").isArray()
-            .jsonPath("$[?(@=='" + AuthoritiesConstants.ADMIN + "')]").hasJsonPath()
-            .jsonPath("$[?(@=='" + AuthoritiesConstants.USER + "')]").hasJsonPath();
-        <%_ } _%>
     }
     <%_ } _%>
 

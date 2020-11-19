@@ -19,14 +19,11 @@
 package <%= packageName %>.web.rest;
 
 import <%= packageName %>.config.Constants;
-<%_ if (authenticationType !== 'oauth2' || searchEngine === 'elasticsearch') { _%>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%= packageName %>.repository.UserRepository;
-<%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
-import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -128,7 +125,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
  * Another option would be to have a specific JPA entity graph to handle this case.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/admin")
 public class UserResource {
     <%_ if (authenticationType !== 'oauth2') { _%>
     private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections.unmodifiableList(Arrays.asList("id", "login", "firstName", "lastName", "email", "activated", "langKey"));
@@ -146,19 +143,12 @@ public class UserResource {
 
     private final MailService mailService;
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
 
-    private final UserSearchRepository userSearchRepository;
-<%_ } _%>
-
-    public UserResource(UserService userService<% if (authenticationType !== 'oauth2') { %>, UserRepository userRepository, MailService mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %>) {
+    public UserResource(UserService userService<% if (authenticationType !== 'oauth2') { %>, UserRepository userRepository, MailService mailService<% } %>) {
         this.userService = userService;
         <%_ if (authenticationType !== 'oauth2') { _%>
         this.userRepository = userRepository;
         this.mailService = mailService;
-        <%_ } _%>
-        <%_ if (searchEngine === 'elasticsearch') { _%>
-        this.userSearchRepository = userSearchRepository;
         <%_ } _%>
     }
 
@@ -177,7 +167,7 @@ public class UserResource {
     <%_ } _%>
      * @throws BadRequestAlertException {@code 400 (Bad Request)} if the login or email is already in use.
      */
-    @PostMapping("/admin/users")
+    @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public <% if (reactive) { %>Mono<ResponseEntity<<%= asEntity('User') %>>><% } else { %>ResponseEntity<<%= asEntity('User') %>><% } %> createUser(@Valid @RequestBody <%= asDto('User') %> userDTO)<% if (!reactive) { %> throws URISyntaxException<% } %> {
         log.debug("REST request to save User : {}", userDTO);
@@ -235,7 +225,7 @@ public class UserResource {
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already in use.
      * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already in use.
      */
-    @PutMapping("/admin/users")
+    @PutMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     <%_ if (!reactive) { _%>
     public ResponseEntity<<%= asDto('User') %>> updateUser(@Valid @RequestBody <%= asDto('User') %> userDTO) {
@@ -290,11 +280,12 @@ public class UserResource {
      * @param pageable the pagination information.<% } %>
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
      */
-    @GetMapping("/admin/users")
+    @GetMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
         <%_ if (!reactive) { _%>
     public ResponseEntity<List<<%= asDto('User') %>>> getAllUsers(Pageable pageable) {
+        log.debug("REST request to get all User for an admin");
         <%_ if (authenticationType !== 'oauth2') { _%>
         if (!onlyContainsAllowedProperties(pageable)) {
             return ResponseEntity.badRequest().build();
@@ -306,6 +297,7 @@ public class UserResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         <%_ } else { _%>
     public Mono<ResponseEntity<Flux<<%= asDto('User') %>>>> getAllUsers(ServerHttpRequest request, Pageable pageable) {
+        log.debug("REST request to get all User for an admin");
         <%_ if (authenticationType !== 'oauth2') { _%>
         if (!onlyContainsAllowedProperties(pageable)) {
             return Mono.just(ResponseEntity.badRequest().build());
@@ -319,66 +311,16 @@ public class UserResource {
         <%_ } _%>
     }
 
-
-    /**
-     * {@code GET /users} : get all users with only the public informations - calling this are allowed for anyone.
-     *<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType == 'neo4j' || databaseType === 'couchbase') { %>
-        <%_ if (reactive) { _%>
-     * @param request a {@link ServerHttpRequest} request.
-        <%_ } _%>
-     * @param pageable the pagination information.<% } %>
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
-     */
-    @GetMapping("/users")
-        <%_ if (!reactive) { _%>
-    public ResponseEntity<List<<%= asDto('PublicUser') %>>> getAllPublicUsers(Pageable pageable) {
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        if (!onlyContainsAllowedProperties(pageable)) {
-            return ResponseEntity.badRequest().build();
-        }
-        <%_ } _%>
-
-        final Page<<%= asDto('PublicUser') %>> page = userService.getAllPublicUsers(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
-        <%_ } else { _%>
-    public Mono<ResponseEntity<Flux<<%= asDto('PublicUser') %>>>> getAllPublicUsers(ServerHttpRequest request, Pageable pageable) {
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        if (!onlyContainsAllowedProperties(pageable)) {
-            return Mono.just(ResponseEntity.badRequest().build());
-        }
-        <%_ } _%>
-
-        return userService.countManagedUsers()
-            .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
-            .map(page -> PaginationUtil.generatePaginationHttpHeaders(UriComponentsBuilder.fromHttpRequest(request), page))
-            .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllPublicUsers(pageable)));
-    }
-        <%_ } _%>
-
     <%_ if (authenticationType !== 'oauth2') { _%>
     private boolean onlyContainsAllowedProperties(Pageable pageable) {
         return pageable.getSort().stream().map(Sort.Order::getProperty).allMatch(ALLOWED_ORDERED_PROPERTIES::contains);
     }
     <%_ } _%>
 
-    /**
-     * Gets a list of all roles.
-     * @return a string list of all roles.
-     */
-    @GetMapping("/users/authorities")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public <% if (reactive) { %>Mono<List<String>><% } else { %>List<String><% } %> getAuthorities() {
-        return userService.getAuthorities()<% if (reactive) { %>.collectList()<% } %>;
-    }
     <%_ } else { // Cassandra _%>
     public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asDto('User') %>> getAllUsers() {
+        log.debug("REST request to get all User for an admin");
         return userService.getAllManagedUsers();
-    }
-
-    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asDto('PublicUser') %>> getAllPublicUsers() {
-        return userService.getAllPublicUsers();
     }
 
     <%_ } _%>
@@ -389,7 +331,7 @@ public class UserResource {
      * @param login the login of the user to find.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the "login" user, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/admin/users/{login}")
+    @GetMapping("/users/{login}")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     <%_ if (!reactive) { _%>
     public ResponseEntity<<%= asDto('User') %>> getUser(@PathVariable @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
@@ -413,7 +355,7 @@ public class UserResource {
      * @param login the login of the user to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/admin/users/{login}")
+    @DeleteMapping("/users/{login}")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     <%_ if (!reactive) { _%>
     public ResponseEntity<Void> deleteUser(@PathVariable @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
@@ -426,29 +368,6 @@ public class UserResource {
         log.debug("REST request to delete User: {}", login);
         return userService.deleteUser(login)
             .map(it -> ResponseEntity.noContent().headers(HeaderUtil.createAlert( applicationName, "userManagement.deleted", login)).build());
-    <%_ } _%>
-    }
-<%_ } _%>
-<%_ if (searchEngine !== false) { _%>
-
-    /**
-     * {@code SEARCH /_search/users/:query} : search for the User corresponding to the query.
-     *
-     * @param query the query to search.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/users/{query}")
-    public <% if(reactive) { %>Mono<<% } %>List<<%= asEntity('User') %>><% if(reactive) { %>><% } %> search(@PathVariable String query) {
-    <%_ if (searchEngine === 'elasticsearch') { _%>
-        <%_ if (!reactive) { _%>
-        return StreamSupport
-            .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-            .collect(Collectors.toList());
-        <%_ } else { _%>
-        return userSearchRepository.search(query).collectList();
-        <%_ } _%>
-    <%_ } else { _%>
-        return userRepository.search(User.PREFIX, query)<% if (reactive) { %>.collectList()<% } %>;
     <%_ } _%>
     }
 <%_ } _%>

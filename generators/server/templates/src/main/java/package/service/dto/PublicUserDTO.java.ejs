@@ -18,9 +18,6 @@
 -%>
 package <%= packageName %>.service.dto;
 
-<%_
-    let userPk = (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') ? "String" : "Long";
-_%>
 <%_ if (databaseType !== 'no') { _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 <%_ } _%>
@@ -30,65 +27,43 @@ import <%= packageName %>.domain.<%= asEntity('User') %>;
  */
 public class <%= asDto('PublicUser') %> {
 
-    private <%= userPk %> id;
-    private String login;
-
-    private String firstName;
-
-    private String lastName;
+    private <%= user.primaryKeyType %> id;
+    private String name;
 
     <%_ if (databaseType !== 'no') { _%>
     public <%= asDto('PublicUser') %>() {
         // Empty constructor needed for Jackson.
     }
 
-    public <%= asDto('PublicUser') %>(User user) {
+    public <%= asDto('PublicUser') %>(<%= asEntity('User') %> user) {
         this.id = user.getId();
-        this.login = user.getLogin();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
+        // Customize it here if you need firstName/lastName/etc
+        this.name = user.getLogin();
     }
 
     <%_ } _%>
-    public <%= userPk %> getId() {
+    public <%= user.primaryKeyType %> getId() {
         return id;
     }
 
-    public void setId(<%= userPk %> id) {
+    public void setId(<%= user.primaryKeyType %> id) {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getName() {
+        return name;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     // prettier-ignore
     @Override
     public String toString() {
         return "<%= asDto('PublicUser') %>{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
+            "id='" + id + '\'' +
+            ", name='" + name + '\'' +
             "}";
     }
 

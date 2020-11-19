@@ -1672,6 +1672,10 @@ const serverFiles = {
                 },
                 { file: 'package/web/rest/UserResource.java', renameTo: generator => `${generator.javaDir}web/rest/UserResource.java` },
                 {
+                    file: 'package/web/rest/PublicUserResource.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/PublicUserResource.java`
+                },
+                {
                     file: 'package/web/rest/vm/ManagedUserVM.java',
                     renameTo: generator => `${generator.javaDir}web/rest/vm/ManagedUserVM.java`,
                 },
@@ -1707,6 +1711,10 @@ const serverFiles = {
                 {
                     file: 'package/service/mapper/UserMapperTest.java',
                     renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`,
+                },
+                {
+                    file: 'package/web/rest/PublicUserResourceIT.java',
+                    renameTo: generator => `${generator.testDir}web/rest/PublicUserResourceIT.java`,
                 },
                 {
                     file: 'package/web/rest/UserResourceIT.java',
@@ -1810,6 +1818,10 @@ const serverFiles = {
                 },
                 { file: 'package/web/rest/UserResource.java', renameTo: generator => `${generator.javaDir}web/rest/UserResource.java` },
                 {
+                    file: 'package/web/rest/PublicUserResource.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/PublicUserResource.java`
+                },
+                {
                     file: 'package/web/rest/vm/KeyAndPasswordVM.java',
                     renameTo: generator => `${generator.javaDir}web/rest/vm/KeyAndPasswordVM.java`,
                 },
@@ -1906,6 +1918,10 @@ const serverFiles = {
                 {
                     file: 'package/config/NoOpMailConfiguration.java',
                     renameTo: generator => `${generator.testDir}config/NoOpMailConfiguration.java`,
+                },
+                {
+                    file: 'package/web/rest/PublicUserResourceIT.java',
+                    renameTo: generator => `${generator.testDir}web/rest/PublicUserResourceIT.java`,
                 },
                 {
                     file: 'package/web/rest/UserResourceIT.java',
