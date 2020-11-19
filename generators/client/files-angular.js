@@ -369,7 +369,6 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                'core/auth/csrf.service.ts',
                 'core/auth/state-storage.service.ts',
                 'shared/has-any-authority.directive.ts',
                 'core/auth/account.service.ts',
@@ -385,6 +384,11 @@ const files = {
             condition: generator => generator.authenticationType === 'session' || generator.authenticationType === 'oauth2',
             path: ANGULAR_DIR,
             templates: ['core/auth/auth-session.service.ts'],
+        },
+        {
+            condition: generator => generator.authenticationType === 'session' && generator.websocket === 'spring-websocket',
+            path: ANGULAR_DIR,
+            templates: ['core/auth/csrf.service.ts'],
         },
     ],
     clientTestFw: [
