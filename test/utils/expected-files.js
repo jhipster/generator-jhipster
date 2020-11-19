@@ -436,7 +436,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/alert/alert-error.model.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/alert/alert.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/account.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/core/auth/csrf.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/config/font-awesome-icons.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/has-any-authority.directive.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/state-storage.service.ts`,
