@@ -757,7 +757,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         user.setActivated(false);
         user.setActivationKey(activationKey);
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
 
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
@@ -801,7 +801,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
@@ -862,7 +862,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
 
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
@@ -910,7 +910,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
@@ -923,7 +923,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         anotherUser.setPassword(RandomStringUtils.random(60));
         anotherUser.setActivated(true);
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        anotherUser.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        anotherUser.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
 
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
@@ -972,7 +972,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
@@ -1026,7 +1026,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         user.setLogin("change-password-wrong-existing-password");
         user.setEmail("change-password-wrong-existing-password@example.com");
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
@@ -1063,7 +1063,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         user.setLogin("change-password");
         user.setEmail("change-password@example.com");
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
@@ -1099,7 +1099,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         user.setLogin("change-password-too-small");
         user.setEmail("change-password-too-small@example.com");
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
@@ -1137,7 +1137,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         user.setLogin("change-password-too-long");
         user.setEmail("change-password-too-long@example.com");
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
@@ -1175,7 +1175,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         user.setLogin("change-password-empty");
         user.setEmail("change-password-empty@example.com");
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
@@ -1211,7 +1211,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         user.setLogin("current-sessions");
         user.setEmail("current-sessions@example.com");
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
@@ -1254,7 +1254,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         user.setLogin("invalidate-session");
         user.setEmail("invalidate-session@example.com");
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
@@ -1298,7 +1298,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         user.setLogin("password-reset");
         user.setEmail("password-reset@example.com");
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
@@ -1328,7 +1328,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         user.setLogin("password-reset-upper-case");
         user.setEmail("password-reset-upper-case@example.com");
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
@@ -1376,7 +1376,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         user.setResetDate(Instant.now().plusSeconds(60));
         user.setResetKey("reset key");
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
@@ -1416,7 +1416,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         user.setResetDate(Instant.now().plusSeconds(60));
         user.setResetKey("reset key too small");
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 

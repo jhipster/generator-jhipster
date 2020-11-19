@@ -48,7 +48,7 @@ for (idx in relationships) {
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         if (otherEntityNameCapitalized === 'User') {
             // Only few user records are generated
-            numberOfRows = (authenticationType === 'oauth2') ? 2 : 4;
+            numberOfRows = (authenticationType === 'oauth2') ? 0 : 2;
         }
         break;
     }

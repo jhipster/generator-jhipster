@@ -659,7 +659,7 @@ public class UserService {
         return userRepository.save(user);
         <%_ } else { _%>
         return SecurityUtils.getCurrentUserLogin()
-            .switchIfEmpty(Mono.just(Constants.SYSTEM_ACCOUNT))
+            .switchIfEmpty(Mono.just(Constants.SYSTEM))
             .flatMap(login -> {
                 if (user.getCreatedBy() == null) {
                     user.setCreatedBy(login);
@@ -738,7 +738,7 @@ public class UserService {
     <%_ } _%>
     <%_ if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { _%>
     public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= asDto('User') %>> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(<%= asDto('User') %>::new);
+        return userRepository.findAll<% if (reactive) { %>ByIdNotNull<% } %>(pageable).map(<%= asDto('User') %>::new);
     }
         <%_ if (reactive) { _%>
 
@@ -746,13 +746,12 @@ public class UserService {
     @Transactional(readOnly = true)
     <%_ } _%>
     public Mono<Long> countManagedUsers() {
-        return userRepository.countAllByLoginNot(Constants.ANONYMOUS_USER);
+        return userRepository.count();
     }
         <%_ } _%>
     <%_ } else { // Cassandra _%>
     public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asDto('User') %>> getAllManagedUsers() {
         return userRepository.findAll()<% if (!reactive) { %>.stream()<% } %>
-            .filter(user -> !Constants.ANONYMOUS_USER.equals(user.getLogin()))
             .map(<%= asDto('User') %>::new)<% if (!reactive) { %>
             .collect(Collectors.toList())<% } %>;
     }
