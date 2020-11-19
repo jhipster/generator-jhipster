@@ -128,6 +128,7 @@ function cleanupOldFiles(generator) {
             generator.removeFolder(`${ANGULAR_DIR}shared/constants`);
             generator.removeFolder(`${ANGULAR_DIR}shared/util`);
             generator.removeFile(`${ANGULAR_DIR}config/dayjs.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/core.module.ts`);
             generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.common.js`);
             generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.dev.js`);
             generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.prod.js`);

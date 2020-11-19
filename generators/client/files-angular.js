@@ -295,7 +295,6 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                'core/core.module.ts',
                 'core/user/account.model.ts',
                 'core/user/authority.model.ts',
                 'core/util/data-util.service.ts',
