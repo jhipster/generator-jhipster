@@ -49,7 +49,7 @@ const getFieldNameUndercored = fields =>
 
 function askForMicroserviceJson() {
     const context = this.context;
-    if (this.jhipsterConfig.applicationType !== 'gateway' || context.entityExisted) {
+    if (this.jhipsterConfig.applicationType !== 'gateway' || context.configExisted) {
         return undefined;
     }
 

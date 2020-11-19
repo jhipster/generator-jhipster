@@ -2230,53 +2230,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         return filesOut;
     }
 
-    setupAppOptions(generator, context = generator, dest = context) {
-        this.setupSharedOptions(generator, context, dest);
-    }
-
-    /**
-     * Setup shared level options from context.
-     * all variables should be set to dest,
-     * all variables should be referred from context,
-     * all methods should be called on generator,
-     * @param {any} generator - generator instance
-     * @param {any} context - context to use default is generator instance
-     * @param {any} dest - destination context to use default is context
-     */
-    setupSharedOptions(generator = this, context = generator, dest = context) {
-        const config = _.defaults({}, context.jhipsterConfig, defaultConfig);
-        generator.loadAppConfig.call(generator, config, dest);
-        generator.loadClientConfig.call(generator, config, dest);
-        generator.loadServerConfig.call(generator, config, dest);
-        generator.loadTranslationConfig.call(generator, config, dest);
-    }
-
-    /**
-     * Setup client instance level options from context.
-     * all variables should be set to dest,
-     * all variables should be referred from context,
-     * all methods should be called on generator,
-     * @param {any} generator - generator instance
-     * @param {any} context - context to use default is generator instance
-     * @param {any} dest - destination context to use default is context
-     */
-    setupClientOptions(generator, context = generator, dest = context) {
-        this.setupSharedOptions(generator, context, dest);
-    }
-
-    /**
-     * Setup Server instance level options from context.
-     * all variables should be set to dest,
-     * all variables should be referred from context,
-     * all methods should be called on generator,
-     * @param {any} generator - generator instance
-     * @param {any} context - context to use default is generator instance
-     * @param {any} dest - destination context to use default is context
-     */
-    setupServerOptions(generator, context = generator, dest = context) {
-        this.setupSharedOptions(generator, context, dest);
-    }
-
     /**
      * Parse runtime options.
      * @param {Object} [options] - object to load from.
