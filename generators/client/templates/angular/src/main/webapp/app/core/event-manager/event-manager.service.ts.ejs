@@ -48,15 +48,22 @@ export class EventManager {
 
   /**
    * Method to subscribe to an event with callback
+   * @param eventNames  Single event name or array of event names to what subscribe
+   * @param callback    Callback to run when the event occurs
    */
-  subscribe(eventName: string, callback: any): Subscription {
+  subscribe(eventNames: string | string[], callback: (event: any) => void): Subscription {
+    if (typeof eventNames === 'string') {
+      eventNames = [eventNames];
+    }
     const subscriber: Subscription = this.observable
       .pipe(
         filter((event: EventWithContent<any> | string) => {
-          if (typeof event === 'string') {
-            return event === eventName;
+          for (const eventName of eventNames) {
+            if ((typeof event === 'string' && event === eventName) || (typeof event !== 'string' && event.name === eventName)) {
+              return true;
+            }
           }
-          return event.name === eventName;
+          return false;
         })
       )
       .subscribe(callback);
