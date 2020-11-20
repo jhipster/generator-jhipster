@@ -70,14 +70,14 @@
                 </div>
             </div>
         </div>
-        <table class="table table-sm table-responsive">
+        <table class="table table-sm table-responsive" aria-describedby="modalThreadsMetrics">
             <thead>
                 <tr>
-                    <th <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>
-                    <th <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.blockedcount">Blocked Count</th>
-                    <th <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.waitedtime">Waited Time</th>
-                    <th <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.waitedcount">Waited Count</th>
-                    <th <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.lockname">Lock Name</th>
+                    <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>
+                    <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.blockedcount">Blocked Count</th>
+                    <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.waitedtime">Waited Time</th>
+                    <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.waitedcount">Waited Count</th>
+                    <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.lockname">Lock Name</th>
                 </tr>
             </thead>
             <tbody>

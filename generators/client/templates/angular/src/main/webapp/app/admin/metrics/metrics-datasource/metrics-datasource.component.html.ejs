@@ -19,22 +19,22 @@
 <h3 <%= jhiPrefix %>Translate="metrics.datasource.title">DataSource statistics (time in millisecond)</h3>
 
 <div class="table-responsive" *ngIf="!updating && datasourceMetrics">
-    <table class="table table-striped">
+    <table class="table table-striped" aria-describedby="datasourceMetrics">
         <thead>
             <tr>
-                <th>
+                <th scope="col">
                     <span <%= jhiPrefix %>Translate="metrics.datasource.usage">Connection Pool Usage</span> (active:
                     {{ datasourceMetrics.active.value }}, min: {{ datasourceMetrics.min.value }}, max:
                     {{ datasourceMetrics.max.value }}, idle: {{ datasourceMetrics.idle.value }})
                 </th>
-                <th class="text-right" <%= jhiPrefix %>Translate="metrics.datasource.count">Count</th>
-                <th class="text-right" <%= jhiPrefix %>Translate="metrics.datasource.mean">Mean</th>
-                <th class="text-right" <%= jhiPrefix %>Translate="metrics.servicesstats.table.min">Min</th>
-                <th class="text-right" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p50">p50</th>
-                <th class="text-right" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p75">p75</th>
-                <th class="text-right" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p95">p95</th>
-                <th class="text-right" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p99">p99</th>
-                <th class="text-right" <%= jhiPrefix %>Translate="metrics.datasource.max">Max</th>
+                <th scope="col" class="text-right" <%= jhiPrefix %>Translate="metrics.datasource.count">Count</th>
+                <th scope="col" class="text-right" <%= jhiPrefix %>Translate="metrics.datasource.mean">Mean</th>
+                <th scope="col" class="text-right" <%= jhiPrefix %>Translate="metrics.servicesstats.table.min">Min</th>
+                <th scope="col" class="text-right" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p50">p50</th>
+                <th scope="col" class="text-right" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p75">p75</th>
+                <th scope="col" class="text-right" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p95">p95</th>
+                <th scope="col" class="text-right" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p99">p99</th>
+                <th scope="col" class="text-right" <%= jhiPrefix %>Translate="metrics.datasource.max">Max</th>
             </tr>
         </thead>
         <tbody>
