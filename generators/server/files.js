@@ -1673,7 +1673,7 @@ const serverFiles = {
                 { file: 'package/web/rest/UserResource.java', renameTo: generator => `${generator.javaDir}web/rest/UserResource.java` },
                 {
                     file: 'package/web/rest/PublicUserResource.java',
-                    renameTo: generator => `${generator.javaDir}web/rest/PublicUserResource.java`
+                    renameTo: generator => `${generator.javaDir}web/rest/PublicUserResource.java`,
                 },
                 {
                     file: 'package/web/rest/vm/ManagedUserVM.java',
@@ -1819,7 +1819,7 @@ const serverFiles = {
                 { file: 'package/web/rest/UserResource.java', renameTo: generator => `${generator.javaDir}web/rest/UserResource.java` },
                 {
                     file: 'package/web/rest/PublicUserResource.java',
-                    renameTo: generator => `${generator.javaDir}web/rest/PublicUserResource.java`
+                    renameTo: generator => `${generator.javaDir}web/rest/PublicUserResource.java`,
                 },
                 {
                     file: 'package/web/rest/vm/KeyAndPasswordVM.java',
