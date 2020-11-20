@@ -119,10 +119,10 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
     <%_
         } else if (databaseType === 'neo4j') { _%>
 
-    @Query("MATCH (n:<%= asEntity(entityClass) %>)<-[]-(m) RETURN n,m")
+    @Query("MATCH (n:<%= asEntity(entityClass) %>)-[]->(m) RETURN n,m")
     Page<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("MATCH (n:<%= asEntity(entityClass) %>)<-[]-(m) RETURN n,m")
+    @Query("MATCH (n:<%= asEntity(entityClass) %>)-[]->(m) RETURN n,m")
     List<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
 
     @Query("MATCH (e:<%= asEntity(entityClass) %> {id: $id}) RETURN e")
