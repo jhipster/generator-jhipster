@@ -71,6 +71,7 @@ import org.springframework.security.test.context.TestSecurityContextHolder;
 <%_ } _%>
 import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (reactive) { _%>
+import <%= packageName %>.service.dto.<%= asDto('PublicUser') %>;
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
 <%_ if (!reactive) { _%>
