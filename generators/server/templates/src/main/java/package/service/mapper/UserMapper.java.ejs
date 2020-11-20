@@ -147,7 +147,7 @@ public class UserMapper {
             return null;
         }
 
-        Set<<%= asDto('User') %>> userSet = new HashSet<<%= asDto('User') %>>();
+        Set<<%= asDto('User') %>> userSet = new HashSet<>();
         for ( <%= asEntity('User') %> userEntity : users ) {
             userSet.add( this.toDtoId( userEntity ) );
         }
@@ -178,7 +178,7 @@ public class UserMapper {
             return null;
         }
 
-        Set<<%= asDto('User') %>> userSet = new HashSet<<%= asDto('User') %>>();
+        Set<<%= asDto('User') %>> userSet = new HashSet<>();
         for ( <%= asEntity('User') %> userEntity : users ) {
             userSet.add( this.toDtoLogin( userEntity ) );
         }
