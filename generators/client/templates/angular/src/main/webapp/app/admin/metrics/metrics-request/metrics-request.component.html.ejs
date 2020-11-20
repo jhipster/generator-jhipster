@@ -21,10 +21,10 @@
 <table class="table table-striped" *ngIf="!updating && requestMetrics">
     <thead>
         <tr>
-            <th <%= jhiPrefix %>Translate="metrics.jvm.http.table.code">Code</th>
-            <th <%= jhiPrefix %>Translate="metrics.jvm.http.table.count">Count</th>
-            <th class="text-right" <%= jhiPrefix %>Translate="metrics.jvm.http.table.mean">Mean</th>
-            <th class="text-right" <%= jhiPrefix %>Translate="metrics.jvm.http.table.max">Max</th>
+            <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.http.table.code">Code</th>
+            <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.http.table.count">Count</th>
+            <th scope="col" class="text-right" <%= jhiPrefix %>Translate="metrics.jvm.http.table.mean">Mean</th>
+            <th scope="col" class="text-right" <%= jhiPrefix %>Translate="metrics.jvm.http.table.max">Max</th>
         </tr>
     </thead>
     <tbody>
