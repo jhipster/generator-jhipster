@@ -118,6 +118,7 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.html`);
             generator.removeFile(`${ANGULAR_DIR}core/auth/user-route-access-service.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/auth/csrf.service.ts`);
             generator.removeFolder(`${ANGULAR_DIR}core/login`);
             generator.removeFolder(`${ANGULAR_DIR}blocks`);
             generator.removeFolder(`${ANGULAR_DIR}core/date`);
