@@ -19,7 +19,7 @@
 <h3 <%= jhiPrefix %>Translate="metrics.datasource.title">DataSource statistics (time in millisecond)</h3>
 
 <div class="table-responsive" *ngIf="!updating && datasourceMetrics">
-    <table class="table table-striped">
+    <table class="table table-striped" aria-describedby="datasourceMetrics">
         <thead>
             <tr>
                 <th scope="col">

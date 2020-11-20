@@ -18,7 +18,7 @@
 -%>
 <h3 <%= jhiPrefix %>Translate="metrics.jvm.http.title">HTTP requests (time in millisecond)</h3>
 
-<table class="table table-striped" *ngIf="!updating && requestMetrics">
+<table class="table table-striped" *ngIf="!updating && requestMetrics" aria-describedby="requestMetrics">
     <thead>
         <tr>
             <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.http.table.code">Code</th>

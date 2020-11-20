@@ -19,7 +19,7 @@
 <h3 <%= jhiPrefix %>Translate="metrics.cache.title">Cache statistics</h3>
 
 <div class="table-responsive" *ngIf="!updating && cacheMetrics">
-    <table class="table table-striped">
+    <table class="table table-striped" aria-describedby="cacheMetrics">
         <thead>
             <tr>
                 <th scope="col" <%= jhiPrefix %>Translate="metrics.cache.cachename">Cache name</th>
