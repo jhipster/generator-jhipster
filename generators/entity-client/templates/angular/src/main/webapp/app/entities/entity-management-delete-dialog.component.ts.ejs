@@ -21,7 +21,6 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-import { EventManager } from 'app/core/event-manager/event-manager.service';
 
 @Component({
     templateUrl: './<%= entityFileName %>-delete-dialog.component.html'
@@ -29,11 +28,7 @@ import { EventManager } from 'app/core/event-manager/event-manager.service';
 export class <%= entityAngularName %>DeleteDialogComponent {
     <%= entityInstance %>?: I<%= entityAngularName %>;
 
-    constructor(
-        protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
-        public activeModal: NgbActiveModal,
-        protected eventManager: EventManager
-    ) {}
+    constructor(protected <%= entityInstance %>Service: <%= entityAngularName %>Service, public activeModal: NgbActiveModal) {}
 
     cancel(): void {
         this.activeModal.dismiss();
@@ -41,8 +36,7 @@ export class <%= entityAngularName %>DeleteDialogComponent {
 
     confirmDelete(id: <%= tsKeyType %>): void {
         this.<%= entityInstance %>Service.delete(id).subscribe(() => {
-            this.eventManager.broadcast('<%= entityInstance %>ListModification');
-            this.activeModal.close();
+            this.activeModal.close('deleted');
         });
     }
 }

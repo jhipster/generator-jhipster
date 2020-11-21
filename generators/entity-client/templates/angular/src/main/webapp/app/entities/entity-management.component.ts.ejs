@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { <%_ if (pagination !== 'no') { _%>HttpHeaders, <% } %>HttpResponse } from '@angular/common/http';
 <%_ if (pagination === 'pagination') { _%>
 import { ActivatedRoute, Router } from '@angular/router';
+import { combineLatest } from 'rxjs';
 <%_ } else if (searchEngine !== false) { _%>
 import { ActivatedRoute } from '@angular/router';
 <%_ } _%>
-import { Subscription<% if (pagination === 'pagination') { %>, combineLatest<% } %> } from 'rxjs';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
@@ -36,7 +36,6 @@ import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service
 <%_ if (!readOnly) { _%>
 import { <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
-import { EventManager } from 'app/core/event-manager/event-manager.service';
 <%_ if (fieldsContainBlob) { _%>
 import { DataUtils } from 'app/core/util/data-util.service';
 <%_ } _%>
@@ -48,7 +47,7 @@ import { ParseLinks } from 'app/core/util/parse-links.service';
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
     templateUrl: './<%= entityFileName %>.component.html'
 })
-export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
+export class <%= entityAngularName %>Component implements OnInit {
     <%_ if (pagination === 'pagination') { _%>
 <%- include('pagination-template', {toArrayString: toArrayString}); -%>
     <%_ } else if (pagination === 'infinite-scroll') { _%>
@@ -56,12 +55,6 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     <%_ } else if (pagination === 'no') { _%>
 <%- include('no-pagination-template', {toArrayString: toArrayString}); -%>
     <%_ } _%>
-
-    ngOnDestroy(): void {
-        if (this.eventSubscriber) {
-            this.eventManager.destroy(this.eventSubscriber);
-        }
-    }
 
     trackId(index: number, item: I<%= entityAngularName %>): <%= tsKeyType %> {
         return item.id!;
@@ -86,14 +79,15 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     }
     _%>
 
-    registerChangeIn<%= entityClassPlural %>(): void {
-        this.eventSubscriber = this.eventManager.subscribe('<%= entityInstance %>ListModification', () => <%= eventCallBack %>);
-    }
-
     <%_ if (!readOnly) { _%>
     delete(<%= entityInstance %>: I<%= entityAngularName %>): void {
         const modalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent, { size: 'lg', backdrop: 'static' });
         modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
+        modalRef.result.then(reason => {
+            if (reason === 'deleted') {
+                <%= eventCallBack %>;
+            }
+        });
     }
     <%_ } _%>
 

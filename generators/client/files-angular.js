@@ -300,6 +300,7 @@ const files = {
                 'core/util/data-util.service.ts',
                 'core/util/parse-links.service.ts',
                 'core/util/alert.service.ts',
+                'core/util/event-manager.service.ts',
 
                 // config
                 'core/config/uib-pagination.config.ts',
@@ -319,10 +320,6 @@ const files = {
                 // request
                 'core/request/request-util.ts',
                 'core/request/request.model.ts',
-
-                // event-manager
-                'core/event-manager/event-manager.service.ts',
-                'core/event-manager/event-with-content.model.ts',
             ],
         },
         {
@@ -410,7 +407,7 @@ const files = {
             templates: [
                 'jest.conf.js',
                 'spec/app/core/user/account.service.spec.ts',
-                'spec/app/core/event-manager/event-manager.service.spec.ts',
+                'spec/app/core/util/event-manager.service.spec.ts',
                 'spec/app/core/util/data-util.service.spec.ts',
                 'spec/app/core/util/parse-links.service.spec.ts',
                 'spec/app/core/util/alert.service.spec.ts',

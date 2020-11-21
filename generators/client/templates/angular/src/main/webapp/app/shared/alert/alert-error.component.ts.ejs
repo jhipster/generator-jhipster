@@ -25,8 +25,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { AlertError } from './alert-error.model';
 import { Alert, AlertService } from 'app/core/util/alert.service';
-import { EventManager } from 'app/core/event-manager/event-manager.service';
-import { EventWithContent } from 'app/core/event-manager/event-with-content.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-alert-error',
@@ -44,13 +43,13 @@ export class AlertErrorComponent implements OnDestroy {
   httpErrorListener: Subscription;
 
   constructor(private alertService: AlertService, private eventManager: EventManager<% if (enableTranslation) { %>, translateService: TranslateService<% } %>) {
-    this.errorListener = eventManager.subscribe('<%= frontendAppName %>.error', (response: EventWithContent<AlertError>) => {
-      const errorResponse = response.content;
+    this.errorListener = eventManager.subscribe('<%= frontendAppName %>.error', (response: EventWithContent<unknown> | string) => {
+      const errorResponse = (response as EventWithContent<AlertError>).content;
       this.addErrorAlert(errorResponse.message<% if (enableTranslation) { %>, errorResponse.key, errorResponse.params<% } %>);
     });
 
-    this.httpErrorListener = eventManager.subscribe('<%= frontendAppName %>.httpError', (response: EventWithContent<HttpErrorResponse>) => {
-      const httpErrorResponse = response.content;
+    this.httpErrorListener = eventManager.subscribe('<%= frontendAppName %>.httpError', (response: EventWithContent<unknown> | string) => {
+      const httpErrorResponse = (response as EventWithContent<HttpErrorResponse>).content;
       switch (httpErrorResponse.status) {
         // connection refused, server not reachable
         case 0:

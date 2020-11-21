@@ -16,18 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpResponse<%_ if (prodDatabaseType !== 'cassandra') { %>, HttpHeaders <% } %>} from '@angular/common/http';
 <%_ if (prodDatabaseType !== 'cassandra') { _%>
 import { ActivatedRoute, Router } from '@angular/router';
+import { combineLatest } from 'rxjs';
 <%_ } _%>
-import { Subscription<% if (databaseType !== 'cassandra') { %>, combineLatest<% } %> } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 <%_ if (prodDatabaseType !== 'cassandra') { _%>
 import { ITEMS_PER_PAGE } from 'app/core/config/pagination.constants';
 <%_ } _%>
-import { EventManager } from 'app/core/event-manager/event-manager.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
 import { UserService } from 'app/core/user/user.service';
@@ -38,10 +37,9 @@ import { UserManagementDeleteDialogComponent } from './user-management-delete-di
   selector: '<%= jhiPrefixDashed %>-user-mgmt',
   templateUrl: './user-management.component.html',
 })
-export class UserManagementComponent implements OnInit, OnDestroy {
+export class UserManagementComponent implements OnInit {
   currentAccount: Account | null = null;
   users: User[] | null = null;
-  userListSubscription?: Subscription;
   isLoading = false;
   <%_ if (databaseType !== 'cassandra') { _%>
   totalItems = 0;
@@ -58,24 +56,16 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     <%_ } _%>
-    private eventManager: EventManager,
     private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => this.currentAccount = account);
-    this.userListSubscription = this.eventManager.subscribe('userListModification', () => this.loadAll());
     <%_ if (databaseType === 'cassandra') { _%>
     this.loadAll();
     <%_ } else { _%>
     this.handleNavigation();
     <%_ } _%>
-  }
-
-  ngOnDestroy(): void {
-    if (this.userListSubscription) {
-      this.eventManager.destroy(this.userListSubscription);
-    }
   }
 
   setActive(user: User, isActivated: boolean): void {
@@ -89,6 +79,11 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   deleteUser(user: User): void {
     const modalRef = this.modalService.open(UserManagementDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.user = user;
+    modalRef.result.then(reason => {
+      if (reason === 'deleted') {
+        this.loadAll();
+      }
+    });
   }
 
   handleSyncList(): void {
