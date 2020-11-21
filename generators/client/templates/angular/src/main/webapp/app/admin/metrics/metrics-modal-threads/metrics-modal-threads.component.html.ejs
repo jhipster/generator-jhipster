@@ -50,7 +50,7 @@
         </span>
     </div>
 
-    <div id="modalThreadsMetrics" class="pad" *ngFor="let thread of getThreads()">
+    <div class="pad" *ngFor="let thread of getThreads()">
         <h6 id="modalThreadsMetrics{{ thread.threadId }}">
             <span class="badge" [ngClass]="getBadgeClass(thread.threadState)">{{ thread.threadState }}</span>
 
@@ -70,7 +70,8 @@
                 </div>
             </div>
         </div>
-        <table class="table table-sm table-responsive" aria-describedby="modalThreadsMetrics">
+        <table class="table table-sm table-responsive">
+            <caption>Threads dump: {{ thread.threadName }}</caption>
             <thead>
                 <tr>
                     <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>

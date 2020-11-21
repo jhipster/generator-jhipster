@@ -47,8 +47,6 @@
     </div>
 
     <div *ngIf="metrics && metricsKeyExists('garbageCollector')">
-        <h3 <%= jhiPrefix %>Translate="metrics.jvm.gc.title">Garbage collector statistics</h3>
-
         <<%= jhiPrefixDashed %>-metrics-garbagecollector
             [updating]="updatingMetrics"
             [garbageCollectorMetrics]="metrics.garbageCollector">
