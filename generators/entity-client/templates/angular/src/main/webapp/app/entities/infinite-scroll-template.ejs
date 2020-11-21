@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
     <%= entityInstancePlural %>: I<%= entityAngularName %>[];
-    eventSubscriber?: Subscription;
     isLoading = false;
     itemsPerPage: number;
     links: { [key: string]: number };
@@ -33,7 +32,6 @@
         <%_ if (fieldsContainBlob) { _%>
         protected dataUtils: DataUtils,
         <%_ } _%>
-        protected eventManager: EventManager,
         <%_ if (!readOnly) { _%>
         protected modalService: NgbModal,
         <%_ } _%>
@@ -128,5 +126,4 @@
 
     ngOnInit(): void {
         this.loadAll();
-        this.registerChangeIn<%= entityClassPlural %>();
     }

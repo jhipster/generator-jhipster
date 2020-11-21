@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
     <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
-    eventSubscriber?: Subscription;
     <%_ if (searchEngine !== false) { _%>
     currentSearch: string;
     <%_ } _%>
@@ -36,7 +35,6 @@
         protected dataUtils: DataUtils,
         <%_ } _%>
         protected router: Router,
-        protected eventManager: EventManager,
         <%_ if (!readOnly) { _%>
         protected modalService: NgbModal
         <%_ } _%>
@@ -98,7 +96,6 @@
 
     ngOnInit(): void {
         this.handleNavigation();
-        this.registerChangeIn<%= entityClassPlural %>();
     }
 
     protected handleNavigation(): void {
