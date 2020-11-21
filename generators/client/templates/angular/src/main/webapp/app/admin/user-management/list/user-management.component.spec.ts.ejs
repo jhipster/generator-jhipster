@@ -77,7 +77,7 @@ describe('Component Tests', () => {
         fakeAsync(() => {
           // GIVEN
           const headers = new HttpHeaders().append('link', 'link;link');
-          spyOn(service, 'query').and.returnValue(
+          spyOn(service, 'queryAsAdmin').and.returnValue(
             of(
               new HttpResponse({
                 body: [new User(<%- tsKeyId %>)],
@@ -91,7 +91,7 @@ describe('Component Tests', () => {
           tick(); // simulate async
 
           // THEN
-          expect(service.query).toHaveBeenCalled();
+          expect(service.queryAsAdmin).toHaveBeenCalled();
           expect(comp.users?.[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
         })
       ));
@@ -104,7 +104,7 @@ describe('Component Tests', () => {
           // GIVEN
           const headers = new HttpHeaders().append('link', 'link;link');
           const user = new User(<%- tsKeyId %>);
-          spyOn(service, 'query').and.returnValue(
+          spyOn(service, 'queryAsAdmin').and.returnValue(
             of(
               new HttpResponse({
                 body: [user],
@@ -120,7 +120,7 @@ describe('Component Tests', () => {
 
           // THEN
           expect(service.update).toHaveBeenCalledWith({ ...user, activated: true });
-          expect(service.query).toHaveBeenCalled();
+          expect(service.queryAsAdmin).toHaveBeenCalled();
           expect(comp.users?.[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
         })
       ));

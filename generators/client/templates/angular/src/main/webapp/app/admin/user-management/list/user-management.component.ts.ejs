@@ -90,7 +90,7 @@ export class UserManagementComponent implements OnInit {
   loadAll(): void {
     this.isLoading = true;
     this.userService
-      .query(<% if (databaseType !== 'cassandra') { %>{
+      .queryAsAdmin(<% if (databaseType !== 'cassandra') { %>{
         page: this.page - 1,
         size: this.itemsPerPage,
         sort: this.sort(),
