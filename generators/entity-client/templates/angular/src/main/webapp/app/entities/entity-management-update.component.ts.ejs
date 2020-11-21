@@ -249,8 +249,8 @@ _%>
         return this.dataUtils.byteSize(base64String);
     }
 
-    openFile(contentType: string, base64String: string): void {
-        this.dataUtils.openFile(contentType, base64String);
+    openFile(base64String: string, contentType: string): void {
+        this.dataUtils.openFile(base64String, contentType);
     }
 
     setFileData(event: Event, field: string, isImage: boolean): void {
