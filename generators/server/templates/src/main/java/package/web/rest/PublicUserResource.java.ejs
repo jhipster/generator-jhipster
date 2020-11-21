@@ -168,14 +168,15 @@ public class PublicUserResource {
      * @return the result of the search.
      */
     @GetMapping("/_search/users/{query}")
-    public <% if(reactive) { %>Mono<<% } %>List<<%= asEntity('User') %>><% if(reactive) { %>><% } %> search(@PathVariable String query) {
+    public <% if(reactive) { %>Mono<<% } %>List<<%= asDto('PublicUser') %>><% if(reactive) { %>><% } %> search(@PathVariable String query) {
     <%_ if (searchEngine === 'elasticsearch') { _%>
         <%_ if (!reactive) { _%>
         return StreamSupport
             .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
+            .map(<%= asDto('PublicUser') %>::new)
             .collect(Collectors.toList());
         <%_ } else { _%>
-        return userSearchRepository.search(query).collectList();
+        return userSearchRepository.search(query).map(<%= asDto('PublicUser') %>::new).collectList();
         <%_ } _%>
     <%_ } else { _%>
         return userRepository.search(User.PREFIX, query)<% if (reactive) { %>.collectList()<% } %>;
