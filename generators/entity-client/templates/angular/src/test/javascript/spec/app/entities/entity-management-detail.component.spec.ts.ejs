@@ -89,10 +89,10 @@ describe('Component Tests', () => {
                 const fakeBase64 = 'fake base64';
 
                 // WHEN
-                comp.openFile(fakeContentType, fakeBase64);
+                comp.openFile(fakeBase64, fakeContentType);
 
                 // THEN
-                expect(dataUtils.openFile).toBeCalledWith(fakeContentType, fakeBase64);
+                expect(dataUtils.openFile).toBeCalledWith(fakeBase64, fakeContentType);
             });
         });
         <%_ } _%>

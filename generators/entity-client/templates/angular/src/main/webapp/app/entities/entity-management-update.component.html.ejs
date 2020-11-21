@@ -68,7 +68,7 @@ _%>
             <%_ } _%>
                         <div *ngIf="editForm.get('<%= fieldName %>')!.value" class="form-text text-danger clearfix">
             <%_ if (fieldTypeBlobContent === 'any') { _%>
-                            <a class="pull-left" (click)="openFile(editForm.get('<%= fieldName %>ContentType')!.value, editForm.get('<%= fieldName %>')!.value)" <%= jhiPrefix %>Translate="entity.action.open">open</a><br>
+                            <a class="pull-left" (click)="openFile(editForm.get('<%= fieldName %>')!.value, editForm.get('<%= fieldName %>ContentType')!.value)" <%= jhiPrefix %>Translate="entity.action.open">open</a><br>
                             <span class="pull-left">{{ editForm.get('<%= fieldName %>ContentType')!.value }}, {{ byteSize(editForm.get('<%= fieldName %>')!.value) }}</span>
             <%_ } else { _%>
                             <span class="pull-left">{{ editForm.get('<%= fieldName %>ContentType')!.value }}, {{ byteSize(editForm.get('<%= fieldName %>')!.value) }}</span>
