@@ -46,12 +46,11 @@
         </<%= jhiPrefixDashed %>-metrics-system>
     </div>
 
-    <div *ngIf="metrics && metricsKeyExists('garbageCollector')">
-        <<%= jhiPrefixDashed %>-metrics-garbagecollector
-            [updating]="updatingMetrics"
-            [garbageCollectorMetrics]="metrics.garbageCollector">
-        </<%= jhiPrefixDashed %>-metrics-garbagecollector>
-    </div>
+    <<%= jhiPrefixDashed %>-metrics-garbagecollector
+        *ngIf="metrics && metricsKeyExists('garbageCollector')"
+        [updating]="updatingMetrics"
+        [garbageCollectorMetrics]="metrics.garbageCollector">
+    </<%= jhiPrefixDashed %>-metrics-garbagecollector>
 
     <div class="well well-lg" *ngIf="updatingMetrics" <%= jhiPrefix %>Translate="metrics.updating">Updating...</div>
 

@@ -51,7 +51,7 @@
     </div>
 
     <div class="pad" *ngFor="let thread of getThreads()">
-        <h6 id="modalThreadsMetrics{{ thread.threadId }}">
+        <h6>
             <span class="badge" [ngClass]="getBadgeClass(thread.threadState)">{{ thread.threadState }}</span>
 
             &nbsp;{{ thread.threadName }} (ID {{ thread.threadId }})
