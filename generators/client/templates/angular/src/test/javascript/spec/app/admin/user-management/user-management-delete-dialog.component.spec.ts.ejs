@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 jest.mock('@ng-bootstrap/ng-bootstrap');
-jest.mock('app/core/event-manager/event-manager.service');
+jest.mock('app/core/util/event-manager.service');
 
 import { ComponentFixture, TestBed, waitForAsync, inject, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -26,7 +26,7 @@ import { of } from 'rxjs';
 
 import { UserManagementDeleteDialogComponent } from 'app/admin/user-management/user-management-delete-dialog.component';
 import { UserService } from 'app/core/user/user.service';
-import { EventManager } from 'app/core/event-manager/event-manager.service';
+import { EventManager } from 'app/core/util/event-manager.service';
 
 describe('Component Tests', () => {
   describe('User Management Delete Component', () => {

@@ -36,7 +36,7 @@ import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service
 <%_ if (!readOnly) { _%>
 import { <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
-import { EventManager } from 'app/core/event-manager/event-manager.service';
+import { EventManager } from 'app/core/util/event-manager.service';
 <%_ if (fieldsContainBlob) { _%>
 import { DataUtils } from 'app/core/util/data-util.service';
 <%_ } _%>

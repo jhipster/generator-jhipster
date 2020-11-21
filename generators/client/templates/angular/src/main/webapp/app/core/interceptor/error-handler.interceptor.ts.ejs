@@ -21,8 +21,7 @@ import { HttpInterceptor, HttpRequest, HttpErrorResponse, HttpHandler, HttpEvent
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { EventManager } from 'app/core/event-manager/event-manager.service';
-import { EventWithContent } from 'app/core/event-manager/event-with-content.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 
 @Injectable()
 export class ErrorHandlerInterceptor implements HttpInterceptor {

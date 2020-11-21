@@ -27,7 +27,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (prodDatabaseType !== 'cassandra') { _%>
 import { ITEMS_PER_PAGE } from 'app/core/config/pagination.constants';
 <%_ } _%>
-import { EventManager } from 'app/core/event-manager/event-manager.service';
+import { EventManager } from 'app/core/util/event-manager.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
 import { UserService } from 'app/core/user/user.service';
