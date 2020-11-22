@@ -70,7 +70,7 @@ const files = {
     angularApp: [
         {
             path: ANGULAR_DIR,
-            templates: ['app.main.ts', 'app.module.ts', 'app-routing.module.ts', 'app.constants.ts', 'polyfills.ts', 'vendor.ts'],
+            templates: ['app.main.ts', 'app.module.ts', 'app-routing.module.ts', 'app.constants.ts', 'polyfills.ts'],
         },
     ],
     angularMain: [

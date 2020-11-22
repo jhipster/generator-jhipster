@@ -463,7 +463,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/shared-libs.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/shared.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/user/account.model.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/vendor.ts`,
         `${CLIENT_MAIN_SRC_DIR}content/scss/global.scss`,
         `${CLIENT_MAIN_SRC_DIR}content/css/loading.css`,
         `${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`,
