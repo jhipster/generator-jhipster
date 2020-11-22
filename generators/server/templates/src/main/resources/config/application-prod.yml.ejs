@@ -121,7 +121,6 @@ spring:
         <%_ if (prodDatabaseType === 'postgresql') { _%>
         database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
         <%_ } _%>
-        show-sql: false
     <%_ } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || (searchEngine === 'elasticsearch' && reactive)) { _%>
     data:
