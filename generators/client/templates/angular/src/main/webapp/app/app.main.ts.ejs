@@ -27,10 +27,6 @@ if (!DEBUG_INFO_ENABLED) {
   enableProdMode();
 }
 
-if ((module as any).hot) {
-  (module as any).hot.accept();
-}
-
 platformBrowserDynamic()
   .bootstrapModule(AppModule, { preserveWhitespaces: true })
   // eslint-disable-next-line no-console
