@@ -166,7 +166,7 @@ _%>
     <%_ if (!embedded) { _%>
         return Objects.hash(<%- idNames.map(n => `this.${n}`).join(', ') %>);
     <%_ } else { _%>
-        return 31;
+        return getClass().hashCode();
     <%_ } _%>
     }
 
