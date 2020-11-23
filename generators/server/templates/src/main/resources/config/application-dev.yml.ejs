@@ -35,6 +35,7 @@ logging:
     level:
         ROOT: DEBUG
         tech.jhipster: DEBUG
+        org.hibernate.SQL: DEBUG
         <%_ if (packageName !== 'tech.jhipster') { _%>
         <%= packageName %>: DEBUG
         <%_ } _%>
@@ -156,7 +157,6 @@ spring:
         <%_ } else if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
         database-platform: tech.jhipster.domain.util.FixedH2Dialect
         <%_ } _%>
-        show-sql: true
     <%_ } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || searchEngine === 'elasticsearch') { _%>
     data:
