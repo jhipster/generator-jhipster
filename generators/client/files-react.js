@@ -28,6 +28,7 @@ const files = {
     common: [
         {
             templates: [
+                '.npmrc',
                 'package.json',
                 '.eslintrc.json',
                 'tsconfig.json',
