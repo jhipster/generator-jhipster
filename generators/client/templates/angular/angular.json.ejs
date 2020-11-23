@@ -34,8 +34,8 @@
             },
             "outputPath": "<%= DIST_DIR %>",
             "index": "<%= MAIN_SRC_DIR %>index.html",
-            "main": "<%= MAIN_SRC_DIR %>app/app.main.ts",
-            "polyfills": "<%= MAIN_SRC_DIR %>app/polyfills.ts",
+            "main": "<%= MAIN_SRC_DIR %>main.ts",
+            "polyfills": "<%= MAIN_SRC_DIR %>polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "assets": [
@@ -54,7 +54,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,

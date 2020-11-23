@@ -69,8 +69,12 @@ const files = {
     ],
     angularApp: [
         {
+            path: CLIENT_MAIN_SRC_DIR,
+            templates: ['main.ts', 'polyfills.ts'],
+        },
+        {
             path: ANGULAR_DIR,
-            templates: ['app.main.ts', 'app.module.ts', 'app-routing.module.ts', 'app.constants.ts', 'polyfills.ts', 'vendor.ts'],
+            templates: ['app.module.ts', 'app-routing.module.ts', 'app.constants.ts'],
         },
     ],
     angularMain: [
