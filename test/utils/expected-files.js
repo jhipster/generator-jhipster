@@ -383,6 +383,7 @@ const expectedFiles = {
         'angular.json',
         'ngsw-config.json',
         '.eslintrc.json',
+        '.npmrc',
         'package.json',
         '.browserslistrc',
         `${CLIENT_MAIN_SRC_DIR}404.html`,
