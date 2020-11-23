@@ -163,6 +163,7 @@ limitations under the License.
     <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config <%= CLIENT_TEST_SRC_DIR %>jest.conf.js",
     "start": "<%= clientPackageManager %> run webpack:dev",
+    "start-hmr": "ng serve --hmr",
     "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
     <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
