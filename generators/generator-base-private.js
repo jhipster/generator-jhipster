@@ -1046,6 +1046,9 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                 importPath = clientFramework === ANGULAR ? 'app/core/user/user.model' : 'app/shared/model/user.model';
             } else {
                 importPath = `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
+                if (clientFramework === ANGULAR) {
+                    importPath = `app/models/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
+                }
             }
             typeImports.set(importType, importPath);
         });
@@ -1066,7 +1069,10 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             const fileName = _.kebabCase(field.fieldType);
             if (field.fieldIsEnum && (!uniqueEnums[field.fieldType] || (uniqueEnums[field.fieldType] && field.fieldValues.length !== 0))) {
                 const importType = `${field.fieldType}`;
-                const importPath = `app/shared/model/enumerations/${fileName}.model`;
+                let importPath = `app/shared/model/enumerations/${fileName}.model`;
+                if (clientFramework === ANGULAR) {
+                    importPath = `app/enums/${fileName}.model`;
+                }
                 uniqueEnums[field.fieldType] = field.fieldType;
                 typeImports.set(importType, importPath);
             }

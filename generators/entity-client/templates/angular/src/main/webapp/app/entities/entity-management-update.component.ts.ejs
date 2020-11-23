@@ -50,7 +50,7 @@ import * as dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/core/config/input.constants';
 <%_ } _%>
 
-import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/models/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 <%_ if (fieldsContainBlob) { _%>
 import { AlertError } from 'app/shared/alert/alert-error.model';
@@ -69,7 +69,7 @@ import { UserService } from 'app/core/user/user.service';
 <%_
             } else {
 _%>
-import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
+import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/models/<%= uniqueRel.otherEntityModelName %>.model';
 import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.service';
 <%_
             }

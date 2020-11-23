@@ -42,7 +42,7 @@ const angularFiles = {
                 {
                     file: 'entities/entity.model.ts',
                     // using entityModelFileName so that there is no conflict when generating microservice entities
-                    renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`,
+                    renameTo: generator => `models/${generator.entityModelFileName}.model.ts`,
                 },
             ],
         },
@@ -408,7 +408,10 @@ function addEnumerationFiles(generator, clientFolder) {
                 packageName: generator.packageName,
             };
             if (!generator.skipClient) {
-                const destinationFile = generator.destinationPath(`${clientFolder}shared/model/enumerations/${enumFileName}.model.ts`);
+                let destinationFile = generator.destinationPath(`${clientFolder}shared/model/enumerations/${enumFileName}.model.ts`);
+                if (clientFolder === ANGULAR_DIR) {
+                    destinationFile = generator.destinationPath(`${clientFolder}enums/${enumFileName}.model.ts`);
+                }
                 generator.template(
                     `${generator.fetchFromInstalledJHipster(
                         `entity-client/templates/${CLIENT_COMMON_TEMPLATES_DIR}`
