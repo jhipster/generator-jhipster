@@ -46,7 +46,8 @@
                     "code": "Code",
                     "count": "Count",
                     "mean": "Mean",
-                    "average": "Average"
+                    "average": "Average",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "Ok",

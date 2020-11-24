@@ -46,7 +46,8 @@
                     "code": "Code",
                     "count": "Αριθμός",
                     "mean": "Μέσο",
-                    "average": "Μέσος ορος"
+                    "average": "Μέσος ορος",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "Ok",

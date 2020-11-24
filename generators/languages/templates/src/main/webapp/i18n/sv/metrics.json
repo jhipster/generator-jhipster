@@ -46,7 +46,8 @@
                     "code": "Kod",
                     "count": "Antal",
                     "mean": "Medelvärde",
-                    "average": "Genomsnitt"
+                    "average": "Genomsnitt",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "Ok",
