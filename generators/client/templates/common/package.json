@@ -5,7 +5,7 @@
     "typescript": "4.0.5",
     "wait-on": "5.2.0",
     "husky": "4.3.0",
-    "lint-staged": "10.5.1"
+    "lint-staged": "10.5.2"
   },
   "dependencies": {
     "dayjs": "1.9.6"
