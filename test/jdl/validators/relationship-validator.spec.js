@@ -182,10 +182,8 @@ describe('RelationshipValidator', () => {
                         });
                     });
 
-                    it('should fail', () => {
-                        expect(() => validator.validate(relationship)).to.throw(
-                            /^In the Many-to-One relationship from A to B, only unidirectionality is supported, you should either create a bidirectional One-to-Many relationship or remove the injected field in the destination entity instead\.$/
-                        );
+                    it('should not fail', () => {
+                        expect(() => validator.validate(relationship)).not.to.throw();
                     });
                 });
             });
