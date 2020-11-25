@@ -46,7 +46,8 @@
                     "code": "Mã",
                     "count": "Số lượng",
                     "mean": "Bình quân",
-                    "average": "Trung bình"
+                    "average": "Trung bình",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "Thành công",

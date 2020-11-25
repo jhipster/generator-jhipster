@@ -46,7 +46,8 @@
                     "code": "Código",
                     "count": "Recuento",
                     "mean": "Media",
-                    "average": "Promedio"
+                    "average": "Promedio",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "Ok",
