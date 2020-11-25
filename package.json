@@ -35,7 +35,7 @@
     },
     "main": "cli/index.js",
     "bin": {
-        "jhipster": "./cli/jhipster.js"
+        "jhipster": "cli/jhipster.js"
     },
     "files": [
         "cli",
