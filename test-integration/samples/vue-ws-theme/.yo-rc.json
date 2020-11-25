@@ -18,8 +18,8 @@
         "creationTimestamp": 1594452153587,
         "serviceDiscoveryType": false,
         "authenticationType": "jwt",
-        "packageName": "io.github.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageName": "tech.jhipster.sample",
+        "packageFolder": "tech/jhipster/sample",
         "serverPort": "8080",
         "cacheProvider": "ehcache",
         "enableHibernateCache": true,
@@ -38,7 +38,7 @@
         "nativeLanguage": "en",
         "jwtSecretKey": "NGJiOTZiMWFlMmQ5NmVkNzhmNzA1NjgxYmNlYjI2MzgwZGE3MzAwY2VkZDc0MThmMzM4MjRiODg0ZWVkYTVkNzU1MDNiODM1YjJmMjBhMDJhYzQwZTViNDUwMzA4YjJlOGYxZjhkYzQ1M2RlMGY1ZGQyYmFlOWVmZGYxMjEyODQ=",
         "clientThemeVariant": "primary",
-        "useSass": true,
+        "withAdminUi": false,
         "languages": ["en"]
     }
 }

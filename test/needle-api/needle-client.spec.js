@@ -54,6 +54,8 @@ describe('needle API Client: JHipster client generator with blueprint', () => {
                 fromCli: true,
                 defaults: true,
                 skipServer: true,
+                db: 'postgresql',
+                auth: 'jwt',
                 blueprint: 'myblueprint',
                 skipChecks: true,
             })

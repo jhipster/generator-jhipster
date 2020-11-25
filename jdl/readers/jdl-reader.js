@@ -21,6 +21,7 @@ const logger = require('../utils/objects/logger');
 
 const FileReader = require('./file-reader');
 const parser = require('../parsing/api');
+const { performJDLPostParsingTasks } = require('../parsing/jdl-post-parsing-tasks');
 
 module.exports = {
     parseFromFiles,
@@ -80,7 +81,8 @@ function checkAllTheFilesAreJDLFiles(files) {
  * @returns the intermediate object.
  */
 function parse(content) {
-    return callApiMethod('parse', content);
+    const parsedContent = callApiMethod('parse', content);
+    return performJDLPostParsingTasks(parsedContent);
 }
 
 function getCst(content) {

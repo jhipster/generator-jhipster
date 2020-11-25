@@ -15,9 +15,6 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         if (!jhContext) {
             this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
         }
-        this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupClientOptions(this, jhContext);
     }
 
     get initializing() {
@@ -143,7 +140,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
     });
 
     it('icon imports contains a new icon added by a new menu method of needle api ', () => {
-        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/core/icons/font-awesome-icons.ts`, '  faIconName1');
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/core/config/font-awesome-icons.ts`, '  faIconName1');
     });
 
     it('admin menu contains the admin element added by needle api', () => {
@@ -159,7 +156,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
     });
 
     it('icon imports contains a new icon added by a new admin menu method of needle api ', () => {
-        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/core/icons/font-awesome-icons.ts`, '  faIconName2');
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/core/config/font-awesome-icons.ts`, '  faIconName2');
     });
 
     it('entity menu contains the entity added by needle api', () => {
@@ -195,8 +192,8 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
     it('admin module contains the routing added by needle api', () => {
         assert.fileContent(
             `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
-            '        },\n' +
-                '        {\n' +
+            '      },\n' +
+                '      {\n' +
                 "        path: 'entity-audit',\n" +
                 "        loadChildren: () => import('./entity-audit/entity-audit.module').then(m => m.EntityAuditModule)\n" +
                 '      },'

@@ -20,7 +20,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgJhipsterModule } from 'ng-jhipster';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
@@ -28,17 +27,16 @@ import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 @NgModule({
-    exports: [
-        FormsModule,
-        CommonModule,
-        NgbModule,
-        NgJhipsterModule,
-        InfiniteScrollModule,
-        FontAwesomeModule,
-        ReactiveFormsModule,
-        <%_ if (enableTranslation) { _%>
-        TranslateModule
-        <%_ } _%>
-    ]
+  exports: [
+    FormsModule,
+    CommonModule,
+    NgbModule,
+    InfiniteScrollModule,
+    FontAwesomeModule,
+    ReactiveFormsModule,
+    <%_ if (enableTranslation) { _%>
+    TranslateModule,
+    <%_ } _%>
+  ],
 })
 export class SharedLibsModule {}

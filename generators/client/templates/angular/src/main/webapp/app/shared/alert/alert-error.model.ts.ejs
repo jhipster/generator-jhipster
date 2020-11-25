@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 export class AlertError {
-    constructor(
-        public message: string,
-        <%_ if (enableTranslation) { _%>
-        public key?: string,
-        public params?: any
-        <%_ } _%>
-    ) {}
+  constructor(
+    public message: string,
+    <%_ if (enableTranslation) { _%>
+    public key?: string,
+    public params?: { [key: string]: unknown }
+    <%_ } _%>
+  ) {}
 }

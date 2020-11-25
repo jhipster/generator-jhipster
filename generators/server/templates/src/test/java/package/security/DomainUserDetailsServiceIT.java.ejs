@@ -122,7 +122,7 @@ class DomainUserDetailsServiceIT <% if (databaseType === 'cassandra') { %>extend
         userOne.setLastName("doe");
         userOne.setLangKey("en");
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        userOne.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        userOne.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save(userOne)<% if (reactive) { %>.block()<% } %>;
 
@@ -138,7 +138,7 @@ class DomainUserDetailsServiceIT <% if (databaseType === 'cassandra') { %>extend
         userTwo.setLastName("doe");
         userTwo.setLangKey("en");
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        userTwo.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        userTwo.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save(userTwo)<% if (reactive) { %>.block()<% } %>;
 
@@ -154,7 +154,7 @@ class DomainUserDetailsServiceIT <% if (databaseType === 'cassandra') { %>extend
         userThree.setLastName("doe");
         userThree.setLangKey("en");
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        userThree.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        userThree.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save(userThree)<% if (reactive) { %>.block()<% } %>;
     }

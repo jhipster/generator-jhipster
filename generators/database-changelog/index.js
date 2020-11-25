@@ -31,25 +31,17 @@ module.exports = class extends BaseGenerator {
     constructor(args, options) {
         super(args, options);
 
-        this.configOptions = this.options.configOptions || {};
-
         this.argument('entities', {
             desc: 'Which entities to generate a new changelog',
             type: Array,
             required: true,
         });
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
-
         if (this.options.help) {
             return;
         }
         this.info(`Creating changelog for entities ${this.options.entities}`);
+        this.configOptions.oldSharedEntities = this.configOptions.oldSharedEntities || [];
     }
 
     _default() {
@@ -128,6 +120,9 @@ module.exports = class extends BaseGenerator {
             this._debug(`Calculating diffs for ${entityName}`);
 
             const oldConfig = JSON.parse(fs.readFileSync(filename));
+            // Share old entity
+            this.configOptions.oldSharedEntities[entityName] = oldConfig;
+
             const oldFields = oldConfig.fields || [];
             const oldFieldNames = oldFields.map(field => field.fieldName);
             const newFieldNames = newFields.map(field => field.fieldName);

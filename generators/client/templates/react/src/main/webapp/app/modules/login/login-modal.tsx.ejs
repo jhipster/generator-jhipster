@@ -25,8 +25,8 @@ import { Link } from 'react-router-dom';
 export interface ILoginModalProps {
   showModal: boolean;
   loginError: boolean;
-  handleLogin: Function;
-  handleClose: Function;
+  handleLogin: (username: string, password: string, rememberMe: boolean) => void;
+  handleClose: () => void;
 }
 
 class LoginModal extends React.Component<ILoginModalProps> {

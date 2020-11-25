@@ -46,7 +46,7 @@ export default class HealthService {
     let hasDetails = false;
 
     for (const key in healthObject) {
-      if (healthObject.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(healthObject, key)) {
         const value = healthObject[key];
         if (key === 'status' || key === 'error') {
           healthData[key] = value;
@@ -73,7 +73,7 @@ export default class HealthService {
 
   public flattenHealthData(result: any, path: any, data: any): any {
     for (const key in data) {
-      if (data.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
         const value = data[key];
         if (this.isHealthObject(value)) {
           if (this.hasSubSystem(value)) {
@@ -106,7 +106,7 @@ export default class HealthService {
     let result = false;
 
     for (const key in healthObject) {
-      if (healthObject.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(healthObject, key)) {
         const value = healthObject[key];
         if (value && value.status) {
           result = true;
@@ -120,7 +120,7 @@ export default class HealthService {
     let result = false;
 
     for (const key in healthObject) {
-      if (healthObject.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(healthObject, key)) {
         if (key === 'status') {
           result = true;
         }

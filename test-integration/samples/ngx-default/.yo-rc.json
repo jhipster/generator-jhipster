@@ -2,8 +2,8 @@
     "generator-jhipster": {
         "applicationType": "monolith",
         "baseName": "jhipsterSampleApplication",
-        "packageName": "io.github.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageName": "tech.jhipster.sample",
+        "packageFolder": "tech/jhipster/sample",
         "authenticationType": "jwt",
         "cacheProvider": "ehcache",
         "enableHibernateCache": true,
@@ -74,7 +74,6 @@
         "dtoSuffix": "",
         "jwtSecretKey": "MjJjOTA4ZWFjNmU5NTkyNjA4MGM4OGRmZjlmODM0M2Y3Y2UwYzYzZDJmNDMxNDM4ZmEwODlkY2MzMDc4YzZlOGM5MzZhNjVhMGFhNGM0MDlmMzUyM2I3MDdlZTZkY2UxMzkwMTc4MGU1Njc0YWY4OWY1NTk2MzIwMDRiYTg2MWQ=",
         "embeddableLaunchScript": false,
-        "useSass": true,
         "clientTheme": "none",
         "otherModules": [],
         "blueprints": [],

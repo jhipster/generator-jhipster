@@ -26,7 +26,7 @@
         { "fieldName": "description", "fieldType": "byte[]", "fieldTypeBlobContent": "text" }
     ],
     "changelogDate": "20200804163352",
-    "dto": "mapstruct",
+    "dto": "no",
     "pagination": "no",
     "jpaMetamodelFiltering": true,
     "service": "serviceImpl",

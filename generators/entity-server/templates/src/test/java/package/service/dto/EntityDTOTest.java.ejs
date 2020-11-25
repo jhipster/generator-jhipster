@@ -29,10 +29,10 @@ _%>
 import java.util.UUID;
 <%_ } _%>
 
-public class <%= asDto(entityClass) %>Test {
+class <%= asDto(entityClass) %>Test {
 
     @Test
-    public void dtoEqualsVerifier() throws Exception {
+    void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(<%= asDto(entityClass) %>.class);
         <%_if (!embedded) { _%>
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %>1 = new <%= asDto(entityClass) %>();

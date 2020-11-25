@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
     <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
-    eventSubscriber?: Subscription;
     isLoading = false;
     <%_ if (searchEngine !== false) { _%>
     currentSearch: string;
@@ -26,9 +25,8 @@
     constructor(
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
         <%_ if (fieldsContainBlob) { _%>
-        protected dataUtils: JhiDataUtils,
+        protected dataUtils: DataUtils,
         <%_ } _%>
-        protected eventManager: JhiEventManager,
         <%_ if (!readOnly) { _%>
         protected modalService: NgbModal,
         <%_ } _%>
@@ -37,8 +35,7 @@
         <%_ } _%>
     ) {
         <%_ if (searchEngine !== false) { _%>
-        this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search'] ?
-            this.activatedRoute.snapshot.queryParams['search'] : '';
+        this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
         <%_ } _%>
     }
 
@@ -51,7 +48,7 @@
                 }).subscribe(
                     (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                         this.isLoading = false;
-                        this.<%= entityInstancePlural %> = res.body || [];
+                        this.<%= entityInstancePlural %> = res.body ?? [];
                     },
                     () => {
                         this.isLoading = false;
@@ -64,7 +61,7 @@
         this.<%= entityInstance %>Service.query().subscribe(
             (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                 this.isLoading = false;
-                this.<%= entityInstancePlural %> = res.body || [];
+                this.<%= entityInstancePlural %> = res.body ?? [];
             },
             () => {
                 this.isLoading = false;
@@ -85,5 +82,4 @@
 
     ngOnInit(): void {
         this.loadAll();
-        this.registerChangeIn<%= entityClassPlural %>();
     }

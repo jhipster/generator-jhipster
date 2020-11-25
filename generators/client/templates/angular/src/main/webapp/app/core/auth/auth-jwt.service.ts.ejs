@@ -25,11 +25,11 @@ import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
 
 import { SERVER_API_URL } from 'app/app.constants';
-import { Login } from 'app/core/login/login.model';
+import { Login } from 'app/login/login.model';
 
 <%_ if (authenticationType !== 'uaa') { _%>
 type JwtToken = {
-    id_token: string;
+  id_token: string;
 };
 <%_ } else { _%>
 export const LOGOUT_URL = SERVER_API_URL + 'auth/logout';
@@ -37,56 +37,56 @@ export const LOGOUT_URL = SERVER_API_URL + 'auth/logout';
 
 @Injectable({ providedIn: 'root' })
 export class AuthServerProvider {
-    constructor(
-        private http: HttpClient,
-        <%_ if (authenticationType !== 'uaa') { _%>
-        private $localStorage: LocalStorageService,
-        private $sessionStorage: SessionStorageService
-        <%_ } _%>
-    ) {}
-
-    <%_ if (authenticationType === 'uaa') { _%>
-
-    login(credentials: Login): Observable<any> {
-        return this.http.post(SERVER_API_URL + 'auth/login', credentials);
-    }
-
-    logout(): Observable<{}> {
-        return this.http.post(LOGOUT_URL, null);
-    }
-
-    <%_ } else { _%>
-
-    getToken(): string {
-        const tokenInLocalStorage: string | null = this.$localStorage.retrieve('authenticationToken');
-        const tokenInSessionStorage: string | null = this.$sessionStorage.retrieve('authenticationToken');
-        return tokenInLocalStorage ?? tokenInSessionStorage ?? '';
-    }
-
-    login(credentials: Login): Observable<void> {
-        return this.http
-            .post<JwtToken>(SERVER_API_URL + 'api/authenticate', credentials)
-            .pipe(map(response => this.authenticateSuccess(response, credentials.rememberMe)));
-    }
-
-    logout(): Observable<void> {
-        return new Observable((observer) => {
-            this.$localStorage.clear('authenticationToken');
-            this.$sessionStorage.clear('authenticationToken');
-            observer.complete();
-        });
-    }
-
-    private authenticateSuccess(response: JwtToken, rememberMe: boolean): void {
-        const jwt = response.id_token;
-        if (rememberMe) {
-            this.$localStorage.store('authenticationToken', jwt);
-            this.$sessionStorage.clear('authenticationToken');
-        } else {
-            this.$sessionStorage.store('authenticationToken', jwt);
-            this.$localStorage.clear('authenticationToken');
-        }
-    }
-
+  constructor(
+    private http: HttpClient,
+    <%_ if (authenticationType !== 'uaa') { _%>
+    private $localStorage: LocalStorageService,
+    private $sessionStorage: SessionStorageService
     <%_ } _%>
+  ) {}
+
+  <%_ if (authenticationType === 'uaa') { _%>
+
+  login(credentials: Login): Observable<any> {
+    return this.http.post(SERVER_API_URL + 'auth/login', credentials);
+  }
+
+  logout(): Observable<{}> {
+    return this.http.post(LOGOUT_URL, null);
+  }
+
+  <%_ } else { _%>
+
+  getToken(): string {
+    const tokenInLocalStorage: string | null = this.$localStorage.retrieve('authenticationToken');
+    const tokenInSessionStorage: string | null = this.$sessionStorage.retrieve('authenticationToken');
+    return tokenInLocalStorage ?? tokenInSessionStorage ?? '';
+  }
+
+  login(credentials: Login): Observable<void> {
+    return this.http
+      .post<JwtToken>(SERVER_API_URL + 'api/authenticate', credentials)
+      .pipe(map(response => this.authenticateSuccess(response, credentials.rememberMe)));
+  }
+
+  logout(): Observable<void> {
+    return new Observable(observer => {
+      this.$localStorage.clear('authenticationToken');
+      this.$sessionStorage.clear('authenticationToken');
+      observer.complete();
+    });
+  }
+
+  private authenticateSuccess(response: JwtToken, rememberMe: boolean): void {
+    const jwt = response.id_token;
+    if (rememberMe) {
+      this.$localStorage.store('authenticationToken', jwt);
+      this.$sessionStorage.clear('authenticationToken');
+    } else {
+      this.$sessionStorage.store('authenticationToken', jwt);
+      this.$localStorage.clear('authenticationToken');
+    }
+  }
+
+  <%_ } _%>
 }

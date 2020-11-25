@@ -20,52 +20,44 @@
     <div class="col-8">
         <div *ngIf="user">
             <h2>
-                <span jhiTranslate="userManagement.detail.title">User</span> [<b>{{ user.login }}</b>]
+                <span <%= jhiPrefix %>Translate="userManagement.detail.title">User</span> [<b>{{ user.login }}</b>]
             </h2>
 
             <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="userManagement.login">Login</span></dt>
+                <dt><span <%= jhiPrefix %>Translate="userManagement.login">Login</span></dt>
                 <dd>
                     <span>{{ user.login }}</span>
-                    <jhi-boolean
-                        [value]="user.activated ? true : false"
-                    <%_ if (enableTranslation) { _%>
-                        [textTrue]="'userManagement.activated' | translate"
-                        [textFalse]="'userManagement.deactivated' | translate">
-                    <%_ } else { _%>
-                        textTrue="Activated"
-                        textFalse="Deactivated">
-                    <%_ } _%>
-                    </jhi-boolean>
+                    <span *ngIf="user.activated" class="badge badge-success" <%= jhiPrefix %>Translate="userManagement.activated">Activated</span>
+                    <span *ngIf="!user.activated" class="badge badge-danger" <%= jhiPrefix %>Translate="userManagement.deactivated">Deactivated</span>
                 </dd>
 
-                <dt><span jhiTranslate="userManagement.firstName">First Name</span></dt>
+                <dt><span <%= jhiPrefix %>Translate="userManagement.firstName">First Name</span></dt>
                 <dd>{{ user.firstName }}</dd>
 
-                <dt><span jhiTranslate="userManagement.lastName">Last Name</span></dt>
+                <dt><span <%= jhiPrefix %>Translate="userManagement.lastName">Last Name</span></dt>
                 <dd>{{ user.lastName }}</dd>
 
-                <dt><span jhiTranslate="userManagement.email">Email</span></dt>
+                <dt><span <%= jhiPrefix %>Translate="userManagement.email">Email</span></dt>
                 <dd>{{ user.email }}</dd>
                 <%_ if (enableTranslation) { _%>
 
-                <dt><span jhiTranslate="userManagement.langKey">Lang Key</span></dt>
+                <dt><span <%= jhiPrefix %>Translate="userManagement.langKey">Lang Key</span></dt>
                 <dd>{{ user.langKey }}</dd>
                 <%_ } _%>
 
-                <dt><span jhiTranslate="userManagement.createdBy">Created By</span></dt>
+                <dt><span <%= jhiPrefix %>Translate="userManagement.createdBy">Created By</span></dt>
                 <dd>{{ user.createdBy }}</dd>
 
-                <dt><span jhiTranslate="userManagement.createdDate">Created Date</span></dt>
+                <dt><span <%= jhiPrefix %>Translate="userManagement.createdDate">Created Date</span></dt>
                 <dd>{{ user.createdDate | date:'dd/MM/yy HH:mm' }}</dd>
 
-                <dt><span jhiTranslate="userManagement.lastModifiedBy">Last Modified By</span></dt>
+                <dt><span <%= jhiPrefix %>Translate="userManagement.lastModifiedBy">Last Modified By</span></dt>
                 <dd>{{ user.lastModifiedBy }}</dd>
 
-                <dt><span jhiTranslate="userManagement.lastModifiedDate">Last Modified Date</span></dt>
+                <dt><span <%= jhiPrefix %>Translate="userManagement.lastModifiedDate">Last Modified Date</span></dt>
                 <dd>{{ user.lastModifiedDate | date:'dd/MM/yy HH:mm' }}</dd>
 
-                <dt><span jhiTranslate="userManagement.profiles">Profiles</span></dt>
+                <dt><span <%= jhiPrefix %>Translate="userManagement.profiles">Profiles</span></dt>
                 <dd>
                     <ul class="list-unstyled">
                         <li *ngFor="let authority of user.authorities">
@@ -76,7 +68,7 @@
             </dl>
 
             <button type="submit" routerLink="../../" class="btn btn-info">
-                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.back">Back</span>
             </button>
         </div>
     </div>

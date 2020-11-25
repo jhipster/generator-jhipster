@@ -22,19 +22,19 @@ _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-<%_ if (fieldsContainBlob) { _%>
-import { JhiDataUtils } from 'ng-jhipster';
-<%_ } _%>
 
 import { <%= entityAngularName %>DetailComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.component';
 import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+<%_ if (fieldsContainBlob) { _%>
+import { DataUtils } from 'app/core/util/data-util.service';
+<%_ } _%>
 
 describe('Component Tests', () => {
     describe('<%= entityAngularName %> Management Detail Component', () => {
         let comp: <%= entityAngularName %>DetailComponent;
         let fixture: ComponentFixture<<%= entityAngularName %>DetailComponent>;
         <%_ if (fieldsContainBlob) { _%>
-        let dataUtils: JhiDataUtils;
+        let dataUtils: DataUtils;
         <%_ } _%>
 
         beforeEach(() => {
@@ -52,7 +52,7 @@ describe('Component Tests', () => {
             fixture = TestBed.createComponent(<%= entityAngularName %>DetailComponent);
             comp = fixture.componentInstance;
             <%_ if (fieldsContainBlob) { _%>
-            dataUtils = TestBed.inject(JhiDataUtils);
+            dataUtils = TestBed.inject(DataUtils);
             <%_ } _%>
         });
 
@@ -68,7 +68,7 @@ describe('Component Tests', () => {
 
         <%_ if (fieldsContainBlob) { _%>
         describe('byteSize', () => {
-            it('Should call byteSize from JhiDataUtils', () => {
+            it('Should call byteSize from DataUtils', () => {
                 // GIVEN
                 spyOn(dataUtils, 'byteSize');
                 const fakeBase64 = 'fake base64';
@@ -82,17 +82,17 @@ describe('Component Tests', () => {
         });
 
         describe('openFile', () => {
-            it('Should call openFile from JhiDataUtils', () => {
+            it('Should call openFile from DataUtils', () => {
                 // GIVEN
                 spyOn(dataUtils, 'openFile');
                 const fakeContentType = 'fake content type';
                 const fakeBase64 = 'fake base64';
 
                 // WHEN
-                comp.openFile(fakeContentType, fakeBase64);
+                comp.openFile(fakeBase64, fakeContentType);
 
                 // THEN
-                expect(dataUtils.openFile).toBeCalledWith(fakeContentType, fakeBase64);
+                expect(dataUtils.openFile).toBeCalledWith(fakeBase64, fakeContentType);
             });
         });
         <%_ } _%>

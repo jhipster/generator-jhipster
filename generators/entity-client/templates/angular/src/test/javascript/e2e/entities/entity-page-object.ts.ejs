@@ -21,7 +21,7 @@ import { element, by<% if (!readOnly) { %>, ElementFinder<% } %> } from 'protrac
 <%_
 let elementGetter = `getText()`;
 if (enableTranslation) {
-    elementGetter = `getAttribute('jhiTranslate')`;
+    elementGetter = `getAttribute('${jhiPrefix}Translate')`;
 }
 _%>
 export class <%= entityClass %>ComponentsPage {

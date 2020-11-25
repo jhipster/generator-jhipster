@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-
 @import '~bootstrap/scss/functions';
 <%_ if (clientTheme !== 'none') { _%>
 @import "~bootswatch/dist/<%= clientTheme %>/variables";
@@ -28,53 +27,52 @@ Navbar
 ========================================================================== */
 
 .navbar-version {
-    font-size: 0.65em;
-    color: $navbar-dark-color;
+  font-size: 0.65em;
+  color: $navbar-dark-color;
 }
 
 .profile-image {
-    height: 1.75em;
-    width: 1.75em;
+  height: 1.75em;
+  width: 1.75em;
 }
 
 .navbar {
-    padding: 0.2rem 1rem;
-    <%_ if (clientTheme !== 'none') { _%>
-    .dropdown-item.active,
-    .dropdown-item.active:focus,
-    .dropdown-item.active:hover {
-        background-color: $dark;
-    }
-    <%_ } _%>
+  padding: 0.2rem 1rem;
+  <%_ if (clientTheme !== 'none') { _%>
+  .dropdown-item.active,
+  .dropdown-item.active:focus,
+  .dropdown-item.active:hover {
+    background-color: $dark;
+  }
+  <%_ } _%>
 
-    ul.navbar-nav {
-        .nav-item {
-            margin-left: 0.5em;
-        }
+  ul.navbar-nav {
+    .nav-item {
+      margin-left: 0.5em;
     }
+  }
 
-    a.nav-link {
-        font-weight: 400;
-    }
+  a.nav-link {
+    font-weight: 400;
+  }
 
-    <%_ if (clientTheme !== 'none') { _%>
-    .navbar-toggler {
-        &:hover {
-            color: $navbar-dark-hover-color;
-        }
+  <%_ if (clientTheme !== 'none') { _%>
+  .navbar-toggler {
+    &:hover {
+      color: $navbar-dark-hover-color;
     }
-    <%_ } _%>
+  }
+  <%_ } _%>
 }
 
 /* ==========================================================================
 Logo styles
 ========================================================================== */
 .logo-img {
-    height: 45px;
-    width: 45px;
-    display: inline-block;
-    vertical-align: middle;
-    background: url('../../../content/images/logo-jhipster.png') no-repeat center center;
-    background-size: contain;
+  height: 45px;
+  width: 45px;
+  display: inline-block;
+  vertical-align: middle;
+  background: url('../../../content/images/logo-jhipster.png') no-repeat center center;
+  background-size: contain;
 }
-

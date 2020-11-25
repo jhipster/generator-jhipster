@@ -27,10 +27,6 @@ jhipster:
             jwt:
                 base64-secret: <%= jwtSecretKey %>
 <%_ if (monitoring === 'prometheus') { _%>
-    metrics:
-        logs: # do not report metrics in the logs
-            enabled: false
-
 management:
     metrics:
         export:

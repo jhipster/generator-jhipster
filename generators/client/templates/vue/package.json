@@ -1,5 +1,18 @@
 {
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "1.2.32",
+    "@fortawesome/free-solid-svg-icons": "5.15.1",
+    "@fortawesome/vue-fontawesome": "2.0.0",
+    "vue-i18n": "8.22.2",
+    "axios": "0.21.0",
+    "bootstrap": "4.5.3",
+    "bootswatch": "4.5.3",
+    "bootstrap-vue": "2.19.0"
+  },
   "devDependencies": {
-    "webpack": "4.44.2"
+    "webpack": "4.44.2",
+    "webpack-bundle-analyzer": "4.1.0",
+    "vue-jest": "3.0.7",
+    "vue-loader": "15.9.5"
   }
 }

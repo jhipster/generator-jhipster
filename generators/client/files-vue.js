@@ -31,9 +31,8 @@ const vueFiles = {
             templates: [
                 'package.json',
                 'tsconfig.json',
-                '.huskyrc',
                 '.postcssrc.js',
-                'tslint.json',
+                '.eslintrc.js',
                 'config/index.js',
                 'config/dev.env.js',
                 'config/prod.env.js',
@@ -177,13 +176,15 @@ const vueFiles = {
     adminModule: [
         {
             path: VUE_DIR,
+            templates: ['admin/docs/docs.vue', 'admin/docs/docs.component.ts'],
+        },
+        {
+            path: VUE_DIR,
+            condition: generator => generator.withAdminUi,
             templates: [
-                // admin modules
                 'admin/configuration/configuration.vue',
                 'admin/configuration/configuration.component.ts',
                 'admin/configuration/configuration.service.ts',
-                'admin/docs/docs.vue',
-                'admin/docs/docs.component.ts',
                 'admin/health/health.vue',
                 'admin/health/health.component.ts',
                 'admin/health/health-modal.vue',
@@ -241,6 +242,12 @@ const vueFiles = {
                 'spec/app/core/ribbon/ribbon.component.spec.ts',
                 'spec/app/shared/config/axios-interceptor.spec.ts',
                 'spec/app/shared/data/data-utils.service.spec.ts',
+            ],
+        },
+        {
+            path: CLIENT_TEST_SRC_DIR,
+            condition: generator => generator.withAdminUi,
+            templates: [
                 'spec/app/admin/configuration/configuration.component.spec.ts',
                 'spec/app/admin/health/health.component.spec.ts',
                 'spec/app/admin/health/health-modal.component.spec.ts',

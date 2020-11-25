@@ -29,11 +29,10 @@ public final class Constants {
 
     <%_ } _%>
     <%_ if (!skipUserManagement || authenticationType === 'oauth2' || ['sql','mongodb','couchbase'].includes(databaseType)) { _%>
-    public static final String SYSTEM_ACCOUNT = "system";
+    public static final String SYSTEM = "system";
     <%_ } _%>
     <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
     public static final String DEFAULT_LANGUAGE = "<%= nativeLanguage %>";
-    public static final String ANONYMOUS_USER = "anonymoususer";
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     public static final String ID_DELIMITER = "__";

@@ -28,8 +28,8 @@ limitations under the License.
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.30",
     "@fortawesome/free-solid-svg-icons": "5.14.0",
-    "@fortawesome/react-fontawesome": "0.1.11",
-    "availity-reactstrap-validation": "2.6.1",
+    "@fortawesome/react-fontawesome": "0.1.12",
+    "availity-reactstrap-validation": "2.7.0",
     "axios": "0.19.2",
     "bootstrap": "4.4.1",
     <%_ if (clientTheme !== 'none') { _%>
@@ -40,7 +40,7 @@ limitations under the License.
     "lodash": "4.17.15",
     "react": "VERSION_MANAGED_BY_CLIENT_REACT",
     "react-dom": "VERSION_MANAGED_BY_CLIENT_REACT",
-    "react-hot-loader": "4.12.20",
+    "react-hot-loader": "4.13.0",
     "react-jhipster": "0.11.0",
     "react-loadable": "5.5.0",
     "react-redux": "7.2.0",
@@ -48,7 +48,7 @@ limitations under the License.
     "react-router-dom": "5.1.2",
     "react-toastify": "5.5.0",
     "react-transition-group": "4.3.0",
-    "reactstrap": "8.4.1",
+    "reactstrap": "8.6.0",
     "redux": "4.0.5",
     "redux-devtools": "3.5.0",
     "redux-devtools-dock-monitor": "1.1.3",
@@ -88,8 +88,8 @@ limitations under the License.
     "@types/selenium-webdriver": "4.0.9",
     <%_ } _%>
     "@types/webpack-env": "1.15.2",
-    "@typescript-eslint/eslint-plugin": "2.29.0",
-    "@typescript-eslint/parser": "2.29.0",
+    "@typescript-eslint/eslint-plugin": "4.8.0",
+    "@typescript-eslint/parser": "4.8.0",
     "autoprefixer": "9.7.6",
     "browser-sync": "2.26.7",
     "browser-sync-webpack-plugin": "2.2.2",
@@ -102,10 +102,10 @@ limitations under the License.
     "core-js": "3.6.5",
     "cross-env": "7.0.2",
     "css-loader": "3.5.3",
-    "eslint": "6.8.0",
-    "eslint-config-prettier": "6.11.0",
-    "eslint-loader": "4.0.2",
-    "eslint-plugin-react": "7.19.0",
+    "eslint": "7.13.0",
+    "eslint-config-prettier": "6.15.0",
+    "eslint-plugin-react": "7.21.5",
+    "eslint-webpack-plugin": "2.3.0",
     "file-loader": "6.0.0",
     "fork-ts-checker-webpack-plugin": "4.1.3",
     "friendly-errors-webpack-plugin": "1.7.0",
@@ -116,16 +116,14 @@ limitations under the License.
         <%_ });
     } _%>
     "html-webpack-plugin": "4.3.0",
-    <%_ if (!skipCommitHook) { _%>
-    "husky": "<%= HUSKY_VERSION %>",
-    <%_ } _%>
     "identity-obj-proxy": "3.0.0",
     "jest": "26.4.2",
     "jest-junit": "11.1.0",
     "jest-sonar-reporter": "2.0.0",
     "json-loader": "0.5.7",
     <%_ if (!skipCommitHook) { _%>
-    "lint-staged": "<%= LINT_STAGED_VERSION %>",
+    "husky": "VERSION_MANAGED_BY_CLIENT_COMMON",
+    "lint-staged": "VERSION_MANAGED_BY_CLIENT_COMMON",
     <%_ } _%>
     <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "1.0.21",
@@ -158,7 +156,7 @@ limitations under the License.
     "terser-webpack-plugin": "2.3.6",
     "thread-loader": "2.1.3",
     "to-string-loader": "1.1.6",
-    "ts-jest": "26.2.0",
+    "ts-jest": "26.4.3",
     "ts-loader": "7.0.1",
     <%_ if (protractorTests) { _%>
     "ts-node": "8.9.1",

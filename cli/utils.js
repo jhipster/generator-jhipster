@@ -18,7 +18,6 @@
  */
 /* eslint-disable no-console */
 const chalk = require('chalk');
-const meow = require('meow');
 const _ = require('lodash');
 
 const CLI_NAME = 'jhipster';
@@ -65,18 +64,9 @@ const init = function (program) {
     program.option('-d, --debug', 'enable debugger');
 
     this.debugEnabled = process.argv.includes('-d') || process.argv.includes('--debug'); // Need this early
-
-    const self = this;
-    // Option event fallback.
-    program.on('option:debug', function () {
-        if (self.debugEnabled) {
-            return;
-        }
-        self.debugEnabled = this.debug;
-        if (self.debugEnabled) {
-            info('Debug logging is on');
-        }
-    });
+    if (this.debugEnabled) {
+        info('Debug logging is on');
+    }
 };
 
 const logger = {
@@ -98,41 +88,6 @@ const toString = item => {
             .join(', ');
     }
     return item ? item.toString() : item;
-};
-
-const initHelp = (program, cliName) => {
-    program.on('--help', () => {
-        logger.debug('Adding additional help info');
-        logger.info(`  For more info visit ${chalk.blue('https://www.jhipster.tech')}`);
-        logger.info('');
-    });
-};
-
-/**
- * Get arguments
- */
-const getArgs = opts => {
-    if (opts.argument) {
-        return `[${opts.argument.join(' ')}]`;
-    }
-    return '';
-};
-
-/**
- * Get options from arguments
- */
-const getOptionsFromArgs = (args = []) => {
-    const options = [];
-    args.forEach(item => {
-        if (typeof item == 'string') {
-            options.push(item);
-        } else if (typeof item == 'object') {
-            if (Array.isArray(item)) {
-                options.push(...item);
-            }
-        }
-    });
-    return options;
 };
 
 /* Convert option objects to command line args */
@@ -161,32 +116,15 @@ const getOptionAsArgs = (options = {}) => {
 /**
  *  Get options for the command
  */
-const getCommand = (cmd, args, opts) => {
-    let options = [];
-    if (opts && opts.argument && opts.argument.length > 0) {
+const getCommand = (cmd, args = []) => {
+    let cmdArgs;
+    if (args.length > 0) {
         logger.debug('Arguments found');
-        options = getOptionsFromArgs(args);
+        args = args.flat();
+        cmdArgs = args.join(' ').trim();
+        logger.debug(`cmdArgs: ${cmdArgs}`);
     }
-    if (args && args.length === 1) {
-        logger.debug('No Arguments found.');
-    }
-    const cmdArgs = options.join(' ').trim();
-    logger.debug(`cmdArgs: ${cmdArgs}`);
     return `${cmd}${cmdArgs ? ` ${cmdArgs}` : ''}`;
-};
-
-const addKebabCase = (options = {}) => {
-    const kebabCase = Object.keys(options).reduce((acc, key) => {
-        acc[_.kebabCase(key)] = options[key];
-        return acc;
-    }, {});
-    return { ...kebabCase, ...options };
-};
-
-const getCommandOptions = (pkg, argv = []) => {
-    const options = meow({ help: false, pkg, argv });
-    const flags = options ? options.flags : undefined;
-    return addKebabCase({ ...flags });
 };
 
 const doneFactory = successMsg => {
@@ -209,36 +147,14 @@ const printSuccess = () => {
     }
 };
 
-const buildCommanderOptions = (optionName, optionDefinition, additionalDescription = '') => {
-    if (optionDefinition.hide || optionName === 'help') {
-        return [];
-    }
-    let cmdString = '';
-    if (optionDefinition.alias) {
-        cmdString = `-${optionDefinition.alias}, `;
-    }
-    cmdString = `${cmdString}--${optionName}`;
-    if (optionDefinition.type === String) {
-        cmdString = `${cmdString} <value>`;
-    }
-    const commanderOption = [cmdString, optionDefinition.description + additionalDescription, optionDefinition.default];
-    return [commanderOption];
-};
-
 module.exports = {
     CLI_NAME,
     GENERATOR_NAME,
     toString,
     logger,
-    initHelp,
-    getArgs,
-    getOptionsFromArgs,
     getCommand,
-    getCommandOptions,
-    addKebabCase,
     doneFactory,
     done: doneFactory(SUCCESS_MESSAGE),
     printSuccess,
     getOptionAsArgs,
-    buildCommanderOptions,
 };

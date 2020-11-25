@@ -106,7 +106,6 @@ module.exports = class extends BaseDockerGenerator {
 
                     if (appConfig.applicationType === 'monolith' && this.monitoring === 'prometheus') {
                         yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=false');
-                        yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=false');
                         yamlConfig.environment.push('MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true');
                     }
 

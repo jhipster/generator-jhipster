@@ -38,12 +38,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
         // This adds support for a `--auth` flag
         this.option('auth', {
             desc: 'Provide authentication type for the application',
@@ -111,6 +105,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         return {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
+            askForAdminUi: prompts.askForAdminUi,
             askForClientTheme: prompts.askForClientTheme,
             askForClientThemeVariant: prompts.askForClientThemeVariant,
         };
@@ -177,6 +172,10 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
                 this.loadTranslationConfig();
             },
 
+            createUserManagementEntities() {
+                this.createUserManagementEntities();
+            },
+
             validateSkipServer() {
                 if (
                     this.jhipsterConfig.skipServer &&
@@ -226,7 +225,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
 
                 this.styleSheetExt = 'scss';
-                this.pkType = this.getPkType(this.databaseType);
                 this.apiUaaPath = `${this.authenticationType === 'uaa' ? `services/${this.uaaBaseName.toLowerCase()}/` : ''}`;
                 this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.buildTool) + constants.CLIENT_DIST_DIR;
 
@@ -254,6 +252,12 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
     _default() {
         return {
             ...super._missingPreDefault(),
+
+            loadUserManagementEntities() {
+                if (!this.configOptions.sharedEntities) return;
+                // Make user entity available to templates.
+                this.user = this.configOptions.sharedEntities.User;
+            },
 
             insight() {
                 statistics.sendSubGenEvent('generator', 'client', {

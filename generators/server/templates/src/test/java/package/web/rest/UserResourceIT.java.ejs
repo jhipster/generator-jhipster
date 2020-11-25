@@ -270,7 +270,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         <%_ } _%>
         user.setLangKey(DEFAULT_LANGKEY);
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         return user;
     }
@@ -791,7 +791,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         <%_ } _%>
         anotherUser.setLangKey("en");
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        anotherUser.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        anotherUser.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -862,7 +862,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         <%_ } _%>
         anotherUser.setLangKey("en");
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        anotherUser.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        anotherUser.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>

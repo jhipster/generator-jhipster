@@ -126,7 +126,7 @@ class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends Abstr
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
 
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
@@ -134,7 +134,7 @@ class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends Abstr
         LoginVM login = new LoginVM();
         login.setUsername("user-jwt-controller");
 <%_ } else { _%>
-    public void testAuthorize() throws Exception {
+    void testAuthorize() throws Exception {
         LoginVM login = new LoginVM();
         login.setUsername("test");
 <%_ } _%>
@@ -175,7 +175,7 @@ class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends Abstr
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
         <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
         <%_ } _%>
 
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;

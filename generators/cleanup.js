@@ -113,12 +113,27 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.route.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.module.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.service.ts`);
-            generator.removeFile(`${ANGULAR_DIR}blocks/interceptor/errorhandler.interceptor.ts`);
             generator.removeFile(`${ANGULAR_DIR}entities/entity.module.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/util/datepicker-adapter.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.html`);
             generator.removeFile(`${ANGULAR_DIR}core/auth/user-route-access-service.ts`);
+            if (generator.jhipsterConfig.authenticationType !== 'session' || generator.jhipsterConfig.websocket !== 'spring-websocket') {
+                generator.removeFile(`${ANGULAR_DIR}core/auth/csrf.service.ts`);
+            }
+            generator.removeFolder(`${ANGULAR_DIR}core/login`);
+            generator.removeFolder(`${ANGULAR_DIR}blocks`);
+            generator.removeFolder(`${ANGULAR_DIR}core/date`);
+            generator.removeFolder(`${ANGULAR_DIR}core/icons`);
+            generator.removeFolder(`${ANGULAR_DIR}core/language`);
+            generator.removeFolder(`${ANGULAR_DIR}shared/auth`);
+            generator.removeFolder(`${ANGULAR_DIR}shared/language`);
+            generator.removeFolder(`${ANGULAR_DIR}shared/constants`);
+            generator.removeFolder(`${ANGULAR_DIR}shared/util`);
+            generator.removeFile(`${ANGULAR_DIR}core/core.module.ts`);
+            generator.removeFile(`${ANGULAR_DIR}vendor.ts`);
+            generator.removeFile(`${ANGULAR_DIR}app.main.ts`);
+            generator.removeFile(`${ANGULAR_DIR}polyfills.ts`);
             generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.common.js`);
             generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.dev.js`);
             generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.prod.js`);
@@ -126,6 +141,8 @@ function cleanupOldFiles(generator) {
             generator.removeFile('tsconfig.base.json');
             generator.removeFile('postcss.config.js');
             generator.removeFile('proxy.conf.json');
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/login/login-modal.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/login/login-modal.service.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.service.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`);
@@ -134,8 +151,14 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest-global-mocks.ts`);
             generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/helpers`);
             generator.removeFile('tslint.json');
+
+            // unreleased files and folders cleanup for v7 developers
+            generator.removeFile(`${ANGULAR_DIR}config/dayjs.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/duration.pipe.ts`);
+            generator.removeFolder(`${ANGULAR_DIR}core/event-manager`);
+            generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/app/core/event-manager`);
         } else if (generator.jhipsterConfig.clientFramework === REACT) {
-            generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx.ejs`);
+            generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/enzyme-setup.ts`);
         } else if (generator.jhipsterConfig.clientFramework === VUE) {
             generator.removeFile(`${VUE_DIR}admin/audits/audits.component.ts`);

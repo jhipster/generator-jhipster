@@ -35,12 +35,6 @@ module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
         this.option('skip-prompts', {
             desc: 'Skip prompts',
             type: Boolean,
@@ -63,6 +57,11 @@ module.exports = class extends BaseBlueprintGenerator {
         // This adds support for a `--skip-server` flag
         this.option('skip-server', {
             desc: 'Skip installing server files',
+            type: Boolean,
+        });
+
+        this.option('regenerate', {
+            desc: 'Regenerate languages files',
             type: Boolean,
         });
 
@@ -139,13 +138,21 @@ module.exports = class extends BaseBlueprintGenerator {
     _configuring() {
         return {
             defaults() {
-                this.setConfigDefaults(translationDefaultConfig);
+                if (!this.jhipsterConfig.nativeLanguage) {
+                    // If native language is not set, use defaults, otherwise languages will be built with nativeLanguage.
+                    this.setConfigDefaults(translationDefaultConfig);
+                    this.languagesToApply = this.jhipsterConfig.languages;
+                }
             },
             updateLanguages() {
                 if (this.jhipsterConfig.enableTranslation) {
-                    if (this.languagesToApply && !this.jhipsterConfig.languages.includes(this.jhipsterConfig.nativeLanguage)) {
+                    if (!this.jhipsterConfig.languages || !this.jhipsterConfig.languages.includes(this.jhipsterConfig.nativeLanguage)) {
                         // First time we are generating the native language
-                        this.languagesToApply.unshift(this.jhipsterConfig.nativeLanguage);
+                        if (!this.languagesToApply) {
+                            this.languagesToApply = [this.jhipsterConfig.nativeLanguage];
+                        } else {
+                            this.languagesToApply.unshift(this.jhipsterConfig.nativeLanguage);
+                        }
                     }
                     // Concatenate the native language, current languages, and the new languages.
                     this.jhipsterConfig.languages = _.union(
@@ -187,7 +194,11 @@ module.exports = class extends BaseBlueprintGenerator {
     _preparing() {
         return {
             prepareForTemplates() {
-                this.languagesToApply = this.languagesToApply || this.languages || [];
+                if (this.options.regenerate) {
+                    this.languagesToApply = this.languages;
+                } else {
+                    this.languagesToApply = this.languagesToApply || [];
+                }
 
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);

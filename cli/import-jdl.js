@@ -148,6 +148,8 @@ function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
         ignoreApplication: undefined,
         ignoreDeployments: undefined,
         inline: undefined,
+        skipSampleRepository: undefined,
+        fromJdl: true,
     };
 
     if (!fork) {
@@ -162,6 +164,7 @@ function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
             error => {
                 process.chdir(oldCwd);
                 logger.error(`Error running generator ${command}: ${error}`, error);
+                return Promise.reject(error);
             }
         );
     }
@@ -170,13 +173,15 @@ function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
     const childProc = forkProcess(jhipsterCli, args, {
         cwd,
     });
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
         childProc.on('exit', code => {
-            if (code !== 0) {
-                process.exitCode = code;
-            }
             logger.debug(`Process ${args} exited with code ${code}`);
             logger.info(`Generator ${command} child process exited with code ${code}`);
+            if (code !== 0) {
+                process.exitCode = code;
+                reject(new Error(`Error executing ${args.join(' ')}`));
+                return;
+            }
             resolve();
         });
     });
@@ -284,9 +289,7 @@ const generateEntityFiles = (processor, exportedEntities, env) => {
     const generatorOptions = {
         force,
         ...processor.options,
-        regenerate: true,
     };
-    const command = 'entities';
 
     const callGenerator = baseName => {
         const cwd = inFolder && baseName ? path.join(processor.pwd, baseName) : processor.pwd;
@@ -306,7 +309,7 @@ const generateEntityFiles = (processor, exportedEntities, env) => {
         logger.info(`Generating entities for application ${baseName} in a new parallel process`);
 
         logger.debug(`Child process will be triggered for ${jhipsterCli} with cwd: ${cwd}`);
-        return runGenerator(command, { cwd, env, fork }, generatorOptions);
+        return runGenerator('entities', { cwd, env, fork }, generatorOptions);
     };
 
     if (fork) {
@@ -317,7 +320,7 @@ const generateEntityFiles = (processor, exportedEntities, env) => {
                 return promise.then(() => callGenerator(baseName));
             }, Promise.resolve());
         }
-        return Promise.all(baseNames.map(callGenerator));
+        return Promise.all(baseNames.map(baseName => callGenerator(baseName)));
     }
 
     return callGenerator();
@@ -337,10 +340,10 @@ class JDLProcessor {
     importJDL() {
         const configuration = {
             applicationName: this.options.baseName,
-            databaseType: this.options.databaseType,
+            databaseType: this.options.db,
             applicationType: this.options.applicationType,
+            skipUserManagement: this.options.skipUserManagement,
             generatorVersion: packagejs.version,
-            forceNoFiltering: this.options.force,
             skipFileGeneration: true,
         };
 

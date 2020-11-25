@@ -305,8 +305,6 @@ const serverFiles = {
                 'config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json',
                 'config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json',
                 'config/couchmove/changelog/V0.1__initial_setup/user__admin.json',
-                'config/couchmove/changelog/V0.1__initial_setup/user__anonymoususer.json',
-                'config/couchmove/changelog/V0.1__initial_setup/user__system.json',
                 'config/couchmove/changelog/V0.1__initial_setup/user__user.json',
             ],
         },
@@ -333,14 +331,6 @@ const serverFiles = {
                 {
                     file: 'config/couchmove/changelog/V0.1__initial_setup/user__admin.json',
                     renameTo: () => 'config/neo4j/migrations/user__admin.json',
-                },
-                {
-                    file: 'config/couchmove/changelog/V0.1__initial_setup/user__anonymoususer.json',
-                    renameTo: () => 'config/neo4j/migrations/user__anonymoususer.json',
-                },
-                {
-                    file: 'config/couchmove/changelog/V0.1__initial_setup/user__system.json',
-                    renameTo: () => 'config/neo4j/migrations/user__system.json',
                 },
                 {
                     file: 'config/couchmove/changelog/V0.1__initial_setup/user__user.json',
@@ -447,7 +437,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => !generator.reactive && generator.applicationType !== 'uaa',
+            condition: generator => !generator.reactive && generator.applicationType !== 'uaa' && generator.authenticationType !== 'uaa',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -457,11 +447,21 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => !generator.reactive && generator.applicationType !== 'uaa' && generator.authenticationType === 'uaa',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/SecurityConfiguration_uaa.java',
+                    renameTo: generator => `${generator.javaDir}config/SecurityConfiguration.java`,
+                },
+            ],
+        },
+        {
             condition: generator => generator.reactive && generator.applicationType !== 'uaa',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/config/ReactiveSecurityConfiguration.java',
+                    file: 'package/config/SecurityConfiguration_reactive.java',
                     renameTo: generator => `${generator.javaDir}config/SecurityConfiguration.java`,
                 },
             ],
@@ -846,16 +846,6 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => !generator.reactive && generator.authenticationType === 'oauth2',
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/config/SecurityConfiguration.java',
-                    renameTo: generator => `${generator.javaDir}config/SecurityConfiguration.java`,
-                },
-            ],
-        },
-        {
             condition: generator =>
                 (!generator.reactive && generator.applicationType === 'gateway' && !generator.serviceDiscoveryType) ||
                 generator.authenticationType === 'uaa',
@@ -1026,8 +1016,14 @@ const serverFiles = {
                     file: 'package/config/CloudDatabaseConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/CloudDatabaseConfiguration.java`,
                 },
+            ],
+        },
+        {
+            condition: generator => generator.databaseType !== 'no',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
                 {
-                    file: 'package/config/DatabaseConfiguration.java',
+                    file: generator => `package/config/DatabaseConfiguration_${generator.databaseType}.java`,
                     renameTo: generator => `${generator.javaDir}config/DatabaseConfiguration.java`,
                 },
             ],
@@ -1105,11 +1101,11 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/repository/reactive/ReactiveN1qlCouchbaseRepository.java',
+                    file: 'package/repository/ReactiveN1qlCouchbaseRepository.java',
                     renameTo: generator => `${generator.javaDir}repository/ReactiveN1qlCouchbaseRepository.java`,
                 },
                 {
-                    file: 'package/repository/reactive/CustomReactiveN1qlCouchbaseRepository.java',
+                    file: 'package/repository/CustomReactiveN1qlCouchbaseRepository.java',
                     renameTo: generator => `${generator.javaDir}repository/CustomReactiveN1qlCouchbaseRepository.java`,
                 },
             ],
@@ -1125,16 +1121,6 @@ const serverFiles = {
                 {
                     file: 'package/config/WebsocketSecurityConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/WebsocketSecurityConfiguration.java`,
-                },
-            ],
-        },
-        {
-            condition: generator => generator.databaseType === 'cassandra',
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/config/CassandraConfiguration.java',
-                    renameTo: generator => `${generator.javaDir}config/CassandraConfiguration.java`,
                 },
             ],
         },
@@ -1336,6 +1322,23 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}web/websocket/dto/ActivityDTO.java`,
                 },
             ],
+        },
+    ],
+    serverTestReactive: [
+        {
+            condition: generator => generator.reactive,
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/JHipsterBlockHoundIntegration.java',
+                    renameTo: generator => `${generator.testDir}config/JHipsterBlockHoundIntegration.java`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.reactive,
+            path: SERVER_TEST_RES_DIR,
+            templates: ['META-INF/services/reactor.blockhound.integration.BlockHoundIntegration'],
         },
     ],
     serverTestFw: [
@@ -1701,12 +1704,26 @@ const serverFiles = {
         {
             condition: generator =>
                 generator.skipUserManagement &&
+                generator.authenticationType !== 'oauth2' &&
                 generator.authenticationType !== 'uaa' &&
                 ['monolith', 'gateway'].includes(generator.applicationType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
-                    file: 'package/web/rest/AccountResourceIT.java',
+                    file: 'package/web/rest/AccountResourceIT_skipUserManagement.java',
+                    renameTo: generator => `${generator.testDir}web/rest/AccountResourceIT.java`,
+                },
+            ],
+        },
+        {
+            condition: generator =>
+                generator.skipUserManagement &&
+                generator.authenticationType === 'oauth2' &&
+                ['monolith', 'gateway'].includes(generator.applicationType),
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/rest/AccountResourceIT_oauth2.java',
                     renameTo: generator => `${generator.testDir}web/rest/AccountResourceIT.java`,
                 },
             ],
@@ -1870,16 +1887,32 @@ const serverFiles = {
                     renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`,
                 },
                 {
-                    file: 'package/web/rest/AccountResourceIT.java',
-                    renameTo: generator => `${generator.testDir}web/rest/AccountResourceIT.java`,
-                },
-                {
                     file: 'package/config/NoOpMailConfiguration.java',
                     renameTo: generator => `${generator.testDir}config/NoOpMailConfiguration.java`,
                 },
                 {
                     file: 'package/web/rest/UserResourceIT.java',
                     renameTo: generator => `${generator.testDir}web/rest/UserResourceIT.java`,
+                },
+            ],
+        },
+        {
+            condition: generator => !generator.skipUserManagement && generator.authenticationType !== 'oauth2',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/rest/AccountResourceIT.java',
+                    renameTo: generator => `${generator.testDir}web/rest/AccountResourceIT.java`,
+                },
+            ],
+        },
+        {
+            condition: generator => !generator.skipUserManagement && generator.authenticationType === 'oauth2',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/rest/AccountResourceIT_oauth2.java',
+                    renameTo: generator => `${generator.testDir}web/rest/AccountResourceIT.java`,
                 },
             ],
         },

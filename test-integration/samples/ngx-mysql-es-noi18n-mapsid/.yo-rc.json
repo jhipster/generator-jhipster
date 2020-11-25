@@ -2,8 +2,8 @@
     "generator-jhipster": {
         "applicationType": "monolith",
         "baseName": "samplePsqlEsNoi18nMapsIdWithNgx",
-        "packageName": "io.github.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageName": "tech.jhipster.sample",
+        "packageFolder": "tech/jhipster/sample",
         "serverPort": "8080",
         "authenticationType": "jwt",
         "cacheProvider": "hazelcast",
@@ -17,7 +17,6 @@
         "enableSwaggerCodegen": false,
         "jwtSecretKey": "NDA4MWUyZjMzNDFmYWIxZGRlZTRkZDkzNDJiODM2MTQ4YTE4NTMxMTdhZmFlODg4NTNjYWM4MzZmMmYxN2M0OTUyYzllYjI3NDY4YWM2M2RmN2UyZTExNzA5MDQ5ZDVhN2QzNjNkMzQxZGQwOWZkZGVkYzlkMzU1NzA4MmU3Zjc=",
         "clientFramework": "angularX",
-        "useSass": true,
         "clientPackageManager": "npm",
         "testFrameworks": ["gatling", "cypress"],
         "jhiPrefix": "jhi",

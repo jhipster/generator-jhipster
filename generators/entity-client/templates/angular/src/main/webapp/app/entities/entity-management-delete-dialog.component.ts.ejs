@@ -18,7 +18,6 @@
 -%>
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
@@ -29,11 +28,7 @@ import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service
 export class <%= entityAngularName %>DeleteDialogComponent {
     <%= entityInstance %>?: I<%= entityAngularName %>;
 
-    constructor(
-        protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
-        public activeModal: NgbActiveModal,
-        protected eventManager: JhiEventManager
-    ) {}
+    constructor(protected <%= entityInstance %>Service: <%= entityAngularName %>Service, public activeModal: NgbActiveModal) {}
 
     cancel(): void {
         this.activeModal.dismiss();
@@ -41,8 +36,7 @@ export class <%= entityAngularName %>DeleteDialogComponent {
 
     confirmDelete(id: <%= tsKeyType %>): void {
         this.<%= entityInstance %>Service.delete(id).subscribe(() => {
-            this.eventManager.broadcast('<%= entityInstance %>ListModification');
-            this.activeModal.close();
+            this.activeModal.close('deleted');
         });
     }
 }

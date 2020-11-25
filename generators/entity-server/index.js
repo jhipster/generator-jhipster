@@ -29,7 +29,12 @@ let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
-        utils.copyObjectProps(this, opts.context);
+
+        this.entity = opts.context;
+        // Remove fields with custom ids, drop once templates supports them
+        this.entity = { ...this.entity, fields: this.entity.fieldsNoId };
+
+        utils.copyObjectProps(this, this.entity);
         this.jhipsterContext = opts.jhipsterContext || opts.context;
 
         this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.jhipsterContext.authenticationType);
@@ -82,7 +87,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.relationships
                     .filter(relationship => relationship.relationshipOtherSideIgnore === undefined)
                     .forEach(relationship => {
-                        relationship.ignoreOtherSideProperty = !relationship.embedded && !!relationship.otherEntity;
+                        relationship.ignoreOtherSideProperty =
+                            !relationship.embedded && !!relationship.otherEntity && relationship.otherEntity.relationships.length > 0;
                     });
                 this.relationshipsContainOtherSideIgnore = this.relationships.some(relationship => relationship.ignoreOtherSideProperty);
             },

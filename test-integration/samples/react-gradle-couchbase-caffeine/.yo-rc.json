@@ -2,8 +2,8 @@
     "generator-jhipster": {
         "applicationType": "monolith",
         "baseName": "sampleReactCouchbaseCaffeine",
-        "packageName": "io.github.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageName": "tech.jhipster.sample",
+        "packageFolder": "tech/jhipster/sample",
         "serverPort": "8080",
         "authenticationType": "jwt",
         "cacheProvider": "caffeine",
@@ -19,7 +19,6 @@
         "enableSwaggerCodegen": false,
         "jwtSecretKey": "MjM5ZDE0ZjlhYWQyZTczNWM2OTVlYmI1OTM0YmRjY2QzODRiZjE5MGNhMmU2M2NhOGM0NThiYzU2YjEyNTM3NDM1MzcxMzQ3NGU3ZDAwNjUxODI5YzgxZDZiNGIwNzJiNDVhOTZiMGY0NjVkMGRlNDUxZGRlOTdlYTk4YTgwMGM=",
         "embeddableLaunchScript": false,
-        "useSass": true,
         "clientPackageManager": "npm",
         "clientFramework": "react",
         "clientTheme": "none",

@@ -65,10 +65,12 @@ export const submitInitResetPasswordSelector = '[data-cy="submit"]';
 
 // Administration
 export const userManagementPageHeadingSelector = '[data-cy="userManagementPageHeading"]';
+<%_ if (withAdminUi) { _%>
 export const metricsPageHeadingSelector = '[data-cy="metricsPageHeading"]';
 export const healthPageHeadingSelector = '[data-cy="healthPageHeading"]';
 export const logsPageHeadingSelector = '[data-cy="logsPageHeading"]';
 export const configurationPageHeadingSelector = '[data-cy="configurationPageHeading"]';
+<%_ } _%>
 
 // ***********************************************
 // End Specific Selector Attributes for Cypress

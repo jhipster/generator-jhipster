@@ -38,15 +38,18 @@ limitations under the License.
     "@fortawesome/fontawesome-svg-core": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "@fortawesome/free-solid-svg-icons": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "@ng-bootstrap/ng-bootstrap": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+<%_ if (enableTranslation) { _%>
     "@ngx-translate/core": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "@ngx-translate/http-loader": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+<%_ } _%>
     "bootstrap": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     <%_ if (clientTheme !== 'none') { _%>
     "bootswatch": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#bootstrap",
     <%_ } _%>
     "dayjs": "VERSION_MANAGED_BY_CLIENT_COMMON",
-    "ng-jhipster": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    <%_ if (authenticationType === 'session' && websocket === 'spring-websocket') { _%>
     "ngx-cookie-service": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    <%_ } _%>
     "ngx-infinite-scroll": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "ngx-webstorage": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "rxjs": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
@@ -62,83 +65,67 @@ limitations under the License.
     "zone.js": "VERSION_MANAGED_BY_CLIENT_ANGULAR"
   },
   "devDependencies": {
+<%_ if (protractorTests) { _%>
+    "@types/chai": "4.2.11",
+    "@types/chai-string": "1.4.2",
+    "@types/mocha": "7.0.2",
+    "@types/selenium-webdriver": "4.0.9",
+    "chai": "4.2.0",
+    "chai-as-promised": "7.1.1",
+    "chai-string": "1.5.0",
+    "mocha": "8.0.1",
+    "protractor": "7.0.0",
+    "ts-node": "8.10.2",
+    "webdriver-manager": "12.1.7",
+<%_ } _%>
+<%_ if (websocket === 'spring-websocket') { _%>
+    "@types/sockjs-client": "1.1.1",
+<%_ } _%>
+<%_ if (!skipCommitHook) { _%>
+    "husky": "VERSION_MANAGED_BY_CLIENT_COMMON",
+    "lint-staged": "VERSION_MANAGED_BY_CLIENT_COMMON",
+<%_ } _%>
+<%_ if (cypressTests) { _%>
+    "cypress": "VERSION_MANAGED_BY_CLIENT_COMMON",
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+    "merge-jsons-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+<%_ } _%>
+<%_ if (!skipServer) { _%>
+    "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
+<%_ } _%>
     "@angular/cli": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "@angular/compiler-cli": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
     "@angular-builders/custom-webpack": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "@angular-builders/jest": "VERSION_MANAGED_BY_CLIENT_ANGULAR#devDependencies#@angular-builders/custom-webpack",
     "@angular/service-worker": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
-    "@angular-eslint/eslint-plugin": "0.5.0-beta.5",
+    "@angular-eslint/eslint-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "@openapitools/openapi-generator-cli": "1.0.13-4.3.1",
-    <%_ if (protractorTests) { _%>
-    "@types/chai": "4.2.11",
-    "@types/chai-string": "1.4.2",
-    <%_ } _%>
-    "@types/jest": "26.0.10",
-    <%_ if (protractorTests) { _%>
-    "@types/mocha": "7.0.2",
-    <%_ } _%>
+    "@types/jest": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "@types/node": "13.13.4",
-    <%_ if (protractorTests) { _%>
-    "@types/selenium-webdriver": "4.0.9",
-    <%_ } _%>
-    <%_ if (websocket === 'spring-websocket') { _%>
-    "@types/sockjs-client": "1.1.1",
-    <%_ } _%>
-    "@typescript-eslint/eslint-plugin": "4.5.0",
-    "@typescript-eslint/parser": "4.5.0",
+    "@typescript-eslint/eslint-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    "@typescript-eslint/parser": "VERSION_MANAGED_BY_CLIENT_ANGULAR#devDependencies#@typescript-eslint/eslint-plugin",
     "browser-sync": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "browser-sync-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    <%_ if (protractorTests) { _%>
-    "chai": "4.2.0",
-    "chai-as-promised": "7.1.1",
-    "chai-string": "1.5.0",
-    <%_ } _%>
     "copy-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "eslint": "7.11.0",
-    "eslint-config-prettier": "6.14.0",
-    "eslint-loader": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    "eslint": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    "eslint-config-prettier": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    "eslint-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "friendly-errors-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    <%_ if (!skipJhipsterDependencies) { _%>
+<%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= packagejs.version %>",
-        <%_ otherModules.forEach(module => { _%>
+    <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
-        <%_ });
-    } _%>
-    <%_ if (!skipCommitHook) { _%>
-    "husky": "<%= HUSKY_VERSION %>",
-    <%_ } _%>
-    "jest": "26.4.2",
-    "jest-date-mock": "1.0.8",
-    "jest-junit": "11.1.0",
-    "jest-sonar-reporter": "2.0.0",
-    <%_ if (!skipCommitHook) { _%>
-    "lint-staged": "<%= LINT_STAGED_VERSION %>",
-    <%_ } _%>
-    <%_ if (enableTranslation) { _%>
-    "merge-jsons-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    <%_ } _%>
-    <%_ if (protractorTests) { _%>
-    "mocha": "8.0.1",
-    <%_ } _%>
+    <%_ });
+} _%>
+    "jest": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    "jest-date-mock": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    "jest-junit": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    "jest-sonar-reporter": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "prettier": "<%= PRETTIER_VERSION %>",
-    <%_ if (!skipServer) { _%>
-    "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
-    <%_ } _%>
-    <%_ if (protractorTests) { _%>
-    "protractor": "7.0.0",
-    <%_ } _%>
-    "rimraf": "3.0.2",
+    "rimraf": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "simple-progress-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    <%_ if (protractorTests) { _%>
-    "ts-node": "8.10.2",
-    <%_ } _%>
-    <%_ if (cypressTests) { _%>
-    "cypress": "VERSION_MANAGED_BY_CLIENT_COMMON",
-    <%_ } _%>
     "typescript": "VERSION_MANAGED_BY_CLIENT_COMMON",
-    <%_ if (protractorTests) { _%>
-    "webdriver-manager": "12.1.7",
-    <%_ } _%>
     "webpack-bundle-analyzer": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "webpack-notifier": "VERSION_MANAGED_BY_CLIENT_ANGULAR"
   },
@@ -176,6 +163,7 @@ limitations under the License.
     <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config <%= CLIENT_TEST_SRC_DIR %>jest.conf.js",
     "start": "<%= clientPackageManager %> run webpack:dev",
+    "start-hmr": "ng serve --hmr",
     "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
     <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",

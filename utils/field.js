@@ -68,8 +68,8 @@ const fakeStringTemplateForFieldName = columnName => {
 
 const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => {
     let data;
-    if (field.options && field.options.fakerTemplate) {
-        data = faker.faker(field.options.fakerTemplate);
+    if (field.fakerTemplate) {
+        data = faker.faker(field.fakerTemplate);
     } else if (field.fieldValidate && field.fieldValidateRules.includes('pattern')) {
         const generated = field.createRandexp().gen();
         if (type === 'csv') {
@@ -149,15 +149,15 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
 };
 
 function prepareFieldForTemplates(entityWithConfig, field, generator) {
-    const fieldOptions = field.options || {};
     _.defaults(field, {
         fieldNameCapitalized: _.upperFirst(field.fieldName),
         fieldNameUnderscored: _.snakeCase(field.fieldName),
-        fieldNameHumanized: fieldOptions.fieldNameHumanized || _.startCase(field.fieldName),
+        fieldNameHumanized: _.startCase(field.fieldName),
+        fieldTranslationKey: `${entityWithConfig.i18nKeyPrefix}.${field.fieldName}`,
     });
     const fieldType = field.fieldType;
 
-    field.fieldIsEnum = fieldIsEnum(fieldType);
+    field.fieldIsEnum = !field.id && fieldIsEnum(fieldType);
     field.fieldWithContentType = (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text';
 
     if (field.fieldNameAsDatabaseColumn === undefined) {
@@ -175,8 +175,8 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
         } else {
             field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
         }
-        field.columnName = field.fieldNameAsDatabaseColumn;
     }
+    field.columnName = field.fieldNameAsDatabaseColumn;
 
     if (field.fieldInJavaBeanMethod === undefined) {
         // Handle the specific case when the second letter is capitalized
@@ -256,6 +256,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
         }
         return data;
     };
+    field.reference = fieldToReference(entityWithConfig, field);
     return field;
 }
 
@@ -297,6 +298,22 @@ function getEnumValuesWithCustomValues(enumValues) {
             value: matched[2],
         };
     });
+}
+
+function fieldToReference(entity, field, pathPrefix = []) {
+    return {
+        id: field.id,
+        entity,
+        field,
+        multiple: false,
+        owned: true,
+        doc: field.javadoc,
+        label: field.fieldNameHumanized,
+        name: field.fieldName,
+        type: field.fieldType,
+        nameCapitalized: field.fieldNameCapitalized,
+        path: [...pathPrefix, field.fieldName],
+    };
 }
 
 module.exports = { prepareFieldForTemplates, fieldIsEnum, getEnumValuesWithCustomValues };

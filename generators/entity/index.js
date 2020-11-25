@@ -50,13 +50,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
             description: 'Entity name',
         });
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
-
         // This method adds support for a `--[no-]regenerate` flag
         this.option('regenerate', {
             desc: 'Regenerate the entity without presenting an option to update it',
@@ -133,17 +126,20 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.entityStorage = this.getEntityConfig(name, true);
         this.entityConfig = this.entityStorage.createProxy();
 
-        const entityExisted = this.options.entityExisted !== undefined ? this.options.entityExisted : this.entityStorage.existed;
+        const configExisted = this.entityStorage.existed;
+        const filename = this.destinationPath(JHIPSTER_CONFIG_DIR, `${name}.json`);
+        const entityExisted = fs.existsSync(filename);
 
         this.context = {
             name,
+            configExisted,
             entityExisted,
         };
 
         this._setupEntityOptions(this, this, this.context);
         this.registerPrettierTransform();
 
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity', { entityExisted, arguments: [name] });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity', { entityExisted, configExisted, arguments: [name] });
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -356,7 +352,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 // Validate root entity json content
                 if (this.entityConfig.changelogDate === undefined) {
                     const currentDate = this.dateFormatForLiquibase();
-                    this.info(`changelogDate is missing in .jhipster/${this.entityConfig.name}.json, using ${currentDate} as fallback`);
+                    if (this.context.entityExisted) {
+                        this.info(`changelogDate is missing in .jhipster/${this.entityConfig.name}.json, using ${currentDate} as fallback`);
+                    }
                     context.changelogDate = this.entityConfig.changelogDate = currentDate;
                 }
 
@@ -475,10 +473,32 @@ class EntityGenerator extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _loading() {
         return {
-            loadConfig() {
+            loadEntity() {
                 // Update current context with config from file.
                 Object.assign(this.context, this.entityStorage.getAll());
                 loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
+
+                if (this.context.fields) {
+                    this.context.fields
+                        .filter(field => field.options)
+                        .forEach(field => {
+                            // Load jdl annotations as default values.
+                            Object.assign(field, field.options);
+                        });
+                }
+
+                if (this.context.relationships) {
+                    this.context.relationships
+                        .filter(relationship => relationship.options)
+                        .forEach(relationship => {
+                            // Load jdl annotations as default values.
+                            Object.assign(relationship, relationship.options);
+                        });
+                }
+            },
+            shareEntity() {
+                this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
+                this.configOptions.sharedEntities[this.context.name] = this.context;
             },
         };
     }
@@ -498,10 +518,20 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.context.fields.forEach(field => {
                     prepareFieldForTemplates(entity, field, this);
                 });
+                this.context.fieldsNoId = this.context.fields.filter(field => !field.id);
             },
-            shareEntity() {
-                this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
-                this.configOptions.sharedEntities[this.context.name] = this.context;
+
+            loadRelationships() {
+                this.context.relationships.forEach(relationship => {
+                    const otherEntityName = this._.upperFirst(relationship.otherEntityName);
+                    const otherEntity = this.configOptions.sharedEntities[otherEntityName];
+                    if (!otherEntity) {
+                        throw new Error(`Error looking for otherEntity ${otherEntityName}`);
+                    }
+                    relationship.otherEntity = otherEntity;
+                    otherEntity.otherRelationships = otherEntity.otherRelationships || [];
+                    otherEntity.otherRelationships.push(relationship);
+                });
             },
         };
     }
@@ -512,26 +542,70 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
+    _preparingRelationships() {
+        return {
+            prepareRelationshipsForTemplates() {
+                this.context.relationships.forEach(relationship => {
+                    prepareRelationshipForTemplates(this.context, relationship, this);
+                });
+            },
+
+            processDerivedPrimaryKey() {
+                if (!this.context.derivedPrimaryKey) {
+                    return;
+                }
+                this.context.primaryKey = this.context.derivedPrimaryKey.otherEntity.primaryKey;
+                this.context.primaryKeyType = this.context.derivedPrimaryKey.otherEntity.primaryKeyType;
+                const idFields = this.context.derivedPrimaryKey.otherEntity.idFields.map(field => {
+                    return { ...field, fieldName: 'id', fieldNameHumanized: 'ID' };
+                });
+                this.context.idFields = idFields;
+                this.context.fields.unshift(...idFields);
+            },
+
+            prepareReferences() {
+                this.context.allReferences = [
+                    ...this.context.fields.map(field => field.reference),
+                    ...this.context.relationships.map(relationship => relationship.reference),
+                ];
+                this.context.dtoReferences = [
+                    ...this.context.fields.map(field => field.reference),
+                    ...this.context.relationships
+                        .map(relationship => relationship.reference)
+                        .filter(reference => reference.owned || reference.relationship.otherEntity.embedded),
+                ];
+            },
+        };
+    }
+
+    get preparingRelationships() {
+        if (useBlueprints) return;
+        return this._preparingRelationships();
+    }
+
+    // Public API method used by the getter and also by Blueprints
     _default() {
         return {
             ...super._missingPreDefault(),
 
-            prepareRelationshipsForTemplates() {
-                this.context.relationships.forEach(relationship => {
-                    const otherEntityName = this._.upperFirst(relationship.otherEntityName);
-                    relationship.otherEntity = this.configOptions.sharedEntities[otherEntityName];
+            loadUserManagementEntities() {
+                if (!this.configOptions.sharedEntities) return;
+                // Make user entity available to templates.
+                this.context.user = this.configOptions.sharedEntities.User;
+            },
 
-                    prepareRelationshipForTemplates(this.context, relationship, this);
-                    this._.defaults(relationship, {
-                        // otherEntityField should be id if not specified
-                        otherEntityField: 'id',
-                        // let ownerSide true when type is 'many-to-one' for convenience.
-                        // means that this side should control the reference.
-                        ownerSide:
-                            relationship.relationshipType !== 'one-to-many' &&
-                            (relationship.ownerSide || relationship.relationshipType === 'many-to-one'),
+            processOtherReferences() {
+                this.context.otherReferences = this.context.otherRelationships.map(relationship => relationship.reference);
+                this.context.allReferences
+                    .filter(reference => reference.relationship && reference.relationship.relatedField)
+                    .forEach(reference => {
+                        reference.relatedReference = reference.relationship.relatedField.reference;
                     });
-                });
+
+                // Get all required back references for dto.
+                this.context.otherDtoReferences = this.context.otherReferences.filter(reference =>
+                    reference.entity.dtoReferences.includes(reference)
+                );
             },
 
             processCollectionRelationships() {
@@ -557,7 +631,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             !relationship.embedded &&
                             // Allows the entity to force earger load every relationship
                             (this.context.eagerLoad ||
-                                (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === true));
+                                (this.context.paginate !== 'pagination' &&
+                                    relationship.relationshipType === 'many-to-many' &&
+                                    relationship.ownerSide === true));
                     });
                 this.context.relationshipsContainEagerLoad = this.context.relationships.some(
                     relationship => relationship.relationshipEagerLoad

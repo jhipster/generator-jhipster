@@ -32,7 +32,7 @@ on:
 env:
     JHI_RUN_APP: 1
     JHI_JDK: 11
-    JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
+    JHI_LIB_REPO: https://github.com/jhipster/jhipster-bom.git
     JHI_LIB_BRANCH: main
     JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
     JHI_GEN_BRANCH: main
@@ -71,7 +71,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                node_version: [12.18.3]
+                node_version: [14.15.0]
                 os: [ubuntu-20.04]
                 app-type:
                     - webflux-mongodb
@@ -83,7 +83,7 @@ jobs:
                     #                    - webflux-couchbase-es-oauth2
                     - webflux-psql
                     #- webflux-mysql
-                    - webflux-mariadb-gradle
+                    #- webflux-mariadb-gradle
                 include:
                     - app-type: webflux-mongodb
                       entity: mongodb
@@ -137,12 +137,12 @@ jobs:
                     #  war: 0
                     #  e2e: 1
                     #  testcontainers: 1
-                    - app-type: webflux-mariadb-gradle
-                      entity: sqlfull
-                      profile: prod
-                      war: 0
-                      e2e: 1
-                      testcontainers: 1
+                    #- app-type: webflux-mariadb-gradle
+                    #  entity: sqlfull
+                    #  profile: prod
+                    #  war: 0
+                    #  e2e: 1
+                    #  testcontainers: 1
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}

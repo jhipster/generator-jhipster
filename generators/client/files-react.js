@@ -32,12 +32,11 @@ const files = {
                 '.eslintrc.json',
                 'tsconfig.json',
                 'tsconfig.test.json',
-                { file: '.editorconfig', method: 'copy', noEjs: true },
-                'webpack/logo-jhipster.png',
                 'webpack/webpack.common.js',
                 'webpack/webpack.dev.js',
                 'webpack/webpack.prod.js',
                 'webpack/utils.js',
+                { file: 'webpack/logo-jhipster.png', method: 'copy' },
             ],
         },
         {
@@ -126,6 +125,11 @@ const files = {
             ],
         },
         {
+            condition: generator => generator.authenticationType === 'oauth2',
+            path: REACT_DIR,
+            templates: [{ file: 'modules/login/login-redirect.tsx', method: 'processJsx' }],
+        },
+        {
             path: REACT_DIR,
             templates: ['modules/home/home.scss'],
         },
@@ -183,16 +187,21 @@ const files = {
         {
             path: REACT_DIR,
             templates: [
-                // admin modules
                 { file: 'modules/administration/index.tsx', method: 'processJsx' },
-                { file: 'modules/administration/configuration/configuration.tsx', method: 'processJsx' },
+                'modules/administration/administration.reducer.ts',
                 { file: 'modules/administration/docs/docs.tsx', method: 'processJsx' },
                 'modules/administration/docs/docs.scss',
+            ],
+        },
+        {
+            condition: generator => generator.withAdminUi,
+            path: REACT_DIR,
+            templates: [
+                { file: 'modules/administration/configuration/configuration.tsx', method: 'processJsx' },
                 { file: 'modules/administration/health/health.tsx', method: 'processJsx' },
                 { file: 'modules/administration/health/health-modal.tsx', method: 'processJsx' },
                 { file: 'modules/administration/logs/logs.tsx', method: 'processJsx' },
                 { file: 'modules/administration/metrics/metrics.tsx', method: 'processJsx' },
-                'modules/administration/administration.reducer.ts',
             ],
         },
         {
@@ -290,17 +299,6 @@ const files = {
                 'spec/app/shared/layout/header/header.spec.tsx',
                 'spec/app/shared/layout/menus/account.spec.tsx',
                 'spec/app/modules/administration/administration.reducer.spec.ts',
-                // 'spec/app/account/activate/_activate.component.spec.js',
-                // 'spec/app/account/password/_password.component.spec.js',
-                // 'spec/app/account/password/_password-strength-bar.component.spec.js',
-                // 'spec/app/account/password-reset/init/_password-reset-init.component.spec.js',
-                // 'spec/app/account/password-reset/finish/_password-reset-finish.component.spec.js',
-                // 'spec/app/account/settings/_settings.component.spec.js',
-                // 'spec/app/admin/health/_health.component.spec.js',
-                // 'spec/helpers/_spyobject.js',
-                // 'spec/helpers/_mock-account.service.js',
-                // 'spec/helpers/_mock-principal.service.js',
-                // 'spec/helpers/_mock-route.service.js'
             ],
         },
         {

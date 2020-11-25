@@ -2,8 +2,8 @@
     "generator-jhipster": {
         "applicationType": "gateway",
         "baseName": "sampleGateway",
-        "packageName": "io.github.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageName": "tech.jhipster.sample",
+        "packageFolder": "tech/jhipster/sample",
         "authenticationType": "oauth2",
         "cacheProvider": "hazelcast",
         "enableHibernateCache": true,
@@ -25,7 +25,6 @@
         "clientFramework": "angularX",
         "jwtSecretKey": "NDQ5NmU1YmEwNjFlZWUyNGVjOGUxMGEwMzA4N2Q2NTRlNTkwNTI5MmEzOTU5NjViNjEzYzhlYWVhNzBlMTg5ZWI5YjJkN2Q2NDJlZjcxZDA3YTIzNzgxZmI0MTVlZWVlNDYzNzFhYmU5OWRiMDhjMWNjNWM2Yzg4YTVhMzZmMzE=",
         "embeddableLaunchScript": false,
-        "useSass": true,
         "clientTheme": "none",
         "entitySuffix": "",
         "dtoSuffix": "DTO",

@@ -20,25 +20,24 @@ const chalk = require('chalk');
 const constants = require('../generator-constants');
 const { clientDefaultConfig } = require('../generator-defaults');
 
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
-const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
+const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 module.exports = {
     askForModuleName,
     askForClient,
+    askForAdminUi,
     askForClientTheme,
     askForClientThemeVariant,
 };
 
-function askForModuleName() {
-    if (this.jhipsterConfig.baseName) return undefined;
+async function askForModuleName() {
+    if (this.jhipsterConfig.baseName) return;
 
-    return this.askModuleName(this);
+    await this.askModuleName(this);
 }
 
-function askForClient() {
-    if (this.existingProject) return true;
+async function askForClient() {
+    if (this.existingProject) return;
 
     const applicationType = this.applicationType;
 
@@ -61,110 +60,58 @@ function askForClient() {
         },
     ];
 
-    const PROMPT = {
+    const answers = await this.prompt({
         type: 'list',
         name: 'clientFramework',
-        when: response => applicationType !== 'microservice' && applicationType !== 'uaa',
+        when: () => applicationType !== 'microservice' && applicationType !== 'uaa',
         message: `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
         choices,
         default: clientDefaultConfig.clientFramework,
-    };
-
-    return this.prompt(PROMPT).then(prompt => {
-        this.clientFramework = this.jhipsterConfig.clientFramework = prompt.clientFramework;
-        if (this.clientFramework === 'no') {
-            this.skipClient = this.jhipsterConfig.skipClient = true;
-        }
     });
+
+    this.clientFramework = this.jhipsterConfig.clientFramework = answers.clientFramework;
+    if (this.clientFramework === 'no') {
+        this.skipClient = this.jhipsterConfig.skipClient = true;
+    }
 }
 
-function askForClientTheme() {
+async function askForClientTheme() {
     if (this.existingProject) {
         return;
     }
 
+    const self = this;
     const skipClient = this.skipClient;
-    const defaultChoices = [
+    const defaultJHipsterChoices = [
         {
             value: 'none',
             name: 'Default JHipster',
         },
-        { value: 'cerulean', name: 'Cerulean' },
-        { value: 'cosmo', name: 'Cosmo' },
-        { value: 'cerulean', name: 'Cyborg' },
-        { value: 'darkly', name: 'Darkly' },
-        { value: 'flatly', name: 'Flatly' },
-        { value: 'journal', name: 'Journal' },
-        { value: 'litera', name: 'Litera' },
-        { value: 'lumen', name: 'Lumen' },
-        { value: 'lux', name: 'Lux' },
-        { value: 'materia', name: 'Materia' },
-        { value: 'minty', name: 'Minty' },
-        { value: 'pulse', name: 'Pulse' },
-        { value: 'sandstone', name: 'Sandstone' },
-        { value: 'simplex', name: 'Simplex' },
-        { value: 'sketchy', name: 'Sketchy' },
-        { value: 'slate', name: 'Slate' },
-        { value: 'solar', name: 'Solar' },
-        { value: 'spacelab', name: 'Spacelab' },
-        { value: 'superhero', name: 'Superhero' },
-        { value: 'united', name: 'United' },
-        { value: 'yeti', name: 'Yeti' },
     ];
 
-    const PROMPT = {
+    const bootswatchChoices = await retrieveOnlineBootswatchThemes(self).catch(errorMessage => {
+        self.warning(errorMessage);
+        return retrieveLocalBootswatchThemes();
+    });
+    const answers = await this.prompt({
         type: 'list',
         name: 'clientTheme',
         when: () => !skipClient,
         message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
-        choices: defaultChoices,
+        choices: [...defaultJHipsterChoices, ...bootswatchChoices],
         default: clientDefaultConfig.clientTheme,
-    };
+    });
 
-    const self = this;
-    const promptClientTheme = function (PROMPT) {
-        return self.prompt(PROMPT).then(prompt => {
-            self.clientTheme = self.jhipsterConfig.clientTheme = prompt.clientTheme;
-        });
-    };
-
-    const done = this.async();
-    this.httpsGet(
-        'https://bootswatch.com/api/4.json',
-        // eslint-disable-next-line consistent-return
-        body => {
-            try {
-                const { themes } = JSON.parse(body);
-
-                PROMPT.choices = [
-                    {
-                        value: 'none',
-                        name: 'Default JHipster',
-                    },
-                    ...themes.map(theme => ({
-                        value: theme.name.toLowerCase(),
-                        name: theme.name,
-                    })),
-                ];
-            } catch (err) {
-                this.warning('Could not fetch bootswatch themes from API. Using default ones.');
-            }
-            done(undefined, promptClientTheme(PROMPT));
-        },
-        () => {
-            this.warning('Could not fetch bootswatch themes from API. Using default ones.');
-            done(undefined, promptClientTheme(PROMPT));
-        }
-    );
+    this.clientTheme = this.jhipsterConfig.clientTheme = answers.clientTheme;
 }
 
-function askForClientThemeVariant() {
+async function askForClientThemeVariant() {
     if (this.existingProject) {
-        return undefined;
+        return;
     }
     if (this.clientTheme === 'none') {
         this.clientThemeVariant = '';
-        return undefined;
+        return;
     }
 
     const skipClient = this.skipClient;
@@ -175,16 +122,93 @@ function askForClientThemeVariant() {
         { value: 'light', name: 'Light' },
     ];
 
-    const PROMPT = {
+    const answers = await this.prompt({
         type: 'list',
         name: 'clientThemeVariant',
         when: () => !skipClient,
         message: 'Choose a Bootswatch variant navbar theme (https://bootswatch.com/)?',
         choices,
         default: clientDefaultConfig.clientThemeVariant,
-    };
+    });
 
-    return this.prompt(PROMPT).then(prompt => {
-        this.clientThemeVariant = this.jhipsterConfig.clientThemeVariant = prompt.clientThemeVariant;
+    this.clientThemeVariant = this.jhipsterConfig.clientThemeVariant = answers.clientThemeVariant;
+}
+
+async function askForAdminUi() {
+    if (this.existingProject) {
+        return;
+    }
+
+    const skipClient = this.skipClient;
+
+    const answers = await this.prompt({
+        type: 'confirm',
+        name: 'withAdminUi',
+        when: () => !skipClient,
+        message: 'Do you want to generate the admin UI?',
+        default: clientDefaultConfig.withAdminUi,
+    });
+
+    this.withAdminUi = this.jhipsterConfig.withAdminUi = answers.withAdminUi;
+}
+
+async function retrieveOnlineBootswatchThemes(generator) {
+    return _retrieveBootswatchThemes(generator, true);
+}
+
+async function retrieveLocalBootswatchThemes(generator) {
+    return _retrieveBootswatchThemes(generator, false);
+}
+
+async function _retrieveBootswatchThemes(generator, useApi) {
+    const errorMessage = 'Could not fetch bootswatch themes from API. Using default ones.';
+    if (!useApi) {
+        return [
+            { value: 'cerulean', name: 'Cerulean' },
+            { value: 'cosmo', name: 'Cosmo' },
+            { value: 'cerulean', name: 'Cyborg' },
+            { value: 'darkly', name: 'Darkly' },
+            { value: 'flatly', name: 'Flatly' },
+            { value: 'journal', name: 'Journal' },
+            { value: 'litera', name: 'Litera' },
+            { value: 'lumen', name: 'Lumen' },
+            { value: 'lux', name: 'Lux' },
+            { value: 'materia', name: 'Materia' },
+            { value: 'minty', name: 'Minty' },
+            { value: 'pulse', name: 'Pulse' },
+            { value: 'sandstone', name: 'Sandstone' },
+            { value: 'simplex', name: 'Simplex' },
+            { value: 'sketchy', name: 'Sketchy' },
+            { value: 'slate', name: 'Slate' },
+            { value: 'solar', name: 'Solar' },
+            { value: 'spacelab', name: 'Spacelab' },
+            { value: 'superhero', name: 'Superhero' },
+            { value: 'united', name: 'United' },
+            { value: 'yeti', name: 'Yeti' },
+        ];
+    }
+
+    return new Promise((resolve, reject) => {
+        generator.httpsGet(
+            'https://bootswatch.com/api/4.json',
+
+            body => {
+                try {
+                    const { themes } = JSON.parse(body);
+
+                    const bootswatchChoices = themes.map(theme => ({
+                        value: theme.name.toLowerCase(),
+                        name: theme.name,
+                    }));
+
+                    resolve(bootswatchChoices);
+                } catch (err) {
+                    reject(errorMessage);
+                }
+            },
+            () => {
+                reject(errorMessage);
+            }
+        );
     });
 }

@@ -17,10 +17,9 @@
  limitations under the License.
 -%>
     <%= entityInstancePlural %>: I<%= entityAngularName %>[];
-    eventSubscriber?: Subscription;
     isLoading = false;
     itemsPerPage: number;
-    links: any;
+    links: { [key: string]: number };
     page: number;
     predicate: string;
     ascending: boolean;
@@ -31,13 +30,12 @@
     constructor(
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
         <%_ if (fieldsContainBlob) { _%>
-        protected dataUtils: JhiDataUtils,
+        protected dataUtils: DataUtils,
         <%_ } _%>
-        protected eventManager: JhiEventManager,
         <%_ if (!readOnly) { _%>
         protected modalService: NgbModal,
         <%_ } _%>
-        protected parseLinks: JhiParseLinks,
+        protected parseLinks: ParseLinks,
         <%_ if (searchEngine !== false) { _%>
         protected activatedRoute: ActivatedRoute,
         <%_ } _%>
@@ -51,8 +49,7 @@
         this.predicate = 'id';
         this.ascending = true;
         <%_ if (searchEngine !== false) { _%>
-        this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search'] ?
-            this.activatedRoute.snapshot.queryParams['search'] : '';
+        this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
         <%_ } _%>
     }
 
@@ -129,5 +126,4 @@
 
     ngOnInit(): void {
         this.loadAll();
-        this.registerChangeIn<%= entityClassPlural %>();
     }

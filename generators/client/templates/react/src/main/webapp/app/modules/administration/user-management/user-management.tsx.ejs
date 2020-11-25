@@ -35,7 +35,7 @@ import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-u
 import { getUsers, updateUser } from './user-management.reducer';
 import { IRootState } from 'app/shared/reducers';
 
-export interface IUserManagementProps extends StateProps, DispatchProps, RouteComponentProps<{}> {}
+export interface IUserManagementProps extends StateProps, DispatchProps, RouteComponentProps<any> {}
 
 export const UserManagement = (props: IUserManagementProps) => {
   const [pagination, setPagination] = useState(overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE), props.location.search));

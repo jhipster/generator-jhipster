@@ -10,14 +10,6 @@
             "otherEntityRelationshipName": "testManyToMany"
         },
         {
-            "relationshipName": "testMapstruct",
-            "otherEntityName": "testMapstruct",
-            "relationshipType": "many-to-many",
-            "otherEntityField": "id",
-            "ownerSide": true,
-            "otherEntityRelationshipName": "testManyToMany"
-        },
-        {
             "relationshipName": "testServiceClass",
             "otherEntityName": "testServiceClass",
             "relationshipType": "many-to-many",
