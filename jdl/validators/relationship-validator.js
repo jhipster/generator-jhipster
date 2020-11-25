@@ -118,14 +118,6 @@ function checkOneToOneRelationship(jdlRelationship) {
 }
 
 function checkManyToOneRelationship(jdlRelationship, skippedUserManagementOption) {
-    const bidirectionalRelationship = jdlRelationship.injectedFieldInFrom && jdlRelationship.injectedFieldInTo;
-    if (bidirectionalRelationship) {
-        throw new Error(
-            `In the Many-to-One relationship from ${jdlRelationship.from} to ${jdlRelationship.to}, ` +
-                'only unidirectionality is supported, you should either create a bidirectional One-to-Many relationship or ' +
-                'remove the injected field in the destination entity instead.'
-        );
-    }
     const unidirectionalRelationship = !jdlRelationship.injectedFieldInFrom || !jdlRelationship.injectedFieldInTo;
     const userIsTheSourceEntity = isUserManagementEntity(jdlRelationship.from);
     const userIsTheDestinationEntity = isUserManagementEntity(jdlRelationship.to);
