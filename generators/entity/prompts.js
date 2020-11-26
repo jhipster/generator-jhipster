@@ -411,7 +411,7 @@ function askForPagination() {
         {
             type: 'list',
             name: 'pagination',
-            message: 'Do you want pagination on your entity?',
+            message: 'Do you want pagination and sorting on your entity?',
             choices: [
                 {
                     value: 'no',
@@ -419,11 +419,11 @@ function askForPagination() {
                 },
                 {
                     value: 'pagination',
-                    name: 'Yes, with pagination links',
+                    name: 'Yes, with pagination links and sorting headers',
                 },
                 {
                     value: 'infinite-scroll',
-                    name: 'Yes, with infinite scroll',
+                    name: 'Yes, with infinite scroll and sorting headers',
                 },
             ],
             default: 0,
