@@ -307,14 +307,14 @@ const files = {
                 'core/util/event-manager.service.ts',
 
                 // config
-                'core/config/uib-pagination.config.ts',
-                'core/config/dayjs.ts',
-                'core/config/datepicker-adapter.ts',
-                'core/config/font-awesome-icons.ts',
-                'core/config/error.constants.ts',
-                'core/config/input.constants.ts',
-                'core/config/pagination.constants.ts',
-                'core/config/authority.constants.ts',
+                'config/uib-pagination.config.ts',
+                'config/dayjs.ts',
+                'config/datepicker-adapter.ts',
+                'config/font-awesome-icons.ts',
+                'config/error.constants.ts',
+                'config/input.constants.ts',
+                'config/pagination.constants.ts',
+                'config/authority.constants.ts',
 
                 // interceptors
                 'core/interceptor/error-handler.interceptor.ts',
@@ -340,7 +340,7 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
-            templates: ['core/config/language.constants.ts', 'core/config/translation.config.ts'],
+            templates: ['config/language.constants.ts', 'config/translation.config.ts'],
         },
     ],
     angularShared: [

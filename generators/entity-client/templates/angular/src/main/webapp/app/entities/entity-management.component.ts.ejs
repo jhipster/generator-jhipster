@@ -30,7 +30,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 <%_ if (pagination !== 'no') { %>
-import { ITEMS_PER_PAGE } from 'app/core/config/pagination.constants';
+import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 <%_ } _%>
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 <%_ if (!readOnly) { _%>
