@@ -2016,5 +2016,49 @@ entity A
                 );
             });
         });
+        context('when parsing relationships with annotations and options', () => {
+            let relationshipOnSource;
+            let relationshipOnDestination;
+
+            before(() => {
+                const content = `entity A
+entity B
+
+relationship OneToOne {
+  @id A{b} to @NotId(value) @Something B{a} with jpaDerivedIdentifier
+}
+`;
+                const importer = createImporterFromContent(content, { databaseType: 'postgresql', applicationName: 'toto' });
+                const imported = importer.import();
+                relationshipOnSource = imported.exportedEntities[0].relationships[0];
+                relationshipOnDestination = imported.exportedEntities[1].relationships[0];
+            });
+
+            after(() => {
+                fse.removeSync('.jhipster');
+            });
+
+            it('should export them', () => {
+                expect(relationshipOnSource).to.deep.equal({
+                    options: { notId: 'value', something: true },
+                    otherEntityField: 'id',
+                    otherEntityName: 'b',
+                    otherEntityRelationshipName: 'a',
+                    ownerSide: true,
+                    relationshipName: 'b',
+                    relationshipType: 'one-to-one',
+                    useJPADerivedIdentifier: true,
+                });
+                expect(relationshipOnDestination).to.deep.equal({
+                    options: { id: true },
+                    otherEntityField: 'id',
+                    otherEntityName: 'a',
+                    otherEntityRelationshipName: 'b',
+                    ownerSide: false,
+                    relationshipName: 'a',
+                    relationshipType: 'one-to-one',
+                });
+            });
+        });
     });
 });

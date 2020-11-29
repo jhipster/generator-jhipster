@@ -291,7 +291,11 @@ function getDestinationEntitySideAttributes(isEntityTheDestinationSideEntity, de
 }
 
 function getRelationshipOptions(relationship) {
-    const options = relationship.options || {};
+    const options = relationship.options || {
+        global: {},
+        source: {},
+        destination: {},
+    };
     if (relationship.useJPADerivedIdentifier) {
         options[JPA_DERIVED_IDENTIFIER] = true;
     }

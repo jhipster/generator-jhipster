@@ -50,10 +50,19 @@ describe('RelationshipConverter', () => {
                                     javadoc: '/**\n * Not required\n */',
                                 },
                                 cardinality: 'one-to-many',
-                                options: [{ option: 'dto', method: 'mapstruct' }],
+                                options: {
+                                    global: [{ optionName: 'jpaDerivedIdentifier', type: 'UNARY' }],
+                                    source: [],
+                                    destination: [],
+                                },
                             },
                         ],
-                        () => ({ dto: 'mapstruct' })
+                        options => {
+                            if (options.length !== 0) {
+                                return { jpaDerivedIdentifier: true };
+                            }
+                            return {};
+                        }
                     );
                     expectedRelationships = [
                         new JDLRelationship({
@@ -66,7 +75,13 @@ describe('RelationshipConverter', () => {
                             isInjectedFieldInToRequired: false,
                             commentInFrom: '/**\\nRequired\\n/',
                             commentInTo: '/**\\nNot required\\n/',
-                            options: { dto: 'mapstruct' },
+                            options: {
+                                global: {
+                                    jpaDerivedIdentifier: true,
+                                },
+                                destination: {},
+                                source: {},
+                            },
                         }),
                     ];
                 });
@@ -94,10 +109,19 @@ describe('RelationshipConverter', () => {
                                     javadoc: '/**\n * Not required\n */',
                                 },
                                 cardinality: 'one-to-many',
-                                options: [{ option: 'dto', method: 'mapstruct' }],
+                                options: {
+                                    global: [{ optionName: 'jpaDerivedIdentifier', type: 'UNARY' }],
+                                    source: [],
+                                    destination: [],
+                                },
                             },
                         ],
-                        () => ({ dto: 'mapstruct' })
+                        options => {
+                            if (options.length !== 0) {
+                                return { jpaDerivedIdentifier: true };
+                            }
+                            return {};
+                        }
                     );
                     expectedRelationships = [
                         new JDLRelationship({
@@ -110,7 +134,13 @@ describe('RelationshipConverter', () => {
                             isInjectedFieldInToRequired: false,
                             commentInFrom: '/**\\nRequired\\n/',
                             commentInTo: '/**\\nNot required\\n/',
-                            options: { dto: 'mapstruct' },
+                            options: {
+                                global: {
+                                    jpaDerivedIdentifier: true,
+                                },
+                                destination: {},
+                                source: {},
+                            },
                         }),
                     ];
                 });

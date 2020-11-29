@@ -708,7 +708,8 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                     let customBinaryOption;
                     let customBinaryOption2;
                     let fieldAnnotation;
-                    let relationshipAnnotation;
+                    let relationshipAnnotationOnSource;
+                    let relationshipAnnotationOnDestination;
 
                     before(() => {
                         const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', 'test-files', 'annotations.jdl')]);
@@ -725,7 +726,9 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                         customBinaryOption = jdlObject.getOptionsForName('myCustomBinaryOption')[0];
                         customBinaryOption2 = jdlObject.getOptionsForName('myCustomBinaryOption')[1];
                         fieldAnnotation = jdlObject.entities.A.fields.name.options.id;
-                        relationshipAnnotation = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options.id;
+                        relationshipAnnotationOnSource = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options.source;
+                        relationshipAnnotationOnDestination = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options
+                            .destination;
                     });
 
                     it('should set the annotations as options', () => {
@@ -740,7 +743,12 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                         expect(customBinaryOption.value).to.deep.equal('customValue');
                         expect(customBinaryOption2.value).to.deep.equal('customValue2');
                         expect(fieldAnnotation).to.deep.equal(true);
-                        expect(relationshipAnnotation).to.deep.equal(true);
+                        expect(relationshipAnnotationOnSource).to.deep.equal({
+                            annotationOnSource: 'toto',
+                        });
+                        expect(relationshipAnnotationOnDestination).to.deep.equal({
+                            annotationOnDestination: true,
+                        });
                     });
                 });
                 context('that are capitalized', () => {
@@ -753,7 +761,8 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                     let customBinaryOption;
                     let customBinaryOption2;
                     let fieldAnnotation;
-                    let relationshipAnnotation;
+                    let relationshipAnnotationOnSource;
+                    let relationshipAnnotationOnDestination;
 
                     before(() => {
                         const input = JDLReader.parseFromFiles([
@@ -772,7 +781,9 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                         customBinaryOption = jdlObject.getOptionsForName('myCustomBinaryOption')[0];
                         customBinaryOption2 = jdlObject.getOptionsForName('myCustomBinaryOption')[1];
                         fieldAnnotation = jdlObject.entities.A.fields.name.options.id;
-                        relationshipAnnotation = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options.id;
+                        relationshipAnnotationOnSource = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options.source;
+                        relationshipAnnotationOnDestination = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options
+                            .destination;
                     });
 
                     it('should set the annotations as options with lower-case letters first', () => {
@@ -787,7 +798,12 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                         expect(customBinaryOption.value).to.deep.equal('customValue');
                         expect(customBinaryOption2.value).to.deep.equal('customValue2');
                         expect(fieldAnnotation).to.deep.equal(true);
-                        expect(relationshipAnnotation).to.deep.equal(true);
+                        expect(relationshipAnnotationOnSource).to.deep.equal({
+                            annotationOnSource: true,
+                        });
+                        expect(relationshipAnnotationOnDestination).to.deep.equal({
+                            annotationOnDestination: true,
+                        });
                     });
                 });
             });
@@ -891,7 +907,9 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                 });
 
                 it('should set it', () => {
-                    expect(jdlObject.relationships.getOneToOne('OneToOne_A{b}_B').options.jpaDerivedIdentifier).to.be.true;
+                    expect(jdlObject.relationships.getOneToOne('OneToOne_A{b}_B').options.global).to.deep.equal({
+                        jpaDerivedIdentifier: true,
+                    });
                 });
             });
             context('when parsing entity options in applications', () => {

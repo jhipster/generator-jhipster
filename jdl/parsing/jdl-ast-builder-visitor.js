@@ -265,20 +265,28 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     }
 
     relationshipBody(context) {
-        const options = [];
-        if (context.annotationDeclaration) {
-            context.annotationDeclaration.forEach(contextObject => {
-                options.push(this.visit(contextObject));
-            });
-        }
+        const optionsForTheSourceSide = context.annotationOnSourceSide ? context.annotationOnSourceSide.map(this.visit, this) : [];
+        const optionsForTheDestinationSide = context.annotationOnDestinationSide
+            ? context.annotationOnDestinationSide.map(this.visit, this)
+            : [];
+
         const from = this.visit(context.from);
         const to = this.visit(context.to);
 
+        const relationshipOptions = [];
         if (context.relationshipOptions) {
-            this.visit(context.relationshipOptions).forEach(o => options.push(o));
+            this.visit(context.relationshipOptions).forEach(option => relationshipOptions.push(option));
         }
 
-        return { from, to, options };
+        return {
+            from,
+            to,
+            options: {
+                global: relationshipOptions,
+                source: optionsForTheSourceSide,
+                destination: optionsForTheDestinationSide,
+            },
+        };
     }
 
     relationshipSide(context) {

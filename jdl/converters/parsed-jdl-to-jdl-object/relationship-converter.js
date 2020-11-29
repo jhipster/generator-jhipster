@@ -38,7 +38,6 @@ function convertRelationships(parsedRelationships, annotationToOptionConverter, 
     }
     const { generateBidirectionalOneToMany } = conversionOptions;
     return parsedRelationships.map(parsedRelationship => {
-        const options = annotationToOptionConverter.call(undefined, parsedRelationship.options);
         const relationshipConfiguration = {
             from: parsedRelationship.from.name,
             to: parsedRelationship.to.name,
@@ -49,7 +48,11 @@ function convertRelationships(parsedRelationships, annotationToOptionConverter, 
             isInjectedFieldInToRequired: parsedRelationship.to.required,
             commentInFrom: formatComment(parsedRelationship.from.javadoc),
             commentInTo: formatComment(parsedRelationship.to.javadoc),
-            options,
+            options: {
+                global: annotationToOptionConverter.call(undefined, parsedRelationship.options.global),
+                source: annotationToOptionConverter.call(undefined, parsedRelationship.options.source),
+                destination: annotationToOptionConverter.call(undefined, parsedRelationship.options.destination),
+            },
             generateBidirectionalOneToMany,
         };
         if (!relationshipConfiguration.injectedFieldInFrom && !relationshipConfiguration.injectedFieldInTo) {

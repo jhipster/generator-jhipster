@@ -115,7 +115,11 @@ describe('RelationshipValidator', () => {
                                 to: 'B',
                                 type,
                                 injectedFieldInTo: 'a',
-                                options: { [JPA_DERIVED_IDENTIFIER]: true },
+                                options: {
+                                    global: {
+                                        [JPA_DERIVED_IDENTIFIER]: true,
+                                    },
+                                },
                             });
                         });
 
