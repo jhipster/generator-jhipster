@@ -79,7 +79,8 @@ export class UserManagementComponent implements OnInit {
   deleteUser(user: User): void {
     const modalRef = this.modalService.open(UserManagementDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.user = user;
-    modalRef.result.then(reason => {
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(reason => {
       if (reason === 'deleted') {
         this.loadAll();
       }
