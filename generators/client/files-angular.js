@@ -301,7 +301,6 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 'core/user/account.model.ts',
-                'core/user/authority.model.ts',
                 'core/util/data-util.service.ts',
                 'core/util/parse-links.service.ts',
                 'core/util/alert.service.ts',
@@ -315,6 +314,7 @@ const files = {
                 'core/config/error.constants.ts',
                 'core/config/input.constants.ts',
                 'core/config/pagination.constants.ts',
+                'core/config/authority.constants.ts',
 
                 // interceptors
                 'core/interceptor/error-handler.interceptor.ts',

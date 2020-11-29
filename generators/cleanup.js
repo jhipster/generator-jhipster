@@ -155,6 +155,7 @@ function cleanupOldFiles(generator) {
             // unreleased files and folders cleanup for v7 developers
             generator.removeFile(`${ANGULAR_DIR}config/dayjs.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/duration.pipe.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/user/authority.model.ts`);
             generator.removeFolder(`${ANGULAR_DIR}core/event-manager`);
             generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/app/core/event-manager`);
         } else if (generator.jhipsterConfig.clientFramework === REACT) {

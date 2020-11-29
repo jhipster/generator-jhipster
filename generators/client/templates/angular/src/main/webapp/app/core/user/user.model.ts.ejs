@@ -19,8 +19,6 @@
 <%_
   const idType = getTypescriptKeyType(user.primaryKeyType);
 _%>
-import { Authority } from './authority.model';
-
 export interface IUser {
   id?: <%= idType %>;
   login?: string;
@@ -29,7 +27,7 @@ export interface IUser {
   email?: string;
   activated?: boolean;
   langKey?: string;
-  authorities?: Authority[];
+  authorities?: string[];
   createdBy?: string;
   createdDate?: Date;
   lastModifiedBy?: string;
@@ -46,7 +44,7 @@ export class User implements IUser {
     public email?: string,
     public activated?: boolean,
     public langKey?: string,
-    public authorities?: Authority[],
+    public authorities?: string[],
     public createdBy?: string,
     public createdDate?: Date,
     public lastModifiedBy?: string,
