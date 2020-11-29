@@ -83,7 +83,8 @@ export class <%= entityAngularName %>Component implements OnInit {
     delete(<%= entityInstance %>: I<%= entityAngularName %>): void {
         const modalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent, { size: 'lg', backdrop: 'static' });
         modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
-        modalRef.result.then(reason => {
+        // unsubscribe not needed because closed completes on modal close
+        modalRef.closed.subscribe(reason => {
             if (reason === 'deleted') {
                 <%= eventCallBack %>;
             }

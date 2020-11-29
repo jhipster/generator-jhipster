@@ -158,6 +158,15 @@ function cleanupOldFiles(generator) {
             generator.removeFolder(`${ANGULAR_DIR}core/config`);
             generator.removeFolder(`${ANGULAR_DIR}core/event-manager`);
             generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/app/core/event-manager`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/jvm-memory`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/jvm-threads`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-cache`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-datasource`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-endpoints-requests`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-garbagecollector`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-modal-threads`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-request`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-system`);
         } else if (generator.jhipsterConfig.clientFramework === REACT) {
             generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/enzyme-setup.ts`);
