@@ -18,18 +18,18 @@
 -%>
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { CacheMetrics } from '../metrics.model';
+import { HttpServerRequests } from 'app/admin/metrics/metrics.model';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-metrics-cache',
-  templateUrl: './metrics-cache.component.html',
+  selector: '<%= jhiPrefixDashed %>-metrics-request',
+  templateUrl: 'metrics-request.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MetricsCacheComponent {
+export class MetricsRequestComponent {
   /**
-   * object containing all cache related metrics
+   * object containing http request related metrics
    */
-  @Input() cacheMetrics?: { [key: string]: CacheMetrics };
+  @Input() requestMetrics?: HttpServerRequests;
 
   /**
    * boolean field saying if the metrics are in the process of being updated

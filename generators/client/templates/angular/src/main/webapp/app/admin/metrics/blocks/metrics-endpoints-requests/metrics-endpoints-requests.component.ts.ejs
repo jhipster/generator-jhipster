@@ -18,17 +18,17 @@
 -%>
 import { Component, Input } from '@angular/core';
 
-import { GarbageCollector } from '../metrics.model';
+import { Services } from 'app/admin/metrics/metrics.model';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-metrics-garbagecollector',
-  templateUrl: './metrics-garbagecollector.component.html',
+  selector: '<%= jhiPrefixDashed %>-metrics-endpoints-requests',
+  templateUrl: './metrics-endpoints-requests.component.html',
 })
-export class MetricsGarbageCollectorComponent {
+export class MetricsEndpointsRequestsComponent {
   /**
-   * object containing garbage collector related metrics
+   * object containing service related metrics
    */
-  @Input() garbageCollectorMetrics?: GarbageCollector;
+  @Input() endpointsRequestsMetrics?: Services;
 
   /**
    * boolean field saying if the metrics are in the process of being updated

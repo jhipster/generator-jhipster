@@ -18,17 +18,17 @@
 -%>
 import { Component, Input } from '@angular/core';
 
-import { JvmMetrics } from '../metrics.model';
+import { GarbageCollector } from 'app/admin/metrics/metrics.model';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-jvm-memory',
-  templateUrl: './jvm-memory.component.html',
+  selector: '<%= jhiPrefixDashed %>-metrics-garbagecollector',
+  templateUrl: './metrics-garbagecollector.component.html',
 })
-export class JvmMemoryComponent {
+export class MetricsGarbageCollectorComponent {
   /**
-   * object containing all jvm memory metrics
+   * object containing garbage collector related metrics
    */
-  @Input() jvmMemoryMetrics?: { [key: string]: JvmMetrics };
+  @Input() garbageCollectorMetrics?: GarbageCollector;
 
   /**
    * boolean field saying if the metrics are in the process of being updated
