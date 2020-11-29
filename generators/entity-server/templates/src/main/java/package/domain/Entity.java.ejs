@@ -48,6 +48,9 @@ import io.swagger.annotations.ApiModel;
 <%_ if (!hasDto && importApiModelProperty === true) { _%>
 import io.swagger.annotations.ApiModelProperty;
 <%_ } _%>
+<%_ if (databaseType === 'sql' && relationships.some(r => r.relationshipType === 'many-to-many' || r.relationshipType === 'one-to-many')) { _%>
+import org.hibernate.annotations.BatchSize;
+<%_ } _%>
 <%_ if (enableHibernateCache) { _%>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -321,8 +324,9 @@ relationships.forEach((relationship, idx) => {
     @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
         <%_ if (enableHibernateCache) { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-        <%_ }
-        } else if (databaseType === 'mongodb' || databaseType === 'couchbase') {
+        <%_ } _%>
+    @BatchSize(size = 20)
+    <%_ } else if (databaseType === 'mongodb' || databaseType === 'couchbase') {
             if (databaseType === 'mongodb' && !otherEntityIsEmbedded) { _%>
     @DBRef
         <%_ } _%>
@@ -403,8 +407,9 @@ relationships.forEach((relationship, idx) => {
                    <%= idx === 0 ? '' : ',' %>@JoinColumn(name = "<%= `${relationship.columnName}_${field.columnName}` %>"))
                    <%_ }); _%>
                <%= relationship.otherEntity.primaryKey.fields.length > 1 ? '}' : '' %>
-        <%_ }
-        } else if ((databaseType === 'mongodb' || databaseType === 'couchbase') && !otherEntityIsEmbedded) {
+        <%_ } _%>
+    @BatchSize(size = 20)
+    <%_ } else if ((databaseType === 'mongodb' || databaseType === 'couchbase') && !otherEntityIsEmbedded) {
             if (databaseType === 'mongodb') { _%>
     @DBRef
         <%_ } _%>
