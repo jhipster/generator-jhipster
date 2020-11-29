@@ -33,8 +33,7 @@ _%>
 <%_ } else { %>
 <%- returnPrefix %> <%= entityInstance %>Repository.findById(<%= instanceName %>.get<%= primaryKey.nameCapitalized %>())
    .map(existing<%= entityClass %> -> {
-<%_ for (field of fields) {
-        if (field.id) continue; _%>
+<%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
    if (<%= instanceName %>.get<%= field.fieldNameCapitalized %>() != null) {
       existing<%= entityClass %>.set<%= field.fieldNameCapitalized %>(<%= instanceName %>.get<%= field.fieldNameCapitalized %>());
    }

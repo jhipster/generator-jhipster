@@ -1,6 +1,11 @@
 @ChangelogDate(20200804035352)
 entity JdlFieldTest {
   id Long
+
+  name String
+
+  @MapstructExpression("java(s.getName())")
+  value String
 }
 
 dto JdlFieldTest with mapstruct
