@@ -619,16 +619,16 @@ relationships.forEach((relationship, idx) => {
         <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
         if (this.<%= relationshipFieldNamePlural %> != null) {
             <%_ if (relationship.otherRelationship.reference.collection) { _%>
-            this.<%= relationshipFieldNamePlural %>.forEach(<%= otherEntityName %> -> <%= otherEntityName %>.remove<%= otherEntityRelationshipNameCapitalized %>(this));
+            this.<%= relationshipFieldNamePlural %>.forEach(i -> i.remove<%= otherEntityRelationshipNameCapitalized %>(this));
             <%_ } else { _%>
-            this.<%= relationshipFieldNamePlural %>.forEach(<%= otherEntityName %> -> <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(null));
+            this.<%= relationshipFieldNamePlural %>.forEach(i -> i.set<%= otherEntityRelationshipNameCapitalized %>(null));
             <%_ } _%>
         }
         if (<%= otherEntityNamePlural %> != null) {
             <%_ if (relationship.otherRelationship.reference.collection) { _%>
-            <%= otherEntityNamePlural %>.forEach(<%= otherEntityName %> -> <%= otherEntityName %>.add<%= otherEntityRelationshipNameCapitalized %>(this));
+            <%= otherEntityNamePlural %>.forEach(i -> i.add<%= otherEntityRelationshipNameCapitalized %>(this));
             <%_ } else { _%>
-            <%= otherEntityNamePlural %>.forEach(<%= otherEntityName %> -> <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(this));
+            <%= otherEntityNamePlural %>.forEach(i -> i.set<%= otherEntityRelationshipNameCapitalized %>(this));
             <%_ } _%>
         }
         <%_ } _%>
