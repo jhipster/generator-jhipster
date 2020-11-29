@@ -109,6 +109,9 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
+                            options: {
+                                id: '42',
+                            },
                             relationshipType: 'one-to-one',
                             relationshipName: 'location',
                             otherEntityName: 'location',
@@ -377,6 +380,17 @@ describe('JDLImporter', () => {
                             relationshipName: 'country',
                             otherEntityName: 'country',
                             otherEntityRelationshipName: 'location',
+                        },
+                        {
+                            options: {
+                                id: true,
+                            },
+                            otherEntityField: 'id',
+                            otherEntityName: 'department',
+                            otherEntityRelationshipName: 'location',
+                            ownerSide: false,
+                            relationshipName: 'department',
+                            relationshipType: 'one-to-one',
                         },
                     ],
                     name: 'Location',
