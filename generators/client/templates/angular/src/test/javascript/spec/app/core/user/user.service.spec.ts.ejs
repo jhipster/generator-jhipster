@@ -24,7 +24,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-import { Authority } from 'app/core/user/authority.model';
+import { Authority } from 'app/config/authority.constants';
 <%_ } _%>
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.model';

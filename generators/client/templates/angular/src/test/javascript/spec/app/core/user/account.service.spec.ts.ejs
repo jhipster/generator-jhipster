@@ -36,13 +36,13 @@ import { NgxWebstorageModule } from 'ngx-webstorage';
 import { SERVER_API_URL } from 'app/app.constants';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
-import { Authority } from 'app/core/user/authority.model';
+import { Authority } from 'app/config/authority.constants';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 <%_ if (websocket === 'spring-websocket') { _%>
 import { TrackerService } from 'app/core/tracker/tracker.service';
 <%_ } _%>
 
-function accountWithAuthorities(authorities: Authority[]): Account {
+function accountWithAuthorities(authorities: string[]): Account {
   return {
     activated: true,
     authorities,

@@ -25,7 +25,7 @@ import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 <%_ if (prodDatabaseType !== 'cassandra') { _%>
-import { ITEMS_PER_PAGE } from 'app/core/config/pagination.constants';
+import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 <%_ } _%>
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
