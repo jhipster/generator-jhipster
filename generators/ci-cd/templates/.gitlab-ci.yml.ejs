@@ -186,7 +186,7 @@ nohttp:
 maven-compile:
     stage: build
     script:
-        - ./mvnw -ntp compile -P-webpack -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw -ntp compile -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         paths:
             - target/classes/
@@ -210,7 +210,7 @@ maven-test:
 
     stage: test
     script:
-        - ./mvnw -ntp verify -P-webpack -Dmaven.repo.local=$MAVEN_USER_HOME <% if (insideDocker && databaseType === 'sql') { %>-Dspring.profiles.active=testcontainers<% } %>
+        - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME <% if (insideDocker && databaseType === 'sql') { %>-Dspring.profiles.active=testcontainers<% } %>
     artifacts:
         reports:
             junit: target/test-results/**/TEST-*.xml
@@ -292,20 +292,20 @@ stages:
     - analyze
     <%_ } _%>
     - packaging
-webpack-build:
+webapp-build:
     stage: build
     script:
         - <%= clientPackageManager %> install
-        - <%= clientPackageManager %> run ci:webpack:build
+        - <%= clientPackageManager %> run webapp:build
     artifacts:
         paths:
             - build/
-webpack-test:
+webapp-test:
     stage: test
     dependencies:
-        - webpack-build
+        - webapp-build
     script:
-        - <%= clientPackageManager %> run webpack:test
+        - <%= clientPackageManager %> run webapp:test
     artifacts:
         reports:
             junit: build/test-results/TESTS-results-jest.xml
@@ -316,7 +316,7 @@ webpack-test:
 sonar-analyze:
     stage: analyze
     dependencies:
-        - webpack-test
+        - webapp-test
     script:
         - npm run sonar
     artifacts:
@@ -324,10 +324,10 @@ sonar-analyze:
         - build/
         - build/test-results
 <%_ } _%>
-webpack-prod:
+webapp-prod:
     stage: packaging
     script:
-        - <%= clientPackageManager %> run webpack:prod
+        - <%= clientPackageManager %> run webapp:prod
         # - add cmd to zip the app folder build/resources/main/static
     artifacts:
         paths:

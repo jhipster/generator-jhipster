@@ -179,7 +179,10 @@ limitations under the License.
     "webpack:dev": "ng serve",
     "webpack:dev-verbose": "ng serve --verbose",
     "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:prod && <%= clientPackageManager %> run clean-www",
-    "webpack:test": "<%= clientPackageManager %> run test"
+    "webpack:test": "<%= clientPackageManager %> run test",
+    "webapp:test": "<%= clientPackageManager %> run webpack:test",
+    "webapp:build": "<%= clientPackageManager %> run webpack:build",
+    "webapp:prod": "<%= clientPackageManager %> run webpack:prod"
   },
   "jestSonar": {
     "reportPath": "<%= BUILD_DIR %>test-results/jest",

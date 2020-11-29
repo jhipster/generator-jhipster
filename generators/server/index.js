@@ -441,29 +441,29 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                         'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
                         'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
                         'java:docker': './mvnw -ntp verify -DskipTests jib:dockerBuild',
-                        'backend:unit:test': `./mvnw -ntp -P-webpack verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
+                        'backend:unit:test': `./mvnw -ntp -P-webapp verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
                     });
                 } else if (buildTool === 'gradle') {
-                    const excludeWebpack = this.jhipsterConfig.skipClient ? '' : '-x webpack';
+                    const excludeWebapp = this.jhipsterConfig.skipClient ? '' : '-x webapp';
                     e2ePackage = 'e2e';
                     scriptsStorage.set({
                         'backend:info': './gradlew -v',
-                        'backend:doc:test': `./gradlew javadoc ${excludeWebpack}`,
-                        'backend:nohttp:test': `./gradlew checkstyleNohttp ${excludeWebpack}`,
+                        'backend:doc:test': `./gradlew javadoc ${excludeWebapp}`,
+                        'backend:nohttp:test': `./gradlew checkstyleNohttp ${excludeWebapp}`,
                         'java:jar': './gradlew bootJar -x test -x integrationTest',
                         'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
                         'java:docker': './gradlew bootJar jibDockerBuild',
-                        'backend:unit:test': `./gradlew test integrationTest ${excludeWebpack} ${javaCommonLog} ${javaTestLog}`,
+                        'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
                         'postci:e2e:package': 'cp build/libs/*SNAPSHOT.$npm_package_config_packaging e2e.$npm_package_config_packaging',
                     });
                 }
 
                 scriptsStorage.set({
-                    'java:jar:dev': 'npm run java:jar -- -Pdev,webpack',
+                    'java:jar:dev': 'npm run java:jar -- -Pdev,webapp',
                     'java:jar:prod': 'npm run java:jar -- -Pprod',
-                    'java:war:dev': 'npm run java:war -- -Pdev,webpack',
+                    'java:war:dev': 'npm run java:war -- -Pdev,webapp',
                     'java:war:prod': 'npm run java:war -- -Pprod',
-                    'java:docker:dev': 'npm run java:docker -- -Pdev,webpack',
+                    'java:docker:dev': 'npm run java:docker -- -Pdev,webapp',
                     'java:docker:prod': 'npm run java:docker -- -Pprod',
                     'ci:backend:test':
                         'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test',

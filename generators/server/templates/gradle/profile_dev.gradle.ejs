@@ -47,7 +47,7 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task) {
+task webapp(type: <%= _.upperFirst(clientPackageManager) %>Task) {
     inputs.files("package-lock.json")
     inputs.files("build.gradle")
     inputs.dir("<%= CLIENT_MAIN_SRC_DIR %>")
@@ -60,7 +60,7 @@ task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task) {
 
     dependsOn <%= clientPackageManager %><%_ if (clientPackageManager === 'npm') { _%>Install<%_ } _%>
 
-    args = ["run", "webpack:build"]
+    args = ["run", "webapp:build"]
     environment = [APP_VERSION: project.version]
 }
 <%_ } _%>
@@ -88,6 +88,6 @@ processResources {
 }
 
 <%_ if (!skipClient) { _%>
-processResources.dependsOn webpack
+processResources.dependsOn webapp
 bootJar.dependsOn processResources
 <%_ } _%>
