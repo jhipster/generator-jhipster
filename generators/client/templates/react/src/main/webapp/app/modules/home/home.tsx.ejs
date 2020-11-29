@@ -62,6 +62,7 @@ export const Home = (props: IHomeProp) => {
             <div>
               <Alert color="warning">
                 <Translate contentKey="global.messages.info.authenticated.prefix">If you want to </Translate>
+                <% if (!enableTranslation) { %><span>&nbsp;</span><% } %>
                 <%_ if (authenticationType === 'oauth2') { _%>
                 <a href={getLoginUrl()} className="alert-link">
                   <Translate contentKey="global.messages.info.authenticated.link">sign in</Translate>
