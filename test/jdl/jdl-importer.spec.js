@@ -109,6 +109,9 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
+                            options: {
+                                id: '42',
+                            },
                             relationshipType: 'one-to-one',
                             relationshipName: 'location',
                             otherEntityName: 'location',
@@ -377,6 +380,17 @@ describe('JDLImporter', () => {
                             relationshipName: 'country',
                             otherEntityName: 'country',
                             otherEntityRelationshipName: 'location',
+                        },
+                        {
+                            options: {
+                                id: true,
+                            },
+                            otherEntityField: 'id',
+                            otherEntityName: 'department',
+                            otherEntityRelationshipName: 'location',
+                            ownerSide: false,
+                            relationshipName: 'department',
+                            relationshipType: 'one-to-one',
                         },
                     ],
                     name: 'Location',
@@ -2014,6 +2028,50 @@ entity A
                 expect(caughtError.message).to.equal(
                     "MismatchedTokenException: Found an invalid token 'unknownOption', at line: 5 and column: 5.\n\tPlease make sure your JDL content does not use invalid characters, keywords or options."
                 );
+            });
+        });
+        context('when parsing relationships with annotations and options', () => {
+            let relationshipOnSource;
+            let relationshipOnDestination;
+
+            before(() => {
+                const content = `entity A
+entity B
+
+relationship OneToOne {
+  @id A{b} to @NotId(value) @Something B{a} with jpaDerivedIdentifier
+}
+`;
+                const importer = createImporterFromContent(content, { databaseType: 'postgresql', applicationName: 'toto' });
+                const imported = importer.import();
+                relationshipOnSource = imported.exportedEntities[0].relationships[0];
+                relationshipOnDestination = imported.exportedEntities[1].relationships[0];
+            });
+
+            after(() => {
+                fse.removeSync('.jhipster');
+            });
+
+            it('should export them', () => {
+                expect(relationshipOnSource).to.deep.equal({
+                    options: { notId: 'value', something: true },
+                    otherEntityField: 'id',
+                    otherEntityName: 'b',
+                    otherEntityRelationshipName: 'a',
+                    ownerSide: true,
+                    relationshipName: 'b',
+                    relationshipType: 'one-to-one',
+                    useJPADerivedIdentifier: true,
+                });
+                expect(relationshipOnDestination).to.deep.equal({
+                    options: { id: true },
+                    otherEntityField: 'id',
+                    otherEntityName: 'a',
+                    otherEntityRelationshipName: 'b',
+                    ownerSide: false,
+                    relationshipName: 'a',
+                    relationshipType: 'one-to-one',
+                });
             });
         });
     });

@@ -159,7 +159,9 @@ describe('JDLToJSONRelationshipConverter', () => {
                             injectedFieldInTo: 'a',
                             injectedFieldInFrom: 'b',
                             options: {
-                                custom: 42,
+                                global: {
+                                    custom: 42,
+                                },
                             },
                         });
                         const returned = convert([oneToOneRelationship], ['A', 'B']);
@@ -191,7 +193,9 @@ describe('JDLToJSONRelationshipConverter', () => {
                             injectedFieldInTo: 'a',
                             injectedFieldInFrom: 'b',
                             options: {
-                                [JPA_DERIVED_IDENTIFIER]: true,
+                                global: {
+                                    [JPA_DERIVED_IDENTIFIER]: true,
+                                },
                             },
                         });
                         const returned = convert([oneToOneRelationship], ['A', 'B']);

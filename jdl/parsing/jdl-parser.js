@@ -271,11 +271,14 @@ module.exports = class JDLParser extends CstParser {
 
     relationshipBody() {
         this.RULE('relationshipBody', () => {
-            this.MANY(() => {
-                this.SUBRULE(this.annotationDeclaration);
+            this.MANY1(() => {
+                this.SUBRULE1(this.annotationDeclaration, { LABEL: 'annotationOnSourceSide' });
             });
             this.SUBRULE1(this.relationshipSide, { LABEL: 'from' });
             this.CONSUME(LexerTokens.TO);
+            this.MANY2(() => {
+                this.SUBRULE2(this.annotationDeclaration, { LABEL: 'annotationOnDestinationSide' });
+            });
             this.SUBRULE2(this.relationshipSide, { LABEL: 'to' });
             this.OPTION(() => {
                 this.CONSUME(LexerTokens.WITH);

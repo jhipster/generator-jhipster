@@ -52,7 +52,7 @@ function checkInjectedFields(jdlRelationship) {
 }
 
 function checkForValidUseOfJPaDerivedIdentifier(jdlRelationship) {
-    if (jdlRelationship.type !== ONE_TO_ONE && jdlRelationship.hasOption(JPA_DERIVED_IDENTIFIER)) {
+    if (jdlRelationship.type !== ONE_TO_ONE && jdlRelationship.hasGlobalOption(JPA_DERIVED_IDENTIFIER)) {
         throw new Error(`Only a ${ONE_TO_ONE} relationship can have the '${JPA_DERIVED_IDENTIFIER}' option.`);
     }
 }

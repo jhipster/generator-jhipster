@@ -1156,7 +1156,11 @@ entity A {
 
             it('should parse them', () => {
                 expect(relationship).to.deep.equal({
-                    options: [],
+                    options: {
+                        global: [],
+                        destination: [],
+                        source: [],
+                    },
                     cardinality: 'OneToOne',
                     from: {
                         injectedField: null,
@@ -1321,12 +1325,16 @@ entity A {
             });
 
             it('should add it', () => {
-                expect(relationship.options).to.deep.equal([
-                    {
-                        optionName: 'jpaDerivedIdentifier',
-                        type: 'UNARY',
-                    },
-                ]);
+                expect(relationship.options).to.deep.equal({
+                    global: [
+                        {
+                            optionName: 'jpaDerivedIdentifier',
+                            type: 'UNARY',
+                        },
+                    ],
+                    source: [],
+                    destination: [],
+                });
             });
         });
         context('when parsing more than one relationship', () => {
@@ -1352,12 +1360,16 @@ entity A {
                                 javadoc: null,
                                 name: 'A',
                             },
-                            options: [
-                                {
-                                    optionName: 'jpaDerivedIdentifier',
-                                    type: 'UNARY',
-                                },
-                            ],
+                            options: {
+                                global: [
+                                    {
+                                        optionName: 'jpaDerivedIdentifier',
+                                        type: 'UNARY',
+                                    },
+                                ],
+                                destination: [],
+                                source: [],
+                            },
                             to: {
                                 injectedField: null,
                                 javadoc: null,
@@ -1371,7 +1383,11 @@ entity A {
                                 javadoc: null,
                                 name: 'B',
                             },
-                            options: [],
+                            options: {
+                                global: [],
+                                destination: [],
+                                source: [],
+                            },
                             to: {
                                 injectedField: null,
                                 javadoc: null,
@@ -1385,16 +1401,135 @@ entity A {
                                 javadoc: null,
                                 name: 'D',
                             },
-                            options: [
-                                {
-                                    optionName: 'jpaDerivedIdentifier',
-                                    type: 'UNARY',
-                                },
-                            ],
+                            options: {
+                                global: [
+                                    {
+                                        optionName: 'jpaDerivedIdentifier',
+                                        type: 'UNARY',
+                                    },
+                                ],
+                                destination: [],
+                                source: [],
+                            },
                             to: {
                                 injectedField: null,
                                 javadoc: null,
                                 name: 'E',
+                            },
+                        },
+                    ]);
+                });
+            });
+        });
+        context('with annotations', () => {
+            context('only in the source side', () => {
+                let relationships;
+
+                before(() => {
+                    const content = parseFromContent('relationship OneToOne { @id A to B }');
+                    relationships = content.relationships;
+                });
+
+                it('should parse them', () => {
+                    expect(relationships).to.deep.equal([
+                        {
+                            cardinality: 'OneToOne',
+                            from: {
+                                injectedField: null,
+                                javadoc: null,
+                                name: 'A',
+                            },
+                            options: {
+                                global: [],
+                                destination: [],
+                                source: [
+                                    {
+                                        optionName: 'id',
+                                        type: 'UNARY',
+                                    },
+                                ],
+                            },
+                            to: {
+                                injectedField: null,
+                                javadoc: null,
+                                name: 'B',
+                            },
+                        },
+                    ]);
+                });
+            });
+            context('only in the destination side', () => {
+                let relationships;
+
+                before(() => {
+                    const content = parseFromContent('relationship OneToOne { A to @id B }');
+                    relationships = content.relationships;
+                });
+
+                it('should parse them', () => {
+                    expect(relationships).to.deep.equal([
+                        {
+                            cardinality: 'OneToOne',
+                            from: {
+                                injectedField: null,
+                                javadoc: null,
+                                name: 'A',
+                            },
+                            options: {
+                                global: [],
+                                destination: [
+                                    {
+                                        optionName: 'id',
+                                        type: 'UNARY',
+                                    },
+                                ],
+                                source: [],
+                            },
+                            to: {
+                                injectedField: null,
+                                javadoc: null,
+                                name: 'B',
+                            },
+                        },
+                    ]);
+                });
+            });
+            context('in both sides', () => {
+                let relationships;
+
+                before(() => {
+                    const content = parseFromContent('relationship OneToOne { @id A to @id B }');
+                    relationships = content.relationships;
+                });
+
+                it('should parse them', () => {
+                    expect(relationships).to.deep.equal([
+                        {
+                            cardinality: 'OneToOne',
+                            from: {
+                                injectedField: null,
+                                javadoc: null,
+                                name: 'A',
+                            },
+                            options: {
+                                global: [],
+                                destination: [
+                                    {
+                                        optionName: 'id',
+                                        type: 'UNARY',
+                                    },
+                                ],
+                                source: [
+                                    {
+                                        optionName: 'id',
+                                        type: 'UNARY',
+                                    },
+                                ],
+                            },
+                            to: {
+                                injectedField: null,
+                                javadoc: null,
+                                name: 'B',
                             },
                         },
                     ]);

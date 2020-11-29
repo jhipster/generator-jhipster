@@ -982,7 +982,9 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
                                 injectedFieldInTo: 'a',
                                 injectedFieldInFrom: 'b',
                                 options: {
-                                    custom: 42,
+                                    global: {
+                                        custom: 42,
+                                    },
                                 },
                             });
                             jdlObject.addEntity(entityA);
@@ -1025,7 +1027,9 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
                                 injectedFieldInTo: 'a',
                                 injectedFieldInFrom: 'b',
                                 options: {
-                                    [JPA_DERIVED_IDENTIFIER]: true,
+                                    global: {
+                                        [JPA_DERIVED_IDENTIFIER]: true,
+                                    },
                                 },
                             });
                             jdlObject.addEntity(entityA);

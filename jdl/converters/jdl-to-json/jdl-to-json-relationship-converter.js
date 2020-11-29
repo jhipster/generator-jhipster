@@ -63,7 +63,10 @@ function getRelatedRelationships(relationships, entityNames) {
             if (jdlRelationship.from === entityName) {
                 relationshipsRelatedToEntity.from.push(jdlRelationship);
             }
-            if (jdlRelationship.to === entityName && jdlRelationship.injectedFieldInTo) {
+            if (
+                jdlRelationship.to === entityName &&
+                (jdlRelationship.injectedFieldInTo || Object.keys(jdlRelationship.options.destination).length !== 0)
+            ) {
                 relationshipsRelatedToEntity.to.push(jdlRelationship);
             }
         });
@@ -110,7 +113,7 @@ function setRelationshipsFromEntity(relatedRelationships, entityName) {
             }
             convertedRelationship.ownerSide = true;
         }
-        setOptionsForRelationship(relationshipToConvert, convertedRelationship);
+        setOptionsForRelationshipSourceSide(relationshipToConvert, convertedRelationship);
         const convertedEntityRelationships = convertedRelationships.get(entityName);
         convertedEntityRelationships.push(convertedRelationship);
     });
@@ -141,25 +144,48 @@ function setRelationshipsToEntity(relatedRelationships, entityName) {
         } else if (relationshipToConvert.type === MANY_TO_ONE && relationshipToConvert.injectedFieldInTo) {
             convertedRelationship.relationshipType = 'one-to-many';
         }
-        setOptionsForRelationship(relationshipToConvert, convertedRelationship);
+        setOptionsForRelationshipDestinationSide(relationshipToConvert, convertedRelationship);
         const convertedEntityRelationships = convertedRelationships.get(entityName);
         convertedEntityRelationships.push(convertedRelationship);
     });
 }
 
-function setOptionsForRelationship(relationshipToConvert, convertedRelationship) {
-    relationshipToConvert.forEachOption((optionName, optionValue) => {
+function setOptionsForRelationshipSourceSide(relationshipToConvert, convertedRelationship) {
+    convertedRelationship.options = convertedRelationship.options || {};
+    relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
         if (optionName === JPA_DERIVED_IDENTIFIER) {
             if (convertedRelationship.ownerSide) {
                 convertedRelationship.useJPADerivedIdentifier = optionValue;
             }
         } else {
-            if (!convertedRelationship.options) {
-                convertedRelationship.options = {};
-            }
             convertedRelationship.options[optionName] = optionValue;
         }
     });
+    relationshipToConvert.forEachDestinationOption((optionName, optionValue) => {
+        convertedRelationship.options[optionName] = optionValue;
+    });
+    if (Object.keys(convertedRelationship.options).length === 0) {
+        delete convertedRelationship.options;
+    }
+}
+
+function setOptionsForRelationshipDestinationSide(relationshipToConvert, convertedRelationship) {
+    convertedRelationship.options = convertedRelationship.options || {};
+    relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
+        if (optionName === JPA_DERIVED_IDENTIFIER) {
+            if (convertedRelationship.ownerSide) {
+                convertedRelationship.useJPADerivedIdentifier = optionValue;
+            }
+        } else {
+            convertedRelationship.options[optionName] = optionValue;
+        }
+    });
+    relationshipToConvert.forEachSourceOption((optionName, optionValue) => {
+        convertedRelationship.options[optionName] = optionValue;
+    });
+    if (Object.keys(convertedRelationship.options).length === 0) {
+        delete convertedRelationship.options;
+    }
 }
 
 /**
