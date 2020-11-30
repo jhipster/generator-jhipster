@@ -113,6 +113,18 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.route.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.module.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.service.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-delete-dialog.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-delete-dialog.component.html`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-detail.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-detail.component.html`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management.component.html`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-update.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-update.component.html`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-delete-dialog.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-detail.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-update.component.spec.ts`);
             generator.removeFile(`${ANGULAR_DIR}entities/entity.module.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/util/datepicker-adapter.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.ts`);
