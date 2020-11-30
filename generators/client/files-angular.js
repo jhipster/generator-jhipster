@@ -372,7 +372,7 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
-            templates: ['shared/find-language-from-key.pipe.ts', 'shared/translate.directive.ts'],
+            templates: ['shared/language/find-language-from-key.pipe.ts', 'shared/language/translate.directive.ts'],
         },
     ],
     angularAuthService: [
@@ -439,7 +439,7 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: CLIENT_TEST_SRC_DIR,
-            templates: ['spec/app/shared/translate.directive.spec.ts'],
+            templates: ['spec/app/shared/language/translate.directive.spec.ts'],
         },
         {
             condition: generator => !generator.skipUserManagement,

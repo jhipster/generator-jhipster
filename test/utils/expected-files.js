@@ -448,8 +448,8 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/date/duration.pipe.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/date/format-medium-date.pipe.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/date/format-medium-datetime.pipe.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/find-language-from-key.pipe.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/translate.directive.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/language/translate.directive.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/config/language.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/config/translation.config.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/login/login.model.ts`,
@@ -491,7 +491,7 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/date/format-medium-datetime.pipe.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/sort/sort.directive.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/sort/sort-by.directive.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/shared/translate.directive.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/shared/language/translate.directive.spec.ts`,
         'tsconfig.app.json',
         'tsconfig.spec.json',
         'tsconfig.json',
@@ -595,8 +595,8 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`,
         `${CLIENT_MAIN_SRC_DIR}app/config/language.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/config/translation.config.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/find-language-from-key.pipe.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/translate.directive.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/language/translate.directive.ts`,
     ],
 
     i18nRtl: [
@@ -606,7 +606,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/ar-ly/global.json`,
         `${CLIENT_MAIN_SRC_DIR}app/config/language.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}content/scss/rtl.scss`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/find-language-from-key.pipe.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`,
     ],
 
     session: [
