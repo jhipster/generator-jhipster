@@ -475,7 +475,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}swagger-ui/dist/images/throbber.gif`,
         `${CLIENT_MAIN_SRC_DIR}swagger-ui/index.html`,
         `${CLIENT_TEST_SRC_DIR}jest.conf.js`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/core/user/account.service.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/core/auth/account.service.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/core/util/event-manager.service.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/core/util/data-util.service.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/core/util/parse-links.service.spec.ts`,

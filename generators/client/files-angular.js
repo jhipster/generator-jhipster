@@ -419,7 +419,7 @@ const files = {
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 'jest.conf.js',
-                'spec/app/core/user/account.service.spec.ts',
+                'spec/app/core/auth/account.service.spec.ts',
                 'spec/app/core/util/event-manager.service.spec.ts',
                 'spec/app/core/util/data-util.service.spec.ts',
                 'spec/app/core/util/parse-links.service.spec.ts',
