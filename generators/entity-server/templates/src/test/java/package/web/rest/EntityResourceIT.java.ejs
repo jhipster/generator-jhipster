@@ -883,7 +883,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
                                                     if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else
                                                         if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>))<%= !reactive ? ')' : '' %><%_ } _%>;
     }
-    <% if (fieldsContainOwnerManyToMany === true) { %>
+    <% if (fieldsContainOwnerManyToMany === true && databaseType !== 'neo4j') { %>
     @SuppressWarnings({"unchecked"})
     void getAll<%= entityClassPlural %>WithEagerRelationshipsIsEnabled() <% if (!reactive) { %>throws Exception <% } %>{
         <%_ if (service !== 'no') { _%>
