@@ -596,7 +596,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             !relationship.embedded &&
                             // Allows the entity to force earger load every relationship
                             (this.context.eagerLoad ||
-                                (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === true));
+                                (this.context.paginate !== 'pagination' &&
+                                    relationship.relationshipType === 'many-to-many' &&
+                                    relationship.ownerSide === true)) &&
+                            // Neo4j eagerly loads relations by default
+                            this.context.databaseType !== 'neo4j';
                     });
                 this.context.relationshipsContainEagerLoad = this.context.relationships.some(
                     relationship => relationship.relationshipEagerLoad
