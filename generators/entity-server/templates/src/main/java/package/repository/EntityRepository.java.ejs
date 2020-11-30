@@ -51,7 +51,7 @@ import org.springframework.data.cassandra.repository.CassandraRepository;
 import org.springframework.stereotype.Repository;
 <%_
 if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') {
-    let importList = relationshipsContainEagerLoad;
+    let importList = fieldsContainOwnerManyToMany;
     for (r of relationships) {
         if (r.relationshipType === 'many-to-one' && r.otherEntityName === 'user') {
             importList = true;
