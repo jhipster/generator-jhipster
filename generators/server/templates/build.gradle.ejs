@@ -405,7 +405,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
     <%_ } _%>
     <%_ if (databaseType === 'neo4j') { _%>
-    implementation "org.neo4j.springframework.data:spring-data-neo4j-rx-spring-boot-starter"
+    implementation "org.springframework.boot:spring-boot-starter-data-neo4j"
     implementation "eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter"
     // This is done here explicitly as dependency resolution seems to have changed recently such that the validation starter
     // and therefore hibernate validators is not included anymore
