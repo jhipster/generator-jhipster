@@ -20,11 +20,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { SharedModule } from 'app/shared/shared.module';
-import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
-import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>-detail.component';
+import { <%= entityAngularName %>Component } from './list/<%= entityFileName %>.component';
+import { <%= entityAngularName %>DetailComponent } from './detail/<%= entityFileName %>-detail.component';
 <%_ if (!readOnly) { _%>
-import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
-import { <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
+import { <%= entityAngularName %>UpdateComponent } from './update/<%= entityFileName %>-update.component';
+import { <%= entityAngularName %>DeleteDialogComponent } from './delete/<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
 
 @NgModule({
