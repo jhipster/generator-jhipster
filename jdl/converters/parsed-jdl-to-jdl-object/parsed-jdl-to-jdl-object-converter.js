@@ -23,7 +23,6 @@ const JDLBinaryOption = require('../../models/jdl-binary-option');
 const ApplicationTypes = require('../../jhipster/application-types');
 const BinaryOptions = require('../../jhipster/binary-options');
 const DatabaseTypes = require('../../jhipster/database-types');
-const { lowerFirst } = require('../../utils/string-utils');
 
 const { convertApplications } = require('./application-converter');
 const { convertEntities } = require('./entity-converter');
@@ -122,10 +121,6 @@ function getJDLFieldsFromParsedEntity(entity) {
     const fields = [];
     for (let i = 0; i < entity.body.length; i++) {
         const field = entity.body[i];
-        const fieldName = lowerFirst(field.name);
-        if (fieldName.toLowerCase() === 'id') {
-            continue; // eslint-disable-line no-continue
-        }
         const jdlField = convertField(field);
         jdlField.validations = getValidations(field);
         jdlField.options = convertAnnotationsToOptions(field.annotations);
