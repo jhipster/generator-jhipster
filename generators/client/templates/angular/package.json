@@ -36,7 +36,7 @@
     "merge-jsons-webpack-plugin": "1.0.21",
     "rimraf": "3.0.2",
     "simple-progress-webpack-plugin": "1.1.2",
-    "webpack-bundle-analyzer": "4.1.0",
+    "webpack-bundle-analyzer": "4.2.0",
     "webpack-notifier": "1.11.0"
   }
 }
