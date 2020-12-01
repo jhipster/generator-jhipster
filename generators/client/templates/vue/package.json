@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "webpack": "4.44.2",
-    "webpack-bundle-analyzer": "4.1.0",
+    "webpack-bundle-analyzer": "4.2.0",
     "vue-jest": "3.0.7",
     "vue-loader": "15.9.5"
   }
