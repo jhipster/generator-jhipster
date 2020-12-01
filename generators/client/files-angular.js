@@ -114,7 +114,7 @@ const files = {
         },
         {
             path: ANGULAR_DIR,
-            templates: ['layouts/profiles/page-ribbon.scss', 'layouts/navbar/navbar.scss', 'home/home.scss'],
+            templates: ['layouts/profiles/page-ribbon.component.scss', 'layouts/navbar/navbar.component.scss', 'home/home.component.scss'],
         },
         // login
         {
@@ -146,7 +146,9 @@ const files = {
                 { file: 'account/activate/activate.component.html', method: 'processHtml' },
                 'account/activate/activate.service.ts',
                 { file: 'account/password/password.route.ts', method: 'processJs' },
-                'account/password/password-strength-bar.component.ts',
+                'account/password/password-strength-bar/password-strength-bar.component.ts',
+                { file: 'account/password/password-strength-bar/password-strength-bar.component.html', method: 'processHtml' },
+                'account/password/password-strength-bar/password-strength-bar.component.scss',
                 'account/password/password.component.ts',
                 { file: 'account/password/password.component.html', method: 'processHtml' },
                 'account/password/password.service.ts',
@@ -178,11 +180,6 @@ const files = {
                 'account/sessions/sessions.service.ts',
             ],
         },
-        {
-            condition: generator => !generator.skipUserManagement,
-            path: ANGULAR_DIR,
-            templates: ['account/password/password-strength-bar.scss'],
-        },
     ],
     angularAdminModule: [
         {
@@ -193,7 +190,7 @@ const files = {
                 { file: 'admin/docs/docs.module.ts', method: 'processJs' },
                 { file: 'admin/docs/docs.component.ts', method: 'processJs' },
                 'admin/docs/docs.component.html',
-                'admin/docs/docs.scss',
+                'admin/docs/docs.component.scss',
             ],
         },
         {
@@ -365,7 +362,9 @@ const files = {
                 'shared/item-count.component.ts',
                 // alert service code
                 'shared/alert/alert.component.ts',
+                'shared/alert/alert.component.html',
                 'shared/alert/alert-error.component.ts',
+                'shared/alert/alert-error.component.html',
                 'shared/alert/alert-error.model.ts',
             ],
         },
@@ -447,7 +446,7 @@ const files = {
             templates: [
                 'spec/app/account/activate/activate.component.spec.ts',
                 'spec/app/account/password/password.component.spec.ts',
-                'spec/app/account/password/password-strength-bar.component.spec.ts',
+                'spec/app/account/password/password-strength-bar/password-strength-bar.component.spec.ts',
                 'spec/app/account/password-reset/init/password-reset-init.component.spec.ts',
                 'spec/app/account/password-reset/finish/password-reset-finish.component.spec.ts',
                 'spec/app/account/register/register.component.spec.ts',
