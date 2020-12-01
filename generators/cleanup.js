@@ -191,7 +191,17 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/test.module.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest-global-mocks.ts`);
-            generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/helpers`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-account.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-active-modal.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-alert.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-event-manager.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-language.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-login-modal.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-login.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-route.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-state-storage.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-tracker.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/spyobject.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/translate.directive.spec.ts`);
             generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/app/core/event-manager`);
             // b) deleted while moving tests next to files they are testing
