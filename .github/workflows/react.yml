@@ -140,6 +140,7 @@ jobs:
                     #   e2e: 1
                     #   testcontainers: 0
         env:
+            JHI_GENERATE_SKIP_CONFIG: 1
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
             JHI_PROFILE: ${{ matrix.environment }}
@@ -215,8 +216,8 @@ jobs:
             #----------------------------------------------------------------------
             - name: 'GENERATION: install JHipster'
               run: $JHI_SCRIPTS/10-install-jhipster.sh
-            - name: 'GENERATION: entities'
-              run: $JHI_SCRIPTS/11-generate-entities.sh
+            - name: 'GENERATION: config'
+              run: $JHI_SCRIPTS/11-generate-config.sh
             - name: 'GENERATION: project'
               run: $JHI_SCRIPTS/12-generate-project.sh
             - name: 'GENERATION: replace version in generated project'
@@ -243,7 +244,7 @@ jobs:
               if: steps.base-checkout.outcome == 'success'
               working-directory: ${{ github.workspace }}/base/app
               run: |
-                  $JHI_SCRIPTS/11-generate-entities.sh
+                  $JHI_SCRIPTS/11-generate-config.sh
                   # 11-generate-entities.sh removes current dir, we need to switch to the new one
                   cd ../app
                   $JHI_SCRIPTS/12-generate-project.sh --skip-install --skip-git
@@ -311,15 +312,15 @@ jobs:
               id: e2e
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: npm run ci:e2e:run --if-present
+            - name: 'E2E: Teardown'
+              if: always() && matrix.e2e == 1 && steps.tests-should-be-skipped.outputs.skip-tests != 'true'
+              run: npm run ci:e2e:teardown
             - name: 'BACKEND: Store failure logs'
               uses: actions/upload-artifact@v2
               if: always() && steps.backend.outcome == 'failure'
               with:
                   name: log-${{ matrix.app-type }}
                   path: ${{ github.workspace }}/app/build/test-results/**/*.xml
-            - name: 'E2E: Teardown'
-              if: always() && matrix.e2e == 1 && steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-              run: npm run ci:e2e:teardown
             - name: 'E2E: Store failure screenshots'
               uses: actions/upload-artifact@v2
               if: always() && steps.e2e.outcome == 'failure'

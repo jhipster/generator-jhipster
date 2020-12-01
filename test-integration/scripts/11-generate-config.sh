@@ -7,8 +7,6 @@ else
     echo "*** 00-init-env.sh not found"
 fi
 
-echo "11-generate-entities.sh script is deprecated, use 11-generate-config.sh instead"
-
 #-------------------------------------------------------------------------------
 # Functions
 #-------------------------------------------------------------------------------
@@ -27,6 +25,15 @@ prepareFolder() {
 
 if [[ $JHI_REPO != "" ]]; then
     prepareFolder
+fi
+
+cd "$JHI_FOLDER_APP"
+
+if [[ "$JHI_ENTITY" != "jdl" ]]; then
+    #-------------------------------------------------------------------------------
+    # Copy jhipster config
+    #-------------------------------------------------------------------------------
+    cp -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json "$JHI_FOLDER_APP"/
 fi
 
 if [[ ("$JHI_ENTITY" == "mongodb") || ("$JHI_ENTITY" == "couchbase") ]]; then
@@ -135,6 +142,11 @@ elif [[ "$JHI_ENTITY" == "sqlfull" ]]; then
     moveEntity JpaFilteringRelationship
     moveEntity JpaFilteringOtherSide
 
+    #-------------------------------------------------------------------------------
+    # Generate jdl entities
+    #-------------------------------------------------------------------------------
+    jhipster --no-insight jdl "$JHI_SAMPLES"/jdl-entities/*.jdl --json-only
+
 elif [[ "$JHI_ENTITY" == "sql" ]]; then
     moveEntity BankAccount
     moveEntity Label
@@ -161,7 +173,15 @@ elif [[ "$JHI_ENTITY" == "sql" ]]; then
 fi
 
 #-------------------------------------------------------------------------------
-# Copy entities json
+# Print entities json
 #-------------------------------------------------------------------------------
 echo "*** Entities:"
 ls -al "$JHI_FOLDER_APP"/.jhipster/
+
+#-------------------------------------------------------------------------------
+# Force no insight
+#-------------------------------------------------------------------------------
+if [ "$JHI_FOLDER_APP" == "$HOME/app" ]; then
+    mkdir -p "$HOME"/.config/configstore/
+    cp "$JHI_INTEG"/configstore/*.json "$HOME"/.config/configstore/
+fi

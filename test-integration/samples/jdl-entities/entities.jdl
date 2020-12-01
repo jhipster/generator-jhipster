@@ -1,0 +1,5 @@
+entity JdlFieldTest {
+  id Long
+}
+
+dto JdlFieldTest with mapstruct
