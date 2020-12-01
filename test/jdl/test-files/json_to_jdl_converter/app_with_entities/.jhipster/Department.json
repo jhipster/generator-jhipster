@@ -13,7 +13,6 @@
       "relationshipValidateRules": "required",
       "relationshipName": "location",
       "otherEntityName": "location",
-      "otherEntityField": "id",
       "ownerSide": true,
       "otherEntityRelationshipName": "department"
     }
