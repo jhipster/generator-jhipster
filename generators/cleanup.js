@@ -113,6 +113,8 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.route.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.module.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.service.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/health/health-modal.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/health/health-modal.component.html`);
             generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-delete-dialog.component.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-delete-dialog.component.html`);
             generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-detail.component.ts`);
