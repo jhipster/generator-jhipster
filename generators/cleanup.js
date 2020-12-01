@@ -106,6 +106,13 @@ function cleanupOldFiles(generator) {
 
     if (generator.isJhipsterVersionLessThan('7.0.0') && generator.jhipsterConfig) {
         if (generator.jhipsterConfig.clientFramework === ANGULAR) {
+            generator.removeFile(`${ANGULAR_DIR}account/password/password-strength-bar.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}account/password/password-strength-bar.scss`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/password/password-strength-bar.component.spec.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/docs/docs.scss`);
+            generator.removeFile(`${ANGULAR_DIR}home/home.scss`);
+            generator.removeFile(`${ANGULAR_DIR}layouts/navbar/navbar.scss`);
+            generator.removeFile(`${ANGULAR_DIR}layouts/profiles/page-ribbon.scss`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audit-data.model.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audit.model.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.component.html`);
@@ -113,6 +120,20 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.route.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.module.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.service.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/health/health-modal.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/health/health-modal.component.html`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-delete-dialog.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-delete-dialog.component.html`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-detail.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-detail.component.html`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management.component.html`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-update.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-update.component.html`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-delete-dialog.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-detail.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-update.component.spec.ts`);
             generator.removeFile(`${ANGULAR_DIR}entities/entity.module.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/util/datepicker-adapter.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.ts`);
@@ -127,7 +148,6 @@ function cleanupOldFiles(generator) {
             generator.removeFolder(`${ANGULAR_DIR}core/icons`);
             generator.removeFolder(`${ANGULAR_DIR}core/language`);
             generator.removeFolder(`${ANGULAR_DIR}shared/auth`);
-            generator.removeFolder(`${ANGULAR_DIR}shared/language`);
             generator.removeFolder(`${ANGULAR_DIR}shared/constants`);
             generator.removeFolder(`${ANGULAR_DIR}shared/util`);
             generator.removeFile(`${ANGULAR_DIR}core/core.module.ts`);
@@ -143,6 +163,7 @@ function cleanupOldFiles(generator) {
             generator.removeFile('proxy.conf.json');
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/login/login-modal.component.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/login/login-modal.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/user/account.service.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.service.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`);
@@ -154,6 +175,9 @@ function cleanupOldFiles(generator) {
 
             // unreleased files and folders cleanup for v7 developers
             generator.removeFile(`${ANGULAR_DIR}shared/duration.pipe.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/find-language-from-key.pipe.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/translate.directive.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/translate.directive.spec.ts`);
             generator.removeFile(`${ANGULAR_DIR}core/user/authority.model.ts`);
             generator.removeFolder(`${ANGULAR_DIR}core/config`);
             generator.removeFolder(`${ANGULAR_DIR}core/event-manager`);

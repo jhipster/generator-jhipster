@@ -23,7 +23,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
-import { <%= entityAngularName %>DetailComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.component';
+import { <%= entityAngularName %>DetailComponent } from 'app/entities/<%= entityFolderName %>/detail/<%= entityFileName %>-detail.component';
 import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 <%_ if (fieldsContainBlob) { _%>
 import { DataUtils } from 'app/core/util/data-util.service';

@@ -114,7 +114,7 @@ const files = {
         },
         {
             path: ANGULAR_DIR,
-            templates: ['layouts/profiles/page-ribbon.scss', 'layouts/navbar/navbar.scss', 'home/home.scss'],
+            templates: ['layouts/profiles/page-ribbon.component.scss', 'layouts/navbar/navbar.component.scss', 'home/home.component.scss'],
         },
         // login
         {
@@ -146,7 +146,9 @@ const files = {
                 { file: 'account/activate/activate.component.html', method: 'processHtml' },
                 'account/activate/activate.service.ts',
                 { file: 'account/password/password.route.ts', method: 'processJs' },
-                'account/password/password-strength-bar.component.ts',
+                'account/password/password-strength-bar/password-strength-bar.component.ts',
+                { file: 'account/password/password-strength-bar/password-strength-bar.component.html', method: 'processHtml' },
+                'account/password/password-strength-bar/password-strength-bar.component.scss',
                 'account/password/password.component.ts',
                 { file: 'account/password/password.component.html', method: 'processHtml' },
                 'account/password/password.service.ts',
@@ -178,11 +180,6 @@ const files = {
                 'account/sessions/sessions.service.ts',
             ],
         },
-        {
-            condition: generator => !generator.skipUserManagement,
-            path: ANGULAR_DIR,
-            templates: ['account/password/password-strength-bar.scss'],
-        },
     ],
     angularAdminModule: [
         {
@@ -193,7 +190,7 @@ const files = {
                 { file: 'admin/docs/docs.module.ts', method: 'processJs' },
                 { file: 'admin/docs/docs.component.ts', method: 'processJs' },
                 'admin/docs/docs.component.html',
-                'admin/docs/docs.scss',
+                'admin/docs/docs.component.scss',
             ],
         },
         {
@@ -211,8 +208,8 @@ const files = {
                 'admin/health/health.module.ts',
                 'admin/health/health.component.ts',
                 { file: 'admin/health/health.component.html', method: 'processHtml' },
-                'admin/health/health-modal.component.ts',
-                { file: 'admin/health/health-modal.component.html', method: 'processHtml' },
+                'admin/health/modal/health-modal.component.ts',
+                { file: 'admin/health/modal/health-modal.component.html', method: 'processHtml' },
                 'admin/health/health.service.ts',
                 'admin/health/health.model.ts',
                 { file: 'admin/logs/logs.route.ts', method: 'processJs' },
@@ -281,14 +278,14 @@ const files = {
             templates: [
                 { file: 'admin/user-management/user-management.route.ts', method: 'processJs' },
                 'admin/user-management/user-management.module.ts',
-                'admin/user-management/user-management.component.ts',
-                { file: 'admin/user-management/user-management.component.html', method: 'processHtml' },
-                'admin/user-management/user-management-detail.component.ts',
-                { file: 'admin/user-management/user-management-detail.component.html', method: 'processHtml' },
-                'admin/user-management/user-management-update.component.ts',
-                { file: 'admin/user-management/user-management-update.component.html', method: 'processHtml' },
-                'admin/user-management/user-management-delete-dialog.component.ts',
-                { file: 'admin/user-management/user-management-delete-dialog.component.html', method: 'processHtml' },
+                'admin/user-management/list/user-management.component.ts',
+                { file: 'admin/user-management/list/user-management.component.html', method: 'processHtml' },
+                'admin/user-management/detail/user-management-detail.component.ts',
+                { file: 'admin/user-management/detail/user-management-detail.component.html', method: 'processHtml' },
+                'admin/user-management/update/user-management-update.component.ts',
+                { file: 'admin/user-management/update/user-management-update.component.html', method: 'processHtml' },
+                'admin/user-management/delete/user-management-delete-dialog.component.ts',
+                { file: 'admin/user-management/delete/user-management-delete-dialog.component.html', method: 'processHtml' },
             ],
         },
         {
@@ -365,14 +362,16 @@ const files = {
                 'shared/item-count.component.ts',
                 // alert service code
                 'shared/alert/alert.component.ts',
+                'shared/alert/alert.component.html',
                 'shared/alert/alert-error.component.ts',
+                'shared/alert/alert-error.component.html',
                 'shared/alert/alert-error.model.ts',
             ],
         },
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
-            templates: ['shared/find-language-from-key.pipe.ts', 'shared/translate.directive.ts'],
+            templates: ['shared/language/find-language-from-key.pipe.ts', 'shared/language/translate.directive.ts'],
         },
     ],
     angularAuthService: [
@@ -419,7 +418,7 @@ const files = {
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 'jest.conf.js',
-                'spec/app/core/user/account.service.spec.ts',
+                'spec/app/core/auth/account.service.spec.ts',
                 'spec/app/core/util/event-manager.service.spec.ts',
                 'spec/app/core/util/data-util.service.spec.ts',
                 'spec/app/core/util/parse-links.service.spec.ts',
@@ -439,7 +438,7 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: CLIENT_TEST_SRC_DIR,
-            templates: ['spec/app/shared/translate.directive.spec.ts'],
+            templates: ['spec/app/shared/language/translate.directive.spec.ts'],
         },
         {
             condition: generator => !generator.skipUserManagement,
@@ -447,7 +446,7 @@ const files = {
             templates: [
                 'spec/app/account/activate/activate.component.spec.ts',
                 'spec/app/account/password/password.component.spec.ts',
-                'spec/app/account/password/password-strength-bar.component.spec.ts',
+                'spec/app/account/password/password-strength-bar/password-strength-bar.component.spec.ts',
                 'spec/app/account/password-reset/init/password-reset-init.component.spec.ts',
                 'spec/app/account/password-reset/finish/password-reset-finish.component.spec.ts',
                 'spec/app/account/register/register.component.spec.ts',
@@ -463,10 +462,10 @@ const files = {
             condition: generator => !generator.skipUserManagement,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
-                'spec/app/admin/user-management/user-management.component.spec.ts',
-                'spec/app/admin/user-management/user-management-detail.component.spec.ts',
-                'spec/app/admin/user-management/user-management-update.component.spec.ts',
-                'spec/app/admin/user-management/user-management-delete-dialog.component.spec.ts',
+                'spec/app/admin/user-management/list/user-management.component.spec.ts',
+                'spec/app/admin/user-management/detail/user-management-detail.component.spec.ts',
+                'spec/app/admin/user-management/update/user-management-update.component.spec.ts',
+                'spec/app/admin/user-management/delete/user-management-delete-dialog.component.spec.ts',
                 // user service tests
                 'spec/app/core/user/user.service.spec.ts',
             ],

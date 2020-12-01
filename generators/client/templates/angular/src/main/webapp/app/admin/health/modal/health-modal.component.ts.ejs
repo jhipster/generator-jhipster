@@ -19,24 +19,36 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
+import { HealthKey, HealthDetails } from '../health.model';
 
 @Component({
-    templateUrl: './<%= entityFileName %>-delete-dialog.component.html'
+  selector: '<%= jhiPrefixDashed %>-health-modal',
+  templateUrl: './health-modal.component.html',
 })
-export class <%= entityAngularName %>DeleteDialogComponent {
-    <%= entityInstance %>?: I<%= entityAngularName %>;
+export class HealthModalComponent {
+  health?: { key: HealthKey; value: HealthDetails };
 
-    constructor(protected <%= entityInstance %>Service: <%= entityAngularName %>Service, public activeModal: NgbActiveModal) {}
+  constructor(public activeModal: NgbActiveModal) {}
 
-    cancel(): void {
-        this.activeModal.dismiss();
+  readableValue(value: any): string {
+    if (this.health?.key === 'diskSpace') {
+      // Should display storage space in an human readable unit
+      const val = value / 1073741824;
+      if (val > 1) {
+        return val.toFixed(2) + ' GB';
+      } else {
+        return (value / 1048576).toFixed(2) + ' MB';
+      }
     }
 
-    confirmDelete(id: <%= tsKeyType %>): void {
-        this.<%= entityInstance %>Service.delete(id).subscribe(() => {
-            this.activeModal.close('deleted');
-        });
+    if (typeof value === 'object') {
+      return JSON.stringify(value);
+    } else {
+      return String(value);
     }
+  }
+
+  dismiss(): void {
+    this.activeModal.dismiss();
+  }
 }

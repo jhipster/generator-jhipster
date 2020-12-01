@@ -32,9 +32,9 @@ import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileN
 <%_ if (pagination !== 'no') { %>
 import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 <%_ } _%>
-import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
+import { <%= entityAngularName %>Service } from '../<%= entityFileName %>.service';
 <%_ if (!readOnly) { _%>
-import { <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
+import { <%= entityAngularName %>DeleteDialogComponent } from '../delete/<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
 <%_ if (fieldsContainBlob) { _%>
 import { DataUtils } from 'app/core/util/data-util.service';
