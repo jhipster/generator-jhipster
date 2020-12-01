@@ -108,7 +108,6 @@ function cleanupOldFiles(generator) {
         if (generator.jhipsterConfig.clientFramework === ANGULAR) {
             generator.removeFile(`${ANGULAR_DIR}account/password/password-strength-bar.component.ts`);
             generator.removeFile(`${ANGULAR_DIR}account/password/password-strength-bar.scss`);
-            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/password/password-strength-bar.component.spec.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/docs/docs.scss`);
             generator.removeFile(`${ANGULAR_DIR}home/home.scss`);
             generator.removeFile(`${ANGULAR_DIR}layouts/navbar/navbar.scss`);
@@ -130,10 +129,6 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management.component.html`);
             generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-update.component.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-update.component.html`);
-            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-delete-dialog.component.spec.ts`);
-            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-detail.component.spec.ts`);
-            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management.component.spec.ts`);
-            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-update.component.spec.ts`);
             generator.removeFile(`${ANGULAR_DIR}entities/entity.module.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/util/datepicker-adapter.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.ts`);
@@ -161,27 +156,17 @@ function cleanupOldFiles(generator) {
             generator.removeFile('tsconfig.base.json');
             generator.removeFile('postcss.config.js');
             generator.removeFile('proxy.conf.json');
-            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/login/login-modal.component.spec.ts`);
-            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/login/login-modal.service.spec.ts`);
-            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/user/account.service.spec.ts`);
-            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
-            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.service.spec.ts`);
-            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`);
-            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/test.module.ts`);
-            generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest.ts`);
-            generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest-global-mocks.ts`);
-            generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/helpers`);
+            generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest.conf.js`);
             generator.removeFile('tslint.json');
 
             // unreleased files and folders cleanup for v7 developers
             generator.removeFile(`${ANGULAR_DIR}shared/duration.pipe.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/find-language-from-key.pipe.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/translate.directive.ts`);
-            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/translate.directive.spec.ts`);
             generator.removeFile(`${ANGULAR_DIR}core/user/authority.model.ts`);
             generator.removeFolder(`${ANGULAR_DIR}core/config`);
             generator.removeFolder(`${ANGULAR_DIR}core/event-manager`);
-            generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/app/core/event-manager`);
             generator.removeFolder(`${ANGULAR_DIR}admin/metrics/jvm-memory`);
             generator.removeFolder(`${ANGULAR_DIR}admin/metrics/jvm-threads`);
             generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-cache`);

@@ -90,26 +90,13 @@
         "test": {
           "builder": "@angular-builders/jest:run",
           "options": {
-            "configPath": "<%= CLIENT_TEST_SRC_DIR %>jest.conf.js"
+            "configPath": "jest.conf.js"
           }
         }
       },
       "schematics": {
         "@schematics/angular:component": {
-          "skipTests": true,
           "style": "scss"
-        },
-        "@schematics/angular:directive": {
-          "skipTests": true
-        },
-        "@schematics/angular:guard": {
-          "skipTests": true
-        },
-        "@schematics/angular:pipe": {
-          "skipTests": true
-        },
-        "@schematics/angular:service": {
-          "skipTests": true
         },
         "@schematics/angular:application": {
           "strict": true

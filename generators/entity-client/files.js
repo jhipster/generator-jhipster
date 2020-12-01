@@ -122,37 +122,36 @@ const angularFiles = {
     test: [
         {
             condition: generator => !generator.embedded,
-            path: CLIENT_TEST_SRC_DIR,
+            path: ANGULAR_DIR,
             templates: [
                 {
-                    file: 'spec/app/entities/detail/entity-management-detail.component.spec.ts',
+                    file: 'entities/detail/entity-management-detail.component.spec.ts',
                     renameTo: generator =>
-                        `spec/app/entities/${generator.entityFolderName}/detail/${generator.entityFileName}-detail.component.spec.ts`,
+                        `entities/${generator.entityFolderName}/detail/${generator.entityFileName}-detail.component.spec.ts`,
                 },
                 {
-                    file: 'spec/app/entities/list/entity-management.component.spec.ts',
-                    renameTo: generator =>
-                        `spec/app/entities/${generator.entityFolderName}/list/${generator.entityFileName}.component.spec.ts`,
+                    file: 'entities/list/entity-management.component.spec.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/list/${generator.entityFileName}.component.spec.ts`,
                 },
                 {
-                    file: 'spec/app/entities/entity-management.service.spec.ts',
-                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.service.spec.ts`,
+                    file: 'entities/entity-management.service.spec.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.service.spec.ts`,
                 },
             ],
         },
         {
             condition: generator => !generator.readOnly && !generator.embedded,
-            path: CLIENT_TEST_SRC_DIR,
+            path: ANGULAR_DIR,
             templates: [
                 {
-                    file: 'spec/app/entities/update/entity-management-update.component.spec.ts',
+                    file: 'entities/update/entity-management-update.component.spec.ts',
                     renameTo: generator =>
-                        `spec/app/entities/${generator.entityFolderName}/update/${generator.entityFileName}-update.component.spec.ts`,
+                        `entities/${generator.entityFolderName}/update/${generator.entityFileName}-update.component.spec.ts`,
                 },
                 {
-                    file: 'spec/app/entities/delete/entity-management-delete-dialog.component.spec.ts',
+                    file: 'entities/delete/entity-management-delete-dialog.component.spec.ts',
                     renameTo: generator =>
-                        `spec/app/entities/${generator.entityFolderName}/delete/${generator.entityFileName}-delete-dialog.component.spec.ts`,
+                        `entities/${generator.entityFolderName}/delete/${generator.entityFileName}-delete-dialog.component.spec.ts`,
                 },
             ],
         },
