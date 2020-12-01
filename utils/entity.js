@@ -170,14 +170,19 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         let idCount = entityWithConfig.idFields.length + entityWithConfig.idRelationships.length;
 
         if (idCount === 0) {
-            const idField = {
-                fieldName: 'id',
-                id: true,
-                fieldNameHumanized: 'ID',
-                fieldTranslationKey: 'global.field.id',
-            };
+            let idField = entityWithConfig.fields.find(field => field.fieldName === 'id');
+            if (idField) {
+                idField.id = true;
+            } else {
+                idField = {
+                    fieldName: 'id',
+                    id: true,
+                    fieldNameHumanized: 'ID',
+                    fieldTranslationKey: 'global.field.id',
+                };
+                entityWithConfig.fields.unshift(idField);
+            }
             entityWithConfig.idFields.push(idField);
-            entityWithConfig.fields.unshift(idField);
             idCount++;
         }
         if (idCount > 1) {
