@@ -281,14 +281,14 @@ const files = {
             templates: [
                 { file: 'admin/user-management/user-management.route.ts', method: 'processJs' },
                 'admin/user-management/user-management.module.ts',
-                'admin/user-management/user-management.component.ts',
-                { file: 'admin/user-management/user-management.component.html', method: 'processHtml' },
-                'admin/user-management/user-management-detail.component.ts',
-                { file: 'admin/user-management/user-management-detail.component.html', method: 'processHtml' },
-                'admin/user-management/user-management-update.component.ts',
-                { file: 'admin/user-management/user-management-update.component.html', method: 'processHtml' },
-                'admin/user-management/user-management-delete-dialog.component.ts',
-                { file: 'admin/user-management/user-management-delete-dialog.component.html', method: 'processHtml' },
+                'admin/user-management/list/user-management.component.ts',
+                { file: 'admin/user-management/list/user-management.component.html', method: 'processHtml' },
+                'admin/user-management/detail/user-management-detail.component.ts',
+                { file: 'admin/user-management/detail/user-management-detail.component.html', method: 'processHtml' },
+                'admin/user-management/update/user-management-update.component.ts',
+                { file: 'admin/user-management/update/user-management-update.component.html', method: 'processHtml' },
+                'admin/user-management/delete/user-management-delete-dialog.component.ts',
+                { file: 'admin/user-management/delete/user-management-delete-dialog.component.html', method: 'processHtml' },
             ],
         },
         {
@@ -372,7 +372,7 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
-            templates: ['shared/find-language-from-key.pipe.ts', 'shared/translate.directive.ts'],
+            templates: ['shared/language/find-language-from-key.pipe.ts', 'shared/language/translate.directive.ts'],
         },
     ],
     angularAuthService: [
@@ -419,7 +419,7 @@ const files = {
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 'jest.conf.js',
-                'spec/app/core/user/account.service.spec.ts',
+                'spec/app/core/auth/account.service.spec.ts',
                 'spec/app/core/util/event-manager.service.spec.ts',
                 'spec/app/core/util/data-util.service.spec.ts',
                 'spec/app/core/util/parse-links.service.spec.ts',
@@ -439,7 +439,7 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: CLIENT_TEST_SRC_DIR,
-            templates: ['spec/app/shared/translate.directive.spec.ts'],
+            templates: ['spec/app/shared/language/translate.directive.spec.ts'],
         },
         {
             condition: generator => !generator.skipUserManagement,
@@ -463,10 +463,10 @@ const files = {
             condition: generator => !generator.skipUserManagement,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
-                'spec/app/admin/user-management/user-management.component.spec.ts',
-                'spec/app/admin/user-management/user-management-detail.component.spec.ts',
-                'spec/app/admin/user-management/user-management-update.component.spec.ts',
-                'spec/app/admin/user-management/user-management-delete-dialog.component.spec.ts',
+                'spec/app/admin/user-management/list/user-management.component.spec.ts',
+                'spec/app/admin/user-management/detail/user-management-detail.component.spec.ts',
+                'spec/app/admin/user-management/update/user-management-update.component.spec.ts',
+                'spec/app/admin/user-management/delete/user-management-delete-dialog.component.spec.ts',
                 // user service tests
                 'spec/app/core/user/user.service.spec.ts',
             ],

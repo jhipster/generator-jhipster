@@ -309,7 +309,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     updateLanguagesInLanguagePipe(languages) {
         const fullPath =
             this.clientFramework === ANGULAR
-                ? `${this.CLIENT_MAIN_SRC_DIR}app/shared/find-language-from-key.pipe.ts`
+                ? `${this.CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
                 : `${this.CLIENT_MAIN_SRC_DIR}/app/config/translation.ts`;
         try {
             let content = '{\n';
