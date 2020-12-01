@@ -27,11 +27,12 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 import { <% if (fieldsContainLocalDate) { %>DATE_FORMAT,<% } if (fieldsContainInstant || fieldsContainZonedDateTime) { %> DATE_TIME_FORMAT<% } %> } from 'app/config/input.constants';
 <%_ } _%>
-import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
+
+import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 
 describe('Service Tests', () => {
     describe('<%= entityAngularName %> Service', () => {

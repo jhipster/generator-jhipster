@@ -29,11 +29,12 @@ import { Router } from '@angular/router';
 <%_ } _%>
 import { of } from 'rxjs';
 
-import { HomeComponent } from 'app/home/home.component';
 import { AccountService } from 'app/core/auth/account.service';
 <%_ if (authenticationType === 'oauth2') { _%>
 import { LoginService } from 'app/login/login.service';
 <%_ } _%>
+
+import { HomeComponent } from './home.component';
 
 describe('Component Tests', () => {
   describe('Home Component', () => {

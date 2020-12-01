@@ -26,11 +26,12 @@ import { Subject, of } from 'rxjs';
 import { TranslateModule, TranslateService, LangChangeEvent } from '@ngx-translate/core';
 <%_ } _%>
 
-import { MainComponent } from 'app/layouts/main/main.component';
 import { AccountService } from 'app/core/auth/account.service';
 <%_ if (enableI18nRTL) { _%>
 import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-key.pipe';
 <%_ } _%>
+
+import { MainComponent } from './main.component';
 
 describe('Component Tests', () => {
   describe('MainComponent', () => {

@@ -26,8 +26,9 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { <%= entityAngularName %>DeleteDialogComponent } from 'app/entities/<%= entityFolderName %>/delete/<%= entityFileName %>-delete-dialog.component';
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+
+import { <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
 
 describe('Component Tests', () => {
     describe('<%= entityAngularName %> Management Delete Component', () => {

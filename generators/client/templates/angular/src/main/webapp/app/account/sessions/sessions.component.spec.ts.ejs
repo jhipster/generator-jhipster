@@ -22,11 +22,12 @@ import { ComponentFixture, TestBed, inject, tick, fakeAsync } from '@angular/cor
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of, throwError } from 'rxjs';
 
-import { Session } from 'app/account/sessions/session.model';
-import { SessionsComponent } from 'app/account/sessions/sessions.component';
-import { SessionsService } from 'app/account/sessions/sessions.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
+
+import { Session } from './session.model';
+import { SessionsComponent } from './sessions.component';
+import { SessionsService } from './sessions.service';
 
 describe('Component Tests', () => {
   let fixture: ComponentFixture<SessionsComponent>;

@@ -34,9 +34,10 @@ import { ActivatedRoute } from '@angular/router';
 <%_ } _%>
 import { of } from 'rxjs';
 
-import { <%= entityAngularName %>Component } from 'app/entities/<%= entityFolderName %>/list/<%= entityFileName %>.component';
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+
+import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
 
 describe('Component Tests', () => {
     describe('<%= entityAngularName %> Management Component', () => {
