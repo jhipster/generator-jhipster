@@ -903,7 +903,6 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
                     it('should convert them', () => {
                         expect(relationshipsForA).to.deep.equal([
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 ownerSide: true,
@@ -911,21 +910,18 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
                                 relationshipType: 'one-to-one',
                             },
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 relationshipName: 'b',
                                 relationshipType: 'one-to-many',
                             },
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 relationshipName: 'b',
                                 relationshipType: 'many-to-one',
                             },
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 ownerSide: true,
@@ -935,7 +931,6 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
                         ]);
                         expect(relationshipsForB).to.deep.equal([
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 ownerSide: false,
@@ -943,21 +938,18 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
                                 relationshipType: 'one-to-one',
                             },
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 relationshipName: 'a',
                                 relationshipType: 'many-to-one',
                             },
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 relationshipName: 'a',
                                 relationshipType: 'one-to-many',
                             },
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 ownerSide: false,
@@ -1004,7 +996,6 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
                                 options: {
                                     custom: 42,
                                 },
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 ownerSide: true,
@@ -1046,7 +1037,6 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
 
                         it('should convert them', () => {
                             expect(convertedRelationship).to.deep.equal({
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 ownerSide: true,
@@ -1090,7 +1080,6 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
                     it('should convert them', () => {
                         expect(relationshipsForA).to.deep.equal([
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 ownerSide: true,
@@ -1101,7 +1090,6 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
                         ]);
                         expect(relationshipsForB).to.deep.equal([
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 ownerSide: false,
@@ -1146,7 +1134,6 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
                         expect(relationshipsForA).to.deep.equal([
                             {
                                 javadoc: 'A to B',
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 ownerSide: true,
@@ -1156,7 +1143,6 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
                         ]);
                         expect(relationshipsForB).to.deep.equal([
                             {
-                                otherEntityField: 'id',
                                 javadoc: 'A to B but in the destination',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
@@ -1197,7 +1183,6 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
 
                         it('should add the relationship for the source entity', () => {
                             expect(relationshipFromSourceToDestination).to.deep.equal({
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 ownerSide: true,
@@ -1238,7 +1223,6 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
 
                         it('should add the relationship for the source entity', () => {
                             expect(relationshipFromSourceToDestination).to.deep.equal({
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 relationshipName: 'b',
@@ -1247,7 +1231,6 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
                         });
                         it('should add the relationship for the destination entity', () => {
                             expect(relationshipFromDestinationToSource).to.deep.equal({
-                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 relationshipName: 'a',
@@ -1284,7 +1267,6 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
 
                         it('should add the relationship for the source entity', () => {
                             expect(relationshipFromSourceToDestination).to.deep.equal({
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 relationshipName: 'b',
@@ -1324,7 +1306,6 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
 
                         it('should add the relationship for the source entity', () => {
                             expect(relationshipFromSourceToDestination).to.deep.equal({
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 ownerSide: true,
@@ -1334,7 +1315,6 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
                         });
                         it('should add the relationship for the destination entity', () => {
                             expect(relationshipFromDestinationToSource).to.deep.equal({
-                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 ownerSide: false,

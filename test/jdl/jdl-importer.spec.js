@@ -66,7 +66,6 @@ describe('JDLImporter', () => {
                             relationshipName: 'location',
                             otherEntityName: 'location',
                             relationshipType: 'many-to-one',
-                            otherEntityField: 'id',
                             otherEntityRelationshipName: 'country',
                         },
                     ],
@@ -115,20 +114,17 @@ describe('JDLImporter', () => {
                             relationshipType: 'one-to-one',
                             relationshipName: 'location',
                             otherEntityName: 'location',
-                            otherEntityField: 'id',
                             ownerSide: true,
                             otherEntityRelationshipName: 'department',
                         },
                         {
                             relationshipType: 'one-to-many',
                             javadoc: 'A relationship',
-                            otherEntityField: 'id',
                             relationshipName: 'employee',
                             otherEntityName: 'employee',
                             otherEntityRelationshipName: 'department',
                         },
                         {
-                            otherEntityField: 'id',
                             otherEntityName: 'jobHistory',
                             otherEntityRelationshipName: 'department',
                             ownerSide: false,
@@ -183,7 +179,6 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
-                            otherEntityField: 'id',
                             relationshipType: 'one-to-many',
                             relationshipName: 'job',
                             otherEntityName: 'job',
@@ -209,10 +204,8 @@ describe('JDLImporter', () => {
                             relationshipName: 'department',
                             otherEntityName: 'department',
                             otherEntityRelationshipName: 'employee',
-                            otherEntityField: 'id',
                         },
                         {
-                            otherEntityField: 'id',
                             otherEntityName: 'jobHistory',
                             otherEntityRelationshipName: 'emp',
                             ownerSide: false,
@@ -278,7 +271,6 @@ describe('JDLImporter', () => {
                             relationshipName: 'history',
                             otherEntityName: 'jobHistory',
                             otherEntityRelationshipName: 'job',
-                            otherEntityField: 'id',
                             ownerSide: false,
                         },
                     ],
@@ -321,7 +313,6 @@ describe('JDLImporter', () => {
                             otherEntityRelationshipName: 'jobHistory',
                             relationshipName: 'department',
                             otherEntityName: 'department',
-                            otherEntityField: 'id',
                             ownerSide: true,
                         },
                         {
@@ -329,7 +320,6 @@ describe('JDLImporter', () => {
                             otherEntityRelationshipName: 'history',
                             relationshipName: 'job',
                             otherEntityName: 'job',
-                            otherEntityField: 'id',
                             ownerSide: true,
                         },
                         {
@@ -375,7 +365,6 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
-                            otherEntityField: 'id',
                             relationshipType: 'one-to-many',
                             relationshipName: 'country',
                             otherEntityName: 'country',
@@ -385,7 +374,6 @@ describe('JDLImporter', () => {
                             options: {
                                 id: true,
                             },
-                            otherEntityField: 'id',
                             otherEntityName: 'department',
                             otherEntityRelationshipName: 'location',
                             ownerSide: false,
@@ -419,7 +407,6 @@ describe('JDLImporter', () => {
                             otherEntityName: 'country',
                             otherEntityRelationshipName: 'area',
                             relationshipType: 'many-to-one',
-                            otherEntityField: 'id',
                         },
                     ],
                     name: 'Region',
@@ -2055,7 +2042,6 @@ relationship OneToOne {
             it('should export them', () => {
                 expect(relationshipOnSource).to.deep.equal({
                     options: { notId: 'value', something: true },
-                    otherEntityField: 'id',
                     otherEntityName: 'b',
                     otherEntityRelationshipName: 'a',
                     ownerSide: true,
@@ -2065,7 +2051,6 @@ relationship OneToOne {
                 });
                 expect(relationshipOnDestination).to.deep.equal({
                     options: { id: true },
-                    otherEntityField: 'id',
                     otherEntityName: 'a',
                     otherEntityRelationshipName: 'b',
                     ownerSide: false,
