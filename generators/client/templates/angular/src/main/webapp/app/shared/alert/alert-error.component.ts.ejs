@@ -29,13 +29,7 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-alert-error',
-  template: ` <div class="alerts" role="alert">
-    <div *ngFor="let alert of alerts" [ngClass]="setClasses(alert)">
-      <ngb-alert *ngIf="alert.message" [type]="alert.type" (closed)="close(alert)">
-        <pre [innerHTML]="alert.message"></pre>
-      </ngb-alert>
-    </div>
-  </div>`,
+  templateUrl: './alert-error.component.html',
 })
 export class AlertErrorComponent implements OnDestroy {
   alerts: Alert[] = [];

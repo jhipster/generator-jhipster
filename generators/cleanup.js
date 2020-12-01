@@ -106,6 +106,13 @@ function cleanupOldFiles(generator) {
 
     if (generator.isJhipsterVersionLessThan('7.0.0') && generator.jhipsterConfig) {
         if (generator.jhipsterConfig.clientFramework === ANGULAR) {
+            generator.removeFile(`${ANGULAR_DIR}account/password/password-strength-bar.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}account/password/password-strength-bar.scss`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/password/password-strength-bar.component.spec.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/docs/docs.scss`);
+            generator.removeFile(`${ANGULAR_DIR}home/home.scss`);
+            generator.removeFile(`${ANGULAR_DIR}layouts/navbar/navbar.scss`);
+            generator.removeFile(`${ANGULAR_DIR}layouts/profiles/page-ribbon.scss`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audit-data.model.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audit.model.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.component.html`);
