@@ -156,8 +156,6 @@ function cleanupOldFiles(generator) {
             generator.removeFile('tsconfig.base.json');
             generator.removeFile('postcss.config.js');
             generator.removeFile('proxy.conf.json');
-            generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec`);
-            generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest.conf.js`);
             generator.removeFile('tslint.json');
 
             // unreleased files and folders cleanup for v7 developers
@@ -176,6 +174,79 @@ function cleanupOldFiles(generator) {
             generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-modal-threads`);
             generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-request`);
             generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-system`);
+
+            // test files removal from old location
+            // a) deleted before moving tests next to files they are testing
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/password/password-strength-bar.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-delete-dialog.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-detail.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-update.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/login/login-modal.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/login/login-modal.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/user/account.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/test.module.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest-global-mocks.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-account.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-active-modal.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-alert.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-event-manager.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-language.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-login-modal.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-login.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-route.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-state-storage.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-tracker.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/spyobject.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/translate.directive.spec.ts`);
+            generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/app/core/event-manager`);
+            // b) deleted while moving tests next to files they are testing
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/activate/activate.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/password-reset/finish/password-reset-finish.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/password-reset/init/password-reset-init.component.spec.ts`);
+            generator.removeFile(
+                `${CLIENT_TEST_SRC_DIR}spec/app/account/password/password-strength-bar/password-strength-bar.component.spec.ts`
+            );
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/password/password.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/register/register.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/sessions/sessions.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/settings/settings.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/configuration/configuration.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/configuration/configuration.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/health/health.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/logs/logs.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/logs/logs.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics.service.spec.ts`);
+            generator.removeFile(
+                `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/delete/user-management-delete-dialog.component.spec.ts`
+            );
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/detail/user-management-detail.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/list/user-management.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/update/user-management-update.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/auth/account.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/user/user.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/util/alert.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/util/data-util.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/util/event-manager.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/util/parse-links.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/home/home.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/layouts/main/main.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/layouts/navbar/navbar.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/login/login.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert-error.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/date/format-medium-date.pipe.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/date/format-medium-datetime.pipe.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/item-count.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/language/translate.directive.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/sort/sort-by.directive.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/sort/sort.directive.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest.conf.js`);
         } else if (generator.jhipsterConfig.clientFramework === REACT) {
             generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/enzyme-setup.ts`);
