@@ -20,7 +20,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { Authority } from 'app/config/authority.constants';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { <%= entityAngularName %>Component } from './list/<%= entityFileName %>.component';
 import { <%= entityAngularName %>DetailComponent } from './detail/<%= entityFileName %>-detail.component';
@@ -35,7 +34,6 @@ const <%= entityInstance %>Route: Routes = [
         path: '',
         component: <%= entityAngularName %>Component,
         data: {
-            authorities: [Authority.USER],
             <%_ if (pagination === 'pagination') { _%>
             defaultSort: 'id,asc',
             <%_ } _%>
@@ -50,7 +48,6 @@ const <%= entityInstance %>Route: Routes = [
             <%= entityInstance %>: <%= entityAngularName %>RoutingResolveService
         },
         data: {
-            authorities: [Authority.USER],
             pageTitle: <% if (enableTranslation) { %>'<%= i18nKeyPrefix %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
@@ -63,7 +60,6 @@ const <%= entityInstance %>Route: Routes = [
             <%= entityInstance %>: <%= entityAngularName %>RoutingResolveService
         },
         data: {
-            authorities: [Authority.USER],
             pageTitle: <% if (enableTranslation) { %>'<%= i18nKeyPrefix %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
@@ -75,7 +71,6 @@ const <%= entityInstance %>Route: Routes = [
             <%= entityInstance %>: <%= entityAngularName %>RoutingResolveService
         },
         data: {
-            authorities: [Authority.USER],
             pageTitle: <% if (enableTranslation) { %>'<%= i18nKeyPrefix %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
