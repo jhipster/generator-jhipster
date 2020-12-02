@@ -7,7 +7,7 @@
     "axios": "0.21.0",
     "bootstrap": "4.5.3",
     "bootswatch": "4.5.3",
-    "bootstrap-vue": "2.19.0"
+    "bootstrap-vue": "2.20.1"
   },
   "devDependencies": {
     "webpack": "4.44.2",
