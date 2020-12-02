@@ -230,13 +230,17 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                     });
                 });
 
-                it('should not add it', () => {
+                it('should add it', () => {
                     expect(jdlObject.entities.A).to.deep.eq(
                         new JDLEntity({
                             name: 'A',
                             tableName: 'A',
                             fields: {
                                 email: new JDLField({ name: 'email', type: FieldTypes.STRING }),
+                                id: new JDLField({
+                                    name: 'id',
+                                    type: FieldTypes.LONG,
+                                }),
                             },
                         })
                     );
