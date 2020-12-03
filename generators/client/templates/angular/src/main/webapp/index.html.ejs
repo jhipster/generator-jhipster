@@ -92,7 +92,18 @@
     <script type="text/javascript" language="javascript">
         // show an error message if the app loading takes more than 5 sec
         window.onload=function() {
-            setTimeout(showError, 4000);
+            var nbCheck = 40; // * 100 = 4 sec
+            const checkStillError = function () {
+                if (document.getElementById("jhipster-error")) {
+                    nbCheck--;
+                }
+                if (nbCheck <= 0) {
+                    showError();
+                } else {
+                    setTimeout(checkStillError, 100);
+                }
+            }
+            checkStillError();
         }
         function showError() {
             var errorElm = document.getElementById("jhipster-error");

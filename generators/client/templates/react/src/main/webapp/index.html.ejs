@@ -91,7 +91,18 @@
     </noscript>
     <script type="text/javascript" language="javascript">
         window.onload=function() {
-            setTimeout(showError, 4000);
+            var nbCheck = 40; // * 100 = 4 sec
+            const checkStillError = function () {
+                if (document.getElementById("jhipster-error")) {
+                    nbCheck--;
+                }
+                if (nbCheck <= 0) {
+                    showError();
+                } else {
+                    setTimeout(checkStillError, 100);
+                }
+            }
+            checkStillError();
         }
         function showError() {
             var errorElm = document.getElementById("jhipster-error");
