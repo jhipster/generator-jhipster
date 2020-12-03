@@ -101,10 +101,6 @@
         this.loadAll();
     }
 
-    handleSyncList(): void {
-        this.reset();
-    }
-
     <%_ if (searchEngine !== false) { _%>
     search(query: string): void {
         this.<%= entityInstancePlural %> = [];

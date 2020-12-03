@@ -69,10 +69,6 @@
         );
     }
 
-    handleSyncList(): void {
-        this.loadAll();
-    }
-
     <%_ if (searchEngine !== false) { _%>
     search(query: string): void {
         this.currentSearch = query;

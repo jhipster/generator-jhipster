@@ -16,12 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+  let refreshMethod;
+  if (pagination === 'pagination') {
+    refreshMethod = 'loadPage()';
+  } else if (pagination === 'infinite-scroll') {
+    refreshMethod = 'reset()';
+  } else if (pagination === 'no') {
+    refreshMethod = 'loadAll()';
+  }
+_%>
 <div>
     <h2 id="page-heading" data-cy="<%= entityClass %>Heading">
         <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></span>
 
         <div class="d-flex justify-content-end">
-            <button class="btn btn-info mr-2" (click)="handleSyncList()" [disabled]="isLoading">
+            <button class="btn btn-info mr-2" (click)="<%= refreshMethod %>" [disabled]="isLoading">
                 <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
                 <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</span>
             </button>
