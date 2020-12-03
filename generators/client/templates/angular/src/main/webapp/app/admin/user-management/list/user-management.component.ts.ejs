@@ -87,8 +87,21 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  handleSyncList(): void {
-    this.loadAll();
+  loadAll(): void {
+    this.isLoading = true;
+    this.userService
+      .query(<% if (databaseType !== 'cassandra') { %>{
+        page: this.page - 1,
+        size: this.itemsPerPage,
+        sort: this.sort(),
+      }<% } %>)
+      .subscribe(
+        (res: HttpResponse<User[]>) => {
+          this.isLoading = false;
+          this.onSuccess(res.body<% if (databaseType !== 'cassandra') { %>, res.headers<% } %>);
+        },
+        () => this.isLoading = false
+      );
   }
 
   <%_ if (databaseType !== 'cassandra') { _%>
@@ -113,23 +126,6 @@ export class UserManagementComponent implements OnInit {
     });
   }
   <%_ } _%>
-
-  private loadAll(): void {
-    this.isLoading = true;
-    this.userService
-      .query(<% if (databaseType !== 'cassandra') { %>{
-        page: this.page - 1,
-        size: this.itemsPerPage,
-        sort: this.sort(),
-      }<% } %>)
-      .subscribe(
-        (res: HttpResponse<User[]>) => {
-          this.isLoading = false;
-          this.onSuccess(res.body<% if (databaseType !== 'cassandra') { %>, res.headers<% } %>);
-        },
-        () => this.isLoading = false
-      );
-  }
 
   <%_ if (databaseType !== 'cassandra') { _%>
   private sort(): string[] {
