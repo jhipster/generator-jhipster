@@ -432,16 +432,16 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} pageTitle - The translation key or the text for the page title in the browser
      */
     addEntityToModule(
-        entityInstance,
-        entityClass,
-        entityName,
-        entityFolderName,
-        entityFileName,
-        entityUrl,
-        clientFramework,
-        microServiceName,
-        readOnly,
-        pageTitle
+        entityInstance = this.entityInstance,
+        entityClass = this.entityClass,
+        entityName = this.entityAngularName,
+        entityFolderName = this.entityFolderName,
+        entityFileName = this.entityFileName,
+        entityUrl = this.entityUrl,
+        clientFramework = this.clientFramework,
+        microServiceName = this.microServiceName,
+        readOnly = this.readOnly,
+        pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
     ) {
         if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addEntityToModule(
@@ -489,7 +489,9 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} route - The route for the module. For example 'entity-audit'.
      * @param {string} modulePath - The path to the module file. For example './entity-audit/entity-audit.module'.
      * @param {string} moduleName - The name of the module. For example 'EntityAuditModule'.
-     * @param {string} pageTitle - The translation key or the text for the page title in the browser. For example 'entityAudit.home.title' or 'Entity audit'.
+     * @param {string} pageTitle - The translation key if i18n is enabled or the text if i18n is disabled for the page title in the browser.
+     *                             For example 'entityAudit.home.title' for i18n enabled or 'Entity audit' for i18n disabled.
+     *                             If undefined then application global page title is used in the browser title bar.
      */
     addAdminRoute(route, modulePath, moduleName, pageTitle) {
         this.needleApi.clientAngular.addAdminRoute(route, modulePath, moduleName, pageTitle);
