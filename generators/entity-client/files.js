@@ -455,12 +455,14 @@ function writeFiles() {
             let clientMainSrcDir;
             let templatesDir;
             let microserviceName = this.microserviceName;
+            let pageTitle;
 
             if (this.clientFramework === ANGULAR) {
                 files = angularFiles;
                 clientMainSrcDir = ANGULAR_DIR;
                 templatesDir = CLIENT_NG2_TEMPLATES_DIR;
                 microserviceName = this.microserviceName;
+                pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural;
             } else if (this.clientFramework === REACT) {
                 files = reactFiles;
                 clientMainSrcDir = REACT_DIR;
@@ -497,7 +499,8 @@ function writeFiles() {
                     this.entityUrl,
                     this.clientFramework,
                     microserviceName,
-                    this.readOnly
+                    this.readOnly,
+                    pageTitle
                 );
                 this.addEntityToMenu(
                     this.entityStateName,

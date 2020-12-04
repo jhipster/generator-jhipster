@@ -56,11 +56,13 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                     'entityFileName',
                     'entityUrl',
                     ANGULAR,
-                    'microServiceName'
+                    'microServiceName',
+                    false,
+                    'entity.home.title'
                 );
                 this.addAdminToModule('appName', 'adminAngularName', 'adminFolderName', 'adminFileName', true, ANGULAR);
                 this.addAngularModule('appName', 'angularName', 'folderName', 'fileName', true, ANGULAR);
-                this.addAdminRoute('entity-audit', './entity-audit/entity-audit.module', 'EntityAuditModule');
+                this.addAdminRoute('entity-audit', './entity-audit/entity-audit.module', 'EntityAuditModule', 'entityAudit.home.title');
             },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
@@ -176,7 +178,8 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
             `${CLIENT_MAIN_SRC_DIR}app/entities/entity-routing.module.ts`,
             '      {\n' +
                 "        path: 'entityUrl',\n" +
-                "        loadChildren: () => import('./entityFolderName/entityFileName-routing.module').then(m => m.MicroServiceNameentityNameRoutingModule)\n" +
+                "        data: { pageTitle: 'entity.home.title' },\n" +
+                "        loadChildren: () => import('./entityFolderName/entityFileName-routing.module').then(m => m.MicroServiceNameentityNameRoutingModule),\n" +
                 '      }'
         );
     });
@@ -195,7 +198,8 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
             '      },\n' +
                 '      {\n' +
                 "        path: 'entity-audit',\n" +
-                "        loadChildren: () => import('./entity-audit/entity-audit.module').then(m => m.EntityAuditModule)\n" +
+                "        data: { pageTitle: 'entityAudit.home.title' },\n" +
+                "        loadChildren: () => import('./entity-audit/entity-audit.module').then(m => m.EntityAuditModule),\n" +
                 '      },'
         );
     });

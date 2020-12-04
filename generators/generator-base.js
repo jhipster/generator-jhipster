@@ -429,6 +429,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework
      * @param {string} microServiceName - Microservice Name
      * @param {boolean} readOnly - If the entity is read-only or not
+     * @param {string} pageTitle - The translation key or the text for the page title in the browser
      */
     addEntityToModule(
         entityInstance,
@@ -439,17 +440,17 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         entityUrl,
         clientFramework,
         microServiceName,
-        readOnly
+        readOnly,
+        pageTitle
     ) {
         if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addEntityToModule(
-                entityInstance,
-                entityClass,
                 entityName,
                 entityFolderName,
                 entityFileName,
                 entityUrl,
-                microServiceName
+                microServiceName,
+                pageTitle
             );
         } else if (clientFramework === REACT) {
             this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName);
@@ -488,9 +489,10 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} route - The route for the module. For example 'entity-audit'.
      * @param {string} modulePath - The path to the module file. For example './entity-audit/entity-audit.module'.
      * @param {string} moduleName - The name of the module. For example 'EntityAuditModule'.
+     * @param {string} pageTitle - The translation key or the text for the page title in the browser. For example 'entityAudit.home.title' or 'Entity audit'.
      */
-    addAdminRoute(route, modulePath, moduleName) {
-        this.needleApi.clientAngular.addAdminRoute(route, modulePath, moduleName);
+    addAdminRoute(route, modulePath, moduleName, pageTitle) {
+        this.needleApi.clientAngular.addAdminRoute(route, modulePath, moduleName, pageTitle);
     }
 
     /**
