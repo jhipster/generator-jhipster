@@ -33,12 +33,11 @@ const <%= entityInstance %>Route: Routes = [
     {
         path: '',
         component: <%= entityAngularName %>Component,
+        <%_ if (pagination === 'pagination') { _%>
         data: {
-            <%_ if (pagination === 'pagination') { _%>
             defaultSort: 'id,asc',
-            <%_ } _%>
-            pageTitle: <% if (enableTranslation) { %>'<%= i18nKeyPrefix %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
+        <%_ } _%>
         canActivate: [UserRouteAccessService]
     },
     {
@@ -46,9 +45,6 @@ const <%= entityInstance %>Route: Routes = [
         component: <%= entityAngularName %>DetailComponent,
         resolve: {
             <%= entityInstance %>: <%= entityAngularName %>RoutingResolveService
-        },
-        data: {
-            pageTitle: <% if (enableTranslation) { %>'<%= i18nKeyPrefix %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
     },
@@ -59,9 +55,6 @@ const <%= entityInstance %>Route: Routes = [
         resolve: {
             <%= entityInstance %>: <%= entityAngularName %>RoutingResolveService
         },
-        data: {
-            pageTitle: <% if (enableTranslation) { %>'<%= i18nKeyPrefix %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
-        },
         canActivate: [UserRouteAccessService]
     },
     {
@@ -69,9 +62,6 @@ const <%= entityInstance %>Route: Routes = [
         component: <%= entityAngularName %>UpdateComponent,
         resolve: {
             <%= entityInstance %>: <%= entityAngularName %>RoutingResolveService
-        },
-        data: {
-            pageTitle: <% if (enableTranslation) { %>'<%= i18nKeyPrefix %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
     },
