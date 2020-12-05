@@ -38,12 +38,7 @@ export const cleanEntity = entity => {
  * @param idList Elements to map.
  * @returns The list of objects with mapped ids.
  */
-export const mapIdList = (idList: ReadonlyArray<any>) => {
-  if (idList) {
-    return idList.filter((entityId: any) => entityId !== '').map((entityId: any) => ({ id: entityId }));
-  }
-  return [];
-};
+ export const mapIdList = (idList: ReadonlyArray<any>) => idList.filter((entityId: any) => entityId !== '').map((entityId: any) => ({ id: entityId }));
 
  export const overridePaginationStateWithQueryParams = (paginationBaseState: IPaginationBaseState , locationSearch: string) => {
   const params = new URLSearchParams(locationSearch);
