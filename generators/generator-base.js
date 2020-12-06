@@ -441,7 +441,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         clientFramework,
         microServiceName,
         readOnly,
-        pageTitle
+        pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
     ) {
         if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addEntityToModule(
