@@ -56,7 +56,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                     'entityFileName',
                     'entityUrl',
                     ANGULAR,
-                    'microServiceName',
+                    'microserviceName',
                     false,
                     'entity.home.title'
                 );
@@ -179,7 +179,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
             '      {\n' +
                 "        path: 'entityUrl',\n" +
                 "        data: { pageTitle: 'entity.home.title' },\n" +
-                "        loadChildren: () => import('./entityFolderName/entityFileName-routing.module').then(m => m.MicroServiceNameentityNameRoutingModule),\n" +
+                "        loadChildren: () => import('./entityFolderName/entityFileName-routing.module').then(m => m.MicroserviceNameentityNameRoutingModule),\n" +
                 '      }'
         );
     });

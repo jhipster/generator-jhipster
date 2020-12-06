@@ -48,7 +48,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                     'entityFileName',
                     'entityUrl',
                     VUE,
-                    'microServiceName'
+                    'microserviceName'
                 );
             },
         };
