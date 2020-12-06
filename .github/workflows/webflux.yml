@@ -87,31 +87,31 @@ jobs:
                 include:
                     - app-type: webflux-mongodb
                       entity: mongodb
-                      profile: prod
+                      environment: prod
                       war: 0
                       e2e: 1
                       testcontainers: 1
                     - app-type: webflux-mongodb-es-session
                       entity: mongodb
-                      profile: prod
+                      environment: prod
                       war: 0
                       e2e: 1
                       testcontainers: 1
                     - app-type: webflux-mongodb-oauth2
                       entity: mongodb
-                      profile: prod
+                      environment: prod
                       war: 0
                       e2e: 1
                       testcontainers: 1
                     - app-type: webflux-gateway-jwt
                       entity: none
-                      profile: prod
+                      environment: prod
                       war: 0
                       e2e: 1
                       testcontainers: 1
                     - app-type: webflux-gateway-oauth2
                       entity: none
-                      profile: prod
+                      environment: prod
                       war: 0
                       e2e: 1
                       testcontainers: 1
@@ -127,7 +127,7 @@ jobs:
                     #                      e2e: 1
                     - app-type: webflux-psql
                       entity: sql
-                      profile: prod
+                      environment: prod
                       war: 0
                       e2e: 1
                       testcontainers: 1
@@ -144,12 +144,13 @@ jobs:
                     #  e2e: 1
                     #  testcontainers: 1
         env:
+            JHI_GENERATE_SKIP_CONFIG: 1
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
-            JHI_PROFILE: ${{ matrix.profile }}
+            JHI_PROFILE: ${{ matrix.environment }}
             JHI_WAR: ${{ matrix.war }}
-            JHI_TESTCONTAINERS: ${{ matrix.testcontainers }}
             JHI_E2E: ${{ matrix.e2e }}
+            SPRING_PROFILES_ACTIVE: ${{ fromJson('["", "testcontainers"]')[matrix.testcontainers] }}
         steps:
             #----------------------------------------------------------------------
             # Install all tools and check configuration
@@ -219,8 +220,8 @@ jobs:
             #----------------------------------------------------------------------
             - name: 'GENERATION: install JHipster'
               run: $JHI_SCRIPTS/10-install-jhipster.sh
-            - name: 'GENERATION: entities'
-              run: $JHI_SCRIPTS/11-generate-entities.sh
+            - name: 'GENERATION: config'
+              run: $JHI_SCRIPTS/11-generate-config.sh
             - name: 'GENERATION: project'
               run: $JHI_SCRIPTS/12-generate-project.sh
             - name: 'GENERATION: replace version in generated project'
@@ -247,7 +248,7 @@ jobs:
               if: steps.base-checkout.outcome == 'success'
               working-directory: ${{ github.workspace }}/base/app
               run: |
-                  $JHI_SCRIPTS/11-generate-entities.sh
+                  $JHI_SCRIPTS/11-generate-config.sh
                   # 11-generate-entities.sh removes current dir, we need to switch to the new one
                   cd ../app
                   $JHI_SCRIPTS/12-generate-project.sh --skip-install --skip-git
@@ -295,28 +296,41 @@ jobs:
             #----------------------------------------------------------------------
             # Launch tests
             #----------------------------------------------------------------------
-            - name: 'TESTS: Start docker-compose containers'
-              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-              run: $JHI_SCRIPTS/20-docker-compose.sh
+            - name: 'TESTS: Start docker-compose containers for e2e and backend tests'
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true' && matrix.testcontainers != 1
+              run: npm run ci:e2e:prepare
             - name: 'TESTS: backend'
+              id: backend
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-              run: $JHI_SCRIPTS/21-tests-backend.sh
+              run: npm run ci:backend:test
             - name: 'TESTS: frontend'
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-              run: $JHI_SCRIPTS/22-tests-frontend.sh
+              run: npm run ci:frontend:test
             - name: 'TESTS: packaging'
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-              run: $JHI_SCRIPTS/23-package.sh
+              run: npm run ci:e2e:package
+            - name: 'TESTS: Start docker-compose containers for e2e tests'
+              if: steps.tests-should-be-skipped.outputs.skip-tests != 'true' && matrix.testcontainers == 1
+              run: npm run ci:e2e:prepare
             - name: 'E2E: Run'
               id: e2e
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-              run: $JHI_SCRIPTS/24-tests-e2e.sh
+              run: npm run ci:e2e:run --if-present
+            - name: 'E2E: Teardown'
+              if: always() && matrix.e2e == 1 && steps.tests-should-be-skipped.outputs.skip-tests != 'true'
+              run: npm run ci:e2e:teardown
+            - name: 'BACKEND: Store failure logs'
+              uses: actions/upload-artifact@v2
+              if: always() && steps.backend.outcome == 'failure'
+              with:
+                  name: log-${{ matrix.app-type }}
+                  path: ${{ github.workspace }}/app/build/test-results/**/*.xml
             - name: 'E2E: Store failure screenshots'
               uses: actions/upload-artifact@v2
               if: always() && steps.e2e.outcome == 'failure'
               with:
                   name: screenshots-${{ matrix.app-type }}
-                  path: ${{ github.workspace }}/app/target/cypress/screenshots
+                  path: ${{ github.workspace }}/app/*/cypress/screenshots
             - name: 'ANALYSIS: Sonar analysis'
               if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
               run: $JHI_SCRIPTS/25-sonar-analyze.sh
