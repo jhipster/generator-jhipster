@@ -432,16 +432,16 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} pageTitle - The translation key or the text for the page title in the browser
      */
     addEntityToModule(
-        entityInstance = this.entityInstance,
-        entityClass = this.entityClass,
-        entityName = this.entityAngularName,
-        entityFolderName = this.entityFolderName,
-        entityFileName = this.entityFileName,
-        entityUrl = this.entityUrl,
-        clientFramework = this.clientFramework,
-        microServiceName = this.microServiceName,
-        readOnly = this.readOnly,
-        pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
+        entityInstance,
+        entityClass,
+        entityName,
+        entityFolderName,
+        entityFileName,
+        entityUrl,
+        clientFramework,
+        microServiceName,
+        readOnly,
+        pageTitle
     ) {
         if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addEntityToModule(
