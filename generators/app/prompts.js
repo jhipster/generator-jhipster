@@ -30,8 +30,8 @@ module.exports = {
 };
 
 async function askForInsightOptIn() {
+    if (!statistics.shouldWeAskForOptIn()) return;
     const answers = await this.prompt({
-        when: () => statistics.shouldWeAskForOptIn(),
         type: 'confirm',
         name: 'insight',
         message: `May ${chalk.cyan('JHipster')} anonymously report usage statistics to improve the tool over time?`,
