@@ -85,7 +85,7 @@
         "prettier-plugin-packagejson": "2.2.8",
         "progress": "2.0.3",
         "randexp": "0.5.3",
-        "semver": "7.3.2",
+        "semver": "7.3.4",
         "shelljs": "0.8.4",
         "then-request": "6.0.2",
         "through2": "4.0.2",
