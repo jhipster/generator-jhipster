@@ -486,18 +486,7 @@ function writeFiles() {
             addEnumerationFiles(this, clientMainSrcDir);
 
             if (!this.embedded) {
-                this.addEntityToModule(
-                    this.entityInstance,
-                    this.entityClass,
-                    this.entityAngularName,
-                    this.entityFolderName,
-                    this.entityFileName,
-                    this.entityUrl,
-                    this.clientFramework,
-                    this.microserviceName,
-                    this.readOnly,
-                    this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
-                );
+                this.addEntityToModule();
                 this.addEntityToMenu(
                     this.entityStateName,
                     this.enableTranslation,

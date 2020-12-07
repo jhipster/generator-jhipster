@@ -427,20 +427,20 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} entityFileName - Entity File Name
      * @param {string} entityUrl - Entity router URL
      * @param {string} clientFramework - The name of the client framework
-     * @param {string} microServiceName - Microservice Name
+     * @param {string} microserviceName - Microservice Name
      * @param {boolean} readOnly - If the entity is read-only or not
      * @param {string} pageTitle - The translation key or the text for the page title in the browser
      */
     addEntityToModule(
-        entityInstance,
-        entityClass,
-        entityName,
-        entityFolderName,
-        entityFileName,
-        entityUrl,
-        clientFramework,
-        microServiceName,
-        readOnly,
+        entityInstance = this.entityInstance,
+        entityClass = this.entityClass,
+        entityName = this.entityAngularName,
+        entityFolderName = this.entityFolderName,
+        entityFileName = this.entityFileName,
+        entityUrl = this.entityUrl,
+        clientFramework = this.clientFramework,
+        microserviceName = this.microserviceName,
+        readOnly = this.readOnly,
         pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
     ) {
         if (clientFramework === ANGULAR) {
@@ -449,7 +449,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
                 entityFolderName,
                 entityFileName,
                 entityUrl,
-                microServiceName,
+                microserviceName,
                 pageTitle
             );
         } else if (clientFramework === REACT) {
