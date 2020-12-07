@@ -314,7 +314,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
 
     _prompting() {
         return {
-            askForInsightOptIn: statistics.shouldWeAskForOptIn() ? prompts.askForInsightOptIn : undefined,
+            askForInsightOptIn: prompts.askForInsightOptIn,
             askForApplicationType: prompts.askForApplicationType,
             askForModuleName: prompts.askForModuleName,
         };

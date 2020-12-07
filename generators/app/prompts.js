@@ -30,6 +30,7 @@ module.exports = {
 };
 
 async function askForInsightOptIn() {
+    if (!statistics.shouldWeAskForOptIn()) return;
     const answers = await this.prompt({
         type: 'confirm',
         name: 'insight',
