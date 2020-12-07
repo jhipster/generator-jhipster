@@ -56,10 +56,12 @@ export class <%= entityAngularName %>Component implements OnInit {
 <%- include('no-pagination-template', {toArrayString: toArrayString}); -%>
     <%_ } _%>
 
-    trackId(index: number, item: I<%= entityAngularName %>): <%= tsKeyType %> {
-        return item.id!;
+    <%_ if (primaryKey) { _%>
+    track<%= primaryKey.nameCapitalized %>(index: number, item: I<%= entityAngularName %>): <%= tsKeyType %> {
+        return item.<%= primaryKey.name %>!;
     }
 
+    <%_ } _%>
     <%_ if (fieldsContainBlob) { _%>
     byteSize(base64String: string): string {
         return this.dataUtils.byteSize(base64String);
@@ -95,8 +97,8 @@ export class <%= entityAngularName %>Component implements OnInit {
 <%_ if (pagination !== 'no') { _%>
     sort(): string[] {
         const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
-        if (this.predicate !== 'id') {
-            result.push('id');
+        if (this.predicate !== '<%- primaryKey.name %>') {
+            result.push('<%- primaryKey.name %>');
         }
         return result;
     }

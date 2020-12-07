@@ -63,7 +63,7 @@ describe('Component Tests', () => {
                 comp.ngOnInit();
 
                 // THEN
-                expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
+                expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({ <%- primaryKey.name %>: <%- tsKeyId %> }));
             });
         });
 
