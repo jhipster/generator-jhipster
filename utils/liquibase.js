@@ -16,7 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module.exports = { parseLiquibaseChangelogDate, formatDateForChangelog };
+
+const _ = require('lodash');
+
+module.exports = {
+    parseLiquibaseChangelogDate,
+    formatDateForChangelog,
+    parseLiquibaseColumnType,
+    parseLiquibaseLoadColumnType,
+    prepareFieldForLiquibaseTemplates,
+};
 
 function parseLiquibaseChangelogDate(changelogDate) {
     if (!changelogDate || changelogDate.length !== 14) {
@@ -60,4 +69,127 @@ function formatDateForChangelog(now) {
         second = `0${second}`;
     }
     return `${year}${month}${day}${hour}${minute}${second}`;
+}
+
+function parseLiquibaseColumnType(entity, field) {
+    const fieldType = field.fieldType;
+    if (fieldType === 'String' || field.fieldIsEnum) {
+        return `varchar(${field.fieldValidateRulesMaxlength || 255})`;
+    }
+
+    if (fieldType === 'Integer') {
+        return 'integer';
+    }
+
+    if (fieldType === 'Long') {
+        return 'bigint';
+    }
+
+    if (fieldType === 'Float') {
+        // eslint-disable-next-line no-template-curly-in-string
+        return '${floatType}';
+    }
+
+    if (fieldType === 'Double') {
+        return 'double';
+    }
+
+    if (fieldType === 'BigDecimal') {
+        return 'decimal(21,2)';
+    }
+
+    if (fieldType === 'LocalDate') {
+        return 'date';
+    }
+
+    if (fieldType === 'Instant') {
+        // eslint-disable-next-line no-template-curly-in-string
+        return '${datetimeType}';
+    }
+
+    if (fieldType === 'ZonedDateTime') {
+        // eslint-disable-next-line no-template-curly-in-string
+        return '${datetimeType}';
+    }
+
+    if (fieldType === 'Duration') {
+        return 'bigint';
+    }
+
+    if (fieldType === 'UUID') {
+        // eslint-disable-next-line no-template-curly-in-string
+        return '${uuidType}';
+    }
+
+    if (fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') {
+        const { prodDatabaseType } = entity;
+        if (prodDatabaseType === 'mysql' || prodDatabaseType === 'postgresql' || prodDatabaseType === 'mariadb') {
+            return 'longblob';
+        }
+
+        return 'blob';
+    }
+
+    if (field.fieldTypeBlobContent === 'text') {
+        // eslint-disable-next-line no-template-curly-in-string
+        return '${clobType}';
+    }
+
+    if (fieldType === 'Boolean') {
+        return 'boolean';
+    }
+
+    return undefined;
+}
+
+function parseLiquibaseLoadColumnType(entity, field) {
+    const columnType = field.columnType;
+    // eslint-disable-next-line no-template-curly-in-string
+    if (['integer', 'bigint', 'double', 'decimal(21,2)', '${floatType}'].includes(columnType)) {
+        return 'numeric';
+    }
+
+    if (field.fieldIsEnum) {
+        return 'string';
+    }
+
+    // eslint-disable-next-line no-template-curly-in-string
+    if (['date', '${datetimeType}', 'boolean'].includes(columnType)) {
+        return columnType;
+    }
+
+    if (columnType === 'blob' || columnType === 'longblob') {
+        return 'blob';
+    }
+
+    // eslint-disable-next-line no-template-curly-in-string
+    if (columnType === '${clobType}') {
+        return 'clob';
+    }
+
+    const { prodDatabaseType } = entity;
+    if (
+        // eslint-disable-next-line no-template-curly-in-string
+        columnType === '${uuidType}' &&
+        prodDatabaseType !== 'mysql' &&
+        prodDatabaseType !== 'mariadb'
+    ) {
+        // eslint-disable-next-line no-template-curly-in-string
+        return '${uuidType}';
+    }
+
+    return 'string';
+}
+
+function prepareFieldForLiquibaseTemplates(entity, field) {
+    _.defaults(field, {
+        columnType: parseLiquibaseColumnType(entity, field),
+        shouldDropDefaultValue: field.fieldType === 'ZonedDateTime' || field.fieldType === 'Instant',
+        shouldCreateContentType: field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text',
+        nullable: !(field.fieldValidate === true && field.fieldValidateRules.includes('required')),
+    });
+    _.defaults(field, {
+        loadColumnType: parseLiquibaseLoadColumnType(entity, field),
+    });
+    return field;
 }
