@@ -44,6 +44,7 @@ const JSONToJDLOptionConverter = require('../jdl/converters/json-to-jdl-option-c
 const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../utils/entity');
 const { prepareFieldForTemplates } = require('../utils/field');
 const { formatDateForChangelog, prepareFieldForLiquibaseTemplates } = require('../utils/liquibase');
+const { stringify } = require('../utils');
 
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
@@ -1767,5 +1768,16 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     buildAngularFormPath(reference, prefix = []) {
         const formPath = [...prefix, ...reference.path].join("', '");
         return `'${formPath}'`;
+    }
+
+    /**
+     * @private
+     *
+     * Print entity json representation.
+     *
+     * @param {object} entity
+     */
+    debugEntity(entity) {
+        this.log(stringify(entity));
     }
 };

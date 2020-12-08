@@ -27,9 +27,20 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     const otherEntityName = relationship.otherEntityName;
     const jhiTablePrefix = entityWithConfig.jhiTablePrefix || generator.getTableName(entityWithConfig.jhiPrefix);
 
+    if (!relationship.otherEntity) {
+        throw new Error(`Error at entity ${entityName}: could not find the entity of the relationship ${stringify(relationship)}`);
+    }
+    const otherEntityData = relationship.otherEntity;
+    if (otherEntityData.primaryKey) {
+        _.defaults(relationship, {
+            // otherEntityField should be id if not specified
+            otherEntityField: otherEntityData.primaryKey.name,
+        });
+        relationship.otherEntityPrimaryKeyType = otherEntityData.primaryKey.type;
+        relationship.otherEntityField = relationship.otherEntityField || otherEntityData.primaryKey.name;
+    }
+
     _.defaults(relationship, {
-        // otherEntityField should be id if not specified
-        otherEntityField: 'id',
         // let ownerSide true when type is 'many-to-one' for convenience.
         // means that this side should control the reference.
         ownerSide:
@@ -38,16 +49,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
 
     relationship.otherSideReferenceExists = false;
 
-    const otherEntityData = relationship.otherEntity;
-    if (!otherEntityData) {
-        throw new Error(`Error at entity ${entityName}: could not find the entity of the relationship ${stringify(relationship)}`);
-    }
-
     relationship.otherEntityIsEmbedded = otherEntityData.embedded;
-
-    if (relationship.otherEntity) {
-        relationship.otherEntityPrimaryKeyType = relationship.otherEntity.primaryKeyType;
-    }
 
     // Look for fields at the other other side of the relationship
     if (otherEntityData.relationships) {
@@ -114,8 +116,13 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         relationship.otherRelationship = otherRelationship;
     }
 
-    if (relationship.otherEntity && relationship.otherEntityField && relationship.otherEntityField !== 'id') {
-        relationship.relatedField = relationship.otherEntity.fields.find(field => field.fieldName === relationship.otherEntityField);
+    if (relationship.otherEntity && relationship.otherEntityField) {
+        relationship.relatedField = otherEntityData.fields.find(field => field.fieldName === relationship.otherEntityField);
+        if (relationship.relatedField) {
+            relationship.otherEntityFieldCapitalized = relationship.relatedField.fieldNameCapitalized;
+        } else {
+            relationship.otherEntityFieldCapitalized = _.upperFirst(relationship.otherEntityField);
+        }
     }
 
     if (relationship.otherEntityRelationshipName !== undefined) {
@@ -137,7 +144,6 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         columnName: generator.getColumnName(relationshipName),
         otherEntityNamePlural: pluralize(otherEntityName),
         otherEntityNameCapitalized: _.upperFirst(otherEntityName),
-        otherEntityFieldCapitalized: _.upperFirst(relationship.otherEntityField),
         otherEntityTableName:
             otherEntityData.entityTableName ||
             generator.getTableName(generator.isBuiltInUser(otherEntityName) ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName),
@@ -260,7 +266,9 @@ function relationshipToReference(entity, relationship, pathPrefix = []) {
         doc: relationship.javaDoc,
         name,
         nameCapitalized: collection ? relationship.relationshipNameCapitalizedPlural : relationship.relationshipNameCapitalized,
-        type: relationship.otherEntity.primaryKeyType,
+        get type() {
+            return relationship.otherEntity.primaryKey ? relationship.otherEntity.primaryKey.type : undefined;
+        },
         path: [...pathPrefix, name],
         idReferences: relationship.otherEntity.idFields ? relationship.otherEntity.idFields.map(field => field.reference) : [],
         valueReference: relationship.otherEntityField && relationship.otherEntityField.reference,
