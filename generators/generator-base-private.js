@@ -1655,6 +1655,8 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
 
     createUserManagementEntities() {
         this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
+        this.configOptions.sharedLiquibaseFakeData = this.configOptions.sharedLiquibaseFakeData || {};
+
         if (
             this.configOptions.sharedEntities.User ||
             (this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.authenticationType !== 'oauth2')
@@ -1667,6 +1669,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         // Create entity definition for built-in entity to make easier to deal with relationships.
         const user = {
             name: 'User',
+            builtIn: true,
             entityTableName: `${this.getTableName(this.jhipsterConfig.jhiPrefix)}_user`,
             relationships: [],
             changelogDate,
@@ -1701,6 +1704,10 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             prepareFieldForLiquibaseTemplates(user, field);
         });
         this.configOptions.sharedEntities.User = user;
+
+        const liquibaseFakeData = user.authenticationType === 'oauth2' ? [] : [{ id: 1 }, { id: 2 }];
+        user.liquibaseFakeData = liquibaseFakeData;
+        this.configOptions.sharedLiquibaseFakeData.User = liquibaseFakeData;
     }
 
     /**
