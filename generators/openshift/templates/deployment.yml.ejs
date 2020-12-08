@@ -78,41 +78,6 @@ objects:
           timeoutSeconds: 600
           maxUnavailable: 25%
           maxSurge: 25%
-          pre:
-            failurePolicy: ignore
-            execNewPod:
-              command:
-                - "/bin/sh"
-                - "-c"
-                - |
-                    while true
-                    do
-                    <%_ if (app.prodDatabaseType === 'mysql') { _%>
-                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-mysqldb 80)
-                    <%_ } _%>
-                    <%_ if (app.prodDatabaseType === 'mariadb') { _%>
-                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-mariadb 80)
-                    <%_ } _%>
-                    <%_ if (app.prodDatabaseType === 'postgresql') { _%>
-                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-postgresqldb 80)
-                    <%_ } _%>
-                    <%_ if (app.prodDatabaseType === 'mongodb') { _%>
-                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-mongodb 80)
-                    <%_ } _%>
-                    <%_ if (app.prodDatabaseType === 'cassandra') { _%>
-                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-cassandra 9042)
-                    <%_ } _%>
-                    <%_ if (app.prodDatabaseType === 'couchbase') { _%>
-                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-couchbase 8091)
-                    <%_ } _%>
-                      if [ $? -eq 0 ]; then
-                        echo "DB is UP"
-                        break
-                      fi
-                      echo "DB is not yet reachable;sleep for 10s before retry"
-                      sleep 10
-                    done
-              containerName: ${APPLICATION_NAME}
         resources:
       replicas: 1
       template:
@@ -120,6 +85,40 @@ objects:
           labels:
             app: ${APPLICATION_NAME}
         spec:
+        initContainers:
+        - name: init-ds
+          image: busybox:latest
+          command:
+            - '/bin/sh'
+            - '-c'
+            - |
+                while true
+                do
+                <%_ if (app.prodDatabaseType === 'mysql') { _%>
+                  rt=$(nc -z -w 1 ${APPLICATION_NAME}-mysqldb 80)
+                <%_ } _%>
+                <%_ if (app.prodDatabaseType === 'mariadb') { _%>
+                  rt=$(nc -z -w 1 ${APPLICATION_NAME}-mariadb 80)
+                <%_ } _%>
+                <%_ if (app.prodDatabaseType === 'postgresql') { _%>
+                  rt=$(nc -z -w 1 ${APPLICATION_NAME}-postgresqldb 80)
+                <%_ } _%>
+                <%_ if (app.prodDatabaseType === 'mongodb') { _%>
+                  rt=$(nc -z -w 1 ${APPLICATION_NAME}-mongodb 80)
+                <%_ } _%>
+                <%_ if (app.prodDatabaseType === 'cassandra') { _%>
+                  rt=$(nc -z -w 1 ${APPLICATION_NAME}-cassandra 9042)
+                <%_ } _%>
+                <%_ if (app.prodDatabaseType === 'couchbase') { _%>
+                  rt=$(nc -z -w 1 ${APPLICATION_NAME}-couchbase 8091)
+                <%_ } _%>
+                  if [ $? -eq 0 ]; then
+                    echo "DB is UP"
+                    break
+                  fi
+                  echo "DB is not yet reachable;sleep for 10s before retry"
+                  sleep 10
+                done
           containers:
           - name: ${APPLICATION_NAME}
             image: <%= app.targetImageName %>
