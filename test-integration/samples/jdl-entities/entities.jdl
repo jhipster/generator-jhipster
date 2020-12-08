@@ -1,3 +1,4 @@
+@ChangelogDate(20200804035352)
 entity JdlFieldTest {
   id Long
 }

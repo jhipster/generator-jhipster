@@ -1,5 +1,13 @@
 #!/bin/bash
 
+if [[ "$1" != "" ]]; then
+    JHI_APP=$1
+fi
+
+if [[ "$2" != "" ]]; then
+    JHI_ENTITY=$2
+fi
+
 set -e
 if [[ -a $(dirname $0)/00-init-env.sh ]]; then
     source $(dirname $0)/00-init-env.sh
@@ -17,7 +25,6 @@ moveEntity() {
 
 prepareFolder() {
     rm -rf "$JHI_FOLDER_APP"
-    mkdir -p "$JHI_FOLDER_APP"/.jhipster/
 }
 #-------------------------------------------------------------------------------
 # Copy entities json
@@ -27,6 +34,7 @@ if [[ $JHI_REPO != "" ]]; then
     prepareFolder
 fi
 
+mkdir -p "$JHI_FOLDER_APP"/.jhipster/
 cd "$JHI_FOLDER_APP"
 
 if [[ "$JHI_ENTITY" != "jdl" ]]; then
