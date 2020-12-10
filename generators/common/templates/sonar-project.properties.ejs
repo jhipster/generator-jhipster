@@ -5,7 +5,7 @@ sonar.projectVersion=1.0
 sonar.sources=<%= MAIN_DIR %>
 sonar.host.url=http://localhost:9001
 
-sonar.tests=<%= TEST_DIR %>
+sonar.tests=<%= TEST_DIR %><% if (!skipClient && clientFramework === ANGULAR) { %>, <%= CLIENT_MAIN_SRC_DIR %>app/**/*.spec.ts<% } %>
 <%_ if (!skipServer) { _%>
     <%_ if (buildTool === 'maven') { _%>
 sonar.coverage.jacoco.xmlReportPaths=target/jacoco/test/jacoco.xml,target/jacoco/integrationTest/jacoco.xml
