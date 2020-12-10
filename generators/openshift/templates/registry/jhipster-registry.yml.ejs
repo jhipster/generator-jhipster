@@ -67,8 +67,11 @@ objects:
     metadata:
       name: ${APPLICATION_NAME}
     spec:
+      selector:
+        matchLabels:
+          app: ${APPLICATION_NAME}
       serviceName: ${APPLICATION_NAME}
-      replicas: "<%= registryReplicas %>"
+      replicas: <%= registryReplicas %>
       template:
         metadata:
           labels:
