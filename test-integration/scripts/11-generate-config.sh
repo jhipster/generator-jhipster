@@ -177,13 +177,15 @@ elif [[ "$JHI_ENTITY" == "sql" ]]; then
 
     moveEntity MapsIdUserProfileWithDTO
 
+elif [[ "$JHI_ENTITY" != "" ]]; then
+    JHI_JDL_ENTITY=$JHI_ENTITY
 fi
 
 #-------------------------------------------------------------------------------
 # Generate jdl entities
 #-------------------------------------------------------------------------------
-if [[ "$JHI_JDL_NAME" != "" ]]; then
-    jhipster --no-insight jdl "$JHI_SAMPLES"/jdl-entities/$JHI_JDL_NAME.jdl --json-only
+if [[ "$JHI_JDL_ENTITY" != "" ]]; then
+    jhipster --no-insight jdl "$JHI_SAMPLES"/jdl-entities/$JHI_JDL_ENTITY.jdl --json-only
 fi
 
 #-------------------------------------------------------------------------------
