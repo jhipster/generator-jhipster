@@ -1,11 +1,15 @@
 #!/bin/bash
 
 if [[ "$1" != "" ]]; then
-    JHI_APP=$1
+    JHI_FOLDER_APP=$1
 fi
 
 if [[ "$2" != "" ]]; then
-    JHI_ENTITY=$2
+    JHI_APP=$2
+fi
+
+if [[ "$3" != "" ]]; then
+    JHI_ENTITY=$3
 fi
 
 set -e

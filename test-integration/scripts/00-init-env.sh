@@ -1,6 +1,6 @@
 #!/bin/bash
 
-JHI_IT_DIR="$( cd "$( dirname $( dirname $( dirname "${BASH_SOURCE[0]}" ) ) )" >/dev/null 2>&1 && pwd )"
+JHI_DETECTED_DIR="$( cd "$( dirname $( dirname $( dirname "${BASH_SOURCE[0]}" ) ) )" >/dev/null 2>&1 && pwd )"
 
 init_var() {
     result=""
@@ -19,7 +19,7 @@ JHI_REPO=$(init_var "$BUILD_REPOSITORY_URI" "$GITHUB_WORKSPACE" )
 
 # folder where the repo is cloned
 if [[ "$JHI_HOME" == "" ]]; then
-    JHI_HOME=$(init_var "$BUILD_REPOSITORY_LOCALPATH" "$GITHUB_WORKSPACE" "$JHI_IT_DIR")
+    JHI_HOME=$(init_var "$BUILD_REPOSITORY_LOCALPATH" "$GITHUB_WORKSPACE" "$JHI_DETECTED_DIR")
 fi
 
 # folder for test-integration
@@ -39,12 +39,12 @@ fi
 
 # folder for app
 if [[ "$JHI_FOLDER_APP" == "" ]]; then
-    JHI_FOLDER_APP="$( pwd )"/app
+    JHI_FOLDER_APP="$HOME"/app
 fi
 
 # folder for uaa app
 if [[ "$JHI_FOLDER_UAA" == "" ]]; then
-    JHI_FOLDER_UAA="$( pwd )"/uaa
+    JHI_FOLDER_UAA="$HOME"/uaa
 fi
 
 # set correct OpenJDK version
