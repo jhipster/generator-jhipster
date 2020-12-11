@@ -73,8 +73,5 @@ const <%= entityInstance %>Route: Routes = [
         RouterModule.forChild(<%= entityInstance %>Route),
         <%= microservicePrefix %><%= entityAngularName %>Module,
     ],
-    exports: [
-        <%= microservicePrefix %><%= entityAngularName %>Module,
-    ],
 })
 export class <%= microservicePrefix %><%= entityAngularName %>RoutingModule {}
