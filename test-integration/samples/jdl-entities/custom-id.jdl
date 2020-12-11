@@ -1,0 +1,47 @@
+@ChangelogDate(20200804035350)
+entity EntityUuidId {
+  id UUID
+}
+
+@ChangelogDate(20200804035351)
+entity EntityUuidIdDTO {
+  id UUID
+}
+
+@ChangelogDate(20200804035352)
+entity EntityUuidIdMapsId {
+}
+
+@ChangelogDate(20200804035353)
+entity EntityUuidIdDTOMapsId {
+}
+
+relationship OneToOne {
+  EntityUuidIdMapsId to @Id EntityUuidId
+  EntityUuidIdDTOMapsId to @Id EntityUuidIdDTO
+}
+
+@ChangelogDate(20200804035360)
+entity EntityCustomId {
+  @Id customId Long
+}
+
+@ChangelogDate(20200804035361)
+entity EntityCustomIdDTO {
+  @Id customId Long
+}
+
+@ChangelogDate(20200804035362)
+entity EntityCustomIdMapsId {
+}
+
+@ChangelogDate(20200804035363)
+entity EntityCustomIdDTOMapsId {
+}
+
+relationship OneToOne {
+  EntityCustomIdMapsId to @Id EntityCustomId
+  EntityCustomIdDTOMapsId to @Id EntityCustomIdDTO
+}
+
+dto EntityUuidIdDTO, EntityUuidIdDTOMapsId, EntityCustomIdDTO, EntityCustomIdDTOMapsId with mapstruct
