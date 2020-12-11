@@ -139,9 +139,9 @@ function cleanupOldFiles(generator) {
             }
             generator.removeFolder(`${ANGULAR_DIR}core/login`);
             generator.removeFolder(`${ANGULAR_DIR}blocks`);
-            generator.removeFolder(`${ANGULAR_DIR}core/date`);
-            generator.removeFolder(`${ANGULAR_DIR}core/icons`);
-            generator.removeFolder(`${ANGULAR_DIR}core/language`);
+            generator.removeFile(`${ANGULAR_DIR}core/date/datepicker-adapter.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/icons/font-awesome-icons.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/language/language.constants.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/auth/has-any-authority.directive.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/constants/authority.constants.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/constants/error.constants.ts`);
