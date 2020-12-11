@@ -139,12 +139,15 @@ function cleanupOldFiles(generator) {
             }
             generator.removeFolder(`${ANGULAR_DIR}core/login`);
             generator.removeFolder(`${ANGULAR_DIR}blocks`);
-            generator.removeFolder(`${ANGULAR_DIR}core/date`);
-            generator.removeFolder(`${ANGULAR_DIR}core/icons`);
-            generator.removeFolder(`${ANGULAR_DIR}core/language`);
-            generator.removeFolder(`${ANGULAR_DIR}shared/auth`);
-            generator.removeFolder(`${ANGULAR_DIR}shared/constants`);
-            generator.removeFolder(`${ANGULAR_DIR}shared/util`);
+            generator.removeFile(`${ANGULAR_DIR}core/date/datepicker-adapter.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/icons/font-awesome-icons.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/language/language.constants.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/auth/has-any-authority.directive.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/constants/authority.constants.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/constants/error.constants.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/constants/input.constants.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/constants/pagination.constants.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/util/request-util.ts`);
             generator.removeFile(`${ANGULAR_DIR}core/core.module.ts`);
             generator.removeFile(`${ANGULAR_DIR}vendor.ts`);
             generator.removeFile(`${ANGULAR_DIR}app.main.ts`);
