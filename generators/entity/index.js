@@ -209,7 +209,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
             loadOptions() {
                 const context = this.context;
-                context.options = this.options;
 
                 if (this.options.db) {
                     context.databaseType = this.getDBTypeFromDBValue(this.options.db);
@@ -413,20 +412,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             )}, using ${relationship.otherEntityName} as fallback`
                         );
                     }
-
-                    if (
-                        relationship.otherEntityField === undefined &&
-                        (relationship.relationshipType === 'many-to-one' ||
-                            (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === true) ||
-                            (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true))
-                    ) {
-                        this.warning(
-                            `otherEntityField is missing in .jhipster/${entityName}.json for relationship ${stringify(
-                                relationship
-                            )}, using id as fallback`
-                        );
-                        relationship.otherEntityField = 'id';
-                    }
                 });
                 this.entityConfig.relationships = relationships;
             },
@@ -554,13 +539,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (!this.context.derivedPrimaryKey) {
                     return;
                 }
-                this.context.primaryKey = this.context.derivedPrimaryKey.otherEntity.primaryKey;
-                this.context.primaryKeyType = this.context.derivedPrimaryKey.otherEntity.primaryKeyType;
                 const idFields = this.context.derivedPrimaryKey.otherEntity.idFields.map(field => {
-                    return { ...field, fieldName: 'id', fieldNameHumanized: 'ID' };
+                    return { ...field, jpaGenerationType: false, liquibaseAutoIncrement: false };
                 });
                 this.context.idFields = idFields;
                 this.context.fields.unshift(...idFields);
+                this.context.primaryKeyType = this.context.primaryKey.type;
             },
 
             prepareReferences() {

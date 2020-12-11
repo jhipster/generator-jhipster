@@ -43,7 +43,8 @@ const JSONToJDLEntityConverter = require('../jdl/converters/json-to-jdl-entity-c
 const JSONToJDLOptionConverter = require('../jdl/converters/json-to-jdl-option-converter');
 const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../utils/entity');
 const { prepareFieldForTemplates } = require('../utils/field');
-const { formatDateForChangelog } = require('../utils/liquibase');
+const { formatDateForChangelog, prepareFieldForLiquibaseTemplates } = require('../utils/liquibase');
+const { stringify } = require('../utils');
 
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
@@ -1693,6 +1694,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         prepareEntityForTemplates(user, this);
         user.fields.forEach(field => {
             prepareFieldForTemplates(user, field, this);
+            prepareFieldForLiquibaseTemplates(user, field);
         });
         this.configOptions.sharedEntities.User = user;
     }
@@ -1766,5 +1768,16 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     buildAngularFormPath(reference, prefix = []) {
         const formPath = [...prefix, ...reference.path].join("', '");
         return `'${formPath}'`;
+    }
+
+    /**
+     * @private
+     *
+     * Print entity json representation.
+     *
+     * @param {object} entity
+     */
+    debugEntity(entity) {
+        this.log(stringify(entity));
     }
 };

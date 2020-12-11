@@ -27,6 +27,7 @@ const constants = require('../generator-constants');
 const { LIQUIBASE_DTD_VERSION } = constants;
 const { prepareFieldForTemplates } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
+const { prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase');
 
 module.exports = class extends BaseGenerator {
     constructor(args, options) {
@@ -55,17 +56,17 @@ module.exports = class extends BaseGenerator {
                 this.entity = { ...this.entity, fields: this.entity.fieldsNoId };
 
                 if (databaseChangelog.type === 'entity-new') {
-                    this.fields = this.entity.fields.map(field => this._prepareFieldForTemplates(this.entity, field));
+                    this.fields = this.entity.fields.map(field => prepareFieldForLiquibaseTemplates(this.entity, field));
                     this.relationships = this.entity.relationships.map(relationship =>
                         this._prepareRelationshipForTemplates(this.entity, relationship)
                     );
                 } else {
                     this.addedFields = this.databaseChangelog.addedFields
                         .map(field => prepareFieldForTemplates(this.entity, field, this))
-                        .map(field => this._prepareFieldForTemplates(this.entity, field));
+                        .map(field => prepareFieldForLiquibaseTemplates(this.entity, field));
                     this.removedFields = this.databaseChangelog.removedFields
                         .map(field => prepareFieldForTemplates(this.entity, field, this))
-                        .map(field => this._prepareFieldForTemplates(this.entity, field));
+                        .map(field => prepareFieldForLiquibaseTemplates(this.entity, field));
                     this.addedRelationships = this.databaseChangelog.addedRelationships
                         .map(relationship => {
                             const otherEntityName = this._.upperFirst(relationship.otherEntityName);
@@ -224,20 +225,11 @@ module.exports = class extends BaseGenerator {
         }
     }
 
-    _prepareFieldForTemplates(entity, field) {
-        field.columnType = this._columnType(entity, field);
-        field.loadColumnType = this._loadColumnType(entity, field);
-        field.shouldDropDefaultValue = field.fieldType === 'ZonedDateTime' || field.fieldType === 'Instant';
-        field.shouldCreateContentType = field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text';
-        field.nullable = !(field.fieldValidate === true && field.fieldValidateRules.includes('required'));
-        return field;
-    }
-
     _prepareRelationshipForTemplates(entity, relationship) {
         relationship.shouldCreateJoinTable = this._shouldCreateJoinTable(relationship);
         relationship.shouldWriteRelationship = this._shouldWriteRelationship(relationship);
         relationship.shouldWriteJoinTable = this._shouldWriteJoinTable(relationship);
-        relationship.columnDataType = this._getRelationshipColumnType(relationship, entity);
+        relationship.columnDataType = relationship.otherEntity.columnType;
         return relationship;
     }
 
@@ -254,119 +246,5 @@ module.exports = class extends BaseGenerator {
 
     _shouldWriteJoinTable(relationship) {
         return relationship.relationshipType === 'many-to-many' && relationship.ownerSide;
-    }
-
-    _loadColumnType(entity, field) {
-        const columnType = field.columnType;
-        // eslint-disable-next-line no-template-curly-in-string
-        if (['integer', 'bigint', 'double', 'decimal(21,2)', '${floatType}'].includes(columnType)) {
-            return 'numeric';
-        }
-
-        if (field.fieldIsEnum) {
-            return 'string';
-        }
-
-        // eslint-disable-next-line no-template-curly-in-string
-        if (['date', '${datetimeType}', 'boolean'].includes(columnType)) {
-            return columnType;
-        }
-
-        if (columnType === 'blob' || columnType === 'longblob') {
-            return 'blob';
-        }
-
-        // eslint-disable-next-line no-template-curly-in-string
-        if (columnType === '${clobType}') {
-            return 'clob';
-        }
-
-        const { prodDatabaseType } = entity;
-        if (
-            // eslint-disable-next-line no-template-curly-in-string
-            columnType === '${uuidType}' &&
-            prodDatabaseType !== 'mysql' &&
-            prodDatabaseType !== 'mariadb'
-        ) {
-            // eslint-disable-next-line no-template-curly-in-string
-            return '${uuidType}';
-        }
-
-        return 'string';
-    }
-
-    _getRelationshipColumnType(relationship, entity) {
-        return relationship.otherEntityName === 'user' && entity.authenticationType === 'oauth2' ? 'varchar(100)' : 'bigint';
-    }
-
-    _columnType(entity, field) {
-        const fieldType = field.fieldType;
-        if (fieldType === 'String' || field.fieldIsEnum) {
-            return `varchar(${field.fieldValidateRulesMaxlength || 255})`;
-        }
-
-        if (fieldType === 'Integer') {
-            return 'integer';
-        }
-
-        if (fieldType === 'Long') {
-            return 'bigint';
-        }
-
-        if (fieldType === 'Float') {
-            // eslint-disable-next-line no-template-curly-in-string
-            return '${floatType}';
-        }
-
-        if (fieldType === 'Double') {
-            return 'double';
-        }
-
-        if (fieldType === 'BigDecimal') {
-            return 'decimal(21,2)';
-        }
-
-        if (fieldType === 'LocalDate') {
-            return 'date';
-        }
-
-        if (fieldType === 'Instant') {
-            // eslint-disable-next-line no-template-curly-in-string
-            return '${datetimeType}';
-        }
-
-        if (fieldType === 'ZonedDateTime') {
-            // eslint-disable-next-line no-template-curly-in-string
-            return '${datetimeType}';
-        }
-
-        if (fieldType === 'Duration') {
-            return 'bigint';
-        }
-
-        if (fieldType === 'UUID') {
-            // eslint-disable-next-line no-template-curly-in-string
-            return '${uuidType}';
-        }
-
-        if (fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') {
-            const { prodDatabaseType } = entity;
-            if (prodDatabaseType === 'mysql' || prodDatabaseType === 'postgresql' || prodDatabaseType === 'mariadb') {
-                return 'longblob';
-            }
-
-            return 'blob';
-        }
-
-        if (field.fieldTypeBlobContent === 'text') {
-            // eslint-disable-next-line no-template-curly-in-string
-            return '${clobType}';
-        }
-
-        if (fieldType === 'Boolean') {
-            return 'boolean';
-        }
-
-        return undefined;
     }
 };

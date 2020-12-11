@@ -157,6 +157,14 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     });
     const fieldType = field.fieldType;
 
+    if (field.id && field.autoGenerate !== false) {
+        const defaultGenerationType = entityWithConfig.prodDatabaseType === 'mysql' ? 'identity' : 'sequence';
+        field.jpaGenerationType = field.jpaGenerationType || field.fieldType === 'Long' ? defaultGenerationType : undefined;
+        if (field.jpaGenerationType === 'identity') {
+            field.liquibaseAutoIncrement = true;
+        }
+    }
+
     field.fieldIsEnum = !field.id && fieldIsEnum(fieldType);
     field.fieldWithContentType = (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text';
 

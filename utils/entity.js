@@ -185,18 +185,58 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
             entityWithConfig.idFields.push(idField);
             idCount++;
         }
+
         if (idCount > 1) {
             throw new Error('Composite id not implemented');
-        } else if (entityWithConfig.idRelationships.length === 1) {
-            entityWithConfig.derivedPrimaryKey = entityWithConfig.idRelationships[0];
-            entityWithConfig.derivedPrimaryKey.useJPADerivedIdentifier = true;
+        } else if (entityWithConfig.idRelationships.length > 0) {
+            const relationshipId = entityWithConfig.idRelationships[0];
+            if (relationshipId.relationshipType === 'one-to-one' && idCount === 1) {
+                relationshipId.useJPADerivedIdentifier = true;
+                entityWithConfig.derivedPrimaryKey = relationshipId;
+                const idFields = entityWithConfig.idFields;
+                entityWithConfig.primaryKey = {
+                    fieldName: 'id',
+                    derived: true,
+                    fields: idFields,
+                    relationships: entityWithConfig.idRelationships,
+                    get name() {
+                        return relationshipId.otherEntity.primaryKey.name;
+                    },
+                    get nameCapitalized() {
+                        return relationshipId.otherEntity.primaryKey.nameCapitalized;
+                    },
+                    get type() {
+                        return relationshipId.otherEntity.primaryKey.type;
+                    },
+                    get references() {
+                        return [
+                            ...idFields.map(field => field.reference),
+                            ...relationshipId.otherEntity.primaryKey.references.map(ref => ({ ...ref })),
+                        ];
+                    },
+                    get composite() {
+                        return this.references.length > 1;
+                    },
+                };
+            } else {
+                throw new Error('Composite id not implemented');
+            }
         } else {
             const idField = entityWithConfig.idFields[0];
             // Allow ids type to be empty and fallback to default type for the database.
             if (!idField.fieldType) {
                 idField.fieldType = generator.getPkType(entityWithConfig.databaseType);
             }
-            entityWithConfig.primaryKey = { name: idField.fieldName, type: idField.fieldType };
+            entityWithConfig.primaryKey = {
+                derived: false,
+                fields: entityWithConfig.idFields,
+                relationships: entityWithConfig.idRelationships,
+                name: idField.fieldName,
+                nameCapitalized: _.upperFirst(idField.fieldName),
+                type: idField.fieldType,
+                references: entityWithConfig.idFields.map(field => field.reference),
+                composite: entityWithConfig.idFields.length > 1,
+            };
             entityWithConfig.primaryKeyType = idField.fieldType;
         }
     }
