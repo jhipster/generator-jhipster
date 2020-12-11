@@ -94,6 +94,7 @@ jobs:
                       testcontainers: 1
                     - app-type: ngx-mysql-es-noi18n-mapsid
                       entity: sqlfull
+                      jdl-entity: '*'
                       environment: prod
                       war: 0
                       e2e: 1
@@ -149,6 +150,7 @@ jobs:
         env:
             JHI_GENERATE_SKIP_CONFIG: 1
             JHI_ENTITY: ${{ matrix.entity }}
+            JHI_JDL_ENTITY: ${{ matrix.jdl-entity }}
             JHI_APP: ${{ matrix.app-type }}
             JHI_PROFILE: ${{ matrix.environment }}
             JHI_WAR: ${{ matrix.war }}

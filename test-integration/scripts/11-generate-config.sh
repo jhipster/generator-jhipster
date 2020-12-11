@@ -150,11 +150,6 @@ elif [[ "$JHI_ENTITY" == "sqlfull" ]]; then
     moveEntity JpaFilteringRelationship
     moveEntity JpaFilteringOtherSide
 
-    #-------------------------------------------------------------------------------
-    # Generate jdl entities
-    #-------------------------------------------------------------------------------
-    jhipster --no-insight jdl "$JHI_SAMPLES"/jdl-entities/*.jdl --json-only
-
 elif [[ "$JHI_ENTITY" == "sql" ]]; then
     moveEntity BankAccount
     moveEntity Label
@@ -178,6 +173,13 @@ elif [[ "$JHI_ENTITY" == "sql" ]]; then
 
     moveEntity MapsIdUserProfileWithDTO
 
+fi
+
+#-------------------------------------------------------------------------------
+# Generate jdl entities
+#-------------------------------------------------------------------------------
+if [[ "$JHI_JDL_NAME" != "" ]]; then
+    jhipster --no-insight jdl "$JHI_SAMPLES"/jdl-entities/$JHI_JDL_NAME.jdl --json-only
 fi
 
 #-------------------------------------------------------------------------------
