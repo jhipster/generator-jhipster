@@ -29,9 +29,9 @@
     <%_ if (databaseType === 'cassandra') { _%>
     <logger name="io.netty" level="WARN"/>
     <%_ } _%>
-    <logger name="jakarta.activation" level="WARN"/>
+    <logger name="javax.activation" level="WARN"/>
     <logger name="javax.mail" level="WARN"/>
-    <logger name="jakarta.xml.bind" level="WARN"/>
+    <logger name="javax.xml.bind" level="WARN"/>
     <logger name="ch.qos.logback" level="WARN"/>
     <%_ if (databaseType === 'cassandra') { _%>
     <logger name="com.datastax" level="WARN"/>
