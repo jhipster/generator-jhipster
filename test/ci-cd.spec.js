@@ -18,7 +18,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     // Jenkins tests
     //--------------------------------------------------
     describe('Jenkins tests', () => {
-        describe('Jenkins: maven AngularX NPM', () => {
+        describe('Jenkins: Maven AngularX NPM', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -73,7 +73,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     // GitLab CI tests
     //--------------------------------------------------
     describe('GitLab CI tests', () => {
-        describe('GitLab: maven AngularX NPM', () => {
+        describe('GitLab CI: Maven AngularX NPM', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -98,7 +98,7 @@ describe('JHipster CI-CD Sub Generator', () => {
             });
         });
 
-        describe('GitLab: Gradle AngularX NPM', () => {
+        describe('GitLab CI: Gradle AngularX NPM', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -122,7 +122,7 @@ describe('JHipster CI-CD Sub Generator', () => {
             });
         });
 
-        describe('GitLab: npm skip server', () => {
+        describe('GitLab CI: npm skip server', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -150,7 +150,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     // Travis CI tests
     //--------------------------------------------------
     describe('Travis CI tests', () => {
-        describe('Travis CI: maven AngularX NPM', () => {
+        describe('Travis CI: Maven AngularX NPM', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -201,7 +201,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     // Azure Pipelines tests
     //--------------------------------------------------
     describe('Azure Pipelines tests', () => {
-        describe('Azure Pipelines: maven AngularX NPM', () => {
+        describe('Azure Pipelines: Maven AngularX NPM', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -244,7 +244,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     // GitHub Actions tests
     //--------------------------------------------------
     describe('GitHub Actions tests', () => {
-        describe('GitHub Actions: maven AngularX NPM', () => {
+        describe('GitHub Actions: Maven AngularX NPM', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
