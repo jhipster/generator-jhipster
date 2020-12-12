@@ -1,47 +1,67 @@
-@ChangelogDate(20200804035350)
+/*
+ * UUID custom id
+ */
+@ChangelogDate(20200804035300)
 entity EntityUuidId {
   id UUID
 }
 
-@ChangelogDate(20200804035351)
-entity EntityUuidIdDTO {
-  id UUID
-}
-
-@ChangelogDate(20200804035352)
+@ChangelogDate(20200804035301)
 entity EntityUuidIdMapsId {
-}
-
-@ChangelogDate(20200804035353)
-entity EntityUuidIdDTOMapsId {
 }
 
 relationship OneToOne {
   EntityUuidIdMapsId to @Id EntityUuidId
+}
+
+/*
+ * UUID custom id with DTO
+ */
+@ChangelogDate(20200804035400)
+entity EntityUuidIdDTO {
+  id UUID
+}
+
+@ChangelogDate(20200804035401)
+entity EntityUuidIdDTOMapsId {
+}
+
+relationship OneToOne {
   EntityUuidIdDTOMapsId to @Id EntityUuidIdDTO
 }
 
-@ChangelogDate(20200804035360)
+dto EntityUuidIdDTO, EntityUuidIdDTOMapsId with mapstruct
+
+/*
+ * Custom named id
+ */
+@ChangelogDate(20200804035500)
 entity EntityCustomId {
   @Id customId Long
 }
 
-@ChangelogDate(20200804035361)
-entity EntityCustomIdDTO {
-  @Id customId Long
-}
-
-@ChangelogDate(20200804035362)
+@ChangelogDate(20200804035501)
 entity EntityCustomIdMapsId {
-}
-
-@ChangelogDate(20200804035363)
-entity EntityCustomIdDTOMapsId {
 }
 
 relationship OneToOne {
   EntityCustomIdMapsId to @Id EntityCustomId
+}
+
+/*
+ * Custom named id with dto
+ */
+@ChangelogDate(20200804035600)
+entity EntityCustomIdDTO {
+  @Id customId Long
+}
+
+@ChangelogDate(20200804035601)
+entity EntityCustomIdDTOMapsId {
+}
+
+relationship OneToOne {
   EntityCustomIdDTOMapsId to @Id EntityCustomIdDTO
 }
 
-dto EntityUuidIdDTO, EntityUuidIdDTOMapsId, EntityCustomIdDTO, EntityCustomIdDTOMapsId with mapstruct
+dto EntityCustomIdDTO, EntityCustomIdDTOMapsId with mapstruct
