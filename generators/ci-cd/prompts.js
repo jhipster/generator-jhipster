@@ -134,6 +134,10 @@ async function askIntegrations() {
     }
     if (['jenkins', 'gitlab', 'travis', 'github', 'circle'].includes(this.pipeline)) {
         integrationChoices.push({
+            name: `${chalk.yellow('*Snyk*')}: dependency scanning for security vulnerabilities (requires SNYK_TOKEN)`,
+            value: 'snyk',
+        });
+        integrationChoices.push({
             name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service)`,
             value: 'heroku',
         });

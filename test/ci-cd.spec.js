@@ -475,7 +475,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     .withOptions({ skipChecks: true })
                     .withPrompts({
                         pipeline: 'github',
-                        cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku'],
+                        cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku', 'snyk'],
                         dockerImage: 'jhipster-publish-docker',
                         artifactorySnapshotsId: 'snapshots',
                         artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
@@ -488,10 +488,11 @@ describe('JHipster CI-CD Sub Generator', () => {
             it('creates expected files', () => {
                 assert.file(expectedFiles.github);
             });
-            it('contains Docker, Sonar, Heroku', () => {
+            it('contains Docker, Sonar, Heroku, Snyk', () => {
                 assert.fileContent('.github/workflows/github-actions.yml', /mvnw.*sonar.com/);
                 assert.fileContent('.github/workflows/github-actions.yml', /mvnw.*jhipster-publish-docker/);
                 assert.fileContent('.github/workflows/github-actions.yml', /mvnw.*sample-mysql/);
+                assert.fileContent('.github/workflows/github-actions.yml', /snyk/);
             });
             it('contains distributionManagement in pom.xml', () => {
                 assert.fileContent('pom.xml', /distributionManagement/);
@@ -507,7 +508,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     .withOptions({ skipChecks: true })
                     .withPrompts({
                         pipeline: 'github',
-                        cicdIntegrations: ['sonar', 'publishDocker', 'heroku'],
+                        cicdIntegrations: ['sonar', 'publishDocker', 'heroku', 'snyk'],
                         dockerImage: 'jhipster-publish-docker',
                         sonarUrl: 'http://sonar.com:9000',
                     })
@@ -520,6 +521,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.fileContent('.github/workflows/github-actions.yml', /gradlew.*jhipster-publish-docker/);
                 assert.fileContent('.github/workflows/github-actions.yml', /gradlew.*sonar.com/);
                 assert.fileContent('.github/workflows/github-actions.yml', /gradlew.*deployHeroku/);
+                assert.fileContent('.github/workflows/github-actions.yml', /snyk/);
             });
         });
         describe('GitHub Actions: autoconfigure', () => {
