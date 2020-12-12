@@ -28,8 +28,8 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
-import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { <%= entityAngularName %>Service } from '../<%= entityFileName %>.service';
+import { <%= entityAngularName %> } from '../<%= entityFileName %>.model';
 
 import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
 
