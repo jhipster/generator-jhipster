@@ -40,6 +40,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('Jenkinsfile', /docker/);
                 assert.noFileContent('Jenkinsfile', /sonar/);
                 assert.noFileContent('Jenkinsfile', /heroku/);
+                assert.noFileContent('Jenkinsfile', /snyk/);
             });
         });
         describe('Jenkins: Gradle Angular NPM', () => {
@@ -64,6 +65,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('Jenkinsfile', /docker/);
                 assert.noFileContent('Jenkinsfile', /sonar/);
                 assert.noFileContent('Jenkinsfile', /heroku/);
+                assert.noFileContent('Jenkinsfile', /snyk/);
             });
         });
         describe('Jenkins: Maven Angular NPM with full options', () => {
@@ -77,7 +79,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     .withPrompts({
                         pipeline: 'jenkins',
                         insideDocker: false,
-                        cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku'],
+                        cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku', 'snyk'],
                         artifactorySnapshotsId: 'snapshots',
                         artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                         artifactoryReleasesId: 'releases',
@@ -93,6 +95,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.fileContent('Jenkinsfile', /sonar/);
                 assert.fileContent('Jenkinsfile', /heroku/);
                 assert.fileContent('Jenkinsfile', /def dockerImage/);
+                assert.fileContent('Jenkinsfile', /snyk/);
             });
             it('contains distributionManagement in pom.xml', () => {
                 assert.fileContent('pom.xml', /distributionManagement/);
@@ -109,7 +112,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     .withPrompts({
                         pipeline: 'jenkins',
                         insideDocker: true,
-                        cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku'],
+                        cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku', 'snyk'],
                         artifactorySnapshotsId: 'snapshots',
                         artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                         artifactoryReleasesId: 'releases',
@@ -126,6 +129,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.fileContent('Jenkinsfile', /sonar/);
                 assert.fileContent('Jenkinsfile', /heroku/);
                 assert.fileContent('Jenkinsfile', /def dockerImage/);
+                assert.fileContent('Jenkinsfile', /snyk/);
             });
         });
     });
