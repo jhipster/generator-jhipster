@@ -323,6 +323,7 @@ function loadRequiredConfigIntoEntity(entity, config) {
         searchEngine: config.searchEngine,
         jhiPrefix: config.jhiPrefix,
         authenticationType: config.authenticationType,
+        reactive: config.reactive,
     });
     return entity;
 }

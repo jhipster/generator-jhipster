@@ -159,9 +159,14 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
 
     if (field.id && field.autoGenerate !== false) {
         const defaultGenerationType = entityWithConfig.prodDatabaseType === 'mysql' ? 'identity' : 'sequence';
-        field.jpaGeneratedValue = field.jpaGeneratedValue || field.fieldType === 'Long' ? defaultGenerationType : true;
-        if (field.jpaGeneratedValue === 'identity') {
+        if (entityWithConfig.reactive) {
             field.liquibaseAutoIncrement = true;
+            field.jpaGeneratedValue = false;
+        } else {
+            field.jpaGeneratedValue = field.jpaGeneratedValue || field.fieldType === 'Long' ? defaultGenerationType : true;
+            if (field.jpaGeneratedValue === 'identity') {
+                field.liquibaseAutoIncrement = true;
+            }
         }
     }
 
