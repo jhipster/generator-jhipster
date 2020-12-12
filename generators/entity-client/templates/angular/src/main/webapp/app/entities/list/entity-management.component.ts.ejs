@@ -28,7 +28,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
 
-import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ if (pagination !== 'no') { %>
 import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 <%_ } _%>

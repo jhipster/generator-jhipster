@@ -19,7 +19,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ if (fieldsContainBlob) { _%>
 import { DataUtils } from 'app/core/util/data-util.service';
 <%_ } _%>
