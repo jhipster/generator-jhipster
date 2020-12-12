@@ -595,5 +595,47 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFile(expectedFiles.gitlab);
             });
         });
+        describe('Circle CI: Maven with Snyk', () => {
+            beforeEach(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+                    })
+                    .withOptions({ skipChecks: true })
+                    .withPrompts({
+                        pipeline: 'circle',
+                        cicdIntegrations: ['snyk'],
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.circle);
+            });
+            it('contains Snyk', () => {
+                assert.fileContent('.circleci/config.yml', /snyk/);
+            });
+        });
+        describe('Circle CI: Gradle with Snyk', () => {
+            beforeEach(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
+                    })
+                    .withOptions({ skipChecks: true })
+                    .withPrompts({
+                        pipeline: 'circle',
+                        cicdIntegrations: ['snyk'],
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.circle);
+            });
+            it('contains Snyk', () => {
+                assert.fileContent('.circleci/config.yml', /snyk/);
+            });
+        });
     });
 });

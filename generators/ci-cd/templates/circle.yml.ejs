@@ -56,7 +56,19 @@ jobs:
             - run:
                 name: Install Node Modules
                 command: 'npm install'
-
+            <%_ if (cicdIntegrations.includes('snyk')) { _%>
+            - run:
+                name: Install Snyk CLI
+                command: |
+                    curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
+                    chmod +x snyk
+            - run:
+                name: Snyk test
+                command: './snyk test --all-projects || true'
+            - run:
+                name: Snyk monitor
+                command: './snyk monitor --all-projects'
+            <%_ } _%>
             - save_cache:
                 paths:
                     - node
