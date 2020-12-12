@@ -9,7 +9,7 @@ const expectedFiles = {
     gitlab: ['.gitlab-ci.yml'],
     circle: ['.circleci/config.yml'],
     azure: ['azure-pipelines.yml'],
-    github: ['.github/workflows/github-ci.yml'],
+    github: ['.github/workflows/github-actions.yml'],
     dockerRegistry: ['src/main/docker/docker-registry.yml'],
 };
 
@@ -489,9 +489,9 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.file(expectedFiles.github);
             });
             it('contains Docker, Sonar, Heroku', () => {
-                assert.fileContent('.github/workflows/github-ci.yml', /mvnw.*sonar.com/);
-                assert.fileContent('.github/workflows/github-ci.yml', /mvnw.*jhipster-publish-docker/);
-                assert.fileContent('.github/workflows/github-ci.yml', /mvnw.*sample-mysql/);
+                assert.fileContent('.github/workflows/github-actions.yml', /mvnw.*sonar.com/);
+                assert.fileContent('.github/workflows/github-actions.yml', /mvnw.*jhipster-publish-docker/);
+                assert.fileContent('.github/workflows/github-actions.yml', /mvnw.*sample-mysql/);
             });
             it('contains distributionManagement in pom.xml', () => {
                 assert.fileContent('pom.xml', /distributionManagement/);
@@ -517,9 +517,9 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.file(expectedFiles.github);
             });
             it('contains Docker, Sonar, Heroku', () => {
-                assert.fileContent('.github/workflows/github-ci.yml', /gradlew.*jhipster-publish-docker/);
-                assert.fileContent('.github/workflows/github-ci.yml', /gradlew.*sonar.com/);
-                assert.fileContent('.github/workflows/github-ci.yml', /gradlew.*deployHeroku/);
+                assert.fileContent('.github/workflows/github-actions.yml', /gradlew.*jhipster-publish-docker/);
+                assert.fileContent('.github/workflows/github-actions.yml', /gradlew.*sonar.com/);
+                assert.fileContent('.github/workflows/github-actions.yml', /gradlew.*deployHeroku/);
             });
         });
         describe('GitHub Actions: autoconfigure', () => {
