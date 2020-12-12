@@ -294,7 +294,6 @@ relationships.forEach((relationship, idx) => {
     const relationshipName = relationships[idx].relationshipName;
     const relationshipFieldName = relationships[idx].relationshipFieldName;
     const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-    const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
     const relationshipType = relationships[idx].relationshipType;
     const relationshipValidate = relationships[idx].relationshipValidate;
     const relationshipRequired = relationships[idx].relationshipRequired;
@@ -393,9 +392,17 @@ relationships.forEach((relationship, idx) => {
             if (relationshipValidate) { _%>
     <%- include('relationship_validators', { relationships, idx }); -%>
         <%_ } _%>
-    @JoinTable(name = "<%= joinTableName %>",
-               joinColumns = @JoinColumn(name = "<%= getColumnName(name) %>_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "<%= getColumnName(relationships[idx].relationshipName) %>_id", referencedColumnName = "id"))
+    @JoinTable(name = "<%= relationship.joinTable.name %>",
+               joinColumns = <%= entity.primaryKey.fields.length > 1 ? '{' : '' %>
+                   <%_ entity.primaryKey.fields.forEach((field, idx) => { _%>
+                   <%= idx === 0 ? '' : ',' %>@JoinColumn(name = "<%= `${entityTableName}_${field.columnName}` %>")
+                   <%_ }); _%>
+               <%= entity.primaryKey.fields.length > 1 ? '}' : '' %>,
+               inverseJoinColumns = <%= relationship.otherEntity.primaryKey.fields.length > 1 ? '{' : '' %>
+                   <%_ relationship.otherEntity.primaryKey.fields.forEach((field, idx) => { _%>
+                   <%= idx === 0 ? '' : ',' %>@JoinColumn(name = "<%= `${relationship.columnName}_${field.columnName}` %>"))
+                   <%_ }); _%>
+               <%= relationship.otherEntity.primaryKey.fields.length > 1 ? '}' : '' %>
         <%_ }
         } else if ((databaseType === 'mongodb' || databaseType === 'couchbase') && !otherEntityIsEmbedded) {
             if (databaseType === 'mongodb') { _%>
@@ -436,7 +443,7 @@ relationships.forEach((relationship, idx) => {
             <%_ } _%>
             <%_ if (isUsingMapsId === true) { %>
     @MapsId
-    @JoinColumn(name = "<%= getColumnName(relationship.otherEntity.primaryKey.name) %>")
+    @JoinColumn(name = "<%= relationship.otherEntity.primaryKey.fields[0].columnName %>")
             <%_ } else { _%>
     @JoinColumn(unique = true)
             <%_ } _%>

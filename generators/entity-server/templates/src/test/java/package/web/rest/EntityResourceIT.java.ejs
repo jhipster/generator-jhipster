@@ -534,9 +534,8 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     public static void deleteEntities(EntityManager em) {
         try {
         <%_ relationships.forEach(function(rel) {
-            if (rel.relationshipType === 'many-to-many' && rel.ownerSide) {
-                const joinTableName = getJoinTableName(entityTableName, rel.relationshipName, prodDatabaseType); _%>
-                em.deleteAll("<%= joinTableName %>").block();
+            if (rel.shouldWriteJoinTable) { _%>
+                em.deleteAll("<%= rel.joinTable.name %>").block();
         <%_ }}); _%>
                 em.deleteAll(<%= entityClass %>.class).block();
         } catch (Exception e) {
