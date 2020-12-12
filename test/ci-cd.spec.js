@@ -18,7 +18,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     // Jenkins tests
     //--------------------------------------------------
     describe('Jenkins tests', () => {
-        describe('Jenkins: Maven AngularX NPM', () => {
+        describe('Jenkins: Maven Angular NPM', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -42,7 +42,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('Jenkinsfile', /heroku/);
             });
         });
-        describe('Jenkins: Gradle AngularX NPM', () => {
+        describe('Jenkins: Gradle Angular NPM', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -66,7 +66,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('Jenkinsfile', /heroku/);
             });
         });
-        describe('Jenkins: Maven AngularX NPM with full options', () => {
+        describe('Jenkins: Maven Angular NPM with full options', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -98,7 +98,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.fileContent('pom.xml', /distributionManagement/);
             });
         });
-        describe('Jenkins: Maven AngularX NPM inside Docker', () => {
+        describe('Jenkins: Maven Angular NPM inside Docker', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -134,7 +134,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     // GitLab CI tests
     //--------------------------------------------------
     describe('GitLab CI tests', () => {
-        describe('GitLab CI: Maven AngularX NPM', () => {
+        describe('GitLab CI: Maven Angular NPM', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -158,7 +158,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('.gitlab-ci.yml', /heroku/);
             });
         });
-        describe('GitLab CI: Gradle AngularX NPM', () => {
+        describe('GitLab CI: Gradle Angular NPM', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -203,7 +203,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.fileContent('.gitlab-ci.yml', /image: jhipster/);
             });
         });
-        describe('GitLab CI: Maven AngularX NPM with full options', () => {
+        describe('GitLab CI: Maven Angular NPM with full options', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -235,7 +235,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.fileContent('pom.xml', /distributionManagement/);
             });
         });
-        describe('GitLab CI: Maven AngularX NPM inside Docker', () => {
+        describe('GitLab CI: Maven Angular NPM inside Docker', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -267,7 +267,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.fileContent('pom.xml', /distributionManagement/);
             });
         });
-        describe('GitLab CI: Maven AngularX Yarn inside Docker Autoconfigure', () => {
+        describe('GitLab CI: Maven Angular Yarn inside Docker Autoconfigure', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -292,7 +292,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     // Travis CI tests
     //--------------------------------------------------
     describe('Travis CI tests', () => {
-        describe('Travis CI: Maven AngularX NPM', () => {
+        describe('Travis CI: Maven Angular NPM', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -314,7 +314,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('.travis.yml', /heroku/);
             });
         });
-        describe('Travis CI: Gradle AngularX NPM', () => {
+        describe('Travis CI: Gradle Angular NPM', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -336,7 +336,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('.travis.yml', /heroku/);
             });
         });
-        describe('Travis CI: Maven AngularX NPM with full options', () => {
+        describe('Travis CI: Maven Angular NPM with full options', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -372,7 +372,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     // Azure Pipelines tests
     //--------------------------------------------------
     describe('Azure Pipelines tests', () => {
-        describe('Azure Pipelines: Maven AngularX NPM', () => {
+        describe('Azure Pipelines: Maven Angular NPM', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -390,7 +390,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.file(expectedFiles.azure);
             });
         });
-        describe('Azure Pipelines: Gradle AngularX NPM', () => {
+        describe('Azure Pipelines: Gradle Angular NPM', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -428,7 +428,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     // GitHub Actions tests
     //--------------------------------------------------
     describe('GitHub Actions tests', () => {
-        describe('GitHub Actions: Maven AngularX NPM', () => {
+        describe('GitHub Actions: Maven Angular NPM', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -447,7 +447,7 @@ describe('JHipster CI-CD Sub Generator', () => {
             });
         });
 
-        describe('GitHub Actions: Gradle AngularX NPM', () => {
+        describe('GitHub Actions: Gradle Angular NPM', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -465,7 +465,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.file(expectedFiles.github);
             });
         });
-        describe('GitHub Actions: Maven AngularX NPM with full options', () => {
+        describe('GitHub Actions: Maven Angular NPM with full options', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -497,7 +497,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.fileContent('pom.xml', /distributionManagement/);
             });
         });
-        describe('GitHub Actions: Gradle AngularX NPM with full options', () => {
+        describe('GitHub Actions: Gradle Angular NPM with full options', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -542,7 +542,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     // Circle CI tests
     //--------------------------------------------------
     describe('Circle CI test', () => {
-        describe('Circle CI: Maven AngularX NPM', () => {
+        describe('Circle CI: Maven Angular NPM', () => {
             beforeEach(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
@@ -563,7 +563,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFile(expectedFiles.gitlab);
             });
         });
-        describe('Circle CI: Gradle AngularX NPM', () => {
+        describe('Circle CI: Gradle Angular NPM', () => {
             beforeEach(done => {
                 helpers
                     .run(require.resolve('../generators/ci-cd'))
