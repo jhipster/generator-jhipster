@@ -417,6 +417,48 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.file(expectedFiles.azure);
             });
         });
+        describe('Azure Pipelines: Maven Angular NPM with Snyk', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+                    })
+                    .withOptions({ skipChecks: true })
+                    .withPrompts({
+                        pipeline: 'azure',
+                        cicdIntegrations: ['snyk'],
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.azure);
+            });
+            it('contains Snyk', () => {
+                assert.fileContent('azure-pipelines.yml', /snyk/);
+            });
+        });
+        describe('Azure Pipelines: Gradle Angular NPM with Snyk', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
+                    })
+                    .withOptions({ skipChecks: true })
+                    .withPrompts({
+                        pipeline: 'azure',
+                        cicdIntegrations: ['snyk'],
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.azure);
+            });
+            it('contains Snyk', () => {
+                assert.fileContent('azure-pipelines.yml', /snyk/);
+            });
+        });
         describe('Azure Pipelines: autoconfigure', () => {
             before(done => {
                 helpers

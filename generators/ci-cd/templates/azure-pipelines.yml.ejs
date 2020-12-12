@@ -46,6 +46,20 @@ jobs:
       command: 'install'
     displayName: 'INSTALL: launch npm install'
 <%_ } _%>
+<%_ if (cicdIntegrations.includes('snyk')) { _%>
+  - script: |
+      curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
+      chmod +x snyk
+    displayName: 'INSTALL: Snyk CLI'
+  - script: ./snyk test --all-projects || true
+    displayName: 'CHECK: Snyk test'
+    env:
+      SNYK_TOKEN: $(SNYK_TOKEN)
+  - script: ./snyk monitor --all-projects
+    displayName: 'CHECK: Snyk monitor'
+    env:
+      SNYK_TOKEN: $(SNYK_TOKEN)
+<%_ } _%>
   <%_ if (!skipServer) { _%>
     <%_ if (buildTool === 'maven') { _%>
   - script: chmod +x mvnw

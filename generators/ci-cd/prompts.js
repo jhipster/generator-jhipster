@@ -85,7 +85,7 @@ async function askPipeline() {
 }
 
 async function askIntegrations() {
-    if (this.abort || !this.pipeline || this.pipeline === 'azure') return;
+    if (this.abort || !this.pipeline) return;
     if (this.autoconfigureTravis) {
         this.cicdIntegrations = [];
         return;
@@ -132,11 +132,13 @@ async function askIntegrations() {
     if (['jenkins', 'github'].includes(this.pipeline)) {
         integrationChoices.push({ name: `Build and publish a ${chalk.yellow('*Docker*')} image`, value: 'publishDocker' });
     }
-    if (['jenkins', 'gitlab', 'travis', 'github', 'circle'].includes(this.pipeline)) {
+    if (['jenkins', 'gitlab', 'travis', 'github', 'circle', 'azure'].includes(this.pipeline)) {
         integrationChoices.push({
             name: `${chalk.yellow('*Snyk*')}: dependency scanning for security vulnerabilities (requires SNYK_TOKEN)`,
             value: 'snyk',
         });
+    }
+    if (['jenkins', 'gitlab', 'travis', 'github', 'circle'].includes(this.pipeline)) {
         integrationChoices.push({
             name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service)`,
             value: 'heroku',
