@@ -101,6 +101,16 @@ const serverFiles = {
       ],
     },
     {
+      condition: generator => generator.primaryKey && generator.primaryKey.composite,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/EntityId.java',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.primaryKey.type}.java`,
+        },
+      ],
+    },
+    {
       condition: generator => !generator.reactive && !generator.embedded,
       path: SERVER_MAIN_SRC_DIR,
       templates: [

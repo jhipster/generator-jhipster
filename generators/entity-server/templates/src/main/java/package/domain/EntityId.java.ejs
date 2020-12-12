@@ -1,0 +1,90 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%=packageName%>.domain;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+<%_ if (validation) { _%>
+import javax.validation.constraints.*;
+<%_ } _%>
+import java.util.Objects;
+
+@Embeddable
+public class <%= primaryKey.type %> implements java.io.Serializable {
+<%_ for (const reference of primaryKey.references.filter(ref => ref.field)) { _%>
+
+    @Column(name = "<%= reference.field.columnName %>")
+    private <%= reference.field.fieldType %> <%= reference.name %>;
+<%_ } _%>
+
+    public <%= primaryKey.type %>(){}
+
+    public <%= primaryKey.type %>(<%= primaryKey.references.filter(ref => ref.field).map(reference => reference.type + ' ' + reference.name).join(', ') %>){
+<%_ for (const reference of primaryKey.references.filter(ref => ref.field)) { _%>
+        this.<%= reference.name %> = <%= reference.name %>;
+<%_ }_%>
+    }
+<%_ for (const reference of primaryKey.references.filter(ref => ref.field)) { _%>
+
+    public <%= buildJavaGetter(reference) %>{
+        return this.<%= reference.name %>;
+    }
+
+    public void <%= buildJavaSetter(reference) %>{
+        this.<%= reference.name %> = <%= reference.name %>;
+    }
+
+    public <%= primaryKey.type %> <%= buildJavaFluentSetter(reference) %>{
+        this.<%= buildJavaSetter(reference, reference.name) %>;
+        return this;
+    }
+<%_ }_%>
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof <%= primaryKey.type %>)) {
+            return false;
+        }
+        if (<%- primaryKey.references.map(ref => `${ref.name} == null`).join(' || ') %>) {
+            return false;
+        }
+
+        <%= primaryKey.type %> <%= entityInstance %>Id = (<%= entityClass %>Id) o;
+        return <%- primaryKey.references.map(f => `Objects.equals(${f.name}, ${entityInstance}Id.${f.name})`).join('\n            && ') %>;
+    }
+
+    @Override
+    public int hashCode() {
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
+    }
+
+    // prettier-ignore
+    @Override
+    public String toString() {
+        return "<%= primaryKey.type %>{" +
+<%_ for (reference of primaryKey.references) {
+                const isNumeric = ['integer', 'long', 'float', 'double', 'bigdecimal'].includes(reference.field.fieldType.toLowerCase()); _%>
+            ", <%= reference.name %>=<% if (! isNumeric) {%>'<% } %>" + <%= buildJavaGet(reference) %> <% if (! isNumeric) { %>+ "'" <% } %>+
+<%_ } _%>
+            "}";
+    }
+}
