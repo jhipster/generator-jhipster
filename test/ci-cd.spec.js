@@ -281,6 +281,77 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.file(expectedFiles.github);
             });
         });
+        describe('GitHub Actions: Maven AngularX NPM with full options', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+                    })
+                    .withOptions({ skipChecks: true })
+                    .withPrompts({
+                        pipeline: 'github',
+                        cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku'],
+                        dockerImage: 'jhipster-publish-docker',
+                        artifactorySnapshotsId: 'snapshots',
+                        artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
+                        artifactoryReleasesId: 'releases',
+                        artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
+                        sonarUrl: 'http://sonar.com:9000',
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.github);
+            });
+            it('contains Docker, Sonar, Heroku', () => {
+                assert.fileContent('.github/workflows/github-ci.yml', /mvnw.*sonar.com/);
+                assert.fileContent('.github/workflows/github-ci.yml', /mvnw.*jhipster-publish-docker/);
+                assert.fileContent('.github/workflows/github-ci.yml', /mvnw.*sample-mysql/);
+            });
+            it('contains distributionManagement in pom.xml', () => {
+                assert.fileContent('pom.xml', /distributionManagement/);
+            });
+        });
+        describe('GitHub Actions: Gradle AngularX NPM with full options', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
+                    })
+                    .withOptions({ skipChecks: true })
+                    .withPrompts({
+                        pipeline: 'github',
+                        cicdIntegrations: ['sonar', 'publishDocker', 'heroku'],
+                        dockerImage: 'jhipster-publish-docker',
+                        sonarUrl: 'http://sonar.com:9000',
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.github);
+            });
+            it('contains Docker, Sonar, Heroku', () => {
+                assert.fileContent('.github/workflows/github-ci.yml', /gradlew.*jhipster-publish-docker/);
+                assert.fileContent('.github/workflows/github-ci.yml', /gradlew.*sonar.com/);
+                assert.fileContent('.github/workflows/github-ci.yml', /gradlew.*deployHeroku/);
+            });
+        });
+        describe('GitHub Actions: autoconfigure', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+                    })
+                    .withOptions({ autoconfigureGithub: true })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.github);
+            });
+        });
     });
 
     //--------------------------------------------------
