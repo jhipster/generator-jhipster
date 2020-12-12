@@ -282,4 +282,52 @@ describe('JHipster CI-CD Sub Generator', () => {
             });
         });
     });
+
+    //--------------------------------------------------
+    // Circle CI tests
+    //--------------------------------------------------
+    describe('Circle CI test', () => {
+        describe('Circle CI: Maven AngularX NPM', () => {
+            beforeEach(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+                    })
+                    .withOptions({ skipChecks: true })
+                    .withPrompts({
+                        pipeline: 'circle',
+                        cicdIntegrations: [],
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.circle);
+                assert.noFile(expectedFiles.jenkins);
+                assert.noFile(expectedFiles.travis);
+                assert.noFile(expectedFiles.gitlab);
+            });
+        });
+        describe('Circle CI: Gradle AngularX NPM', () => {
+            beforeEach(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
+                    })
+                    .withOptions({ skipChecks: true })
+                    .withPrompts({
+                        pipeline: 'circle',
+                        cicdIntegrations: [],
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.circle);
+                assert.noFile(expectedFiles.jenkins);
+                assert.noFile(expectedFiles.travis);
+                assert.noFile(expectedFiles.gitlab);
+            });
+        });
+    });
 });
