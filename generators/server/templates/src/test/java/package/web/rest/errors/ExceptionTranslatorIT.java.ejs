@@ -155,11 +155,7 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
  */
 @WithMockUser
 @AutoConfigureWebTestClient
-<%_ if (authenticationType === 'oauth2') { _%>
-@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
-<%_ } else { _%>
-@SpringBootTest(classes = <%= mainClass %>.class)
-<%_ } _%>
+@<%= mainClass %>IntegrationTest
 class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired
