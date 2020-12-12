@@ -160,6 +160,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
                 assert.noFileContent('.gitlab-ci.yml', /sonar/);
                 assert.noFileContent('.gitlab-ci.yml', /heroku/);
+                assert.noFileContent('.gitlab-ci.yml', /snyk/);
             });
         });
         describe('GitLab CI: Gradle Angular NPM', () => {
@@ -183,6 +184,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
                 assert.noFileContent('.gitlab-ci.yml', /sonar/);
                 assert.noFileContent('.gitlab-ci.yml', /heroku/);
+                assert.noFileContent('.gitlab-ci.yml', /snyk/);
             });
         });
         describe('GitLab CI: npm skip server', () => {
@@ -218,7 +220,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     .withPrompts({
                         pipeline: 'gitlab',
                         insideDocker: false,
-                        cicdIntegrations: ['deploy', 'sonar', 'heroku'],
+                        cicdIntegrations: ['deploy', 'sonar', 'heroku', 'snyk'],
                         artifactorySnapshotsId: 'snapshots',
                         artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                         artifactoryReleasesId: 'releases',
@@ -234,6 +236,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
                 assert.fileContent('.gitlab-ci.yml', /sonar/);
                 assert.fileContent('.gitlab-ci.yml', /heroku/);
+                assert.fileContent('.gitlab-ci.yml', /snyk/);
             });
             it('contains distributionManagement in pom.xml', () => {
                 assert.fileContent('pom.xml', /distributionManagement/);
@@ -250,7 +253,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     .withPrompts({
                         pipeline: 'gitlab',
                         insideDocker: true,
-                        cicdIntegrations: ['deploy', 'sonar', 'heroku'],
+                        cicdIntegrations: ['deploy', 'sonar', 'heroku', 'snyk'],
                         artifactorySnapshotsId: 'snapshots',
                         artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                         artifactoryReleasesId: 'releases',
@@ -266,6 +269,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.fileContent('.gitlab-ci.yml', /image: jhipster/);
                 assert.fileContent('.gitlab-ci.yml', /sonar/);
                 assert.fileContent('.gitlab-ci.yml', /heroku/);
+                assert.fileContent('.gitlab-ci.yml', /snyk/);
             });
             it('contains distributionManagement in pom.xml', () => {
                 assert.fileContent('pom.xml', /distributionManagement/);
@@ -288,6 +292,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.fileContent('.gitlab-ci.yml', /image: jhipster/);
                 assert.noFileContent('.gitlab-ci.yml', /sonar/);
                 assert.noFileContent('.gitlab-ci.yml', /heroku/);
+                assert.noFileContent('.gitlab-ci.yml', /snyk/);
             });
         });
     });
