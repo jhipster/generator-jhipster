@@ -24,30 +24,23 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-<%= LIQUIBASE_DTD_VERSION %>.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
     <%_
-    const entityTableName = entity.entityTableName;
-    const entityClass = entity.entityClass;
-    const javadoc = entity.javadoc;
-    const name = entity.name;
     if (addedFields && addedFields.length) { _%>
 
     <!--
-        Added columns to the entity <%= entityClass %>.
+        Added columns to the entity <%= entity.entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>-1-add-columns" author="jhipster">
-        <addColumn tableName="<%= entityTableName %>"<%- formatAsLiquibaseRemarks(javadoc, true) %>>
-            <%_ for (idx in addedFields) {
-                const columnData = addedFields[idx];
-              _%>
-            <column name="<%= columnData.columnName %>" type="<%= columnData.columnType %>"<%- formatAsLiquibaseRemarks(columnData.javadoc, true) %>/>
-                <%_ if (columnData.shouldCreateContentType) { _%>
-            <column name="<%= columnData.columnName %>_content_type" type="varchar(255)"/>
+        <addColumn tableName="<%= entity.entityTableName %>"<%- formatAsLiquibaseRemarks(entity.javadoc, true) %>>
+            <%_ for (field of addedFields) { _%>
+            <column name="<%= field.columnName %>" type="<%= field.columnType %>"<%- formatAsLiquibaseRemarks(field.javadoc, true) %>/>
+                <%_ if (field.shouldCreateContentType) { _%>
+            <column name="<%= field.columnName %>_content_type" type="varchar(255)"/>
                 <%_ }
-            } // End for (idx in addedFields) _%>
+            } // End for (field of addedFields) _%>
         </addColumn>
-        <%_ for (idx in addedFields) {
-            const columnData = addedFields[idx];
-            if (columnData.fieldType === 'ZonedDateTime' || columnData.fieldType === 'Instant') { _%>
-        <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%= columnData.columnName %>" columnDataType="datetime"/>
+        <%_ for (field of addedFields) {
+            if (field.fieldType === 'ZonedDateTime' || field.fieldType === 'Instant') { _%>
+        <dropDefaultValue tableName="<%= entity.entityTableName %>" columnName="<%= field.columnName %>" columnDataType="datetime"/>
         <%_ } _%>
       <%_ } _%>
     </changeSet>
@@ -55,28 +48,26 @@
     <%_ if (removedFields && removedFields.length) { _%>
 
     <!--
-        Dropped columns to the entity <%= entityClass %>.
+        Dropped columns to the entity <%= entity.entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>-1-drop-columns" author="jhipster">
-        <dropColumn tableName="<%= entityTableName %>">
+        <dropColumn tableName="<%= entity.entityTableName %>">
         <%_
-        for (idx in removedFields) {
-            const columnData = removedFields[idx];
+        for (field of removedFields) {
         _%>
-            <column name="<%= columnData.columnName %>"/>
+            <column name="<%= field.columnName %>"/>
         <%_
         } _%>
         </dropColumn>
     </changeSet>
     <%_ } _%>
-    <%_ if (addedRelationships && addedRelationships.length) {
+    <%_ if (addedRelationships && addedRelationships.length > 0) {
             let hasRelationShips = false;
             let hasJoinRelationShips = false;
-            for (idx in addedRelationships) {
-                const relationshipData = addedRelationships[idx];
-                if (relationshipData.shouldWriteRelationship) {
+            for (relationship of addedRelationships) {
+                if (relationship.shouldWriteRelationship) {
                     hasRelationShips = true;
-                } else if (relationshipData.shouldWriteJoinTable) {
+                } else if (relationship.shouldWriteJoinTable) {
                     hasJoinRelationShips = true;
                 }
             }
@@ -84,58 +75,53 @@
      _%>
 
     <!--
-        Added relationships to the entity <%= entityClass %>.
+        Added relationships to the entity <%= entity.entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>-1-add-relationships" author="jhipster">
         <%_ if (hasRelationShips) { _%>
-        <addColumn tableName="<%= entityTableName %>"<%- formatAsLiquibaseRemarks(javadoc, true) %>>
+        <addColumn tableName="<%= entity.entityTableName %>"<%- formatAsLiquibaseRemarks(entity.javadoc, true) %>>
             <%_
-            for (idx in addedRelationships) {
-                const relationshipData = addedRelationships[idx];
-                relationshipColumnType = relationshipData.otherEntityName === 'user' && authenticationType === 'oauth2' ? 'varchar(100)' : 'bigint';
-                if (relationshipData.shouldWriteRelationship) { _%>
-            <column name="<%= relationshipData.columnName %>_id" type="<%= relationshipColumnType %>"/>
+            for (relationship of addedRelationships) {
+                relationshipColumnType = relationship.otherEntityName === 'user' && authenticationType === 'oauth2' ? 'varchar(100)' : 'bigint';
+                if (relationship.shouldWriteRelationship) { _%>
+            <column name="<%= relationship.columnName %>_id" type="<%= relationshipColumnType %>"/>
                 <%_
                 }
             } _%>
         </addColumn>
         <% } %>
+    <%_ const joinTableRelations = addedRelationships.filter(rel => rel.shouldWriteJoinTable);
+        if(joinTableRelations.length > 0) {
+    _%>
+        <%_ for (relationship of joinTableRelations) { _%>
 
- <%_     for (idx in addedRelationships) {
-            const relationshipData = addedRelationships[idx];
-            relationshipName = relationshipData.relationshipName,
-            otherEntityName = relationshipData.otherEntityName;
-            const relationshipColumnType = otherEntityName === 'user' && authenticationType === 'oauth2' ? 'varchar(100)' : 'bigint';
-            if (relationshipData.shouldWriteJoinTable) {
-                const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
-_%>
-
-        <createTable tableName="<%= joinTableName %>">
-            <column name="<%= getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
+        <createTable tableName="<%= relationship.joinTable.name %>">
+            <%_ for (field of relationship.otherEntity.primaryKey.fields) { _%>
+            <column name="<%= relationship.columnName %>_<%= field.columnName %>" type="<%= field.columnType %>">
                 <constraints nullable="false"/>
             </column>
-            <column name="<%= getColumnName(name) %>_id" type="bigint">
+            <%_ } _%>
+            <%_ for (field of entity.primaryKey.fields) { _%>
+            <column name="<%= entity.entityTableName %>_<%= field.columnName %>" type="<%= field.columnType %>">
                 <constraints nullable="false"/>
             </column>
+            <%_ } _%>
         </createTable>
 
-        <addPrimaryKey columnNames="<%= getColumnName(name) %>_id, <%= getColumnName(relationshipName) %>_id" tableName="<%= joinTableName %>"/>
-<%              } 
-            }
-%>
+        <addPrimaryKey columnNames="<%= entity.primaryKey.fields.map(field => `${entity.entityTableName}_${field.columnName}`).join(', ') %>, <%= relationship.otherEntity.primaryKey.fields.map(field => `${relationship.columnName}_${field.columnName}`).join(', ') %>" tableName="<%= relationship.joinTable.name %>"/>
+        <%_ } _%>
     </changeSet>
     <%_ }
-    } _%>
+    } }_%>
     <%_
 /* ======== Start removed relationships exists ======== */
 if (removedRelationships && removedRelationships.length) {
     let hasRelationShips = false;
     let hasJoinRelationShips = false;
-    for (idx in removedRelationships) {
-        const relationshipData = removedRelationships[idx];
-        if (relationshipData.shouldWriteRelationship) {
+    for (relationship of removedRelationships) {
+        if (relationship.shouldWriteRelationship) {
             hasRelationShips = true;
-        } else if (relationshipData.shouldWriteJoinTable) {
+        } else if (relationship.shouldWriteJoinTable) {
             hasJoinRelationShips = true;
         }
     }
@@ -144,28 +130,26 @@ if (removedRelationships && removedRelationships.length) {
      _%>
 
     <!--
-        Dropped relationships to the entity <%= entityClass %>.
+        Dropped relationships to the entity <%= entity.entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>-1-drop-relationships" author="jhipster">
         <%_
         /* ======== Start hasRelationShips ======== */
         if (hasRelationShips) {
             /* ======== Start dropForeignKeyConstraint ======== */
-            for (idx in removedRelationships) {
-                const relationshipData = removedRelationships[idx];
-                if (relationshipData.shouldWriteRelationship) {
+            for (relationship of removedRelationships) {
+                if (relationship.shouldWriteRelationship) {
         _%>
-        <dropForeignKeyConstraint baseTableName="<%= entityTableName %>" constraintName="<%= getFKConstraintName(entityTableName, relationshipData.relationshipName, prodDatabaseType) %>"/>
+        <dropForeignKeyConstraint baseTableName="<%= entity.entityTableName %>" constraintName="<%= getFKConstraintName(entity.entityTableName, relationship.relationshipName, prodDatabaseType) %>"/>
         <%_     }
             }
             /* ======== End dropForeignKeyConstraint ======== */ _%>
-        <dropColumn tableName="<%= entityTableName %>">
+        <dropColumn tableName="<%= entity.entityTableName %>">
         <%_
             /* ======== Start drop relationship column ======== */
-            for (idx in removedRelationships) {
-                const relationshipData = removedRelationships[idx];
-                if (relationshipData.shouldWriteRelationship) { _%>
-            <column name="<%= relationshipData.columnName %>_id"/>
+            for (relationship of removedRelationships) {
+                if (relationship.shouldWriteRelationship) { _%>
+            <column name="<%= relationship.columnName %>_id"/>
         <%_     }
             }
             /* ======== End drop relationship column ======== */ _%>
@@ -173,15 +157,13 @@ if (removedRelationships && removedRelationships.length) {
         <%_ }
         /* ======== End hasRelationShips ======== */ _%>
         <%_
-        /* ======== Start for shouldWriteJoinTable ======== */
-        for (idx in removedRelationships) {
-            const relationshipData = removedRelationships[idx];
-            if (relationshipData.shouldWriteJoinTable) { _%>
-        <dropTable cascadeConstraints="true"
-            tableName="<%= getJoinTableName(entityTableName, relationshipData.relationshipName, prodDatabaseType) %>"/>
+        /* ======== Start for joinTable ======== */
+        for (relationship of removedRelationships) {
+            if (relationship.shouldWriteJoinTable) { _%>
+        <dropTable cascadeConstraints="true" tableName="<%= relationship.joinTable.name %>"/>
             <%_ }
         }
-        /* ======== End for shouldWriteJoinTable ======== */ _%>
+        /* ======== End for joinTable ======== */ _%>
     </changeSet>
     <%_
     }
