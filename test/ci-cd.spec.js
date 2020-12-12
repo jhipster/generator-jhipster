@@ -314,7 +314,6 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('.travis.yml', /heroku/);
             });
         });
-
         describe('Travis CI: Gradle AngularX NPM', () => {
             before(done => {
                 helpers
@@ -335,6 +334,36 @@ describe('JHipster CI-CD Sub Generator', () => {
             it("doesn't contain Sonar, Heroku", () => {
                 assert.noFileContent('.travis.yml', /sonar/);
                 assert.noFileContent('.travis.yml', /heroku/);
+            });
+        });
+        describe('Travis CI: Maven AngularX NPM with full options', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+                    })
+                    .withOptions({ skipChecks: true })
+                    .withPrompts({
+                        pipeline: 'travis',
+                        cicdIntegrations: ['deploy', 'sonar', 'heroku'],
+                        artifactorySnapshotsId: 'snapshots',
+                        artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
+                        artifactoryReleasesId: 'releases',
+                        artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
+                        sonarUrl: 'http://localhost:9000',
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.travis);
+            });
+            it('contains Sonar, Heroku', () => {
+                assert.fileContent('.travis.yml', /sonar/);
+                assert.fileContent('.travis.yml', /heroku/);
+            });
+            it('contains distributionManagement in pom.xml', () => {
+                assert.fileContent('pom.xml', /distributionManagement/);
             });
         });
     });
