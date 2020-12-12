@@ -19,11 +19,10 @@
 version: 2.1
 jobs:
     build:
-        machine:
-            image: circleci/classic:201808-01
+        docker:
+            - image: jhipster/jhipster:v<%= jhipsterVersion %>
         steps:
             - checkout
-
             # Download and cache dependencies
             - restore_cache:
                 keys:
@@ -34,24 +33,6 @@ jobs:
                     <%_ } _%>
                     # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
                     - v1-dependencies-
-            - run:
-                name: Install OpenJDK 11
-                command: |
-                    sudo rm /var/lib/apt/lists/lock
-                    sudo rm /var/cache/apt/archives/lock
-                    sudo rm /var/lib/dpkg/lock
-                    sudo apt install openjdk-11-jdk
-                    echo 'export PATH="/usr/lib/jvm/java-11-openjdk-amd64/bin:$PATH"' >> $BASH_ENV
-            - run:
-                name: Setup NVM
-                command: |
-                    echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
-                    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-            - run:
-                name: Install Node <%= NODE_VERSION %>
-                command: |
-                    nvm install <%= NODE_VERSION %>
-                    nvm alias default <%= NODE_VERSION %>
             - run:
                 name: Print Java Version
                 command: 'java -version'
