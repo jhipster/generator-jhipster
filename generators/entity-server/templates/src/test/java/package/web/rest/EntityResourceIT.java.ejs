@@ -103,7 +103,7 @@ import org.junit.jupiter.api.AfterEach;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if ((searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany) { _%>
+<%_ if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany) { _%>
 import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
