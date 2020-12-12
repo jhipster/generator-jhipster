@@ -246,7 +246,6 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
 class <%= entityClass %>SqlHelper {
     static List<Expression> getColumns(Table table, String columnPrefix) {
         List<Expression> columns = new ArrayList<>();
-        columns.add(Column.aliased("id", table, columnPrefix + "_id"));
 <%_ fields.forEach(function(field) { 
     let col = field.fieldNameAsDatabaseColumn;
     _%>
