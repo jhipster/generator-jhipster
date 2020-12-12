@@ -42,7 +42,6 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('Jenkinsfile', /heroku/);
             });
         });
-
         describe('Jenkins: Gradle AngularX NPM', () => {
             before(done => {
                 helpers
@@ -65,6 +64,68 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('Jenkinsfile', /docker/);
                 assert.noFileContent('Jenkinsfile', /sonar/);
                 assert.noFileContent('Jenkinsfile', /heroku/);
+            });
+        });
+        describe('Jenkins: Maven AngularX NPM with full options', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+                    })
+                    .withOptions({ skipChecks: true })
+                    .withPrompts({
+                        pipeline: 'jenkins',
+                        insideDocker: false,
+                        cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku'],
+                        artifactorySnapshotsId: 'snapshots',
+                        artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
+                        artifactoryReleasesId: 'releases',
+                        artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
+                        sonarName: 'sonarName',
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.jenkins);
+            });
+            it('contains Docker, Sonar, Heroku', () => {
+                assert.fileContent('Jenkinsfile', /sonar/);
+                assert.fileContent('Jenkinsfile', /heroku/);
+                assert.fileContent('Jenkinsfile', /def dockerImage/);
+            });
+            it('contains distributionManagement in pom.xml', () => {
+                assert.fileContent('pom.xml', /distributionManagement/);
+            });
+        });
+        describe('Jenkins: Maven AngularX NPM inside Docker', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+                    })
+                    .withOptions({ skipChecks: true })
+                    .withPrompts({
+                        pipeline: 'jenkins',
+                        insideDocker: true,
+                        cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku'],
+                        artifactorySnapshotsId: 'snapshots',
+                        artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
+                        artifactoryReleasesId: 'releases',
+                        artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
+                        sonarName: 'sonarName',
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.jenkins);
+            });
+            it('contains Docker, Sonar, Heroku, dockerImage', () => {
+                assert.fileContent('Jenkinsfile', /docker/);
+                assert.fileContent('Jenkinsfile', /sonar/);
+                assert.fileContent('Jenkinsfile', /heroku/);
+                assert.fileContent('Jenkinsfile', /def dockerImage/);
             });
         });
     });
@@ -97,7 +158,6 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('.gitlab-ci.yml', /heroku/);
             });
         });
-
         describe('GitLab CI: Gradle AngularX NPM', () => {
             before(done => {
                 helpers
@@ -121,7 +181,6 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('.gitlab-ci.yml', /heroku/);
             });
         });
-
         describe('GitLab CI: npm skip server', () => {
             before(done => {
                 helpers
