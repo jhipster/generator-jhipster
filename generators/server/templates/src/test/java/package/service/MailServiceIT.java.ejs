@@ -18,19 +18,17 @@
 -%>
 package <%= packageName %>.service;
 
+
 import <%= packageName %>.config.Constants;
 <% if (databaseType === 'cassandra') { %>
 import <%= packageName %>.AbstractCassandraTest;<% } %>
 <%_ if (databaseType === 'neo4j') { _%>
 import <%= packageName %>.AbstractNeo4jIT;
 <%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
-import <%= packageName %>.RedisTestContainerExtension;
-<%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 import <%= packageName %>.ReactiveSqlTestContainerExtension;
 <%_ } _%>
-import <%= packageName %>.<%= mainClass %>;
+import <%= packageName %>.<%= mainClass %>IntegrationTest;
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 import tech.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +41,6 @@ import org.mockito.Captor;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -71,16 +68,13 @@ import static org.mockito.Mockito.*;
 /**
  * Integration tests for {@link MailService}.
  */
-@SpringBootTest(classes = <%= mainClass %>.class)
-<%_ if (cacheProvider === 'redis') { _%>
-@ExtendWith(RedisTestContainerExtension.class)
-<%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
 @ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 @ExtendWith(ReactiveSqlTestContainerExtension.class)
 <%_ } _%>
+@<%= mainClass %>IntegrationTest
 class MailServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     private static final String[] languages = {

@@ -24,10 +24,7 @@ import <%= packageName %>.AbstractCassandraTest;
 <%_ if (databaseType === 'neo4j') { _%>
 import <%= packageName %>.AbstractNeo4jIT;
 <%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
-import <%= packageName %>.RedisTestContainerExtension;
-<%_ } _%>
-import <%= packageName %>.<%= mainClass %>;
+import <%= packageName %>.<%= mainClass %>IntegrationTest;
 <%_ if (!skipUserManagement) { _%>
     <%_ if (databaseType === 'sql' && reactive) { _%>
 import <%= packageName %>.config.Constants;
@@ -37,9 +34,6 @@ import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
 import <%= packageName %>.web.rest.vm.LoginVM;
 import org.junit.jupiter.api.Test;
-<%_ if (cacheProvider === 'redis') { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
@@ -49,7 +43,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 <%_ } else { _%>
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 <%_ } _%>
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 <%_ if (!skipUserManagement) { _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -87,10 +80,7 @@ import static org.hamcrest.Matchers.not;
 <%_ } else { _%>
 @AutoConfigureWebTestClient
 <%_ } _%>
-@SpringBootTest(classes = <%= mainClass %>.class)
-<%_ if (cacheProvider === 'redis') { _%>
-@ExtendWith(RedisTestContainerExtension.class)
-<%_ } _%>
+@<%= mainClass %>IntegrationTest
 <%_ if (databaseType === 'neo4j') { _%>
 @ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
