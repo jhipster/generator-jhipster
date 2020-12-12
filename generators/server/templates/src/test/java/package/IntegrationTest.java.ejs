@@ -19,6 +19,12 @@
 package <%= packageName %>;
 
 import <%= packageName %>.<%= mainClass %>;
+<%_ if (databaseType === 'neo4j') { _%>
+import <%= packageName %>.AbstractNeo4jIT;
+<%_ } _%>
+<%_ if (reactiveSqlTestContainers) { _%>
+import <%= packageName %>.ReactiveSqlTestContainerExtension;
+<%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
 import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
@@ -28,9 +34,10 @@ import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
 <%_ if (authenticationType === 'oauth2') { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
+<%_ if (cacheProvider === 'redis' || databaseType === 'neo4j' || reactiveSqlTestContainers) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
+
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.lang.annotation.ElementType;
@@ -52,5 +59,11 @@ import java.lang.annotation.Target;
 <%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
 @ExtendWith(RedisTestContainerExtension.class)
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+@ExtendWith(AbstractNeo4jIT.class)
+<%_ } _%>
+<%_ if (reactiveSqlTestContainers) { _%>
+@ExtendWith(ReactiveSqlTestContainerExtension.class)
 <%_ } _%>
 public @interface <%= mainClass %>IntegrationTest {}

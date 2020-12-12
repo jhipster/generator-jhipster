@@ -21,12 +21,6 @@ package <%= packageName %>.service;
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-import <%= packageName %>.AbstractNeo4jIT;
-<%_ } _%>
-<%_ if (reactiveSqlTestContainers) { _%>
-import <%= packageName %>.ReactiveSqlTestContainerExtension;
-<%_ } _%>
 import <%= packageName %>.<%= mainClass %>IntegrationTest;
 import <%= packageName %>.config.Constants;
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
@@ -58,9 +52,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if (databaseType === 'neo4j' || reactiveSqlTestContainers) { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (databaseType === 'sql' && !reactive && authenticationType !== 'oauth2') { _%>
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -141,12 +132,6 @@ import static org.mockito.Mockito.when;
  * Integration tests for {@link UserService}.
  */
 @<%= mainClass %>IntegrationTest
-<%_ if (databaseType === 'neo4j') { _%>
-@ExtendWith(AbstractNeo4jIT.class)
-<%_ } _%>
-<%_ if (reactiveSqlTestContainers) { _%>
-@ExtendWith(ReactiveSqlTestContainerExtension.class)
-<%_ } _%>
 <%_ if (databaseType === 'sql' && !reactive) { _%>
 @Transactional
 <%_ } _%>

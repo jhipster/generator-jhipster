@@ -22,20 +22,11 @@ package <%= packageName %>.service;
 import <%= packageName %>.config.Constants;
 <% if (databaseType === 'cassandra') { %>
 import <%= packageName %>.AbstractCassandraTest;<% } %>
-<%_ if (databaseType === 'neo4j') { _%>
-import <%= packageName %>.AbstractNeo4jIT;
-<%_ } _%>
-<%_ if (reactiveSqlTestContainers) { _%>
-import <%= packageName %>.ReactiveSqlTestContainerExtension;
-<%_ } _%>
 import <%= packageName %>.<%= mainClass %>IntegrationTest;
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 import tech.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if (databaseType === 'neo4j' || cacheProvider === 'redis' || reactiveSqlTestContainers) { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.MockitoAnnotations;
@@ -68,12 +59,6 @@ import static org.mockito.Mockito.*;
 /**
  * Integration tests for {@link MailService}.
  */
-<%_ if (databaseType === 'neo4j') { _%>
-@ExtendWith(AbstractNeo4jIT.class)
-<%_ } _%>
-<%_ if (reactiveSqlTestContainers) { _%>
-@ExtendWith(ReactiveSqlTestContainerExtension.class)
-<%_ } _%>
 @<%= mainClass %>IntegrationTest
 class MailServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
