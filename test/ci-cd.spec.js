@@ -390,7 +390,6 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.file(expectedFiles.azure);
             });
         });
-
         describe('Azure Pipelines: Gradle AngularX NPM', () => {
             before(done => {
                 helpers
@@ -403,6 +402,20 @@ describe('JHipster CI-CD Sub Generator', () => {
                         pipeline: 'azure',
                         cicdIntegrations: [],
                     })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.azure);
+            });
+        });
+        describe('Azure Pipelines: autoconfigure', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+                    })
+                    .withOptions({ autoconfigureAzure: true })
                     .on('end', done);
             });
             it('creates expected files', () => {
