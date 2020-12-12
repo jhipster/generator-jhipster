@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#-------------------------------------------------------------------------------
+# Eg: 11-generate-config.sh ./ ngx-default sqlfull
+#-------------------------------------------------------------------------------
 if [[ "$1" != "" ]]; then
     JHI_FOLDER_APP=$1
 fi
@@ -177,14 +180,14 @@ elif [[ "$JHI_ENTITY" == "sql" ]]; then
 
     moveEntity MapsIdUserProfileWithDTO
 
-elif [[ "$JHI_ENTITY" != "" ]]; then
-    JHI_JDL_ENTITY=$JHI_ENTITY
+elif [[ "$3" != "" ]]; then
+    JHI_JDL_ENTITY=$3
 fi
 
 #-------------------------------------------------------------------------------
 # Generate jdl entities
 #-------------------------------------------------------------------------------
-if [[ "$JHI_JDL_ENTITY" != "" ]]; then
+if [[ "$JHI_JDL_ENTITY" != "" && "$JHI_JDL_ENTITY" != "none" ]]; then
     jhipster --no-insight jdl "$JHI_SAMPLES"/jdl-entities/$JHI_JDL_ENTITY.jdl --json-only
 fi
 
