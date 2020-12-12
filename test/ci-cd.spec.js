@@ -203,6 +203,89 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.fileContent('.gitlab-ci.yml', /image: jhipster/);
             });
         });
+        describe('GitLab CI: Maven AngularX NPM with full options', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+                    })
+                    .withOptions({ skipChecks: true })
+                    .withPrompts({
+                        pipeline: 'gitlab',
+                        insideDocker: false,
+                        cicdIntegrations: ['deploy', 'sonar', 'heroku'],
+                        artifactorySnapshotsId: 'snapshots',
+                        artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
+                        artifactoryReleasesId: 'releases',
+                        artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
+                        sonarUrl: 'http://localhost:9000',
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.gitlab);
+            });
+            it('contains Sonar, Heroku', () => {
+                assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
+                assert.fileContent('.gitlab-ci.yml', /sonar/);
+                assert.fileContent('.gitlab-ci.yml', /heroku/);
+            });
+            it('contains distributionManagement in pom.xml', () => {
+                assert.fileContent('pom.xml', /distributionManagement/);
+            });
+        });
+        describe('GitLab CI: Maven AngularX NPM inside Docker', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+                    })
+                    .withOptions({ skipChecks: true })
+                    .withPrompts({
+                        pipeline: 'gitlab',
+                        insideDocker: true,
+                        cicdIntegrations: ['deploy', 'sonar', 'heroku'],
+                        artifactorySnapshotsId: 'snapshots',
+                        artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
+                        artifactoryReleasesId: 'releases',
+                        artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
+                        sonarUrl: 'http://localhost:9000',
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.gitlab);
+            });
+            it('contains image: jhipster, Sonar, Heroku', () => {
+                assert.fileContent('.gitlab-ci.yml', /image: jhipster/);
+                assert.fileContent('.gitlab-ci.yml', /sonar/);
+                assert.fileContent('.gitlab-ci.yml', /heroku/);
+            });
+            it('contains distributionManagement in pom.xml', () => {
+                assert.fileContent('pom.xml', /distributionManagement/);
+            });
+        });
+        describe('GitLab CI: Maven AngularX Yarn inside Docker Autoconfigure', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+                    })
+                    .withOptions({ autoconfigureGitlab: true })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.gitlab);
+            });
+            it('contains image: jhipster, Sonar, Heroku', () => {
+                assert.fileContent('.gitlab-ci.yml', /image: jhipster/);
+                assert.noFileContent('.gitlab-ci.yml', /sonar/);
+                assert.noFileContent('.gitlab-ci.yml', /heroku/);
+            });
+        });
     });
 
     //--------------------------------------------------
