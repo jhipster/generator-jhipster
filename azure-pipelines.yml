@@ -45,8 +45,8 @@ jobs:
           NG_CLI_ANALYTICS: false
           # https://github.com/actions/virtual-environments/issues/1499#issuecomment-689467080
           MAVEN_OPTS: '-Dhttp.keepAlive=false
-                       -Dmaven.wagon.http.pool=false
-                       -Dmaven.wagon.httpconnectionManager.ttlSeconds=120'
+              -Dmaven.wagon.http.pool=false
+              -Dmaven.wagon.httpconnectionManager.ttlSeconds=120'
 
       strategy:
           matrix:
