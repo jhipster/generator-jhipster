@@ -173,7 +173,7 @@ module.exports = class extends BaseGenerator {
             this.template('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
         }
         if (this.pipeline === 'github') {
-            this.template('github-ci.yml.ejs', '.github/workflows/github-ci.yml');
+            this.template('github-actions.yml.ejs', '.github/workflows/github-actions.yml');
         }
 
         if (this.cicdIntegrations.includes('deploy')) {
