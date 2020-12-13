@@ -441,7 +441,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/alert/alert.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/account.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/config/font-awesome-icons.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/has-any-authority.directive.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/auth/has-any-authority.directive.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/state-storage.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/user-route-access.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/config/authority.constants.ts`,
