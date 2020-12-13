@@ -29,8 +29,6 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
 import { <%= entityAngularName %>Service } from '../<%= entityFileName %>.service';
-import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
-
 import { <%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_
 Object.keys(differentRelationships).forEach(key => {
@@ -50,6 +48,8 @@ import { <%= uniqueRel.otherEntityAngularName %> } from 'app/entities/<%= unique
     }
 });
 _%>
+
+import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
 
 describe('Component Tests', () => {
     describe('<%= entityAngularName %> Management Update Component', () => {
@@ -108,16 +108,19 @@ describe('Component Tests', () => {
     if (trackedEntities.length > 0) {
 _%>
 
-        describe('tracking relationships identifiers', () => {
+        describe('Tracking relationships identifiers', () => {
     <%_ for (reference of trackedEntities) {
             const otherEntity = reference.relationship.otherEntity;
             const otherEntityTsKeyId = generateTestEntityId(otherEntity.primaryKey.type);
     _%>
-            it('track <%= otherEntity.entityAngularName %>', () => {
-                const entity = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %>);
-                const trackResult = comp.track<%= otherEntity.entityAngularName %>By<%= otherEntity.primaryKey.nameCapitalized %>(0, entity);
-                expect(trackResult).toEqual(entity.<%= otherEntity.primaryKey.name %>);
+            describe('track<%= otherEntity.entityAngularName %>By<%= otherEntity.primaryKey.nameCapitalized %>', () => {
+                it('Should return tracked <%= otherEntity.entityAngularName %> primary key', () => {
+                    const entity = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %>);
+                    const trackResult = comp.track<%= otherEntity.entityAngularName %>By<%= otherEntity.primaryKey.nameCapitalized %>(0, entity);
+                    expect(trackResult).toEqual(entity.<%= otherEntity.primaryKey.name %>);
+                });
             });
+
     <%_ } _%>
         });
 <%_ } _%>
@@ -125,22 +128,36 @@ _%>
     if (selectableEntities.length > 0) {
 _%>
 
-        describe('getting selected relationships', () => {
+        describe('Getting selected relationships', () => {
     <%_ for (reference of selectableEntities) {
             const otherEntity = reference.relationship.otherEntity;
             const otherEntityTsKeyId = generateTestEntityId(otherEntity.primaryKey.type);
+            const otherEntityAlternativeTsKeyId = generateTestEntityId(otherEntity.primaryKey.type, 1);
     _%>
-            it('get selected <%= otherEntity.entityAngularName %> without selected values', () => {
-                const entity = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %>);
-                const selectedEntity = comp.getSelected<%= otherEntity.entityAngularName %>(entity);
-                expect(selectedEntity).toEqual(entity);
-            });
+            describe('getSelected<%= otherEntity.entityAngularName %>', () => {
+                it('Should return option if no <%= otherEntity.entityAngularName %> is selected', () => {
+                    const option = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %>);
+                    const result = comp.getSelected<%= otherEntity.entityAngularName %>(option);
+                    expect(result === option).toEqual(true);
+                });
 
-            it('get selected <%= otherEntity.entityAngularName %>', () => {
-                const entity = new <%= otherEntity.entityAngularName %>(<%- otherEntity.primaryKey.fields.map(field => generateTestEntityId(field.fieldType)).join(', ') %>);
-                const selectable = new <%= otherEntity.entityAngularName %>(<%- otherEntity.primaryKey.fields.map(field => generateTestEntityId(field.fieldType)).join(', ') %>);
-                const selectedEntity = comp.getSelected<%= otherEntity.entityAngularName %>(entity, [selectable]);
-                expect(selectedEntity).toEqual(selectable);
+                it('Should return selected <%= otherEntity.entityAngularName %> for according option', () => {
+                    const option = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %>);
+                    const selected = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %>);
+                    const selected2 = new <%= otherEntity.entityAngularName %>(<%- otherEntityAlternativeTsKeyId %>);
+                    const result = comp.getSelected<%= otherEntity.entityAngularName %>(option, [selected2, selected]);
+                    expect(result === selected).toEqual(true);
+                    expect(result === selected2).toEqual(false);
+                    expect(result === option).toEqual(false);
+                });
+
+                it('Should return option if this <%= otherEntity.entityAngularName %> is not selected', () => {
+                    const option = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %>);
+                    const selected = new <%= otherEntity.entityAngularName %>(<%- otherEntityAlternativeTsKeyId %>);
+                    const result = comp.getSelected<%= otherEntity.entityAngularName %>(option, [selected]);
+                    expect(result === option).toEqual(true);
+                    expect(result === selected).toEqual(false);
+                });
             });
 
     <%_ } _%>
