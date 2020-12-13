@@ -22,7 +22,7 @@ package <%= packageName %>.service;
 import <%= packageName %>.config.Constants;
 <% if (databaseType === 'cassandra') { %>
 import <%= packageName %>.AbstractCassandraTest;<% } %>
-import <%= packageName %>.<%= mainClass %>IntegrationTest;
+import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 import tech.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,7 +59,7 @@ import static org.mockito.Mockito.*;
 /**
  * Integration tests for {@link MailService}.
  */
-@<%= mainClass %>IntegrationTest
+@IntegrationTest
 class MailServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     private static final String[] languages = {

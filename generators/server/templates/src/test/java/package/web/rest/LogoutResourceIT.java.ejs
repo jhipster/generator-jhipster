@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.web.rest;
 
-import <%= packageName %>.<%= mainClass %>IntegrationTest;
+import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.config.TestSecurityConfiguration;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,7 +60,7 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 /**
  * Integration tests for the {@link LogoutResource} REST controller.
  */
-@<%= mainClass %>IntegrationTest
+@IntegrationTest
 class LogoutResourceIT {
 
     @Autowired

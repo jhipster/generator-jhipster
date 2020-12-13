@@ -60,7 +60,7 @@ _%>
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-import <%= packageName %>.<%= mainClass %>IntegrationTest;
+import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 <%_
     var imported = [];
@@ -213,7 +213,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link <%= entityClass %>Resource} REST controller.
  */
-@<%= mainClass %>IntegrationTest
+@IntegrationTest
 <%_ if (cacheProvider === 'redis' || searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany === true) { _%>
 @ExtendWith(MockitoExtension.class)
 <%_ } _%>

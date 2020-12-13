@@ -21,7 +21,7 @@ package <%= packageName %>.service;
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-import <%= packageName %>.<%= mainClass %>IntegrationTest;
+import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.config.Constants;
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
 import <%= packageName %>.domain.PersistentToken;
@@ -131,7 +131,7 @@ import static org.mockito.Mockito.when;
 /**
  * Integration tests for {@link UserService}.
  */
-@<%= mainClass %>IntegrationTest
+@IntegrationTest
 <%_ if (databaseType === 'sql' && !reactive) { _%>
 @Transactional
 <%_ } _%>

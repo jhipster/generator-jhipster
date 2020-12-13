@@ -21,7 +21,7 @@ package <%= packageName %>.web.rest;
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-import <%= packageName %>.<%= mainClass %>IntegrationTest;
+import <%= packageName %>.IntegrationTest;
 <%_ if (!skipUserManagement) { _%>
     <%_ if (databaseType === 'sql' && reactive) { _%>
 import <%= packageName %>.config.Constants;
@@ -74,7 +74,7 @@ import static org.hamcrest.Matchers.not;
 <%_ } else { _%>
 @AutoConfigureWebTestClient
 <%_ } _%>
-@<%= mainClass %>IntegrationTest
+@IntegrationTest
 class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     <%_ if (!skipUserManagement) { _%>

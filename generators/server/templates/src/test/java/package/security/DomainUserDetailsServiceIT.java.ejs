@@ -22,7 +22,7 @@ package <%= packageName %>.security;
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-import <%= packageName %>.<%= mainClass %>IntegrationTest;
+import <%= packageName %>.IntegrationTest;
 <%_ if (databaseType === 'sql' && reactive) { _%>
 import <%= packageName %>.config.Constants;
 <%_ } _%>
@@ -64,7 +64,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 <%_ if (databaseType === 'couchbase') { _%>
 @WithMockUser("test-user-one")
 <%_ } _%>
-@<%= mainClass %>IntegrationTest
+@IntegrationTest
 class DomainUserDetailsServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     private static final String USER_ONE_LOGIN = "test-user-one";

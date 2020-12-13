@@ -19,7 +19,7 @@
 package <%= packageName %>;
 
 
-import <%= packageName %>.<%= mainClass %>IntegrationTest;
+import <%= packageName %>.IntegrationTest;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.metadata.Metadata;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@<%= mainClass %>IntegrationTest
+@IntegrationTest
 public class CassandraKeyspaceIT extends AbstractCassandraTest {
 
     @Autowired

@@ -21,7 +21,7 @@ package <%= packageName %>.web.rest;
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-import <%= packageName %>.<%= mainClass %>IntegrationTest;
+import <%= packageName %>.IntegrationTest;
 <%_ if (reactive && searchEngine === 'elasticsearch') { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
@@ -65,7 +65,7 @@ import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 @AutoConfigureWebTestClient
 <%_ } _%>
 @WithMockUser(value = TEST_USER_LOGIN)
-@<%= mainClass %>IntegrationTest
+@IntegrationTest
 class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
     static final String TEST_USER_LOGIN = "test";
 

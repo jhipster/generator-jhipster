@@ -901,7 +901,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'package/IntegrationTest.java',
-                    renameTo: generator => `${generator.testDir}/${generator.mainClass}IntegrationTest.java`,
+                    renameTo: generator => `${generator.testDir}/IntegrationTest.java`,
                 },
             ],
         },
