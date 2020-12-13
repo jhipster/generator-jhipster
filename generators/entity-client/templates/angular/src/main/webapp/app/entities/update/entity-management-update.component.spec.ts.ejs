@@ -29,9 +29,27 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
 import { <%= entityAngularName %>Service } from '../<%= entityFileName %>.service';
-import { <%= entityAngularName %> } from '../<%= entityFileName %>.model';
-
 import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
+
+import { <%= entityAngularName %> } from '../<%= entityFileName %>.model';
+<%_
+Object.keys(differentRelationships).forEach(key => {
+    if (differentRelationships[key].some(rel => rel.reference.owned)) {
+        const uniqueRel = differentRelationships[key][0];
+        if (uniqueRel.otherEntityAngularName !== entityAngularName) {
+            if (isBuiltInUser(uniqueRel.otherEntityAngularName)) {
+_%>
+import { User } from 'app/core/user/user.model';
+<%_
+            } else {
+_%>
+import { <%= uniqueRel.otherEntityAngularName %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.model';
+<%_
+            }
+        }
+    }
+});
+_%>
 
 describe('Component Tests', () => {
     describe('<%= entityAngularName %> Management Update Component', () => {
@@ -86,5 +104,47 @@ describe('Component Tests', () => {
                 })
             );
         });
+<%_ const trackedEntities = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference);
+    if (trackedEntities.length > 0) {
+_%>
+
+        describe('tracking relationships identifiers', () => {
+    <%_ for (reference of trackedEntities) {
+            const otherEntity = reference.relationship.otherEntity;
+            const otherEntityTsKeyId = generateTestEntityId(otherEntity.primaryKey.type);
+    _%>
+            it('track <%= otherEntity.entityAngularName %>', () => {
+                const entity = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %>);
+                const trackResult = comp.track<%= otherEntity.entityAngularName %>By<%= otherEntity.primaryKey.nameCapitalized %>(0, entity);
+                expect(trackResult).toEqual(entity.<%= otherEntity.primaryKey.name %>);
+            });
+    <%_ } _%>
+        });
+<%_ } _%>
+<%_ const selectableEntities = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipType === 'many-to-many' && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference);
+    if (selectableEntities.length > 0) {
+_%>
+
+        describe('getting selected relationships', () => {
+    <%_ for (reference of selectableEntities) {
+            const otherEntity = reference.relationship.otherEntity;
+            const otherEntityTsKeyId = generateTestEntityId(otherEntity.primaryKey.type);
+    _%>
+            it('get selected <%= otherEntity.entityAngularName %> without selected values', () => {
+                const entity = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %>);
+                const selectedEntity = comp.getSelected<%= otherEntity.entityAngularName %>(entity);
+                expect(selectedEntity).toEqual(entity);
+            });
+
+            it('get selected <%= otherEntity.entityAngularName %>', () => {
+                const entity = new <%= otherEntity.entityAngularName %>(<%- otherEntity.primaryKey.fields.map(field => generateTestEntityId(field.fieldType)).join(', ') %>);
+                const selectable = new <%= otherEntity.entityAngularName %>(<%- otherEntity.primaryKey.fields.map(field => generateTestEntityId(field.fieldType)).join(', ') %>);
+                const selectedEntity = comp.getSelected<%= otherEntity.entityAngularName %>(entity, [selectable]);
+                expect(selectedEntity).toEqual(selectable);
+            });
+
+    <%_ } _%>
+        });
+<%_ } _%>
     });
 });

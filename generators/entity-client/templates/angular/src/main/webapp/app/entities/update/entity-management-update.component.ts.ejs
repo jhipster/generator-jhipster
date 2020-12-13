@@ -59,7 +59,7 @@ import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 <%_ } _%>
 <%_
 Object.keys(differentRelationships).forEach(key => {
-    if (differentRelationships[key].some(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one' && rel.ownerSide === true || rel.relationshipType === 'many-to-many' && rel.ownerSide === true)) {
+    if (differentRelationships[key].some(rel => rel.reference.owned)) {
         const uniqueRel = differentRelationships[key][0];
         if (uniqueRel.otherEntityAngularName !== entityAngularName) {
             if (isBuiltInUser(uniqueRel.otherEntityAngularName)) {
@@ -76,49 +76,6 @@ import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%=
         }
     }
 });
-let selectableEntitiesIdType = getTypescriptKeyType(getPkType(databaseType));
-if (databaseType === 'sql' && authenticationType === 'oauth2') {
-    let existsUserSelectableEntity = false;
-    let existsOtherSelectableEntity = false;
-    for (selectableEntity of selectableEntities) {
-        if (selectableEntity === 'IUser') {
-            existsUserSelectableEntity = true;
-        } else {
-            existsOtherSelectableEntity = true;
-        }
-    }
-    if (existsUserSelectableEntity) {
-        if (existsOtherSelectableEntity) {
-            selectableEntitiesIdType = 'number | string';
-        } else {
-            selectableEntitiesIdType = 'string';
-        }
-    }
-}
-let selectableEntitiesType = '';
-if (selectableEntities.length === 1) {
-    selectableEntitiesType = selectableEntities[0];
-} else if (selectableEntities.length > 1) {
-    selectableEntitiesType = 'SelectableEntity';
-_%>
-
-type SelectableEntity = <%= selectableEntities.join(' | ') %>;
-<%_
-}
-let selectableManyToManyEntitiesType = '';
-if (selectableEntities.length === selectableManyToManyEntities.length && selectableEntities.every(value => selectableManyToManyEntities.includes(value))) {
-    selectableManyToManyEntitiesType = selectableEntitiesType;
-} else {
-    if (selectableManyToManyEntities.length === 1) {
-        selectableManyToManyEntitiesType = selectableManyToManyEntities[0];
-    } else if (selectableManyToManyEntities.length > 1) {
-        selectableManyToManyEntitiesType = 'SelectableManyToManyEntity';
-_%>
-
-type SelectableManyToManyEntity = <%= selectableManyToManyEntities.join(' | ') %>;
-<%_
-    }
-}
 _%>
 
 @Component({
@@ -189,7 +146,7 @@ _%>
         }
         this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
             <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
-            if (<%= entityInstance %>.id == null) {
+            if (<%= entityInstance %>.<%= primaryKey.name %> == null) {
                 const today = dayjs().startOf('day');
             <%_ } _%>
             <%_ for (idx in fields) {
@@ -286,7 +243,7 @@ _%>
     save(): void {
         this.isSaving = true;
         const <%= entityInstance %> = this.createFromForm();
-        if (<%= entityInstance %>.id !== undefined) {
+        if (<%= entityInstance %>.<%= primaryKey.name %> !== undefined) {
             this.subscribeToSaveResponse(
                 this.<%= entityInstance %>Service.update(<%= entityInstance %>));
         } else {
@@ -339,18 +296,18 @@ _%>
     protected onSaveError(): void {
         this.isSaving = false;
     }
+    <%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
 
-    <%_ if (selectableEntitiesType) { _%>
-    trackById(index: number, item: <%= selectableEntitiesType %>): <%= selectableEntitiesIdType %> {
-        return item.id!;
+    track<%= reference.relationship.otherEntity.entityAngularName %>By<%= reference.relationship.otherEntity.primaryKey.nameCapitalized %>(index: number, item: I<%= reference.relationship.otherEntity.entityAngularName %>): <%= getTypescriptKeyType(reference.relationship.otherEntity.primaryKey.type) %> {
+        return item.<%= reference.relationship.otherEntity.primaryKey.name %>!;
     }
     <%_ } _%>
+    <%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipType === 'many-to-many' && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
 
-    <%_ if (selectableManyToManyEntitiesType) { _%>
-    getSelected(option: <%= selectableManyToManyEntitiesType %>, selectedVals?: <%= selectableManyToManyEntitiesType %>[]): <%= selectableManyToManyEntitiesType %> {
+    getSelected<%= reference.relationship.otherEntity.entityAngularName %>(option: I<%= reference.relationship.otherEntity.entityAngularName %>, selectedVals?: I<%= reference.relationship.otherEntity.entityAngularName %>[]): I<%= reference.relationship.otherEntity.entityAngularName %> {
         if (selectedVals) {
           for (let i = 0; i < selectedVals.length; i++) {
-              if (option.id === selectedVals[i].id) {
+              if (option.<%= reference.relationship.otherEntity.primaryKey.name %> === selectedVals[i].<%= reference.relationship.otherEntity.primaryKey.name %>) {
                   return selectedVals[i];
               }
           }

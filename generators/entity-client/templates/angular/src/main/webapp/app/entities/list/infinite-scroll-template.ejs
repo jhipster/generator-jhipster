@@ -46,7 +46,7 @@
         this.links = {
             last: 0
         };
-        this.predicate = 'id';
+        this.predicate = '<%- primaryKey.name %>';
         this.ascending = true;
         <%_ if (searchEngine !== false) { _%>
         this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
@@ -112,7 +112,7 @@
             this.predicate = '_score';
             this.ascending = false;
         } else {
-            this.predicate = 'id';
+            this.predicate = '<%- primaryKey.name %>';
             this.ascending = true;
         }
         this.currentSearch = query;

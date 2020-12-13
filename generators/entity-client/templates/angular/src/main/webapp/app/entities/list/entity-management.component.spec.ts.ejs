@@ -56,13 +56,13 @@ describe('Component Tests', () => {
                         provide: ActivatedRoute,
                         useValue: {
                             data: of({
-                                defaultSort: 'id,asc',
+                                defaultSort: '<%- primaryKey.name %>,asc',
                             }),
                             queryParamMap: of(
                                 jest.requireActual('@angular/router').convertToParamMap({
                                     page: '1',
                                     size: '1',
-                                    sort: 'id,desc',
+                                    sort: '<%- primaryKey.name %>,desc',
                                 })
                             ),
                             <%_ if (searchEngine !== false) { _%>
@@ -101,7 +101,7 @@ describe('Component Tests', () => {
 
             // THEN
             expect(service.query).toHaveBeenCalled();
-            expect(comp.<%= entityInstancePlural %><%= entityArrayOptionalChainSymbol %>[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
+            expect(comp.<%= entityInstancePlural %><%= entityArrayOptionalChainSymbol %>[0]).toEqual(jasmine.objectContaining({ <%- primaryKey.name %>: <%- tsKeyId %> }));
         });
 
     <%_ if (pagination !== 'no') { _%>
@@ -122,7 +122,7 @@ describe('Component Tests', () => {
 
             // THEN
             expect(service.query).toHaveBeenCalled();
-            expect(comp.<%= entityInstancePlural %><%= entityArrayOptionalChainSymbol %>[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
+            expect(comp.<%= entityInstancePlural %><%= entityArrayOptionalChainSymbol %>[0]).toEqual(jasmine.objectContaining({ <%- primaryKey.name %>: <%- tsKeyId %> }));
         });
 
         <%_ if (pagination === 'infinite-scroll') { _%>
@@ -146,7 +146,7 @@ describe('Component Tests', () => {
             // THEN
             expect(comp.page).toEqual(0);
             expect(service.query).toHaveBeenCalledTimes(2);
-            expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
+            expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({ <%- primaryKey.name %>: <%- tsKeyId %> }));
         });
 
         it('should calculate the sort attribute for an id', () => {
@@ -155,7 +155,7 @@ describe('Component Tests', () => {
             const result = comp.sort();
 
             // THEN
-            expect(result).toEqual(['id,asc']);
+            expect(result).toEqual(['<%- primaryKey.name %>,asc']);
         });
 
         it('should calculate the sort attribute for a non-id attribute', () => {
@@ -169,7 +169,7 @@ describe('Component Tests', () => {
             const result = comp.sort();
 
             // THEN
-                expect(result).toEqual(['name,asc', 'id']);
+                expect(result).toEqual(['name,asc', '<%- primaryKey.name %>']);
         });
 
         <%_ } else { _%>
@@ -180,7 +180,7 @@ describe('Component Tests', () => {
             const result = comp.sort();
 
             // THEN
-            expect(result).toEqual(['id,desc']);
+            expect(result).toEqual(['<%- primaryKey.name %>,desc']);
         });
 
         it('should calculate the sort attribute for a non-id attribute', () => {
@@ -194,7 +194,7 @@ describe('Component Tests', () => {
             const result = comp.sort();
 
             // THEN
-            expect(result).toEqual(['name,desc', 'id']);
+            expect(result).toEqual(['name,desc', '<%- primaryKey.name %>']);
         });
 
         <%_ } _%>
