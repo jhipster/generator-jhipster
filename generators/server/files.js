@@ -897,6 +897,15 @@ const serverFiles = {
             ],
         },
         {
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/IntegrationTest.java',
+                    renameTo: generator => `${generator.testDir}/IntegrationTest.java`,
+                },
+            ],
+        },
+        {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {

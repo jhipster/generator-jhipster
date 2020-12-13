@@ -60,22 +60,7 @@ _%>
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-import <%= packageName %>.AbstractNeo4jIT;
-<%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
-import <%= packageName %>.RedisTestContainerExtension;
-<%_ } _%>
-<%_ if (reactiveSqlTestContainers) { _%>
-import <%= packageName %>.ReactiveSqlTestContainerExtension;
-<%_ } _%>
-import <%= packageName %>.<%= mainClass %>;
-<%_ if (authenticationType === 'uaa') { _%>
-import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
-<%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
-import <%= packageName %>.config.TestSecurityConfiguration;
-<%_ } _%>
+import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 <%_
     var imported = [];
@@ -118,7 +103,7 @@ import org.junit.jupiter.api.AfterEach;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if ((searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany || cacheProvider === 'redis') || databaseType === 'neo4j' || reactiveSqlTestContainers) { _%>
+<%_ if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany || cacheProvider === 'redis' || databaseType === 'neo4j' || reactiveSqlTestContainers) { _%>
 import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -129,7 +114,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 <%_ } else { _%>
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 <%_ } _%>
-import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (searchEngine === 'elasticsearch' && pagination !== 'no' || fieldsContainOwnerManyToMany) { _%>
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -229,23 +213,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link <%= entityClass %>Resource} REST controller.
  */
-<%_ if (authenticationType === 'oauth2') { _%>
-@SpringBootTest(classes = { <%= mainClass %>.class, TestSecurityConfiguration.class })
-<%_ } else if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
-@SpringBootTest(classes = { SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class })
-<%_ } else { _%>
-@SpringBootTest(classes = <%= mainClass %>.class)
-<%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
-@ExtendWith({ RedisTestContainerExtension.class, MockitoExtension.class })
-<%_ } else if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany === true) { _%>
+@IntegrationTest
+<%_ if (cacheProvider === 'redis' || searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany === true) { _%>
 @ExtendWith(MockitoExtension.class)
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-@ExtendWith(AbstractNeo4jIT.class)
-<%_ } _%>
-<%_ if (reactiveSqlTestContainers) { _%>
-@ExtendWith(ReactiveSqlTestContainerExtension.class)
 <%_ } _%>
 <%_ if (!reactive) { _%>
 @AutoConfigureMockMvc
