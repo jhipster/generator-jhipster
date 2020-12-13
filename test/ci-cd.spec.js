@@ -355,7 +355,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     .withOptions({ skipChecks: true })
                     .withPrompts({
                         pipeline: 'travis',
-                        cicdIntegrations: ['deploy', 'sonar', 'heroku'],
+                        cicdIntegrations: ['deploy', 'sonar', 'heroku', 'snyk'],
                         artifactorySnapshotsId: 'snapshots',
                         artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                         artifactoryReleasesId: 'releases',
@@ -367,9 +367,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             it('creates expected files', () => {
                 assert.file(expectedFiles.travis);
             });
-            it('contains Sonar, Heroku', () => {
+            it('contains Sonar, Heroku, Snyk', () => {
                 assert.fileContent('.travis.yml', /sonar/);
                 assert.fileContent('.travis.yml', /heroku/);
+                assert.fileContent('.travis.yml', /snyk/);
             });
             it('contains distributionManagement in pom.xml', () => {
                 assert.fileContent('pom.xml', /distributionManagement/);
