@@ -1207,15 +1207,16 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      * Generate a primary key, according to the type
      *
      * @param {any} pkType - the type of the primary key
+     * @param {number} index - the index of the primary key, currently it's possible to generate 2 values, index = 0 - first key (default), otherwise second key
      */
-    generateTestEntityId(pkType) {
+    generateTestEntityId(pkType, index = 0) {
         if (pkType === 'String') {
-            return "'123'";
+            return index === 0 ? "'123'" : "'456'";
         }
         if (pkType === 'UUID') {
-            return "'9fec3727-3421-4967-b213-ba36557ca194'";
+            return index === 0 ? "'9fec3727-3421-4967-b213-ba36557ca194'" : "'1361f429-3817-4123-8ee3-fdf8943310b2'";
         }
-        return 123;
+        return index === 0 ? 123 : 456;
     }
 
     /**
