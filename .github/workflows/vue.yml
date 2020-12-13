@@ -53,6 +53,11 @@ env:
     NG_CLI_ANALYTICS: 'false'
     JHI_GITHUB_CI: true
     FORCE_COLOR: 1
+    # https://github.com/actions/virtual-environments/issues/1499#issuecomment-689467080
+    MAVEN_OPTS: >-
+        -Dhttp.keepAlive=false
+        -Dmaven.wagon.http.pool=false
+        -Dmaven.wagon.httpconnectionManager.ttlSeconds=120
 jobs:
     applications:
         name: ${{ matrix.app-type }}
