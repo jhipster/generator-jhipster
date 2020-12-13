@@ -21,7 +21,7 @@ sonar.junit.reportPaths=<%_ if (buildTool === 'maven') { _%>target<%_ } else { _
 <%_ } _%>
 <%_ if (!skipClient) { _%>
 sonar.testExecutionReportPaths=<%_ if (buildTool === 'maven') { _%>target<%_ } else { _%> build<%_ } _%>/test-results/jest/TESTS-results-sonar.xml
-sonar.typescript.lcov.reportPaths=<%_ if (buildTool === 'maven') { _%>target<%_ } else { _%> build<%_ } _%>/test-results/lcov.info
+sonar.javascript.lcov.reportPaths=<%_ if (buildTool === 'maven') { _%>target<%_ } else { _%> build<%_ } _%>/test-results/lcov.info
 <%_ } _%>
 
 sonar.sourceEncoding=UTF-8
