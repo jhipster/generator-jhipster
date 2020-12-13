@@ -26,7 +26,7 @@ const mapper = entityInstance  + 'Mapper';
 _%>
 <%_ if(viaService) { %>
    <%_ if(!reactive) { %>
-   Optional<<%= instanceType %>> result = Optional.ofNullable(<%= entityInstance %>Service.partialUpdate(<%= instanceName %>));
+   Optional<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
    <%_ } else { %>
    Mono<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
    <%_ } %>
@@ -56,5 +56,5 @@ _%>
          <%_ } %>
       })<% } %><% if (dto !== 'no') { %>
    .map(<%= mapper %>::toDto)<% } %><% if (isService && !reactive) { %>
-   .get()<% } %>;
+   <% } %>;
 <%_ } %>
