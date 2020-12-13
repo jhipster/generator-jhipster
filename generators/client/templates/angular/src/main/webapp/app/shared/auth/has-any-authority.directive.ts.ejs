@@ -37,7 +37,7 @@ import { AccountService } from 'app/core/auth/account.service';
   selector: '[<%= jhiPrefix %>HasAnyAuthority]',
 })
 export class HasAnyAuthorityDirective implements OnDestroy {
-  private authorities: string[] = [];
+  private authorities: string | string[] = '';
 
   private readonly destroy$ = new Subject<void>();
 
@@ -45,7 +45,7 @@ export class HasAnyAuthorityDirective implements OnDestroy {
 
   @Input()
   set <%= jhiPrefix %>HasAnyAuthority(value: string | string[]) {
-    this.authorities = typeof value === 'string' ? [value] : value;
+    this.authorities = value;
     this.updateView();
     // Get notified each time authentication state changes.
     this.accountService

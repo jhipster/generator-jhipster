@@ -419,6 +419,7 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 'core/auth/account.service.spec.ts',
+                'shared/auth/has-any-authority.directive.spec.ts',
                 'core/util/event-manager.service.spec.ts',
                 'core/util/data-util.service.spec.ts',
                 'core/util/parse-links.service.spec.ts',

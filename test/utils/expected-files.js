@@ -495,6 +495,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/sort/sort.directive.spec.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/sort/sort-by.directive.spec.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/translate.directive.spec.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/auth/has-any-authority.directive.spec.ts`,
         'tsconfig.app.json',
         'tsconfig.spec.json',
         'tsconfig.json',
