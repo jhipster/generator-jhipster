@@ -27,9 +27,6 @@ import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
 import org.junit.jupiter.api.Test;
-<%_ if (reactive && ['mysql', 'postgresql', 'mssql'].includes(prodDatabaseType)) { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 import <%= packageName %>.ReactiveSqlTestContainerExtension;
 <%_ } _%>
