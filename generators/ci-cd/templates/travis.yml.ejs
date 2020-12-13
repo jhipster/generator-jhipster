@@ -64,6 +64,12 @@ before_install:
 install:
   - <%= clientPackageManager %> install
 script:
+<%_ if (cicdIntegrations.includes('snyk')) { _%>
+  - curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
+  - chmod +x snyk
+  - ./snyk test --all-projects || true
+  - ./snyk monitor --all-projects
+<%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
   - chmod +x mvnw
 <%_ } else if (buildTool === 'gradle') { _%>

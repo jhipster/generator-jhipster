@@ -63,8 +63,24 @@ jobs:
               if (!skipClient) { _%>
             - name: Install node.js packages
               run: <%= clientPackageManager %> install
-              <%_ }
-              if (!skipServer) { _%>
+              <%_ } _%>
+              <%_ if (cicdIntegrations.includes('snyk')) { _%>
+            - name: Install Snyk CLI
+              run: |
+                  curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
+                  chmod +x snyk
+            - name: Snyk test
+              continue-on-error: true
+              run: ./snyk test --all-projects
+              env:
+                  SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+            - name: Snyk monitor
+              continue-on-error: true
+              run: ./snyk monitor --all-projects
+              env:
+                  SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+              <%_ } _%>
+              <%_ if (!skipServer) { _%>
             - name: Run backend test
               run: |
                   <%_ if (buildTool === 'maven') { _%>

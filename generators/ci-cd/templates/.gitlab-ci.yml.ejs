@@ -55,6 +55,17 @@ nohttp:
     stage: check
     script:
         - ./gradlew checkstyleNohttp --no-daemon
+<%_ if (cicdIntegrations.includes('snyk')) { _%>
+
+dependency-scanning:
+    stage: check
+    script:
+        - curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
+        - chmod +x snyk
+        - ./snyk test --all-projects
+        - ./snyk monitor --all-projects
+    allow_failure: true
+<%_ } _%>
 
 gradle-compile:
     stage: build
@@ -182,6 +193,17 @@ nohttp:
     stage: check
     script:
         - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
+<%_ if (cicdIntegrations.includes('snyk')) { _%>
+
+dependency-scanning:
+    stage: check
+    script:
+        - curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
+        - chmod +x snyk
+        - ./snyk test --all-projects
+        - ./snyk monitor --all-projects
+    allow_failure: true
+<%_ } _%>
 
 maven-compile:
     stage: build

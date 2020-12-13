@@ -40,6 +40,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('Jenkinsfile', /docker/);
                 assert.noFileContent('Jenkinsfile', /sonar/);
                 assert.noFileContent('Jenkinsfile', /heroku/);
+                assert.noFileContent('Jenkinsfile', /snyk/);
             });
         });
         describe('Jenkins: Gradle Angular NPM', () => {
@@ -64,6 +65,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('Jenkinsfile', /docker/);
                 assert.noFileContent('Jenkinsfile', /sonar/);
                 assert.noFileContent('Jenkinsfile', /heroku/);
+                assert.noFileContent('Jenkinsfile', /snyk/);
             });
         });
         describe('Jenkins: Maven Angular NPM with full options', () => {
@@ -77,7 +79,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     .withPrompts({
                         pipeline: 'jenkins',
                         insideDocker: false,
-                        cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku'],
+                        cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku', 'snyk'],
                         artifactorySnapshotsId: 'snapshots',
                         artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                         artifactoryReleasesId: 'releases',
@@ -93,6 +95,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.fileContent('Jenkinsfile', /sonar/);
                 assert.fileContent('Jenkinsfile', /heroku/);
                 assert.fileContent('Jenkinsfile', /def dockerImage/);
+                assert.fileContent('Jenkinsfile', /snyk/);
             });
             it('contains distributionManagement in pom.xml', () => {
                 assert.fileContent('pom.xml', /distributionManagement/);
@@ -109,7 +112,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     .withPrompts({
                         pipeline: 'jenkins',
                         insideDocker: true,
-                        cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku'],
+                        cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku', 'snyk'],
                         artifactorySnapshotsId: 'snapshots',
                         artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                         artifactoryReleasesId: 'releases',
@@ -126,6 +129,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.fileContent('Jenkinsfile', /sonar/);
                 assert.fileContent('Jenkinsfile', /heroku/);
                 assert.fileContent('Jenkinsfile', /def dockerImage/);
+                assert.fileContent('Jenkinsfile', /snyk/);
             });
         });
     });
@@ -156,6 +160,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
                 assert.noFileContent('.gitlab-ci.yml', /sonar/);
                 assert.noFileContent('.gitlab-ci.yml', /heroku/);
+                assert.noFileContent('.gitlab-ci.yml', /snyk/);
             });
         });
         describe('GitLab CI: Gradle Angular NPM', () => {
@@ -179,6 +184,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
                 assert.noFileContent('.gitlab-ci.yml', /sonar/);
                 assert.noFileContent('.gitlab-ci.yml', /heroku/);
+                assert.noFileContent('.gitlab-ci.yml', /snyk/);
             });
         });
         describe('GitLab CI: npm skip server', () => {
@@ -214,7 +220,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     .withPrompts({
                         pipeline: 'gitlab',
                         insideDocker: false,
-                        cicdIntegrations: ['deploy', 'sonar', 'heroku'],
+                        cicdIntegrations: ['deploy', 'sonar', 'heroku', 'snyk'],
                         artifactorySnapshotsId: 'snapshots',
                         artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                         artifactoryReleasesId: 'releases',
@@ -230,6 +236,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
                 assert.fileContent('.gitlab-ci.yml', /sonar/);
                 assert.fileContent('.gitlab-ci.yml', /heroku/);
+                assert.fileContent('.gitlab-ci.yml', /snyk/);
             });
             it('contains distributionManagement in pom.xml', () => {
                 assert.fileContent('pom.xml', /distributionManagement/);
@@ -246,7 +253,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     .withPrompts({
                         pipeline: 'gitlab',
                         insideDocker: true,
-                        cicdIntegrations: ['deploy', 'sonar', 'heroku'],
+                        cicdIntegrations: ['deploy', 'sonar', 'heroku', 'snyk'],
                         artifactorySnapshotsId: 'snapshots',
                         artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                         artifactoryReleasesId: 'releases',
@@ -262,6 +269,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.fileContent('.gitlab-ci.yml', /image: jhipster/);
                 assert.fileContent('.gitlab-ci.yml', /sonar/);
                 assert.fileContent('.gitlab-ci.yml', /heroku/);
+                assert.fileContent('.gitlab-ci.yml', /snyk/);
             });
             it('contains distributionManagement in pom.xml', () => {
                 assert.fileContent('pom.xml', /distributionManagement/);
@@ -284,6 +292,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.fileContent('.gitlab-ci.yml', /image: jhipster/);
                 assert.noFileContent('.gitlab-ci.yml', /sonar/);
                 assert.noFileContent('.gitlab-ci.yml', /heroku/);
+                assert.noFileContent('.gitlab-ci.yml', /snyk/);
             });
         });
     });
@@ -346,7 +355,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     .withOptions({ skipChecks: true })
                     .withPrompts({
                         pipeline: 'travis',
-                        cicdIntegrations: ['deploy', 'sonar', 'heroku'],
+                        cicdIntegrations: ['deploy', 'sonar', 'heroku', 'snyk'],
                         artifactorySnapshotsId: 'snapshots',
                         artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                         artifactoryReleasesId: 'releases',
@@ -358,9 +367,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             it('creates expected files', () => {
                 assert.file(expectedFiles.travis);
             });
-            it('contains Sonar, Heroku', () => {
+            it('contains Sonar, Heroku, Snyk', () => {
                 assert.fileContent('.travis.yml', /sonar/);
                 assert.fileContent('.travis.yml', /heroku/);
+                assert.fileContent('.travis.yml', /snyk/);
             });
             it('contains distributionManagement in pom.xml', () => {
                 assert.fileContent('pom.xml', /distributionManagement/);
@@ -406,6 +416,48 @@ describe('JHipster CI-CD Sub Generator', () => {
             });
             it('creates expected files', () => {
                 assert.file(expectedFiles.azure);
+            });
+        });
+        describe('Azure Pipelines: Maven Angular NPM with Snyk', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+                    })
+                    .withOptions({ skipChecks: true })
+                    .withPrompts({
+                        pipeline: 'azure',
+                        cicdIntegrations: ['snyk'],
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.azure);
+            });
+            it('contains Snyk', () => {
+                assert.fileContent('azure-pipelines.yml', /snyk/);
+            });
+        });
+        describe('Azure Pipelines: Gradle Angular NPM with Snyk', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
+                    })
+                    .withOptions({ skipChecks: true })
+                    .withPrompts({
+                        pipeline: 'azure',
+                        cicdIntegrations: ['snyk'],
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.azure);
+            });
+            it('contains Snyk', () => {
+                assert.fileContent('azure-pipelines.yml', /snyk/);
             });
         });
         describe('Azure Pipelines: autoconfigure', () => {
@@ -475,7 +527,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     .withOptions({ skipChecks: true })
                     .withPrompts({
                         pipeline: 'github',
-                        cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku'],
+                        cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku', 'snyk'],
                         dockerImage: 'jhipster-publish-docker',
                         artifactorySnapshotsId: 'snapshots',
                         artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
@@ -488,10 +540,11 @@ describe('JHipster CI-CD Sub Generator', () => {
             it('creates expected files', () => {
                 assert.file(expectedFiles.github);
             });
-            it('contains Docker, Sonar, Heroku', () => {
+            it('contains Docker, Sonar, Heroku, Snyk', () => {
                 assert.fileContent('.github/workflows/github-actions.yml', /mvnw.*sonar.com/);
                 assert.fileContent('.github/workflows/github-actions.yml', /mvnw.*jhipster-publish-docker/);
                 assert.fileContent('.github/workflows/github-actions.yml', /mvnw.*sample-mysql/);
+                assert.fileContent('.github/workflows/github-actions.yml', /snyk/);
             });
             it('contains distributionManagement in pom.xml', () => {
                 assert.fileContent('pom.xml', /distributionManagement/);
@@ -507,7 +560,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     .withOptions({ skipChecks: true })
                     .withPrompts({
                         pipeline: 'github',
-                        cicdIntegrations: ['sonar', 'publishDocker', 'heroku'],
+                        cicdIntegrations: ['sonar', 'publishDocker', 'heroku', 'snyk'],
                         dockerImage: 'jhipster-publish-docker',
                         sonarUrl: 'http://sonar.com:9000',
                     })
@@ -520,6 +573,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.fileContent('.github/workflows/github-actions.yml', /gradlew.*jhipster-publish-docker/);
                 assert.fileContent('.github/workflows/github-actions.yml', /gradlew.*sonar.com/);
                 assert.fileContent('.github/workflows/github-actions.yml', /gradlew.*deployHeroku/);
+                assert.fileContent('.github/workflows/github-actions.yml', /snyk/);
             });
         });
         describe('GitHub Actions: autoconfigure', () => {
@@ -582,6 +636,48 @@ describe('JHipster CI-CD Sub Generator', () => {
                 assert.noFile(expectedFiles.jenkins);
                 assert.noFile(expectedFiles.travis);
                 assert.noFile(expectedFiles.gitlab);
+            });
+        });
+        describe('Circle CI: Maven with Snyk', () => {
+            beforeEach(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+                    })
+                    .withOptions({ skipChecks: true })
+                    .withPrompts({
+                        pipeline: 'circle',
+                        cicdIntegrations: ['snyk'],
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.circle);
+            });
+            it('contains Snyk', () => {
+                assert.fileContent('.circleci/config.yml', /snyk/);
+            });
+        });
+        describe('Circle CI: Gradle with Snyk', () => {
+            beforeEach(done => {
+                helpers
+                    .run(require.resolve('../generators/ci-cd'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
+                    })
+                    .withOptions({ skipChecks: true })
+                    .withPrompts({
+                        pipeline: 'circle',
+                        cicdIntegrations: ['snyk'],
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files', () => {
+                assert.file(expectedFiles.circle);
+            });
+            it('contains Snyk', () => {
+                assert.fileContent('.circleci/config.yml', /snyk/);
             });
         });
     });
