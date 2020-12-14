@@ -151,7 +151,7 @@ export const getUsersAsAdmin: ICrudGetAllAction<IUser> = (page, size, sort) => {
 
 export const getRoles = () => ({
   type: ACTION_TYPES.FETCH_ROLES,
-  payload: axios.get(`${adminUrl}/authorities`)
+  payload: axios.get(`<%= apiUaaPath %>api/authorities`)
 });
 
 export const getUser: ICrudGetAction<IUser> = id => {

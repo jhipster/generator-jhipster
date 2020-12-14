@@ -73,7 +73,7 @@ describe('UserManagementEdit Component', () => {
       await userManagementEdit.$nextTick();
 
       // THEN
-      expect(axiosStub.get.calledWith(`api/users/authorities`)).toBeTruthy();
+      expect(axiosStub.get.calledWith(`api/authorities`)).toBeTruthy();
     });
   });
 

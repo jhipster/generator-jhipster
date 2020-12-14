@@ -66,7 +66,7 @@ export class UserService {
 
   authorities(): Observable<string[]> {
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-    return this.http.get<string[]>(SERVER_API_URL + '<%- apiUaaPath %>api/users/authorities');
+    return this.http.get<string[]>(SERVER_API_URL + '<%- apiUaaPath %>api/authorities');
     <%_ } else { _%>
     return of([Authority.ADMIN, Authority.USER]);
     <%_ } _%>

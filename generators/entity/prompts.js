@@ -1003,6 +1003,7 @@ function askForRelationship() {
         {
             when: response =>
                 response.relationshipAdd === true &&
+                response.otherEntityName.toLowerCase() !== 'user' &&
                 (response.relationshipType === 'many-to-one' ||
                     (response.relationshipType === 'many-to-many' && response.ownerSide === true) ||
                     (response.relationshipType === 'one-to-one' && response.ownerSide === true)),
