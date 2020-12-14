@@ -18,7 +18,6 @@
 -%>
 
 CREATE TABLE IF NOT EXISTS <%= entityInstance %> (
-    id uuid,
 <%_ for (idx in fields) {
         const fieldType = fields[idx].fieldType;
         const fieldName = fields[idx].fieldName;

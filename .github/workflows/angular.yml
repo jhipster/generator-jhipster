@@ -95,14 +95,14 @@ jobs:
                     - ngx-gradle-h2disk-ws-nocache
                 include:
                     - app-type: ngx-default
-                      entity: sql
+                      entity: sqlfull
+                      jdl-entity: '*'
                       environment: prod
                       war: 0
                       e2e: 1
                       testcontainers: 1
                     - app-type: ngx-mysql-es-noi18n-mapsid
-                      entity: sqlfull
-                      jdl-entity: '*'
+                      entity: sql
                       environment: prod
                       war: 0
                       e2e: 1

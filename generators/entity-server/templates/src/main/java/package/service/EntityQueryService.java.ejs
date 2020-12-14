@@ -121,11 +121,12 @@ public class <%= serviceClassName %> extends QueryService<<%= asEntity(entityCla
     protected Specification<<%= asEntity(entityClass) %>> createSpecification(<%= criteria %> criteria) {
         Specification<<%= asEntity(entityClass) %>> specification = Specification.where(null);
         if (criteria != null) {
-            if (criteria.getId() != null) {
-                specification = specification.and(<%= getSpecificationBuilder(primaryKeyType) %>(criteria.getId(), <%= asEntity(entityClass) %>_.id));
+            if (criteria.get<%= primaryKey.nameCapitalized %>() != null) {
+                specification = specification.and(<%= getSpecificationBuilder(primaryKeyType) %>(criteria.get<%= primaryKey.nameCapitalized %>(), <%= asEntity(entityClass) %>_.id));
             }
             <%_
             fields.forEach((field) => {
+                if (field.id) return;
                 if (isFilterableType(field.fieldType)) { _%>
             if (criteria.get<%= field.fieldInJavaBeanMethod %>() != null) {
                 specification = specification.and(<%= getSpecificationBuilder(field.fieldType) %>(criteria.get<%= field.fieldInJavaBeanMethod %>(), <%= asEntity(entityClass) %>_.<%= field.fieldName %>));

@@ -60,7 +60,6 @@ public class <%= entityClass %>RowMapper implements BiFunction<Row, String, <%= 
     @Override
     public <%= asEntity(entityClass) %> apply(Row row, String prefix) {
         <%= asEntity(entityClass) %> entity = new <%= asEntity(entityClass) %>();
-        entity.setId(row.get(prefix + "_id", Long.class));
         <%_ fields.forEach(function(field) {
             let fieldType = field.fieldType;
             if (field.fieldTypeBlobContent === 'text') {

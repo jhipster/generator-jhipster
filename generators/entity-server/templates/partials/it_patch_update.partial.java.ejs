@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 // Initialize the database
-<%_ if (primaryKeyType === 'UUID') { _%>
-    <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
+<%_ if (primaryKeyType === 'UUID' && databaseType !== 'sql') { _%>
+    <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(UUID.randomUUID());
 <%_ } _%>
 <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
@@ -26,7 +26,7 @@ int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= call
 
 // Update the <%= entityInstance %> using partial update
 <%= asEntity(entityClass) %> partialUpdated<%= asEntity(entityClass) %> = new <%= asEntity(entityClass) %>();
-partialUpdated<%= asEntity(entityClass) %>.setId(<%= asEntity(entityInstance) %>.getId());
+partialUpdated<%= asEntity(entityClass) %>.set<%= primaryKey.nameCapitalized %>(<%= asEntity(entityInstance) %>.get<%= primaryKey.nameCapitalized %>());
 <%_ fieldsToUpdate = fields.filter(field => field.includeField) %>
 <%_ if (fluentMethods && fieldsToUpdate.length > 0) { _%>
     partialUpdated<%= asEntity(entityClass) %><% for (field of fieldsToUpdate) { %>

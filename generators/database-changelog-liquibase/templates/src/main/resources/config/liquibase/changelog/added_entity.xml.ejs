@@ -24,22 +24,11 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-<%= LIQUIBASE_DTD_VERSION %>.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <% let autoIncrementValue = entity.primaryKeyType !== 'String';
-        let databasePKType = entity.primaryKeyType !== 'String' ? 'bigint' : 'varchar(100)';
-        const isAutoIncrementDB = reactive || prodDatabaseType === 'mysql';
-    _%>
-    <%_ if (isAutoIncrementDB) { _%>
-    <property name="autoIncrement" value="<%- autoIncrementValue %>"/>
-    <%_ } _%>
-
     <!--
         Added the entity <%= entity.entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>-1" author="jhipster">
         <createTable tableName="<%= entity.entityTableName %>"<%- formatAsLiquibaseRemarks(entity.javadoc, true) %>>
-            <column name="id" type="<%= databasePKType %>" <%_ if (entity.primaryKeyType === 'String' ) { _%> <% } else if (isAutoIncrementDB) { %> autoIncrement="${autoIncrement}" <%_ } %>>
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
             <%_ for (idx in fields) {
                 const nullable = fields[idx].nullable;
                 const fieldType = fields[idx].fieldType;
@@ -47,8 +36,10 @@
                 const columnName = fields[idx].fieldNameAsDatabaseColumn;
                 const columnType = fields[idx].columnType;
                 _%>
-            <column name="<%= columnName %>" type="<%= columnType %>"<%- formatAsLiquibaseRemarks(fields[idx].javadoc, true) %>>
-                <%_ if (fields[idx].unique) { _%>
+            <column name="<%= columnName %>" type="<%= columnType %>"<%- formatAsLiquibaseRemarks(fields[idx].javadoc, true) %><% if (fields[idx].id && fields[idx].liquibaseAutoIncrement) { %> autoIncrement="true" <%_ } %>>
+                <%_ if (fields[idx].id) { _%>
+                <constraints primaryKey="true" nullable="false"/>
+                <%_ } else if (fields[idx].unique) { _%>
                 <constraints nullable="<%= nullable %>" unique="true" uniqueConstraintName="<%= fields[idx].uniqueConstraintName %>" />
                 <%_ } else { _%>
                 <constraints nullable="<%= nullable %>" />
@@ -70,18 +61,16 @@
                 if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
                     nullable_relation = false;
                 }
-                if (relationships[idx].relationshipType === 'many-to-one') { _%>
-            <column name="<%= relationships[idx].columnName %>_id" type="<%= relationshipColumnType %>">
-                <constraints nullable="<%= relationships[idx].nullable %>" />
+                if (relationships[idx].relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true
+                            && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false))) {
+                    relationships[idx].otherEntity.idFields.forEach(idField => {
+                    const uniqueConstraintName = relationshipType === 'one-to-one' ? getUXConstraintName(entity.entityTableName, relationships[idx].columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
+                     _%>
+            <column name="<%= relationships[idx].columnName %>_<%= idField.columnName %>" type="<%= idField.columnType %>">
+                <constraints nullable="<%= relationships[idx].nullable %>"<% if (uniqueConstraintName) { %> unique="true" uniqueConstraintName="<%= uniqueConstraintName %>"<% } %> />
             </column>
-            <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true
-                            && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false)) {
-                const uniqueConstraintName = getUXConstraintName(entity.entityTableName, relationships[idx].columnName + '_id', entity.prodDatabaseType);
-            _%>
-            <column name="<%= relationships[idx].columnName %>_id" type="<%= relationshipColumnType %>">
-                <constraints unique="true" nullable="<%= relationships[idx].nullable %>" uniqueConstraintName="<%= uniqueConstraintName %>" />
-            </column>
-            <%_ }
+                    <%_ });
+                }
             } _%>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
@@ -131,7 +120,6 @@
                   file="config/liquibase/fake-data/<%= !entity.incrementalChangelog ? entity.entityTableName : databaseChangelog.changelogDate + '_entity_' + entity.entityClass %>.csv"
                   separator=";"
                   tableName="<%= entity.entityTableName %>">
-            <column name="id" type="numeric"/>
             <%_ for (idx in fields) {
                 _%>
             <column name="<%= fields[idx].columnName %>" type="<%= fields[idx].loadColumnType %>"/>

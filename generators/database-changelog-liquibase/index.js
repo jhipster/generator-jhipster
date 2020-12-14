@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const assert = require('assert');
+const _ = require('lodash');
 
 const BaseGenerator = require('../generator-base');
 const { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } = require('./files');
@@ -36,15 +37,13 @@ module.exports = class extends BaseGenerator {
 
         assert(this.options.databaseChangelog, 'Changelog is required');
         this.databaseChangelog = this.options.databaseChangelog;
+
+        // Set number of rows to be generated
+        this.numberOfRows = 10;
     }
 
-    // Public API method used by the getter and also by Blueprints
-    _default() {
+    _preparing() {
         return {
-            setupConstants() {
-                // Make constants available in templates
-                this.LIQUIBASE_DTD_VERSION = LIQUIBASE_DTD_VERSION;
-            },
             prepareEntityForTemplates() {
                 const databaseChangelog = this.databaseChangelog;
                 this.entity = this.configOptions.sharedEntities[databaseChangelog.entityName];
@@ -52,14 +51,8 @@ module.exports = class extends BaseGenerator {
                     throw new Error(`Shared entity ${databaseChangelog.entityName} was not found`);
                 }
 
-                // Remove fields with custom ids, drop once templates supports them
-                this.entity = { ...this.entity, fields: this.entity.fieldsNoId };
-
                 if (databaseChangelog.type === 'entity-new') {
                     this.fields = this.entity.fields.map(field => prepareFieldForLiquibaseTemplates(this.entity, field));
-                    this.relationships = this.entity.relationships.map(relationship =>
-                        this._prepareRelationshipForTemplates(this.entity, relationship)
-                    );
                 } else {
                     this.addedFields = this.databaseChangelog.addedFields
                         .map(field => prepareFieldForTemplates(this.entity, field, this))
@@ -67,6 +60,69 @@ module.exports = class extends BaseGenerator {
                     this.removedFields = this.databaseChangelog.removedFields
                         .map(field => prepareFieldForTemplates(this.entity, field, this))
                         .map(field => prepareFieldForLiquibaseTemplates(this.entity, field));
+                }
+            },
+
+            setupReproducibility() {
+                if (this.jhipsterConfig.skipServer || this.entity.skipServer) {
+                    return;
+                }
+
+                // In order to have consistent results with Faker, restart seed with current entity name hash.
+                this.entity.resetFakerSeed();
+            },
+
+            prepareFakeData() {
+                const databaseChangelog = this.databaseChangelog;
+                this.entity.liquibaseFakeData = [];
+                for (let rowNumber = 0; rowNumber < this.numberOfRows; rowNumber++) {
+                    const rowData = {};
+                    const fields = databaseChangelog.type === 'entity-new' ? this.fields : this.addedFields;
+                    fields.forEach((field, idx) => {
+                        if (field.derived) {
+                            Object.defineProperty(rowData, field.fieldName, {
+                                get: () => {
+                                    if (
+                                        !field.derivedEntity.liquibaseFakeData ||
+                                        rowNumber >= field.derivedEntity.liquibaseFakeData.length
+                                    ) {
+                                        return undefined;
+                                    }
+                                    return field.derivedEntity.liquibaseFakeData[rowNumber][field.fieldName];
+                                },
+                            });
+                            return;
+                        }
+                        let data;
+                        if (field.id && field.fieldType === 'Long') {
+                            data = rowNumber + 1;
+                        } else {
+                            data = field.generateFakeData();
+                        }
+                        rowData[field.fieldName] = data;
+                    });
+
+                    this.entity.liquibaseFakeData.push(rowData);
+                }
+                this.configOptions.sharedLiquibaseFakeData = this.configOptions.sharedLiquibaseFakeData || {};
+                this.configOptions.sharedLiquibaseFakeData[_.upperFirst(this.entity.name)] = this.entity.liquibaseFakeData;
+            },
+        };
+    }
+
+    get preparing() {
+        return this._preparing();
+    }
+
+    _preparingRelationships() {
+        return {
+            prepareRelationshipsForTemplates() {
+                const databaseChangelog = this.databaseChangelog;
+                if (databaseChangelog.type === 'entity-new') {
+                    this.relationships = this.entity.relationships.map(relationship =>
+                        this._prepareRelationshipForTemplates(this.entity, relationship)
+                    );
+                } else {
                     this.addedRelationships = this.databaseChangelog.addedRelationships
                         .map(relationship => {
                             const otherEntityName = this._.upperFirst(relationship.otherEntityName);
@@ -102,6 +158,20 @@ module.exports = class extends BaseGenerator {
         };
     }
 
+    get preparingRelationships() {
+        return this._preparingRelationships();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return {
+            setupConstants() {
+                // Make constants available in templates
+                this.LIQUIBASE_DTD_VERSION = LIQUIBASE_DTD_VERSION;
+            },
+        };
+    }
+
     get default() {
         return this._default();
     }
@@ -109,15 +179,6 @@ module.exports = class extends BaseGenerator {
     // Public API method used by the getter and also by Blueprints
     _writing() {
         return {
-            setupReproducibility() {
-                if (this.jhipsterConfig.skipServer || this.entity.skipServer) {
-                    return;
-                }
-
-                // In order to have consistent results with Faker, restart seed with current entity name hash.
-                this.entity.resetFakerSeed();
-            },
-
             writeLiquibaseFiles() {
                 const config = this.jhipsterConfig;
                 if (config.skipServer || this.entity.skipServer || config.databaseType !== 'sql') {
