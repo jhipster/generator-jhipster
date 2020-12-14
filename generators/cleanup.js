@@ -142,7 +142,6 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${ANGULAR_DIR}core/date/datepicker-adapter.ts`);
             generator.removeFile(`${ANGULAR_DIR}core/icons/font-awesome-icons.ts`);
             generator.removeFile(`${ANGULAR_DIR}core/language/language.constants.ts`);
-            generator.removeFile(`${ANGULAR_DIR}shared/auth/has-any-authority.directive.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/constants/authority.constants.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/constants/error.constants.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/constants/input.constants.ts`);
@@ -177,6 +176,9 @@ function cleanupOldFiles(generator) {
             generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-modal-threads`);
             generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-request`);
             generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-system`);
+            generator.removeFile(`${ANGULAR_DIR}shared/has-any-authority.directive.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/item-count.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/item-count.component.spec.ts`);
 
             // test files removal from old location
             // a) deleted before moving tests next to files they are testing

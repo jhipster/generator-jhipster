@@ -360,7 +360,7 @@ const files = {
                 'shared/date/format-medium-datetime.pipe.ts',
                 'shared/sort/sort.directive.ts',
                 'shared/sort/sort-by.directive.ts',
-                'shared/item-count.component.ts',
+                'shared/pagination/item-count.component.ts',
                 // alert service code
                 'shared/alert/alert.component.ts',
                 'shared/alert/alert.component.html',
@@ -380,7 +380,7 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 'core/auth/state-storage.service.ts',
-                'shared/has-any-authority.directive.ts',
+                'shared/auth/has-any-authority.directive.ts',
                 'core/auth/account.service.ts',
                 'core/auth/user-route-access.service.ts',
             ],
@@ -419,6 +419,7 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 'core/auth/account.service.spec.ts',
+                'shared/auth/has-any-authority.directive.spec.ts',
                 'core/util/event-manager.service.spec.ts',
                 'core/util/data-util.service.spec.ts',
                 'core/util/parse-links.service.spec.ts',
@@ -432,7 +433,7 @@ const files = {
                 'shared/date/format-medium-datetime.pipe.spec.ts',
                 'shared/sort/sort.directive.spec.ts',
                 'shared/sort/sort-by.directive.spec.ts',
-                'shared/item-count.component.spec.ts',
+                'shared/pagination/item-count.component.spec.ts',
             ],
         },
         {
