@@ -205,7 +205,7 @@ class PublicUserResourceIT <% if (databaseType === 'cassandra') { %>extends Abst
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_LOGIN)))
+            .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))
             .andExpect(jsonPath("$.[*].email").doesNotExist())
             <%_ if (databaseType !== 'cassandra') { _%>
             .andExpect(jsonPath("$.[*].imageUrl").doesNotExist())
@@ -219,7 +219,7 @@ class PublicUserResourceIT <% if (databaseType === 'cassandra') { %>extends Abst
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .returnResult(<%= asDto('PublicUser') %>.class).getResponseBody().blockFirst();
 
-        assertThat(foundUser.getName()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         <% } _%>
     }
 

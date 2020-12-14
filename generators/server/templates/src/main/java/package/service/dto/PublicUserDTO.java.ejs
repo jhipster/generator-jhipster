@@ -28,7 +28,7 @@ import <%= packageName %>.domain.<%= asEntity('User') %>;
 public class <%= asDto('PublicUser') %> {
 
     private <%= user.primaryKeyType %> id;
-    private String name;
+    private String login;
 
     <%_ if (databaseType !== 'no') { _%>
     public <%= asDto('PublicUser') %>() {
@@ -38,7 +38,7 @@ public class <%= asDto('PublicUser') %> {
     public <%= asDto('PublicUser') %>(<%= asEntity('User') %> user) {
         this.id = user.getId();
         // Customize it here if you need firstName/lastName/etc
-        this.name = user.getLogin();
+        this.login = user.getLogin();
     }
 
     <%_ } _%>
@@ -50,12 +50,12 @@ public class <%= asDto('PublicUser') %> {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getLogin() {
+        return login;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     // prettier-ignore
@@ -63,7 +63,7 @@ public class <%= asDto('PublicUser') %> {
     public String toString() {
         return "<%= asDto('PublicUser') %>{" +
             "id='" + id + '\'' +
-            ", name='" + name + '\'' +
+            ", login='" + login + '\'' +
             "}";
     }
 
