@@ -10,8 +10,22 @@ entity EntityUuidId {
 entity EntityUuidIdMapsId {
 }
 
+@ChangelogDate(20200804035302)
+entity EntityUuidIdRelationship {
+  id UUID
+}
+
 relationship OneToOne {
   EntityUuidIdMapsId to @Id EntityUuidId
+  EntityUuidIdRelationship{oneToOne} to EntityUuidId{oneToOneBack}
+}
+
+relationship ManyToOne {
+  EntityUuidIdRelationship{manyToOne} to EntityUuidId{manyToOneBack}
+}
+
+relationship ManyToMany {
+  EntityUuidIdRelationship{manyToMany} to EntityUuidId{manyToManyBack}
 }
 
 /*
@@ -26,11 +40,25 @@ entity EntityUuidIdDTO {
 entity EntityUuidIdDTOMapsId {
 }
 
-relationship OneToOne {
-  EntityUuidIdDTOMapsId to @Id EntityUuidIdDTO
+@ChangelogDate(20200804035402)
+entity EntityUuidIdDTORel {
+  id UUID
 }
 
-dto EntityUuidIdDTO, EntityUuidIdDTOMapsId with mapstruct
+relationship OneToOne {
+  EntityUuidIdDTOMapsId to @Id EntityUuidIdDTO
+  EntityUuidIdDTORel{oneToOne} to EntityUuidIdDTO{oneToOneBack}
+}
+
+relationship ManyToOne {
+  EntityUuidIdDTORel{manyToOne} to EntityUuidIdDTO{manyToOneBack}
+}
+
+relationship ManyToMany {
+  EntityUuidIdDTORel{manyToMany} to EntityUuidIdDTO{manyToManyBack}
+}
+
+dto EntityUuidIdDTO, EntityUuidIdDTOMapsId, EntityUuidIdDTORel with mapstruct
 
 /*
  * Custom named id
@@ -44,8 +72,22 @@ entity EntityCustomId {
 entity EntityCustomIdMapsId {
 }
 
+@ChangelogDate(20200804035502)
+entity EntityCustomIdRelationship {
+  @Id relatedId Long
+}
+
 relationship OneToOne {
   EntityCustomIdMapsId to @Id EntityCustomId
+  EntityCustomIdRelationship{oneToOne} to EntityCustomId{oneToOneBack}
+}
+
+relationship ManyToOne {
+  EntityCustomIdRelationship{manyToOne} to EntityCustomId{manyToOneBack}
+}
+
+relationship ManyToMany {
+  EntityCustomIdRelationship{manyToMany} to EntityCustomId{manyToManyBack}
 }
 
 /*
@@ -60,8 +102,22 @@ entity EntityCustomIdDTO {
 entity EntityCustomIdDTOMapsId {
 }
 
-relationship OneToOne {
-  EntityCustomIdDTOMapsId to @Id EntityCustomIdDTO
+@ChangelogDate(20200804035502)
+entity EntityCustomIdDTORel {
+  @Id relatedId Long
 }
 
-dto EntityCustomIdDTO, EntityCustomIdDTOMapsId with mapstruct
+relationship OneToOne {
+  EntityCustomIdDTOMapsId to @Id EntityCustomIdDTO
+  EntityCustomIdDTORel{oneToOne} to EntityCustomIdDTO{oneToOneBack}
+}
+
+relationship ManyToOne {
+  EntityCustomIdDTORel{manyToOne} to EntityCustomIdDTO{manyToOneBack}
+}
+
+relationship ManyToMany {
+  EntityCustomIdDTORel{manyToMany} to EntityCustomIdDTO{manyToManyBack}
+}
+
+dto EntityCustomIdDTO, EntityCustomIdDTOMapsId, EntityCustomIdDTORel with mapstruct
