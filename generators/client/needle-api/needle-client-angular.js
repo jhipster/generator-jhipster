@@ -231,7 +231,7 @@ module.exports = class extends needleClientBase {
             );
 
             if (!isSpecificEntityAlreadyGenerated) {
-                const modulePath = `./${entityFolderName}/${entityFileName}-routing.module`;
+                const modulePath = `./${entityFolderName}/route/${entityFileName}-routing.module`;
                 const moduleName = microserviceName
                     ? `${this.generator.upperFirstCamelCase(microserviceName)}${entityAngularName}RoutingModule`
                     : `${entityAngularName}RoutingModule`;

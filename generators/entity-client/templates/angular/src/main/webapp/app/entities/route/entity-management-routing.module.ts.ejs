@@ -21,13 +21,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
-import { <%= entityAngularName %>Component } from './list/<%= entityFileName %>.component';
-import { <%= entityAngularName %>DetailComponent } from './detail/<%= entityFileName %>-detail.component';
+import { <%= entityAngularName %>Component } from '../list/<%= entityFileName %>.component';
+import { <%= entityAngularName %>DetailComponent } from '../detail/<%= entityFileName %>-detail.component';
 <%_ if (!readOnly) { _%>
-import { <%= entityAngularName %>UpdateComponent } from './update/<%= entityFileName %>-update.component';
+import { <%= entityAngularName %>UpdateComponent } from '../update/<%= entityFileName %>-update.component';
 <%_ } _%>
 import { <%= entityAngularName %>RoutingResolveService } from './<%= entityFileName %>-routing-resolve.service';
-import { <%= microservicePrefix %><%= entityAngularName %>Module } from './<%= entityFileName %>.module';
+import { <%= microservicePrefix %><%= entityAngularName %>Module } from '../<%= entityFileName %>.module';
 
 const <%= entityInstance %>Route: Routes = [
     {

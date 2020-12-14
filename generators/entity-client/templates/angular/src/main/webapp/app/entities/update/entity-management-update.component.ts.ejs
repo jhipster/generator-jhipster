@@ -51,7 +51,7 @@ import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 <%_ } _%>
 
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from '../<%= entityFileName %>.model';
-import { <%= entityAngularName %>Service } from '../<%= entityFileName %>.service';
+import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 <%_ if (fieldsContainBlob) { _%>
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -70,7 +70,7 @@ import { UserService } from 'app/core/user/user.service';
             } else {
 _%>
 import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.model';
-import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.service';
+import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/service/<%= uniqueRel.otherEntityFileName %>.service';
 <%_
             }
         }
