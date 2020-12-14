@@ -360,7 +360,7 @@ const files = {
                 'shared/date/format-medium-datetime.pipe.ts',
                 'shared/sort/sort.directive.ts',
                 'shared/sort/sort-by.directive.ts',
-                'shared/item-count.component.ts',
+                'shared/pagination/item-count.component.ts',
                 // alert service code
                 'shared/alert/alert.component.ts',
                 'shared/alert/alert.component.html',
@@ -433,7 +433,7 @@ const files = {
                 'shared/date/format-medium-datetime.pipe.spec.ts',
                 'shared/sort/sort.directive.spec.ts',
                 'shared/sort/sort-by.directive.spec.ts',
-                'shared/item-count.component.spec.ts',
+                'shared/pagination/item-count.component.spec.ts',
             ],
         },
         {

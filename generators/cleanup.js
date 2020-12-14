@@ -177,6 +177,8 @@ function cleanupOldFiles(generator) {
             generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-request`);
             generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-system`);
             generator.removeFile(`${ANGULAR_DIR}shared/has-any-authority.directive.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/item-count.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/item-count.component.spec.ts`);
 
             // test files removal from old location
             // a) deleted before moving tests next to files they are testing
