@@ -18,14 +18,17 @@ entity EntityUuidIdRelationship {
 relationship OneToOne {
   EntityUuidIdMapsId to @Id EntityUuidId
   EntityUuidIdRelationship{oneToOne} to EntityUuidId{oneToOneBack}
+  EntityUuidIdRelationship{oneToOneMapsId} to EntityUuidIdMapsId{oneToOneMapsIdBack}
 }
 
 relationship ManyToOne {
   EntityUuidIdRelationship{manyToOne} to EntityUuidId{manyToOneBack}
+  EntityUuidIdRelationship{manyToOneMapsId} to EntityUuidIdMapsId{manyToOneMapsIdBack}
 }
 
 relationship ManyToMany {
   EntityUuidIdRelationship{manyToMany} to EntityUuidId{manyToManyBack}
+  EntityUuidIdRelationship{manyToManyMapsId} to EntityUuidIdMapsId{manyToManyMapsIdBack}
 }
 
 /*
@@ -48,14 +51,17 @@ entity EntityUuidIdDTORel {
 relationship OneToOne {
   EntityUuidIdDTOMapsId to @Id EntityUuidIdDTO
   EntityUuidIdDTORel{oneToOne} to EntityUuidIdDTO{oneToOneBack}
+  EntityUuidIdDTORel{oneToOneMapsId} to EntityUuidIdDTOMapsId{oneToOneMapsIdBack}
 }
 
 relationship ManyToOne {
   EntityUuidIdDTORel{manyToOne} to EntityUuidIdDTO{manyToOneBack}
+  EntityUuidIdDTORel{manyToOneMapsId} to EntityUuidIdDTOMapsId{manyToOneMapsIdBack}
 }
 
 relationship ManyToMany {
   EntityUuidIdDTORel{manyToMany} to EntityUuidIdDTO{manyToManyBack}
+  EntityUuidIdDTORel{manyToManyMapsId} to EntityUuidIdDTOMapsId{manyToManyMapsIdBack}
 }
 
 dto EntityUuidIdDTO, EntityUuidIdDTOMapsId, EntityUuidIdDTORel with mapstruct
@@ -80,14 +86,17 @@ entity EntityCustomIdRelationship {
 relationship OneToOne {
   EntityCustomIdMapsId to @Id EntityCustomId
   EntityCustomIdRelationship{oneToOne} to EntityCustomId{oneToOneBack}
+  EntityCustomIdRelationship{oneToOneMapsId} to EntityCustomIdMapsId{oneToOneMapsIdBack}
 }
 
 relationship ManyToOne {
   EntityCustomIdRelationship{manyToOne} to EntityCustomId{manyToOneBack}
+  EntityCustomIdRelationship{manyToOneMapsId} to EntityCustomIdMapsId{manyToOneMapsIdBack}
 }
 
 relationship ManyToMany {
   EntityCustomIdRelationship{manyToMany} to EntityCustomId{manyToManyBack}
+  EntityCustomIdRelationship{manyToManyMapsId} to EntityCustomIdMapsId{manyToManyMapsIdBack}
 }
 
 /*
@@ -110,14 +119,17 @@ entity EntityCustomIdDTORel {
 relationship OneToOne {
   EntityCustomIdDTOMapsId to @Id EntityCustomIdDTO
   EntityCustomIdDTORel{oneToOne} to EntityCustomIdDTO{oneToOneBack}
+  EntityCustomIdDTORel{oneToOneMapsId} to EntityCustomIdDTOMapsId{oneToOneMapsIdBack}
 }
 
 relationship ManyToOne {
   EntityCustomIdDTORel{manyToOne} to EntityCustomIdDTO{manyToOneBack}
+  EntityCustomIdDTORel{manyToOneMapsId} to EntityCustomIdDTOMapsId{manyToOneMapsIdBack}
 }
 
 relationship ManyToMany {
   EntityCustomIdDTORel{manyToMany} to EntityCustomIdDTO{manyToManyBack}
+  EntityCustomIdDTORel{manyToManyMapsId} to EntityCustomIdDTOMapsId{manyToManyMapsIdBack}
 }
 
 dto EntityCustomIdDTO, EntityCustomIdDTOMapsId, EntityCustomIdDTORel with mapstruct
