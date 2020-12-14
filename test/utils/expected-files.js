@@ -31,6 +31,7 @@ const expectedFiles = {
             `${CLIENT_MAIN_SRC_DIR}app/entities/foo/update/foo-update.component.spec.ts`,
             `${CLIENT_MAIN_SRC_DIR}app/entities/foo/list/foo.component.spec.ts`,
             `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo.service.spec.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/foo/route/foo-routing-resolve.service.spec.ts`,
         ],
         clientNg2WithSuffix: [
             `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/list/foo-management.component.html`,
@@ -50,6 +51,7 @@ const expectedFiles = {
             `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/update/foo-management-update.component.spec.ts`,
             `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/list/foo-management.component.spec.ts`,
             `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/foo-management.service.spec.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/route/foo-management-routing-resolve.service.spec.ts`,
         ],
         clientNg2WithRootFolder: [
             `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/list/foo.component.html`,
@@ -69,6 +71,7 @@ const expectedFiles = {
             `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/update/foo-update.component.spec.ts`,
             `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/list/foo.component.spec.ts`,
             `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo.service.spec.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/route/foo-routing-resolve.service.spec.ts`,
         ],
         clientNg2WithRootFolderAndSuffix: [
             `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/list/foo-management.component.html`,
@@ -88,6 +91,7 @@ const expectedFiles = {
             `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/update/foo-management-update.component.spec.ts`,
             `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/list/foo-management.component.spec.ts`,
             `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management.service.spec.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/route/foo-management-routing-resolve.service.spec.ts`,
         ],
         clientNg2GatewayMicroserviceEntity: [
             `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/list/bar.component.html`,
@@ -107,6 +111,7 @@ const expectedFiles = {
             `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/update/bar-update.component.spec.ts`,
             `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/list/bar.component.spec.ts`,
             `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar.service.spec.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/route/bar-routing-resolve.service.spec.ts`,
         ],
         clientBazGatewayMicroserviceEntity: [
             `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/list/baz.component.html`,
@@ -126,6 +131,7 @@ const expectedFiles = {
             `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/update/baz-update.component.spec.ts`,
             `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/list/baz.component.spec.ts`,
             `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/baz.service.spec.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/route/baz-routing-resolve.service.spec.ts`,
         ],
         server: [
             '.jhipster/Foo.json',
