@@ -38,7 +38,7 @@ import { createRequestOption } from 'app/core/request/request-util';
 <%_ if (searchEngine !== false) { _%>
 import { <%= searchType %> } from 'app/core/request/request.model';
 <%_ } _%>
-import { I<%= entityAngularName %> } from './<%= entityFileName %>.model';
+import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 
 type EntityResponseType = HttpResponse<I<%= entityAngularName %>>;
 type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
