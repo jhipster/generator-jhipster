@@ -140,6 +140,9 @@ import java.util.Map;
     <%_ } _%>
 import java.util.Set;
 <%_ } _%>
+<%_ if (user.primaryKey.type === 'UUID') { _%>
+import java.util.UUID;
+<%_ } _%>
 <%_ if (databaseType !== 'cassandra' && !(databaseType === 'sql' && reactive) && authenticationType !== 'oauth2') { _%>
 import java.time.Instant;
 <%_ } _%>

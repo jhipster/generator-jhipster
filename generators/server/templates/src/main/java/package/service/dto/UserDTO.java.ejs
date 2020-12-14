@@ -22,12 +22,17 @@ package <%= packageName %>.service.dto;
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 <%_ } _%>
 
+<%_ if (user.primaryKey.type === 'UUID') { _%>
+import java.util.UUID;
+<%_ } _%>
+
 /**
  * A DTO representing a user, with only the public attributes.
  */
 public class <%= asDto('User') %> {
 
     private <%= user.primaryKey.type %> id;
+
     private String login;
 
     <%_ if (databaseType !== 'no') { _%>

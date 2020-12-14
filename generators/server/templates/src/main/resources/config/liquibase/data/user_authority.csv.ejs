@@ -1,6 +1,6 @@
 user_id;authority_name
 <%_ if (authenticationType !== 'oauth2') { _%>
-1;ROLE_ADMIN
-1;ROLE_USER
-2;ROLE_USER
+<%= user.liquibaseFakeData[0].id %>;ROLE_ADMIN
+<%= user.liquibaseFakeData[0].id %>;ROLE_USER
+<%= user.liquibaseFakeData[1].id %>;ROLE_USER
 <%_ } _%>

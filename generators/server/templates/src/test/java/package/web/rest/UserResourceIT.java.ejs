@@ -89,9 +89,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
-import java.util.UUID;
-<%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (reactive && searchEngine === 'elasticsearch') { _%>
@@ -128,12 +125,10 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
     private static final String UPDATED_LOGIN = "jhipster";
     <%_ } _%>
 
-    <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
-    private static final Long DEFAULT_ID = 1L;
-    <%_ } else if (databaseType === 'couchbase') { _%>
+    <%_ if (databaseType === 'couchbase') { _%>
     private static final String DEFAULT_ID = <%= asEntity('User') %>.PREFIX + DEFAULT_LOGIN;
     <%_ } else { _%>
-    private static final String DEFAULT_ID = "id1";
+    private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- getPrimaryKeyValue(user.primaryKey.type) %>;
     <%_ } _%>
     <%_ if (authenticationType !== 'oauth2') { _%>
 
@@ -355,7 +350,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         <%_ } else if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
         managedUserVM.setId("1L");
         <%_ } else { _%>
-        managedUserVM.setId(1L);
+        managedUserVM.setId(DEFAULT_ID);
         <%_ } _%>
         managedUserVM.setLogin(DEFAULT_LOGIN);
         managedUserVM.setPassword(DEFAULT_PASSWORD);
@@ -904,11 +899,11 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
     void testUserEquals() throws Exception {
         TestUtil.equalsVerifier(<%= asEntity('User') %>.class);
         <%= asEntity('User') %> user1 = new <%= asEntity('User') %>();
-        user1.setId(<% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>1L<% } else { %>"id1"<% } %>);
+        user1.setId(DEFAULT_ID);
         <%= asEntity('User') %> user2 = new <%= asEntity('User') %>();
         user2.setId(user1.getId());
         assertThat(user1).isEqualTo(user2);
-        user2.setId(<% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>2L<% } else { %>"id2"<% } %>);
+        user2.setId(<%- getPrimaryKeyValue(user.primaryKey.type, databaseType, 2) %>);
         assertThat(user1).isNotEqualTo(user2);
         user1.setId(null);
         assertThat(user1).isNotEqualTo(user2);
