@@ -56,6 +56,31 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                 });
             });
         });
+        context('when passing a JDL object with two applications one with and one without entities', () => {
+            let result;
+
+            before(() => {
+                const jdlObject = new JDLObject();
+                const application1 = createJDLApplication({ applicationType: MONOLITH, baseName: 'app1' });
+                jdlObject.addApplication(application1);
+                const entity = new JDLEntity({
+                    name: 'EntityA',
+                });
+                const application2 = createJDLApplication({ applicationType: MONOLITH, baseName: 'app2' });
+                application2.addEntityName('EntityA');
+                jdlObject.addEntity(entity);
+                jdlObject.addApplication(application2);
+                result = convert({
+                    jdlObject,
+                });
+            });
+
+            it('should return a map with two applications', () => {
+                expect(result.size).to.equal(2);
+                expect(result.get('app1').length).to.equal(0);
+                expect(result.get('app2').length).to.equal(1);
+            });
+        });
         context('when passing a JDL object without entities', () => {
             let result;
 

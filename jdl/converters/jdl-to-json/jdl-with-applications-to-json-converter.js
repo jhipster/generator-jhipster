@@ -57,6 +57,7 @@ function convert(args = {}) {
     const entitiesForEachApplication = getEntitiesForEachApplicationMap();
     setOptions(entitiesForEachApplication);
     formatEntitiesForEachApplication(entitiesForEachApplication);
+    addApplicationsWithoutEntities(entitiesForEachApplication);
     return entitiesForEachApplication;
 }
 
@@ -164,4 +165,14 @@ function formatEntitiesForEachApplication(entitiesForEachApplication) {
     entitiesForEachApplication.forEach((applicationEntities, applicationName) => {
         entitiesForEachApplication.set(applicationName, Object.values(applicationEntities));
     });
+}
+
+function addApplicationsWithoutEntities(entitiesForEachApplication) {
+    const applicationsWithoutEntities = jdlObject
+        .getApplications()
+        .filter(jdlApplication => jdlApplication.getEntityNames().length === 0)
+        .map(jdlApplication => jdlApplication.getConfigurationOptionValue('baseName'));
+    if (applicationsWithoutEntities.length > 0) {
+        applicationsWithoutEntities.forEach(applicationName => entitiesForEachApplication.set(applicationName, []));
+    }
 }
