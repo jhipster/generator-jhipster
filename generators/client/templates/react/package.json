@@ -4,6 +4,7 @@
     "react-dom": "17.0.1"
   },
   "devDependencies": {
+    "typescript": "4.0.5",
     "webpack": "4.44.2"
   }
 }
