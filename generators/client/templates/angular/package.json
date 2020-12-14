@@ -2,7 +2,7 @@
   "dependencies": {
     "@angular/common": "11.0.4",
     "bootstrap": "4.5.3",
-    "@fortawesome/angular-fontawesome": "0.8.0",
+    "@fortawesome/angular-fontawesome": "0.8.1",
     "@fortawesome/fontawesome-svg-core": "1.2.32",
     "@fortawesome/free-solid-svg-icons": "5.15.1",
     "@ng-bootstrap/ng-bootstrap": "8.0.0",
