@@ -539,15 +539,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (!this.context.derivedPrimaryKey) {
                     return;
                 }
-                const idFields = this.context.derivedPrimaryKey.otherEntity.idFields.map(field => {
-                    return {
-                        ...field,
-                        derived: true,
-                        derivedEntity: this.context.derivedPrimaryKey.otherEntity,
-                        jpaGeneratedValue: false,
-                        liquibaseAutoIncrement: false,
-                    };
-                });
+                const idFields = this.context.primaryKey.derivedFields;
                 this.context.idFields = idFields;
                 this.context.fields.unshift(...idFields);
                 this.context.primaryKeyType = this.context.primaryKey.type;

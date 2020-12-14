@@ -197,7 +197,18 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
                 entityWithConfig.primaryKey = {
                     fieldName: 'id',
                     derived: true,
-                    fields: idFields,
+                    get fields() {
+                        return [...idFields, ...this.derivedFields];
+                    },
+                    get derivedFields() {
+                        return relationshipId.otherEntity.primaryKey.fields.map(field => ({
+                            ...field,
+                            derived: true,
+                            derivedEntity: relationshipId.otherEntity,
+                            jpaGeneratedValue: false,
+                            liquibaseAutoIncrement: false,
+                        }));
+                    },
                     relationships: entityWithConfig.idRelationships,
                     get name() {
                         return relationshipId.otherEntity.primaryKey.name;
