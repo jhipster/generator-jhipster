@@ -67,12 +67,12 @@ const angularFiles = {
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.module.ts`,
                 },
                 {
-                    file: 'entities/entity-management-routing.module.ts',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-routing.module.ts`,
+                    file: 'entities/route/entity-management-routing.module.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/route/${generator.entityFileName}-routing.module.ts`,
                 },
                 {
-                    file: 'entities/entity-management-routing-resolve.service.ts',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-routing-resolve.service.ts`,
+                    file: 'entities/route/entity-management-routing-resolve.service.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/route/${generator.entityFileName}-routing-resolve.service.ts`,
                 },
                 {
                     file: 'entities/list/entity-management.component.ts',

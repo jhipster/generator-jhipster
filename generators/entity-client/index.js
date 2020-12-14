@@ -105,6 +105,12 @@ module.exports = class extends BaseBlueprintGenerator {
                         }
                     });
                     this.removeFile(
+                        `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-routing-resolve.service.ts`
+                    );
+                    this.removeFile(
+                        `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-routing.module.ts`
+                    );
+                    this.removeFile(
                         `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}.component.spec.ts`
                     );
                     this.removeFile(
