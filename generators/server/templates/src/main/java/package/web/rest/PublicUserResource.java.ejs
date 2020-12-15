@@ -26,7 +26,7 @@ import org.springframework.data.domain.Sort;
 import java.util.Collections;
 <%_ } _%>
 import <%= packageName %>.service.UserService;
-import <%= packageName %>.service.dto.<%= asDto('PublicUser') %>;
+import <%= packageName %>.service.dto.<%= asDto('User') %>;
 
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
 import tech.jhipster.web.util.PaginationUtil;
@@ -110,7 +110,7 @@ public class PublicUserResource {
     @GetMapping("/users")
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
         <%_ if (!reactive) { _%>
-    public ResponseEntity<List<<%= asDto('PublicUser') %>>> getAllPublicUsers(Pageable pageable) {
+    public ResponseEntity<List<<%= asDto('User') %>>> getAllPublicUsers(Pageable pageable) {
         log.debug("REST request to get all public User names");
         <%_ if (authenticationType !== 'oauth2') { _%>
         if (!onlyContainsAllowedProperties(pageable)) {
@@ -118,12 +118,12 @@ public class PublicUserResource {
         }
         <%_ } _%>
 
-        final Page<<%= asDto('PublicUser') %>> page = userService.getAllPublicUsers(pageable);
+        final Page<<%= asDto('User') %>> page = userService.getAllPublicUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
         <%_ } else { _%>
-    public Mono<ResponseEntity<Flux<<%= asDto('PublicUser') %>>>> getAllPublicUsers(ServerHttpRequest request, Pageable pageable) {
+    public Mono<ResponseEntity<Flux<<%= asDto('User') %>>>> getAllPublicUsers(ServerHttpRequest request, Pageable pageable) {
         log.debug("REST request to get all public User names");
         <%_ if (authenticationType !== 'oauth2') { _%>
         if (!onlyContainsAllowedProperties(pageable)) {
@@ -153,7 +153,7 @@ public class PublicUserResource {
     }
 
     <%_ } else { // Cassandra _%>
-    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asDto('PublicUser') %>> getAllPublicUsers() {
+    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asDto('User') %>> getAllPublicUsers() {
         return userService.getAllPublicUsers();
     }
 
@@ -168,15 +168,15 @@ public class PublicUserResource {
      * @return the result of the search.
      */
     @GetMapping("/_search/users/{query}")
-    public <% if(reactive) { %>Mono<<% } %>List<<%= asDto('PublicUser') %>><% if(reactive) { %>><% } %> search(@PathVariable String query) {
+    public <% if(reactive) { %>Mono<<% } %>List<<%= asDto('User') %>><% if(reactive) { %>><% } %> search(@PathVariable String query) {
     <%_ if (searchEngine === 'elasticsearch') { _%>
         <%_ if (!reactive) { _%>
         return StreamSupport
             .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-            .map(<%= asDto('PublicUser') %>::new)
+            .map(<%= asDto('User') %>::new)
             .collect(Collectors.toList());
         <%_ } else { _%>
-        return userSearchRepository.search(query).map(<%= asDto('PublicUser') %>::new).collectList();
+        return userSearchRepository.search(query).map(<%= asDto('User') %>::new).collectList();
         <%_ } _%>
     <%_ } else { _%>
         return userRepository.search(User.PREFIX, query)<% if (reactive) { %>.collectList()<% } %>;

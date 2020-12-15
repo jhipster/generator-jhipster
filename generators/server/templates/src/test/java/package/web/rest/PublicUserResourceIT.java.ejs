@@ -71,7 +71,7 @@ import org.springframework.security.test.context.TestSecurityContextHolder;
 <%_ } _%>
 import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (reactive) { _%>
-import <%= packageName %>.service.dto.<%= asDto('PublicUser') %>;
+import <%= packageName %>.service.dto.<%= asDto('User') %>;
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
 <%_ if (!reactive) { _%>
@@ -212,12 +212,12 @@ class PublicUserResourceIT <% if (databaseType === 'cassandra') { %>extends Abst
             <%_ } _%>
             .andExpect(jsonPath("$.[*].langKey").doesNotExist());
         <%_ } else { _%>
-        <%= asDto('PublicUser') %> foundUser = webTestClient.get().uri("/api/users?sort=id,DESC")
+        <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=id,DESC")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .returnResult(<%= asDto('PublicUser') %>.class).getResponseBody().blockFirst();
+            .returnResult(<%= asDto('User') %>.class).getResponseBody().blockFirst();
 
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         <% } _%>

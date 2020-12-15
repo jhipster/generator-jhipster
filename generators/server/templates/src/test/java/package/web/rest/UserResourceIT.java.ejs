@@ -34,7 +34,7 @@ import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
-import <%= packageName %>.service.dto.<%= asDto('PublicUser') %>;
+import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 <%_ if (databaseType === 'sql' && reactive) { _%>
 import <%= packageName %>.service.EntityManager;
@@ -502,12 +502,12 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
             <%_ } _%>
             .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
         <%_ } else { _%>
-        <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/admin/users?sort=id,DESC")
+        <%= asDto('AdminUser') %> foundUser = webTestClient.get().uri("/api/admin/users?sort=id,DESC")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .returnResult(<%= asDto('User') %>.class).getResponseBody().blockFirst();
+            .returnResult(<%= asDto('AdminUser') %>.class).getResponseBody().blockFirst();
 
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(foundUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
@@ -916,7 +916,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
 
     @Test
     void testUserDTOtoUser() {
-        <%= asDto('User') %> userDTO = new <%= asDto('User') %>();
+        <%= asDto('AdminUser') %> userDTO = new <%= asDto('AdminUser') %>();
         userDTO.setId(DEFAULT_ID);
         userDTO.setLogin(DEFAULT_LOGIN);
         userDTO.setFirstName(DEFAULT_FIRSTNAME);
@@ -972,7 +972,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
         <%_ } _%>
 
-        <%= asDto('User') %> userDTO = userMapper.userToUserDTO(user);
+        <%= asDto('AdminUser') %> userDTO = userMapper.userToAdminUserDTO(user);
 
         assertThat(userDTO.getId()).isEqualTo(DEFAULT_ID);
         assertThat(userDTO.getLogin()).isEqualTo(DEFAULT_LOGIN);
