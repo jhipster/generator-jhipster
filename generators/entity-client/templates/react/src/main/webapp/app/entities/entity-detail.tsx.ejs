@@ -53,7 +53,7 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
     <Row>
       <Col md="8">
         <h2 data-cy="<%= entityInstance %>DetailsHeading">
-          <Translate contentKey="<%= i18nKeyPrefix %>.detail.title"><%= entityClass %></Translate> [<b>{<%= entityInstance %>Entity.id}</b>]
+          <Translate contentKey="<%= i18nKeyPrefix %>.detail.title"><%= entityClass %></Translate> [<strong>{<%= entityInstance %>Entity.id}</strong>]
         </h2>
           <dl className="jh-entity-details">
           <%_ for (idx in fields) {
