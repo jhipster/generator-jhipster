@@ -126,6 +126,10 @@ objects:
             env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod,api-docs
+            <%_ if (!app.serviceDiscoveryType || app.applicationType === 'uaa') { _%>
+            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+              value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
+            <%_ } _%>
             <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
             - name: SPRING_CLOUD_CONFIG_URI
               value: http://admin:${jhipster.registry.password}@jhipster-registry:8761/config
@@ -238,7 +242,12 @@ objects:
       type: LoadBalancer
       ports:
       - name: http
+      <%_ if (!app.serviceDiscoveryType || app.applicationType === 'uaa') { _%>
+        port: 80
+        targetPort: ${{APP_PORT}}
+      <%_ } else { _%>
         port: ${{APP_PORT}}
+      <%_ } _%>
   -
     apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Route
