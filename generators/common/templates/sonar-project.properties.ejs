@@ -32,7 +32,7 @@ sonar.javascript.lcov.reportPaths=<%_ if (buildTool === 'maven') { _%>target<%_ 
 sonar.sourceEncoding=UTF-8
 sonar.exclusions=<%= CLIENT_MAIN_SRC_DIR %>content/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>i18n/*.js, <%= CLIENT_DIST_DIR %>**/*.*
 
-sonar.issue.ignore.multicriteria=<%_ if (!skipServer) { _%>S3437,<% if (authenticationType === 'jwt') { %>S4502,<% } %>S4684,UndocumentedApi<%_ } _%><%_ if (!skipClient) { _%><%_ if (!skipServer) { _%>,<%_ } _%>BoldAndItalicTagsCheck<%_ } _%>
+sonar.issue.ignore.multicriteria=<%_ if (!skipServer) { _%>S3437,<% if (authenticationType === 'jwt') { %>S4502,<% } %>S4684,UndocumentedApi<%_ } _%>
 
 <%_ if (!skipServer) { _%>
 # Rule https://sonarcloud.io/coding_rules?open=squid%3AS3437&rule_key=squid%3AS3437 is ignored, as a JPA-managed field cannot be transient
@@ -49,9 +49,4 @@ sonar.issue.ignore.multicriteria.S4502.ruleKey=squid:S4502
 # Rule https://sonarcloud.io/coding_rules?open=java%3AS4684&rule_key=java%3AS4684
 sonar.issue.ignore.multicriteria.S4684.resourceKey=<%= MAIN_DIR %>java/**/*
 sonar.issue.ignore.multicriteria.S4684.ruleKey=java:S4684
-<%_ } _%>
-<%_ if (!skipClient) { _%>
-# Rule https://sonarcloud.io/coding_rules?open=Web%3ABoldAndItalicTagsCheck&rule_key=Web%3ABoldAndItalicTagsCheck is ignored. Even if we agree that using the "i" tag is an awful practice, this is what is recommended by http://fontawesome.io/examples/
-sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.resourceKey=<%= CLIENT_MAIN_SRC_DIR %>app/**/*.*
-sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.ruleKey=Web:BoldAndItalicTagsCheck
 <%_ } _%>
