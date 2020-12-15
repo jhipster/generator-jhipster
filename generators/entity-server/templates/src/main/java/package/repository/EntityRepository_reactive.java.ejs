@@ -111,6 +111,7 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
         <%_ } _%>
 
         <%_ for (idx in relationships) {
+                  let relationship = relationships[idx];
                   let relationshipType = relationships[idx].relationshipType;
                   let relationshipName = relationships[idx].relationshipName;
                   let ownerSide = relationships[idx].ownerSide;
@@ -121,11 +122,10 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
 
     @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= getColumnName(relationshipName) %>_id IS NULL")
     Flux<<%= asEntity(entityClass) %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();
-              <%_ } else if (relationshipType === 'many-to-many') {
-                  const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
+              <%_ } else if (relationship.shouldWriteJoinTable) {
                   _%>
 
-    @Query("SELECT entity.* FROM <%= entityTableName %> entity JOIN <%= joinTableName %> joinTable ON entity.id = joinTable.<%= getColumnName(name) %>_id WHERE joinTable.<%= getColumnName(relationshipName) %>_id = :id")
+    @Query("SELECT entity.* FROM <%= entityTableName %> entity JOIN <%= relationship.joinTable.name %> joinTable ON entity.id = joinTable.<%= getColumnName(name) %>_id WHERE joinTable.<%= getColumnName(relationshipName) %>_id = :id")
     Flux<<%= asEntity(entityClass) %>> findBy<%= relationships[idx].relationshipNameCapitalized %>(<%= primaryKeyType %> id);
               <%_ } else if (relationshipType === 'one-to-one' && ownerSide === false) {
                   let otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName;

@@ -287,25 +287,20 @@ module.exports = class extends BaseGenerator {
     }
 
     _prepareRelationshipForTemplates(entity, relationship) {
-        relationship.shouldCreateJoinTable = this._shouldCreateJoinTable(relationship);
-        relationship.shouldWriteRelationship = this._shouldWriteRelationship(relationship);
-        relationship.shouldWriteJoinTable = this._shouldWriteJoinTable(relationship);
+        relationship.shouldWriteRelationship =
+            relationship.relationshipType === 'many-to-one' ||
+            (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true);
+
+        if (relationship.shouldWriteJoinTable) {
+            const joinTableName = relationship.joinTable.name;
+            const prodDatabaseType = entity.prodDatabaseType;
+            _.defaults(relationship.joinTable, {
+                constraintName: this.getFKConstraintName(joinTableName, entity.entityTableName, prodDatabaseType),
+                otherConstraintName: this.getFKConstraintName(joinTableName, relationship.columnName, prodDatabaseType),
+            });
+        }
+
         relationship.columnDataType = relationship.otherEntity.columnType;
         return relationship;
-    }
-
-    _shouldCreateJoinTable(relationship) {
-        return relationship.relationshipType === 'many-to-many' && relationship.ownerSide;
-    }
-
-    _shouldWriteRelationship(relationship) {
-        return (
-            relationship.relationshipType === 'many-to-one' ||
-            (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true)
-        );
-    }
-
-    _shouldWriteJoinTable(relationship) {
-        return relationship.relationshipType === 'many-to-many' && relationship.ownerSide;
     }
 };

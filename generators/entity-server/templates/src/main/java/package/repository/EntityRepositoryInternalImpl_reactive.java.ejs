@@ -97,10 +97,9 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
         <%_ }); _%>
 
         <%_ relationships.forEach(function(rel) {
-            if (rel.relationshipType === 'many-to-many' && rel.ownerSide) {
-                const joinTableName = getJoinTableName(entityTableName, rel.relationshipName, prodDatabaseType);
+            if (rel.shouldWriteJoinTable) {
         _%>
-    private final static EntityManager.LinkTable <%= rel.relationshipName %>Link = new LinkTable("<%= joinTableName %>", "<%= getColumnName(name) %>_id", "<%= getColumnName(rel.relationshipName) %>_id");
+    private final static EntityManager.LinkTable <%= rel.relationshipName %>Link = new LinkTable("<%= rel.joinTable.name %>", "<%= getColumnName(name) %>_id", "<%= getColumnName(rel.relationshipName) %>_id");
         <%_ }
         }); _%>
 

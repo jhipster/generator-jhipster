@@ -116,13 +116,25 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         relationship.otherRelationship = otherRelationship;
     }
 
-    if (relationship.otherEntity && relationship.otherEntityField) {
-        relationship.relatedField = otherEntityData.fields.find(field => field.fieldName === relationship.otherEntityField);
-        if (relationship.relatedField) {
-            relationship.otherEntityFieldCapitalized = relationship.relatedField.fieldNameCapitalized;
-        } else {
-            relationship.otherEntityFieldCapitalized = _.upperFirst(relationship.otherEntityField);
+    relationship.relatedField = otherEntityData.fields.find(field => field.fieldName === relationship.otherEntityField);
+    if (!relationship.relatedField && !relationship.otherEntity.embedded) {
+        if (otherEntityData.primaryKey && otherEntityData.primaryKey.derived) {
+            Object.defineProperty(relationship, 'relatedField', {
+                get() {
+                    const relatedField = otherEntityData.primaryKey.derivedFields.find(
+                        field => field.fieldName === relationship.otherEntityField
+                    );
+                    return relatedField;
+                },
+            });
+        } else if (!ignoreMissingRequiredRelationship) {
+            throw new Error(`Error looking for field ${relationship.otherEntityField} at ${otherEntityData.name}`);
         }
+    }
+    if (relationship.relatedField) {
+        relationship.otherEntityFieldCapitalized = relationship.relatedField.fieldNameCapitalized;
+    } else {
+        relationship.otherEntityFieldCapitalized = _.upperFirst(relationship.otherEntityField);
     }
 
     if (relationship.otherEntityRelationshipName !== undefined) {
@@ -241,6 +253,17 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         }
     }
     relationship.nullable = !(relationship.relationshipValidate === true && relationship.relationshipRequired);
+
+    relationship.shouldWriteJoinTable = relationship.relationshipType === 'many-to-many' && relationship.ownerSide;
+    if (relationship.shouldWriteJoinTable) {
+        relationship.joinTable = {
+            name: generator.getJoinTableName(
+                entityWithConfig.entityTableName,
+                relationship.relationshipName,
+                entityWithConfig.prodDatabaseType
+            ),
+        };
+    }
 
     const entityType = relationship.otherEntityNameCapitalized;
     if (!entityWithConfig.differentTypes.includes(entityType)) {

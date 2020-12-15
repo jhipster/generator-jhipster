@@ -31,23 +31,22 @@
         Added the field constraints for entity <%= entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>-fields-constraints" author="jhipster">
-        <%_ for (idx in addedFields) {
-            const columnData = addedFields[idx];
-            if (columnData.unique) {
+        <%_ for (field of addedFields) {
+            if (field.unique) {
         _%>
         <addUniqueConstraint tableName="<%= entityTableName %>"
-            columnNames="<%= columnData.columnName %>"
-            constraintName="<%= columnData.getUXConstraintName(entityTableName) %>"/>
+            columnNames="<%= field.columnName %>"
+            constraintName="<%= field.getUXConstraintName(entityTableName) %>"/>
         <%  }
-            if (!columnData.nullable) {
+            if (!field.nullable) {
         _%>
         <addNotNullConstraint tableName="<%= entityTableName %>"
-            columnName="<%= columnData.columnName %>"
-            columnDataType="<%= columnData.fieldType %>"/>
-                <%_ if (columnData.shouldCreateContentType) {
+            columnName="<%= field.columnName %>"
+            columnDataType="<%= field.fieldType %>"/>
+                <%_ if (field.shouldCreateContentType) {
                 _%>
         <addNotNullConstraint tableName="<%= entityTableName %>"
-            columnName="<%= columnData.columnName %>_content_type"
+            columnName="<%= field.columnName %>_content_type"
             columnDataType="varchar(255)"/>
         <%      }
             }
@@ -63,12 +62,14 @@
         <%_
         for (idx in addedRelationships) {
             const relationshipData = addedRelationships[idx];
-            if (relationshipData.unique) { _%>
+            if (relationshipData.unique) {
+        _%>
         <addUniqueConstraint tableName="<%= entityTableName %>"
             columnNames="<%= relationshipData.columnName %>_id"
             constraintName="<%= _getUniqueConstraintName(entityTableName, relationshipData.columnName) %>"/>
         <% }
-        if (!relationshipData.nullable) { _%>
+        if (!relationshipData.nullable) {
+        _%>
         <addNotNullConstraint tableName="<%= entityTableName %>"
             columnName="<%= relationshipData.columnName %>"
             columnDataType="<%= relationshipData.columnDataType %>"/>
@@ -90,31 +91,32 @@
                 let baseColumnName = getColumnName(relationshipName) + '_id';
                 if (relationship.relationshipType === 'one-to-one' && relationship.useJPADerivedIdentifier === true) {
                     baseColumnName = 'id';
-                } %>
+                }
+        %>
         <addForeignKeyConstraint baseColumnNames="<%= baseColumnName %>"
                                  baseTableName="<%= entityTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= relationship.otherEntityTableName %>"/>
         <%_ } else if (relationship.shouldWriteJoinTable) {
-                const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
-                const constraintName = getFKConstraintName(joinTableName, getColumnName(entityTableName), prodDatabaseType, true);
-                const otherEntityConstraintName = getFKConstraintName(joinTableName, getColumnName(relationshipName), prodDatabaseType, true);
-          _%>
+                const constraintName = getFKConstraintName(relationship.joinTable.name, getColumnName(entityTableName), prodDatabaseType);
+                const otherEntityConstraintName = getFKConstraintName(relationship.joinTable.name, getColumnName(relationshipName), prodDatabaseType);
+        _%>
 
-        <addForeignKeyConstraint baseColumnNames="<%= getColumnName(name) %>_id"
-                                 baseTableName="<%= joinTableName %>"
+        <addForeignKeyConstraint baseColumnNames="<%= primaryKey.fields.map(field => relationship.columnName + '_' + field.columnName).join(', ') %>"
+                                 baseTableName="<%= relationship.joinTable.name %>"
                                  constraintName="<%= constraintName %>"
-                                 referencedColumnNames="id"
+                                 referencedColumnNames="<%= primaryKey.fields.map(field => field.columnName).join(', ') %>"
                                  referencedTableName="<%= entityTableName %>"/>
 
-        <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
-                                 baseTableName="<%= joinTableName %>"
+        <addForeignKeyConstraint baseColumnNames="<%= relationship.otherEntity.primaryKey.fields.map(field => relationship.columnName + '_' + field.columnName).join(', ') %>"
+                                 baseTableName="<%= relationship.joinTable.name %>"
                                  constraintName="<%= getColumnName(otherEntityConstraintName) %>"
-                                 referencedColumnNames="id"
+                                 referencedColumnNames="<%= relationship.otherEntity.primaryKey.fields.map(field => field.columnName).join(', ') %>"
                                  referencedTableName="<%= relationship.otherEntityTableName %>"/>
-        <% }
-        } %>
+    <%_     }
+        }
+    _%>
     </changeSet>
-    <% } %>
+    <%_ } _%>
 </databaseChangeLog>

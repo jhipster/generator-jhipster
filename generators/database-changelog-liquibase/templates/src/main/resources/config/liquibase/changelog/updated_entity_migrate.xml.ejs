@@ -43,19 +43,17 @@
                   primaryKey="id"
                   tableName="<%= entityTableName %>">
             <column name="id" type="numeric"/>
-            <%_ for (idx in addedFields) {
-                const columnData = addedFields[idx];
+            <%_ for (field of addedFields) {
                 _%>
-            <column name="<%= columnData.fieldNameAsDatabaseColumn %>" type="<%= columnData.loadColumnType %>"/>
-                <%_ if (columnData.shouldCreateContentType) { _%>
-            <column name="<%= columnData.fieldNameAsDatabaseColumn %>_content_type" type="string"/>
+            <column name="<%= field.columnName %>" type="<%= field.loadColumnType %>"/>
+                <%_ if (field.shouldCreateContentType) { _%>
+            <column name="<%= field.columnName %>_content_type" type="string"/>
                 <%_ } _%>
             <%_ } _%>
-            <%_ for (idx in addedRelationships) {
-                const relationshipData = addedRelationships[idx];
+            <%_ for (relationship of addedRelationships) {
                 _%>
-                <%_ if (relationshipData.shouldWriteRelationship) { _%>
-            <column name="<%= relationshipData.columnName %>" type="string"/>
+                <%_ if (relationship.shouldWriteRelationship) { _%>
+            <column name="<%= relationship.columnName %>" type="string"/>
                 <%_ } _%>
             <%_ } _%>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
