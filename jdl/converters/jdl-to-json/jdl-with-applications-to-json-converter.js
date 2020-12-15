@@ -168,11 +168,9 @@ function formatEntitiesForEachApplication(entitiesForEachApplication) {
 }
 
 function addApplicationsWithoutEntities(entitiesForEachApplication) {
-    const applicationsWithoutEntities = jdlObject
-        .getApplications()
-        .filter(jdlApplication => jdlApplication.getEntityNames().length === 0)
-        .map(jdlApplication => jdlApplication.getConfigurationOptionValue('baseName'));
-    if (applicationsWithoutEntities.length > 0) {
-        applicationsWithoutEntities.forEach(applicationName => entitiesForEachApplication.set(applicationName, []));
-    }
+    jdlObject.forEachApplication(jdlApplication => {
+        if (jdlApplication.getEntityNames().length === 0) {
+            entitiesForEachApplication.set(jdlApplication.getConfigurationOptionValue('baseName'), []);
+        }
+    });
 }
