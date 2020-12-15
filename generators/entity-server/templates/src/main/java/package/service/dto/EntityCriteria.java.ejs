@@ -3,8 +3,8 @@ package <%= packageName %>.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
-<%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>
-import <%= packageName %>.domain.enumeration.<%= fields[idx].fieldType %>;
+<%_ for (const field of fields) { if (field.fieldIsEnum === true) { _%>
+import <%= packageName %>.domain.enumeration.<%= field.fieldType %>;
 <%_ } } _%>
 import tech.jhipster.service.filter.BooleanFilter;
 import tech.jhipster.service.filter.DoubleFilter;
