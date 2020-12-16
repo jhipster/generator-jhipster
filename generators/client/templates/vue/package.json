@@ -10,7 +10,7 @@
     "bootstrap-vue": "2.21.0"
   },
   "devDependencies": {
-    "typescript": "4.0.5",
+    "typescript": "4.1.3",
     "webpack": "4.44.2",
     "webpack-bundle-analyzer": "4.2.0",
     "vue-jest": "3.0.7",
