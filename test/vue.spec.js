@@ -1017,7 +1017,7 @@ describe('Vue applications', () => {
         after(() => runResult.cleanup());
 
         it('should not have admin ui components', () => {
-            assert.nofile(expectedFiles.i18n);
+            assert.noFile(expectedFiles.i18n);
             assert.noFile(expectedFiles.i18nAdmin);
             assert.file(expectedFiles.common);
             assert.noFile(expectedFiles.admin);
