@@ -36,7 +36,7 @@ const hasValidationRule = fields.some(field =>
 const hasRequiredRelationship = relationships.some(relationship => relationship.relationshipRequired);
 const isValidatorsRequired = hasValidationRule || hasRequiredRelationship;
 _%>
-import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %>, Optional } from '@angular/core';
+import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder,<%_ if (isValidatorsRequired) { _%> Validators<%_ } _%> } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -44,7 +44,6 @@ import { Observable } from 'rxjs';
 <%_ if ( rxjsMapIsUsed ) { _%>
 import { map } from 'rxjs/operators';
 <%_ } _%>
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
 import * as dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
@@ -137,13 +136,9 @@ _%>
         <%_ } _%>
         protected activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
-        @Optional() public activeModal?: NgbActiveModal,
     ) {}
 
     ngOnInit(): void {
-        if (this.activeModal) {
-          return;
-        }
         this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
             <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
             if (<%= entityInstance %>.<%= primaryKey.name %> == null) {
@@ -233,11 +228,7 @@ _%>
 <%_ } _%>
 
     previousState(): void {
-        if (this.activeModal) {
-            this.activeModal.close();
-        } else {
-            window.history.back();
-        }
+        window.history.back();
     }
 
     save(): void {

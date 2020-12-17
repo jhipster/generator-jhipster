@@ -27,7 +27,6 @@ import { <%= entityAngularName %>DetailComponent } from '../detail/<%= entityFil
 import { <%= entityAngularName %>UpdateComponent } from '../update/<%= entityFileName %>-update.component';
 <%_ } _%>
 import { <%= entityAngularName %>RoutingResolveService } from './<%= entityFileName %>-routing-resolve.service';
-import { <%= microservicePrefix %><%= entityAngularName %>Module } from '../<%= entityFileName %>.module';
 
 const <%= entityInstance %>Route: Routes = [
     {
@@ -69,9 +68,7 @@ const <%= entityInstance %>Route: Routes = [
 ];
 
 @NgModule({
-    imports: [
-        RouterModule.forChild(<%= entityInstance %>Route),
-        <%= microservicePrefix %><%= entityAngularName %>Module,
-    ],
+    imports: [RouterModule.forChild(<%= entityInstance %>Route)],
+    exports: [RouterModule],
 })
 export class <%= microservicePrefix %><%= entityAngularName %>RoutingModule {}

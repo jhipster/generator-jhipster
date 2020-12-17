@@ -231,10 +231,10 @@ module.exports = class extends needleClientBase {
             );
 
             if (!isSpecificEntityAlreadyGenerated) {
-                const modulePath = `./${entityFolderName}/route/${entityFileName}-routing.module`;
+                const modulePath = `./${entityFolderName}/${entityFileName}.module`;
                 const moduleName = microserviceName
-                    ? `${this.generator.upperFirstCamelCase(microserviceName)}${entityAngularName}RoutingModule`
-                    : `${entityAngularName}RoutingModule`;
+                    ? `${this.generator.upperFirstCamelCase(microserviceName)}${entityAngularName}Module`
+                    : `${entityAngularName}Module`;
 
                 this._addRoute(entityUrl, modulePath, moduleName, 'jhipster-needle-add-entity-route', entityModulePath, pageTitle);
             }
