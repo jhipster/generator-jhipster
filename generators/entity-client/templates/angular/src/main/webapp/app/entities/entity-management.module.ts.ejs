@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 
 import { SharedModule } from 'app/shared/shared.module';
 import { <%= entityAngularName %>Component } from './list/<%= entityFileName %>.component';
@@ -26,21 +25,15 @@ import { <%= entityAngularName %>DetailComponent } from './detail/<%= entityFile
 import { <%= entityAngularName %>UpdateComponent } from './update/<%= entityFileName %>-update.component';
 import { <%= entityAngularName %>DeleteDialogComponent } from './delete/<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
+import { <%= entityAngularName %>RoutingModule } from './route/<%= entityFileName %>-routing.module';
 
 @NgModule({
     imports: [
         SharedModule,
-        RouterModule,
+        <%= entityAngularName %>RoutingModule,
     ],
     declarations: [
         <%= entityAngularName %>Component,
-        <%= entityAngularName %>DetailComponent,
-        <%_ if (!readOnly) { _%>
-        <%= entityAngularName %>UpdateComponent,
-        <%= entityAngularName %>DeleteDialogComponent,
-        <%_ } %>
-    ],
-    exports: [
         <%= entityAngularName %>DetailComponent,
         <%_ if (!readOnly) { _%>
         <%= entityAngularName %>UpdateComponent,
