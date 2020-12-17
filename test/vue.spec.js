@@ -981,4 +981,149 @@ describe('Vue applications', () => {
             );
         });
     });
+
+    describe('noi18 and Admin UI not selected', () => {
+        let runResult;
+        before(() => {
+            return helpers
+                .create(require.resolve('../generators/app'))
+                .withOptions({
+                    fromCli: true,
+                    skipInstall: true,
+                })
+                .withPrompts({
+                    baseName: 'samplePsql',
+                    packageName: 'com.mycompany.myapp',
+                    applicationType: 'monolith',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Disk',
+                    prodDatabaseType: 'postgresql',
+                    cacheProvider: 'ehcache',
+                    authenticationType: 'jwt',
+                    enableTranslation: false,
+                    nativeLanguage: 'en',
+                    buildTool: 'maven',
+                    clientFramework: VUE,
+                    clientTheme: 'none',
+                    testFrameworks: ['cypress'],
+                    withAdminUi: false,
+                })
+                .run()
+                .then(result => {
+                    runResult = result;
+                });
+        });
+
+        after(() => runResult.cleanup());
+
+        it('should not have admin ui components', () => {
+            assert.nofile(expectedFiles.i18n);
+            assert.noFile(expectedFiles.i18nAdmin);
+            assert.file(expectedFiles.common);
+            assert.noFile(expectedFiles.admin);
+            assert.file(expectedFiles.app);
+            assert.file(expectedFiles.allAuthExceptOAuth2);
+            assert.noFile(expectedFiles.session);
+            assert.noFile([`${CLIENT_SPEC_SRC_DIR}app/account/login.service.spec.ts`]);
+            assert.file(expectedFiles.test);
+            assert.noFile(expectedFiles.protractor);
+            assert.file(expectedFiles.webpack);
+        });
+
+        it('should not contains admin ui menu', () => {
+            assert.noFileContent(
+                `${CLIENT_MAIN_SRC_DIR}app/core/jhi-navbar/jhi-navbar.vue`,
+                '<b-dropdown-item  to="/admin/metrics" active-class="active">\n' +
+                    '            <font-awesome-icon icon="tachometer-alt" />\n' +
+                    '            <span v-text="$t(\'global.menu.admin.metrics\')">Metrics</span>\n' +
+                    '          </b-dropdown-item>\n' +
+                    '          <b-dropdown-item to="/admin/health" active-class="active">\n' +
+                    '            <font-awesome-icon icon="heart" />\n' +
+                    '            <span v-text="$t(\'global.menu.admin.health\')">Health</span>\n' +
+                    '          </b-dropdown-item>\n' +
+                    '          <b-dropdown-item  to="/admin/configuration" active-class="active">\n' +
+                    '            <font-awesome-icon icon="cogs" />\n' +
+                    '            <span v-text="$t(\'global.menu.admin.configuration\')">Configuration</span>\n' +
+                    '          </b-dropdown-item>\n' +
+                    '          <b-dropdown-item  to="/admin/logs" active-class="active">\n' +
+                    '            <font-awesome-icon icon="tasks" />\n' +
+                    '            <span v-text="$t(\'global.menu.admin.logs\')">Logs</span>\n' +
+                    '          </b-dropdown-item>'
+            );
+        });
+
+        it('should contains admin service in main app file', () => {
+            assert.noFileContent(
+                `${CLIENT_MAIN_SRC_DIR}app/main.ts`,
+                "import HealthService from './admin/health/health.service';\n" +
+                    "import MetricsService from './admin/metrics/metrics.service';\n" +
+                    "import LogsService from './admin/logs/logs.service';\n" +
+                    "import ConfigurationService from '@/admin/configuration/configuration.service';"
+            );
+
+            assert.noFileContent(
+                `${CLIENT_MAIN_SRC_DIR}app/main.ts`,
+                '    healthService: () => new HealthService(),\n' +
+                    '    configurationService: () => new ConfigurationService(),\n' +
+                    '    logsService: () => new LogsService(),\n' +
+                    '    metricsService: () => new MetricsService(),'
+            );
+        });
+
+        it('should not contains admin routes in admin router', () => {
+            assert.noFileContent(
+                `${CLIENT_MAIN_SRC_DIR}app/router/admin.ts`,
+                "const JhiConfigurationComponent = () => import('@/admin/configuration/configuration.vue');\n" +
+                    "const JhiHealthComponent = () => import('@/admin/health/health.vue');\n" +
+                    "const JhiLogsComponent = () => import('@/admin/logs/logs.vue');\n" +
+                    "const JhiMetricsComponent = () => import('@/admin/metrics/metrics.vue');"
+            );
+
+            assert.noFileContent(
+                `${CLIENT_MAIN_SRC_DIR}app/router/admin.ts`,
+                '{\n' +
+                    "    path: '/admin/health',\n" +
+                    "    name: 'JhiHealthComponent',\n" +
+                    '    component: JhiHealthComponent,\n' +
+                    '    meta: { authorities: [Authority.ADMIN] },\n' +
+                    '  },\n' +
+                    '  {\n' +
+                    "    path: '/admin/logs',\n" +
+                    "    name: 'JhiLogsComponent',\n" +
+                    '    component: JhiLogsComponent,\n' +
+                    '    meta: { authorities: [Authority.ADMIN] },\n' +
+                    '  },\n' +
+                    '  {\n' +
+                    "    path: '/admin/metrics',\n" +
+                    "    name: 'JhiMetricsComponent',\n" +
+                    '    component: JhiMetricsComponent,\n' +
+                    '    meta: { authorities: [Authority.ADMIN] },\n' +
+                    '  },\n' +
+                    '  {\n' +
+                    "    path: '/admin/configuration',\n" +
+                    "    name: 'JhiConfigurationComponent',\n" +
+                    '    component: JhiConfigurationComponent,\n' +
+                    '    meta: { authorities: [Authority.ADMIN] },\n' +
+                    '  },'
+            );
+        });
+
+        it('should not contains admin ui cypress tests', () => {
+            assert.noFileContent(
+                `${CLIENT_TEST_SRC_DIR}cypress/integration/administration/administration.spec.ts`,
+                '  metricsPageHeadingSelector,\n' +
+                    '  healthPageHeadingSelector,\n' +
+                    '  logsPageHeadingSelector,\n' +
+                    '  configurationPageHeadingSelector,'
+            );
+
+            assert.noFileContent(
+                `${CLIENT_TEST_SRC_DIR}cypress/support/commands.ts`,
+                'export const metricsPageHeadingSelector = \'[data-cy="metricsPageHeading"]\';\n' +
+                    'export const healthPageHeadingSelector = \'[data-cy="healthPageHeading"]\';\n' +
+                    'export const logsPageHeadingSelector = \'[data-cy="logsPageHeading"]\';\n' +
+                    'export const configurationPageHeadingSelector = \'[data-cy="configurationPageHeading"]\';'
+            );
+        });
+    });
 });
