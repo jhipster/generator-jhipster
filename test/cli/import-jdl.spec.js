@@ -534,6 +534,39 @@ describe('JHipster generator import jdl', () => {
         });
     });
 
+    describe('imports multiple JDL apps one with and one without entities', () => {
+        const options = { skipInstall: true, noInsight: true, interactive: false, skipGit: false };
+        beforeEach(() => {
+            return testInTempDir(dir => {
+                fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
+                fse.removeSync(`${dir}/.yo-rc.json`);
+                return loadImportJdl()(['apps-with-and-without-entities.jdl'], options, env);
+            });
+        });
+
+        afterEach(() => revertTempDir(originalCwd));
+
+        it('creates the applications', () => {
+            assert.file([path.join('app1', '.yo-rc.json'), path.join('app2', '.yo-rc.json')]);
+        });
+        it('creates the entities in one app only', () => {
+            assert.noFile([path.join('app1', '.jhipster', 'BankAccount.json')]);
+            assert.file([path.join('app2', '.jhipster', 'BankAccount.json')]);
+        });
+        it('calls application generator', () => {
+            expect(subGenCallParams.count).to.equal(2);
+            expect(subGenCallParams.commands).to.eql(['app', 'app']);
+            expect(subGenCallParams.options[0]).to.eql([
+                '--force',
+                '--with-entities',
+                '--skip-install',
+                '--no-insight',
+                '--no-skip-git',
+                '--from-jdl',
+            ]);
+        });
+    });
+
     describe('skips JDL apps with --ignore-application', () => {
         const options = { skipInstall: true, ignoreApplication: true, fork: true, skipGit: false };
         beforeEach(() => {
