@@ -63,7 +63,7 @@ module.exports = {
         options: {
           limit: 10000,
           name: 'content/[hash].[ext]',
-          publicPath: "./"
+          publicPath: "../"
         }
       },
       {
@@ -72,7 +72,7 @@ module.exports = {
         options: {
           limit: 10000,
           name: 'content/[hash].[ext]',
-          publicPath: "./"
+          publicPath: "../"
         }
       },
       {
@@ -81,7 +81,7 @@ module.exports = {
         options: {
           limit: 10000,
           name: 'content/[hash].[ext]',
-          publicPath: "./"
+          publicPath: "../"
         }
       }
     ]
@@ -112,7 +112,7 @@ module.exports = {
     }),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      base: './',
+      base: '/',
       template: './<%= MAIN_SRC_DIR %>index.html',
       chunks: ['vendors', 'main', 'global'],
       chunksSortMode: 'manual',
