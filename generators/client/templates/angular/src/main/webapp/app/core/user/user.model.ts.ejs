@@ -52,3 +52,15 @@ export class User implements IUser {
     public password?: string
   ) {}
 }
+
+export interface IPublicUser {
+  id?: <%= idType %>;
+  name?: string;
+}
+
+export class PublicUser implements IPublicUser {
+  constructor(
+    public id?: <%= idType %>,
+    public login?: string,
+  ) {}
+}

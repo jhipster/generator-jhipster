@@ -168,8 +168,9 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     <%_ } _%>
     <%_ if (authenticationType !== 'oauth2') { _%>
 
-    <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asEntity('User') %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
+    <%= listOrFlux %><<%= asEntity('User') %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
     <%_ } _%>
+
     <%_ if (authenticationType !== 'oauth2') { _%>
 
     <%= optionalOrMono %><<%= asEntity('User') %>> findOneByResetKey(String resetKey);
@@ -221,12 +222,17 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 
         <%_ } _%>
     <%_ } _%>
+
     <% if (reactive) { %>
     Flux<<%= asEntity('User') %>>findAllByIdNotNull(Pageable pageable);
 
+    Flux<<%= asEntity('User') %>>findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
+
     Mono<Long> count();
     <% } else { %>
-    Page<<%= asEntity('User') %>>findAll(Pageable pageable);
+    Page<<%= asEntity('User') %>> findAll(Pageable pageable);
+
+    Page<<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
     <% } %>
 }
 <%_ } else if (databaseType === 'sql' && reactive) { _%>
@@ -246,6 +252,8 @@ public interface UserRepository extends R2dbcRepository<User, <% if (authenticat
     Mono<User> findOneByLogin(String login);
 
     Flux<User> findAllByIdNotNull(Pageable pageable);
+
+    Flux<User> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
 
     Mono<Long> count();
 

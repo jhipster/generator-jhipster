@@ -23,6 +23,7 @@ package <%= packageName %>.web.rest;
 import <%= packageName %>.security.SecurityUtils;
     <%_ } _%>
 import <%= packageName %>.service.UserService;
+import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 
 import org.slf4j.Logger;
@@ -72,7 +73,7 @@ public class AccountResource {
      */
     @GetMapping("/account")
     @SuppressWarnings("unchecked")
-    public <% if (reactive) { %>Mono<<%= asDto('User') %>><% } else { %><%= asDto('User') %><% } %> getAccount(Principal principal) {
+    public <% if (reactive) { %>Mono<<%= asDto('AdminUser') %>><% } else { %><%= asDto('AdminUser') %><% } %> getAccount(Principal principal) {
         if (principal instanceof AbstractAuthenticationToken) {
             return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal);
         } else {
@@ -184,6 +185,7 @@ import <%= packageName %>.security.SecurityUtils;
 import <%= packageName %>.service.MailService;
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.PasswordChangeDTO;
+import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 import <%= packageName %>.web.rest.errors.*;
 import <%= packageName %>.web.rest.vm.KeyAndPasswordVM;
@@ -319,9 +321,9 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be returned.
      */
     @GetMapping("/account")
-    public <% if (reactive) { %>Mono<<%= asDto('User') %>><% } else { %><%= asDto('User') %><% } %> getAccount() {
+    public <% if (reactive) { %>Mono<<%= asDto('AdminUser') %>><% } else { %><%= asDto('AdminUser') %><% } %> getAccount() {
         return userService.getUserWithAuthorities()
-            .map(<%= asDto('User') %>::new)
+            .map(<%= asDto('AdminUser') %>::new)
             <%_ if (!reactive) { _%>
             .orElseThrow(() -> new AccountResourceException("User could not be found"));
             <%_ } else { _%>
@@ -338,7 +340,7 @@ public class AccountResource {
      */
     @PostMapping("/account")
     <%_ if (!reactive) { _%>
-    public void saveAccount(@Valid @RequestBody <%= asDto('User') %> userDTO) {
+    public void saveAccount(@Valid @RequestBody <%= asDto('AdminUser') %> userDTO) {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
         Optional<<%= asEntity('User') %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
@@ -351,7 +353,7 @@ public class AccountResource {
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
             userDTO.getLangKey()<% if (['sql', 'mongodb', 'couchbase', 'neo4j'].includes(databaseType)) { %>, userDTO.getImageUrl()<% } %>);
     <%_ } else { _%>
-    public Mono<Void> saveAccount(@Valid @RequestBody <%= asDto('User') %> userDTO) {
+    public Mono<Void> saveAccount(@Valid @RequestBody <%= asDto('AdminUser') %> userDTO) {
         return SecurityUtils.getCurrentUserLogin()
             .switchIfEmpty(Mono.error(new AccountResourceException("Current user login not found")))
             .flatMap(userLogin -> userRepository.findOneByEmailIgnoreCase(userDTO.getEmail())

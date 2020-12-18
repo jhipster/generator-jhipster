@@ -22,6 +22,7 @@ package <%= packageName %>.service.mapper;
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 
 import org.springframework.stereotype.Service;
@@ -53,14 +54,25 @@ public class UserMapper {
         return new <%= asDto('User') %>(user);
     }
 
-    public List<<%= asEntity('User') %>> userDTOsToUsers(List<<%= asDto('User') %>> userDTOs) {
+    public List<<%= asDto('AdminUser') %>> usersToAdminUserDTOs(List<<%= asEntity('User') %>> users) {
+        return users.stream()
+            .filter(Objects::nonNull)
+            .map(this::userToAdminUserDTO)
+            .collect(Collectors.toList());
+    }
+
+    public <%= asDto('AdminUser') %> userToAdminUserDTO(<%= asEntity('User') %> user) {
+        return new <%= asDto('AdminUser') %>(user);
+    }
+
+    public List<<%= asEntity('User') %>> userDTOsToUsers(List<<%= asDto('AdminUser') %>> userDTOs) {
         return userDTOs.stream()
             .filter(Objects::nonNull)
             .map(this::userDTOToUser)
             .collect(Collectors.toList());
     }
 
-    public <%= asEntity('User') %> userDTOToUser(<%= asDto('User') %> userDTO) {
+    public <%= asEntity('User') %> userDTOToUser(<%= asDto('AdminUser') %> userDTO) {
         if (userDTO == null) {
             return null;
         } else {
