@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const microservicePrefix = locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : ''; _%>
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -71,4 +70,4 @@ const <%= entityInstance %>Route: Routes = [
     imports: [RouterModule.forChild(<%= entityInstance %>Route)],
     exports: [RouterModule],
 })
-export class <%= microservicePrefix %><%= entityAngularName %>RoutingModule {}
+export class <%= entityAngularName %>RoutingModule {}
