@@ -966,11 +966,14 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     /**
      * Find key type for Typescript
      *
-     * @param {string} pkType - primary key type in database
+     * @param {string} primaryKey - primary key definition
      * @returns {string} primary key type in Typescript
      */
-    getTypescriptKeyType(pkType) {
-        if (pkType === 'String' || pkType === 'UUID') {
+    getTypescriptKeyType(primaryKey) {
+        if (typeof primaryKey === 'object') {
+            primaryKey = primaryKey.type;
+        }
+        if (primaryKey === 'String' || primaryKey === 'UUID') {
             return 'string';
         }
         return 'number';
@@ -979,18 +982,20 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     /**
      * Generate Entity Client Field Declarations
      *
-     * @param {string} pkType - type of primary key
+     * @param {string} primaryKey - primary key definition
      * @param {Array|Object} fields - array of fields
      * @param {Array|Object} relationships - array of relationships
      * @param {string} dto - dto
      * @param {boolean} embedded - either the actual entity is embedded or not
      * @returns variablesWithTypes: Array
      */
-    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
+    generateEntityClientFields(primaryKey, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
         const variablesWithTypes = [];
-        const tsKeyType = this.getTypescriptKeyType(pkType);
-        if (!embedded && this.jhipsterConfig.clientFramework !== ANGULAR) {
-            variablesWithTypes.push(`id?: ${tsKeyType}`);
+        if (!embedded && primaryKey) {
+            const tsKeyType = this.getTypescriptKeyType(primaryKey);
+            if (this.jhipsterConfig.clientFramework !== ANGULAR) {
+                variablesWithTypes.push(`id?: ${tsKeyType}`);
+            }
         }
         fields.forEach(field => {
             const fieldType = field.fieldType;
@@ -1206,14 +1211,17 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     /**
      * Generate a primary key, according to the type
      *
-     * @param {any} pkType - the type of the primary key
+     * @param {any} primaryKey - primary key definition
      * @param {number} index - the index of the primary key, currently it's possible to generate 2 values, index = 0 - first key (default), otherwise second key
      */
-    generateTestEntityId(pkType, index = 0) {
-        if (pkType === 'String') {
+    generateTestEntityId(primaryKey, index = 0) {
+        if (typeof primaryKey === 'object') {
+            primaryKey = primaryKey.type;
+        }
+        if (primaryKey === 'String') {
             return index === 0 ? "'123'" : "'456'";
         }
-        if (pkType === 'UUID') {
+        if (primaryKey === 'UUID') {
             return index === 0 ? "'9fec3727-3421-4967-b213-ba36557ca194'" : "'1361f429-3817-4123-8ee3-fdf8943310b2'";
         }
         return index === 0 ? 123 : 456;

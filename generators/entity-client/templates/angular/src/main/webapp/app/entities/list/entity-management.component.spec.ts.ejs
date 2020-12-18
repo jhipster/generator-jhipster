@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = generateTestEntityId(primaryKeyType);
+const tsKeyId = generateTestEntityId(primaryKey.type);
 const entityArrayOptionalChainSymbol = pagination === 'infinite-scroll' ? '' : '?.';
 _%>
 <%_ if (pagination !== 'no' || searchEngine !== false) { _%>

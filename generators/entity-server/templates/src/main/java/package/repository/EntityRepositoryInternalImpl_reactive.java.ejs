@@ -143,7 +143,7 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
     }
 
     @Override
-    public Mono<<%= asEntity(entityClass) %>> findById(<%= primaryKeyType %> id) {
+    public Mono<<%= asEntity(entityClass) %>> findById(<%= primaryKey.type %> id) {
         return createQuery(null, Criteria.where("id").is(id)).one();
     }
 

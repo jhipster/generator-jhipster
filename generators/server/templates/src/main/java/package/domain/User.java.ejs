@@ -171,7 +171,7 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     <%_ } _%>
 <%_ } _%>
-    private <%= user.primaryKeyType %> id;
+    private <%= user.primaryKey.type %> id;
 
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)

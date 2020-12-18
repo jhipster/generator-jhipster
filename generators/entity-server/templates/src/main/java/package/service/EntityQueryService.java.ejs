@@ -122,7 +122,7 @@ public class <%= serviceClassName %> extends QueryService<<%= asEntity(entityCla
         Specification<<%= asEntity(entityClass) %>> specification = Specification.where(null);
         if (criteria != null) {
             if (criteria.get<%= primaryKey.nameCapitalized %>() != null) {
-                specification = specification.and(<%= getSpecificationBuilder(primaryKeyType) %>(criteria.get<%= primaryKey.nameCapitalized %>(), <%= asEntity(entityClass) %>_.id));
+                specification = specification.and(<%= getSpecificationBuilder(primaryKey.type) %>(criteria.get<%= primaryKey.nameCapitalized %>(), <%= asEntity(entityClass) %>_.id));
             }
             <%_
             fields.forEach((field) => {

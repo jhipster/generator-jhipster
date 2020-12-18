@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = generateTestEntityId(primaryKeyType);
+const tsKeyId = generateTestEntityId(primaryKey.type);
 const enumImports = generateEntityClientEnumImports(fields);
 _%>
 /* tslint:disable max-line-length */
@@ -66,7 +66,7 @@ describe('Service Tests', () => {
       currentDate = new Date();
       <%_ } _%>
       elemDefault = new <%= entityAngularName %>(
-        <%_ if (primaryKeyType === 'String'  || primaryKeyType === 'UUID') { _%>
+        <%_ if (primaryKey.type === 'String'  || primaryKey.type === 'UUID') { _%>
         'ID',
         <%_ } else { _%>
         0,
@@ -127,7 +127,7 @@ describe('Service Tests', () => {
 <%_ if (!readOnly) { _%>
       it('should create a <%= entityAngularName %>', async () => {
         const returnedFromService = Object.assign({
-  <%_ if (primaryKeyType === 'String'  || primaryKeyType === 'UUID') { _%>
+  <%_ if (primaryKey.type === 'String'  || primaryKey.type === 'UUID') { _%>
           id: 'ID',
   <%_ } else { _%>
           id: 0,

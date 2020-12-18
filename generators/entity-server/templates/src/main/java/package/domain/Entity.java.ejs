@@ -122,7 +122,7 @@ import java.util.Set;
 <%_ } if (databaseType === 'couchbase' && hasRelationship) { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
-<%_ if (primaryKeyType === 'UUID' || fieldsContainUUID === true) { _%>
+<%_ if ((!embedded && primaryKey.type === 'UUID') || fieldsContainUUID === true) { _%>
 import java.util.UUID;
 <%_ }
 Object.keys(uniqueEnums).forEach(function(element) { _%>
@@ -197,7 +197,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%_ } else if (databaseType === 'neo4j') { _%>
     @GeneratedValue(UUIDStringGenerator.class)
     <%_ } _%>
-    private <%= primaryKeyType %> <%= primaryKey.name %>;
+    private <%= primaryKey.type %> <%= primaryKey.name %>;
 
 <%_ } _%>
 <%_ for (idx in fields) {
@@ -473,16 +473,16 @@ relationships.forEach((relationship, idx) => {
 }); _%>
     // jhipster-needle-entity-add-field - JHipster will add fields here
 <%_ if (!embedded) { _%>
-    public <%= primaryKeyType %> get<%= primaryKey.nameCapitalized %>() {
+    public <%= primaryKey.type %> get<%= primaryKey.nameCapitalized %>() {
         return <%= primaryKey.name %>;
     }
 
-    public void set<%= primaryKey.nameCapitalized %>(<%= primaryKeyType %> <%= primaryKey.name %>) {
+    public void set<%= primaryKey.nameCapitalized %>(<%= primaryKey.type %> <%= primaryKey.name %>) {
         this.<%= primaryKey.name %> = <%= primaryKey.name %>;
     }
 
     <%_ if (fluentMethods) { _%>
-    public <%= asEntity(entityClass) %> <%= primaryKey.name %>(<%= primaryKeyType %> <%= primaryKey.name %>) {
+    public <%= asEntity(entityClass) %> <%= primaryKey.name %>(<%= primaryKey.type %> <%= primaryKey.name %>) {
         this.<%= primaryKey.name %> = <%= primaryKey.name %>;
         return this;
     }

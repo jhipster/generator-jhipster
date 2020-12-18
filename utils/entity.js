@@ -26,7 +26,7 @@ const { entityDefaultConfig } = require('../generators/generator-defaults');
 const { stringHashCode } = require('../generators/utils');
 
 const BASE_TEMPLATE_DATA = {
-    primaryKeyType: undefined,
+    primaryKey: undefined,
     skipUiGrouping: false,
     haveFieldWithJavadoc: false,
     existingEnum: false,
@@ -248,7 +248,6 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
                 references: entityWithConfig.idFields.map(field => field.reference),
                 composite: entityWithConfig.idFields.length > 1,
             };
-            entityWithConfig.primaryKeyType = idField.fieldType;
         }
     }
 

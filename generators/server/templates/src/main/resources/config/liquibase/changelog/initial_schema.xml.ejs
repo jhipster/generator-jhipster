@@ -40,7 +40,7 @@
     <changeSet id="00000000000001" author="jhipster">
 <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
         <createTable tableName="<%= user.entityTableName %>">
-            <%_ if (user.primaryKeyType !== 'Long') { _%>
+            <%_ if (user.primaryKey.type !== 'Long') { _%>
             <column name="id" type="varchar(100)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
