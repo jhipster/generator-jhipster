@@ -207,6 +207,11 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
             type: Boolean,
         });
 
+        this.option('ignore-errors', {
+            desc: "Don't fail on prettier errors.",
+            type: Boolean,
+        });
+
         this.option('native-language', {
             alias: 'n',
             desc: 'Set application native language',

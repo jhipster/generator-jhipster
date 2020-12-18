@@ -1436,7 +1436,11 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
                 const filterPatternForPrettier = `{,.,**/,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
                 const prettierFilter = filter(['.yo-rc.json', filterPatternForPrettier], { restore: true });
                 // this pipe will pass through (restore) anything that doesn't match typescriptFilter
-                generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
+                generator.registerTransformStream([
+                    prettierFilter,
+                    prettierTransform(prettierOptions, this, this.options.ignoreErrors),
+                    prettierFilter.restore,
+                ]);
             },
             taskName: 'queuePrettierTransform',
             queueName: 'jhipster:preConflicts',
