@@ -46,6 +46,12 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
             desc: 'Application type to generate',
             type: String,
         });
+
+        this.option('client-framework', {
+            desc: 'Provide client framework for the application',
+            type: String,
+        });
+
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip the client-side application generation',
