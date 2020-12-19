@@ -58,7 +58,7 @@ describe('UserManagementEdit Component', () => {
       await userManagementEdit.$nextTick();
 
       // THEN
-      expect(axiosStub.get.calledWith('api/users/' + <%- tsKeyId %>)).toBeTruthy();
+      expect(axiosStub.get.calledWith('api/admin/users/' + <%- tsKeyId %>)).toBeTruthy();
     });
   });
 
@@ -94,7 +94,7 @@ describe('UserManagementEdit Component', () => {
       await userManagementEdit.$nextTick();
 
       // THEN
-      expect(axiosStub.put.calledWith('api/users', { id: <%- tsKeyId %>, authorities: [] })).toBeTruthy();
+      expect(axiosStub.put.calledWith('api/admin/users', { id: <%- tsKeyId %>, authorities: [] })).toBeTruthy();
       expect(userManagementEdit.isSaving).toEqual(false);
     });
 
@@ -113,7 +113,7 @@ describe('UserManagementEdit Component', () => {
       await userManagementEdit.$nextTick();
 
       // THEN
-      expect(axiosStub.post.calledWith('api/users', { authorities: []<% if (!enableTranslation) { %>, langKey: 'en'<% } %>})).toBeTruthy();
+      expect(axiosStub.post.calledWith('api/admin/users', { authorities: []<% if (!enableTranslation) { %>, langKey: 'en'<% } %>})).toBeTruthy();
       expect(userManagementEdit.isSaving).toEqual(false);
     });
   });

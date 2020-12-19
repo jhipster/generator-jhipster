@@ -70,7 +70,7 @@ describe('UserManagement Component', () => {
       await userManagement.$nextTick();
 
       // THEN
-      expect(axiosStub.get.calledWith(`api/users<%_ if (databaseType !== 'cassandra') { _%>?sort=id,asc&page=0&size=20<%_ } _%>`)).toBeTruthy();
+      expect(axiosStub.get.calledWith(`api/admin/users<%_ if (databaseType !== 'cassandra') { _%>?sort=id,asc&page=0&size=20<%_ } _%>`)).toBeTruthy();
     });
   });
 
@@ -84,8 +84,8 @@ describe('UserManagement Component', () => {
       await userManagement.$nextTick();
 
       // THEN
-      expect(axiosStub.put.calledWith(`api/users`, { id: <%- tsKeyId %>, activated: true })).toBeTruthy();
-      expect(axiosStub.get.calledWith(`api/users<%_ if (databaseType !== 'cassandra') { _%>?sort=id,asc&page=0&size=20<%_ } _%>`)).toBeTruthy();
+      expect(axiosStub.put.calledWith(`api/admin/users`, { id: <%- tsKeyId %>, activated: true })).toBeTruthy();
+      expect(axiosStub.get.calledWith(`api/admin/users<%_ if (databaseType !== 'cassandra') { _%>?sort=id,asc&page=0&size=20<%_ } _%>`)).toBeTruthy();
     });
   });
 
@@ -105,8 +105,8 @@ describe('UserManagement Component', () => {
       await userManagement.$nextTick();
 
       // THEN
-      expect(axiosStub.delete.calledWith('api/users/' + <%- tsKeyId %>)).toBeTruthy();
-      expect(axiosStub.get.calledWith(`api/users<%_ if (databaseType !== 'cassandra') { _%>?sort=id,asc&page=0&size=20<%_ } _%>`)).toBeTruthy();
+      expect(axiosStub.delete.calledWith('api/admin/users/' + <%- tsKeyId %>)).toBeTruthy();
+      expect(axiosStub.get.calledWith(`api/admin/users<%_ if (databaseType !== 'cassandra') { _%>?sort=id,asc&page=0&size=20<%_ } _%>`)).toBeTruthy();
     });
   });
 <%_ if (databaseType !== 'cassandra') { _%>
