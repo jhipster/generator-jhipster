@@ -192,7 +192,6 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/ApplicationProperties.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/AsyncConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CloudDatabaseConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/Constants.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/DatabaseConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/DateTimeFormatConfiguration.java`,

@@ -1014,20 +1014,6 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator =>
-                generator.databaseType === 'sql' ||
-                generator.databaseType === 'mongodb' ||
-                generator.databaseType === 'neo4j' ||
-                generator.databaseType === 'couchbase',
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/config/CloudDatabaseConfiguration.java',
-                    renameTo: generator => `${generator.javaDir}config/CloudDatabaseConfiguration.java`,
-                },
-            ],
-        },
-        {
             condition: generator => generator.databaseType !== 'no',
             path: SERVER_MAIN_SRC_DIR,
             templates: [

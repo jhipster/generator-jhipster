@@ -620,17 +620,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
             },
 
-            addHerokuDependencies() {
-                if (this.abort) return;
-                if (this.buildTool === 'maven') {
-                    this.addMavenDependency('org.springframework.cloud', 'spring-cloud-localconfig-connector');
-                    this.addMavenDependency('org.springframework.cloud', 'spring-cloud-heroku-connector');
-                } else if (this.buildTool === 'gradle') {
-                    this.addGradleDependency('implementation', 'org.springframework.cloud', 'spring-cloud-localconfig-connector');
-                    this.addGradleDependency('implementation', 'org.springframework.cloud', 'spring-cloud-heroku-connector');
-                }
-            },
-
             addHerokuBuildPlugin() {
                 if (this.abort) return;
                 if (this.buildTool !== 'gradle') return;
