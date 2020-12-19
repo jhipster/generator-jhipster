@@ -55,7 +55,7 @@ const PRETTIER_JAVA_VERSION = packagejs.dependencies['prettier-plugin-java'];
 
 // Version of docker images
 const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.4.0';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.5.0';
 const DOCKER_JHIPSTER_CONTROL_CENTER = 'jhipster/jhipster-control-center:v0.2.0';
 const DOCKER_JAVA_JRE = 'adoptopenjdk:11-jre-hotspot';
 const DOCKER_MYSQL = 'mysql:8.0.22';
