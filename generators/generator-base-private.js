@@ -1434,15 +1434,25 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             return;
         }
 
-        const prettierOptions = { plugins: [prettierPluginPackagejson] };
-        if (!this.skipServer && !this.jhipsterConfig.skipServer) {
-            prettierOptions.plugins.push(prettierPluginJava);
-        }
-        // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        const filterPatternForPrettier = `{,.,**/,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
-        const prettierFilter = filter(['.yo-rc.json', filterPatternForPrettier], { restore: true });
-        // this pipe will pass through (restore) anything that doesn't match typescriptFilter
-        generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
+        this.queueTask({
+            method: () => {
+                const prettierOptions = { plugins: [prettierPluginPackagejson] };
+                if (!this.skipServer && !this.jhipsterConfig.skipServer) {
+                    prettierOptions.plugins.push(prettierPluginJava);
+                }
+                // Prettier is clever, it uses correct rules and correct parser according to file extension.
+                const filterPatternForPrettier = `{,.,**/,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
+                const prettierFilter = filter(['.yo-rc.json', filterPatternForPrettier], { restore: true });
+                // this pipe will pass through (restore) anything that doesn't match typescriptFilter
+                generator.registerTransformStream([
+                    prettierFilter,
+                    prettierTransform(prettierOptions, this, this.options.ignoreErrors),
+                    prettierFilter.restore,
+                ]);
+            },
+            taskName: 'queuePrettierTransform',
+            queueName: 'jhipster:preConflicts',
+        });
     }
 
     registerGeneratedAnnotationTransform() {
