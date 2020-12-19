@@ -48,7 +48,7 @@ import java.util.List;
 <%_ if (!reactive) { _%>
 import java.util.Optional;
 <%_ } _%>
-<%_ if (primaryKeyType === 'UUID') { _%>
+<%_ if (primaryKey.type === 'UUID') { _%>
 import java.util.UUID;
 <%_ } _%>
 
@@ -123,7 +123,7 @@ public interface <%= entityClass %>Service {
      * @param id the id of the entity.
      * @return the entity.
      */
-    <%= optionalOrMono %><<%= instanceType %>> findOne(<%= primaryKeyType %> id);
+    <%= optionalOrMono %><<%= instanceType %>> findOne(<%= primaryKey.type %> id);
 
     /**
      * Delete the "id" <%= entityInstance %>.
@@ -133,7 +133,7 @@ public interface <%= entityClass %>Service {
      * @return a Mono to signal the deletion
 <%_ } _%>
      */
-    <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%= primaryKeyType %> id);<% if (searchEngine !== false) { %>
+    <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%= primaryKey.type %> id);<% if (searchEngine !== false) { %>
 
     /**
      * Search for the <%= entityInstance %> corresponding to the query.

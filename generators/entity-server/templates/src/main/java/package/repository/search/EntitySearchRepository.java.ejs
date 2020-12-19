@@ -31,7 +31,7 @@ import org.springframework.data.elasticsearch.repository.<% if (reactive) {%>Rea
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 <%_ } _%>
-<%_ if (primaryKeyType === 'UUID') { _%>
+<%_ if (primaryKey.type === 'UUID') { _%>
 
 import java.util.UUID;
 <% } %>
@@ -43,7 +43,7 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 /**
  * Spring Data Elasticsearch repository for the {@link <%= asEntity(entityClass) %>} entity.
  */
-public interface <%= entityClass %>SearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= asEntity(entityClass) %>, <%= primaryKeyType %>><% if (reactive) {%>, <%= entityClass %>SearchRepositoryInternal<% } %> {
+public interface <%= entityClass %>SearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= asEntity(entityClass) %>, <%= primaryKey.type %>><% if (reactive) {%>, <%= entityClass %>SearchRepositoryInternal<% } %> {
 }
 <%_ if (reactive) { _%>
 

@@ -54,7 +54,7 @@ if (isFilterableType(fieldType)) {
 }
 });
 relationships.forEach((relationship) => {
-const relationshipType = relationship.otherEntity.primaryKeyType;
+const relationshipType = relationship.otherEntity.primaryKey.type;
 const referenceFilterType = '' + relationshipType + 'Filter';
 // user has a String PK when using OAuth, so change relationships accordingly
 let oauthAwareReferenceFilterType = referenceFilterType;

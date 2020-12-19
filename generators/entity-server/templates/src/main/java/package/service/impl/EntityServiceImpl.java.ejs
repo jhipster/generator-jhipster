@@ -75,7 +75,7 @@ import java.util.List;
 <%_ if (!reactive) { _%>
 import java.util.Optional;
 <%_ } _%>
-<%_ if (primaryKeyType === 'UUID') { _%>
+<%_ if (primaryKey.type === 'UUID') { _%>
 import java.util.UUID;
 <%_ } _%>
 <%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && ((searchEngine !== false) || dto === 'mapstruct'))) { _%>
@@ -214,7 +214,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    public <%= optionalOrMono %><<%= instanceType %>> findOne(<%= primaryKeyType %> id) {
+    public <%= optionalOrMono %><<%= instanceType %>> findOne(<%= primaryKey.type %> id) {
         log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService: false, returnDirectly:true}); -%>
     }
 
@@ -231,7 +231,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ if (service === 'serviceImpl') { _%>
     @Override
     <%_ } _%>
-    public <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%= primaryKeyType %> id) {
+    public <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%= primaryKey.type %> id) {
         log.debug("Request to delete <%= entityClass %> : {}", id);
 <%- include('../../common/delete_template', {viaService: false, fromResource: false}); -%>
     }

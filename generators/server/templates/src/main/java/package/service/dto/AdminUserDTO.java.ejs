@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  */
 public class <%= asDto('AdminUser') %> {
 
-    private <%= user.primaryKeyType %> id;
+    private <%= user.primaryKey.type %> id;
 
     @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
@@ -110,11 +110,11 @@ public class <%= asDto('AdminUser') %> {
     }
 
     <%_ } _%>
-    public <%= user.primaryKeyType %> getId() {
+    public <%= user.primaryKey.type %> getId() {
         return id;
     }
 
-    public void setId(<%= user.primaryKeyType %> id) {
+    public void setId(<%= user.primaryKey.type %> id) {
         this.id = id;
     }
 
