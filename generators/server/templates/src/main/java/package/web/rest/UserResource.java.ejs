@@ -81,8 +81,6 @@ import reactor.core.publisher.Mono;
 import javax.validation.constraints.Pattern;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import java.util.*;
@@ -161,14 +159,11 @@ public class UserResource {
      *
      * @param userDTO the user to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new user, or with status {@code 400 (Bad Request)} if the login or email is already in use.
-    <%_ if (!reactive) { _%>
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-    <%_ } _%>
      * @throws BadRequestAlertException {@code 400 (Bad Request)} if the login or email is already in use.
      */
     @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public <% if (reactive) { %>Mono<ResponseEntity<<%= asEntity('User') %>>><% } else { %>ResponseEntity<<%= asEntity('User') %>><% } %> createUser(@Valid @RequestBody <%= asDto('AdminUser') %> userDTO)<% if (!reactive) { %> throws URISyntaxException<% } %> {
+    public <% if (reactive) { %>Mono<ResponseEntity<<%= asEntity('User') %>>><% } else { %>ResponseEntity<<%= asEntity('User') %>><% } %> createUser(@Valid @RequestBody <%= asDto('AdminUser') %> userDTO) {
         log.debug("REST request to save User : {}", userDTO);
 
         if (userDTO.getId() != null) {
@@ -182,7 +177,7 @@ public class UserResource {
         } else {
             <%= asEntity('User') %> newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
-            return ResponseEntity.created(new URI("/api/admin/users/" + newUser.getLogin()))
+            return ResponseEntity.status(HttpStatus.CREATED)
                 .headers(HeaderUtil.createAlert(applicationName, <% if (enableTranslation) { %> "userManagement.created"<% } else { %> "A user is created with identifier " + newUser.getLogin()<% } %>, newUser.getLogin()))
                 .body(newUser);
         }
@@ -205,13 +200,10 @@ public class UserResource {
             })
             .doOnSuccess(mailService::sendCreationEmail)
             .map(user -> {
-                try {
-                    return ResponseEntity.created(new URI("/api/admin/users/" + user.getLogin()))
-                        .headers(HeaderUtil.createAlert(applicationName, "userManagement.created", user.getLogin()))
-                        .body(user);
-                } catch (URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
+                return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .headers(HeaderUtil.createAlert(applicationName, "userManagement.created", user.getLogin()))
+                    .body(user);
             });
         <%_ } _%>
     }
