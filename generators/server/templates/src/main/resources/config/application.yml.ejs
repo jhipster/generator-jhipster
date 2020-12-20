@@ -56,6 +56,7 @@ eureka:
       git-version: ${git.commit.id.describe:}
       git-commit: ${git.commit.id.abbrev:}
       git-branch: ${git.branch:}
+      context-path: ${server.servlet.context-path:}
 <%_ } _%>
 <%_ if (applicationType === 'gateway') { _%>
 
