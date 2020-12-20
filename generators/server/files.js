@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -897,6 +897,15 @@ const serverFiles = {
             ],
         },
         {
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/IntegrationTest.java',
+                    renameTo: generator => `${generator.testDir}/IntegrationTest.java`,
+                },
+            ],
+        },
+        {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1001,20 +1010,6 @@ const serverFiles = {
                 {
                     file: 'package/RedisTestContainerExtension.java',
                     renameTo: generator => `${generator.testDir}RedisTestContainerExtension.java`,
-                },
-            ],
-        },
-        {
-            condition: generator =>
-                generator.databaseType === 'sql' ||
-                generator.databaseType === 'mongodb' ||
-                generator.databaseType === 'neo4j' ||
-                generator.databaseType === 'couchbase',
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/config/CloudDatabaseConfiguration.java',
-                    renameTo: generator => `${generator.javaDir}config/CloudDatabaseConfiguration.java`,
                 },
             ],
         },
@@ -1636,6 +1631,10 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}service/dto/package-info.java`,
                 },
                 {
+                    file: 'package/service/dto/AdminUserDTO.java',
+                    renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('AdminUser')}.java`,
+                },
+                {
                     file: 'package/service/dto/UserDTO.java',
                     renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('User')}.java`,
                 },
@@ -1658,6 +1657,10 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}repository/UserRepository.java`,
                 },
                 { file: 'package/web/rest/UserResource.java', renameTo: generator => `${generator.javaDir}web/rest/UserResource.java` },
+                {
+                    file: 'package/web/rest/PublicUserResource.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/PublicUserResource.java`,
+                },
                 {
                     file: 'package/web/rest/vm/ManagedUserVM.java',
                     renameTo: generator => `${generator.javaDir}web/rest/vm/ManagedUserVM.java`,
@@ -1694,6 +1697,10 @@ const serverFiles = {
                 {
                     file: 'package/service/mapper/UserMapperTest.java',
                     renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`,
+                },
+                {
+                    file: 'package/web/rest/PublicUserResourceIT.java',
+                    renameTo: generator => `${generator.testDir}web/rest/PublicUserResourceIT.java`,
                 },
                 {
                     file: 'package/web/rest/UserResourceIT.java',
@@ -1776,6 +1783,10 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}service/dto/package-info.java`,
                 },
                 {
+                    file: 'package/service/dto/AdminUserDTO.java',
+                    renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('AdminUser')}.java`,
+                },
+                {
                     file: 'package/service/dto/UserDTO.java',
                     renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('User')}.java`,
                 },
@@ -1792,6 +1803,10 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}web/rest/AccountResource.java`,
                 },
                 { file: 'package/web/rest/UserResource.java', renameTo: generator => `${generator.javaDir}web/rest/UserResource.java` },
+                {
+                    file: 'package/web/rest/PublicUserResource.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/PublicUserResource.java`,
+                },
                 {
                     file: 'package/web/rest/vm/KeyAndPasswordVM.java',
                     renameTo: generator => `${generator.javaDir}web/rest/vm/KeyAndPasswordVM.java`,
@@ -1889,6 +1904,10 @@ const serverFiles = {
                 {
                     file: 'package/config/NoOpMailConfiguration.java',
                     renameTo: generator => `${generator.testDir}config/NoOpMailConfiguration.java`,
+                },
+                {
+                    file: 'package/web/rest/PublicUserResourceIT.java',
+                    renameTo: generator => `${generator.testDir}web/rest/PublicUserResourceIT.java`,
                 },
                 {
                     file: 'package/web/rest/UserResourceIT.java',

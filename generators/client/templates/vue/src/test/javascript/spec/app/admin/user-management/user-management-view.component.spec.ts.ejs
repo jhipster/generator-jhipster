@@ -1,5 +1,5 @@
 <%_
-const tsKeyId = generateTestEntityId(user.primaryKeyType);
+const tsKeyId = generateTestEntityId(user.primaryKey.type);
 _%>
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
@@ -61,7 +61,7 @@ describe('UserManagementView Component', () => {
       await userManagementView.$nextTick();
 
       // THEN
-      expect(axiosStub.get.calledWith('api/users/' + <%- tsKeyId %>)).toBeTruthy();
+      expect(axiosStub.get.calledWith('api/admin/users/' + <%- tsKeyId %>)).toBeTruthy();
       expect(userManagementView.user).toEqual(userData);
     });
   });

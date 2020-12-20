@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -344,13 +344,17 @@ function writeFiles() {
             'app/core/jhi-navbar/jhi-navbar.vue',
             'app/core/ribbon/ribbon.vue',
             'app/shared/jhi-item-count.vue',
-            'app/admin/configuration/configuration.vue',
-            'app/admin/health/health.vue',
-            'app/admin/health/health-modal.vue',
-            'app/admin/logs/logs.vue',
-            'app/admin/metrics/metrics.vue',
-            'app/admin/metrics/metrics-modal.vue',
         ]);
+        if (this.withAdminUi) {
+            utils.vueReplaceTranslation(this, [
+                'app/admin/configuration/configuration.vue',
+                'app/admin/health/health.vue',
+                'app/admin/health/health-modal.vue',
+                'app/admin/logs/logs.vue',
+                'app/admin/metrics/metrics.vue',
+                'app/admin/metrics/metrics-modal.vue',
+            ]);
+        }
         if (this.authenticationType !== 'oauth2') {
             utils.vueReplaceTranslation(this, ['app/account/login-form/login-form.vue']);
         }

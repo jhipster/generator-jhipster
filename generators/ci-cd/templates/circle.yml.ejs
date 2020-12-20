@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,11 +19,21 @@
 version: 2.1
 jobs:
     build:
-        machine:
-            image: circleci/classic:201808-01
+        docker:
+            - image: jhipster/jhipster:v<%= jhipsterVersion %>
         steps:
             - checkout
-
+            - setup_remote_docker:
+                version: 19.03.13
+            - run:
+                name: Install docker and docker-compose
+                command: |
+                    echo jhipster | sudo -S apt update
+                    echo jhipster | sudo -S apt install -y docker.io
+                    echo jhipster | sudo -S curl -Lo /usr/local/bin/docker-compose $(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep "browser_download_url.*docker-compose-Linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
+                    echo jhipster | sudo -S chmod +x /usr/local/bin/docker-compose
+                    docker version
+                    docker-compose version
             # Download and cache dependencies
             - restore_cache:
                 keys:
@@ -34,24 +44,6 @@ jobs:
                     <%_ } _%>
                     # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
                     - v1-dependencies-
-            - run:
-                name: Install OpenJDK 11
-                command: |
-                    sudo rm /var/lib/apt/lists/lock
-                    sudo rm /var/cache/apt/archives/lock
-                    sudo rm /var/lib/dpkg/lock
-                    sudo apt install openjdk-11-jdk
-                    echo 'export PATH="/usr/lib/jvm/java-11-openjdk-amd64/bin:$PATH"' >> $BASH_ENV
-            - run:
-                name: Setup NVM
-                command: |
-                    echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
-                    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-            - run:
-                name: Install Node <%= NODE_VERSION %>
-                command: |
-                    nvm install <%= NODE_VERSION %>
-                    nvm alias default <%= NODE_VERSION %>
             - run:
                 name: Print Java Version
                 command: 'java -version'
@@ -64,7 +56,19 @@ jobs:
             - run:
                 name: Install Node Modules
                 command: 'npm install'
-
+            <%_ if (cicdIntegrations.includes('snyk')) { _%>
+            - run:
+                name: Install Snyk CLI
+                command: |
+                    curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
+                    chmod +x snyk
+            - run:
+                name: Snyk test
+                command: './snyk test --all-projects || true'
+            - run:
+                name: Snyk monitor
+                command: './snyk monitor --all-projects'
+            <%_ } _%>
             - save_cache:
                 paths:
                     - node
@@ -103,23 +107,23 @@ jobs:
                 <%_ } _%>
             <%_ } else if (buildTool === 'gradle') { _%>
                 <%_ if (cicdIntegrations.includes('heroku')) { _%>
-            -run:
+            - run:
                 name: Deploy to Heroku
                 command: './gradlew deployHeroku --no-daemon'
                 <%_ } _%>
             <%_ } _%>
             <%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) {
-                const commented = applicationType === 'gateway' ? '# ' : ''; _%>
-            <%= commented %>-run:
+                const commented = '# '; _%>
+            <%= commented %>- run:
             <%= commented %>    name: 'E2E: Package'
             <%= commented %>    command: <%= clientPackageManager %> run ci:e2e:package
-            <%= commented %>-run:
+            <%= commented %>- run:
             <%= commented %>    name: 'E2E: Prepare'
             <%= commented %>    command: <%= clientPackageManager %> run ci:e2e:prepare
-            <%= commented %>-run:
+            <%= commented %>- run:
             <%= commented %>    name: 'E2E: Run'
             <%= commented %>    command: <%= clientPackageManager %> run ci:e2e:run
-            <%= commented %>-run:
+            <%= commented %>- run:
             <%= commented %>    name: 'E2E: Teardown'
             <%= commented %>    command: <%= clientPackageManager %> run ci:e2e:teardown
             <%_ } _%>

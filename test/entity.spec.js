@@ -590,7 +590,10 @@ describe('JHipster generator for entity', () => {
                     assert.file(`${CLIENT_MAIN_SRC_DIR}i18n/en/sampleMicroserviceBar.json`);
                     assert.file(expectedFiles.clientNg2GatewayMicroserviceEntity);
                     assert.noFile(expectedFiles.gatling);
-                    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar.service.ts`, 'samplemicroservice');
+                    assert.fileContent(
+                        `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/service/bar.service.ts`,
+                        'samplemicroservice'
+                    );
                     assert.fileContent(
                         `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar.module.ts`,
                         'SampleMicroserviceBarModule'
@@ -647,7 +650,7 @@ describe('JHipster generator for entity', () => {
                     assert.file(expectedFiles.clientBazGatewayMicroserviceEntity);
                 });
                 it('generates a string id for the mongodb entity', () => {
-                    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/model/sampleMicroservice/baz.model.ts`, 'id?: string');
+                    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/baz.model.ts`, 'id?: string');
                 });
             });
         });

@@ -1,14 +1,14 @@
 /**
  * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -66,7 +66,6 @@ describe('JDLImporter', () => {
                             relationshipName: 'location',
                             otherEntityName: 'location',
                             relationshipType: 'many-to-one',
-                            otherEntityField: 'id',
                             otherEntityRelationshipName: 'country',
                         },
                     ],
@@ -115,20 +114,17 @@ describe('JDLImporter', () => {
                             relationshipType: 'one-to-one',
                             relationshipName: 'location',
                             otherEntityName: 'location',
-                            otherEntityField: 'id',
                             ownerSide: true,
                             otherEntityRelationshipName: 'department',
                         },
                         {
                             relationshipType: 'one-to-many',
                             javadoc: 'A relationship',
-                            otherEntityField: 'id',
                             relationshipName: 'employee',
                             otherEntityName: 'employee',
                             otherEntityRelationshipName: 'department',
                         },
                         {
-                            otherEntityField: 'id',
                             otherEntityName: 'jobHistory',
                             otherEntityRelationshipName: 'department',
                             ownerSide: false,
@@ -183,7 +179,6 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
-                            otherEntityField: 'id',
                             relationshipType: 'one-to-many',
                             relationshipName: 'job',
                             otherEntityName: 'job',
@@ -209,10 +204,8 @@ describe('JDLImporter', () => {
                             relationshipName: 'department',
                             otherEntityName: 'department',
                             otherEntityRelationshipName: 'employee',
-                            otherEntityField: 'id',
                         },
                         {
-                            otherEntityField: 'id',
                             otherEntityName: 'jobHistory',
                             otherEntityRelationshipName: 'emp',
                             ownerSide: false,
@@ -278,7 +271,6 @@ describe('JDLImporter', () => {
                             relationshipName: 'history',
                             otherEntityName: 'jobHistory',
                             otherEntityRelationshipName: 'job',
-                            otherEntityField: 'id',
                             ownerSide: false,
                         },
                     ],
@@ -321,7 +313,6 @@ describe('JDLImporter', () => {
                             otherEntityRelationshipName: 'jobHistory',
                             relationshipName: 'department',
                             otherEntityName: 'department',
-                            otherEntityField: 'id',
                             ownerSide: true,
                         },
                         {
@@ -329,7 +320,6 @@ describe('JDLImporter', () => {
                             otherEntityRelationshipName: 'history',
                             relationshipName: 'job',
                             otherEntityName: 'job',
-                            otherEntityField: 'id',
                             ownerSide: true,
                         },
                         {
@@ -375,7 +365,6 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
-                            otherEntityField: 'id',
                             relationshipType: 'one-to-many',
                             relationshipName: 'country',
                             otherEntityName: 'country',
@@ -385,7 +374,6 @@ describe('JDLImporter', () => {
                             options: {
                                 id: true,
                             },
-                            otherEntityField: 'id',
                             otherEntityName: 'department',
                             otherEntityRelationshipName: 'location',
                             ownerSide: false,
@@ -419,7 +407,6 @@ describe('JDLImporter', () => {
                             otherEntityName: 'country',
                             otherEntityRelationshipName: 'area',
                             relationshipType: 'many-to-one',
-                            otherEntityField: 'id',
                         },
                     ],
                     name: 'Region',
@@ -589,6 +576,57 @@ relationship OneToOne {
                 });
             });
         });
+        context('when parsing two JDL applications with and without entities ', () => {
+            let returned;
+            const APPLICATION_NAMES = ['app1', 'app2'];
+
+            before(() => {
+                const importer = createImporterFromFiles([
+                    path.join(__dirname, 'test-files', 'applications_with_and_without_entities.jdl'),
+                ]);
+                returned = importer.import();
+            });
+
+            after(() => {
+                APPLICATION_NAMES.forEach(applicationName => {
+                    fse.removeSync(applicationName);
+                });
+            });
+
+            it('should return the import state', () => {
+                expect(returned.exportedEntities).to.have.lengthOf(1);
+                expect(returned.exportedApplications).to.have.lengthOf(2);
+                expect(Object.keys(returned.exportedApplicationsWithEntities).length).to.equal(2);
+                expect(returned.exportedDeployments).to.have.lengthOf(0);
+            });
+            it('should create the folders and the .yo-rc.json files', () => {
+                APPLICATION_NAMES.forEach(applicationName => {
+                    expect(fse.statSync(path.join(applicationName, '.yo-rc.json')).isFile()).to.be.true;
+                    expect(fse.statSync(applicationName).isDirectory()).to.be.true;
+                });
+            });
+            it('should create the entity folder in only one app folder', () => {
+                expect(fse.existsSync(path.join(APPLICATION_NAMES[0], '.jhipster'))).to.be.false;
+                expect(fse.statSync(path.join(APPLICATION_NAMES[1], '.jhipster')).isDirectory()).to.be.true;
+                expect(fse.statSync(path.join(APPLICATION_NAMES[1], '.jhipster', 'BankAccount.json')).isFile()).to.be.true;
+            });
+            it('should export the application contents', () => {
+                expect(returned.exportedApplicationsWithEntities[APPLICATION_NAMES[0]].entities).to.have.lengthOf(0);
+                expect(returned.exportedApplicationsWithEntities[APPLICATION_NAMES[1]].entities).to.have.lengthOf(1);
+            });
+            it('should return the corresponding exportedApplicationsWithEntities', () => {
+                returned.exportedApplications.forEach(application => {
+                    const applicationConfig = application['generator-jhipster'];
+                    const entityNames = application.entities || [];
+                    const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
+                    expect(applicationConfig).to.be.eql(applicationWithEntities.config);
+                    expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
+                    expect(returned.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(
+                        applicationWithEntities.entities
+                    );
+                });
+            });
+        });
         context('when parsing one JDL application and entities passed as string', () => {
             let returned;
 
@@ -666,6 +704,7 @@ relationship OneToOne {
                 expect(content['generator-jhipster'].entitySuffix).to.equal('Entity');
                 expect(content['generator-jhipster'].dtoSuffix).to.equal('DTO');
             });
+
             it('should return the corresponding exportedApplicationsWithEntities', () => {
                 returned.exportedApplications.forEach(application => {
                     const applicationConfig = application['generator-jhipster'];
@@ -2055,7 +2094,6 @@ relationship OneToOne {
             it('should export them', () => {
                 expect(relationshipOnSource).to.deep.equal({
                     options: { notId: 'value', something: true },
-                    otherEntityField: 'id',
                     otherEntityName: 'b',
                     otherEntityRelationshipName: 'a',
                     ownerSide: true,
@@ -2065,7 +2103,6 @@ relationship OneToOne {
                 });
                 expect(relationshipOnDestination).to.deep.equal({
                     options: { id: true },
-                    otherEntityField: 'id',
                     otherEntityName: 'a',
                     otherEntityRelationshipName: 'b',
                     ownerSide: false,

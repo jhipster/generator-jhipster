@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,7 +21,7 @@
         <span id="user-management-page-heading" <%= jhiPrefix %>Translate="userManagement.home.title" data-cy="userManagementPageHeading">Users</span>
 
         <div class="d-flex justify-content-end">
-            <button class="btn btn-info mr-2" (click)="handleSyncList()" [disabled]="isLoading">
+            <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
                 <fa-icon icon="sync" [spin]="isLoading"></fa-icon> <span <%= jhiPrefix %>Translate="userManagement.home.refreshListLabel">Refreh List</span>
             </button>
             <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">

@@ -8,7 +8,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#      https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,6 +19,8 @@
 
 name: Angular
 on:
+    schedule:
+        - cron: '0 0 * * *'
     push:
         branches-ignore:
             - 'dependabot/**'
@@ -37,7 +39,7 @@ env:
     JHI_RUN_APP: 1
     JHI_JDK: 11
     JHI_LIB_REPO: https://github.com/jhipster/jhipster-bom.git
-    JHI_LIB_BRANCH: main
+    JHI_LIB_BRANCH: release
     JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
     JHI_GEN_BRANCH: main
     SPRING_OUTPUT_ANSI_ENABLED: ALWAYS
@@ -51,6 +53,11 @@ env:
     NG_CLI_ANALYTICS: 'false'
     JHI_GITHUB_CI: true
     FORCE_COLOR: 1
+    # https://github.com/actions/virtual-environments/issues/1499#issuecomment-689467080
+    MAVEN_OPTS: >-
+        -Dhttp.keepAlive=false
+        -Dmaven.wagon.http.pool=false
+        -Dmaven.wagon.httpconnectionManager.ttlSeconds=120
 jobs:
     applications:
         name: ${{ matrix.app-type }}
@@ -74,6 +81,7 @@ jobs:
             matrix:
                 node_version: [14.15.0]
                 os: [ubuntu-20.04]
+                cache: [angular]
                 app-type:
                     - ngx-default
                     - ngx-mysql-es-noi18n-mapsid
@@ -87,13 +95,14 @@ jobs:
                     - ngx-gradle-h2disk-ws-nocache
                 include:
                     - app-type: ngx-default
-                      entity: sql
+                      entity: sqlfull
+                      jdl-entity: '*'
                       environment: prod
                       war: 0
                       e2e: 1
                       testcontainers: 1
                     - app-type: ngx-mysql-es-noi18n-mapsid
-                      entity: sqlfull
+                      entity: sql
                       environment: prod
                       war: 0
                       e2e: 1
@@ -147,7 +156,9 @@ jobs:
                       e2e: 1
                       testcontainers: 0
         env:
+            JHI_GENERATE_SKIP_CONFIG: 1
             JHI_ENTITY: ${{ matrix.entity }}
+            JHI_JDL_ENTITY: ${{ matrix.jdl-entity }}
             JHI_APP: ${{ matrix.app-type }}
             JHI_PROFILE: ${{ matrix.environment }}
             JHI_WAR: ${{ matrix.war }}
@@ -169,7 +180,7 @@ jobs:
                   mkdir -p base/app
                   mkdir -p base/uaa
               working-directory: ${{ github.workspace }}
-            - uses: actions/setup-node@v2.1.2
+            - uses: actions/setup-node@v2.1.3
               with:
                   node-version: ${{ matrix.node_version }}
             - uses: actions/setup-java@v1
@@ -183,16 +194,25 @@ jobs:
               uses: actions/cache@v2
               with:
                   path: ~/.npm
-                  key: ${{ runner.os }}-node-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json.ejs') }}
+                  key: ${{ runner.os }}-node-${{ matrix.cache }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json.ejs') }}
                   restore-keys: |
-                      ${{ runner.os }}-node-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-
+                      ${{ runner.os }}-node-${{ matrix.cache }}-${{ steps.get-date.outputs.date }}-
             - name: 'SETUP: load maven cache'
+              if: "!contains(matrix.app-type, 'gradle')"
               uses: actions/cache@v2
               with:
                   path: ~/.m2/repository
-                  key: ${{ runner.os }}-maven-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
+                  key: ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
                   restore-keys: |
-                      ${{ runner.os }}-maven-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-
+                      ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}-
+            - name: 'SETUP: load jhipster-bom maven cache'
+              if: contains(matrix.app-type, 'gradle')
+              uses: actions/cache@v2
+              with:
+                  path: ~/.m2/repository
+                  key: ${{ runner.os }}-maven-jhipster-bom-${{ steps.get-date.outputs.date }}-
+                  restore-keys: |
+                      ${{ runner.os }}-maven-jhipster-bom-
             - name: 'SETUP: load gradle cache'
               if: contains(matrix.app-type, 'gradle')
               uses: actions/cache@v2
@@ -200,17 +220,17 @@ jobs:
                   path: |
                       ~/.gradle/caches
                       ~/.gradle/wrapper
-                  key: ${{ runner.os }}-gradle-${{ matrix.app-type }}-${{ hashFiles('generator-jhipster/**/build.gradle.ejs') }}
+                  key: ${{ runner.os }}-gradle-${{ hashFiles('generator-jhipster/**/build.gradle.ejs') }}
                   restore-keys: |
-                      ${{ runner.os }}-gradle-${{ matrix.app-type }}-
+                      ${{ runner.os }}-gradle-
             - name: 'SETUP: load e2e cache'
               if: matrix.e2e == 1
               uses: actions/cache@v2
               with:
                   path: ~/.cache/Cypress/
-                  key: ${{ runner.os }}-e2e-${{ matrix.app-type }}-${{ hashFiles('generator-jhipster/**/package.json.ejs') }}
+                  key: ${{ runner.os }}-cypress-${{ hashFiles('generator-jhipster/client/common/package.json') }}
                   restore-keys: |
-                      ${{ runner.os }}-e2e-${{ matrix.app-type }}-
+                      ${{ runner.os }}-cypress-
             - name: 'ENV: display variables'
               run: $JHI_SCRIPTS/01-display-configuration.sh
             - name: 'TOOLS: configure tools installed by the system'
@@ -222,8 +242,8 @@ jobs:
             #----------------------------------------------------------------------
             - name: 'GENERATION: install JHipster'
               run: $JHI_SCRIPTS/10-install-jhipster.sh
-            - name: 'GENERATION: entities'
-              run: $JHI_SCRIPTS/11-generate-entities.sh
+            - name: 'GENERATION: config'
+              run: $JHI_SCRIPTS/11-generate-config.sh
             - name: 'GENERATION: project'
               run: $JHI_SCRIPTS/12-generate-project.sh
             - name: 'GENERATION: replace version in generated project'
@@ -250,7 +270,7 @@ jobs:
               if: steps.base-checkout.outcome == 'success'
               working-directory: ${{ github.workspace }}/base/app
               run: |
-                  $JHI_SCRIPTS/11-generate-entities.sh
+                  $JHI_SCRIPTS/11-generate-config.sh
                   # 11-generate-entities.sh removes current dir, we need to switch to the new one
                   cd ../app
                   $JHI_SCRIPTS/12-generate-project.sh --skip-install --skip-git

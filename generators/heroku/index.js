@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -617,17 +617,6 @@ module.exports = class extends BaseBlueprintGenerator {
                             this.log(`${chalk.yellow.bold('WARNING!')} Failed to add 'provision-okta-addon.sh' to .gitignore.'`);
                         }
                     });
-                }
-            },
-
-            addHerokuDependencies() {
-                if (this.abort) return;
-                if (this.buildTool === 'maven') {
-                    this.addMavenDependency('org.springframework.cloud', 'spring-cloud-localconfig-connector');
-                    this.addMavenDependency('org.springframework.cloud', 'spring-cloud-heroku-connector');
-                } else if (this.buildTool === 'gradle') {
-                    this.addGradleDependency('implementation', 'org.springframework.cloud', 'spring-cloud-localconfig-connector');
-                    this.addGradleDependency('implementation', 'org.springframework.cloud', 'spring-cloud-heroku-connector');
                 }
             },
 

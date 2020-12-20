@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,7 @@ const path = require('path');
 const through = require('through2');
 const prettier = require('prettier');
 
-const prettierTransform = function (defaultOptions) {
+const prettierTransform = function (defaultOptions, generator, ignoreErrors = false) {
     return through.obj((file, encoding, callback) => {
         if (file.state === 'deleted') {
             callback(null, file);
@@ -44,11 +44,15 @@ const prettierTransform = function (defaultOptions) {
                 callback(null, file);
             })
             .catch(error => {
-                callback(
-                    new Error(`Error parsing file ${file.relative}: ${error}
+                const errorMessage = `Error parsing file ${file.relative}: ${error}
 
-At: ${fileContent}`)
-                );
+At: ${fileContent}`;
+                if (ignoreErrors) {
+                    generator.warning(errorMessage);
+                    callback(null, file);
+                } else {
+                    callback(new Error(errorMessage));
+                }
             });
     });
 };

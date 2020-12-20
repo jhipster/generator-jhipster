@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -46,6 +46,12 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
             desc: 'Application type to generate',
             type: String,
         });
+
+        this.option('client-framework', {
+            desc: 'Provide client framework for the application',
+            type: String,
+        });
+
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip the client-side application generation',
@@ -204,6 +210,11 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
 
         this.option('legacy-db-names', {
             desc: 'Generate database names with jhipster 6 compatibility.',
+            type: Boolean,
+        });
+
+        this.option('ignore-errors', {
+            desc: "Don't fail on prettier errors.",
             type: Boolean,
         });
 

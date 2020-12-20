@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -278,10 +278,10 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     }
 
     getPrettierExtensions() {
-        let prettierExtensions = 'md,json,yml';
+        let prettierExtensions = 'md,json,yml,html';
         if (!this.skipClient && !this.jhipsterConfig.skipClient) {
             prettierExtensions = `${prettierExtensions},js,ts,tsx,css,scss`;
-            if (this.clientFramework && this.clientFramework === VUE) {
+            if (this.jhipsterConfig.clientFramework === VUE) {
                 prettierExtensions = `${prettierExtensions},vue`;
             }
         }
@@ -427,29 +427,30 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} entityFileName - Entity File Name
      * @param {string} entityUrl - Entity router URL
      * @param {string} clientFramework - The name of the client framework
-     * @param {string} microServiceName - Microservice Name
+     * @param {string} microserviceName - Microservice Name
      * @param {boolean} readOnly - If the entity is read-only or not
+     * @param {string} pageTitle - The translation key or the text for the page title in the browser
      */
     addEntityToModule(
-        entityInstance,
-        entityClass,
-        entityName,
-        entityFolderName,
-        entityFileName,
-        entityUrl,
-        clientFramework,
-        microServiceName,
-        readOnly
+        entityInstance = this.entityInstance,
+        entityClass = this.entityClass,
+        entityName = this.entityAngularName,
+        entityFolderName = this.entityFolderName,
+        entityFileName = this.entityFileName,
+        entityUrl = this.entityUrl,
+        clientFramework = this.clientFramework,
+        microserviceName = this.microserviceName,
+        readOnly = this.readOnly,
+        pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural
     ) {
         if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addEntityToModule(
-                entityInstance,
-                entityClass,
                 entityName,
                 entityFolderName,
                 entityFileName,
                 entityUrl,
-                microServiceName
+                microserviceName,
+                pageTitle
             );
         } else if (clientFramework === REACT) {
             this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName);
@@ -488,9 +489,12 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
      * @param {string} route - The route for the module. For example 'entity-audit'.
      * @param {string} modulePath - The path to the module file. For example './entity-audit/entity-audit.module'.
      * @param {string} moduleName - The name of the module. For example 'EntityAuditModule'.
+     * @param {string} pageTitle - The translation key if i18n is enabled or the text if i18n is disabled for the page title in the browser.
+     *                             For example 'entityAudit.home.title' for i18n enabled or 'Entity audit' for i18n disabled.
+     *                             If undefined then application global page title is used in the browser title bar.
      */
-    addAdminRoute(route, modulePath, moduleName) {
-        this.needleApi.clientAngular.addAdminRoute(route, modulePath, moduleName);
+    addAdminRoute(route, modulePath, moduleName, pageTitle) {
+        this.needleApi.clientAngular.addAdminRoute(route, modulePath, moduleName, pageTitle);
     }
 
     /**

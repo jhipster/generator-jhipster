@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,7 +28,7 @@ if (isUsingMapsId) {
     hasOauthUser = mapsIdAssoc.otherEntityName === 'user' && authenticationType === 'oauth2';
 }
 _%>
-<%_ if (primaryKeyType === 'UUID' || (databaseType === 'sql' && hasOauthUser === true)) { _%>
+<%_ if ((!embedded && primaryKey.type === 'UUID') || (databaseType === 'sql' && hasOauthUser === true)) { _%>
 import java.util.UUID;
 <%_ } _%>
 
@@ -39,13 +39,13 @@ class <%= entityClass %>Test {
         TestUtil.equalsVerifier(<%= asEntity(entityClass) %>.class);
     <%_if (!embedded) { _%>
         <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %>1 = new <%= asEntity(entityClass) %>();
-        <%= asEntity(entityInstance) %>1.setId(<% if (databaseType === 'sql' && hasOauthUser === true) { %>UUID.randomUUID().toString()<% } else if (primaryKeyType === 'Long') { %>1L<% } else if (primaryKeyType === 'String') { %>"id1"<% } else if (primaryKeyType === 'UUID') { %>UUID.randomUUID()<% } %>);
+        <%= asEntity(entityInstance) %>1.set<%= primaryKey.nameCapitalized %>(<% if (databaseType === 'sql' && hasOauthUser === true) { %>UUID.randomUUID().toString()<% } else if (primaryKey.type === 'Long') { %>1L<% } else if (primaryKey.type === 'String') { %>"id1"<% } else if (primaryKey.type === 'UUID') { %>UUID.randomUUID()<% } %>);
         <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %>2 = new <%= asEntity(entityClass) %>();
-        <%= asEntity(entityInstance) %>2.setId(<%= asEntity(entityInstance) %>1.getId());
+        <%= asEntity(entityInstance) %>2.set<%= primaryKey.nameCapitalized %>(<%= asEntity(entityInstance) %>1.get<%= primaryKey.nameCapitalized %>());
         assertThat(<%= asEntity(entityInstance) %>1).isEqualTo(<%= asEntity(entityInstance) %>2);
-        <%= asEntity(entityInstance) %>2.setId(<% if (databaseType === 'sql' && hasOauthUser === true) { %>UUID.randomUUID().toString()<% } else if (primaryKeyType === 'Long') { %>2L<% } else if (primaryKeyType === 'String') { %>"id2"<% } else if (primaryKeyType === 'UUID') { %>UUID.randomUUID()<% } %>);
+        <%= asEntity(entityInstance) %>2.set<%= primaryKey.nameCapitalized %>(<% if (databaseType === 'sql' && hasOauthUser === true) { %>UUID.randomUUID().toString()<% } else if (primaryKey.type === 'Long') { %>2L<% } else if (primaryKey.type === 'String') { %>"id2"<% } else if (primaryKey.type === 'UUID') { %>UUID.randomUUID()<% } %>);
         assertThat(<%= asEntity(entityInstance) %>1).isNotEqualTo(<%= asEntity(entityInstance) %>2);
-        <%= asEntity(entityInstance) %>1.setId(null);
+        <%= asEntity(entityInstance) %>1.set<%= primaryKey.nameCapitalized %>(null);
         assertThat(<%= asEntity(entityInstance) %>1).isNotEqualTo(<%= asEntity(entityInstance) %>2);
     <%_} _%>
     }

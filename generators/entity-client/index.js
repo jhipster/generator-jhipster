@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
+const _ = require('lodash');
 const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
@@ -46,7 +47,9 @@ module.exports = class extends BaseBlueprintGenerator {
     _preparing() {
         return {
             setup() {
-                this.tsKeyType = this.getTypescriptKeyType(this.primaryKeyType);
+                if (!this.embedded) {
+                    this.tsKeyType = this.getTypescriptKeyType(this.primaryKey.type);
+                }
             },
         };
     }
@@ -96,6 +99,23 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.removeFile(
                         `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-update.component.html`
                     );
+                    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/shared/model/${this.entityModelFileName}.model.ts`);
+                    this.fields.forEach(field => {
+                        if (field.fieldIsEnum === true) {
+                            const enumFileName = _.kebabCase(field.fieldType);
+                            this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/shared/model/enumerations/${enumFileName}.model.ts`);
+                        }
+                    });
+                    this.removeFile(
+                        `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-routing-resolve.service.ts`
+                    );
+                    this.removeFile(
+                        `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-routing.module.ts`
+                    );
+                    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.service.ts`);
+                    this.removeFile(
+                        `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.service.spec.ts`
+                    );
                     this.removeFile(
                         `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}.component.spec.ts`
                     );
@@ -107,6 +127,9 @@ module.exports = class extends BaseBlueprintGenerator {
                     );
                     this.removeFile(
                         `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}-update.component.spec.ts`
+                    );
+                    this.removeFile(
+                        `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}.service.spec.ts`
                     );
                 }
             },

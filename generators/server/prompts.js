@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -309,6 +309,7 @@ function askForServerSideOpts() {
 
     return this.prompt(prompts).then(answers => {
         this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = answers.serviceDiscoveryType;
+        this.reactive = this.jhipsterConfig.reactive = answers.reactive;
         this.authenticationType = this.jhipsterConfig.authenticationType = answers.authenticationType;
 
         this.packageName = this.jhipsterConfig.packageName = answers.packageName;
@@ -372,7 +373,6 @@ function askForOptionalItems() {
 
     if (choices.length > 0) {
         return this.prompt(PROMPTS).then(answers => {
-            this.reactive = this.jhipsterConfig.reactive = answers.reactive;
             this.serverSideOptions = this.jhipsterConfig.serverSideOptions = answers.serverSideOptions;
             this.websocket = this.jhipsterConfig.websocket = this.getOptionFromArray(answers.serverSideOptions, 'websocket');
             this.searchEngine = this.jhipsterConfig.searchEngine = this.getOptionFromArray(answers.serverSideOptions, 'searchEngine');

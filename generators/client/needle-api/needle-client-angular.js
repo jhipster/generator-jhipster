@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -200,23 +200,28 @@ module.exports = class extends needleClientBase {
         this.addIcon(iconName);
     }
 
-    _addRoute(route, modulePath, moduleName, needleName, filePath) {
+    _addRoute(route, modulePath, moduleName, needleName, filePath, pageTitle) {
         const isRouteAlreadyAdded = jhipsterUtils.checkStringInFile(filePath, `path: '${route}'`, this.generator);
         if (isRouteAlreadyAdded) {
             return;
         }
         const errorMessage = `${chalk.yellow('Route ') + route + chalk.yellow(` not added to ${filePath}.\n`)}`;
+        let pageTitleTemplate = '';
+        if (pageTitle) {
+            pageTitleTemplate = `
+            |        data: { pageTitle: '${pageTitle}' },`;
+        }
         const routingEntry = this.generator.stripMargin(
             `{
-            |        path: '${route}',
-            |        loadChildren: () => import('${modulePath}').then(m => m.${moduleName})
+            |        path: '${route}',${pageTitleTemplate}
+            |        loadChildren: () => import('${modulePath}').then(m => m.${moduleName}),
             |      },`
         );
         const rewriteFileModel = this.generateFileModel(filePath, needleName, routingEntry);
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
 
-    addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, entityUrl, microServiceName) {
+    addEntityToModule(entityAngularName, entityFolderName, entityFileName, entityUrl, microserviceName, pageTitle) {
         const entityModulePath = `${this.CLIENT_MAIN_SRC_DIR}app/entities/entity-routing.module.ts`;
         try {
             const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(
@@ -226,20 +231,20 @@ module.exports = class extends needleClientBase {
             );
 
             if (!isSpecificEntityAlreadyGenerated) {
-                const modulePath = `./${entityFolderName}/${entityFileName}-routing.module`;
-                const moduleName = microServiceName
-                    ? `${this.generator.upperFirstCamelCase(microServiceName)}${entityAngularName}RoutingModule`
-                    : `${entityAngularName}RoutingModule`;
+                const modulePath = `./${entityFolderName}/${entityFileName}.module`;
+                const moduleName = microserviceName
+                    ? `${this.generator.upperFirstCamelCase(microserviceName)}${entityAngularName}Module`
+                    : `${entityAngularName}Module`;
 
-                this._addRoute(entityUrl, modulePath, moduleName, 'jhipster-needle-add-entity-route', entityModulePath);
+                this._addRoute(entityUrl, modulePath, moduleName, 'jhipster-needle-add-entity-route', entityModulePath, pageTitle);
             }
         } catch (e) {
             this.generator.debug('Error:', e);
         }
     }
 
-    addAdminRoute(route, modulePath, moduleName) {
+    addAdminRoute(route, modulePath, moduleName, pageTitle) {
         const adminModulePath = `${this.CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`;
-        this._addRoute(route, modulePath, moduleName, 'jhipster-needle-add-admin-route', adminModulePath);
+        this._addRoute(route, modulePath, moduleName, 'jhipster-needle-add-admin-route', adminModulePath, pageTitle);
     }
 };

@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,16 +21,7 @@ package <%= packageName %>.web.rest;
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-import <%= packageName %>.AbstractNeo4jIT;
-<%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
-import <%= packageName %>.RedisTestContainerExtension;
-<%_ } _%>
-<%_ if (reactiveSqlTestContainers) { _%>
-import <%= packageName %>.ReactiveSqlTestContainerExtension;
-<%_ } _%>
-import <%= packageName %>.<%= mainClass %>;
+import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.config.Constants;
 <%_ if (authenticationType === 'session' && !reactive) { _%>
 import <%= packageName %>.domain.PersistentToken;
@@ -49,13 +40,11 @@ import <%= packageName %>.repository.search.UserSearchRepository;
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.PasswordChangeDTO;
+import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 import <%= packageName %>.web.rest.vm.KeyAndPasswordVM;
 import <%= packageName %>.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
-<%_ if (databaseType === 'neo4j' || cacheProvider === 'redis' || reactiveSqlTestContainers) { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
 <%_ if (reactive && testsNeedCsrf || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
 import org.junit.jupiter.api.BeforeEach;
 <%_ } _%>
@@ -66,7 +55,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 <%_ } else { _%>
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 <%_ } _%>
-import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (reactive) { _%>
 import org.springframework.http.HttpStatus;
 <%_ } _%>
@@ -114,22 +102,13 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 /**
  * Integration tests for the {@link AccountResource} REST controller.
  */
-<%_ if (reactiveSqlTestContainers) { _%>
-@ExtendWith(ReactiveSqlTestContainerExtension.class)
-<%_ } _%>
 <%_ if (!reactive) { _%>
 @AutoConfigureMockMvc
 <%_ } else { _%>
 @AutoConfigureWebTestClient
 <%_ } _%>
 @WithMockUser(value = TEST_USER_LOGIN)
-@SpringBootTest(classes = <%= mainClass %>.class)
-<%_ if (cacheProvider === 'redis') { _%>
-@ExtendWith(RedisTestContainerExtension.class)
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-@ExtendWith(AbstractNeo4jIT.class)
-<%_ } _%>
+@IntegrationTest
 class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
     static final String TEST_USER_LOGIN = "test";
 
@@ -229,7 +208,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         Set<String> authorities = new HashSet<>();
         authorities.add(AuthoritiesConstants.ADMIN);
 
-        <%= asDto('User') %> user = new <%= asDto('User') %>();
+        <%= asDto('AdminUser') %> user = new <%= asDto('AdminUser') %>();
         user.setLogin(TEST_USER_LOGIN);
         user.setFirstName("john");
         user.setLastName("doe");
@@ -675,7 +654,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
         assertThat(testUser4.get().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
 
         testUser4.get().setActivated(true);
-        userService.updateUser((new <%= asDto('User') %>(testUser4.get())))<% if (reactive) { %>.block()<% } %>;
+        userService.updateUser((new <%= asDto('AdminUser') %>(testUser4.get())))<% if (reactive) { %>.block()<% } %>;
 
         // Register 4th (already activated) user
         <%_ if (!reactive) { _%>
@@ -811,7 +790,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
             .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
 
         <%_ } _%>
-        <%= asDto('User') %> userDTO = new <%= asDto('User') %>();
+        <%= asDto('AdminUser') %> userDTO = new <%= asDto('AdminUser') %>();
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
@@ -867,7 +846,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
 
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-        <%= asDto('User') %> userDTO = new <%= asDto('User') %>();
+        <%= asDto('AdminUser') %> userDTO = new <%= asDto('AdminUser') %>();
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
@@ -928,7 +907,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
 
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
 
-        <%= asDto('User') %> userDTO = new <%= asDto('User') %>();
+        <%= asDto('AdminUser') %> userDTO = new <%= asDto('AdminUser') %>();
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
@@ -982,7 +961,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
             .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
 
         <%_ } _%>
-        <%= asDto('User') %> userDTO = new <%= asDto('User') %>();
+        <%= asDto('AdminUser') %> userDTO = new <%= asDto('AdminUser') %>();
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
