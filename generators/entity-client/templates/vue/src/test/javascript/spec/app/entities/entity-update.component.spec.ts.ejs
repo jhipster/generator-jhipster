@@ -26,9 +26,9 @@ import Router from 'vue-router';
 
 <%_
     let dayJsIncluded = false;
-    for (idx in fields) {
-        const fieldName = fields[ idx ].fieldName;
-        const fieldType = fields[idx].fieldType;
+    for (field of fields) {
+        const fieldName = field.fieldName;
+        const fieldType = field.fieldType;
         if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType) && !dayJsIncluded) {
             dayJsIncluded = true;
 _%>
@@ -43,13 +43,13 @@ import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/
 
 <%_
     const importEntitiesSeen = [entityAngularName];
-    for (idx in relationships) {
-      if (!relationships[idx].otherEntityIsEmbedded) {
-        const otherEntityAngularName = relationships[idx].otherEntityAngularName;
-        const otherEntityFileName = relationships[idx].otherEntityFileName;
-        const otherEntityFolderName = relationships[idx].otherEntityFileName;
-        const otherEntityClientRootFolder = relationships[idx].otherEntityClientRootFolder;
-        const otherEntityModelName = relationships[idx].otherEntityModelName;
+    for (relationship of relationships) {
+      if (!relationship.otherEntityIsEmbedded) {
+        const otherEntityAngularName = relationship.otherEntityAngularName;
+        const otherEntityFileName = relationship.otherEntityFileName;
+        const otherEntityFolderName = relationship.otherEntityFileName;
+        const otherEntityClientRootFolder = relationship.otherEntityClientRootFolder;
+        const otherEntityModelName = relationship.otherEntityModelName;
         if (!importEntitiesSeen.includes(otherEntityAngularName)) {
 _%>
   <% if (otherEntityAngularName === 'User' && authenticationType !== 'oauth2') { %>
@@ -95,11 +95,11 @@ describe('Component Tests', () => {
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
           <%_
             const entitiesSeen = [entityAngularName];
-            for (idx in relationships) {
-              if (!relationships[idx].otherEntityIsEmbedded) {
-                const otherEntityName = relationships[idx].otherEntityName;
-                const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-                const otherEntityAngularName = relationships[idx].otherEntityAngularName;
+            for (relationship of relationships) {
+              if (!relationship.otherEntityIsEmbedded) {
+                const otherEntityName = relationship.otherEntityName;
+                const otherEntityNamePlural = relationship.otherEntityNamePlural;
+                const otherEntityAngularName = relationship.otherEntityAngularName;
                 if (!(otherEntityAngularName === 'User' && authenticationType === "oauth2")) {
           _%>
           <%_ if (!entitiesSeen.includes(otherEntityAngularName)) { %>
@@ -114,9 +114,9 @@ describe('Component Tests', () => {
 
     <%_
       let dateTestsIncluded = false;
-      for (idx in fields) {
-          const fieldName = fields[ idx ].fieldName;
-          const fieldType = fields[idx].fieldType;
+      for (field of fields) {
+          const fieldName = field.fieldName;
+          const fieldType = field.fieldType;
           if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType) && !dateTestsIncluded) {
               dateTestsIncluded = true;
     _%>
