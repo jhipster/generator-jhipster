@@ -304,7 +304,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
               <thead>
                 <tr>
                   <th <% if (pagination !== 'no') { %> className="hand" onClick={sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
-                  <%_ for (field of fields) { _%>
+                  <%_ for (field of fields.filter(field => !field.id)) { _%>
                   <th<% if (pagination !== 'no') { %> className="hand" onClick={sort('<%= field.fieldName %>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${field.fieldName}` %>"><%= field.fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
                   <%_ } _%>
                   <%_ for (relationship of relationships) { _%>
@@ -327,7 +327,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                         {<%= entityInstance %>.id}
                       </Button>
                     </td>
-                    <%_ for (field of fields) {
+                    <%_ for (field of fields.filter(field => !field.id)) {
                       const fieldType = field.fieldType;
                       const fieldName = field.fieldName;
                       const fieldIsEnum = field.fieldIsEnum;

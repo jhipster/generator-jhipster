@@ -18,7 +18,7 @@
 -%>
 <%_
 const i18nToLoad = [entityInstance];
-for (const field of fields) {
+for (const field of fields.filter(field => !field.id)) {
     if (field.fieldIsEnum === true) {
         i18nToLoad.push(field.enumInstance);
     }
@@ -183,7 +183,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
   }, [props.updateSuccess]);
 
   const saveEntity = (event, errors, values) => {
-    <%_ for (field of fields) {
+    <%_ for (field of fields.filter(field => !field.id)) {
         const fieldType = field.fieldType;
         const fieldName = field.fieldName;
     _%>
@@ -234,7 +234,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             </AvGroup>
             : null
           }
-          <%_ for (field of fields) {
+          <%_ for (field of fields.filter(field => !field.id)) {
               const fieldType = field.fieldType;
               const fieldName = field.fieldName;
               const fieldNameHumanized = field.fieldNameHumanized;

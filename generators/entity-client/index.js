@@ -22,7 +22,7 @@ const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const {
-    SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR },
+    SUPPORTED_CLIENT_FRAMEWORKS: { VUE },
 } = require('../generator-constants');
 
 let useBlueprints;
@@ -32,7 +32,7 @@ module.exports = class extends BaseBlueprintGenerator {
         super(args, opts);
         this.entity = opts.context;
 
-        if (this.jhipsterConfig.clientFramework !== ANGULAR) {
+        if (this.jhipsterConfig.clientFramework === VUE) {
             // Remove fields with custom ids, drop once templates supports them
             this.entity = { ...this.entity, fields: this.entity.fieldsNoId };
         }

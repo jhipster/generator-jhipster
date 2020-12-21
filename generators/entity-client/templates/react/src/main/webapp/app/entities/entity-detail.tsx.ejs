@@ -56,7 +56,7 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
           <Translate contentKey="<%= i18nKeyPrefix %>.detail.title"><%= entityClass %></Translate> [<strong>{<%= entityInstance %>Entity.id}</strong>]
         </h2>
           <dl className="jh-entity-details">
-          <%_ for (field of fields) {
+          <%_ for (field of fields.filter(field => !field.id)) {
               const fieldType = field.fieldType;
               const fieldName = field.fieldName;
               const fieldNameHumanized = field.fieldNameHumanized;
