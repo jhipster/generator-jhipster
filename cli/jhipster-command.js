@@ -48,6 +48,19 @@ class JHipsterCommand extends Command {
         return this;
     }
 
+    excessArgumentsCallback(excessArgumentsCallback) {
+        this._excessArgumentsCallback = excessArgumentsCallback;
+        return this;
+    }
+
+    _excessArguments(receivedArgs) {
+        if (this._excessArgumentsCallback) {
+            this._excessArgumentsCallback(receivedArgs);
+        } else {
+            super._excessArguments(receivedArgs);
+        }
+    }
+
     _parseCommand(operands, unknown) {
         if (this._lazyBuildCommandCallBack) {
             this._lazyBuildCommandCallBack();
