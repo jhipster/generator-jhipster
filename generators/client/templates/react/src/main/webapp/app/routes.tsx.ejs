@@ -40,7 +40,7 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import PageNotFound from 'app/shared/error/page-not-found';
 import { AUTHORITIES } from 'app/config/constants';
 <%_ if (websocket === 'spring-websocket') { _%>
-import { sendActivity } from "app/config/websocket-middleware";
+import { sendActivity } from 'app/config/websocket-middleware';
 <%_ } _%>
 
 <%_ if (!skipUserManagement) { _%>
