@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,8 +28,11 @@ module.exports = {
                 if (key === 'faker') {
                     return '[faker]';
                 }
-                if (key === 'otherEntity') {
+                if (key === 'otherEntity' || key === 'entity') {
                     return `[${value.name} Entity]`;
+                }
+                if (key === 'reference') {
+                    return `[${value.name} Reference]`;
                 }
                 if (key === 'otherRelationship') {
                     return `[${value.relationshipName} relationship]`;

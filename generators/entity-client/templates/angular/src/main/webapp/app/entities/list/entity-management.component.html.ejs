@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,12 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+  let refreshMethod;
+  if (pagination === 'pagination') {
+    refreshMethod = 'loadPage()';
+  } else if (pagination === 'infinite-scroll') {
+    refreshMethod = 'reset()';
+  } else if (pagination === 'no') {
+    refreshMethod = 'loadAll()';
+  }
+_%>
 <div>
     <h2 id="page-heading" data-cy="<%= entityClass %>Heading">
         <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></span>
 
         <div class="d-flex justify-content-end">
-            <button class="btn btn-info mr-2" (click)="handleSyncList()" [disabled]="isLoading">
+            <button class="btn btn-info mr-2" (click)="<%= refreshMethod %>" [disabled]="isLoading">
                 <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
                 <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</span>
             </button>
@@ -85,7 +95,7 @@
                 </tr>
             </thead>
             <tbody<% if (pagination === 'infinite-scroll') { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0"<% } %>>
-                <tr *ngFor="let <%= entityInstance %> of <%= entityInstancePlural %>; trackBy: trackId" data-cy="entityTable">
+                <tr *ngFor="let <%= entityInstance %> of <%= entityInstancePlural %>; trackBy: track<%= primaryKey.nameCapitalized %>" data-cy="entityTable">
                 <%_
                 const keys = idFields.map(idField => `${entityInstance}.${idField.fieldName}`);
                 const routerLink = idFields.length === 0 ? '' : ` [routerLink]="['/${ entityUrl }', ${ keys.join(', ') }, 'view']"`;
@@ -120,6 +130,7 @@
                     <%_ } _%>
                 <%_ } _%>
                 <%_ for (idx in relationships) {
+                    const relationship = relationships[idx];
                     const relationshipType = relationships[idx].relationshipType;
                     const ownerSide = relationships[idx].ownerSide;
                     const relationshipFieldName = relationships[idx].relationshipFieldName;
@@ -145,11 +156,11 @@
                         <%_ } else { _%>
                             <%_ if (relationshipType === 'many-to-many') { _%>
                         <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
-                            <a class="form-control-static" [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>?.id, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
+                            <a class="form-control-static" [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>?.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
                         </span>
                             <%_ } else { _%>
                         <div *ngIf="<%= entityInstance + "." + relationshipFieldName %>">
-                            <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "?.id" %>, 'view']" >{{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}</a>
+                            <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "?." + relationship.otherEntity.primaryKey.name %>, 'view']" >{{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}</a>
                         </div>
                             <%_ } _%>
                         <%_ } _%>
@@ -159,7 +170,7 @@
                     <td class="text-right">
                         <div class="btn-group">
                             <button type="submit"
-                                    [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.id, 'view']"
+                                    [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.<%= primaryKey.name %>, 'view']"
                                     class="btn btn-info btn-sm"
                                     data-cy="entityDetailsButton">
                                 <fa-icon icon="eye"></fa-icon>
@@ -168,7 +179,7 @@
                             <%_ if (!readOnly) { _%>
 
                             <button type="submit"
-                                    [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.id, 'edit']"
+                                    [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.<%= primaryKey.name %>, 'edit']"
                                     class="btn btn-primary btn-sm"
                                     data-cy="entityEditButton">
                                 <fa-icon icon="pencil-alt"></fa-icon>

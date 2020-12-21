@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,8 +31,6 @@ module.exports = class extends BaseBlueprintGenerator {
         super(args, opts);
 
         this.entity = opts.context;
-        // Remove fields with custom ids, drop once templates supports them
-        this.entity = { ...this.entity, fields: this.entity.fieldsNoId };
 
         utils.copyObjectProps(this, this.entity);
         this.jhipsterContext = opts.jhipsterContext || opts.context;
@@ -85,7 +83,7 @@ module.exports = class extends BaseBlueprintGenerator {
              */
             processJsonIgnoreReferences() {
                 this.relationships
-                    .filter(relationship => relationship.relationshipOtherSideIgnore === undefined)
+                    .filter(relationship => relationship.ignoreOtherSideProperty === undefined)
                     .forEach(relationship => {
                         relationship.ignoreOtherSideProperty =
                             !relationship.embedded && !!relationship.otherEntity && relationship.otherEntity.relationships.length > 0;

@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,7 +43,8 @@ const JSONToJDLEntityConverter = require('../jdl/converters/json-to-jdl-entity-c
 const JSONToJDLOptionConverter = require('../jdl/converters/json-to-jdl-option-converter');
 const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../utils/entity');
 const { prepareFieldForTemplates } = require('../utils/field');
-const { formatDateForChangelog } = require('../utils/liquibase');
+const { formatDateForChangelog, prepareFieldForLiquibaseTemplates } = require('../utils/liquibase');
+const { stringify } = require('../utils');
 
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
@@ -965,11 +966,14 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     /**
      * Find key type for Typescript
      *
-     * @param {string} pkType - primary key type in database
+     * @param {string} primaryKey - primary key definition
      * @returns {string} primary key type in Typescript
      */
-    getTypescriptKeyType(pkType) {
-        if (pkType === 'String' || pkType === 'UUID') {
+    getTypescriptKeyType(primaryKey) {
+        if (typeof primaryKey === 'object') {
+            primaryKey = primaryKey.type;
+        }
+        if (primaryKey === 'String' || primaryKey === 'UUID') {
             return 'string';
         }
         return 'number';
@@ -978,18 +982,20 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     /**
      * Generate Entity Client Field Declarations
      *
-     * @param {string} pkType - type of primary key
+     * @param {string} primaryKey - primary key definition
      * @param {Array|Object} fields - array of fields
      * @param {Array|Object} relationships - array of relationships
      * @param {string} dto - dto
      * @param {boolean} embedded - either the actual entity is embedded or not
      * @returns variablesWithTypes: Array
      */
-    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
+    generateEntityClientFields(primaryKey, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
         const variablesWithTypes = [];
-        const tsKeyType = this.getTypescriptKeyType(pkType);
-        if (!embedded && this.jhipsterConfig.clientFramework !== ANGULAR) {
-            variablesWithTypes.push(`id?: ${tsKeyType}`);
+        if (!embedded && primaryKey) {
+            const tsKeyType = this.getTypescriptKeyType(primaryKey);
+            if (this.jhipsterConfig.clientFramework !== ANGULAR) {
+                variablesWithTypes.push(`id?: ${tsKeyType}`);
+            }
         }
         fields.forEach(field => {
             const fieldType = field.fieldType;
@@ -1045,7 +1051,10 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             if (this.isBuiltInUser(otherEntityAngularName)) {
                 importPath = clientFramework === ANGULAR ? 'app/core/user/user.model' : 'app/shared/model/user.model';
             } else {
-                importPath = `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
+                importPath =
+                    clientFramework === ANGULAR
+                        ? `app/entities/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFolderName}/${relationship.otherEntityFileName}.model`
+                        : `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
             }
             typeImports.set(importType, importPath);
         });
@@ -1066,7 +1075,8 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             const fileName = _.kebabCase(field.fieldType);
             if (field.fieldIsEnum && (!uniqueEnums[field.fieldType] || (uniqueEnums[field.fieldType] && field.fieldValues.length !== 0))) {
                 const importType = `${field.fieldType}`;
-                const importPath = `app/shared/model/enumerations/${fileName}.model`;
+                const modelPath = clientFramework === ANGULAR ? 'entities' : 'shared/model';
+                const importPath = `app/${modelPath}/enumerations/${fileName}.model`;
                 uniqueEnums[field.fieldType] = field.fieldType;
                 typeImports.set(importType, importPath);
             }
@@ -1201,16 +1211,20 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     /**
      * Generate a primary key, according to the type
      *
-     * @param {any} pkType - the type of the primary key
+     * @param {any} primaryKey - primary key definition
+     * @param {number} index - the index of the primary key, currently it's possible to generate 2 values, index = 0 - first key (default), otherwise second key
      */
-    generateTestEntityId(pkType) {
-        if (pkType === 'String') {
-            return "'123'";
+    generateTestEntityId(primaryKey, index = 0) {
+        if (typeof primaryKey === 'object') {
+            primaryKey = primaryKey.type;
         }
-        if (pkType === 'UUID') {
-            return "'9fec3727-3421-4967-b213-ba36557ca194'";
+        if (primaryKey === 'String') {
+            return index === 0 ? "'123'" : "'456'";
         }
-        return 123;
+        if (primaryKey === 'UUID') {
+            return index === 0 ? "'9fec3727-3421-4967-b213-ba36557ca194'" : "'1361f429-3817-4123-8ee3-fdf8943310b2'";
+        }
+        return index === 0 ? 123 : 456;
     }
 
     /**
@@ -1420,15 +1434,25 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             return;
         }
 
-        const prettierOptions = { plugins: [prettierPluginPackagejson] };
-        if (!this.skipServer && !this.jhipsterConfig.skipServer) {
-            prettierOptions.plugins.push(prettierPluginJava);
-        }
-        // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        const filterPatternForPrettier = `{,.,**/,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
-        const prettierFilter = filter(['.yo-rc.json', filterPatternForPrettier], { restore: true });
-        // this pipe will pass through (restore) anything that doesn't match typescriptFilter
-        generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
+        this.queueTask({
+            method: () => {
+                const prettierOptions = { plugins: [prettierPluginPackagejson] };
+                if (!this.skipServer && !this.jhipsterConfig.skipServer) {
+                    prettierOptions.plugins.push(prettierPluginJava);
+                }
+                // Prettier is clever, it uses correct rules and correct parser according to file extension.
+                const filterPatternForPrettier = `{,.,**/,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
+                const prettierFilter = filter(['.yo-rc.json', filterPatternForPrettier], { restore: true });
+                // this pipe will pass through (restore) anything that doesn't match typescriptFilter
+                generator.registerTransformStream([
+                    prettierFilter,
+                    prettierTransform(prettierOptions, this, this.options.ignoreErrors),
+                    prettierFilter.restore,
+                ]);
+            },
+            taskName: 'queuePrettierTransform',
+            queueName: 'jhipster:preConflicts',
+        });
     }
 
     registerGeneratedAnnotationTransform() {
@@ -1650,6 +1674,8 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
 
     createUserManagementEntities() {
         this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
+        this.configOptions.sharedLiquibaseFakeData = this.configOptions.sharedLiquibaseFakeData || {};
+
         if (
             this.configOptions.sharedEntities.User ||
             (this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.authenticationType !== 'oauth2')
@@ -1662,6 +1688,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         // Create entity definition for built-in entity to make easier to deal with relationships.
         const user = {
             name: 'User',
+            builtIn: true,
             entityTableName: `${this.getTableName(this.jhipsterConfig.jhiPrefix)}_user`,
             relationships: [],
             changelogDate,
@@ -1693,8 +1720,13 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         prepareEntityForTemplates(user, this);
         user.fields.forEach(field => {
             prepareFieldForTemplates(user, field, this);
+            prepareFieldForLiquibaseTemplates(user, field);
         });
         this.configOptions.sharedEntities.User = user;
+
+        const liquibaseFakeData = user.authenticationType === 'oauth2' ? [] : [{ id: 1 }, { id: 2 }];
+        user.liquibaseFakeData = liquibaseFakeData;
+        this.configOptions.sharedLiquibaseFakeData.User = liquibaseFakeData;
     }
 
     /**
@@ -1766,5 +1798,16 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     buildAngularFormPath(reference, prefix = []) {
         const formPath = [...prefix, ...reference.path].join("', '");
         return `'${formPath}'`;
+    }
+
+    /**
+     * @private
+     *
+     * Print entity json representation.
+     *
+     * @param {object} entity
+     */
+    debugEntity(entity) {
+        this.log(stringify(entity));
     }
 };

@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,7 +36,7 @@ const hasValidationRule = fields.some(field =>
 const hasRequiredRelationship = relationships.some(relationship => relationship.relationshipRequired);
 const isValidatorsRequired = hasValidationRule || hasRequiredRelationship;
 _%>
-import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %>, Optional } from '@angular/core';
+import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder,<%_ if (isValidatorsRequired) { _%> Validators<%_ } _%> } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -44,14 +44,13 @@ import { Observable } from 'rxjs';
 <%_ if ( rxjsMapIsUsed ) { _%>
 import { map } from 'rxjs/operators';
 <%_ } _%>
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
 import * as dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 <%_ } _%>
 
-import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-import { <%= entityAngularName %>Service } from '../<%= entityFileName %>.service';
+import { I<%= entityAngularName %>, <%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 <%_ if (fieldsContainBlob) { _%>
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -59,7 +58,7 @@ import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 <%_ } _%>
 <%_
 Object.keys(differentRelationships).forEach(key => {
-    if (differentRelationships[key].some(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one' && rel.ownerSide === true || rel.relationshipType === 'many-to-many' && rel.ownerSide === true)) {
+    if (differentRelationships[key].some(rel => rel.reference.owned)) {
         const uniqueRel = differentRelationships[key][0];
         if (uniqueRel.otherEntityAngularName !== entityAngularName) {
             if (isBuiltInUser(uniqueRel.otherEntityAngularName)) {
@@ -69,56 +68,13 @@ import { UserService } from 'app/core/user/user.service';
 <%_
             } else {
 _%>
-import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
-import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.service';
+import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.model';
+import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/service/<%= uniqueRel.otherEntityFileName %>.service';
 <%_
             }
         }
     }
 });
-let selectableEntitiesIdType = getTypescriptKeyType(getPkType(databaseType));
-if (databaseType === 'sql' && authenticationType === 'oauth2') {
-    let existsUserSelectableEntity = false;
-    let existsOtherSelectableEntity = false;
-    for (selectableEntity of selectableEntities) {
-        if (selectableEntity === 'IUser') {
-            existsUserSelectableEntity = true;
-        } else {
-            existsOtherSelectableEntity = true;
-        }
-    }
-    if (existsUserSelectableEntity) {
-        if (existsOtherSelectableEntity) {
-            selectableEntitiesIdType = 'number | string';
-        } else {
-            selectableEntitiesIdType = 'string';
-        }
-    }
-}
-let selectableEntitiesType = '';
-if (selectableEntities.length === 1) {
-    selectableEntitiesType = selectableEntities[0];
-} else if (selectableEntities.length > 1) {
-    selectableEntitiesType = 'SelectableEntity';
-_%>
-
-type SelectableEntity = <%= selectableEntities.join(' | ') %>;
-<%_
-}
-let selectableManyToManyEntitiesType = '';
-if (selectableEntities.length === selectableManyToManyEntities.length && selectableEntities.every(value => selectableManyToManyEntities.includes(value))) {
-    selectableManyToManyEntitiesType = selectableEntitiesType;
-} else {
-    if (selectableManyToManyEntities.length === 1) {
-        selectableManyToManyEntitiesType = selectableManyToManyEntities[0];
-    } else if (selectableManyToManyEntities.length > 1) {
-        selectableManyToManyEntitiesType = 'SelectableManyToManyEntity';
-_%>
-
-type SelectableManyToManyEntity = <%= selectableManyToManyEntities.join(' | ') %>;
-<%_
-    }
-}
 _%>
 
 @Component({
@@ -180,16 +136,12 @@ _%>
         <%_ } _%>
         protected activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
-        @Optional() public activeModal?: NgbActiveModal,
     ) {}
 
     ngOnInit(): void {
-        if (this.activeModal) {
-          return;
-        }
         this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
             <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
-            if (<%= entityInstance %>.id == null) {
+            if (<%= entityInstance %>.<%= primaryKey.name %> == null) {
                 const today = dayjs().startOf('day');
             <%_ } _%>
             <%_ for (idx in fields) {
@@ -276,17 +228,13 @@ _%>
 <%_ } _%>
 
     previousState(): void {
-        if (this.activeModal) {
-            this.activeModal.close();
-        } else {
-            window.history.back();
-        }
+        window.history.back();
     }
 
     save(): void {
         this.isSaving = true;
         const <%= entityInstance %> = this.createFromForm();
-        if (<%= entityInstance %>.id !== undefined) {
+        if (<%= entityInstance %>.<%= primaryKey.name %> !== undefined) {
             this.subscribeToSaveResponse(
                 this.<%= entityInstance %>Service.update(<%= entityInstance %>));
         } else {
@@ -339,18 +287,18 @@ _%>
     protected onSaveError(): void {
         this.isSaving = false;
     }
+    <%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
 
-    <%_ if (selectableEntitiesType) { _%>
-    trackById(index: number, item: <%= selectableEntitiesType %>): <%= selectableEntitiesIdType %> {
-        return item.id!;
+    track<%= reference.relationship.otherEntity.entityAngularName %>By<%= reference.relationship.otherEntity.primaryKey.nameCapitalized %>(index: number, item: I<%= reference.relationship.otherEntity.entityAngularName %>): <%= getTypescriptKeyType(reference.relationship.otherEntity.primaryKey.type) %> {
+        return item.<%= reference.relationship.otherEntity.primaryKey.name %>!;
     }
     <%_ } _%>
+    <%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipType === 'many-to-many' && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
 
-    <%_ if (selectableManyToManyEntitiesType) { _%>
-    getSelected(option: <%= selectableManyToManyEntitiesType %>, selectedVals?: <%= selectableManyToManyEntitiesType %>[]): <%= selectableManyToManyEntitiesType %> {
+    getSelected<%= reference.relationship.otherEntity.entityAngularName %>(option: I<%= reference.relationship.otherEntity.entityAngularName %>, selectedVals?: I<%= reference.relationship.otherEntity.entityAngularName %>[]): I<%= reference.relationship.otherEntity.entityAngularName %> {
         if (selectedVals) {
           for (let i = 0; i < selectedVals.length; i++) {
-              if (option.id === selectedVals[i].id) {
+              if (option.<%= reference.relationship.otherEntity.primaryKey.name %> === selectedVals[i].<%= reference.relationship.otherEntity.primaryKey.name %>) {
                   return selectedVals[i];
               }
           }

@@ -16,7 +16,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
   <%_ if (searchEngine === 'elasticsearch') { _%>
   public currentSearch = '';
   <%_ } _%>
-  private removeId: <% if (primaryKeyType === 'String'  || primaryKeyType === 'UUID') { %>string<% } else { %>number<% } %> = null;
+  private removeId: <% if (primaryKey.type === 'String'  || primaryKey.type === 'UUID') { %>string<% } else { %>number<% } %> = null;
   <%_ if (pagination !== 'no') { _%>
   public itemsPerPage = 20;
   public queryCount: number = null;

@@ -1,0 +1,6 @@
+@ChangelogDate(20200804035352)
+entity JdlFieldTest {
+  id Long
+}
+
+dto JdlFieldTest with mapstruct

@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,7 +23,6 @@
 
             <div>
                 <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
-
 <%_ for (idx in fields) {
     const fieldName = fields[idx].fieldName;
     const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
@@ -167,6 +166,9 @@ _%>
 <%_ } _%>
 <%_ for (idx in relationships) {
     const relationship = relationships[idx];
+    if (!relationship.otherEntity.primaryKey) {
+        continue;
+    }
     const relationshipType = relationships[idx].relationshipType;
     const ownerSide = relationships[idx].ownerSide;
     const otherEntityName = relationships[idx].otherEntityName;
@@ -191,7 +193,7 @@ _%>
             <%_ } else { _%>
                         <option *ngIf="!editForm.get('<%= relationshipName %>')!.value" [ngValue]="null" selected></option>
             <%_ } _%>
-                        <option [ngValue]="<%= otherEntityName %>Option.id === editForm.get('<%= relationshipFieldName %>')!.value?.id ? editForm.get('<%= relationshipFieldName %>')!.value : <%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <%= otherEntityNamePlural.toLowerCase() %>; trackBy: trackById">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
+                        <option [ngValue]="<%= otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %> === editForm.get('<%= relationshipFieldName %>')!.value?.<%= relationship.otherEntity.primaryKey.name %> ? editForm.get('<%= relationshipFieldName %>')!.value : <%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <%= otherEntityNamePlural.toLowerCase() %>; trackBy: track<%= relationships[idx].otherEntity.entityAngularName %>By<%= relationships[idx].otherEntity.primaryKey.nameCapitalized %>">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     </select>
                 </div>
     <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
@@ -204,7 +206,7 @@ _%>
             <%_ } else { _%>
                         <option *ngIf="editForm.get([<%- buildAngularFormPath(relationship.reference) %>])?.value == null" [ngValue]="null" selected></option>
             <%_ } _%>
-                        <option [ngValue]="<%= otherEntityName %>Option.id === editForm.get('<%= relationshipFieldName %>')!.value?.id ? editForm.get('<%= relationshipFieldName %>')!.value : <%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <%= relationshipFieldNamePlural.toLowerCase() %>; trackBy: trackById">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
+                        <option [ngValue]="<%= otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %> === editForm.get('<%= relationshipFieldName %>')!.value?.<%= relationship.otherEntity.primaryKey.name %> ? editForm.get('<%= relationshipFieldName %>')!.value : <%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <%= relationshipFieldNamePlural.toLowerCase() %>; trackBy: track<%= relationships[idx].otherEntity.entityAngularName %>By<%= relationships[idx].otherEntity.primaryKey.nameCapitalized %>">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     </select>
                 </div>
     <%_ } else if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
@@ -212,7 +214,7 @@ _%>
                 <div class="form-group">
                     <label <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipFieldNamePlural %>"><%= relationshipNameHumanized %></label>
                     <select class="form-control" id="field_<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipFieldNamePlural %>" formControlName="<%= relationshipFieldNamePlural %>">
-                        <option [ngValue]="getSelected(<%= otherEntityName %>Option, editForm.get('<%= relationshipFieldNamePlural %>')!.value)" *ngFor="let <%= otherEntityName %>Option of <%= otherEntityNamePlural.toLowerCase() %>; trackBy: trackById">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
+                        <option [ngValue]="getSelected<%= relationships[idx].otherEntity.entityAngularName %>(<%= otherEntityName %>Option, editForm.get('<%= relationshipFieldNamePlural %>')!.value)" *ngFor="let <%= otherEntityName %>Option of <%= otherEntityNamePlural.toLowerCase() %>; trackBy: track<%= relationships[idx].otherEntity.entityAngularName %>By<%= relationships[idx].otherEntity.primaryKey.nameCapitalized %>">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     </select>
                 </div>
     <%_ } _%>

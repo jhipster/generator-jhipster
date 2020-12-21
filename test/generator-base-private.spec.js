@@ -2,10 +2,6 @@ const path = require('path');
 const expect = require('chai').expect;
 // using base generator which extends the private base
 const BaseGenerator = require('../generators/generator-base').prototype;
-const constants = require('../generators/generator-constants');
-
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 BaseGenerator.log = msg => {
     // eslint-disable-next-line no-console
@@ -94,33 +90,6 @@ export * from './entityFolderName/entityFileName.state';`;
                     const imports = BaseGenerator.generateEntityClientImports(relationships, 'no');
                     expect(imports).to.have.key('IUser');
                     expect(imports.size).to.eql(1);
-                });
-            });
-        });
-        describe('with no relationship from or to the User', () => {
-            describe('when called to have models to be imported in the templates', () => {
-                let importsForAngular = null;
-                let importsForReact = null;
-                const relationships = [
-                    {
-                        otherEntityAngularName: 'AnEntity',
-                        otherEntityFileName: 'AnEntity',
-                        otherEntityClientRootFolder: 'anEntity',
-                    },
-                    {
-                        otherEntityAngularName: 'AnotherEntity',
-                        otherEntityFileName: 'AnotherEntity',
-                        otherEntityClientRootFolder: 'anotherEntity',
-                    },
-                ];
-
-                before(() => {
-                    importsForAngular = BaseGenerator.generateEntityClientImports(relationships, 'no', ANGULAR);
-                    importsForReact = BaseGenerator.generateEntityClientImports(relationships, 'no', REACT);
-                });
-
-                it('adds the same imports regardless of the client framework', () => {
-                    expect(importsForAngular).to.eql(importsForReact);
                 });
             });
         });

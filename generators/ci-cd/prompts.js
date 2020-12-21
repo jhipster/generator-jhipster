@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -85,7 +85,7 @@ async function askPipeline() {
 }
 
 async function askIntegrations() {
-    if (this.abort || !this.pipeline || this.pipeline === 'azure') return;
+    if (this.abort || !this.pipeline) return;
     if (this.autoconfigureTravis) {
         this.cicdIntegrations = [];
         return;
@@ -131,6 +131,12 @@ async function askIntegrations() {
     }
     if (['jenkins', 'github'].includes(this.pipeline)) {
         integrationChoices.push({ name: `Build and publish a ${chalk.yellow('*Docker*')} image`, value: 'publishDocker' });
+    }
+    if (['jenkins', 'gitlab', 'travis', 'github', 'circle', 'azure'].includes(this.pipeline)) {
+        integrationChoices.push({
+            name: `${chalk.yellow('*Snyk*')}: dependency scanning for security vulnerabilities (requires SNYK_TOKEN)`,
+            value: 'snyk',
+        });
     }
     if (['jenkins', 'gitlab', 'travis', 'github', 'circle'].includes(this.pipeline)) {
         integrationChoices.push({
