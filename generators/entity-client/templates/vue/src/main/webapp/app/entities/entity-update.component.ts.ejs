@@ -5,7 +5,7 @@ import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vu
 <% } %>
 <%_
   let fieldsContainedValidators = [];
-  for (field of fields) {
+  for (field of fields.filter(field => !field.id)) {
     if (field.fieldValidate === true) {
       if (!fieldsContainedValidators.includes('numeric') && ['Integer', 'Long'].includes(field.fieldType)) {
         fieldsContainedValidators.push('numeric');
@@ -43,7 +43,7 @@ import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vu
 <%_ } _%>
 <%_
     let dayJsIncluded = false;
-    for (field of fields) {
+    for (field of fields.filter(field => !field.id)) {
         const fieldName = field.fieldName;
         const fieldType = field.fieldType;
         if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType) && !dayJsIncluded) {
@@ -80,7 +80,7 @@ import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
 const validations: any = {
   <%= entityInstance %>: {
-    <%_ for (field of fields) {
+    <%_ for (field of fields.filter(field => !field.id)) {
       const fieldName = field.fieldName;
       const fieldType = field.fieldType;
     _%>
@@ -180,7 +180,7 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
 
   public save() : void {
     this.isSaving = true;
-    <%_ for (field of fields) {
+    <%_ for (field of fields.filter(field => !field.id)) {
         const fieldName = field.fieldName;
         const fieldType = field.fieldType;
     } _%>
@@ -223,7 +223,7 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
 
   <%_
     let dateFunctionIncluded = false;
-    for (field of fields) {
+    for (field of fields.filter(field => !field.id)) {
         const fieldName = field.fieldName;
         const fieldType = field.fieldType;
         if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType) && !dateFunctionIncluded) {
@@ -256,7 +256,7 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
   public retrieve<%= entityAngularName %>(<%= entityInstance %>Id) : void {
     this.<%= entityInstance %>Service().find(<%= entityInstance %>Id).then((res) => {
 <%_
-        for (field of fields) {
+        for (field of fields.filter(field => !field.id)) {
             const fieldName = field.fieldName;
             const fieldType = field.fieldType;
             if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType)) {

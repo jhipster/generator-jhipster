@@ -9,7 +9,7 @@
                         <input type="text" class="form-control" id="id" name="id"
                                v-model="<%= entityInstance %>.id" readonly />
                     </div>
-                    <%_ for (field of fields) {
+                    <%_ for (field of fields.filter(field => !field.id)) {
                         const fieldName = field.fieldName;
                         const fieldNameCapitalized = field.fieldNameCapitalized;
                         const fieldNameHumanized = field.fieldNameHumanized;

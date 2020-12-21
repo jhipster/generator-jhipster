@@ -4,7 +4,7 @@
             <div v-if="<%= entityInstance %>">
                 <h2 class="jh-entity-heading" data-cy="<%= entityInstance %>DetailsHeading"><span v-text="$t('<%= i18nKeyPrefix %>.detail.title')"><%= entityAngularName %></span> {{<%= entityInstance %>.id}}</h2>
                 <dl class="row jh-entity-details">
-                    <%_ for (field of fields) {
+                    <%_ for (field of fields.filter(field => !field.id)) {
                         const fieldName = field.fieldName;
                         const fieldType = field.fieldType;
                         const fieldTypeBlobContent = field.fieldTypeBlobContent; _%>

@@ -26,7 +26,7 @@ import Router from 'vue-router';
 
 <%_
     let dayJsIncluded = false;
-    for (field of fields) {
+    for (field of fields.filter(field => !field.id)) {
         const fieldName = field.fieldName;
         const fieldType = field.fieldType;
         if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType) && !dayJsIncluded) {
@@ -114,7 +114,7 @@ describe('Component Tests', () => {
 
     <%_
       let dateTestsIncluded = false;
-      for (field of fields) {
+      for (field of fields.filter(field => !field.id)) {
           const fieldName = field.fieldName;
           const fieldType = field.fieldType;
           if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType) && !dateTestsIncluded) {

@@ -45,7 +45,7 @@
                 <thead>
                 <tr>
                     <th scope="row"<% if (pagination !== 'no') { %> v-on:click="changeOrder('id')"<% } %>><span v-text="$t('global.field.id')">ID</span><% if (pagination !== 'no') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
-                    <%_ for (field of fields) { _%>
+                    <%_ for (field of fields.filter(field => !field.id)) { _%>
                     <th scope="row"<% if (pagination !== 'no') { %> v-on:click="changeOrder('<%= field.fieldName%>')"<% } %>><span v-text="$t('<%=`${i18nKeyPrefix}.${field.fieldName}` %>')"><%= field.fieldNameHumanized %></span><% if (pagination !== 'no') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%= field.fieldName%>'"></jhi-sort-indicator><% } %></th>
                     <%_ } _%>
                     <%_ for (relationship of relationships) { _%>
@@ -65,7 +65,7 @@
                     <td>
                         <router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}">{{<%= entityInstance %>.id}}</router-link>
                     </td>
-                    <%_ for (field of fields) {
+                    <%_ for (field of fields.filter(field => !field.id)) {
                         const fieldName = field.fieldName;
                         const fieldNameCapitalized = field.fieldNameCapitalized;
                         const fieldType = field.fieldType;
