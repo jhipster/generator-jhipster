@@ -101,10 +101,11 @@ const connect = () => {
 
 const disconnect = () => {
   if (stompClient !== null) {
-    stompClient.disconnect();
+    if (stompClient.connected) {
+      stompClient.disconnect();
+    }
     stompClient = null;
   }
-  window.onhashchange = () => {};
   alreadyConnectedOnce = false;
 };
 
