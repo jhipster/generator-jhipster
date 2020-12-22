@@ -73,7 +73,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _writing() {
         return {
             cleanup() {
-                if (this.isJhipsterVersionLessThan('7.0.0') && this.jhipsterConfig.clientFramework === ANGULAR) {
+                if (this.isJhipsterVersionLessThan('7.0.0-beta.0') && this.jhipsterConfig.clientFramework === ANGULAR) {
                     this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.route.ts`);
                     this.removeFile(
                         `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.component.ts`
