@@ -2403,6 +2403,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
                 }
             }
         }
+
+        if (options.pkType) {
+            this.jhipsterConfig.pkType = options.pkType;
+        }
     }
 
     /**

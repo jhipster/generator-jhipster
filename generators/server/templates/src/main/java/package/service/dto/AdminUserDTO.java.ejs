@@ -30,6 +30,9 @@ import javax.validation.constraints.*;
 import java.time.Instant;
 <%_ } _%>
 import java.util.Set;
+<%_ if (user.primaryKey.type === 'UUID') { _%>
+import java.util.UUID;
+<%_ } _%>
 <%_ if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'sql') { _%>
 import java.util.stream.Collectors;
 <%_ } _%>

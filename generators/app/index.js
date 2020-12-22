@@ -231,6 +231,11 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
             type: Array,
         });
 
+        this.option('pk-type', {
+            desc: 'Default primary key type (beta)',
+            type: String,
+        });
+
         // Just constructing help, stop here
         if (this.options.help) {
             return;

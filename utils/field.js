@@ -157,12 +157,15 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     });
     const fieldType = field.fieldType;
 
-    if (field.id && field.autoGenerate !== false) {
-        const defaultGenerationType = entityWithConfig.prodDatabaseType === 'mysql' ? 'identity' : 'sequence';
-        if (entityWithConfig.reactive) {
+    if (field.id) {
+        if (field.autoGenerate === false || !['Long', 'UUID'].includes(field.fieldType)) {
+            field.liquibaseAutoIncrement = false;
+            field.jpaGeneratedValue = false;
+        } else if (entityWithConfig.reactive) {
             field.liquibaseAutoIncrement = true;
             field.jpaGeneratedValue = false;
         } else {
+            const defaultGenerationType = entityWithConfig.prodDatabaseType === 'mysql' ? 'identity' : 'sequence';
             field.jpaGeneratedValue = field.jpaGeneratedValue || field.fieldType === 'Long' ? defaultGenerationType : true;
             if (field.jpaGeneratedValue === 'identity') {
                 field.liquibaseAutoIncrement = true;
