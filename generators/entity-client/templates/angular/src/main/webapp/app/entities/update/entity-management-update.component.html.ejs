@@ -47,7 +47,7 @@
     }
 _%>
 
-                <div class="form-group"<% if (id) { %> [hidden]="editForm.get('<%= fieldName %>')?.value == null"<% } %>>
+                <div class="form-group"<% if (id) { %> [hidden]="editForm.get('<%= fieldName %>')!.value == null"<% } %>>
                     <label class="form-control-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= fieldName %>"<% if (fields[idx].javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= fields[idx].javadoc %>"<% } } %>><%= fieldNameHumanized %></label>
     <%_ if (fields[idx].fieldIsEnum) { _%>
                     <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>">
@@ -204,7 +204,7 @@ _%>
             <%_ if (!relationshipRequired) { _%>
                         <option [ngValue]="null"></option>
             <%_ } else { _%>
-                        <option *ngIf="editForm.get([<%- buildAngularFormPath(relationship.reference) %>])?.value == null" [ngValue]="null" selected></option>
+                        <option *ngIf="editForm.get([<%- buildAngularFormPath(relationship.reference) %>])!.value == null" [ngValue]="null" selected></option>
             <%_ } _%>
                         <option [ngValue]="<%= otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %> === editForm.get('<%= relationshipFieldName %>')!.value?.<%= relationship.otherEntity.primaryKey.name %> ? editForm.get('<%= relationshipFieldName %>')!.value : <%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <%= relationshipFieldNamePlural.toLowerCase() %>; trackBy: track<%= relationships[idx].otherEntity.entityAngularName %>By<%= relationships[idx].otherEntity.primaryKey.nameCapitalized %>">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     </select>
