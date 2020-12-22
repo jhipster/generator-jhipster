@@ -104,7 +104,7 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}tsconfig-aot.json`);
     }
 
-    if (generator.isJhipsterVersionLessThan('7.0.0') && generator.jhipsterConfig) {
+    if (generator.isJhipsterVersionLessThan('7.0.0-beta.0') && generator.jhipsterConfig) {
         if (generator.jhipsterConfig.clientFramework === ANGULAR) {
             generator.removeFile(`${ANGULAR_DIR}account/password/password-strength-bar.component.ts`);
             generator.removeFile(`${ANGULAR_DIR}account/password/password-strength-bar.scss`);
@@ -399,7 +399,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${javaDir}config/ReactivePageableHandlerMethodArgumentResolver.java`);
         generator.removeFile(`${javaDir}config/ReactiveSortHandlerMethodArgumentResolver.java`);
     }
-    if (generator.isJhipsterVersionLessThan('7.0.0')) {
+    if (generator.isJhipsterVersionLessThan('7.0.0-beta.0')) {
         generator.removeFile(`${javaDir}config/apidoc/SwaggerConfiguration.java`);
         generator.removeFile(`${javaDir}config/audit/package-info.java`);
         generator.removeFile(`${javaDir}config/audit/AuditEventConverter.java`);
