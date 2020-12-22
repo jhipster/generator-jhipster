@@ -17,10 +17,10 @@
  limitations under the License.
 -%>
 <%
-const variablesWithTypes = generateEntityClientFields(primaryKey, fields, relationships, dto, customDateType = 'Date', embedded);
+const variablesWithTypes = generateEntityClientFields(primaryKey, fields.filter(field => !field.id), relationships, dto, customDateType = 'Date', embedded);
 const typeImports = generateEntityClientImports(relationships, dto);
-const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields);
-const enumImports = generateEntityClientEnumImports(fields);
+const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields.filter(field => !field.id));
+const enumImports = generateEntityClientEnumImports(fields.filter(field => !field.id));
 %>
 <%_ typeImports.forEach( (importedPath, importedType) => {
   importedPath = importedPath.replace('core/user/user.model', 'shared/model/user.model');

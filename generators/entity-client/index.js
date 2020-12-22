@@ -32,11 +32,6 @@ module.exports = class extends BaseBlueprintGenerator {
         super(args, opts);
         this.entity = opts.context;
 
-        if (this.jhipsterConfig.clientFramework !== ANGULAR) {
-            // Remove fields with custom ids, drop once templates supports them
-            this.entity = { ...this.entity, fields: this.entity.fieldsNoId };
-        }
-
         utils.copyObjectProps(this, this.entity);
         this.jhipsterContext = opts.jhipsterContext || opts.context;
 
@@ -73,7 +68,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _writing() {
         return {
             cleanup() {
-                if (this.isJhipsterVersionLessThan('7.0.0') && this.jhipsterConfig.clientFramework === ANGULAR) {
+                if (this.isJhipsterVersionLessThan('7.0.0-beta.0') && this.jhipsterConfig.clientFramework === ANGULAR) {
                     this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.route.ts`);
                     this.removeFile(
                         `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.component.ts`

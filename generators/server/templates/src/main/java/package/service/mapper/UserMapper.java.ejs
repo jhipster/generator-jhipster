@@ -130,7 +130,7 @@ public class UserMapper {
     }
     <%_ } _%>
 
-    public <%= asEntity('User') %> userFromId(<% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id) {
+    public <%= asEntity('User') %> userFromId(<%= user.primaryKey.type %> id) {
         if (id == null) {
             return null;
         }

@@ -1233,21 +1233,16 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      * @param {any} databaseType - the database type
      */
     getPkType(databaseType) {
-        let pk = '';
-        switch (databaseType) {
-            case 'mongodb':
-            case 'neo4j':
-            case 'couchbase':
-                pk = 'String';
-                break;
-            case 'cassandra':
-                pk = 'UUID';
-                break;
-            default:
-                pk = 'Long';
-                break;
+        if (this.jhipsterConfig.pkType) {
+            return this.jhipsterConfig.pkType;
         }
-        return pk;
+        if (['mongodb', 'neo4j', 'couchbase'].includes(databaseType)) {
+            return 'String';
+        }
+        if (databaseType === 'cassandra') {
+            return 'UUID';
+        }
+        return 'Long';
     }
 
     /**
@@ -1317,7 +1312,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      * @param {string} defaultValue - default value
      * @returns {string} java primary key value
      */
-    getPrimaryKeyValue(primaryKeyType, databaseType, defaultValue) {
+    getPrimaryKeyValue(primaryKeyType, databaseType = this.jhipsterConfig.databasetype, defaultValue = 1) {
         let value;
         switch (primaryKeyType) {
             case 'String':
@@ -1698,8 +1693,8 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         // Fallback to defaults for test cases.
         loadRequiredConfigIntoEntity(user, defaultConfig);
 
-        const userIdType =
-            user.authenticationType === 'oauth2' || user.databaseType !== 'sql' ? 'String' : this.getPkType(user.databaseType);
+        const oauth2 = user.authenticationType === 'oauth2';
+        const userIdType = oauth2 || user.databaseType !== 'sql' ? 'String' : this.getPkType(user.databaseType);
         const fieldValidateRulesMaxlength = userIdType === 'String' ? 100 : undefined;
 
         user.fields = [
@@ -1724,7 +1719,13 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         });
         this.configOptions.sharedEntities.User = user;
 
-        const liquibaseFakeData = user.authenticationType === 'oauth2' ? [] : [{ id: 1 }, { id: 2 }];
+        user.resetFakerSeed();
+        const liquibaseFakeData = oauth2
+            ? []
+            : [
+                  { id: userIdType === 'Long' ? 1 : user.primaryKey.fields[0].generateFakeData() },
+                  { id: userIdType === 'Long' ? 2 : user.primaryKey.fields[0].generateFakeData() },
+              ];
         user.liquibaseFakeData = liquibaseFakeData;
         this.configOptions.sharedLiquibaseFakeData.User = liquibaseFakeData;
     }

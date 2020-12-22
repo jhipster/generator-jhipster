@@ -143,7 +143,7 @@ describe('<%= entityClass %> e2e test', () => {
     cy.wait('@entitiesRequest');
     cy.get(entityCreateButtonSelector).click({force: true});
     cy.getEntityCreateUpdateHeading('<%= entityClass %>');
-    <%_ fieldsNoId.forEach((field) => {
+    <%_ fields.filter(field => !field.id).forEach((field) => {
       const fieldName = field.fieldName;
       const fieldNameCapitalized = field.fieldNameCapitalized;
       const fieldType = field.fieldType;

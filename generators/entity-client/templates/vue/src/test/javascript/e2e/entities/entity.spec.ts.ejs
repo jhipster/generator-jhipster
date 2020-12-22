@@ -117,7 +117,7 @@ describe('<%= entityClass %> e2e test', () => {
     });
 
    <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', async () => {
-      <%_ fields.forEach((field) => {
+      <%_ fields.filter(field => !field.id).forEach((field) => {
         const fieldName = field.fieldName;
         const fieldNameCapitalized = field.fieldNameCapitalized;
         const fieldType = field.fieldType;
@@ -253,7 +253,7 @@ describe('<%= entityClass %> e2e test', () => {
 
         expect(await updatePage.title.getText()).not.to.be.empty;
 
-        <%_ fields.forEach((field) => {
+        <%_ fields.filter(field => !field.id).forEach((field) => {
           const fieldName = field.fieldName;
           const fieldNameCapitalized = field.fieldNameCapitalized;
           const fieldType = field.fieldType;

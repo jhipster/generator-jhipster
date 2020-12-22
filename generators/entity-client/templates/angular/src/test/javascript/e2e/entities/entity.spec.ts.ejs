@@ -107,7 +107,7 @@ describe('<%= entityClass %> e2e test', () => {
         await <%= entityInstance %>ComponentsPage.clickOnCreateButton();
 
         await promise.all([
-        <%_ fieldsNoId.forEach((field) => {
+        <%_ fields.filter(field => !field.id).forEach((field) => {
             const fieldName = field.fieldName;
             const fieldNameCapitalized = field.fieldNameCapitalized;
             const fieldType = field.fieldType;
@@ -151,7 +151,7 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ }); _%>
         ]);
 
-    <%_ fieldsNoId.forEach((field) => {
+    <%_ fields.filter(field => !field.id).forEach((field) => {
         const fieldName = field.fieldName;
         const fieldNameCapitalized = field.fieldNameCapitalized;
         const fieldType = field.fieldType;
