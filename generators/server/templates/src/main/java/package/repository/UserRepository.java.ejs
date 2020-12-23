@@ -233,8 +233,6 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 
     Mono<Long> count();
     <% } else { %>
-    Page<<%= asEntity('User') %>> findAll(Pageable pageable);
-
     Page<<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
     <% } %>
 }
