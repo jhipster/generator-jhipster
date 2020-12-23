@@ -420,7 +420,6 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${testDir}service/AuditEventServiceIT.java`);
         generator.removeFile(`${testDir}web/rest/AuditResourceIT.java`);
         generator.removeFile(`${testDir}repository/CustomAuditEventRepositoryIT.java`);
-        generator.removeFile(`${javaDir}config/CloudDatabaseConfiguration.java`);
 
         if (generator.databaseType === 'cassandra') {
             generator.removeFile(`${javaDir}config/metrics/package-info.java`);
@@ -433,6 +432,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         if (generator.searchEngine === 'elasticsearch') {
             generator.removeFile(`${testDir}config/ElasticsearchTestConfiguration.java`);
         }
+    }
+    if (generator.isJhipsterVersionLessThan('7.0.0-beta.1')) {
+        generator.removeFile(`${javaDir}config/CloudDatabaseConfiguration.java`);
     }
 }
 
