@@ -262,6 +262,15 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
         }
     }
+
+    if (generator.isJhipsterVersionLessThan('7.0.0-beta.1') && generator.jhipsterConfig) {
+        if (generator.jhipsterConfig.clientFramework === ANGULAR) {
+            generator.removeFile(`${ANGULAR_DIR}core/user/account.model.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/user/user.model.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/user/user.service.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/user/user.service.spec.ts`);
+        }
+    }
 }
 
 /**

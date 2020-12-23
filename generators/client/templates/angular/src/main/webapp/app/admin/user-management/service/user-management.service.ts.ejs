@@ -23,45 +23,39 @@ import { Observable<% if (authenticationType !== 'oauth2' && databaseType !== 's
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/core/request/request-util';
 import { Pagination } from 'app/core/request/request.model';
-import { IPublicUser, IUser } from './user.model';
+import { IUser } from '../user-management.model';
 <%_ if (authenticationType !== 'oauth2' && databaseType !== 'sql' && databaseType !== 'mongodb' && databaseType !== 'couchbase') { _%>
 import { Authority } from 'app/config/authority.constants';
 <%_ } _%>
 
 @Injectable({ providedIn: 'root' })
-export class UserService {
-  public resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/users';
-  public userManagementUrl = SERVER_API_URL + '<%- apiUaaPath %>api/admin/users';
+export class UserManagementService {
+  public resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/admin/users';
 
   constructor(private http: HttpClient) {}
 
   <%_ if (authenticationType !== 'oauth2') { _%>
   create(user: IUser): Observable<IUser> {
-    return this.http.post<IUser>(this.userManagementUrl, user);
+    return this.http.post<IUser>(this.resourceUrl, user);
   }
 
   update(user: IUser): Observable<IUser> {
-    return this.http.put<IUser>(this.userManagementUrl, user);
+    return this.http.put<IUser>(this.resourceUrl, user);
   }
 
   find(login: string): Observable<IUser> {
-    return this.http.get<IUser>(`${this.userManagementUrl}/${login}`);
+    return this.http.get<IUser>(`${this.resourceUrl}/${login}`);
   }
   <%_ } _%>
 
-  query(req?: Pagination): Observable<HttpResponse<IPublicUser[]>> {
-    const options = createRequestOption(req);
-    return this.http.get<IPublicUser[]>(this.resourceUrl, { params: options, observe: 'response' });
-  }
-
-  queryAsAdmin(req?: Pagination): Observable<HttpResponse<IUser[]>> {
+  query(req?: Pagination): Observable<HttpResponse<IUser[]>> {
       const options = createRequestOption(req);
-      return this.http.get<IUser[]>(this.userManagementUrl, { params: options, observe: 'response' });
+      return this.http.get<IUser[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
   <%_ if (authenticationType !== 'oauth2') { _%>
   delete(login: string): Observable<{}> {
-    return this.http.delete(`${this.userManagementUrl}/${login}`);
+    return this.http.delete(`${this.resourceUrl}/${login}`);
   }
 
   authorities(): Observable<string[]> {

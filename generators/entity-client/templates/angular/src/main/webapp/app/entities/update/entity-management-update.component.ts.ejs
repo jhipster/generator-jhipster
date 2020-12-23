@@ -63,8 +63,8 @@ Object.keys(differentRelationships).forEach(key => {
         if (uniqueRel.otherEntityAngularName !== entityAngularName) {
             if (isBuiltInUser(uniqueRel.otherEntityAngularName)) {
 _%>
-import { IUser } from 'app/core/user/user.model';
-import { UserService } from 'app/core/user/user.service';
+import { IUser } from 'app/entities/user/user.model';
+import { UserService } from 'app/entities/user/user.service';
 <%_
             } else {
 _%>
@@ -288,7 +288,7 @@ _%>
     <%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
 
     track<%= reference.relationship.otherEntity.entityAngularName %>By<%= reference.relationship.otherEntity.primaryKey.nameCapitalized %>(index: number, item: I<%= reference.relationship.otherEntity.entityAngularName %>): <%= getTypescriptKeyType(reference.relationship.otherEntity.primaryKey.type) %> {
-        return item.<%= reference.relationship.otherEntity.primaryKey.name %>!;
+        return item.<%= reference.relationship.otherEntity.primaryKey.name %><%= isBuiltInUser(reference.relationship.otherEntity.entityAngularName) ? '' : '!' %>;
     }
     <%_ } _%>
     <%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipType === 'many-to-many' && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
