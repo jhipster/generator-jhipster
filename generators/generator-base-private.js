@@ -1057,7 +1057,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             const importType = `I${otherEntityAngularName}`;
             let importPath;
             if (this.isBuiltInUser(otherEntityAngularName)) {
-                importPath = clientFramework === ANGULAR ? 'app/core/user/user.model' : 'app/shared/model/user.model';
+                importPath = clientFramework === ANGULAR ? 'app/entities/user/user.model' : 'app/shared/model/user.model';
             } else {
                 importPath =
                     clientFramework === ANGULAR
