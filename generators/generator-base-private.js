@@ -1000,6 +1000,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         fields.forEach(field => {
             const fieldType = field.fieldType;
             const fieldName = field.fieldName;
+            const nullable = !field.id && field.nullable;
             let tsType = 'any';
             if (field.fieldIsEnum) {
                 tsType = fieldType;
@@ -1010,10 +1011,13 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             } else if (['String', 'UUID', 'Duration', 'byte[]', 'ByteBuffer'].includes(fieldType)) {
                 tsType = 'string';
                 if (['byte[]', 'ByteBuffer'].includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
-                    variablesWithTypes.push(`${fieldName}ContentType?: string`);
+                    variablesWithTypes.push(`${fieldName}ContentType?: ${nullable ? 'string | null' : 'string'}`);
                 }
             } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
                 tsType = customDateType;
+            }
+            if (nullable) {
+                tsType += ' | null';
             }
             variablesWithTypes.push(`${fieldName}?: ${tsType}`);
         });
@@ -1021,6 +1025,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         relationships.forEach(relationship => {
             let fieldType;
             let fieldName;
+            const nullable = !relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes('required');
             const relationshipType = relationship.relationshipType;
             if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
                 fieldType = `I${relationship.otherEntityAngularName}[]`;
@@ -1028,6 +1033,9 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             } else {
                 fieldType = `I${relationship.otherEntityAngularName}`;
                 fieldName = relationship.relationshipFieldName;
+            }
+            if (nullable) {
+                fieldType += ' | null';
             }
             variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
         });

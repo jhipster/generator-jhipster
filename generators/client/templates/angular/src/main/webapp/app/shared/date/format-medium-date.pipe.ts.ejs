@@ -24,7 +24,7 @@ import * as dayjs from 'dayjs';
   name: 'formatMediumDate',
 })
 export class FormatMediumDatePipe implements PipeTransform {
-  transform(day: dayjs.Dayjs | undefined): string {
+  transform(day: dayjs.Dayjs | null | undefined): string {
     return day ? day.format('D MMM YYYY') : '';
   }
 }
