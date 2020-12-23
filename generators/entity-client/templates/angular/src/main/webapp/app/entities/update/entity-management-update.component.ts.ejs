@@ -140,10 +140,9 @@ _%>
 
     ngOnInit(): void {
         this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
-            <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
-            if (<%= entityInstance %>.<%= primaryKey.name %> == null) {
+        <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
+            if (<%= entityInstance %>.<%= primaryKey.name %> === undefined) {
                 const today = dayjs().startOf('day');
-            <%_ } _%>
             <%_ for (idx in fields) {
                 const fieldName = fields[idx].fieldName;
                 const fieldType = fields[idx].fieldType;
@@ -152,9 +151,8 @@ _%>
                 <%= entityInstance %>.<%= fieldName %> = today;
                 <%_ } _%>
             <%_ } _%>
-            <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
             }
-            <%_ } _%>
+        <%_ } _%>
 
             this.updateForm(<%= entityInstance %>);
 
@@ -201,7 +199,7 @@ _%>
         return this.dataUtils.byteSize(base64String);
     }
 
-    openFile(base64String: string, contentType: string): void {
+    openFile(base64String: string, contentType: string | null | undefined): void {
         this.dataUtils.openFile(base64String, contentType);
     }
 
