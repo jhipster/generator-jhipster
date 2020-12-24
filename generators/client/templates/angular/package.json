@@ -23,7 +23,7 @@
     "@types/jest": "26.0.19",
     "@typescript-eslint/eslint-plugin": "4.11.0",
     "browser-sync": "2.26.13",
-    "browser-sync-webpack-plugin": "2.2.2",
+    "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "6.4.1",
     "eslint": "7.16.0",
     "eslint-config-prettier": "7.1.0",
