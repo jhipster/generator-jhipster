@@ -52,13 +52,17 @@ module.exports = class extends BaseGenerator {
                 }
 
                 if (databaseChangelog.type === 'entity-new') {
-                    this.fields = this.entity.fields.map(field => prepareFieldForLiquibaseTemplates(this.entity, field));
+                    this.fields = this.entity.fields
+                        .filter(field => !field.transient)
+                        .map(field => prepareFieldForLiquibaseTemplates(this.entity, field));
                 } else {
                     this.addedFields = this.databaseChangelog.addedFields
                         .map(field => prepareFieldForTemplates(this.entity, field, this))
+                        .filter(field => !field.transient)
                         .map(field => prepareFieldForLiquibaseTemplates(this.entity, field));
                     this.removedFields = this.databaseChangelog.removedFields
                         .map(field => prepareFieldForTemplates(this.entity, field, this))
+                        .filter(field => !field.transient)
                         .map(field => prepareFieldForLiquibaseTemplates(this.entity, field));
                 }
             },

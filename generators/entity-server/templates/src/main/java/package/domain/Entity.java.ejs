@@ -25,8 +25,8 @@ let hasTextBlob = false;
 let hasRelationship = relationships.length !== 0;
 _%>
 <%_
-for (idx in fields) {
-    if (prodDatabaseType === 'postgresql' && fields[idx].fieldTypeBlobContent === 'text') {
+for (field of fields.filter(field => !field.transient)) {
+    if (prodDatabaseType === 'postgresql' && field.fieldTypeBlobContent === 'text') {
         hasTextBlob = true;
         break;
     }
@@ -200,21 +200,20 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     private <%= primaryKey.type %> <%= primaryKey.name %>;
 
 <%_ } _%>
-<%_ for (idx in fields) {
-    if (fields[idx].id) continue;
-    if (typeof fields[idx].javadoc !== 'undefined') { _%>
-<%- formatAsFieldJavadoc(fields[idx].javadoc) %>
+<%_ for (field of fields.filter(field => !field.id && !field.transient)) {
+    if (typeof field.javadoc !== 'undefined') { _%>
+<%- formatAsFieldJavadoc(field.javadoc) %>
     <%_ }
     let required = false;
     let unique = false;
-    const fieldValidate = fields[idx].fieldValidate;
-    const fieldValidateRules = fields[idx].fieldValidateRules;
-    const fieldValidateRulesMaxlength = fields[idx].fieldValidateRulesMaxlength;
-    const fieldType = fields[idx].fieldType;
-    const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-    const fieldName = fields[idx].fieldName;
-    const fieldNameUnderscored = fields[idx].fieldNameUnderscored;
-    const fieldNameAsDatabaseColumn = fields[idx].fieldNameAsDatabaseColumn;
+    const fieldValidate = field.fieldValidate;
+    const fieldValidateRules = field.fieldValidateRules;
+    const fieldValidateRulesMaxlength = field.fieldValidateRulesMaxlength;
+    const fieldType = field.fieldType;
+    const fieldTypeBlobContent = field.fieldTypeBlobContent;
+    const fieldName = field.fieldName;
+    const fieldNameUnderscored = field.fieldNameUnderscored;
+    const fieldNameAsDatabaseColumn = field.fieldNameAsDatabaseColumn;
     if (fieldValidate === true) {
         if (fieldValidateRules.includes('required')) {
             required = true;
@@ -222,16 +221,16 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         if (fieldValidateRules.includes('unique')) {
             unique = true;
         } _%>
-    <%- include('../common/field_validators', {field: fields[idx]}); -%>
+    <%- include('../common/field_validators', {field: field}); -%>
     <%_ } _%>
-    <%_ if (!hasDto && typeof fields[idx].javadoc != 'undefined') { _%>
-    @ApiModelProperty(value = "<%- formatAsApiDescription(fields[idx].javadoc) %>"<% if (required) { %>, required = true<% } %>)
+    <%_ if (!hasDto && typeof field.javadoc != 'undefined') { _%>
+    @ApiModelProperty(value = "<%- formatAsApiDescription(field.javadoc) %>"<% if (required) { %>, required = true<% } %>)
     <%_ } _%>
     <%_ if (databaseType === 'sql' && reactive) { _%>
     @Column("<%- fieldNameAsDatabaseColumn %>")
     <%_ } _%>
     <%_ if (databaseType === 'sql' && !reactive) {
-        if (fields[idx].fieldIsEnum) { _%>
+        if (field.fieldIsEnum) { _%>
     @Enumerated(EnumType.STRING)
         <%_ }
         if (fieldType === 'byte[]') { _%>
@@ -263,7 +262,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     private String <%= fieldName %>;
     <%_ } _%>
 
-    <%_ if (fields[idx].fieldWithContentType) { _%>
+    <%_ if (field.fieldWithContentType) { _%>
       <%_ if ((databaseType === 'sql' && !reactive) || databaseType === 'cassandra') { _%>
     @Column(<% if (databaseType !== 'cassandra') { %>name = <% } %>"<%- fieldNameAsDatabaseColumn %>_content_type"<% if (required && databaseType !== 'cassandra') { %>, nullable = false<% } %>)
         <%_ if (required && databaseType === 'cassandra') { _%>
@@ -288,18 +287,18 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 }
 
 relationships.forEach((relationship, idx) => {
-    const otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName;
-    const otherEntityRelationshipNamePlural = relationships[idx].otherEntityRelationshipNamePlural;
-    const otherEntityIsEmbedded = relationships[idx].otherEntityIsEmbedded;
-    const relationshipName = relationships[idx].relationshipName;
-    const relationshipFieldName = relationships[idx].relationshipFieldName;
-    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-    const relationshipType = relationships[idx].relationshipType;
-    const relationshipValidate = relationships[idx].relationshipValidate;
-    const relationshipRequired = relationships[idx].relationshipRequired;
-    const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-    const ownerSide = relationships[idx].ownerSide || false;
-    const isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
+    const otherEntityRelationshipName = relationship.otherEntityRelationshipName;
+    const otherEntityRelationshipNamePlural = relationship.otherEntityRelationshipNamePlural;
+    const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
+    const relationshipName = relationship.relationshipName;
+    const relationshipFieldName = relationship.relationshipFieldName;
+    const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+    const relationshipType = relationship.relationshipType;
+    const relationshipValidate = relationship.relationshipValidate;
+    const relationshipRequired = relationship.relationshipRequired;
+    const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
+    const ownerSide = relationship.ownerSide || false;
+    const isUsingMapsId = relationship.useJPADerivedIdentifier;
     if (otherEntityRelationshipName) {
         mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
     }
@@ -309,10 +308,10 @@ relationships.forEach((relationship, idx) => {
       return;
     }
 
-    if (typeof relationships[idx].javadoc != 'undefined') { _%>
-<%- formatAsFieldJavadoc(relationships[idx].javadoc) %>
+    if (typeof relationship.javadoc != 'undefined') { _%>
+<%- formatAsFieldJavadoc(relationship.javadoc) %>
     <%_ if (!hasDto) { _%>
-    @ApiModelProperty(value = "<%- formatAsApiDescription(relationships[idx].javadoc) %>")
+    @ApiModelProperty(value = "<%- formatAsApiDescription(relationship.javadoc) %>")
     <%_ } _%>
 <%_ }
     if (relationshipType === 'one-to-many') {
@@ -488,12 +487,11 @@ relationships.forEach((relationship, idx) => {
     }
     <%_ } _%>
 <%_ } _%>
-<%_ for (idx in fields) {
-        if (fields[idx].id) continue;
-        const fieldType = fields[idx].fieldType;
-        const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-        const fieldName = fields[idx].fieldName;
-        const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod; _%>
+<%_ for (field of fields.filter(field => !field.id && !field.transient)) {
+        const fieldType = field.fieldType;
+        const fieldTypeBlobContent = field.fieldTypeBlobContent;
+        const fieldName = field.fieldName;
+        const fieldInJavaBeanMethod = field.fieldInJavaBeanMethod; _%>
 
     <%_ if (fieldTypeBlobContent !== 'text') { _%>
     public <%= fieldType %> get<%= fieldInJavaBeanMethod %>() {
@@ -529,7 +527,7 @@ relationships.forEach((relationship, idx) => {
         this.<%= fieldName %> = <%= fieldName %>;
     <%_ } _%>
     }
-    <%_ if (fields[idx].fieldWithContentType) { _%>
+    <%_ if (field.fieldWithContentType) { _%>
 
     public String get<%= fieldInJavaBeanMethod %>ContentType() {
         return this.<%= fieldName %>ContentType;
@@ -548,27 +546,26 @@ relationships.forEach((relationship, idx) => {
     <%_ } _%>
 <%_ } _%>
 <%_
-    for (idx in relationships) {
-        const relationship = relationships[idx];
-        const relationshipFieldName = relationships[idx].relationshipFieldName;
-        const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-        const relationshipType = relationships[idx].relationshipType;
-        const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-        const relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
-        const relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural;
-        const otherEntityName = relationships[idx].otherEntityName;
-        const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-        const otherEntityRelationshipNameCapitalized = relationships[idx].otherEntityRelationshipNameCapitalized;
-        const otherEntityRelationshipNameCapitalizedPlural = relationships[idx].otherEntityRelationshipNameCapitalizedPlural;
-        const otherEntityIsEmbedded = relationships[idx].otherEntityIsEmbedded;
-        const ownerSide = relationships[idx].ownerSide || false;
+    for (relationship of relationships) {
+        const relationshipFieldName = relationship.relationshipFieldName;
+        const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+        const relationshipType = relationship.relationshipType;
+        const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
+        const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
+        const relationshipNameCapitalizedPlural = relationship.relationshipNameCapitalizedPlural;
+        const otherEntityName = relationship.otherEntityName;
+        const otherEntityNamePlural = relationship.otherEntityNamePlural;
+        const otherEntityRelationshipNameCapitalized = relationship.otherEntityRelationshipNameCapitalized;
+        const otherEntityRelationshipNameCapitalizedPlural = relationship.otherEntityRelationshipNameCapitalizedPlural;
+        const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
+        const ownerSide = relationship.ownerSide || false;
 
         // An embedded entity should not reference entities that embeds it, unless the other entity is also embedded
         if (embedded && !otherEntityIsEmbedded && ownerSide === false) {
             continue;
         }
 
-        const useJPADerivedIdentifier = relationships[idx].useJPADerivedIdentifier;
+        const useJPADerivedIdentifier = relationship.useJPADerivedIdentifier;
         const reactiveRelationshipWithId = (databaseType === 'sql' && reactive && !(relationshipType === 'one-to-one' &&
                 (ownerSide === false || (ownerSide === true && useJPADerivedIdentifier === true))));
     _%>
@@ -734,26 +731,25 @@ relationships.forEach((relationship, idx) => {
         <%_ if (!embedded) { _%>
             "<%= primaryKey.name %>=" + get<%= primaryKey.nameCapitalized %>() +
         <%_ } _%>
-            <%_ for (idx in fields) {
-                if (fields[idx].id) continue;
-                const fieldType = fields[idx].fieldType;
-                const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-                const fieldName = fields[idx].fieldName;
-                const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
+            <%_ for (field of fields.filter(field => !field.id && !field.transient)) {
+                const fieldType = field.fieldType;
+                const fieldTypeBlobContent = field.fieldTypeBlobContent;
+                const fieldName = field.fieldName;
+                const fieldInJavaBeanMethod = field.fieldInJavaBeanMethod;
                 const isNumeric = ['integer', 'long', 'float', 'double', 'bigdecimal'].includes(fieldType.toLowerCase()); _%>
             ", <%= fieldName %>=<% if (! isNumeric) { %>'<% } %>" + get<%= fieldInJavaBeanMethod %>() <% if (! isNumeric) { %>+ "'" <% } %>+
-                <%_ if (fields[idx].fieldWithContentType) { _%>
+                <%_ if (field.fieldWithContentType) { _%>
             ", <%= fieldName %>ContentType='" + get<%= fieldInJavaBeanMethod %>ContentType() + "'" +
                 <%_ } _%>
             <%_ } _%>
-            <%_ for (idx in relationships) {
-                const relationshipType = relationships[idx].relationshipType;
-                const otherEntityIsEmbedded = relationships[idx].otherEntityIsEmbedded;
-                const relationshipFieldName = relationships[idx].relationshipFieldName;
-                const relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
-                const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-                const relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural;
-                const ownerSide = relationships[idx].ownerSide; _%>
+            <%_ for (relationship of relationships) {
+                const relationshipType = relationship.relationshipType;
+                const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
+                const relationshipFieldName = relationship.relationshipFieldName;
+                const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
+                const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+                const relationshipNameCapitalizedPlural = relationship.relationshipNameCapitalizedPlural;
+                const ownerSide = relationship.ownerSide; _%>
             <%_ if (otherEntityIsEmbedded) {
                     if (relationshipType === 'many-to-one') { _%>
             ", <%= relationshipFieldNamePlural %>='" + get<%= relationshipNameCapitalizedPlural %>() + "'" +

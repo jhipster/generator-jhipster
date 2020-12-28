@@ -86,24 +86,24 @@ _%>
         <%_ } _%>
         <%_ if (fieldType === 'LocalDate') { _%>
                     <div class="input-group">
-                        <input id="field_<%= fieldName %>" data-cy="<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" ngbDatepicker #<%= fieldName %>Dp="ngbDatepicker" formControlName="<%= fieldName %>"/>
+                        <input id="field_<%= fieldName %>" data-cy="<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" ngbDatepicker #<%= fieldName %>Dp="ngbDatepicker" formControlName="<%= fieldName %>"<% if (readonly) { %> [readonly]="true"<% } %>/>
                         <span class="input-group-append">
                             <button type="button" class="btn btn-secondary" (click)="<%= fieldName %>Dp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
                         </span>
                     </div>
         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                     <div class="d-flex">
-                        <input id="field_<%= fieldName %>" data-cy="<%= fieldName %>" type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" placeholder="YYYY-MM-DD HH:mm"/>
+                        <input id="field_<%= fieldName %>" data-cy="<%= fieldName %>" type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" placeholder="YYYY-MM-DD HH:mm"<% if (readonly) { %> [readonly]="true"<% } %>/>
                     </div>
         <%_ } else if (fieldTypeBlobContent === 'text') { _%>
                     <textarea class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>"
-                              formControlName="<%= fieldName %>"></textarea>
+                              formControlName="<%= fieldName %>"<% if (readonly) { %> [readonly]="true"<% } %>></textarea>
         <%_ } else if (fieldType === 'Boolean') { _%>
                     <input type="<%= fieldInputType %>" class="form-check" name="<%= fieldName %>" id="field_<%= fieldName %>"
-                           data-cy="<%= fieldName %>" formControlName="<%= fieldName %>" />
+                           data-cy="<%= fieldName %>" formControlName="<%= fieldName %>" <% if (readonly) { %> [readonly]="true"<% } %>/>
         <%_ } else { _%>
                     <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>"
-                           formControlName="<%= fieldName %>"<% if (readonly) { %> readonly<% } %>/>
+                           formControlName="<%= fieldName %>"<% if (readonly) { %> [readonly]="true"<% } %>/>
             <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
                     <input type="hidden" class="form-control" name="<%= fieldName %>ContentType" id="field_<%= fieldName %>ContentType"
                            formControlName="<%= fieldName %>ContentType" />

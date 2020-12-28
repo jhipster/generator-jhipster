@@ -94,7 +94,7 @@ module.exports = class extends BaseGenerator {
             const filename = this.destinationPath(JHIPSTER_CONFIG_DIR, `${entityName}.json`);
 
             const newConfig = this.fs.readJSON(filename);
-            const newFields = newConfig.fields || [];
+            const newFields = (newConfig.fields || []).filter(field => !field.transient);
             const newRelationships = newConfig.relationships || [];
 
             if (
@@ -123,7 +123,7 @@ module.exports = class extends BaseGenerator {
             // Share old entity
             this.configOptions.oldSharedEntities[entityName] = oldConfig;
 
-            const oldFields = oldConfig.fields || [];
+            const oldFields = (oldConfig.fields || []).filter(field => !field.transient);
             const oldFieldNames = oldFields.map(field => field.fieldName);
             const newFieldNames = newFields.map(field => field.fieldName);
 
