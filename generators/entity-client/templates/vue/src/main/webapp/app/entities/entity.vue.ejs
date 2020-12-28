@@ -4,7 +4,7 @@
             <span v-text="$t('<%= i18nKeyPrefix %>.home.title')" id="<%= entityFileName %>-heading"><%= entityClassPluralHumanized %></span>
             <div class="d-flex justify-content-end">
                 <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
-                    <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span v-text="$t('userManagement.home.refreshListLabel')">Refresh List</span>
+                    <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span v-text="$t('<%= i18nKeyPrefix %>.home.refreshListLabel')">Refresh List</span>
                 </button>
                 <%_ if (!readOnly) { _%>
                 <router-link :to="{name: '<%= entityAngularName %>Create'}" tag="button" id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%= entityUrl %>">
