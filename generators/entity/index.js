@@ -137,7 +137,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
         };
 
         this._setupEntityOptions(this, this, this.context);
-        this.registerPrettierTransform();
 
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity', { entityExisted, configExisted, arguments: [name] });
     }

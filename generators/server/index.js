@@ -53,8 +53,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
 
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('server');
-
-        this.registerPrettierTransform();
     }
 
     // Public API method used by the getter and also by Blueprints

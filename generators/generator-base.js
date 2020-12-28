@@ -163,7 +163,9 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         if (!this.options.skipYoResolve) {
             this.registerConflicterAttributesTransform();
         }
+
         this.registerForceEntitiesTransform();
+        this.registerPrettierTransform();
     }
 
     /**

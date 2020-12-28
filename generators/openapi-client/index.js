@@ -31,7 +31,6 @@ module.exports = class extends BaseGenerator {
             type: Boolean,
             defaults: false,
         });
-        this.registerPrettierTransform();
     }
 
     get initializing() {

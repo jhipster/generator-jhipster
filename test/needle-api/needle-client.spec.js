@@ -65,6 +65,6 @@ describe('needle API Client: JHipster client generator with blueprint', () => {
 
     it('Assert index.html contain the comment and the resource added', () => {
         assert.fileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<!-- Comment added by JHipster API -->');
-        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<link rel="stylesheet" href="content/css/my.css">');
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<link rel="stylesheet" href="content/css/my.css" />');
     });
 });

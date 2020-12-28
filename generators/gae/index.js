@@ -28,11 +28,6 @@ const dockerPrompts = require('../docker-prompts');
 const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
-    constructor(args, opts) {
-        super(args, opts);
-        this.registerPrettierTransform();
-    }
-
     get initializing() {
         return {
             sayHello() {
