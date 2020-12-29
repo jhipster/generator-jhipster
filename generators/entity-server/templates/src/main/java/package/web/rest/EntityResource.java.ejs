@@ -22,8 +22,8 @@ package <%= packageName %>.web.rest;
 const viaService = service !== 'no';
 
 let manyToManyWithUser = false;
-for (idx in relationships) {
-    if (relationships[idx].otherEntityName === 'user' && relationships[idx].relationshipType === 'many-to-many') {
+for (const relationship of relationships) {
+    if (relationship.otherEntityName === 'user' && relationship.relationshipType === 'many-to-many') {
         manyToManyWithUser = true;
         break;
     }

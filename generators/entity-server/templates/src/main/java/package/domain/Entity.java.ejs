@@ -25,7 +25,7 @@ let hasTextBlob = false;
 let hasRelationship = relationships.length !== 0;
 _%>
 <%_
-for (field of fields.filter(field => !field.transient)) {
+for (const field of fields.filter(field => !field.transient)) {
     if (prodDatabaseType === 'postgresql' && field.fieldTypeBlobContent === 'text') {
         hasTextBlob = true;
         break;
@@ -200,7 +200,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     private <%= primaryKey.type %> <%= primaryKey.name %>;
 
 <%_ } _%>
-<%_ for (field of fields.filter(field => !field.id && !field.transient)) {
+<%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
     if (typeof field.javadoc !== 'undefined') { _%>
 <%- formatAsFieldJavadoc(field.javadoc) %>
     <%_ }
@@ -221,7 +221,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         if (fieldValidateRules.includes('unique')) {
             unique = true;
         } _%>
-    <%- include('../common/field_validators', {field: field}); -%>
+    <%- include('../common/field_validators', {field}); -%>
     <%_ } _%>
     <%_ if (!hasDto && typeof field.javadoc != 'undefined') { _%>
     @ApiModelProperty(value = "<%- formatAsApiDescription(field.javadoc) %>"<% if (required) { %>, required = true<% } %>)
@@ -350,7 +350,7 @@ relationships.forEach((relationship, idx) => {
     _%>
     @ManyToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
         <%_ if (relationshipValidate) { _%>
-    <%- include('relationship_validators', { relationships, idx }); -%>
+    <%- include('relationship_validators', { relationship }); -%>
         <%_ }
     } else if ((databaseType === 'mongodb' || databaseType === 'couchbase') && !otherEntityIsEmbedded) {
         if (databaseType === 'mongodb') { _%>
@@ -389,7 +389,7 @@ relationships.forEach((relationship, idx) => {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
         <%_ } if (ownerSide === true) {
             if (relationshipValidate) { _%>
-    <%- include('relationship_validators', { relationships, idx }); -%>
+    <%- include('relationship_validators', { relationship }); -%>
         <%_ } _%>
     @JoinTable(name = "<%= relationship.joinTable.name %>",
                joinColumns = <%= entity.primaryKey.fields.length > 1 ? '{' : '' %>
@@ -438,7 +438,7 @@ relationships.forEach((relationship, idx) => {
             if (ownerSide) { _%>
     @OneToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
             <%_ if (relationshipValidate) { _%>
-    <%- include('relationship_validators', { relationships, idx }); -%>
+    <%- include('relationship_validators', { relationship }); -%>
             <%_ } _%>
             <%_ if (isUsingMapsId === true) { %>
     @MapsId
@@ -487,7 +487,7 @@ relationships.forEach((relationship, idx) => {
     }
     <%_ } _%>
 <%_ } _%>
-<%_ for (field of fields.filter(field => !field.id && !field.transient)) {
+<%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
         const fieldType = field.fieldType;
         const fieldTypeBlobContent = field.fieldTypeBlobContent;
         const fieldName = field.fieldName;
@@ -546,7 +546,7 @@ relationships.forEach((relationship, idx) => {
     <%_ } _%>
 <%_ } _%>
 <%_
-    for (relationship of relationships) {
+    for (const relationship of relationships) {
         const relationshipFieldName = relationship.relationshipFieldName;
         const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
         const relationshipType = relationship.relationshipType;
@@ -731,7 +731,7 @@ relationships.forEach((relationship, idx) => {
         <%_ if (!embedded) { _%>
             "<%= primaryKey.name %>=" + get<%= primaryKey.nameCapitalized %>() +
         <%_ } _%>
-            <%_ for (field of fields.filter(field => !field.id && !field.transient)) {
+            <%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
                 const fieldType = field.fieldType;
                 const fieldTypeBlobContent = field.fieldTypeBlobContent;
                 const fieldName = field.fieldName;
@@ -742,7 +742,7 @@ relationships.forEach((relationship, idx) => {
             ", <%= fieldName %>ContentType='" + get<%= fieldInJavaBeanMethod %>ContentType() + "'" +
                 <%_ } _%>
             <%_ } _%>
-            <%_ for (relationship of relationships) {
+            <%_ for (const relationship of relationships) {
                 const relationshipType = relationship.relationshipType;
                 const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
                 const relationshipFieldName = relationship.relationshipFieldName;
