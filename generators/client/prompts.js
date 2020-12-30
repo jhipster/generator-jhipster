@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,26 +18,26 @@
  */
 const chalk = require('chalk');
 const constants = require('../generator-constants');
+const { clientDefaultConfig } = require('../generator-defaults');
 
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 module.exports = {
     askForModuleName,
     askForClient,
-    askFori18n,
+    askForAdminUi,
     askForClientTheme,
     askForClientThemeVariant,
 };
 
-function askForModuleName() {
-    if (this.baseName) return;
+async function askForModuleName() {
+    if (this.jhipsterConfig.baseName) return;
 
-    this.askModuleName(this);
+    await this.askModuleName(this);
 }
 
-function askForClient(meta) {
-    if (!meta && this.existingProject) return;
+async function askForClient() {
+    if (this.existingProject) return;
 
     const applicationType = this.applicationType;
 
@@ -51,124 +51,62 @@ function askForClient(meta) {
             name: 'React',
         },
         {
+            value: VUE,
+            name: 'Vue',
+        },
+        {
             value: 'no',
             name: 'No client',
         },
     ];
 
-    const PROMPT = {
+    const answers = await this.prompt({
         type: 'list',
         name: 'clientFramework',
-        when: response => applicationType !== 'microservice' && applicationType !== 'uaa',
+        when: () => applicationType !== 'microservice' && applicationType !== 'uaa',
         message: `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
         choices,
-        default: ANGULAR,
-    };
-
-    if (meta) return PROMPT; // eslint-disable-line consistent-return
-
-    const done = this.async();
-
-    this.prompt(PROMPT).then(prompt => {
-        this.clientFramework = prompt.clientFramework;
-        if (this.clientFramework === 'no') {
-            this.skipClient = true;
-        }
-        done();
+        default: clientDefaultConfig.clientFramework,
     });
+
+    this.clientFramework = this.jhipsterConfig.clientFramework = answers.clientFramework;
+    if (this.clientFramework === 'no') {
+        this.skipClient = this.jhipsterConfig.skipClient = true;
+    }
 }
 
-function askFori18n() {
-    if (this.existingProject || this.configOptions.skipI18nQuestion) return;
-
-    this.aski18n(this);
-}
-
-function askForClientTheme(meta) {
-    if (!meta && this.existingProject) {
+async function askForClientTheme() {
+    if (this.existingProject) {
         return;
     }
 
+    const self = this;
     const skipClient = this.skipClient;
-    const done = this.async();
-    const defaultChoices = [
+    const defaultJHipsterChoices = [
         {
             value: 'none',
             name: 'Default JHipster',
         },
-        { value: 'cerulean', name: 'Cerulean' },
-        { value: 'cosmo', name: 'Cosmo' },
-        { value: 'cerulean', name: 'Cyborg' },
-        { value: 'darkly', name: 'Darkly' },
-        { value: 'flatly', name: 'Flatly' },
-        { value: 'journal', name: 'Journal' },
-        { value: 'litera', name: 'Litera' },
-        { value: 'lumen', name: 'Lumen' },
-        { value: 'lux', name: 'Lux' },
-        { value: 'materia', name: 'Materia' },
-        { value: 'minty', name: 'Minty' },
-        { value: 'pulse', name: 'Pulse' },
-        { value: 'sandstone', name: 'Sandstone' },
-        { value: 'simplex', name: 'Simplex' },
-        { value: 'sketchy', name: 'Sketchy' },
-        { value: 'slate', name: 'Slate' },
-        { value: 'solar', name: 'Solar' },
-        { value: 'spacelab', name: 'Spacelab' },
-        { value: 'superhero', name: 'Superhero' },
-        { value: 'united', name: 'United' },
-        { value: 'yeti', name: 'Yeti' },
     ];
 
-    const PROMPT = {
+    const bootswatchChoices = await retrieveOnlineBootswatchThemes(self).catch(errorMessage => {
+        self.warning(errorMessage);
+        return retrieveLocalBootswatchThemes();
+    });
+    const answers = await this.prompt({
         type: 'list',
         name: 'clientTheme',
         when: () => !skipClient,
         message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
-        choices: defaultChoices,
-        default: 'none',
-    };
-
-    this.httpsGet(
-        'https://bootswatch.com/api/4.json',
-        // eslint-disable-next-line consistent-return
-        body => {
-            try {
-                const { themes } = JSON.parse(body);
-
-                PROMPT.choices = [
-                    {
-                        value: 'none',
-                        name: 'Default JHipster',
-                    },
-                    ...themes.map(theme => ({
-                        value: theme.name.toLowerCase(),
-                        name: theme.name,
-                    })),
-                ];
-
-                if (meta) return PROMPT;
-                promptQuestion(PROMPT, done, this);
-            } catch (err) {
-                this.warning('Could not fetch bootswatch themes from API. Using default ones.');
-                promptQuestion(PROMPT, done, this);
-            }
-        },
-        () => {
-            this.warning('Could not fetch bootswatch themes from API. Using default ones.');
-            promptQuestion(PROMPT, done, this);
-        }
-    );
-}
-
-function promptQuestion(PROMPT, done, generator) {
-    generator.prompt(PROMPT).then(prompt => {
-        generator.clientTheme = prompt.clientTheme;
-        done();
+        choices: [...defaultJHipsterChoices, ...bootswatchChoices],
+        default: clientDefaultConfig.clientTheme,
     });
+
+    this.clientTheme = this.jhipsterConfig.clientTheme = answers.clientTheme;
 }
 
-function askForClientThemeVariant(meta) {
-    if (!meta && this.existingProject) {
+async function askForClientThemeVariant() {
+    if (this.existingProject) {
         return;
     }
     if (this.clientTheme === 'none') {
@@ -184,21 +122,93 @@ function askForClientThemeVariant(meta) {
         { value: 'light', name: 'Light' },
     ];
 
-    const PROMPT = {
+    const answers = await this.prompt({
         type: 'list',
         name: 'clientThemeVariant',
         when: () => !skipClient,
         message: 'Choose a Bootswatch variant navbar theme (https://bootswatch.com/)?',
         choices,
-        default: 'primary',
-    };
+        default: clientDefaultConfig.clientThemeVariant,
+    });
 
-    if (meta) return PROMPT; // eslint-disable-line consistent-return
+    this.clientThemeVariant = this.jhipsterConfig.clientThemeVariant = answers.clientThemeVariant;
+}
 
-    const done = this.async();
+async function askForAdminUi() {
+    if (this.existingProject) {
+        return;
+    }
 
-    this.prompt(PROMPT).then(prompt => {
-        this.clientThemeVariant = prompt.clientThemeVariant;
-        done();
+    const skipClient = this.skipClient;
+
+    const answers = await this.prompt({
+        type: 'confirm',
+        name: 'withAdminUi',
+        when: () => !skipClient,
+        message: 'Do you want to generate the admin UI?',
+        default: clientDefaultConfig.withAdminUi,
+    });
+
+    this.withAdminUi = this.jhipsterConfig.withAdminUi = answers.withAdminUi;
+}
+
+async function retrieveOnlineBootswatchThemes(generator) {
+    return _retrieveBootswatchThemes(generator, true);
+}
+
+async function retrieveLocalBootswatchThemes(generator) {
+    return _retrieveBootswatchThemes(generator, false);
+}
+
+async function _retrieveBootswatchThemes(generator, useApi) {
+    const errorMessage = 'Could not fetch bootswatch themes from API. Using default ones.';
+    if (!useApi) {
+        return [
+            { value: 'cerulean', name: 'Cerulean' },
+            { value: 'cosmo', name: 'Cosmo' },
+            { value: 'cerulean', name: 'Cyborg' },
+            { value: 'darkly', name: 'Darkly' },
+            { value: 'flatly', name: 'Flatly' },
+            { value: 'journal', name: 'Journal' },
+            { value: 'litera', name: 'Litera' },
+            { value: 'lumen', name: 'Lumen' },
+            { value: 'lux', name: 'Lux' },
+            { value: 'materia', name: 'Materia' },
+            { value: 'minty', name: 'Minty' },
+            { value: 'pulse', name: 'Pulse' },
+            { value: 'sandstone', name: 'Sandstone' },
+            { value: 'simplex', name: 'Simplex' },
+            { value: 'sketchy', name: 'Sketchy' },
+            { value: 'slate', name: 'Slate' },
+            { value: 'solar', name: 'Solar' },
+            { value: 'spacelab', name: 'Spacelab' },
+            { value: 'superhero', name: 'Superhero' },
+            { value: 'united', name: 'United' },
+            { value: 'yeti', name: 'Yeti' },
+        ];
+    }
+
+    return new Promise((resolve, reject) => {
+        generator.httpsGet(
+            'https://bootswatch.com/api/4.json',
+
+            body => {
+                try {
+                    const { themes } = JSON.parse(body);
+
+                    const bootswatchChoices = themes.map(theme => ({
+                        value: theme.name.toLowerCase(),
+                        name: theme.name,
+                    }));
+
+                    resolve(bootswatchChoices);
+                } catch (err) {
+                    reject(errorMessage);
+                }
+            },
+            () => {
+                reject(errorMessage);
+            }
+        );
     });
 }

@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,7 +23,7 @@ module.exports = {
     askIntegrations,
 };
 
-function askPipeline() {
+async function askPipeline() {
     if (this.abort) return;
     if (this.autoconfigureTravis) {
         this.log('Auto-configuring Travis CI');
@@ -58,7 +58,12 @@ function askPipeline() {
         return;
     }
 
-    const done = this.async();
+    if (this.autoconfigureCircleCI) {
+        this.log('Auto-configuring CircleCI');
+        this.pipeline = 'circle';
+        return;
+    }
+
     const prompts = [
         {
             type: 'list',
@@ -75,14 +80,12 @@ function askPipeline() {
             ],
         },
     ];
-    this.prompt(prompts).then(props => {
-        this.pipeline = props.pipeline;
-        done();
-    });
+    const props = await this.prompt(prompts);
+    this.pipeline = props.pipeline;
 }
 
-function askIntegrations() {
-    if (this.abort || !this.pipeline || this.pipeline === 'azure') return;
+async function askIntegrations() {
+    if (this.abort || !this.pipeline) return;
     if (this.autoconfigureTravis) {
         this.cicdIntegrations = [];
         return;
@@ -113,6 +116,12 @@ function askIntegrations() {
         return;
     }
 
+    if (this.autoconfigureCircleCI) {
+        this.log('Auto-configuring CircleCI');
+        this.pipeline = 'circle';
+        return;
+    }
+
     const integrationChoices = [];
     if (['jenkins', 'gitlab', 'github'].includes(this.pipeline)) {
         integrationChoices.push({ name: `Deploy your application to an ${chalk.yellow('*Artifactory*')}`, value: 'deploy' });
@@ -123,6 +132,12 @@ function askIntegrations() {
     if (['jenkins', 'github'].includes(this.pipeline)) {
         integrationChoices.push({ name: `Build and publish a ${chalk.yellow('*Docker*')} image`, value: 'publishDocker' });
     }
+    if (['jenkins', 'gitlab', 'travis', 'github', 'circle', 'azure'].includes(this.pipeline)) {
+        integrationChoices.push({
+            name: `${chalk.yellow('*Snyk*')}: dependency scanning for security vulnerabilities (requires SNYK_TOKEN)`,
+            value: 'snyk',
+        });
+    }
     if (['jenkins', 'gitlab', 'travis', 'github', 'circle'].includes(this.pipeline)) {
         integrationChoices.push({
             name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service)`,
@@ -131,7 +146,6 @@ function askIntegrations() {
     }
     const defaultDockerImage = `jhipster/${this.dasherizedBaseName}`;
 
-    const done = this.async();
     const prompts = [
         {
             when: this.pipeline === 'jenkins',
@@ -226,25 +240,23 @@ function askIntegrations() {
             default: `${this.herokuAppName}`,
         },
     ];
-    this.prompt(prompts).then(props => {
-        this.cicdIntegrations = props.cicdIntegrations;
+    const props = await this.prompt(prompts);
 
-        this.artifactorySnapshotsId = props.artifactorySnapshotsId;
-        this.artifactorySnapshotsUrl = props.artifactorySnapshotsUrl;
-        this.artifactoryReleasesId = props.artifactoryReleasesId;
-        this.artifactoryReleasesUrl = props.artifactoryReleasesUrl;
+    this.cicdIntegrations = props.cicdIntegrations;
 
-        this.sonarName = props.sonarName;
-        this.sonarUrl = props.sonarUrl;
-        this.sonarOrga = props.sonarOrga;
+    this.artifactorySnapshotsId = props.artifactorySnapshotsId;
+    this.artifactorySnapshotsUrl = props.artifactorySnapshotsUrl;
+    this.artifactoryReleasesId = props.artifactoryReleasesId;
+    this.artifactoryReleasesUrl = props.artifactoryReleasesUrl;
 
-        this.publishDocker = props.publishDocker;
-        this.dockerImage = props.dockerImage;
+    this.sonarName = props.sonarName;
+    this.sonarUrl = props.sonarUrl;
+    this.sonarOrga = props.sonarOrga;
 
-        this.insideDocker = props.insideDocker;
+    this.publishDocker = props.publishDocker;
+    this.dockerImage = props.dockerImage;
 
-        this.sendBuildToGitlab = props.sendBuildToGitlab;
+    this.insideDocker = props.insideDocker;
 
-        done();
-    });
+    this.sendBuildToGitlab = props.sendBuildToGitlab;
 }

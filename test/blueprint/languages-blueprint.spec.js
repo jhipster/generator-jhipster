@@ -16,8 +16,6 @@ const mockBlueprintSubGen = class extends LanguagesGenerator {
         }
 
         this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupEntityOptions(this, jhContext, this);
     }
 
     get initializing() {
@@ -53,7 +51,7 @@ describe('JHipster languages generator with blueprint', () => {
                         fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
                     })
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipInstall: true,
                         blueprint: blueprintName,
                         skipChecks: true,
@@ -67,6 +65,7 @@ describe('JHipster languages generator with blueprint', () => {
 
             it('creates expected files from jhipster languages generator', () => {
                 assert.file(expectedFiles.i18nDeJson);
+                assert.file(expectedFiles.i18nAdminDeJson);
             });
         });
     });

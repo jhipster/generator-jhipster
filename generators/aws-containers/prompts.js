@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,7 +18,7 @@
  */
 const _ = require('lodash');
 const chalk = require('chalk');
-const databaseTypes = require('jhipster-core').JHipsterDatabaseTypes;
+const databaseTypes = require('../../jdl/jhipster/database-types');
 
 const AURORA_DB_PASSWORD_REGEX = /^[^@"/]{8,42}$/;
 const CLOUDFORMATION_STACK_NAME = /[a-zA-Z][-a-zA-Z0-9]*/;
@@ -572,7 +572,7 @@ function askDeployNow() {
         {
             type: 'confirm',
             name: 'deployNow',
-            message: 'Would you like to deploy now?.',
+            message: 'Would you like to deploy now?',
             default: true,
         },
     ];

@@ -1,0 +1,232 @@
+<template>
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <form name="editForm" role="form" novalidate v-on:submit.prevent="save()" >
+                <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%= entityClass %>CreateUpdateHeading" v-text="$t('<%= i18nKeyPrefix %>.home.createOrEditLabel')">Create or edit a <%= entityAngularName %></h2>
+                <div>
+                    <div class="form-group" v-if="<%= entityInstance %>.id">
+                        <label for="id" v-text="$t('global.field.id')">ID</label>
+                        <input type="text" class="form-control" id="id" name="id"
+                               v-model="<%= entityInstance %>.id" readonly />
+                    </div>
+                    <%_ for (field of fields.filter(field => !field.id)) {
+                        const fieldName = field.fieldName;
+                        const fieldNameCapitalized = field.fieldNameCapitalized;
+                        const fieldNameHumanized = field.fieldNameHumanized;
+                        const fieldType = field.fieldType;
+                        const fieldTypeBlobContent = field.fieldTypeBlobContent;
+                        let fieldInputType = 'text';
+                        let fieldInputClass = 'form-control';
+                        let ngModelOption = '';
+                        const translationKey = `${i18nKeyPrefix}.${fieldName}`;
+                        if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
+                            fieldInputType = 'number';
+                        } else if (fieldType === 'LocalDate') {
+                            fieldInputType = 'date';
+                        } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) {
+                            fieldInputType = 'datetime-local';
+                        } else if (fieldType === 'Boolean') {
+                            fieldInputType = 'checkbox';
+                            fieldInputClass = 'form-check';
+                        } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') {
+                            fieldInputType = 'hidden';
+                        }
+                    _%>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('<%= translationKey %>')" for="<%= entityFileName %>-<%= fieldName %>"><%= fieldNameHumanized %></label>
+                        <%_ if (field.fieldIsEnum) { _%>
+                        <select class="form-control" name="<%= fieldName %>" :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model" id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>>
+                        <%_ const enumPrefix = frontendAppName + '.'+ fieldType;
+                            const values = field.enumValues;
+                            for (key in values) {
+                                const enumValue = values[key]; _%>
+                            <option value="<%= enumValue.name %>" v-bind:label="$t('<%=enumPrefix%>.<%= enumValue.name %>')"><%= enumValue.value %></option>
+                            <%_ } _%>
+                        </select>
+                        <%_ } else { _%>
+                        <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
+                        <div>
+                            <%_ if (fieldTypeBlobContent === 'image') { _%>
+                            <img v-bind:src="'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>" style="max-height: 100px;" v-if="<%= entityInstance %>.<%= fieldName %>" alt="<%=entityInstance %> image"/>
+                            <%_ } _%>
+                            <div v-if="<%= entityInstance %>.<%= fieldName %>" class="form-text text-danger clearfix">
+                                <%_ if (fieldTypeBlobContent === 'any') { _%>
+                                <a class="pull-left" v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="$t('entity.action.open')">open</a><br>
+                                <span class="pull-left">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
+                                <%_ } else { _%>
+                                <span class="pull-left">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
+                                <%_ } _%>
+                                <%_ if (fieldTypeBlobContent === 'image') { _%>
+                                <button type="button" v-on:click="clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'file_<%= fieldName %>')" class="btn btn-secondary btn-xs pull-right">
+                                <%_ } else { _%>
+                                <button type="button" v-on:click="<%= entityInstance %>.<%= fieldName %>=null;<%= entityInstance %>.<%= fieldName %>ContentType=null;"
+                                        class="btn btn-secondary btn-xs pull-right">
+                                <%_ } _%>
+                                    <font-awesome-icon icon="times"></font-awesome-icon>
+                                </button>
+                            </div>
+                            <input type="file" ref="file_<%= fieldName %>" id="file_<%= fieldName %>" data-cy="<%= fieldName %>" v-on:change="setFileData($event, <%= entityInstance %>, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*" v-text="$t('entity.action.addimage')"<% } else { %>false)" v-text="$t('entity.action.addblob')"<% } %>/>
+                        </div>
+                        <%_ } _%>
+                        <%_ if (fieldType === 'LocalDate') { _%>
+                        <b-input-group class="mb-3">
+                            <b-input-group-prepend>
+                                <b-form-datepicker
+                                    aria-controls="<%= entityFileName %>-<%= fieldName %>"
+                                    v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model"
+                                    name="<%= fieldName %>"
+                                    class="<%= fieldInputClass %>"
+                                    :locale="currentLanguage"
+                                    button-only
+                                    today-button
+                                    reset-button
+                                    close-button
+                                >
+                                </b-form-datepicker>
+                            </b-input-group-prepend>
+                            <b-form-input id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" type="text" class="<%= fieldInputClass %>" name="<%= fieldName %>"  :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }"
+                            v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %> />
+                        </b-input-group>
+                        <%_ } else if (['Instant'].includes(fieldType)) { _%>
+                        <div class="d-flex">
+                            <input id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" type="datetime-local" class="<%= fieldInputClass %>" name="<%= fieldName %>" :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }"
+                            <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>
+                            :value="convertDateTimeFromServer($v.<%= entityInstance %>.<%= fieldName %>.$model)"
+                            @change="updateInstantField('<%= fieldName %>', $event)"/>
+                        </div>
+                        <%_ } else if (['ZonedDateTime'].includes(fieldType)) { _%>
+                        <div class="d-flex">
+                            <input id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" type="datetime-local" class="<%= fieldInputClass %>" name="<%= fieldName %>" :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }"
+                            <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>
+                            :value="convertDateTimeFromServer($v.<%= entityInstance %>.<%= fieldName %>.$model)"
+                            @change="updateZonedDateTimeField('<%= fieldName %>', $event)"/>
+                        </div>
+                        <%_ } else if (fieldTypeBlobContent === 'text') { _%>
+                        <textarea class="<%= fieldInputClass %>" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>"
+                            :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>></textarea>
+                        <%_ } else { _%>
+                        <input type="<%= fieldInputType %>" class="<%= fieldInputClass %>" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>"
+                            :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" v-model<% if (fieldInputType === 'number') { %>.number<% } %>="$v.<%= entityInstance %>.<%= fieldName %>.$model" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>/>
+                            <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
+                        <input type="hidden" class="<%= fieldInputClass %>" name="<%= fieldName %>ContentType" id="<%= entityFileName %>-<%= fieldName %>ContentType"
+                            v-model="<%= entityInstance %>.<%= fieldName %>ContentType" />
+                            <%_ } _%>
+                        <%_ } _%>
+                        <%_ } _%>
+                        <%_ if (field.fieldValidate === true) { _%>
+                        <div v-if="$v.<%= entityInstance %>.<%= fieldName %>.$anyDirty && $v.<%= entityInstance %>.<%= fieldName %>.$invalid">
+                            <%_ if (field.fieldValidateRules.includes('required')) { _%>
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.required" v-text="$t('entity.validation.required')">
+                                This field is required.
+                            </small>
+                            <%_ } _%>
+                            <%_ if (field.fieldValidateRules.includes('minlength')) { _%>
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.minLength" v-text="$t('entity.validation.minlength', {min: <%= field.fieldValidateRulesMinlength %>})">
+                                This field is required to be at least <%= field.fieldValidateRulesMinlength %> characters.
+                            </small>
+                            <%_ } _%>
+                            <%_ if (field.fieldValidateRules.includes('maxlength')) { _%>
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.maxLength" v-text="$t('entity.validation.maxlength', {max: <%= field.fieldValidateRulesMaxlength %>})">
+                                This field cannot be longer than <%= field.fieldValidateRulesMaxlength %> characters.
+                            </small>
+                            <%_ } _%>
+                            <%_ if (field.fieldValidateRules.includes('min')) { _%>
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.min" v-text="$t('entity.validation.min', {min: <%= field.fieldValidateRulesMin %>})">
+                                This field should be at least <%= field.fieldValidateRulesMin %>.
+                            </small>
+                            <%_ } _%>
+                            <%_ if (field.fieldValidateRules.includes('max')) { _%>
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.max" v-text="$t('entity.validation.max', {max: <%= field.fieldValidateRulesMax %>})">
+                                This field cannot be longer than <%= field.fieldValidateRulesMax %> characters.
+                            </small>
+                            <%_ } _%>
+                            <%_ if (field.fieldValidateRules.includes('pattern')) { _%>
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.pattern" v-text="$t('entity.validation.pattern', {pattern: '<%= fieldNameHumanized %>'})">
+                                This field should follow pattern for "<%= fieldNameHumanized %>".
+                            </small>
+                            <%_ } _%>
+                            <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.numeric" v-text="$t('entity.validation.number')">
+                                This field should be a number.
+                            </small>
+                            <%_ } _%>
+                            <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.ZonedDateTimelocal" v-text="$t('entity.validation.ZonedDateTimelocal')">
+                                This field should be a date and time.
+                            </small>
+                            <%_ } _%>
+                        </div>
+                        <%_ } _%>
+                    </div>
+                    <%_ } _%>
+                    <%_ for (relationship of relationships) {
+                        const relationshipType = relationship.relationshipType;
+                        const ownerSide = relationship.ownerSide;
+                        const otherEntityName = relationship.otherEntityName;
+                        const otherEntityNamePlural = relationship.otherEntityNamePlural;
+                        const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
+                        const relationshipName = relationship.relationshipName;
+                        const relationshipNameHumanized = relationship.relationshipNameHumanized;
+                        const relationshipFieldName = relationship.relationshipFieldName;
+                        const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+                        const otherEntityField = relationship.otherEntityField;
+                        const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
+                        const relationshipRequired = relationship.relationshipRequired;
+                        const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
+                    <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
+                        <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>"<% if (relationshipRequired) { %> required<% } %>>
+                            <%_ if (!relationshipRequired) { _%>
+                            <option v-bind:value="null"></option>
+                            <%_ } else { _%>
+                            <option v-if="!<%= entityInstance %>.<%= relationshipName %>" v-bind:value="null" selected></option>
+                            <%_ } _%>
+                            <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.id === <%= entityInstance %>.<%=relationshipFieldName %>.id ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                        </select>
+                    </div>
+                    <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
+                        <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>"<% if (relationshipRequired) { %> required<% } %>>
+                            <%_ if (!relationshipRequired) { _%>
+                            <option v-bind:value="null"></option>
+                            <%_ } else { _%>
+                            <option v-if="!<%= entityInstance %>.<%= relationshipName %>" v-bind:value="null" selected></option>
+                            <%_ } _%>
+                            <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.id === <%= entityInstance %>.<%=relationshipFieldName %>.id ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=relationshipFieldNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                        </select>
+                    </div>
+                    <%_ } else if (relationshipType === 'many-to-many' && relationship.ownerSide === true) { _%>
+                    <div class="form-group">
+                        <label v-text="$t('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
+                        <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipName %>" v-if="<%=entityInstance %>.<%=relationshipFieldNamePlural %> !== undefined" v-model="<%=entityInstance %>.<%=relationshipFieldNamePlural %>"<% if (relationshipRequired) { %> required<% } %>>
+                            <option v-bind:value="getSelected(<%=entityInstance %>.<%=relationshipFieldNamePlural %>, <%=otherEntityName %>Option)" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                        </select>
+                    </div>
+                    <%_ } _%>
+                    <%_ if (relationship.relationshipValidate === true) { _%>
+                    <div v-if="$v.<%= entityInstance %>.<%= relationshipName %>.$anyDirty && $v.<%= entityInstance %>.<%= relationshipName %>.$invalid">
+                        <%_ if (relationshipRequired) { _%>
+                        <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= relationshipName %>.required" v-text="$t('entity.validation.required')">
+                            This field is required.
+                        </small>
+                        <%_ } _%>
+                    </div>
+                    <%_ } _%>
+                <%_ } _%>
+                </div>
+                <div>
+                    <button type="button" id="cancel-save" class="btn btn-secondary" v-on:click="previousState()">
+                        <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.cancel')">Cancel</span>
+                    </button>
+                    <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" :disabled="$v.<%= entityInstance %>.$invalid || isSaving" class="btn btn-primary">
+                        <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.save')">Save</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</template>
+<script lang="ts" src="./<%= entityFileName %>-update.component.ts">
+</script>

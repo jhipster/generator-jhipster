@@ -15,10 +15,6 @@ const mockBlueprintSubGen = class extends ServerGenerator {
         if (!jhContext) {
             this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
         }
-
-        this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupServerOptions(this, jhContext);
     }
 
     get initializing() {
@@ -110,10 +106,11 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
             helpers
                 .run(path.join(__dirname, '../../generators/server'))
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
                     skipChecks: true,
+                    skipClient: true,
                 })
                 .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
                 .withPrompts({
@@ -148,11 +145,19 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
             );
             assert.fileContent(
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesOneToMany");'
+                '      createCache(\n' +
+                    '        cm,\n' +
+                    '        com.mycompany.myapp.domain.entityClass.class.getName() +\n' +
+                    '        ".entitiesOneToMany"\n' +
+                    '      );'
             );
             assert.fileContent(
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesManoToMany");'
+                '      createCache(\n' +
+                    '        cm,\n' +
+                    '        com.mycompany.myapp.domain.entityClass.class.getName() +\n' +
+                    '        ".entitiesManoToMany"\n' +
+                    '      );'
             );
         });
     });
@@ -162,7 +167,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
             helpers
                 .run(path.join(__dirname, '../../generators/server'))
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
                     skipChecks: true,
@@ -200,11 +205,19 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
             );
             assert.fileContent(
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesOneToMany");'
+                '      createCache(\n' +
+                    '        cm,\n' +
+                    '        com.mycompany.myapp.domain.entityClass.class.getName() +\n' +
+                    '        ".entitiesOneToMany"\n' +
+                    '      );'
             );
             assert.fileContent(
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesManoToMany");'
+                '      createCache(\n' +
+                    '        cm,\n' +
+                    '        com.mycompany.myapp.domain.entityClass.class.getName() +\n' +
+                    '        ".entitiesManoToMany"\n' +
+                    '      );'
             );
         });
     });
@@ -214,7 +227,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
             helpers
                 .run(path.join(__dirname, '../../generators/server'))
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
                     skipChecks: true,
@@ -247,7 +260,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
             helpers
                 .run(path.join(__dirname, '../../generators/server'))
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
                     skipChecks: true,
@@ -284,15 +297,29 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
         it('Assert redis configuration has entity added', () => {
             assert.fileContent(
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName(), jcacheConfiguration);'
+                '      createCache(\n' +
+                    '        cm,\n' +
+                    '        com.mycompany.myapp.domain.User.class.getName(),\n' +
+                    '        jcacheConfiguration\n' +
+                    '      );'
             );
             assert.fileContent(
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesOneToMany", jcacheConfiguration);'
+                '      createCache(\n' +
+                    '        cm,\n' +
+                    '        com.mycompany.myapp.domain.entityClass.class.getName() +\n' +
+                    '        ".entitiesOneToMany",\n' +
+                    '        jcacheConfiguration\n' +
+                    '      );'
             );
             assert.fileContent(
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesManoToMany", jcacheConfiguration);'
+                '      createCache(\n' +
+                    '        cm,\n' +
+                    '        com.mycompany.myapp.domain.entityClass.class.getName() +\n' +
+                    '        ".entitiesManoToMany",\n' +
+                    '        jcacheConfiguration\n' +
+                    '      );'
             );
         });
     });

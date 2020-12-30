@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,7 +19,7 @@
 const shelljs = require('shelljs');
 const chalk = require('chalk');
 const dockerUtils = require('./docker-utils');
-const { getBase64Secret, getAllJhipsterConfig } = require('./utils');
+const { getBase64Secret } = require('./utils');
 
 module.exports = {
     checkDocker: dockerUtils.checkDocker,
@@ -105,7 +105,7 @@ function loadConfigs() {
     this.appsFolders.forEach(appFolder => {
         const path = this.destinationPath(`${this.directoryPath + appFolder}`);
         if (this.fs.exists(`${path}/.yo-rc.json`)) {
-            const config = getAllJhipsterConfig(this, true, path);
+            const config = this.getJhipsterConfig(`${path}/.yo-rc.json`).createProxy();
 
             if (config.applicationType === 'monolith') {
                 this.monolithicNb++;
@@ -141,7 +141,6 @@ function loadFromYoRc() {
     this.gatewayType = this.config.get('gatewayType');
     this.clusteredDbApps = this.config.get('clusteredDbApps');
     this.monitoring = this.config.get('monitoring');
-    this.consoleOptions = this.config.get('consoleOptions');
     this.useKafka = false;
     this.useMemcached = false;
     this.useRedis = false;

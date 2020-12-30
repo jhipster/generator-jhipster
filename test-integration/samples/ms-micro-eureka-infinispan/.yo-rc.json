@@ -2,14 +2,14 @@
     "generator-jhipster": {
         "applicationType": "microservice",
         "baseName": "samplesMicroserviceEurekaInfinispan",
-        "packageName": "io.github.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageName": "tech.jhipster.sample",
+        "packageFolder": "tech/jhipster/sample",
         "authenticationType": "jwt",
         "cacheProvider": "infinispan",
         "enableHibernateCache": true,
         "databaseType": "sql",
         "devDatabaseType": "h2Disk",
-        "prodDatabaseType": "mysql",
+        "prodDatabaseType": "postgresql",
         "searchEngine": false,
         "serviceDiscoveryType": "eureka",
         "buildTool": "maven",
@@ -29,6 +29,7 @@
         "entitySuffix": "",
         "dtoSuffix": "DTO",
         "otherModules": [],
-        "blueprints": []
+        "blueprints": [],
+        "creationTimestamp": 1596513172471
     }
 }

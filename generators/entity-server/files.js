@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,13 +18,9 @@
  */
 const _ = require('lodash');
 const chalk = require('chalk');
-const faker = require('faker');
 const fs = require('fs');
 const utils = require('../utils');
 const constants = require('../generator-constants');
-
-/* Use customized randexp */
-const randexp = utils.RandexpWithFaker;
 
 /* Constants use throughout */
 const INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX;
@@ -33,74 +29,12 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const TEST_DIR = constants.TEST_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
-/*
- * Current faker version is 4.1.0 and was release in 2017
- * It is outdated
- * https://github.com/Marak/faker.js/blob/10bfb9f467b0ac2b8912ffc15690b50ef3244f09/lib/date.js#L73-L96
- * Needed for reproducible builds
- */
-const getRecentDate = function (days, refDate) {
-    let date = new Date();
-    if (refDate !== undefined) {
-        date = new Date(Date.parse(refDate));
-    }
-
-    const range = {
-        min: 1000,
-        max: (days || 1) * 24 * 3600 * 1000,
-    };
-
-    let future = date.getTime();
-    future -= faker.random.number(range); // some time from now to N days ago, in milliseconds
-    date.setTime(future);
-
-    return date;
-};
-
-const getRecentForLiquibase = function (days, changelogDate) {
-    let formatedDate;
-    if (changelogDate !== undefined) {
-        formatedDate = `${changelogDate.substring(0, 4)}-${changelogDate.substring(4, 6)}-${changelogDate.substring(
-            6,
-            8
-        )}T${changelogDate.substring(8, 10)}:${changelogDate.substring(10, 12)}:${changelogDate.substring(12, 14)}+00:00`;
-    }
-    return getRecentDate(1, formatedDate);
-};
-
 /**
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
 const serverFiles = {
     dbChangelog: [
-        {
-            condition: generator => generator.databaseType === 'sql' && !generator.skipDbChangelog,
-            path: SERVER_MAIN_RES_DIR,
-            templates: [
-                {
-                    file: 'config/liquibase/changelog/added_entity.xml',
-                    options: { interpolate: INTERPOLATE_REGEX },
-                    renameTo: generator =>
-                        `config/liquibase/changelog/${generator.changelogDate}_added_entity_${generator.entityClass}.xml`,
-                },
-            ],
-        },
-        {
-            condition: generator =>
-                generator.databaseType === 'sql' &&
-                !generator.skipDbChangelog &&
-                (generator.fieldsContainOwnerManyToMany || generator.fieldsContainOwnerOneToOne || generator.fieldsContainManyToOne),
-            path: SERVER_MAIN_RES_DIR,
-            templates: [
-                {
-                    file: 'config/liquibase/changelog/added_entity_constraints.xml',
-                    options: { interpolate: INTERPOLATE_REGEX },
-                    renameTo: generator =>
-                        `config/liquibase/changelog/${generator.changelogDate}_added_entity_constraints_${generator.entityClass}.xml`,
-                },
-            ],
-        },
         {
             condition: generator => generator.databaseType === 'cassandra' && !generator.skipDbChangelog,
             path: SERVER_MAIN_RES_DIR,
@@ -121,44 +55,6 @@ const serverFiles = {
                         `config/couchmove/changelog/V${generator.changelogDate}__${generator.entityInstance.toLowerCase()}.fts`,
                 },
             ],
-        },
-    ],
-    fakeData: [
-        {
-            condition: generator => generator.databaseType === 'sql' && !generator.skipFakeData && !generator.skipDbChangelog,
-            path: SERVER_MAIN_RES_DIR,
-            templates: [
-                {
-                    file: 'config/liquibase/fake-data/table.csv',
-                    options: {
-                        interpolate: INTERPOLATE_REGEX,
-                        context: {
-                            getRecentForLiquibase,
-                            faker,
-                            randexp,
-                        },
-                    },
-                    renameTo: generator => `config/liquibase/fake-data/${generator.entityTableName}.csv`,
-                },
-            ],
-        },
-        {
-            condition: generator =>
-                generator.databaseType === 'sql' &&
-                !generator.skipFakeData &&
-                !generator.skipDbChangelog &&
-                (generator.fieldsContainImageBlob === true || generator.fieldsContainBlob === true),
-            path: SERVER_MAIN_RES_DIR,
-            templates: [{ file: 'config/liquibase/fake-data/blob/hipster.png', method: 'copy', noEjs: true }],
-        },
-        {
-            condition: generator =>
-                generator.databaseType === 'sql' &&
-                !generator.skipFakeData &&
-                !generator.skipDbChangelog &&
-                generator.fieldsContainTextBlob === true,
-            path: SERVER_MAIN_RES_DIR,
-            templates: [{ file: 'config/liquibase/fake-data/blob/hipster.txt', method: 'copy' }],
         },
     ],
     server: [
@@ -196,7 +92,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.searchEngine === 'elasticsearch',
+            condition: generator => generator.searchEngine === 'elasticsearch' && !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -206,9 +102,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator =>
-                (!generator.reactive || !['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(generator.databaseType)) &&
-                !generator.embedded,
+            condition: generator => !generator.reactive && !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -218,15 +112,26 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator =>
-                generator.reactive &&
-                ['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(generator.databaseType) &&
-                !generator.embedded,
+            condition: generator => generator.reactive && !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/repository/EntityReactiveRepository.java',
+                    file: 'package/repository/EntityRepository_reactive.java',
                     renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.reactive && generator.databaseType === 'sql' && !generator.embedded,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/repository/EntityRepositoryInternalImpl_reactive.java',
+                    renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}RepositoryInternalImpl.java`,
+                },
+                {
+                    file: 'package/repository/rowmapper/EntityRowMapper.java',
+                    renameTo: generator => `${generator.packageFolder}/repository/rowmapper/${generator.entityClass}RowMapper.java`,
                 },
             ],
         },
@@ -282,7 +187,6 @@ const serverFiles = {
                     file: 'package/web/rest/EntityResourceIT.java',
                     options: {
                         context: {
-                            randexp,
                             _,
                             chalkRed: chalk.red,
                             fs,
@@ -294,7 +198,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.searchEngine === 'elasticsearch',
+            condition: generator => generator.searchEngine === 'elasticsearch' && !generator.embedded,
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
@@ -355,37 +259,20 @@ module.exports = {
 
 function writeFiles() {
     return {
-        saveRemoteEntityPath() {
-            if (_.isUndefined(this.microservicePath)) {
-                return;
-            }
-            this.copy(
-                `${this.microservicePath}/${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`,
-                this.destinationPath(`${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`)
-            );
-        },
-
         setupReproducibility() {
             if (this.skipServer) return;
 
             // In order to have consistent results with Faker, restart seed with current entity name hash.
-            faker.seed(utils.stringHashCode(this.name.toLowerCase()));
+            this.resetFakerSeed();
         },
 
         writeServerFiles() {
             if (this.skipServer) return;
 
             // write server side files
-            this.writeFilesToDisk(serverFiles, this, false, this.fetchFromInstalledJHipster('entity-server/templates'));
+            this.writeFilesToDisk(serverFiles);
 
             if (this.databaseType === 'sql') {
-                if (!this.skipDbChangelog) {
-                    if (this.fieldsContainOwnerManyToMany || this.fieldsContainOwnerOneToOne || this.fieldsContainManyToOne) {
-                        this.addConstraintsChangelogToLiquibase(`${this.changelogDate}_added_entity_constraints_${this.entityClass}`);
-                    }
-                    this.addChangelogToLiquibase(`${this.changelogDate}_added_entity_${this.entityClass}`);
-                }
-
                 if (['ehcache', 'caffeine', 'infinispan', 'redis'].includes(this.cacheProvider) && this.enableHibernateCache) {
                     this.addEntityToCache(
                         this.asEntity(this.entityClass),
@@ -406,7 +293,7 @@ function writeFiles() {
                 const fieldType = field.fieldType;
                 const enumInfo = {
                     ...utils.getEnumInfo(field, this.clientRootFolder),
-                    angularAppName: this.angularAppName,
+                    frontendAppName: this.frontendAppName,
                     packageName: this.packageName,
                 };
                 // eslint-disable-next-line no-console

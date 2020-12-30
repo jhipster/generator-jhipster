@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,28 +32,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import { getUsers, updateUser } from './user-management.reducer';
+import { getUsersAsAdmin, updateUser } from './user-management.reducer';
 import { IRootState } from 'app/shared/reducers';
 
-export interface IUserManagementProps extends StateProps, DispatchProps, RouteComponentProps<{}> {}
+export interface IUserManagementProps extends StateProps, DispatchProps, RouteComponentProps<any> {}
 
 export const UserManagement = (props: IUserManagementProps) => {
   const [pagination, setPagination] = useState(overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE), props.location.search));
 
-  useEffect(() => {
-    props.getUsers(pagination.activePage - 1, pagination.itemsPerPage, `${pagination.sort},${pagination.order}`);
+  const getUsersFromProps = () => {
+    props.getUsersAsAdmin(pagination.activePage - 1, pagination.itemsPerPage, `${pagination.sort},${pagination.order}`);
     const endURL = `?page=${pagination.activePage}&sort=${pagination.sort},${pagination.order}`;
     if (props.location.search !== endURL) {
       props.history.push(`${props.location.pathname}${endURL}`);
     }
+  };
+
+  useEffect(() => {
+    getUsersFromProps();
   }, [pagination.activePage, pagination.order, pagination.sort]);
 
   useEffect(() => {
     const params = new URLSearchParams(props.location.search);
     const page = params.get('page');
-    const sort = params.get('sort');
-    if (page && sort) {
-      const sortSplit = sort.split(',');
+    const sortParam = params.get('sort');
+    if (page && sortParam) {
+      const sortSplit = sortParam.split(',');
       setPagination({
         ...pagination,
         activePage: +page,
@@ -76,20 +80,29 @@ export const UserManagement = (props: IUserManagementProps) => {
       activePage: currentPage
     });
 
+  const handleSyncList = () => {
+    getUsersFromProps();
+  };
+
   const toggleActive = user => () =>
     props.updateUser({
       ...user,
       activated: !user.activated
     });
 
-  const { users, account, match, totalItems } = props;
+  const { users, account, match, totalItems, loading } = props;
   return (
     <div>
-      <h2 id="user-management-page-heading">
+      <h2 id="user-management-page-heading" data-cy="userManagementPageHeading">
         <Translate contentKey="userManagement.home.title">Users</Translate>
-        <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity">
-          <FontAwesomeIcon icon="plus" /> <Translate contentKey="userManagement.home.createLabel">Create a new user</Translate>
-        </Link>
+        <div className="d-flex justify-content-end">
+          <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
+            <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="userManagement.home.refreshListLabel">Refresh List</Translate>
+          </Button>
+          <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity">
+            <FontAwesomeIcon icon="plus" /> <Translate contentKey="userManagement.home.createLabel">Create a new user</Translate>
+          </Link>
+        </div>
       </h2>
       <Table responsive striped>
         <thead>
@@ -211,12 +224,13 @@ export const UserManagement = (props: IUserManagementProps) => {
 };
 
 const mapStateToProps = (storeState: IRootState) => ({
+  loading: storeState.userManagement.loading,
   users: storeState.userManagement.users,
   totalItems: storeState.userManagement.totalItems,
   account: storeState.authentication.account
 });
 
-const mapDispatchToProps = { getUsers, updateUser };
+const mapDispatchToProps = { getUsersAsAdmin, updateUser };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

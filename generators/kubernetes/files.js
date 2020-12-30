@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -71,22 +71,6 @@ function writeFiles() {
         writeMessagingBroker() {
             if (!this.useKafka) return;
             this.template('messagebroker/kafka.yml.ejs', `messagebroker-${suffix}/kafka.yml`);
-        },
-
-        writeJhipsterConsole() {
-            const consoleOut = 'console'.concat('-', suffix);
-            if (this.monitoring === 'elk') {
-                this.template('console/jhipster-elasticsearch.yml.ejs', `${consoleOut}/jhipster-elasticsearch.yml`);
-                this.template('console/jhipster-logstash.yml.ejs', `${consoleOut}/jhipster-logstash.yml`);
-                this.template('console/jhipster-console.yml.ejs', `${consoleOut}/jhipster-console.yml`);
-                this.template('console/jhipster-dashboard-console.yml.ejs', `${consoleOut}/jhipster-dashboard-console.yml`);
-                if (this.deploymentApplicationType === 'microservice') {
-                    this.template('console/jhipster-zipkin.yml.ejs', `${consoleOut}/jhipster-zipkin.yml`);
-                }
-                if (this.istio) {
-                    this.template('istio/gateway/jhipster-console-gateway.yml.ejs', `${consoleOut}/jhipster-console-gateway.yml`);
-                }
-            }
         },
 
         writePrometheusGrafanaFiles() {

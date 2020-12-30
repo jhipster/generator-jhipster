@@ -3,8 +3,8 @@
         "applicationType": "monolith",
         "reactive": true,
         "baseName": "sampleWebfluxNodb",
-        "packageName": "io.github.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageName": "tech.jhipster.sample",
+        "packageFolder": "tech/jhipster/sample",
         "authenticationType": "oauth2",
         "cacheProvider": "no",
         "enableHibernateCache": false,
@@ -18,12 +18,13 @@
         "enableTranslation": true,
         "nativeLanguage": "en",
         "languages": ["en", "fr"],
-        "testFrameworks": ["gatling", "protractor"],
+        "testFrameworks": ["gatling", "cypress"],
         "serverPort": "8080",
         "jhiPrefix": "jhi",
         "clientPackageManager": "npm",
         "clientFramework": "angularX",
         "clientTheme": "none",
-        "clientThemeVariant": ""
+        "clientThemeVariant": "",
+        "creationTimestamp": 1596513172471
     }
 }

@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,110 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const commander = require('commander');
-const chalk = require('chalk');
 
-const packageJson = require('../package.json');
-const {
-    CLI_NAME,
-    initHelp,
-    logger,
-    createYeomanEnv,
-    toString,
-    getCommand,
-    getCommandOptions,
-    getArgs,
-    done,
-    loadAllBlueprintsWithVersion,
-    getBlueprintPackagePaths,
-    loadBlueprintCommands,
-    loadSharedOptions,
-} = require('./utils');
-const initAutoCompletion = require('./completion').init;
-const SUB_GENERATORS = require('./commands');
-const { packageNameToNamespace } = require('../generators/utils');
+const { runJHipster } = require('./program');
+const { done, logger } = require('./utils');
 
-const program = new commander.Command();
-const version = packageJson.version;
-const JHIPSTER_NS = CLI_NAME;
+module.exports = runJHipster().catch(done);
 
-const blueprintsWithVersion = loadAllBlueprintsWithVersion();
-const allBlueprints = Object.keys(blueprintsWithVersion);
-
-const env = createYeomanEnv(allBlueprints);
-const blueprintsPackagePath = getBlueprintPackagePaths(env, blueprintsWithVersion);
-const sharedOptions = loadSharedOptions(blueprintsPackagePath) || {};
-// Env will forward sharedOptions to every generator
-Object.assign(env.sharedOptions, sharedOptions);
-
-/* setup debugging */
-logger.init(program);
-
-/**
- *  Run a yeoman command
- */
-const runYoCommand = (cmd, args, options, opts) => {
-    logger.debug(`cmd: ${toString(cmd)}`);
-    logger.debug(`args: ${toString(args)}`);
-    logger.debug(`opts: ${toString(opts)}`);
-    const command = getCommand(cmd, args, opts);
-    logger.info(chalk.yellow(`Executing ${command}`));
-    logger.info(chalk.yellow(`Options: ${toString(options)}`));
-    try {
-        env.run(command, options, done);
-    } catch (e) {
-        logger.error(e.message, e);
-    }
-};
-
-program.version(version).usage('[command] [options]').allowUnknownOption();
-
-const blueprintCommands = loadBlueprintCommands(blueprintsPackagePath);
-const allCommands = { ...SUB_GENERATORS, ...blueprintCommands };
-
-/* create commands */
-Object.entries(allCommands).forEach(([key, opts]) => {
-    const command = program.command(`${key} ${getArgs(opts)}`, '', { isDefault: opts.default });
-    if (opts.alias) {
-        command.alias(opts.alias);
-    }
-    command
-        .allowUnknownOption()
-        .description(opts.desc)
-        .action(args => {
-            const options = getCommandOptions(packageJson, process.argv.slice(2));
-            if (opts.cliOnly) {
-                logger.debug('Executing CLI only script');
-                /* eslint-disable global-require, import/no-dynamic-require */
-                require(`./${key}`)(program.args, options, env);
-                /* eslint-enable */
-            } else {
-                const namespace = opts.blueprint ? `${packageNameToNamespace(opts.blueprint)}:${key}` : `${JHIPSTER_NS}:${key}`;
-                runYoCommand(namespace, program.args, options, opts);
-            }
-        })
-        .on('--help', () => {
-            if (opts.help) {
-                logger.info(opts.help);
-            } else {
-                logger.debug('Adding additional help info');
-                env.run(`${JHIPSTER_NS}:${key} --help`, done);
-            }
-        });
+process.on('unhandledRejection', up => {
+    logger.error('Unhandled promise rejection at:');
+    logger.fatal(up);
 });
-
-/* Generate useful help info during typos */
-initHelp(program, CLI_NAME);
-
-/* Enable autocompletion: This needs to right before parsing argv */
-initAutoCompletion(program, CLI_NAME);
-
-program.parse(process.argv);
-
-/* Run default when no commands are specified */
-if (program.rawArgs.length < 3 || program.rawArgs[2].startsWith('-')) {
-    logger.debug('No command specified. Running default');
-    logger.info(chalk.yellow('Running default command'));
-    const options = getCommandOptions(packageJson, process.argv.slice(2));
-    runYoCommand(`${JHIPSTER_NS}:app`, [], options, {});
-}

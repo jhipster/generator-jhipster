@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,25 +29,20 @@ const constants = require('../generator-constants');
 const exec = childProcess.exec;
 
 module.exports = class extends BaseGenerator {
-    constructor(args, opts) {
-        super(args, opts);
-        this.registerPrettierTransform();
-    }
-
     initializing() {
         this.log(chalk.bold('CloudFoundry configuration is starting'));
-        const configuration = this.getAllJhipsterConfig(this, true);
+        const configuration = this.config;
         this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
         this.baseName = configuration.get('baseName');
         this.buildTool = configuration.get('buildTool');
         this.packageName = configuration.get('packageName');
         this.packageFolder = configuration.get('packageFolder');
-        this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
+        this.cacheProvider = configuration.get('cacheProvider') || 'no';
         this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
         this.databaseType = configuration.get('databaseType');
         this.devDatabaseType = configuration.get('devDatabaseType');
         this.prodDatabaseType = configuration.get('prodDatabaseType');
-        this.angularAppName = this.getAngularAppName();
+        this.frontendAppName = this.getFrontendAppName();
     }
 
     get prompting() {

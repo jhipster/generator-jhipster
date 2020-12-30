@@ -7,16 +7,13 @@ const constants = require('../../generators/generator-constants');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
-const mockBlueprintSubGen = class extends ClientGenerator {
+const MockedClientGenerator = class MockedClientGenerator extends ClientGenerator {
     constructor(args, opts) {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
         if (!jhContext) {
             this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
         }
-        this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupClientOptions(this, jhContext);
     }
 
     get initializing() {
@@ -63,7 +60,7 @@ describe('JHipster client generator with blueprint', () => {
                 helpers
                     .run(path.join(__dirname, '../../generators/client'))
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         build: 'maven',
                         auth: 'jwt',
                         db: 'mysql',
@@ -71,13 +68,13 @@ describe('JHipster client generator with blueprint', () => {
                         blueprint: blueprintName,
                         skipChecks: true,
                     })
-                    .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
+                    .withGenerators([[MockedClientGenerator, 'jhipster-myblueprint:client']])
                     .withPrompts({
                         baseName: 'jhipster',
                         clientFramework: ANGULAR,
                         enableTranslation: true,
                         nativeLanguage: 'en',
-                        languages: ['fr'],
+                        languages: ['fr', 'en'],
                     })
                     .on('end', done);
             });
@@ -85,6 +82,7 @@ describe('JHipster client generator with blueprint', () => {
             it('creates expected files from jhipster client generator', () => {
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.i18nJson);
+                assert.file(expectedFiles.i18nAdminJson);
             });
 
             it('contains the specific change added by the blueprint', () => {
@@ -98,7 +96,7 @@ describe('JHipster client generator with blueprint', () => {
             helpers
                 .run(path.join(__dirname, '../../generators/client'))
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
                     skipChecks: true,
@@ -109,7 +107,7 @@ describe('JHipster client generator with blueprint', () => {
                     clientFramework: ANGULAR,
                     enableTranslation: true,
                     nativeLanguage: 'en',
-                    languages: ['fr'],
+                    languages: ['fr', 'en'],
                 })
                 .on('end', done);
         });

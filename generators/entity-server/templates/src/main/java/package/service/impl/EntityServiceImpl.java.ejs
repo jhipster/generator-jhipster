@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,15 +31,7 @@ const entityToDto = 'toDto';
 const entityToDtoReference = mapper + '::'+ 'toDto';
 const repository = entityInstance  + 'Repository';
 const searchRepository = entityInstance  + 'SearchRepository';
-let isUsingMapsId = false;
-let mapsIdAssoc;
-for (idx in relationships) {
-    isUsingMapsId = relationships[idx].useJPADerivedIdentifier === true;
-    if (isUsingMapsId) {
-        mapsIdAssoc = relationships[idx];
-        break;
-    }
-}
+
 _%>
 <%_ if (service === 'serviceImpl') { _%>
 import <%= packageName %>.service.<%= entityClass %>Service;
@@ -59,7 +51,7 @@ import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-<%_ if (pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
+<%_ if (pagination !== 'no' || relationshipsContainEagerLoad) { _%>
     <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
     <%_ } _%>
@@ -69,7 +61,7 @@ import org.springframework.stereotype.Service;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
-<%_ if (reactiveRepositories) { _%>
+<%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 <%_ } _%>
@@ -83,7 +75,7 @@ import java.util.List;
 <%_ if (!reactive) { _%>
 import java.util.Optional;
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (primaryKey.type === 'UUID') { _%>
 import java.util.UUID;
 <%_ } _%>
 <%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && ((searchEngine !== false) || dto === 'mapstruct'))) { _%>
@@ -107,12 +99,14 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
 <%- include('../../common/inject_template', {asEntity, asDto, viaService: false, constructorName: serviceClassName, queryService: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
 
+    <%_ if (service !== 'serviceImpl') { _%>
     /**
      * Save a <%= entityInstance %>.
      *
      * @param <%= instanceName %> the entity to save.
      * @return the persisted entity.
      */
+    <%_ } _%>
     <%_ if (service === 'serviceImpl') { _%>
     @Override
     <%_ } _%>
@@ -121,16 +115,34 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
         <%_ if (!reactive) { _%>
 <%- include('../../common/save_template', {asEntity, asDto, viaService: false, returnDirectly: true, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
         <%_ } else { _%>
-<%- include('../../common/save_reactive_template', {asEntity, asDto, viaService: false, returnDirectly: true}); -%>
+<%- include('../../common/save_template_reactive', {asEntity, asDto, viaService: false, returnDirectly: true}); -%>
         <%_ } _%>
     }
 
+    <%_ if (service !== 'serviceImpl') { _%>
+    /**
+     * Partially udpates a <%= entityInstance %>.
+     *
+     * @param <%= instanceName %> the entity to update partially.
+     * @return the persisted entity.
+     */
+    <%_ } _%>
+    <%_ if (service === 'serviceImpl') { _%>
+    @Override
+    <%_ } _%>
+    public <% if (!reactive) { %>Optional<<% } %><% if (reactive) { %>Mono<<% } %><%= instanceType %>> partialUpdate(<%= instanceType %> <%= instanceName %>) {
+        log.debug("Request to partially update <%= entityClass %> : {}", <%= instanceName %>);
+<%- include('../../common/patch_template', {asEntity, asDto, isService: true, viaService: false}); -%>
+    }
+
+    <%_ if (service !== 'serviceImpl') { _%>
     /**
      * Get all the <%= entityInstancePlural %>.
      *<% if (pagination !== 'no') { %>
      * @param pageable the pagination information.<% } %>
      * @return the list of entities.
      */
+    <%_ } _%>
     <%_ if (service === 'serviceImpl') { _%>
     @Override
     <%_ } _%>
@@ -140,7 +152,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     public <% if (pagination !== 'no') { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> findAll(<% if (pagination !== 'no') { %>Pageable pageable<% } %>) {
         log.debug("Request to get all <%= entityClassPlural %>");
         <%_ if (pagination === 'no') { _%>
-        return <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany === true) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto === 'mapstruct') { %><% if (!reactive) { %>.stream()<% } %>
+        return <%= entityInstance %>Repository.<% if (relationshipsContainEagerLoad) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto === 'mapstruct') { %><% if (!reactive) { %>.stream()<% } %>
             .map(<%= entityToDtoReference %>)<% if (!reactive) { %>
             .collect(Collectors.toCollection(LinkedList::new))<% } } %>;
         <%_ } else { _%>
@@ -149,68 +161,83 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
         <%_ } _%>
     }
 
-    <%_ if (fieldsContainOwnerManyToMany === true) { _%>
+    <%_ if (relationshipsContainEagerLoad) { _%>
 
+    <%_ if (service !== 'serviceImpl') { _%>
     /**
      * Get all the <%= entityInstancePlural %> with eager load of many-to-many relationships.
      *
      * @return the list of entities.
      */
+    <%_ } _%>
     public <%= pageOrFlux %><<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable) {
         return <%= entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
     }
     <%_ } _%>
 <%- include('../../common/get_filtered_template', {asEntity, asDto}); -%>
 <%_ if (reactive) { _%>
+    <%_ if (service !== 'serviceImpl') { _%>
     /**
-    * Returns the number of <%= entityInstancePlural %> available.
-    *
-    */
+     * Returns the number of <%= entityInstancePlural %> available.
+     * @return the number of entities in the database.
+     *
+     */
+    <%_ } _%>
     public Mono<Long> countAll() {
         return <%= entityInstance %>Repository.count();
     }
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
+    <%_ if (service !== 'serviceImpl') { _%>
     /**
-    * Returns the number of <%= entityInstancePlural %> available in search repository.
-    *
-    */
+     * Returns the number of <%= entityInstancePlural %> available in search repository.
+     *
+     */
+    <%_ } _%>
     public Mono<Long> searchCount() {
         return <%= entityInstance %>SearchRepository.count();
     }
-    <%_  } _%>
+    <%_ } _%>
 
-<%_  } _%>
+<%_ } _%>
+    <%_ if (service !== 'serviceImpl') { _%>
     /**
      * Get one <%= entityInstance %> by id.
      *
      * @param id the id of the entity.
      * @return the entity.
      */
+    <%_ } _%>
     <%_ if (service === 'serviceImpl') { _%>
     @Override
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    public <%= optionalOrMono %><<%= instanceType %>> findOne(<%= primaryKeyType %> id) {
+    public <%= optionalOrMono %><<%= instanceType %>> findOne(<%= primaryKey.type %> id) {
         log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService: false, returnDirectly:true}); -%>
     }
 
+    <%_ if (service !== 'serviceImpl') { _%>
     /**
      * Delete the <%= entityInstance %> by id.
      *
      * @param id the id of the entity.
+<%_ if (reactive) { _%>
+     * @return a Mono to signal the deletion
+<%_ } _%>
      */
+    <%_ } _%>
     <%_ if (service === 'serviceImpl') { _%>
     @Override
     <%_ } _%>
-    public <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%= primaryKeyType %> id) {
+    public <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%= primaryKey.type %> id) {
         log.debug("Request to delete <%= entityClass %> : {}", id);
 <%- include('../../common/delete_template', {viaService: false, fromResource: false}); -%>
     }
     <%_ if (searchEngine !== false) { _%>
 
+    <%_ if (service !== 'serviceImpl') { _%>
     /**
      * Search for the <%= entityInstance %> corresponding to the query.
      *
@@ -218,6 +245,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
      * @param pageable the pagination information.<% } %>
      * @return the list of entities.
      */
+    <%_ } _%>
     <%_ if (service === 'serviceImpl') { _%>
     @Override
     <%_ } _%>

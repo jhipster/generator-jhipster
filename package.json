@@ -1,11 +1,7 @@
 {
     "name": "generator-jhipster",
-    "version": "6.8.0",
+    "version": "7.0.0-beta.0",
     "description": "Spring Boot + Angular/React in one handy generator",
-    "files": [
-        "cli",
-        "generators"
-    ],
     "keywords": [
         "yeoman-generator",
         "Java",
@@ -18,10 +14,20 @@
         "Angular",
         "Twitter Bootstrap",
         "Webpack",
-        "Docker"
+        "Docker",
+        "JDL"
     ],
     "homepage": "https://www.jhipster.tech/",
     "bugs": "https://github.com/jhipster/generator-jhipster/issues",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/jhipster/generator-jhipster.git"
+    },
+    "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/generator-jhipster"
+    },
+    "license": "Apache-2.0",
     "author": {
         "name": "Julien Dubois",
         "email": "",
@@ -29,93 +35,91 @@
     },
     "main": "cli/index.js",
     "bin": {
-        "jhipster": "./cli/jhipster.js"
+        "jhipster": "cli/jhipster.js"
     },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/jhipster/generator-jhipster.git"
-    },
+    "files": [
+        "cli",
+        "generators",
+        "jdl",
+        "utils"
+    ],
     "scripts": {
-        "prettier:format": "prettier --write \"{,**/}*.{js,json,md,yml,java}\"",
         "completion": "tabtab install --name jhipster --auto",
+        "ejs-lint": "mocha test/ejslint.js",
+        "ejslint": "ejslint",
+        "eslint": "eslint .",
+        "jdl:test": "mocha test/jdl --no-insight --forbid-only -p",
+        "jdl:test-watch": "npm run jdl:test -- --watch",
+        "jsdoc": "jsdoc --configure jsdoc-conf.json",
         "lint": "npm run eslint && npm run ejs-lint",
         "lint-fix": "npm run prettier:format && npm run eslint -- --fix",
-        "eslint": "eslint .",
-        "ejs-lint": "npm run test:unit -- test/ejslint.js",
-        "ejslint": "ejslint",
+        "prettier:check": "prettier --check \"{,**/}*.{js,json,md,yml,java}\"",
+        "prettier:format": "prettier --write \"{,**/}*.{js,json,md,yml,java}\"",
         "pretest": "npm run lint",
-        "test": "npm run test:unit -- test/**/*.spec.js test/*.spec.js --no-insight",
-        "test:unit": "mocha --timeout 30000 --slow 0 --reporter spec",
-        "jsdoc": "jsdoc --configure jsdoc-conf.json"
+        "test": "mocha --no-insight --forbid-only --parallel"
     },
     "dependencies": {
-        "aws-sdk": "2.665.0",
-        "axios": "0.19.2",
-        "chalk": "4.0.0",
-        "commander": "4.1.1",
-        "conf": "6.2.4",
+        "aws-sdk": "2.817.0",
+        "axios": "0.21.1",
+        "chalk": "4.1.0",
+        "chevrotain": "7.0.3",
+        "commander": "7.0.0-2",
+        "conf": "7.1.2",
         "didyoumean": "1.2.1",
-        "ejs": "3.1.2",
-        "faker": "4.1.0",
+        "ejs": "3.1.5",
+        "faker": "5.1.0",
+        "find-up": "5.0.0",
         "glob": "7.1.6",
         "gulp-filter": "6.0.0",
         "insight": "0.10.3",
-        "jhipster-core": "7.2.1",
-        "js-object-pretty-print": "0.3.0",
-        "js-yaml": "3.13.1",
-        "lodash": "4.17.15",
-        "meow": "6.1.0",
-        "mkdirp": "1.0.4",
+        "js-yaml": "3.14.1",
+        "lodash": "4.17.20",
+        "minimatch": "3.0.4",
         "normalize-path": "3.0.0",
-        "ora": "4.0.4",
+        "ora": "5.1.0",
         "os-locale": "5.0.0",
         "parse-gitignore": "1.0.1",
         "pluralize": "8.0.0",
-        "prettier": "2.0.5",
-        "prettier-plugin-java": "0.8.0",
+        "prettier": "2.2.1",
+        "prettier-plugin-java": "1.0.1",
+        "prettier-plugin-packagejson": "2.2.8",
         "progress": "2.0.3",
         "randexp": "0.5.3",
-        "semver": "7.3.2",
+        "semver": "7.3.4",
         "shelljs": "0.8.4",
-        "sync-request": "6.1.0",
-        "tabtab": "2.2.2",
-        "test": "^0.6.0",
-        "through2": "3.0.1",
-        "uuid": "7.0.3",
-        "yeoman-environment": "2.9.6",
-        "yeoman-generator": "4.9.0"
+        "then-request": "6.0.2",
+        "through2": "4.0.2",
+        "uuid": "8.3.2",
+        "winston": "3.3.3",
+        "yeoman-environment": "2.10.3",
+        "yeoman-generator": "4.12.0"
     },
     "devDependencies": {
-        "@openapitools/openapi-generator-cli": "1.0.12-4.3.0",
         "chai": "4.2.0",
         "ejs-lint": "1.1.0",
-        "eslint": "6.8.0",
-        "eslint-config-airbnb-base": "14.1.0",
-        "eslint-config-prettier": "6.11.0",
-        "eslint-plugin-import": "2.20.2",
-        "eslint-plugin-prettier": "3.1.3",
-        "fs-extra": "9.0.0",
-        "jsdoc": "3.6.4",
-        "mocha": "7.1.2",
-        "sinon": "9.0.2",
+        "eslint": "7.16.0",
+        "eslint-config-airbnb-base": "14.2.1",
+        "eslint-config-prettier": "7.1.0",
+        "eslint-plugin-chai-friendly": "^0.6.0",
+        "eslint-plugin-import": "2.22.1",
+        "eslint-plugin-mocha": "8.0.0",
+        "eslint-plugin-prettier": "3.3.0",
+        "fs-extra": "9.0.1",
+        "jsdoc": "3.6.6",
+        "mocha": "8.2.1",
+        "proxyquire": "2.1.3",
+        "sinon": "9.2.2",
+        "sinon-chai": "3.5.0",
         "yeoman-assert": "3.1.1",
-        "yeoman-test": "2.4.1"
-    },
-    "resolutions": {
-        "inquirer": "6.3.1"
+        "yeoman-test": "4.0.0"
     },
     "engines": {
-        "node": ">=10.20.1",
+        "node": ">=12.12.0",
         "npm": ">=6.14.4"
     },
-    "license": "Apache-2.0",
     "collective": {
         "type": "opencollective",
         "url": "https://opencollective.com/generator-jhipster",
         "logo": "https://opencollective.com/opencollective/logo.txt"
-    },
-    "funding": {
-        "type": "opencollective",
-        "url": "https://opencollective.com/generator-jhipster"
     }
 }

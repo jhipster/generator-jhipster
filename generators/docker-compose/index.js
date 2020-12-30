@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,11 +24,6 @@ const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-base-docker');
 
 module.exports = class extends BaseDockerGenerator {
-    constructor(args, opts) {
-        super(args, opts);
-        this.registerPrettierTransform();
-    }
-
     get initializing() {
         return {
             ...super.initializing,
@@ -104,12 +99,9 @@ module.exports = class extends BaseDockerGenerator {
                         portIndex++;
                     }
 
-                    // Add monitoring configuration for monolith directly in the docker-compose file as they can't get them from the config server
-                    if (appConfig.applicationType === 'monolith' && this.monitoring === 'elk') {
-                        yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=true');
-                        yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash');
-                        yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=true');
-                        yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_REPORT_FREQUENCY=60');
+                    if (appConfig.applicationType === 'monolith' && this.monitoring === 'prometheus') {
+                        yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=false');
+                        yamlConfig.environment.push('MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true');
                     }
 
                     if (this.serviceDiscoveryType === 'eureka') {
@@ -222,16 +214,12 @@ module.exports = class extends BaseDockerGenerator {
             },
 
             saveConfig() {
-                if (this.monitoring === 'no') {
-                    this.consoleOptions = [];
-                }
                 this.config.set({
                     appsFolders: this.appsFolders,
                     directoryPath: this.directoryPath,
                     gatewayType: this.gatewayType,
                     clusteredDbApps: this.clusteredDbApps,
                     monitoring: this.monitoring,
-                    consoleOptions: this.consoleOptions,
                     serviceDiscoveryType: this.serviceDiscoveryType,
                     jwtSecretKey: this.jwtSecretKey,
                 });

@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,18 +18,36 @@
 -%><%
 let helpBlocks = 0; %>
 {
-    "<%= angularAppName %>": {
+    <%_ // Male (default) variant
+    let Um = 'Um';
+    let novo = 'novo';
+    let criado = 'criado';
+    let atualizado = 'atualizado';
+    let excluido = 'excluído';
+    let Nenhum = 'Nenhum';
+    let encontrado = 'encontrado';
+    if (entityI18nVariant === 'female') {
+        Um = 'Uma';
+        novo = 'nova';
+        criado = 'criada';
+        atualizado = 'atualizada';
+        excluido = 'excluída';
+        Nenhum = 'Nenhuma';
+        encontrado = 'encontrada';
+    } _%>
+    "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
-                "createLabel": "Criar novo <%= entityClassHumanized %>",
+                "refreshListLabel": "Atualizar lista",
+                "createLabel": "Criar <%= novo %> <%= entityClassHumanized %>",
                 "createOrEditLabel": "Criar ou editar <%= entityClassHumanized %>"<% if (searchEngine !== false) { %>,
                 "search": "Pesquisar por <%= entityClassHumanized %>"<% } %>,
-                "notFound": "Nenhum <%= entityClassHumanized %> encontrado"
+                "notFound": "<%= Nenhum %> <%= entityClassHumanized %> <%= encontrado %>"
             },<% if (!microserviceAppName) { %>
-            "created": "Um novo <%= entityClassHumanized %> foi criado com o identificador {{ param }}",
-            "updated": "Um <%= entityClassHumanized %> foi atualizado com o identificador {{ param }}",
-            "deleted": "Um <%= entityClassHumanized %> foi excluído com o identificador {{ param }}",<% } %>
+            "created": "<%= Um %> <%= novo %> <%= entityClassHumanized %> foi <%= criado %> com o identificador {{ param }}",
+            "updated": "<%= Um %> <%= entityClassHumanized %> foi <%= atualizado %> com o identificador {{ param }}",
+            "deleted": "<%= Um %> <%= entityClassHumanized %> foi <%= excluido %> com o identificador {{ param }}",<% } %>
             "delete": {
                 "question": "Tem certeza de que deseja excluir <%= entityClassHumanized %> {{ id }}?"
             },
@@ -47,12 +65,14 @@ let helpBlocks = 0; %>
             } %>
             }<% } %>
         }
-    }<% if (microserviceAppName) { %>,
+    }
+<%_ if (microserviceAppName) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "Um novo <%= entityClassHumanized %> foi criado com o identificador {{ param }}",
-            "updated": "Um <%= entityClassHumanized %> foi atualizado com o identificador {{ param }}",
-            "deleted": "Um <%= entityClassHumanized %> foi excluído com o identificador {{ param }}"
+            "created": "<%= Um %> <%= novo %> <%= entityClassHumanized %> foi <%= criado %> com o identificador {{ param }}",
+            "updated": "<%= Um %> <%= entityClassHumanized %> foi <%= atualizado %> com o identificador {{ param }}",
+            "deleted": "<%= Um %> <%= entityClassHumanized %> foi <%= excluido %> com o identificador {{ param }}"
         }
-    }<% } %>
+    }
+<%_ } _%>
 }

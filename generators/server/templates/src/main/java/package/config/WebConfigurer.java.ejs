@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,14 +22,14 @@ package <%= packageName %>.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 <%_ } _%>
 <%_ if (!skipClient || ['h2Disk', 'h2Memory'].includes(devDatabaseType) && !reactive) { _%>
-import io.github.jhipster.config.JHipsterConstants;
+import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
-import io.github.jhipster.config.JHipsterProperties;
+import tech.jhipster.config.JHipsterProperties;
 <%_ if (['h2Disk', 'h2Memory'].includes(devDatabaseType) && !reactive) { _%>
-import io.github.jhipster.config.h2.H2ConfigurationHelper;
+import tech.jhipster.config.h2.H2ConfigurationHelper;
 <%_ } _%>
 <%_ if (!skipClient && reactive) { _%>
-import io.github.jhipster.web.filter.<% if (reactive) { %>reactive.<% } %>CachingHttpHeadersFilter;
+import tech.jhipster.web.filter.<% if (reactive) { %>reactive.<% } %>CachingHttpHeadersFilter;
 <%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +60,7 @@ import org.springframework.core.env.Profiles;
 import org.springframework.http.MediaType;
     <%_ } _%>
 <%_ } _%>
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.cors.CorsConfiguration;
 <%_ if (!reactive) { _%>
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -68,9 +69,6 @@ import org.springframework.web.filter.CorsFilter;
 <%_ if (reactive) { _%>
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-    <%_ if (!skipClient && ['monolith','gateway'].includes(applicationType)) { _%>
-import org.springframework.web.reactive.config.ResourceHandlerRegistry;
-    <%_ } _%>
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.result.method.HandlerMethodArgumentResolver;
 import org.springframework.web.server.WebExceptionHandler;
@@ -137,21 +135,8 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
      */
     @Override
     public void customize(WebServerFactory server) {
-        setMimeMappings(server);
         // When running in an IDE or with <% if (buildTool === 'gradle') { %>./gradlew bootRun<% } else { %>./mvnw spring-boot:run<% } %>, set location of the static web assets.
         setLocationForStaticAssets(server);
-    }
-
-    private void setMimeMappings(WebServerFactory server) {
-        if (server instanceof ConfigurableServletWebServerFactory) {
-            MimeMappings mappings = new MimeMappings(MimeMappings.DEFAULT);
-            // IE issue, see https://github.com/jhipster/generator-jhipster/pull/711
-            mappings.add("html", MediaType.TEXT_HTML_VALUE + ";charset=" + StandardCharsets.UTF_8.name().toLowerCase());
-            // CloudFoundry issue, see https://github.com/cloudfoundry/gorouter/issues/64
-            mappings.add("json", MediaType.TEXT_HTML_VALUE + ";charset=" + StandardCharsets.UTF_8.name().toLowerCase());
-            ConfigurableServletWebServerFactory servletWebServer = (ConfigurableServletWebServerFactory) server;
-            servletWebServer.setMimeMappings(mappings);
-        }
     }
 
     private void setLocationForStaticAssets(WebServerFactory server) {
@@ -193,11 +178,13 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
     public Cors<% if (reactive) { %>Web<% } %>Filter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = jHipsterProperties.getCors();
-        if (config.getAllowedOrigins() != null && !config.getAllowedOrigins().isEmpty()) {
+        if (!CollectionUtils.isEmpty(config.getAllowedOrigins())) {
             log.debug("Registering CORS filter");
             source.registerCorsConfiguration("/api/**", config);
             source.registerCorsConfiguration("/management/**", config);
             source.registerCorsConfiguration("/v2/api-docs", config);
+            source.registerCorsConfiguration("/v3/api-docs", config);
+            source.registerCorsConfiguration("/swagger-resources", config);
             <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
             source.registerCorsConfiguration("/auth/**", config);
             <%_ } _%>
@@ -245,17 +232,6 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         // Use a cache filter that only match selected paths
         return new CachingHttpHeadersFilter(TimeUnit.DAYS.toMillis(jHipsterProperties.getHttp().getCache().getTimeToLiveInDays()));
     }
-            <%_ if (applicationType === 'monolith' || applicationType === 'gateway') { _%>
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/swagger-ui.html**")
-            .addResourceLocations("classpath:/META-INF/resources/");
-
-        registry.addResourceHandler("/webjars/**")
-            .addResourceLocations("classpath:/META-INF/resources/webjars/");
-    }
-            <%_ } _%>
         <%_ } _%>
     <%_ } _%>
     <%_ if (['h2Disk', 'h2Memory'].includes(devDatabaseType) && !reactive) { _%>

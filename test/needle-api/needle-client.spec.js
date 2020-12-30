@@ -4,7 +4,6 @@ const helpers = require('yeoman-test');
 const ClientGenerator = require('../../generators/client');
 const constants = require('../../generators/generator-constants');
 
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
 const mockBlueprintSubGen = class extends ClientGenerator {
@@ -18,8 +17,6 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         }
 
         this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupEntityOptions(this, jhContext, this);
     }
 
     get initializing() {
@@ -54,27 +51,20 @@ describe('needle API Client: JHipster client generator with blueprint', () => {
         helpers
             .run(path.join(__dirname, '../../generators/client'))
             .withOptions({
-                'from-cli': true,
-                build: 'maven',
+                fromCli: true,
+                defaults: true,
+                skipServer: true,
+                db: 'postgresql',
                 auth: 'jwt',
-                db: 'mysql',
-                skipInstall: true,
                 blueprint: 'myblueprint',
                 skipChecks: true,
             })
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
-            .withPrompts({
-                baseName: 'jhipster',
-                clientFramework: ANGULAR,
-                enableTranslation: true,
-                nativeLanguage: 'en',
-                languages: ['en', 'fr'],
-            })
             .on('end', done);
     });
 
     it('Assert index.html contain the comment and the resource added', () => {
         assert.fileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<!-- Comment added by JHipster API -->');
-        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<link rel="stylesheet" href="content/css/my.css">');
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<link rel="stylesheet" href="content/css/my.css" />');
     });
 });

@@ -46,7 +46,8 @@
                     "code": "Kód",
                     "count": "Počet",
                     "mean": "Průměr (Mean)",
-                    "average": "Průměr (Average)"
+                    "average": "Průměr (Average)",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "Ok",

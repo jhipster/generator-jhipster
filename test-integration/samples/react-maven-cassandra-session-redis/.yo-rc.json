@@ -2,8 +2,8 @@
     "generator-jhipster": {
         "applicationType": "monolith",
         "baseName": "sampleReactCassandraSessionRedis",
-        "packageName": "io.github.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageName": "tech.jhipster.sample",
+        "packageFolder": "tech/jhipster/sample",
         "serverPort": "8080",
         "authenticationType": "session",
         "cacheProvider": "redis",
@@ -19,12 +19,11 @@
         "enableSwaggerCodegen": false,
         "rememberMeKey": "6e6046f07954160649d92d36ec3a32d9e02ad6a37d3411765fa8e9445c7c10a81570225a7dfaa56e1679498363f2daa4b8e2",
         "embeddableLaunchScript": false,
-        "useSass": true,
         "clientPackageManager": "npm",
         "clientFramework": "react",
         "clientTheme": "none",
         "clientThemeVariant": "",
-        "testFrameworks": ["gatling", "protractor"],
+        "testFrameworks": ["gatling", "cypress"],
         "jhiPrefix": "jhi",
         "entitySuffix": "",
         "dtoSuffix": "DTO",
@@ -32,6 +31,7 @@
         "enableTranslation": true,
         "nativeLanguage": "en",
         "languages": ["en", "fr"],
-        "blueprints": []
+        "blueprints": [],
+        "creationTimestamp": 1596513172471
     }
 }

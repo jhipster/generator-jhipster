@@ -46,7 +46,8 @@
                     "code": "상태코드",
                     "count": "횟수",
                     "mean": "대표값(Mean)",
-                    "average": "평균(Average)"
+                    "average": "평균(Average)",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "성공(Ok)",

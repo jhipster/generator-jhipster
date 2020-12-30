@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "Aktivne sjednice za [<strong>{{username}}</strong>]",
+        "table": {
+            "ipaddress": "IP adresa",
+            "useragent": "Korisnički agent",
+            "date": "Datum",
+            "button": "Poništi"
+        },
+        "messages": {
+            "success": "<strong>Poništena sjednica!</strong>",
+            "error": "<strong>Dogodila se pogreška!</strong> Sjednica nije mogla biti poništena."
+        }
+    }
+}

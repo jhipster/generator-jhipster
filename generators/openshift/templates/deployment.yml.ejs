@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -63,20 +63,6 @@ parameters:
     description: Port of the application
     required: true
     displayName: Application Port
-<%_ if (app.monitoring === 'elk') { _%>
-  -
-    name: JHIPSTER_LOGSTASH
-    value: jhipster-logstash
-    description: Host name of the Logstash service
-    required: true
-    displayName: "*** PLEASE DO NOT CHANGE THIS ***"
-  -
-    name: JHIPSTER_ZIPKIN
-    value: http://jhipster-zipkin
-    description: Host name of the Zipkin service
-    required: true
-    displayName: "*** PLEASE DO NOT CHANGE THIS ***"
-<%_ } _%>
 objects:
   -
     apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
@@ -92,41 +78,6 @@ objects:
           timeoutSeconds: 600
           maxUnavailable: 25%
           maxSurge: 25%
-          pre:
-            failurePolicy: ignore
-            execNewPod:
-              command:
-                - "/bin/sh"
-                - "-c"
-                - |
-                    while true
-                    do
-                    <%_ if (app.prodDatabaseType === 'mysql') { _%>
-                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-mysqldb 80)
-                    <%_ } _%>
-                    <%_ if (app.prodDatabaseType === 'mariadb') { _%>
-                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-mariadb 80)
-                    <%_ } _%>
-                    <%_ if (app.prodDatabaseType === 'postgresql') { _%>
-                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-postgresqldb 80)
-                    <%_ } _%>
-                    <%_ if (app.prodDatabaseType === 'mongodb') { _%>
-                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-mongodb 80)
-                    <%_ } _%>
-                    <%_ if (app.prodDatabaseType === 'cassandra') { _%>
-                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-cassandra 9042)
-                    <%_ } _%>
-                    <%_ if (app.prodDatabaseType === 'couchbase') { _%>
-                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-couchbase 8091)
-                    <%_ } _%>
-                      if [ $? -eq 0 ]; then
-                        echo "DB is UP"
-                        break
-                      fi
-                      echo "DB is not yet reachable;sleep for 10s before retry"
-                      sleep 10
-                    done
-              containerName: ${APPLICATION_NAME}
         resources:
       replicas: 1
       template:
@@ -134,13 +85,51 @@ objects:
           labels:
             app: ${APPLICATION_NAME}
         spec:
+          initContainers:
+          - name: init-ds
+            image: busybox:latest
+            command:
+              - '/bin/sh'
+              - '-c'
+              - |
+                  while true
+                  do
+                  <%_ if (app.prodDatabaseType === 'mysql') { _%>
+                    rt=$(nc -z -w 1 ${APPLICATION_NAME}-mysqldb 80)
+                  <%_ } _%>
+                  <%_ if (app.prodDatabaseType === 'mariadb') { _%>
+                    rt=$(nc -z -w 1 ${APPLICATION_NAME}-mariadb 80)
+                  <%_ } _%>
+                  <%_ if (app.prodDatabaseType === 'postgresql') { _%>
+                    rt=$(nc -z -w 1 ${APPLICATION_NAME}-postgresqldb 80)
+                  <%_ } _%>
+                  <%_ if (app.prodDatabaseType === 'mongodb') { _%>
+                    rt=$(nc -z -w 1 ${APPLICATION_NAME}-mongodb 80)
+                  <%_ } _%>
+                  <%_ if (app.prodDatabaseType === 'cassandra') { _%>
+                    rt=$(nc -z -w 1 ${APPLICATION_NAME}-cassandra 9042)
+                  <%_ } _%>
+                  <%_ if (app.prodDatabaseType === 'couchbase') { _%>
+                    rt=$(nc -z -w 1 ${APPLICATION_NAME}-couchbase 8091)
+                  <%_ } _%>
+                    if [ $? -eq 0 ]; then
+                      echo "DB is UP"
+                      break
+                    fi
+                    echo "DB is not yet reachable;sleep for 10s before retry"
+                    sleep 10
+                  done
           containers:
           - name: ${APPLICATION_NAME}
             image: <%= app.targetImageName %>
             imagePullPolicy: IfNotPresent
             env:
             - name: SPRING_PROFILES_ACTIVE
-              value: prod,swagger
+              value: prod,api-docs
+            <%_ if (!app.serviceDiscoveryType || app.applicationType === 'uaa') { _%>
+            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+              value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
+            <%_ } _%>
             <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
             - name: SPRING_CLOUD_CONFIG_URI
               value: http://admin:${jhipster.registry.password}@jhipster-registry:8761/config
@@ -205,8 +194,6 @@ objects:
               value: ${APPLICATION_NAME}
             <%_ } _%>
             <%_ if (app.searchEngine === 'elasticsearch') { _%>
-            - name: SPRING_DATA_JEST_URI
-              value: http://${APPLICATION_NAME}-elasticsearch:9200
             - name: SPRING_ELASTICSEARCH_REST_URIS
               value: http://${APPLICATION_NAME}-elasticsearch:9200
             <%_ } _%>
@@ -228,27 +215,9 @@ objects:
             - name: KAFKA_PRODUCER_VALUE_DESERIALIZER
               value: 'org.apache.kafka.common.serialization.StringDeserializer'
             <%_ } _%>
-            <%_ if (monitoring === 'elk') { _%>
-            - name: JHIPSTER_METRICS_LOGS_ENABLED
-              value: "true"
-            - name: JHIPSTER_LOGGING_LOGSTASH_ENABLED
-              value: "true"
-            - name: JHIPSTER_LOGGING_LOGSTASH_HOST
-              value: ${JHIPSTER_LOGSTASH}
-              <%_ if (deploymentApplicationType === 'microservice') { _%>
-            - name: SPRING_ZIPKIN_ENABLED
-              value: "true"
-            - name: SPRING_ZIPKIN_BASE_URL
-              value: ${JHIPSTER_ZIPKIN}
-              <%_ } _%>
-            <%_ } _%>
             <%_ if (monitoring === 'prometheus') { _%>
-            - name: JHIPSTER_METRICS_LOGS_ENABLED
-              value: "true"
             - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
               value: "true"
-            - name: JHIPSTER_METRICS_PROMETHEUS_ENDPOINT
-              value: "/prometheusMetrics"
             <%_ } _%>
             ports:
             - name: http
@@ -273,7 +242,12 @@ objects:
       type: LoadBalancer
       ports:
       - name: http
+      <%_ if (!app.serviceDiscoveryType || app.applicationType === 'uaa') { _%>
+        port: 80
+        targetPort: ${{APP_PORT}}
+      <%_ } else { _%>
         port: ${{APP_PORT}}
+      <%_ } _%>
   -
     apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Route

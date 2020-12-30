@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,15 +29,23 @@ module.exports = class extends BaseBlueprintGenerator {
         super(args, opts);
         utils.copyObjectProps(this, opts.context);
         this.jhipsterContext = opts.jhipsterContext || opts.context;
-        this.configOptions = opts.configOptions || {};
 
-        useBlueprints =
-            !this.fromBlueprint && this.instantiateBlueprints('entity-i18n', { context: opts.context, debug: opts.context.isDebugEnabled });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-i18n', { context: opts.context });
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return super._missingPreDefault();
+    }
+
+    get default() {
+        if (useBlueprints) return;
+        return this._default();
     }
 
     // Public API method used by the getter and also by Blueprints
     _writing() {
-        return writeFiles();
+        return { ...writeFiles(), ...super._missingPostWriting() };
     }
 
     get writing() {

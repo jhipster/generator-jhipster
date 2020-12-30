@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,33 +20,21 @@
 configserver:
     name: Docker JHipster Registry
     status: Connected to <% if (serviceDiscoveryType === 'eureka') { %>the JHipster Registry<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul<% } %> running in Docker
-
+   
 jhipster:
     security:
         authentication:
             jwt:
                 base64-secret: <%= jwtSecretKey %>
-<%_ if (monitoring === 'elk') { _%>
-    logging:
-        logstash: # forward logs to ELK
-            enabled: true
-            host: jhipster-logstash
+<%_ if (monitoring === 'prometheus') { _%>
+management:
     metrics:
-        logs: # report metrics in the logs
-            enabled: true
-            report-frequency: 60 # in seconds
-<%_ } _%>
-
-<%_ if (consoleOptions && consoleOptions.includes('zipkin') || !skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
+        export:
+            prometheus:
+                enabled: true
+<%_ } _%>  
+<%_ if (!skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
 spring:
-    <%_ if (consoleOptions && consoleOptions.includes('zipkin')) { _%>
-    zipkin:
-        base-url: http://jhipster-zipkin:9411
-        enabled: true
-    sleuth:
-        sampler:
-            probability: 1 # report 100% of traces to Zipkin
-    <%_ } _%>
     <%_ if (!skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
     cloud:
         consul:

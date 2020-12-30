@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,12 +33,7 @@ const AZURE_APP_INSIGHTS_STARTER_VERSION = '2.5.1';
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
+
         this.option('skip-build', {
             desc: 'Skips building the application',
             type: Boolean,
@@ -57,14 +52,13 @@ module.exports = class extends BaseGenerator {
             defaults: false,
         });
 
-        this.azureSpringCloudSkipBuild = this.options['skip-build'];
-        this.azureSpringCloudSkipDeploy = this.options['skip-deploy'] || this.options['skip-build'];
-        this.azureSpringCloudSkipInsights = this.options['skip-insights'];
-        this.registerPrettierTransform();
+        this.azureSpringCloudSkipBuild = this.options.skipBuild;
+        this.azureSpringCloudSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
+        this.azureSpringCloudSkipInsights = this.options.skipInsights;
     }
 
     initializing() {
-        if (!this.options['from-cli']) {
+        if (!this.options.fromCli) {
             this.warning(
                 `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
                     'jhipster <command>'
@@ -83,7 +77,7 @@ module.exports = class extends BaseGenerator {
         this.databaseType = this.config.get('databaseType');
         this.prodDatabaseType = this.config.get('prodDatabaseType');
         this.searchEngine = this.config.get('searchEngine');
-        this.angularAppName = this.getAngularAppName();
+        this.frontendAppName = this.getFrontendAppName();
         this.buildTool = this.config.get('buildTool');
         this.applicationType = this.config.get('applicationType');
         this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
@@ -462,15 +456,11 @@ which is free for the first 30 days`);
 
             copyAzureAppServiceFiles() {
                 if (this.abort) return;
-                const done = this.async();
                 this.log(chalk.bold('\nCreating Azure App Service deployment files'));
                 this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
                 if (this.azureAppServiceDeploymentType === 'github-action') {
                     this.template('github/workflows/azure-app-service.yml.ejs', '.github/workflows/azure-app-service.yml');
                 }
-                this.conflicter.resolve(err => {
-                    done();
-                });
             },
         };
     }

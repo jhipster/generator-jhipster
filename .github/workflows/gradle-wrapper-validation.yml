@@ -8,7 +8,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#      https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,13 +18,24 @@
 #
 
 name: 'Validate Gradle Wrapper'
-on: [push, pull_request]
+on:
+    push:
+        branches-ignore:
+            - 'dependabot/**'
+    pull_request:
+        branches:
+            - '*'
 
 jobs:
     validation:
         name: 'Validation'
         runs-on: ubuntu-latest
-        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
+        if: >-
+            !contains(github.event.head_commit.message, '[ci skip]') &&
+            !contains(github.event.head_commit.message, '[skip ci]') &&
+            !contains(github.event.pull_request.title, '[skip ci]') &&
+            !contains(github.event.pull_request.title, '[ci skip]') &&
+            !contains(github.event.pull_request.user.login, 'dependabot')
         steps:
             - uses: actions/checkout@v2
             - uses: gradle/wrapper-validation-action@v1

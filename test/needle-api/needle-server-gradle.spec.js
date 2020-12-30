@@ -12,10 +12,6 @@ const mockBlueprintSubGen = class extends ServerGenerator {
         if (!jhContext) {
             this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
         }
-
-        this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupServerOptions(this, jhContext);
     }
 
     get initializing() {
@@ -58,7 +54,7 @@ describe('needle API server gradle: JHipster server generator with blueprint', (
         helpers
             .run(path.join(__dirname, '../../generators/server'))
             .withOptions({
-                'from-cli': true,
+                fromCli: true,
                 skipInstall: true,
                 blueprint: 'myblueprint',
                 skipChecks: true,
@@ -87,6 +83,10 @@ describe('needle API server gradle: JHipster server generator with blueprint', (
 
     it('Assert gradle.properties has the property added', () => {
         assert.fileContent('gradle.properties', 'name=value');
+    });
+
+    it('Assert gradle.properties has not snake case properties', () => {
+        assert.noFileContent('gradle.properties', /^(?!.*#).*_.*$/m); // Not comment and contains underscore
     });
 
     it('Assert gradle.properties has the plugin added', () => {

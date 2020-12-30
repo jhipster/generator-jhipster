@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,12 +24,9 @@ import {
   Navbar,
   Nav,
   NavbarToggler,
-  NavbarBrand,
   Collapse
 } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { NavLink as Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
 
 <%_ if (enableTranslation && enableI18nRTL) { _%>
@@ -44,10 +41,10 @@ export interface IHeaderProps {
   isAdmin: boolean;
   ribbonEnv: string;
   isInProduction: boolean;
-  isSwaggerEnabled: boolean;
+  isOpenAPIEnabled: boolean;
 <%_ if (enableTranslation) { _%>
   currentLocale: string;
-  onLocaleChange: Function;
+  onLocaleChange: (langKey: string) => void;
 <%_ } _%>
 }
 
@@ -89,7 +86,7 @@ const Header = (props: IHeaderProps) => {
     <div id="app-header">
       {renderDevRibbon()}
       <LoadingBar className="loading-bar"/>
-      <Navbar <% if (clientTheme === 'none' || clientThemeVariant !== 'light') { %>dark<% } else { %>light<% } %> expand="sm" fixed="top" className="<%_ if (clientTheme === 'none') { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
+      <Navbar data-cy="navbar" <% if (clientTheme === 'none' || clientThemeVariant !== 'light') { %>dark<% } else { %>light<% } %> expand="sm" fixed="top" className="<%_ if (clientTheme === 'none') { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
         <NavbarToggler aria-label="Menu" onClick={toggleMenu} />
         <Brand />
         <Collapse isOpen={menuOpen} navbar>
@@ -97,7 +94,7 @@ const Header = (props: IHeaderProps) => {
             <Home />
             {props.isAuthenticated && <EntitiesMenu />}
             {props.isAuthenticated && props.isAdmin &&
-              <AdminMenu showSwagger={props.isSwaggerEnabled} <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %> showDatabase={!props.isInProduction} <%_ } _%> />}
+            <AdminMenu showOpenAPI={props.isOpenAPIEnabled} <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %> showDatabase={!props.isInProduction} <%_ } _%> />}
           <%_ if (enableTranslation) { _%>
             <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />
           <%_ } _%>

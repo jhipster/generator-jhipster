@@ -1,8 +1,8 @@
 This ticket has been closed as the **guidelines are not followed**.
 
-Tickets must follow our [Guidelines](https://github.com/jhipster/generator-jhipster/blob/master/CONTRIBUTING.md), as mentioned in:
+Tickets must follow our [Guidelines](https://github.com/jhipster/generator-jhipster/blob/main/CONTRIBUTING.md), as mentioned in:
 
-1.  our [Readme file on the front page of the project](https://github.com/jhipster/generator-jhipster/blob/master/README.md),
+1.  our [Readme file on the front page of the project](https://github.com/jhipster/generator-jhipster/blob/main/README.md),
 2.  the ["create a new ticket" page](https://github.com/jhipster/generator-jhipster/issues/new/choose) and
 3.  our [Help page](https://www.jhipster.tech/help/)
 

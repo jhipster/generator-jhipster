@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const _ = require('lodash');
 const needleClient = require('./needle-client');
 
 module.exports = class extends needleClient {
@@ -39,7 +38,7 @@ module.exports = class extends needleClient {
     _addTranslationKey(key, value, language, errorMessage, needle) {
         const fullErrorMessage = `${chalk.yellow(' Reference to ') + language} ${chalk.yellow(errorMessage)}`;
         const fullPath = `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
-        const rewriteFileModel = this.generateFileModel(fullPath, needle, `"${key}": "${_.startCase(value)}",`);
+        const rewriteFileModel = this.generateFileModel(fullPath, needle, `"${key}": "${value}",`);
 
         this.addBlockContentToFile(rewriteFileModel, fullErrorMessage);
     }

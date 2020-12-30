@@ -1,0 +1,36 @@
+application {
+  config {
+    baseName tata,
+    applicationType monolith,
+    packageName com.mathieu.tata
+  }
+}
+application {
+  config {
+    baseName titi,
+    applicationType gateway,
+    packageName com.mathieu.titi
+  }
+}
+application {
+  config {
+    baseName toto,
+    applicationType microservice,
+    packageName com.mathieu.toto
+  }
+}
+application {
+  config {
+    baseName tutu,
+    applicationType monolith,
+    packageName com.mathieu.tutu
+  }
+}
+
+deployment {
+  deploymentType docker-compose,
+  appsFolders [tata, titi],
+  directoryPath "../",
+  serviceDiscoveryType eureka,
+  dockerRepositoryName "test"
+}

@@ -9,51 +9,38 @@
         {
             "fieldName": "stringRequiredTom",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "stringMinlengthTom",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "minlength"
-            ],
+            "fieldValidateRules": ["minlength"],
             "fieldValidateRulesMinlength": 0
         },
         {
             "fieldName": "stringMaxlengthTom",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
+            "fieldValidateRules": ["maxlength"],
             "fieldValidateRulesMaxlength": 20
         },
         {
             "fieldName": "stringPatternTom",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "pattern"
-            ],
+            "fieldValidateRules": ["pattern"],
             "fieldValidateRulesPattern": "^[a-zA-Z0-9]*$",
             "fieldValidateRulesPatternJava": "^[a-zA-Z0-9]*$"
         },
         {
             "fieldName": "numberPatternTom",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "pattern"
-            ],
+            "fieldValidateRules": ["pattern"],
             "fieldValidateRulesPattern": "^[0-9]+$",
             "fieldValidateRulesPatternJava": "^[0-9]+$"
         },
         {
             "fieldName": "numberPatternRequiredTom",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "pattern",
-                "required"
-            ],
+            "fieldValidateRules": ["pattern", "required"],
             "fieldValidateRulesPattern": "^[0-9]+$",
             "fieldValidateRulesPatternJava": "^[0-9]+$"
         },
@@ -64,24 +51,18 @@
         {
             "fieldName": "integerRequiredTom",
             "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "integerMinTom",
             "fieldType": "Integer",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "integerMaxTom",
             "fieldType": "Integer",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
@@ -91,24 +72,18 @@
         {
             "fieldName": "longRequiredTom",
             "fieldType": "Long",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "longMinTom",
             "fieldType": "Long",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "longMaxTom",
             "fieldType": "Long",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
@@ -118,70 +93,52 @@
         {
             "fieldName": "floatRequiredTom",
             "fieldType": "Float",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "floatMinTom",
             "fieldType": "Float",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "floatMaxTom",
             "fieldType": "Float",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
             "fieldName": "doubleRequiredTom",
             "fieldType": "Double",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "doubleMinTom",
             "fieldType": "Double",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "doubleMaxTom",
             "fieldType": "Double",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
             "fieldName": "bigDecimalRequiredTom",
             "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "bigDecimalMinTom",
             "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "bigDecimalMaxTom",
             "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
@@ -191,9 +148,7 @@
         {
             "fieldName": "localDateRequiredTom",
             "fieldType": "LocalDate",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "instantTom",
@@ -202,9 +157,7 @@
         {
             "fieldName": "instantRequiredTom",
             "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "zonedDateTimeTom",
@@ -213,9 +166,7 @@
         {
             "fieldName": "zonedDateTimeRequiredTom",
             "fieldType": "ZonedDateTime",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "durationTom",
@@ -224,9 +175,7 @@
         {
             "fieldName": "durationRequiredTom",
             "fieldType": "Duration",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "booleanTom",
@@ -235,9 +184,7 @@
         {
             "fieldName": "booleanRequiredTom",
             "fieldType": "Boolean",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "enumTom",
@@ -248,9 +195,7 @@
             "fieldName": "enumRequiredTom",
             "fieldType": "EnumRequiredFieldClass",
             "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "uuidTom",
@@ -259,9 +204,7 @@
         {
             "fieldName": "uuidRequiredTom",
             "fieldType": "UUID",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "byteImageTom",
@@ -272,26 +215,20 @@
             "fieldName": "byteImageRequiredTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "byteImageMinbytesTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image",
-            "fieldValidateRules": [
-                "minbytes"
-            ],
+            "fieldValidateRules": ["minbytes"],
             "fieldValidateRulesMinbytes": 0
         },
         {
             "fieldName": "byteImageMaxbytesTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image",
-            "fieldValidateRules": [
-                "maxbytes"
-            ],
+            "fieldValidateRules": ["maxbytes"],
             "fieldValidateRulesMaxbytes": 10000
         },
         {
@@ -303,26 +240,20 @@
             "fieldName": "byteAnyRequiredTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "byteAnyMinbytesTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any",
-            "fieldValidateRules": [
-                "minbytes"
-            ],
+            "fieldValidateRules": ["minbytes"],
             "fieldValidateRulesMinbytes": 0
         },
         {
             "fieldName": "byteAnyMaxbytesTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any",
-            "fieldValidateRules": [
-                "maxbytes"
-            ],
+            "fieldValidateRules": ["maxbytes"],
             "fieldValidateRulesMaxbytes": 10000
         },
         {
@@ -334,12 +265,10 @@
             "fieldName": "byteTextRequiredTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         }
     ],
-    "changelogDate": "20160208184031",
+    "changelogDate": "20160208184035",
     "dto": "no",
     "service": "no",
     "pagination": "no"

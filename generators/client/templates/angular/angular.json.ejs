@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,26 +25,84 @@
       "root": "",
       "sourceRoot": "<%= MAIN_SRC_DIR.replace(/\/$/, "") %>",
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "skipTests": true,
-          "style": "scss"
+      "architect": {
+        "build": {
+          "builder": "@angular-builders/custom-webpack:browser",
+          "options": {
+            "customWebpackConfig": {
+              "path": "./webpack/webpack.custom.js"
+            },
+            "outputPath": "<%= DIST_DIR %>",
+            "index": "<%= MAIN_SRC_DIR %>index.html",
+            "main": "<%= MAIN_SRC_DIR %>main.ts",
+            "polyfills": "<%= MAIN_SRC_DIR %>polyfills.ts",
+            "tsConfig": "tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "<%= MAIN_SRC_DIR %>content",
+              "<%= MAIN_SRC_DIR %>favicon.ico",
+              "<%= MAIN_SRC_DIR %>manifest.webapp",
+              { "glob": "*.{js,css,html,png}", "input": "./node_modules/swagger-ui-dist", "output": "swagger-ui", "ignore": ["**/index.html"]  },
+              { "glob": "axios.min.js", "input": "./node_modules/axios/dist", "output": "swagger-ui" },
+              { "glob": "**/*", "input": "<%= MAIN_SRC_DIR %>swagger-ui/", "output": "swagger-ui" }
+            ],
+            "styles": ["<%= MAIN_SRC_DIR %>content/scss/vendor.scss", "<%= MAIN_SRC_DIR %>content/scss/global.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "serviceWorker": true,
+              "ngswConfigPath": "ngsw-config.json",
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
         },
-        "@schematics/angular:directive": {
-          "skipTests": true
+        "serve": {
+          "builder": "@angular-builders/custom-webpack:dev-server",
+          "options": {
+            "browserTarget": "<%= dasherizedBaseName %>:build",
+            "proxyConfig": "./webpack/proxy.conf.js"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "<%= dasherizedBaseName %>:build:production"
+            }
+          }
         },
-        "@schematics/angular:guard": {
-          "skipTests": true
-        },
-        "@schematics/angular:pipe": {
-          "skipTests": true
-        },
-        "@schematics/angular:service": {
-          "skipTests": true
+        "test": {
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "configPath": "jest.conf.js"
+          }
         }
       },
-      "prefix": "<%= jhiPrefixDashed %>",
-      "architect": {}
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "prefix": "<%= jhiPrefixDashed %>"
     }
   },
   "defaultProject": "<%= dasherizedBaseName %>",

@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,11 +23,6 @@ const AwsFactory = require('./lib/aws.js');
 const statistics = require('../statistics');
 
 module.exports = class extends BaseGenerator {
-    constructor(args, opts) {
-        super(args, opts);
-        this.registerPrettierTransform();
-    }
-
     get initializing() {
         return {
             initAws() {
@@ -48,9 +43,11 @@ module.exports = class extends BaseGenerator {
                     this.environmentName = awsConfig.environmentName;
                     this.bucketName = awsConfig.bucketName;
                     this.instanceType = awsConfig.instanceType;
+                    this.customInstanceType = '';
                     this.awsRegion = awsConfig.awsRegion;
                     this.dbName = awsConfig.dbName;
                     this.dbInstanceClass = awsConfig.dbInstanceClass;
+                    this.customDBInstanceClass = '';
 
                     this.log(
                         chalk.green(

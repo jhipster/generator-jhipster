@@ -19,17 +19,12 @@
         {
             "fieldName": "name",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "unique"
-            ]
+            "fieldValidateRules": ["required", "unique"]
         },
         {
             "fieldName": "shortName",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "unique"
-            ]
+            "fieldValidateRules": ["unique"]
         },
         {
             "fieldName": "numberOfPeople",
@@ -39,9 +34,7 @@
             "fieldName": "divisionType",
             "fieldType": "DivisionType",
             "fieldValues": "SCHOOL,CLASS,SUBGROUP",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "colorBackground",

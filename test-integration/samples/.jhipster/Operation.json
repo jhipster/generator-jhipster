@@ -21,9 +21,7 @@
         {
             "fieldName": "date",
             "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "description",
@@ -32,12 +30,10 @@
         {
             "fieldName": "amount",
             "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         }
     ],
-    "changelogDate": "20150805125054",
+    "changelogDate": "20150805125055",
     "dto": "no",
     "service": "no",
     "pagination": "infinite-scroll",

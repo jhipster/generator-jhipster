@@ -9,13 +9,6 @@
             "otherEntityRelationshipName": "testManyToOne"
         },
         {
-            "relationshipName": "testMapstruct",
-            "otherEntityName": "testMapstruct",
-            "relationshipType": "many-to-one",
-            "otherEntityField": "id",
-            "otherEntityRelationshipName": "testManyToOne"
-        },
-        {
             "relationshipName": "testServiceClass",
             "otherEntityName": "testServiceClass",
             "relationshipType": "many-to-one",
@@ -55,7 +48,7 @@
             "otherEntityName": "superMegaLargeTestEntity",
             "relationshipType": "many-to-one",
             "otherEntityField": "id",
-            "otherEntityRelationshipName": "testManyToOne"
+            "otherEntityRelationshipName": "superMegaLargeTestManyToOne"
         }
     ],
     "fields": [],

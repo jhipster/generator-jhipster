@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,10 +39,11 @@ import <%= packageName %>.security.AuthoritiesConstants;
     <%_ } _%>
 import <%= packageName %>.security.SecurityUtils;
 <%_ } _%>
+import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 <%_ if (authenticationType !== 'oauth2') { _%>
 
-import io.github.jhipster.security.RandomUtil;
+import tech.jhipster.security.RandomUtil;
 <%_ } _%>
 
 <%_ if (databaseType !== 'no') { _%>
@@ -226,7 +227,7 @@ public class UserService {
     <%_ } _%>
     public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> requestPasswordReset(String mail) {
         return userRepository.findOneByEmailIgnoreCase(mail)
-            .filter(<%= asEntity('User') %>::getActivated)
+            .filter(<%= asEntity('User') %>::isActivated)
             <%_ if (!reactive) { _%>
             .map(user -> {
                 user.setResetKey(RandomUtil.generateResetKey());
@@ -254,7 +255,7 @@ public class UserService {
     <%_ if (databaseType === 'sql' && reactive) { _%>
     @Transactional
     <%_ } _%>
-    public <% if (reactive) { %>Mono<<%= asEntity('User') %>><% } else { %><%= asEntity('User') %><% } %> registerUser(<%= asDto('User') %> userDTO, String password) {
+    public <% if (reactive) { %>Mono<<%= asEntity('User') %>><% } else { %><%= asEntity('User') %><% } %> registerUser(<%= asDto('AdminUser') %> userDTO, String password) {
     <%_ if (!reactive) { _%>
         userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
@@ -309,7 +310,7 @@ public class UserService {
     <%_ } else { // reactive _%>
         return userRepository.findOneByLogin(userDTO.getLogin().toLowerCase())
             .flatMap(existingUser -> {
-                if (!existingUser.getActivated()) {
+                if (!existingUser.isActivated()) {
                     <%_ if (cacheManagerIsAvailable === true) { _%>
                     this.clearUserCaches(existingUser);
                     <%_ } _%>
@@ -320,7 +321,7 @@ public class UserService {
             })
             .then(userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()))
             .flatMap(existingUser -> {
-                if (!existingUser.getActivated()) {
+                if (!existingUser.isActivated()) {
                     <%_ if (cacheManagerIsAvailable === true) { _%>
                     this.clearUserCaches(existingUser);
                     <%_ } _%>
@@ -380,7 +381,7 @@ public class UserService {
 
     <%_ if (!reactive) { _%>
     private boolean removeNonActivatedUser(<%= asEntity('User') %> existingUser) {
-        if (existingUser.getActivated()) {
+        if (existingUser.isActivated()) {
              return false;
         }
         userRepository.delete(existingUser);
@@ -397,7 +398,7 @@ public class UserService {
     <%_ if (databaseType === 'sql' && reactive) { _%>
     @Transactional
     <%_ } _%>
-    public <% if (reactive) { %>Mono<<%= asEntity('User') %>><% } else { %><%= asEntity('User') %><% } %> createUser(<%= asDto('User') %> userDTO) {
+    public <% if (reactive) { %>Mono<<%= asEntity('User') %>><% } else { %><%= asEntity('User') %><% } %> createUser(<%= asDto('AdminUser') %> userDTO) {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();<% if (databaseType === 'cassandra') { %>
         user.setId(UUID.randomUUID().toString());<% } %>
         user.setLogin(userDTO.getLogin().toLowerCase());
@@ -480,7 +481,7 @@ public class UserService {
     <%_ if (databaseType === 'sql' && reactive) { _%>
     @Transactional
     <%_ } _%>
-    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asDto('User') %>> updateUser(<%= asDto('User') %> userDTO) {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asDto('AdminUser') %>> updateUser(<%= asDto('AdminUser') %> userDTO) {
         <%_ if (!reactive) { _%>
         return Optional.of(userRepository
             .findById(userDTO.getId()))
@@ -517,7 +518,7 @@ public class UserService {
                 user.setAuthorities(userDTO.getAuthorities());
                 <%_ } _%>
         <%_ if (!reactive) { _%>
-                <%_ if (['sql', 'mongodb'].includes(databaseType)) { _%>
+                <%_ if (['sql', 'mongodb', 'neo4j'].includes(databaseType)) { _%>
                 userDTO.getAuthorities().stream()
                     .map(authorityRepository::findById)
                     .filter(Optional::isPresent)
@@ -555,7 +556,7 @@ public class UserService {
             <%_ } _%>
             .doOnNext(user -> log.debug("Changed Information for User: {}", user))
         <%_ } _%>
-            .map(<%= asDto('User') %>::new);
+            .map(<%= asDto('AdminUser') %>::new);
     }
 
     <%_ if (!reactive) { _%>
@@ -659,7 +660,7 @@ public class UserService {
         return userRepository.save(user);
         <%_ } else { _%>
         return SecurityUtils.getCurrentUserLogin()
-            .switchIfEmpty(Mono.just(Constants.SYSTEM_ACCOUNT))
+            .switchIfEmpty(Mono.just(Constants.SYSTEM))
             .flatMap(login -> {
                 if (user.getCreatedBy() == null) {
                     user.setCreatedBy(login);
@@ -737,22 +738,36 @@ public class UserService {
     @Transactional(readOnly = true)
     <%_ } _%>
     <%_ if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { _%>
-    public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= asDto('User') %>> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(<%= asDto('User') %>::new);
+    public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= asDto('AdminUser') %>> getAllManagedUsers(Pageable pageable) {
+        return userRepository.findAll<% if (reactive) { %>ByIdNotNull<% } %>(pageable).map(<%= asDto('AdminUser') %>::new);
     }
+
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional(readOnly = true)
+    <%_ } _%>
+    public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= asDto('User') %>> getAllPublicUsers(Pageable pageable) {
+        return userRepository.findAllByIdNotNullAndActivatedIsTrue(pageable).map(<%= asDto('User') %>::new);
+    }
+
         <%_ if (reactive) { _%>
 
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
     public Mono<Long> countManagedUsers() {
-        return userRepository.countAllByLoginNot(Constants.ANONYMOUS_USER);
+        return userRepository.count();
     }
         <%_ } _%>
     <%_ } else { // Cassandra _%>
-    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asDto('User') %>> getAllManagedUsers() {
+    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asDto('AdminUser') %>> getAllManagedUsers() {
         return userRepository.findAll()<% if (!reactive) { %>.stream()<% } %>
-            .filter(user -> !Constants.ANONYMOUS_USER.equals(user.getLogin()))
+            .map(<%= asDto('AdminUser') %>::new)<% if (!reactive) { %>
+            .collect(Collectors.toList())<% } %>;
+    }
+
+    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asDto('User') %>> getAllPublicUsers() {
+        return userRepository.findAll()<% if (!reactive) { %>.stream()<% } %>
+            .filter(user -> user.isActivated())
             .map(<%= asDto('User') %>::new)<% if (!reactive) { %>
             .collect(Collectors.toList())<% } %>;
     }
@@ -953,9 +968,9 @@ public class UserService {
      * @return the user from the authentication.
      */
         <%_ if (databaseType === 'sql') { _%>
-    @Transactional(readOnly = true)
+    @Transactional
         <%_ } _%>
-    public <% if (!reactive) { %>UserDTO<% } else { %>Mono<UserDTO><% } %> getUserFromAuthentication(AbstractAuthenticationToken authToken) {
+    public <% if (!reactive) { %><%= asDto('AdminUser') %><% } else { %>Mono<<%= asDto('AdminUser') %>><% } %> getUserFromAuthentication(AbstractAuthenticationToken authToken) {
         Map<String, Object> attributes;
         if (authToken instanceof OAuth2AuthenticationToken) {
             attributes = ((OAuth2AuthenticationToken) authToken).getPrincipal().getAttributes();
@@ -964,7 +979,7 @@ public class UserService {
         } else {
             throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
         }
-        <%= databaseType === 'no' ? asDto('User') : asEntity('User') %> user = getUser(attributes);
+        <%= databaseType === 'no' ? asDto('AdminUser') : asEntity('User') %> user = getUser(attributes);
         user.setAuthorities(authToken.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
             <%_ if (['sql', 'mongodb', 'neo4j'].includes(databaseType)) { _%>
@@ -975,11 +990,11 @@ public class UserService {
             })
             <%_ } _%>
             .collect(Collectors.toSet()));
-        return <% if (databaseType !== 'no' && !reactive) { %>new UserDTO(syncUserWithIdP(attributes, user))<% } else if (!reactive) { %>user<% } %><% if (databaseType === 'no' && reactive) { %>Mono.just(user)<% } else if (reactive) { %>syncUserWithIdP(attributes, user).flatMap(u -> Mono.just(new UserDTO(u)))<% } %>;
+        return <% if (databaseType !== 'no' && !reactive) { %>new <%= asDto('AdminUser') %>(syncUserWithIdP(attributes, user))<% } else if (!reactive) { %>user<% } %><% if (databaseType === 'no' && reactive) { %>Mono.just(user)<% } else if (reactive) { %>syncUserWithIdP(attributes, user).flatMap(u -> Mono.just(new <%= asDto('AdminUser') %>(u)))<% } %>;
     }
 
-    private static <%= databaseType === 'no' ? asDto('User') : asEntity('User') %> getUser(Map<String, Object> details) {
-        <%= databaseType === 'no' ? asDto('User') : asEntity('User') %> user = new <%= databaseType === 'no' ? asDto('User') : asEntity('User') %>();
+    private static <%= databaseType === 'no' ? asDto('AdminUser') : asEntity('User') %> getUser(Map<String, Object> details) {
+        <%= databaseType === 'no' ? asDto('AdminUser') : asEntity('User') %> user = new <%= databaseType === 'no' ? asDto('AdminUser') : asEntity('User') %>();
         // handle resource server JWT, where sub claim is email and uid is ID
         if (details.get("uid") != null) {
             user.setId((String) details.get("uid"));

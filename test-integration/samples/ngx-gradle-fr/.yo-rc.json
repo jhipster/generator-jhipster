@@ -1,21 +1,21 @@
 {
     "generator-jhipster": {
         "baseName": "sampleNgxGradle",
-        "packageName": "io.github.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageName": "tech.jhipster.sample",
+        "packageFolder": "tech/jhipster/sample",
         "serverPort": "8080",
         "authenticationType": "jwt",
         "cacheProvider": "ehcache",
         "enableHibernateCache": true,
         "websocket": false,
         "databaseType": "sql",
-        "devDatabaseType": "mysql",
-        "prodDatabaseType": "mysql",
+        "devDatabaseType": "postgresql",
+        "prodDatabaseType": "postgresql",
         "searchEngine": false,
         "messageBroker": false,
         "buildTool": "gradle",
         "applicationType": "monolith",
-        "testFrameworks": ["gatling", "protractor"],
+        "testFrameworks": ["gatling", "cypress"],
         "jhiPrefix": "jhi",
         "enableTranslation": true,
         "nativeLanguage": "fr",
@@ -25,11 +25,11 @@
         "clientFramework": "angularX",
         "jwtSecretKey": "ZGRhODA2ZGUxOTZlYmI4NDcxMTQzNjViOGQxYjM2MDk4M2YyOGNhYzg4ZTZjN2NmYTE2NGVhYWQ3YTMyYTFiNmVkZDhlYTliNTViODBmODU0MTFhOTQwZWY5ZDdhMWYwYmI1ZmY5MTMwM2I4ZDA4NThhYzllY2U4NzczMjljZGQ=",
         "embeddableLaunchScript": false,
-        "useSass": true,
         "clientTheme": "none",
         "entitySuffix": "",
         "dtoSuffix": "DTO",
         "otherModules": [],
-        "blueprints": []
+        "blueprints": [],
+        "creationTimestamp": 1596513172471
     }
 }

@@ -1,8 +1,8 @@
 {
     "generator-jhipster": {
         "baseName": "sampleOauth2SassInfinispan",
-        "packageName": "io.github.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageName": "tech.jhipster.sample",
+        "packageFolder": "tech/jhipster/sample",
         "serverPort": "8080",
         "authenticationType": "oauth2",
         "cacheProvider": "infinispan",
@@ -16,11 +16,12 @@
         "buildTool": "maven",
         "rememberMeKey": "448f9a67a8a292c4905a733ec22cc3b78e493c56",
         "applicationType": "monolith",
-        "testFrameworks": ["gatling", "protractor"],
+        "testFrameworks": ["gatling", "cypress"],
         "jhiPrefix": "myPrefix",
         "serviceDiscoveryType": false,
         "enableTranslation": false,
         "clientPackageManager": "npm",
-        "clientFramework": "angularX"
+        "clientFramework": "angularX",
+        "creationTimestamp": 1596513172471
     }
 }

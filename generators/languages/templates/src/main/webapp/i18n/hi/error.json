@@ -3,12 +3,12 @@
         "title": "त्रुटि पृष्ठ!",
         "http": {
             "400": "Bad request.",
-            "403": "आप पृष्ठ तक पहुँचने के लिए अधिकृत नहीं हैं.",
-            "404": "पृष्ठ मौजूद नहीं है.",
-            "405": "The HTTP verb you used is not supported for this URL.",
-            "500": "Internal server error."
+            "403": "आप पृष्ठ तक पहुँचने के लिए अधिकृत नहीं है।",
+            "404": "पृष्ठ मौजूद नहीं है।",
+            "405": "आपके द्वारा उपयोग की गई HTTP क्रिया इस URL के लिए समर्थित नहीं है।",
+            "500": "आंतरिक सर्वर त्रुटि।"
         },
-        "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
-        "validation": "Validation error on the server."
+        "concurrencyFailure": "एक अन्य उपयोगकर्ता ने इस डेटा को आपके जैसे ही परिवर्तित किया है। आपके परिवर्तन अस्वीकृत कर दिए गए।",
+        "validation": "सर्वर में मान्यता त्रुटि।"
     }
 }

@@ -1,11 +1,15 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
+
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-      http://www.apache.org/licenses/LICENSE-2.0
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,9 +48,6 @@
                 "health": "Ҳолат",
                 "configuration": "Созламалар",
                 "logs": "Логлар",
-                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-                "audits": "Аудит",
-                <%_ } _%>
                 "apidocs": "API",
                 "database": "Маълумотлар базаси",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -153,9 +154,9 @@
         "idexists": "Янги {{ entityName }} IDси тизимда мавжуд ID бўлмаслиги керак.",
         "idnull": "Нотўғри ID",
         "file": {
-            "could.not.extract": "Could not extract file",
-            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+            "could.not.extract": "Файлни чиқариб бўлмайди",
+            "not.image": "Файл расм бўлиши керак эди, лекин \"{{ fileType }}\" топилди"
         }
     },
-    "footer": "Саҳифа таг қисми"
+    "footer": "Саҳифанинг остки қисми"
 }

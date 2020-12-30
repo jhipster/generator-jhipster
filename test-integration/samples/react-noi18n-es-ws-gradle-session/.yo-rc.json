@@ -1,8 +1,8 @@
 {
     "generator-jhipster": {
         "baseName": "sampleReact",
-        "packageName": "io.github.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
+        "packageName": "tech.jhipster.sample",
+        "packageFolder": "tech/jhipster/sample",
         "serverPort": "8080",
         "authenticationType": "session",
         "cacheProvider": "ehcache",
@@ -10,17 +10,18 @@
         "websocket": "spring-websocket",
         "databaseType": "sql",
         "devDatabaseType": "h2Disk",
-        "prodDatabaseType": "mysql",
+        "prodDatabaseType": "postgresql",
         "searchEngine": "elasticsearch",
         "buildTool": "gradle",
         "enableTranslation": false,
         "messageBroker": false,
         "rememberMeKey": "448f9a67a8a292c4905a733ec22cc3b78e493c56",
         "applicationType": "monolith",
-        "testFrameworks": ["protractor"],
+        "testFrameworks": ["cypress"],
         "jhiPrefix": "myPrefix",
         "serviceDiscoveryType": false,
         "clientPackageManager": "npm",
-        "clientFramework": "react"
+        "clientFramework": "react",
+        "creationTimestamp": 1596513172471
     }
 }

@@ -26,7 +26,6 @@
                 "health": "Ҳолат",
                 "configuration": "Созламалар",
                 "logs": "Логлар",
-                "audits": "Аудит",
                 "apidocs": "API",
                 "database": "Маълумотлар базаси",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -133,8 +132,8 @@
         "idexists": "Янги {{ entityName }} IDси тизимда мавжуд ID бўлмаслиги керак.",
         "idnull": "Нотўғри ID",
         "file": {
-            "could.not.extract": "Could not extract file",
-            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+            "could.not.extract": "Файлни чиқариб бўлмайди",
+            "not.image": "Файл расм бўлиши керак эди, лекин \"{{ fileType }}\" топилди"
         }
     },
     "footer": "Саҳифа таг қисми"

@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -50,7 +50,7 @@ eureka:
 <%_ } _%>
 
 spring:
-<%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseType === 'sql') { _%>
     profiles:
         # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
         #active: testcontainers
@@ -65,7 +65,7 @@ spring:
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        url: <%- getJDBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
         name:
         username:
         password:
@@ -77,9 +77,8 @@ spring:
             write-durations-as-timestamps: false
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     jpa:
-        database-platform: io.github.jhipster.domain.util.FixedH2Dialect
+        database-platform: tech.jhipster.domain.util.FixedH2Dialect
         open-in-view: false
-        show-sql: false
         hibernate:
             ddl-auto: none
             naming:
@@ -93,8 +92,9 @@ spring:
             hibernate.generate_statistics: false
             hibernate.hbm2ddl.auto: validate
             hibernate.jdbc.time_zone: UTC
+            hibernate.query.fail_on_pagination_over_collection_fetch: true
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || searchEngine === 'elasticsearch') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
     data:
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
@@ -105,22 +105,10 @@ spring:
     <%_ } _%>
     <%_ if (databaseType === 'cassandra') { _%>
         cassandra:
-            contactPoints: localhost
-            port: 0
-            protocolVersion: V4
+            contact-points: localhost
             compression: NONE
-            keyspaceName: cassandra_unit_keyspace
-    <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
-        elasticsearch:
-            properties:
-                path:
-                    home: <%= BUILD_DIR %>elasticsearch
-                <%_ if (cucumberTests) { _%>
-                # See https://github.com/jhipster/generator-jhipster/issues/10302
-                node:
-                    max_local_storage_nodes: 2
-                <%_ } _%>
+            keyspace-name: cassandra_unit_keyspace
+            local-datacenter: datacenter1
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
@@ -132,7 +120,7 @@ spring:
     liquibase:
         contexts: test
         <%_ if (reactive) { _%>
-        url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        url: <%- getJDBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
         <%_ } _%>
     <%_ } _%>
     mail:
@@ -141,12 +129,9 @@ spring:
         allow-bean-definition-overriding: true
     messages:
         basename: i18n/messages
-    mvc:
-        favicon:
-            enabled: false
     <%_ if (databaseType === 'sql' && reactive) { _%>
     r2dbc:
-        url: r2dbc:h2:mem:///<%= baseName %>?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        url: <%- getR2DBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
         username: r2dbc
         password:
     <%_ } _%>
@@ -191,7 +176,7 @@ server:
 
 jhipster:
     clientApp:
-        name: "<%= angularAppName %>"
+        name: "<%= frontendAppName %>"
     logging:
         # To test json console appender
         use-json-format: false
@@ -230,15 +215,6 @@ jhipster:
         remember-me:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>
-<%_ } _%>
-    metrics:
-        logs: # Reports metrics in the logs
-            enabled: true
-            report-frequency: 60 # in seconds
-<%_ if (cacheProvider === 'redis') { _%>
-    cache:
-        redis:
-            server: ${redis.test.server}
 <%_ } _%>
 <%_ if (messageBroker === 'kafka') { _%>
 kafka:

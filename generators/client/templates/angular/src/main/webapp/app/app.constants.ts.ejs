@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,5 +22,5 @@
 
 export const VERSION = process.env.VERSION;
 export const DEBUG_INFO_ENABLED = Boolean(process.env.DEBUG_INFO_ENABLED);
-export const SERVER_API_URL = process.env.SERVER_API_URL;
+export const SERVER_API_URL = process.env.SERVER_API_URL ?? '';
 export const BUILD_TIMESTAMP = process.env.BUILD_TIMESTAMP;

@@ -9,32 +9,24 @@
         {
             "fieldName": "stringRequiredAlice",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "stringMinlengthAlice",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "minlength"
-            ],
+            "fieldValidateRules": ["minlength"],
             "fieldValidateRulesMinlength": 0
         },
         {
             "fieldName": "stringMaxlengthAlice",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
+            "fieldValidateRules": ["maxlength"],
             "fieldValidateRulesMaxlength": 20
         },
         {
             "fieldName": "stringPatternAlice",
             "fieldType": "String",
-            "fieldValidateRules": [
-                "pattern"
-            ],
+            "fieldValidateRules": ["pattern"],
             "fieldValidateRulesPattern": "^[a-zA-Z0-9]*$",
             "fieldValidateRulesPatternJava": "^[a-zA-Z0-9]*$"
         },
@@ -45,24 +37,18 @@
         {
             "fieldName": "integerRequiredAlice",
             "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "integerMinAlice",
             "fieldType": "Integer",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "integerMaxAlice",
             "fieldType": "Integer",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
@@ -72,24 +58,18 @@
         {
             "fieldName": "longRequiredAlice",
             "fieldType": "Long",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "longMinAlice",
             "fieldType": "Long",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "longMaxAlice",
             "fieldType": "Long",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
@@ -99,70 +79,52 @@
         {
             "fieldName": "floatRequiredAlice",
             "fieldType": "Float",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "floatMinAlice",
             "fieldType": "Float",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "floatMaxAlice",
             "fieldType": "Float",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
             "fieldName": "doubleRequiredAlice",
             "fieldType": "Double",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "doubleMinAlice",
             "fieldType": "Double",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "doubleMaxAlice",
             "fieldType": "Double",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
             "fieldName": "bigDecimalRequiredAlice",
             "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "bigDecimalMinAlice",
             "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "min"
-            ],
+            "fieldValidateRules": ["min"],
             "fieldValidateRulesMin": 0
         },
         {
             "fieldName": "bigDecimalMaxAlice",
             "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "max"
-            ],
+            "fieldValidateRules": ["max"],
             "fieldValidateRulesMax": 100
         },
         {
@@ -172,9 +134,7 @@
         {
             "fieldName": "localDateRequiredAlice",
             "fieldType": "LocalDate",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "instantAlice",
@@ -183,9 +143,7 @@
         {
             "fieldName": "instanteRequiredAlice",
             "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "zonedDateTimeAlice",
@@ -194,9 +152,7 @@
         {
             "fieldName": "zonedDateTimeRequiredAlice",
             "fieldType": "ZonedDateTime",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "durationAlice",
@@ -205,9 +161,7 @@
         {
             "fieldName": "durationRequiredAlice",
             "fieldType": "Duration",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "booleanAlice",
@@ -216,9 +170,7 @@
         {
             "fieldName": "booleanRequiredAlice",
             "fieldType": "Boolean",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "enumAlice",
@@ -229,9 +181,7 @@
             "fieldName": "enumRequiredAlice",
             "fieldType": "EnumRequiredFieldClass",
             "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "uuidAlice",
@@ -240,9 +190,7 @@
         {
             "fieldName": "uuidRequiredAlice",
             "fieldType": "UUID",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "byteImageAlice",
@@ -253,26 +201,20 @@
             "fieldName": "byteImageRequiredAlice",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "byteImageMinbytesAlice",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image",
-            "fieldValidateRules": [
-                "minbytes"
-            ],
+            "fieldValidateRules": ["minbytes"],
             "fieldValidateRulesMinbytes": 0
         },
         {
             "fieldName": "byteImageMaxbytesAlice",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image",
-            "fieldValidateRules": [
-                "maxbytes"
-            ],
+            "fieldValidateRules": ["maxbytes"],
             "fieldValidateRulesMaxbytes": 10000
         },
         {
@@ -284,26 +226,20 @@
             "fieldName": "byteAnyRequiredAlice",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         },
         {
             "fieldName": "byteAnyMinbytesAlice",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any",
-            "fieldValidateRules": [
-                "minbytes"
-            ],
+            "fieldValidateRules": ["minbytes"],
             "fieldValidateRulesMinbytes": 0
         },
         {
             "fieldName": "byteAnyMaxbytesAlice",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any",
-            "fieldValidateRules": [
-                "maxbytes"
-            ],
+            "fieldValidateRules": ["maxbytes"],
             "fieldValidateRulesMaxbytes": 10000
         },
         {
@@ -315,12 +251,10 @@
             "fieldName": "byteTextRequiredAlice",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldValidateRules": ["required"]
         }
     ],
-    "changelogDate": "20160208184034",
+    "changelogDate": "20160208184038",
     "dto": "no",
     "service": "no",
     "pagination": "pagination"

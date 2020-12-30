@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,12 +22,6 @@ let clientPackageMngrName = 'Npm';
 let clientPackageMngrAddGlobal = 'install -g';
 let clientPackageMngrAdd = 'install --save --save-exact';
 let clientPackageMngrAddDev = 'install --save-dev --save-exact';
-if (clientPackageManager === 'yarn') {
-    clientPackageMngrName = 'Yarn';
-    clientPackageMngrAddGlobal = 'global add';
-    clientPackageMngrAdd = 'add --exact';
-    clientPackageMngrAddDev = 'add --dev --exact';
-}
 let DOCUMENTATION_ARCHIVE_URL = `${DOCUMENTATION_URL + DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`;
 _%>
 This application was generated using JHipster <%= jhipsterVersion %>, you can find documentation and help at [<%= DOCUMENTATION_ARCHIVE_URL %>](<%= DOCUMENTATION_ARCHIVE_URL %>).
@@ -46,32 +40,34 @@ This application is configured for Service Discovery and Configuration with <% i
 <%_ if (skipClient) { _%>
 To start your application in the dev profile, run:
 
-    <% if (buildTool === 'maven') { %>./mvnw<% } %><% if (buildTool === 'gradle') { %>./gradlew<% } %>
-
+```
+<% if (buildTool === 'maven') { %>./mvnw<% } %><% if (buildTool === 'gradle') { %>./gradlew<% } %>
+```
 <%_ } _%>
+
 <%_ if (!skipClient) { _%>
 Before you can build this project, you must install and configure the following dependencies on your machine:
 
 1. [Node.js][]: We use Node to run a development web server and build the project.
    Depending on your system, you can install Node either from source or as a pre-packaged bundle.
-<%_ if (clientPackageManager === 'yarn') { _%>
-2. [Yarn][]: We use Yarn to manage Node dependencies.
-   Depending on your system, you can install Yarn either from source or as a pre-packaged bundle.
-<%_ } _%>
 
 After installing Node, you should be able to run the following command to install development tools.
 You will only need to run this command when dependencies change in [package.json](package.json).
 
-    <%= clientPackageManager %> install
+```
+<%= clientPackageManager %> install
+```
 
-We use <%= clientPackageManager %> scripts and [Webpack][] as our build system.
+We use <%= clientPackageManager %> scripts and [<%_ if (clientFramework === ANGULAR) { _%>Angular CLI with <%_ } _%> Webpack][] as our build system.
 
 <%_ if (['hazelcast', 'memcached', 'redis'].includes(cacheProvider)) { _%>
 If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.
 To start your cache server, run:
+
 ```
 docker-compose -f src/main/docker/<%= cacheProvider==='hazelcast'?'hazelcast-management-center':cacheProvider %>.yml up -d
 ```
+
 <%_ if (cacheProvider === 'redis') { _%>
 
 The cache can also be turned off by adding to the application yaml:
@@ -89,10 +85,24 @@ the same CacheManager.
 
 Run the following commands in two separate terminals to create a blissful development experience where your browser
 auto-refreshes when files change on your hard drive.
-<% if (buildTool === 'maven') { %>
-    ./mvnw<% } %><% if (buildTool === 'gradle') { %>
-    ./gradlew -x webpack<% } %>
-    <%= clientPackageManager %> start
+
+```
+<%_ if (buildTool === 'maven') { _%>
+./mvnw
+<%_ } _%>
+<%_ if (buildTool === 'gradle') { _%>
+./gradlew -x webpack
+<%_ } _%>
+<%= clientPackageManager %> start
+```
+<%_ if (clientFramework === ANGULAR) { _%>
+
+If you want to use [HMR](https://webpack.js.org/guides/hot-module-replacement) for instant page updates and data + scroll position preservation on file changes then instead of `<%= clientPackageManager %> start` run
+
+```
+<%= clientPackageManager %> run start-hmr
+```
+<%_ } _%>
 
 <%= clientPackageMngrName %> is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
 specifying a newer version in [package.json](package.json). You can also run `<%= clientPackageManager %> update` and `<%= clientPackageManager %> install` to manage dependencies.
@@ -128,9 +138,31 @@ spring:
             client-secret: web_app
 ```
 
+### JHipster Control Center
+
+JHipster Control Center can help you to manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
+
+```
+docker-compose -f src/main/docker/jhipster-control-center.yml up
+```
+
 ### Okta
 
-If you'd like to use Okta instead of Keycloak, you'll need to change a few things. First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta domain, that has a name like `https://dev-123456.okta.com`.
+If you'd like to use Okta instead of Keycloak, it's pretty quick using the [Okta CLI](https://cli.okta.com/). After you've installed it, run:
+
+```shell
+okta register
+```
+
+Then, in your JHipster app's directory, run `okta apps create` and select **JHipster**. This will set up an Okta app for you, create `ROLE_ADMIN` and `ROLE_USER` groups, create a `.okta.env` file with your Okta settings, and configure a `groups` claim in your ID token.
+
+Run `source .okta.env` and start your app with Maven or Gradle. You should be able to sign in with the credentials you registered with.
+
+If you're on Windows, you should install [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10) so the `source` command will work.
+
+If you'd like to configure things manually through the Okta developer console, see the instructions below.
+
+First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta domain, that has a name like `https://dev-123456.okta.com`.
 
 Modify `src/main/resources/config/application.yml` to use your Okta settings.
 
@@ -152,7 +184,7 @@ security:
 
 Create an OIDC App in Okta to get a `{clientId}` and `{clientSecret}`. To do this, log in to your Okta Developer account and navigate to **Applications** > **Add Application**. Click **Web** and click the **Next** button. Give the app a name you’ll remember, specify `http://localhost:8080` as a Base URI, and `http://localhost:8080/login/oauth2/code/oidc` as a Login Redirect URI. Click **Done**, then Edit and add `http://localhost:8080` as a Logout redirect URI. Copy and paste the client ID and secret into your `application.yml` file.
 
-Create a `ROLE_ADMIN` and `ROLE_USER` group and add users into them. Modify e2e tests to use this account when running integration tests. You'll need to change credentials in `src/test/javascript/e2e/account/account.spec.ts` and `src/test/javascript/e2e/admin/administration.spec.ts`.
+Create a `ROLE_ADMIN` and `ROLE_USER` group and add users into them. Modify e2e tests to use this account when running integration tests. You'll need to change credentials in `<%= CLIENT_TEST_SRC_DIR %>e2e/account/account.spec.ts` and `<%= CLIENT_TEST_SRC_DIR %>e2e/admin/administration.spec.ts`.
 
 Navigate to **API** > **Authorization Servers**, click the **Authorization Servers** tab and edit the default one. Click the **Claims** tab and **Add Claim**. Name it "groups", and include it in the ID Token. Set the value type to "Groups" and set the filter to be a Regex of `.*`.
 
@@ -163,7 +195,8 @@ After making these changes, you should be good to go! If you have any issues, pl
 
 JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
 
-The service worker initialization code is commented out by default. To enable it, uncomment the following code in `src/main/webapp/index.html`:
+<%_ if (clientFramework !== ANGULAR) { _%>
+The service worker initialization code is commented out by default. To enable it, uncomment the following code in `<%= CLIENT_MAIN_SRC_DIR %>index.html`:
 
 ```html
 <script>
@@ -176,20 +209,32 @@ The service worker initialization code is commented out by default. To enable it
 ```
 
 Note: [Workbox](https://developers.google.com/web/tools/workbox/) powers JHipster's service worker. It dynamically generates the `service-worker.js` file.
+<%_ } _%>
+<%_ if (clientFramework === ANGULAR) { _%>
+The service worker initialization code is disabled by default. To enable it, uncomment the following code in `<%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts`:
+
+```typescript
+ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
+```
+<%_ } _%>
 
 ### Managing dependencies
 
 For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
 
-    <%= clientPackageManager %> <%= clientPackageMngrAdd %> leaflet
+```
+<%= clientPackageManager %> <%= clientPackageMngrAdd %> leaflet
+```
 
 To benefit from TypeScript type definitions from [DefinitelyTyped][] repository in development, you would run following command:
 
-    <%= clientPackageManager %> <%= clientPackageMngrAddDev %> @types/leaflet
+```
+<%= clientPackageManager %> <%= clientPackageMngrAddDev %> @types/leaflet
+```
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
 <%_ if (clientFramework === ANGULAR) { _%>
-Edit [<%= CLIENT_MAIN_SRC_DIR %>app/vendor.ts](<%= CLIENT_MAIN_SRC_DIR %>app/vendor.ts) file:
+Edit [<%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts](<%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts) file:
 ~~~
 import 'leaflet/dist/leaflet.js';
 ~~~
@@ -211,13 +256,18 @@ You can also use [Angular CLI][] to generate some custom client code.
 
 For example, the following command:
 
-    ng generate component my-component
+```
+ng generate component my-component
+```
 
 will generate few files:
 
-    create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.html
-    create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.ts
-    update <%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts
+```
+create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.html
+create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.ts
+update <%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts
+```
+
 <%_ } _%>
 <%_ if (enableSwaggerCodegen) { _%>
 ### Doing API-First development using openapi-generator
@@ -245,17 +295,29 @@ Refer to [Doing API-First development][] for more details.
 ### Packaging as jar
 
 To build the final jar and optimize the <%= baseName %> application for production, run:
-<% if (buildTool === 'maven') { %>
-    ./mvnw -Pprod clean verify<% } %><% if (buildTool === 'gradle') { %>
-    ./gradlew -Pprod clean bootJar<% } %>
+
+```
+<%_ if (buildTool === 'maven') { _%>
+./mvnw -Pprod clean verify
+<%_ } _%>
+<%_ if (buildTool === 'gradle') { _%>
+./gradlew -Pprod clean bootJar
+<%_ } _%>
+```
 
 <%_ if (!skipClient) { _%>
 This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
 <%_ } _%>
 To ensure everything worked, run:
-<% if (buildTool === 'maven') { %>
-    java -jar target/*.jar<% } %><% if (buildTool === 'gradle') { %>
-    java -jar build/libs/*.jar<% } %>
+
+```
+<%_ if (buildTool === 'maven') { _%>
+java -jar target/*.jar
+<%_ } _%>
+<%_ if (buildTool === 'gradle') { _%>
+java -jar build/libs/*.jar
+<%_ } _%>
+```
 
 <% if (!skipClient) { %>Then navigate to [http://localhost:<%= serverPort %>](http://localhost:<%= serverPort %>) in your browser.
 <% } %>
@@ -264,25 +326,36 @@ Refer to [Using JHipster in production][] for more details.
 ### Packaging as war
 
 To package your application as a war in order to deploy it to an application server, run:
-<% if (buildTool === 'maven') { %>
-    ./mvnw -Pprod,war clean verify<% } %><% if (buildTool === 'gradle') { %>
-    ./gradlew -Pprod -Pwar clean bootWar<% } %>
+
+```
+<%_ if (buildTool === 'maven') { _%>
+./mvnw -Pprod,war clean verify
+<%_ } _%>
+<%_ if (buildTool === 'gradle') { _%>
+./gradlew -Pprod -Pwar clean bootWar
+<%_ } _%>
+```
 
 ## Testing
 
 To launch your application's tests, run:
 
-    <%_ if (buildTool === 'maven') { _%>
-    ./mvnw verify
-    <%_ } else { _%>
-    ./gradlew test integrationTest jacocoTestReport
-    <%_ } _%>
+```
+<%_ if (buildTool === 'maven') { _%>
+./mvnw verify
+<%_ } else { _%>
+./gradlew test integrationTest jacocoTestReport
+<%_ } _%>
+```
+
 <% if (!skipClient) { %>
 ### Client tests
 
-Unit tests are run by [Jest][] and written with [Jasmine][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](<%= CLIENT_TEST_SRC_DIR %>) and can be run with:
+Unit tests are run by [Jest][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](<%= CLIENT_TEST_SRC_DIR %>) and can be run with:
 
-    <%= clientPackageManager %> test
+```
+<%= clientPackageManager %> test
+```
 
 <% if (protractorTests) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [<%= CLIENT_TEST_SRC_DIR %>e2e](<%= CLIENT_TEST_SRC_DIR %>e2e)
 and can be run by starting Spring Boot in one terminal (`<% if (buildTool === 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<%= clientPackageManager %> run e2e`) in a second one.<% } %>
@@ -302,6 +375,8 @@ Sonar is used to analyse code quality. You can start a local Sonar server (acces
 docker-compose -f src/main/docker/sonar.yml up -d
 ```
 
+Note: we have turned off authentication in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
+
 You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner)<% if (buildTool) { %> or by using the <% if (buildTool === 'maven') { %>maven<% } %><% if (buildTool === 'gradle') { %>gradle<% } %> plugin<% } %>.
 
 Then, run a Sonar analysis:
@@ -316,7 +391,6 @@ If you need to re-run the Sonar phase, please be sure to specify at least the `i
 ```
 ./mvnw initialize sonar:sonar
 ```
-or
 <%_ } else if (buildTool === 'gradle') { _%>
 ```
 ./gradlew -Pprod clean check jacocoTestReport sonarqube
@@ -331,20 +405,29 @@ You can use Docker to improve your JHipster development experience. A number of 
 <% if (databaseType !== 'no') { %>
 For example, to start a <%= prodDatabaseType %> database in a docker container, run:
 
-    docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml up -d
+```
+docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml up -d
+```
 
 To stop it and remove the container, run:
 
-    docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml down
+```
+docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml down
+```
+
 <% } %>
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
-    <% if (buildTool === 'maven') { %>./mvnw -Pprod verify jib:dockerBuild<% } %><% if (buildTool === 'gradle') { %>./gradlew bootJar -Pprod jibDockerBuild<% } %>
+```
+<% if (buildTool === 'maven') { %>./mvnw -Pprod verify jib:dockerBuild<% } %><% if (buildTool === 'gradle') { %>./gradlew bootJar -Pprod jibDockerBuild<% } %>
+```
 
 Then run:
 
-    docker-compose -f src/main/docker/app.yml up -d
+```
+docker-compose -f src/main/docker/app.yml up -d
+```
 
 For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
 
@@ -372,7 +455,6 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 <% if (testFrameworks.includes("gatling")) { %>[Gatling]: https://gatling.io/<% } %>
 <%_ if (!skipClient) { _%>
 [Node.js]: https://nodejs.org/
-[Yarn]: https://yarnpkg.org/
 [Webpack]: https://webpack.github.io/
 [Angular CLI]: https://cli.angular.io/
 [BrowserSync]: https://www.browsersync.io/

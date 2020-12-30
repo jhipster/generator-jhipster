@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,19 +18,16 @@
  */
 const os = require('os');
 const shelljs = require('shelljs');
+const fs = require('fs');
 const chalk = require('chalk');
 const _ = require('lodash');
 const BaseGenerator = require('../generator-base');
 const statistics = require('../statistics');
+const dockerPrompts = require('../docker-prompts');
 
 const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
-    constructor(args, opts) {
-        super(args, opts);
-        this.registerPrettierTransform();
-    }
-
     get initializing() {
         return {
             sayHello() {
@@ -80,18 +77,18 @@ module.exports = class extends BaseGenerator {
             },
 
             loadConfig() {
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
                 this.baseName = configuration.get('baseName');
                 this.mainClass = this.getMainClassName();
                 this.packageName = configuration.get('packageName');
                 this.packageFolder = configuration.get('packageFolder');
-                this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
+                this.cacheProvider = configuration.get('cacheProvider') || 'no';
                 this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
                 this.databaseType = configuration.get('databaseType');
                 this.prodDatabaseType = configuration.get('prodDatabaseType');
                 this.searchEngine = configuration.get('searchEngine');
-                this.angularAppName = this.getAngularAppName();
+                this.frontendAppName = this.getFrontendAppName();
                 this.buildTool = configuration.get('buildTool');
                 this.applicationType = configuration.get('applicationType');
                 this.serviceDiscoveryType = configuration.get('serviceDiscoveryType');
@@ -116,33 +113,64 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    defaultProjectId() {
-        if (this.abort) return null;
-        if (this.gcpProjectId) {
-            return this.gcpProjectId;
-        }
-        try {
-            const projectId = shelljs.exec('gcloud config get-value core/project --quiet', { silent: true }).stdout;
-            return projectId.trim();
-        } catch (ex) {
-            this.log.error('Unable to determine the default Google Cloud Project ID');
-            return undefined;
-        }
-    }
-
-    defaultServiceNameChoices(defaultServiceExists) {
-        if (this.applicationType === 'monolith') {
-            return defaultServiceExists ? ['default', _.kebabCase(this.baseName)] : ['default'];
-        }
-        if (this.applicationType === 'gateway') {
-            return ['default'];
-        }
-
-        return [_.kebabCase(this.baseName)];
-    }
-
     get prompting() {
         return {
+            askForPath() {
+                if (this.abort) return undefined;
+                if (this.applicationType !== 'gateway') return undefined;
+                const messageAskForPath = 'Enter the root directory where the microservices are located';
+                const prompts = [
+                    {
+                        type: 'input',
+                        name: 'directoryPath',
+                        message: messageAskForPath,
+                        default: this.directoryPath || '../',
+                        validate: input => {
+                            const path = this.destinationPath(input);
+                            if (shelljs.test('-d', path)) {
+                                const appsFolders = this._getMicroserviceFolders(input);
+
+                                if (appsFolders.length === 0) {
+                                    return `No microservices are found in ${path}`;
+                                }
+                                return true;
+                            }
+                            return `${path} is not a directory or doesn't exist`;
+                        },
+                    },
+                ];
+
+                return this.prompt(prompts).then(props => {
+                    this.directoryPath = props.directoryPath;
+                    // Patch the path if there is no trailing "/"
+                    if (!this.directoryPath.endsWith('/')) {
+                        this.log(chalk.yellow(`The path "${this.directoryPath}" does not end with a trailing "/", adding it anyway.`));
+                        this.directoryPath += '/';
+                    }
+                    this.appsFolders = this._getMicroserviceFolders(this.directoryPath);
+                    this.log(chalk.green(`${this.appsFolders.length} applications found at ${this.destinationPath(this.directoryPath)}\n`));
+                });
+            },
+            askForApps() {
+                if (this.regenerate) return undefined;
+                if (this.applicationType !== 'gateway') return undefined;
+                const messageAskForApps = 'Which microservice applications do you want to include in your configuration?';
+                const prompts = [
+                    {
+                        type: 'checkbox',
+                        name: 'chosenApps',
+                        message: messageAskForApps,
+                        choices: this.appsFolders,
+                        default: this.defaultAppsFolders,
+                        validate: input => (input.length === 0 ? 'Please choose at least one application' : true),
+                    },
+                ];
+
+                return this.prompt(prompts).then(props => {
+                    this.appsFolders = props.chosenApps;
+                    dockerPrompts.loadConfigs.call(this);
+                });
+            },
             askForProjectId() {
                 if (this.abort) return;
                 const done = this.async();
@@ -151,7 +179,7 @@ module.exports = class extends BaseGenerator {
                         type: 'input',
                         name: 'gcpProjectId',
                         message: 'Google Cloud Project ID',
-                        default: this.defaultProjectId(),
+                        default: this._defaultProjectId(),
                         validate: input => {
                             if (input.trim().length === 0) {
                                 return 'Project ID cannot empty';
@@ -188,15 +216,23 @@ module.exports = class extends BaseGenerator {
                                     message: 'In which Google App Engine location do you want to deploy ?',
                                     choices: [
                                         { value: 'northamerica-northeast1', name: 'northamerica-northeast1 - Montréal' },
-                                        { value: 'us-central', name: 'us-central - Iowa' },
+                                        { value: 'us-central', name: 'us-central1 - Iowa' },
                                         { value: 'us-east1', name: 'us-east1 - South Carolina' },
                                         { value: 'us-east4', name: 'us-east4 - Northern Virginia' },
+                                        { value: 'us-west2', name: 'us-west2 - Los Angeles' },
+                                        { value: 'us-west3', name: 'us-west3 - Salt Lake City' },
+                                        { value: 'us-west4', name: 'us-west4 - Las Vegas' },
                                         { value: 'southamerica-east1', name: 'southamerica-east1 - São Paulo' },
-                                        { value: 'europe-west', name: 'europe-west - Belgium' },
+                                        { value: 'europe-west', name: 'europe-west1 - Belgium' },
                                         { value: 'europe-west2', name: 'europe-west2 - London' },
                                         { value: 'europe-west3', name: 'europe-west3 - Frankfurt' },
+                                        { value: 'europe-west6', name: 'europe-west6 - Zürich' },
                                         { value: 'asia-northeast1', name: 'asia-northeast1 - Tokyo' },
+                                        { value: 'asia-northeast2', name: 'asia-northeast2 - Osaka' },
+                                        { value: 'asia-northeast3', name: 'asia-northeast3 - Seoul' },
                                         { value: 'asia-south1', name: 'asia-south1 - Mumbai' },
+                                        { value: 'asia-east2', name: 'asia-east2 - Hong Kong' },
+                                        { value: 'asia-southeast2', name: 'asia-southeast2 - Jakarta' },
                                         { value: 'australia-southeast1', name: 'australia-southeast1 - Sydney' },
                                     ],
                                     default: this.gaeLocation ? this.gaeLocation : 0,
@@ -236,7 +272,7 @@ module.exports = class extends BaseGenerator {
                         type: 'list',
                         name: 'gaeServiceName',
                         message: 'Google App Engine Service Name',
-                        choices: this.defaultServiceNameChoices(this.defaultServiceExists),
+                        choices: this._defaultServiceNameChoices(this.defaultServiceExists),
                         default: this.gaeServiceName ? this.gaeServiceName : 0,
                     },
                 ];
@@ -410,7 +446,7 @@ module.exports = class extends BaseGenerator {
 
                 const cloudSqlInstances = [{ value: '', name: 'New Cloud SQL Instance' }];
                 shelljs.exec(
-                    `gcloud sql instances list  --format='value[separator=":"](project,region,name)' --project="${this.gcpProjectId}"`,
+                    `gcloud sql instances list  --format="value[separator=':'](project,region,name)" --project="${this.gcpProjectId}"`,
                     (code, stdout, err) => {
                         if (err && code !== 0) {
                             this.log.error(err);
@@ -507,7 +543,7 @@ module.exports = class extends BaseGenerator {
                 const cloudSqlDatabases = [{ value: '', name: 'New Database' }];
                 const name = this.gcpCloudSqlInstanceName.split(':')[2];
                 shelljs.exec(
-                    `gcloud sql databases list -i ${name} --format='value(name)' --project="${this.gcpProjectId}"`,
+                    `gcloud sql databases list -i ${name} --format="value(name)" --project="${this.gcpProjectId}"`,
                     { silent: true },
                     (code, stdout, err) => {
                         if (err && code !== 0) {
@@ -609,8 +645,13 @@ module.exports = class extends BaseGenerator {
                 // for mysql keep default options, set specific option for pg
                 const dbVersionFlag =
                     this.prodDatabaseType === 'postgresql' ? ' --database-version="POSTGRES_9_6" --tier="db-g1-small"' : '';
-
-                const cmd = `gcloud sql instances create "${name}" --region='${this.gaeLocation}' --project=${this.gcpProjectId}${dbVersionFlag}`;
+                let gaeCloudSqlLocation = this.gaeLocation;
+                if (gaeCloudSqlLocation === 'us-central') {
+                    gaeCloudSqlLocation = 'us-central1';
+                } else if (gaeCloudSqlLocation === 'europe-west') {
+                    gaeCloudSqlLocation = 'europe-west1';
+                }
+                const cmd = `gcloud sql instances create "${name}" --region='${gaeCloudSqlLocation}' --project=${this.gcpProjectId}${dbVersionFlag}`;
                 this.log(chalk.bold(`\n... Running: ${cmd}`));
 
                 shelljs.exec(cmd, { silent: true }, (code, stdout, err) => {
@@ -639,7 +680,7 @@ module.exports = class extends BaseGenerator {
 
                 const name = this.gcpCloudSqlInstanceName.split(':')[2];
                 shelljs.exec(
-                    `gcloud sql users list -i jhipster --format='value(name)' --project="${this.gcpProjectId}"`,
+                    `gcloud sql users list -i jhipster --format="value(name)" --project="${this.gcpProjectId}"`,
                     { silent: true },
                     (code, stdout, err) => {
                         if (_.includes(stdout, this.gcpCloudSqlUserName)) {
@@ -704,18 +745,16 @@ module.exports = class extends BaseGenerator {
             copyFiles() {
                 if (this.abort) return;
 
-                const done = this.async();
                 this.log(chalk.bold('\nCreating Google App Engine deployment files'));
 
                 this.template('app.yaml.ejs', `${constants.MAIN_DIR}/appengine/app.yaml`);
+                if (this.applicationType === 'gateway') {
+                    this.template('dispatch.yaml.ejs', `${constants.MAIN_DIR}/appengine/dispatch.yaml`);
+                }
                 this.template('application-prod-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
                 if (this.buildTool === 'gradle') {
                     this.template('gae.gradle.ejs', 'gradle/gae.gradle');
                 }
-
-                this.conflicter.resolve(err => {
-                    done();
-                });
             },
 
             addDependencies() {
@@ -770,12 +809,15 @@ module.exports = class extends BaseGenerator {
         return {
             productionBuild() {
                 if (this.abort) return;
-
+                // Until issue; https://github.com/GoogleCloudPlatform/app-gradle-plugin/issues/376 is fixed we shall disable .gcloudignore
+                this.log(
+                    chalk.bold(
+                        'Due to a Bug in GCloud SDK you will need to disable the generation of .gcloudignore file before deploying using: "gcloud config set gcloudignore/enabled false". For more info refer: https://github.com/GoogleCloudPlatform/app-gradle-plugin/issues/376'
+                    )
+                );
                 if (this.buildTool === 'maven') {
-                    this.log(chalk.bold('\nRun App Engine DevServer Locally: ./mvnw package appengine:run -DskipTests'));
                     this.log(chalk.bold('Deploy to App Engine: ./mvnw package appengine:deploy -DskipTests -Pgae,prod,prod-gae'));
                 } else if (this.buildTool === 'gradle') {
-                    this.log(chalk.bold('\nRun App Engine DevServer Locally: ./gradlew appengineRun'));
                     this.log(chalk.bold('Deploy to App Engine: ./gradlew appengineDeploy -Pgae -Pprod-gae'));
                 }
                 /*
@@ -799,9 +841,57 @@ module.exports = class extends BaseGenerator {
 
                 child.stdout.on('data', (data) => {
                     process.stdout.write(data.toString());
-                });
-*/
+                }); */
             },
         };
+    }
+
+    _defaultProjectId() {
+        if (this.abort) return null;
+        if (this.gcpProjectId) {
+            return this.gcpProjectId;
+        }
+        try {
+            const projectId = shelljs.exec('gcloud config get-value core/project --quiet', { silent: true }).stdout;
+            return projectId.trim();
+        } catch (ex) {
+            this.log.error('Unable to determine the default Google Cloud Project ID');
+            return undefined;
+        }
+    }
+
+    _defaultServiceNameChoices(defaultServiceExists) {
+        if (this.applicationType === 'monolith') {
+            return defaultServiceExists ? ['default', _.kebabCase(this.baseName)] : ['default'];
+        }
+        if (this.applicationType === 'gateway') {
+            return ['default'];
+        }
+
+        return [_.kebabCase(this.baseName)];
+    }
+
+    _getMicroserviceFolders(input) {
+        const destinationPath = this.destinationPath(input);
+        const files = shelljs.ls('-l', destinationPath);
+        const appsFolders = [];
+
+        files.forEach(file => {
+            if (file.isDirectory()) {
+                if (fs.existsSync(`${destinationPath}/${file.name}/.yo-rc.json`)) {
+                    try {
+                        const fileData = this.fs.readJSON(`${destinationPath}/${file.name}/.yo-rc.json`);
+                        if (fileData['generator-jhipster'].applicationType === 'microservice') {
+                            appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
+                        }
+                    } catch (err) {
+                        this.log(chalk.red(`${file}: this .yo-rc.json can't be read`));
+                        this.debug('Error:', err);
+                    }
+                }
+            }
+        });
+
+        return appsFolders;
     }
 };

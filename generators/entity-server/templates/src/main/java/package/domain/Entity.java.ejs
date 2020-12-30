@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,22 +20,13 @@ package <%= packageName %>.domain;
 
 <%_
 
-let { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums } = _processJavaEntityImports(fields, relationships);
-
 let hasDto = dto === 'mapstruct';
-let isUsingMapsId = false;
 let hasTextBlob = false;
 let hasRelationship = relationships.length !== 0;
 _%>
 <%_
-for (idx in relationships) {
-    isUsingMapsId = relationships[idx].useJPADerivedIdentifier === true;
-    if (isUsingMapsId) {
-        break;
-    }
-}
-for (idx in fields) {
-    if (prodDatabaseType === 'postgresql' && fields[idx].fieldTypeBlobContent === 'text') {
+for (const field of fields.filter(field => !field.transient)) {
+    if (prodDatabaseType === 'postgresql' && field.fieldTypeBlobContent === 'text') {
         hasTextBlob = true;
         break;
     }
@@ -47,20 +38,24 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.cassandra.core.mapping.Column;
     <%_ } _%>
 import org.springframework.data.cassandra.core.mapping.Table;
-<%_ } if (importJsonIgnore === true) { _%>
-import com.fasterxml.jackson.annotation.JsonIgnore;
-<%_ } if (importJsonIgnoreProperties === true) { _%>
+<%_ } _%>
+<%_ if (relationshipsContainOtherSideIgnore === true) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-<%_ } if (!hasDto && typeof javadoc != 'undefined') { _%>
+<%_ } _%>
+<%_ if (!hasDto && typeof javadoc != 'undefined') { _%>
 import io.swagger.annotations.ApiModel;
-<%_ } if (!hasDto && importApiModelProperty === true) { _%>
+<%_ } _%>
+<%_ if (!hasDto && importApiModelProperty === true) { _%>
 import io.swagger.annotations.ApiModelProperty;
-<%_ } if (enableHibernateCache) { _%>
+<%_ } _%>
+<%_ if (enableHibernateCache) { _%>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-<%_ } if (hasTextBlob === true || (fieldsContainUUID === true && ['mysql', 'mariadb'].includes(prodDatabaseType))) { _%>
+<%_ } _%>
+<%_ if (!reactive && (hasTextBlob === true || (fieldsContainUUID === true && ['mysql', 'mariadb'].includes(prodDatabaseType)))) { _%>
 import org.hibernate.annotations.Type;
-<%_ } if (databaseType === 'mongodb') {
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') {
         if (!embedded) { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -91,8 +86,16 @@ import org.neo4j.springframework.data.core.support.UUIDStringGenerator;
 import org.neo4j.springframework.data.core.schema.Relationship;
 <%_ } _%>
 <%_ } if (databaseType === 'sql') { _%>
+    <%_ if (reactive) { _%>
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+    <%_ } else { _%>
 
 import javax.persistence.*;
+    <%_ } _%>
 <%_ } if (validation) { _%>
 import javax.validation.constraints.*;
 <%_ } _%>
@@ -113,13 +116,13 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 <%_ } if (fieldsContainDuration === true) { _%>
 import java.time.Duration;
-<%_ } if (importSet === true) { _%>
+<%_ } if (entityContainsCollectionField) { _%>
 import java.util.HashSet;
 import java.util.Set;
 <%_ } if (databaseType === 'couchbase' && hasRelationship) { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
-<%_ if (databaseType === 'cassandra' || fieldsContainUUID === true) { _%>
+<%_ if ((!embedded && primaryKey.type === 'UUID') || fieldsContainUUID === true) { _%>
 import java.util.UUID;
 <%_ }
 Object.keys(uniqueEnums).forEach(function(element) { _%>
@@ -143,22 +146,28 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
     <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
+  <%_ if (reactive) { _%>
+@Table("<%= entityTableName %>")
+  <%_ } else { _%>
 @Entity
 @Table(name = "<%= entityTableName %>")
-<%_     if (enableHibernateCache) { _%>
+    <%_ if (enableHibernateCache) { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-<%_     }
-} if (!embedded) {
-    if (databaseType === 'mongodb') { _%>
+    <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (!embedded) { _%>
+    <%_ if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= entityTableName %>")
-<%_ } if (databaseType === 'neo4j') { _%>
+    <%_ } else if (databaseType === 'neo4j') { _%>
 @Node
-<%_ } if (databaseType === 'couchbase') { _%>
+    <%_ } else if (databaseType === 'couchbase') { _%>
 @Document
-<%_ }
-} if (databaseType === 'cassandra') { _%>
+    <%_ } else if (databaseType === 'cassandra') { _%>
 @Table("<%= entityInstance %>")
-<%_ } if (searchEngine === 'elasticsearch') { _%>
+    <%_ } _%>
+<%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "<%= entityInstance.toLowerCase() %>")
 <%_ } _%>
 public class <%= asEntity(entityClass) %> implements Serializable {
@@ -174,37 +183,37 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 
 <%_ if (!embedded) { _%>
     @Id
-    <%_ if (databaseType === 'sql' && isUsingMapsId === false) { _%>
-        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+    <%_ if (databaseType === 'sql' && isUsingMapsId === false && !reactive && !primaryKey.composite) { _%>
+        <%_ if (primaryKey.fields[0].jpaGeneratedValue === 'identity') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-        <%_ }  else { _%>
+        <%_ } else if (primaryKey.fields[0].jpaGeneratedValue === 'sequence') { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
+        <%_ } else if (primaryKey.fields[0].jpaGeneratedValue) { _%>
+    @GeneratedValue
         <%_ } _%>
-    <%_ } _%>
-    <%_ if (databaseType === 'couchbase' && !embedded) { _%>
+    <%_ } else if (databaseType === 'couchbase' && !embedded) { _%>
     @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
-    <%_ } _%>
-    <%_ if (databaseType === 'neo4j') { _%>
+    <%_ } else if (databaseType === 'neo4j') { _%>
     @GeneratedValue(UUIDStringGenerator.class)
     <%_ } _%>
-    private <%= primaryKeyType %> id;
+    private <%= primaryKey.type %> <%= primaryKey.name %>;
 
 <%_ } _%>
-<%_ for (idx in fields) {
-    if (typeof fields[idx].javadoc !== 'undefined') { _%>
-<%- formatAsFieldJavadoc(fields[idx].javadoc) %>
+<%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
+    if (typeof field.javadoc !== 'undefined') { _%>
+<%- formatAsFieldJavadoc(field.javadoc) %>
     <%_ }
     let required = false;
     let unique = false;
-    const fieldValidate = fields[idx].fieldValidate;
-    const fieldValidateRules = fields[idx].fieldValidateRules;
-    const fieldValidateRulesMaxlength = fields[idx].fieldValidateRulesMaxlength;
-    const fieldType = fields[idx].fieldType;
-    const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-    const fieldName = fields[idx].fieldName;
-    const fieldNameUnderscored = fields[idx].fieldNameUnderscored;
-    const fieldNameAsDatabaseColumn = fields[idx].fieldNameAsDatabaseColumn;
+    const fieldValidate = field.fieldValidate;
+    const fieldValidateRules = field.fieldValidateRules;
+    const fieldValidateRulesMaxlength = field.fieldValidateRulesMaxlength;
+    const fieldType = field.fieldType;
+    const fieldTypeBlobContent = field.fieldTypeBlobContent;
+    const fieldName = field.fieldName;
+    const fieldNameUnderscored = field.fieldNameUnderscored;
+    const fieldNameAsDatabaseColumn = field.fieldNameAsDatabaseColumn;
     if (fieldValidate === true) {
         if (fieldValidateRules.includes('required')) {
             required = true;
@@ -212,13 +221,16 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         if (fieldValidateRules.includes('unique')) {
             unique = true;
         } _%>
-    <%- include('../common/field_validators'); -%>
+    <%- include('../common/field_validators', {field}); -%>
     <%_ } _%>
-    <%_ if (!hasDto && typeof fields[idx].javadoc != 'undefined') { _%>
-    @ApiModelProperty(value = "<%- formatAsApiDescription(fields[idx].javadoc) %>"<% if (required) { %>, required = true<% } %>)
+    <%_ if (!hasDto && typeof field.javadoc != 'undefined') { _%>
+    @ApiModelProperty(value = "<%- formatAsApiDescription(field.javadoc) %>"<% if (required) { %>, required = true<% } %>)
     <%_ } _%>
-    <%_ if (databaseType === 'sql') {
-        if (fields[idx].fieldIsEnum) { _%>
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+    @Column("<%- fieldNameAsDatabaseColumn %>")
+    <%_ } _%>
+    <%_ if (databaseType === 'sql' && !reactive) {
+        if (field.fieldIsEnum) { _%>
     @Enumerated(EnumType.STRING)
         <%_ }
         if (fieldType === 'byte[]') { _%>
@@ -250,11 +262,17 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     private String <%= fieldName %>;
     <%_ } _%>
 
-    <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
-      <%_ if (databaseType === 'sql' || databaseType === 'cassandra') { _%>
+    <%_ if (field.fieldWithContentType) { _%>
+      <%_ if ((databaseType === 'sql' && !reactive) || databaseType === 'cassandra') { _%>
     @Column(<% if (databaseType !== 'cassandra') { %>name = <% } %>"<%- fieldNameAsDatabaseColumn %>_content_type"<% if (required && databaseType !== 'cassandra') { %>, nullable = false<% } %>)
         <%_ if (required && databaseType === 'cassandra') { _%>
     @NotNull
+        <%_ } _%>
+      <%_ } _%>
+      <%_ if (databaseType === 'sql' && reactive) { _%>
+      @Column("<%- fieldNameAsDatabaseColumn %>_content_type")
+        <%_ if (required) { _%>
+      @NotNull
         <%_ } _%>
       <%_ } _%>
       <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
@@ -265,60 +283,74 @@ public class <%= asEntity(entityClass) %> implements Serializable {
       <%_ } _%>
     private String <%= fieldName %>ContentType;
 
-    <%_ }
+<%_ }
+}
+
+relationships.forEach((relationship, idx) => {
+    const otherEntityRelationshipName = relationship.otherEntityRelationshipName;
+    const otherEntityRelationshipNamePlural = relationship.otherEntityRelationshipNamePlural;
+    const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
+    const relationshipName = relationship.relationshipName;
+    const relationshipFieldName = relationship.relationshipFieldName;
+    const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+    const relationshipType = relationship.relationshipType;
+    const relationshipValidate = relationship.relationshipValidate;
+    const relationshipRequired = relationship.relationshipRequired;
+    const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
+    const ownerSide = relationship.ownerSide || false;
+    const isUsingMapsId = relationship.useJPADerivedIdentifier;
+    if (otherEntityRelationshipName) {
+        mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
     }
 
-    for (idx in relationships) {
-        const otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName;
-        const otherEntityRelationshipNamePlural = relationships[idx].otherEntityRelationshipNamePlural;
-        const otherEntityIsEmbedded = relationships[idx].otherEntityIsEmbedded;
-        const relationshipName = relationships[idx].relationshipName;
-        const relationshipFieldName = relationships[idx].relationshipFieldName;
-        const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-        const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
-        const relationshipType = relationships[idx].relationshipType;
-        const relationshipValidate = relationships[idx].relationshipValidate;
-        const relationshipRequired = relationships[idx].relationshipRequired;
-        const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-        const ownerSide = relationships[idx].ownerSide;
-        const isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
-        if (otherEntityRelationshipName) {
-            mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
-        }
-        if (typeof relationships[idx].javadoc != 'undefined') { _%>
-<%- formatAsFieldJavadoc(relationships[idx].javadoc) %>
-            <%_ if (!hasDto) { _%>
-    @ApiModelProperty(value = "<%- formatAsApiDescription(relationships[idx].javadoc) %>")
-            <%_ } _%>
-    <%_ }
-        if (relationshipType === 'one-to-many') {
-            if (databaseType === 'sql') {
+    // An embedded entity should not reference entities that embeds it, unless the other entity is also embedded
+    if (embedded && !otherEntityIsEmbedded && ownerSide === false) {
+      return;
+    }
+
+    if (typeof relationship.javadoc != 'undefined') { _%>
+<%- formatAsFieldJavadoc(relationship.javadoc) %>
+    <%_ if (!hasDto) { _%>
+    @ApiModelProperty(value = "<%- formatAsApiDescription(relationship.javadoc) %>")
+    <%_ } _%>
+<%_ }
+    if (relationshipType === 'one-to-many') {
+        if (databaseType === 'sql' && !reactive) {
     _%>
     @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
-            <%_ if (enableHibernateCache) { _%>
+        <%_ if (enableHibernateCache) { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-            <%_ }
+        <%_ }
         } else if (databaseType === 'mongodb' || databaseType === 'couchbase') {
             if (databaseType === 'mongodb' && !otherEntityIsEmbedded) { _%>
     @DBRef
         <%_ } _%>
     @Field("<%= relationshipFieldName %>")
-        <%_ if (databaseType === 'couchbase'&& !otherEntityIsEmbedded) { _%>
+        <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
     private Set<String> <%= relationshipFieldName %>Ids = new HashSet<>();
 
     @N1qlJoin(on = "lks.<%= relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
         <%_ } _%>
     <%_ } else if (databaseType === 'neo4j') { _%>
     @Relationship
+    <%_ } else if (databaseType === 'sql' && reactive) { _%>
+    @Transient
+    <%_ } _%>
+    <%_ if (relationship.ignoreOtherSideProperty) { _%>
+    @JsonIgnoreProperties(value = {
+        <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
+        "<%= otherRelationship.relationshipReferenceField %>",
+        <%_ }); _%>
+    }, allowSetters = true)
     <%_ } _%>
     private Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
-    <%_ } else if (relationshipType === 'many-to-one') {
-            if (databaseType === 'sql') {
+<%_ } else if (relationshipType === 'many-to-one') {
+        if (databaseType === 'sql' && !reactive) {
     _%>
     @ManyToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
         <%_ if (relationshipValidate) { _%>
-    <%- include('relationship_validators'); -%>
+    <%- include('relationship_validators', { relationship }); -%>
         <%_ }
     } else if ((databaseType === 'mongodb' || databaseType === 'couchbase') && !otherEntityIsEmbedded) {
         if (databaseType === 'mongodb') { _%>
@@ -333,23 +365,43 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     } else if (databaseType === 'neo4j') { _%>
     @Relationship("<%= relationshipFieldName %>")
     <%_ } _%>
-    <%_ if (otherEntityRelationshipNamePlural !== undefined && otherEntityRelationshipNamePlural !== '') { _%>
-    @JsonIgnoreProperties(value = "<%= otherEntityRelationshipNamePlural %>", allowSetters = true)
+    <%_ if (relationship.ignoreOtherSideProperty) { _%>
+    @JsonIgnoreProperties(value = {
+        <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
+        "<%= otherRelationship.relationshipReferenceField %>",
+        <%_ }); _%>
+    }, allowSetters = true)
+    <%_ } _%>
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+    @Transient
     <%_ } _%>
     private <%= asEntity(otherEntityNameCapitalized) %> <%= relationshipFieldName %>;
 
-    <%_ } else if (relationshipType === 'many-to-many') {
-        if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+    @Column("<%= getColumnName(relationshipName) %>_id")
+    private Long <%= relationshipFieldName %>Id;
+    <%_ } _%>
+
+<%_ } else if (relationshipType === 'many-to-many') {
+        if (databaseType === 'sql' && !reactive) { _%>
     @ManyToMany<% if (ownerSide === false) { %>(mappedBy = "<%= otherEntityRelationshipNamePlural %>")<% } %>
         <%_ if (enableHibernateCache) {_%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
         <%_ } if (ownerSide === true) {
             if (relationshipValidate) { _%>
-    <%- include('relationship_validators'); -%>
+    <%- include('relationship_validators', { relationship }); -%>
         <%_ } _%>
-    @JoinTable(name = "<%= joinTableName %>",
-               joinColumns = @JoinColumn(name = "<%= getColumnName(name) %>_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "<%= getColumnName(relationships[idx].relationshipName) %>_id", referencedColumnName = "id"))
+    @JoinTable(name = "<%= relationship.joinTable.name %>",
+               joinColumns = <%= entity.primaryKey.fields.length > 1 ? '{' : '' %>
+                   <%_ entity.primaryKey.fields.forEach((field, idx) => { _%>
+                   <%= idx === 0 ? '' : ',' %>@JoinColumn(name = "<%= `${entityTableName}_${field.columnName}` %>")
+                   <%_ }); _%>
+               <%= entity.primaryKey.fields.length > 1 ? '}' : '' %>,
+               inverseJoinColumns = <%= relationship.otherEntity.primaryKey.fields.length > 1 ? '{' : '' %>
+                   <%_ relationship.otherEntity.primaryKey.fields.forEach((field, idx) => { _%>
+                   <%= idx === 0 ? '' : ',' %>@JoinColumn(name = "<%= `${relationship.columnName}_${field.columnName}` %>"))
+                   <%_ }); _%>
+               <%= relationship.otherEntity.primaryKey.fields.length > 1 ? '}' : '' %>
         <%_ }
         } else if ((databaseType === 'mongodb' || databaseType === 'couchbase') && !otherEntityIsEmbedded) {
             if (databaseType === 'mongodb') { _%>
@@ -361,27 +413,41 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 
     @N1qlJoin(on = "lks.<%= relationshipFieldNamePlural %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
         <%_ }
-         } if (ownerSide === false) { _%>
-    @JsonIgnore
+        }
+        if (relationship.ignoreOtherSideProperty) { _%>
+    @JsonIgnoreProperties(value = {
+        <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
+        "<%= otherRelationship.relationshipReferenceField %>",
+        <%_ }); _%>
+    }, allowSetters = true)
+    <%_ } _%>
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+    @Transient
     <%_ } _%>
     private Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
-    <%_ } else {
-        if (databaseType === 'sql') {
+<%_ } else {
+        if (databaseType === 'sql' && !reactive) {
+            if (relationship.ignoreOtherSideProperty) { _%>
+    @JsonIgnoreProperties(value = {
+        <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
+        "<%= otherRelationship.relationshipReferenceField %>",
+        <%_ }); _%>
+    }, allowSetters = true)
+        <%_ }
             if (ownerSide) { _%>
     @OneToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
             <%_ if (relationshipValidate) { _%>
-    <%- include('relationship_validators'); -%>
+    <%- include('relationship_validators', { relationship }); -%>
             <%_ } _%>
             <%_ if (isUsingMapsId === true) { %>
     @MapsId
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "<%= relationship.otherEntity.primaryKey.fields[0].columnName %>")
             <%_ } else { _%>
     @JoinColumn(unique = true)
             <%_ } _%>
         <%_ } else { _%>
     @OneToOne(mappedBy = "<%= otherEntityRelationshipName %>")
-    @JsonIgnore
         <%_ }
         } else if ((databaseType === 'mongodb' || databaseType === 'couchbase') && !otherEntityIsEmbedded) {
             if (databaseType === 'mongodb') { _%>
@@ -393,36 +459,46 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 
     @N1qlJoin(on = "lks.<%= relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
         <%_ }
-            if (ownerSide === false) { _%>
-    @com.fasterxml.jackson.annotation.JsonBackReference
-    <%_     }
-        } _%>
+        } else if (databaseType === 'sql' && reactive) { _%>
+          <%_ if (ownerSide === true && isUsingMapsId !== true) { _%>
+    private Long <%= relationshipFieldName %>Id;
+
+          <%_ } _%>
+    @Transient
+    <%_ } _%>
     private <%= asEntity(otherEntityNameCapitalized) %> <%= relationshipFieldName %>;
 
-    <%_ }
-    } _%>
+<%_ }
+}); _%>
     // jhipster-needle-entity-add-field - JHipster will add fields here
-    <%_ if (!embedded) { _%>
-    public <% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'neo4j') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> getId() {
-        return id;
+<%_ if (!embedded) { _%>
+    public <%= primaryKey.type %> get<%= primaryKey.nameCapitalized %>() {
+        return <%= primaryKey.name %>;
     }
 
-    public void setId(<% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> id) {
-        this.id = id;
+    public void set<%= primaryKey.nameCapitalized %>(<%= primaryKey.type %> <%= primaryKey.name %>) {
+        this.<%= primaryKey.name %> = <%= primaryKey.name %>;
+    }
+
+    <%_ if (fluentMethods) { _%>
+    public <%= asEntity(entityClass) %> <%= primaryKey.name %>(<%= primaryKey.type %> <%= primaryKey.name %>) {
+        this.<%= primaryKey.name %> = <%= primaryKey.name %>;
+        return this;
     }
     <%_ } _%>
-<%_ for (idx in fields) {
-        const fieldType = fields[idx].fieldType;
-        const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-        const fieldName = fields[idx].fieldName;
-        const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod; _%>
+<%_ } _%>
+<%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
+        const fieldType = field.fieldType;
+        const fieldTypeBlobContent = field.fieldTypeBlobContent;
+        const fieldName = field.fieldName;
+        const fieldInJavaBeanMethod = field.fieldInJavaBeanMethod; _%>
 
     <%_ if (fieldTypeBlobContent !== 'text') { _%>
-    public <%= fieldType %> <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldInJavaBeanMethod %>() {
+    public <%= fieldType %> get<%= fieldInJavaBeanMethod %>() {
     <%_ } else { _%>
     public String get<%= fieldInJavaBeanMethod %>() {
     <%_ } _%>
-        return <%= fieldName %>;
+        return this.<%= fieldName %>;
     }
     <%_ if (fluentMethods) { _%>
 
@@ -431,7 +507,11 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         <%_ } else { _%>
     public <%= asEntity(entityClass) %> <%= fieldName %>(String <%= fieldName %>) {
         <%_ } _%>
+        <%_ if (fieldType === 'BigDecimal' && databaseType === 'sql' && reactive) { _%>
+        this.<%= fieldName %> = <%= fieldName %> != null ? <%= fieldName %>.stripTrailingZeros() : null;
+        <%_ } else { _%>
         this.<%= fieldName %> = <%= fieldName %>;
+        <%_ } _%>
         return this;
     }
     <%_ } _%>
@@ -441,12 +521,16 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%_ } else { _%>
     public void set<%= fieldInJavaBeanMethod %>(String <%= fieldName %>) {
     <%_ } _%>
+    <%_ if (fieldType === 'BigDecimal' && databaseType === 'sql' && reactive) { _%>
+        this.<%= fieldName %> = <%= fieldName %> != null ? <%= fieldName %>.stripTrailingZeros() : null;
+    <%_ } else { _%>
         this.<%= fieldName %> = <%= fieldName %>;
+    <%_ } _%>
     }
-    <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
+    <%_ if (field.fieldWithContentType) { _%>
 
     public String get<%= fieldInJavaBeanMethod %>ContentType() {
-        return <%= fieldName %>ContentType;
+        return this.<%= fieldName %>ContentType;
     }
     <%_ if (fluentMethods) { _%>
 
@@ -462,28 +546,38 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%_ } _%>
 <%_ } _%>
 <%_
-    for (idx in relationships) {
-        const relationshipFieldName = relationships[idx].relationshipFieldName;
-        const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-        const relationshipType = relationships[idx].relationshipType;
-        const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-        const relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
-        const relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural;
-        const otherEntityName = relationships[idx].otherEntityName;
-        const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-        const otherEntityRelationshipNameCapitalized = relationships[idx].otherEntityRelationshipNameCapitalized;
-        const otherEntityRelationshipNameCapitalizedPlural = relationships[idx].otherEntityRelationshipNameCapitalizedPlural;
-        const otherEntityIsEmbedded = relationships[idx].otherEntityIsEmbedded;
+    for (const relationship of relationships) {
+        const relationshipFieldName = relationship.relationshipFieldName;
+        const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+        const relationshipType = relationship.relationshipType;
+        const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
+        const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
+        const relationshipNameCapitalizedPlural = relationship.relationshipNameCapitalizedPlural;
+        const otherEntityName = relationship.otherEntityName;
+        const otherEntityNamePlural = relationship.otherEntityNamePlural;
+        const otherEntityRelationshipNameCapitalized = relationship.otherEntityRelationshipNameCapitalized;
+        const otherEntityRelationshipNameCapitalizedPlural = relationship.otherEntityRelationshipNameCapitalizedPlural;
+        const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
+        const ownerSide = relationship.ownerSide || false;
+
+        // An embedded entity should not reference entities that embeds it, unless the other entity is also embedded
+        if (embedded && !otherEntityIsEmbedded && ownerSide === false) {
+            continue;
+        }
+
+        const useJPADerivedIdentifier = relationship.useJPADerivedIdentifier;
+        const reactiveRelationshipWithId = (databaseType === 'sql' && reactive && !(relationshipType === 'one-to-one' &&
+                (ownerSide === false || (ownerSide === true && useJPADerivedIdentifier === true))));
     _%>
     <%_ if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') { _%>
 
     public Set<<%= asEntity(otherEntityNameCapitalized) %>> get<%= relationshipNameCapitalizedPlural %>() {
-        return <%= relationshipFieldNamePlural %>;
+        return this.<%= relationshipFieldNamePlural %>;
     }
         <%_ if (fluentMethods) { _%>
 
     public <%= asEntity(entityClass) %> <%= relationshipFieldNamePlural %>(Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= otherEntityNamePlural %>) {
-        this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
+        this.set<%= relationshipNameCapitalizedPlural %>(<%= otherEntityNamePlural %>);
             <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
         this.<%= relationshipFieldName %>Ids = <%= otherEntityNamePlural %>.stream()
             .map(<%= asEntity(otherEntityNameCapitalized) %>::getId)
@@ -494,34 +588,62 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 
     public <%= asEntity(entityClass) %> add<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
         this.<%= relationshipFieldNamePlural %>.add(<%= otherEntityName %>);
+        <%_ if (!otherEntityIsEmbedded || embedded && ownerSide === true) { _%>
             <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
-        this.<%= relationshipFieldName %>Ids.add(<%= otherEntityName %>.getId());
+        this.<%= relationshipFieldName %>Ids.add(<%= otherEntityName %>.get<%= primaryKey.nameCapitalized %>());
             <%_ } _%>
-            <%_ if (relationshipType === 'one-to-many') { _%>
+            <%_ if (relationship.otherRelationship) {
+                    if (relationshipType === 'one-to-many') {
+                        if (databaseType !== 'neo4j') { _%>
         <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
-            <%_ } else if (otherEntityRelationshipNameCapitalizedPlural !== '' && asEntity(otherEntityNameCapitalized)!=='User' && relationshipType === 'many-to-many') {
+                    <%_ } _%>
+                <%_ } else if (otherEntityRelationshipNameCapitalizedPlural && asEntity(otherEntityNameCapitalized)!=='User' && relationshipType === 'many-to-many') {
                 // JHipster version < 3.6.0 didn't ask for this relationship name _%>
         <%= otherEntityName %>.get<%= otherEntityRelationshipNameCapitalizedPlural %>().add(this);
+                <%_ } _%>
             <%_ } _%>
+        <%_ } _%>
         return this;
     }
 
     public <%= asEntity(entityClass) %> remove<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
         this.<%= relationshipFieldNamePlural %>.remove(<%= otherEntityName %>);
+        <%_ if (!otherEntityIsEmbedded || (embedded && ownerSide === true)) { _%>
             <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
-        this.<%= relationshipFieldName %>Ids.remove(<%= otherEntityName %>.getId());
+        this.<%= relationshipFieldName %>Ids.remove(<%= otherEntityName %>.get<%= primaryKey.nameCapitalized %>());
             <%_ } _%>
-            <%_ if (relationshipType === 'one-to-many') { _%>
+            <%_ if (relationship.otherRelationship) {
+                    if (relationshipType === 'one-to-many') {
+                        if (databaseType !== 'neo4j') { _%>
         <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(null);
-            <%_ } else if (otherEntityRelationshipNameCapitalizedPlural !== '' && asEntity(otherEntityNameCapitalized)!=='User' && relationshipType === 'many-to-many') {
+                    <%_ } _%>
+                <%_ } else if (otherEntityRelationshipNameCapitalizedPlural !== '' && asEntity(otherEntityNameCapitalized)!=='User' && relationshipType === 'many-to-many') {
                 // JHipster version < 3.6.0 didn't ask for this relationship name _%>
         <%= otherEntityName %>.get<%= otherEntityRelationshipNameCapitalizedPlural %>().remove(this);
+                <%_ } _%>
             <%_ } _%>
+        <%_ } _%>
         return this;
     }
         <%_ } _%>
 
     public void set<%= relationshipNameCapitalizedPlural %>(Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= otherEntityNamePlural %>) {
+        <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
+        if (this.<%= relationshipFieldNamePlural %> != null) {
+            <%_ if (relationship.otherRelationship.reference.collection) { _%>
+            this.<%= relationshipFieldNamePlural %>.forEach(i -> i.remove<%= otherEntityRelationshipNameCapitalized %>(this));
+            <%_ } else { _%>
+            this.<%= relationshipFieldNamePlural %>.forEach(i -> i.set<%= otherEntityRelationshipNameCapitalized %>(null));
+            <%_ } _%>
+        }
+        if (<%= otherEntityNamePlural %> != null) {
+            <%_ if (relationship.otherRelationship.reference.collection) { _%>
+            <%= otherEntityNamePlural %>.forEach(i -> i.add<%= otherEntityRelationshipNameCapitalized %>(this));
+            <%_ } else { _%>
+            <%= otherEntityNamePlural %>.forEach(i -> i.set<%= otherEntityRelationshipNameCapitalized %>(this));
+            <%_ } _%>
+        }
+        <%_ } _%>
         this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
         <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
         this.<%= relationshipFieldName %>Ids = <%= otherEntityNamePlural %>.stream()
@@ -532,25 +654,51 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%_ } else { _%>
 
     public <%= asEntity(otherEntityNameCapitalized) %> get<%= relationshipNameCapitalized %>() {
-        return <%= relationshipFieldName %>;
+        return this.<%= relationshipFieldName %>;
     }
         <%_ if (fluentMethods) { _%>
 
     public <%= asEntity(entityClass) %> <%= relationshipFieldName %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
-        this.<%= relationshipFieldName %> = <%= otherEntityName %>;
-            <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
-        this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
+        this.set<%= relationshipNameCapitalized %>(<%= otherEntityName %>);
+            <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationshipWithId) { _%>
+        this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.get<%= primaryKey.nameCapitalized %>() : null;
             <%_ } _%>
         return this;
     }
         <%_ } _%>
 
     public void set<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
+        <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
+        if (this.<%= relationshipFieldName %> != null) {
+            <%_ if (relationship.otherRelationship.reference.collection) { _%>
+            this.<%= relationshipFieldName %>.remove<%= otherEntityRelationshipNameCapitalized %>(this);
+            <%_ } else { _%>
+            this.<%= relationshipFieldName %>.set<%= otherEntityRelationshipNameCapitalized %>(null);
+            <%_ } _%>
+        }
+        if (<%= relationshipFieldName %> != null) {
+            <%_ if (relationship.otherRelationship.reference.collection) { _%>
+            <%= relationshipFieldName %>.add<%= otherEntityRelationshipNameCapitalized %>(this);
+            <%_ } else { _%>
+            <%= relationshipFieldName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
+            <%_ } _%>
+        }
+        <%_ } _%>
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
-        <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
-        this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
+        <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationshipWithId) { _%>
+        this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.get<%= primaryKey.nameCapitalized %>() : null;
         <%_ } _%>
     }
+        <%_ if (reactiveRelationshipWithId) { _%>
+
+    public Long get<%= relationshipNameCapitalized %>Id() {
+        return this.<%= relationshipFieldName %>Id;
+    }
+
+    public void set<%= relationshipNameCapitalized %>Id(Long <%= otherEntityName %>) {
+        this.<%= relationshipFieldName %>Id = <%= otherEntityName %>;
+    }
+        <%_ } _%>
     <%_ } _%>
 <%_ } _%>
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -564,7 +712,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             return false;
         }
         <%_ if (!embedded) { _%>
-        return id != null && id.equals(((<%= asEntity(entityClass) %>) o).id);
+        return <%= primaryKey.name %> != null && <%= primaryKey.name %>.equals(((<%= asEntity(entityClass) %>) o).<%= primaryKey.name %>);
         <%_ } else { _%>
         return false;
         <%_ } _%>
@@ -572,34 +720,36 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "<%= asEntity(entityClass) %>{" +
         <%_ if (!embedded) { _%>
-            "id=" + getId() +
+            "<%= primaryKey.name %>=" + get<%= primaryKey.nameCapitalized %>() +
         <%_ } _%>
-            <%_ for (idx in fields) {
-                const fieldType = fields[idx].fieldType;
-                const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-                const fieldName = fields[idx].fieldName;
-                const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
+            <%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
+                const fieldType = field.fieldType;
+                const fieldTypeBlobContent = field.fieldTypeBlobContent;
+                const fieldName = field.fieldName;
+                const fieldInJavaBeanMethod = field.fieldInJavaBeanMethod;
                 const isNumeric = ['integer', 'long', 'float', 'double', 'bigdecimal'].includes(fieldType.toLowerCase()); _%>
-            ", <%= fieldName %>=<% if (! isNumeric) { %>'<% } %>" + <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<% } %><%= fieldInJavaBeanMethod %>() <% if (! isNumeric) { %>+ "'" <% } %>+
-                <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
+            ", <%= fieldName %>=<% if (! isNumeric) { %>'<% } %>" + get<%= fieldInJavaBeanMethod %>() <% if (! isNumeric) { %>+ "'" <% } %>+
+                <%_ if (field.fieldWithContentType) { _%>
             ", <%= fieldName %>ContentType='" + get<%= fieldInJavaBeanMethod %>ContentType() + "'" +
                 <%_ } _%>
             <%_ } _%>
-            <%_ for (idx in relationships) {
-                const relationshipType = relationships[idx].relationshipType;
-                const otherEntityIsEmbedded = relationships[idx].otherEntityIsEmbedded;
-                const relationshipFieldName = relationships[idx].relationshipFieldName;
-                const relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
-                const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-                const relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural;
-                const ownerSide = relationships[idx].ownerSide; _%>
+            <%_ for (const relationship of relationships) {
+                const relationshipType = relationship.relationshipType;
+                const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
+                const relationshipFieldName = relationship.relationshipFieldName;
+                const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
+                const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+                const relationshipNameCapitalizedPlural = relationship.relationshipNameCapitalizedPlural;
+                const ownerSide = relationship.ownerSide; _%>
             <%_ if (otherEntityIsEmbedded) {
                     if (relationshipType === 'many-to-one') { _%>
             ", <%= relationshipFieldNamePlural %>='" + get<%= relationshipNameCapitalizedPlural %>() + "'" +

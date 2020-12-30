@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -125,6 +125,13 @@ management:
         git:
             mode: full
     health:
+        group:
+            liveness:
+                include: livenessState
+            readiness:
+                include: readinessState<% if (databaseType === 'sql') { %>,datasource<% } %>
+        probes:
+            enabled: true
         mail:
             enabled: false # When using the MailService, configure an SMTP server and set this to true
     metrics:
@@ -153,10 +160,7 @@ management:
                         enabled: true
 
 spring:
-    <%_ if (searchEngine === 'elasticsearch' && !reactive) { _%>
-    autoconfigure:
-        exclude: <% if (databaseType === 'sql' && messageBroker === 'kafka') { %>org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration,<% } %>org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration,org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration
-    <%_ } else if (databaseType === 'sql' && messageBroker === 'kafka') { _%>
+    <%_ if (databaseType === 'sql' && messageBroker === 'kafka') { _%>
     autoconfigure:
         exclude: org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration
     <%_ } _%>
@@ -254,11 +258,6 @@ spring:
         basename: i18n/messages
     main:
         allow-bean-definition-overriding: true
-    <%_ if (!reactive) { _%>
-    mvc:
-        favicon:
-            enabled: false
-    <%_ } _%>
     <%_ if (skipUserManagement && ['monolith', 'gateway'].includes(applicationType) && !['oauth2','uaa'].includes(authenticationType)) { _%>
     security:
         user:
@@ -333,7 +332,7 @@ info:
 
 jhipster:
     clientApp:
-        name: "<%= angularAppName %>"
+        name: "<%= frontendAppName %>"
     # By default CORS is disabled. Uncomment to enable.
     # cors:
     #     allowed-origins: "*"
@@ -348,7 +347,7 @@ jhipster:
     #     max-age: 1800
     mail:
         from: <%= baseName %>@localhost
-    swagger:
+    api-docs:
         default-include-pattern: /api/.*
         title: <%= baseName %> API
         description: <%= baseName %> API documentation
@@ -357,7 +356,7 @@ jhipster:
         contact-name:
         contact-url:
         contact-email:
-        license:
+        license: unlicensed
         license-url:
     <%_ if (authenticationType === 'oauth2') { _%>
     security:

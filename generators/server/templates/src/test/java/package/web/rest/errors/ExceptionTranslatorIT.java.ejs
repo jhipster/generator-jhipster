@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,20 +21,8 @@ package <%= packageName %>.web.rest.errors;
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
-import <%= packageName %>.RedisTestContainerExtension;
-<%_ } _%>
-import <%= packageName %>.<%= mainClass %>;
-<%_ if (authenticationType === 'uaa') { _%>
-import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
-<%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
-import <%= packageName %>.config.TestSecurityConfiguration;
-<%_ } _%>
+import <%= packageName %>.IntegrationTest;
 import org.junit.jupiter.api.Test;
-<%_ if (cacheProvider === 'redis') { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -57,24 +45,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @WithMockUser
 @AutoConfigureMockMvc
-<%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
-@SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class})
-<%_ } else if (authenticationType === 'oauth2') { _%>
-@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
-<%_ } else { _%>
-@SpringBootTest(classes = <%= mainClass %>.class)
-<%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
-@ExtendWith(RedisTestContainerExtension.class)
-<%_ } _%>
-public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+@IntegrationTest
+class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired
     private MockMvc mockMvc;
     <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 
     @Test
-    public void testConcurrencyFailure() throws Exception {
+    void testConcurrencyFailure() throws Exception {
         mockMvc.perform(get("/api/exception-translator-test/concurrency-failure")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
             .andExpect(status().isConflict())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -83,18 +62,18 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
     <%_ } _%>
 
     @Test
-    public void testMethodArgumentNotValid() throws Exception {
+    void testMethodArgumentNotValid() throws Exception {
          mockMvc.perform(post("/api/exception-translator-test/method-argument").content("{}").contentType(MediaType.APPLICATION_JSON)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
              .andExpect(status().isBadRequest())
              .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
              .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_VALIDATION))
              .andExpect(jsonPath("$.fieldErrors.[0].objectName").value("test"))
              .andExpect(jsonPath("$.fieldErrors.[0].field").value("test"))
-             .andExpect(jsonPath("$.fieldErrors.[0].message").value("NotNull"));
+             .andExpect(jsonPath("$.fieldErrors.[0].message").value("must not be null"));
     }
 
     @Test
-    public void testMissingServletRequestPartException() throws Exception {
+    void testMissingServletRequestPartException() throws Exception {
         mockMvc.perform(get("/api/exception-translator-test/missing-servlet-request-part")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -102,7 +81,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
     }
 
     @Test
-    public void testMissingServletRequestParameterException() throws Exception {
+    void testMissingServletRequestParameterException() throws Exception {
         mockMvc.perform(get("/api/exception-translator-test/missing-servlet-request-parameter")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -110,7 +89,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
     }
 
     @Test
-    public void testAccessDenied() throws Exception {
+    void testAccessDenied() throws Exception {
         mockMvc.perform(get("/api/exception-translator-test/access-denied")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
             .andExpect(status().isForbidden())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -119,7 +98,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
     }
 
     @Test
-    public void testUnauthorized() throws Exception {
+    void testUnauthorized() throws Exception {
         mockMvc.perform(get("/api/exception-translator-test/unauthorized")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
             .andExpect(status().isUnauthorized())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -129,7 +108,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
     }
 
     @Test
-    public void testMethodNotSupported() throws Exception {
+    void testMethodNotSupported() throws Exception {
         mockMvc.perform(post("/api/exception-translator-test/access-denied")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
             .andExpect(status().isMethodNotAllowed())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -138,7 +117,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
     }
 
     @Test
-    public void testExceptionWithResponseStatus() throws Exception {
+    void testExceptionWithResponseStatus() throws Exception {
         mockMvc.perform(get("/api/exception-translator-test/response-status")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -147,7 +126,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
     }
 
     @Test
-    public void testInternalServerError() throws Exception {
+    void testInternalServerError() throws Exception {
         mockMvc.perform(get("/api/exception-translator-test/internal-server-error")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
             .andExpect(status().isInternalServerError())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -176,12 +155,8 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
  */
 @WithMockUser
 @AutoConfigureWebTestClient
-<%_ if (authenticationType === 'oauth2') { _%>
-@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
-<%_ } else { _%>
-@SpringBootTest(classes = <%= mainClass %>.class)
-<%_ } _%>
-public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+@IntegrationTest
+class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired
     private WebTestClient webTestClient;
@@ -195,7 +170,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
     <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 
     @Test
-    public void testConcurrencyFailure() {
+    void testConcurrencyFailure() {
         webTestClient.get().uri("/api/exception-translator-test/concurrency-failure")
             .exchange()
             .expectStatus().isEqualTo(HttpStatus.CONFLICT)
@@ -206,7 +181,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
     <%_ } _%>
 
     @Test
-    public void testMethodArgumentNotValid() {
+    void testMethodArgumentNotValid() {
          webTestClient.post().uri("/api/exception-translator-test/method-argument")
              .contentType(MediaType.APPLICATION_JSON)
              .bodyValue("{}")
@@ -216,11 +191,11 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
              .jsonPath("$.message").isEqualTo(ErrorConstants.ERR_VALIDATION)
              .jsonPath("$.fieldErrors.[0].objectName").isEqualTo("test")
              .jsonPath("$.fieldErrors.[0].field").isEqualTo("test")
-             .jsonPath("$.fieldErrors.[0].message").isEqualTo("NotNull");
+             .jsonPath("$.fieldErrors.[0].message").isEqualTo("must not be null");
     }
 
     @Test
-    public void testMissingRequestPart() {
+    void testMissingRequestPart() {
         webTestClient.get().uri("/api/exception-translator-test/missing-servlet-request-part")
             .exchange()
             .expectStatus().isBadRequest()
@@ -230,7 +205,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
     }
 
     @Test
-    public void testMissingRequestParameter() {
+    void testMissingRequestParameter() {
         webTestClient.get().uri("/api/exception-translator-test/missing-servlet-request-parameter")
             .exchange()
             .expectStatus().isBadRequest()
@@ -240,7 +215,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
     }
 
     @Test
-    public void testAccessDenied() {
+    void testAccessDenied() {
         webTestClient.get().uri("/api/exception-translator-test/access-denied")
             .exchange()
             .expectStatus().isForbidden()
@@ -251,7 +226,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
     }
 
     @Test
-    public void testUnauthorized() {
+    void testUnauthorized() {
         webTestClient.get().uri("/api/exception-translator-test/unauthorized")
             .exchange()
             .expectStatus().isUnauthorized()
@@ -263,7 +238,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
     }
 
     @Test
-    public void testMethodNotSupported() {
+    void testMethodNotSupported() {
         webTestClient.post().uri("/api/exception-translator-test/access-denied")
             .exchange()
             .expectStatus().isEqualTo(HttpStatus.METHOD_NOT_ALLOWED)
@@ -274,7 +249,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
     }
 
     @Test
-    public void testExceptionWithResponseStatus() {
+    void testExceptionWithResponseStatus() {
         webTestClient.get().uri("/api/exception-translator-test/response-status")
             .exchange()
             .expectStatus().isBadRequest()
@@ -285,7 +260,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
     }
 
     @Test
-    public void testInternalServerError() {
+    void testInternalServerError() {
         webTestClient.get().uri("/api/exception-translator-test/internal-server-error")
             .exchange()
             .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)

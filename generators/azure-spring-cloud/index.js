@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,12 +27,7 @@ const constants = require('../generator-constants');
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
+
         this.option('skip-build', {
             desc: 'Skips building the application',
             type: Boolean,
@@ -45,13 +40,12 @@ module.exports = class extends BaseGenerator {
             defaults: false,
         });
 
-        this.azureSpringCloudSkipBuild = this.options['skip-build'];
-        this.azureSpringCloudSkipDeploy = this.options['skip-deploy'] || this.options['skip-build'];
-        this.registerPrettierTransform();
+        this.azureSpringCloudSkipBuild = this.options.skipBuild;
+        this.azureSpringCloudSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
     }
 
     initializing() {
-        if (!this.options['from-cli']) {
+        if (!this.options.fromCli) {
             this.warning(
                 `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
                     'jhipster <command>'
@@ -65,12 +59,12 @@ module.exports = class extends BaseGenerator {
         this.packageFolder = this.config.get('packageFolder');
         this.authenticationType = this.config.get('authenticationType');
         this.jwtSecretKey = this.config.get('jwtSecretKey');
-        this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
+        this.cacheProvider = this.config.get('cacheProvider') || 'no';
         this.enableHibernateCache = this.config.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
         this.databaseType = this.config.get('databaseType');
         this.prodDatabaseType = this.config.get('prodDatabaseType');
         this.searchEngine = this.config.get('searchEngine');
-        this.angularAppName = this.getAngularAppName();
+        this.frontendAppName = this.getFrontendAppName();
         this.buildTool = this.config.get('buildTool');
         this.applicationType = this.config.get('applicationType');
         this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
@@ -291,27 +285,21 @@ ${chalk.red('az extension add --name spring-cloud')}`
 
             copyAzureSpringCloudFiles() {
                 if (this.abort) return;
-                const done = this.async();
                 this.log(chalk.bold('\nCreating Azure Spring Cloud deployment files'));
                 this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
                 this.template('bootstrap-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-azure.yml`);
                 if (this.azureSpringCloudDeploymentType === 'github-action') {
                     this.template('github/workflows/azure-spring-cloud.yml.ejs', '.github/workflows/azure-spring-cloud.yml');
                 }
-                this.conflicter.resolve(err => {
-                    done();
-                });
             },
 
             addAzureSpringCloudMavenProfile() {
                 if (this.abort) return;
-                const done = this.async();
                 if (this.buildTool === 'maven') {
                     this.render('pom-profile.xml.ejs', profile => {
                         this.addMavenProfile('azure', `            ${profile.toString().trim()}`);
                     });
                 }
-                done();
             },
         };
     }

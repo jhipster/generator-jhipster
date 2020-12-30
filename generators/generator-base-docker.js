@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,12 +26,7 @@ const constants = require('./generator-constants');
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
+
         // This adds support for a `--skip-checks` flag
         this.option('skip-checks', {
             desc: 'Check the status of the required tools',
@@ -44,9 +39,8 @@ module.exports = class extends BaseGenerator {
             type: Boolean,
             defaults: false,
         });
-        this.regenerate = this.options['skip-prompts'];
-        this.skipChecks = this.options['skip-checks'];
-        this.registerPrettierTransform();
+        this.regenerate = this.options.skipPrompts;
+        this.skipChecks = this.options.skipChecks;
     }
 
     get initializing() {
@@ -60,12 +54,7 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
                 this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
                 this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
-                this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
-                this.DOCKER_JHIPSTER_CURATOR = constants.DOCKER_JHIPSTER_CURATOR;
-                this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
-                this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
-                this.DOCKER_JHIPSTER_IMPORT_DASHBOARDS = constants.DOCKER_JHIPSTER_IMPORT_DASHBOARDS;
-                this.DOCKER_JHIPSTER_ZIPKIN = constants.DOCKER_JHIPSTER_ZIPKIN;
+                this.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
                 this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
                 this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
                 this.DOCKER_CONSUL = constants.DOCKER_CONSUL;

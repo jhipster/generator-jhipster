@@ -17,10 +17,6 @@ const mockBlueprintSubGen = class extends ServerGenerator {
         if (!jhContext) {
             this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
         }
-
-        this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupServerOptions(this, jhContext);
     }
 
     get initializing() {
@@ -55,7 +51,7 @@ describe('needle API server log: JHipster server generator with blueprint', () =
         helpers
             .run(path.join(__dirname, '../../generators/server'))
             .withOptions({
-                'from-cli': true,
+                fromCli: true,
                 skipInstall: true,
                 blueprint: 'myblueprint',
                 skipChecks: true,

@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,28 +16,53 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
+const { detectLanguage } = require('../../utils/language');
 
 module.exports = {
     askForLanguages,
+    askI18n,
 };
 
+function askI18n() {
+    if (this.options.skipPrompts) return undefined;
+    return this.prompt(
+        [
+            {
+                type: 'confirm',
+                name: 'enableTranslation',
+                message: 'Would you like to enable internationalization support?',
+                default: true,
+            },
+            {
+                type: 'list',
+                name: 'nativeLanguage',
+                message: 'Please choose the native language of the application',
+                choices: () => this.getAllSupportedLanguageOptions(),
+                default: () => detectLanguage(),
+                store: true,
+            },
+        ],
+        this.config
+    );
+}
+
 function askForLanguages() {
-    if (this.languages) return undefined;
-    const languageOptions = this.getAllSupportedLanguageOptions();
-    const prompts = [
+    if (this.options.skipPrompts || this.languagesToApply || !this.jhipsterConfig.enableTranslation) {
+        return undefined;
+    }
+    return this.prompt([
         {
             type: 'checkbox',
             name: 'languages',
             message: 'Please choose additional languages to install',
-            choices: languageOptions,
+            choices: () => {
+                const languageOptions = this.getAllSupportedLanguageOptions();
+                const nativeLanguage = this.jhipsterConfig.nativeLanguage;
+                const currentLanguages = this.jhipsterConfig.languages || [];
+                return languageOptions.filter(l => l.value !== nativeLanguage && !currentLanguages.includes(l.value));
+            },
         },
-    ];
-    if (this.enableTranslation || this.configOptions.enableTranslation) {
-        return this.prompt(prompts).then(props => {
-            this.languagesToApply = props.languages || [];
-        });
-    }
-    this.log(chalk.red('Translation is disabled for the project. Languages cannot be added.'));
-    return undefined;
+    ]).then(answers => {
+        this.languagesToApply = answers.languages;
+    });
 }

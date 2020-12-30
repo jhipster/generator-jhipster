@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "removeComments": false,
+        "noImplicitAny": false,
+        "skipLibCheck": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "outDir": "<%= DIST_DIR %>app",
+        "lib": ["es7", "dom"],
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "baseUrl": "./",
+        "paths": {
+            "@/*": ["<%= CLIENT_MAIN_SRC_DIR %>app/*"]
+        },
+        "importHelpers": false,
+        "allowJs": true
+    },
+    "include": [
+        "<%= CLIENT_MAIN_SRC_DIR %>app",
+        "<%= CLIENT_TEST_SRC_DIR %>spec"
+    ],
+    "exclude": ["node_modules"<% if (!cypressTests) { %>,"<%= CLIENT_TEST_SRC_DIR %>cypress"<% } %>]
+}

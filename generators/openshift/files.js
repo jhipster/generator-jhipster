@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -54,12 +54,6 @@ function writeFiles() {
                 this.template('registry/consul.yml.ejs', `${this.directoryPath}/ocp/registry/consul.yml`);
                 this.template('registry/application-configmap.yml.ejs', `${this.directoryPath}/ocp/registry/application-configmap.yml`);
             }
-        },
-
-        writeElkFiles() {
-            if (this.monitoring !== 'elk') return;
-
-            this.template('monitoring/jhipster-monitoring.yml.ejs', `${this.directoryPath}/ocp/monitoring/jhipster-monitoring.yml`);
         },
 
         writePrometheusFiles() {

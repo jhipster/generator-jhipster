@@ -1,0 +1,78 @@
+import {
+  <%_ if (!skipUserManagement) { _%>
+  userManagementPageHeadingSelector,
+  <%_ } _%>
+  <%_ if (withAdminUi) { _%>
+  metricsPageHeadingSelector,
+  healthPageHeadingSelector,
+  logsPageHeadingSelector,
+  configurationPageHeadingSelector,
+  <%_ } _%>
+} from '../../support/commands';
+
+describe('/admin', () => {
+  <%_ if (authenticationType === 'oauth2') { _%>
+  beforeEach(() => {
+    cy.getOauth2Data();
+    cy.get('@oauth2Data').then(oauth2Data => {
+      cy.keycloackLogin(oauth2Data, 'user');
+    });
+  });
+
+  afterEach(() => {
+    cy.get('@oauth2Data').then(oauth2Data => {
+      cy.keycloackLogout(oauth2Data);
+    });
+    cy.clearCache();
+  });
+  <%_ } else { _%>
+  before(() => {
+    cy.window().then((win) => {
+      win.sessionStorage.clear()
+    });
+    <%_ if (authenticationType === 'session') { _%>cy.clearCookie('SESSION')<% } %>
+    cy.clearCookies();
+    cy.visit('');
+    cy.login('admin', 'admin');
+  });
+  <%_ } _%>
+
+  <%_ if (!skipUserManagement) { _%>
+  describe('/user-management', () => {
+    it('should load the page', () => {
+      cy.clickOnAdminMenuItem('user-management');
+      cy.get(userManagementPageHeadingSelector).should('be.visible');
+    });
+  });
+  <%_ } _%>
+
+  <%_ if (withAdminUi) { _%>
+  describe('/metrics', () => {
+    it('should load the page', () => {
+      cy.clickOnAdminMenuItem('metrics');
+      cy.get(metricsPageHeadingSelector).should('be.visible');
+    });
+  });
+
+  describe('/health', () => {
+    it('should load the page', () => {
+      cy.clickOnAdminMenuItem('health');
+      cy.get(healthPageHeadingSelector).should('be.visible');
+    });
+  });
+
+  describe('/logs', () => {
+    it('should load the page', () => {
+      cy.clickOnAdminMenuItem('logs');
+      cy.get(logsPageHeadingSelector).should('be.visible');
+    });
+  });
+
+  describe('/configuration', () => {
+    it('should load the page', () => {
+      cy.clickOnAdminMenuItem('configuration');
+      cy.get(configurationPageHeadingSelector).should('be.visible');
+    });
+  });
+<%_ } _%>
+});

@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,19 +18,24 @@
  */
 
 const BaseGenerator = require('../generator-base');
-const utils = require('../utils');
+const { parseBluePrints } = require('../../utils/blueprint');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
+
+        if (this.options.help) {
+            return;
+        }
+
         this.force = this.options.force;
 
-        this.skipInstall = this.options['skip-install'];
+        this.skipInstall = this.options.skipInstall;
         this.silent = this.options.silent;
-        this.skipChecks = this.options['skip-checks'];
+        this.skipChecks = this.options.skipChecks;
 
         // Verify 6.6.0 app blueprint bug
-        if (!this.config.existed && !this.options.blueprints) {
+        if (!this.config.existed && !this.options.blueprints && !this.options.help) {
             this.error(
                 'This seems to be an app blueprinted project with jhipster 6.6.0 bug (https://github.com/jhipster/generator-jhipster/issues/11045), you should pass --blueprints to jhipster upgrade commmand.'
             );
@@ -45,9 +50,7 @@ module.exports = class extends BaseGenerator {
             validateFromCli: this.checkInvocationFromCLI,
 
             parseBlueprints() {
-                this.blueprints = utils.parseBluePrints(
-                    this.options.blueprints || this.config.get('blueprints') || this.config.get('blueprint')
-                );
+                this.blueprints = parseBluePrints(this.options.blueprints || this.config.get('blueprints') || this.config.get('blueprint'));
             },
 
             async unifyConfig() {

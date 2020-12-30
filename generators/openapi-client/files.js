@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,7 +29,8 @@ module.exports = {
 function writeFiles() {
     return {
         addOpenAPIIgnoreFile() {
-            this.copy('.openapi-generator-ignore', '.openapi-generator-ignore');
+            const basePath = this.config.get('reactive') ? 'java' : 'spring';
+            this.copy(`${basePath}/.openapi-generator-ignore`, '.openapi-generator-ignore');
         },
 
         callOpenApiGenerator() {
@@ -54,28 +55,42 @@ function writeFiles() {
                 const inputSpec = this.clientsToGenerate[cliName].spec;
                 const generatorName = this.clientsToGenerate[cliName].generatorName;
 
-                let openApiCmd;
-                if (generatorName === 'spring') {
-                    this.log(chalk.green(`\n\nGenerating npm script for generating client code ${cliName} (${inputSpec})`));
-                    openApiCmd =
-                        'openapi-generator generate ' +
-                        '-g spring ' +
-                        `-i ${inputSpec} ` +
-                        '-p library=spring-cloud ' +
-                        '-p supportingFiles=ApiKeyRequestInterceptor.java ' +
-                        `-p apiPackage=${cliPackage}.api ` +
-                        `-p modelPackage=${cliPackage}.model ` +
-                        `-p basePackage=${this.packageName}.client ` +
-                        `-p configPackage=${cliPackage} ` +
-                        `-p title=${_.camelCase(cliName)} ` +
-                        `-p artifactId=${_.camelCase(cliName)} ` +
-                        '--skip-validate-spec';
+                const openApiCmd = ['openapi-generator generate'];
+                let openApiGeneratorName;
+                let openApiGeneratorLibrary;
+                const additionalParameters = [];
 
-                    if (this.clientsToGenerate[cliName].useServiceDiscovery) {
-                        openApiCmd += ' --additional-properties ribbon=true';
-                    }
+                if (generatorName === 'spring') {
+                    openApiGeneratorName = 'spring';
+                    openApiGeneratorLibrary = 'spring-cloud';
+
+                    additionalParameters.push('-p supportingFiles=ApiKeyRequestInterceptor.java');
+                } else if (generatorName === 'java') {
+                    openApiGeneratorName = 'java';
+                    openApiGeneratorLibrary = 'webclient';
+
+                    additionalParameters.push('-p dateLibrary=java8');
                 }
-                this.addNpmScript(`openapi-client:${cliName}`, `${openApiCmd}`);
+                this.log(chalk.green(`\n\nGenerating npm script for generating client code ${cliName} (${inputSpec})`));
+
+                openApiCmd.push(
+                    `-g ${openApiGeneratorName}`,
+                    `-i ${inputSpec}`,
+                    `-p library=${openApiGeneratorLibrary}`,
+                    `-p apiPackage=${cliPackage}.api`,
+                    `-p modelPackage=${cliPackage}.model`,
+                    `-p basePackage=${this.packageName}.client`,
+                    `-p configPackage=${cliPackage}`,
+                    `-p title=${_.camelCase(cliName)}`,
+                    `-p artifactId=${_.camelCase(cliName)}`
+                );
+
+                openApiCmd.push(additionalParameters.join(','));
+                openApiCmd.push('--skip-validate-spec');
+                if (this.clientsToGenerate[cliName].useServiceDiscovery) {
+                    openApiCmd.push('--additional-properties ribbon=true');
+                }
+                this.addNpmScript(`openapi-client:${cliName}`, `${openApiCmd.join(' ')}`);
             });
         },
 
@@ -111,24 +126,26 @@ function writeFiles() {
                 }
                 this.addGradleDependency('compile', 'org.springframework.cloud', 'spring-cloud-starter-oauth2');
             }
+        },
 
+        /* This is a hack to avoid non compiling generated code from openapi generator when the
+         * enableSwaggerCodegen option is not selected (otherwise the jackson-databind-nullable dependency is already added).
+         * Related to this issue https://github.com/OpenAPITools/openapi-generator/issues/2901 - remove this code when it's fixed.
+         */
+        addJacksonDataBindNullable() {
             if (!this.enableSwaggerCodegen) {
-                /* This is a hack to avoid non compiling generated code from openapi generator when the
-                 * enableSwaggerCodegen option is not selected (otherwise the jackson-databind-nullable dependency is already added).
-                 * Related to this issue https://github.com/OpenAPITools/openapi-generator/issues/2901 - remove this code when it's fixed.
-                 */
                 if (this.buildTool === 'maven') {
                     this.addMavenProperty('jackson-databind-nullable.version', constants.JACKSON_DATABIND_NULLABLE_VERSION);
                     // eslint-disable-next-line no-template-curly-in-string
                     this.addMavenDependency('org.openapitools', 'jackson-databind-nullable', '${jackson-databind-nullable.version}');
                 } else if (this.buildTool === 'gradle') {
-                    this.addGradleProperty('jackson_databind_nullable_version', constants.JACKSON_DATABIND_NULLABLE_VERSION);
+                    this.addGradleProperty('jacksonDatabindNullableVersion', constants.JACKSON_DATABIND_NULLABLE_VERSION);
                     this.addGradleDependency(
                         'compile',
                         'org.openapitools',
                         'jackson-databind-nullable',
                         // eslint-disable-next-line no-template-curly-in-string
-                        '${jackson_databind_nullable_version}'
+                        '${jacksonDatabindNullableVersion}'
                     );
                 }
             }

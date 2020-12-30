@@ -7,6 +7,8 @@ else
     echo "*** 00-init-env.sh not found"
 fi
 
+echo "11-generate-entities.sh script is deprecated, use 11-generate-config.sh instead"
+
 #-------------------------------------------------------------------------------
 # Functions
 #-------------------------------------------------------------------------------
@@ -129,6 +131,9 @@ elif [[ "$JHI_ENTITY" == "sqlfull" ]]; then
     moveEntity MapsIdParentEntityWithDTO
     moveEntity MapsIdChildEntityWithDTO
     moveEntity MapsIdUserProfileWithDTO
+
+    moveEntity JpaFilteringRelationship
+    moveEntity JpaFilteringOtherSide
 
 elif [[ "$JHI_ENTITY" == "sql" ]]; then
     moveEntity BankAccount

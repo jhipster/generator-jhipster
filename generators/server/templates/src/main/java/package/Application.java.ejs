@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,8 +23,8 @@ import <%= packageName %>.client.OAuth2InterceptedFeignConfiguration;
 <%_ } _%>
 import <%= packageName %>.config.ApplicationProperties;
 
-import io.github.jhipster.config.DefaultProfileUtil;
-import io.github.jhipster.config.JHipsterConstants;
+import tech.jhipster.config.DefaultProfileUtil;
+import tech.jhipster.config.JHipsterConstants;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -35,9 +35,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 <%_ } _%>
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-<%_ if (serviceDiscoveryType) { _%>
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-<%_ } _%>
 <%_ if (applicationType === 'gateway' && !reactive) { _%>
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 <%_ } _%>
@@ -54,6 +51,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.TimeZone;
 import java.time.ZoneId;
+import java.util.Optional;
 
 <%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
 @ComponentScan(
@@ -62,9 +60,6 @@ import java.time.ZoneId;
 <%_ } _%>
 @SpringBootApplication
 @EnableConfigurationProperties({<% if (databaseType === 'sql') { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
-<%_ if (serviceDiscoveryType) { _%>
-@EnableDiscoveryClient
-<%_ } _%>
 <%_ if (applicationType === 'gateway' && !reactive) { _%>
 @EnableZuulProxy
 <%_ } _%>
@@ -115,15 +110,9 @@ public class <%= mainClass %> {
     }
 
     private static void logApplicationStartup(Environment env) {
-        String protocol = "http";
-        if (env.getProperty("server.ssl.key-store") != null) {
-            protocol = "https";
-        }
+        String protocol = Optional.ofNullable(env.getProperty("server.ssl.key-store")).map(key -> "https").orElse("http");
         String serverPort = env.getProperty("server.port");
-        String contextPath = env.getProperty("server.servlet.context-path");
-        if (StringUtils.isBlank(contextPath)) {
-            contextPath = "/";
-        }
+        String contextPath = Optional.ofNullable(env.getProperty("server.servlet.context-path")).filter(StringUtils::isNotBlank).orElse("/");
         String hostAddress = "localhost";
         try {
             hostAddress = InetAddress.getLocalHost().getHostAddress();

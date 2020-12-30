@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,6 +17,38 @@
  limitations under the License.
 -%>
 import { element, by, ElementFinder, ElementArrayFinder } from 'protractor';
+
+import {
+  waitUntilAnyDisplayed<% if (!readOnly) { %>,
+  waitUntilDisplayed,
+  click,
+  waitUntilHidden,
+  isVisible,<% } %>
+} from '../../<%= entityParentPathAddition %>util/utils';
+
+import NavBarPage from './../../<%= entityParentPathAddition %>page-objects/navbar-page';
+
+<%_ if (!readOnly) { _%>
+import <%= entityClass %>UpdatePage from './<%= entityFileName %>-update.page-object';
+
+const expect = chai.expect;
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+export class <%= entityClass %>DeleteDialog {
+    deleteModal = element(by.className('modal'));
+    private dialogTitle: ElementFinder = element(by.id('<%= i18nKeyPrefix %>.delete.question'));
+    private confirmButton = element(by.id('<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>'));
+
+    getDialogTitle() {
+        return this.dialogTitle;
+    }
+
+    async clickOnConfirmButton() {
+        await this.confirmButton.click();
+    }
+}
+<%_ } _%>
+
 
 export default class <%= entityClass %>ComponentsPage {
     <%_ if (!readOnly) { _%>
@@ -42,20 +74,31 @@ export default class <%= entityClass %>ComponentsPage {
       return record.element(by.css('a.btn.btn-danger.btn-sm'));
     }
     <%_ } _%>
-}
 
-<%_ if (!readOnly) { _%>
-export class <%= entityClass %>DeleteDialog {
-    deleteModal = element(by.className('modal'));
-    private dialogTitle: ElementFinder = element(by.id('<%= i18nKeyPrefix %>.delete.question'));
-    private confirmButton = element(by.id('<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>'));
-
-    getDialogTitle() {
-        return this.dialogTitle;
+    async goToPage(navBarPage: NavBarPage) {
+      await navBarPage.getEntityPage('<%= entityStateName %>');
+      await waitUntilAnyDisplayed([this.noRecords, this.table]);
+      return this;
     }
 
-    async clickOnConfirmButton() {
-        await this.confirmButton.click();
+    <%_ if (!readOnly) { _%>
+    async goToCreate<%= entityClass %>() {
+      await this.createButton.click();
+      return new <%= entityClass %>UpdatePage();
     }
+  
+    async delete<%= entityClass %>() {
+      const deleteButton = this.getDeleteButton(this.records.last());
+      await click(deleteButton);
+  
+      const <%= entityInstance %>DeleteDialog = new <%= entityClass %>DeleteDialog();
+      await waitUntilDisplayed(<%= entityInstance %>DeleteDialog.deleteModal);
+      expect(await <%= entityInstance %>DeleteDialog.getDialogTitle().getAttribute('id')).to.match(/<%= i18nKeyPrefix %>.delete.question/);
+      await <%= entityInstance %>DeleteDialog.clickOnConfirmButton();
+
+      await waitUntilHidden(<%= entityInstance %>DeleteDialog.deleteModal);
+
+      expect(await isVisible(<%= entityInstance %>DeleteDialog.deleteModal)).to.be.false;
+    }
+    <%_ } _%>
 }
-<%_ } _%>

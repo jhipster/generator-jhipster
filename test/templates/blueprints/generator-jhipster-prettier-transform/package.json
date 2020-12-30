@@ -1,0 +1,7 @@
+{
+  "name": "generator-jhipster-dummy",
+  "version": "9.9.9",
+  "peerDependencies": {
+    "generator-jhipster": "^7.0.0-beta.0"
+  }
+}

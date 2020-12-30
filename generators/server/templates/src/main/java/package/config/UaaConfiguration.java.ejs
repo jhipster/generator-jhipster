@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,7 +19,7 @@
 package <%= packageName %>.config;
 
 import <%= packageName %>.security.AuthoritiesConstants;
-import io.github.jhipster.config.JHipsterProperties;
+import tech.jhipster.config.JHipsterProperties;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -110,8 +110,10 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
                 .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/websocket/**").permitAll()<% } %>
                 .antMatchers("/management/health").permitAll()
+                .antMatchers("/management/health/**").permitAll()
                 .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/v2/api-docs/**").permitAll()
+                .antMatchers("/v3/api-docs/**").permitAll()
                 .antMatchers("/swagger-resources/configuration/ui").permitAll()
                 .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN);
         }
@@ -155,7 +157,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
             .withClient(jHipsterProperties.getSecurity().getClientAuthorization().getClientId())
             .secret(passwordEncoder.encode(jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret()))
             .scopes("web-app")
-            .authorities("ROLE_ADMIN")
+            .authorities(AuthoritiesConstants.ADMIN)
             .autoApprove(true)
             .authorizedGrantTypes("client_credentials")
             .accessTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds())

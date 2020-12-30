@@ -8,10 +8,10 @@ module.exports = {
   testURL: 'http://localhost/',
   cacheDirectory: '<rootDir>/<%= BUILD_DIR %>jest-cache',
   coverageDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/',
-  testMatch: ['<rootDir>/src/test/javascript/spec/**/@(*.)@(spec.ts?(x))'],
+  testMatch: ['<rootDir>/<%= CLIENT_TEST_SRC_DIR %>spec/**/@(*.)@(spec.ts?(x))'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   coveragePathIgnorePatterns: [
-    '<rootDir>/src/test/javascript'
+    '<rootDir>/<%= CLIENT_TEST_SRC_DIR %>'
   ],
   moduleNameMapper: mapTypescriptAliasToJestAlias({
     '\\.(css|scss)$': 'identity-obj-proxy'
@@ -25,13 +25,13 @@ module.exports = {
     '<rootDir>/node_modules/'
   ],
   setupFiles: [
-    '<rootDir>/src/test/javascript/spec/enzyme-setup.ts',
-    '<rootDir>/src/test/javascript/spec/storage-mock.ts'
+    '<rootDir>/<%= CLIENT_TEST_SRC_DIR %>spec/icons-mock.ts',
+    '<rootDir>/<%= CLIENT_TEST_SRC_DIR %>spec/storage-mock.ts'
   ],
-  snapshotSerializers: ['enzyme-to-json/serializer'],
   globals: {
     'ts-jest': {
-      tsConfig: './tsconfig.test.json',
+      tsconfig: './tsconfig.test.json',
+      compiler: 'typescript',
       diagnostics: false
     }
   }

@@ -1,0 +1,168 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+const tsKeyId = generateTestEntityId(primaryKey.type);
+_%>
+jest.mock('@angular/router');
+
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { HttpResponse } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
+
+import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+import { <%= entityAngularName %> } from '../<%= entityFileName %>.model';
+<%_
+Object.keys(differentRelationships).forEach(key => {
+    if (differentRelationships[key].some(rel => rel.reference.owned)) {
+        const uniqueRel = differentRelationships[key][0];
+        if (uniqueRel.otherEntityAngularName !== entityAngularName) {
+            if (isBuiltInUser(uniqueRel.otherEntityAngularName)) {
+_%>
+import { User } from 'app/entities/user/user.model';
+<%_
+            } else {
+_%>
+import { <%= uniqueRel.otherEntityAngularName %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.model';
+<%_
+            }
+        }
+    }
+});
+_%>
+
+import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
+
+describe('Component Tests', () => {
+    describe('<%= entityAngularName %> Management Update Component', () => {
+        let comp: <%= entityAngularName %>UpdateComponent;
+        let fixture: ComponentFixture<<%= entityAngularName %>UpdateComponent>;
+        let service: <%= entityAngularName %>Service;
+
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                imports: [HttpClientTestingModule],
+                declarations: [<%= entityAngularName %>UpdateComponent],
+                providers: [FormBuilder, ActivatedRoute]
+            })
+            .overrideTemplate(<%= entityAngularName %>UpdateComponent, '')
+            .compileComponents();
+
+            fixture = TestBed.createComponent(<%= entityAngularName %>UpdateComponent);
+            comp = fixture.componentInstance;
+            service = TestBed.inject(<%= entityAngularName %>Service);
+        });
+
+        describe('save', () => {
+            it('Should call update service on save for existing entity',
+                fakeAsync(() => {
+                    // GIVEN
+                    const entity = new <%= entityAngularName %>(<%- tsKeyId %>);
+                    spyOn(service, 'update').and.returnValue(of(new HttpResponse({ body: entity })));
+                    comp.updateForm(entity);
+                    // WHEN
+                    comp.save();
+                    tick(); // simulate async
+
+                    // THEN
+                    expect(service.update).toHaveBeenCalledWith(entity);
+                    expect(comp.isSaving).toEqual(false);
+                })
+            );
+
+            it('Should call create service on save for new entity',
+                fakeAsync(() => {
+                    // GIVEN
+                    const entity = new <%= entityAngularName %>();
+                    spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
+                    comp.updateForm(entity);
+                    // WHEN
+                    comp.save();
+                    tick(); // simulate async
+
+                    // THEN
+                    expect(service.create).toHaveBeenCalledWith(entity);
+                    expect(comp.isSaving).toEqual(false);
+                })
+            );
+        });
+<%_ const trackedEntities = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference);
+    if (trackedEntities.length > 0) {
+_%>
+
+        describe('Tracking relationships identifiers', () => {
+    <%_ for (reference of trackedEntities) {
+            const otherEntity = reference.relationship.otherEntity;
+            const otherEntityTsKeyId = generateTestEntityId(otherEntity.primaryKey.type);
+    _%>
+            describe('track<%= otherEntity.entityAngularName %>By<%= otherEntity.primaryKey.nameCapitalized %>', () => {
+                it('Should return tracked <%= otherEntity.entityAngularName %> primary key', () => {
+                    const entity = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %><% if (isBuiltInUser(otherEntity.entityAngularName)) { %>, 'user'<% } %>);
+                    const trackResult = comp.track<%= otherEntity.entityAngularName %>By<%= otherEntity.primaryKey.nameCapitalized %>(0, entity);
+                    expect(trackResult).toEqual(entity.<%= otherEntity.primaryKey.name %>);
+                });
+            });
+
+    <%_ } _%>
+        });
+<%_ } _%>
+<%_ const selectableEntities = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipType === 'many-to-many' && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference);
+    if (selectableEntities.length > 0) {
+_%>
+
+        describe('Getting selected relationships', () => {
+    <%_ for (reference of selectableEntities) {
+            const otherEntity = reference.relationship.otherEntity;
+            const otherEntityTsKeyId = generateTestEntityId(otherEntity.primaryKey.type);
+            const otherEntityAlternativeTsKeyId = generateTestEntityId(otherEntity.primaryKey.type, 1);
+            const isUserRelation = isBuiltInUser(otherEntity.entityAngularName);
+    _%>
+            describe('getSelected<%= otherEntity.entityAngularName %>', () => {
+                it('Should return option if no <%= otherEntity.entityAngularName %> is selected', () => {
+                    const option = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %><% if (isUserRelation) { %>, 'user'<% } %>);
+                    const result = comp.getSelected<%= otherEntity.entityAngularName %>(option);
+                    expect(result === option).toEqual(true);
+                });
+
+                it('Should return selected <%= otherEntity.entityAngularName %> for according option', () => {
+                    const option = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %><% if (isUserRelation) { %>, 'user'<% } %>);
+                    const selected = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %><% if (isUserRelation) { %>, 'user'<% } %>);
+                    const selected2 = new <%= otherEntity.entityAngularName %>(<%- otherEntityAlternativeTsKeyId %><% if (isUserRelation) { %>, 'user2'<% } %>);
+                    const result = comp.getSelected<%= otherEntity.entityAngularName %>(option, [selected2, selected]);
+                    expect(result === selected).toEqual(true);
+                    expect(result === selected2).toEqual(false);
+                    expect(result === option).toEqual(false);
+                });
+
+                it('Should return option if this <%= otherEntity.entityAngularName %> is not selected', () => {
+                    const option = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %><% if (isUserRelation) { %>, 'user'<% } %>);
+                    const selected = new <%= otherEntity.entityAngularName %>(<%- otherEntityAlternativeTsKeyId %><% if (isUserRelation) { %>, 'user2'<% } %>);
+                    const result = comp.getSelected<%= otherEntity.entityAngularName %>(option, [selected]);
+                    expect(result === option).toEqual(true);
+                    expect(result === selected).toEqual(false);
+                });
+            });
+
+    <%_ } _%>
+        });
+<%_ } _%>
+    });
+});

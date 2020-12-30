@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,21 +17,20 @@
  limitations under the License.
 -%>
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 
-import { <%= angularXAppName %>SharedModule } from 'app/shared/shared.module';
-import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
-import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>-detail.component';
+import { SharedModule } from 'app/shared/shared.module';
+import { <%= entityAngularName %>Component } from './list/<%= entityFileName %>.component';
+import { <%= entityAngularName %>DetailComponent } from './detail/<%= entityFileName %>-detail.component';
 <%_ if (!readOnly) { _%>
-import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
-import { <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
+import { <%= entityAngularName %>UpdateComponent } from './update/<%= entityFileName %>-update.component';
+import { <%= entityAngularName %>DeleteDialogComponent } from './delete/<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
-import { <%= entityInstance %>Route } from './<%= entityFileName %>.route';
+import { <%= entityAngularName %>RoutingModule } from './route/<%= entityFileName %>-routing.module';
 
 @NgModule({
     imports: [
-        <%= angularXAppName %>SharedModule,
-        RouterModule.forChild(<%= entityInstance %>Route)
+        SharedModule,
+        <%= entityAngularName %>RoutingModule,
     ],
     declarations: [
         <%= entityAngularName %>Component,
@@ -47,4 +46,4 @@ import { <%= entityInstance %>Route } from './<%= entityFileName %>.route';
     ]
     <%_ } _%>
 })
-export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : angularXAppName %><%= entityAngularName %>Module {}
+export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : '' %><%= entityAngularName %>Module {}

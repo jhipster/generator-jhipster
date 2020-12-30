@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,6 +19,7 @@
 package <%= packageName %>.service.mapper;
 
 import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import org.apache.commons.lang3.RandomStringUtils;
@@ -30,26 +31,27 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+<%_ if (user.primaryKey.type === 'UUID') { _%>
+import java.util.UUID;
+<%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Unit tests for {@link UserMapper}.
  */
-public class UserMapperTest {
+class UserMapperTest {
 
     private static final String DEFAULT_LOGIN = "johndoe";
-    <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
-    private static final Long DEFAULT_ID = 1L;
-    <%_ } else if (databaseType === 'couchbase') { _%>
+    <%_ if (databaseType === 'couchbase') { _%>
     private static final String DEFAULT_ID = <%= asEntity('User') %>.PREFIX + DEFAULT_LOGIN;
     <%_ } else { _%>
-    private static final String DEFAULT_ID = "id1";
+    private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- getPrimaryKeyValue(user.primaryKey.type) %>;
     <%_ } _%>
 
     private UserMapper userMapper;
     private <%= asEntity('User') %> user;
-    private <%= asDto('User') %> userDto;
+    private <%= asDto('AdminUser') %> userDto;
 
     @BeforeEach
     public void init() {
@@ -68,46 +70,49 @@ public class UserMapperTest {
         <%_ } _%>
         user.setLangKey("en");
 
-        userDto = new <%= asDto('User') %>(user);
+        userDto = new <%= asDto('AdminUser') %>(user);
     }
 
     @Test
-    public void usersToUserDTOsShouldMapOnlyNonNullUsers() {
+    void usersToUserDTOsShouldMapOnlyNonNullUsers() {
         List<<%= asEntity('User') %>> users = new ArrayList<>();
         users.add(user);
         users.add(null);
 
         List<<%= asDto('User') %>> userDTOS = userMapper.usersToUserDTOs(users);
 
-        assertThat(userDTOS).isNotEmpty();
-        assertThat(userDTOS).size().isEqualTo(1);
+        assertThat(userDTOS)
+          .isNotEmpty()
+          .size().isEqualTo(1);
     }
 
     @Test
-    public void userDTOsToUsersShouldMapOnlyNonNullUsers() {
-        List<<%= asDto('User') %>> usersDto = new ArrayList<>();
+    void userDTOsToUsersShouldMapOnlyNonNullUsers() {
+        List<<%= asDto('AdminUser') %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
         usersDto.add(null);
 
         List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
 
-        assertThat(users).isNotEmpty();
-        assertThat(users).size().isEqualTo(1);
+        assertThat(users)
+          .isNotEmpty()
+          .size().isEqualTo(1);
     }
 
     @Test
-    public void userDTOsToUsersWithAuthoritiesStringShouldMapToUsersWithAuthoritiesDomain() {
+    void userDTOsToUsersWithAuthoritiesStringShouldMapToUsersWithAuthoritiesDomain() {
         Set<String> authoritiesAsString = new HashSet<>();
         authoritiesAsString.add("ADMIN");
         userDto.setAuthorities(authoritiesAsString);
 
-        List<<%= asDto('User') %>> usersDto = new ArrayList<>();
+        List<<%= asDto('AdminUser') %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
 
         List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
 
-        assertThat(users).isNotEmpty();
-        assertThat(users).size().isEqualTo(1);
+        assertThat(users)
+          .isNotEmpty()
+          .size().isEqualTo(1);
         assertThat(users.get(0).getAuthorities()).isNotNull();
         assertThat(users.get(0).getAuthorities()).isNotEmpty();
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
@@ -119,22 +124,23 @@ public class UserMapperTest {
     }
 
     @Test
-    public void userDTOsToUsersMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
+    void userDTOsToUsersMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
         userDto.setAuthorities(null);
 
-        List<<%= asDto('User') %>> usersDto = new ArrayList<>();
+        List<<%= asDto('AdminUser') %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
 
         List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
 
-        assertThat(users).isNotEmpty();
-        assertThat(users).size().isEqualTo(1);
+        assertThat(users)
+          .isNotEmpty()
+          .size().isEqualTo(1);
         assertThat(users.get(0).getAuthorities()).isNotNull();
         assertThat(users.get(0).getAuthorities()).isEmpty();
     }
 
     @Test
-    public void userDTOToUserMapWithAuthoritiesStringShouldReturnUserWithAuthorities() {
+    void userDTOToUserMapWithAuthoritiesStringShouldReturnUserWithAuthorities() {
         Set<String> authoritiesAsString = new HashSet<>();
         authoritiesAsString.add("ADMIN");
         userDto.setAuthorities(authoritiesAsString);
@@ -153,7 +159,7 @@ public class UserMapperTest {
     }
 
     @Test
-    public void userDTOToUserMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
+    void userDTOToUserMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
         userDto.setAuthorities(null);
 
         <%= asEntity('User') %> user = userMapper.userDTOToUser(userDto);
@@ -164,12 +170,12 @@ public class UserMapperTest {
     }
 
     @Test
-    public void userDTOToUserMapWithNullUserShouldReturnNull() {
+    void userDTOToUserMapWithNullUserShouldReturnNull() {
         assertThat(userMapper.userDTOToUser(null)).isNull();
     }
 
     @Test
-    public void testUserFromId() {
+    void testUserFromId() {
         assertThat(userMapper.userFromId(DEFAULT_ID).getId()).isEqualTo(DEFAULT_ID);
         assertThat(userMapper.userFromId(null)).isNull();
     }

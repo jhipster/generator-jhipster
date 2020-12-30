@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,7 +19,6 @@
 
 const defaultCommands = {
     app: {
-        default: true,
         desc: '[Default] Create a new JHipster application based on the selected options',
     },
     aws: {
@@ -43,12 +42,18 @@ const defaultCommands = {
     'docker-compose': {
         desc: 'Create all required Docker deployment configuration for the selected applications',
     },
+    download: {
+        desc: 'Download jdl file from template repository',
+        cliOnly: true,
+        argument: ['<jdlFiles...>'],
+    },
     entity: {
-        argument: ['name'],
         desc: 'Create a new JHipster entity: JPA entity, Spring server-side components and Angular client-side components',
     },
+    entities: {
+        desc: 'Regenerate entities',
+    },
     'export-jdl': {
-        argument: ['jdlFile'],
         desc: 'Create a JDL file from the existing entities',
     },
     gae: {
@@ -57,31 +62,63 @@ const defaultCommands = {
     heroku: {
         desc: 'Deploy the current application to Heroku',
     },
-    'import-jdl': {
-        argument: ['jdlFiles...'],
+    info: {
+        desc: 'Display information about your current project and system',
+    },
+    jdl: {
+        alias: 'import-jdl',
+        argument: ['[jdlFiles...]'],
         cliOnly: true,
+        options: [
+            {
+                option: '--fork',
+                desc: 'Run generators using fork',
+            },
+            {
+                option: '--interactive',
+                desc: 'Run generation in series so that questions can be interacted with',
+            },
+            {
+                option: '--json-only',
+                desc: 'Generate only the JSON files and skip entity regeneration',
+                default: false,
+            },
+            {
+                option: '--ignore-application',
+                desc: 'Ignores application generation',
+                default: false,
+            },
+            {
+                option: '--ignore-deployments',
+                desc: 'Ignores deployments generation',
+                default: false,
+            },
+            {
+                option: '--skip-sample-repository',
+                desc: 'Disable fetching sample files when the file is not a URL',
+                default: false,
+            },
+            {
+                option: '--inline <value>',
+                desc: 'Pass JDL content inline. Argument can be skipped when passing this',
+            },
+            {
+                option: '--skip-user-management',
+                desc: 'Skip the user management module during app generation',
+            },
+        ],
         desc: `Create entities from the JDL file/content passed in argument.
   By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.`,
         help: `
-    --skip-install        # Do not automatically install dependencies                              Default: false
-    --interactive         # Run generation in series so that questions can be interacted with      Default: false
-    --db                  # Provide DB option for the application when using skip-server flag
-    --json-only           # Generate only the JSON files and skip entity regeneration              Default: false
-    --ignore-application  # Ignores application generation                                         Default: false
-    --ignore-deployments  # Ignores deployments generation                                         Default: false
-    --skip-ui-grouping    # Disable the UI grouping behavior for entity client side code           Default: false
-    --skip-db-changelog   # Disable generation of database changelogs                              Default: false
-    --inline              # Pass JDL content inline. Argument can be skipped when passing this
-
 Arguments:
     jdlFiles # The JDL file names Type: String[] Required: true if --inline is not set
 
 Example:
-    jhipster import-jdl myfile.jdl
-    jhipster import-jdl myfile.jdl --interactive
-    jhipster import-jdl myfile1.jdl myfile2.jdl
-    jhipster import-jdl --inline "application { config { baseName jhapp, testFrameworks [protractor] }}"
-    jhipster import-jdl --inline \\
+    jhipster jdl myfile.jdl
+    jhipster jdl myfile.jdl --interactive
+    jhipster jdl myfile1.jdl myfile2.jdl
+    jhipster jdl --inline "application { config { baseName jhapp, testFrameworks [protractor] }}"
+    jhipster jdl --inline \\
         "application {
             config {
                 baseName jhapp,
@@ -89,9 +126,6 @@ Example:
             }
         }"
         `,
-    },
-    info: {
-        desc: 'Display information about your current project and system',
     },
     kubernetes: {
         alias: 'k8s',
@@ -106,19 +140,19 @@ Example:
         desc: 'Deploy the current application to Kubernetes using knative constructs',
     },
     languages: {
-        argument: ['languages...'],
         desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder',
     },
     openshift: {
         desc: 'Deploy the current application to OpenShift',
     },
+    page: {
+        desc: 'Create a new page. (Supports vue clients)',
+    },
     'spring-service': {
         alias: 'service',
-        argument: ['name'],
         desc: 'Create a new Spring service bean',
     },
     'spring-controller': {
-        argument: ['name'],
         desc: 'Create a new Spring controller',
     },
     'openapi-client': {

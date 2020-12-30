@@ -1,0 +1,80 @@
+import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import axios from 'axios';
+import sinon from 'sinon';
+
+import * as config from '@/shared/config/config';
+import Configuration from '@/admin/configuration/configuration.vue';
+import ConfigurationClass from '@/admin/configuration/configuration.component';
+import ConfigurationService from '@/admin/configuration/configuration.service';
+
+const localVue = createLocalVue();
+
+config.initVueApp(localVue);
+<%_ if (enableTranslation) { _%>
+const i18n = config.initI18N(localVue);
+<%_ } _%>
+const store = config.initVueXStore(localVue);
+
+const axiosStub = {
+  get: sinon.stub(axios, 'get'),
+};
+
+describe('Configuration Component', () => {
+  let wrapper: Wrapper<ConfigurationClass>;
+  let configuration: ConfigurationClass;
+
+  beforeEach(() => {
+    axiosStub.get.reset();
+    axiosStub.get.resolves({ data: { contexts: [
+      { beans: [{prefix: 'A'}, {prefix: 'B'}] }
+    ], propertySources: [{ properties: { key1: {value: 'value'} }}] } });
+    wrapper = shallowMount<ConfigurationClass>(Configuration, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, provide: {configurationService: () => new ConfigurationService() } });
+    configuration = wrapper.vm;
+  });
+
+  describe('OnRouteEnter', () => {
+    it('should set all default values correctly', () => {
+      expect(configuration.configKeys).toEqual([]);
+      expect(configuration.filtered).toBe('');
+      expect(configuration.orderProp).toBe('prefix');
+      expect(configuration.reverse).toBe(false);
+    });
+    it('Should call load all on init', async () => {
+      // WHEN
+      configuration.init();
+      await configuration.$nextTick();
+
+      // THEN
+      expect(axiosStub.get.calledWith('management/env')).toBeTruthy();
+      expect(axiosStub.get.calledWith('management/configprops')).toBeTruthy();
+    });
+  });
+
+  describe('keys method', () => {
+    it('should return the keys of an Object', () => {
+      // GIVEN
+      const data = {
+        key1: 'test',
+        key2: 'test2'
+      };
+
+      // THEN
+      expect(configuration.keys(data)).toEqual(['key1', 'key2']);
+      expect(configuration.keys(undefined)).toEqual([]);
+    });
+  });
+
+  describe('changeOrder function', () => {
+    it('should change order', () => {
+      // GIVEN
+      const rev = configuration.reverse;
+
+      // WHEN
+      configuration.changeOrder('prefix');
+
+      // THEN
+      expect(configuration.orderProp).toBe('prefix');
+      expect(configuration.reverse).toBe(!rev);
+    });
+  });
+});

@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -55,11 +55,11 @@ import static org.springframework.security.oauth2.core.oidc.endpoint.OidcParamet
 /**
  * Test class for the {@link SecurityUtils} utility class.
  */
-public class SecurityUtilsUnitTest {
+class SecurityUtilsUnitTest {
 
 <%_ if (!reactive) { _%>
     @Test
-    public void testGetCurrentUserLogin() {
+    void testGetCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
         SecurityContextHolder.setContext(securityContext);
@@ -69,10 +69,10 @@ public class SecurityUtilsUnitTest {
     <%_ if (authenticationType === 'oauth2') { _%>
 
     @Test
-    public void testGetCurrentUserLoginForOAuth2() {
+    void testGetCurrentUserLoginForOAuth2() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         Map<String, Object> claims = new HashMap<>();
-        claims.put("groups", "ROLE_USER");
+        claims.put("groups", AuthoritiesConstants.USER);
         claims.put("sub", 123);
         claims.put("preferred_username", "admin");
         OidcIdToken idToken = new OidcIdToken(ID_TOKEN, Instant.now(),
@@ -92,7 +92,7 @@ public class SecurityUtilsUnitTest {
     <%_ if (authenticationType === 'jwt') { _%>
 
     @Test
-    public void testgetCurrentUserJWT() {
+    void testgetCurrentUserJWT() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "token"));
         SecurityContextHolder.setContext(securityContext);
@@ -102,7 +102,7 @@ public class SecurityUtilsUnitTest {
     <%_ } _%>
 
     @Test
-    public void testIsAuthenticated() {
+    void testIsAuthenticated() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
         SecurityContextHolder.setContext(securityContext);
@@ -111,7 +111,7 @@ public class SecurityUtilsUnitTest {
     }
 
     @Test
-    public void testAnonymousIsNotAuthenticated() {
+    void testAnonymousIsNotAuthenticated() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
@@ -122,7 +122,7 @@ public class SecurityUtilsUnitTest {
     }
 
     @Test
-    public void testIsCurrentUserInRole() {
+    void testIsCurrentUserInRole() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
@@ -135,7 +135,7 @@ public class SecurityUtilsUnitTest {
 <%_ } _%>
 <%_ if (reactive) { _%>
     @Test
-    public void testgetCurrentUserLogin() {
+    void testgetCurrentUserLogin() {
         String login = SecurityUtils.getCurrentUserLogin()
             .subscriberContext(
                 ReactiveSecurityContextHolder.withAuthentication(
@@ -148,7 +148,7 @@ public class SecurityUtilsUnitTest {
     <%_ if (authenticationType === 'jwt') { _%>
 
     @Test
-    public void testgetCurrentUserJWT() {
+    void testgetCurrentUserJWT() {
         String jwt = SecurityUtils.getCurrentUserJWT()
             .subscriberContext(
                 ReactiveSecurityContextHolder.withAuthentication(
@@ -161,7 +161,7 @@ public class SecurityUtilsUnitTest {
     <%_ } _%>
 
     @Test
-    public void testIsAuthenticated() {
+    void testIsAuthenticated() {
         Boolean isAuthenticated = SecurityUtils.isAuthenticated()
             .subscriberContext(
                 ReactiveSecurityContextHolder.withAuthentication(
@@ -173,7 +173,7 @@ public class SecurityUtilsUnitTest {
     }
 
     @Test
-    public void testAnonymousIsNotAuthenticated() {
+    void testAnonymousIsNotAuthenticated() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
         Boolean isAuthenticated = SecurityUtils.isAuthenticated()
@@ -187,7 +187,7 @@ public class SecurityUtilsUnitTest {
     }
 
     @Test
-    public void testIsCurrentUserInRole() {
+    void testIsCurrentUserInRole() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
         Context context = ReactiveSecurityContextHolder.withAuthentication(

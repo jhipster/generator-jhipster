@@ -1,0 +1,14 @@
+{
+  "baseUrl": "http://localhost:<%= serverPort %>/",
+  "testFiles": "**/*.spec.ts",
+  "supportFile": "<%= CLIENT_TEST_SRC_DIR %>cypress/support/index.ts",
+  "video": false,
+  "integrationFolder": "<%= CLIENT_TEST_SRC_DIR %>cypress/integration",
+  "fixturesFolder": "<%= CLIENT_TEST_SRC_DIR %>cypress/fixtures",
+  "pluginsFile": "<%= CLIENT_TEST_SRC_DIR %>cypress/plugins/index.ts",
+  "screenshotsFolder": "target/cypress/screenshots",
+  "chromeWebSecurity": <% if(authenticationType === 'oauth2') { %>false<% } else { %>true<% } %>,
+  "viewportWidth": 1200,
+  "viewportHeight": 720,
+  "retries": 2
+}

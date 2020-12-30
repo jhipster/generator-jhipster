@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,7 +19,7 @@
 {
     "health": {
         "title": "स्वास्थ्य जाँच",
-        "refresh.button": "ताज़ा करें",
+        "refresh.button": "रिफ्रेश करें",
         "stacktrace": "Stacktrace",
         "details": {
             "details": "विवरण",
@@ -39,8 +39,13 @@
             "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
             "consul": "Consul",<% } %>
             <%_ } _%>
-            "diskSpace": "डिस्क स्थान",
-            "mail": "ईमेल",
+            <%_ if (cacheProvider === 'hazelcast') { _%>
+            "hazelcast": "Hazelcast",
+            <%_ } _%>
+            "diskSpace": "डिस्क में जग़ह",
+            "mail": "ई-मेल",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
             "ping": "Application"<% if (searchEngine === 'elasticsearch') { %>,
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
             "db": "Database"<% } %><% if (databaseType === 'mongodb') { %>,
@@ -54,7 +59,7 @@
             "status": "स्थिति"
         },
         "status": {
-            "UNKNOWN": "UNKNOWN",
+            "UNKNOWN": "अज्ञात स्थिति",
             "UP": "ऊपर",
             "DOWN": "नीचे"
         }
