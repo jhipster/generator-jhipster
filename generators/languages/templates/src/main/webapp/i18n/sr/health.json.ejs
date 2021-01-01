@@ -47,8 +47,9 @@
             "livenessState": "Liveness state",
             "readinessState": "Readiness state",
             "ping": "Application"<% if (searchEngine === 'elasticsearch') { %>,
-            "elasticsearch": "Elastična pretraga"<% } %><% if (databaseType === 'sql') { %>,
-            "db": "SQL baza podataka"<% } %><% if (databaseType === 'mongodb') { %>,
+            "elasticsearch": "Elastična pretraga"<% } %><% if (databaseType === 'sql' && !reactive) { %>,
+            "db": "SQL baza podataka"<% } %><% if (databaseType === 'sql' && reactive) { %>,
+            "r2dbc": "SQL baza podataka"<% } %><% if (databaseType === 'mongodb') { %>,
             "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
             "couchbase": "Couchbase"<% } %><% if (databaseType === 'neo4j') { %>,
             "neo4j": "Neo4j"<% } %>
