@@ -40,7 +40,7 @@ would like to implement a new feature then consider what kind of change it is:
 
 ## <a name="rfcs"></a> RFCs
 
-Sometimes, major feature requests are "complex" or "substantial". In this case, Github Issues might not be the best tool to to present them because we will need a lot of going back and forth to reach a consensus.
+Sometimes, major feature requests are "complex" or "substantial". In this case, GitHub Issues might not be the best tool to to present them because we will need a lot of going back and forth to reach a consensus.
 
 So we ask that these feature request be put through a formal design process and have their specifications described in an "RFC" (request for comments) that will be validated by the team through a Pull Request Review.
 
@@ -48,8 +48,8 @@ The RFC process is intended to provide a consistent and controlled path for majo
 
 To submit an RFC follow those steps:
 
-1. Discuss the RFC proposal with the core team through Github issues or other channels
-2. Create the initial Github issue for the Feature Request if it doesn't already exist
+1. Discuss the RFC proposal with the core team through GitHub issues or other channels
+2. Create the initial GitHub issue for the Feature Request if it doesn't already exist
 3. Copy the `rfcs/0-jhipster-rfc-template.md` to `rfcs/${featureRequestIssueNumber}-my-feature-request-name.md`
 4. Fill in the RFC, make sure to complete every required section
 5. Submit the RFC as a Pull Request with the summary of the proposal in the PR description
@@ -219,22 +219,24 @@ Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhi
 
 [Please read the GitHub forking documentation for more information](https://help.github.com/articles/fork-a-repo)
 
-### Set NPM/YARN to use the cloned project
+### Set NPM to use the cloned project
 
-In your cloned `generator-jhipster` project, type `npm link` or `yarn && yarn link` depending on the package manager you use.
+In your cloned `generator-jhipster` project, type `npm link`.
 
 This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `jhipster`, you will now use the development version of JHipster.
 
 For testing, you will want to generate an application, and there is a specific issue here: for each application, JHipster installs a local version of itself. This is made to enable several applications to each use a specific JHipster version (application A uses JHipster 3.1.0, and application B uses JHipster 3.2.0).
 
-To overcome this you need to run `npm link generator-jhipster` or `yarn link generator-jhipster` on the generated project folder as well, so that the local version has a symbolic link to the development version of JHipster.
+To overcome this you need to run `npm link generator-jhipster` on the generated project folder as well, so that the local version has a symbolic link to the development version of JHipster.
+Also add the option `--skip-jhipster-dependencies` to generate the application ignoring the JHipster dependencies (otherwise a released version will be installed each time npm install/ci is called). You can later on re-add the dependency with the command `jhipster --no-skip-jhipster-dependencies`.
 
 To put it in a nutshell, you need to:
 
-1.  run `npm link` or `yarn link` on the `generator-jhipster` project
-2.  run `npm link generator-jhipster` or `yarn link generator-jhipster` on the generated application folder (you need to do this for each application you create)
+1.  run `npm link` on the `generator-jhipster` project
+2.  run `npm link generator-jhipster` on the generated application folder (you need to do this for each application you create)
+3.  run `jhipster --skip-jhipster-dependencies` on the generated application folder
 
-Now, running the 'jhipster' command should run your locally installed JHipster version directly from sources. Check that the symbolic link is correct with the following command :
+Now, running the 'jhipster' command should run your locally installed JHipster version directly from sources. Check that the symbolic link is correct with the following command:
 
 ```shell
 ➜  ~ ll $(which jhipster)

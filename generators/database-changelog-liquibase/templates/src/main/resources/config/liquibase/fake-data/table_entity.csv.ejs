@@ -1,0 +1,110 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+let table = [];
+
+// Generate CSV header
+let header = [];
+header.push('id');
+for (idx in fields) {
+    header.push(fields[idx].columnName);
+    if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') {
+        header.push(fields[idx].columnName + '_content_type');
+    }
+}
+for (idx in relationships) {
+    const relationshipType = relationships[idx].relationshipType
+    if (
+        (relationshipType === "many-to-one"
+            || (relationshipType === "one-to-one" && relationships[idx].ownerSide === true
+               && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false))
+        ) && (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired)
+    ) {
+        header.push(getColumnName(relationships[idx].relationshipName) + "_id");
+    }
+}
+table.push(header);
+
+// Set number of rows to be generated
+let numberOfRows = 10;
+for (idx in relationships) {
+    if ( relationships[idx].useJPADerivedIdentifier === true ) {
+        const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+        if (otherEntityNameCapitalized === 'User') {
+            // Only few user records are generated
+            numberOfRows = (authenticationType === 'oauth2') ? 2 : 4;
+        }
+        break;
+    }
+}
+
+// store unique values
+const uniqueValues = {};
+for (idx in fields) {
+    if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('unique')) {
+        uniqueValues[idx] = [];
+    }
+}
+
+// Generate CSV rows
+
+for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
+    let line = [ lineNb ];
+    for (idx in fields) {
+        let data = fields[idx].generateFakeData();
+        // manage required
+        if (data === undefined) {
+            if (fields[idx].fieldValidateRules.includes('required')) {
+                line = [];
+                break;
+            }
+            data = '';
+        }
+
+        line.push(data);
+        if (fields[idx].columnType === 'blob' || fields[idx].columnType === 'longblob') {
+            line.push('image/png');
+        }
+    }
+
+    for (idx in relationships) {
+        const relationshipType = relationships[idx].relationshipType;
+        if (
+            (relationshipType === "many-to-one"
+                || (relationshipType === "one-to-one" && relationships[idx].ownerSide === true
+                   && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false))
+            ) && (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired)
+        ) {
+            if (relationships[idx].otherEntityNameCapitalized === 'User') {
+                line.push(entity.faker.random.number({min: 1, max: 2}));
+            } else {
+                line.push(lineNb);
+            }
+        }
+    }
+    if (line.length === header.length) {
+        table.push(line);
+    }
+}
+
+let result = table
+        .map(line => line.join(';'))
+        .join('\n');
+ _%>
+<%- result %>

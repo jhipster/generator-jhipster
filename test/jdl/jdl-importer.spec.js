@@ -57,6 +57,7 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
+                            otherEntityField: 'region',
                             relationshipType: 'one-to-many',
                             relationshipName: 'area',
                             otherEntityName: 'region',
@@ -79,7 +80,6 @@ describe('JDLImporter', () => {
                     service: 'no',
                     jpaMetamodelFiltering: false,
                     fluentMethods: true,
-                    clientRootFolder: '',
                     applications: '*',
                     skipServer: true,
                     microserviceName: 'mymicroservice',
@@ -121,6 +121,7 @@ describe('JDLImporter', () => {
                         {
                             relationshipType: 'one-to-many',
                             javadoc: 'A relationship',
+                            otherEntityField: 'id',
                             relationshipName: 'employee',
                             otherEntityName: 'employee',
                             otherEntityRelationshipName: 'department',
@@ -143,7 +144,6 @@ describe('JDLImporter', () => {
                     service: 'no',
                     jpaMetamodelFiltering: false,
                     fluentMethods: true,
-                    clientRootFolder: '',
                     applications: '*',
                     microserviceName: 'mymicroservice',
                     javadoc: '',
@@ -183,6 +183,7 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
+                            otherEntityField: 'id',
                             relationshipType: 'one-to-many',
                             relationshipName: 'job',
                             otherEntityName: 'job',
@@ -229,7 +230,6 @@ describe('JDLImporter', () => {
                     service: 'serviceClass',
                     jpaMetamodelFiltering: false,
                     fluentMethods: true,
-                    clientRootFolder: '',
                     applications: '*',
                     microserviceName: 'mymicroservice',
                     searchEngine: 'elasticsearch',
@@ -292,7 +292,6 @@ describe('JDLImporter', () => {
                     service: 'no',
                     jpaMetamodelFiltering: false,
                     fluentMethods: true,
-                    clientRootFolder: '',
                     applications: '*',
                     microserviceName: 'mymicroservice',
                     javadoc: '',
@@ -354,7 +353,6 @@ describe('JDLImporter', () => {
                     service: 'no',
                     jpaMetamodelFiltering: false,
                     fluentMethods: true,
-                    clientRootFolder: '',
                     applications: '*',
                     microserviceName: 'mymicroservice',
                     changelogDate: '20190101000200',
@@ -380,6 +378,7 @@ describe('JDLImporter', () => {
                     ],
                     relationships: [
                         {
+                            otherEntityField: 'id',
                             relationshipType: 'one-to-many',
                             relationshipName: 'country',
                             otherEntityName: 'country',
@@ -395,7 +394,6 @@ describe('JDLImporter', () => {
                     service: 'no',
                     jpaMetamodelFiltering: false,
                     fluentMethods: true,
-                    clientRootFolder: '',
                     applications: '*',
                     microserviceName: 'mymicroservice',
                     javadoc: '',
@@ -426,7 +424,6 @@ describe('JDLImporter', () => {
                     service: 'no',
                     jpaMetamodelFiltering: false,
                     fluentMethods: true,
-                    clientRootFolder: '',
                     applications: '*',
                     microserviceName: 'mymicroservice',
                     javadoc: '',
@@ -462,7 +459,6 @@ describe('JDLImporter', () => {
                     service: 'no',
                     jpaMetamodelFiltering: false,
                     fluentMethods: true,
-                    clientRootFolder: '',
                     applications: '*',
                     microserviceName: 'mymicroservice',
                     javadoc: '',
@@ -512,6 +508,7 @@ describe('JDLImporter', () => {
                     ],
                     exportedApplications: [],
                     exportedDeployments: [],
+                    exportedApplicationsWithEntities: {},
                 });
             });
             it('should create the files', () => {
@@ -575,6 +572,18 @@ relationship OneToOne {
                 expect(fse.statSync('.jhipster').isDirectory()).to.be.true;
                 expect(fse.statSync(path.join('.jhipster', 'BankAccount.json')).isFile()).to.be.true;
             });
+            it('should return the corresponding exportedApplicationsWithEntities', () => {
+                returned.exportedApplications.forEach(application => {
+                    const applicationConfig = application['generator-jhipster'];
+                    const entityNames = application.entities || [];
+                    const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
+                    expect(applicationConfig).to.be.eql(applicationWithEntities.config);
+                    expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
+                    expect(returned.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(
+                        applicationWithEntities.entities
+                    );
+                });
+            });
         });
         context('when parsing one JDL application and entities passed as string', () => {
             let returned;
@@ -615,6 +624,18 @@ relationship OneToOne {
                 expect(fse.statSync('.jhipster').isDirectory()).to.be.true;
                 expect(fse.statSync(path.join('.jhipster', 'BankAccount.json')).isFile()).to.be.true;
             });
+            it('should return the corresponding exportedApplicationsWithEntities', () => {
+                returned.exportedApplications.forEach(application => {
+                    const applicationConfig = application['generator-jhipster'];
+                    const entityNames = application.entities || [];
+                    const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
+                    expect(applicationConfig).to.be.eql(applicationWithEntities.config);
+                    expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
+                    expect(returned.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(
+                        applicationWithEntities.entities
+                    );
+                });
+            });
         });
         context('when parsing one JDL application and entities with entity and dto suffixes', () => {
             let returned;
@@ -641,6 +662,18 @@ relationship OneToOne {
                 expect(content['generator-jhipster'].entitySuffix).to.equal('Entity');
                 expect(content['generator-jhipster'].dtoSuffix).to.equal('DTO');
             });
+            it('should return the corresponding exportedApplicationsWithEntities', () => {
+                returned.exportedApplications.forEach(application => {
+                    const applicationConfig = application['generator-jhipster'];
+                    const entityNames = application.entities || [];
+                    const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
+                    expect(applicationConfig).to.be.eql(applicationWithEntities.config);
+                    expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
+                    expect(returned.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(
+                        applicationWithEntities.entities
+                    );
+                });
+            });
         });
         context('when parsing JDL applications and exporting them', () => {
             const contents = [];
@@ -655,7 +688,7 @@ relationship OneToOne {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -691,7 +724,7 @@ relationship OneToOne {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -727,7 +760,7 @@ relationship OneToOne {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -758,7 +791,7 @@ relationship OneToOne {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -828,7 +861,7 @@ relationship OneToOne {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -864,7 +897,7 @@ relationship OneToOne {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -895,7 +928,7 @@ relationship OneToOne {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -929,7 +962,6 @@ relationship OneToOne {
                     service: 'no',
                     jpaMetamodelFiltering: false,
                     fluentMethods: true,
-                    clientRootFolder: '',
                     applications: ['myFirstApp'],
                 },
                 {
@@ -944,7 +976,6 @@ relationship OneToOne {
                     service: 'no',
                     jpaMetamodelFiltering: false,
                     fluentMethods: true,
-                    clientRootFolder: '',
                     applications: ['myFirstApp'],
                 },
                 {
@@ -959,7 +990,6 @@ relationship OneToOne {
                     service: 'no',
                     jpaMetamodelFiltering: false,
                     fluentMethods: true,
-                    clientRootFolder: '',
                     applications: ['myFirstApp', 'mySecondApp'],
                     microserviceName: 'mySecondApp',
                 },
@@ -975,7 +1005,6 @@ relationship OneToOne {
                     service: 'no',
                     jpaMetamodelFiltering: false,
                     fluentMethods: true,
-                    clientRootFolder: '',
                     applications: ['myFirstApp', 'myThirdApp'],
                 },
             ];
@@ -1044,6 +1073,18 @@ relationship OneToOne {
                         default:
                         // nothing to do
                     }
+                });
+            });
+            it('should return the corresponding exportedApplicationsWithEntities', () => {
+                importState.exportedApplications.forEach(application => {
+                    const applicationConfig = application['generator-jhipster'];
+                    const entityNames = application.entities || [];
+                    const applicationWithEntities = importState.exportedApplicationsWithEntities[applicationConfig.baseName];
+                    expect(applicationConfig).to.be.eql(applicationWithEntities.config);
+                    expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
+                    expect(importState.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(
+                        applicationWithEntities.entities
+                    );
                 });
             });
         });
@@ -1156,7 +1197,7 @@ relationship OneToOne {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -1192,7 +1233,7 @@ relationship OneToOne {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -1228,7 +1269,7 @@ relationship OneToOne {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -1259,7 +1300,7 @@ relationship OneToOne {
                         websocket: false,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         buildTool: 'maven',
                         searchEngine: false,
                         enableTranslation: true,
@@ -1291,7 +1332,6 @@ relationship OneToOne {
                         directoryPath: '../',
                         gatewayType: 'zuul',
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         deploymentType: 'docker-compose',
                         serviceDiscoveryType: 'eureka',
                         dockerPushCommand: 'docker push',
@@ -1343,7 +1383,6 @@ relationship OneToOne {
                         directoryPath: '../',
                         gatewayType: 'zuul',
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         deploymentType: 'docker-compose',
                         serviceDiscoveryType: 'eureka',
                         dockerPushCommand: 'docker push',
@@ -1355,7 +1394,6 @@ relationship OneToOne {
                     'generator-jhipster': {
                         appsFolders: ['tata', 'titi'],
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         directoryPath: '../',
                         deploymentType: 'kubernetes',
                         dockerPushCommand: 'docker push',
@@ -1373,7 +1411,6 @@ relationship OneToOne {
                     'generator-jhipster': {
                         appsFolders: ['tata', 'titi'],
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         directoryPath: '../',
                         deploymentType: 'openshift',
                         dockerPushCommand: 'docker push',
@@ -1561,7 +1598,6 @@ relationship OneToOne {
                         directoryPath: '../',
                         appsFolders: ['store', 'invoice', 'notification', 'product'],
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         serviceDiscoveryType: false,
                         dockerRepositoryName: 'deepu105',
                         dockerPushCommand: 'docker push',
@@ -1575,7 +1611,6 @@ relationship OneToOne {
                         directoryPath: '../',
                         appsFolders: ['store', 'invoice', 'notification', 'product'],
                         clusteredDbApps: [],
-                        consoleOptions: [],
                         serviceDiscoveryType: false,
                         dockerRepositoryName: 'deepu105',
                         dockerPushCommand: 'docker push',
@@ -1700,7 +1735,6 @@ paginate * with infinite-scroll
                 expect(entityA).to.deep.equal({
                     applications: ['tata'],
                     changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
-                    clientRootFolder: '',
                     dto: 'no',
                     embedded: false,
                     entityTableName: 'a',
@@ -1716,7 +1750,6 @@ paginate * with infinite-scroll
                 expect(entityB).to.deep.equal({
                     applications: ['tata'],
                     changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 2 }),
-                    clientRootFolder: '',
                     dto: 'no',
                     embedded: false,
                     entityTableName: 'b',
@@ -1732,7 +1765,6 @@ paginate * with infinite-scroll
                 expect(entityCInTata).to.deep.equal({
                     applications: ['tata', 'tutu'],
                     changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 3 }),
-                    clientRootFolder: '',
                     dto: 'no',
                     embedded: false,
                     entityTableName: 'c',
@@ -1748,7 +1780,6 @@ paginate * with infinite-scroll
                 expect(entityCInTutu).to.deep.equal({
                     applications: ['tata', 'tutu'],
                     changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 3 }),
-                    clientRootFolder: '',
                     dto: 'no',
                     embedded: false,
                     entityTableName: 'c',
@@ -1764,7 +1795,6 @@ paginate * with infinite-scroll
                 expect(entityD).to.deep.equal({
                     applications: ['tutu'],
                     changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 4 }),
-                    clientRootFolder: '',
                     dto: 'mapstruct',
                     embedded: false,
                     entityTableName: 'd',
@@ -1780,7 +1810,6 @@ paginate * with infinite-scroll
                 expect(entityE).to.deep.equal({
                     applications: ['tutu'],
                     changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 5 }),
-                    clientRootFolder: '',
                     dto: 'no',
                     embedded: false,
                     entityTableName: 'e',
@@ -1798,7 +1827,7 @@ paginate * with infinite-scroll
                 expect(entityF).to.be.false;
             });
         });
-        context('when passing skipYoRcGeneration and skipEntityFilesGeneration options', () => {
+        context('when passing the skipFileGeneration option', () => {
             before(() => {
                 expect(fse.existsSync('.yo-rc.json')).to.be.false;
                 expect(fse.existsSync('.jhipster')).to.be.false;
@@ -1820,8 +1849,7 @@ paginate * with infinite-scroll
                     {
                         creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
                         generatorVersion: '7.0.0',
-                        skipYoRcGeneration: true,
-                        skipEntityFilesGeneration: true,
+                        skipFileGeneration: true,
                     }
                 );
                 importer.import();
@@ -1892,7 +1920,7 @@ paginate * with infinite-scroll
                             nativeLanguage: 'en',
                             packageFolder: 'com/mycompany/myapp',
                             packageName: 'com.mycompany.myapp',
-                            prodDatabaseType: 'mysql',
+                            prodDatabaseType: 'postgresql',
                             searchEngine: false,
                             serverPort: '8080',
                             serviceDiscoveryType: false,
@@ -1905,6 +1933,71 @@ paginate * with infinite-scroll
                         },
                     },
                 ]);
+            });
+        });
+        context('when choosing neo4j as database type', () => {
+            let importState;
+
+            before(() => {
+                const content = `entity Person {
+   name String
+}
+
+relationship OneToMany {
+   Person{friends} to Person
+}`;
+                const importer = createImporterFromContent(content, {
+                    applicationName: 'toto',
+                    databaseType: 'neo4j',
+                });
+                importState = importer.import();
+            });
+            after(() => {
+                fse.removeSync('.jhipster');
+            });
+
+            it('should not generate a bidirectional one-to-many relationship', () => {
+                expect(importState.exportedEntities[0].relationships).to.have.length(1);
+            });
+        });
+        context('when having the use-options', () => {
+            let importState;
+
+            before(() => {
+                const content = `application {
+  config {
+    baseName toto
+  }
+  entities A, B, C
+  use serviceImpl for * except C
+}
+
+entity A
+entity B
+entity C
+
+use mapstruct, elasticsearch for A, B except C`;
+                const importer = createImporterFromContent(content, {
+                    applicationName: 'toto',
+                    databaseType: 'sql',
+                });
+                importState = importer.import();
+            });
+            after(() => {
+                fse.removeSync('.jhipster');
+                fse.unlinkSync('.yo-rc.json');
+            });
+
+            it('should add the options', () => {
+                expect(importState.exportedEntities[0].dto).to.equal('mapstruct');
+                expect(importState.exportedEntities[1].dto).to.equal('mapstruct');
+                expect(importState.exportedEntities[2].dto).not.to.equal('mapstruct');
+                expect(importState.exportedEntities[0].service).to.equal('serviceImpl');
+                expect(importState.exportedEntities[1].service).to.equal('serviceImpl');
+                expect(importState.exportedEntities[2].service).not.to.equal('serviceImpl');
+                expect(importState.exportedEntities[0].searchEngine).to.equal('elasticsearch');
+                expect(importState.exportedEntities[1].searchEngine).to.equal('elasticsearch');
+                expect(importState.exportedEntities[2].searchEngine).not.to.equal('elasticsearch');
             });
         });
     });

@@ -24,7 +24,6 @@ import { Translate } from 'react-jhipster';
 import { connect } from 'react-redux';
 import { Row, Col, Alert } from 'reactstrap';
 
-import { IRootState } from 'app/shared/reducers';
 <%_ if (authenticationType === 'oauth2') { _%>
 import { getLoginUrl } from 'app/shared/util/url-utils';
 <%_ } _%>
@@ -37,8 +36,11 @@ export const Home = (props: IHomeProp) => {
 
   return (
     <Row>
+      <Col md="3" className="pad">
+        <span className="hipster rounded" />
+      </Col>
       <Col md="9">
-        <h2><Translate contentKey="home.title">Welcome, Java Hipster!</Translate></h2>
+        <h2><Translate contentKey="home.title">Welcome, <%= backendName %> Hipster!</Translate></h2>
         <p className="lead"><Translate contentKey="home.subtitle">This is your homepage</Translate></p>
         {
           (account && account.login) ? (
@@ -108,11 +110,8 @@ export const Home = (props: IHomeProp) => {
         <p>
           <Translate contentKey="home.like">If you like JHipster, do not forget to give us a star on</Translate>
           {' '}
-          <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">Github</a>!
+          <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">GitHub</a>!
         </p>
-      </Col>
-      <Col md="3" className="pad">
-        <span className="hipster rounded" />
       </Col>
     </Row>
   );

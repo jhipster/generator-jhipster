@@ -69,9 +69,9 @@ describe('JHipster generator for entity', () => {
 
         context('monolith with entity and dto suffixes', () => {
             describe('with entity and dto suffixes', () => {
-                beforeEach(done => {
+                before(() =>
                     helpers
-                        .run(require.resolve('../generators/entity'))
+                        .create(require.resolve('../generators/entity'))
                         .inTmpDir(dir => {
                             fse.copySync(path.join(__dirname, '../test/templates/entity-dto-suffixes'), dir);
                         })
@@ -82,8 +82,8 @@ describe('JHipster generator for entity', () => {
                             dto: 'mapstruct',
                             service: 'serviceImpl',
                         })
-                        .on('end', done);
-                });
+                        .run()
+                );
 
                 it('creates expected files with suffix', () => {
                     assert.file([
@@ -95,17 +95,23 @@ describe('JHipster generator for entity', () => {
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`,
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
                     ]);
+                });
 
+                it('correctly writes the repository', () => {
                     assert.fileContent(
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`,
                         'public interface FooRepository '
                     );
+                });
 
+                it('correctly writes the entity', () => {
                     assert.fileContent(
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/FooXXX.java`,
                         'public class FooXXX implements Serializable'
                     );
+                });
 
+                it('correctly writes the dto file', () => {
                     assert.fileContent(
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooYYY.java`,
                         'public class FooYYY implements Serializable'
@@ -301,7 +307,7 @@ describe('JHipster generator for entity', () => {
                             fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                         })
                         .withArguments(['foo'])
-                        .withOptions({ 'angular-suffix': 'management' })
+                        .withOptions({ angularSuffix: 'management' })
                         .withPrompts({
                             fieldAdd: false,
                             relationshipAdd: false,
@@ -328,7 +334,7 @@ describe('JHipster generator for entity', () => {
                             fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                         })
                         .withArguments(['foo'])
-                        .withOptions({ 'client-root-folder': 'test-root' })
+                        .withOptions({ clientRootFolder: 'test-root' })
                         .withPrompts({
                             fieldAdd: false,
                             relationshipAdd: false,
@@ -355,8 +361,7 @@ describe('JHipster generator for entity', () => {
                             fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                         })
                         .withArguments(['foo'])
-                        .withOptions({ 'client-root-folder': 'test-root' })
-                        .withOptions({ 'angular-suffix': 'management' })
+                        .withOptions({ clientRootFolder: 'test-root', angularSuffix: 'management' })
                         .withPrompts({
                             fieldAdd: false,
                             relationshipAdd: false,
@@ -463,7 +468,7 @@ describe('JHipster generator for entity', () => {
                             fse.copySync(path.join(__dirname, '../test/templates/all-languages'), dir);
                         })
                         .withArguments(['foo'])
-                        .withOptions({ 'client-root-folder': 'test-root' })
+                        .withOptions({ clientRootFolder: 'test-root' })
                         .withPrompts({
                             fieldAdd: false,
                             relationshipAdd: false,
@@ -492,7 +497,7 @@ describe('JHipster generator for entity', () => {
                             fse.copySync(path.join(__dirname, '../test/templates/default-microservice'), dir);
                         })
                         .withArguments(['foo'])
-                        .withOptions({ 'client-root-folder': 'test-root' })
+                        .withOptions({ clientRootFolder: 'test-root' })
                         .withPrompts({
                             fieldAdd: false,
                             relationshipAdd: false,
@@ -572,7 +577,7 @@ describe('JHipster generator for entity', () => {
                         })
                         .withPrompts({
                             useMicroserviceJson: true,
-                            microservicePath: '../',
+                            microservicePath: 'microservice1',
                         })
                         .withArguments(['bar'])
                         .on('end', done);
@@ -604,7 +609,7 @@ describe('JHipster generator for entity', () => {
                         .withArguments(['foo'])
                         .withPrompts({
                             useMicroserviceJson: true,
-                            microservicePath: '../',
+                            microservicePath: 'microservice1',
                         })
                         .on('end', done);
                 });
@@ -630,7 +635,7 @@ describe('JHipster generator for entity', () => {
                         .withArguments(['baz'])
                         .withPrompts({
                             useMicroserviceJson: true,
-                            microservicePath: '../',
+                            microservicePath: 'microservice1',
                         })
                         .on('end', done);
                 });
@@ -736,11 +741,8 @@ describe('JHipster generator for entity', () => {
                     helpers
                         .run(require.resolve('../generators/entity'))
                         .inTmpDir(dir => {
-                            fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
-                            fse.copySync(
-                                path.join(__dirname, '../test/templates/export-jdl/.jhipster/Country.json'),
-                                path.join(dir, '.jhipster/Foo.json')
-                            );
+                            fse.copySync(path.join(__dirname, './templates/default-ng2'), dir);
+                            fse.copySync(path.join(__dirname, 'templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
                         })
                         .withArguments(['Foo'])
                         .withOptions({ regenerate: true, force: true })
@@ -752,7 +754,7 @@ describe('JHipster generator for entity', () => {
                     assert.file(expectedFiles.clientNg2);
                     assert.file(expectedFiles.gatling);
                 });
-                it('generates swagger annotations on domain model', () => {
+                it('generates OpenAPI annotations on domain model', () => {
                     assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`, /@ApiModelProperty/);
                 });
             });
@@ -765,10 +767,7 @@ describe('JHipster generator for entity', () => {
                         .run(require.resolve('../generators/entity'))
                         .inTmpDir(dir => {
                             fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
-                            fse.copySync(
-                                path.join(__dirname, '../test/templates/export-jdl/.jhipster/Country.json'),
-                                path.join(dir, '.jhipster/Foo.json')
-                            );
+                            fse.copySync(path.join(__dirname, 'templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
                         })
                         .withArguments(['Foo'])
                         .withOptions({ regenerate: true, force: true, skipDbChangelog: true })
@@ -794,10 +793,7 @@ describe('JHipster generator for entity', () => {
                         .run(require.resolve('../generators/entity'))
                         .inTmpDir(dir => {
                             fse.copySync(path.join(__dirname, '../test/templates/compose/05-cassandra'), dir);
-                            fse.copySync(
-                                path.join(__dirname, '../test/templates/export-jdl/.jhipster/Country.json'),
-                                path.join(dir, '.jhipster/Foo.json')
-                            );
+                            fse.copySync(path.join(__dirname, 'templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
                         })
                         .withArguments(['Foo'])
                         .withOptions({ regenerate: true, force: true, skipDbChangelog: true })
@@ -822,7 +818,7 @@ describe('JHipster generator for entity', () => {
                         .inTmpDir(dir => {
                             fse.copySync(path.join(__dirname, '../test/templates/default-microservice'), dir);
                             fse.copySync(
-                                path.join(__dirname, '../test/templates/export-jdl/.jhipster/Employee.json'),
+                                path.join(__dirname, 'templates/.jhipster/DtoServicePagination.json'),
                                 path.join(dir, '.jhipster/Foo.json')
                             );
                         })
@@ -840,7 +836,7 @@ describe('JHipster generator for entity', () => {
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
                     ]);
                 });
-                it('generates swagger annotations on DTO', () => {
+                it('generates OpenAPI annotations on DTO', () => {
                     assert.noFileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`, /@ApiModelProperty/);
                     assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooDTO.java`, /@ApiModelProperty/);
                 });
@@ -864,16 +860,20 @@ describe('JHipster generator for entity', () => {
                     assert.file(expectedFiles.clientNg2);
                     assert.file(expectedFiles.gatling);
                     assert.file(expectedFiles.fakeData);
+                });
 
-                    assert.fileContent(`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/foo.csv`, /1;New Leu Diverse Illinois;"0646"/);
+                it('creates reproducible liquibase data', () => {
+                    assert.fileContent(`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/foo.csv`, /1;Qatari salmon Monitored;65526;"6"/);
+                });
 
+                it('creates reproducible backend test', () => {
                     assert.fileContent(
                         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`,
-                        /DEFAULT_NUMBER_PATTERN_REQUIRED = "387"/
+                        /DEFAULT_NUMBER_PATTERN_REQUIRED = "66225"/
                     );
                     assert.fileContent(
                         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`,
-                        /UPDATED_NUMBER_PATTERN_REQUIRED = "468439"/
+                        /UPDATED_NUMBER_PATTERN_REQUIRED = "24"/
                     );
                 });
             });
@@ -952,9 +952,9 @@ describe('JHipster generator for entity', () => {
     });
     describe('regeneration from app generator', () => {
         describe('with creation timestamp', () => {
-            before(done => {
-                helpers
-                    .run(require.resolve('../generators/app'))
+            before(() => {
+                return helpers
+                    .create(require.resolve('../generators/app'))
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                         const jhipsterFolder = path.join(dir, '.jhipster');
@@ -962,7 +962,7 @@ describe('JHipster generator for entity', () => {
                         fse.writeJsonSync(path.join(jhipsterFolder, 'Foo.json'), {});
                     })
                     .withOptions({ creationTimestamp: '2016-01-20', withEntities: true })
-                    .on('end', done);
+                    .run();
             });
 
             it('creates expected default files', () => {

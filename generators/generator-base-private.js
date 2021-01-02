@@ -27,11 +27,15 @@ const exec = require('child_process').exec;
 const https = require('https');
 const filter = require('gulp-filter');
 const through = require('through2');
+const fs = require('fs');
+const minimatch = require('minimatch');
+const findUp = require('find-up');
 
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
-const { prettierTransform, prettierOptions } = require('./generator-transforms');
+const { languageToJavaLanguage } = require('./utils');
+const { prettierTransform, prettierJavaOptions, generatedAnnotationTransform } = require('./generator-transforms');
 const JSONToJDLEntityConverter = require('../jdl/converters/json-to-jdl-entity-converter');
 const JSONToJDLOptionConverter = require('../jdl/converters/json-to-jdl-option-converter');
 
@@ -47,7 +51,7 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
  *
  * The method signatures in private API can be changed without a major version change.
  */
-module.exports = class extends Generator {
+module.exports = class JHipsterBasePrivateGenerator extends Generator {
     constructor(args, opts) {
         super(args, opts);
         // expose lodash to templates
@@ -121,10 +125,7 @@ module.exports = class extends Generator {
     installI18nServerFilesByLanguage(_this, resourceDir, lang, testResourceDir) {
         const generator = _this || this;
         const prefix = this.fetchFromInstalledJHipster('languages/templates');
-        // Template the message server side properties
-        const langProp = lang.replace(/-/g, '_');
-        // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
-        const langJavaProp = langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
+        const langJavaProp = languageToJavaLanguage(lang);
         generator.template(
             `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
             `${resourceDir}i18n/messages_${langJavaProp}.properties`
@@ -148,7 +149,11 @@ module.exports = class extends Generator {
                 `${prefix ? `${prefix}/` : ''}i18n/entity_${language}.json.ejs`,
                 `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/${fileName}.json`
             );
-            this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
+            this.addEntityTranslationKey(
+                this.entityTranslationKeyMenu,
+                this.entityClassHumanized || _.startCase(this.entityClass),
+                language
+            );
         } catch (e) {
             this.debug('Error:', e);
             // An exception is thrown if the folder doesn't exist
@@ -458,13 +463,13 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Rename File
+     * Execute a git mv.
      *
      * @param {string} source
      * @param {string} dest
      * @returns {boolean} true if success; false otherwise
      */
-    renameFile(source, dest) {
+    gitMove(source, dest) {
         source = this.destinationPath(source);
         dest = this.destinationPath(dest);
         if (source && dest && shelljs.test('-f', source)) {
@@ -537,11 +542,12 @@ module.exports = class extends Generator {
      * Format As Liquibase Remarks
      *
      * @param {string} text - text to format
+     * @param {boolean} addRemarksTag - add remarks tag
      * @returns formatted liquibase remarks
      */
-    formatAsLiquibaseRemarks(text) {
+    formatAsLiquibaseRemarks(text, addRemarksTag = false) {
         if (!text) {
-            return text;
+            return addRemarksTag ? '' : text;
         }
         const rows = text.split('\n');
         let description = rows[0];
@@ -565,7 +571,7 @@ module.exports = class extends Generator {
         description = description.replace(/</g, '&lt;');
         // escape > to &gt;
         description = description.replace(/>/g, '&gt;');
-        return description;
+        return addRemarksTag ? ` remarks="${description}"` : description;
     }
 
     /**
@@ -700,15 +706,6 @@ module.exports = class extends Generator {
     }
 
     /**
-     * @param {Array} array - array to search in
-     * @param {any} item - item to search for
-     * @return {boolean} true if array contains item; false otherwise
-     */
-    contains(array, item) {
-        return _.includes(array, item);
-    }
-
-    /**
      * Function to issue a https get request, and process the result
      *
      *  @param {string} url - the url to fetch
@@ -809,7 +806,7 @@ module.exports = class extends Generator {
      */
     debug(msg, ...args) {
         const formattedMsg = `${chalk.yellow.bold('DEBUG!')} ${msg}`;
-        if (this.isDebugEnabled || (this.options && this.options.debug)) {
+        if ((this.configOptions && this.configOptions.isDebugEnabled) || (this.options && this.options.debug)) {
             this.log(formattedMsg);
             args.forEach(arg => this.log(arg));
         }
@@ -846,27 +843,18 @@ module.exports = class extends Generator {
      * Check if Node is installed
      */
     checkNode() {
-        if (this.skipChecks || this.skipServer) return;
-        const done = this.async();
-        exec('node -v', (err, stdout, stderr) => {
-            if (err) {
-                this.warning('NodeJS is not found on your system.');
-            } else {
-                const nodeVersion = semver.clean(stdout);
-                const nodeFromPackageJson = packagejs.engines.node;
-                if (!semver.satisfies(nodeVersion, nodeFromPackageJson)) {
-                    this.warning(
-                        `Your NodeJS version is too old (${nodeVersion}). You should use at least NodeJS ${chalk.bold(nodeFromPackageJson)}`
-                    );
-                }
-                if (!(process.release || {}).lts) {
-                    this.warning(
-                        'Your Node version is not LTS (Long Term Support), use it at your own risk! JHipster does not support non-LTS releases, so if you encounter a bug, please use a LTS version first.'
-                    );
-                }
-            }
-            done();
-        });
+        if (this.skipChecks) return;
+        const nodeFromPackageJson = packagejs.engines.node;
+        if (!semver.satisfies(process.version, nodeFromPackageJson)) {
+            this.warning(
+                `Your NodeJS version is too old (${process.version}). You should use at least NodeJS ${chalk.bold(nodeFromPackageJson)}`
+            );
+        }
+        if (!(process.release || {}).lts) {
+            this.warning(
+                'Your Node version is not LTS (Long Term Support), use it at your own risk! JHipster does not support non-LTS releases, so if you encounter a bug, please use a LTS version first.'
+            );
+        }
     }
 
     /**
@@ -875,24 +863,6 @@ module.exports = class extends Generator {
     checkGit() {
         if (this.skipChecks || this.skipClient) return;
         this.gitInstalled = this.isGitInstalled();
-    }
-
-    /**
-     * Check if Yarn is installed
-     */
-    checkYarn() {
-        if (this.skipChecks || !this.useYarn) return;
-        const done = this.async();
-        exec('yarn --version', err => {
-            if (err) {
-                this.warning('yarn is not found on your computer.\n', ' Using npm instead');
-                this.useYarn = false;
-            } else {
-                this.useYarn = true;
-            }
-            this.useNpm = !this.useYarn;
-            done();
-        });
     }
 
     /**
@@ -975,7 +945,7 @@ module.exports = class extends Generator {
                             .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body || []);`;
                 }
             }
-            if (variableName && !this.contains(queries, query)) {
+            if (variableName && !queries.includes(query)) {
                 queries.push(query);
                 variables.push(`${variableName}: I${relationship.otherEntityAngularName}[] = [];`);
             }
@@ -1077,15 +1047,11 @@ module.exports = class extends Generator {
                 fieldName = relationship.relationshipFieldName;
             } else {
                 const relationshipFieldName = relationship.relationshipFieldName;
-                const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
                 const relationshipType = relationship.relationshipType;
                 const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
                 const ownerSide = relationship.ownerSide;
 
-                if (relationshipType === 'many-to-many' && ownerSide === true) {
-                    fieldType = `I${otherEntityFieldCapitalized}[]`;
-                    fieldName = relationshipFieldNamePlural;
-                } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
+                if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
                     if (otherEntityFieldCapitalized !== 'Id' && otherEntityFieldCapitalized !== '') {
                         fieldType = 'string';
                         fieldName = `${relationshipFieldName}${otherEntityFieldCapitalized}`;
@@ -1132,7 +1098,7 @@ module.exports = class extends Generator {
                 const otherEntityAngularName = relationship.otherEntityAngularName;
                 const importType = `I${otherEntityAngularName}`;
                 let importPath;
-                if (otherEntityAngularName === 'User') {
+                if (this.isBuiltInUser(otherEntityAngularName)) {
                     importPath = clientFramework === ANGULAR ? 'app/core/user/user.model' : 'app/shared/model/user.model';
                 } else {
                     importPath = `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
@@ -1279,21 +1245,6 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Copy Filtering Flag
-     *
-     * @param {any} from - from
-     * @param {any} to - to
-     * @param {any} context - generator context
-     */
-    copyFilteringFlag(from, to, context = this) {
-        if (context.databaseType === 'sql' && context.service !== 'no') {
-            to.jpaMetamodelFiltering = from.jpaMetamodelFiltering;
-        } else {
-            to.jpaMetamodelFiltering = false;
-        }
-    }
-
-    /**
      * Rebuild client for Angular
      */
     rebuildClient() {
@@ -1350,15 +1301,10 @@ module.exports = class extends Generator {
      * @param {T[]} relationships - relationships
      */
     getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships) {
-        let hasFound = false;
-        let primaryKeyType = this.getPkType(databaseType);
-        relationships.forEach(relationship => {
-            if (relationship.useJPADerivedIdentifier === true && !hasFound) {
-                primaryKeyType = relationship.otherEntityName === 'user' && authenticationType === 'oauth2' ? 'String' : primaryKeyType;
-                hasFound = true;
-            }
-        });
-        return primaryKeyType;
+        const derivedRelationship = relationships.find(relationship => relationship.useJPADerivedIdentifier === true);
+        return derivedRelationship && this.isUserEntity(derivedRelationship.otherEntityName) && authenticationType === 'oauth2'
+            ? 'String'
+            : this.getPkType(databaseType);
     }
 
     /**
@@ -1368,44 +1314,72 @@ module.exports = class extends Generator {
      * @param {*} options
      */
     getJDBCUrl(databaseType, options = {}) {
+        return this.getDBCUrl(databaseType, 'jdbc', options);
+    }
+
+    /**
+     * Returns the R2DBC URL for a databaseType
+     *
+     * @param {string} databaseType
+     * @param {*} options
+     */
+    getR2DBCUrl(databaseType, options = {}) {
+        return this.getDBCUrl(databaseType, 'r2dbc', options);
+    }
+
+    /**
+     * Returns the URL for a particular databaseType and protocol
+     *
+     * @param {string} databaseType
+     * @param {string} protocol
+     * @param {*} options
+     */
+    getDBCUrl(databaseType, protocol, options = {}) {
+        if (!protocol) {
+            throw new Error('protocol is required');
+        }
         if (!options.databaseName) {
             throw new Error("option 'databaseName' is required");
         }
         if (['mysql', 'mariadb', 'postgresql', 'oracle', 'mssql'].includes(databaseType) && !options.hostname) {
             throw new Error(`option 'hostname' is required for ${databaseType} databaseType`);
         }
-        let jdbcUrl;
+        let dbcUrl;
         let extraOptions;
         if (databaseType === 'mysql') {
-            jdbcUrl = `jdbc:mysql://${options.hostname}:3306/${options.databaseName}`;
+            dbcUrl = `${protocol}:mysql://${options.hostname}:3306/${options.databaseName}`;
             extraOptions =
                 '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true';
         } else if (databaseType === 'mariadb') {
-            jdbcUrl = `jdbc:mariadb://${options.hostname}:3306/${options.databaseName}`;
+            dbcUrl = `${protocol}:mariadb://${options.hostname}:3306/${options.databaseName}`;
             extraOptions = '?useLegacyDatetimeCode=false&serverTimezone=UTC';
         } else if (databaseType === 'postgresql') {
-            jdbcUrl = `jdbc:postgresql://${options.hostname}:5432/${options.databaseName}`;
+            dbcUrl = `${protocol}:postgresql://${options.hostname}:5432/${options.databaseName}`;
         } else if (databaseType === 'oracle') {
-            jdbcUrl = `jdbc:oracle:thin:@${options.hostname}:1521:${options.databaseName}`;
+            dbcUrl = `${protocol}:oracle:thin:@${options.hostname}:1521:${options.databaseName}`;
         } else if (databaseType === 'mssql') {
-            jdbcUrl = `jdbc:sqlserver://${options.hostname}:1433;database=${options.databaseName}`;
+            dbcUrl = `${protocol}:sqlserver://${options.hostname}:1433;database=${options.databaseName}`;
         } else if (databaseType === 'h2Disk') {
             if (!options.localDirectory) {
                 throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
             }
-            jdbcUrl = `jdbc:h2:file:${options.localDirectory}/${options.databaseName}`;
+            dbcUrl = `${protocol}:h2:file:${options.localDirectory}/${options.databaseName}`;
             extraOptions = ';DB_CLOSE_DELAY=-1';
         } else if (databaseType === 'h2Memory') {
-            jdbcUrl = `jdbc:h2:mem:${options.databaseName}`;
+            if (protocol === 'r2dbc') {
+                dbcUrl = `${protocol}:h2:mem:///${options.databaseName}`;
+            } else {
+                dbcUrl = `${protocol}:h2:mem:${options.databaseName}`;
+            }
             extraOptions = ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE';
         } else {
             throw new Error(`${databaseType} databaseType is not supported`);
         }
 
         if (!options.skipExtraOptions && extraOptions) {
-            jdbcUrl += extraOptions;
+            dbcUrl += extraOptions;
         }
-        return jdbcUrl;
+        return dbcUrl;
     }
 
     /**
@@ -1479,14 +1453,23 @@ module.exports = class extends Generator {
      * @param {any} generator
      */
     registerPrettierTransform(generator = this) {
-        // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        let filterPatternForPrettier = '{,**/,.jhipster/**/}*.{md,json,ts,tsx,scss,css,yml}';
-        if (!this.skipServer && this.prettierJava) {
-            filterPatternForPrettier = '{,**/,.jhipster/**/}*.{md,json,ts,tsx,scss,css,yml,java}';
+        if (this.options.help) {
+            return;
         }
+
+        let prettierOptions = {};
+        if (!this.skipServer && !this.jhipsterConfig.skipServer) {
+            prettierOptions = prettierJavaOptions;
+        }
+        // Prettier is clever, it uses correct rules and correct parser according to file extension.
+        const filterPatternForPrettier = `{,.,**/,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
         const prettierFilter = filter(['.yo-rc.json', filterPatternForPrettier], { restore: true });
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter
         generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
+    }
+
+    registerGeneratedAnnotationTransform() {
+        this.registerTransformStream(generatedAnnotationTransform(this));
     }
 
     registerForceEntitiesTransform() {
@@ -1501,11 +1484,79 @@ module.exports = class extends Generator {
         );
     }
 
+    parseYoAttributesFile(yoAttributeFileName) {
+        let overridesContent;
+        try {
+            overridesContent = fs.readFileSync(yoAttributeFileName, 'utf-8');
+        } catch (error) {
+            this.warning(`Error loading yo attributes file ${yoAttributeFileName}, ${error}`);
+            return null;
+        }
+        const absoluteDir = path.dirname(yoAttributeFileName);
+
+        return Object.fromEntries(
+            overridesContent
+                .split(/\r?\n/)
+                .map(override => override.trim())
+                .map(override => override.split('#')[0].trim())
+                .filter(override => override)
+                .map(override => override.split(/\s+/))
+                .map(([pattern, status = 'skip']) => [path.join(absoluteDir, pattern), status])
+        );
+    }
+
+    getConflicterStatusForFile(filePath, yoAttributeFileName) {
+        const fileDir = path.dirname(filePath);
+        this.yoResolveByFile = this.yoResolveByFile || {};
+        const yoResolveFiles = [];
+        let foundYoAttributesFile = findUp.sync([yoAttributeFileName], { cwd: fileDir });
+        while (foundYoAttributesFile) {
+            yoResolveFiles.push(foundYoAttributesFile);
+            foundYoAttributesFile = findUp.sync([yoAttributeFileName], { cwd: path.join(path.dirname(foundYoAttributesFile), '..') });
+        }
+
+        let fileStatus;
+        if (yoResolveFiles) {
+            yoResolveFiles.forEach(yoResolveFile => {
+                if (this.yoResolveByFile[yoResolveFile] === undefined) {
+                    this.yoResolveByFile[yoResolveFile] = this.parseYoAttributesFile(yoResolveFile);
+                }
+            });
+            yoResolveFiles
+                .map(yoResolveFile => this.yoResolveByFile[yoResolveFile])
+                .map(attributes => attributes)
+                .find(yoResolve => {
+                    return Object.entries(yoResolve).some(([pattern, status]) => {
+                        if (minimatch(filePath, pattern)) {
+                            fileStatus = status;
+                            return true;
+                        }
+                        return false;
+                    });
+                });
+        }
+        return fileStatus;
+    }
+
+    registerConflicterAttributesTransform(yoAttributeFileName = '.yo-resolve') {
+        const generator = this;
+        this.registerTransformStream(
+            through.obj(function (file, enc, cb) {
+                const status = generator.getConflicterStatusForFile(file.path, yoAttributeFileName);
+                if (status) {
+                    file.conflicter = status;
+                }
+                this.push(file);
+                cb();
+            })
+        );
+    }
+
     /**
      * Check if the subgenerator has been invoked from JHipster CLI or from Yeoman (yo jhipster:subgenerator)
      */
     checkInvocationFromCLI() {
-        if (!this.options['from-cli']) {
+        if (!this.options.fromCli) {
             this.warning(
                 `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
                     'jhipster <command>'

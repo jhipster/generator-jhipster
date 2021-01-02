@@ -21,6 +21,9 @@ const chalk = require('chalk');
 const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const {
+    SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR },
+} = require('../generator-constants');
 
 let useBlueprints;
 
@@ -30,13 +33,11 @@ module.exports = class extends BaseBlueprintGenerator {
         utils.copyObjectProps(this, opts.context);
         this.jhipsterContext = opts.jhipsterContext || opts.context;
 
-        useBlueprints =
-            !this.fromBlueprint &&
-            this.instantiateBlueprints('entity-client', { context: opts.context, debug: opts.context.isDebugEnabled });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-client', { context: opts.context });
     }
 
     // Public API method used by the getter and also by Blueprints
-    _configuring() {
+    _preparing() {
         return {
             setup() {
                 this.tsKeyType = this.getTypescriptKeyType(this.primaryKeyType);
@@ -44,14 +45,32 @@ module.exports = class extends BaseBlueprintGenerator {
         };
     }
 
-    get configuring() {
+    get preparing() {
         if (useBlueprints) return;
-        return this._configuring();
+        return this._preparing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return super._missingPreDefault();
+    }
+
+    get default() {
+        if (useBlueprints) return;
+        return this._default();
     }
 
     // Public API method used by the getter and also by Blueprints
     _writing() {
-        return writeFiles();
+        return {
+            cleanup() {
+                if (this.isJhipsterVersionLessThan('7.0.0') && this.jhipsterConfig.clientFramework === ANGULAR) {
+                    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.route.ts`);
+                }
+            },
+            ...writeFiles(),
+            ...super._missingPostWriting(),
+        };
     }
 
     get writing() {
@@ -63,7 +82,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _end() {
         return {
             end() {
-                if (!this.options['skip-install'] && !this.skipClient) {
+                if (!this.options.skipInstall && !this.skipClient) {
                     this.rebuildClient();
                 }
                 this.log(chalk.bold.green(`Entity ${this.entityNameCapitalized} generated successfully.`));

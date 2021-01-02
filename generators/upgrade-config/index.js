@@ -23,11 +23,16 @@ const { parseBluePrints } = require('../../utils/blueprint');
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
+
+        if (this.options.help) {
+            return;
+        }
+
         this.force = this.options.force;
 
-        this.skipInstall = this.options['skip-install'];
+        this.skipInstall = this.options.skipInstall;
         this.silent = this.options.silent;
-        this.skipChecks = this.options['skip-checks'];
+        this.skipChecks = this.options.skipChecks;
 
         // Verify 6.6.0 app blueprint bug
         if (!this.config.existed && !this.options.blueprints && !this.options.help) {

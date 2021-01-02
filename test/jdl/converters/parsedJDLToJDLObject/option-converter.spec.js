@@ -45,9 +45,12 @@ describe('OptionConverter', () => {
                                 excludedNames: ['B'],
                             }),
                         ];
-                        convertedOptions = convertOptions({
-                            [unaryOptionName]: { list: ['A'], excluded: ['B'] },
-                        });
+                        convertedOptions = convertOptions(
+                            {
+                                [unaryOptionName]: { list: ['A'], excluded: ['B'] },
+                            },
+                            []
+                        );
                     });
 
                     it('should convert it', () => {
@@ -59,7 +62,7 @@ describe('OptionConverter', () => {
                 [BinaryOptions.Options.DTO, BinaryOptions.Values.dto.MAPSTRUCT],
                 [BinaryOptions.Options.SERVICE, BinaryOptions.Values.service.SERVICE_CLASS],
                 [BinaryOptions.Options.PAGINATION, BinaryOptions.Values.pagination.PAGINATION],
-                [BinaryOptions.Options.SEARCH, BinaryOptions.Values.search.ELASTIC_SEARCH],
+                [BinaryOptions.Options.SEARCH, BinaryOptions.Values.search.ELASTICSEARCH],
                 [BinaryOptions.Options.ANGULAR_SUFFIX, 'toto'],
                 [BinaryOptions.Options.CLIENT_ROOT_FOLDER, 'toto'],
                 [BinaryOptions.Options.MICROSERVICE, 'toto'],
@@ -84,13 +87,83 @@ describe('OptionConverter', () => {
                                     [optionValue]: { list: ['A'], excluded: ['B'] },
                                 },
                             },
-                            () => ({ entityList: ['A'], excludedEntityList: ['B'] })
+                            []
                         );
                     });
 
                     it('should convert it', () => {
                         expect(convertedOptions).to.deep.equal(expectedOptions);
                     });
+                });
+            });
+        });
+        context('when passing use options', () => {
+            context('that exist', () => {
+                let convertedOptions;
+
+                before(() => {
+                    convertedOptions = convertOptions({}, [
+                        {
+                            optionValues: ['mapstruct', 'couchbase'],
+                            list: ['*'],
+                            excluded: ['B'],
+                        },
+                        {
+                            optionValues: ['pagination'],
+                            list: ['A', 'C'],
+                            excluded: [],
+                        },
+                    ]);
+                });
+                it('should convert them', () => {
+                    expect(convertedOptions).to.deep.equal([
+                        new JDLBinaryOption({
+                            name: BinaryOptions.Options.DTO,
+                            value: BinaryOptions.Values[BinaryOptions.Options.DTO].MAPSTRUCT,
+                            entityNames: ['*'],
+                            excludedNames: ['B'],
+                        }),
+                        new JDLBinaryOption({
+                            name: BinaryOptions.Options.SEARCH,
+                            value: BinaryOptions.Values[BinaryOptions.Options.SEARCH].COUCHBASE,
+                            entityNames: ['*'],
+                            excludedNames: ['B'],
+                        }),
+                        new JDLBinaryOption({
+                            name: BinaryOptions.Options.PAGINATION,
+                            value: BinaryOptions.Values[BinaryOptions.Options.PAGINATION].PAGINATION,
+                            entityNames: ['A', 'C'],
+                            excludedNames: [],
+                        }),
+                    ]);
+                });
+            });
+            context('that do not exist', () => {
+                let convertedOptions;
+
+                before(() => {
+                    convertedOptions = convertOptions({}, [
+                        {
+                            optionValues: ['mapstruct'],
+                            list: ['*'],
+                            excluded: ['B'],
+                        },
+                        {
+                            optionValues: ['oops'],
+                            list: ['A', 'C'],
+                            excluded: [],
+                        },
+                    ]);
+                });
+                it('should not convert them', () => {
+                    expect(convertedOptions).to.deep.equal([
+                        new JDLBinaryOption({
+                            name: BinaryOptions.Options.DTO,
+                            value: BinaryOptions.Values[BinaryOptions.Options.DTO].MAPSTRUCT,
+                            entityNames: ['*'],
+                            excludedNames: ['B'],
+                        }),
+                    ]);
                 });
             });
         });

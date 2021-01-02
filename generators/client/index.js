@@ -24,18 +24,17 @@ const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
 const writeVueFiles = require('./files-vue').writeFiles;
+const writeCommonFiles = require('./files-common').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { clientDefaultConfig } = require('../generator-defaults');
 
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
-const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
+const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 let useBlueprints;
 
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -55,7 +54,6 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('skip-commit-hook', {
             desc: 'Skip adding husky commit hooks',
             type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--experimental` flag which can be used to enable experimental features
@@ -63,14 +61,13 @@ module.exports = class extends BaseBlueprintGenerator {
             desc:
                 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
-            defaults: false,
         });
 
         if (this.options.help) {
             return;
         }
 
-        this.loadOptions();
+        this.loadStoredAppOptions();
         this.loadRuntimeOptions();
 
         this.existingProject = !!this.jhipsterConfig.clientFramework;
@@ -91,7 +88,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
             },
 
-            setupClientconsts() {
+            setupClientConstants() {
                 // Make constants available in templates
                 this.LOGIN_REGEX = constants.LOGIN_REGEX_JS;
                 this.ANGULAR = ANGULAR;
@@ -146,18 +143,38 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
-    _default() {
+    _composing() {
         return {
+            composeCommon() {
+                this.composeWithJHipster('common', true);
+            },
+            composeCypress() {
+                const testFrameworks = this.jhipsterConfig.testFrameworks;
+                if (!Array.isArray(testFrameworks) || !testFrameworks.includes('cypress')) return;
+                this.composeWithJHipster('cypress', true);
+            },
             composeLanguages() {
                 // We don't expose client/server to cli, composing with languages is used for test purposes.
-                if (this.configOptions.skipComposeLanguages || this.jhipsterConfig.enableTranslation === false) return;
+                if (this.jhipsterConfig.enableTranslation === false) return;
 
-                this.configOptions.skipComposeLanguages = true;
-                this.composeWith(require.resolve('../languages'), {
-                    ...this.options,
-                    configOptions: this.configOptions,
-                    debug: this.isDebugEnabled,
-                });
+                this.composeWithJHipster('languages', true);
+            },
+        };
+    }
+
+    get composing() {
+        if (useBlueprints) return;
+        return this._composing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _loading() {
+        return {
+            loadSharedConfig() {
+                this.loadAppConfig();
+                this.loadClientConfig();
+                this.loadServerConfig();
+                this.loadTranslationConfig();
             },
 
             validateSkipServer() {
@@ -188,13 +205,18 @@ module.exports = class extends BaseBlueprintGenerator {
                     );
                 }
             },
-            loadSharedConfig() {
-                this.loadAppConfig();
-                this.loadClientConfig();
-                this.loadServerConfig();
-                this.loadTranslationConfig();
-            },
-            setupSharedOptions() {
+        };
+    }
+
+    get loading() {
+        if (useBlueprints) return;
+        return this._loading();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _preparing() {
+        return {
+            prepareForTemplates() {
                 this.enableI18nRTL = false;
                 if (this.languages !== undefined) {
                     this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
@@ -210,8 +232,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 // Application name modified, using each technology's conventions
                 this.camelizedBaseName = _.camelCase(this.baseName);
-                this.angularAppName = this.getAngularAppName();
-                this.angularXAppName = this.getAngularXAppName();
+                this.frontendAppName = this.getFrontendAppName();
                 this.hipster = this.getHipster(this.baseName);
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
@@ -221,6 +242,18 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.skipUserManagement = true;
                 }
             },
+        };
+    }
+
+    get preparing() {
+        if (useBlueprints) return;
+        return this._preparing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return {
+            ...super._missingPreDefault(),
 
             insight() {
                 statistics.sendSubGenEvent('generator', 'client', {
@@ -256,12 +289,92 @@ module.exports = class extends BaseBlueprintGenerator {
                     // do nothing by default
                 }
             },
+            writeCommonFiles() {
+                if (this.skipClient) return;
+                return writeCommonFiles.call(this, useBlueprints);
+            },
+
+            ...super._missingPostWriting(),
         };
     }
 
     get writing() {
         if (useBlueprints) return;
         return this._writing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _postWriting() {
+        return {
+            packageJsonScripts() {
+                if (this.skipClient) return;
+                const packageJsonStorage = this.createStorage('package.json');
+                const scriptsStorage = packageJsonStorage.createStorage('scripts');
+
+                const packageJsonConfigStorage = packageJsonStorage.createStorage('config').createProxy();
+                if (process.env.JHI_PROFILE) {
+                    packageJsonConfigStorage.default_environment = process.env.JHI_PROFILE.includes('dev') ? 'dev' : 'prod';
+                }
+
+                const devDependencies = packageJsonStorage.createStorage('devDependencies');
+                devDependencies.set('wait-on', 'VERSION_MANAGED_BY_CLIENT_COMMON');
+                devDependencies.set('concurrently', 'VERSION_MANAGED_BY_CLIENT_COMMON');
+
+                if (this.clientFramework === 'react') {
+                    scriptsStorage.set(
+                        'ci:frontend:test',
+                        'npm run webpack:build:$npm_package_config_default_environment && npm run test-ci'
+                    );
+                } else {
+                    scriptsStorage.set('ci:frontend:test', 'npm run webpack:build:$npm_package_config_default_environment && npm test');
+                }
+
+                if (scriptsStorage.get('e2e')) {
+                    scriptsStorage.set({
+                        'ci:server:await':
+                            'echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"',
+                        'pree2e:headless': 'npm run ci:server:await',
+                        'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
+                        'e2e:dev': 'concurrently -k -s first "./mvnw" "e2e:run"',
+                    });
+                }
+            },
+
+            packageJson() {
+                if (this.skipClient) return;
+                this.replacePackageJsonVersions(
+                    'VERSION_MANAGED_BY_CLIENT_COMMON',
+                    this.fetchFromInstalledJHipster('client/templates/common/package.json')
+                );
+                switch (this.clientFramework) {
+                    case ANGULAR:
+                        this.replacePackageJsonVersions(
+                            'VERSION_MANAGED_BY_CLIENT_ANGULAR',
+                            this.fetchFromInstalledJHipster('client/templates/angular/package.json')
+                        );
+                        break;
+                    case REACT:
+                        this.replacePackageJsonVersions(
+                            'VERSION_MANAGED_BY_CLIENT_REACT',
+                            this.fetchFromInstalledJHipster('client/templates/react/package.json')
+                        );
+                        break;
+                    case VUE:
+                        this.replacePackageJsonVersions(
+                            'VERSION_MANAGED_BY_CLIENT_VUE',
+                            this.fetchFromInstalledJHipster('client/templates/vue/package.json')
+                        );
+                        break;
+                    default:
+                    // do nothing by default
+                }
+            },
+        };
+    }
+
+    get postWriting() {
+        if (useBlueprints) return;
+        return this._postWriting();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -273,11 +386,10 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 const installConfig = {
                     bower: false,
-                    npm: this.clientPackageManager !== 'yarn',
-                    yarn: this.clientPackageManager === 'yarn',
+                    npm: true,
                 };
 
-                if (this.options['skip-install']) {
+                if (this.options.skipInstall) {
                     this.log(logMsg);
                 } else {
                     try {
@@ -306,7 +418,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 const logMsg = `Start your Webpack development server with:\n ${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
 
                 this.log(chalk.green(logMsg));
-                if (!this.options['skip-install']) {
+                if (!this.options.skipInstall) {
                     this.spawnCommandSync(this.clientPackageManager, ['run', 'cleanup']);
                 }
             },

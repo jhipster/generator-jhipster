@@ -36,7 +36,21 @@ const Values = {
         PAGINATION: 'pagination',
         'INFINITE-SCROLL': 'infinite-scroll',
     },
-    [Options.SEARCH]: { ELASTIC_SEARCH: 'elasticsearch', COUCHBASE: 'couchbase' },
+    [Options.SEARCH]: { ELASTICSEARCH: 'elasticsearch', COUCHBASE: 'couchbase' },
+};
+
+function getOptionName(optionValue) {
+    return optionNames.find(optionName => Values[optionName] && Values[optionName][optionValue]);
+}
+
+const OptionValues = {
+    mapstruct: 'MAPSTRUCT',
+    serviceClass: 'SERVICE_CLASS',
+    serviceImpl: 'SERVICE_IMPL',
+    pagination: 'PAGINATION',
+    'infinite-scroll': 'INFINITE-SCROLL',
+    elasticsearch: 'ELASTICSEARCH',
+    couchbase: 'COUCHBASE',
 };
 
 function forEach(passedFunction) {
@@ -62,7 +76,10 @@ function exists(passedOption, passedValue) {
 
 module.exports = {
     Options,
+    // TODO change the names
+    OptionValues,
     Values,
     exists,
     forEach,
+    getOptionName,
 };

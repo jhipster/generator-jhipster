@@ -2,7 +2,7 @@
     <div class="row justify-content-center">
         <div class="col-8">
             <div v-if="<%= entityInstance %>">
-                <h2 class="jh-entity-heading"><span v-text="$t('<%= i18nKeyPrefix %>.detail.title')"><%= entityAngularName %></span> {{<%= entityInstance %>.id}}</h2>
+                <h2 class="jh-entity-heading" data-cy="<%= entityInstance %>DetailsHeading"><span v-text="$t('<%= i18nKeyPrefix %>.detail.title')"><%= entityAngularName %></span> {{<%= entityInstance %>.id}}</h2>
                 <dl class="row jh-entity-details">
                     <%_ for (idx in fields) {
                         const fieldName = fields[idx].fieldName;
@@ -13,7 +13,7 @@
                     </dt>
                     <dd>
                         <%_ if (fields[idx].fieldIsEnum) { _%>
-                        <span v-text="$t('<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>)">{{<%= entityInstance %>.<%= fieldName %>}}</span>
+                        <span v-text="$t('<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>)">{{<%= entityInstance %>.<%= fieldName %>}}</span>
                         <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
                         <div v-if="<%= entityInstance %>.<%= fieldName %>">
                             <a v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
@@ -26,6 +26,8 @@
                             <a v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="$t('entity.action.open')">open</a>
                             {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}
                         </div>
+                        <%_ } else if (['Duration'].includes(fieldType)) { _%>
+                        <span>{{<%= entityInstance %>.<%= fieldName %> | duration }} ({{<%= entityInstance %>.<%= fieldName %>}})</span>
                         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                         <%_ if (enableTranslation) { _%>
                         <span v-if="<%= entityInstance %>.<%=fieldName %>">{{$d(Date.parse(<%= entityInstance %>.<%=fieldName %>), 'long') }}</span>
@@ -92,7 +94,8 @@
                 </dl>
                 <button type="submit"
                         v-on:click.prevent="previousState()"
-                        class="btn btn-info">
+                        class="btn btn-info"
+                        data-cy="entityDetailsBackButton">
                     <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.back')"> Back</span>
                 </button>
                 <%_ if (!readOnly) { _%>

@@ -13,10 +13,12 @@ init_var() {
 }
 
 # uri of repo
-JHI_REPO=$(init_var "$BUILD_REPOSITORY_URI" "$TRAVIS_REPO_SLUG" "$GITHUB_WORKSPACE" )
+JHI_REPO=$(init_var "$BUILD_REPOSITORY_URI" "$GITHUB_WORKSPACE" )
 
 # folder where the repo is cloned
-JHI_HOME=$(init_var "$BUILD_REPOSITORY_LOCALPATH" "$TRAVIS_BUILD_DIR" "$GITHUB_WORKSPACE")
+if [[ "$JHI_HOME" == "" ]]; then
+    JHI_HOME=$(init_var "$BUILD_REPOSITORY_LOCALPATH" "$GITHUB_WORKSPACE")
+fi
 
 # folder for test-integration
 if [[ "$JHI_INTEG" == "" ]]; then

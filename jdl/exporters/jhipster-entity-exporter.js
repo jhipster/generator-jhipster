@@ -28,58 +28,14 @@ let configuration = {};
 
 module.exports = {
     exportEntities,
-    exportEntitiesInApplications,
 };
-
-/**
- * @deprecated
- * This function will be removed in the next major version, use exportEntities instead.
- * Exports the passed entities to JSON in the applications.
- * @param passedConfiguration the object having the keys:
- *        - entities: the entities to exporters,
- *        - forceNoFiltering: whether to filter out unchanged entities,
- *        - skipEntityFilesGeneration: whether to skip file write to disk,
- *        - applications: the application iterable containing some or all the entities
- * @return the exported entities per application name.
- */
-function exportEntitiesInApplications(passedConfiguration) {
-    if (!passedConfiguration || !passedConfiguration.entities) {
-        throw new Error('Entities have to be passed to be exported.');
-    }
-    let exportedEntities = [];
-    Object.keys(passedConfiguration.applications).forEach(applicationName => {
-        const application = passedConfiguration.applications[applicationName];
-        const entitiesToExport = getEntitiesToExport(application.getEntityNames(), passedConfiguration.entities);
-        exportedEntities = exportedEntities.concat(
-            exportEntities({
-                entities: entitiesToExport,
-                skipEntityFilesGeneration: passedConfiguration.skipEntityFilesGeneration,
-                forceNoFiltering: passedConfiguration.forceNoFiltering,
-                application: {
-                    forSeveralApplications: Object.keys(passedConfiguration.applications).length !== 1,
-                    name: application.getConfigurationOptionValue('baseName'),
-                    type: application.getConfigurationOptionValue('applicationType'),
-                },
-            })
-        );
-    });
-    return exportedEntities;
-}
-
-function getEntitiesToExport(entityNamesToExport, entities) {
-    const entitiesToExport = {};
-    entityNamesToExport.forEach(entityName => {
-        entitiesToExport[entityName] = entities[entityName];
-    });
-    return entitiesToExport;
-}
 
 /**
  * Exports the passed entities to JSON.
  * @param {Object} passedConfiguration - the object having the keys:
  * @param {Array<JSONEntity>} passedConfiguration.entities - the entity objects to export.
  * @param {Boolean} passedConfiguration.forceNoFiltering - whether to filter out unchanged entities.
- * @param {Boolean} passedConfiguration.skipEntityFilesGeneration - whether to skip file write to disk.
+ * @param {Boolean} passedConfiguration.skipFileGeneration - whether to skip file write to disk.
  * @param {Object} passedConfiguration.application - the application where the entities should be exported.
  * @param {Boolean} passedConfiguration.application.forSeveralApplications - whether to create the .jhipster folder
  *          inside a specific application's folder.
@@ -100,7 +56,7 @@ function exportEntities(passedConfiguration) {
     if (shouldFilterOutEntitiesBasedOnMicroservice()) {
         configuration.entities = filterOutEntitiesByMicroservice();
     }
-    if (!passedConfiguration.skipEntityFilesGeneration) {
+    if (!passedConfiguration.skipFileGeneration) {
         createJHipsterJSONFolder(subFolder);
         writeEntities(subFolder);
     }

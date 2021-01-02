@@ -1,0 +1,160 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "Koristite <strong>zastarijeli</strong> web preglednik. Molimo <a href=\"http://browsehappy.com/?locale=hr\">obnovite svoj preglednik</a> da bi poboljšali svoje korisničko iskustvo.",
+        "menu": {
+            "home": "Početak",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Entiteti",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Korisnički račun",
+                "settings": "Postavke",
+                "password": "Zaporka",
+                "sessions": "Sjednice",
+                "login": "Prijava",
+                "logout": "Odjava",
+                "register": "Registracija"
+            },
+            "admin": {
+                "main": "Administracija",
+                <%_ if (applicationType === 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
+                "userManagement": "Upravljanje korisnicima",
+                "tracker": "Korisničke aktivnosti",
+                "metrics": "Metrika",
+                "health": "Stanje sustava",
+                "configuration": "Konfiguracija",
+                "logs": "Logovi",
+                "apidocs": "API",
+                "database": "Baza podataka",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Jezik"
+        },
+        "form": {
+            "username": "Korisnik",
+            "username.placeholder": "Vaše korisničko ime",
+            "currentpassword.label": "Postojeća zaporka",
+            "currentpassword.placeholder": "Postojeća zaporka",
+            "newpassword": "Nova zaporka",
+            "newpassword.placeholder": "Nova zaporka",
+            "confirmpassword": "Potvrda nove zaporke",
+            "confirmpassword.placeholder": "Potvrda nove zaporke",
+            "email": "E-pošta",
+            "email.placeholder": "Vaša e-pošta"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "Ako se želite ",
+                    "link": "prijaviti",
+                    "suffix": ", možete pokušati sa zadanim korisničkim računima:<br/>- Administrator (korisnik=\"admin\" and zaporka=\"admin\") <br/>- User (korisnik=\"user\" and zaporka=\"user\")."
+                },
+                "register": {
+                    "noaccount": "Još nemate korisnički račun?",
+                    "link": "Registrirajte novog korisnika"
+                }
+            },
+            "error": {
+                "dontmatch": "Zaporka i potvrda zaporke nisu iste!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Potrebna je vaša zaporka.",
+                    "minlength": "Vaša zaporka treba imati najmanje 4 znaka.",
+                    "maxlength": "Vaša zaporka ne može biti duža od 50 znakova.",
+                    "strength": "Jačina zaporke:"
+                },
+                "confirmpassword": {
+                    "required": "Potrebna je potvrda zaporke.",
+                    "minlength": "Potvrda vaše zaporke mora imati najmanje 4 znaka.",
+                    "maxlength": "Potvrda vaše zaporke ne može biti duža od 50 znakova."
+                },
+                "email": {
+                    "required": "Potrebna je adresa vaše e-pošte.",
+                    "invalid": "Adresa vaše e-pošte je neispravna.",
+                    "minlength": "Duljina vaše e-pošte mora imati najmanje 5 znakova.",
+                    "maxlength": "Adresa vaše e-pošte ne može biti duža od 50 znakova."
+                }
+            }
+        },
+        "field": {
+            "id": "ID"
+        },
+        "ribbon": {
+            "dev": "Razvojna okolina"
+        },
+        "item-count": "Prikaz {{first}} - {{second}} od {{total}} stavaka."
+    },
+    "entity": {
+        "action": {
+            "addblob": "Dodaj BLOB",
+            "addimage": "Dodaj sliku",
+            "back": "Nazad",
+            "cancel": "Odustani",
+            "delete": "Briši",
+            "edit": "Uredi",
+            "open": "Otvori",
+            "save": "Spremi",
+            "view": "Preged"
+        },
+        "detail": {
+            "field": "Polje",
+            "value": "Vrijednost"
+        },
+        "delete": {
+            "title": "Potvrdite brisanje"
+        },
+        "validation": {
+            "required": "Potrebno je unijeti ovo polje.",
+            "minlength": "U ovo polje mora biti unijeto najmanje {{ min }} znakova.",
+            "maxlength": "U ovo polje ne može biti unijeto više od {{ max }} znakova.",
+            "min": "Ovo polje mora biti najmanje {{ min }}.",
+            "max": "Ovo polje ne može biti veće od {{ max }}.",
+            "minbytes": "Ovo polje mora sadržavati više od {{ min }} bajtova.",
+            "maxbytes": "Ovo polje ne može sadržavati više od {{ max }} bajtova.",
+            "pattern": "Ovo polje treba slijediti uzorak {{ pattern }}.",
+            "number": "U ovo polje treba unijeti brojčanu vrijednost.",
+            "datetimelocal": "U ovo polje treba unijeti datum i vrijeme.",
+            "patternLogin": "Ovo polje može sadržavati samo slova, brojeve i adrese e-pošte."
+        }
+    },
+    "error": {
+        "internalServerError": "Interna greška na serveru",
+        "server.not.reachable": "Ne mogu pristupiti serveru",
+        "url.not.found": "Nije nađeno",
+        "NotNull": "Polje {{ fieldName }} ne može biti prazno!",
+        "Size": "Polje {{ fieldName }} ne zadovoljava zahtjeve za min/max vrijednost!",
+        "userexists": "Korisničko ime se već koristi!",
+        "emailexists": "Adresa e-pošte se već koristi!",
+        "idexists": "Novi entitet {{ entityName }} ne može imati taj ID",
+        "idnull": "Neispravan ID",
+        "file": {
+            "could.not.extract": "Nije moguće izdvojiti datoteku.",
+            "not.image": "Očekivano je da datoteka bude slika ali je prepoznato \"{{ fileType }}\""
+        }
+    },
+    "footer": "Ovo je podnožje stranice"
+}

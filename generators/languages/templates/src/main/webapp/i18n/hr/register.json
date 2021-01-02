@@ -1,0 +1,24 @@
+{
+    "register": {
+        "title": "Registracija",
+        "form": {
+            "button": "Registriraj"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Potrebno je vaše korisničko ime.",
+                    "minlength": "Vaše korisničko ime mora imati barem jedan znak.",
+                    "maxlength": "Vaše korisičko ime ne može biti dulje od 50 znakova.",
+                    "pattern": "Vaše korisničko je neispravno."
+                }
+            },
+            "success": "<strong>Registracija spremljena!</strong> Molimo provjerite svoju e-poštu radi potvrde.",
+            "error": {
+                "fail": "<strong>Registracija nije uspjela!</strong> Molimo pokušajte ponovno kasnije.",
+                "userexists": "<strong>Korisničko ime je već registrirano!</strong> Molimo izaberite drugo korisničko ime.",
+                "emailexists": "<strong>Adresa e-pošte se već koristi!</strong> Molimo izaberite drugu adresu e-pošte."
+            }
+        }
+    }
+}

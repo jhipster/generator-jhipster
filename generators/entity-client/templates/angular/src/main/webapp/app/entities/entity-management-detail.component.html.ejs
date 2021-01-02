@@ -19,11 +19,13 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="<%= entityInstance %>">
-            <h2><span jhiTranslate="<%= i18nKeyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{ <%= entityInstance %>.id }}</h2>
+            <h2 data-cy="<%= entityInstance %>DetailsHeading"><span jhiTranslate="<%= i18nKeyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{ <%= entityInstance %>.id }}</h2>
 
             <hr>
 
             <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
+
+            <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
 
             <dl class="row-md jh-entity-details">
                 <%_ for (idx in fields) {
@@ -34,7 +36,7 @@
                 <dt><span jhiTranslate="<%= i18nKeyPrefix %>.<%= fieldName %>"<% if (fields[idx].javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= fields[idx].javadoc %>"<% } } %>><%= fields[idx].fieldNameHumanized %></span></dt>
                 <dd>
                     <%_ if (fields[idx].fieldIsEnum) { _%>
-                    <span jhiTranslate="{{ '<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}</span>
+                    <span jhiTranslate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}</span>
                     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
                     <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
                         <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
@@ -47,6 +49,8 @@
                         <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" jhiTranslate="entity.action.open">open</a>
                         {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
                     </div>
+                    <%_ } else if (['Duration'].includes(fieldType)) { _%>
+                        {{ <%= entityInstance %>.<%= fieldName %> | duration }} ({{<%= entityInstance %>.<%= fieldName %> }})
                     <%_ } else { _%>
                     <span>{{ <%= entityInstance %>.<%= fieldName %> }}</span>
                     <%_ } _%>
@@ -108,7 +112,8 @@
 
             <button type="submit"
                     (click)="previousState()"
-                    class="btn btn-info">
+                    class="btn btn-info"
+                    data-cy="entityDetailsBackButton">
                 <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
             </button>
             <%_ if (!readOnly) { _%>

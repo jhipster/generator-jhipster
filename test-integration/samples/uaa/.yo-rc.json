@@ -10,7 +10,7 @@
         "websocket": false,
         "databaseType": "sql",
         "devDatabaseType": "h2Disk",
-        "prodDatabaseType": "mysql",
+        "prodDatabaseType": "postgresql",
         "searchEngine": false,
         "messageBroker": false,
         "serviceDiscoveryType": "eureka",
@@ -23,6 +23,7 @@
         "nativeLanguage": "en",
         "languages": ["en"],
         "clientFramework": "angularX",
-        "clientPackageManager": "npm"
+        "clientPackageManager": "npm",
+        "creationTimestamp": 1596513172471
     }
 }

@@ -50,7 +50,7 @@ describe('JHipster blueprint config migration with ignore option', () => {
                         fse.writeJsonSync(path.join(dir, '.yo-rc.json'), yoRc);
                     })
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipChecks: true,
                         unifyConfigOnly: true,
                     })

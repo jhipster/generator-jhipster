@@ -32,7 +32,6 @@ const deploymentTokens = [
     { name: 'DIRECTORY_PATH', pattern: 'directoryPath' },
     { name: 'APPS_FOLDERS', pattern: 'appsFolders' },
     { name: 'CLUSTERED_DB_APPS', pattern: 'clusteredDbApps' },
-    { name: 'CONSOLE_OPTIONS', pattern: 'consoleOptions' },
     { name: 'DOCKER_REPOSITORY_NAME', pattern: 'dockerRepositoryName' },
     { name: 'DOCKER_PUSH_COMMAND', pattern: 'dockerPushCommand' },
     { name: 'KUBERNETES_NAMESPACE', pattern: 'kubernetesNamespace' },

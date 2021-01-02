@@ -20,7 +20,6 @@ const _ = require('lodash');
 
 module.exports = {
     getTableNameFromEntityName,
-    createFromEntityName,
 };
 
 /**
@@ -29,16 +28,6 @@ module.exports = {
  * @returns {string} the corresponding table name.
  */
 function getTableNameFromEntityName(entityName) {
-    return createFromEntityName(entityName);
-}
-
-/**
- * Creates an entity table name from the passed entity name.
- * @param {string} entityName - the entity's name
- * @returns {string} the corresponding table name.
- * @deprecated use getTableNameFromEntityName instead.
- */
-function createFromEntityName(entityName) {
     if (!entityName) {
         throw new Error('An entity name must be passed to get a table name.');
     }

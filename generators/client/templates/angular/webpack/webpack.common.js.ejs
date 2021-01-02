@@ -56,7 +56,7 @@ module.exports = (options) => ({
                         minifyCSS:false
                     }
                 },
-                exclude: utils.root('src/main/webapp/index.html')
+                exclude: utils.root('<%= CLIENT_MAIN_SRC_DIR %>index.html')
             },
             {
                 test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
@@ -102,7 +102,7 @@ module.exports = (options) => ({
         }),
         new CopyWebpackPlugin({
             patterns: [
-                <%_ if (!reactive && (applicationType === 'gateway' || applicationType === 'monolith')) { _%>
+                <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
                 { from: './node_modules/swagger-ui-dist/*.{js,css,html,png}', to: 'swagger-ui', flatten: true, globOptions: { ignore: ['**/index.html'] }},
                 { from: './node_modules/axios/dist/axios.min.js', to: 'swagger-ui' },
                 { from: './<%= MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui' },

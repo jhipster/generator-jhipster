@@ -24,7 +24,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { of } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { <%= angularXAppName %>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
+import { TestModule } from '../../../<%= entityParentPathAddition %>test.module';
 import { MockEventManager } from '../../../<%= entityParentPathAddition %>helpers/mock-event-manager.service';
 import { MockActiveModal } from '../../../<%= entityParentPathAddition %>helpers/mock-active-modal.service';
 import { <%= entityAngularName %>DeleteDialogComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-delete-dialog.component';
@@ -40,7 +40,7 @@ describe('Component Tests', () => {
 
         beforeEach(() => {
             TestBed.configureTestingModule({
-                imports: [<%= angularXAppName %>TestModule],
+                imports: [TestModule],
                 declarations: [<%= entityAngularName %>DeleteDialogComponent]
             })
             .overrideTemplate(<%= entityAngularName %>DeleteDialogComponent, '')

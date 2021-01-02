@@ -27,6 +27,9 @@ import <%= packageName %>.AbstractNeo4jIT;
 <%_ if (cacheProvider === 'redis') { _%>
 import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
+<%_ if (reactiveSqlTestContainers) { _%>
+import <%= packageName %>.ReactiveSqlTestContainerExtension;
+<%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (databaseType === 'sql' && reactive) { _%>
 import <%= packageName %>.config.Constants;
@@ -44,6 +47,9 @@ import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import <%= packageName %>.service.EntityManager;
+<%_ } _%>
 import <%= packageName %>.service.mapper.UserMapper;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%= packageName %>.web.rest.vm.ManagedUserVM;
@@ -51,10 +57,7 @@ import <%= packageName %>.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if (cacheProvider === 'redis') { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseType === 'neo4j' || cacheProvider === 'redis' || reactiveSqlTestContainers) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,7 +146,10 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 <%_ if (databaseType === 'neo4j') { _%>
 @ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
-public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+<%_ if (reactiveSqlTestContainers) { _%>
+@ExtendWith(ReactiveSqlTestContainerExtension.class)
+<%_ } _%>
+class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     private static final String DEFAULT_LOGIN = "johndoe";
     <%_ if (authenticationType !== 'oauth2') { _%>
@@ -205,7 +211,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
 
     @Autowired
     private UserMapper userMapper;
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+    <%_ if (databaseType === 'sql') { _%>
 
     @Autowired
     private EntityManager em;
@@ -246,7 +252,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which has a required relationship to the User entity.
      */
-    public static <%= asEntity('User') %> createEntity(<% if (databaseType === 'sql' && !reactive) { %>EntityManager em<% } %>) {
+    public static <%= asEntity('User') %> createEntity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra' || (authenticationType === 'oauth2' && databaseType !== 'couchbase')) { _%>
         user.setId(UUID.randomUUID().toString());
@@ -268,6 +274,20 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ } _%>
         return user;
     }
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+
+    /**
+     * Delete all the users from the database.
+     */
+    public static void deleteEntities(EntityManager em) {
+        try {
+            em.deleteAll("<%= jhiTablePrefix %>_user_authority").block();
+            em.deleteAll(User.class).block();
+        } catch (Exception e) {
+            // It can fail, if other entities are still referring this - it will be removed later.
+        }
+    }
+    <%_ } _%>
 
     @BeforeEach
     public void initTest() {
@@ -276,10 +296,8 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ } _%>
         <%_ if (databaseType !== 'sql' || reactive) { _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
-        user = createEntity();
-        <%_ } else { _%>
-        user = createEntity(em);
         <%_ } _%>
+        user = createEntity(<% if (databaseType === 'sql' ) { %>em<% } _%>);
         <%_ if (databaseType === 'sql') { _%>
         user.setLogin(DEFAULT_LOGIN);
         user.setEmail(DEFAULT_EMAIL);
@@ -291,7 +309,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void createUser() throws Exception {
+    void createUser() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
         <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
@@ -347,7 +365,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void createUserWithExistingId() throws Exception {
+    void createUserWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
@@ -394,7 +412,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void createUserWithExistingLogin() throws Exception {
+    void createUserWithExistingLogin() throws Exception {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -439,7 +457,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void createUserWithExistingEmail() throws Exception {
+    void createUserWithExistingEmail() throws Exception {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -485,7 +503,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void getAllUsers()<% if (!reactive) { %> throws Exception<% } %> {
+    void getAllUsers()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
         userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
@@ -504,7 +522,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
             <%_ } _%>
             .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
         <%_ } else { _%>
-        <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=createdDate,DESC")
+        <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=id,DESC")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -522,11 +540,34 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ } _%>
     }
 
+    <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
+    @Test
+    <%_ if (!reactive) { _%>
+    @Transactional
+    <%_ } _%>
+    void getAllUsersSortedByParameters() throws Exception {
+        // Initialize the database
+        userRepository.<% if (reactive) { %>save<% } else { %>saveAndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+
+        <%_ if (!reactive) { _%>
+            restUserMockMvc.perform(get("/api/users?sort=resetKey,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+            restUserMockMvc.perform(get("/api/users?sort=password,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+            restUserMockMvc.perform(get("/api/users?sort=resetKey,id,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+            restUserMockMvc.perform(get("/api/users?sort=id,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        <%_ } else { _%>
+            webTestClient.get().uri("/api/users?sort=resetKey,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
+            webTestClient.get().uri("/api/users?sort=password,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
+            webTestClient.get().uri("/api/users?sort=resetKey,id,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
+            webTestClient.get().uri("/api/users?sort=id,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk();
+        <%_ } _%>
+    }
+    <%_ } _%>
+
     @Test
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void getUser()<% if (!reactive) { %> throws Exception<% } %> {
+    void getUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
         userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -579,7 +620,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void getNonExistingUser()<% if (!reactive) { %> throws Exception<% } %> {
+    void getNonExistingUser()<% if (!reactive) { %> throws Exception<% } %> {
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(get("/api/users/unknown"))
             .andExpect(status().isNotFound());
@@ -595,7 +636,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void updateUser() throws Exception {
+    void updateUser() throws Exception {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
@@ -616,7 +657,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         managedUserVM.setFirstName(UPDATED_FIRSTNAME);
         managedUserVM.setLastName(UPDATED_LASTNAME);
         managedUserVM.setEmail(UPDATED_EMAIL);
-        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setActivated(updatedUser.isActivated());
         <%_ if (databaseType !== 'cassandra') { _%>
         managedUserVM.setImageUrl(UPDATED_IMAGEURL);
         <%_ } _%>
@@ -646,7 +687,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         // Validate the User in the database
         assertPersistedUsers(users -> {
             assertThat(users).hasSize(databaseSizeBeforeUpdate);
-            <%= asEntity('User') %> testUser = users.get(users.size() - 1);
+            <%= asEntity('User') %> testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().get();
             assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
             assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
             assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
@@ -661,7 +702,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void updateUserLogin() throws Exception {
+    void updateUserLogin() throws Exception {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
@@ -682,7 +723,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         managedUserVM.setFirstName(UPDATED_FIRSTNAME);
         managedUserVM.setLastName(UPDATED_LASTNAME);
         managedUserVM.setEmail(UPDATED_EMAIL);
-        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setActivated(updatedUser.isActivated());
         <%_ if (databaseType !== 'cassandra') { _%>
         managedUserVM.setImageUrl(UPDATED_IMAGEURL);
         <%_ } _%>
@@ -712,7 +753,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         // Validate the User in the database
         assertPersistedUsers(users -> {
             assertThat(users).hasSize(databaseSizeBeforeUpdate);
-            <%= asEntity('User') %> testUser = users.get(users.size() - 1);
+            <%= asEntity('User') %> testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().get();
             assertThat(testUser.getLogin()).isEqualTo(UPDATED_LOGIN);
             assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
             assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
@@ -728,7 +769,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void updateUserExistingEmail() throws Exception {
+    void updateUserExistingEmail() throws Exception {
         // Initialize the database with 2 users
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -767,7 +808,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         managedUserVM.setFirstName(updatedUser.getFirstName());
         managedUserVM.setLastName(updatedUser.getLastName());
         managedUserVM.setEmail("jhipster@localhost");// this email should already be used by anotherUser
-        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setActivated(updatedUser.isActivated());
         <%_ if (databaseType !== 'cassandra') { _%>
         managedUserVM.setImageUrl(updatedUser.getImageUrl());
         <%_ } _%>
@@ -799,7 +840,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void updateUserExistingLogin() throws Exception {
+    void updateUserExistingLogin() throws Exception {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -838,7 +879,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         managedUserVM.setFirstName(updatedUser.getFirstName());
         managedUserVM.setLastName(updatedUser.getLastName());
         managedUserVM.setEmail(updatedUser.getEmail());
-        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setActivated(updatedUser.isActivated());
         <%_ if (databaseType !== 'cassandra') { _%>
         managedUserVM.setImageUrl(updatedUser.getImageUrl());
         <%_ } _%>
@@ -870,7 +911,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void deleteUser()<% if (!reactive) { %> throws Exception<% } %> {
+    void deleteUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
@@ -908,7 +949,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void getAllAuthorities()<% if (!reactive) { %> throws Exception<% } %> {
+    void getAllAuthorities()<% if (!reactive) { %> throws Exception<% } %> {
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(get("/api/users/authorities")
             .accept(MediaType.APPLICATION_JSON)
@@ -932,7 +973,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ } _%>
 
     @Test
-    public void testUserEquals() throws Exception {
+    void testUserEquals() throws Exception {
         TestUtil.equalsVerifier(<%= asEntity('User') %>.class);
         <%= asEntity('User') %> user1 = new <%= asEntity('User') %>();
         user1.setId(<% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>1L<% } else { %>"id1"<% } %>);
@@ -946,7 +987,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     }
 
     @Test
-    public void testUserDTOtoUser() {
+    void testUserDTOtoUser() {
         <%= asDto('User') %> userDTO = new <%= asDto('User') %>();
         userDTO.setId(DEFAULT_ID);
         userDTO.setLogin(DEFAULT_LOGIN);
@@ -970,7 +1011,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         assertThat(user.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(user.getLastName()).isEqualTo(DEFAULT_LASTNAME);
         assertThat(user.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        assertThat(user.getActivated()).isEqualTo(true);
+        assertThat(user.isActivated()).isTrue();
         <%_ if (databaseType !== 'cassandra') { _%>
         assertThat(user.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         <%_ } _%>
@@ -985,7 +1026,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     }
 
     @Test
-    public void testUserToUserDTO() {
+    void testUserToUserDTO() {
         user.setId(DEFAULT_ID);
         <%_ if (databaseType !== 'cassandra') { _%>
         user.setCreatedBy(DEFAULT_LOGIN);
@@ -1010,7 +1051,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         assertThat(userDTO.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(userDTO.getLastName()).isEqualTo(DEFAULT_LASTNAME);
         assertThat(userDTO.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        assertThat(userDTO.isActivated()).isEqualTo(true);
+        assertThat(userDTO.isActivated()).isTrue();
         <%_ if (databaseType !== 'cassandra') { _%>
         assertThat(userDTO.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         <%_ } _%>
@@ -1027,12 +1068,12 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
 
     @Test
-    public void testAuthorityEquals() {
+    void testAuthorityEquals() {
         Authority authorityA = new Authority();
-        assertThat(authorityA).isEqualTo(authorityA);
-        assertThat(authorityA).isNotEqualTo(null);
-        assertThat(authorityA).isNotEqualTo(new Object());
-        assertThat(authorityA.hashCode()).isEqualTo(0);
+        assertThat(authorityA)
+          .isNotEqualTo(null)
+          .isNotEqualTo(new Object());
+        assertThat(authorityA.hashCode()).isZero();
         assertThat(authorityA.toString()).isNotNull();
 
         Authority authorityB = new Authority();
@@ -1045,8 +1086,9 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         assertThat(authorityA).isNotEqualTo(authorityB);
 
         authorityB.setName(AuthoritiesConstants.USER);
-        assertThat(authorityA).isEqualTo(authorityB);
-        assertThat(authorityA.hashCode()).isEqualTo(authorityB.hashCode());
+        assertThat(authorityA)
+          .isEqualTo(authorityB)
+          .hasSameHashCodeAs(authorityB);
     }
     <%_ } _%>
 

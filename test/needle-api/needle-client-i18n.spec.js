@@ -19,8 +19,6 @@ const mockBlueprintSubGen = class extends LanguagesGenerator {
         }
 
         this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupEntityOptions(this, jhContext, this);
     }
 
     get initializing() {
@@ -43,16 +41,16 @@ const mockBlueprintSubGen = class extends LanguagesGenerator {
         const phaseFromJHipster = super._writing();
         const customPhaseSteps = {
             addElementInTranslation() {
-                this.addElementTranslationKey('my_key', 'My value', 'en');
-                this.addElementTranslationKey('ma_cle', 'Ma valeur', 'fr');
+                this.addElementTranslationKey('my_key', 'My Value', 'en');
+                this.addElementTranslationKey('ma_cle', 'Ma Valeur', 'fr');
             },
             addAdminElementTranslationKey() {
-                this.addAdminElementTranslationKey('my_admin_key', 'my admin value', 'en');
-                this.addAdminElementTranslationKey('ma_cle_admin', 'ma valeur admin', 'fr');
+                this.addAdminElementTranslationKey('my_admin_key', 'My Admin Value', 'en');
+                this.addAdminElementTranslationKey('ma_cle_admin', 'Ma Valeur Admin', 'fr');
             },
             addEntityTranslationKey() {
-                this.addEntityTranslationKey('my_entity_key', 'my entity value', 'en');
-                this.addEntityTranslationKey('ma_cle_entite', 'ma valeur entite', 'fr');
+                this.addEntityTranslationKey('my_entity_key', 'My Entity Value', 'en');
+                this.addEntityTranslationKey('ma_cle_entite', 'Ma Valeur Entite', 'fr');
             },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
@@ -67,7 +65,7 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
                 fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
             })
             .withOptions({
-                'from-cli': true,
+                fromCli: true,
                 build: 'maven',
                 auth: 'jwt',
                 db: 'mysql',

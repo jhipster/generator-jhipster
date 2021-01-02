@@ -22,7 +22,7 @@ const jhipsterUtils = require('../../utils');
 const needleClientBase = require('./needle-client');
 
 module.exports = class extends needleClientBase {
-    addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu) {
+    addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue = _.startCase(routerName)) {
         const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
         const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/core/jhi-navbar/jhi-navbar.vue`;
         const menuI18nTitle = enableTranslation ? ` v-text="$t('global.menu.entities.${entityTranslationKeyMenu}')"` : '';
@@ -31,7 +31,7 @@ module.exports = class extends needleClientBase {
             this.generator.stripMargin(
                 `<b-dropdown-item to="/${routerName}">
 |                        <font-awesome-icon icon="asterisk" />
-|                        <span${menuI18nTitle}>${_.startCase(routerName)}</span>
+|                        <span${menuI18nTitle}>${entityTranslationValue}</span>
 |                    </b-dropdown-item>`);
 
         const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-to-menu', entityEntry);

@@ -60,7 +60,7 @@ describe('JHipster server generator with blueprint', () => {
                 return helpers
                     .create('jhipster:server', {}, { createEnv: EnvironmentBuilder.createEnv })
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipInstall: true,
                         blueprint: blueprintName,
                         skipChecks: true,
@@ -106,7 +106,7 @@ describe('JHipster server generator with blueprint', () => {
             return helpers
                 .create('jhipster:server', {}, { createEnv: EnvironmentBuilder.createEnv })
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
                     skipChecks: true,

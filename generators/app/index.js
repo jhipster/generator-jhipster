@@ -25,10 +25,11 @@ const prompts = require('./prompts');
 const packagejs = require('../../package.json');
 const statistics = require('../statistics');
 const { appDefaultConfig } = require('../generator-defaults');
+const { JHIPSTER_CONFIG_DIR } = require('../generator-constants');
 
 let useBlueprints;
 
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -43,6 +44,10 @@ module.exports = class extends BaseBlueprintGenerator {
             desc: 'Execute jhipster with default config',
             type: Boolean,
             defaults: false,
+        });
+        this.option('base-name', {
+            desc: 'Application base name',
+            type: String,
         });
         this.option('application-type', {
             desc: 'Application type to generate',
@@ -71,7 +76,6 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('skip-commit-hook', {
             desc: 'Skip adding husky commit hooks',
             type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--skip-user-management` flag
@@ -96,14 +100,12 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('with-entities', {
             desc: 'Regenerate the existing entities if any',
             type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--skip-checks` flag
         this.option('skip-checks', {
             desc: 'Check the status of the required tools',
             type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--jhi-prefix` flag
@@ -122,13 +124,6 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('dto-suffix', {
             desc: 'Add suffix after dtos name',
             type: String,
-        });
-
-        // This adds support for a `--yarn` flag
-        this.option('yarn', {
-            desc: 'Use yarn instead of npm',
-            type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--auth` flag
@@ -184,7 +179,6 @@ module.exports = class extends BaseBlueprintGenerator {
             desc:
                 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
-            defaults: false,
         });
 
         // This adds support for a `--creation-timestamp` flag which can be used create reproducible builds
@@ -193,11 +187,18 @@ module.exports = class extends BaseBlueprintGenerator {
             type: String,
         });
 
-        // This adds support for a `--prettier-java` flag
-        this.option('prettier-java', {
-            desc: 'Launch prettier-java pre-formatting at generation',
+        this.option('incremental-changelog', {
+            desc: 'Creates incremental database changelogs',
             type: Boolean,
-            defaults: false,
+        });
+
+        this.option('recreate-initial-changelog', {
+            desc: 'Recreate the initial database changelog based on the current config',
+            type: Boolean,
+        });
+        this.option('skip-jhipster-dependencies', {
+            desc: "Don't write jhipster dependencies.",
+            type: Boolean,
         });
 
         // Just constructing help, stop here
@@ -205,7 +206,22 @@ module.exports = class extends BaseBlueprintGenerator {
             return;
         }
 
-        this.loadOptions();
+        // Write new definitions to memfs
+        if (this.options.applicationWithEntities) {
+            this.config.set({
+                ...this.config.getAll(),
+                ...this.options.applicationWithEntities.config,
+            });
+            const entities = this.options.applicationWithEntities.entities.map(entity => {
+                const entityName = _.upperFirst(entity.name);
+                const file = this.destinationPath(JHIPSTER_CONFIG_DIR, `${entityName}.json`);
+                this.fs.writeJSON(file, { ...this.fs.readJSON(file), ...entity });
+                return entityName;
+            });
+            this.jhipsterConfig.entities = [...new Set((this.jhipsterConfig.entities || []).concat(entities))];
+        }
+
+        this.loadStoredAppOptions();
         this.loadRuntimeOptions();
 
         // Use jhipster defaults
@@ -255,10 +271,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
             validateGit() {
                 this.checkGit();
-            },
-
-            validateYarn() {
-                this.checkYarn();
             },
 
             checkForNewJHVersion() {
@@ -326,7 +338,7 @@ module.exports = class extends BaseBlueprintGenerator {
         return this._configuring();
     }
 
-    _default() {
+    _composing() {
         return {
             /**
              * Composing with others generators, must be runned after `configuring` priority to let blueprints
@@ -336,57 +348,59 @@ module.exports = class extends BaseBlueprintGenerator {
              * priority will run before this `composing` task and the configuration will not be settled.
              */
             composing() {
-                const options = this.options;
-                const configOptions = this.configOptions;
-                if (!this.skipServer && !this.configOptions.skipComposeServer) {
-                    this.configOptions.skipComposeServer = true;
-                    this.composeWith(require.resolve('../server'), {
-                        ...options,
-                        configOptions,
-                        debug: this.isDebugEnabled,
-                    });
+                if (!this.skipServer) {
+                    this.composeWithJHipster('server', true);
                 }
-                if (!this.skipClient && !this.configOptions.skipComposeClient) {
-                    this.configOptions.skipComposeClient = true;
-                    this.composeWith(require.resolve('../client'), {
-                        ...options,
-                        configOptions,
-                        debug: this.isDebugEnabled,
-                    });
+                if (!this.skipClient) {
+                    this.composeWithJHipster('client', true);
                 }
-                if (!this.configOptions.skipComposeCommon) {
-                    this.configOptions.skipComposeCommon = true;
-                    this.composeWith(require.resolve('../common'), {
-                        ...options,
-                        configOptions,
-                        debug: this.isDebugEnabled,
-                    });
-                }
-                if (!this.configOptions.skipI18n && !this.configOptions.skipComposeLanguages) {
-                    this.configOptions.skipComposeLanguages = true;
-                    this.composeWith(require.resolve('../languages'), {
-                        ...options,
-                        configOptions,
-                        skipPrompts: this.options.withEntities || this.existingProject || this.options.defaults,
-                        debug: this.isDebugEnabled,
-                    });
+                this.composeWithJHipster('common', true);
+                if (!this.configOptions.skipI18n) {
+                    this.composeWithJHipster(
+                        'languages',
+                        {
+                            skipPrompts: this.options.withEntities || this.existingProject || this.options.defaults,
+                        },
+                        true
+                    );
                 }
             },
-
             askForTestOpts: prompts.askForTestOpts,
 
             askForMoreModules: prompts.askForMoreModules,
+        };
+    }
 
-            saveConfig() {
+    get composing() {
+        if (useBlueprints) return;
+        return this._composing();
+    }
+
+    _loading() {
+        return {
+            saveConfigWithDefaults() {
                 this.setConfigDefaults();
 
+                this._validateAppConfiguration();
+            },
+
+            saveBlueprintConfig() {
                 const config = {};
                 this.blueprints && (config.blueprints = this.blueprints);
                 this.blueprintVersion && (config.blueprintVersion = this.blueprintVersion);
                 this.config.set(config);
-
-                this._validateAppConfiguration();
             },
+        };
+    }
+
+    get loading() {
+        if (useBlueprints) return;
+        return this._loading();
+    }
+
+    _default() {
+        return {
+            ...super._missingPreDefault(),
 
             insight() {
                 const yorc = {
@@ -420,23 +434,58 @@ module.exports = class extends BaseBlueprintGenerator {
             regenerateEntities() {
                 if (this.withEntities && !this.configOptions.skipComposeEntity) {
                     this.configOptions.skipComposeEntity = true;
-                    const options = this.options;
-                    const configOptions = this.configOptions;
                     this.getExistingEntities().forEach(entity => {
-                        this.composeWith(require.resolve('../entity'), {
-                            ...options,
-                            configOptions,
+                        this.composeWithJHipster('entity', {
                             regenerate: true,
-                            'skip-install': true,
-                            debug: this.isDebugEnabled,
+                            skipDbChangelog: this.jhipsterConfig.databaseType === 'sql',
+                            skipInstall: true,
                             arguments: [entity.name],
                         });
                     });
                 }
             },
 
+            regeneratePages() {
+                if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0 || this.configOptions.skipComposePage) return;
+                this.configOptions.skipComposePage = true;
+                this.jhipsterConfig.pages.forEach(page => {
+                    this.composeWithJHipster(page.generator || 'page', {
+                        skipInstall: true,
+                        arguments: [page.name],
+                        page,
+                    });
+                });
+            },
+
+            databaseChangelog() {
+                if (this.skipServer || this.jhipsterConfig.databaseType !== 'sql') {
+                    return;
+                }
+                const existingEntities = this.getExistingEntities();
+                if (existingEntities.length === 0) {
+                    return;
+                }
+
+                this.composeWithJHipster('database-changelog', {
+                    arguments: existingEntities.map(entity => entity.name),
+                });
+            },
+
+            ...super._missingPostWriting(),
+        };
+    }
+
+    get writing() {
+        if (useBlueprints) return;
+        return this._writing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _install() {
+        return {
+            /** Initialize git repository before package manager install for commit hooks */
             initGitRepo() {
-                if (!this.options['skip-git']) {
+                if (!this.options.skipGit) {
                     if (this.gitInstalled || this.isGitInstalled()) {
                         const gitDir = this.gitExec('rev-parse --is-inside-work-tree', { trace: false }).stdout;
                         // gitDir has a line break to remove (at least on windows)
@@ -456,15 +505,16 @@ module.exports = class extends BaseBlueprintGenerator {
         };
     }
 
-    get writing() {
+    get install() {
         if (useBlueprints) return;
-        return this._writing();
+        return this._install();
     }
 
     _end() {
         return {
+            /** Initial commit to git repository after package manager install for package-lock.json */
             gitCommit() {
-                if (!this.options['skip-git'] && this.isGitInstalled()) {
+                if (!this.options.skipGit && this.isGitInstalled()) {
                     if (this.gitInitialized) {
                         this.debug('Committing files to git');
                         const done = this.async();
@@ -473,7 +523,7 @@ module.exports = class extends BaseBlueprintGenerator {
                                 // if no files in Git from current folder then we assume that this is initial application generation
                                 this.gitExec('add .', { trace: false }, code => {
                                     if (code === 0) {
-                                        let commitMsg = `Initial version of ${this.baseName} generated by JHipster-${this.jhipsterVersion}`;
+                                        let commitMsg = `Initial version of ${this.jhipsterConfig.baseName} generated by JHipster-${this.jhipsterConfig.jhipsterVersion}`;
                                         if (this.jhipsterConfig.blueprints && this.jhipsterConfig.blueprints.length > 0) {
                                             const bpInfo = this.jhipsterConfig.blueprints
                                                 .map(bp => `${bp.name.replace('generator-jhipster-', '')}-${bp.version}`)

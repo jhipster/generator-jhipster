@@ -18,7 +18,7 @@
  */
 
 const merge = require('../utils/object-utils').merge;
-const { createFromEntityName } = require('../jhipster/entity-table-name-creator');
+const { getTableNameFromEntityName } = require('../jhipster/entity-table-name-creator');
 
 module.exports = class JDLEntity {
     constructor(args) {
@@ -63,7 +63,7 @@ module.exports = class JDLEntity {
                 .join('')} */\n`;
         }
         stringifiedEntity += `entity ${this.name}`;
-        if (this.tableName && createFromEntityName(this.name) !== createFromEntityName(this.tableName)) {
+        if (this.tableName && getTableNameFromEntityName(this.name) !== getTableNameFromEntityName(this.tableName)) {
             stringifiedEntity += ` (${this.tableName})`;
         }
         if (Object.keys(this.fields).length !== 0) {

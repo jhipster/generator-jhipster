@@ -36,10 +36,19 @@ const appDefaultConfig = {
     entitySuffix: '',
     dtoSuffix: 'DTO',
     reactive: false,
-    testFrameworks: [],
-    blueprints: [],
-    otherModules: [],
     clientPackageManager: 'npm',
+    get testFrameworks() {
+        return [];
+    },
+    get blueprints() {
+        return [];
+    },
+    get otherModules() {
+        return [];
+    },
+    get pages() {
+        return [];
+    },
 };
 
 /** Required config for prompts to be skipped */
@@ -48,7 +57,7 @@ const serverRequiredConfig = {
     cacheProvider: 'ehcache',
     websocket: false,
     databaseType: 'sql',
-    prodDatabaseType: 'mysql',
+    prodDatabaseType: 'postgresql',
     devDatabaseType: 'h2Disk',
     searchEngine: false,
     buildTool: 'maven',
@@ -77,7 +86,9 @@ const clientDefaultConfig = {
 const translationDefaultConfig = {
     enableTranslation: true,
     nativeLanguage: 'en',
-    languages: [],
+    get languages() {
+        return [];
+    },
 };
 
 /** Required config for prompts to be skipped, baseName is missing */
@@ -94,10 +105,30 @@ const defaultConfig = {
     ...translationDefaultConfig,
 };
 
+const entityDefaultConfig = {
+    pagination: 'no',
+    validation: false,
+    dto: 'no',
+    service: 'no',
+    jpaMetamodelFiltering: false,
+    readOnly: false,
+    embedded: false,
+    entityAngularJSSuffix: '',
+    fluentMethods: true,
+    clientRootFolder: '',
+    get fields() {
+        return [];
+    },
+    get relationships() {
+        return [];
+    },
+};
+
 module.exports = {
     appDefaultConfig,
     serverDefaultConfig,
     clientDefaultConfig,
     defaultConfig,
     requiredDefaultConfig,
+    entityDefaultConfig,
 };

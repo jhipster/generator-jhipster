@@ -33,7 +33,7 @@ describe('JHipster application generator with blueprint', () => {
                     fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
                 })
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     skipChecks: false,
                     blueprint: 'myblueprint',
@@ -85,7 +85,7 @@ describe('JHipster application generator with blueprint', () => {
                     fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
                 })
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     skipChecks: false,
                     blueprint: 'myblueprint',
@@ -136,7 +136,7 @@ describe('JHipster application generator with blueprint', () => {
                     fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
                 })
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     skipChecks: false,
                     blueprint: 'myblueprint',
@@ -188,7 +188,7 @@ describe('JHipster application generator with blueprint', () => {
                     fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
                 })
                 .withOptions({
-                    'from-cli': true,
+                    fromCli: true,
                     skipInstall: true,
                     skipChecks: false,
                     blueprint: 'myblueprint',

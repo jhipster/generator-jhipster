@@ -3,7 +3,7 @@ services:
     samplekafka-app:
         image: samplekafka
         environment:
-            - SPRING_PROFILES_ACTIVE=prod,swagger
+            - SPRING_PROFILES_ACTIVE=prod,api-docs
             - SPRING_DATASOURCE_URL=jdbc:mysql://samplekafka-mysql:3306/samplekafka?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
             - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
             - KAFKA_CONSUMER_KEY_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
@@ -17,16 +17,29 @@ services:
         ports:
             - 8080:8080
     samplekafka-mysql:
-        extends:
-            file: mysql.yml
-            service: samplekafka-mysql
-    kafka:
-        extends:
-            file: kafka.yml
-            service: kafka
+        image: <%= DOCKER_MYSQL %>
+        # volumes:
+        #     - ~/volumes/jhipster/sampleKafka/mysql/:/var/lib/mysql/
         environment:
-            - KAFKA_ADVERTISED_HOST_NAME=kafka
+            - MYSQL_USER=root
+            - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+            - MYSQL_DATABASE=samplekafka
+        ports:
+            - 3306:3306
+        command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+    kafka:
+        image: <%= DOCKER_KAFKA %>
+        environment:
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+            KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+            KAFKA_BROKER_ID: 2
+            KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+            KAFKA_ADVERTISED_HOST_NAME: kafka
+        ports:
+            - 9092:9092
     zookeeper:
-        extends:
-            file: kafka.yml
-            service: zookeeper
+        image: <%= DOCKER_ZOOKEEPER %>
+        environment:
+            ZOOKEEPER_CLIENT_PORT: 2181
+            ZOOKEEPER_TICK_TIME: 2000
+            ZOOKEEPER_SYNC_LIMIT: 2

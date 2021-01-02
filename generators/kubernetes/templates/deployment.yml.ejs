@@ -123,6 +123,12 @@ spec:
         <%_ if (app.prodDatabaseType === 'mysql' || app.prodDatabaseType === 'mariadb') { _%>
         - name: SPRING_DATASOURCE_URL
           value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
+        - name: SPRING_LIQUIBASE_URL
+          value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
+            <%_ if (reactive) { _%>
+        - name: SPRING_R2DBC_URL
+          value: <%- getR2DBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
+            <%_ } _%>
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'mariadb') { _%>
         - name: SPRING_DATASOURCE_PASSWORD
@@ -141,6 +147,12 @@ spec:
             secretKeyRef:
               name: <%= app.baseName.toLowerCase() %>-postgresql
               key: postgresql-password
+        - name: SPRING_LIQUIBASE_URL
+          value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
+            <%_ if (reactive) { _%>
+        - name: SPRING_R2DBC_URL
+          value: <%- getR2DBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
+            <%_ } _%>
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'mongodb') { _%>
         - name: SPRING_DATA_MONGODB_DATABASE
@@ -155,8 +167,6 @@ spec:
           value: <%= app.baseName.toLowerCase() %>
         <%_ } _%>
         <%_ if (app.searchEngine === 'elasticsearch') { _%>
-        - name: SPRING_DATA_JEST_URI
-          value: http://<%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9200
         - name: SPRING_ELASTICSEARCH_REST_URIS
           value: http://<%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9200
         <%_ } _%>
@@ -178,20 +188,6 @@ spec:
         - name: KAFKA_PRODUCER_VALUE_DESERIALIZER
           value: 'org.apache.kafka.common.serialization.StringDeserializer'
         <%_ } _%>
-        <%_ if (monitoring === 'elk') { _%>
-        - name: JHIPSTER_METRICS_LOGS_ENABLED
-          value: 'true'
-        - name: JHIPSTER_LOGGING_LOGSTASH_ENABLED
-          value: 'true'
-        - name: JHIPSTER_LOGGING_LOGSTASH_HOST
-          value: jhipster-logstash
-            <%_ if (deploymentApplicationType === 'microservice') { _%>
-        - name: SPRING_ZIPKIN_ENABLED
-          value: "true"
-        - name: SPRING_ZIPKIN_BASE_URL
-          value: http://jhipster-zipkin
-            <%_ } _%>
-        <%_ } _%>
         <%_ if (monitoring === 'prometheus') { _%>
         - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
           value: 'true'
@@ -204,6 +200,8 @@ spec:
         <%_ } _%>
         - name: JAVA_OPTS
           value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
         resources:
           requests:
             memory: "512Mi"
@@ -216,13 +214,13 @@ spec:
           containerPort: <%= app.serverPort %>
         readinessProbe:
           httpGet:
-            path: /management/health
+            path: /management/health/readiness
             port: http
           initialDelaySeconds: 20
           periodSeconds: 15
           failureThreshold: 6
         livenessProbe:
           httpGet:
-            path: /management/health
+            path: /management/health/liveness
             port: http
           initialDelaySeconds: 120

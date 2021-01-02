@@ -22,12 +22,6 @@ let clientPackageMngrName = 'Npm';
 let clientPackageMngrAddGlobal = 'install -g';
 let clientPackageMngrAdd = 'install --save --save-exact';
 let clientPackageMngrAddDev = 'install --save-dev --save-exact';
-if (clientPackageManager === 'yarn') {
-    clientPackageMngrName = 'Yarn';
-    clientPackageMngrAddGlobal = 'global add';
-    clientPackageMngrAdd = 'add --exact';
-    clientPackageMngrAddDev = 'add --dev --exact';
-}
 let DOCUMENTATION_ARCHIVE_URL = `${DOCUMENTATION_URL + DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`;
 _%>
 This application was generated using JHipster <%= jhipsterVersion %>, you can find documentation and help at [<%= DOCUMENTATION_ARCHIVE_URL %>](<%= DOCUMENTATION_ARCHIVE_URL %>).
@@ -56,10 +50,6 @@ Before you can build this project, you must install and configure the following 
 
 1. [Node.js][]: We use Node to run a development web server and build the project.
    Depending on your system, you can install Node either from source or as a pre-packaged bundle.
-<%_ if (clientPackageManager === 'yarn') { _%>
-2. [Yarn][]: We use Yarn to manage Node dependencies.
-   Depending on your system, you can install Yarn either from source or as a pre-packaged bundle.
-<%_ } _%>
 
 After installing Node, you should be able to run the following command to install development tools.
 You will only need to run this command when dependencies change in [package.json](package.json).
@@ -97,12 +87,12 @@ Run the following commands in two separate terminals to create a blissful develo
 auto-refreshes when files change on your hard drive.
 
 ```
-<% if (buildTool === 'maven') { %>
+<%_ if (buildTool === 'maven') { _%>
 ./mvnw
-<% } %>
-<% if (buildTool === 'gradle') { %>
+<%_ } _%>
+<%_ if (buildTool === 'gradle') { _%>
 ./gradlew -x webpack
-<% } %>
+<%_ } _%>
 <%= clientPackageManager %> start
 ```
 
@@ -140,9 +130,31 @@ spring:
             client-secret: web_app
 ```
 
+### JHipster Control Center
+
+JHipster Control Center can help you to manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
+
+```
+docker-compose -f src/main/docker/jhipster-control-center.yml up
+```
+
 ### Okta
 
-If you'd like to use Okta instead of Keycloak, you'll need to change a few things. First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta domain, that has a name like `https://dev-123456.okta.com`.
+If you'd like to use Okta instead of Keycloak, it's pretty quick using the [Okta CLI](https://cli.okta.com/). After you've installed it, run:
+
+```shell
+okta register
+```
+
+Then, in your JHipster app's directory, run `okta apps create` and select **JHipster**. This will set up an Okta app for you, create `ROLE_ADMIN` and `ROLE_USER` groups, create a `.okta.env` file with your Okta settings, and configure a `groups` claim in your ID token.
+
+Run `source .okta.env` and start your app with Maven or Gradle. You should be able to sign in with the credentials you registered with.
+
+If you're on Windows, you should install [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10) so the `source` command will work.
+
+If you'd like to configure things manually through the Okta developer console, see the instructions below.
+
+First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta domain, that has a name like `https://dev-123456.okta.com`.
 
 Modify `src/main/resources/config/application.yml` to use your Okta settings.
 
@@ -164,7 +176,7 @@ security:
 
 Create an OIDC App in Okta to get a `{clientId}` and `{clientSecret}`. To do this, log in to your Okta Developer account and navigate to **Applications** > **Add Application**. Click **Web** and click the **Next** button. Give the app a name you’ll remember, specify `http://localhost:8080` as a Base URI, and `http://localhost:8080/login/oauth2/code/oidc` as a Login Redirect URI. Click **Done**, then Edit and add `http://localhost:8080` as a Logout redirect URI. Copy and paste the client ID and secret into your `application.yml` file.
 
-Create a `ROLE_ADMIN` and `ROLE_USER` group and add users into them. Modify e2e tests to use this account when running integration tests. You'll need to change credentials in `src/test/javascript/e2e/account/account.spec.ts` and `src/test/javascript/e2e/admin/administration.spec.ts`.
+Create a `ROLE_ADMIN` and `ROLE_USER` group and add users into them. Modify e2e tests to use this account when running integration tests. You'll need to change credentials in `<%= CLIENT_TEST_SRC_DIR %>e2e/account/account.spec.ts` and `<%= CLIENT_TEST_SRC_DIR %>e2e/admin/administration.spec.ts`.
 
 Navigate to **API** > **Authorization Servers**, click the **Authorization Servers** tab and edit the default one. Click the **Claims** tab and **Add Claim**. Name it "groups", and include it in the ID Token. Set the value type to "Groups" and set the filter to be a Regex of `.*`.
 
@@ -175,7 +187,7 @@ After making these changes, you should be good to go! If you have any issues, pl
 
 JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
 
-The service worker initialization code is commented out by default. To enable it, uncomment the following code in `src/main/webapp/index.html`:
+The service worker initialization code is commented out by default. To enable it, uncomment the following code in `<%= CLIENT_MAIN_SRC_DIR %>index.html`:
 
 ```html
 <script>
@@ -268,12 +280,12 @@ Refer to [Doing API-First development][] for more details.
 To build the final jar and optimize the <%= baseName %> application for production, run:
 
 ```
-<% if (buildTool === 'maven') { %>
+<%_ if (buildTool === 'maven') { _%>
 ./mvnw -Pprod clean verify
-<% } %>
-<% if (buildTool === 'gradle') { %>
+<%_ } _%>
+<%_ if (buildTool === 'gradle') { _%>
 ./gradlew -Pprod clean bootJar
-<% } %>
+<%_ } _%>
 ```
 
 <%_ if (!skipClient) { _%>
@@ -282,12 +294,12 @@ This will concatenate and minify the client CSS and JavaScript files. It will al
 To ensure everything worked, run:
 
 ```
-<% if (buildTool === 'maven') { %>
+<%_ if (buildTool === 'maven') { _%>
 java -jar target/*.jar
-<% } %>
-<% if (buildTool === 'gradle') { %>
+<%_ } _%>
+<%_ if (buildTool === 'gradle') { _%>
 java -jar build/libs/*.jar
-<% } %>
+<%_ } _%>
 ```
 
 <% if (!skipClient) { %>Then navigate to [http://localhost:<%= serverPort %>](http://localhost:<%= serverPort %>) in your browser.
@@ -299,12 +311,12 @@ Refer to [Using JHipster in production][] for more details.
 To package your application as a war in order to deploy it to an application server, run:
 
 ```
-<% if (buildTool === 'maven') { %>
+<%_ if (buildTool === 'maven') { _%>
 ./mvnw -Pprod,war clean verify
-<% } %>
-<% if (buildTool === 'gradle') { %>
+<%_ } _%>
+<%_ if (buildTool === 'gradle') { _%>
 ./gradlew -Pprod -Pwar clean bootWar
-<% } %>
+<%_ } _%>
 ```
 
 ## Testing
@@ -424,7 +436,6 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 <% if (testFrameworks.includes("gatling")) { %>[Gatling]: https://gatling.io/<% } %>
 <%_ if (!skipClient) { _%>
 [Node.js]: https://nodejs.org/
-[Yarn]: https://yarnpkg.org/
 [Webpack]: https://webpack.github.io/
 [Angular CLI]: https://cli.angular.io/
 [BrowserSync]: https://www.browsersync.io/

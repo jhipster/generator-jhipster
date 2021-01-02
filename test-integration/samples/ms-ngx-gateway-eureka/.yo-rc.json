@@ -10,7 +10,7 @@
         "websocket": false,
         "databaseType": "sql",
         "devDatabaseType": "h2Disk",
-        "prodDatabaseType": "mysql",
+        "prodDatabaseType": "postgresql",
         "searchEngine": false,
         "serviceDiscoveryType": "eureka",
         "buildTool": "maven",
@@ -30,6 +30,7 @@
         "entitySuffix": "",
         "dtoSuffix": "DTO",
         "otherModules": [],
-        "blueprints": []
+        "blueprints": [],
+        "creationTimestamp": 1596513172471
     }
 }

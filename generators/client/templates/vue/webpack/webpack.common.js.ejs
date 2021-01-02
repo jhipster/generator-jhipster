@@ -16,13 +16,13 @@ module.exports = {
   mode: 'development',
   context: path.resolve(__dirname, '../'),
   entry: {
-    app: './src/main/webapp/app/main.ts'
+    app: './<%= CLIENT_MAIN_SRC_DIR %>app/main.ts'
   },
   resolve: {
     extensions: ['.ts', '.js', '.vue', '.json'],
     alias: {
       vue$: 'vue/dist/vue.esm.js',
-      '@': resolve('src/main/webapp/app')
+      '@': resolve('<%= CLIENT_MAIN_SRC_DIR %>app')
     }
   },
   module: {
@@ -93,15 +93,15 @@ module.exports = {
       patterns: [
         { from: './node_modules/swagger-ui-dist/*.{js,css,html,png}', to: 'swagger-ui', flatten: true, globOptions: { ignore: ['**/index.html'] } },
         { from: './node_modules/axios/dist/axios.min.js', to: 'swagger-ui' },
-        { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
-        { from: './src/main/webapp/content/', to: 'content' },
-        { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },
+        { from: './<%= CLIENT_MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui' },
+        { from: './<%= CLIENT_MAIN_SRC_DIR %>content/', to: 'content' },
+        { from: './<%= CLIENT_MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
         {
-          from: './src/main/webapp/manifest.webapp',
+          from: './<%= CLIENT_MAIN_SRC_DIR %>manifest.webapp',
           to: 'manifest.webapp',
         },
         // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
-        { from: './src/main/webapp/robots.txt', to: 'robots.txt' },
+        { from: './<%= CLIENT_MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' },
       ]
     }),
     // https://github.com/ampedandwired/html-webpack-plugin

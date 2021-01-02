@@ -20,10 +20,10 @@
 const chalk = require('chalk');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
-const writeFiles = require('./files').writeFiles;
+const writeVueFiles = require('./files-vue').writeFiles;
 const constants = require('../generator-constants');
 
-const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
+const { VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 let useBlueprints;
 
@@ -31,10 +31,18 @@ module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
+        // This makes it possible to pass `pageName` by argument
+        this.argument('pageName', {
+            type: String,
+            required: false,
+            description: 'Page name',
+        });
+
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
+            hide: true,
             defaults: false,
         });
         this.option('skip-prompts', {
@@ -43,20 +51,21 @@ module.exports = class extends BaseBlueprintGenerator {
             hide: true,
             defaults: false,
         });
-        // This makes it possible to pass `languages` by argument
-        this.argument('pageName', {
-            type: String,
+        this.argument('recreate', {
+            type: Boolean,
             required: false,
-            description: 'Page name',
+            description: 'Recreate the page',
         });
-        this.pageName = this.options.pageName;
 
         if (this.options.help) {
             return;
         }
+        this.pageName = this.options.pageName;
+        this.page = this.options.page || {};
 
-        this.loadOptions();
         this.loadRuntimeOptions();
+
+        this.rootGenerator = this.env.rootGenerator() === this;
 
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('page');
     }
@@ -66,17 +75,12 @@ module.exports = class extends BaseBlueprintGenerator {
             validateFromCli() {
                 this.checkInvocationFromCLI();
             },
-            setupConsts() {
-                const configuration = this.jhipsterConfig;
-                this.skipClient = configuration.skipClient;
-                this.clientPackageManager = configuration.clientPackageManager;
-                this.enableTranslation = configuration.enableTranslation;
-                this.protractorTests = configuration.testFrameworks && configuration.testFrameworks.includes('protractor');
-                this.clientFramework = configuration.clientFramework;
-
-                if (this.clientFramework !== VUE) {
-                    this.error(`This sub generator page is not supported for ${this.clientFramework}`);
-                }
+            loadConfig() {
+                this.skipClient = this.jhipsterConfig.skipClient;
+                this.clientPackageManager = this.jhipsterConfig.clientPackageManager;
+                this.enableTranslation = this.jhipsterConfig.enableTranslation;
+                this.protractorTests = this.jhipsterConfig.testFrameworks && this.jhipsterConfig.testFrameworks.includes('protractor');
+                this.clientFramework = this.jhipsterConfig.clientFramework;
             },
         };
     }
@@ -97,10 +101,52 @@ module.exports = class extends BaseBlueprintGenerator {
         return this._prompting();
     }
 
+    _configuring() {
+        return {
+            save() {
+                const pages = this.jhipsterConfig.pages || [];
+                const page = pages.find(page => page.name === this.pageName);
+                if (page) {
+                    return;
+                }
+                this.jhipsterConfig.pages = pages.concat({ name: this.pageName });
+            },
+        };
+    }
+
+    get configuring() {
+        if (useBlueprints) return;
+        return this._configuring();
+    }
+
+    _default() {
+        return {
+            prepareForTemplates() {
+                this.jhiPrefix = this.page.jhiPrefix || this.jhipsterConfig.jhiPrefix;
+
+                this.pageNameDashed = this._.kebabCase(this.pageName);
+                this.pageInstance = this._.lowerFirst(this.pageName);
+                this.jhiPrefixDashed = this._.kebabCase(this.jhiPrefix);
+
+                this.pageFileName = this.page.pageFileName || this.pageNameDashed;
+                this.pageFolderName = this.page.pageFileName || this.pageFileName;
+            },
+        };
+    }
+
+    get default() {
+        if (useBlueprints) return;
+        return this._default();
+    }
+
     _writing() {
         return {
-            writeAdditionalFile() {
-                writeFiles.call(this);
+            writeClientPageFiles() {
+                if (this.skipClient) return;
+                if (![VUE].includes(this.clientFramework)) {
+                    throw new Error(`The page sub-generator is not supported for client ${this.clientFramework}`);
+                }
+                writeVueFiles.call(this);
             },
         };
     }
@@ -113,9 +159,11 @@ module.exports = class extends BaseBlueprintGenerator {
     _end() {
         return {
             end() {
-                if (!this.options['skip-install'] && !this.skipClient) {
-                    this.rebuildClient();
-                }
+                if (!this.rootGenerator || this.options.skipInstall || this.skipClient) return;
+                this.rebuildClient();
+            },
+            success() {
+                if (!this.rootGenerator) return;
                 this.log(chalk.bold.green(`Page ${this.pageName} generated successfully.`));
             },
         };

@@ -1,0 +1,102 @@
+{
+    "metrics": {
+        "title": "Metrika aplikacije",
+        "refresh.button": "Aktualiziraj",
+        "updating": "Aktualizacija...",
+        "jvm": {
+            "title": "JVM Metrika",
+            "memory": {
+                "title": "Memorija",
+                "total": "Ukupna Memorija",
+                "heap": "Heap Memorija",
+                "nonheap": "Non-Heap Memorija"
+            },
+            "threads": {
+                "title": "Threads",
+                "all": "Svi",
+                "runnable": "Runnable",
+                "timedwaiting": "Timed waiting",
+                "waiting": "Waiting",
+                "blocked": "Blocked",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id: ",
+                    "blockedtime": "Blocked Time",
+                    "blockedcount": "Blocked Count",
+                    "waitedtime": "Waited Time",
+                    "waitedcount": "Waited Count",
+                    "lockname": "Lock name",
+                    "stacktrace": "Stacktrace",
+                    "show": "Show Stacktrace",
+                    "hide": "Hide Stacktrace"
+                }
+            },
+            "gc": {
+                "title": "Garbage collections",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "Broj HTTP zahtjeva (događaja u milisekundama)",
+                "active": "Aktivnih zahtjeva:",
+                "total": "Ukupno zahtjeva:",
+                "table": {
+                    "code": "Code",
+                    "count": "Broj",
+                    "mean": "Mean",
+                    "average": "Srednja vrijednost",
+                    "max": "Max"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Nije nađeno",
+                    "servererror": "Greška servera"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Statistika servisa (vrijeme u milisekundama)",
+            "table": {
+                "name": "Naziv servisa",
+                "count": "Broj",
+                "mean": "Srednje",
+                "min": "Min",
+                "max": "Max",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "cache": {
+            "title": "Cache statistika",
+            "cachename": "Naziv",
+            "hits": "Cache Hits",
+            "misses": "Cache Misses",
+            "gets": "Cache Gets",
+            "puts": "Cache Puts",
+            "removals": "Cache Removals",
+            "evictions": "Cache Evictions",
+            "hitPercent": "Cache Hit %",
+            "missPercent": "Cache Miss %",
+            "averageGetTime": "Average get time (µs)",
+            "averagePutTime": "Average put time (µs)",
+            "averageRemoveTime": "Average remove time (µs)"
+        },
+        "datasource": {
+            "usage": "Korištenje connection pool-a",
+            "title": "Statistika izvora podataka (vrijeme u milisekundama)",
+            "name": "Korištenje poola ",
+            "count": "Broj",
+            "mean": "Srednje",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

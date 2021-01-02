@@ -18,9 +18,10 @@ import {isVisible, waitUntilDisplayed, waitUntilHidden,} from '../../util/utils'
 const expect = chai.expect;
 
 describe('Account', () => {
-
   let navBarPage: NavBarPage = new NavBarPage();
   let signInPage: SignInPage;
+  const username = process.env.E2E_USERNAME || 'admin';
+  const password = process.env.E2E_PASSWORD || 'admin';
 <%_ if (!skipUserManagement) { _%>
   let passwordPage: PasswordPage;
   let settingsPage: SettingsPage;
@@ -50,7 +51,7 @@ describe('Account', () => {
       expect(await signInPage.getTitle()).to.eq(loginPageTitle);
       expect(await isVisible(signInPage.dangerAlert)).to.be.false;
 
-      await signInPage.login('admin', 'foo');
+      await signInPage.login(username, 'foo');
 
       await waitUntilDisplayed(signInPage.dangerAlert);
       expect(await signInPage.dangerAlert.isDisplayed()).to.be.true;
@@ -58,7 +59,7 @@ describe('Account', () => {
       await signInPage.closeButton.click();
       await waitUntilHidden(signInPage.loginForm);
 <%_ } else { _%>
-      await signInPage.login('admin', 'foo');
+      await signInPage.login(username, 'foo');
       const alert = element(by.css('.alert-error'));
       if (await alert.isPresent()) {
         // Keycloak
@@ -67,7 +68,7 @@ describe('Account', () => {
         // Okta
         const error = element(by.css('.infobox-error'));
         await waitUntilDisplayed(error);
-        expect(await error.getText()).to.eq('Sign in failed!');
+        expect(await error.getText()).to.eq('Unable to sign in');
       }
       await signInPage.username.clear();
       await signInPage.password.clear();
@@ -81,9 +82,9 @@ describe('Account', () => {
       expect(await isVisible(signInPage.dangerAlert)).to.be.false;
 
       await signInPage.username.clear();
-      await signInPage.username.sendKeys('admin');
+      await signInPage.username.sendKeys(username);
       await signInPage.password.clear();
-      await signInPage.password.sendKeys('admin');
+      await signInPage.password.sendKeys(password);
       await signInPage.loginButton.click();
 
       await waitUntilHidden(signInPage.loginForm);
@@ -93,8 +94,7 @@ describe('Account', () => {
   <%_ } else { _%>
       await browser.get('/');
       signInPage = await navBarPage.getSignInPage();
-      // Keycloak credentials by default, change them to be able to use oauth2 with Okta
-      await signInPage.login('admin', 'admin');
+      await signInPage.login(username, password);
       const success = element(by.className('alert-success'));
       await waitUntilDisplayed(success);
 
@@ -383,9 +383,6 @@ describe('Account', () => {
         await detailsPage.email.sendKeys('ipster');
         await detailsPage.saveBtn.click();
 
-        await waitUntilDisplayed(detailsPage.infoAlert);
-        expect(await detailsPage.infoAlert.isDisplayed()).to.be.true;
-
         expect(await userManagementPage.getEmailColumnText('user_test')).to.eq('admin@localhost.jhipster');
       });
 
@@ -399,9 +396,6 @@ describe('Account', () => {
         await waitUntilHidden(deletePage.modal);
 
         expect(await isVisible(deletePage.modal)).to.be.false;
-
-        await waitUntilDisplayed(userManagementPage.dangerAlert);
-        expect(await userManagementPage.dangerAlert.isDisplayed()).to.be.true;
       });
     });
   });

@@ -144,7 +144,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     expect(convertedEntity).to.deep.equal({
                         applications: ['toto'],
                         changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
-                        clientRootFolder: '',
                         dto: 'no',
                         embedded: false,
                         entityTableName: 'entity_a',
@@ -315,7 +314,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     expect(convertedEntity).to.deep.equal({
                         applications: ['toto'],
                         changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
-                        clientRootFolder: '',
                         dto: 'mapstruct',
                         embedded: false,
                         entityTableName: 'entity_a',
@@ -377,7 +375,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     expect(convertedEntity).to.deep.equal({
                         applications: ['toto'],
                         changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
-                        clientRootFolder: '',
                         dto: 'no',
                         embedded: false,
                         entityTableName: 'entity_a',
@@ -429,7 +426,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     expect(convertedEntity).to.deep.equal({
                         applications: ['toto'],
                         changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
-                        clientRootFolder: '',
                         dto: 'no',
                         embedded: false,
                         entityTableName: 'entity_a',
@@ -485,7 +481,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         expect(convertedEntity).to.deep.equal({
                             applications: ['toto'],
                             changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
-                            clientRootFolder: '',
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_a',
@@ -558,7 +553,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         expect(convertedEntity).to.deep.equal({
                             applications: ['toto'],
                             changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
-                            clientRootFolder: '',
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_a',
@@ -629,7 +623,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         expect(convertedEntity).to.deep.equal({
                             applications: ['toto'],
                             changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
-                            clientRootFolder: '',
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'a',
@@ -685,7 +678,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         expect(convertedEntity).to.deep.equal({
                             applications: ['toto'],
                             changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
-                            clientRootFolder: '',
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_a',
@@ -796,7 +788,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         expect(convertedEntity).to.deep.equal({
                             applications: ['toto'],
                             changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
-                            clientRootFolder: '',
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_a',
@@ -873,7 +864,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         expect(convertedEntity).to.deep.equal({
                             applications: ['toto'],
                             changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
-                            clientRootFolder: '',
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_a',
@@ -968,6 +958,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 relationshipType: 'one-to-one',
                             },
                             {
+                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 relationshipName: 'b',
@@ -991,6 +982,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         ]);
                         expect(relationshipsForB).to.deep.equal([
                             {
+                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 ownerSide: false,
@@ -1005,6 +997,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 relationshipType: 'many-to-one',
                             },
                             {
+                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 relationshipName: 'a',
@@ -1166,6 +1159,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         ]);
                         expect(relationshipsForB).to.deep.equal([
                             {
+                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 ownerSide: false,
@@ -1225,6 +1219,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         ]);
                         expect(relationshipsForB).to.deep.equal([
                             {
+                                otherEntityField: 'id',
                                 javadoc: 'A to B but in the destination',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
@@ -1316,6 +1311,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
 
                         it('should add the relationship for the source entity', () => {
                             expect(relationshipFromSourceToDestination).to.deep.equal({
+                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 relationshipName: 'b',
@@ -1477,6 +1473,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         });
                         it('should ignore it for the destination entity', () => {
                             expect(relationshipFromDestinationToSource).to.deep.equal({
+                                otherEntityField: 'name',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 ownerSide: false,
@@ -1520,6 +1517,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
 
                         it('should ignore it for the source entity', () => {
                             expect(relationshipFromSourceToDestination).to.deep.equal({
+                                otherEntityField: 'name',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 relationshipName: 'b',
@@ -1580,6 +1578,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         });
                         it('should ignore it for the source entity', () => {
                             expect(relationshipFromDestinationToSource).to.deep.equal({
+                                otherEntityField: 'name',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 relationshipName: 'a',
@@ -1726,7 +1725,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         {
                             applications: ['tata'],
                             changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
-                            clientRootFolder: '',
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_a',
@@ -1743,7 +1741,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         {
                             applications: ['tata'],
                             changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 2 }),
-                            clientRootFolder: '',
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_b',
@@ -1760,7 +1757,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         {
                             applications: ['tata', 'tutu'],
                             changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 3 }),
-                            clientRootFolder: '',
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_c',
@@ -1779,7 +1775,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         {
                             applications: ['tata', 'tutu'],
                             changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 3 }),
-                            clientRootFolder: '',
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_c',
@@ -1796,7 +1791,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         {
                             applications: ['tutu'],
                             changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 4 }),
-                            clientRootFolder: '',
                             dto: 'mapstruct',
                             embedded: false,
                             entityTableName: 'entity_d',
@@ -1813,7 +1807,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         {
                             applications: ['tutu'],
                             changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 5 }),
-                            clientRootFolder: '',
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_e',

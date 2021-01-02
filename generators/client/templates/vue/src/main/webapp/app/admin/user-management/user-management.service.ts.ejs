@@ -1,7 +1,6 @@
 import axios from 'axios';
-import Vue from 'vue';
 import buildPaginationQueryOpts from '@/shared/sort/sorts';
-<%_ if (databaseType !== 'sql' && databaseType !== 'mongodb' || databaseType !== 'couchbase') { _%>
+<%_ if (databaseType === 'cassandra') { _%>
 import {Authority} from '@/shared/security/authority'
 <%_ } _%>
 
@@ -23,12 +22,12 @@ export default class UserManagementService {
     return axios.delete(`api/users/${userId}`);
   }
 
-  public retrieve(<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>req?: any <%_ } _%>): Promise<any> {
-    return axios.get(`api/users<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>?${buildPaginationQueryOpts(req)}<%_ } _%>`);
+  public retrieve(<%_ if (databaseType !== 'cassandra') { _%>req?: any <%_ } _%>): Promise<any> {
+    return axios.get(`api/users<%_ if (databaseType !== 'cassandra') { _%>?${buildPaginationQueryOpts(req)}<%_ } _%>`);
   }
 
   public retrieveAuthorities(): Promise<any> {
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if (databaseType !== 'cassandra') { _%>
     return axios.get('<%- apiUaaPath %>api/users/authorities');
     <%_ } else { _%>
     return Promise.resolve([Authority.USER, Authority.ADMIN]);

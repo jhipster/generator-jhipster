@@ -18,7 +18,7 @@ describe('JHipster upgrade generator', function () {
             let workingDirectory;
             helpers
                 .run(path.join(__dirname, '../generators/app'))
-                .withOptions({ skipInstall: true, skipChecks: true, 'from-cli': true })
+                .withOptions({ skipInstall: true, skipChecks: true, fromCli: true })
                 .inTmpDir(dir => {
                     /* eslint-disable-next-line no-console */
                     console.log(`Generating JHipster application in directory: ${dir}`);
@@ -36,7 +36,7 @@ describe('JHipster upgrade generator', function () {
                     enableHibernateCache: true,
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
-                    prodDatabaseType: 'mysql',
+                    prodDatabaseType: 'postgresql',
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
@@ -51,10 +51,10 @@ describe('JHipster upgrade generator', function () {
                     helpers
                         .run(path.join(__dirname, '../generators/upgrade'))
                         .withOptions({
-                            'from-cli': true,
+                            fromCli: true,
                             force: true,
                             silent: false,
-                            'target-version': packageJson.version,
+                            targetVersion: packageJson.version,
                         })
                         .inTmpDir(() => {
                             /* eslint-disable-next-line no-console */
@@ -95,7 +95,7 @@ describe('JHipster upgrade generator', function () {
             let workingDirectory;
             helpers
                 .run(path.join(__dirname, '../generators/app'))
-                .withOptions({ skipInstall: true, skipChecks: true, 'from-cli': true, blueprints: blueprintName })
+                .withOptions({ skipInstall: true, skipChecks: true, fromCli: true, blueprints: blueprintName })
                 .inTmpDir(dir => {
                     /* eslint-disable-next-line no-console */
                     console.log(`Generating JHipster application in directory: ${dir}`);
@@ -123,7 +123,7 @@ describe('JHipster upgrade generator', function () {
                     enableHibernateCache: true,
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
-                    prodDatabaseType: 'mysql',
+                    prodDatabaseType: 'postgresql',
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
@@ -138,11 +138,11 @@ describe('JHipster upgrade generator', function () {
                     helpers
                         .run(path.join(__dirname, '../generators/upgrade'))
                         .withOptions({
-                            'from-cli': true,
+                            fromCli: true,
                             force: true,
                             silent: false,
-                            'skip-checks': true,
-                            'target-version': packageJson.version,
+                            skipChecks: true,
+                            targetVersion: packageJson.version,
                         })
                         .inTmpDir(() => {
                             /* eslint-disable-next-line no-console */

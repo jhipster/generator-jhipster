@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { render } from '@testing-library/react';
 
 import ErrorBoundary from 'app/shared/error/error-boundary';
 
@@ -17,12 +17,12 @@ describe('error component', () => {
   });
 
   it('Should throw an error when componnet is not enclosed in Error Boundary', () => {
-    expect(() => shallow(<ErrorComp />)).toThrow(Error);
+    expect(() => render(<ErrorComp />)).toThrow(Error);
   });
 
   it('Should call Error Boundary componentDidCatch method', () => {
     const spy = jest.spyOn(ErrorBoundary.prototype, 'componentDidCatch');
-    mount(
+    render(
       <ErrorBoundary>
         <ErrorComp />
       </ErrorBoundary>

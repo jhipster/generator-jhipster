@@ -23,16 +23,29 @@ const variables = query.variables;
 const rxjsMapIsUsed = query.rxjsMapIsUsed;
 const selectableEntities = query.selectableEntities;
 const selectableManyToManyEntities = query.selectableManyToManyEntities;
+const hasValidationRule = fields.some(field =>
+        field.fieldValidate && (
+                field.fieldValidateRules.includes('required') ||
+                field.fieldValidateRules.includes('minlength') ||
+                field.fieldValidateRules.includes('maxlength') ||
+                field.fieldValidateRules.includes('min') ||
+                field.fieldValidateRules.includes('max') ||
+                field.fieldValidateRules.includes('pattern')
+        )
+);
+const hasRequiredRelationship = relationships.some(relationship => relationship.relationshipRequired);
+const isValidatorsRequired = hasValidationRule || hasRequiredRelationship;
 _%>
-import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
+import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %>, Optional } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder,<%_ if (isValidatorsRequired) { _%> Validators<%_ } _%> } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 <%_ if ( rxjsMapIsUsed ) { _%>
 import { map } from 'rxjs/operators';
 <%_ } _%>
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
@@ -51,7 +64,7 @@ Object.keys(differentRelationships).forEach(key => {
     if (differentRelationships[key].some(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one' && rel.ownerSide === true || rel.relationshipType === 'many-to-many' && rel.ownerSide === true)) {
         const uniqueRel = differentRelationships[key][0];
         if (uniqueRel.otherEntityAngularName !== entityAngularName) {
-            if (uniqueRel.otherEntityAngularName === 'User') {
+            if (isBuiltInUser(uniqueRel.otherEntityAngularName)) {
 _%>
 import { IUser } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
@@ -162,10 +175,12 @@ _%>
         protected elementRef: ElementRef,
         <%_ } _%>
         protected activatedRoute: ActivatedRoute,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        @Optional() public activeModal?: NgbActiveModal,
     ) {}
 
     ngOnInit(): void {
+        if (this.activeModal) return;
         this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
             <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
             if (!<%= entityInstance %>.id) {
@@ -237,10 +252,10 @@ _%>
         this.dataUtils.openFile(contentType, base64String);
     }
 
-    setFileData(event: Event, field: string, isImage: boolean): void {
+    setFileData(event: any, field: string, isImage: boolean): void {
         this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe(null, (err: JhiFileLoadError) => {
             this.eventManager.broadcast(
-                new JhiEventWithContent<AlertError>('<%= angularAppName %>.error', { <% if (enableTranslation) { %>...err, key: 'error.file.' + err.key<% } else { %>message: err.message<% } %> })
+                new JhiEventWithContent<AlertError>('<%= frontendAppName %>.error', { <% if (enableTranslation) { %>...err, key: 'error.file.' + err.key<% } else { %>message: err.message<% } %> })
             );
         });
     }
@@ -259,7 +274,11 @@ _%>
 <%_ } _%>
 
     previousState(): void {
-        window.history.back();
+        if (this.activeModal) {
+            this.activeModal.close();
+        } else {
+            window.history.back();
+        }
     }
 
     save(): void {

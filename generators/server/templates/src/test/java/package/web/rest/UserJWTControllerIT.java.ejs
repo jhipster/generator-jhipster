@@ -59,7 +59,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
     <%_ if (databaseType === 'sql') { _%>
 import org.springframework.transaction.annotation.Transactional;
     <%_ } _%>
@@ -95,7 +94,7 @@ import static org.hamcrest.Matchers.not;
 <%_ if (databaseType === 'neo4j') { _%>
 @ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
-public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     <%_ if (!skipUserManagement) { _%>
     @Autowired
@@ -117,7 +116,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void testAuthorize() throws Exception {
+    void testAuthorize() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
@@ -166,7 +165,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
-    public void testAuthorizeWithRememberMe() throws Exception {
+    void testAuthorizeWithRememberMe() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
@@ -184,7 +183,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
         LoginVM login = new LoginVM();
         login.setUsername("user-jwt-controller-remember-me");
 <%_ } else { _%>
-    public void testAuthorizeWithRememberMe() throws Exception {
+    void testAuthorizeWithRememberMe() throws Exception {
         LoginVM login = new LoginVM();
         login.setUsername("test");
 <%_ } _%>
@@ -212,7 +211,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
     }
 
     @Test
-    public void testAuthorizeFails() throws Exception {
+    void testAuthorizeFails() throws Exception {
         LoginVM login = new LoginVM();
         login.setUsername("wrong-user");
         login.setPassword("wrong password");

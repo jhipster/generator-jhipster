@@ -31,7 +31,7 @@ const { defaultConfig } = require('../generator-defaults');
 
 let useBlueprints;
 
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -47,14 +47,13 @@ module.exports = class extends BaseBlueprintGenerator {
             desc:
                 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
-            defaults: false,
         });
 
         if (this.options.help) {
             return;
         }
 
-        this.loadOptions();
+        this.loadStoredAppOptions();
         this.loadRuntimeOptions();
 
         // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
@@ -82,6 +81,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Make constants available in templates
                 this.MAIN_DIR = constants.MAIN_DIR;
                 this.TEST_DIR = constants.TEST_DIR;
+                this.DOCKER_DIR = constants.DOCKER_DIR;
                 this.LOGIN_REGEX = constants.LOGIN_REGEX;
                 this.CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
                 this.SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
@@ -95,6 +95,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.PRETTIER_JAVA_VERSION = constants.PRETTIER_JAVA_VERSION;
 
                 this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
+                this.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
                 this.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;
                 this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
                 this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
@@ -112,9 +113,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
                 this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
                 this.DOCKER_SONAR = constants.DOCKER_SONAR;
-                this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
-                this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
-                this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
                 this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
                 this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
                 this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
@@ -126,7 +124,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.JAVA_VERSION = constants.JAVA_VERSION;
 
                 this.NODE_VERSION = constants.NODE_VERSION;
-                this.YARN_VERSION = constants.YARN_VERSION;
                 this.NPM_VERSION = constants.NPM_VERSION;
                 this.GRADLE_VERSION = constants.GRADLE_VERSION;
 
@@ -135,6 +132,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
                 this.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
                 this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
+                this.HIBERNATE_VERSION = constants.HIBERNATE_VERSION;
                 this.JACOCO_VERSION = constants.JACOCO_VERSION;
 
                 this.KAFKA_VERSION = constants.KAFKA_VERSION;
@@ -217,30 +215,44 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
-    _default() {
+    _composing() {
         return {
             composeLanguages() {
                 // We don't expose client/server to cli, composing with languages is used for test purposes.
-                if (this.configOptions.skipComposeLanguages || this.jhipsterConfig.enableTranslation === false) return;
-
-                this.configOptions.skipComposeLanguages = true;
-                this.composeWith(require.resolve('../languages'), {
-                    ...this.options,
-                    configOptions: this.configOptions,
-                    debug: this.isDebugEnabled,
-                });
+                if (this.jhipsterConfig.enableTranslation === false) return;
+                this.composeWithJHipster('languages', true);
             },
+        };
+    }
 
+    get composing() {
+        if (useBlueprints) return;
+        return this._composing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _loading() {
+        return {
             loadSharedConfig() {
                 this.loadAppConfig();
                 this.loadClientConfig();
                 this.loadServerConfig();
                 this.loadTranslationConfig();
             },
+        };
+    }
 
-            setupSharedOptions() {
+    get loading() {
+        if (useBlueprints) return;
+        return this._loading();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _preparing() {
+        return {
+            prepareForTemplates() {
                 // Application name modified, using each technology's conventions
-                this.angularAppName = this.getAngularAppName();
+                this.frontendAppName = this.getFrontendAppName();
                 this.camelizedBaseName = _.camelCase(this.baseName);
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.lowercaseBaseName = this.baseName.toLowerCase();
@@ -281,6 +293,18 @@ module.exports = class extends BaseBlueprintGenerator {
                     }
                 }
             },
+        };
+    }
+
+    get preparing() {
+        if (useBlueprints) return;
+        return this._preparing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return {
+            ...super._missingPreDefault(),
 
             insight() {
                 statistics.sendSubGenEvent('generator', 'server', {
@@ -310,7 +334,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
     // Public API method used by the getter and also by Blueprints
     _writing() {
-        return writeFiles();
+        return { ...writeFiles(), ...super._missingPostWriting() };
     }
 
     get writing() {
@@ -318,18 +342,137 @@ module.exports = class extends BaseBlueprintGenerator {
         return this._writing();
     }
 
+    _postWriting() {
+        return {
+            packageJsonScripts() {
+                const packageJsonStorage = this.createStorage('package.json');
+                const packageJsonConfigStorage = packageJsonStorage.createStorage('config').createProxy();
+                packageJsonConfigStorage.backend_port = this.serverPort;
+                packageJsonConfigStorage.packaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
+                if (process.env.JHI_PROFILE) {
+                    packageJsonConfigStorage.default_environment = process.env.JHI_PROFILE.includes('dev') ? 'dev' : 'prod';
+                }
+            },
+            packageJsonDockerScripts() {
+                const packageJsonStorage = this.createStorage('package.json');
+                const scriptsStorage = packageJsonStorage.createStorage('scripts');
+                const databaseType = this.jhipsterConfig.databaseType;
+                if (databaseType === 'sql') {
+                    const prodDatabaseType = this.jhipsterConfig.prodDatabaseType;
+                    if (prodDatabaseType === 'no' || prodDatabaseType === 'oracle') {
+                        scriptsStorage.set(
+                            'docker:db',
+                            `echo "Docker for db ${prodDatabaseType} not configured for application ${this.baseName}"`
+                        );
+                    } else {
+                        scriptsStorage.set('docker:db', `docker-compose -f src/main/docker/${prodDatabaseType}.yml up -d`);
+                    }
+                } else {
+                    const dockerFile = `src/main/docker/${databaseType}.yml`;
+                    if (databaseType === 'cassandra') {
+                        scriptsStorage.set({
+                            'docker:db:await': 'wait-on tcp:9042 && sleep 20',
+                        });
+                    }
+                    if (databaseType === 'couchbase' || databaseType === 'cassandra') {
+                        scriptsStorage.set({
+                            'docker:db:build': `docker-compose -f ${dockerFile} build`,
+                            'docker:db': `docker-compose -f ${dockerFile} up -d`,
+                        });
+                    } else if (this.fs.exists(this.destinationPath(dockerFile))) {
+                        scriptsStorage.set('docker:db', `docker-compose -f ${dockerFile} up -d`);
+                    } else {
+                        scriptsStorage.set(
+                            'docker:db',
+                            `echo "Docker for db ${databaseType} not configured for application ${this.baseName}"`
+                        );
+                    }
+                }
+
+                const dockerOthers = [];
+                const dockerBuild = [];
+                ['keycloak', 'elasticsearch', 'kafka', 'consul', 'redis', 'memcached', 'jhipster-registry'].forEach(dockerConfig => {
+                    const dockerFile = `src/main/docker/${dockerConfig}.yml`;
+                    if (this.fs.exists(this.destinationPath(dockerFile))) {
+                        if (['cassandra', 'couchbase'].includes(dockerConfig)) {
+                            scriptsStorage.set(`docker:${dockerConfig}:build`, `docker-compose -f ${dockerFile} build`);
+                            dockerBuild.push(`npm run docker:${dockerConfig}:build`);
+                        }
+                        scriptsStorage.set(`docker:${dockerConfig}`, `docker-compose -f ${dockerFile} up -d`);
+                        dockerOthers.push(`npm run docker:${dockerConfig}`);
+                    }
+                });
+                scriptsStorage.set({
+                    'predocker:others': dockerBuild.join(' && '),
+                    'docker:others': dockerOthers.join(' && '),
+                    'ci:e2e:prepare:docker': 'npm run docker:db && npm run docker:others && docker ps -a',
+                });
+            },
+            packageJsonBackendScripts() {
+                const packageJsonStorage = this.createStorage('package.json');
+                const scriptsStorage = packageJsonStorage.createStorage('scripts');
+                const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.org.zalando=OFF -Dlogging.level.io.github.jhipster=OFF -Dlogging.level.${this.jhipsterConfig.packageName}=OFF`;
+                const javaTestLog =
+                    '-Dlogging.level.org.springframework=OFF -Dlogging.level.org.springframework.web=OFF -Dlogging.level.org.springframework.security=OFF';
+
+                const buildTool = this.jhipsterConfig.buildTool;
+                let e2ePackage = 'target/e2e';
+                if (buildTool === 'maven') {
+                    scriptsStorage.set({
+                        'backend:info': './mvnw -ntp enforcer:display-info --batch-mode',
+                        'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
+                        'backend:nohttp:test': './mvnw -ntp checkstyle:check --batch-mode',
+                        'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
+                        'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
+                        'java:docker': './mvnw -ntp verify -DskipTests jib:dockerBuild',
+                        'backend:unit:test': `./mvnw -ntp -P-webpack verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
+                    });
+                } else if (buildTool === 'gradle') {
+                    const excludeWebpack = this.jhipsterConfig.skipClient ? '' : '-x webpack';
+                    e2ePackage = 'e2e';
+                    scriptsStorage.set({
+                        'backend:info': './gradlew -v',
+                        'backend:doc:test': `./gradlew javadoc ${excludeWebpack}`,
+                        'backend:nohttp:test': `./gradlew checkstyleNohttp ${excludeWebpack}`,
+                        'java:jar': './gradlew bootJar -x test',
+                        'java:war': './gradlew bootWar -Pwar -x test',
+                        'java:docker': './gradlew bootJar jibDockerBuild',
+                        'backend:unit:test': `./gradlew test integrationTest ${excludeWebpack} ${javaCommonLog} ${javaTestLog}`,
+                        'postci:e2e:package': 'cp build/libs/*SNAPSHOT.$npm_package_config_packaging e2e.$npm_package_config_packaging',
+                    });
+                }
+
+                scriptsStorage.set({
+                    'java:jar:dev': 'npm run java:jar -- -Pdev,webpack',
+                    'java:jar:prod': 'npm run java:jar -- -Pprod',
+                    'java:war:dev': 'npm run java:war -- -Pdev,webpack',
+                    'java:war:prod': 'npm run java:war -- -Pprod',
+                    'java:docker:dev': 'npm run java:docker -- -Pdev,webpack',
+                    'java:docker:prod': 'npm run java:docker -- -Pprod',
+                    'ci:backend:test':
+                        'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test',
+                    'server:package': 'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment',
+                    'ci:e2e:package':
+                        'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
+                    'preci:e2e:server:start': 'npm run docker:db:await --if-present && npm run docker:others:await --if-present',
+                    'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=$npm_package_config_default_environment ${javaCommonLog} --logging.level.org.springframework.web=ERROR`,
+                });
+            },
+        };
+    }
+
+    get postWriting() {
+        if (useBlueprints) return;
+        return this._postWriting();
+    }
+
     _install() {
         return {
             installing() {
                 if (this.skipClient) {
-                    if (!this.options['skip-install']) {
-                        if (this.clientPackageManager === 'yarn') {
-                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));
-                            this.yarnInstall();
-                        } else if (this.clientPackageManager === 'npm') {
-                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
-                            this.npmInstall();
-                        }
+                    if (!this.options.skipInstall) {
+                        this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
+                        this.npmInstall();
                     }
                 }
             },
@@ -391,7 +534,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
         // user-management will be handled by UAA app, oauth expects users to be managed in IpP
         if ((config.applicationType === 'gateway' && config.authenticationType === 'uaa') || config.authenticationType === 'oauth2') {
-            this.info('user-management will be handled by UAA app, oauth expects users to be managed in IpP');
             config.skipUserManagement = true;
         }
 

@@ -1,6 +1,9 @@
 /* eslint-disable no-unused-expressions */
 const expect = require('chai').expect;
+const sinon = require('sinon');
 const assert = require('yeoman-assert');
+const helpers = require('yeoman-test');
+
 const expectedFiles = require('./utils/expected-files');
 const Base = require('../generators/generator-base');
 const { testInTempDir, revertTempDir } = require('./utils/utils');
@@ -55,17 +58,12 @@ describe('Generator Base', () => {
             });
         });
     });
-    describe('getPluralColumnName', () => {
-        describe('when called with a value', () => {
-            it('returns a plural column name', () => {
-                expect(BaseGenerator.getPluralColumnName('colName')).to.equal('col_names');
-            });
-        });
-    });
     describe('getJoinTableName', () => {
         describe('when called with a value', () => {
             it('returns a join table name', () => {
-                expect(BaseGenerator.getJoinTableName('entityName', 'relationshipName', 'mysql')).to.equal('entity_name_relationship_name');
+                expect(BaseGenerator.getJoinTableName('entityName', 'relationshipName', 'postgresql')).to.equal(
+                    'entity_name_relationship_name'
+                );
             });
         });
         describe('when called with a long name', () => {
@@ -80,7 +78,7 @@ describe('Generator Base', () => {
     describe('getFKConstraintName', () => {
         describe('when called with a value', () => {
             it('returns a constraint name', () => {
-                expect(BaseGenerator.getFKConstraintName('entityName', 'relationshipName', 'mysql')).to.equal(
+                expect(BaseGenerator.getFKConstraintName('entityName', 'relationshipName', 'postgresql')).to.equal(
                     'fk_entity_name_relationship_name_id'
                 );
             });
@@ -93,47 +91,47 @@ describe('Generator Base', () => {
                 );
             });
         });
-        describe('when called with a long name and mysql', () => {
+        describe('when called with a long name and postgresql', () => {
             it('returns a proper constraint name', () => {
                 expect(
                     BaseGenerator.getFKConstraintName(
                         'entityLongerNameWithPaginationAndDTO',
                         'relationshipLongerNameWithPaginationAndDTO',
-                        'mysql'
+                        'postgresql'
                     )
-                ).to.have.length(64);
+                ).to.have.length(63);
                 expect(
                     BaseGenerator.getFKConstraintName(
                         'entityLongerNameWithPaginationAndDTO',
                         'relationshipLongerNameWithPaginationAndDTO',
-                        'mysql'
+                        'postgresql'
                     )
-                ).to.equal('entity_longer_name_with_paginat_relationship_longer_name_with_id');
+                ).to.equal('entity_longer_name_with_pagina_relationship_longer_name_with_id');
             });
         });
-        describe('when called with a long name that is near limit and mysql', () => {
+        describe('when called with a long name that is near limit and postgresql', () => {
             it('returns a proper constraint name', () => {
                 expect(
-                    BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToMany', 'mysql').length
+                    BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToMany', 'postgresql').length
                 ).to.be.lessThan(64);
-                expect(BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToMany', 'mysql')).to.equal(
+                expect(BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToMany', 'postgresql')).to.equal(
                     'test_custom_table_name_user_many_to_many_user_many_to_many_id'
                 );
                 expect(
-                    BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', 'mysql').length
+                    BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', 'postgresql').length
                 ).to.be.lessThan(64);
-                expect(BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', 'mysql')).to.equal(
+                expect(BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', 'postgresql')).to.equal(
                     'test_custom_table_name_user_many_to_many_user_many_to_manies_id'
                 );
             });
         });
-        describe('when called with a long name that is equal to limit and mysql', () => {
+        describe('when called with a long name that is equal to limit and postgresql', () => {
             it('returns a proper constraint name', () => {
-                expect(BaseGenerator.getFKConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'mysql')).to.have.length(
-                    64
-                );
-                expect(BaseGenerator.getFKConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'mysql')).to.equal(
-                    'test_custom_table_names_user_many_to_many_user_many_to_manies_id'
+                expect(
+                    BaseGenerator.getFKConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'postgresql')
+                ).to.have.length(63);
+                expect(BaseGenerator.getFKConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'postgresql')).to.equal(
+                    'test_custom_table_names_user_many_to_many_user_many_to_manie_id'
                 );
             });
         });
@@ -151,12 +149,14 @@ describe('Generator Base', () => {
     describe('getUXConstraintName', () => {
         describe('when called with a value', () => {
             it('returns a constraint name', () => {
-                expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', 'mysql')).to.equal('ux_entity_name_column_name');
+                expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', 'postgresql')).to.equal('ux_entity_name_column_name');
             });
         });
         describe('when called with a value and no snake case', () => {
             it('returns a constraint name', () => {
-                expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', 'mysql', true)).to.equal('ux_entityName_columnName');
+                expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', 'postgresql', true)).to.equal(
+                    'ux_entityName_columnName'
+                );
             });
         });
         describe('when called with a long name and oracle', () => {
@@ -167,62 +167,62 @@ describe('Generator Base', () => {
                 );
             });
         });
-        describe('when called with a long name and mysql', () => {
+        describe('when called with a long name and postgresql', () => {
             it('returns a proper constraint name', () => {
                 expect(
                     BaseGenerator.getUXConstraintName(
                         'entityLongerNameWithPaginationAndDTO',
                         'columnLongerNameWithPaginationAndDTO',
-                        'mysql'
+                        'postgresql'
                     )
-                ).to.have.length(64);
+                ).to.have.length(63);
                 expect(
                     BaseGenerator.getUXConstraintName(
                         'entityLongerNameWithPaginationAndDTO',
                         'columnLongerNameWithPaginationAndDTO',
-                        'mysql'
+                        'postgresql'
                     )
-                ).to.equal('ux_entity_longer_name_with_paginat_column_longer_name_with_pagin');
+                ).to.equal('ux_entity_longer_name_with_pagina_column_longer_name_with_pagin');
             });
         });
-        describe('when called with a long name that is near limit and mysql', () => {
+        describe('when called with a long name that is near limit and postgresql', () => {
             it('returns a proper constraint name', () => {
                 expect(
-                    BaseGenerator.getUXConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', 'mysql').length
+                    BaseGenerator.getUXConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', 'postgresql').length
                 ).to.be.lessThan(64);
-                expect(BaseGenerator.getUXConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', 'mysql')).to.equal(
+                expect(BaseGenerator.getUXConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', 'postgresql')).to.equal(
                     'ux_test_custom_table_name_user_many_to_many_user_many_to_manies'
                 );
             });
         });
-        describe('when called with a long name that is equal to limit and mysql', () => {
+        describe('when called with a long name that is equal to limit and postgresql', () => {
             it('returns a proper constraint name', () => {
-                expect(BaseGenerator.getUXConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'mysql')).to.have.length(
-                    64
-                );
-                expect(BaseGenerator.getUXConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'mysql')).to.equal(
-                    'ux_test_custom_table_names_user_many_to_many_user_many_to_manies'
+                expect(
+                    BaseGenerator.getUXConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'postgresql')
+                ).to.have.length(63);
+                expect(BaseGenerator.getUXConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'postgresql')).to.equal(
+                    'ux_test_custom_table_names_user_many_to_many_user_many_to_manie'
                 );
             });
         });
-        describe('when called with a long name and mysql and no snake case', () => {
+        describe('when called with a long name and postgresql and no snake case', () => {
             it('returns a proper constraint name', () => {
                 expect(
                     BaseGenerator.getUXConstraintName(
                         'entityLongerNameWithPaginationAndDTO',
                         'columnLongerNameWithPaginationAndDTO',
-                        'mysql',
+                        'postgresql',
                         true
                     )
-                ).to.have.length(64);
+                ).to.have.length(63);
                 expect(
                     BaseGenerator.getUXConstraintName(
                         'entityLongerNameWithPaginationAndDTO',
                         'columnLongerNameWithPaginationAndDTO',
-                        'mysql',
+                        'postgresql',
                         true
                     )
-                ).to.equal('ux_entityLongerNameWithPaginationA_columnLongerNameWithPaginatio');
+                ).to.equal('ux_entityLongerNameWithPagination_columnLongerNameWithPaginatio');
             });
         });
     });
@@ -240,17 +240,23 @@ describe('Generator Base', () => {
             });
         });
     });
-    describe('getAngularAppName', () => {
-        describe('when called with name', () => {
-            it('return the angular app name', () => {
-                BaseGenerator.baseName = 'myTest';
-                expect(BaseGenerator.getAngularAppName()).to.equal('myTestApp');
+    describe('getFrontendAppName', () => {
+        describe('when called with name having App', () => {
+            it('returns the frontend app name', () => {
+                BaseGenerator.jhipsterConfig = { baseName: 'myAmazingApp' };
+                expect(BaseGenerator.getFrontendAppName()).to.equal('myAmazingApp');
             });
         });
-        describe('when called with name having App', () => {
-            it('return the angular app name', () => {
-                BaseGenerator.baseName = 'myApp';
-                expect(BaseGenerator.getAngularAppName()).to.equal('myApp');
+        describe('when called with name', () => {
+            it('returns the frontend app name with the App suffix added', () => {
+                BaseGenerator.jhipsterConfig = { baseName: 'myAwesomeProject' };
+                expect(BaseGenerator.getFrontendAppName()).to.equal('myAwesomeProjectApp');
+            });
+        });
+        describe('when called with name starting with a digit', () => {
+            it('returns the default frontend app name - App', () => {
+                BaseGenerator.jhipsterConfig = { baseName: '1derful' };
+                expect(BaseGenerator.getFrontendAppName()).to.equal('App');
             });
         });
     });
@@ -309,66 +315,16 @@ describe('Generator Base', () => {
             });
         });
     });
-    describe('getEnumValuesWithCustomValues', () => {
-        describe('when not passing anything', () => {
-            it('should fail', () => {
-                expect(() => BaseGenerator.getEnumValuesWithCustomValues()).to.throw(
-                    /^Enumeration values must be passed to get the formatted values\.$/
-                );
-            });
-        });
-        describe('when passing an empty string', () => {
-            it('should fail', () => {
-                expect(() => BaseGenerator.getEnumValuesWithCustomValues('')).to.throw(
-                    /^Enumeration values must be passed to get the formatted values\.$/
-                );
-            });
-        });
-        describe('when passing a string without custom enum values', () => {
-            it('should return a formatted list', () => {
-                expect(BaseGenerator.getEnumValuesWithCustomValues('FRANCE, ENGLAND, ICELAND')).to.deep.equal([
-                    { name: 'FRANCE', value: 'FRANCE' },
-                    { name: 'ENGLAND', value: 'ENGLAND' },
-                    { name: 'ICELAND', value: 'ICELAND' },
-                ]);
-            });
-        });
-        describe('when passing a string with some custom enum values', () => {
-            it('should return a formatted list', () => {
-                expect(BaseGenerator.getEnumValuesWithCustomValues('FRANCE(france), ENGLAND, ICELAND (viking_country)')).to.deep.equal([
-                    { name: 'FRANCE', value: 'france' },
-                    { name: 'ENGLAND', value: 'ENGLAND' },
-                    { name: 'ICELAND', value: 'viking_country' },
-                ]);
-            });
-        });
-        describe('when passing a string custom enum values for each value', () => {
-            it('should return a formatted list', () => {
-                expect(BaseGenerator.getEnumValuesWithCustomValues('FRANCE(france), ENGLAND(england), ICELAND (iceland)')).to.deep.equal([
-                    { name: 'FRANCE', value: 'france' },
-                    { name: 'ENGLAND', value: 'england' },
-                    { name: 'ICELAND', value: 'iceland' },
-                ]);
-            });
-        });
-    });
     describe('dateFormatForLiquibase', () => {
         let base;
         let oldCwd;
-        before(() => {
+        let options;
+        beforeEach(() => {
             oldCwd = testInTempDir(() => {}, true);
-            base = new Base();
-            base.configOptions = base.configOptions || {};
-        });
-        after(() => {
-            revertTempDir(oldCwd);
+            base = new Base({ ...options });
         });
         afterEach(() => {
-            base.config.delete('lastLiquibaseTimestamp');
-            base.config.delete('creationTimestamp');
-            delete base.options.withEntities;
-            delete base.options.creationTimestamp;
-            delete base.configOptions.reproducibleLiquibaseTimestamp;
+            revertTempDir(oldCwd);
         });
         describe('when there is no configured lastLiquibaseTimestamp', () => {
             let firstChangelogDate;
@@ -426,8 +382,11 @@ describe('Generator Base', () => {
             });
         });
         describe('with withEntities option', () => {
-            beforeEach(() => {
-                base.options.withEntities = true;
+            before(() => {
+                options = { withEntities: true };
+            });
+            after(() => {
+                options = undefined;
             });
             describe('with reproducible=false argument', () => {
                 let firstChangelogDate;
@@ -452,8 +411,10 @@ describe('Generator Base', () => {
             describe('with a past creationTimestamp option', () => {
                 let firstChangelogDate;
                 let secondChangelogDate;
+                before(() => {
+                    options.creationTimestamp = '2000-01-01';
+                });
                 beforeEach(() => {
-                    base.options.creationTimestamp = '2000-01-01';
                     firstChangelogDate = base.dateFormatForLiquibase();
                     secondChangelogDate = base.dateFormatForLiquibase();
                 });
@@ -472,13 +433,135 @@ describe('Generator Base', () => {
                 });
             });
             describe('with a future creationTimestamp option', () => {
-                beforeEach(() => {
-                    base.options.creationTimestamp = '2030-01-01';
-                });
-                it('should return a valid changelog date', () => {
-                    expect(() => base.dateFormatForLiquibase()).to.throw(/^Creation timestamp should not be in the future: 2030-01-01\.$/);
+                it('should throw', () => {
+                    options.creationTimestamp = '2030-01-01';
+                    expect(() => new Base({ ...options })).to.throw(/^Creation timestamp should not be in the future: 2030-01-01\.$/);
                 });
             });
+        });
+    });
+    describe('priorities', () => {
+        let mockedPriorities;
+        const priorities = [
+            'initializing',
+            'prompting',
+            'configuring',
+            'composing',
+            'loading',
+            'preparing',
+            'default',
+            'writing',
+            'postWriting',
+            'install',
+            'end',
+        ];
+        before(() => {
+            mockedPriorities = {};
+            priorities.forEach(priority => {
+                mockedPriorities[priority] = sinon.fake();
+            });
+            const mockBlueprintSubGen = class extends Base {
+                get initializing() {
+                    return {
+                        mocked() {
+                            mockedPriorities.initializing();
+                        },
+                    };
+                }
+
+                get prompting() {
+                    return {
+                        mocked() {
+                            mockedPriorities.prompting();
+                        },
+                    };
+                }
+
+                get configuring() {
+                    return {
+                        mocked() {
+                            mockedPriorities.configuring();
+                        },
+                    };
+                }
+
+                get composing() {
+                    return {
+                        mocked() {
+                            mockedPriorities.composing();
+                        },
+                    };
+                }
+
+                get loading() {
+                    return {
+                        mocked() {
+                            mockedPriorities.loading();
+                        },
+                    };
+                }
+
+                get preparing() {
+                    return {
+                        mocked() {
+                            mockedPriorities.preparing();
+                        },
+                    };
+                }
+
+                get default() {
+                    return {
+                        mocked() {
+                            mockedPriorities.default();
+                        },
+                    };
+                }
+
+                get writing() {
+                    return {
+                        mocked() {
+                            mockedPriorities.writing();
+                        },
+                    };
+                }
+
+                get postWriting() {
+                    return {
+                        mocked() {
+                            mockedPriorities.postWriting();
+                        },
+                    };
+                }
+
+                get install() {
+                    return {
+                        mocked() {
+                            mockedPriorities.install();
+                        },
+                    };
+                }
+
+                get end() {
+                    return {
+                        mocked() {
+                            mockedPriorities.end();
+                        },
+                    };
+                }
+            };
+            return helpers.create(mockBlueprintSubGen).run();
+        });
+
+        priorities.forEach((priority, idx) => {
+            it(`should execute ${priority}`, () => {
+                assert(mockedPriorities[priority].calledOnce);
+            });
+            if (idx > 0) {
+                const lastPriority = priorities[idx - 1];
+                it(`should execute ${priority} after ${lastPriority} `, () => {
+                    assert(mockedPriorities[priority].calledAfter(mockedPriorities[lastPriority]));
+                });
+            }
         });
     });
 });

@@ -47,19 +47,6 @@ const appOut = appName.concat('-', suffix); _%>
 # messagebroker
 - messagebroker-<%= suffix %>/kafka.yml
 <%_ } _%>
-<%_ if (monitoring === 'elk') {
-    const consoleOut = 'console'.concat('-', suffix); _%>
-# monitoring elk
-- <%= consoleOut %>/jhipster-elasticsearch.yml
-- <%= consoleOut %>/jhipster-logstash.yml
-- <%= consoleOut %>/jhipster-console.yml
-- <%= consoleOut %>/jhipster-dashboard-console.yml
-<%_ if (deploymentApplicationType === 'microservice') { _%>
-- <%= consoleOut %>/jhipster-zipkin.yml
-<%_ } _%>
-<%_ if (istio) { _%>
-- <%= consoleOut %>/jhipster-console-gateway.yml
-<%_ } } _%>
 <%_ if (monitoring === 'prometheus') {
     const monitOut = 'monitoring'.concat('-', suffix); _%>
 # monitoring prometheus

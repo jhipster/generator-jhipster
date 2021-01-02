@@ -146,7 +146,7 @@ module.exports = class extends needleClientBase {
         }
     }
 
-    addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu) {
+    addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue = _.startCase(routerName)) {
         const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
         const entityMenuPath = `${this.CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
         const entityEntry =
@@ -154,7 +154,7 @@ module.exports = class extends needleClientBase {
             this.generator.stripMargin(`|<li>
                              |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                              |                            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-                             |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
+                             |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${entityTranslationValue}</span>
                              |                        </a>
                              |                    </li>`);
         const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-entity-to-menu', entityEntry);
@@ -211,7 +211,7 @@ module.exports = class extends needleClientBase {
     }
 
     addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, entityUrl, microServiceName) {
-        const entityModulePath = `${this.CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`;
+        const entityModulePath = `${this.CLIENT_MAIN_SRC_DIR}app/entities/entity-routing.module.ts`;
         try {
             const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(
                 entityModulePath,
@@ -220,11 +220,10 @@ module.exports = class extends needleClientBase {
             );
 
             if (!isSpecificEntityAlreadyGenerated) {
-                const appName = this.generator.getAngularXAppName();
-                const modulePath = `./${entityFolderName}/${entityFileName}.module`;
+                const modulePath = `./${entityFolderName}/${entityFileName}-routing.module`;
                 const moduleName = microServiceName
-                    ? `${this.generator.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`
-                    : `${appName}${entityAngularName}Module`;
+                    ? `${this.generator.upperFirstCamelCase(microServiceName)}${entityAngularName}RoutingModule`
+                    : `${entityAngularName}RoutingModule`;
 
                 this._addRoute(entityUrl, modulePath, moduleName, 'jhipster-needle-add-entity-route', entityModulePath);
             }

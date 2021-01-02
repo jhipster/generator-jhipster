@@ -33,8 +33,8 @@ import {
     <%_ } _%>
   byteSize,
   <%_ } _%>
-  Translate<% if (searchEngine !== false) { %>, translate, ICrudSearchAction<% } %>,
-  ICrudGetAllAction<% if (fieldsContainDate) { %>, TextFormat<% } %>
+  Translate<% if (searchEngine !== false) { %>, translate, ICrudSearchAction<% } %>
+  <% if (fieldsContainDate) { %>, TextFormat<% } %>
   <%_ if (pagination !== 'no') { _%>
   , getSortState, IPaginationBaseState
   <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
@@ -42,6 +42,10 @@ import {
   <%_ }} _%>
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+<%_ if (fieldsContainDuration) { _%>
+import { DurationFormat } from 'app/shared/DurationFormat';
+<%_ } _%>
 
 import { IRootState } from 'app/shared/reducers';
 import {
@@ -151,7 +155,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
       resetAll();
     }
   }, [props.updateSuccess]);
-  
+
   useEffect(() => {
     getAllEntities()
   }, [paginationState.activePage]);
@@ -234,19 +238,36 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   <%_ } _%>
   <%_ } _%>
 
+  const handleSyncList = () => {
+    <% if (pagination === 'no') { %>
+      props.getEntities();
+    <% } %>
+    <% if (pagination === 'pagination') { %>
+      sortEntities();
+    <% } %>
+    <% if (pagination === 'infinite-scroll') { %>
+      resetAll();
+    <% } %>
+  };
+
   const { <%= entityInstance %>List, match, loading<% if (pagination === 'pagination') { %>, totalItems<% } %>} = props;
   return (
     <div>
-      <h2 id="<%= entityFileName %>-heading">
+      <h2 id="<%= entityFileName %>-heading" data-cy="<%= entityClass %>Heading">
         <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
-        <%_ if (!readOnly) { _%>
-        <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
-          <FontAwesomeIcon icon="plus" />&nbsp;
-          <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
-            Create new <%= entityClassHumanized %>
-          </Translate>
-        </Link>
-        <%_ } _%>
+        <div className="d-flex justify-content-end">
+          <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
+            <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</Translate>
+          </Button>
+          <%_ if (!readOnly) { _%>
+            <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+              <FontAwesomeIcon icon="plus" />&nbsp;
+              <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
+                Create new <%= entityClassHumanized %>
+              </Translate>
+            </Link>
+          <%_ } _%>
+        </div>
       </h2>
       <%_ if (searchEngine !== false) { _%>
       <Row>
@@ -282,7 +303,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
             <Table responsive>
               <thead>
                 <tr>
-                  <th<% if (pagination !== 'no') { %> className="hand" onClick={sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
+                  <th <% if (pagination !== 'no') { %> className="hand" onClick={sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
                   <%_ for (idx in fields) { _%>
                   <th<% if (pagination !== 'no') { %> className="hand" onClick={sort('<%= fields[idx].fieldName %>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${fields[idx].fieldName}` %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
                   <%_ } _%>
@@ -300,7 +321,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
               <tbody>
                 {
                   <%= entityInstance %>List.map((<%= entityInstance %>, i) => (
-                  <tr key={`entity-${i}`}>
+                  <tr key={`entity-${i}`} data-cy="entityTable">
                     <td>
                       <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}`} color="link" size="sm">
                         {<%= entityInstance %>.id}
@@ -316,10 +337,12 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                       {<%= entityInstance %>.<%= fields[idx].fieldName %> ? 'true' : 'false'}
                     <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
                       {<%= entityInstance %>.<%= fieldName %> ? <TextFormat type="date" value={<%= entityInstance %>.<%= fieldName %>} format={APP_DATE_FORMAT} />: null}
+                    <%_ } else if (fieldType === 'Duration') { _%>
+                      {<%= entityInstance %>.<%= fieldName %> ? <DurationFormat value={<%= entityInstance %>.<%= fieldName %>} />: null}
                     <%_ } else if (fieldType === 'LocalDate') { _%>
                       {<%= entityInstance %>.<%= fieldName %> ? <TextFormat type="date" value={<%= entityInstance %>.<%= fieldName %>} format={APP_LOCAL_DATE_FORMAT} />: null}
                     <%_ } else if (fieldIsEnum && enableTranslation) { _%>
-                      <Translate contentKey={`<%= angularAppName %>.<%= fieldType %>.${<%= entityInstance %>.<%= fieldName %>}`} />
+                      <Translate contentKey={`<%= frontendAppName %>.<%= fieldType %>.${<%= entityInstance %>.<%= fieldName %>}`} />
                     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
                       <%_
                         // blobFields
@@ -406,14 +429,14 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                       <%_ } _%>
                       <td className="text-right">
                         <div className="btn-group flex-btn-group-container">
-                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}`} color="info" size="sm">
+                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                             <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                           </Button>
                           <%_ if (!readOnly) { _%>
-                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/edit<%_ if (pagination === 'pagination') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="primary" size="sm">
+                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/edit<%_ if (pagination === 'pagination') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="primary" size="sm" data-cy="entityEditButton">
                             <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                           </Button>
-                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/delete<%_ if (pagination === 'pagination') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="danger" size="sm">
+                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/delete<%_ if (pagination === 'pagination') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="danger" size="sm" data-cy="entityDeleteButton">
                             <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                           </Button>
                           <%_ } _%>

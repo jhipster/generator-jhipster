@@ -23,7 +23,7 @@ describe('JHipster generator', () => {
                         return env;
                     })
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipInstall: true,
                         skipChecks: true,
                         jhiPrefix: 'test',
@@ -39,7 +39,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -59,7 +59,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.jwtServer.map(applyCustomizers));
                 assert.file(expectedFiles.maven.map(applyCustomizers));
                 assert.file(expectedFiles.dockerServices.map(applyCustomizers));
-                assert.file(expectedFiles.mysql.map(applyCustomizers));
+                assert.file(expectedFiles.postgresql.map(applyCustomizers));
                 assert.file(expectedFiles.hibernateTimeZoneConfig.map(applyCustomizers));
                 assert.file(
                     getFilesForOptions(angularFiles, {
@@ -87,7 +87,6 @@ describe('JHipster generator', () => {
             it('uses correct prettier formatting', () => {
                 // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
                 assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
-                assert.fileContent('tsconfig.base.json', / {2}"compilerOptions":/);
             });
         });
 
@@ -100,7 +99,7 @@ describe('JHipster generator', () => {
                         return env;
                     })
                     .withOptions({
-                        'from-cli': true,
+                        fromCli: true,
                         skipInstall: true,
                         skipChecks: true,
                         jhiPrefix: 'test',
@@ -117,7 +116,7 @@ describe('JHipster generator', () => {
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
@@ -137,7 +136,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.jwtServer.map(applyCustomizers));
                 assert.file(expectedFiles.maven.map(applyCustomizers));
                 assert.file(expectedFiles.dockerServices.map(applyCustomizers));
-                assert.file(expectedFiles.mysql.map(applyCustomizers));
+                assert.file(expectedFiles.postgresql.map(applyCustomizers));
                 assert.file(expectedFiles.hibernateTimeZoneConfig.map(applyCustomizers));
                 assert.file(
                     getFilesForOptions(reactFiles, {

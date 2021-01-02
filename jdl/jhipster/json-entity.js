@@ -20,7 +20,7 @@
 const { merge } = require('../utils/object-utils');
 const { formatDateForLiquibase, formatComment } = require('../utils/format-utils');
 const { upperFirst } = require('../utils/string-utils');
-const { createFromEntityName } = require('./entity-table-name-creator');
+const { getTableNameFromEntityName } = require('./entity-table-name-creator');
 
 /**
  * The JSONEntity class represents a read-to-be exported to JSON entity.
@@ -62,7 +62,9 @@ class JSONEntity {
         this.fluentMethods = merged.fluentMethods;
         this.readOnly = merged.readOnly;
         this.embedded = merged.embedded;
-        this.clientRootFolder = merged.clientRootFolder;
+        if (merged.clientRootFolder) {
+            this.clientRootFolder = merged.clientRootFolder;
+        }
         if (merged.microserviceName) {
             this.microserviceName = merged.microserviceName;
         }
@@ -120,7 +122,7 @@ function defaults(entityName) {
         relationships: [],
         changelogDate: formatDateForLiquibase(),
         javadoc: formatComment(),
-        entityTableName: createFromEntityName(entityName),
+        entityTableName: getTableNameFromEntityName(entityName),
         dto: 'no',
         pagination: 'no',
         service: 'no',
@@ -128,7 +130,6 @@ function defaults(entityName) {
         readOnly: false,
         embedded: false,
         jpaMetamodelFiltering: false,
-        clientRootFolder: '',
         applications: [],
     };
 }

@@ -24,10 +24,19 @@ const { formatComment } = require('../../utils/format-utils');
 
 module.exports = { convertRelationships };
 
-function convertRelationships(parsedRelationships, annotationToOptionConverter) {
+/**
+ * Converts parsed relationships to JDLRelationship objects.
+ * @param {Array<Object>} parsedRelationships - the parsed relationships.
+ * @param {Function} annotationToOptionConverter - the function that can convert annotations to options.
+ * @param {Object} conversionOptions - conversion options
+ * @param {Boolean} conversionOptions.generateBidirectionalOneToMany - whether to generate bidirectional one-to-many.
+ * @return {Array<JDLRelationship>} the converted JDL relationships.
+ */
+function convertRelationships(parsedRelationships, annotationToOptionConverter, conversionOptions = {}) {
     if (!parsedRelationships) {
         throw new Error('Relationships have to be passed so as to be converted.');
     }
+    const { generateBidirectionalOneToMany } = conversionOptions;
     return parsedRelationships.map(parsedRelationship => {
         const options = annotationToOptionConverter.call(undefined, parsedRelationship.options);
         const relationshipConfiguration = {
@@ -41,6 +50,7 @@ function convertRelationships(parsedRelationships, annotationToOptionConverter) 
             commentInFrom: formatComment(parsedRelationship.from.javadoc),
             commentInTo: formatComment(parsedRelationship.to.javadoc),
             options,
+            generateBidirectionalOneToMany,
         };
         if (!relationshipConfiguration.injectedFieldInFrom && !relationshipConfiguration.injectedFieldInTo) {
             relationshipConfiguration.injectedFieldInFrom = lowerFirst(relationshipConfiguration.to);

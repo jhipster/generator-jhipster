@@ -11,7 +11,7 @@
         "websocket": false,
         "databaseType": "sql",
         "devDatabaseType": "h2Memory",
-        "prodDatabaseType": "mysql",
+        "prodDatabaseType": "postgresql",
         "searchEngine": false,
         "messageBroker": false,
         "serviceDiscoveryType": false,
@@ -24,7 +24,7 @@
         "clientFramework": "react",
         "clientTheme": "none",
         "clientThemeVariant": "",
-        "testFrameworks": ["gatling", "protractor"],
+        "testFrameworks": ["gatling", "cypress"],
         "jhiPrefix": "jhi",
         "entitySuffix": "",
         "dtoSuffix": "DTO",
@@ -32,6 +32,7 @@
         "enableTranslation": true,
         "nativeLanguage": "en",
         "languages": ["en"],
-        "blueprints": []
+        "blueprints": [],
+        "creationTimestamp": 1596513172471
     }
 }

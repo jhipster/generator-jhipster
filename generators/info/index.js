@@ -119,16 +119,6 @@ module.exports = class extends BaseGenerator {
                 });
             },
 
-            checkYarn() {
-                const done = this.async();
-                shelljs.exec('yarn --version', { silent: true }, (err, stdout, stderr) => {
-                    if (!err) {
-                        console.log(`yarn: ${stdout}`);
-                    }
-                    done();
-                });
-            },
-
             checkDocker() {
                 const done = this.async();
                 shelljs.exec('docker -v', { silent: true }, (err, stdout, stderr) => {

@@ -15,7 +15,7 @@
         "messageBroker": false,
         "buildTool": "maven",
         "applicationType": "monolith",
-        "testFrameworks": ["gatling", "protractor"],
+        "testFrameworks": ["gatling", "cypress"],
         "jhiPrefix": "myPrefix",
         "serviceDiscoveryType": false,
         "enableTranslation": false,
@@ -27,6 +27,7 @@
         "entitySuffix": "",
         "dtoSuffix": "DTO",
         "otherModules": [],
-        "blueprints": []
+        "blueprints": [],
+        "creationTimestamp": 1596513172471
     }
 }

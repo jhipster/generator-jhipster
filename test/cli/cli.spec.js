@@ -1,29 +1,23 @@
 /* eslint-disable no-unused-expressions, no-console */
 
 const expect = require('chai').expect;
-const exec = require('child_process').exec;
+const { exec, fork } = require('child_process');
 const path = require('path');
 const proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 const sinon = require('sinon');
 const Environment = require('yeoman-environment');
 
-const {
-    getJHipsterCli,
-    testInTempDir,
-    prepareTempDir,
-    revertTempDir,
-    copyFakeBlueprint,
-    copyBlueprint,
-    lnYeoman,
-} = require('../utils/utils');
+const { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('../utils/utils');
 const { logger } = require('../../cli/utils');
 
-describe('jhipster cli test', () => {
-    let cwd;
-    before(() => {
-        cwd = prepareTempDir();
+const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'cli', 'cli.js'));
+
+describe('jhipster cli', () => {
+    let cleanup;
+    beforeEach(() => {
+        cleanup = prepareTempDir();
     });
-    after(() => revertTempDir(cwd));
+    afterEach(() => cleanup());
 
     const cmd = getJHipsterCli();
 
@@ -96,6 +90,7 @@ describe('jhipster cli test', () => {
             commands.mocked = { desc: 'Mocked command' };
             sinon.stub(Environment.prototype, 'run').callsFake((...args) => {
                 callback(...args);
+                return Promise.resolve();
             });
             sinon.stub(Environment.prototype, 'create').returns({ _options: {} });
         });
@@ -108,7 +103,7 @@ describe('jhipster cli test', () => {
             it('should pass a truthy fromCli', done => {
                 callback = (_command, options) => {
                     expect(options.fromCli).to.be.true;
-                    expect(options['from-cli']).to.be.true;
+                    expect(options.fromCli).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands });
@@ -134,7 +129,6 @@ describe('jhipster cli test', () => {
                     expect(command).to.be.equal('jhipster:mocked');
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands });
@@ -154,7 +148,6 @@ describe('jhipster cli test', () => {
                     expect(command).to.be.equal('jhipster:mocked Foo');
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands });
@@ -174,7 +167,6 @@ describe('jhipster cli test', () => {
                     expect(command).to.be.equal('jhipster:mocked Foo Bar');
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands });
@@ -199,7 +191,7 @@ describe('jhipster cli test', () => {
             it('should pass a truthy fromCli', done => {
                 const cb = (_args, options, _env) => {
                     expect(options.fromCli).to.be.true;
-                    expect(options['from-cli']).to.be.true;
+                    expect(options.fromCli).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
@@ -228,7 +220,27 @@ describe('jhipster cli test', () => {
                     expect(args).to.eql(['Foo']);
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
+                    done();
+                };
+                proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
+            });
+        });
+
+        describe('with negate argument', () => {
+            beforeEach(() => {
+                commands.mocked.desc = 'Mocked command';
+                commands.mocked.argument = ['name'];
+                commands.mocked.cliOnly = true;
+                process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--no-foo', '--no-foo-bar'];
+            });
+
+            commonTests();
+
+            it('should forward argument and options', done => {
+                const cb = (args, options) => {
+                    expect(args).to.eql(['Foo']);
+                    expect(options.foo).to.be.false;
+                    expect(options.fooBar).to.be.false;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
@@ -250,7 +262,6 @@ describe('jhipster cli test', () => {
                     expect(args).to.eql(['Foo', 'Bar']);
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
@@ -271,7 +282,6 @@ describe('jhipster cli test', () => {
                     expect(args).to.eql([]);
                     expect(options.foo).to.be.true;
                     expect(options.fooBar).to.be.true;
-                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
@@ -279,68 +289,138 @@ describe('jhipster cli test', () => {
         });
     });
 
-    it('should delegate to blueprint on blueprint command but will not find it', function (done) {
-        this.timeout(10000);
+    describe('when executing with blueprints', () => {
+        describe('delegating commands', () => {
+            describe('to blueprint without commands', () => {
+                let cbArgs;
+                beforeEach(done => {
+                    const tmpdir = process.cwd();
+                    copyFakeBlueprint(tmpdir, 'bar');
+                    exec(`${cmd} foo --blueprints bar`, (...args) => {
+                        cbArgs = args;
+                        done();
+                    });
+                });
 
-        testInTempDir(tmpdir => {
-            copyFakeBlueprint(tmpdir, 'bar');
-            exec(`${cmd} foo --blueprint bar`, (error, stdout, stderr) => {
-                expect(error).to.not.be.null;
-                expect(error.code).to.equal(1);
-                /* eslint-disable prettier/prettier */
-                expect(stdout.includes('No custom commands found within blueprint: generator-jhipster-bar')).to.be.true;
-                expect(stderr.includes('foo is not a known command')).to.be.true;
-                done();
+                it('should execute callback with error', () => {
+                    expect(cbArgs[0]).to.not.be.null;
+                    expect(cbArgs[0].code).to.equal(1);
+                });
+                it('should print warnings', () => {
+                    /* eslint-disable prettier/prettier */
+                    expect(cbArgs[1].includes('No custom commands found within blueprint: generator-jhipster-bar')).to.be.true;
+                    expect(cbArgs[2].includes('foo is not a known command')).to.be.true;
+                });
+            });
+
+            describe('to multiple blueprints without commands', () => {
+                let cbArgs;
+                beforeEach(done => {
+                    const tmpdir = process.cwd();
+                    copyFakeBlueprint(tmpdir, 'bar', 'baz');
+                    exec(`${cmd} foo --blueprints bar,baz`, (...args) => {
+                        cbArgs = args;
+                        done();
+                    });
+                });
+
+                it('should execute callback with error', () => {
+                    expect(cbArgs[0]).to.not.be.null;
+                    expect(cbArgs[0].code).to.equal(1);
+                });
+                it('should print warnings', () => {
+                    /* eslint-disable prettier/prettier */
+                    expect(cbArgs[1].includes('No custom commands found within blueprint: generator-jhipster-bar')).to.be.true;
+                    expect(cbArgs[1].includes('No custom commands found within blueprint: generator-jhipster-baz')).to.be.true;
+                    expect(cbArgs[2].includes('foo is not a known command')).to.be.true;
+                });
             });
         });
-    });
 
-    it('should delegate to blueprint on multiple blueprints command but will not find it', function (done) {
-        this.timeout(10000);
+        describe('loading sharedOptions', () => {
+            describe('using blueprint with sharedOptions', () => {
+                let stdout;
+                beforeEach(done => {
+                    const tmpdir = process.cwd();
+                    copyBlueprint(path.join(__dirname, '../templates/blueprint-cli'), tmpdir, 'cli');
+                    lnYeoman(tmpdir);
+                    const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli'], { stdio: 'pipe', cwd: tmpdir });
+                    forked.on('exit', () => {
+                        stdout = forked.stdout.read().toString();
+                        done();
+                    });
+                });
 
-        testInTempDir(tmpdir => {
-            copyFakeBlueprint(tmpdir, 'bar', 'baz');
-            exec(`${cmd} foo --blueprints bar,baz`, (error, stdout, stderr) => {
-                expect(error).to.not.be.null;
-                expect(error.code).to.equal(1);
-                /* eslint-disable prettier/prettier */
-                expect(stdout.includes('No custom commands found within blueprint: generator-jhipster-bar')).to.be.true;
-                expect(stdout.includes('No custom commands found within blueprint: generator-jhipster-baz')).to.be.true;
-                expect(stderr.includes('foo is not a known command')).to.be.true;
-                done();
+                it('should print sharedOptions info', () => {
+                    expect(stdout.includes('Running foo')).to.be.true;
+                    expect(stdout.includes('Running bar')).to.be.true;
+                    expect(stdout.includes('barValue')).to.be.true;
+                    expect(stdout.includes('fooValue')).to.be.false;
+                });
+            });
+
+            describe('using multiple blueprints with sharedOptions', () => {
+                let stdout;
+                beforeEach(done => {
+                    const tmpdir = process.cwd();
+                    copyBlueprint(path.join(__dirname, '../templates/blueprint-cli'), tmpdir, 'cli');
+                    copyBlueprint(path.join(__dirname, '../templates/blueprint-cli-shared'), tmpdir, 'cli-shared');
+                    lnYeoman(tmpdir);
+                    const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli'], { stdio: 'pipe', cwd: tmpdir });
+                    forked.on('exit', () => {
+                        stdout = forked.stdout.read().toString();
+                        done();
+                    });
+                });
+
+                it('should print sharedOptions info', () => {
+                    expect(stdout.includes('Running foo')).to.be.true;
+                    expect(stdout.includes('Running bar')).to.be.true;
+                    expect(stdout.includes('barValue')).to.be.true;
+                    expect(stdout.includes('fooValue')).to.be.false;
+                });
             });
         });
-    });
+        describe('loading options', () => {
+            describe('using blueprint with cli option', () => {
+                let stdout;
+                beforeEach(done => {
+                    const tmpdir = process.cwd();
+                    copyBlueprint(path.join(__dirname, '../templates/blueprint-cli'), tmpdir, 'cli');
+                    lnYeoman(tmpdir);
+                    const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli', '--help'], { stdio: 'pipe' });
+                    forked.on('exit', () => {
+                        stdout = forked.stdout.read().toString();
+                        done();
+                    });
+                });
 
-    it('should delegate to blueprint on multiple blueprints command with sharedOptions and find it', function (done) {
-        this.timeout(10000);
-
-        testInTempDir(tmpdir => {
-            copyBlueprint(path.join(__dirname, '../templates/blueprint-cli'), tmpdir, 'cli');
-            lnYeoman(tmpdir);
-            exec(`${cmd} foo --blueprints cli`, (error, stdout, stderr) => {
-                expect(stdout.includes('Running foo')).to.be.true;
-                expect(stdout.includes('Running bar')).to.be.true;
-                expect(stdout.includes('barValue')).to.be.true;
-                expect(stdout.includes('foorValue')).to.be.false;
-                done();
+                it('should print foo options', () => {
+                    expect(stdout.includes('--foo')).to.be.true;
+                    expect(stdout.includes('foo description (blueprint option: generator-jhipster-cli)')).to.be.true;
+                });
             });
-        });
-    });
 
-    it('should delegate to blueprint on multiple blueprints command with multiple sharedOptions and find it', function (done) {
-        this.timeout(10000);
+            describe('using blueprint with generator option', () => {
+                let stdout;
+                beforeEach(done => {
+                    const tmpdir = process.cwd();
+                    copyBlueprint(path.join(__dirname, '../templates/blueprint-cli-shared'), tmpdir, 'cli-shared');
+                    lnYeoman(tmpdir);
+                    const forked = fork(jhipsterCli, ['bar', '--blueprints', 'cli-shared', '--help'], { stdio: 'pipe', cwd: tmpdir });
+                    forked.on('exit', () => {
+                        stdout = forked.stdout.read().toString();
+                        done();
+                    });
+                });
 
-        testInTempDir(tmpdir => {
-            copyBlueprint(path.join(__dirname, '../templates/blueprint-cli'), tmpdir, 'cli');
-            copyBlueprint(path.join(__dirname, '../templates/blueprint-cli-shared'), tmpdir, 'cli-shared');
-            lnYeoman(tmpdir);
-            exec(`${cmd} foo --blueprints cli,cli-shared`, (error, stdout, stderr) => {
-                expect(stdout.includes('Running foo')).to.be.true;
-                expect(stdout.includes('Running bar')).to.be.true;
-                expect(stdout.includes('fooValue')).to.be.true;
-                expect(stdout.includes('barValue')).to.be.true;
-                done();
+                it('should print bar command help', () => {
+                    expect(stdout.includes('Create a new bar. (blueprint: generator-jhipster-cli-shared)')).to.be.true;
+                });
+                it('should print foo option', () => {
+                    expect(stdout.includes('--foo')).to.be.true;
+                    expect(stdout.includes('foo description')).to.be.true;
+                });
             });
         });
     });

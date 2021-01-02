@@ -3,7 +3,41 @@ import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vu
   import { mixins } from 'vue-class-component';
   import JhiDataUtils from '@/shared/data/data-utils.service';
 <% } %>
-import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vuelidate/lib/validators';
+<%_
+  let fieldsContainedValidators = [];
+  for (idx in fields) {
+    if (fields[idx].fieldValidate === true) {
+      if (!fieldsContainedValidators.includes('numeric') && ['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fields[idx].fieldType)) {
+        fieldsContainedValidators.push('numeric');
+      }
+      if (!fieldsContainedValidators.includes('required') && fields[idx].fieldValidateRules.includes('required')) {
+        fieldsContainedValidators.push('required');
+      }
+      if (!fieldsContainedValidators.includes('minLength') && fields[idx].fieldValidateRules.includes('minlength')) {
+        fieldsContainedValidators.push('minLength');
+      }
+      if (!fieldsContainedValidators.includes('maxLength') && fields[idx].fieldValidateRules.includes('maxlength')) {
+        fieldsContainedValidators.push('maxLength');
+      }
+      if (!fieldsContainedValidators.includes('minValue') && fields[idx].fieldValidateRules.includes('min')) {
+        fieldsContainedValidators.push('minValue');
+      }
+      if (!fieldsContainedValidators.includes('maxValue') && fields[idx].fieldValidateRules.includes('max')) {
+        fieldsContainedValidators.push('maxValue');
+      }
+    }
+  }
+  for (idx in relationships) {
+    if (relationships[idx].relationshipValidate === true) {
+      if (!fieldsContainedValidators.includes('required')) {
+        fieldsContainedValidators.push('required');
+      }
+    }
+  }
+  if (fieldsContainedValidators.length !== 0) {
+    let validators = fieldsContainedValidators.toString();
+  _%>import {<%= validators %>} from 'vuelidate/lib/validators';
+<%_ } _%>
 <%_
     let dateFnsIncluded = false;
     for (idx in fields) {
@@ -13,6 +47,7 @@ import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vue
             dateFnsIncluded = true;
 _%>
 import format from 'date-fns/format';
+import isValid from 'date-fns/isValid';
 import parse from 'date-fns/parse';
 import parseISO from 'date-fns/parseISO';
 import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
@@ -26,19 +61,20 @@ import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
         const otherEntityAngularName = relationships[idx].otherEntityAngularName;
         const otherEntityFileName = relationships[idx].otherEntityFileName;
         const otherEntityFolderName = relationships[idx].otherEntityFileName;
+        const otherEntityClientRootFolder = relationships[idx].otherEntityClientRootFolder;
         const otherEntityModelName = relationships[idx].otherEntityModelName;
         if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) {
           hasManyToMany = true;
         }
+        if (!importEntitiesSeen.includes(otherEntityAngularName)) {
 _%>
   <% if (otherEntityAngularName === 'User' && authenticationType !== 'oauth2') { %>
 import UserService from '@/admin/user-management/user-management.service';
-  <% } else if (otherEntityAngularName !== 'User' && !importEntitiesSeen.includes(otherEntityAngularName)) { %>
-import <%= otherEntityAngularName %>Service from '../<%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
+  <% } else if (otherEntityAngularName !== 'User') { %>
+import <%= otherEntityAngularName %>Service from '@/entities/<%= otherEntityClientRootFolder %><%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
 import { I<%= otherEntityAngularName %> } from '@/shared/model/<%= otherEntityModelName %>.model';
-  <% } %>
+  <% } } %>
 <%_ importEntitiesSeen.push(otherEntityAngularName); } } _%>
-import AlertService from '@/shared/alert/alert.service';
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
@@ -59,7 +95,7 @@ const validations: any = {
     <%_ if (fields[idx].fieldValidateRules.includes('maxlength')) { _%>
       maxLength: maxLength(<%= fields[idx].fieldValidateRulesMaxlength %>),
     <%_ } _%>
-    <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
+    <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
     numeric,
     <%_ if (fields[idx].fieldValidateRules.includes('min')) { _%>
       min: minValue(<%= fields[idx].fieldValidateRulesMin %>),
@@ -87,7 +123,6 @@ const validations: any = {
   validations
 })
 export default class <%= entityAngularName %>Update extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
-  @Inject('alertService') private alertService: () => AlertService;
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service: () => <%= entityAngularName %>Service;
   public <%= entityInstance %>: I<%= entityAngularName %> = new <%= entityAngularName %>();
   <%_
@@ -155,7 +190,13 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
         <%_ } else {_%>
         const message = 'A <%= entityAngularName %> is updated with identifier ' + param.id;
         <%_ } _%>
-        this.alertService().showAlert(message, 'info');
+        return this.$root.$bvToast.toast(message.toString(), {
+          toaster: 'b-toaster-top-center',
+          title: 'Info',
+          variant: 'info',
+          solid: true,
+          autoHideDelay: 5000,
+        });
       });
     } else {
       this.<%= entityInstance %>Service().create(this.<%= entityInstance %>).then((param) => {
@@ -166,7 +207,13 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
         <%_ } else {_%>
         const message = 'A <%= entityAngularName %> is created with identifier ' + param.id;
         <%_ } _%>
-        this.alertService().showAlert(message, 'success');
+        this.$root.$bvToast.toast(message.toString(), {
+          toaster: 'b-toaster-top-center',
+          title: 'Success',
+          variant: 'success',
+          solid: true,
+          autoHideDelay: 5000,
+        });
       });
     }
   }
@@ -180,7 +227,7 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
             dateFunctionIncluded = true;
   _%>
     public convertDateTimeFromServer(date: Date): string {
-      if (date) {
+      if (date && isValid(date)) {
         return format(date, DATE_TIME_LONG_FORMAT);
       }
       return null;
@@ -239,12 +286,14 @@ _%>
   <%_ } _%>
   public initRelationships() : void {
     <%_
+        let entitiesSet = new Set();
         for (idx in relationships) {
           if (!relationships[idx].otherEntityIsEmbedded) {
           const otherEntityName = relationships[idx].otherEntityName;
           const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
           const otherEntityAngularName = relationships[idx].otherEntityAngularName;
-          if (!(otherEntityAngularName === 'User' && authenticationType === "oauth2")) {
+          if (!(otherEntityAngularName === 'User' && authenticationType === "oauth2") && !entitiesSet.has(otherEntityName)) {
+            entitiesSet.add(otherEntityName);
     _%>
     this.<%= otherEntityName %>Service().retrieve().then((res) => {
       this.<%= otherEntityNamePlural %> = res.data;

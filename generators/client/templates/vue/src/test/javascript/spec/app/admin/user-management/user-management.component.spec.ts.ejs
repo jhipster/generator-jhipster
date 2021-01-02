@@ -5,7 +5,6 @@ import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import AlertService from '@/shared/alert/alert.service';
 import * as config from '@/shared/config/config';
 import UserManagement from '@/admin/user-management/user-management.vue';
 import UserManagementClass from '@/admin/user-management/user-management.component';
@@ -20,7 +19,6 @@ const i18n = config.initI18N(localVue);
 <%_ } _%>
 const store = config.initVueXStore(localVue);
 localVue.component('font-awesome-icon', FontAwesomeIcon);
-localVue.component('b-alert', {});
 localVue.component('router-link', {});
 localVue.component('jhi-sort-indicator', {});
 localVue.directive('b-modal', {});
@@ -59,7 +57,6 @@ describe('UserManagement Component', () => {
         bModal: true
       },
       provide: {
-        alertService: () => new AlertService(store),
         userService: () => new UserManagementService()
       }
     });
@@ -73,7 +70,7 @@ describe('UserManagement Component', () => {
       await userManagement.$nextTick();
 
       // THEN
-      expect(mockedAxios.get).toHaveBeenCalledWith(`api/users<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>?sort=id,desc&page=0&size=20<%_ } _%>`);
+      expect(mockedAxios.get).toHaveBeenCalledWith(`api/users<%_ if (databaseType !== 'cassandra') { _%>?sort=id,asc&page=0&size=20<%_ } _%>`);
     });
   });
 
@@ -88,14 +85,21 @@ describe('UserManagement Component', () => {
 
       // THEN
       expect(mockedAxios.put).toHaveBeenCalledWith(`api/users`, { id: <%- tsKeyId %>, activated: true });
-      expect(mockedAxios.get).toHaveBeenCalledWith(`api/users<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>?sort=id,desc&page=0&size=20<%_ } _%>`);
+      expect(mockedAxios.get).toHaveBeenCalledWith(`api/users<%_ if (databaseType !== 'cassandra') { _%>?sort=id,asc&page=0&size=20<%_ } _%>`);
     });
   });
 
   describe('confirmDelete', () => {
     it('Should call delete service on confirmDelete', async () => {
       // GIVEN
-      mockedAxios.delete.mockReturnValue(Promise.resolve({ headers: {} }));
+      mockedAxios.delete.mockReturnValue(
+        Promise.resolve({
+          headers: {
+            'x-jhipsterapp-alert': '',
+            'x-jhipsterapp-params': '',
+          },
+        })
+      );
 
       // WHEN
       userManagement.prepareRemove({ login: <%- tsKeyId %> });
@@ -104,7 +108,7 @@ describe('UserManagement Component', () => {
 
       // THEN
       expect(mockedAxios.delete).toHaveBeenCalledWith('api/users/' + <%- tsKeyId %>);
-      expect(mockedAxios.get).toHaveBeenCalledWith(`api/users<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>?sort=id,desc&page=0&size=20<%_ } _%>`);
+      expect(mockedAxios.get).toHaveBeenCalledWith(`api/users<%_ if (databaseType !== 'cassandra') { _%>?sort=id,asc&page=0&size=20<%_ } _%>`);
     });
   });
 <%_ if (databaseType !== 'cassandra') { _%>

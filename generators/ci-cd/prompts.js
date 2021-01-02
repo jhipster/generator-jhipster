@@ -58,6 +58,12 @@ function askPipeline() {
         return;
     }
 
+    if (this.autoconfigureCircleCI) {
+        this.log('Auto-configuring CircleCI');
+        this.pipeline = 'circle';
+        return;
+    }
+
     const done = this.async();
     const prompts = [
         {
@@ -110,6 +116,12 @@ function askIntegrations() {
     if (this.autoconfigureGithub) {
         this.log('Auto-configuring GitHub Actions');
         this.pipeline = 'github';
+        return;
+    }
+
+    if (this.autoconfigureCircleCI) {
+        this.log('Auto-configuring CircleCI');
+        this.pipeline = 'circle';
         return;
     }
 

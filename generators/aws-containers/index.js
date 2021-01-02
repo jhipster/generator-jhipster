@@ -96,9 +96,9 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold('This AWS generator will help you deploy your JHipster app as a Docker container on AWS.'));
             },
             option() {
-                this.deployNow = this.options['skip-install'];
-                this.skipUpload = this.options['skip-upload'];
-                this.skipBuild = this.options['skip-build'];
+                this.deployNow = this.options.skipInstall;
+                this.skipUpload = this.options.skipUpload;
+                this.skipBuild = this.options.skipBuild;
             },
             getConfig() {
                 if (fileUtils.doesFileExist('awsConstants.json')) {
@@ -143,10 +143,7 @@ module.exports = class extends BaseGenerator {
                     data => this.log.error(data.toString().trim())
                 );
 
-                awsClient.CF().setOutputs(
-                    message => this.log(message),
-                    message => this.log.error(message)
-                );
+                awsClient.CF().setOutputs(message => this.log(message));
             },
             fetchRegion() {
                 if (this.abort) return;
@@ -370,8 +367,6 @@ module.exports = class extends BaseGenerator {
             },
             springProjectChanges() {
                 if (this.abort) return;
-                const done = this.async();
-
                 this.appConfigs.forEach(config => {
                     const directory = `${this.directoryPath}${config.appFolder}`;
                     this.temp = {
@@ -382,23 +377,13 @@ module.exports = class extends BaseGenerator {
                     this.template(SPRING_FACTORIES_FILENAME, SPRING_FACTORIES_PATH(directory));
                     this.template(BOOTSTRAP_FILENAME, BOOTSTRAP_PATH(directory));
                 });
-
-                this.conflicter.resolve(() => {
-                    delete this.temp;
-                    done();
-                });
             },
             generateCloudFormationTemplate() {
                 if (this.abort) return;
-                const done = this.async();
-
                 this.template(BASE_TEMPLATE_FILENAME, BASE_TEMPLATE_PATH);
                 this.aws.apps.forEach(config =>
                     this.template(APP_TEMPLATE_FILENAME, APP_TEMPLATE_PATH(config.baseName), null, {}, { aws: this.aws, app: config })
                 );
-                this.conflicter.resolve(() => {
-                    done();
-                });
             },
         };
     }
@@ -489,7 +474,7 @@ module.exports = class extends BaseGenerator {
 
                 return Promise.all(promises)
                     .then(() => done())
-                    .catch(e => {
+                    .catch(() => {
                         this.abort = true;
                         done();
                     });
@@ -613,7 +598,7 @@ module.exports = class extends BaseGenerator {
 
                 return Promise.all(promises)
                     .then(() => done())
-                    .catch(e => {
+                    .catch(() => {
                         this.abort = true;
                         done();
                     });
@@ -639,7 +624,7 @@ module.exports = class extends BaseGenerator {
 
                 return Promise.all(promises)
                     .then(() => done())
-                    .catch(e => {
+                    .catch(() => {
                         this.abort = true;
                         done();
                     });
@@ -672,10 +657,10 @@ module.exports = class extends BaseGenerator {
                     const repository = `${app.EcrRepositoryUri}:latest`;
                     return dockerCli
                         .pushImage(repository)
-                        .then(ok => {
+                        .then(() => {
                             this.log.ok(`Image is now pushed to repository ${repository}.`);
                         })
-                        .catch(err => {
+                        .catch(() => {
                             this.log.error("Couldn't push image to AWS ECR Repository");
                         });
                 });

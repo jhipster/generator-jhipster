@@ -74,7 +74,6 @@ const optionNames = {
     SKIP_USER_MANAGEMENT: 'skipUserManagement',
     TEST_FRAMEWORKS: 'testFrameworks',
     UAA_BASE_NAME: 'uaaBaseName',
-    USE_NPM: 'useNpm',
     USE_SASS: 'useSass',
     WEBSOCKET: 'websocket',
     WITH_ENTITIES: 'withEntities',
@@ -116,7 +115,6 @@ const optionValues = {
         vue: 'vue',
     },
     [optionNames.CLIENT_PACKAGE_MANAGER]: {
-        yarn: 'yarn',
         npm: 'npm',
     },
     [optionNames.CLIENT_THEME]: 'none',
@@ -186,6 +184,7 @@ const optionValues = {
     [optionNames.SKIP_USER_MANAGEMENT]: false,
     [optionNames.TEST_FRAMEWORKS]: {
         protractor: 'protractor',
+        cypress: 'cypress',
         cucumber: 'cucumber',
         gatling: 'gatling',
     },
