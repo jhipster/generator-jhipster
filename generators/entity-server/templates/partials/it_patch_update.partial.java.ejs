@@ -40,14 +40,14 @@ partialUpdated<%= persistClass %>.set<%= primaryKey.nameCapitalized %>(<%= persi
 <%_ if (reactive) { _%>
 webTestClient
 .patch()
-.uri(ENTITY_API_URL_ID, partialUpdated<%= asEntity(entityClass) %>.get<%= primaryKey.nameCapitalized %>())
+.uri(ENTITY_API_URL_ID, partialUpdated<%= persistClass %>.get<%= primaryKey.nameCapitalized %>())
 .contentType(MediaType.valueOf("application/merge-patch+json"))
 .bodyValue(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + persistClass %>))
 .exchange()
 .expectStatus()
 .isOk();
 <%_ } else { _%>
-rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdated<%= asEntity(entityClass) %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdated<%= persistClass %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
 .contentType("application/merge-patch+json")
 .content(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + persistClass %>)))
 .andExpect(status().isOk());
