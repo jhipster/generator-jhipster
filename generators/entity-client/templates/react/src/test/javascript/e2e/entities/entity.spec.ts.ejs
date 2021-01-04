@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -93,9 +93,9 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.table);
         await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount + 1);
         expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount + 1);
-        
+
         await <%= entityInstance %>ComponentsPage.delete<%= entityClass %>();
-        if(beforeRecordsCount !== 0) { 
+        if(beforeRecordsCount !== 0) {
           await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount);
           expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount);
         } else {

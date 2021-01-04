@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -103,7 +103,7 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
         <%_ }
         }); _%>
 
-    public <%= entityClass %>RepositoryInternalImpl(DatabaseClient db, ReactiveDataAccessStrategy dataAccessStrategy, EntityManager entityManager<%_ 
+    public <%= entityClass %>RepositoryInternalImpl(DatabaseClient db, ReactiveDataAccessStrategy dataAccessStrategy, EntityManager entityManager<%_
             reactiveUniqueEntityTypes.forEach(function(element) { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>) {
         this.db = db;
         this.dataAccessStrategy = dataAccessStrategy;
@@ -128,7 +128,7 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
         <%_ reactiveEagerRelations.forEach(function(rel) { _%>
         columns.addAll(<%= rel.otherEntityNameCapitalized %>SqlHelper.getColumns(<%= rel.relationshipName %>Table, "<%= rel.relationshipName %>"));
         <%_ }); _%>
-        SelectFromAndJoin<% if (reactiveEagerRelations.length > 0) { %>Condition<% } %> selectFrom = Select.builder().select(columns).from(entityTable)<%_ reactiveEagerRelations.forEach(function(rel) { 
+        SelectFromAndJoin<% if (reactiveEagerRelations.length > 0) { %>Condition<% } %> selectFrom = Select.builder().select(columns).from(entityTable)<%_ reactiveEagerRelations.forEach(function(rel) {
             const colName = _getJoinColumnName(rel); %>
             .leftOuterJoin(<%= rel.relationshipName %>Table).on(Column.create("<%= colName %>", entityTable)).equals(Column.create("id", <%= rel.relationshipName %>Table ))<%_ }); _%>;
 
@@ -233,9 +233,9 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
                 return (rel.relationshipType === 'many-to-many' && rel.ownerSide);
             }).forEach(function(rel, idx) {
                 if (idx === 0) { _%>
-        return entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId)<% 
+        return entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId)<%
                 } else { %>
-                .and(entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId))<% } 
+                .and(entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId))<% }
             }); %>;
     }
 
@@ -245,7 +245,7 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
 class <%= entityClass %>SqlHelper {
     static List<Expression> getColumns(Table table, String columnPrefix) {
         List<Expression> columns = new ArrayList<>();
-<%_ fields.forEach(function(field) { 
+<%_ fields.forEach(function(field) {
     let col = field.fieldNameAsDatabaseColumn;
     _%>
         columns.add(Column.aliased("<%= col %>", table, columnPrefix + "_<%= col %>"));

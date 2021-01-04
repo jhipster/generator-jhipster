@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -64,14 +64,14 @@ describe('AccountMenu', () => {
 
   it('Renders a authenticated AccountMenu component', () => {
     const html = authenticatedWrapper();
-    
+
     expect(html).not.toContain('/login');
     expect(html).toContain('/logout');
   });
 
   it('Renders a guest AccountMenu component', () => {
     const html = guestWrapper();
-    
+
     <%_ if (authenticationType === 'oauth2') { _%>
     expect(html).toContain(getLoginUrl());
     <%_ } else { _%>
