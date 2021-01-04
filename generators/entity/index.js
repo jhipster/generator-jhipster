@@ -863,17 +863,19 @@ class EntityGenerator extends BaseBlueprintGenerator {
           .forEach(relationship => {
             relationship.relationshipEagerLoad =
               !relationship.embedded &&
-              // Allows the entity to force earger load every relationship
               (this.context.eagerLoad ||
                 (this.context.paginate !== PAGINATION &&
-                  relationship.relationshipType === 'many-to-many' &&
-                  relationship.ownerSide === true)) &&
+                  relationship.ownerSide &&
+                  // Fetch relationships if otherEntityField differs otherwise the id is enough
+                  (relationship.collection || relationship.otherEntity.primaryKey.name !== relationship.otherEntityField))) &&
               // Neo4j & Couchbase eagerly loads relations by default
               ![NEO4J, COUCHBASE].includes(this.context.databaseType);
+            relationship.bagRelationship = relationship.relationshipEagerLoad && relationship.collection;
           });
         this.context.relationshipsContainEagerLoad = this.context.relationships.some(relationship => relationship.relationshipEagerLoad);
         this.context.eagerRelations = this.context.relationships.filter(rel => rel.relationshipEagerLoad);
         this.context.regularEagerRelations = this.context.eagerRelations.filter(rel => rel.id !== true);
+        this.context.containsBagRelationships = this.context.relationships.some(relationship => relationship.bagRelationship);
 
         this.context.reactiveEagerRelations = this.context.relationships.filter(
           rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true)

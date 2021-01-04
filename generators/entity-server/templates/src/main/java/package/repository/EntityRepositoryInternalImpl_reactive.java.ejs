@@ -156,7 +156,7 @@ _%>
         return createQuery(null, where(EntityManager.ENTITY_ALIAS + ".<%= primaryKey.name %>").is(id)).one();
     }
 
-<%_ if (fieldsContainOwnerManyToMany) { _%>
+<%_ if (relationshipsContainEagerLoad) { _%>
 
     @Override
     public Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id) {

@@ -813,7 +813,7 @@ _%>
   <%_ } _%>
         <%= entityInstance %>Repository.save(<%= persistInstance %>)<%= callBlock %>;
 
-        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = webTestClient.get().uri(ENTITY_API_URL)
+        List<<%= persistClass %>> <%= entityInstance %>List = webTestClient.get().uri(ENTITY_API_URL)
             .accept(MediaType.APPLICATION_NDJSON)
             .exchange()
             .expectStatus().isOk()
@@ -1577,7 +1577,7 @@ _%>
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
-        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
+        List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
 
@@ -1614,7 +1614,7 @@ _%>
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
-        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
+        List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
 
@@ -1651,7 +1651,7 @@ _%>
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
-        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
+        List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
 
