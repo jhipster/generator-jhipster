@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,7 +22,7 @@
 
         <div class="d-flex justify-content-end">
             <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
-                <fa-icon icon="sync" [spin]="isLoading"></fa-icon> <span <%= jhiPrefix %>Translate="userManagement.home.refreshListLabel">Refreh List</span>
+                <fa-icon icon="sync" [spin]="isLoading"></fa-icon> <span <%= jhiPrefix %>Translate="userManagement.home.refreshListLabel">Refresh List</span>
             </button>
             <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
                 <fa-icon icon="plus"></fa-icon> <span <%= jhiPrefix %>Translate="userManagement.home.createLabel">Create a new User</span>

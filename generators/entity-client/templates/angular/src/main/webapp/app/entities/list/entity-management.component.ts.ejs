@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -67,7 +67,7 @@ export class <%= entityAngularName %>Component implements OnInit {
         return this.dataUtils.byteSize(base64String);
     }
 
-    openFile(base64String: string, contentType = ''): void {
+    openFile(base64String: string, contentType: string | null | undefined): void {
         return this.dataUtils.openFile(base64String, contentType);
     }
     <%_ } _%>

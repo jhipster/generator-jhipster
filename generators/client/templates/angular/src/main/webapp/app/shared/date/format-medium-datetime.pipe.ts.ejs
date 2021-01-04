@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -24,7 +24,7 @@ import * as dayjs from 'dayjs';
   name: 'formatMediumDatetime',
 })
 export class FormatMediumDatetimePipe implements PipeTransform {
-  transform(day: dayjs.Dayjs | undefined): string {
+  transform(day: dayjs.Dayjs | null | undefined): string {
     return day ? day.format('D MMM YYYY HH:mm:ss') : '';
   }
 }

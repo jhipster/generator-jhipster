@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -29,11 +29,6 @@ const constants = require('../generator-constants');
 const exec = childProcess.exec;
 
 module.exports = class extends BaseGenerator {
-    constructor(args, opts) {
-        super(args, opts);
-        this.registerPrettierTransform();
-    }
-
     initializing() {
         this.log(chalk.bold('CloudFoundry configuration is starting'));
         const configuration = this.config;

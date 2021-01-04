@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -25,7 +25,7 @@ services:
             - ./prometheus/:/etc/prometheus/
         command:
             - '--config.file=/etc/prometheus/prometheus.yml'
-        # If you want to expose these ports outside your dev PC, 
+        # If you want to expose these ports outside your dev PC,
         # remove the "127.0.0.1:" prefix
         ports:
             - 127.0.0.1:9090:9090
@@ -40,7 +40,7 @@ services:
             - GF_SECURITY_ADMIN_PASSWORD=admin
             - GF_USERS_ALLOW_SIGN_UP=false
             - GF_INSTALL_PLUGINS=grafana-piechart-panel
-        # If you want to expose these ports outside your dev PC, 
+        # If you want to expose these ports outside your dev PC,
         # remove the "127.0.0.1:" prefix
         ports:
             - 127.0.0.1:3000:3000

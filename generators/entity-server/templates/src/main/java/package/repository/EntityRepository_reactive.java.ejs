@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -110,30 +110,29 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
 
         <%_ } _%>
 
-        <%_ for (idx in relationships) {
-                  let relationship = relationships[idx];
-                  let relationshipType = relationships[idx].relationshipType;
-                  let relationshipName = relationships[idx].relationshipName;
-                  let ownerSide = relationships[idx].ownerSide;
+        <%_ for (const relationship of relationships) {
+                  let relationshipType = relationship.relationshipType;
+                  let relationshipName = relationship.relationshipName;
+                  let ownerSide = relationship.ownerSide;
                   if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
 
     @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= getColumnName(relationshipName) %>_id = :id")
-    Flux<<%= asEntity(entityClass) %>> findBy<%= relationships[idx].relationshipNameCapitalized %>(<%= primaryKey.type %> id);
+    Flux<<%= asEntity(entityClass) %>> findBy<%= relationship.relationshipNameCapitalized %>(<%= primaryKey.type %> id);
 
     @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= getColumnName(relationshipName) %>_id IS NULL")
-    Flux<<%= asEntity(entityClass) %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();
+    Flux<<%= asEntity(entityClass) %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull();
               <%_ } else if (relationship.shouldWriteJoinTable) {
                   _%>
 
     @Query("SELECT entity.* FROM <%= entityTableName %> entity JOIN <%= relationship.joinTable.name %> joinTable ON entity.id = joinTable.<%= getColumnName(name) %>_id WHERE joinTable.<%= getColumnName(relationshipName) %>_id = :id")
-    Flux<<%= asEntity(entityClass) %>> findBy<%= relationships[idx].relationshipNameCapitalized %>(<%= primaryKey.type %> id);
+    Flux<<%= asEntity(entityClass) %>> findBy<%= relationship.relationshipNameCapitalized %>(<%= primaryKey.type %> id);
               <%_ } else if (relationshipType === 'one-to-one' && ownerSide === false) {
-                  let otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName;
-                  let otherEntityTableName = relationships[idx].otherEntityTableName;
+                  let otherEntityRelationshipName = relationship.otherEntityRelationshipName;
+                  let otherEntityTableName = relationship.otherEntityTableName;
                   _%>
 
     @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.id not in (select <%= getColumnName(otherEntityRelationshipName) %>_id from <%= otherEntityTableName %>)")
-    Flux<<%= asEntity(entityClass) %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();
+    Flux<<%= asEntity(entityClass) %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull();
               <%_ } _%>
         <%_ } _%>
 

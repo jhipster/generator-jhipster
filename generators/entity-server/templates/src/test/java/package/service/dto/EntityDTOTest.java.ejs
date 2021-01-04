@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -24,7 +24,7 @@ import <%= packageName %>.web.rest.TestUtil;
 <%_
 let id1;
 let id2;
-if (!embedded) { 
+if (!embedded) {
     id1 = getPrimaryKeyValue(primaryKey.type, databaseType, '1');
     id2 = getPrimaryKeyValue(primaryKey.type, databaseType, '2');
     if (id1.includes('UUID')) { _%>

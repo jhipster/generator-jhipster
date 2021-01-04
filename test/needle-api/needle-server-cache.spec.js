@@ -110,6 +110,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
                     skipInstall: true,
                     blueprint: 'myblueprint',
                     skipChecks: true,
+                    skipClient: true,
                 })
                 .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
                 .withPrompts({

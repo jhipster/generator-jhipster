@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+const assert = require('assert');
 const _ = require('lodash');
 const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
 
@@ -273,6 +274,19 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
         return data;
     };
     field.reference = fieldToReference(entityWithConfig, field);
+
+    if (field.mapstructExpression) {
+        assert.equal(
+            entityWithConfig.dto,
+            'mapstruct',
+            `@MapstructExpression requires an Entity with mapstruct dto [${entityWithConfig.name}.${field.fieldName}].`
+        );
+        // Remove from Entity.java and liquibase.
+        field.transient = true;
+        // Disable update form.
+        field.readonly = true;
+    }
+
     return field;
 }
 

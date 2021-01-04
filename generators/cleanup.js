@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -262,6 +262,15 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
         }
     }
+
+    if (generator.isJhipsterVersionLessThan('7.0.0-beta.1') && generator.jhipsterConfig) {
+        if (generator.jhipsterConfig.clientFramework === ANGULAR) {
+            generator.removeFile(`${ANGULAR_DIR}core/user/account.model.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/user/user.model.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/user/user.service.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/user/user.service.spec.ts`);
+        }
+    }
 }
 
 /**
@@ -411,7 +420,6 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${testDir}service/AuditEventServiceIT.java`);
         generator.removeFile(`${testDir}web/rest/AuditResourceIT.java`);
         generator.removeFile(`${testDir}repository/CustomAuditEventRepositoryIT.java`);
-        generator.removeFile(`${javaDir}config/CloudDatabaseConfiguration.java`);
 
         if (generator.databaseType === 'cassandra') {
             generator.removeFile(`${javaDir}config/metrics/package-info.java`);
@@ -424,6 +432,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         if (generator.searchEngine === 'elasticsearch') {
             generator.removeFile(`${testDir}config/ElasticsearchTestConfiguration.java`);
         }
+    }
+    if (generator.isJhipsterVersionLessThan('7.0.0-beta.1')) {
+        generator.removeFile(`${javaDir}config/CloudDatabaseConfiguration.java`);
     }
 }
 

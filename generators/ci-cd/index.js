@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -71,8 +71,6 @@ module.exports = class extends BaseGenerator {
             defaults: false,
             description: 'Automatically configure CircleCI',
         });
-
-        this.registerPrettierTransform();
     }
 
     get initializing() {

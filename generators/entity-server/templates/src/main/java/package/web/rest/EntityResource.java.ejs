@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,8 +22,8 @@ package <%= packageName %>.web.rest;
 const viaService = service !== 'no';
 
 let manyToManyWithUser = false;
-for (idx in relationships) {
-    if (relationships[idx].otherEntityName === 'user' && relationships[idx].relationshipType === 'many-to-many') {
+for (const relationship of relationships) {
+    if (relationship.otherEntityName === 'user' && relationship.relationshipType === 'many-to-many') {
         manyToManyWithUser = true;
         break;
     }

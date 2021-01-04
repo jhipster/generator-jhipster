@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -229,14 +229,14 @@ describe('<%= entityClass %> e2e test', () => {
 
         detailsPage = new <%= entityClass %>DetailsPage();
 
-        <%_ if (fields.length > 0 && databaseType !== 'neo4j') { _%>
+        <%_ if (fields.some(field => !field.id) && databaseType !== 'neo4j') { _%>
         await waitUntilAllDisplayed([detailsPage.title, detailsPage.backButton, detailsPage.firstDetail]);
         <%_ } else { _%>
         await waitUntilAllDisplayed([detailsPage.title, detailsPage.backButton]);
         <%_ } _%>
 
         expect(await detailsPage.title.getText()).not.to.be.empty;
-        <%_ if (fields.length > 0  && databaseType !== 'neo4j') { _%>
+        <%_ if (fields.some(field => !field.id) && databaseType !== 'neo4j') { _%>
         expect(await detailsPage.firstDetail.getText()).not.to.be.empty;
         <%_ } _%>
 

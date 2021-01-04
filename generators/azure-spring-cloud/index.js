@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -42,7 +42,6 @@ module.exports = class extends BaseGenerator {
 
         this.azureSpringCloudSkipBuild = this.options.skipBuild;
         this.azureSpringCloudSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
-        this.registerPrettierTransform();
     }
 
     initializing() {

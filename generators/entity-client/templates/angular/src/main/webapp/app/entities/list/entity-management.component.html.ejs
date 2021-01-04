@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -79,16 +79,16 @@ _%>
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
                 <tr<% if (pagination !== 'no') { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="<%= pagination !== 'infinite-scroll' ? 'loadPage.bind(this)' : 'reset.bind(this)'%>"<% } %>>
-                    <%_ for (idx in fields) { _%>
-                    <th scope="col"<% if (pagination !== 'no') { %> <%= jhiPrefix %>SortBy="<%= fields[idx].fieldName %>"<% } %>><span <%= jhiPrefix %>Translate="<%= fields[idx].fieldTranslationKey %>"><%= fields[idx].fieldNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                    <%_ for (const field of fields) { _%>
+                    <th scope="col"<% if (pagination !== 'no') { %> <%= jhiPrefix %>SortBy="<%= field.fieldName %>"<% } %>><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%= field.fieldNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
                     <%_ } _%>
-                    <%_ for (idx in relationships) { _%>
-                        <%_ if (relationships[idx].relationshipType === 'many-to-one'
-                                || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
-                                || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
-                            const fieldName = "." + relationships[idx].otherEntityField;
+                    <%_ for (const relationship of relationships) { _%>
+                        <%_ if (relationship.relationshipType === 'many-to-one'
+                                || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true)
+                                || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === true && pagination === 'no')) {
+                            const fieldName = "." + relationship.otherEntityField;
                         _%>
-                    <th scope="col" <% if (pagination !== 'no') { %> <%= jhiPrefix %>SortBy="<%= relationships[idx].relationshipName + (fieldName) %>"<% } %>><span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                    <th scope="col" <% if (pagination !== 'no') { %> <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>"<% } %>><span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%= relationship.relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
                         <%_ } _%>
                     <%_ } _%>
                     <th scope="col"></th>
@@ -100,10 +100,10 @@ _%>
                 const keys = idFields.map(idField => `${entityInstance}.${idField.fieldName}`);
                 const routerLink = idFields.length === 0 ? '' : ` [routerLink]="['/${ entityUrl }', ${ keys.join(', ') }, 'view']"`;
                 for ([idx, field] of fields.entries()) {
-                    const fieldName = fields[idx].fieldName;
-                    const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
-                    const fieldType = fields[idx].fieldType;
-                    const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+                    const fieldName = field.fieldName;
+                    const fieldNameCapitalized = field.fieldNameCapitalized;
+                    const fieldType = field.fieldType;
+                    const fieldTypeBlobContent = field.fieldTypeBlobContent;
                 _%>
                     <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
                     <td>
@@ -117,7 +117,7 @@ _%>
                         <a *ngIf="<%= entityInstance %>.<%= fieldName %>" (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open">open</a>
                         <span *ngIf="<%= entityInstance %>.<%= fieldName %>">{{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}</span>
                     </td>
-                    <%_ } else if (fields[idx].fieldIsEnum) { _%>
+                    <%_ } else if (field.fieldIsEnum) { _%>
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %> <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
                     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                     <td>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}</td>
@@ -129,16 +129,15 @@ _%>
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %>>{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
                     <%_ } _%>
                 <%_ } _%>
-                <%_ for (idx in relationships) {
-                    const relationship = relationships[idx];
-                    const relationshipType = relationships[idx].relationshipType;
-                    const ownerSide = relationships[idx].ownerSide;
-                    const relationshipFieldName = relationships[idx].relationshipFieldName;
-                    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-                    const otherEntityName = relationships[idx].otherEntityName;
-                    const otherEntityStateName = relationships[idx].otherEntityStateName;
-                    const otherEntityField = relationships[idx].otherEntityField;
-                    const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+                <%_ for (const relationship of relationships) {
+                    const relationshipType = relationship.relationshipType;
+                    const ownerSide = relationship.ownerSide;
+                    const relationshipFieldName = relationship.relationshipFieldName;
+                    const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+                    const otherEntityName = relationship.otherEntityName;
+                    const otherEntityStateName = relationship.otherEntityStateName;
+                    const otherEntityField = relationship.otherEntityField;
+                    const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
                 _%>
                     <%_ if (relationshipType === 'many-to-one'
                             || (relationshipType === 'one-to-one' && ownerSide === true)

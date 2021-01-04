@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,9 +18,42 @@
  */
 
 const { expect } = require('chai');
-const { getEnumValuesWithCustomValues } = require('../utils/field');
+const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../utils/entity');
+const { formatDateForChangelog } = require('../utils/liquibase');
+const { defaultConfig } = require('../generators/generator-defaults');
+const BaseGenerator = require('../generators/generator-base');
+const { prepareFieldForTemplates, getEnumValuesWithCustomValues } = require('../utils/field');
 
 describe('main utilities', () => {
+    const defaultGenerator = { jhipsterConfig: defaultConfig };
+    Object.setPrototypeOf(defaultGenerator, BaseGenerator.prototype);
+
+    const defaultEntity = prepareEntityForTemplates(
+        loadRequiredConfigIntoEntity({ changelogDate: formatDateForChangelog(new Date()), name: 'Entity' }, defaultConfig),
+        defaultGenerator
+    );
+
+    describe('prepareFieldForTemplates', () => {
+        describe('with dto != mapstruct and @MapstructExpression', () => {
+            const field = { fieldName: 'name', fieldType: 'String', mapstructExpression: 'java()' };
+            it('should fail', () => {
+                expect(() => prepareFieldForTemplates(defaultEntity, field, defaultGenerator)).to.throw(
+                    /^@MapstructExpression requires an Entity with mapstruct dto \[Entity.name\].$/
+                );
+            });
+        });
+        describe('with dto == mapstruct and @MapstructExpression', () => {
+            let field = { fieldName: 'name', fieldType: 'String', mapstructExpression: 'java()' };
+            beforeEach(() => {
+                field = prepareFieldForTemplates({ ...defaultEntity, dto: 'mapstruct' }, field, defaultGenerator);
+            });
+            it('should set field as transient and readonly', () => {
+                expect(field.transient).to.be.true;
+                expect(field.readonly).to.be.true;
+            });
+        });
+    });
+
     describe('getEnumValuesWithCustomValues', () => {
         describe('when not passing anything', () => {
             it('should fail', () => {

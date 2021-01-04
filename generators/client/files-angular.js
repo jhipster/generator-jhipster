@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -157,6 +157,7 @@ const files = {
                 'account/register/register.component.ts',
                 { file: 'account/register/register.component.html', method: 'processHtml' },
                 'account/register/register.service.ts',
+                'account/register/register.model.ts',
                 { file: 'account/password-reset/init/password-reset-init.route.ts', method: 'processJs' },
                 'account/password-reset/init/password-reset-init.component.ts',
                 { file: 'account/password-reset/init/password-reset-init.component.html', method: 'processHtml' },
@@ -279,6 +280,7 @@ const files = {
             templates: [
                 { file: 'admin/user-management/user-management.route.ts', method: 'processJs' },
                 'admin/user-management/user-management.module.ts',
+                'admin/user-management/user-management.model.ts',
                 'admin/user-management/list/user-management.component.ts',
                 { file: 'admin/user-management/list/user-management.component.html', method: 'processHtml' },
                 'admin/user-management/detail/user-management-detail.component.ts',
@@ -287,6 +289,7 @@ const files = {
                 { file: 'admin/user-management/update/user-management-update.component.html', method: 'processHtml' },
                 'admin/user-management/delete/user-management-delete-dialog.component.ts',
                 { file: 'admin/user-management/delete/user-management-delete-dialog.component.html', method: 'processHtml' },
+                'admin/user-management/service/user-management.service.ts',
             ],
         },
         {
@@ -306,7 +309,6 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                'core/user/account.model.ts',
                 'core/util/data-util.service.ts',
                 'core/util/parse-links.service.ts',
                 'core/util/alert.service.ts',
@@ -341,7 +343,7 @@ const files = {
         {
             condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
             path: ANGULAR_DIR,
-            templates: ['core/user/user.service.ts', 'core/user/user.model.ts'],
+            templates: ['entities/user/user.service.ts', 'entities/user/user.service.spec.ts', 'entities/user/user.model.ts'],
         },
         {
             condition: generator => generator.enableTranslation,
@@ -381,6 +383,7 @@ const files = {
             templates: [
                 'core/auth/state-storage.service.ts',
                 'shared/auth/has-any-authority.directive.ts',
+                'core/auth/account.model.ts',
                 'core/auth/account.service.ts',
                 'core/auth/user-route-access.service.ts',
             ],
@@ -467,8 +470,7 @@ const files = {
                 'admin/user-management/detail/user-management-detail.component.spec.ts',
                 'admin/user-management/update/user-management-update.component.spec.ts',
                 'admin/user-management/delete/user-management-delete-dialog.component.spec.ts',
-                // user service tests
-                'core/user/user.service.spec.ts',
+                'admin/user-management/service/user-management.service.spec.ts',
             ],
         },
         {

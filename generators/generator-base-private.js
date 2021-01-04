@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -1000,6 +1000,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         fields.forEach(field => {
             const fieldType = field.fieldType;
             const fieldName = field.fieldName;
+            const nullable = !field.id && field.nullable;
             let tsType = 'any';
             if (field.fieldIsEnum) {
                 tsType = fieldType;
@@ -1010,10 +1011,13 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             } else if (['String', 'UUID', 'Duration', 'byte[]', 'ByteBuffer'].includes(fieldType)) {
                 tsType = 'string';
                 if (['byte[]', 'ByteBuffer'].includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
-                    variablesWithTypes.push(`${fieldName}ContentType?: string`);
+                    variablesWithTypes.push(`${fieldName}ContentType?: ${nullable ? 'string | null' : 'string'}`);
                 }
             } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
                 tsType = customDateType;
+            }
+            if (nullable) {
+                tsType += ' | null';
             }
             variablesWithTypes.push(`${fieldName}?: ${tsType}`);
         });
@@ -1021,6 +1025,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         relationships.forEach(relationship => {
             let fieldType;
             let fieldName;
+            const nullable = !relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes('required');
             const relationshipType = relationship.relationshipType;
             if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
                 fieldType = `I${relationship.otherEntityAngularName}[]`;
@@ -1028,6 +1033,9 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             } else {
                 fieldType = `I${relationship.otherEntityAngularName}`;
                 fieldName = relationship.relationshipFieldName;
+            }
+            if (nullable) {
+                fieldType += ' | null';
             }
             variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
         });
@@ -1049,7 +1057,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             const importType = `I${otherEntityAngularName}`;
             let importPath;
             if (this.isBuiltInUser(otherEntityAngularName)) {
-                importPath = clientFramework === ANGULAR ? 'app/core/user/user.model' : 'app/shared/model/user.model';
+                importPath = clientFramework === ANGULAR ? 'app/entities/user/user.model' : 'app/shared/model/user.model';
             } else {
                 importPath =
                     clientFramework === ANGULAR
@@ -1431,6 +1439,10 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
 
         this.queueTask({
             method: () => {
+                if (this.env.rootGenerator() && this.env.rootGenerator() !== this) {
+                    return;
+                }
+
                 const prettierOptions = { plugins: [prettierPluginPackagejson] };
                 if (!this.skipServer && !this.jhipsterConfig.skipServer) {
                     prettierOptions.plugins.push(prettierPluginJava);

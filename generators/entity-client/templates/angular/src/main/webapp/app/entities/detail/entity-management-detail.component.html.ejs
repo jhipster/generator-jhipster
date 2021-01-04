@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -28,14 +28,14 @@
             <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
 
             <dl class="row-md jh-entity-details">
-                <%_ for (idx in fields) {
-                    const fieldName = fields[idx].fieldName;
-                    const fieldType = fields[idx].fieldType;
-                    const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+                <%_ for (const field of fields) {
+                    const fieldName = field.fieldName;
+                    const fieldType = field.fieldType;
+                    const fieldTypeBlobContent = field.fieldTypeBlobContent;
                 _%>
-                <dt><span <%= jhiPrefix %>Translate="<%= fields[idx].fieldTranslationKey %>"<% if (fields[idx].javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= fields[idx].javadoc %>"<% } } %>><%= fields[idx].fieldNameHumanized %></span></dt>
+                <dt><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"<% if (field.javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.javadoc %>"<% } } %>><%= field.fieldNameHumanized %></span></dt>
                 <dd>
-                    <%_ if (fields[idx].fieldIsEnum) { _%>
+                    <%_ if (field.fieldIsEnum) { _%>
                     <span <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}</span>
                     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
                     <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
@@ -61,18 +61,17 @@
                 </dd>
                 <%_ } _%>
                 <%_
-                for (idx in relationships) {
-                    const relationship = relationships[idx];
-                    const relationshipType = relationships[idx].relationshipType;
-                    const ownerSide = relationships[idx].ownerSide;
-                    const relationshipName = relationships[idx].relationshipName;
-                    const relationshipFieldName = relationships[idx].relationshipFieldName;
-                    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-                    const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
-                    const otherEntityName = relationships[idx].otherEntityName;
-                    const otherEntityStateName = relationships[idx].otherEntityStateName;
-                    const otherEntityField = relationships[idx].otherEntityField;
-                    const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+                for (const relationship of relationships) {
+                    const relationshipType = relationship.relationshipType;
+                    const ownerSide = relationship.ownerSide;
+                    const relationshipName = relationship.relationshipName;
+                    const relationshipFieldName = relationship.relationshipFieldName;
+                    const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+                    const relationshipNameHumanized = relationship.relationshipNameHumanized;
+                    const otherEntityName = relationship.otherEntityName;
+                    const otherEntityStateName = relationship.otherEntityStateName;
+                    const otherEntityField = relationship.otherEntityField;
+                    const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
                     if (relationshipType === 'many-to-one'
                         || (relationshipType === 'one-to-one' && ownerSide === true)
                         || (relationshipType === 'many-to-many' && ownerSide === true)) {

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,8 +23,8 @@ import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { LANGUAGES } from 'app/config/language.constants';
 <%_ } _%>
-import { User } from 'app/core/user/user.model';
-import { UserService } from 'app/core/user/user.service';
+import { User } from '../user-management.model';
+import { UserManagementService } from '../service/user-management.service';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-user-mgmt-update',
@@ -49,7 +49,7 @@ export class UserManagementUpdateComponent implements OnInit {
     authorities: [],
   });
 
-  constructor(private userService: UserService, private route: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(private userService: UserManagementService, private route: ActivatedRoute, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.route.data.subscribe(({ user }) => {

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -233,8 +233,6 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 
     Mono<Long> count();
     <% } else { %>
-    Page<<%= asEntity('User') %>> findAll(Pageable pageable);
-
     Page<<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
     <% } %>
 }

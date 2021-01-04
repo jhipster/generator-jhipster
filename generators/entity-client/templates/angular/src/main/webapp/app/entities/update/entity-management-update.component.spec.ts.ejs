@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -37,7 +37,7 @@ Object.keys(differentRelationships).forEach(key => {
         if (uniqueRel.otherEntityAngularName !== entityAngularName) {
             if (isBuiltInUser(uniqueRel.otherEntityAngularName)) {
 _%>
-import { User } from 'app/core/user/user.model';
+import { User } from 'app/entities/user/user.model';
 <%_
             } else {
 _%>
@@ -115,7 +115,7 @@ _%>
     _%>
             describe('track<%= otherEntity.entityAngularName %>By<%= otherEntity.primaryKey.nameCapitalized %>', () => {
                 it('Should return tracked <%= otherEntity.entityAngularName %> primary key', () => {
-                    const entity = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %>);
+                    const entity = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %><% if (isBuiltInUser(otherEntity.entityAngularName)) { %>, 'user'<% } %>);
                     const trackResult = comp.track<%= otherEntity.entityAngularName %>By<%= otherEntity.primaryKey.nameCapitalized %>(0, entity);
                     expect(trackResult).toEqual(entity.<%= otherEntity.primaryKey.name %>);
                 });
@@ -133,18 +133,19 @@ _%>
             const otherEntity = reference.relationship.otherEntity;
             const otherEntityTsKeyId = generateTestEntityId(otherEntity.primaryKey.type);
             const otherEntityAlternativeTsKeyId = generateTestEntityId(otherEntity.primaryKey.type, 1);
+            const isUserRelation = isBuiltInUser(otherEntity.entityAngularName);
     _%>
             describe('getSelected<%= otherEntity.entityAngularName %>', () => {
                 it('Should return option if no <%= otherEntity.entityAngularName %> is selected', () => {
-                    const option = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %>);
+                    const option = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %><% if (isUserRelation) { %>, 'user'<% } %>);
                     const result = comp.getSelected<%= otherEntity.entityAngularName %>(option);
                     expect(result === option).toEqual(true);
                 });
 
                 it('Should return selected <%= otherEntity.entityAngularName %> for according option', () => {
-                    const option = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %>);
-                    const selected = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %>);
-                    const selected2 = new <%= otherEntity.entityAngularName %>(<%- otherEntityAlternativeTsKeyId %>);
+                    const option = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %><% if (isUserRelation) { %>, 'user'<% } %>);
+                    const selected = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %><% if (isUserRelation) { %>, 'user'<% } %>);
+                    const selected2 = new <%= otherEntity.entityAngularName %>(<%- otherEntityAlternativeTsKeyId %><% if (isUserRelation) { %>, 'user2'<% } %>);
                     const result = comp.getSelected<%= otherEntity.entityAngularName %>(option, [selected2, selected]);
                     expect(result === selected).toEqual(true);
                     expect(result === selected2).toEqual(false);
@@ -152,8 +153,8 @@ _%>
                 });
 
                 it('Should return option if this <%= otherEntity.entityAngularName %> is not selected', () => {
-                    const option = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %>);
-                    const selected = new <%= otherEntity.entityAngularName %>(<%- otherEntityAlternativeTsKeyId %>);
+                    const option = new <%= otherEntity.entityAngularName %>(<%- otherEntityTsKeyId %><% if (isUserRelation) { %>, 'user'<% } %>);
+                    const selected = new <%= otherEntity.entityAngularName %>(<%- otherEntityAlternativeTsKeyId %><% if (isUserRelation) { %>, 'user2'<% } %>);
                     const result = comp.getSelected<%= otherEntity.entityAngularName %>(option, [selected]);
                     expect(result === option).toEqual(true);
                     expect(result === selected).toEqual(false);

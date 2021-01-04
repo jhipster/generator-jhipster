@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,14 +18,14 @@
 -%>
 
 CREATE TABLE IF NOT EXISTS <%= entityInstance %> (
-<%_ for (idx in fields) {
-        const fieldType = fields[idx].fieldType;
-        const fieldName = fields[idx].fieldName;
-        const fieldNameUnderscored = fields[idx].fieldNameUnderscored;
-        const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
+<%_ for (const field of fields) {
+        const fieldType = field.fieldType;
+        const fieldName = field.fieldName;
+        const fieldNameUnderscored = field.fieldNameUnderscored;
+        const fieldTypeBlobContent = field.fieldTypeBlobContent; _%>
     <%_ if (fieldType === 'UUID') { _%>
     <%= fieldName %> uuid,
-    <%_ } else if (fieldType === 'String' || fields[idx].fieldIsEnum) { _%>
+    <%_ } else if (fieldType === 'String' || field.fieldIsEnum) { _%>
     <%= fieldName %> text,
     <%_ } else if (fieldType === 'Integer') { _%>
     <%= fieldName %> int,

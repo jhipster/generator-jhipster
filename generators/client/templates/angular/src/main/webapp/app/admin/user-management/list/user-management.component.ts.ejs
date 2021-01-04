@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -28,9 +28,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 <%_ } _%>
 import { AccountService } from 'app/core/auth/account.service';
-import { Account } from 'app/core/user/account.model';
-import { UserService } from 'app/core/user/user.service';
-import { User } from 'app/core/user/user.model';
+import { Account } from 'app/core/auth/account.model';
+import { UserManagementService } from '../service/user-management.service';
+import { User } from '../user-management.model';
 import { UserManagementDeleteDialogComponent } from '../delete/user-management-delete-dialog.component';
 
 @Component({
@@ -50,7 +50,7 @@ export class UserManagementComponent implements OnInit {
   <%_ } _%>
 
   constructor(
-    private userService: UserService,
+    private userService: UserManagementService,
     private accountService: AccountService,
     <%_ if (prodDatabaseType !== 'cassandra') { _%>
     private activatedRoute: ActivatedRoute,
@@ -90,7 +90,7 @@ export class UserManagementComponent implements OnInit {
   loadAll(): void {
     this.isLoading = true;
     this.userService
-      .queryAsAdmin(<% if (databaseType !== 'cassandra') { %>{
+      .query(<% if (databaseType !== 'cassandra') { %>{
         page: this.page - 1,
         size: this.itemsPerPage,
         sort: this.sort(),

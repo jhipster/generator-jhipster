@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,15 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export class Account {
-  constructor(
-    public activated: boolean,
-    public authorities: string[],
-    public email: string,
-    public firstName: string,
-    public langKey: string,
-    public lastName: string,
-    public login: string,
-    public imageUrl: string
-  ) {}
+export class Registration {
+  constructor(public login: string, public email: string, public password: string, public langKey: string) {}
 }

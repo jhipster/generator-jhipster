@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -93,7 +93,7 @@ services:
             - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true
             <%_ } _%>
         <%_ if (applicationType === 'monolith' || applicationType === 'gateway') { _%>
-        # If you want to expose these ports outside your dev PC, 
+        # If you want to expose these ports outside your dev PC,
         # remove the "127.0.0.1:" prefix
         ports:
             - 127.0.0.1:<%= serverPort %>:<%= serverPort %>
@@ -107,7 +107,7 @@ services:
             - MYSQL_USER=root
             - MYSQL_ALLOW_EMPTY_PASSWORD=yes
             - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
-        # If you want to expose these ports outside your dev PC, 
+        # If you want to expose these ports outside your dev PC,
         # remove the "127.0.0.1:" prefix
         ports:
             - 127.0.0.1:3306:3306
@@ -122,8 +122,8 @@ services:
             - MYSQL_USER=root
             - MYSQL_ALLOW_EMPTY_PASSWORD=yes
             - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
-        # If you want to expose these ports outside your dev PC, 
-        # remove the "127.0.0.1:" prefix    
+        # If you want to expose these ports outside your dev PC,
+        # remove the "127.0.0.1:" prefix
         ports:
             - 127.0.0.1:3306:3306
         command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
@@ -137,7 +137,7 @@ services:
             - POSTGRES_USER=<%= baseName %>
             - POSTGRES_PASSWORD=
             - POSTGRES_HOST_AUTH_METHOD=trust
-        # If you want to expose these ports outside your dev PC, 
+        # If you want to expose these ports outside your dev PC,
         # remove the "127.0.0.1:" prefix
         ports:
             - 127.0.0.1:5432:5432
@@ -145,7 +145,7 @@ services:
     <%_ if (prodDatabaseType === 'mongodb') { _%>
     <%= baseName.toLowerCase() %>-mongodb:
         image: <%= DOCKER_MONGODB %>
-        # If you want to expose these ports outside your dev PC, 
+        # If you want to expose these ports outside your dev PC,
         # remove the "127.0.0.1:" prefix
         ports:
             - 127.0.0.1:27017:27017
@@ -157,7 +157,7 @@ services:
         build:
             context: .
             dockerfile: couchbase/Couchbase.Dockerfile
-        # If you want to expose these ports outside your dev PC, 
+        # If you want to expose these ports outside your dev PC,
         # remove the "127.0.0.1:" prefix
         ports:
             - 127.0.0.1:8091:8091
@@ -182,7 +182,7 @@ services:
             - SA_PASSWORD=yourStrong(!)Password
             - MSSQL_DATABASE=<%= baseName %>
             - MSSQL_SLEEP=60
-        # If you want to expose these ports outside your dev PC, 
+        # If you want to expose these ports outside your dev PC,
         # remove the "127.0.0.1:" prefix
         ports:
             - 127.0.0.1:1433:1433
@@ -195,7 +195,7 @@ services:
         #     - ~/volumes/jhipster/<%= baseName %>/neo4j/:/data
         environment:
             - NEO4J_AUTH=none
-        # If you want to expose these ports outside your dev PC, 
+        # If you want to expose these ports outside your dev PC,
         # remove the "127.0.0.1:" prefix
         ports:
             - "127.0.0.1:7474:7474"
@@ -206,7 +206,7 @@ services:
         image: <%= DOCKER_CASSANDRA %>
         # volumes:
         #     - ~/volumes/jhipster/<%= baseName %>/cassandra/:/var/lib/cassandra/data
-        # If you want to expose these ports outside your dev PC, 
+        # If you want to expose these ports outside your dev PC,
         # remove the "127.0.0.1:" prefix
         ports:
             - 127.0.0.1:7000:7000
@@ -233,7 +233,7 @@ services:
     <%_ if (cacheProvider === 'memcached') { _%>
     <%= baseName.toLowerCase() %>-memcached:
         image: <%= DOCKER_MEMCACHED %>
-        # If you want to expose these ports outside your dev PC, 
+        # If you want to expose these ports outside your dev PC,
         # remove the "127.0.0.1:" prefix
         ports:
             - 127.0.0.1:11211:11211
@@ -241,7 +241,7 @@ services:
     <%_ if (cacheProvider === 'redis') { _%>
     <%= baseName.toLowerCase() %>-redis:
         image: <%= DOCKER_REDIS %>
-        # If you want to expose these ports outside your dev PC, 
+        # If you want to expose these ports outside your dev PC,
         # remove the "127.0.0.1:" prefix
         ports:
             - 127.0.0.1:6379:6379
@@ -251,7 +251,7 @@ services:
         image: <%= DOCKER_ELASTICSEARCH %>
         # volumes:
         #     - ~/volumes/jhipster/<%= baseName %>/elasticsearch/:/usr/share/elasticsearch/data/
-        # If you want to expose these ports outside your dev PC, 
+        # If you want to expose these ports outside your dev PC,
         # remove the "127.0.0.1:" prefix
         ports:
             - 127.0.0.1:9200:9200
@@ -263,7 +263,7 @@ services:
     <%_ if (messageBroker === 'kafka') { _%>
     kafka:
         image: <%= DOCKER_KAFKA %>
-        # If you want to expose these ports outside your dev PC, 
+        # If you want to expose these ports outside your dev PC,
         # remove the "127.0.0.1:" prefix
         ports:
             - 127.0.0.1:9092:9092
@@ -306,7 +306,7 @@ services:
             - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-registry
             - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
             <%_ } _%>
-        # If you want to expose these ports outside your dev PC, 
+        # If you want to expose these ports outside your dev PC,
         # remove the "127.0.0.1:" prefix
         ports:
             - 127.0.0.1:8761:8761
@@ -314,7 +314,7 @@ services:
     <%_ if (serviceDiscoveryType === 'consul') { _%>
     consul:
         image: <%= DOCKER_CONSUL %>
-        # If you want to expose these ports outside your dev PC, 
+        # If you want to expose these ports outside your dev PC,
         # remove the "127.0.0.1:" prefix
         ports:
             - 127.0.0.1:8300:8300
@@ -345,8 +345,8 @@ services:
             - KEYCLOAK_USER=admin
             - KEYCLOAK_PASSWORD=admin
             - DB_VENDOR=h2
-        # If you want to expose these ports outside your dev PC, 
-        # remove the "127.0.0.1:" prefix        
+        # If you want to expose these ports outside your dev PC,
+        # remove the "127.0.0.1:" prefix
         ports:
             - 127.0.0.1:9080:9080
             - 127.0.0.1:9443:9443

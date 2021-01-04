@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -37,7 +37,7 @@ const GRADLE_VERSION = '6.7';
 const JIB_VERSION = '2.7.0';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '7.0.0-beta.0';
+const JHIPSTER_DEPENDENCIES_VERSION = '7.0.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
 const SPRING_BOOT_VERSION = '2.3.7.RELEASE';
 const LIQUIBASE_VERSION = '4.2.2';

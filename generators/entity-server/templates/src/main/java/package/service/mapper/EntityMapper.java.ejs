@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -67,8 +67,12 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityC
             qualifiedByName = qualifiedByName + (reference.collection ? 'Set' : ''); _%>
     @Mapping(target = "<%= reference.name %>", source = "<%= reference.name %>", qualifiedByName="<%= qualifiedByName %>")
     <%_ } _%>
+    <%_ for (reference of dtoReferences.filter(reference => reference.field && reference.field.mapstructExpression)) {
+            renMapAnotEnt = true; _%>
+    @Mapping( target = "<%= reference.name %>", expression = "<%- reference.field.mapstructExpression %>")
+    <%_ } _%>
     <%_ if (renMapAnotEnt === true) { _%>
-    <%= asDto(entityClass) %> toDto(<%= asEntity(entityClass) %> <%= asEntity(entityInstance) %>);
+    <%= asDto(entityClass) %> toDto(<%= asEntity(entityClass) %> s);
     <%_ } %>
 <%_ } %>
 <%_ /***** Id mapping *****/

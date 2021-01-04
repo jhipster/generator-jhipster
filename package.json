@@ -59,10 +59,10 @@
         "test": "mocha --no-insight --forbid-only --parallel"
     },
     "dependencies": {
-        "aws-sdk": "2.809.0",
-        "axios": "0.21.0",
+        "aws-sdk": "2.820.0",
+        "axios": "0.21.1",
         "chalk": "4.1.0",
-        "chevrotain": "7.0.3",
+        "chevrotain": "7.1.0",
         "commander": "7.0.0-2",
         "conf": "7.1.2",
         "didyoumean": "1.2.1",
@@ -72,11 +72,11 @@
         "glob": "7.1.6",
         "gulp-filter": "6.0.0",
         "insight": "0.10.3",
-        "js-yaml": "3.14.1",
+        "js-yaml": "4.0.0",
         "lodash": "4.17.20",
         "minimatch": "3.0.4",
         "normalize-path": "3.0.0",
-        "ora": "5.1.0",
+        "ora": "5.2.0",
         "os-locale": "5.0.0",
         "parse-gitignore": "1.0.1",
         "pluralize": "8.0.0",
@@ -97,7 +97,7 @@
     "devDependencies": {
         "chai": "4.2.0",
         "ejs-lint": "1.1.0",
-        "eslint": "7.16.0",
+        "eslint": "7.17.0",
         "eslint-config-airbnb-base": "14.2.1",
         "eslint-config-prettier": "7.1.0",
         "eslint-plugin-chai-friendly": "^0.6.0",
@@ -111,7 +111,7 @@
         "sinon": "9.2.2",
         "sinon-chai": "3.5.0",
         "yeoman-assert": "3.1.1",
-        "yeoman-test": "3.0.0"
+        "yeoman-test": "4.0.0"
     },
     "engines": {
         "node": ">=12.12.0",
