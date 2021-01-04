@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -72,7 +72,7 @@ public class <%= entityClass %>RowMapper implements BiFunction<Row, String, <%= 
         <%_ }); _%>
         <%_ reactiveRegularEagerRelations.forEach(function(rel) { _%>
         entity.set<%= rel.relationshipNameCapitalized %>Id(converter.fromRow(row, prefix + "_<%= getColumnName(rel.relationshipName) %>_id", Long.class));
-        <%_ }); _%> 
+        <%_ }); _%>
         return entity;
     }
 

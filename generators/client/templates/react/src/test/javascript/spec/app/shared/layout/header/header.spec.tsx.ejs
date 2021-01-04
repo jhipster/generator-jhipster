@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -84,7 +84,7 @@ describe('Header', () => {
   // All tests will go here
   it('Renders a Header component in dev profile with LoadingBar, Navbar, Nav and dev ribbon.', () => {
     const html = wrapper();
-    
+
     // Find Navbar component
     expect(html).toContain('navbar');
     // Find AdminMenu component
@@ -99,7 +99,7 @@ describe('Header', () => {
 
   it('Renders a Header component in prod profile with LoadingBar, Navbar, Nav.', () => {
     const html = wrapper(prodProps);
-    
+
     // Find Navbar component
     expect(html).toContain('navbar');
     // Find AdminMenu component
@@ -114,7 +114,7 @@ describe('Header', () => {
 
   it('Renders a Header component in prod profile with logged in User', () => {
     const html = wrapper(userProps);
-    
+
     // Find Navbar component
     expect(html).toContain('navbar');
     // Not find AdminMenu component
@@ -127,7 +127,7 @@ describe('Header', () => {
 
   it('Renders a Header component in prod profile with no logged in User', () => {
     const html = wrapper(guestProps);
-    
+
     // Find Navbar component
     expect(html).toContain('navbar');
     // Not find AdminMenu component
