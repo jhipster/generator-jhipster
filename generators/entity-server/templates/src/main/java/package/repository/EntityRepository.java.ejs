@@ -50,7 +50,7 @@ import org.springframework.data.cassandra.repository.CassandraRepository;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
 <%_
-if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') {
+if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') {
     let importList = fieldsContainOwnerManyToMany;
     for (r of relationships) {
         if (r.relationshipType === 'many-to-one' && r.otherEntityName === 'user') {
@@ -117,13 +117,6 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
     @Query("<%- (databaseType === 'mongodb') ? "{'id': ?0}" : "#{#n1ql.selectEntity} USE KEYS $1 WHERE #{#n1ql.filter}" %>")
     Optional<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
     <%_
-        } else if (databaseType === 'neo4j') { _%>
-
-    @Query("MATCH (n:<%= asEntity(entityClass) %>)<-[]-(m) RETURN n,m")
-    Page<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable pageable);
-
-    @Query("MATCH (e:<%= asEntity(entityClass) %> {id: $id}) RETURN e")
-    Optional<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
-    <%_ }
+        }
     } _%>
 }
