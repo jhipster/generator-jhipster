@@ -33,11 +33,13 @@ const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig } = require('./generator-defaults');
+const { defaultConfigMicroservice } = require('./generator-defaults');
 const { detectLanguage } = require('../utils/language');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 const databaseTypes = require('../jdl/jhipster/database-types');
+const MICROSERVICE = require('../jdl/jhipster/application-types');
 
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -2606,7 +2608,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         return { ...defaultAppTypeConfig, ...defaultConfig };
     }
 
-    setConfigDefaults(defaults = defaultConfig) {
+    setConfigDefaults(defaults = this.jhipsterConfig.applicationType !== MICROSERVICE ? defaultConfig : defaultConfigMicroservice) {
         const jhipsterVersion = packagejs.version;
         const baseName = this.getDefaultAppName();
         const creationTimestamp = new Date().getTime();
