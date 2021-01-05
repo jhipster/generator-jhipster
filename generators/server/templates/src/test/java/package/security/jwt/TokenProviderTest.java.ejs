@@ -106,7 +106,7 @@ class TokenProviderTest {
     }
 
     @Test
-    public void testKeyIsSetFromSecretWhenSecretIsNotEmpty() {
+    void testKeyIsSetFromSecretWhenSecretIsNotEmpty() {
         final String secret = "NwskoUmKHZtzGRKJKVjsJF7BtQMMxNWi";
         JHipsterProperties jHipsterProperties = new JHipsterProperties();
         jHipsterProperties.getSecurity().getAuthentication().getJwt().setSecret(secret);
@@ -119,7 +119,7 @@ class TokenProviderTest {
     }
 
     @Test
-    public void testKeyIsSetFromBase64SecretWhenSecretIsEmpty() {
+    void testKeyIsSetFromBase64SecretWhenSecretIsEmpty() {
         final String base64Secret = "fd54a45s65fds737b9aafcb3412e07ed99b267f33413274720ddbb7f6c5e64e9f14075f2d7ed041592f0b7657baf8";
         JHipsterProperties jHipsterProperties = new JHipsterProperties();
         jHipsterProperties.getSecurity().getAuthentication().getJwt().setBase64Secret(base64Secret);
