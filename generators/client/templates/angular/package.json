@@ -13,7 +13,7 @@
     "ngx-webstorage": "7.0.1",
     "rxjs": "6.6.3",
     "swagger-ui-dist": "3.38.0",
-    "tslib": "2.0.3",
+    "tslib": "2.1.0",
     "zone.js": "0.10.3"
   },
   "devDependencies": {
