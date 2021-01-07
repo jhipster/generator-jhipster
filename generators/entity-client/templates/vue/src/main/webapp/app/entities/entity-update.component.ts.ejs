@@ -189,7 +189,7 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
         this.isSaving = false;
         this.$router.go(-1);
         <%_ if (enableTranslation) { _%>
-        const message = this.$t('<%= i18nKeyPrefix %>.updated', { 'param' : param.id });
+        const message = this.$t('<%= i18nAlertHeaderPrefix %>.updated', { 'param' : param.id });
         <%_ } else {_%>
         const message = 'A <%= entityAngularName %> is updated with identifier ' + param.id;
         <%_ } _%>
@@ -206,7 +206,7 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
         this.isSaving = false;
         this.$router.go(-1);
         <%_ if (enableTranslation) { _%>
-        const message = this.$t('<%= i18nKeyPrefix %>.created', { 'param' : param.id });
+          const message = this.$t('<%= i18nAlertHeaderPrefix %>.created', { 'param' : param.id });
         <%_ } else {_%>
         const message = 'A <%= entityAngularName %> is created with identifier ' + param.id;
         <%_ } _%>

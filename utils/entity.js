@@ -154,6 +154,10 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     entityWithConfig.differentTypes.push(entityWithConfig.entityClass);
     entityWithConfig.i18nToLoad.push(entityWithConfig.entityInstance);
     entityWithConfig.i18nKeyPrefix = `${entityWithConfig.frontendAppName}.${entityWithConfig.entityTranslationKey}`;
+    entityWithConfig.i18nAlertHeaderPrefix = entityWithConfig.i18nKeyPrefix;
+    if (entityWithConfig.microserviceAppName) {
+        entityWithConfig.i18nAlertHeaderPrefix = `${entityWithConfig.microserviceAppName}.${entityWithConfig.entityTranslationKey}`;
+    }
 
     const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => generator.isBuiltInUser(relationship.otherEntityName));
     entityWithConfig.saveUserSnapshot =
