@@ -226,7 +226,10 @@
     "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:prod",
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
+    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
+    "webapp:test": "<%= clientPackageManager %> run webpack:test",
+    "webapp:build": "<%= clientPackageManager %> run webpack:build",
+    "webapp:prod": "<%= clientPackageManager %> run webpack:prod"
   },
   "jestSonar": {
     "reportPath": "<%= BUILD_DIR %>test-results/jest",

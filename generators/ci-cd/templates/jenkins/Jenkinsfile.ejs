@@ -36,7 +36,7 @@ node {
 <%_ if (buildTool === 'maven') { _%>
 <%= indent %>    stage('clean') {
 <%= indent %>        sh "chmod +x mvnw"
-<%= indent %>        sh "./mvnw -ntp clean -P-webpack"
+<%= indent %>        sh "./mvnw -ntp clean -P-webapp"
 <%= indent %>    }
 <%= indent %>    stage('nohttp') {
 <%= indent %>        sh "./mvnw -ntp checkstyle:check"
@@ -67,7 +67,7 @@ node {
     <%_ } _%>
 <%= indent %>    stage('backend tests') {
 <%= indent %>        try {
-<%= indent %>            sh "./mvnw -ntp verify -P-webpack"
+<%= indent %>            sh "./mvnw -ntp verify -P-webapp"
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
@@ -97,7 +97,7 @@ node {
 <%= indent %>        sh "./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>"
     <%_ } else { _%>
 <%= indent %>    stage('packaging') {
-<%= indent %>        sh "./mvnw -ntp verify -P-webpack <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests"
+<%= indent %>        sh "./mvnw -ntp verify -P-webapp <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests"
     <%_ } _%>
 <%= indent %>        archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
 <%= indent %>    }

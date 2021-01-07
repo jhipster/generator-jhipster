@@ -1210,8 +1210,8 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      */
     rebuildClient() {
         const done = this.async();
-        this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
-        this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']).on('close', () => {
+        this.log(`\n${chalk.bold.green('Running `webapp:build` to update client app\n')}`);
+        this.spawnCommand(this.clientPackageManager, ['run', 'webapp:build']).on('close', () => {
             done();
         });
     }
