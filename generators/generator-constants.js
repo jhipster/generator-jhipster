@@ -33,7 +33,7 @@ const LINT_STAGED_VERSION = '10.5.3';
 const NODE_VERSION = '14.15.0';
 const NPM_VERSION = '6.14.10';
 
-const GRADLE_VERSION = '6.7';
+const GRADLE_VERSION = '6.7.1';
 const JIB_VERSION = '2.7.0';
 
 // Libraries version
