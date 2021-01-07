@@ -110,6 +110,12 @@ const defaultConfig = {
     ...translationDefaultConfig,
 };
 
+const defaultConfigMicroservice = {
+    ...appDefaultConfig,
+    ...serverDefaultConfig,
+    ...translationDefaultConfig,
+};
+
 const entityDefaultConfig = {
     pagination: binaryOptions.DefaultValues[binaryOptions.Options.PAGINATION],
     validation: false,
@@ -134,6 +140,7 @@ module.exports = {
     serverDefaultConfig,
     clientDefaultConfig,
     defaultConfig,
+    defaultConfigMicroservice,
     requiredDefaultConfig,
     entityDefaultConfig,
     translationDefaultConfig,
