@@ -130,6 +130,8 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
                 this.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;
 
+                this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+
                 this.packagejs = packagejs;
             },
 

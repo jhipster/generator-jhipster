@@ -58,7 +58,7 @@ You will only need to run this command when dependencies change in [package.json
 <%= clientPackageManager %> install
 ```
 
-We use <%= clientPackageManager %> scripts and [<%_ if (clientFramework === ANGULAR) { _%>Angular CLI with <%_ } _%> Webpack][] as our build system.
+We use <%= clientPackageManager %> scripts and <% if (clientFramework === ANGULAR) { %>[Angular CLI][] with <% } %>[Webpack][] as our build system.
 
 <%_ if (['hazelcast', 'memcached', 'redis'].includes(cacheProvider)) { _%>
 If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.

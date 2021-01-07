@@ -50,11 +50,17 @@ bootRun {
 task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task) {
     inputs.files("package-lock.json")
     inputs.files("build.gradle")
+    <%_ if (clientFramework === ANGULAR) { _%>
+    inputs.files("angular.json")
+    inputs.dir("<%= CLIENT_WEBPACK_DIR %>")
+    <%_ } _%>
     inputs.dir("<%= CLIENT_MAIN_SRC_DIR %>")
+    <%_ if (clientFramework !== ANGULAR) { _%>
 
-    def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>/")
+    def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>")
     webpackDevFiles.exclude("webpack.prod.js")
     inputs.files(webpackDevFiles)
+    <%_ } _%>
 
     outputs.dir("<%= CLIENT_DIST_DIR %>")
 
