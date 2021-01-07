@@ -233,11 +233,11 @@ const reactFiles = {
     test: [
         {
             condition: generator => !generator.embedded,
-            path: CLIENT_TEST_SRC_DIR,
+            path: REACT_DIR,
             templates: [
                 {
-                    file: 'spec/app/entities/entity-reducer.spec.ts',
-                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-reducer.spec.ts`,
+                    file: 'entities/entity-reducer.spec.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-reducer.spec.ts`,
                 },
             ],
         },
