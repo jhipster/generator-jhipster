@@ -107,8 +107,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
                 .antMatchers("/api/account/reset-password/init").permitAll()
                 .antMatchers("/api/account/reset-password/finish").permitAll()
                 .antMatchers("/api/**").authenticated()<% if (websocket === 'spring-websocket') { %>
-                .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/websocket/**").permitAll()<% } %>
+                .antMatchers("/websocket/**").authenticated()<% } %>
                 .antMatchers("/management/health").permitAll()
                 .antMatchers("/management/health/**").permitAll()
                 .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
