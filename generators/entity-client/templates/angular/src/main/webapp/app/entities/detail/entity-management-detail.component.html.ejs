@@ -50,11 +50,11 @@
                         {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
                     </div>
                     <%_ } else if (['Duration'].includes(fieldType)) { _%>
-                        {{ <%= entityInstance %>.<%= fieldName %> | duration }} ({{<%= entityInstance %>.<%= fieldName %> }})
+                    <span>{{ <%= entityInstance %>.<%= fieldName %> | duration }} ({{<%= entityInstance %>.<%= fieldName %> }})</span>
                     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-                    {{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}
+                    <span>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}</span>
                     <%_ } else if (fieldType === 'LocalDate') { _%>
-                    {{ <%= entityInstance %>.<%= fieldName %> | formatMediumDate }}
+                    <span>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDate }}</span>
                     <%_ } else { _%>
                     <span>{{ <%= entityInstance %>.<%= fieldName %> }}</span>
                     <%_ } _%>
@@ -84,7 +84,7 @@
                         {{ <%= relationshipFieldName %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}
                     </span>
                         <%_ } else { _%>
-                    {{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}
+                    <span>{{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}</span>
                         <%_ } _%>
                     <%_ } else { _%>
                         <%_ if (relationshipType === 'many-to-many') { _%>
