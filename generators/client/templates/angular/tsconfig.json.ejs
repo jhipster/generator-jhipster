@@ -18,7 +18,7 @@
 -%>
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es2015",
     "module": "es2020",
     "moduleResolution": "node",
     "sourceMap": true,
@@ -30,7 +30,7 @@
     "skipLibCheck": true,
     <%_ } _%>
     "outDir": "<%= DIST_DIR %>app",
-    "lib": ["es7", "dom"],
+    "lib": ["es2018", "dom"],
     "baseUrl": "./",
     "paths": {
       "app/*": ["<%= CLIENT_MAIN_SRC_DIR %>app/*"]
