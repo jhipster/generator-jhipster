@@ -209,8 +209,8 @@
     <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config <%= CLIENT_TEST_SRC_DIR %>jest.conf.js",
     "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
-    "start": "<%= clientPackageManager %> run webpack:dev",
-    "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
+    "start": "<%= clientPackageManager %> run webapp:dev",
+    "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
     <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
     <%_ } _%>
@@ -218,18 +218,15 @@
     "test": "<%= clientPackageManager %> run jest",
     "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",
     "test:watch": "<%= clientPackageManager %> run jest -- --watch",
-    "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:dev",
-    "webpack:build:dev": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
-    "webpack:build:prod": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
-    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
-    "webpack:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
-    "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:prod",
-    "webpack:test": "<%= clientPackageManager %> run test",
+    "webapp:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webapp:build:dev",
+    "webapp:build:dev": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
+    "webapp:build:prod": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
+    "webapp:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
+    "webapp:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
+    "webapp:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webapp:build:prod",
+    "webapp:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
-    "webapp:test": "<%= clientPackageManager %> run webpack:test",
-    "webapp:build": "<%= clientPackageManager %> run webpack:build",
-    "webapp:prod": "<%= clientPackageManager %> run webpack:prod"
+    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
   },
   "jestSonar": {
     "reportPath": "<%= BUILD_DIR %>test-results/jest",

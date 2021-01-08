@@ -324,13 +324,13 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
                 devDependencies.set('wait-on', 'VERSION_MANAGED_BY_CLIENT_COMMON');
                 devDependencies.set('concurrently', 'VERSION_MANAGED_BY_CLIENT_COMMON');
 
-                if (this.clientFramework === 'react') {
+                if (this.clientFramework === REACT) {
                     scriptsStorage.set(
                         'ci:frontend:test',
-                        'npm run webpack:build:$npm_package_config_default_environment && npm run test-ci'
+                        'npm run webapp:build:$npm_package_config_default_environment && npm run test-ci'
                     );
                 } else {
-                    scriptsStorage.set('ci:frontend:build', 'npm run webpack:build:$npm_package_config_default_environment');
+                    scriptsStorage.set('ci:frontend:build', 'npm run webapp:build:$npm_package_config_default_environment');
                     scriptsStorage.set('ci:frontend:test', 'npm run ci:frontend:build && npm test');
                 }
 
