@@ -324,31 +324,31 @@ const vueFiles = {
     test: [
         {
             condition: generator => !generator.embedded,
-            path: CLIENT_TEST_SRC_DIR,
+            path: VUE_DIR,
             templates: [
                 {
-                    file: 'spec/app/entities/entity.component.spec.ts',
-                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.component.spec.ts`,
+                    file: 'entities/entity.component.spec.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.spec.ts`,
                 },
                 {
-                    file: 'spec/app/entities/entity-details.component.spec.ts',
+                    file: 'entities/entity-details.component.spec.ts',
                     renameTo: generator =>
-                        `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-details.component.spec.ts`,
+                        `entities/${generator.entityFolderName}/${generator.entityFileName}-details.component.spec.ts`,
                 },
                 {
-                    file: 'spec/app/entities/entity.service.spec.ts',
-                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.service.spec.ts`,
+                    file: 'entities/entity.service.spec.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.service.spec.ts`,
                 },
             ],
         },
         {
             condition: generator => !generator.readOnly && !generator.embedded,
-            path: CLIENT_TEST_SRC_DIR,
+            path: VUE_DIR,
             templates: [
                 {
-                    file: 'spec/app/entities/entity-update.component.spec.ts',
+                    file: 'entities/entity-update.component.spec.ts',
                     renameTo: generator =>
-                        `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.spec.ts`,
+                        `entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.spec.ts`,
                 },
             ],
         },
