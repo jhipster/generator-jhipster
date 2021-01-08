@@ -163,27 +163,24 @@
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
     <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
-    "start": "<%= clientPackageManager %> run webpack:dev",
+    "start": "<%= clientPackageManager %> run webapp:dev",
     "start-hmr": "ng serve --hmr",
-    "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
+    "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
     <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
     <%_ } _%>
     "serve": "<%= clientPackageManager %> run start",
-    "build": "<%= clientPackageManager %> run webpack:prod",
+    "build": "<%= clientPackageManager %> run webapp:prod",
     "pretest": "<%= clientPackageManager %> run lint",
     "test": "ng test --coverage --logHeapUsage -w=2",
     "test:watch": "<%= clientPackageManager %> run test -- --watch",
-    "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:dev",
-    "webpack:build:dev": "ng build",
-    "webpack:build:prod": "ng build --prod",
-    "webpack:dev": "ng serve",
-    "webpack:dev-verbose": "ng serve --verbose",
-    "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:prod && <%= clientPackageManager %> run clean-www",
-    "webpack:test": "<%= clientPackageManager %> run test",
-    "webapp:test": "<%= clientPackageManager %> run webpack:test",
-    "webapp:build": "<%= clientPackageManager %> run webpack:build",
-    "webapp:prod": "<%= clientPackageManager %> run webpack:prod"
+    "webapp:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webapp:build:dev",
+    "webapp:build:dev": "ng build",
+    "webapp:build:prod": "ng build --prod",
+    "webapp:dev": "ng serve",
+    "webapp:dev-verbose": "ng serve --verbose",
+    "webapp:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webapp:build:prod && <%= clientPackageManager %> run clean-www",
+    "webapp:test": "<%= clientPackageManager %> run test"
   },
   "jestSonar": {
     "reportPath": "<%= BUILD_DIR %>test-results/jest",
