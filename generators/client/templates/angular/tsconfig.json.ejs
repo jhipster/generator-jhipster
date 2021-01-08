@@ -45,6 +45,8 @@
     "strictTemplates": true,
     "strictInputAccessModifiers": true,
     "preserveWhitespaces": true
-  },
-  "exclude": ["<%= CLIENT_TEST_SRC_DIR %>cypress"]
+  }
+  <%_ if (cypressTests) { _%>
+  ,"exclude": ["<%= CLIENT_TEST_SRC_DIR %>cypress"]
+  <%_ } _%>
 }
