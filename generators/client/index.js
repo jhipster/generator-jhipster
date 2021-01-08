@@ -235,6 +235,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.lowercaseBaseName = this.baseName.toLowerCase();
+                this.humanizedBaseName = this.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(this.baseName);
 
                 if (this.authenticationType === 'oauth2' || (this.databaseType === 'no' && this.authenticationType !== 'uaa')) {
                     this.skipUserManagement = true;

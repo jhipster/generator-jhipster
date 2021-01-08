@@ -86,7 +86,7 @@ describe('Component Tests', () => {
     });
 
     describe('page title', () => {
-      const defaultPageTitle = '<% if (enableTranslation) { %>global.title<% } else { %><%= capitalizedBaseName %><% } %>';
+      const defaultPageTitle = '<% if (enableTranslation) { %>global.title<% } else { %><%= humanizedBaseName %><% } %>';
       const parentRoutePageTitle = 'parentTitle';
       const childRoutePageTitle = 'childTitle';
       const navigationEnd = new NavigationEnd(1, '', '');
