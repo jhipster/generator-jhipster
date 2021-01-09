@@ -182,7 +182,7 @@ describe('Component Tests', () => {
         eventManager.broadcast({ name: '<%= frontendAppName %>.httpError', content: response });
         // THEN
         expect(comp.alerts.length).toBe(1);
-        expect(comp.alerts[0].<%= mainAlertField %>).toBe('Detailed error message');
+        expect(comp.alerts[0].<%= mainAlertField %>).toBe(<% if (enableTranslation) { %>'error.http.500'<% } else { %>'Detailed error message'<% } %>);
       });
     });
   });
