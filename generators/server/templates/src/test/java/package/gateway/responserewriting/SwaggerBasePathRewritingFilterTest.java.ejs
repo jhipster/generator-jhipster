@@ -72,7 +72,7 @@ class SwaggerBasePathRewritingFilterTest {
 
     @Test
     void run_on_valid_response() throws Exception {
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/service1/v3/api-docs");
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/services/service1/v3/api-docs");
         RequestContext context = RequestContext.getCurrentContext();
         context.setRequest(request);
 
@@ -80,18 +80,18 @@ class SwaggerBasePathRewritingFilterTest {
         context.setResponseGZipped(false);
         context.setResponse(response);
 
-        InputStream in = IOUtils.toInputStream("{\"basePath\":\"/\"}", StandardCharsets.UTF_8);
+        InputStream in = IOUtils.toInputStream("{\"servers\":[{\"url\":\"http://localhost:8080\"}]}", StandardCharsets.UTF_8);
         context.setResponseDataStream(in);
 
         filter.run();
 
         assertEquals("UTF-8", response.getCharacterEncoding());
-        assertEquals("{\"basePath\":\"/service1\"}", context.getResponseBody());
+        assertEquals("{\"servers\":[{\"url\":\"http://localhost:8080/services/service1\"}]}", context.getResponseBody());
     }
 
     @Test
     void run_on_valid_response_gzip() throws Exception {
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/service1/v3/api-docs");
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/services/service1/v3/api-docs");
         RequestContext context = RequestContext.getCurrentContext();
         context.setRequest(request);
 
@@ -99,7 +99,7 @@ class SwaggerBasePathRewritingFilterTest {
         context.setResponseGZipped(true);
         context.setResponse(response);
 
-        context.setResponseDataStream(new ByteArrayInputStream(gzipData("{\"basePath\":\"/\"}")));
+        context.setResponseDataStream(new ByteArrayInputStream(gzipData("{\"servers\":[{\"url\":\"http://localhost:8080\"}]}")));
 
         filter.run();
 
@@ -107,6 +107,90 @@ class SwaggerBasePathRewritingFilterTest {
 
         InputStream responseDataStream = new GZIPInputStream(context.getResponseDataStream());
         String responseBody = IOUtils.toString(responseDataStream, StandardCharsets.UTF_8);
-        assertEquals("{\"basePath\":\"/service1\"}", responseBody);
+        assertEquals("{\"servers\":[{\"url\":\"http://localhost:8080/services/service1\"}]}", responseBody);
+    }
+
+    @Test
+    void run_on_empty() throws Exception {
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/services/service1/v3/api-docs");
+        RequestContext context = RequestContext.getCurrentContext();
+        context.setRequest(request);
+
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        context.setResponseGZipped(true);
+        context.setResponse(response);
+        
+        context.setResponseDataStream(new ByteArrayInputStream(gzipData("{}")));
+        
+        filter.run();
+        
+        assertEquals("UTF-8", response.getCharacterEncoding());
+        
+        InputStream responseDataStream = new GZIPInputStream(context.getResponseDataStream());
+        String responseBody = IOUtils.toString(responseDataStream, StandardCharsets.UTF_8);
+        assertEquals("{}", responseBody);
+    }
+
+    @Test
+    void run_on_empty_servers() throws Exception {
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/services/service1/v3/api-docs");
+        RequestContext context = RequestContext.getCurrentContext();
+        context.setRequest(request);
+
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        context.setResponseGZipped(true);
+        context.setResponse(response);
+
+        context.setResponseDataStream(new ByteArrayInputStream(gzipData("{\"servers\":[]}")));
+
+        filter.run();
+
+        assertEquals("UTF-8", response.getCharacterEncoding());
+
+        InputStream responseDataStream = new GZIPInputStream(context.getResponseDataStream());
+        String responseBody = IOUtils.toString(responseDataStream, StandardCharsets.UTF_8);
+        assertEquals("{\"servers\":[]}", responseBody);
+    }
+
+    @Test
+    void run_on_empty_urls() throws Exception {
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/services/service1/v3/api-docs");
+        RequestContext context = RequestContext.getCurrentContext();
+        context.setRequest(request);
+
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        context.setResponseGZipped(true);
+        context.setResponse(response);
+
+        context.setResponseDataStream(new ByteArrayInputStream(gzipData("{\"servers\":[{\"description\":\"description without urls\"}]}")));
+
+        filter.run();
+
+        assertEquals("UTF-8", response.getCharacterEncoding());
+
+        InputStream responseDataStream = new GZIPInputStream(context.getResponseDataStream());
+        String responseBody = IOUtils.toString(responseDataStream, StandardCharsets.UTF_8);
+        assertEquals("{\"servers\":[{\"description\":\"description without urls\"}]}", responseBody);
+    }
+
+    @Test
+    void run_on_bad_response() throws Exception {
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/services/service1/v3/api-docs");
+        RequestContext context = RequestContext.getCurrentContext();
+        context.setRequest(request);
+        
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        context.setResponseGZipped(true);
+        context.setResponse(response);
+
+        context.setResponseDataStream(new ByteArrayInputStream(gzipData("bad response")));
+
+        filter.run();
+
+        assertEquals("UTF-8", response.getCharacterEncoding());
+
+        InputStream responseDataStream = new GZIPInputStream(context.getResponseDataStream());
+        String responseBody = IOUtils.toString(responseDataStream, StandardCharsets.UTF_8);
+        assertEquals(responseBody, "null");
     }
 }
