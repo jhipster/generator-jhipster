@@ -23,6 +23,7 @@ module.exports = {
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/'
   ],
+  setupFiles: ['<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/setup-tests.ts'],
   globals: {
     'ts-jest': {
       tsconfig: './tsconfig.test.json',

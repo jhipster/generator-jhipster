@@ -77,6 +77,7 @@ const files = {
                 { file: 'app.tsx', method: 'processJsx' },
                 { file: 'index.tsx', method: 'processJsx' },
                 { file: 'routes.tsx', method: 'processJsx' },
+                'setup-tests.ts',
                 'typings.d.ts',
                 'config/constants.ts',
                 'config/dayjs.ts',

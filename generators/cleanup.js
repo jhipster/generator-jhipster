@@ -255,8 +255,6 @@ function cleanupOldFiles(generator) {
         } else if (generator.jhipsterConfig.clientFramework === REACT) {
             generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/enzyme-setup.ts`);
-            generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec`);
-            generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest.conf.js`);
         } else if (generator.jhipsterConfig.clientFramework === VUE) {
             generator.removeFile(`${VUE_DIR}admin/audits/audits.component.ts`);
             generator.removeFile(`${VUE_DIR}admin/audits/audits.service.ts`);
@@ -271,6 +269,29 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${ANGULAR_DIR}core/user/user.model.ts`);
             generator.removeFile(`${ANGULAR_DIR}core/user/user.service.ts`);
             generator.removeFile(`${ANGULAR_DIR}core/user/user.service.spec.ts`);
+        } else if (generator.jhipsterConfig.clientFramework === REACT) {
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest.conf.js`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/icons-mock.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/storage-mock.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/utils.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/config/axios-interceptor.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/config/notification-middleware.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/reducers/application-profile.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/reducers/authentication.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/util/entity-utils.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/auth/private-route.spec.tsx`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/error/error-boundary.spec.tsx`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/error/error-boundary-route.spec.tsx`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/layout/header/header.spec.tsx`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/layout/menus/account.spec.tsx`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/administration/administration.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/account/register/register.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/account/activate/activate.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/account/password/password.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/account/settings/settings.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/administration/user-management/user-management.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/reducers/locale.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/reducers/user-management.spec.ts`);
         }
     }
 }

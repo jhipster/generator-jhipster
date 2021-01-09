@@ -22,7 +22,7 @@ const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const {
-    SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR },
+    SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT },
 } = require('../generator-constants');
 
 let useBlueprints;
@@ -125,6 +125,11 @@ module.exports = class extends BaseBlueprintGenerator {
                     );
                     this.removeFile(
                         `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}.service.spec.ts`
+                    );
+                }
+                if (this.isJhipsterVersionLessThan('7.0.0-beta.1') && this.jhipsterConfig.clientFramework === REACT) {
+                    this.removeFile(
+                        `${this.CLIENT_TEST_SRC_DIR}spec/app/entities/${this.entityFolderName}/${this.entityFileName}-reducer.spec.ts`
                     );
                 }
             },
