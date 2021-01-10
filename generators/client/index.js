@@ -86,6 +86,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
                 // Make constants available in templates
                 this.LOGIN_REGEX = constants.LOGIN_REGEX_JS;
                 this.ANGULAR = ANGULAR;
+                this.VUE = VUE;
                 this.HUSKY_VERSION = constants.HUSKY_VERSION;
                 this.LINT_STAGED_VERSION = constants.LINT_STAGED_VERSION;
                 this.PRETTIER_VERSION = constants.PRETTIER_VERSION;

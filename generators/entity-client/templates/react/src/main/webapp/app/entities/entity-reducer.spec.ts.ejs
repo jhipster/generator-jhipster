@@ -45,7 +45,7 @@ import reducer, {
   updateEntity,
   <%_ } _%>
   reset
-} from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.reducer';
+} from './<%= entityFileName %>.reducer';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
 
