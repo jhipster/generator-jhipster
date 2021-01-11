@@ -590,6 +590,36 @@ const serverFiles = {
                 },
             ],
         },
+        {
+            condition: generator =>
+                !generator.reactive &&
+                generator.authenticationType === 'oauth2' &&
+                (generator.applicationType === 'monolith' ||
+                    generator.applicationType === 'microservice' ||
+                    generator.applicationType === 'gateway'),
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/security/oauth2/CustomClaimConverter.java',
+                    renameTo: generator => `${generator.javaDir}security/oauth2/CustomClaimConverter.java`,
+                },
+            ],
+        },
+        {
+            condition: generator =>
+                !generator.reactive &&
+                generator.authenticationType === 'oauth2' &&
+                (generator.applicationType === 'monolith' ||
+                    generator.applicationType === 'microservice' ||
+                    generator.applicationType === 'gateway'),
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/security/oauth2/CustomClaimConverterIT.java',
+                    renameTo: generator => `${generator.javaDir}security/oauth2/CustomClaimConverterIT.java`,
+                },
+            ],
+        },
     ],
     serverJavaGateway: [
         {
