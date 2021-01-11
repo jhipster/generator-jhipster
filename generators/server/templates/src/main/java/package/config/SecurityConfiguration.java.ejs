@@ -97,7 +97,7 @@ import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
     <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
     <%_ } _%>
-    <%_ if (authenticationType === 'oauth2' && applicationType === 'microservice') { _%>
+    <%_ if (authenticationType === 'oauth2' && (applicationType === 'monolith' || applicationType === 'microservice' || applicationType === 'gateway')) { _%>
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import <%= packageName %>.security.oauth2.CustomClaimConverter;
