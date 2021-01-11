@@ -74,6 +74,9 @@ spec:
       containers:
       - name: elasticsearch
         image: <%= DOCKER_ELASTICSEARCH %>
+        env:
+        - name: discovery.type
+          value: single-node
         ports:
         - containerPort: 9200
           name: http
