@@ -10,14 +10,6 @@
             "otherEntityRelationshipName": "testOneToOne"
         },
         {
-            "relationshipName": "testMapstruct",
-            "otherEntityName": "testMapstruct",
-            "relationshipType": "one-to-one",
-            "otherEntityField": "id",
-            "ownerSide": true,
-            "otherEntityRelationshipName": "testOneToOne"
-        },
-        {
             "relationshipName": "testServiceClass",
             "otherEntityName": "testServiceClass",
             "relationshipType": "one-to-one",

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,7 +18,6 @@
 -%>
 package <%= packageName %>.config;
 
-<%_ if (authenticationType === 'session' || authenticationType === 'jwt' || authenticationType === 'oauth2') { _%>
 import <%= packageName %>.security.*;
     <%_ if (authenticationType === 'jwt') { _%>
 import <%= packageName %>.security.jwt.*;
@@ -26,13 +25,13 @@ import <%= packageName %>.security.jwt.*;
     <%_ if (authenticationType === 'session') { _%>
 
         <%_ if (!skipUserManagement) { _%>
-import io.github.jhipster.config.JHipsterProperties;
+import tech.jhipster.config.JHipsterProperties;
         <%_ } _%>
-import io.github.jhipster.security.*;
+import tech.jhipster.security.*;
     <%_ } _%>
 
     <%_ if (authenticationType === 'oauth2') { _%>
-import io.github.jhipster.config.JHipsterProperties;
+import tech.jhipster.config.JHipsterProperties;
     <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -68,7 +67,7 @@ import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-        <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+        <%_ if (applicationType === 'gateway') { _%>
 import <%= packageName %>.security.oauth2.AuthorizationHeaderFilter;
 import <%= packageName %>.security.oauth2.AuthorizationHeaderUtil;
         <%_ } _%>
@@ -276,12 +275,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ if (authenticationType === 'oauth2') { _%>
             .antMatchers("/api/auth-info").permitAll()
     <%_ } _%>
+            .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/**").authenticated()
     <%_ if (websocket === 'spring-websocket') { _%>
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/websocket/**").permitAll()
     <%_ } _%>
             .antMatchers("/management/health").permitAll()
+            .antMatchers("/management/health/**").permitAll()
             .antMatchers("/management/info").permitAll()
             .antMatchers("/management/prometheus").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)<%_ if (authenticationType === 'session') { %>;<% } %>
@@ -360,7 +361,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         return jwtDecoder;
     }
-        <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+        <%_ if (applicationType === 'gateway') { _%>
 
     @Bean
     public AuthorizationHeaderFilter authHeaderFilter(AuthorizationHeaderUtil headerUtil) {
@@ -369,92 +370,3 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         <%_ } _%>
     <%_ } _%>
 }
-<%_ } _%>
-<%_ if (authenticationType === 'uaa') { _%>
-import <%= packageName %>.config.oauth2.OAuth2JwtAccessTokenConverter;
-import <%= packageName %>.config.oauth2.OAuth2Properties;
-import <%= packageName %>.security.oauth2.OAuth2SignatureVerifierClient;
-import <%= packageName %>.security.AuthoritiesConstants;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cloud.client.loadbalancer.RestTemplateCustomizer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-    <%_ if (applicationType === 'gateway') { _%>
-import org.springframework.security.web.csrf.CsrfFilter;
-import org.springframework.web.filter.CorsFilter;
-    <%_ } _%>
-import org.springframework.web.client.RestTemplate;
-
-@Configuration
-@EnableResourceServer
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
-    private final OAuth2Properties oAuth2Properties;
-
-    <%_ if (applicationType === 'gateway') { _%>
-    private final CorsFilter corsFilter;
-
-    <%_ } _%>
-    public SecurityConfiguration(OAuth2Properties oAuth2Properties<% if (applicationType === 'gateway') { %>, CorsFilter corsFilter<% } %>) {
-        this.oAuth2Properties = oAuth2Properties;
-    <%_ if (applicationType === 'gateway') { _%>
-        this.corsFilter = corsFilter;
-    <%_ } _%>
-    }
-
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http
-            .csrf()
-    <%_ if (applicationType === 'gateway') { _%>
-            .ignoringAntMatchers("/h2-console/**")
-            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-        .and()
-            .addFilterBefore(corsFilter, CsrfFilter.class)
-    <%_ } else { _%>
-            .disable()
-    <%_ } _%>
-            .headers()
-            .frameOptions()
-            .disable()
-        .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-            .authorizeRequests()
-            .antMatchers("/api/**").authenticated()
-            .antMatchers("/management/health").permitAll()
-            .antMatchers("/management/info").permitAll()
-            .antMatchers("/management/prometheus").permitAll()
-            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
-    }
-
-    @Bean
-    public TokenStore tokenStore(JwtAccessTokenConverter jwtAccessTokenConverter) {
-        return new JwtTokenStore(jwtAccessTokenConverter);
-    }
-
-    @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter(OAuth2SignatureVerifierClient signatureVerifierClient) {
-        return new OAuth2JwtAccessTokenConverter(oAuth2Properties, signatureVerifierClient);
-    }
-
-    @Bean
-    @Qualifier("loadBalancedRestTemplate")
-    public RestTemplate loadBalancedRestTemplate(RestTemplateCustomizer customizer) {
-        RestTemplate restTemplate = new RestTemplate();
-        customizer.customize(restTemplate);
-        return restTemplate;
-    }
-}
-<%_ } _%>

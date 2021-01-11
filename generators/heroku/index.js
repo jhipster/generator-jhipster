@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -37,12 +37,6 @@ module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
         this.option('skip-build', {
             desc: 'Skips building the application',
             type: Boolean,
@@ -61,7 +55,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.herokuSkipBuild = this.options.skipBuild;
         this.herokuSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
-        this.registerPrettierTransform();
 
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('heroku');
     }
@@ -114,13 +107,10 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.herokuAppName) {
                     ChildProcess.exec('heroku apps:info --json', (err, stdout) => {
                         if (err) {
-                            this.config.set({
-                                herokuAppName: null,
-                                herokuDeployType: this.herokuDeployType,
-                            });
                             this.abort = true;
                             this.log.error(`Could not find application: ${chalk.cyan(this.herokuAppName)}`);
                             this.log.error('Run the generator again to create a new application.');
+                            this.herokuAppName = null;
                         } else {
                             const json = JSON.parse(stdout);
                             this.herokuAppName = json.app.name;
@@ -629,23 +619,15 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
             },
 
-            addHerokuDependencies() {
-                if (this.buildTool === 'maven') {
-                    this.addMavenDependency('org.springframework.cloud', 'spring-cloud-localconfig-connector');
-                    this.addMavenDependency('org.springframework.cloud', 'spring-cloud-heroku-connector');
-                } else if (this.buildTool === 'gradle') {
-                    this.addGradleDependency('implementation', 'org.springframework.cloud', 'spring-cloud-localconfig-connector');
-                    this.addGradleDependency('implementation', 'org.springframework.cloud', 'spring-cloud-heroku-connector');
-                }
-            },
-
             addHerokuBuildPlugin() {
+                if (this.abort) return;
                 if (this.buildTool !== 'gradle') return;
                 this.addGradlePlugin('gradle.plugin.com.heroku.sdk', 'heroku-gradle', '1.0.4');
                 this.applyFromGradleScript('gradle/heroku');
             },
 
             addHerokuMavenProfile() {
+                if (this.abort) return;
                 if (this.buildTool === 'maven') {
                     this.render('pom-profile.xml.ejs', profile => {
                         this.addMavenProfile('heroku', `            ${profile.toString().trim()}`);
@@ -663,6 +645,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _end() {
         return {
             makeScriptExecutable() {
+                if (this.abort) return;
                 if (this.useOkta) {
                     try {
                         fs.chmodSync('provision-okta-addon.sh', '755');
@@ -751,7 +734,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
                         this.log(chalk.bold('\nDeploying application'));
 
-                        const herokuPush = execCmd('git push heroku HEAD:master', { maxBuffer: 1024 * 10000 });
+                        const herokuPush = execCmd('git push heroku HEAD:main', { maxBuffer: 1024 * 10000 });
 
                         herokuPush.child.stdout.on('data', data => {
                             this.log(data);

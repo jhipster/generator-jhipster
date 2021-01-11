@@ -1,14 +1,14 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -106,7 +106,7 @@ describe('JDLRelationship', () => {
             );
         });
     });
-    describe('hasOption', () => {
+    describe('hasGlobalOption', () => {
         let relationship;
 
         before(() => {
@@ -115,27 +115,31 @@ describe('JDLRelationship', () => {
                 to: 'B',
                 injectedFieldInTo: 'a',
                 type: RelationshipTypes.ONE_TO_ONE,
-                options: { [JPA_DERIVED_IDENTIFIER]: true },
+                options: {
+                    global: { [JPA_DERIVED_IDENTIFIER]: true },
+                    destination: {},
+                    source: {},
+                },
             });
         });
 
         context('when the option does not exist', () => {
             it('should return false', () => {
-                expect(relationship.hasOption('toto')).to.be.false;
+                expect(relationship.hasGlobalOption('toto')).to.be.false;
             });
         });
         context('when the option exists', () => {
             it('should return true', () => {
-                expect(relationship.hasOption(JPA_DERIVED_IDENTIFIER)).to.be.true;
+                expect(relationship.hasGlobalOption(JPA_DERIVED_IDENTIFIER)).to.be.true;
             });
         });
     });
-    describe('forEachOption', () => {
+    describe('forEachGlobalOption', () => {
         let relationship;
         let options;
 
         before(() => {
-            options = { custom: 1, anotherCustom: 42 };
+            options = { global: { custom: 1, anotherCustom: 42 } };
             relationship = new JDLRelationship({
                 from: 'A',
                 to: 'B',
@@ -146,8 +150,8 @@ describe('JDLRelationship', () => {
         });
 
         it('should loop over the function for each element', () => {
-            relationship.forEachOption((optionName, optionValue) => {
-                expect(optionValue).to.equal(options[optionName]);
+            relationship.forEachGlobalOption((optionName, optionValue) => {
+                expect(optionValue).to.equal(options.global[optionName]);
             });
         });
     });
@@ -292,26 +296,62 @@ describe('JDLRelationship', () => {
             });
         });
         context('with options', () => {
-            let relationship;
+            context('being global', () => {
+                let relationship;
 
-            before(() => {
-                relationship = new JDLRelationship({
-                    from: 'A',
-                    to: 'B',
-                    type: RelationshipTypes.ONE_TO_ONE,
-                    injectedFieldInFrom: 'b',
-                    injectedFieldInTo: 'a',
-                    options: { [JPA_DERIVED_IDENTIFIER]: true },
+                before(() => {
+                    relationship = new JDLRelationship({
+                        from: 'A',
+                        to: 'B',
+                        type: RelationshipTypes.ONE_TO_ONE,
+                        injectedFieldInFrom: 'b',
+                        injectedFieldInTo: 'a',
+                        options: {
+                            global: { [JPA_DERIVED_IDENTIFIER]: true },
+                            source: {},
+                            destination: {},
+                        },
+                    });
+                });
+
+                it('should add them', () => {
+                    expect(relationship.toString()).to.equal(
+                        `relationship ${relationship.type} {
+  ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}{` +
+                            `${relationship.injectedFieldInTo}} with ${JPA_DERIVED_IDENTIFIER}
+}`
+                    );
                 });
             });
+            context('being global, on the source and on the destination', () => {
+                let relationship;
 
-            it('should add them', () => {
-                expect(relationship.toString()).to.equal(
-                    `relationship ${relationship.type} {
-  ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}{` +
-                        `${relationship.injectedFieldInTo}} with ${JPA_DERIVED_IDENTIFIER}
+                before(() => {
+                    relationship = new JDLRelationship({
+                        from: 'A',
+                        to: 'B',
+                        type: RelationshipTypes.ONE_TO_ONE,
+                        injectedFieldInFrom: 'b',
+                        injectedFieldInTo: 'a',
+                        options: {
+                            global: { [JPA_DERIVED_IDENTIFIER]: true },
+                            source: { id: true },
+                            destination: { id: true, idGenerator: 'sequence' },
+                        },
+                    });
+                });
+
+                it('should add them', () => {
+                    expect(relationship.toString()).to.equal(
+                        `relationship ${relationship.type} {
+  @id
+  ${relationship.from}{${relationship.injectedFieldInFrom}} to
+  @id
+  @idGenerator(sequence)
+  ${relationship.to}{${relationship.injectedFieldInTo}} with ${JPA_DERIVED_IDENTIFIER}
 }`
-                );
+                    );
+                });
             });
         });
     });

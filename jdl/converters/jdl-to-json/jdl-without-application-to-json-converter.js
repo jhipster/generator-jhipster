@@ -1,14 +1,14 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,7 +40,6 @@ module.exports = {
  * @param {String} args.applicationName - the application's name
  * @param {String} args.databaseType - the database type
  * @param {applicationType} args.applicationType - the application's type
- * @param {Date} args.creationTimestamp - the creation timestamp, for entities
  * @returns {Map} entities that can be exported to JSON
  */
 function convert(args = {}) {
@@ -48,7 +47,7 @@ function convert(args = {}) {
         throw new Error("The JDL object, the application's name and its the database type are mandatory.");
     }
     init(args);
-    setBasicEntityInformation(args.creationTimestamp);
+    setBasicEntityInformation();
     setOptions();
     setFields();
     setRelationships();
@@ -69,8 +68,8 @@ function resetState() {
     entities = null;
 }
 
-function setBasicEntityInformation(creationTimestamp = new Date()) {
-    const convertedEntities = BasicEntityConverter.convert(jdlObject.getEntities(), creationTimestamp);
+function setBasicEntityInformation() {
+    const convertedEntities = BasicEntityConverter.convert(jdlObject.getEntities());
     convertedEntities.forEach((jsonEntity, entityName) => {
         entities[entityName] = jsonEntity;
     });

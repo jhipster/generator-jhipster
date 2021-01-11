@@ -1,14 +1,14 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @see OAuth2CookieHelper
  */
-public class OAuth2CookieHelperTest {
+class OAuth2CookieHelperTest {
     public static final String GET_COOKIE_DOMAIN_METHOD = "getCookieDomain";
     private OAuth2Properties oAuth2Properties;
     private OAuth2CookieHelper cookieHelper;
@@ -43,7 +43,7 @@ public class OAuth2CookieHelperTest {
     }
 
     @Test
-    public void testLocalhostDomain() {
+    void testLocalhostDomain() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setServerName("localhost");
         String name = ReflectionTestUtils.invokeMethod(cookieHelper, GET_COOKIE_DOMAIN_METHOD, request);
@@ -51,7 +51,7 @@ public class OAuth2CookieHelperTest {
     }
 
     @Test
-    public void testComDomain() {
+    void testComDomain() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setServerName("test.com");
         String name = ReflectionTestUtils.invokeMethod(cookieHelper, GET_COOKIE_DOMAIN_METHOD, request);
@@ -59,7 +59,7 @@ public class OAuth2CookieHelperTest {
     }
 
     @Test
-    public void testWwwDomainCom() {
+    void testWwwDomainCom() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setServerName("www.test.com");
         String name = ReflectionTestUtils.invokeMethod(cookieHelper, GET_COOKIE_DOMAIN_METHOD, request);
@@ -67,7 +67,7 @@ public class OAuth2CookieHelperTest {
     }
 
     @Test
-    public void testComSubDomain() {
+    void testComSubDomain() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setServerName("abc.test.com");
         String name = ReflectionTestUtils.invokeMethod(cookieHelper, GET_COOKIE_DOMAIN_METHOD, request);
@@ -75,7 +75,7 @@ public class OAuth2CookieHelperTest {
     }
 
     @Test
-    public void testWwwSubDomainCom() {
+    void testWwwSubDomainCom() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setServerName("www.abc.test.com");
         String name = ReflectionTestUtils.invokeMethod(cookieHelper, GET_COOKIE_DOMAIN_METHOD, request);
@@ -84,7 +84,7 @@ public class OAuth2CookieHelperTest {
 
 
     @Test
-    public void testCoUkDomain() {
+    void testCoUkDomain() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setServerName("test.co.uk");
         String name = ReflectionTestUtils.invokeMethod(cookieHelper, GET_COOKIE_DOMAIN_METHOD, request);
@@ -92,7 +92,7 @@ public class OAuth2CookieHelperTest {
     }
 
     @Test
-    public void testCoUkSubDomain() {
+    void testCoUkSubDomain() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setServerName("abc.test.co.uk");
         String name = ReflectionTestUtils.invokeMethod(cookieHelper, GET_COOKIE_DOMAIN_METHOD, request);
@@ -100,7 +100,7 @@ public class OAuth2CookieHelperTest {
     }
 
     @Test
-    public void testNestedDomain() {
+    void testNestedDomain() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setServerName("abc.xyu.test.co.uk");
         String name = ReflectionTestUtils.invokeMethod(cookieHelper, GET_COOKIE_DOMAIN_METHOD, request);
@@ -108,7 +108,7 @@ public class OAuth2CookieHelperTest {
     }
 
     @Test
-    public void testIpAddress() {
+    void testIpAddress() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setServerName("127.0.0.1");
         String name = ReflectionTestUtils.invokeMethod(cookieHelper, GET_COOKIE_DOMAIN_METHOD, request);

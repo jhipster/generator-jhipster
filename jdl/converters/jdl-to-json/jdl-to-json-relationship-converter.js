@@ -1,14 +1,14 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -63,7 +63,10 @@ function getRelatedRelationships(relationships, entityNames) {
             if (jdlRelationship.from === entityName) {
                 relationshipsRelatedToEntity.from.push(jdlRelationship);
             }
-            if (jdlRelationship.to === entityName && jdlRelationship.injectedFieldInTo) {
+            if (
+                jdlRelationship.to === entityName &&
+                (jdlRelationship.injectedFieldInTo || Object.keys(jdlRelationship.options.destination).length !== 0)
+            ) {
                 relationshipsRelatedToEntity.to.push(jdlRelationship);
             }
         });
@@ -88,7 +91,9 @@ function setRelationshipsFromEntity(relatedRelationships, entityName) {
         }
         const splitField = extractField(relationshipToConvert.injectedFieldInFrom);
         convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.to);
-        convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
+        if (splitField.otherEntityField) {
+            convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
+        }
         if (relationshipToConvert.type === ONE_TO_ONE) {
             convertedRelationship.ownerSide = true;
         } else if (relationshipToConvert.type === MANY_TO_MANY) {
@@ -101,16 +106,18 @@ function setRelationshipsFromEntity(relatedRelationships, entityName) {
                         relationshipName: camelCase(relationshipToConvert.from),
                         otherEntityName: camelCase(relationshipToConvert.from),
                         relationshipType: _.kebabCase(MANY_TO_MANY),
-                        otherEntityField: lowerFirst(otherSplitField.otherEntityField),
                         otherEntityRelationshipName: lowerFirst(relationshipToConvert.to),
                         ownerSide: false,
                     };
+                    if (otherSplitField.otherEntityField) {
+                        otherSideRelationship.otherEntityField = lowerFirst(otherSplitField.otherEntityField);
+                    }
                     convertedOtherEntityRelationships.push(otherSideRelationship);
                 }
             }
             convertedRelationship.ownerSide = true;
         }
-        setOptionsForRelationship(relationshipToConvert, convertedRelationship);
+        setOptionsForRelationshipSourceSide(relationshipToConvert, convertedRelationship);
         const convertedEntityRelationships = convertedRelationships.get(entityName);
         convertedEntityRelationships.push(convertedRelationship);
     });
@@ -133,7 +140,9 @@ function setRelationshipsToEntity(relatedRelationships, entityName) {
         }
         const splitField = extractField(relationshipToConvert.injectedFieldInTo);
         convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.from);
-        convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
+        if (splitField.otherEntityField) {
+            convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
+        }
         if (relationshipToConvert.type === ONE_TO_ONE || relationshipToConvert.type === MANY_TO_MANY) {
             convertedRelationship.ownerSide = false;
         } else if (relationshipToConvert.type === ONE_TO_MANY) {
@@ -141,25 +150,48 @@ function setRelationshipsToEntity(relatedRelationships, entityName) {
         } else if (relationshipToConvert.type === MANY_TO_ONE && relationshipToConvert.injectedFieldInTo) {
             convertedRelationship.relationshipType = 'one-to-many';
         }
-        setOptionsForRelationship(relationshipToConvert, convertedRelationship);
+        setOptionsForRelationshipDestinationSide(relationshipToConvert, convertedRelationship);
         const convertedEntityRelationships = convertedRelationships.get(entityName);
         convertedEntityRelationships.push(convertedRelationship);
     });
 }
 
-function setOptionsForRelationship(relationshipToConvert, convertedRelationship) {
-    relationshipToConvert.forEachOption((optionName, optionValue) => {
+function setOptionsForRelationshipSourceSide(relationshipToConvert, convertedRelationship) {
+    convertedRelationship.options = convertedRelationship.options || {};
+    relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
         if (optionName === JPA_DERIVED_IDENTIFIER) {
             if (convertedRelationship.ownerSide) {
                 convertedRelationship.useJPADerivedIdentifier = optionValue;
             }
         } else {
-            if (!convertedRelationship.options) {
-                convertedRelationship.options = {};
-            }
             convertedRelationship.options[optionName] = optionValue;
         }
     });
+    relationshipToConvert.forEachDestinationOption((optionName, optionValue) => {
+        convertedRelationship.options[optionName] = optionValue;
+    });
+    if (Object.keys(convertedRelationship.options).length === 0) {
+        delete convertedRelationship.options;
+    }
+}
+
+function setOptionsForRelationshipDestinationSide(relationshipToConvert, convertedRelationship) {
+    convertedRelationship.options = convertedRelationship.options || {};
+    relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
+        if (optionName === JPA_DERIVED_IDENTIFIER) {
+            if (convertedRelationship.ownerSide) {
+                convertedRelationship.useJPADerivedIdentifier = optionValue;
+            }
+        } else {
+            convertedRelationship.options[optionName] = optionValue;
+        }
+    });
+    relationshipToConvert.forEachSourceOption((optionName, optionValue) => {
+        convertedRelationship.options[optionName] = optionValue;
+    });
+    if (Object.keys(convertedRelationship.options).length === 0) {
+        delete convertedRelationship.options;
+    }
 }
 
 /**
@@ -170,7 +202,6 @@ function setOptionsForRelationship(relationshipToConvert, convertedRelationship)
  */
 function extractField(field) {
     const splitField = {
-        otherEntityField: 'id', // id by default
         relationshipName: '',
     };
     if (field) {

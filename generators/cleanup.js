@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,7 @@
 const constants = require('./generator-constants');
 const { languageSnakeCase, languageToJavaLanguage } = require('./utils');
 
-const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR } = constants;
+const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, SERVER_MAIN_RES_DIR, ANGULAR_DIR, REACT_DIR, VUE_DIR, CLIENT_WEBPACK_DIR } = constants;
 
 const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
@@ -104,8 +104,14 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}tsconfig-aot.json`);
     }
 
-    if (generator.isJhipsterVersionLessThan('7.0.0') && generator.jhipsterConfig) {
+    if (generator.isJhipsterVersionLessThan('7.0.0-beta.0') && generator.jhipsterConfig) {
         if (generator.jhipsterConfig.clientFramework === ANGULAR) {
+            generator.removeFile(`${ANGULAR_DIR}account/password/password-strength-bar.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}account/password/password-strength-bar.scss`);
+            generator.removeFile(`${ANGULAR_DIR}admin/docs/docs.scss`);
+            generator.removeFile(`${ANGULAR_DIR}home/home.scss`);
+            generator.removeFile(`${ANGULAR_DIR}layouts/navbar/navbar.scss`);
+            generator.removeFile(`${ANGULAR_DIR}layouts/profiles/page-ribbon.scss`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audit-data.model.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audit.model.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.component.html`);
@@ -113,24 +119,179 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.route.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.module.ts`);
             generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.service.ts`);
-            generator.removeFile(`${ANGULAR_DIR}blocks/interceptor/errorhandler.interceptor.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/health/health-modal.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/health/health-modal.component.html`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-delete-dialog.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-delete-dialog.component.html`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-detail.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-detail.component.html`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management.component.html`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-update.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-update.component.html`);
             generator.removeFile(`${ANGULAR_DIR}entities/entity.module.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/util/datepicker-adapter.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.ts`);
             generator.removeFile(`${ANGULAR_DIR}shared/login/login.component.html`);
             generator.removeFile(`${ANGULAR_DIR}core/auth/user-route-access-service.ts`);
-            generator.removeFile(`${ANGULAR_DIR}tsconfig.base.json`);
+            if (generator.jhipsterConfig.authenticationType !== 'session' || generator.jhipsterConfig.websocket !== 'spring-websocket') {
+                generator.removeFile(`${ANGULAR_DIR}core/auth/csrf.service.ts`);
+            }
+            generator.removeFolder(`${ANGULAR_DIR}core/login`);
+            generator.removeFolder(`${ANGULAR_DIR}blocks`);
+            generator.removeFile(`${ANGULAR_DIR}core/date/datepicker-adapter.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/icons/font-awesome-icons.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/language/language.constants.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/constants/authority.constants.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/constants/error.constants.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/constants/input.constants.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/constants/pagination.constants.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/util/request-util.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/core.module.ts`);
+            generator.removeFile(`${ANGULAR_DIR}vendor.ts`);
+            generator.removeFile(`${ANGULAR_DIR}app.main.ts`);
+            generator.removeFile(`${ANGULAR_DIR}polyfills.ts`);
+            generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.common.js`);
+            generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.dev.js`);
+            generator.removeFile(`${CLIENT_WEBPACK_DIR}webpack.prod.js`);
+            generator.removeFile(`${CLIENT_WEBPACK_DIR}utils.js`);
+            generator.removeFile('tsconfig.base.json');
+            generator.removeFile('postcss.config.js');
+            generator.removeFile('proxy.conf.json');
+            generator.removeFile('tslint.json');
+
+            // unreleased files and folders cleanup for v7 developers
+            generator.removeFile(`${ANGULAR_DIR}shared/duration.pipe.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/find-language-from-key.pipe.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/translate.directive.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/user/authority.model.ts`);
+            generator.removeFolder(`${ANGULAR_DIR}core/config`);
+            generator.removeFolder(`${ANGULAR_DIR}core/event-manager`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/jvm-memory`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/jvm-threads`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-cache`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-datasource`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-endpoints-requests`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-garbagecollector`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-modal-threads`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-request`);
+            generator.removeFolder(`${ANGULAR_DIR}admin/metrics/metrics-system`);
+            generator.removeFile(`${ANGULAR_DIR}shared/has-any-authority.directive.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/item-count.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}shared/item-count.component.spec.ts`);
+
+            // test files removal from old location
+            // a) deleted before moving tests next to files they are testing
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/password/password-strength-bar.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-delete-dialog.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-detail.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-update.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/login/login-modal.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/login/login-modal.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/user/account.service.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.service.spec.ts`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/test.module.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest-global-mocks.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-account.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-active-modal.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-alert.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-event-manager.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-language.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-login-modal.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-login.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-route.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-state-storage.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/mock-tracker.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/helpers/spyobject.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/translate.directive.spec.ts`);
+            generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/app/core/event-manager`);
+            // b) deleted while moving tests next to files they are testing
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/activate/activate.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/password-reset/finish/password-reset-finish.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/password-reset/init/password-reset-init.component.spec.ts`);
+            generator.removeFile(
+                `${CLIENT_TEST_SRC_DIR}spec/app/account/password/password-strength-bar/password-strength-bar.component.spec.ts`
+            );
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/password/password.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/register/register.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/sessions/sessions.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/account/settings/settings.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/configuration/configuration.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/configuration/configuration.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/health/health.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/logs/logs.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/logs/logs.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics.service.spec.ts`);
+            generator.removeFile(
+                `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/delete/user-management-delete-dialog.component.spec.ts`
+            );
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/detail/user-management-detail.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/list/user-management.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/update/user-management-update.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/auth/account.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/user/user.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/util/alert.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/util/data-util.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/util/event-manager.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/core/util/parse-links.service.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/home/home.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/layouts/main/main.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/layouts/navbar/navbar.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/login/login.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert-error.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/date/format-medium-date.pipe.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/date/format-medium-datetime.pipe.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/item-count.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/language/translate.directive.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/sort/sort-by.directive.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/sort/sort.directive.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest.conf.js`);
         } else if (generator.jhipsterConfig.clientFramework === REACT) {
-            generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx.ejs`);
+            generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/enzyme-setup.ts`);
         } else if (generator.jhipsterConfig.clientFramework === VUE) {
             generator.removeFile(`${VUE_DIR}admin/audits/audits.component.ts`);
             generator.removeFile(`${VUE_DIR}admin/audits/audits.service.ts`);
             generator.removeFile(`${VUE_DIR}admin/audits/audits.vue`);
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
+        }
+    }
+
+    if (generator.isJhipsterVersionLessThan('7.0.0-beta.1') && generator.jhipsterConfig) {
+        if (generator.jhipsterConfig.clientFramework === ANGULAR) {
+            generator.removeFile(`${ANGULAR_DIR}core/user/account.model.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/user/user.model.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/user/user.service.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/user/user.service.spec.ts`);
+        } else if (generator.jhipsterConfig.clientFramework === REACT) {
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest.conf.js`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/icons-mock.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/storage-mock.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/utils.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/config/axios-interceptor.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/config/notification-middleware.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/reducers/application-profile.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/reducers/authentication.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/util/entity-utils.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/auth/private-route.spec.tsx`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/error/error-boundary.spec.tsx`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/error/error-boundary-route.spec.tsx`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/layout/header/header.spec.tsx`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/layout/menus/account.spec.tsx`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/administration/administration.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/account/register/register.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/account/activate/activate.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/account/password/password.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/account/settings/settings.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/administration/user-management/user-management.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/reducers/locale.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/reducers/user-management.spec.ts`);
         }
     }
 }
@@ -270,7 +431,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${javaDir}config/ReactivePageableHandlerMethodArgumentResolver.java`);
         generator.removeFile(`${javaDir}config/ReactiveSortHandlerMethodArgumentResolver.java`);
     }
-    if (generator.isJhipsterVersionLessThan('7.0.0')) {
+    if (generator.isJhipsterVersionLessThan('7.0.0-beta.0')) {
         generator.removeFile(`${javaDir}config/apidoc/SwaggerConfiguration.java`);
         generator.removeFile(`${javaDir}config/audit/package-info.java`);
         generator.removeFile(`${javaDir}config/audit/AuditEventConverter.java`);
@@ -294,6 +455,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         if (generator.searchEngine === 'elasticsearch') {
             generator.removeFile(`${testDir}config/ElasticsearchTestConfiguration.java`);
         }
+    }
+    if (generator.isJhipsterVersionLessThan('7.0.0-beta.1')) {
+        generator.removeFile(`${javaDir}config/CloudDatabaseConfiguration.java`);
     }
 }
 

@@ -19,6 +19,7 @@ const priorities = [
     'composing',
     'loading',
     'preparing',
+    'preparingRelationships',
     'default',
     'writing',
     'postWriting',
@@ -106,6 +107,18 @@ const createAllBlueprint = mockedPriorities => {
 
         get preparing() {
             return this._preparing();
+        }
+
+        _preparingRelationships() {
+            return {
+                mockedPreparingRelationships() {
+                    mockedPriorities.preparingRelationships();
+                },
+            };
+        }
+
+        get preparingRelationships() {
+            return this._preparingRelationships();
         }
 
         _default() {
@@ -289,7 +302,7 @@ describe('Generator Base Blueprint', () => {
             });
 
             priorities.forEach(priority => {
-                if (['composing', 'loading', 'preparing', 'postWriting'].includes(priority)) {
+                if (['composing', 'loading', 'preparing', 'preparingRelationships', 'postWriting'].includes(priority)) {
                     it(`should not execute ${priority}`, () => {
                         assert.equal(mockedPriorities[priority].callCount, 0);
                     });

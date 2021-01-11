@@ -4,10 +4,10 @@ import { Store } from 'vuex';
 import { BUILD_TIMESTAMP } from '@/constants';
 
 export default class TranslationService {
-  private store: Store<{}>;
+  private store: Store<unknown>;
   private i18n: VueI18n;
 
-  constructor(store: Store<{}>, i18n: VueI18n) {
+  constructor(store: Store<unknown>, i18n: VueI18n) {
     this.store = store;
     this.i18n = i18n;
   }
@@ -28,5 +28,19 @@ export default class TranslationService {
       this.i18n.locale = currentLanguage;
       this.store.commit('currentLanguage', currentLanguage);
     }
+    <%_ if (enableI18nRTL) { _%>
+      this.updatePageDirection(currentLanguage);
+    <%_ } _%>
   }
+
+  <%_ if (enableI18nRTL) { _%>
+    private isRTL(lang: string): boolean {
+      const languages = this.store.getters.languages;
+      return languages[lang] && languages[lang].rtl;
+    }
+
+    private updatePageDirection(currentLanguage: string): void {
+      document.querySelector('html').setAttribute('dir', this.isRTL(currentLanguage) ? 'rtl' : 'ltr');
+    }
+  <%_ } _%>
 }

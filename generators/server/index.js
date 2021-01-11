@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -35,13 +35,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
-
         // This adds support for a `--experimental` flag which can be used to enable experimental features
         this.option('experimental', {
             desc:
@@ -60,8 +53,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
 
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('server');
-
-        this.registerPrettierTransform();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -138,6 +129,8 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                 this.KAFKA_VERSION = constants.KAFKA_VERSION;
 
                 this.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;
+
+                this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
                 this.packagejs = packagejs;
             },
@@ -239,6 +232,10 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                 this.loadServerConfig();
                 this.loadTranslationConfig();
             },
+
+            createUserManagementEntities() {
+                this.createUserManagementEntities();
+            },
         };
     }
 
@@ -262,7 +259,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
                     this.cacheProvider
                 );
                 this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.authenticationType);
-                this.pkType = this.getPkType(this.databaseType);
 
                 this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
 
@@ -306,6 +302,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         return {
             ...super._missingPreDefault(),
 
+            loadUserManagementEntities() {
+                if (!this.configOptions.sharedEntities) return;
+                // Make user entity available to templates.
+                this.user = this.configOptions.sharedEntities.User;
+            },
+
             insight() {
                 statistics.sendSubGenEvent('generator', 'server', {
                     app: {
@@ -340,6 +342,144 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     get writing() {
         if (useBlueprints) return;
         return this._writing();
+    }
+
+    _postWriting() {
+        return {
+            packageJsonScripts() {
+                const packageJsonStorage = this.createStorage('package.json');
+                const packageJsonConfigStorage = packageJsonStorage.createStorage('config').createProxy();
+                packageJsonConfigStorage.backend_port = this.serverPort;
+                packageJsonConfigStorage.packaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
+                if (process.env.JHI_PROFILE) {
+                    packageJsonConfigStorage.default_environment = process.env.JHI_PROFILE.includes('dev') ? 'dev' : 'prod';
+                }
+            },
+            packageJsonDockerScripts() {
+                const packageJsonStorage = this.createStorage('package.json');
+                const scriptsStorage = packageJsonStorage.createStorage('scripts');
+                const databaseType = this.jhipsterConfig.databaseType;
+                if (databaseType === 'sql') {
+                    const prodDatabaseType = this.jhipsterConfig.prodDatabaseType;
+                    if (prodDatabaseType === 'no' || prodDatabaseType === 'oracle') {
+                        scriptsStorage.set(
+                            'docker:db:up',
+                            `echo "Docker for db ${prodDatabaseType} not configured for application ${this.baseName}"`
+                        );
+                    } else {
+                        scriptsStorage.set({
+                            'docker:db:up': `docker-compose -f src/main/docker/${prodDatabaseType}.yml up -d`,
+                            'docker:db:down': `docker-compose -f src/main/docker/${prodDatabaseType}.yml down -v --remove-orphans`,
+                        });
+                    }
+                } else {
+                    const dockerFile = `src/main/docker/${databaseType}.yml`;
+                    if (databaseType === 'cassandra') {
+                        scriptsStorage.set({
+                            'docker:db:await': 'wait-on tcp:9042 && sleep 20',
+                        });
+                    }
+                    if (databaseType === 'couchbase' || databaseType === 'cassandra') {
+                        scriptsStorage.set({
+                            'docker:db:build': `docker-compose -f ${dockerFile} build`,
+                            'docker:db:up': `docker-compose -f ${dockerFile} up -d`,
+                            'docker:db:down': `docker-compose -f ${dockerFile} down -v --remove-orphans`,
+                        });
+                    } else if (this.fs.exists(this.destinationPath(dockerFile))) {
+                        scriptsStorage.set({
+                            'docker:db:up': `docker-compose -f ${dockerFile} up -d`,
+                            'docker:db:down': `docker-compose -f ${dockerFile} down -v --remove-orphans`,
+                        });
+                    } else {
+                        scriptsStorage.set(
+                            'docker:db:up',
+                            `echo "Docker for db ${databaseType} not configured for application ${this.baseName}"`
+                        );
+                    }
+                }
+
+                const dockerOthersUp = [];
+                const dockerOthersDown = [];
+                const dockerBuild = [];
+                ['keycloak', 'elasticsearch', 'kafka', 'consul', 'redis', 'memcached', 'jhipster-registry'].forEach(dockerConfig => {
+                    const dockerFile = `src/main/docker/${dockerConfig}.yml`;
+                    if (this.fs.exists(this.destinationPath(dockerFile))) {
+                        if (['cassandra', 'couchbase'].includes(dockerConfig)) {
+                            scriptsStorage.set(`docker:${dockerConfig}:build`, `docker-compose -f ${dockerFile} build`);
+                            dockerBuild.push(`npm run docker:${dockerConfig}:build`);
+                        }
+                        scriptsStorage.set(`docker:${dockerConfig}:up`, `docker-compose -f ${dockerFile} up -d`);
+                        dockerOthersUp.push(`npm run docker:${dockerConfig}:up`);
+                        scriptsStorage.set(`docker:${dockerConfig}:down`, `docker-compose -f ${dockerFile} down -v --remove-orphans`);
+                        dockerOthersDown.push(`npm run docker:${dockerConfig}:down`);
+                    }
+                });
+                scriptsStorage.set({
+                    'predocker:others:up': dockerBuild.join(' && '),
+                    'docker:others:up': dockerOthersUp.join(' && '),
+                    'docker:others:down': dockerOthersDown.join(' && '),
+                    'ci:e2e:prepare:docker': 'npm run docker:db:up && npm run docker:others:up && docker ps -a',
+                    'ci:e2e:prepare': 'npm run ci:e2e:prepare:docker',
+                    'ci:e2e:teardown:docker': 'npm run docker:db:down --if-present && npm run docker:others:down && docker ps -a',
+                    'ci:e2e:teardown': 'npm run ci:e2e:teardown:docker',
+                });
+            },
+            packageJsonBackendScripts() {
+                const packageJsonStorage = this.createStorage('package.json');
+                const scriptsStorage = packageJsonStorage.createStorage('scripts');
+                const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.org.zalando=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.${this.jhipsterConfig.packageName}=OFF`;
+                const javaTestLog =
+                    '-Dlogging.level.org.springframework=OFF -Dlogging.level.org.springframework.web=OFF -Dlogging.level.org.springframework.security=OFF';
+
+                const buildTool = this.jhipsterConfig.buildTool;
+                let e2ePackage = 'target/e2e';
+                if (buildTool === 'maven') {
+                    scriptsStorage.set({
+                        'backend:info': './mvnw -ntp enforcer:display-info --batch-mode',
+                        'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
+                        'backend:nohttp:test': './mvnw -ntp checkstyle:check --batch-mode',
+                        'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
+                        'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
+                        'java:docker': './mvnw -ntp verify -DskipTests jib:dockerBuild',
+                        'backend:unit:test': `./mvnw -ntp -P-webapp verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
+                    });
+                } else if (buildTool === 'gradle') {
+                    const excludeWebapp = this.jhipsterConfig.skipClient ? '' : '-x webapp';
+                    e2ePackage = 'e2e';
+                    scriptsStorage.set({
+                        'backend:info': './gradlew -v',
+                        'backend:doc:test': `./gradlew javadoc ${excludeWebapp}`,
+                        'backend:nohttp:test': `./gradlew checkstyleNohttp ${excludeWebapp}`,
+                        'java:jar': './gradlew bootJar -x test -x integrationTest',
+                        'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
+                        'java:docker': './gradlew bootJar jibDockerBuild',
+                        'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
+                        'postci:e2e:package': 'cp build/libs/*SNAPSHOT.$npm_package_config_packaging e2e.$npm_package_config_packaging',
+                    });
+                }
+
+                scriptsStorage.set({
+                    'java:jar:dev': 'npm run java:jar -- -Pdev,webapp',
+                    'java:jar:prod': 'npm run java:jar -- -Pprod',
+                    'java:war:dev': 'npm run java:war -- -Pdev,webapp',
+                    'java:war:prod': 'npm run java:war -- -Pprod',
+                    'java:docker:dev': 'npm run java:docker -- -Pdev,webapp',
+                    'java:docker:prod': 'npm run java:docker -- -Pprod',
+                    'ci:backend:test':
+                        'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test',
+                    'ci:server:package': 'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment',
+                    'ci:e2e:package':
+                        'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
+                    'preci:e2e:server:start': 'npm run docker:db:await --if-present && npm run docker:others:await --if-present',
+                    'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
+                });
+            },
+        };
+    }
+
+    get postWriting() {
+        if (useBlueprints) return;
+        return this._postWriting();
     }
 
     _install() {
@@ -410,7 +550,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
         // user-management will be handled by UAA app, oauth expects users to be managed in IpP
         if ((config.applicationType === 'gateway' && config.authenticationType === 'uaa') || config.authenticationType === 'oauth2') {
-            this.info('user-management will be handled by UAA app, oauth expects users to be managed in IpP');
             config.skipUserManagement = true;
         }
 

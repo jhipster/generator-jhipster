@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -35,12 +35,6 @@ module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
         this.option('skip-prompts', {
             desc: 'Skip prompts',
             type: Boolean,
@@ -63,6 +57,11 @@ module.exports = class extends BaseBlueprintGenerator {
         // This adds support for a `--skip-server` flag
         this.option('skip-server', {
             desc: 'Skip installing server files',
+            type: Boolean,
+        });
+
+        this.option('regenerate', {
+            desc: 'Regenerate languages files',
             type: Boolean,
         });
 
@@ -139,13 +138,21 @@ module.exports = class extends BaseBlueprintGenerator {
     _configuring() {
         return {
             defaults() {
-                this.setConfigDefaults(translationDefaultConfig);
+                if (!this.jhipsterConfig.nativeLanguage) {
+                    // If native language is not set, use defaults, otherwise languages will be built with nativeLanguage.
+                    this.setConfigDefaults(translationDefaultConfig);
+                    this.languagesToApply = this.jhipsterConfig.languages;
+                }
             },
             updateLanguages() {
                 if (this.jhipsterConfig.enableTranslation) {
-                    if (this.languagesToApply && !this.jhipsterConfig.languages.includes(this.jhipsterConfig.nativeLanguage)) {
+                    if (!this.jhipsterConfig.languages || !this.jhipsterConfig.languages.includes(this.jhipsterConfig.nativeLanguage)) {
                         // First time we are generating the native language
-                        this.languagesToApply.unshift(this.jhipsterConfig.nativeLanguage);
+                        if (!this.languagesToApply) {
+                            this.languagesToApply = [this.jhipsterConfig.nativeLanguage];
+                        } else {
+                            this.languagesToApply.unshift(this.jhipsterConfig.nativeLanguage);
+                        }
                     }
                     // Concatenate the native language, current languages, and the new languages.
                     this.jhipsterConfig.languages = _.union(
@@ -187,7 +194,11 @@ module.exports = class extends BaseBlueprintGenerator {
     _preparing() {
         return {
             prepareForTemplates() {
-                this.languagesToApply = this.languagesToApply || this.languages || [];
+                if (this.options.regenerate) {
+                    this.languagesToApply = this.languages;
+                } else {
+                    this.languagesToApply = this.languagesToApply || [];
+                }
 
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
@@ -233,16 +244,15 @@ module.exports = class extends BaseBlueprintGenerator {
             },
             write() {
                 if (!this.skipClient) {
+                    this.updateLanguagesInDayjsConfiguation(this.languages);
                     if (this.clientFramework === ANGULAR) {
                         this.updateLanguagesInLanguagePipe(this.languages);
                         this.updateLanguagesInLanguageConstantNG2(this.languages);
-                        this.updateLanguagesInMomentWebpackNgx(this.languages);
-                        this.updateLanguagesInWebpack(this.languages);
+                        this.updateLanguagesInWebpackAngular(this.languages);
                     }
                     if (this.clientFramework === REACT) {
                         this.updateLanguagesInLanguagePipe(this.languages);
-                        this.updateLanguagesInMomentWebpackReact(this.languages);
-                        this.updateLanguagesInWebpack(this.languages);
+                        this.updateLanguagesInWebpackReact(this.languages);
                     }
                     if (this.clientFramework === VUE) {
                         this.vueUpdateLanguagesInTranslationStore(this.languages);

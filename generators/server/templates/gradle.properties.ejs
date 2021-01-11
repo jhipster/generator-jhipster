@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,29 +26,29 @@ npmVersion=<%= NPM_VERSION %>
 # Dependency versions
 jhipsterDependenciesVersion=<%= JHIPSTER_DEPENDENCIES_VERSION %>
 # The spring-boot version should match the one managed by
-# https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/<%= JHIPSTER_DEPENDENCIES_VERSION %>
+# https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/<%= JHIPSTER_DEPENDENCIES_VERSION %>
 springBootVersion=<%= SPRING_BOOT_VERSION %>
 # The hibernate version should match the one managed by
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %> -->
 hibernateVersion=<%= HIBERNATE_VERSION %>
-mapstructVersion=1.4.0.Final
-archunitJunit5Version=0.14.1
+mapstructVersion=1.4.1.Final
+archunitJunit5Version=0.15.0
 <%_ if (enableSwaggerCodegen) { _%>
 jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 <%_ } _%>
 <%_ if (cacheProvider === 'caffeine') { _%>
-caffeineVersion=2.8.5
-typesafeConfigVersion=1.4.0
+caffeineVersion=2.8.8
+typesafeConfigVersion=1.4.1
 <%_ } _%>
 <%_ if (databaseType === 'sql' && !reactive) { _%>
-liquibaseHibernate5Version=3.10.2
+liquibaseHibernate5Version=4.2.2
 liquibaseTaskPrefix=liquibase
 <%_ } _%>
 
 <%_ if (reactive) { _%>
 blockhoundJunitPlatformVersion=1.0.4.RELEASE
-junitPlatformLauncherVersion=1.6.2
-r2dbcMariadbVersion=0.8.2-alpha2
+junitPlatformLauncherVersion=1.7.0
+r2dbcMariadbVersion=1.0.0
 <%_ } _%>
 
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
@@ -62,9 +62,9 @@ cassandraDriverVersion=4.6.1
 
 # gradle plugin version
 jibPluginVersion=<%= JIB_VERSION %>
-gitPropertiesPluginVersion=2.2.3
+gitPropertiesPluginVersion=2.2.4
 <%_ if (!skipClient) { _%>
-gradleNodePluginVersion=2.2.4
+gradleNodePluginVersion=3.0.0-rc5
 <%_ } _%>
 aptPluginVersion=0.21
 <%_ if (databaseType === 'sql' && !reactive) { _%>
@@ -75,7 +75,7 @@ sonarqubePluginVersion=3.0
 openapiPluginVersion=4.3.1
 <%_ } _%>
 springNoHttpPluginVersion=0.0.5.RELEASE
-checkstyleVersion=8.36
+checkstyleVersion=8.38
 
 # jhipster-needle-gradle-property - JHipster will add additional properties here
 

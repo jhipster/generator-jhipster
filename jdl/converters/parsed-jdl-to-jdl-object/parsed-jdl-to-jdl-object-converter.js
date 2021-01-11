@@ -1,13 +1,14 @@
-/** Copyright 2013-2020 the original author or authors from the JHipster project.
+/**
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+const _ = require('lodash');
 const JDLObject = require('../../models/jdl-object');
 const JDLEntity = require('../../models/jdl-entity');
 const JDLUnaryOption = require('../../models/jdl-unary-option');
@@ -23,7 +24,6 @@ const JDLBinaryOption = require('../../models/jdl-binary-option');
 const ApplicationTypes = require('../../jhipster/application-types');
 const BinaryOptions = require('../../jhipster/binary-options');
 const DatabaseTypes = require('../../jhipster/database-types');
-const { lowerFirst } = require('../../utils/string-utils');
 
 const { convertApplications } = require('./application-converter');
 const { convertEntities } = require('./entity-converter');
@@ -122,10 +122,6 @@ function getJDLFieldsFromParsedEntity(entity) {
     const fields = [];
     for (let i = 0; i < entity.body.length; i++) {
         const field = entity.body[i];
-        const fieldName = lowerFirst(field.name);
-        if (fieldName.toLowerCase() === 'id') {
-            continue; // eslint-disable-line no-continue
-        }
         const jdlField = convertField(field);
         jdlField.validations = getValidations(field);
         jdlField.options = convertAnnotationsToOptions(field.annotations);
@@ -139,20 +135,21 @@ function addOptionsFromEntityAnnotations() {
         const entityName = entity.name;
         const annotations = entity.annotations;
         annotations.forEach(annotation => {
+            let annotationName = _.lowerFirst(annotation.optionName);
             if (annotation.type === 'UNARY') {
                 jdlObject.addOption(
                     new JDLUnaryOption({
-                        name: annotation.optionName,
+                        name: annotationName,
                         entityNames: [entityName],
                     })
                 );
             } else if (annotation.type === 'BINARY') {
-                if (annotation.optionName === 'paginate') {
-                    annotation.optionName = BinaryOptions.Options.PAGINATION;
+                if (annotationName === 'paginate') {
+                    annotationName = BinaryOptions.Options.PAGINATION;
                 }
                 jdlObject.addOption(
                     new JDLBinaryOption({
-                        name: annotation.optionName,
+                        name: annotationName,
                         value: annotation.optionValue,
                         entityNames: [entityName],
                     })
@@ -207,18 +204,19 @@ function fillAssociations() {
 function convertAnnotationsToOptions(annotations) {
     const result = {};
     annotations.forEach(annotation => {
+        const annotationName = _.lowerFirst(annotation.optionName);
         const value = annotation.optionValue ? annotation.optionValue : true;
-        if (annotation.optionName in result) {
-            const previousValue = result[annotation.optionName];
+        if (annotationName in result) {
+            const previousValue = result[annotationName];
             if (Array.isArray(previousValue)) {
                 if (!previousValue.includes(value)) {
                     previousValue.push(value);
                 }
             } else if (value !== previousValue) {
-                result[annotation.optionName] = [previousValue, value];
+                result[annotationName] = [previousValue, value];
             }
         } else {
-            result[annotation.optionName] = value;
+            result[annotationName] = value;
         }
     });
     return result;

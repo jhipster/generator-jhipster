@@ -1,14 +1,14 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-const { isReservedFieldName } = require('../jhipster/reserved-keywords');
 const { merge } = require('../utils/object-utils');
 
 module.exports = class JDLField {
@@ -25,9 +24,6 @@ module.exports = class JDLField {
         const merged = merge(defaults(), args);
         if (!merged.name || !merged.type) {
             throw new Error('The field name and type are mandatory to create a field.');
-        }
-        if (isReservedFieldName(merged.name)) {
-            throw new Error(`The field name cannot be a reserved keyword, got: ${merged.name}.`);
         }
         this.name = merged.name;
         this.type = merged.type;

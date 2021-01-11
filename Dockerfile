@@ -10,7 +10,7 @@ RUN \
   ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
   apt-get update && \
   # install utilities
-  apt-get install -y \
+  apt-get --no-install-recommends install -y \
     wget \
     curl \
     vim \
@@ -18,19 +18,12 @@ RUN \
     zip \
     bzip2 \
     fontconfig \
-    python \
-    g++ \
     libpng-dev \
-    build-essential \
-    software-properties-common \
-    sudo && \
-  # install OpenJDK 11
-  add-apt-repository ppa:openjdk-r/ppa && \
-  apt-get update && \
-  apt-get install -y openjdk-11-jdk && \
+    sudo \
+    openjdk-11-jdk && \
   update-java-alternatives -s java-1.11.0-openjdk-amd64 && \
   # install node.js
-  wget https://nodejs.org/dist/v12.18.3/node-v12.18.3-linux-x64.tar.gz -O /tmp/node.tar.gz && \
+  wget https://nodejs.org/dist/v14.15.0/node-v14.15.0-linux-x64.tar.gz -O /tmp/node.tar.gz && \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
   # upgrade npm
   npm install -g npm && \

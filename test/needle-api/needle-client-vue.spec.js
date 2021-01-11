@@ -15,9 +15,6 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         if (!jhContext) {
             this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
         }
-        this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupClientOptions(this, jhContext);
     }
 
     get initializing() {
@@ -51,7 +48,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                     'entityFileName',
                     'entityUrl',
                     VUE,
-                    'microServiceName'
+                    'microserviceName'
                 );
             },
         };
@@ -94,10 +91,12 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
     it('menu contains the item and the root', () => {
         assert.fileContent(
             `${CLIENT_MAIN_SRC_DIR}app/core/jhi-navbar/jhi-navbar.vue`,
-            '<b-dropdown-item to="/routerName">\n' +
-                '                        <font-awesome-icon icon="asterisk" />\n' +
-                '                        <span>Router Name</span>\n' +
-                '                    </b-dropdown-item>'
+            `
+          <b-dropdown-item to="/routerName">
+            <font-awesome-icon icon="asterisk" />
+            <span>Router Name</span>
+          </b-dropdown-item>
+`
         );
     });
 
@@ -120,25 +119,25 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
                 "    path: '/entityFileName',\n" +
                 "    name: 'entityName',\n" +
                 '    component: entityName,\n' +
-                '    meta: { authorities: [Authority.USER] }\n' +
+                '    meta: { authorities: [Authority.USER] },\n' +
                 '  },\n' +
                 '  {\n' +
                 "    path: '/entityFileName/new',\n" +
                 "    name: 'entityNameCreate',\n" +
                 '    component: entityNameUpdate,\n' +
-                '    meta: { authorities: [Authority.USER] }\n' +
+                '    meta: { authorities: [Authority.USER] },\n' +
                 '  },\n' +
                 '  {\n' +
                 "    path: '/entityFileName/:entityInstanceId/edit',\n" +
                 "    name: 'entityNameEdit',\n" +
                 '    component: entityNameUpdate,\n' +
-                '    meta: { authorities: [Authority.USER] }\n' +
+                '    meta: { authorities: [Authority.USER] },\n' +
                 '  },\n' +
                 '  {\n' +
                 "    path: '/entityFileName/:entityInstanceId/view',\n" +
                 "    name: 'entityNameView',\n" +
                 '    component: entityNameDetails,\n' +
-                '    meta: { authorities: [Authority.USER] }\n' +
+                '    meta: { authorities: [Authority.USER] },\n' +
                 '  },\n'
         );
     });

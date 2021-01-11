@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,55 +29,48 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-        // This adds support for a `--from-cli` flag
-        this.option('fromCli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
+
         // Automatically configure Travis
-        this.argument('autoconfigure-travis', {
+        this.option('autoconfigure-travis', {
             type: Boolean,
             defaults: false,
             description: 'Automatically configure Travis',
         });
 
         // Automatically configure Jenkins
-        this.argument('autoconfigure-jenkins', {
+        this.option('autoconfigure-jenkins', {
             type: Boolean,
             defaults: false,
             description: 'Automatically configure Jenkins',
         });
 
         // Automatically configure Gitlab
-        this.argument('autoconfigure-gitlab', {
+        this.option('autoconfigure-gitlab', {
             type: Boolean,
             defaults: false,
             description: 'Automatically configure Gitlab',
         });
 
         // Automatically configure Azure
-        this.argument('autoconfigure-azure', {
+        this.option('autoconfigure-azure', {
             type: Boolean,
             defaults: false,
             description: 'Automatically configure Azure',
         });
 
         // Automatically configure GitHub Actions
-        this.argument('autoconfigure-github', {
+        this.option('autoconfigure-github', {
             type: Boolean,
             defaults: false,
             description: 'Automatically configure GitHub Actions',
         });
 
         // Automatically configure CircleCI
-        this.argument('autoconfigure-circle', {
+        this.option('autoconfigure-circle', {
             type: Boolean,
             defaults: false,
             description: 'Automatically configure CircleCI',
         });
-
-        this.registerPrettierTransform();
     }
 
     get initializing() {
@@ -178,7 +171,7 @@ module.exports = class extends BaseGenerator {
             this.template('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
         }
         if (this.pipeline === 'github') {
-            this.template('github-ci.yml.ejs', '.github/workflows/github-ci.yml');
+            this.template('github-actions.yml.ejs', '.github/workflows/github-actions.yml');
         }
 
         if (this.cicdIntegrations.includes('deploy')) {

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,11 +29,11 @@ const vueFiles = {
     common: [
         {
             templates: [
+                '.npmrc',
                 'package.json',
                 'tsconfig.json',
-                '.huskyrc',
                 '.postcssrc.js',
-                'tslint.json',
+                '.eslintrc.js',
                 'config/index.js',
                 'config/dev.env.js',
                 'config/prod.env.js',
@@ -61,11 +61,6 @@ const vueFiles = {
             path: CLIENT_MAIN_SRC_DIR,
             templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss'],
         },
-        {
-            condition: generator => generator.enableI18nRTL,
-            path: CLIENT_MAIN_SRC_DIR,
-            templates: ['content/scss/rtl.scss'],
-        },
     ],
     swagger: [
         {
@@ -91,6 +86,7 @@ const vueFiles = {
                 'shared/config/axios-interceptor.ts',
                 'shared/config/config.ts',
                 'shared/config/config-bootstrap-vue.ts',
+                'shared/config/dayjs.ts',
                 'shared/config/store/account-store.ts',
                 'shared/security/authority.ts',
                 'router/index.ts',
@@ -181,13 +177,15 @@ const vueFiles = {
     adminModule: [
         {
             path: VUE_DIR,
+            templates: ['admin/docs/docs.vue', 'admin/docs/docs.component.ts'],
+        },
+        {
+            path: VUE_DIR,
+            condition: generator => generator.withAdminUi,
             templates: [
-                // admin modules
                 'admin/configuration/configuration.vue',
                 'admin/configuration/configuration.component.ts',
                 'admin/configuration/configuration.service.ts',
-                'admin/docs/docs.vue',
-                'admin/docs/docs.component.ts',
                 'admin/health/health.vue',
                 'admin/health/health.component.ts',
                 'admin/health/health-modal.vue',
@@ -245,6 +243,12 @@ const vueFiles = {
                 'spec/app/core/ribbon/ribbon.component.spec.ts',
                 'spec/app/shared/config/axios-interceptor.spec.ts',
                 'spec/app/shared/data/data-utils.service.spec.ts',
+            ],
+        },
+        {
+            path: CLIENT_TEST_SRC_DIR,
+            condition: generator => generator.withAdminUi,
+            templates: [
                 'spec/app/admin/configuration/configuration.component.spec.ts',
                 'spec/app/admin/health/health.component.spec.ts',
                 'spec/app/admin/health/health-modal.component.spec.ts',
@@ -329,7 +333,7 @@ const vueFiles = {
 
 function writeFiles() {
     // write Vue files
-    this.writeFilesToDisk(vueFiles, this, false, this.fetchFromInstalledJHipster('client/templates/vue'));
+    this.writeFilesToDisk(vueFiles, 'vue');
 
     if (!this.enableTranslation) {
         utils.vueReplaceTranslation(this, [
@@ -340,13 +344,17 @@ function writeFiles() {
             'app/core/jhi-navbar/jhi-navbar.vue',
             'app/core/ribbon/ribbon.vue',
             'app/shared/jhi-item-count.vue',
-            'app/admin/configuration/configuration.vue',
-            'app/admin/health/health.vue',
-            'app/admin/health/health-modal.vue',
-            'app/admin/logs/logs.vue',
-            'app/admin/metrics/metrics.vue',
-            'app/admin/metrics/metrics-modal.vue',
         ]);
+        if (this.withAdminUi) {
+            utils.vueReplaceTranslation(this, [
+                'app/admin/configuration/configuration.vue',
+                'app/admin/health/health.vue',
+                'app/admin/health/health-modal.vue',
+                'app/admin/logs/logs.vue',
+                'app/admin/metrics/metrics.vue',
+                'app/admin/metrics/metrics-modal.vue',
+            ]);
+        }
         if (this.authenticationType !== 'oauth2') {
             utils.vueReplaceTranslation(this, ['app/account/login-form/login-form.vue']);
         }

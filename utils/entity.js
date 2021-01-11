@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,6 +26,7 @@ const { entityDefaultConfig } = require('../generators/generator-defaults');
 const { stringHashCode } = require('../generators/utils');
 
 const BASE_TEMPLATE_DATA = {
+    primaryKey: undefined,
     skipUiGrouping: false,
     haveFieldWithJavadoc: false,
     existingEnum: false,
@@ -50,6 +51,14 @@ const BASE_TEMPLATE_DATA = {
     fieldsContainManyToOne: false,
     fieldsContainEmbedded: false,
     fieldsIsReactAvField: false,
+
+    get otherRelationships() {
+        return [];
+    },
+
+    get idFields() {
+        return [];
+    },
 
     get enums() {
         return [];
@@ -87,7 +96,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     }
 
     entityWithConfig.useMicroserviceJson = entityWithConfig.useMicroserviceJson || entityWithConfig.microserviceName !== undefined;
-    if (entityWithConfig.applicationType === 'gateway' && entityWithConfig.useMicroserviceJson) {
+    if (generator.jhipsterConfig.applicationType === 'gateway' && entityWithConfig.useMicroserviceJson) {
         if (!entityWithConfig.microserviceName) {
             throw new Error('Microservice name for the entity is not found. Entity cannot be generated!');
         }
@@ -142,11 +151,13 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
             : entityWithConfig.entityStateName
     );
 
-    entityWithConfig.reactiveRepositories = entityWithConfig.reactive;
-
     entityWithConfig.differentTypes.push(entityWithConfig.entityClass);
     entityWithConfig.i18nToLoad.push(entityWithConfig.entityInstance);
     entityWithConfig.i18nKeyPrefix = `${entityWithConfig.frontendAppName}.${entityWithConfig.entityTranslationKey}`;
+    entityWithConfig.i18nAlertHeaderPrefix = entityWithConfig.i18nKeyPrefix;
+    if (entityWithConfig.microserviceAppName) {
+        entityWithConfig.i18nAlertHeaderPrefix = `${entityWithConfig.microserviceAppName}.${entityWithConfig.entityTranslationKey}`;
+    }
 
     const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => generator.isBuiltInUser(relationship.otherEntityName));
     entityWithConfig.saveUserSnapshot =
@@ -155,11 +166,94 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         hasBuiltInUserField &&
         entityWithConfig.dto === 'no';
 
-    entityWithConfig.primaryKeyType = generator.getPkTypeBasedOnDBAndAssociation(
-        entityWithConfig.authenticationType,
-        entityWithConfig.databaseType,
-        entityWithConfig.relationships
-    );
+    if (!entityWithConfig.embedded) {
+        entityWithConfig.idFields = entityWithConfig.fields.filter(field => field.id);
+        entityWithConfig.idRelationships = entityWithConfig.relationships.filter(
+            relationship => relationship.id || relationship.useJPADerivedIdentifier === true
+        );
+        let idCount = entityWithConfig.idFields.length + entityWithConfig.idRelationships.length;
+
+        if (idCount === 0) {
+            let idField = entityWithConfig.fields.find(field => field.fieldName === 'id');
+            if (idField) {
+                idField.id = true;
+            } else {
+                idField = {
+                    fieldName: 'id',
+                    id: true,
+                    fieldNameHumanized: 'ID',
+                    fieldTranslationKey: 'global.field.id',
+                };
+                entityWithConfig.fields.unshift(idField);
+            }
+            entityWithConfig.idFields.push(idField);
+            idCount++;
+        }
+
+        if (idCount > 1) {
+            throw new Error('Composite id not implemented');
+        } else if (entityWithConfig.idRelationships.length > 0) {
+            const relationshipId = entityWithConfig.idRelationships[0];
+            if (relationshipId.relationshipType === 'one-to-one' && idCount === 1) {
+                relationshipId.useJPADerivedIdentifier = true;
+                entityWithConfig.derivedPrimaryKey = relationshipId;
+                const idFields = entityWithConfig.idFields;
+                entityWithConfig.primaryKey = {
+                    fieldName: 'id',
+                    derived: true,
+                    get fields() {
+                        return [...idFields, ...this.derivedFields];
+                    },
+                    get derivedFields() {
+                        return relationshipId.otherEntity.primaryKey.fields.map(field => ({
+                            ...field,
+                            derived: true,
+                            derivedEntity: relationshipId.otherEntity,
+                            jpaGeneratedValue: false,
+                            liquibaseAutoIncrement: false,
+                        }));
+                    },
+                    relationships: entityWithConfig.idRelationships,
+                    get name() {
+                        return relationshipId.otherEntity.primaryKey.name;
+                    },
+                    get nameCapitalized() {
+                        return relationshipId.otherEntity.primaryKey.nameCapitalized;
+                    },
+                    get type() {
+                        return relationshipId.otherEntity.primaryKey.type;
+                    },
+                    get references() {
+                        return [
+                            ...idFields.map(field => field.reference),
+                            ...relationshipId.otherEntity.primaryKey.references.map(ref => ({ ...ref })),
+                        ];
+                    },
+                    get composite() {
+                        return this.references.length > 1;
+                    },
+                };
+            } else {
+                throw new Error('Composite id not implemented');
+            }
+        } else {
+            const idField = entityWithConfig.idFields[0];
+            // Allow ids type to be empty and fallback to default type for the database.
+            if (!idField.fieldType) {
+                idField.fieldType = generator.getPkType(entityWithConfig.databaseType);
+            }
+            entityWithConfig.primaryKey = {
+                derived: false,
+                fields: entityWithConfig.idFields,
+                relationships: entityWithConfig.idRelationships,
+                name: idField.fieldName,
+                nameCapitalized: _.upperFirst(idField.fieldName),
+                type: idField.fieldType,
+                references: entityWithConfig.idFields.map(field => field.reference),
+                composite: entityWithConfig.idFields.length > 1,
+            };
+        }
+    }
 
     entityWithConfig.fields.forEach(field => {
         const fieldType = field.fieldType;
@@ -209,7 +303,8 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     });
 
     entityWithConfig.generateFakeData = type => {
-        const fieldEntries = entityWithConfig.fields.map(field => {
+        const fieldsToGenerate = type === 'cypress' ? entityWithConfig.fields.filter(field => !field.id) : entityWithConfig.fields;
+        const fieldEntries = fieldsToGenerate.map(field => {
             const fieldData = field.generateFakeData(type);
             if (!field.nullable && fieldData === null) return undefined;
             return [field.fieldName, fieldData];
@@ -242,6 +337,7 @@ function loadRequiredConfigIntoEntity(entity, config) {
         searchEngine: config.searchEngine,
         jhiPrefix: config.jhiPrefix,
         authenticationType: config.authenticationType,
+        reactive: config.reactive,
     });
     return entity;
 }

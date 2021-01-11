@@ -1,14 +1,14 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -52,7 +52,7 @@ function checkInjectedFields(jdlRelationship) {
 }
 
 function checkForValidUseOfJPaDerivedIdentifier(jdlRelationship) {
-    if (jdlRelationship.type !== ONE_TO_ONE && jdlRelationship.hasOption(JPA_DERIVED_IDENTIFIER)) {
+    if (jdlRelationship.type !== ONE_TO_ONE && jdlRelationship.hasGlobalOption(JPA_DERIVED_IDENTIFIER)) {
         throw new Error(`Only a ${ONE_TO_ONE} relationship can have the '${JPA_DERIVED_IDENTIFIER}' option.`);
     }
 }
@@ -118,14 +118,6 @@ function checkOneToOneRelationship(jdlRelationship) {
 }
 
 function checkManyToOneRelationship(jdlRelationship, skippedUserManagementOption) {
-    const bidirectionalRelationship = jdlRelationship.injectedFieldInFrom && jdlRelationship.injectedFieldInTo;
-    if (bidirectionalRelationship) {
-        throw new Error(
-            `In the Many-to-One relationship from ${jdlRelationship.from} to ${jdlRelationship.to}, ` +
-                'only unidirectionality is supported, you should either create a bidirectional One-to-Many relationship or ' +
-                'remove the injected field in the destination entity instead.'
-        );
-    }
     const unidirectionalRelationship = !jdlRelationship.injectedFieldInFrom || !jdlRelationship.injectedFieldInTo;
     const userIsTheSourceEntity = isUserManagementEntity(jdlRelationship.from);
     const userIsTheDestinationEntity = isUserManagementEntity(jdlRelationship.to);

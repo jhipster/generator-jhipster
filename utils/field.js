@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+const assert = require('assert');
 const _ = require('lodash');
 const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
 
@@ -68,8 +69,8 @@ const fakeStringTemplateForFieldName = columnName => {
 
 const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => {
     let data;
-    if (field.options && field.options.fakerTemplate) {
-        data = faker.faker(field.options.fakerTemplate);
+    if (field.fakerTemplate) {
+        data = faker.faker(field.fakerTemplate);
     } else if (field.fieldValidate && field.fieldValidateRules.includes('pattern')) {
         const generated = field.createRandexp().gen();
         if (type === 'csv') {
@@ -149,15 +150,31 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
 };
 
 function prepareFieldForTemplates(entityWithConfig, field, generator) {
-    const fieldOptions = field.options || {};
     _.defaults(field, {
         fieldNameCapitalized: _.upperFirst(field.fieldName),
         fieldNameUnderscored: _.snakeCase(field.fieldName),
-        fieldNameHumanized: fieldOptions.fieldNameHumanized || _.startCase(field.fieldName),
+        fieldNameHumanized: _.startCase(field.fieldName),
+        fieldTranslationKey: `${entityWithConfig.i18nKeyPrefix}.${field.fieldName}`,
     });
     const fieldType = field.fieldType;
 
-    field.fieldIsEnum = fieldIsEnum(fieldType);
+    if (field.id) {
+        if (field.autoGenerate === false || !['Long', 'UUID'].includes(field.fieldType)) {
+            field.liquibaseAutoIncrement = false;
+            field.jpaGeneratedValue = false;
+        } else if (entityWithConfig.reactive) {
+            field.liquibaseAutoIncrement = true;
+            field.jpaGeneratedValue = false;
+        } else {
+            const defaultGenerationType = entityWithConfig.prodDatabaseType === 'mysql' ? 'identity' : 'sequence';
+            field.jpaGeneratedValue = field.jpaGeneratedValue || field.fieldType === 'Long' ? defaultGenerationType : true;
+            if (field.jpaGeneratedValue === 'identity') {
+                field.liquibaseAutoIncrement = true;
+            }
+        }
+    }
+
+    field.fieldIsEnum = !field.id && fieldIsEnum(fieldType);
     field.fieldWithContentType = (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text';
 
     if (field.fieldNameAsDatabaseColumn === undefined) {
@@ -175,8 +192,8 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
         } else {
             field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
         }
-        field.columnName = field.fieldNameAsDatabaseColumn;
     }
+    field.columnName = field.fieldNameAsDatabaseColumn;
 
     if (field.fieldInJavaBeanMethod === undefined) {
         // Handle the specific case when the second letter is capitalized
@@ -256,6 +273,20 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
         }
         return data;
     };
+    field.reference = fieldToReference(entityWithConfig, field);
+
+    if (field.mapstructExpression) {
+        assert.equal(
+            entityWithConfig.dto,
+            'mapstruct',
+            `@MapstructExpression requires an Entity with mapstruct dto [${entityWithConfig.name}.${field.fieldName}].`
+        );
+        // Remove from Entity.java and liquibase.
+        field.transient = true;
+        // Disable update form.
+        field.readonly = true;
+    }
+
     return field;
 }
 
@@ -297,6 +328,22 @@ function getEnumValuesWithCustomValues(enumValues) {
             value: matched[2],
         };
     });
+}
+
+function fieldToReference(entity, field, pathPrefix = []) {
+    return {
+        id: field.id,
+        entity,
+        field,
+        multiple: false,
+        owned: true,
+        doc: field.javadoc,
+        label: field.fieldNameHumanized,
+        name: field.fieldName,
+        type: field.fieldType,
+        nameCapitalized: field.fieldNameCapitalized,
+        path: [...pathPrefix, field.fieldName],
+    };
 }
 
 module.exports = { prepareFieldForTemplates, fieldIsEnum, getEnumValuesWithCustomValues };

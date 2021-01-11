@@ -1,0 +1,81 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { Component, ViewChild, OnInit, AfterViewInit, ElementRef } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { LoginService } from 'app/login/login.service';
+import { AccountService } from 'app/core/auth/account.service';
+
+@Component({
+  selector: '<%= jhiPrefixDashed %>-login',
+  templateUrl: './login.component.html',
+})
+export class LoginComponent implements OnInit, AfterViewInit {
+  @ViewChild('username', { static: false })
+  username?: ElementRef;
+
+  authenticationError = false;
+
+  loginForm = this.fb.group({
+    username: [null, [Validators.required]],
+    password: [null, [Validators.required]],
+    rememberMe: [false],
+  });
+
+  constructor(
+    private accountService: AccountService,
+    private loginService: LoginService,
+    private router: Router,
+    private fb: FormBuilder
+  ) {}
+
+  ngOnInit(): void {
+    // if already authenticated then navigate to home page
+    this.accountService.identity().subscribe(() => {
+      if (this.accountService.isAuthenticated()) {
+        this.router.navigate(['']);
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    if (this.username) {
+      this.username.nativeElement.focus();
+    }
+  }
+
+  login(): void {
+    this.loginService
+      .login({
+        username: this.loginForm.get('username')!.value,
+        password: this.loginForm.get('password')!.value,
+        rememberMe: this.loginForm.get('rememberMe')!.value,
+      })
+      .subscribe(
+        () => {
+          this.authenticationError = false;
+          if (!this.router.getCurrentNavigation()) {
+            // There were no routing during login (eg from navigationToStoredUrl)
+            this.router.navigate(['']);
+          }
+        },
+        () => this.authenticationError = true
+      );
+  }
+}

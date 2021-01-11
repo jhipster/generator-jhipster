@@ -59,10 +59,39 @@ const containsLanguageFiles = languageValue => {
     });
 };
 
+const noLanguageFiles = languageValue => {
+    it(`should not create files for ${languageValue}`, () => {
+        assert.noFile([
+            `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/activate.json`,
+            `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/configuration.json`,
+            `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/error.json`,
+            `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/login.json`,
+            `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/logs.json`,
+            `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/home.json`,
+            `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/metrics.json`,
+            `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/password.json`,
+            `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/register.json`,
+            `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/sessions.json`,
+            `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/settings.json`,
+            `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/reset.json`,
+            `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/user-management.json`,
+            `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/global.json`,
+            `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/health.json`,
+            `${SERVER_MAIN_RES_DIR}i18n/messages_${languageValue
+                .replace(/-/g, '_')
+                .replace(/_[a-z]+$/g, lang => lang.toUpperCase())}.properties`,
+        ]);
+        assert.noFile([`${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/gateway.json`]);
+    });
+    it('should not create global.json', () => {
+        assert.noFile(`${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/global.json`);
+    });
+};
+
 const containsLanguageInVueStore = languageValue => {
     it(`add language ${languageValue} into translation-store.ts, webpack.common.js`, () => {
         const langKey = languageValue.includes('-') ? `'${languageValue}'` : `${languageValue}`;
-        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/config/store/translation-store.ts`, `'${langKey}': { name:`);
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/config/store/translation-store.ts`, `${langKey}: { name:`);
         assert.fileContent(
             `${CLIENT_WEBPACK_DIR}webpack.common.js`,
             `{ pattern: './src/main/webapp/i18n/${languageValue}/*.json', fileName: './i18n/${languageValue}.json' }`
@@ -99,8 +128,31 @@ describe('JHipster generator languages', () => {
             });
         });
     });
-    context('Creates default i18n files for the native language', () => {
-        describe('with prompts', () => {
+    context('should not create i18n files', () => {
+        describe('for already generated native language', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/languages'))
+                    .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'] })
+                    .withOptions({ skipInstall: true })
+                    .on('end', done);
+            });
+            noLanguageFiles('fr');
+        });
+        describe('for already generated languages', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/languages'))
+                    .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
+                    .withOptions({ skipInstall: true, skipPrompts: true })
+                    .on('end', done);
+            });
+            noLanguageFiles('fr');
+            noLanguageFiles('en');
+        });
+    });
+    context('should create default i18n files for the native language', () => {
+        describe('using prompts', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/languages'))
@@ -114,17 +166,7 @@ describe('JHipster generator languages', () => {
             });
             containsLanguageFiles('fr');
         });
-        describe('with options', () => {
-            before(done => {
-                helpers
-                    .run(require.resolve('../generators/languages'))
-                    .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr' })
-                    .withOptions({ skipInstall: true, languages: [] })
-                    .on('end', done);
-            });
-            containsLanguageFiles('fr');
-        });
-        describe('regenerating', () => {
+        describe('using options', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/languages'))
@@ -134,9 +176,29 @@ describe('JHipster generator languages', () => {
             });
             containsLanguageFiles('fr');
         });
+        describe('when regenerating', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/languages'))
+                    .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'] })
+                    .withOptions({ skipInstall: true, skipPrompts: true, regenerate: true })
+                    .on('end', done);
+            });
+            containsLanguageFiles('fr');
+        });
     });
-    context('Creates default i18n files for the native language and an additional language', () => {
-        describe('with prompts', () => {
+    context('should create default i18n files for the native language and an additional language', () => {
+        describe('by default', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/languages'))
+                    .withOptions({ skipInstall: true, skipPrompts: true })
+                    .on('end', done);
+            });
+            containsLanguageFiles('fr');
+            containsLanguageFiles('en');
+        });
+        describe('using prompts', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/languages'))
@@ -151,7 +213,7 @@ describe('JHipster generator languages', () => {
             containsLanguageFiles('fr');
             containsLanguageFiles('en');
         });
-        describe('with options', () => {
+        describe('using options', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/languages'))
@@ -162,12 +224,12 @@ describe('JHipster generator languages', () => {
             containsLanguageFiles('fr');
             containsLanguageFiles('en');
         });
-        describe('regenerating', () => {
+        describe('when regenerating', () => {
             before(done => {
                 helpers
                     .run(require.resolve('../generators/languages'))
-                    .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en'] })
-                    .withOptions({ skipInstall: true })
+                    .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
+                    .withOptions({ skipInstall: true, skipPrompts: true, regenerate: true })
                     .on('end', done);
             });
             containsLanguageFiles('fr');

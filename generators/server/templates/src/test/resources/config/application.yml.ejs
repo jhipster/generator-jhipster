@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -77,9 +77,8 @@ spring:
             write-durations-as-timestamps: false
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     jpa:
-        database-platform: io.github.jhipster.domain.util.FixedH2Dialect
+        database-platform: tech.jhipster.domain.util.FixedH2Dialect
         open-in-view: false
-        show-sql: false
         hibernate:
             ddl-auto: none
             naming:
@@ -93,6 +92,7 @@ spring:
             hibernate.generate_statistics: false
             hibernate.hbm2ddl.auto: validate
             hibernate.jdbc.time_zone: UTC
+            hibernate.query.fail_on_pagination_over_collection_fetch: true
     <%_ } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
     data:
@@ -216,10 +216,6 @@ jhipster:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>
 <%_ } _%>
-    metrics:
-        logs: # Reports metrics in the logs
-            enabled: true
-            report-frequency: 60 # in seconds
 <%_ if (messageBroker === 'kafka') { _%>
 kafka:
     bootstrap-servers: localhost:9092

@@ -12,7 +12,7 @@ Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submit
 
 ## Contributing
 
-We are honoured by any contributions you may have small or large. Please refer to our [contribution guidelines and instructions document](https://github.com/jhipster/generator-jhipster/blob/master/CONTRIBUTING.md) for any information about contributing to the project.
+We are honoured by any contributions you may have small or large. Please refer to our [contribution guidelines and instructions document](https://github.com/jhipster/generator-jhipster/blob/main/CONTRIBUTING.md) for any information about contributing to the project.
 
 ## Sponsors
 
@@ -37,7 +37,7 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
       </td>
       <td align="center" valign="middle">
         <a href="https://dev.entando.org/jhipster" target="_blank">
-          <img width="200em" src="https://www.jhipster.tech/images/open-collective/Entando_E.png">
+          <img width="200em" src="https://www.jhipster.tech/images/open-collective/entandoe.png">
         </a>
       </td>
     </tr>
@@ -46,80 +46,15 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 ### Bronze sponsors
 
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="middle">
-        <a href="https://forsyslab.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/forsyslab.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://www.cuba-platform.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/cubaplatform.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://www.codefirst.co.uk" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/codefirst.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://blokt.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/blokt.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://clay.global/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/clay.png">
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center" valign="middle">
-        <a href="https://writersperhour.com/urgent-essay-writing-service" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/writersperhour.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://www.minitool.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/minitool.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://edubirdie.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/edubirdie.png">	
-        </a>
-      </td>
-      <td align="center" valign="middle">	
-        <a href="https://www.zadluzenia.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/zadluzenia.png">	
-        </a>
-      </td>
-      <td align="center" valign="middle">	
-        <a href="https://opencollective.com/jim-van-dam" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/jim-van-dam.png">	
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center" valign="middle">
-        <a href="https://casino-academia.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/casinoacademia.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://raj.bet/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/rajbet.png">
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
+[![BronzeSponsors][bronze-sponsors-image]][bronze-sponsors-url]
+
+### Backers
 
 **Thank you to all our backers!**
 
 [![Backers][backers-image]][backers-url]
+
+<object data="https://opencollective.com/generator-jhipster/tiers/backer.svg?avatarHeight=40&width=890&button=false" type="image/svg+xml"></object>
 
 ## Azure Builds
 
@@ -127,17 +62,17 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 
 | Pipeline Status                                                        |
 | :--------------------------------------------------------------------- |
-| [![Angular Maven][github-angular-maven]][github-actions]               |
+| [![Angular Maven SQL][github-angular-maven-sql]][github-actions]       |
 | [![Angular Maven NoSQL][github-angular-maven-nosql]][github-actions]   |
-| [![Angular Gradle][github-angular-gradle]][github-actions]             |
+| [![Angular Gradle SQL][github-angular-gradle-sql]][github-actions]     |
 | [![Angular Gradle NoSQL][github-angular-gradle-nosql]][github-actions] |
-| [![React Maven][github-react-maven]][github-actions]                   |
+| [![React Maven SQL][github-react-maven-sql]][github-actions]           |
 | [![React Maven NoSQL][github-react-maven-nosql]][github-actions]       |
-| [![React Gradle][github-react-gradle]][github-actions]                 |
+| [![React Gradle SQL][github-react-gradle-sql]][github-actions]         |
 | [![React Gradle NoSQL][github-react-gradle-nosql]][github-actions]     |
-| [![Vue Maven][github-vue-maven]][github-actions]                       |
+| [![Vue Maven SQL][github-vue-maven-sql]][github-actions]               |
 | [![Vue Maven NoSQL][github-vue-maven-nosql]][github-actions]           |
-| [![Vue Gradle][github-vue-gradle]][github-actions]                     |
+| [![Vue Gradle SQL][github-vue-gradle-sql]][github-actions]             |
 | [![Vue Gradle NoSQL][github-vue-gradle-nosql]][github-actions]         |
 | [![Elasticsearch][github-elasticsearch]][github-actions]               |
 | [![Monolith OAuth2][github-monolith-oauth2]][github-actions]           |
@@ -154,17 +89,17 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 
 [github-actions]: https://github.com/hipster-labs/jhipster-daily-builds/actions
 [github-official-windows]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Official%20Windows/badge.svg
-[github-angular-maven]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Angular%20Maven/badge.svg
+[github-angular-maven-sql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Angular%20Maven%20SQL/badge.svg
 [github-angular-maven-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Angular%20Maven%20NoSQL/badge.svg
-[github-angular-gradle]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Angular%20Gradle/badge.svg
+[github-angular-gradle-sql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Angular%20Gradle%20SQL/badge.svg
 [github-angular-gradle-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Angular%20Gradle%20NoSQL/badge.svg
-[github-react-maven]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/React%20Maven/badge.svg
+[github-react-maven-sql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/React%20Maven%20SQL/badge.svg
 [github-react-maven-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/React%20Maven%20NoSQL/badge.svg
-[github-react-gradle]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/React%20Gradle/badge.svg
+[github-react-gradle-sql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/React%20Gradle%20SQL/badge.svg
 [github-react-gradle-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/React%20Gradle%20NoSQL/badge.svg
-[github-vue-maven]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Maven/badge.svg
+[github-vue-maven-sql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Maven%20SQL/badge.svg
 [github-vue-maven-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Maven%20NoSQL/badge.svg
-[github-vue-gradle]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Gradle/badge.svg
+[github-vue-gradle-sql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Gradle%20SQL/badge.svg
 [github-vue-gradle-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Gradle%20NoSQL/badge.svg
 [github-elasticsearch]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Elasticsearch/badge.svg
 [github-monolith-oauth2]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Monolith%20OAuth2/badge.svg
@@ -178,11 +113,11 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [sonar-coverage]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-sample-application&metric=coverage
 [sonar-bugs]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-sample-application&metric=bugs
 [sonar-vulnerabilities]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-sample-application&metric=vulnerabilities
-[jhipster-image]: https://raw.githubusercontent.com/jhipster/jhipster-artwork/master/logos/JHipster%20RGB-small100x25px.png
+[jhipster-image]: https://raw.githubusercontent.com/jhipster/jhipster-artwork/main/logos/JHipster%20RGB-small100x25px.png
 [jhipster-url]: https://www.jhipster.tech/
 [npm-image]: https://badge.fury.io/js/generator-jhipster.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster
-[azure-devops-image]: https://dev.azure.com/jhipster/generator-jhipster/_apis/build/status/jhipster.generator-jhipster?branchName=master
+[azure-devops-image]: https://dev.azure.com/jhipster/generator-jhipster/_apis/build/status/jhipster.generator-jhipster?branchName=main
 [azure-devops-url-main]: https://dev.azure.com/jhipster/generator-jhipster/_build
 [github-actions-generator-image]: https://github.com/jhipster/generator-jhipster/workflows/Generator/badge.svg
 [github-actions-angular-image]: https://github.com/jhipster/generator-jhipster/workflows/Angular/badge.svg
@@ -190,8 +125,10 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [github-actions-vue-image]: https://github.com/jhipster/generator-jhipster/workflows/Vue/badge.svg
 [github-actions-webflux-image]: https://github.com/jhipster/generator-jhipster/workflows/Webflux/badge.svg
 [github-actions-url]: https://github.com/jhipster/generator-jhipster/actions
-[backers-image]: https://opencollective.com/generator-jhipster/tiers/backer.svg?avatarHeight=40&width=890
+[backers-image]: https://opencollective.com/generator-jhipster/tiers/backer.svg?avatarHeight=70&width=890
 [backers-url]: https://opencollective.com/generator-jhipster
+[bronze-sponsors-image]: https://opencollective.com/generator-jhipster/tiers/bronze-sponsor.svg?avatarHeight=120&width=890
+[bronze-sponsors-url]: https://opencollective.com/generator-jhipster
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md
 [npmcharts-image]: https://img.shields.io/npm/dm/generator-jhipster.svg?label=Downloads&style=flat

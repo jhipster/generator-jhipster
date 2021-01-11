@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 const expect = require('chai').expect;
 const sinon = require('sinon');
+const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 
@@ -16,6 +17,19 @@ BaseGenerator.log = msg => {
     console.log(msg);
 };
 
+const fakeGenerator = custom => {
+    return {
+        debug: sinon.spy(),
+        warning: sinon.spy(),
+        copy: sinon.spy(),
+        processJs: sinon.spy(),
+        processHtml: sinon.spy(),
+        template: sinon.spy(),
+        templatePath: sinon.stub().callsFake((...dest) => path.join(...dest)),
+        ...custom,
+    };
+};
+
 describe('Generator Base', () => {
     describe('getAllSupportedLanguages', () => {
         describe('when called', () => {
@@ -27,7 +41,7 @@ describe('Generator Base', () => {
     describe('isSupportedLanguage', () => {
         describe('when called with valid language', () => {
             it('returns true', () => {
-                expect(BaseGenerator.isSupportedLanguage('en')).to.equal(true);
+                expect(BaseGenerator.isSupportedLanguage('en')).to.be.true;
             });
         });
         describe('when called with invalid language', () => {
@@ -61,23 +75,36 @@ describe('Generator Base', () => {
     describe('getJoinTableName', () => {
         describe('when called with a value', () => {
             it('returns a join table name', () => {
-                expect(BaseGenerator.getJoinTableName('entityName', 'relationshipName', 'mysql')).to.equal('entity_name_relationship_name');
+                expect(BaseGenerator.getJoinTableName('entityName', 'relationshipName', 'postgresql')).to.equal(
+                    'rel_entity_name__relationship_name'
+                );
             });
         });
         describe('when called with a long name', () => {
             it('returns a proper join table name', () => {
-                expect(BaseGenerator.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle')).to.have.length(30);
                 expect(BaseGenerator.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle')).to.equal(
-                    'entity_name_lon_relationship_n'
+                    'rel_entity_name_l__relation_be'
                 );
+                expect(BaseGenerator.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle')).to.have.length(30);
+            });
+        });
+        describe('when legacyRelationshipTableName is set', () => {
+            it('returns a proper join table name', () => {
+                function TestClass() {}
+                TestClass.prototype = Object.create(Base.prototype);
+                TestClass.prototype.jhipsterConfig = { legacyRelationshipTableName: true };
+                expect(TestClass.prototype.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle')).to.equal(
+                    'rel_entity_name_l__relation_be'
+                );
+                expect(TestClass.prototype.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle')).to.have.length(30);
             });
         });
     });
     describe('getFKConstraintName', () => {
         describe('when called with a value', () => {
             it('returns a constraint name', () => {
-                expect(BaseGenerator.getFKConstraintName('entityName', 'relationshipName', 'mysql')).to.equal(
-                    'fk_entity_name_relationship_name_id'
+                expect(BaseGenerator.getFKConstraintName('entityName', 'relationshipName', 'postgresql')).to.equal(
+                    'fk_entity_name__relationship_name_id'
                 );
             });
         });
@@ -85,51 +112,51 @@ describe('Generator Base', () => {
             it('returns a proper constraint name', () => {
                 expect(BaseGenerator.getFKConstraintName('entityNameLongerName', 'relationshipLongerName', 'oracle')).to.have.length(30);
                 expect(BaseGenerator.getFKConstraintName('entityNameLongerName', 'relationshipLongerName', 'oracle')).to.equal(
-                    'entity_name_lo_relationship_id'
+                    'fk_entity_name__relation_03_id'
                 );
             });
         });
-        describe('when called with a long name and mysql', () => {
+        describe('when called with a long name and postgresql', () => {
             it('returns a proper constraint name', () => {
                 expect(
                     BaseGenerator.getFKConstraintName(
                         'entityLongerNameWithPaginationAndDTO',
                         'relationshipLongerNameWithPaginationAndDTO',
-                        'mysql'
+                        'postgresql'
                     )
-                ).to.have.length(64);
+                ).to.have.length(63);
                 expect(
                     BaseGenerator.getFKConstraintName(
                         'entityLongerNameWithPaginationAndDTO',
                         'relationshipLongerNameWithPaginationAndDTO',
-                        'mysql'
+                        'postgresql'
                     )
-                ).to.equal('entity_longer_name_with_paginat_relationship_longer_name_with_id');
+                ).to.equal('fk_entity_longer_name_with_pagi__relationship_longer_name_b6_id');
             });
         });
-        describe('when called with a long name that is near limit and mysql', () => {
+        describe('when called with a long name that is near limit and postgresql', () => {
             it('returns a proper constraint name', () => {
                 expect(
-                    BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToMany', 'mysql').length
+                    BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToMany', 'postgresql').length
                 ).to.be.lessThan(64);
-                expect(BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToMany', 'mysql')).to.equal(
-                    'test_custom_table_name_user_many_to_many_user_many_to_many_id'
+                expect(BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToMany', 'postgresql')).to.equal(
+                    'fk_test_custom_table_name__user_many_to_many_user_many_to_8c_id'
                 );
                 expect(
-                    BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', 'mysql').length
+                    BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', 'postgresql').length
                 ).to.be.lessThan(64);
-                expect(BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', 'mysql')).to.equal(
-                    'test_custom_table_name_user_many_to_many_user_many_to_manies_id'
+                expect(BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', 'postgresql')).to.equal(
+                    'fk_test_custom_table_name__user_many_to_many_user_many_to_72_id'
                 );
             });
         });
-        describe('when called with a long name that is equal to limit and mysql', () => {
+        describe('when called with a long name that is equal to limit and postgresql', () => {
             it('returns a proper constraint name', () => {
-                expect(BaseGenerator.getFKConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'mysql')).to.have.length(
-                    64
-                );
-                expect(BaseGenerator.getFKConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'mysql')).to.equal(
-                    'test_custom_table_names_user_many_to_many_user_many_to_manies_id'
+                expect(
+                    BaseGenerator.getFKConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'postgresql')
+                ).to.have.length(63);
+                expect(BaseGenerator.getFKConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'postgresql')).to.equal(
+                    'fk_test_custom_table_names__user_many_to_many_user_many_t_50_id'
                 );
             });
         });
@@ -139,7 +166,7 @@ describe('Generator Base', () => {
                     30
                 );
                 expect(BaseGenerator.getFKConstraintName('entityNameLongerName', 'relationshipLongerName', 'oracle', true)).to.equal(
-                    'entityNameLong_relationship_id'
+                    'fk_entityNameL__relation_03_id'
                 );
             });
         });
@@ -147,78 +174,80 @@ describe('Generator Base', () => {
     describe('getUXConstraintName', () => {
         describe('when called with a value', () => {
             it('returns a constraint name', () => {
-                expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', 'mysql')).to.equal('ux_entity_name_column_name');
+                expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', 'postgresql')).to.equal('ux_entity_name__column_name');
             });
         });
         describe('when called with a value and no snake case', () => {
             it('returns a constraint name', () => {
-                expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', 'mysql', true)).to.equal('ux_entityName_columnName');
+                expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', 'postgresql', true)).to.equal(
+                    'ux_entityName__columnName'
+                );
             });
         });
         describe('when called with a long name and oracle', () => {
             it('returns a proper constraint name', () => {
                 expect(BaseGenerator.getUXConstraintName('entityNameLongerName', 'columnLongerName', 'oracle')).to.have.length(30);
                 expect(BaseGenerator.getUXConstraintName('entityNameLongerName', 'columnLongerName', 'oracle')).to.equal(
-                    'ux_entity_name_lo_column_longe'
+                    'ux_entity_name__column_long_29'
                 );
             });
         });
-        describe('when called with a long name and mysql', () => {
+        describe('when called with a long name and postgresql', () => {
             it('returns a proper constraint name', () => {
                 expect(
                     BaseGenerator.getUXConstraintName(
                         'entityLongerNameWithPaginationAndDTO',
                         'columnLongerNameWithPaginationAndDTO',
-                        'mysql'
+                        'postgresql'
                     )
-                ).to.have.length(64);
+                ).to.have.length(63);
                 expect(
                     BaseGenerator.getUXConstraintName(
                         'entityLongerNameWithPaginationAndDTO',
                         'columnLongerNameWithPaginationAndDTO',
-                        'mysql'
+                        'postgresql'
                     )
-                ).to.equal('ux_entity_longer_name_with_paginat_column_longer_name_with_pagin');
+                ).to.equal('ux_entity_longer_name_with_pagi__column_longer_name_with_pag_8b');
             });
         });
-        describe('when called with a long name that is near limit and mysql', () => {
+        describe('when called with a long name that is near limit and postgresql', () => {
             it('returns a proper constraint name', () => {
                 expect(
-                    BaseGenerator.getUXConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', 'mysql').length
+                    BaseGenerator.getUXConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', 'postgresql').length
                 ).to.be.lessThan(64);
-                expect(BaseGenerator.getUXConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', 'mysql')).to.equal(
-                    'ux_test_custom_table_name_user_many_to_many_user_many_to_manies'
+                expect(BaseGenerator.getUXConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', 'postgresql')).to.equal(
+                    'ux_test_custom_table_name__user_many_to_many_user_many_to_ma_72'
                 );
             });
         });
-        describe('when called with a long name that is equal to limit and mysql', () => {
+        describe('when called with a long name that is equal to limit and postgresql', () => {
             it('returns a proper constraint name', () => {
-                expect(BaseGenerator.getUXConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'mysql')).to.have.length(
-                    64
-                );
-                expect(BaseGenerator.getUXConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'mysql')).to.equal(
-                    'ux_test_custom_table_names_user_many_to_many_user_many_to_manies'
+                expect(
+                    BaseGenerator.getUXConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'postgresql')
+                ).to.have.length(63);
+                expect(BaseGenerator.getUXConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', 'postgresql')).to.equal(
+                    'ux_test_custom_table_names__user_many_to_many_user_many_to_m_50'
                 );
             });
         });
-        describe('when called with a long name and mysql and no snake case', () => {
+        describe('when called with a long name and postgresql and no snake case', () => {
             it('returns a proper constraint name', () => {
                 expect(
                     BaseGenerator.getUXConstraintName(
                         'entityLongerNameWithPaginationAndDTO',
                         'columnLongerNameWithPaginationAndDTO',
-                        'mysql',
+                        'postgresql',
                         true
                     )
-                ).to.have.length(64);
+                ).to.have.length(63);
                 expect(
                     BaseGenerator.getUXConstraintName(
                         'entityLongerNameWithPaginationAndDTO',
                         'columnLongerNameWithPaginationAndDTO',
-                        'mysql',
+                        'postgresql',
                         true
                     )
-                ).to.equal('ux_entityLongerNameWithPaginationA_columnLongerNameWithPaginatio');
+                ).to.equal('ux_entityLongerNameWithPaginati__columnLongerNameWithPaginat_8b');
             });
         });
     });
@@ -308,6 +337,158 @@ describe('Generator Base', () => {
                 filesToAssert = filesToAssert.sort();
                 const out = BaseGenerator.writeFilesToDisk(files, generator, true).sort();
                 expect(out).to.eql(filesToAssert);
+            });
+        });
+        describe('when called without jhipsterTemplatesFolders and without rootTemplatesPath', () => {
+            const files = { files: [{ templates: ['foo'] }] };
+            const generator = fakeGenerator();
+            let out;
+            before('should produce correct files', () => {
+                out = BaseGenerator.writeFilesToDisk(files, generator).sort();
+            });
+            it('should return template file names', () => {
+                expect(out).to.eql(['foo']);
+            });
+            it('should call template with file', () => {
+                expect(generator.template.calledOnce).to.be.true;
+                expect(generator.template.getCall(0).args[0]).to.be.eql('foo.ejs');
+            });
+        });
+        describe('when called with jhipsterTemplatesFolders', () => {
+            const fixturesPath = path.join(__dirname, 'fixtures', 'writeFilesToDisk');
+            let generator;
+            beforeEach(() => {
+                generator = fakeGenerator({
+                    jhipsterTemplatesFolders: [
+                        path.join(fixturesPath, 'templates', 'specific'),
+                        path.join(fixturesPath, 'templates', 'common'),
+                    ],
+                });
+            });
+            describe('exiting file in templates/specific and templates/common folders', () => {
+                const templates = ['all'];
+                const files = { files: [{ templates }] };
+                let out;
+                beforeEach('should produce correct files', () => {
+                    out = BaseGenerator.writeFilesToDisk(files, generator).sort();
+                });
+                it('should return template file names', () => {
+                    expect(out).to.eql(templates);
+                });
+                it('should call template with the file in templates/specific', () => {
+                    expect(generator.template.calledOnce).to.be.true;
+                    expect(generator.template.getCall(0).args[0]).to.be.eql(
+                        path.join(fixturesPath, 'templates', 'specific', `${templates[0]}.ejs`)
+                    );
+                });
+                it('should forward jhipsterTemplatesFolders as options.root', () => {
+                    expect(generator.template.getCall(0).args[3].root).to.be.eql(generator.jhipsterTemplatesFolders);
+                });
+            });
+            describe('exiting file only in templates/common folder', () => {
+                const templates = ['common'];
+                const files = { files: [{ templates }] };
+                let out;
+                beforeEach('should produce correct files', () => {
+                    out = BaseGenerator.writeFilesToDisk(files, generator).sort();
+                });
+                it('should return template file names', () => {
+                    expect(out).to.eql(templates);
+                });
+                it('should call template with the file in templates/common', () => {
+                    expect(generator.template.calledOnce).to.be.true;
+                    expect(generator.template.getCall(0).args[0]).to.be.eql(
+                        path.join(fixturesPath, 'templates', 'common', `${templates[0]}.ejs`)
+                    );
+                });
+                it('should forward jhipsterTemplatesFolders as options.root', () => {
+                    expect(generator.template.getCall(0).args[3].root).to.be.eql(generator.jhipsterTemplatesFolders);
+                });
+            });
+        });
+        describe('when called with jhipsterTemplatesFolders and rootTemplatesPath', () => {
+            const fixturesPath = path.join(__dirname, 'fixtures', 'writeFilesToDisk');
+            const rootTemplatesPath = ['specific', 'common'];
+            let generator;
+            beforeEach(() => {
+                generator = fakeGenerator({
+                    jhipsterTemplatesFolders: [path.join(fixturesPath, 'templates_override'), path.join(fixturesPath, 'templates')],
+                });
+            });
+            describe('exiting file in templates_override/specific, templates/specific, templates/common folders', () => {
+                const templates = ['all'];
+                const files = { files: [{ templates }] };
+                let out;
+                beforeEach('should produce correct files', () => {
+                    out = BaseGenerator.writeFilesToDisk(files, generator, rootTemplatesPath).sort();
+                });
+                it('should return template file names', () => {
+                    expect(out).to.eql(templates);
+                });
+                it('should call template with the file in templates_override/specific', () => {
+                    expect(generator.template.calledOnce).to.be.true;
+                    expect(generator.template.getCall(0).args[0]).to.be.eql(
+                        path.join(fixturesPath, 'templates_override', 'specific', `${templates[0]}.ejs`)
+                    );
+                });
+                it('should forward jhipsterTemplatesFolders concatenated with rootTemplatesPath as options.root', () => {
+                    expect(generator.template.getCall(0).args[3].root).to.be.eql([
+                        path.join(generator.jhipsterTemplatesFolders[0], rootTemplatesPath[0]),
+                        path.join(generator.jhipsterTemplatesFolders[0], rootTemplatesPath[1]),
+                        path.join(generator.jhipsterTemplatesFolders[1], rootTemplatesPath[0]),
+                        path.join(generator.jhipsterTemplatesFolders[1], rootTemplatesPath[1]),
+                    ]);
+                });
+            });
+            describe('exiting file only templates/specific folder', () => {
+                const templates = ['specific'];
+                const files = { files: [{ templates }] };
+                let out;
+                beforeEach('should produce correct files', () => {
+                    out = BaseGenerator.writeFilesToDisk(files, generator, rootTemplatesPath).sort();
+                });
+                it('should return template file names', () => {
+                    expect(out).to.eql(templates);
+                });
+                it('should call template with the file in templates/specific', () => {
+                    expect(generator.template.calledOnce).to.be.true;
+                    expect(generator.template.getCall(0).args[0]).to.be.eql(
+                        path.join(fixturesPath, 'templates', 'specific', `${templates[0]}.ejs`)
+                    );
+                });
+                it('should forward jhipsterTemplatesFolders concatenated with rootTemplatesPath as options.root', () => {
+                    expect(generator.template.getCall(0).args[3].root).to.be.eql([
+                        path.join(generator.jhipsterTemplatesFolders[0], rootTemplatesPath[0]),
+                        path.join(generator.jhipsterTemplatesFolders[0], rootTemplatesPath[1]),
+                        path.join(generator.jhipsterTemplatesFolders[1], rootTemplatesPath[0]),
+                        path.join(generator.jhipsterTemplatesFolders[1], rootTemplatesPath[1]),
+                    ]);
+                });
+            });
+            describe('exiting file only templates/common folder', () => {
+                const templates = ['common'];
+                const files = { files: [{ templates }] };
+                let out;
+                beforeEach('should produce correct files', () => {
+                    out = BaseGenerator.writeFilesToDisk(files, generator, rootTemplatesPath).sort();
+                });
+                it('should return template file names', () => {
+                    expect(out).to.eql(['common']);
+                });
+                it('should call template with the file in templates/common', () => {
+                    expect(generator.template.callCount).to.be.equal(1);
+                    expect(generator.template.getCall(0).args[0]).to.be.eql(
+                        path.join(fixturesPath, 'templates', 'common', `${templates[0]}.ejs`)
+                    );
+                });
+                it('should forward jhipsterTemplatesFolders concatenated with rootTemplatesPath as options.root', () => {
+                    expect(generator.template.getCall(0).args[3].root).to.be.eql([
+                        path.join(generator.jhipsterTemplatesFolders[0], rootTemplatesPath[0]),
+                        path.join(generator.jhipsterTemplatesFolders[0], rootTemplatesPath[1]),
+                        path.join(generator.jhipsterTemplatesFolders[1], rootTemplatesPath[0]),
+                        path.join(generator.jhipsterTemplatesFolders[1], rootTemplatesPath[1]),
+                    ]);
+                });
             });
         });
     });
@@ -436,6 +617,198 @@ describe('Generator Base', () => {
             });
         });
     });
+    describe('getJDBCUrl', () => {
+        describe('when called for mysql', () => {
+            it('return jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true', () => {
+                expect(BaseGenerator.getJDBCUrl('mysql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true'
+                );
+            });
+        });
+        describe('when called for mysql with skipExtraOptions enabled', () => {
+            it('return jdbc:mysql://localhost:3306/test', () => {
+                expect(BaseGenerator.getJDBCUrl('mysql', { databaseName: 'test', hostname: 'localhost', skipExtraOptions: true })).to.equal(
+                    'jdbc:mysql://localhost:3306/test'
+                );
+            });
+        });
+        describe('when called for mariadb', () => {
+            it('return jdbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC', () => {
+                expect(BaseGenerator.getJDBCUrl('mariadb', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'jdbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC'
+                );
+            });
+        });
+        describe('when called for mariadb with skipExtraOptions enabled', () => {
+            it('return jdbc:mariadb://localhost:3306/test', () => {
+                expect(
+                    BaseGenerator.getJDBCUrl('mariadb', { databaseName: 'test', hostname: 'localhost', skipExtraOptions: true })
+                ).to.equal('jdbc:mariadb://localhost:3306/test');
+            });
+        });
+        describe('when called for postgresql', () => {
+            it('return jdbc:postgresql://localhost:5432/test', () => {
+                expect(BaseGenerator.getJDBCUrl('postgresql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'jdbc:postgresql://localhost:5432/test'
+                );
+            });
+        });
+        describe('when called for oracle', () => {
+            it('return jdbc:oracle:thin:@localhost:1521:test', () => {
+                expect(BaseGenerator.getJDBCUrl('oracle', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'jdbc:oracle:thin:@localhost:1521:test'
+                );
+            });
+        });
+        describe('when called for mssql', () => {
+            it('return jdbc:sqlserver://localhost:1433;database=test', () => {
+                expect(BaseGenerator.getJDBCUrl('mssql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'jdbc:sqlserver://localhost:1433;database=test'
+                );
+            });
+        });
+        describe('when called for h2Disk', () => {
+            it('return jdbc:h2:file:./build/h2db/db/test;DB_CLOSE_DELAY=-1', () => {
+                expect(BaseGenerator.getJDBCUrl('h2Disk', { databaseName: 'test', localDirectory: './build/h2db/db' })).to.equal(
+                    'jdbc:h2:file:./build/h2db/db/test;DB_CLOSE_DELAY=-1'
+                );
+            });
+        });
+        describe('when called for h2Disk with skipExtraOptions enabled', () => {
+            it('return jdbc:h2:file:./build/h2db/db/test', () => {
+                expect(
+                    BaseGenerator.getJDBCUrl('h2Disk', { databaseName: 'test', localDirectory: './build/h2db/db', skipExtraOptions: true })
+                ).to.equal('jdbc:h2:file:./build/h2db/db/test');
+            });
+        });
+        describe('when called for h2Disk with missing `localDirectory` option', () => {
+            it('throw an error', () => {
+                expect(() => BaseGenerator.getJDBCUrl('h2Disk', { databaseName: 'test' })).to.throw(
+                    "'localDirectory' option should be provided for h2Disk databaseType"
+                );
+            });
+        });
+        describe('when called for h2Memory', () => {
+            it('return jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE', () => {
+                expect(BaseGenerator.getJDBCUrl('h2Memory', { databaseName: 'test' })).to.equal(
+                    'jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE'
+                );
+            });
+        });
+        describe('when called for h2Memory with skipExtraOptions enabled', () => {
+            it('return jdbc:h2:mem:test', () => {
+                expect(BaseGenerator.getJDBCUrl('h2Memory', { databaseName: 'test', skipExtraOptions: true })).to.equal('jdbc:h2:mem:test');
+            });
+        });
+        describe('when called with missing `databaseName` option', () => {
+            it('throw an error', () => {
+                expect(() => BaseGenerator.getJDBCUrl('mysql')).to.throw("option 'databaseName' is required");
+            });
+        });
+        describe('when called for an unknown databaseType', () => {
+            it('throw an error', () => {
+                expect(() => BaseGenerator.getJDBCUrl('foodb', { databaseName: 'test' })).to.throw('foodb databaseType is not supported');
+            });
+        });
+    });
+
+    describe('getR2DBCUrl', () => {
+        describe('when called for mysql', () => {
+            it('return r2dbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true', () => {
+                expect(BaseGenerator.getR2DBCUrl('mysql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'r2dbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true'
+                );
+            });
+        });
+        describe('when called for mysql with skipExtraOptions enabled', () => {
+            it('return r2dbc:mysql://localhost:3306/test', () => {
+                expect(
+                    BaseGenerator.getR2DBCUrl('mysql', { databaseName: 'test', hostname: 'localhost', skipExtraOptions: true })
+                ).to.equal('r2dbc:mysql://localhost:3306/test');
+            });
+        });
+        describe('when called for mariadb', () => {
+            it('return r2dbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC', () => {
+                expect(BaseGenerator.getR2DBCUrl('mariadb', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'r2dbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC'
+                );
+            });
+        });
+        describe('when called for mariadb with skipExtraOptions enabled', () => {
+            it('return r2dbc:mariadb://localhost:3306/test', () => {
+                expect(
+                    BaseGenerator.getR2DBCUrl('mariadb', { databaseName: 'test', hostname: 'localhost', skipExtraOptions: true })
+                ).to.equal('r2dbc:mariadb://localhost:3306/test');
+            });
+        });
+        describe('when called for postgresql', () => {
+            it('return r2dbc:postgresql://localhost:5432/test', () => {
+                expect(BaseGenerator.getR2DBCUrl('postgresql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'r2dbc:postgresql://localhost:5432/test'
+                );
+            });
+        });
+        describe('when called for oracle', () => {
+            it('return r2dbc:oracle:thin:@localhost:1521:test', () => {
+                expect(BaseGenerator.getR2DBCUrl('oracle', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'r2dbc:oracle:thin:@localhost:1521:test'
+                );
+            });
+        });
+        describe('when called for mssql', () => {
+            it('return r2dbc:sqlserver://localhost:1433;database=test', () => {
+                expect(BaseGenerator.getR2DBCUrl('mssql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
+                    'r2dbc:sqlserver://localhost:1433;database=test'
+                );
+            });
+        });
+        describe('when called for h2Disk', () => {
+            it('return r2dbc:h2:file:./build/h2db/db/test;DB_CLOSE_DELAY=-1', () => {
+                expect(BaseGenerator.getR2DBCUrl('h2Disk', { databaseName: 'test', localDirectory: './build/h2db/db' })).to.equal(
+                    'r2dbc:h2:file://./build/h2db/db/test;DB_CLOSE_DELAY=-1'
+                );
+            });
+        });
+        describe('when called for h2Disk with skipExtraOptions enabled', () => {
+            it('return r2dbc:h2:file:://./build/h2db/db/test', () => {
+                expect(
+                    BaseGenerator.getR2DBCUrl('h2Disk', { databaseName: 'test', localDirectory: './build/h2db/db', skipExtraOptions: true })
+                ).to.equal('r2dbc:h2:file://./build/h2db/db/test');
+            });
+        });
+        describe('when called for h2Disk with missing `localDirectory` option', () => {
+            it('throw an error', () => {
+                expect(() => BaseGenerator.getR2DBCUrl('h2Disk', { databaseName: 'test' })).to.throw(
+                    "'localDirectory' option should be provided for h2Disk databaseType"
+                );
+            });
+        });
+        describe('when called for h2Memory', () => {
+            it('return r2dbc:h2:mem:///test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE', () => {
+                expect(BaseGenerator.getR2DBCUrl('h2Memory', { databaseName: 'test' })).to.equal(
+                    'r2dbc:h2:mem:///test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE'
+                );
+            });
+        });
+        describe('when called for h2Memory with skipExtraOptions enabled', () => {
+            it('return r2dbc:h2:mem:///test', () => {
+                expect(BaseGenerator.getR2DBCUrl('h2Memory', { databaseName: 'test', skipExtraOptions: true })).to.equal(
+                    'r2dbc:h2:mem:///test'
+                );
+            });
+        });
+        describe('when called with missing `databaseName` option', () => {
+            it('throw an error', () => {
+                expect(() => BaseGenerator.getR2DBCUrl('mysql')).to.throw("option 'databaseName' is required");
+            });
+        });
+        describe('when called for an unknown databaseType', () => {
+            it('throw an error', () => {
+                expect(() => BaseGenerator.getR2DBCUrl('foodb', { databaseName: 'test' })).to.throw('foodb databaseType is not supported');
+            });
+        });
+    });
+
     describe('priorities', () => {
         let mockedPriorities;
         const priorities = [
@@ -445,9 +818,11 @@ describe('Generator Base', () => {
             'composing',
             'loading',
             'preparing',
+            'preparingRelationships',
             'default',
             'writing',
             'postWriting',
+            'preConflicts',
             'install',
             'end',
         ];
@@ -505,6 +880,14 @@ describe('Generator Base', () => {
                     };
                 }
 
+                get preparingRelationships() {
+                    return {
+                        mocked() {
+                            mockedPriorities.preparingRelationships();
+                        },
+                    };
+                }
+
                 get default() {
                     return {
                         mocked() {
@@ -525,6 +908,14 @@ describe('Generator Base', () => {
                     return {
                         mocked() {
                             mockedPriorities.postWriting();
+                        },
+                    };
+                }
+
+                get preConflicts() {
+                    return {
+                        mocked() {
+                            mockedPriorities.preConflicts();
                         },
                     };
                 }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,13 +27,6 @@ let useBlueprints;
 module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
-
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
 
         if (this.options.help) {
             return;
@@ -107,11 +100,6 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
     _default() {
         return {
             ...super._missingPreDefault(),
-
-            writePrettierConfig() {
-                // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work
-                this.writeFilesToDisk(prettierConfigFiles, this, false, this.fetchFromInstalledJHipster('common/templates'));
-            },
         };
     }
 
@@ -122,7 +110,14 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
 
     // Public API method used by the getter and also by Blueprints
     _writing() {
-        return { ...writeFiles(), ...super._missingPostWriting() };
+        return {
+            writePrettierConfig() {
+                // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work
+                this.writeFilesToDisk(prettierConfigFiles);
+            },
+            ...writeFiles(),
+            ...super._missingPostWriting(),
+        };
     }
 
     get writing() {

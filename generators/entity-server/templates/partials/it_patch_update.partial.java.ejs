@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 // Initialize the database
-<%_ if (databaseType === 'cassandra') { _%>
-    <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
+<%_ if (primaryKey.type === 'UUID' && databaseType !== 'sql') { _%>
+    <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(UUID.randomUUID());
 <%_ } _%>
 <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
@@ -26,7 +26,7 @@ int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= call
 
 // Update the <%= entityInstance %> using partial update
 <%= asEntity(entityClass) %> partialUpdated<%= asEntity(entityClass) %> = new <%= asEntity(entityClass) %>();
-partialUpdated<%= asEntity(entityClass) %>.setId(<%= asEntity(entityInstance) %>.getId());
+partialUpdated<%= asEntity(entityClass) %>.set<%= primaryKey.nameCapitalized %>(<%= asEntity(entityInstance) %>.get<%= primaryKey.nameCapitalized %>());
 <%_ fieldsToUpdate = fields.filter(field => field.includeField) %>
 <%_ if (fluentMethods && fieldsToUpdate.length > 0) { _%>
     partialUpdated<%= asEntity(entityClass) %><% for (field of fieldsToUpdate) { %>
@@ -43,12 +43,21 @@ partialUpdated<%= asEntity(entityClass) %>.setId(<%= asEntity(entityInstance) %>
 <%_ } _%>
 <%_ } _%>
 
-
+<%_ if (!reactive) { _%>
 rest<%= entityClass %>MockMvc.perform(patch("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
 .contentType("application/merge-patch+json")
 .content(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>)))
 .andExpect(status().isOk());
-
+<%_ } else { _%>
+webTestClient
+.patch()
+.uri("/api/<%= entityApiUrl %>")
+.contentType(MediaType.valueOf("application/merge-patch+json"))
+.bodyValue(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>))
+.exchange()
+.expectStatus()
+.isOk();
+<%_ } _%>
 
 // Validate the <%= entityClass %> in the database
 <%_ if (databaseType === 'couchbase') { _%>
@@ -62,6 +71,8 @@ assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
 <%_ } else if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { _%>
     assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
     assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>ContentType()).isEqualTo(<%= field.testWithConstant %>_CONTENT_TYPE);
+<%_ } else if (field.fieldType === 'BigDecimal'){ _%>
+    assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualByComparingTo(<%= field.testWithConstant %>);
 <%_ } else { _%>
     assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
 <%_ } } _%>

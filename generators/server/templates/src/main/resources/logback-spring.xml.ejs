@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -45,9 +45,6 @@
     </root>
 -->
 
-    <%_ if (databaseType === 'cassandra') { _%>
-    <logger name="io.netty" level="WARN"/>
-    <%_ } _%>
     <logger name="javax.activation" level="WARN"/>
     <logger name="javax.mail" level="WARN"/>
     <logger name="javax.management.remote" level="WARN"/>
@@ -77,7 +74,7 @@
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
-    <%_ if (reactive) { _%>
+    <%_ if (reactive || databaseType === 'cassandra' || cacheProvider === 'redis') { _%>
     <logger name="io.netty" level="WARN"/>
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -42,12 +42,7 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
+
         // This adds support for a `--target-version` flag
         this.option('target-version', {
             desc: 'Upgrade to a specific version instead of the latest',
@@ -204,8 +199,8 @@ module.exports = class extends BaseGenerator {
         const commandPrefix = 'npm show';
         const pkgInfo = shelljs.exec(`${commandPrefix} ${packageName} version`, { silent: this.silent });
         if (pkgInfo.stderr) {
-            this.warning(`Something went wrong fetching the latest ${packageName} version number...\n${pkgInfo.stderr}`);
-            this.error('Exiting process');
+            this.warning(pkgInfo.stderr);
+            throw new Error(`Something went wrong fetching the latest ${packageName} version number...\n${pkgInfo.stderr}`);
         }
         const msg = pkgInfo.stdout;
         return msg.replace('\n', '');
@@ -216,7 +211,7 @@ module.exports = class extends BaseGenerator {
         const commandPrefix = 'npm install';
         const devDependencyParam = '--save-dev';
         const noPackageLockParam = '--no-package-lock';
-        const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} ${noPackageLockParam} --ignore-scripts`;
+        const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} ${noPackageLockParam} --ignore-scripts --legacy-peer-deps`;
         this.info(generatorCommand);
 
         const npmIntall = shelljs.exec(generatorCommand, { silent: this.silent });
@@ -329,8 +324,8 @@ module.exports = class extends BaseGenerator {
                 const gitStatus = this.gitExec(['status', '--porcelain'], { silent: this.silent });
                 if (gitStatus.code !== 0) this.error(`Unable to check for local changes:\n${gitStatus.stdout} ${gitStatus.stderr}`);
                 if (gitStatus.stdout) {
-                    this.warning(' local changes found.\n\tPlease commit/stash them before upgrading');
-                    this.error('Exiting process');
+                    this.warning(gitStatus.stdout);
+                    throw new Error(' local changes found.\n\tPlease commit/stash them before upgrading');
                 }
             },
 

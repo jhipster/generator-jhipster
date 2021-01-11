@@ -2,10 +2,6 @@ const path = require('path');
 const expect = require('chai').expect;
 // using base generator which extends the private base
 const BaseGenerator = require('../generators/generator-base').prototype;
-const constants = require('../generators/generator-constants');
-
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 BaseGenerator.log = msg => {
     // eslint-disable-next-line no-console
@@ -74,12 +70,6 @@ export * from './entityFolderName/entityFileName.state';`;
                     otherEntityAngularName: 'AnEntity',
                 },
             ];
-            describe('when called with dto option', () => {
-                it('return an empty Map', () => {
-                    const imports = BaseGenerator.generateEntityClientImports(relationships, 'yes');
-                    expect(imports.size).to.eql(0);
-                });
-            });
             describe('when called with 2 distinct relationships without dto option', () => {
                 it('return a Map with 2 imports', () => {
                     const imports = BaseGenerator.generateEntityClientImports(relationships, 'no');
@@ -100,33 +90,6 @@ export * from './entityFolderName/entityFileName.state';`;
                     const imports = BaseGenerator.generateEntityClientImports(relationships, 'no');
                     expect(imports).to.have.key('IUser');
                     expect(imports.size).to.eql(1);
-                });
-            });
-        });
-        describe('with no relationship from or to the User', () => {
-            describe('when called to have models to be imported in the templates', () => {
-                let importsForAngular = null;
-                let importsForReact = null;
-                const relationships = [
-                    {
-                        otherEntityAngularName: 'AnEntity',
-                        otherEntityFileName: 'AnEntity',
-                        otherEntityClientRootFolder: 'anEntity',
-                    },
-                    {
-                        otherEntityAngularName: 'AnotherEntity',
-                        otherEntityFileName: 'AnotherEntity',
-                        otherEntityClientRootFolder: 'anotherEntity',
-                    },
-                ];
-
-                before(() => {
-                    importsForAngular = BaseGenerator.generateEntityClientImports(relationships, 'no', ANGULAR);
-                    importsForReact = BaseGenerator.generateEntityClientImports(relationships, 'no', REACT);
-                });
-
-                it('adds the same imports regardless of the client framework', () => {
-                    expect(importsForAngular).to.eql(importsForReact);
                 });
             });
         });
@@ -156,7 +119,7 @@ export * from './entityFolderName/entityFileName.state';`;
         });
         describe('when called with languages ar-ly', () => {
             it('return true', () => {
-                expect(BaseGenerator.skipLanguageForLocale('ar-ly')).to.equal(true);
+                expect(BaseGenerator.skipLanguageForLocale('ar-ly')).to.be.true;
             });
         });
     });
@@ -175,198 +138,6 @@ export * from './entityFolderName/entityFileName.state';`;
         describe('when called with UUID', () => {
             it("return '9fec3727-3421-4967-b213-ba36557ca194'", () => {
                 expect(BaseGenerator.generateTestEntityId('UUID')).to.equal("'9fec3727-3421-4967-b213-ba36557ca194'");
-            });
-        });
-    });
-
-    describe('getJDBCUrl', () => {
-        describe('when called for mysql', () => {
-            it('return jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true', () => {
-                expect(BaseGenerator.getJDBCUrl('mysql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
-                    'jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true'
-                );
-            });
-        });
-        describe('when called for mysql with skipExtraOptions enabled', () => {
-            it('return jdbc:mysql://localhost:3306/test', () => {
-                expect(BaseGenerator.getJDBCUrl('mysql', { databaseName: 'test', hostname: 'localhost', skipExtraOptions: true })).to.equal(
-                    'jdbc:mysql://localhost:3306/test'
-                );
-            });
-        });
-        describe('when called for mariadb', () => {
-            it('return jdbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC', () => {
-                expect(BaseGenerator.getJDBCUrl('mariadb', { databaseName: 'test', hostname: 'localhost' })).to.equal(
-                    'jdbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC'
-                );
-            });
-        });
-        describe('when called for mariadb with skipExtraOptions enabled', () => {
-            it('return jdbc:mariadb://localhost:3306/test', () => {
-                expect(
-                    BaseGenerator.getJDBCUrl('mariadb', { databaseName: 'test', hostname: 'localhost', skipExtraOptions: true })
-                ).to.equal('jdbc:mariadb://localhost:3306/test');
-            });
-        });
-        describe('when called for postgresql', () => {
-            it('return jdbc:postgresql://localhost:5432/test', () => {
-                expect(BaseGenerator.getJDBCUrl('postgresql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
-                    'jdbc:postgresql://localhost:5432/test'
-                );
-            });
-        });
-        describe('when called for oracle', () => {
-            it('return jdbc:oracle:thin:@localhost:1521:test', () => {
-                expect(BaseGenerator.getJDBCUrl('oracle', { databaseName: 'test', hostname: 'localhost' })).to.equal(
-                    'jdbc:oracle:thin:@localhost:1521:test'
-                );
-            });
-        });
-        describe('when called for mssql', () => {
-            it('return jdbc:sqlserver://localhost:1433;database=test', () => {
-                expect(BaseGenerator.getJDBCUrl('mssql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
-                    'jdbc:sqlserver://localhost:1433;database=test'
-                );
-            });
-        });
-        describe('when called for h2Disk', () => {
-            it('return jdbc:h2:file:./build/h2db/db/test;DB_CLOSE_DELAY=-1', () => {
-                expect(BaseGenerator.getJDBCUrl('h2Disk', { databaseName: 'test', localDirectory: './build/h2db/db' })).to.equal(
-                    'jdbc:h2:file:./build/h2db/db/test;DB_CLOSE_DELAY=-1'
-                );
-            });
-        });
-        describe('when called for h2Disk with skipExtraOptions enabled', () => {
-            it('return jdbc:h2:file:./build/h2db/db/test', () => {
-                expect(
-                    BaseGenerator.getJDBCUrl('h2Disk', { databaseName: 'test', localDirectory: './build/h2db/db', skipExtraOptions: true })
-                ).to.equal('jdbc:h2:file:./build/h2db/db/test');
-            });
-        });
-        describe('when called for h2Disk with missing `localDirectory` option', () => {
-            it('throw an error', () => {
-                expect(() => BaseGenerator.getJDBCUrl('h2Disk', { databaseName: 'test' })).to.throw(
-                    "'localDirectory' option should be provided for h2Disk databaseType"
-                );
-            });
-        });
-        describe('when called for h2Memory', () => {
-            it('return jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE', () => {
-                expect(BaseGenerator.getJDBCUrl('h2Memory', { databaseName: 'test' })).to.equal(
-                    'jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE'
-                );
-            });
-        });
-        describe('when called for h2Memory with skipExtraOptions enabled', () => {
-            it('return jdbc:h2:mem:test', () => {
-                expect(BaseGenerator.getJDBCUrl('h2Memory', { databaseName: 'test', skipExtraOptions: true })).to.equal('jdbc:h2:mem:test');
-            });
-        });
-        describe('when called with missing `databaseName` option', () => {
-            it('throw an error', () => {
-                expect(() => BaseGenerator.getJDBCUrl('mysql')).to.throw("option 'databaseName' is required");
-            });
-        });
-        describe('when called for an unknown databaseType', () => {
-            it('throw an error', () => {
-                expect(() => BaseGenerator.getJDBCUrl('foodb', { databaseName: 'test' })).to.throw('foodb databaseType is not supported');
-            });
-        });
-    });
-
-    describe('getR2DBCUrl', () => {
-        describe('when called for mysql', () => {
-            it('return r2dbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true', () => {
-                expect(BaseGenerator.getR2DBCUrl('mysql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
-                    'r2dbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true'
-                );
-            });
-        });
-        describe('when called for mysql with skipExtraOptions enabled', () => {
-            it('return r2dbc:mysql://localhost:3306/test', () => {
-                expect(
-                    BaseGenerator.getR2DBCUrl('mysql', { databaseName: 'test', hostname: 'localhost', skipExtraOptions: true })
-                ).to.equal('r2dbc:mysql://localhost:3306/test');
-            });
-        });
-        describe('when called for mariadb', () => {
-            it('return r2dbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC', () => {
-                expect(BaseGenerator.getR2DBCUrl('mariadb', { databaseName: 'test', hostname: 'localhost' })).to.equal(
-                    'r2dbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false&serverTimezone=UTC'
-                );
-            });
-        });
-        describe('when called for mariadb with skipExtraOptions enabled', () => {
-            it('return r2dbc:mariadb://localhost:3306/test', () => {
-                expect(
-                    BaseGenerator.getR2DBCUrl('mariadb', { databaseName: 'test', hostname: 'localhost', skipExtraOptions: true })
-                ).to.equal('r2dbc:mariadb://localhost:3306/test');
-            });
-        });
-        describe('when called for postgresql', () => {
-            it('return r2dbc:postgresql://localhost:5432/test', () => {
-                expect(BaseGenerator.getR2DBCUrl('postgresql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
-                    'r2dbc:postgresql://localhost:5432/test'
-                );
-            });
-        });
-        describe('when called for oracle', () => {
-            it('return r2dbc:oracle:thin:@localhost:1521:test', () => {
-                expect(BaseGenerator.getR2DBCUrl('oracle', { databaseName: 'test', hostname: 'localhost' })).to.equal(
-                    'r2dbc:oracle:thin:@localhost:1521:test'
-                );
-            });
-        });
-        describe('when called for mssql', () => {
-            it('return r2dbc:sqlserver://localhost:1433;database=test', () => {
-                expect(BaseGenerator.getR2DBCUrl('mssql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
-                    'r2dbc:sqlserver://localhost:1433;database=test'
-                );
-            });
-        });
-        describe('when called for h2Disk', () => {
-            it('return r2dbc:h2:file:./build/h2db/db/test;DB_CLOSE_DELAY=-1', () => {
-                expect(BaseGenerator.getR2DBCUrl('h2Disk', { databaseName: 'test', localDirectory: './build/h2db/db' })).to.equal(
-                    'r2dbc:h2:file:./build/h2db/db/test;DB_CLOSE_DELAY=-1'
-                );
-            });
-        });
-        describe('when called for h2Disk with skipExtraOptions enabled', () => {
-            it('return r2dbc:h2:file:./build/h2db/db/test', () => {
-                expect(
-                    BaseGenerator.getR2DBCUrl('h2Disk', { databaseName: 'test', localDirectory: './build/h2db/db', skipExtraOptions: true })
-                ).to.equal('r2dbc:h2:file:./build/h2db/db/test');
-            });
-        });
-        describe('when called for h2Disk with missing `localDirectory` option', () => {
-            it('throw an error', () => {
-                expect(() => BaseGenerator.getR2DBCUrl('h2Disk', { databaseName: 'test' })).to.throw(
-                    "'localDirectory' option should be provided for h2Disk databaseType"
-                );
-            });
-        });
-        describe('when called for h2Memory', () => {
-            it('return r2dbc:h2:mem:///test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE', () => {
-                expect(BaseGenerator.getR2DBCUrl('h2Memory', { databaseName: 'test' })).to.equal(
-                    'r2dbc:h2:mem:///test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE'
-                );
-            });
-        });
-        describe('when called for h2Memory with skipExtraOptions enabled', () => {
-            it('return r2dbc:h2:mem:///test', () => {
-                expect(BaseGenerator.getR2DBCUrl('h2Memory', { databaseName: 'test', skipExtraOptions: true })).to.equal(
-                    'r2dbc:h2:mem:///test'
-                );
-            });
-        });
-        describe('when called with missing `databaseName` option', () => {
-            it('throw an error', () => {
-                expect(() => BaseGenerator.getR2DBCUrl('mysql')).to.throw("option 'databaseName' is required");
-            });
-        });
-        describe('when called for an unknown databaseType', () => {
-            it('throw an error', () => {
-                expect(() => BaseGenerator.getR2DBCUrl('foodb', { databaseName: 'test' })).to.throw('foodb databaseType is not supported');
             });
         });
     });

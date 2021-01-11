@@ -68,7 +68,7 @@ entity Region {
 }
 
 relationship OneToOne {
-  Department{location} to Location
+  @id Department{location} to @id(42) Location
 }
 
 relationship OneToMany {

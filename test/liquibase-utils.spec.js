@@ -6,12 +6,12 @@ describe('Liquibase Utils', () => {
     describe('::parseLiquibaseChangelogDate', () => {
         describe('when not passing parameters', () => {
             it('throws', () => {
-                expect(() => liquibaseUtils.parseLiquibaseChangelogDate()).to.throw(/^A valid changelogDate is required to parse\.$/);
+                expect(() => liquibaseUtils.parseLiquibaseChangelogDate()).to.throw(/^undefined is not a valid changelogDate\.$/);
             });
         });
         describe('when passing an invalid changelogDate', () => {
             it('throws', () => {
-                expect(() => liquibaseUtils.parseLiquibaseChangelogDate('1234')).to.throw(/^A valid changelogDate is required to parse\.$/);
+                expect(() => liquibaseUtils.parseLiquibaseChangelogDate('1234')).to.throw(/^1234 is not a valid changelogDate\.$/);
             });
         });
         describe('when passing a valid changelogDate', () => {

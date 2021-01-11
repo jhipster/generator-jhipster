@@ -1,14 +1,14 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,6 +39,7 @@ const optionNames = {
     CLIENT_PACKAGE_MANAGER: 'clientPackageManager',
     CLIENT_THEME: 'clientTheme',
     CLIENT_THEME_VARIANT: 'clientThemeVariant',
+    WITH_ADMIN_UI: 'withAdminUi',
     CREATION_TIMESTAMP: 'creationTimestamp',
     DATABASE_TYPE: 'databaseType',
     DEV_DATABASE_TYPE: 'devDatabaseType',
@@ -74,7 +75,6 @@ const optionNames = {
     SKIP_USER_MANAGEMENT: 'skipUserManagement',
     TEST_FRAMEWORKS: 'testFrameworks',
     UAA_BASE_NAME: 'uaaBaseName',
-    USE_SASS: 'useSass',
     WEBSOCKET: 'websocket',
     WITH_ENTITIES: 'withEntities',
 };
@@ -119,7 +119,6 @@ const optionValues = {
     },
     [optionNames.CLIENT_THEME]: 'none',
     [optionNames.CLIENT_THEME_VARIANT]: { none: '', default: 'primary' },
-    [optionNames.CREATION_TIMESTAMP]: new Date().getTime(),
     [optionNames.DATABASE_TYPE]: {
         [SQL]: SQL,
         [MONGODB]: MONGODB,
@@ -145,12 +144,11 @@ const optionValues = {
     [optionNames.JHI_PREFIX]: 'jhi',
     [optionNames.JHIPSTER_VERSION]: '',
     [optionNames.JWT_SECRET_KEY]: '',
-    [optionNames.LANGUAGES]: ['en', 'fr'],
+    [optionNames.LANGUAGES]: [],
     [optionNames.MESSAGE_BROKER]: {
         kafka: 'kafka',
         false: false,
     },
-    [optionNames.NATIVE_LANGUAGE]: 'en',
     [optionNames.NPM]: true,
     [optionNames.OTHER_MODULES]: [],
     [optionNames.PACKAGE_FOLDER]: 'com/mycompany/myapp',
@@ -190,12 +188,12 @@ const optionValues = {
     },
     [optionNames.UAA_BASE_NAME]: '../uaa',
     [optionNames.USE_NPM]: true,
-    [optionNames.USE_SASS]: false,
     [optionNames.WEBSOCKET]: {
         'spring-websocket': 'spring-websocket',
         false: false,
     },
     [optionNames.WITH_ENTITIES]: false,
+    [optionNames.WITH_ADMIN_UI]: true,
 };
 
 const optionTypes = {
@@ -246,9 +244,9 @@ const optionTypes = {
     [optionNames.TEST_FRAMEWORKS]: { type: ApplicationOptionTypes.LIST },
     [optionNames.UAA_BASE_NAME]: { type: ApplicationOptionTypes.STRING },
     [optionNames.USE_NPM]: { type: ApplicationOptionTypes.BOOLEAN },
-    [optionNames.USE_SASS]: { type: ApplicationOptionTypes.BOOLEAN },
     [optionNames.WEBSOCKET]: { type: ApplicationOptionTypes.STRING },
     [optionNames.WITH_ENTITIES]: { type: ApplicationOptionTypes.BOOLEAN },
+    [optionNames.WITH_ADMIN_UI]: { type: ApplicationOptionTypes.BOOLEAN },
 };
 
 const QuotedOptionNames = [optionNames.JHIPSTER_VERSION, optionNames.REMEMBER_ME_KEY, optionNames.JWT_SECRET_KEY];

@@ -24,7 +24,7 @@ export default class <%= entityAngularName %>Service {
   }
   <%_ } _%>
 
-  public find(id: <% if (primaryKeyType === 'String'  || primaryKeyType === 'UUID') { %>string<% } else { %>number<% } %>) : Promise<I<%= entityAngularName %>> {
+  public find(id: <% if (primaryKey.type === 'String'  || primaryKey.type === 'UUID') { %>string<% } else { %>number<% } %>) : Promise<I<%= entityAngularName %>> {
     return new Promise<I<%= entityAngularName %>>((resolve, reject) => {
       axios.get(`${baseApiUrl}/${id}`).then(res => {
         resolve(res.data);
@@ -42,7 +42,7 @@ export default class <%= entityAngularName %>Service {
   <%_
   if (!readOnly) { _%>
 
-  public delete(id: <% if (primaryKeyType === 'String'  || primaryKeyType === 'UUID') { %>string<% } else { %>number<% } %>) : Promise<any> {
+  public delete(id: <% if (primaryKey.type === 'String'  || primaryKey.type === 'UUID') { %>string<% } else { %>number<% } %>) : Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios.delete(`${baseApiUrl}/${id}`).then(res => {
         resolve(res);

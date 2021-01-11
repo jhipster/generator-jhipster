@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,20 +21,8 @@ package <%= packageName %>.service;
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-import <%= packageName %>.AbstractNeo4jIT;
-<%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
-import <%= packageName %>.RedisTestContainerExtension;
-<%_ } _%>
-<%_ if (reactiveSqlTestContainers) { _%>
-import <%= packageName %>.ReactiveSqlTestContainerExtension;
-<%_ } _%>
-import <%= packageName %>.<%= mainClass %>;
+import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.config.Constants;
-<%_ if (authenticationType === 'oauth2') { _%>
-import <%= packageName %>.config.TestSecurityConfiguration;
-<%_ } _%>
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
 import <%= packageName %>.domain.PersistentToken;
 <%_ } _%>
@@ -53,10 +41,10 @@ import <%= packageName %>.repository.UserRepository;
 <%_ if (authenticationType === 'oauth2') { _%>
 import <%= packageName %>.security.AuthoritiesConstants;
 <%_ } _%>
-import <%= packageName %>.service.dto.<%= asDto('User') %>;
+import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase')) { _%>
 
-import io.github.jhipster.security.RandomUtil;
+import tech.jhipster.security.RandomUtil;
 <%_ } _%>
 
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -64,11 +52,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if (databaseType === 'neo4j' || cacheProvider === 'redis' || reactiveSqlTestContainers) { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (databaseType === 'sql' && !reactive && authenticationType !== 'oauth2') { _%>
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.auditing.AuditingHandler;
@@ -147,20 +131,7 @@ import static org.mockito.Mockito.when;
 /**
  * Integration tests for {@link UserService}.
  */
-<%_ if (authenticationType === 'oauth2') { _%>
-@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
-<%_ } else { _%>
-@SpringBootTest(classes = <%= mainClass %>.class)
-<%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
-@ExtendWith(RedisTestContainerExtension.class)
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-@ExtendWith(AbstractNeo4jIT.class)
-<%_ } _%>
-<%_ if (reactiveSqlTestContainers) { _%>
-@ExtendWith(ReactiveSqlTestContainerExtension.class)
-<%_ } _%>
+@IntegrationTest
 <%_ if (databaseType === 'sql' && !reactive) { _%>
 @Transactional
 <%_ } _%>
@@ -251,7 +222,7 @@ class UserServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCas
             <%_ } _%>
         user.setLangKey(DEFAULT_LANGKEY);
             <%_ if (databaseType === 'sql' && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        user.setCreatedBy(Constants.SYSTEM);
             <%_ } _%>
         <%_ } _%>
         <%_ if (authenticationType === 'oauth2' ) { _%>
@@ -458,33 +429,6 @@ class UserServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCas
         persistentTokenRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(token);
     }
     <%_ } _%>
-    <%_ if (databaseType !== 'no') { _%>
-
-    @Test
-        <%_ if (databaseType === 'sql' && !reactive) { _%>
-    @Transactional
-        <%_ } else if (databaseType === 'couchbase') { _%>
-    @WithAnonymousUser
-        <%_ } _%>
-    void assertThatAnonymousUserIsNotGet() {
-        <%_ if (authenticationType === 'oauth2') { _%>
-        user.setId(Constants.ANONYMOUS_USER);
-        <%_ } _%>
-        user.setLogin(Constants.ANONYMOUS_USER);
-        if (!userRepository.findOneByLogin(Constants.ANONYMOUS_USER)<% if (reactive) { %>.blockOptional()<% } %>.isPresent()) {
-            userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        }<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>
-        final PageRequest pageable = PageRequest.of(0, (int) userRepository.count()<% if (reactive) { %>.block().intValue()<% } %>);
-        final <% if (reactive) { %>List<% } else { %>Page<% } %><<%= asDto('User') %>> allManagedUsers = userService.getAllManagedUsers(pageable)<% if (reactive) { %>
-            .collectList().block()<% } %>;
-        assertThat(allManagedUsers<% if (!reactive) { %>.getContent()<% } %>.stream()<% } %><% if (databaseType === 'cassandra') { %>
-        final List<<%= asDto('User') %>> allManagedUsers = userService.getAllManagedUsers()<% if (reactive) { %>
-            .collectList().block()<% } %>;
-        assertThat(allManagedUsers.stream()<% } %>
-            .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
-            .isTrue();
-    }
-    <%_ } _%>
 
     <%_ if (authenticationType === 'oauth2') { _%>
     @Test
@@ -493,7 +437,7 @@ class UserServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCas
     <%_ } _%>
     void testDefaultUserDetails() {
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
+        <%= asDto('AdminUser') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
 
         assertThat(userDTO.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(userDTO.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
@@ -513,7 +457,7 @@ class UserServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCas
         userDetails.put("preferred_username", "TEST");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
+        <%= asDto('AdminUser') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
 
         assertThat(userDTO.getLogin()).isEqualTo("test");
     }
@@ -527,7 +471,7 @@ class UserServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCas
         userDetails.put("locale", "en-US");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
+        <%= asDto('AdminUser') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
 
         assertThat(userDTO.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
     }
@@ -540,7 +484,7 @@ class UserServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCas
         userDetails.put("locale", "it-IT");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
+        <%= asDto('AdminUser') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
 
         assertThat(userDTO.getLangKey()).isEqualTo("it");
     }
@@ -553,7 +497,7 @@ class UserServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCas
         userDetails.put("locale", "en_US");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
+        <%= asDto('AdminUser') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
 
         assertThat(userDTO.getLangKey()).isEqualTo("en");
     }
@@ -566,14 +510,14 @@ class UserServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCas
         userDetails.put("locale", "en-US");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
+        <%= asDto('AdminUser') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
 
         assertThat(userDTO.getLangKey()).isEqualTo("en");
     }
 
     private OAuth2AuthenticationToken createMockOAuth2AuthenticationToken(Map<String, Object> userDetails) {
         Collection<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(Constants.ANONYMOUS_USER, Constants.ANONYMOUS_USER, authorities);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken("anonymous", "anonymous", authorities);
         usernamePasswordAuthenticationToken.setDetails(userDetails);
         OAuth2User user = new DefaultOAuth2User(authorities, userDetails, "sub");
 

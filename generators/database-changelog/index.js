@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,25 +31,17 @@ module.exports = class extends BaseGenerator {
     constructor(args, options) {
         super(args, options);
 
-        this.configOptions = this.options.configOptions || {};
-
         this.argument('entities', {
             desc: 'Which entities to generate a new changelog',
             type: Array,
             required: true,
         });
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
-
         if (this.options.help) {
             return;
         }
         this.info(`Creating changelog for entities ${this.options.entities}`);
+        this.configOptions.oldSharedEntities = this.configOptions.oldSharedEntities || [];
     }
 
     _default() {
@@ -102,7 +94,7 @@ module.exports = class extends BaseGenerator {
             const filename = this.destinationPath(JHIPSTER_CONFIG_DIR, `${entityName}.json`);
 
             const newConfig = this.fs.readJSON(filename);
-            const newFields = newConfig.fields || [];
+            const newFields = (newConfig.fields || []).filter(field => !field.transient);
             const newRelationships = newConfig.relationships || [];
 
             if (
@@ -128,7 +120,10 @@ module.exports = class extends BaseGenerator {
             this._debug(`Calculating diffs for ${entityName}`);
 
             const oldConfig = JSON.parse(fs.readFileSync(filename));
-            const oldFields = oldConfig.fields || [];
+            // Share old entity
+            this.configOptions.oldSharedEntities[entityName] = oldConfig;
+
+            const oldFields = (oldConfig.fields || []).filter(field => !field.transient);
             const oldFieldNames = oldFields.map(field => field.fieldName);
             const newFieldNames = newFields.map(field => field.fieldName);
 

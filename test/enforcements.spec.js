@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -46,6 +46,7 @@ describe('Enforce some developments patterns', () => {
             ...readDir(path.join(__dirname, '..', 'generators', 'cypress')),
             ...readDir(path.join(__dirname, '..', 'generators', 'entity-i18n')),
             ...readDir(path.join(__dirname, '..', 'generators', 'entity-client')),
+            ...readDir(path.join(__dirname, '..', 'generators', 'entities-client')),
         ];
         filesToTest.forEach(file => {
             describe(`file ${path.basename(file)}`, () => {
@@ -74,6 +75,28 @@ describe('Enforce some developments patterns', () => {
                             }
                         }
                     });
+                    it(`should not contain ${notSpected}`, () => {
+                        assert(!regex.test(content), `file ${file} should not contain ${notSpected}`);
+                    });
+                });
+            });
+        });
+    });
+
+    describe('at generators base', () => {
+        const filesToTest = [
+            path.join(__dirname, '..', 'generators', 'generator-base-private.js'),
+            path.join(__dirname, '..', 'generators', 'generator-base.js'),
+        ];
+        filesToTest.forEach(file => {
+            describe(`file ${path.basename(file)}`, () => {
+                let content;
+                before(() => {
+                    content = fse.readFileSync(file, 'utf-8');
+                });
+
+                ['src/main/webapp', 'src/test/javascript'].forEach(notSpected => {
+                    const regex = new RegExp(notSpected, 'g');
                     it(`should not contain ${notSpected}`, () => {
                         assert(!regex.test(content), `file ${file} should not contain ${notSpected}`);
                     });

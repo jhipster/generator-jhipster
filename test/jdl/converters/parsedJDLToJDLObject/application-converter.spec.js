@@ -1,14 +1,14 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,10 +40,7 @@ describe('ApplicationConverter', () => {
                             config: {
                                 baseName: 'mono',
                             },
-                            entities: {
-                                entityList: [],
-                                excluded: [],
-                            },
+                            entities: [],
                             options: {},
                             useOptions: [],
                         },
@@ -66,23 +63,18 @@ describe('ApplicationConverter', () => {
                     let expectedApplication;
 
                     before(() => {
-                        convertedApplication = convertApplications(
-                            [
-                                {
-                                    config: {
-                                        applicationType: MONOLITH,
-                                        baseName: 'mono',
-                                    },
-                                    entities: {
-                                        entityList: [],
-                                        excluded: [],
-                                    },
-                                    options: {},
-                                    useOptions: [],
+                        convertedApplication = convertApplications([
+                            {
+                                config: {
+                                    applicationType: MONOLITH,
+                                    baseName: 'mono',
+                                    creationTimestamp: 42,
                                 },
-                            ],
-                            { creationTimestamp: 42 }
-                        );
+                                entities: [],
+                                options: {},
+                                useOptions: [],
+                            },
+                        ]);
                         expectedApplication = [
                             createJDLApplication({
                                 applicationType: MONOLITH,
@@ -108,10 +100,7 @@ describe('ApplicationConverter', () => {
                                         applicationType: MONOLITH,
                                         baseName: 'mono',
                                     },
-                                    entities: {
-                                        entityList: [],
-                                        excluded: [],
-                                    },
+                                    entities: [],
                                     options: {},
                                     useOptions: [],
                                 },
@@ -150,10 +139,7 @@ describe('ApplicationConverter', () => {
                                                 'super-framework',
                                             ],
                                         },
-                                        entities: {
-                                            entityList: [],
-                                            excluded: [],
-                                        },
+                                        entities: [],
                                         options: {},
                                         useOptions: [],
                                     },
@@ -191,16 +177,12 @@ describe('ApplicationConverter', () => {
                                 config: {
                                     baseName: 'mono',
                                 },
-                                entities: {
-                                    entityList: ['*'],
-                                    excluded: [],
-                                },
+                                entities: ['A', 'B'],
                                 options: {},
                                 useOptions: [],
                             },
                         ],
-                        {},
-                        ['A', 'B']
+                        {}
                     );
                     const application = createJDLApplication({
                         applicationType: MONOLITH,
@@ -224,19 +206,17 @@ describe('ApplicationConverter', () => {
                                 config: {
                                     baseName: 'mono',
                                 },
-                                entities: {
-                                    entityList: ['B'],
-                                    excluded: [],
-                                },
+                                entities: ['B'],
                                 options: {},
+                                useOptions: [],
                             },
                         ];
                     });
 
-                    it('should fail', () => {
+                    it('should not fail', () => {
                         expect(() => {
-                            convertApplications(applicationsToConvert, {}, ['A']);
-                        }).to.throw(/^The entity B which is declared in mono's entity list doesn't exist\.$/);
+                            convertApplications(applicationsToConvert, {});
+                        }).not.to.throw();
                     });
                 });
             });
@@ -251,16 +231,12 @@ describe('ApplicationConverter', () => {
                                 config: {
                                     baseName: 'mono',
                                 },
-                                entities: {
-                                    entityList: ['*'],
-                                    excluded: ['A'],
-                                },
+                                entities: ['B'],
                                 options: {},
                                 useOptions: [],
                             },
                         ],
-                        {},
-                        ['A', 'B']
+                        {}
                     );
                     const application = createJDLApplication({
                         applicationType: MONOLITH,
@@ -284,10 +260,7 @@ describe('ApplicationConverter', () => {
                                 config: {
                                     baseName: 'mono',
                                 },
-                                entities: {
-                                    entityList: ['A'],
-                                    excluded: [],
-                                },
+                                entities: ['A'],
                                 options: {
                                     dto: {
                                         mapstruct: {
@@ -302,7 +275,7 @@ describe('ApplicationConverter', () => {
                     });
 
                     it('should fail', () => {
-                        expect(() => convertApplications(applicationsToConvert, {}, ['A', 'B', 'C'])).to.throw(
+                        expect(() => convertApplications(applicationsToConvert, {})).to.throw(
                             /^The entity C in the dto option isn't declared in mono's entity list\.$/
                         );
                     });
@@ -317,10 +290,7 @@ describe('ApplicationConverter', () => {
                                     config: {
                                         baseName: 'mono',
                                     },
-                                    entities: {
-                                        entityList: ['*'],
-                                        excluded: [],
-                                    },
+                                    entities: ['A', 'B'],
                                     options: {
                                         dto: {
                                             mapstruct: {
@@ -332,8 +302,7 @@ describe('ApplicationConverter', () => {
                                     useOptions: [],
                                 },
                             ],
-                            {},
-                            ['A', 'B']
+                            {}
                         );
                     });
 

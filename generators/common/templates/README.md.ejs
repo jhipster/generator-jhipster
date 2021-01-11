@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -58,7 +58,7 @@ You will only need to run this command when dependencies change in [package.json
 <%= clientPackageManager %> install
 ```
 
-We use <%= clientPackageManager %> scripts and [Webpack][] as our build system.
+We use <%= clientPackageManager %> scripts and <% if (clientFramework === ANGULAR) { %>[Angular CLI][] with <% } %>[Webpack][] as our build system.
 
 <%_ if (['hazelcast', 'memcached', 'redis'].includes(cacheProvider)) { _%>
 If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.
@@ -91,10 +91,18 @@ auto-refreshes when files change on your hard drive.
 ./mvnw
 <%_ } _%>
 <%_ if (buildTool === 'gradle') { _%>
-./gradlew -x webpack
+./gradlew -x webapp
 <%_ } _%>
 <%= clientPackageManager %> start
 ```
+<%_ if (clientFramework === ANGULAR) { _%>
+
+If you want to use [HMR](https://webpack.js.org/guides/hot-module-replacement) for instant page updates and data + scroll position preservation on file changes then instead of `<%= clientPackageManager %> start` run
+
+```
+<%= clientPackageManager %> run start-hmr
+```
+<%_ } _%>
 
 <%= clientPackageMngrName %> is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
 specifying a newer version in [package.json](package.json). You can also run `<%= clientPackageManager %> update` and `<%= clientPackageManager %> install` to manage dependencies.
@@ -140,7 +148,21 @@ docker-compose -f src/main/docker/jhipster-control-center.yml up
 
 ### Okta
 
-If you'd like to use Okta instead of Keycloak, you'll need to change a few things. First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta domain, that has a name like `https://dev-123456.okta.com`.
+If you'd like to use Okta instead of Keycloak, it's pretty quick using the [Okta CLI](https://cli.okta.com/). After you've installed it, run:
+
+```shell
+okta register
+```
+
+Then, in your JHipster app's directory, run `okta apps create` and select **JHipster**. This will set up an Okta app for you, create `ROLE_ADMIN` and `ROLE_USER` groups, create a `.okta.env` file with your Okta settings, and configure a `groups` claim in your ID token.
+
+Run `source .okta.env` and start your app with Maven or Gradle. You should be able to sign in with the credentials you registered with.
+
+If you're on Windows, you should install [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10) so the `source` command will work.
+
+If you'd like to configure things manually through the Okta developer console, see the instructions below.
+
+First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta domain, that has a name like `https://dev-123456.okta.com`.
 
 Modify `src/main/resources/config/application.yml` to use your Okta settings.
 
@@ -173,6 +195,7 @@ After making these changes, you should be good to go! If you have any issues, pl
 
 JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
 
+<%_ if (clientFramework !== ANGULAR) { _%>
 The service worker initialization code is commented out by default. To enable it, uncomment the following code in `<%= CLIENT_MAIN_SRC_DIR %>index.html`:
 
 ```html
@@ -186,6 +209,14 @@ The service worker initialization code is commented out by default. To enable it
 ```
 
 Note: [Workbox](https://developers.google.com/web/tools/workbox/) powers JHipster's service worker. It dynamically generates the `service-worker.js` file.
+<%_ } _%>
+<%_ if (clientFramework === ANGULAR) { _%>
+The service worker initialization code is disabled by default. To enable it, uncomment the following code in `<%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts`:
+
+```typescript
+ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
+```
+<%_ } _%>
 
 ### Managing dependencies
 
@@ -203,7 +234,7 @@ To benefit from TypeScript type definitions from [DefinitelyTyped][] repository 
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
 <%_ if (clientFramework === ANGULAR) { _%>
-Edit [<%= CLIENT_MAIN_SRC_DIR %>app/vendor.ts](<%= CLIENT_MAIN_SRC_DIR %>app/vendor.ts) file:
+Edit [<%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts](<%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts) file:
 ~~~
 import 'leaflet/dist/leaflet.js';
 ~~~
@@ -320,7 +351,7 @@ To launch your application's tests, run:
 <% if (!skipClient) { %>
 ### Client tests
 
-Unit tests are run by [Jest][] and written with [Jasmine][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](<%= CLIENT_TEST_SRC_DIR %>) and can be run with:
+Unit tests are run by [Jest][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](<%= CLIENT_TEST_SRC_DIR %>) and can be run with:
 
 ```
 <%= clientPackageManager %> test
@@ -343,6 +374,8 @@ Sonar is used to analyse code quality. You can start a local Sonar server (acces
 ```
 docker-compose -f src/main/docker/sonar.yml up -d
 ```
+
+Note: we have turned off authentication in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
 
 You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner)<% if (buildTool) { %> or by using the <% if (buildTool === 'maven') { %>maven<% } %><% if (buildTool === 'gradle') { %>gradle<% } %> plugin<% } %>.
 

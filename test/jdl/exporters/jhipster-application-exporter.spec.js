@@ -1,14 +1,14 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -50,9 +50,8 @@ describe('JHipsterApplicationExporter', () => {
                             enableTranslation: false,
                             jhiPrefix: 'jhi',
                             jhipsterVersion: '4.9.0',
-                            languages: ['en', 'fr'],
+                            languages: [],
                             messageBroker: false,
-                            nativeLanguage: 'en',
                             packageFolder: 'com/mathieu/sample',
                             packageName: 'com.mathieu.sample',
                             prodDatabaseType: 'mysql',
@@ -63,9 +62,9 @@ describe('JHipsterApplicationExporter', () => {
                             skipServer: false,
                             skipUserManagement: false,
                             testFrameworks: [],
-                            useSass: true,
                             websocket: false,
                             jwtSecretKey: '1234',
+                            withAdminUi: true,
                         },
                     });
                     content = fs.readFileSync(path.join('.yo-rc.json'), { encoding: 'utf8' });
@@ -116,9 +115,8 @@ describe('JHipsterApplicationExporter', () => {
                             enableTranslation: false,
                             jhiPrefix: 'jhi',
                             jhipsterVersion: '4.9.0',
-                            languages: ['en', 'fr'],
+                            languages: [],
                             messageBroker: false,
-                            nativeLanguage: 'en',
                             packageFolder: 'com/mathieu/sample',
                             packageName: 'com.mathieu.sample',
                             prodDatabaseType: 'mysql',
@@ -129,9 +127,9 @@ describe('JHipsterApplicationExporter', () => {
                             skipServer: false,
                             skipUserManagement: false,
                             testFrameworks: [],
-                            useSass: true,
                             websocket: false,
                             jwtSecretKey: '1234',
+                            withAdminUi: true,
                         },
                     });
                     content = JSON.parse(fs.readFileSync(path.join('.yo-rc.json'), { encoding: 'utf8' }));
@@ -164,9 +162,8 @@ describe('JHipsterApplicationExporter', () => {
                             enableTranslation: false,
                             jhiPrefix: 'jhi',
                             jhipsterVersion: '4.9.0',
-                            languages: ['en', 'fr'],
+                            languages: [],
                             messageBroker: false,
-                            nativeLanguage: 'en',
                             packageFolder: 'com/mathieu/sample',
                             packageName: 'com.mathieu.sample',
                             prodDatabaseType: 'mysql',
@@ -177,10 +174,10 @@ describe('JHipsterApplicationExporter', () => {
                             skipServer: false,
                             skipUserManagement: false,
                             testFrameworks: [],
-                            useSass: true,
                             websocket: false,
                             jwtSecretKey: '1234',
                             creationTimestamp: 'old',
+                            withAdminUi: true,
                         },
                     });
                 });
@@ -219,9 +216,8 @@ describe('JHipsterApplicationExporter', () => {
                             enableTranslation: false,
                             jhiPrefix: 'jhi',
                             jhipsterVersion: '4.9.0',
-                            languages: ['en', 'fr'],
+                            languages: [],
                             messageBroker: false,
-                            nativeLanguage: 'en',
                             packageFolder: 'com/mathieu/toto',
                             packageName: 'com.mathieu.toto',
                             prodDatabaseType: 'mysql',
@@ -232,9 +228,9 @@ describe('JHipsterApplicationExporter', () => {
                             skipServer: false,
                             skipUserManagement: false,
                             testFrameworks: [],
-                            useSass: true,
                             websocket: false,
                             jwtSecretKey: '1234',
+                            withAdminUi: true,
                         },
                     },
 
@@ -257,9 +253,8 @@ describe('JHipsterApplicationExporter', () => {
                             enableTranslation: false,
                             jhiPrefix: 'jhi',
                             jhipsterVersion: '4.9.0',
-                            languages: ['en', 'fr'],
+                            languages: [],
                             messageBroker: false,
-                            nativeLanguage: 'en',
                             packageFolder: 'com/mathieu/titi',
                             packageName: 'com.mathieu.titi',
                             prodDatabaseType: 'mysql',
@@ -270,9 +265,9 @@ describe('JHipsterApplicationExporter', () => {
                             skipServer: false,
                             skipUserManagement: false,
                             testFrameworks: [],
-                            useSass: true,
                             websocket: false,
                             jwtSecretKey: '1234',
+                            withAdminUi: true,
                         },
                     },
                 ]);
