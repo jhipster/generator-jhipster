@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.config.TestSecurityConfiguration;
 import <%= packageName %>.security.AuthoritiesConstants;
+import <%= packageName %>.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +31,6 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +47,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
+@IntegrationTest
 @ExtendWith(MockitoExtension.class)
 public class CustomClaimConverterIT {
     private static final String USERNAME = "admin";
