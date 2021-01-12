@@ -24,7 +24,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-<%= LIQUIBASE_DTD_VERSION %>.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <% const isAutoIncrementDB = reactive || prodDatabaseType === 'mysql'; _%>
+    <%_ const isAutoIncrementDB = reactive || prodDatabaseType === 'mysql'; _%>
     <%_ if (!isAutoIncrementDB) { _%>
     <changeSet id="00000000000000" author="jhipster">
         <createSequence sequenceName="sequence_generator" startValue="1050" incrementBy="50"/>
