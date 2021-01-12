@@ -78,7 +78,7 @@ _%>
         if (field) {
             if (field.fieldValidate === true) {
     _%>
-    <%- include('../../common/field_validators', {field}); -%>
+    <%- include('../../common/field_validators', {field, reactive}); -%>
     <%_     }
         }
     _%>
