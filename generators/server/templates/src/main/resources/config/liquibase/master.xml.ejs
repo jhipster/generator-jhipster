@@ -17,7 +17,6 @@
     <%_ if (prodDatabaseType === 'mssql') { _%>
     <property name="now" value="GETDATE()" dbms="mssql"/>
     <%_ } _%>
-
     <property name="floatType" value="float4" dbms="postgresql, h2"/>
     <property name="floatType" value="float" dbms="mysql, oracle, mssql, mariadb"/>
     <%_ if (prodDatabaseType === 'postgresql') { _%>
@@ -31,7 +30,6 @@
     <%_ } else { _%>
     <property name="uuidType" value="uuid" dbms="h2, <%= prodDatabaseType %>"/>
     <%_ } _%>
-
     <property name="datetimeType" value="datetime(6)" dbms="mysql, mariadb"/>
     <property name="datetimeType" value="datetime" dbms="oracle, mssql, postgresql, h2"/>
 

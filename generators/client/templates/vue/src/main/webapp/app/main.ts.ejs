@@ -16,12 +16,12 @@ import HealthService from './admin/health/health.service';
 import MetricsService from './admin/metrics/metrics.service';
 import LogsService from './admin/logs/logs.service';
 import ConfigurationService from '@/admin/configuration/configuration.service';
-<%_ } %>
+<%_ } _%>
 <%_ if (!skipUserManagement) { _%>
 import ActivateService from './account/activate/activate.service';
 import RegisterService from './account/register/register.service';
 import UserManagementService from '@/admin/user-management/user-management.service';
-<%_ } %>
+<%_ } _%>
 import LoginService from './account/login.service';
 import AccountService from './account/account.service';
 
@@ -31,7 +31,7 @@ import TranslationService from '@/locale/translation.service';
 <%_ } _%>
 <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { %>
 import GatewayService from '@/admin/gateway/gateway.service';
-<%_ } %>
+<%_ } _%>
 <%_ if (websocket === 'spring-websocket') { _%>
 import TrackerService from './admin/tracker/tracker.service';
 <%_ } _%>
@@ -97,17 +97,17 @@ new Vue({
     activateService: () => new ActivateService(),
     registerService: () => new RegisterService(),
     userService: () => new UserManagementService(),
-    <%_ } %>
+    <%_ } _%>
     <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { %>
     gatewayService: () => new GatewayService(),
-    <%_ } %>
-  <%_ if (withAdminUi) { _%>
+    <%_ } _%>
+    <%_ if (withAdminUi) { _%>
     healthService: () => new HealthService(),
     configurationService: () => new ConfigurationService(),
     logsService: () => new LogsService(),
     metricsService: () => new MetricsService(),
-  <%_ } %>
-  <%_ if (websocket === 'spring-websocket') { _%>
+    <%_ } _%>
+    <%_ if (websocket === 'spring-websocket') { _%>
     trackerService: () => trackerService,
     <%_ } _%>
     <%_ if (enableTranslation) { _%>
