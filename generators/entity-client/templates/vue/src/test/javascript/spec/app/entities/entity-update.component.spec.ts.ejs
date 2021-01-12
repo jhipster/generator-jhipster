@@ -54,6 +54,8 @@ import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/
 _%>
   <% if (otherEntityAngularName === 'User' && authenticationType !== 'oauth2') { %>
 import UserService from '@/admin/user-management/user-management.service';
+ <%_ } else if (otherEntityAngularName === 'User' && authenticationType === 'oauth2') { _%>
+import UserOAuth2Service from '@/entities/user/user.oauth2.service';
   <% } else if (otherEntityAngularName !== 'User') { %>
 import <%= otherEntityAngularName %>Service from '@/entities/<%= otherEntityClientRootFolder %><%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
   <% } } %>
@@ -100,12 +102,15 @@ describe('Component Tests', () => {
                 const otherEntityName = relationship.otherEntityName;
                 const otherEntityNamePlural = relationship.otherEntityNamePlural;
                 const otherEntityAngularName = relationship.otherEntityAngularName;
-                if (!(otherEntityAngularName === 'User' && authenticationType === "oauth2")) {
           _%>
           <%_ if (!entitiesSeen.includes(otherEntityAngularName)) { %>
+          <%_ if (otherEntityAngularName === 'User' && authenticationType === 'oauth2') { _%>
+          userOAuth2Service: () => new UserOAuth2Service(),
+          <%_ } else { _%>
           <%= otherEntityName %>Service: () => new <%= otherEntityAngularName %>Service(),
           <%_ } _%>
-          <%_ entitiesSeen.push(otherEntityAngularName); } } } _%>
+          <%_ } _%>
+          <%_ entitiesSeen.push(otherEntityAngularName); } }_%>
 
         }
       });
