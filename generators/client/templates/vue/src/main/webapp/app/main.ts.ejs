@@ -35,6 +35,9 @@ import GatewayService from '@/admin/gateway/gateway.service';
 <%_ if (websocket === 'spring-websocket') { _%>
 import TrackerService from './admin/tracker/tracker.service';
 <%_ } _%>
+<%_ if (!skipUserManagement || authenticationType === 'oauth2') { %>
+import UserOAuth2Service from '@/entities/user/user.oauth2.service';
+<%_ } _%>
 /* tslint:disable */
 
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
@@ -109,6 +112,9 @@ new Vue({
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
     trackerService: () => trackerService,
+    <%_ } %>
+    <%_ if (!skipUserManagement || authenticationType === 'oauth2') { %>
+    userOAuth2Service: () => new UserOAuth2Service(),
     <%_ } _%>
     <%_ if (enableTranslation) { _%>
     translationService: () => translationService,

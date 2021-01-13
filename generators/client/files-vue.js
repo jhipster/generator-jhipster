@@ -224,6 +224,11 @@ const vueFiles = {
             path: VUE_DIR,
             templates: ['admin/gateway/gateway.vue', 'admin/gateway/gateway.component.ts', 'admin/gateway/gateway.service.ts'],
         },
+        {
+            condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
+            path: VUE_DIR,
+            templates: ['entities/user/user.oauth2.service.ts'],
+        },
     ],
     clientTestConfig: [
         {
