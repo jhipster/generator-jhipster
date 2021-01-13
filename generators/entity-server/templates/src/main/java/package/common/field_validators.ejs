@@ -28,7 +28,7 @@ if (field.fieldValidate === true) {
 
     if (rules.includes('required') && !isBlob) {
         // reactive tests need a default validation message because lookup is blocking
-        validators.push('@NotNull' + reactive ? '(message = "must not be null")' : '');
+        validators.push('@NotNull' + (reactive ? '(message = "must not be null")' : ''));
     }
     if (rules.includes('minlength') && !rules.includes('maxlength')) {
         validators.push('@Size(min = ' + field.fieldValidateRulesMinlength + ')');
