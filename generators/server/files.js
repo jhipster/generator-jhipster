@@ -1078,7 +1078,10 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.databaseType === 'sql' && generator.reactive && !generator.skipUserManagement,
+            condition: generator =>
+                generator.databaseType === 'sql' &&
+                generator.reactive &&
+                (!generator.skipUserManagement || generator.authenticationType === 'oauth2'),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
