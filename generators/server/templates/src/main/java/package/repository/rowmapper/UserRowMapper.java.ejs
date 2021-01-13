@@ -46,7 +46,7 @@ public class UserRowMapper implements BiFunction<Row, String, User> {
     @Override
     public User apply(Row row, String prefix) {
         User entity = new User();
-        entity.setId(row.get(prefix + "_id", <% if (authenticationType !== 'oauth2') { %>Long<% } else { %>String<% } %>.class));
+        entity.setId(row.get(prefix + "_id", <%= user.primaryKey.type %>.class));
         entity.setLogin(converter.fromRow(row, prefix + "_login", String.class));
         <%_ if (authenticationType !== 'oauth2') { _%>
         entity.setPassword(converter.fromRow(row, prefix + "_password", String.class));
