@@ -114,8 +114,10 @@ management:
     web:
       base-path: /management
       exposure:
-        include: ["configprops", "env", <% if (applicationType === 'gateway' && reactive) { %>"gateway", <% } %>"health", "info", "jhimetrics", "logfile", "loggers", "prometheus", "threaddump"]
+        include: ["configprops", "env", <% if (applicationType === 'gateway' && reactive) { %>"gateway", <% } %>"health", "info", "jhimetrics", "logfile", "loggers", "prometheus", "threaddump", "shutdown", "caches", "liquibase"]
   endpoint:
+    shutdown:
+        enabled: true
     health:
       show-details: when_authorized
       roles: "ROLE_ADMIN"
