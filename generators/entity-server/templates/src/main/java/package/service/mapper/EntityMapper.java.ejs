@@ -78,7 +78,7 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityC
 <%_ /***** Id mapping *****/
     const otherIdReferences = otherDtoReferences.filter(r => !r.relatedReference || r.relatedReference.id);
     if (!embedded && otherIdReferences.length > 0) {
-        if (otherIdReferences.some(r => !r.collection)) { %>
+        if (otherIdReferences.some(r => !r.collection)) { _%>
 
     @Named("<%= primaryKey.name %>")
     @BeanMapping(ignoreByDefault = true)
@@ -89,9 +89,9 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityC
         <%_ } _%>
         <%_ if (renMapAnotEnt === true) { _%>
     <%= asDto(entityClass) %> toDtoId(<%= asEntity(entityClass) %> <%= asEntity(entityInstance) %>);
-        <%_ } %>
-    <%_ } %>
-    <%_ if (otherIdReferences.some(r => r.collection)) { %>
+        <%_ } _%>
+    <%_ } _%>
+    <%_ if (otherIdReferences.some(r => r.collection)) { _%>
 
     @Named("<%= primaryKey.name %>Set")
     @BeanMapping(ignoreByDefault = true)
@@ -102,16 +102,16 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityC
         <%_ } _%>
         <%_ if (renMapAnotEnt === true) { _%>
     Set<<%= asDto(entityClass) %>> toDtoIdSet(Set<<%= asEntity(entityClass) %>> <%= asEntity(entityInstance) %>);
-        <%_ } %>
-    <%_ } %>
-<%_ } %>
+        <%_ } _%>
+    <%_ } _%>
+<%_ } _%>
 <%_ if (!embedded) {
-
         // DTO -> entity mapping
         var renMapAnotDto = false;  //Render Mapping Annotation during DTO to Entity conversion?
         if(idFields.length > 1) {
             renMapAnotDto = true;
             idFields.map(field => field.reference).forEach(reference => { _%>
+
     @Mapping(target = "id.<%= reference.name %>", source = "<%= buildReferencePath(reference) %>")
         <%_ })
         }
