@@ -125,13 +125,17 @@ spec:
           value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
         - name: SPRING_LIQUIBASE_URL
           value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
-            <%_ if (reactive) { _%>
+            <%_ if (app.reactive) { _%>
         - name: SPRING_R2DBC_URL
           value: <%- getR2DBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
             <%_ } _%>
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'mariadb') { _%>
+          <%_ if (app.reactive) { _%>
+        - name: SPRING_R2DBC_PASSWORD
+          <%_ } else { _%>
         - name: SPRING_DATASOURCE_PASSWORD
+          <%_ } _%>
           valueFrom:
             secretKeyRef:
               name: <%= app.baseName.toLowerCase() %>-mariadb
@@ -142,14 +146,18 @@ spec:
           value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName }) %>
         - name: SPRING_DATASOURCE_USERNAME
           value: <%= app.baseName %>
+          <%_ if (app.reactive) { _%>
+        - name: SPRING_R2DBC_PASSWORD
+          <%_ } else { _%>
         - name: SPRING_DATASOURCE_PASSWORD
+          <%_ } _%>
           valueFrom:
             secretKeyRef:
               name: <%= app.baseName.toLowerCase() %>-postgresql
               key: postgresql-password
         - name: SPRING_LIQUIBASE_URL
           value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
-            <%_ if (reactive) { _%>
+            <%_ if (app.reactive) { _%>
         - name: SPRING_R2DBC_URL
           value: <%- getR2DBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
             <%_ } _%>
@@ -158,7 +166,7 @@ spec:
         - name: SPRING_DATA_MONGODB_DATABASE
           value: <%= app.baseName %>
         - name: SPRING_DATA_MONGODB_URI
-          value: "mongodb://<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-mongodb-<%= i %>.<%= app.baseName.toLowerCase() %>-mongodb.<%= kubernetesNamespace %>:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %><% if (i < (app.dbPeerCount-1)) { %>,<% }} %>"
+          value: "mongodb://<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-mongodb-<%= i %>.<%= app.baseName.toLowerCase() %>-mongodb.<%= kubernetesNamespace %>:27017<% if (app.reactive) { %>/?waitQueueMultiple=1000<% } %><% if (i < (app.dbPeerCount-1)) { %>,<% }} %>"
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'couchbase') { _%>
         - name: SPRING_COUCHBASE_BOOTSTRAP_HOSTS
