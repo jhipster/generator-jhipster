@@ -27,7 +27,8 @@ if (field.fieldValidate === true) {
     const isBlob = field.fieldType === 'byte[]';
 
     if (rules.includes('required') && !isBlob) {
-        validators.push('@NotNull');
+        // reactive tests need a default validation message because lookup is blocking
+        validators.push('@NotNull' + (reactive ? '(message = "must not be null")' : ''));
     }
     if (rules.includes('minlength') && !rules.includes('maxlength')) {
         validators.push('@Size(min = ' + field.fieldValidateRulesMinlength + ')');
