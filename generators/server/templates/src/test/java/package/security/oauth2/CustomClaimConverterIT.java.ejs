@@ -35,7 +35,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+<%_ if (databaseType !== 'no') { _%>
 import org.springframework.transaction.annotation.Transactional;
+<%_ } _%>
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -76,7 +78,9 @@ public class CustomClaimConverterIT {
     }
 
     @Test
+    <%_ if (databaseType !== 'no') { _%>
     @Transactional
+    <%_ } _%>
     public void testConvert() {
         Map<String, Object> claims = new HashMap<>();
         claims.put("sub", "123");
