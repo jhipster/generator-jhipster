@@ -1078,7 +1078,14 @@ const serverFiles = {
             ],
         },
         {
+<<<<<<< HEAD
             condition: generator => generator.databaseType === 'sql' && generator.reactive && !generator.skipUserManagement,
+=======
+            condition: generator =>
+                generator.databaseType === 'sql' &&
+                generator.reactive &&
+                (!generator.skipUserManagement || generator.authenticationType === 'oauth2'),
+>>>>>>> 9756f77f79... Fix formatting
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
