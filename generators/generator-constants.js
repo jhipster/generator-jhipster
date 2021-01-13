@@ -28,13 +28,13 @@ const clientFrameworks = applicationOptions.OptionValues[applicationOptions.Opti
 const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the variable as it might be useful in the future.
 
 // Version of Node, NPM
-const HUSKY_VERSION = '4.3.6';
+const HUSKY_VERSION = '4.3.7';
 const LINT_STAGED_VERSION = '10.5.3';
 const NODE_VERSION = '14.15.0';
-const NPM_VERSION = '6.14.10';
+const NPM_VERSION = '6.14.11';
 
 const GRADLE_VERSION = '6.7.1';
-const JIB_VERSION = '2.7.0';
+const JIB_VERSION = '2.7.1';
 
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '7.0.0-SNAPSHOT';
