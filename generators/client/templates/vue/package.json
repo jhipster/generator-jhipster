@@ -19,7 +19,7 @@
     "bootswatch": "4.5.3",
     "swagger-ui-dist": "3.25.4",
     "bootstrap-vue": "2.21.2",
-    "sockjs-client": "1.1.4",
+    "sockjs-client": "1.5.0",
     "webstomp-client": "1.2.0"
   },
   "devDependencies": {
