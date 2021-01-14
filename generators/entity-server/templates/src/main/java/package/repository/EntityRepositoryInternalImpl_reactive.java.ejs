@@ -134,9 +134,10 @@ _%>
 
         String select = entityManager.createSelect(selectFrom, <%= asEntity(entityClass) %>.class, pageable, criteria);
 <%_ if (databaseType === 'sql') { _%>
+        String alias = entityTable.getReferenceName().getReference();
         String selectWhere =
             Optional.ofNullable(criteria).map(crit ->
-                new StringBuilder(select).append(" ").append("WHERE").append(" ").append(crit.toString()).toString()).orElse(select); // TODO remove once https://github.com/spring-projects/spring-data-jdbc/issues/907 will be fixed
+                new StringBuilder(select).append(" ").append("WHERE").append(" ").append(alias).append(".").append(crit.toString()).toString()).orElse(select); // TODO remove once https://github.com/spring-projects/spring-data-jdbc/issues/907 will be fixed
 <%_ } _%>
         return db.execute(select<% if (databaseType === 'sql') { %>Where<% } %>).map(this::process);
     }
