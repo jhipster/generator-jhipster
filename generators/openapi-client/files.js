@@ -24,6 +24,7 @@ const constants = require('../generator-constants');
 
 module.exports = {
     writeFiles,
+    customizeFiles,
 };
 
 function writeFiles() {
@@ -32,7 +33,11 @@ function writeFiles() {
             const basePath = this.config.get('reactive') ? 'java' : 'spring';
             this.copy(`${basePath}/.openapi-generator-ignore`, '.openapi-generator-ignore');
         },
+    };
+}
 
+function customizeFiles() {
+    return {
         callOpenApiGenerator() {
             this.baseName = this.config.get('baseName');
             this.authenticationType = this.config.get('authenticationType');
@@ -103,13 +108,13 @@ function writeFiles() {
                 if (!['microservice', 'gateway', 'uaa'].includes(this.applicationType)) {
                     let exclusions;
                     if (this.authenticationType === 'session') {
-                        exclusions =
-                            '            <exclusions>\n' +
-                            '                <exclusion>\n' +
-                            '                    <groupId>org.springframework.cloud</groupId>\n' +
-                            '                    <artifactId>spring-cloud-starter-ribbon</artifactId>\n' +
-                            '                </exclusion>\n' +
-                            '            </exclusions>';
+                        exclusions = `
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-starter-ribbon</artifactId>
+                </exclusion>
+            </exclusions>`;
                     }
                     this.addMavenDependency('org.springframework.cloud', 'spring-cloud-starter-openfeign', null, exclusions);
                 }
@@ -189,6 +194,10 @@ function writeFiles() {
                 '   @ComponentScan.Filter(type = FilterType.REGEX, ' +
                 `pattern = "${this.packageName}.client.*.ClientConfiguration")\n})`;
             this.rewriteFile(mainClassFile, '@SpringBootApplication', componentScan);
+        },
+
+        addNpmDependency() {
+            this.addNpmDependency('@openapitools/openapi-generator-cli', constants.OPENAPI_GENERATOR_CLI_VERSION);
         },
     };
 }
