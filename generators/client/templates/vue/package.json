@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@openapitools/openapi-generator-cli": "1.0.13-4.3.1",
+    "@openapitools/openapi-generator-cli": "2.1.16",
     "@fortawesome/fontawesome-svg-core": "1.2.34",
     "@fortawesome/free-solid-svg-icons": "5.15.2",
     "@fortawesome/vue-fontawesome": "2.0.2",
