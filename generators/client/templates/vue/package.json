@@ -40,7 +40,7 @@
     "browser-sync": "2.26.13",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "6.3.0",
-    "css-loader": "5.0.1",
+    "css-loader": "3.5.3",
     "file-loader": "6.2.0",
     "fork-ts-checker-webpack-plugin": "4.1.6",
     "friendly-errors-webpack-plugin": "1.7.0",
