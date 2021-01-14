@@ -66,7 +66,7 @@
     "sinon": "9.2.3",
     "terser-webpack-plugin": "4.2.3",
     "ts-jest": "26.4.4",
-    "ts-loader": "7.0.4",
+    "ts-loader": "8.0.14",
     "tslib": "2.1.0",
     "tslint-config-prettier": "1.18.0",
     "tslint-eslint-rules": "5.4.0",
