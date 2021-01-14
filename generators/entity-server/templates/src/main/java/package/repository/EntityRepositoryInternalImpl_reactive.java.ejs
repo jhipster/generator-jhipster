@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
+import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 <%_ if (databaseType === 'sql') { _%>
 import io.r2dbc.spi.Row;
@@ -92,25 +92,25 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
 <%_ }); _%>
 
     private final static Table entityTable = Table.aliased("<%= entityTableName %>", EntityManager.ENTITY_ALIAS);
-        <%_ reactiveEagerRelations.forEach(function(rel) { _%>
+<%_ reactiveEagerRelations.forEach(function(rel) { _%>
     private final static Table <%= rel.relationshipName %>Table = Table.aliased("<%= rel.otherEntityTableName %>", "<%= _generateSqlSafeName(rel.relationshipName) %>");
-        <%_ }); _%>
+<%_ }); _%>
 
-        <%_ relationships.forEach(function(rel) {
-            if (rel.shouldWriteJoinTable) {
-        _%>
+<%_ relationships.forEach(function(rel) {
+    if (rel.shouldWriteJoinTable) {
+_%>
     private final static EntityManager.LinkTable <%= rel.relationshipName %>Link = new LinkTable("<%= rel.joinTable.name %>", "<%= getColumnName(name) %>_id", "<%= getColumnName(rel.relationshipName) %>_id");
-        <%_ }
-        }); _%>
+<%_ }
+}); _%>
 
     public <%= entityClass %>RepositoryInternalImpl(DatabaseClient db, ReactiveDataAccessStrategy dataAccessStrategy, EntityManager entityManager<%_
             reactiveUniqueEntityTypes.forEach(function(element) { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>) {
         this.db = db;
         this.dataAccessStrategy = dataAccessStrategy;
         this.entityManager = entityManager;
-        <%_ reactiveUniqueEntityTypes.forEach(function(element) { _%>
+<%_ reactiveUniqueEntityTypes.forEach(function(element) { _%>
         this.<%= element.toLowerCase() %>Mapper = <%= element.toLowerCase() %>Mapper;
-        <%_ }); _%>
+<%_ }); _%>
     }
 
     @Override
@@ -125,16 +125,20 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
 
     RowsFetchSpec<<%= asEntity(entityClass) %>> createQuery(Pageable pageable, Criteria criteria) {
         List<Expression> columns = <%= asEntity(entityClass) %>SqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
-        <%_ reactiveEagerRelations.forEach(function(rel) { _%>
+<%_ reactiveEagerRelations.forEach(function(rel) { _%>
         columns.addAll(<%= rel.otherEntityNameCapitalized %>SqlHelper.getColumns(<%= rel.relationshipName %>Table, "<%= rel.relationshipName %>"));
-        <%_ }); _%>
+<%_ }); _%>
         SelectFromAndJoin<% if (reactiveEagerRelations.length > 0) { %>Condition<% } %> selectFrom = Select.builder().select(columns).from(entityTable)<%_ reactiveEagerRelations.forEach(function(rel) {
             const colName = _getJoinColumnName(rel); %>
             .leftOuterJoin(<%= rel.relationshipName %>Table).on(Column.create("<%= colName %>", entityTable)).equals(Column.create("id", <%= rel.relationshipName %>Table ))<%_ }); _%>;
 
-        String select = entityManager.createSelect(selectFrom, <%= asEntity(entityClass) %>.class, pageable/*, criteria */);
-        return db.execute(select)
-                .map(this::process);
+        String select = entityManager.createSelect(selectFrom, <%= asEntity(entityClass) %>.class, pageable, criteria);
+<%_ if (databaseType === 'sql') { _%>
+        String selectWhere =
+            Optional.ofNullable(criteria).map(crit ->
+                new StringBuilder(select).append(" ").append("WHERE").append(" ").append(crit.toString()).toString()).orElse(select); // TODO remove once https://github.com/spring-projects/spring-data-jdbc/issues/907 will be fixed
+<%_ } _%>
+        return db.execute(select<% if (databaseType === 'sql') { %>Where<% } %>).map(this::process);
     }
 
     @Override
@@ -147,7 +151,7 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
         return createQuery(null, Criteria.where("id").is(id)).one();
     }
 
-    <%_ if (fieldsContainOwnerManyToMany) { _%>
+<%_ if (fieldsContainOwnerManyToMany) { _%>
 
     @Override
     public Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(Long id) {
@@ -164,7 +168,7 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
         return findAllBy(page);
     }
 
-    <%_ } _%>
+<%_ } _%>
     private <%= asEntity(entityClass) %> process(Row row, RowMetadata metadata) {
         <%= asEntity(entityClass) %> entity = <%= entityClass.toLowerCase() %>Mapper.apply(row, "e");
         <%_ reactiveEagerRelations.forEach(function(rel) { _%>
@@ -181,9 +185,9 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
     @Override
     public <S extends <%= asEntity(entityClass) %>> Mono<S> save(S entity) {
         if (entity.get<%= primaryKey.nameCapitalized %>() == null) {
-            <%_ if (isUsingMapsId) { _%>
+<%_ if (isUsingMapsId) { _%>
             entity.set<%= primaryKey.nameCapitalized %>(entity.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>());
-            <%_ } _%>
+<%_ } _%>
             return insert(entity)<% if (fieldsContainOwnerManyToMany) { %>.flatMap(savedEntity -> updateRelations(savedEntity))<% } %>;
         } else {
             return update(entity).map(numberOfUpdates -> {
@@ -197,15 +201,15 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
 
     @Override
     public Mono<Integer> update(<%= asEntity(entityClass) %> entity) {
-        <%_ if (fields.length + reactiveEagerRelations.length > 0) { _%>
+<%_ if (fields.length + reactiveEagerRelations.length > 0) { _%>
         return db.update().table(<%= asEntity(entityClass) %>.class).using(entity).fetch().rowsUpdated();
-        <%_ } else { _%>
+<%_ } else { _%>
         // What can we update on this field?
         return Mono.just(1);
-        <%_ } _%>
+<%_ } _%>
     }
 
-    <%_ if (fieldsContainOwnerManyToMany) { _%>
+<%_ if (fieldsContainOwnerManyToMany) { _%>
 
     @Override
     public Mono<Void> deleteById(Long entityId) {
@@ -215,31 +219,31 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
     }
 
     protected <S extends <%= asEntity(entityClass) %>> Mono<S> updateRelations(S entity) {
-        <%_ relationships.filter(function(rel) {
-                return (rel.relationshipType === 'many-to-many' && rel.ownerSide);
-            }).forEach(function(rel, idx) {
-                if (idx === 0) { _%>
+  <%_ relationships.filter(function(rel) {
+          return (rel.relationshipType === 'many-to-many' && rel.ownerSide);
+      }).forEach(function(rel, idx) {
+          if (idx === 0) { _%>
         Mono<Void> result = entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::getId)).then();
-        <%_     } else { _%>
+  <%_     } else { _%>
         result = result.and(entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::getId)));
-        <%_
-                }
-            }); _%>
+  <%_
+          }
+      }); _%>
         return result.thenReturn(entity);
     }
 
     protected Mono<Void> deleteRelations(Long entityId) {
-        <%_ relationships.filter(function(rel) {
-                return (rel.relationshipType === 'many-to-many' && rel.ownerSide);
-            }).forEach(function(rel, idx) {
-                if (idx === 0) { _%>
+  <%_ relationships.filter(function(rel) {
+          return (rel.relationshipType === 'many-to-many' && rel.ownerSide);
+      }).forEach(function(rel, idx) {
+          if (idx === 0) { _%>
         return entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId)<%
                 } else { %>
                 .and(entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId))<% }
             }); %>;
     }
 
-    <%_ } _%>
+<%_ } _%>
 }
 
 class <%= entityClass %>SqlHelper {
