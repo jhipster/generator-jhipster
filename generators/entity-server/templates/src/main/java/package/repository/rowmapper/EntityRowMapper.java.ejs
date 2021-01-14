@@ -71,7 +71,7 @@ public class <%= entityClass %>RowMapper implements BiFunction<Row, String, <%= 
         entity.set<%= field.fieldInJavaBeanMethod %>(converter.fromRow(row, prefix + "_<%= field.fieldNameAsDatabaseColumn %>", <%= fieldType %>.class));
         <%_ }); _%>
         <%_ reactiveRegularEagerRelations.forEach(function(rel) { _%>
-        entity.set<%= rel.relationshipNameCapitalized %>Id(converter.fromRow(row, prefix + "_<%= getColumnName(rel.relationshipName) %>_id", Long.class));
+        entity.set<%= rel.relationshipNameCapitalized %>Id(converter.fromRow(row, prefix + "_<%= getColumnName(rel.relationshipName) %>_id", <%= rel.otherEntity.primaryKey.type %>.class));
         <%_ }); _%>
         return entity;
     }
