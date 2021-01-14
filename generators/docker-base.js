@@ -40,7 +40,7 @@ function checkImages() {
 
     let imagePath = '';
     let runCommand = '';
-    this.warning = false;
+    this.hasWarning = false;
     this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
     this.appsFolders.forEach((appsFolder, index) => {
         const appConfig = this.appConfigs[index];
@@ -52,7 +52,7 @@ function checkImages() {
             runCommand = './gradlew bootJar -Pprod jibDockerBuild';
         }
         if (shelljs.ls(imagePath).length === 0) {
-            this.warning = true;
+            this.hasWarning = true;
             this.warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath + appsFolder)}\n`;
         }
     });

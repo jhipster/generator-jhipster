@@ -132,7 +132,7 @@ module.exports = class extends BaseDockerGenerator {
     }
 
     end() {
-        if (this.warning) {
+        if (this.hasWarning) {
             this.log(`\n${chalk.yellow.bold('WARNING!')} OpenShift configuration generated, but no Jib cache found`);
             this.log('If you forgot to generate the Docker image for this application, please run:');
             this.log(this.warningMessage);
