@@ -40,7 +40,7 @@
     "copy-webpack-plugin": "6.3.0",
     "css-loader": "3.5.3",
     "file-loader": "6.2.0",
-    "fork-ts-checker-webpack-plugin": "4.1.6",
+    "fork-ts-checker-webpack-plugin": "5.2.1",
     "friendly-errors-webpack-plugin": "1.7.0",
     "html-webpack-plugin": "4.5.1",
     "jest": "26.6.3",
