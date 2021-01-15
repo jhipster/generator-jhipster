@@ -496,15 +496,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     );
                 }
 
-                if (this.prodDatabaseType === 'neo4j' && this.reactive) {
-                    this.log(
-                        chalk.red(
-                            'The reactive Neo4j driver requires Neo4j >= 4. The Graphene addon does not support this database version (yet).'
-                        )
-                    );
-                    done();
-                }
-
                 if (this.useOkta) {
                     ChildProcess.exec(`heroku addons:create okta --app ${this.herokuAppName}`, (err, stdout, stderr) => {
                         addonCreateCallback('Okta', err, stdout, stderr);
@@ -518,10 +509,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     dbAddOn = 'jawsdb:kitefin --as DATABASE';
                 } else if (this.prodDatabaseType === 'mariadb') {
                     dbAddOn = 'jawsdb-maria:kitefin --as DATABASE';
-                } else if (this.prodDatabaseType === 'mongodb') {
-                    dbAddOn = 'mongolab:sandbox --as MONGODB';
-                } else if (this.prodDatabaseType === 'neo4j') {
-                    dbAddOn = 'graphenedb:dev-free --as GRAPHENEDB';
                 }
 
                 if (dbAddOn) {

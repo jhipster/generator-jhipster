@@ -41,17 +41,6 @@ eureka:
             defaultZone: ${JHIPSTER_REGISTRY_URL}/eureka/
 <%_ } _%>
 
-<%_ if (prodDatabaseType === 'neo4j') { _%>
-org:
-    neo4j:
-      driver:
-        uri: ${GRAPHENEDB_BOLT_URL}
-        authentication:
-            username: ${GRAPHENEDB_BOLT_USER}
-            password: ${GRAPHENEDB_BOLT_PASSWORD}
-        config:
-            encrypted: true
-<%_ } _%>
 <%_ if (cacheProvider === 'memcached' || cacheProvider === 'redis') { _%>
 jhipster:
   cache:
@@ -84,11 +73,6 @@ spring:
         password: ${JDBC_DATABASE_PASSWORD}
         hikari:
             maximumPoolSize: 8
-<%_ } _%>
-<%_ if (prodDatabaseType === 'mongodb') { _%>
-    data:
-        mongodb:
-            uri: ${MONGODB_URI}?authMode=scram-sha1
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
     elasticsearch:
