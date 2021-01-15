@@ -39,8 +39,8 @@
     "dayjs": "VERSION_MANAGED_BY_CLIENT_COMMON",
     "swagger-ui-dist": "VERSION_MANAGED_BY_CLIENT_VUE",
     <%_ if (websocket === 'spring-websocket') { _%>
-    "sockjs-client": "VERSION_MANAGED_BY_CLIENT_VUE",
-    "webstomp-client": "VERSION_MANAGED_BY_CLIENT_VUE",
+    "sockjs-client": "1.1.4",
+    "webstomp-client": "1.2.0",
     <%_ } _%>
     "vue": "VERSION_MANAGED_BY_CLIENT_VUE",
     "vue-class-component": "VERSION_MANAGED_BY_CLIENT_VUE",
@@ -54,19 +54,22 @@
     "vuex": "VERSION_MANAGED_BY_CLIENT_VUE"
   },
   "devDependencies": {
-    "babel-core": "VERSION_MANAGED_BY_CLIENT_VUE",
     <%_ if (protractorTests) { _%>
     "@types/chai": "4.2.11",
     "@types/chai-string": "1.4.2",
-    <%_ } _%>
-    "@types/jest": "VERSION_MANAGED_BY_CLIENT_VUE",
-    <%_ if (protractorTests) { _%>
     "@types/mocha": "7.0.2",
-    <%_ } _%>
-    "@types/node": "VERSION_MANAGED_BY_CLIENT_VUE",
-    <%_ if (protractorTests) { _%>
     "@types/selenium-webdriver": "4.0.9",
+    "chai": "4.2.0",
+    "chai-as-promised": "7.1.1",
+    "chai-string": "1.5.0",
+    "mocha": "7.1.2",
+    "protractor": "5.4.4",
+    "ts-node": "8.10.1",
+    "webdriver-manager": "12.1.8",
     <%_ } _%>
+    "babel-core": "VERSION_MANAGED_BY_CLIENT_VUE",
+    "@types/jest": "VERSION_MANAGED_BY_CLIENT_VUE",
+    "@types/node": "VERSION_MANAGED_BY_CLIENT_VUE",
     "@types/sinon": "VERSION_MANAGED_BY_CLIENT_VUE",
     "@types/vuelidate": "VERSION_MANAGED_BY_CLIENT_VUE",
     "@typescript-eslint/eslint-plugin": "VERSION_MANAGED_BY_CLIENT_VUE",
@@ -80,11 +83,6 @@
     "autoprefixer": "VERSION_MANAGED_BY_CLIENT_VUE",
     "browser-sync": "VERSION_MANAGED_BY_CLIENT_VUE",
     "browser-sync-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_VUE",
-    <%_ if (protractorTests) { _%>
-    "chai": "4.2.0",
-    "chai-as-promised": "7.1.1",
-    "chai-string": "1.5.0",
-    <%_ } _%>
     "copy-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_VUE",
     "css-loader": "VERSION_MANAGED_BY_CLIENT_VUE",
     "file-loader": "VERSION_MANAGED_BY_CLIENT_VUE",
@@ -107,9 +105,6 @@
     "jest-sonar-reporter": "VERSION_MANAGED_BY_CLIENT_VUE",
     "jest-vue-preprocessor": "VERSION_MANAGED_BY_CLIENT_VUE",
     "merge-jsons-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_VUE",
-    <%_ if (protractorTests) { _%>
-    "mocha": "7.1.2",
-    <%_ } _%>
     "mini-css-extract-plugin": "VERSION_MANAGED_BY_CLIENT_VUE",
     "node-notifier": "VERSION_MANAGED_BY_CLIENT_VUE",
     "numeral": "VERSION_MANAGED_BY_CLIENT_VUE",
@@ -123,9 +118,6 @@
     <%_ if (!skipServer) { _%>
     "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
     <%_ } _%>
-    <%_ if (protractorTests) { _%>
-    "protractor": "5.4.4",
-    <%_ } _%>
     <%_ if (cypressTests) { _%>
     "cypress": "VERSION_MANAGED_BY_CLIENT_COMMON",
     <%_ } _%>
@@ -136,9 +128,6 @@
     "terser-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_VUE",
     "ts-jest": "VERSION_MANAGED_BY_CLIENT_VUE",
     "ts-loader": "VERSION_MANAGED_BY_CLIENT_VUE",
-    <%_ if (protractorTests) { _%>
-    "ts-node": "8.10.1",
-    <%_ } _%>
     "tslib": "VERSION_MANAGED_BY_CLIENT_VUE",
     "eslint": "VERSION_MANAGED_BY_CLIENT_VUE",
     "tslint-config-prettier": "VERSION_MANAGED_BY_CLIENT_VUE",
@@ -151,9 +140,6 @@
     "vue-jest": "VERSION_MANAGED_BY_CLIENT_VUE",
     "vue-loader": "VERSION_MANAGED_BY_CLIENT_VUE",
     "vue-template-compiler": "VERSION_MANAGED_BY_CLIENT_VUE",
-    <%_ if (protractorTests) { _%>
-    "webdriver-manager": "12.1.8",
-    <%_ } _%>
     "webpack": "VERSION_MANAGED_BY_CLIENT_VUE",
     "webpack-bundle-analyzer": "VERSION_MANAGED_BY_CLIENT_VUE",
     "webpack-cli": "VERSION_MANAGED_BY_CLIENT_VUE",
