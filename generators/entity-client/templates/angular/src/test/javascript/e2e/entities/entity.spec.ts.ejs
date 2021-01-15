@@ -60,8 +60,8 @@ describe('<%= entityClass %> e2e test', () => {
     const fileToUpload = '../../../../../../<%= entityParentPathAddition %><%= CLIENT_MAIN_SRC_DIR %>content/images/' + fileNameToUpload;
     const absolutePath = path.resolve(__dirname, fileToUpload);
     <%_ } _%>
-    const username = process.env.E2E_USERNAME || 'admin';
-    const password = process.env.E2E_PASSWORD || 'admin';
+    const username = process.env.E2E_USERNAME ?? 'admin';
+    const password = process.env.E2E_PASSWORD ?? 'admin';
 
     before(async () => {
         await browser.get('/');
