@@ -95,13 +95,13 @@ public class EntityManager {
      */
     public String createSelect(SelectFromAndJoin selectFrom, Class<?> entityType, Pageable pageable, Criteria criteria) {
         if (pageable != null) {
-            if (null != criteria) {
+            if (criteria != null) {
                 return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()).where(Conditions.just(criteria.toString())), entityType, pageable.getSort());
             } else {
                 return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
             }
         } else {
-            if (null != criteria) {
+            if (criteria != null) {
                 return createSelectImpl(selectFrom.where(Conditions.just(criteria.toString())), entityType, null);
             } else {
                 return createSelectImpl(selectFrom, entityType, null);
@@ -118,13 +118,13 @@ public class EntityManager {
      */
     public String createSelect(SelectFromAndJoinCondition selectFrom, Class<?> entityType, Pageable pageable, Criteria criteria) {
         if (pageable != null) {
-            if (null != criteria) {
+            if (criteria != null) {
                 return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()).where(Conditions.just(criteria.toString())), entityType, pageable.getSort());
             } else {
                 return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
             }
         } else {
-            if (null != criteria) {
+            if (criteria != null) {
                 return createSelectImpl(selectFrom.where(Conditions.just(criteria.toString())), entityType, null);
             } else {
                 return createSelectImpl(selectFrom, entityType, null);
