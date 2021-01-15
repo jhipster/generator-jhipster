@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@types/jest": "26.0.20",
-    "@types/node": "14.14.20",
+    "@types/node": "14.14.21",
     "@types/sinon": "9.0.10",
     "@types/vuelidate": "0.7.13",
     "@typescript-eslint/eslint-plugin": "4.13.0",
