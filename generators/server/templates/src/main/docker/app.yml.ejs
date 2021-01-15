@@ -36,7 +36,12 @@ services:
             <%_ if (databaseType === 'sql') {
                 const databaseName = ['mysql', 'mariadb'].includes(prodDatabaseType) ? baseName.toLowerCase() : baseName;
             _%>
+                <%_ if (reactive) { _%>
+            - SPRING_R2DBC_URL=<%- getR2DBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
+                <%_ } else { %>
             - SPRING_DATASOURCE_URL=<%- getJDBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
+                <%_ } _%>
+            - SPRING_LIQUIBASE_URL=<%- getJDBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
             <%_ } _%>
             <%_ if (prodDatabaseType === 'mongodb') { _%>
             - SPRING_DATA_MONGODB_URI=mongodb://<%= baseName.toLowerCase() %>-mongodb:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>

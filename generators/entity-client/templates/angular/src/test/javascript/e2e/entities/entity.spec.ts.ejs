@@ -60,15 +60,17 @@ describe('<%= entityClass %> e2e test', () => {
     const fileToUpload = '../../../../../../<%= entityParentPathAddition %><%= CLIENT_MAIN_SRC_DIR %>content/images/' + fileNameToUpload;
     const absolutePath = path.resolve(__dirname, fileToUpload);
     <%_ } _%>
+    const username = process.env.E2E_USERNAME ?? 'admin';
+    const password = process.env.E2E_PASSWORD ?? 'admin';
 
     before(async () => {
         await browser.get('/');
         navBarPage = new NavBarPage();
         signInPage = await navBarPage.getSignInPage();
         <%_ if (authenticationType === 'oauth2') { _%>
-        await signInPage.loginWithOAuth('admin', 'admin');
+        await signInPage.loginWithOAuth(username, password);
         <%_ } else { _%>
-        await signInPage.autoSignInUsing('admin', 'admin');
+        await signInPage.autoSignInUsing(username, password);
         <%_ } _%>
         await browser.wait(ec.visibilityOf(navBarPage.entityMenu), 5000);
     });
@@ -208,6 +210,7 @@ describe('<%= entityClass %> e2e test', () => {
             .to.eq('Are you sure you want to delete this <%= entityClassHumanized %>?');
         <%_ } _%>
         await <%= entityInstance %>DeleteDialog.clickOnConfirmButton();
+        await browser.wait(ec.visibilityOf(<%= entityInstance %>ComponentsPage.title), 5000);
 
         expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
     });<%= closeBlockComment %>

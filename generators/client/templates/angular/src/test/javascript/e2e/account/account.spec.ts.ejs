@@ -73,6 +73,7 @@ describe('account', () => {
     } else {
       // Okta
       const error = element(by.css('.infobox-error'));
+      await browser.wait(ec.presenceOf(error), 5000);
       expect(await error.getText()).to.eq('Unable to sign in');
     }
   <%_ } _%>
@@ -92,6 +93,7 @@ describe('account', () => {
     expect(value1).to.eq(expect1);
     await signInPage.autoSignInUsing(username, password);
   <%_ } else { _%>
+    await signInPage.clearPassword();
     await signInPage.loginWithOAuth('', password);
   <%_ } _%>
 

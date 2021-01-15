@@ -9,11 +9,13 @@ const expect = chai.expect;
 
 describe('Administration', () => {
   let navBarPage: NavBarPage;
+  const username = process.env.E2E_USERNAME ?? 'admin';
+  const password = process.env.E2E_PASSWORD ?? 'admin';
 
   before(async () => {
     await browser.get('/');
     navBarPage = new NavBarPage();
-    await navBarPage.login('admin', 'admin');
+    await navBarPage.login(username, password);
     await waitUntilDisplayed(navBarPage.adminMenu);
   });
 
