@@ -37,7 +37,7 @@
     "babel-core": "7.0.0-bridge.0",
     "browser-sync": "2.26.13",
     "browser-sync-webpack-plugin": "2.3.0",
-    "copy-webpack-plugin": "6.3.0",
+    "copy-webpack-plugin": "6.4.1",
     "css-loader": "3.5.3",
     "file-loader": "6.2.0",
     "fork-ts-checker-webpack-plugin": "4.1.6",
