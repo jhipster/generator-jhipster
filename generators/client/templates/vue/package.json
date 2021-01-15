@@ -77,7 +77,7 @@
     "webpack": "4.46.0",
     "webpack-bundle-analyzer": "4.3.0",
     "webpack-cli": "3.3.12",
-    "webpack-dev-server": "3.11.0",
+    "webpack-dev-server": "3.11.2",
     "webpack-merge": "5.7.3",
     "workbox-webpack-plugin": "6.0.2",
     "vue-jest": "3.0.7",
