@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,7 +23,7 @@ let closeBlockComment = ``;
 if (enableTranslation) {
     elementGetter = `getAttribute('${jhiPrefix}Translate')`;
 }
-for (let relationship of relationships) {
+for (const relationship of relationships) {
     if (relationship.relationshipRequired || relationship.useJPADerivedIdentifier) {
         openBlockComment = `/* `;
         closeBlockComment = ` */`;
@@ -60,15 +60,17 @@ describe('<%= entityClass %> e2e test', () => {
     const fileToUpload = '../../../../../../<%= entityParentPathAddition %><%= CLIENT_MAIN_SRC_DIR %>content/images/' + fileNameToUpload;
     const absolutePath = path.resolve(__dirname, fileToUpload);
     <%_ } _%>
+    const username = process.env.E2E_USERNAME ?? 'admin';
+    const password = process.env.E2E_PASSWORD ?? 'admin';
 
     before(async () => {
         await browser.get('/');
         navBarPage = new NavBarPage();
         signInPage = await navBarPage.getSignInPage();
         <%_ if (authenticationType === 'oauth2') { _%>
-        await signInPage.loginWithOAuth('admin', 'admin');
+        await signInPage.loginWithOAuth(username, password);
         <%_ } else { _%>
-        await signInPage.autoSignInUsing('admin', 'admin');
+        await signInPage.autoSignInUsing(username, password);
         <%_ } _%>
         await browser.wait(ec.visibilityOf(navBarPage.entityMenu), 5000);
     });
@@ -107,7 +109,7 @@ describe('<%= entityClass %> e2e test', () => {
         await <%= entityInstance %>ComponentsPage.clickOnCreateButton();
 
         await promise.all([
-        <%_ fieldsNoId.forEach((field) => {
+        <%_ fields.filter(field => !field.id).forEach((field) => {
             const fieldName = field.fieldName;
             const fieldNameCapitalized = field.fieldNameCapitalized;
             const fieldType = field.fieldType;
@@ -151,7 +153,7 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ }); _%>
         ]);
 
-    <%_ fieldsNoId.forEach((field) => {
+    <%_ fields.filter(field => !field.id).forEach((field) => {
         const fieldName = field.fieldName;
         const fieldNameCapitalized = field.fieldNameCapitalized;
         const fieldType = field.fieldType;
@@ -208,6 +210,7 @@ describe('<%= entityClass %> e2e test', () => {
             .to.eq('Are you sure you want to delete this <%= entityClassHumanized %>?');
         <%_ } _%>
         await <%= entityInstance %>DeleteDialog.clickOnConfirmButton();
+        await browser.wait(ec.visibilityOf(<%= entityInstance %>ComponentsPage.title), 5000);
 
         expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
     });<%= closeBlockComment %>

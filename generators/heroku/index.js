@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -55,7 +55,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.herokuSkipBuild = this.options.skipBuild;
         this.herokuSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
-        this.registerPrettierTransform();
 
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('heroku');
     }
@@ -497,15 +496,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     );
                 }
 
-                if (this.prodDatabaseType === 'neo4j' && this.reactive) {
-                    this.log(
-                        chalk.red(
-                            'The reactive Neo4j driver requires Neo4j >= 4. The Graphene addon does not support this database version (yet).'
-                        )
-                    );
-                    done();
-                }
-
                 if (this.useOkta) {
                     ChildProcess.exec(`heroku addons:create okta --app ${this.herokuAppName}`, (err, stdout, stderr) => {
                         addonCreateCallback('Okta', err, stdout, stderr);
@@ -519,10 +509,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     dbAddOn = 'jawsdb:kitefin --as DATABASE';
                 } else if (this.prodDatabaseType === 'mariadb') {
                     dbAddOn = 'jawsdb-maria:kitefin --as DATABASE';
-                } else if (this.prodDatabaseType === 'mongodb') {
-                    dbAddOn = 'mongolab:sandbox --as MONGODB';
-                } else if (this.prodDatabaseType === 'neo4j') {
-                    dbAddOn = 'graphenedb:dev-free --as GRAPHENEDB';
                 }
 
                 if (dbAddOn) {

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,8 +47,8 @@ const expect = chai.expect;
 describe('Account', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  const username = process.env.E2E_USERNAME || 'admin';
-  const password = process.env.E2E_PASSWORD || 'admin';
+  const username = process.env.E2E_USERNAME ?? 'admin';
+  const password = process.env.E2E_PASSWORD ?? 'admin';
   <%_ if (!skipUserManagement) { _%>
   let passwordPage: PasswordPage;
   let settingsPage: SettingsPage;
@@ -282,6 +282,15 @@ describe('Account', () => {
     expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
 
     await passwordPage.autoChangePassword('new_password', password, password);
+    <%_ if (enableTranslation) { _%>
+    const toast = getToastByInnerText('Password changed!');
+    <% } else { %>
+    const toast = getToastByInnerText('<strong>Password changed!</strong>');
+    <%_ } _%>
+    await waitUntilDisplayed(toast);
+
+    // Success toast should appear
+    expect(await toast.isPresent()).to.be.true;
 
     await navBarPage.autoSignOut();
   });

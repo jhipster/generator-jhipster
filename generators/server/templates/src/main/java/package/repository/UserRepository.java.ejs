@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -140,6 +140,9 @@ import java.util.Map;
     <%_ } _%>
 import java.util.Set;
 <%_ } _%>
+<%_ if (user.primaryKey.type === 'UUID') { _%>
+import java.util.UUID;
+<%_ } _%>
 <%_ if (databaseType !== 'cassandra' && !(databaseType === 'sql' && reactive) && authenticationType !== 'oauth2') { _%>
 import java.time.Instant;
 <%_ } _%>
@@ -230,8 +233,6 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 
     Mono<Long> count();
     <% } else { %>
-    Page<<%= asEntity('User') %>> findAll(Pageable pageable);
-
     Page<<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
     <% } %>
 }
@@ -364,17 +365,20 @@ class UserSqlHelper {
         List<Expression> columns = new ArrayList<>();
         columns.add(Column.aliased("id", table, columnPrefix + "_id"));
         columns.add(Column.aliased("login", table, columnPrefix + "_login"));
+        <%_ if (authenticationType !== 'oauth2') { _%>
         columns.add(Column.aliased("password_hash", table, columnPrefix + "_password"));
+        <%_ } _%>
         columns.add(Column.aliased("first_name", table, columnPrefix + "_first_name"));
         columns.add(Column.aliased("last_name", table, columnPrefix + "_last_name"));
         columns.add(Column.aliased("email", table, columnPrefix + "_email"));
         columns.add(Column.aliased("activated", table, columnPrefix + "_activated"));
         columns.add(Column.aliased("lang_key", table, columnPrefix + "_lang_key"));
         columns.add(Column.aliased("image_url", table, columnPrefix + "_image_url"));
+        <%_ if (authenticationType !== 'oauth2') { _%>
         columns.add(Column.aliased("activation_key", table, columnPrefix + "_activation_key"));
         columns.add(Column.aliased("reset_key", table, columnPrefix + "_reset_key"));
         columns.add(Column.aliased("reset_date", table, columnPrefix + "_reset_date"));
-
+        <%_ } _%>
         return columns;
     }
 }

@@ -28,8 +28,10 @@ export default class LoginForm extends Vue {
           const jwt = bearerToken.slice(7, bearerToken.length);
           if (this.rememberMe) {
             localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', jwt);
+            sessionStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
           } else {
             sessionStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', jwt);
+            localStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
           }
         }
     <%_ } else { _%>

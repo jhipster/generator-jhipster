@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -104,7 +104,7 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}tsconfig-aot.json`);
     }
 
-    if (generator.isJhipsterVersionLessThan('7.0.0') && generator.jhipsterConfig) {
+    if (generator.isJhipsterVersionLessThan('7.0.0-beta.0') && generator.jhipsterConfig) {
         if (generator.jhipsterConfig.clientFramework === ANGULAR) {
             generator.removeFile(`${ANGULAR_DIR}account/password/password-strength-bar.component.ts`);
             generator.removeFile(`${ANGULAR_DIR}account/password/password-strength-bar.scss`);
@@ -262,6 +262,38 @@ function cleanupOldFiles(generator) {
             generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
         }
     }
+
+    if (generator.isJhipsterVersionLessThan('7.0.0-beta.1') && generator.jhipsterConfig) {
+        if (generator.jhipsterConfig.clientFramework === ANGULAR) {
+            generator.removeFile(`${ANGULAR_DIR}core/user/account.model.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/user/user.model.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/user/user.service.ts`);
+            generator.removeFile(`${ANGULAR_DIR}core/user/user.service.spec.ts`);
+        } else if (generator.jhipsterConfig.clientFramework === REACT) {
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest.conf.js`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/icons-mock.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/storage-mock.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/utils.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/config/axios-interceptor.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/config/notification-middleware.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/reducers/application-profile.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/reducers/authentication.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/util/entity-utils.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/auth/private-route.spec.tsx`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/error/error-boundary.spec.tsx`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/error/error-boundary-route.spec.tsx`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/layout/header/header.spec.tsx`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/layout/menus/account.spec.tsx`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/administration/administration.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/account/register/register.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/account/activate/activate.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/account/password/password.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/account/settings/settings.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/administration/user-management/user-management.reducer.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/reducers/locale.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/reducers/user-management.spec.ts`);
+        }
+    }
 }
 
 /**
@@ -399,7 +431,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${javaDir}config/ReactivePageableHandlerMethodArgumentResolver.java`);
         generator.removeFile(`${javaDir}config/ReactiveSortHandlerMethodArgumentResolver.java`);
     }
-    if (generator.isJhipsterVersionLessThan('7.0.0')) {
+    if (generator.isJhipsterVersionLessThan('7.0.0-beta.0')) {
         generator.removeFile(`${javaDir}config/apidoc/SwaggerConfiguration.java`);
         generator.removeFile(`${javaDir}config/audit/package-info.java`);
         generator.removeFile(`${javaDir}config/audit/AuditEventConverter.java`);
@@ -423,6 +455,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         if (generator.searchEngine === 'elasticsearch') {
             generator.removeFile(`${testDir}config/ElasticsearchTestConfiguration.java`);
         }
+    }
+    if (generator.isJhipsterVersionLessThan('7.0.0-beta.1')) {
+        generator.removeFile(`${javaDir}config/CloudDatabaseConfiguration.java`);
     }
 }
 

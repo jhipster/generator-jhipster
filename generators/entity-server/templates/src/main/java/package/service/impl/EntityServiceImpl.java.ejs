@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -112,16 +112,12 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %><%= instanceType %><% if (reactive) { %>><% } %> save(<%= instanceType %> <%= instanceName %>) {
         log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);
-        <%_ if (!reactive) { _%>
-<%- include('../../common/save_template', {asEntity, asDto, viaService: false, returnDirectly: true, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
-        <%_ } else { _%>
-<%- include('../../common/save_template_reactive', {asEntity, asDto, viaService: false, returnDirectly: true}); -%>
-        <%_ } _%>
+<%- include('/partials/save_template', {asEntity, asDto, viaService: false, returnDirectly: true, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
     }
 
     <%_ if (service !== 'serviceImpl') { _%>
     /**
-     * Partially udpates a <%= entityInstance %>.
+     * Partially update a <%= entityInstance %>.
      *
      * @param <%= instanceName %> the entity to update partially.
      * @return the persisted entity.

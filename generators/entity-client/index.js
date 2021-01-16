@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,7 +22,7 @@ const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const {
-    SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR },
+    SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT },
 } = require('../generator-constants');
 
 let useBlueprints;
@@ -31,11 +31,6 @@ module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
         this.entity = opts.context;
-
-        if (this.jhipsterConfig.clientFramework !== ANGULAR) {
-            // Remove fields with custom ids, drop once templates supports them
-            this.entity = { ...this.entity, fields: this.entity.fieldsNoId };
-        }
 
         utils.copyObjectProps(this, this.entity);
         this.jhipsterContext = opts.jhipsterContext || opts.context;
@@ -73,7 +68,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _writing() {
         return {
             cleanup() {
-                if (this.isJhipsterVersionLessThan('7.0.0') && this.jhipsterConfig.clientFramework === ANGULAR) {
+                if (this.isJhipsterVersionLessThan('7.0.0-beta.0') && this.jhipsterConfig.clientFramework === ANGULAR) {
                     this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.route.ts`);
                     this.removeFile(
                         `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.component.ts`
@@ -130,6 +125,11 @@ module.exports = class extends BaseBlueprintGenerator {
                     );
                     this.removeFile(
                         `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}.service.spec.ts`
+                    );
+                }
+                if (this.isJhipsterVersionLessThan('7.0.0-beta.1') && this.jhipsterConfig.clientFramework === REACT) {
+                    this.removeFile(
+                        `${this.CLIENT_TEST_SRC_DIR}spec/app/entities/${this.entityFolderName}/${this.entityFileName}-reducer.spec.ts`
                     );
                 }
             },

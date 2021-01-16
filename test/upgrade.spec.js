@@ -77,7 +77,7 @@ describe('JHipster upgrade generator', function () {
             expect(commitsCount).to.equal('5');
         });
     });
-    describe('blueprint application', () => {
+    describe.skip('blueprint application', () => {
         const blueprintName = 'generator-jhipster-sample-blueprint';
         const blueprintVersion = '0.1.1';
         let cleanup;

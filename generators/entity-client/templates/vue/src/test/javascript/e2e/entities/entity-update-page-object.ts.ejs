@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -42,7 +42,7 @@ footer: ElementFinder = element(by.id('footer'));
 saveButton: ElementFinder = element(by.id('save-entity'));
 cancelButton: ElementFinder = element(by.id('cancel-save'));
 
-<%_ fields.forEach((field) => {
+<%_ fields.filter(field => !field.id).forEach((field) => {
   const fieldName = field.fieldName;
   const fieldType = field.fieldType;
   const fieldTypeBlobContent = field.fieldTypeBlobContent;

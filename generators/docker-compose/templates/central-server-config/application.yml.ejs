@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,7 +20,7 @@
 configserver:
     name: Docker JHipster Registry
     status: Connected to <% if (serviceDiscoveryType === 'eureka') { %>the JHipster Registry<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul<% } %> running in Docker
-   
+
 jhipster:
     security:
         authentication:
@@ -32,7 +32,7 @@ management:
         export:
             prometheus:
                 enabled: true
-<%_ } _%>  
+<%_ } _%>
 <%_ if (!skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
 spring:
     <%_ if (!skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>

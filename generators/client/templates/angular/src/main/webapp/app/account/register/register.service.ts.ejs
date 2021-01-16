@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,13 +21,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
-import { IUser } from 'app/core/user/user.model';
+import { Registration } from './register.model';
 
 @Injectable({ providedIn: 'root' })
 export class RegisterService {
   constructor(private http: HttpClient) {}
 
-  save(account: IUser): Observable<{}> {
-    return this.http.post(SERVER_API_URL + '<%- apiUaaPath %>api/register', account);
+  save(registration: Registration): Observable<{}> {
+    return this.http.post(SERVER_API_URL + '<%- apiUaaPath %>api/register', registration);
   }
 }

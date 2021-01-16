@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -30,6 +30,9 @@ import javax.validation.constraints.*;
 import java.time.Instant;
 <%_ } _%>
 import java.util.Set;
+<%_ if (user.primaryKey.type === 'UUID') { _%>
+import java.util.UUID;
+<%_ } _%>
 <%_ if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'sql') { _%>
 import java.util.stream.Collectors;
 <%_ } _%>

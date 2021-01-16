@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -81,7 +81,7 @@ function checkImageExist(opts = { cwd: './', appConfig: null }) {
     if (this.abort) return;
 
     let imagePath = '';
-    this.warning = false;
+    this.hasWarning = false;
     this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
     if (opts.appConfig.buildTool === 'maven') {
         imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/target/docker`);
@@ -92,7 +92,7 @@ function checkImageExist(opts = { cwd: './', appConfig: null }) {
     }
 
     if (shelljs.ls(imagePath).length === 0) {
-        this.warning = true;
+        this.hasWarning = true;
         this.warningMessage += `  ${chalk.cyan(this.dockerBuildCommand)} in ${this.destinationPath(this.directoryPath + opts.cwd)}\n`;
     }
 }

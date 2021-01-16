@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -125,7 +125,7 @@
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <cassandra-driver.version>4.6.1</cassandra-driver.version>
 <%_ } _%>
-        <archunit-junit5.version>0.14.1</archunit-junit5.version>
+        <archunit-junit5.version>0.15.0</archunit-junit5.version>
         <mapstruct.version>1.4.1.Final</mapstruct.version>
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
@@ -146,10 +146,10 @@
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
         <maven-checkstyle.version>3.1.1</maven-checkstyle.version>
-        <checkstyle.version>8.38</checkstyle.version>
+        <checkstyle.version>8.39</checkstyle.version>
         <spring-nohttp-checkstyle.version>0.0.5.RELEASE</spring-nohttp-checkstyle.version>
 <%_ if (!skipClient) { _%>
-        <frontend-maven-plugin.version>1.10.4</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.11.0</frontend-maven-plugin.version>
 <%_ } _%>
         <git-commit-id-plugin.version>4.0.3</git-commit-id-plugin.version>
         <jacoco-maven-plugin.version><%= JACOCO_VERSION %></jacoco-maven-plugin.version>
@@ -159,7 +159,7 @@
         <openapi-generator-maven-plugin.version>4.3.1</openapi-generator-maven-plugin.version>
 <%_ } _%>
         <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
-        <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>3.8.0.2131</sonar-maven-plugin.version>
         <jacoco.utReportFolder>${project.build.directory}/jacoco/test</jacoco.utReportFolder>
         <jacoco.utReportFile>${jacoco.utReportFolder}/test.exec</jacoco.utReportFile>
         <jacoco.itReportFolder>${project.build.directory}/jacoco/integrationTest</jacoco.itReportFolder>
@@ -1546,7 +1546,7 @@
         </profile>
 <%_ if (!skipClient) { _%>
         <profile>
-            <id>webpack</id>
+            <id>webapp</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -1587,13 +1587,13 @@
                                 </goals>
                             </execution>
                             <execution>
-                                <id>webpack build dev</id>
+                                <id>webapp build dev</id>
                                 <goals>
                                     <goal><%= clientPackageManager %></goal>
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
-                                    <arguments>run webpack:build</arguments>
+                                    <arguments>run webapp:build</arguments>
                                     <environmentVariables>
                                         <APP_VERSION>${project.version}</APP_VERSION>
                                     </environmentVariables>
@@ -1703,24 +1703,24 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>webpack build test</id>
+                                <id>webapp build test</id>
                                 <goals>
                                     <goal><%= clientPackageManager %></goal>
                                 </goals>
                                 <phase>test</phase>
                                 <configuration>
-                                    <arguments>run webpack:test</arguments>
+                                    <arguments>run webapp:test</arguments>
                                     <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>webpack build prod</id>
+                                <id>webapp build prod</id>
                                 <goals>
                                     <goal><%= clientPackageManager %></goal>
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
-                                    <arguments>run webpack:prod</arguments>
+                                    <arguments>run webapp:prod</arguments>
                                     <environmentVariables>
                                         <APP_VERSION>${project.version}</APP_VERSION>
                                     </environmentVariables>

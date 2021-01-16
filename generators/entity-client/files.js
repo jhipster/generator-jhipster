@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -233,11 +233,11 @@ const reactFiles = {
     test: [
         {
             condition: generator => !generator.embedded,
-            path: CLIENT_TEST_SRC_DIR,
+            path: REACT_DIR,
             templates: [
                 {
-                    file: 'spec/app/entities/entity-reducer.spec.ts',
-                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-reducer.spec.ts`,
+                    file: 'entities/entity-reducer.spec.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-reducer.spec.ts`,
                 },
             ],
         },

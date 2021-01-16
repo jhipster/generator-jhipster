@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -102,12 +102,12 @@ export class <%= entityAngularName %>Service {
 <%_ if (fieldsContainDate) { _%>
     protected convertDateFromClient(<%= entityInstance %>: I<%= entityAngularName %>): I<%= entityAngularName %> {
         const copy: I<%= entityAngularName %> = Object.assign({}, <%= entityInstance %>, {
-    <%_ for (idx in fields) { _%>
-        <%_ if ( ['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType) ) { _%>
-        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %>?.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.toJSON() : undefined,
+    <%_ for (const field of fields) { _%>
+        <%_ if ( ['Instant', 'ZonedDateTime'].includes(field.fieldType) ) { _%>
+        <%= field.fieldName %>: <%= entityInstance %>.<%= field.fieldName %>?.isValid() ? <%= entityInstance %>.<%= field.fieldName %>.toJSON() : undefined,
         <%_ } _%>
-        <%_ if ( fields[idx].fieldType === 'LocalDate' ) { _%>
-        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %>?.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.format(DATE_FORMAT) : undefined,
+        <%_ if ( field.fieldType === 'LocalDate' ) { _%>
+        <%= field.fieldName %>: <%= entityInstance %>.<%= field.fieldName %>?.isValid() ? <%= entityInstance %>.<%= field.fieldName %>.format(DATE_FORMAT) : undefined,
         <%_ } _%>
     <%_ } _%>
         });
@@ -116,9 +116,9 @@ export class <%= entityAngularName %>Service {
 
     protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
         if (res.body) {
-        <%_ for (idx in fields) { _%>
-            <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { _%>
-            res.body.<%= fields[idx].fieldName %> = res.body.<%= fields[idx].fieldName %> ? dayjs(res.body.<%= fields[idx].fieldName %>) : undefined;
+        <%_ for (const field of fields) { _%>
+            <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(field.fieldType) ) { _%>
+            res.body.<%= field.fieldName %> = res.body.<%= field.fieldName %> ? dayjs(res.body.<%= field.fieldName %>) : undefined;
             <%_ } _%>
         <%_ } _%>
         }
@@ -128,9 +128,9 @@ export class <%= entityAngularName %>Service {
     protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
         if (res.body) {
             res.body.forEach ((<%= entityInstance %>: I<%= entityAngularName %>) => {
-            <%_ for (idx in fields) { _%>
-                <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { _%>
-                <%= entityInstance %>.<%= fields[idx].fieldName %> = <%= entityInstance %>.<%= fields[idx].fieldName %> ? dayjs(<%= entityInstance %>.<%= fields[idx].fieldName %>) : undefined;
+            <%_ for (const field of fields) { _%>
+                <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(field.fieldType) ) { _%>
+                <%= entityInstance %>.<%= field.fieldName %> = <%= entityInstance %>.<%= field.fieldName %> ? dayjs(<%= entityInstance %>.<%= field.fieldName %>) : undefined;
                 <%_ } _%>
             <%_ } _%>
             });

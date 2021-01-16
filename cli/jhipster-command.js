@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -48,6 +48,32 @@ class JHipsterCommand extends Command {
         return this;
     }
 
+    /**
+     * Register callback to customize _excessArguments behavior.
+     * @param {Function} excessArgumentsCallback
+     * @return {JHipsterCommand} this;
+     */
+    excessArgumentsCallback(excessArgumentsCallback) {
+        this._excessArgumentsCallback = excessArgumentsCallback;
+        return this;
+    }
+
+    /**
+     * @private
+     * Override _excessArguments to customize behavior.
+     */
+    _excessArguments(receivedArgs) {
+        if (this._excessArgumentsCallback) {
+            this._excessArgumentsCallback(receivedArgs);
+        } else {
+            super._excessArguments(receivedArgs);
+        }
+    }
+
+    /**
+     * @private
+     * Override _parseCommand to execute a callback before parsing.
+     */
     _parseCommand(operands, unknown) {
         if (this._lazyBuildCommandCallBack) {
             this._lazyBuildCommandCallBack();

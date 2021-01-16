@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -107,8 +107,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
                 .antMatchers("/api/account/reset-password/init").permitAll()
                 .antMatchers("/api/account/reset-password/finish").permitAll()
                 .antMatchers("/api/**").authenticated()<% if (websocket === 'spring-websocket') { %>
-                .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/websocket/**").permitAll()<% } %>
+                .antMatchers("/websocket/**").authenticated()<% } %>
                 .antMatchers("/management/health").permitAll()
                 .antMatchers("/management/health/**").permitAll()
                 .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)

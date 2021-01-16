@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -91,7 +91,7 @@ export class MainComponent implements OnInit {
   private updateTitle(): void {
     let pageTitle = this.getPageTitle(this.router.routerState.snapshot.root);
     if (!pageTitle) {
-      pageTitle = '<% if (enableTranslation) { %>global.title<% } else { %><%= capitalizedBaseName %><% } %>';
+      pageTitle = '<% if (enableTranslation) { %>global.title<% } else { %><%= humanizedBaseName %><% } %>';
     }
     <%_ if (enableTranslation) { _%>
     this.translateService.get(pageTitle).subscribe(title => this.titleService.setTitle(title));

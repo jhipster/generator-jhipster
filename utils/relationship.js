@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -43,8 +43,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     _.defaults(relationship, {
         // let ownerSide true when type is 'many-to-one' for convenience.
         // means that this side should control the reference.
-        ownerSide:
-            relationship.relationshipType !== 'one-to-many' && (relationship.ownerSide || relationship.relationshipType === 'many-to-one'),
+        ownerSide: relationship.ownerSide || relationship.relationshipType === 'many-to-one',
     });
 
     relationship.otherSideReferenceExists = false;
@@ -294,7 +293,7 @@ function relationshipToReference(entity, relationship, pathPrefix = []) {
         },
         path: [...pathPrefix, name],
         idReferences: relationship.otherEntity.idFields ? relationship.otherEntity.idFields.map(field => field.reference) : [],
-        valueReference: relationship.otherEntityField && relationship.otherEntityField.reference,
+        valueReference: relationship.relatedField && relationship.relatedField.reference,
     };
     return reference;
 }

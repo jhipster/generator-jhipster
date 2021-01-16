@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -66,17 +66,17 @@
   },
   "devDependencies": {
 <%_ if (protractorTests) { _%>
-    "@types/chai": "4.2.11",
+    "@types/chai": "4.2.14",
     "@types/chai-string": "1.4.2",
-    "@types/mocha": "7.0.2",
-    "@types/selenium-webdriver": "4.0.9",
+    "@types/mocha": "8.2.0",
+    "@types/selenium-webdriver": "4.0.11",
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
     "chai-string": "1.5.0",
-    "mocha": "8.0.1",
+    "mocha": "8.2.1",
     "protractor": "7.0.0",
-    "ts-node": "8.10.2",
-    "webdriver-manager": "12.1.7",
+    "ts-node": "9.1.1",
+    "webdriver-manager": "12.1.8",
 <%_ } _%>
 <%_ if (websocket === 'spring-websocket') { _%>
     "@types/sockjs-client": "1.1.1",
@@ -100,9 +100,8 @@
     "@angular-builders/jest": "VERSION_MANAGED_BY_CLIENT_ANGULAR#devDependencies#@angular-builders/custom-webpack",
     "@angular/service-worker": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
     "@angular-eslint/eslint-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "@openapitools/openapi-generator-cli": "1.0.13-4.3.1",
     "@types/jest": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "@types/node": "13.13.4",
+    "@types/node": "14.14.20",
     "@typescript-eslint/eslint-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
     "@typescript-eslint/parser": "VERSION_MANAGED_BY_CLIENT_ANGULAR#devDependencies#@typescript-eslint/eslint-plugin",
     "browser-sync": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
@@ -163,24 +162,24 @@
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
     <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
-    "start": "<%= clientPackageManager %> run webpack:dev",
+    "start": "<%= clientPackageManager %> run webapp:dev",
     "start-hmr": "ng serve --hmr",
-    "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
+    "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
     <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
     <%_ } _%>
     "serve": "<%= clientPackageManager %> run start",
-    "build": "<%= clientPackageManager %> run webpack:prod",
+    "build": "<%= clientPackageManager %> run webapp:prod",
     "pretest": "<%= clientPackageManager %> run lint",
     "test": "ng test --coverage --logHeapUsage -w=2",
     "test:watch": "<%= clientPackageManager %> run test -- --watch",
-    "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:dev",
-    "webpack:build:dev": "ng build",
-    "webpack:build:prod": "ng build --prod",
-    "webpack:dev": "ng serve",
-    "webpack:dev-verbose": "ng serve --verbose",
-    "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:prod && <%= clientPackageManager %> run clean-www",
-    "webpack:test": "<%= clientPackageManager %> run test"
+    "webapp:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webapp:build:dev",
+    "webapp:build:dev": "ng build",
+    "webapp:build:prod": "ng build --prod",
+    "webapp:dev": "ng serve",
+    "webapp:dev-verbose": "ng serve --verbose",
+    "webapp:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webapp:build:prod && <%= clientPackageManager %> run clean-www",
+    "webapp:test": "<%= clientPackageManager %> run test"
   },
   "jestSonar": {
     "reportPath": "<%= BUILD_DIR %>test-results/jest",

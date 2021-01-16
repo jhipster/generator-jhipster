@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -87,7 +87,7 @@ export class AlertErrorComponent implements OnDestroy {
               this.addErrorAlert(`Error on field "${fieldName}"`<% if (enableTranslation) { %>, `error.${fieldError.message as string}`, { fieldName }<% } %>);
             }
           } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-            this.addErrorAlert(httpErrorResponse.error.message<% if (enableTranslation) { %>, httpErrorResponse.error.message, httpErrorResponse.error.params<% } %>);
+            this.addErrorAlert(httpErrorResponse.error.detail ?? httpErrorResponse.error.message<% if (enableTranslation) { %>, httpErrorResponse.error.message, httpErrorResponse.error.params<% } %>);
           } else {
             this.addErrorAlert(httpErrorResponse.error<% if (enableTranslation) { %>, httpErrorResponse.error<% } %>);
           }
@@ -100,7 +100,7 @@ export class AlertErrorComponent implements OnDestroy {
 
         default:
           if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-            this.addErrorAlert(httpErrorResponse.error.message<% if (enableTranslation) { %>, httpErrorResponse.error.message<% } %>);
+            this.addErrorAlert(httpErrorResponse.error.detail ?? httpErrorResponse.error.message<% if (enableTranslation) { %>, httpErrorResponse.error.message, httpErrorResponse.error.params<% } %>);
           } else {
             this.addErrorAlert(httpErrorResponse.error<% if (enableTranslation) { %>, httpErrorResponse.error<% } %>);
           }

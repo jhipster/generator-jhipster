@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -155,6 +155,7 @@ function getConfigForMicroserviceApplication(customOptions = {}) {
     delete options[CLIENT_THEME];
     delete options[CLIENT_THEME_VARIANT];
     delete options[SKIP_SERVER];
+    delete options[WITH_ADMIN_UI];
     if (typeof options[SKIP_USER_MANAGEMENT] !== 'boolean') {
         options[SKIP_USER_MANAGEMENT] = true;
     }

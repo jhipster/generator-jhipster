@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -56,10 +56,10 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
           <Translate contentKey="<%= i18nKeyPrefix %>.detail.title"><%= entityClass %></Translate> [<strong>{<%= entityInstance %>Entity.id}</strong>]
         </h2>
           <dl className="jh-entity-details">
-          <%_ for (idx in fields) {
-              const fieldType = fields[idx].fieldType;
-              const fieldName = fields[idx].fieldName;
-              const fieldNameHumanized = fields[idx].fieldNameHumanized;
+          <%_ for (field of fields.filter(field => !field.id)) {
+              const fieldType = field.fieldType;
+              const fieldName = field.fieldName;
+              const fieldNameHumanized = field.fieldNameHumanized;
           _%>
             <dt>
               <span id="<%= fieldName %>">
@@ -67,12 +67,12 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
                   <%= fieldNameHumanized %>
                 </Translate>
               </span>
-              <%_ if (fields[idx].javadoc) { _%>
+              <%_ if (field.javadoc) { _%>
               <UncontrolledTooltip target="<%= fieldName %>">
                 <%_ if (enableTranslation) { _%>
                 <Translate contentKey="<%= i18nKeyPrefix %>.help.<%= fieldName %>"/>
                 <%_ } else { _%>
-                <%= fields[idx].javadoc %>
+                <%= field.javadoc %>
                 <%_ } _%>
               </UncontrolledTooltip>
               <%_ } _%>
@@ -89,7 +89,7 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
             <%_
                 } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
 
-                  const fieldBlobType = fields[idx].fieldTypeBlobContent;
+                  const fieldBlobType = field.fieldTypeBlobContent;
                   if (fieldBlobType !== 'text') {
             _%>
                 {<%= entityInstance %>Entity.<%= fieldName %> ? (
@@ -107,24 +107,24 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
                   </div>
                 ) : null}
               <%_ } else { _%>
-                {<%= entityInstance %>Entity.<%= fields[idx].fieldName %>}
+                {<%= entityInstance %>Entity.<%= field.fieldName %>}
               <%_ } _%>
             <%_ } else { _%>
-            {<%= entityInstance %>Entity.<%= fields[idx].fieldName %>}
+            {<%= entityInstance %>Entity.<%= field.fieldName %>}
             <%_ } _%>
             </dd>
             <%_ } _%>
-            <%_ for (idx in relationships) {
-                const relationshipType = relationships[idx].relationshipType;
-                const ownerSide = relationships[idx].ownerSide;
-                const relationshipName = relationships[idx].relationshipName;
-                const relationshipFieldName = relationships[idx].relationshipFieldName;
-                const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-                const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
-                const otherEntityName = relationships[idx].otherEntityName;
-                const otherEntityStateName = relationships[idx].otherEntityStateName;
-                const otherEntityField = relationships[idx].otherEntityField;
-                const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+            <%_ for (relationship of relationships) {
+                const relationshipType = relationship.relationshipType;
+                const ownerSide = relationship.ownerSide;
+                const relationshipName = relationship.relationshipName;
+                const relationshipFieldName = relationship.relationshipFieldName;
+                const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+                const relationshipNameHumanized = relationship.relationshipNameHumanized;
+                const otherEntityName = relationship.otherEntityName;
+                const otherEntityStateName = relationship.otherEntityStateName;
+                const otherEntityField = relationship.otherEntityField;
+                const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
                 if (relationshipType === 'many-to-one'
                 || (relationshipType === 'one-to-one' && ownerSide === true)
                 || (relationshipType === 'many-to-many' && ownerSide === true)) { _%>

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -48,6 +48,8 @@ describe('<%= entityClass %> e2e test', () => {
 <%_ if (!readOnly) { _%>
     let <%= entityInstance %>UpdatePage: <%= entityClass %>UpdatePage;
 <%_ } _%>
+    const username = process.env.E2E_USERNAME ?? 'admin';
+    const password = process.env.E2E_PASSWORD ?? 'admin';
 
     before(async () => {
         await browser.get('/');
@@ -55,13 +57,12 @@ describe('<%= entityClass %> e2e test', () => {
         signInPage = await navBarPage.getSignInPage();
         <%_ if (authenticationType !== 'oauth2') { _%>
         await signInPage.waitUntilDisplayed();
-
-        await signInPage.username.sendKeys('admin');
-        await signInPage.password.sendKeys('admin');
+        await signInPage.username.sendKeys(username);
+        await signInPage.password.sendKeys(password);
         await signInPage.loginButton.click();
         await signInPage.waitUntilHidden();
         <%_ } else { _%>
-        await signInPage.loginWithOAuth('admin', 'admin');
+        await signInPage.loginWithOAuth(username, password);
         <%_ } _%>
         await waitUntilDisplayed(navBarPage.entityMenu);
         await waitUntilDisplayed(navBarPage.adminMenu);
@@ -93,9 +94,9 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.table);
         await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount + 1);
         expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount + 1);
-        
+
         await <%= entityInstance %>ComponentsPage.delete<%= entityClass %>();
-        if(beforeRecordsCount !== 0) { 
+        if(beforeRecordsCount !== 0) {
           await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount);
           expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount);
         } else {

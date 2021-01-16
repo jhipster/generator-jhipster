@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2020 the original author or authors from the JHipster project.
+# Copyright 2013-2021 the original author or authors from the JHipster project.
 #
 # This file is part of the JHipster project, see https://www.jhipster.tech/
 # for more information.
@@ -105,7 +105,7 @@ jobs:
               run: |
                   mkdir app
               working-directory: ${{ github.workspace }}
-            - uses: actions/setup-node@v2.1.3
+            - uses: actions/setup-node@v2.1.4
               with:
                   node-version: ${{ matrix.node_version }}
             - uses: actions/setup-java@v1
@@ -196,7 +196,7 @@ jobs:
               if: always() && steps.e2e.outcome == 'failure'
               with:
                   name: screenshots-${{ matrix.app-type }}
-                  path: ${{ github.workspace }}/app/target/cypress/screenshots
+                  path: ${{ github.workspace }}/app/*/cypress/screenshots
             - name: 'ANALYSIS: Sonar analysis'
               run: $JHI_SCRIPTS/25-sonar-analyze.sh
               env:

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -137,7 +137,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
         };
 
         this._setupEntityOptions(this, this, this.context);
-        this.registerPrettierTransform();
 
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity', { entityExisted, configExisted, arguments: [name] });
     }
@@ -503,7 +502,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.context.fields.forEach(field => {
                     prepareFieldForTemplates(entity, field, this);
                 });
-                this.context.fieldsNoId = this.context.fields.filter(field => !field.id);
             },
 
             loadRelationships() {
@@ -614,7 +612,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             (this.context.eagerLoad ||
                                 (this.context.paginate !== 'pagination' &&
                                     relationship.relationshipType === 'many-to-many' &&
-                                    relationship.ownerSide === true));
+                                    relationship.ownerSide === true)) &&
+                            // Neo4j eagerly loads relations by default
+                            this.context.databaseType !== 'neo4j';
                     });
                 this.context.relationshipsContainEagerLoad = this.context.relationships.some(
                     relationship => relationship.relationshipEagerLoad

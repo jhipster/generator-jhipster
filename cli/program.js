@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -38,7 +38,6 @@ const createProgram = () => {
     return (
         new JHipsterCommand()
             .storeOptionsAsProperties(false)
-            .passCommandToAction(false)
             .version(version)
             .addHelpText('after', moreInfo)
             // JHipster common options
@@ -80,14 +79,18 @@ const rejectExtraArgs = (program, cmd, extraArgs) => {
 const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand }) => {
     /* create commands */
     Object.entries(commands).forEach(([cmdName, opts]) => {
-        const command = program
+        program
             .command(cmdName, '', { isDefault: cmdName === 'app' })
             .description(opts.desc + (opts.blueprint ? chalk.yellow(` (blueprint: ${opts.blueprint})`) : ''))
             .addCommandArguments(opts.argument)
             .addCommandOptions(opts.options)
             .addHelpText('after', opts.help)
             .addAlias(opts.alias)
-            .lazyBuildCommand(() => {
+            .excessArgumentsCallback(function (receivedArgs) {
+                rejectExtraArgs(program, this.name(), receivedArgs);
+            })
+            .lazyBuildCommand(function () {
+                const command = this;
                 if (!opts.cliOnly || cmdName === 'jdl') {
                     if (opts.blueprint) {
                         // Blueprint only command.
@@ -133,11 +136,10 @@ const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand })
                 command.addHelpText('after', moreInfo);
             })
             .action((...everything) => {
-                // [args, opts, extraArgs]
+                // [args, opts, command]
+                // Unused command
+                everything.pop();
                 const cmdOptions = everything.pop();
-                if (Array.isArray(cmdOptions)) {
-                    return rejectExtraArgs(program, cmdName, cmdOptions);
-                }
                 const args = everything;
                 const options = {
                     ...program.opts(),
@@ -149,9 +151,8 @@ const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand })
                     return loadCommand(cmdName)(args, options, env);
                 }
                 const namespace = opts.blueprint ? `${packageNameToNamespace(opts.blueprint)}:${cmdName}` : `${JHIPSTER_NS}:${cmdName}`;
-                const command = getCommand(namespace, args, opts);
-                logger.debug(`Executing generator ${command} with options ${JSON.stringify(options)}`);
-                return env.run(command, options).then(done, done);
+                const generatorCommand = getCommand(namespace, args, opts);
+                return env.run(generatorCommand, options).then(done, done);
             });
     });
 };

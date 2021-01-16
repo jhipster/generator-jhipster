@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -223,6 +223,11 @@ const vueFiles = {
             condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
             path: VUE_DIR,
             templates: ['admin/gateway/gateway.vue', 'admin/gateway/gateway.component.ts', 'admin/gateway/gateway.service.ts'],
+        },
+        {
+            condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
+            path: VUE_DIR,
+            templates: ['entities/user/user.oauth2.service.ts'],
         },
     ],
     clientTestConfig: [

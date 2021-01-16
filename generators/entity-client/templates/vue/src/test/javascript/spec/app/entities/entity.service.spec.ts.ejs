@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,7 +18,7 @@
 -%>
 <%_
 const tsKeyId = generateTestEntityId(primaryKey.type);
-const enumImports = generateEntityClientEnumImports(fields);
+const enumImports = generateEntityClientEnumImports(fields.filter(field => !field.id));
 _%>
 /* tslint:disable max-line-length */
 import axios from 'axios';
@@ -71,7 +71,7 @@ describe('Service Tests', () => {
         <%_ } else { _%>
         0,
         <%_ } _%>
-        <%_ fields.forEach((field) => {
+        <%_ fields.filter(field => !field.id).forEach((field) => {
             const fieldType = field.fieldType; _%>
             <%_ if (field.fieldIsEnum) { _%>
         <%= fieldType + '.' + field.enumValues[0].name %>,
@@ -98,7 +98,7 @@ describe('Service Tests', () => {
     describe('Service methods', () => {
       it('should find an element', async () => {
         const returnedFromService = Object.assign({
-<%_ fields.forEach((field) => {
+<%_ fields.filter(field => !field.id).forEach((field) => {
     const fieldType = field.fieldType; _%>
     <%_ if (['LocalDate'].includes(fieldType)) { _%>
           <%= field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
@@ -132,7 +132,7 @@ describe('Service Tests', () => {
   <%_ } else { _%>
           id: 0,
   <%_ } _%>
-  <%_ fields.forEach((field) => {
+  <%_ fields.filter(field => !field.id).forEach((field) => {
       const fieldType = field.fieldType; _%>
       <%_ if (['LocalDate'].includes(fieldType)) { _%>
           <%= field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
@@ -142,7 +142,7 @@ describe('Service Tests', () => {
   <%_ }) _%>
         }, elemDefault);
         const expected = Object.assign({
-  <%_ fields.forEach((field) => {
+  <%_ fields.filter(field => !field.id).forEach((field) => {
       const fieldType = field.fieldType; _%>
       <%_ if (['LocalDate'].includes(fieldType)) { _%>
           <%= field.fieldName%>: currentDate,
@@ -170,7 +170,7 @@ describe('Service Tests', () => {
 
       it('should update a <%= entityAngularName %>', async () => {
         const returnedFromService = Object.assign({
-  <%_ fields.forEach((field) => {
+  <%_ fields.filter(field => !field.id).forEach((field) => {
       const fieldType = field.fieldType; _%>
       <%_ if (fieldType === 'Boolean') { _%>
           <%= field.fieldName%>: true,
@@ -191,7 +191,7 @@ describe('Service Tests', () => {
           }, elemDefault);
 
           const expected = Object.assign({
-  <%_ fields.forEach((field) => {
+  <%_ fields.filter(field => !field.id).forEach((field) => {
       const fieldType = field.fieldType; _%>
       <%_ if (['LocalDate'].includes(fieldType)) { _%>
           <%= field.fieldName%>: currentDate,
@@ -220,7 +220,7 @@ describe('Service Tests', () => {
 <%_ } _%>
       it('should return a list of <%= entityAngularName %>', async () => {
         const returnedFromService = Object.assign({
-    <%_ fields.forEach((field) => {
+    <%_ fields.filter(field => !field.id).forEach((field) => {
         const fieldType = field.fieldType; _%>
         <%_ if (fieldType === 'Boolean') { _%>
           <%= field.fieldName%>: true,
@@ -240,7 +240,7 @@ describe('Service Tests', () => {
     <%_ }) _%>
         }, elemDefault);
         const expected = Object.assign({
-    <%_ fields.forEach((field) => {
+    <%_ fields.filter(field => !field.id).forEach((field) => {
         const fieldType = field.fieldType; _%>
         <%_ if (['LocalDate'].includes(fieldType)) { _%>
           <%= field.fieldName%>: currentDate,

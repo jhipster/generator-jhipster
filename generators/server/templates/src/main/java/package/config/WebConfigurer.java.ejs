@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -56,9 +56,6 @@ import org.springframework.data.web.ReactiveSortHandlerMethodArgumentResolver;
 <%_ if (!reactive) { _%>
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
-    <%_ if (!skipClient) { _%>
-import org.springframework.http.MediaType;
-    <%_ } _%>
 <%_ } _%>
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.cors.CorsConfiguration;

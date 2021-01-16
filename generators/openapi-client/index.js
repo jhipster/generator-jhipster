@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,7 +21,7 @@ const shelljs = require('shelljs');
 const chalk = require('chalk');
 const BaseGenerator = require('../generator-base');
 const prompts = require('./prompts');
-const writeFiles = require('./files').writeFiles;
+const { writeFiles, customizeFiles } = require('./files');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -31,7 +31,6 @@ module.exports = class extends BaseGenerator {
             type: Boolean,
             defaults: false,
         });
-        this.registerPrettierTransform();
     }
 
     get initializing() {
@@ -89,19 +88,24 @@ module.exports = class extends BaseGenerator {
         return writeFiles();
     }
 
+    get postWriting() {
+        return customizeFiles();
+    }
+
     install() {
         this.clientPackageManager = this.config.get('clientPackageManager');
+        const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} install`, { silent: this.silent });
+        if (stderr) {
+            this.log(`Something went wrong while running npm install: ${stdout} ${stderr}`);
+        }
         Object.keys(this.clientsToGenerate).forEach(cliName => {
-            const done = this.async();
             this.log(chalk.green(`\nGenerating client for ${cliName}`));
             const generatorName = this.clientsToGenerate[cliName].generatorName;
             const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} run openapi-client:${cliName}`, { silent: this.silent });
             if (!stderr) {
                 this.success(`Succesfully generated ${cliName} ${generatorName} client`);
-                done();
             } else {
                 this.log(`Something went wrong while generating client ${cliName}: ${stdout} ${stderr}`);
-                done();
             }
         });
     }

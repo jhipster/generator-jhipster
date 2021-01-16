@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -231,6 +231,11 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
             type: Array,
         });
 
+        this.option('pk-type', {
+            desc: 'Default primary key type (beta)',
+            type: String,
+        });
+
         // Just constructing help, stop here
         if (this.options.help) {
             return;
@@ -267,8 +272,6 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
 
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('app');
-
-        this.registerPrettierTransform();
     }
 
     _initializing() {

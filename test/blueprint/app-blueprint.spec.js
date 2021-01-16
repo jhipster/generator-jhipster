@@ -127,7 +127,7 @@ describe('JHipster application generator with blueprint', () => {
                         name: 'generator-jhipster-myblueprint',
                         version: '9.9.9',
                         peerDependencies: {
-                            'generator-jhipster': '^6.0.0',
+                            'generator-jhipster': '^7.0.0-beta.0',
                         },
                     };
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,11 +24,6 @@ const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-base-docker');
 
 module.exports = class extends BaseDockerGenerator {
-    constructor(args, opts) {
-        super(args, opts);
-        this.registerPrettierTransform();
-    }
-
     get initializing() {
         return {
             ...super.initializing,
@@ -237,7 +232,7 @@ module.exports = class extends BaseDockerGenerator {
     }
 
     end() {
-        if (this.warning) {
+        if (this.hasWarning) {
             this.log(`\n${chalk.yellow.bold('WARNING!')} Docker Compose configuration generated, but no Jib cache found`);
             this.log('If you forgot to generate the Docker image for this application, please run:');
             this.log(chalk.red(this.warningMessage));

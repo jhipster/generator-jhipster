@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -86,6 +86,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
                 // Make constants available in templates
                 this.LOGIN_REGEX = constants.LOGIN_REGEX_JS;
                 this.ANGULAR = ANGULAR;
+                this.VUE = VUE;
                 this.HUSKY_VERSION = constants.HUSKY_VERSION;
                 this.LINT_STAGED_VERSION = constants.LINT_STAGED_VERSION;
                 this.PRETTIER_VERSION = constants.PRETTIER_VERSION;
@@ -235,6 +236,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.lowercaseBaseName = this.baseName.toLowerCase();
+                this.humanizedBaseName = this.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(this.baseName);
 
                 if (this.authenticationType === 'oauth2' || (this.databaseType === 'no' && this.authenticationType !== 'uaa')) {
                     this.skipUserManagement = true;
@@ -324,13 +326,13 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
                 devDependencies.set('wait-on', 'VERSION_MANAGED_BY_CLIENT_COMMON');
                 devDependencies.set('concurrently', 'VERSION_MANAGED_BY_CLIENT_COMMON');
 
-                if (this.clientFramework === 'react') {
+                if (this.clientFramework === REACT) {
                     scriptsStorage.set(
                         'ci:frontend:test',
-                        'npm run webpack:build:$npm_package_config_default_environment && npm run test-ci'
+                        'npm run webapp:build:$npm_package_config_default_environment && npm run test-ci'
                     );
                 } else {
-                    scriptsStorage.set('ci:frontend:build', 'npm run webpack:build:$npm_package_config_default_environment');
+                    scriptsStorage.set('ci:frontend:build', 'npm run webapp:build:$npm_package_config_default_environment');
                     scriptsStorage.set('ci:frontend:test', 'npm run ci:frontend:build && npm test');
                 }
 

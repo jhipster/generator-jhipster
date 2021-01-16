@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,9 +18,9 @@
 -%>
 <%_
 const i18nToLoad = [entityInstance];
-for (const idx in fields) {
-    if (fields[idx].fieldIsEnum === true) {
-        i18nToLoad.push(fields[idx].enumInstance);
+for (const field of fields.filter(field => !field.id)) {
+    if (field.fieldIsEnum === true) {
+        i18nToLoad.push(field.enumInstance);
     }
 }
 _%>
@@ -183,9 +183,9 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
   }, [props.updateSuccess]);
 
   const saveEntity = (event, errors, values) => {
-    <%_ for (idx in fields) {
-        const fieldType = fields[idx].fieldType;
-        const fieldName = fields[idx].fieldName;
+    <%_ for (field of fields.filter(field => !field.id)) {
+        const fieldType = field.fieldType;
+        const fieldName = field.fieldName;
     _%>
     <%_ if (fieldType === 'Instant' || fieldType === 'ZonedDateTime')  { _%>
     values.<%= fieldName %> = convertDateTimeToServer(values.<%= fieldName %>);
@@ -234,10 +234,10 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             </AvGroup>
             : null
           }
-          <%_ for (idx in fields) {
-              const fieldType = fields[idx].fieldType;
-              const fieldName = fields[idx].fieldName;
-              const fieldNameHumanized = fields[idx].fieldNameHumanized;
+          <%_ for (field of fields.filter(field => !field.id)) {
+              const fieldType = field.fieldType;
+              const fieldName = field.fieldName;
+              const fieldNameHumanized = field.fieldNameHumanized;
           _%>
           <AvGroup <% if (fieldType === 'Boolean') { %> check <% } %>>
           <%_ if (fieldType === 'Boolean') { _%>
@@ -278,8 +278,8 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               <%- include('react_validators'); %>
             />
           <%_
-            } else if (fields[idx].fieldIsEnum) {
-              const enumValues = fields[idx].enumValues;
+            } else if (field.fieldIsEnum) {
+              const enumValues = field.enumValues;
           _%>
             <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
               <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
@@ -317,7 +317,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
           <%_
           } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
 
-            const fieldBlobType = fields[idx].fieldTypeBlobContent;
+            const fieldBlobType = field.fieldTypeBlobContent;
             if (fieldBlobType !== 'text') {
               const isAnImage = fieldBlobType === 'image';
               const capitalizedFirstLetter =  _.upperFirst(fieldName);
@@ -373,12 +373,12 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
           </Label>
           <AvField id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" type="text" name="<%= fieldName %>" <%- include('react_validators'); %>/>
         <%_ } _%>
-          <%_ if (fields[idx].javadoc) { _%>
+          <%_ if (field.javadoc) { _%>
           <UncontrolledTooltip target="<%= fieldName %>Label">
             <%_ if (enableTranslation) { _%>
             <Translate contentKey="<%= i18nKeyPrefix %>.help.<%= fieldName %>"/>
             <%_ } else { _%>
-            <%= fields[idx].javadoc %>
+            <%= field.javadoc %>
             <%_ } _%>
           </UncontrolledTooltip>
           <%_ } _%>

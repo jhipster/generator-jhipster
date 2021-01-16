@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -33,11 +33,13 @@ const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig } = require('./generator-defaults');
+const { defaultConfigMicroservice } = require('./generator-defaults');
 const { detectLanguage } = require('../utils/language');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 const databaseTypes = require('../jdl/jhipster/database-types');
+const MICROSERVICE = require('../jdl/jhipster/application-types');
 
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -163,7 +165,9 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         if (!this.options.skipYoResolve) {
             this.registerConflicterAttributesTransform();
         }
+
         this.registerForceEntitiesTransform();
+        this.registerPrettierTransform();
     }
 
     /**
@@ -2132,7 +2136,9 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         } else {
             rootTemplatesPath = Array.isArray(rootTemplatesPath) ? rootTemplatesPath : [rootTemplatesPath];
             rootTemplatesAbsolutePath = _this.jhipsterTemplatesFolders
-                .map(templateFolder => rootTemplatesPath.map(relativePath => path.join(templateFolder, relativePath)))
+                .map(templateFolder =>
+                    rootTemplatesPath.map(relativePath => (relativePath ? path.join(templateFolder, relativePath) : templateFolder))
+                )
                 .flat();
         }
 
@@ -2403,6 +2409,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
                 }
             }
         }
+
+        if (options.pkType) {
+            this.jhipsterConfig.pkType = options.pkType;
+        }
     }
 
     /**
@@ -2600,7 +2610,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         return { ...defaultAppTypeConfig, ...defaultConfig };
     }
 
-    setConfigDefaults(defaults = defaultConfig) {
+    setConfigDefaults(defaults = this.jhipsterConfig.applicationType !== MICROSERVICE ? defaultConfig : defaultConfigMicroservice) {
         const jhipsterVersion = packagejs.version;
         const baseName = this.getDefaultAppName();
         const creationTimestamp = new Date().getTime();

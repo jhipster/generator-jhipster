@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -86,6 +86,9 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+<%_ if (user.primaryKey.type === 'UUID') { _%>
+import java.util.UUID;
+<%_ } _%>
 
 <%_ if (databaseType === 'couchbase') { _%>
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
@@ -131,11 +134,13 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
 <%_ if (databaseType === 'sql') { _%>
     @Id
     <%_ if (!reactive) { _%>
-        <%_ if (authenticationType !== 'oauth2' && prodDatabaseType === 'mysql') { _%>
+        <%_ if (user.primaryKey.fields[0].jpaGeneratedValue === 'identity') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-        <%_ } else if (authenticationType !== 'oauth2') { _%>
+        <%_ } else if (user.primaryKey.fields[0].jpaGeneratedValue === 'sequence') { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
+        <%_ } else if (user.primaryKey.fields[0].jpaGeneratedValue) { _%>
+    @GeneratedValue
         <%_ } _%>
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch' && authenticationType === 'oauth2') { _%>
@@ -372,11 +377,11 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     <%_ } _%>
     private Set<PersistentToken> persistentTokens = new HashSet<>();<% } %>
 
-    public <% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>Long<% } else { %>String<% } %> getId() {
+    public <%= user.primaryKey.type %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>Long<% } else { %>String<% } %> id) {
+    public void setId(<%= user.primaryKey.type %> id) {
         this.id = id;
     }
 

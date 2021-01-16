@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,20 +47,26 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task) {
+task webapp(type: <%= _.upperFirst(clientPackageManager) %>Task) {
     inputs.files("package-lock.json")
     inputs.files("build.gradle")
+    <%_ if (clientFramework === ANGULAR) { _%>
+    inputs.files("angular.json")
+    inputs.dir("<%= CLIENT_WEBPACK_DIR %>")
+    <%_ } _%>
     inputs.dir("<%= CLIENT_MAIN_SRC_DIR %>")
+    <%_ if (clientFramework !== ANGULAR) { _%>
 
-    def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>/")
+    def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>")
     webpackDevFiles.exclude("webpack.prod.js")
     inputs.files(webpackDevFiles)
+    <%_ } _%>
 
     outputs.dir("<%= CLIENT_DIST_DIR %>")
 
     dependsOn <%= clientPackageManager %><%_ if (clientPackageManager === 'npm') { _%>Install<%_ } _%>
 
-    args = ["run", "webpack:build"]
+    args = ["run", "webapp:build"]
     environment = [APP_VERSION: project.version]
 }
 <%_ } _%>
@@ -88,6 +94,6 @@ processResources {
 }
 
 <%_ if (!skipClient) { _%>
-processResources.dependsOn webpack
+processResources.dependsOn webapp
 bootJar.dependsOn processResources
 <%_ } _%>

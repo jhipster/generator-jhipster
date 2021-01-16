@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -72,11 +72,13 @@ describe('<%= entityClass %> e2e test', () => {
   const absolutePath = path.resolve(__dirname, fileToUpload);
   <%_ } _%>
   let beforeRecordsCount = 0;
+  const username = process.env.E2E_USERNAME ?? 'admin';
+  const password = process.env.E2E_PASSWORD ?? 'admin';
 
   before(async () => {
     await browser.get('/');
     navBarPage = new NavBarPage();
-    await navBarPage.login('admin', 'admin');
+    await navBarPage.login(username, password);
   });
 
 
@@ -117,7 +119,7 @@ describe('<%= entityClass %> e2e test', () => {
     });
 
    <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', async () => {
-      <%_ fields.forEach((field) => {
+      <%_ fields.filter(field => !field.id).forEach((field) => {
         const fieldName = field.fieldName;
         const fieldNameCapitalized = field.fieldNameCapitalized;
         const fieldType = field.fieldType;
@@ -229,14 +231,14 @@ describe('<%= entityClass %> e2e test', () => {
 
         detailsPage = new <%= entityClass %>DetailsPage();
 
-        <%_ if (fields.length > 0 && databaseType !== 'neo4j') { _%>
+        <%_ if (fields.some(field => !field.id) && databaseType !== 'neo4j') { _%>
         await waitUntilAllDisplayed([detailsPage.title, detailsPage.backButton, detailsPage.firstDetail]);
         <%_ } else { _%>
         await waitUntilAllDisplayed([detailsPage.title, detailsPage.backButton]);
         <%_ } _%>
 
         expect(await detailsPage.title.getText()).not.to.be.empty;
-        <%_ if (fields.length > 0  && databaseType !== 'neo4j') { _%>
+        <%_ if (fields.some(field => !field.id) && databaseType !== 'neo4j') { _%>
         expect(await detailsPage.firstDetail.getText()).not.to.be.empty;
         <%_ } _%>
 
@@ -253,7 +255,7 @@ describe('<%= entityClass %> e2e test', () => {
 
         expect(await updatePage.title.getText()).not.to.be.empty;
 
-        <%_ fields.forEach((field) => {
+        <%_ fields.filter(field => !field.id).forEach((field) => {
           const fieldName = field.fieldName;
           const fieldNameCapitalized = field.fieldNameCapitalized;
           const fieldType = field.fieldType;

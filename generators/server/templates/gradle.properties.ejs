@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -32,7 +32,7 @@ springBootVersion=<%= SPRING_BOOT_VERSION %>
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %> -->
 hibernateVersion=<%= HIBERNATE_VERSION %>
 mapstructVersion=1.4.1.Final
-archunitJunit5Version=0.14.1
+archunitJunit5Version=0.15.0
 <%_ if (enableSwaggerCodegen) { _%>
 jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 <%_ } _%>
@@ -64,7 +64,7 @@ cassandraDriverVersion=4.6.1
 jibPluginVersion=<%= JIB_VERSION %>
 gitPropertiesPluginVersion=2.2.4
 <%_ if (!skipClient) { _%>
-gradleNodePluginVersion=2.2.4
+gradleNodePluginVersion=3.0.0-rc6
 <%_ } _%>
 aptPluginVersion=0.21
 <%_ if (databaseType === 'sql' && !reactive) { _%>
@@ -75,7 +75,7 @@ sonarqubePluginVersion=3.0
 openapiPluginVersion=4.3.1
 <%_ } _%>
 springNoHttpPluginVersion=0.0.5.RELEASE
-checkstyleVersion=8.38
+checkstyleVersion=8.39
 
 # jhipster-needle-gradle-property - JHipster will add additional properties here
 

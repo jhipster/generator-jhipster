@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -154,6 +154,10 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     entityWithConfig.differentTypes.push(entityWithConfig.entityClass);
     entityWithConfig.i18nToLoad.push(entityWithConfig.entityInstance);
     entityWithConfig.i18nKeyPrefix = `${entityWithConfig.frontendAppName}.${entityWithConfig.entityTranslationKey}`;
+    entityWithConfig.i18nAlertHeaderPrefix = entityWithConfig.i18nKeyPrefix;
+    if (entityWithConfig.microserviceAppName) {
+        entityWithConfig.i18nAlertHeaderPrefix = `${entityWithConfig.microserviceAppName}.${entityWithConfig.entityTranslationKey}`;
+    }
 
     const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => generator.isBuiltInUser(relationship.otherEntityName));
     entityWithConfig.saveUserSnapshot =

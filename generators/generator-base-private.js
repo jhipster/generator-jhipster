@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -1000,6 +1000,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         fields.forEach(field => {
             const fieldType = field.fieldType;
             const fieldName = field.fieldName;
+            const nullable = !field.id && field.nullable;
             let tsType = 'any';
             if (field.fieldIsEnum) {
                 tsType = fieldType;
@@ -1010,10 +1011,13 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             } else if (['String', 'UUID', 'Duration', 'byte[]', 'ByteBuffer'].includes(fieldType)) {
                 tsType = 'string';
                 if (['byte[]', 'ByteBuffer'].includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
-                    variablesWithTypes.push(`${fieldName}ContentType?: string`);
+                    variablesWithTypes.push(`${fieldName}ContentType?: ${nullable ? 'string | null' : 'string'}`);
                 }
             } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
                 tsType = customDateType;
+            }
+            if (nullable) {
+                tsType += ' | null';
             }
             variablesWithTypes.push(`${fieldName}?: ${tsType}`);
         });
@@ -1021,6 +1025,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         relationships.forEach(relationship => {
             let fieldType;
             let fieldName;
+            const nullable = !relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes('required');
             const relationshipType = relationship.relationshipType;
             if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
                 fieldType = `I${relationship.otherEntityAngularName}[]`;
@@ -1028,6 +1033,9 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             } else {
                 fieldType = `I${relationship.otherEntityAngularName}`;
                 fieldName = relationship.relationshipFieldName;
+            }
+            if (nullable) {
+                fieldType += ' | null';
             }
             variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
         });
@@ -1049,7 +1057,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
             const importType = `I${otherEntityAngularName}`;
             let importPath;
             if (this.isBuiltInUser(otherEntityAngularName)) {
-                importPath = clientFramework === ANGULAR ? 'app/core/user/user.model' : 'app/shared/model/user.model';
+                importPath = clientFramework === ANGULAR ? 'app/entities/user/user.model' : 'app/shared/model/user.model';
             } else {
                 importPath =
                     clientFramework === ANGULAR
@@ -1202,8 +1210,8 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      */
     rebuildClient() {
         const done = this.async();
-        this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
-        this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']).on('close', () => {
+        this.log(`\n${chalk.bold.green('Running `webapp:build` to update client app\n')}`);
+        this.spawnCommand(this.clientPackageManager, ['run', 'webapp:build']).on('close', () => {
             done();
         });
     }
@@ -1233,21 +1241,16 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      * @param {any} databaseType - the database type
      */
     getPkType(databaseType) {
-        let pk = '';
-        switch (databaseType) {
-            case 'mongodb':
-            case 'neo4j':
-            case 'couchbase':
-                pk = 'String';
-                break;
-            case 'cassandra':
-                pk = 'UUID';
-                break;
-            default:
-                pk = 'Long';
-                break;
+        if (this.jhipsterConfig.pkType) {
+            return this.jhipsterConfig.pkType;
         }
-        return pk;
+        if (['mongodb', 'neo4j', 'couchbase'].includes(databaseType)) {
+            return 'String';
+        }
+        if (databaseType === 'cassandra') {
+            return 'UUID';
+        }
+        return 'Long';
     }
 
     /**
@@ -1317,7 +1320,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      * @param {string} defaultValue - default value
      * @returns {string} java primary key value
      */
-    getPrimaryKeyValue(primaryKeyType, databaseType, defaultValue) {
+    getPrimaryKeyValue(primaryKeyType, databaseType = this.jhipsterConfig.databasetype, defaultValue = 1) {
         let value;
         switch (primaryKeyType) {
             case 'String':
@@ -1436,6 +1439,10 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
 
         this.queueTask({
             method: () => {
+                if (this.env.rootGenerator() && this.env.rootGenerator() !== this) {
+                    return;
+                }
+
                 const prettierOptions = { plugins: [prettierPluginPackagejson] };
                 if (!this.skipServer && !this.jhipsterConfig.skipServer) {
                     prettierOptions.plugins.push(prettierPluginJava);
@@ -1698,8 +1705,8 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         // Fallback to defaults for test cases.
         loadRequiredConfigIntoEntity(user, defaultConfig);
 
-        const userIdType =
-            user.authenticationType === 'oauth2' || user.databaseType !== 'sql' ? 'String' : this.getPkType(user.databaseType);
+        const oauth2 = user.authenticationType === 'oauth2';
+        const userIdType = oauth2 || user.databaseType !== 'sql' ? 'String' : this.getPkType(user.databaseType);
         const fieldValidateRulesMaxlength = userIdType === 'String' ? 100 : undefined;
 
         user.fields = [
@@ -1724,7 +1731,13 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         });
         this.configOptions.sharedEntities.User = user;
 
-        const liquibaseFakeData = user.authenticationType === 'oauth2' ? [] : [{ id: 1 }, { id: 2 }];
+        user.resetFakerSeed();
+        const liquibaseFakeData = oauth2
+            ? []
+            : [
+                  { id: userIdType === 'Long' ? 1 : user.primaryKey.fields[0].generateFakeData() },
+                  { id: userIdType === 'Long' ? 2 : user.primaryKey.fields[0].generateFakeData() },
+              ];
         user.liquibaseFakeData = liquibaseFakeData;
         this.configOptions.sharedLiquibaseFakeData.User = liquibaseFakeData;
     }

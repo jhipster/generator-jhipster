@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,8 +22,8 @@ package <%= packageName %>.web.rest;
 const viaService = service !== 'no';
 
 let manyToManyWithUser = false;
-for (idx in relationships) {
-    if (relationships[idx].otherEntityName === 'user' && relationships[idx].relationshipType === 'many-to-many') {
+for (const relationship of relationships) {
+    if (relationship.otherEntityName === 'user' && relationship.relationshipType === 'many-to-many') {
         manyToManyWithUser = true;
         break;
     }
@@ -126,7 +126,9 @@ import java.util.UUID;
     <%_ if (!viaService) { _%>
 import java.util.stream.Collectors;
     <%_ } _%>
+    <%_ if (databaseType !== 'sql' || !reactive) { _%>
 import java.util.stream.StreamSupport;
+    <%_ } _%>
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch' && !reactive) { _%>
 
@@ -192,13 +194,12 @@ public class <%= entityClass %>Resource {
         <%_ if (primaryKey.type === 'UUID' && databaseType !== 'sql') { _%>
         <%= instanceName %>.set<%= primaryKey.nameCapitalized %>(UUID.randomUUID());
         <%_ } _%>
+<%- include('/partials/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
         <%_ if (!reactive) { _%>
-<%- include('../../common/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.get<%= primaryKey.nameCapitalized %>()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.get<%= primaryKey.nameCapitalized %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>))
             .body(result);
         <%_ } else { _%>
-<%- include('../../common/save_template_reactive', {asEntity, asDto, viaService: viaService, returnDirectly: false}); -%>
             .map(result -> {
                 try {
                     return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.get<%= primaryKey.nameCapitalized %>()))
@@ -239,13 +240,12 @@ public class <%= entityClass %>Resource {
         }
             <%_ } _%>
         <%_ } _%>
+<%- include('/partials/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: false, isUsingMapsId: false, mapsIdAssoc: mapsIdAssoc}); -%>
     <%_ if (!reactive) { _%>
-<%- include('../../common/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: false, isUsingMapsId: false, mapsIdAssoc: mapsIdAssoc}); -%>
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%= instanceName %>.get<%= primaryKey.nameCapitalized %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>))
             .body(result);
     <%_ } else { _%>
-<%- include('../../common/save_template_reactive', {asEntity, asDto, viaService: viaService, returnDirectly: false}); -%>
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
             .map(result -> ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.get<%= primaryKey.nameCapitalized %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>))

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -44,11 +44,12 @@
             <%_ } _%>
             "diskSpace": "Kettaruum",
             "mail": "E-post",
-            "livenessState": "Liveness state",
-            "readinessState": "Readiness state",
+            "livenessState": "Elusolek",
+            "readinessState": "Valmisolek",
             "ping": "Rakendus"<% if (searchEngine === 'elasticsearch') { %>,
-            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
-            "db": "Andmebaas"<% } %><% if (databaseType === 'mongodb') { %>,
+            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql' && !reactive) { %>,
+            "db": "Andmebaas"<% } %><% if (databaseType === 'sql' && reactive) { %>,
+            "r2dbc": "Andmebaas"<% } %><% if (databaseType === 'mongodb') { %>,
             "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
             "cassandra": "Cassandra"<% } %><% if (databaseType === 'couchbase') { %>,
             "couchbase": "Couchbase"<% } %><% if (databaseType === 'neo4j') { %>,

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -31,6 +31,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+<%_ if (user.primaryKey.type === 'UUID') { _%>
+import java.util.UUID;
+<%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,12 +43,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserMapperTest {
 
     private static final String DEFAULT_LOGIN = "johndoe";
-    <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
-    private static final Long DEFAULT_ID = 1L;
-    <%_ } else if (databaseType === 'couchbase') { _%>
+    <%_ if (databaseType === 'couchbase') { _%>
     private static final String DEFAULT_ID = <%= asEntity('User') %>.PREFIX + DEFAULT_LOGIN;
     <%_ } else { _%>
-    private static final String DEFAULT_ID = "id1";
+    private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- getPrimaryKeyValue(user.primaryKey.type) %>;
     <%_ } _%>
 
     private UserMapper userMapper;

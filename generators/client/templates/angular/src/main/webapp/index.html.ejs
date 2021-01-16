@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -26,9 +26,10 @@
     <meta name="google" content="notranslate"><% } %>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="theme-color" content="#000000">
-    <link rel="icon" href="favicon.ico" />
-    <link rel="stylesheet" href="content/css/loading.css">
     <base href="/"/>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="manifest" href="manifest.webapp" />
+    <link rel="stylesheet" href="content/css/loading.css">
     <!-- jhipster-needle-add-resources-to-root - JHipster will add new resources here -->
 </head>
 <body>
@@ -50,7 +51,7 @@
                 <h1>An error has occurred :-(</h1>
                 <h2>Usual error causes</h2>
                 <ol>
-                    <li>You started the application from an IDE and you didn't run <code style="color:red"><%= clientPackageManager %> start</code> or <code style="color:red"><%= clientPackageManager %> run webpack:build</code>.</li>
+                    <li>You started the application from an IDE and you didn't run <code style="color:red"><%= clientPackageManager %> start</code> or <code style="color:red"><%= clientPackageManager %> run webapp:build</code>.</li>
                     <li>You had a network error while running <code style="color:red"><%= clientPackageManager %> install</code>. If you are behind a corporate proxy, it is likely that this error was caused by your proxy. Have a look at the JHipster error logs, you will probably have the cause of the error.</li>
                     <li>You installed a Node.js version that doesn't work with JHipster: please use an LTS (long-term support) version, as it's the only version we support.</li>
                 </ol>
@@ -59,7 +60,7 @@
                 <p>If you want to have more control, so you can debug your issue more easily, you should follow the following steps:</p>
                 <ol>
                     <li>Install npm dependencies with the command <code style="color:red"><%= clientPackageManager %> install</code></li>
-                    <li>Build the client with the command <code style="color:red"><%= clientPackageManager %> run webpack:build</code> or <code style="color:red"><%= clientPackageManager %> start</code></li>
+                    <li>Build the client with the command <code style="color:red"><%= clientPackageManager %> run webapp:build</code> or <code style="color:red"><%= clientPackageManager %> start</code></li>
                     <li>Start the server with <code style="color:red"><% if (buildTool === 'maven') { %>./mvnw<% } else if (buildTool === 'gradle') { %>./gradlew<% } %></code> or using your IDE</li>
                 </ol>
 
@@ -87,9 +88,9 @@
         </div>
     </<%= jhiPrefixDashed %>-main>
     <noscript>
-        <h1>You must enable javascript to view this page.</h1>
+        <h1>You must enable JavaScript to view this page.</h1>
     </noscript>
-    <script type="text/javascript" language="javascript">
+    <script type="text/javascript">
         // show an error message if the app loading takes more than 5 sec
         window.onload=function() {
             setTimeout(showError, 4000);

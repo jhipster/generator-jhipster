@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -80,13 +80,13 @@ public interface <%= entityClass %>Service {
      * @return the list of entities.
      */
     <% if (pagination !== 'no') { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> findAll(<% if (pagination !== 'no') { %>Pageable pageable<% } %>);
-<% for (idx in relationships) { if (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide !== true) { -%>
+<% for (const relationship of relationships) { if (relationship.relationshipType === 'one-to-one' && relationship.ownerSide !== true) { -%>
     /**
-     * Get all the <%= asDto(entityClass) %> where <%= relationships[idx].relationshipNameCapitalized %> is {@code null}.
+     * Get all the <%= asDto(entityClass) %> where <%= relationship.relationshipNameCapitalized %> is {@code null}.
      *
      * @return the {@link <%= listOrFlux %>} of entities.
      */
-    <%= listOrFlux %><<%= instanceType %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();
+    <%= listOrFlux %><<%= instanceType %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull();
 <%_ } } _%>
 
     <%_ if (relationshipsContainEagerLoad) { _%>
