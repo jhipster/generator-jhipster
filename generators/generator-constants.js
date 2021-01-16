@@ -47,7 +47,7 @@ const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}
 const HIBERNATE_VERSION = '5.4.27.Final';
 
 const JACOCO_VERSION = '0.8.6';
-const KAFKA_VERSION = '5.5.2';
+const KAFKA_VERSION = '5.5.3';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
 
 // The installed prettier version should be the same that the one used during JHipster generation to avoid formatting differences
