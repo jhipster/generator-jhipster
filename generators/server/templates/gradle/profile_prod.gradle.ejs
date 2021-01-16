@@ -67,7 +67,7 @@ processResources {
         <%_ } _%>
     }
     <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
-    filesMatching("**/bootstrap.yml") {
+    filesMatching("**/application.yml") {
         filter {
             it.replace("#spring.profiles.active#", profiles)
         }

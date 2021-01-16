@@ -62,6 +62,21 @@ spring:
         exclude:
             - org.springframework.cloud.gateway.config.GatewayMetricsAutoConfiguration
     <%_ } _%>
+    <%_ if (serviceDiscoveryType === 'eureka') { _%>
+    cloud:
+        config:
+            enabled: false
+    <%_ } _%>
+    <%_ if (serviceDiscoveryType === 'consul') { _%>
+    cloud:
+        consul:
+            discovery:
+                enabled: false
+                instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
+            config:
+                enabled: false
+            enabled: false
+    <%_ } _%>
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource

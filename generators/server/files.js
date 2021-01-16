@@ -870,13 +870,6 @@ const serverFiles = {
             templates: [{ file: 'static/microservices_index.html', renameTo: () => 'static/index.html' }],
         },
     ],
-    serverMicroserviceAndGateway: [
-        {
-            condition: generator => generator.serviceDiscoveryType,
-            path: SERVER_MAIN_RES_DIR,
-            templates: ['config/bootstrap.yml', 'config/bootstrap-prod.yml'],
-        },
-    ],
     serverJavaApp: [
         {
             path: SERVER_MAIN_SRC_DIR,
@@ -1470,11 +1463,6 @@ const serverFiles = {
                     renameTo: generator => `${generator.testDir}gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java`,
                 },
             ],
-        },
-        {
-            condition: generator => generator.serviceDiscoveryType,
-            path: SERVER_TEST_RES_DIR,
-            templates: ['config/bootstrap.yml'],
         },
         {
             condition: generator => generator.authenticationType === 'uaa',
