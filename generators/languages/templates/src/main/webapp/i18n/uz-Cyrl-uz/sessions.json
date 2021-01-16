@@ -1,6 +1,6 @@
 {
     "sessions": {
-        "title": "[<b>{{username}}</b>] учун фаол сессиялар",
+        "title": "[<strong>{{username}}</strong>] учун фаол сессиялар",
         "table": {
             "ipaddress": "IP манзил",
             "useragent": "Фойдаланувчи Агент",

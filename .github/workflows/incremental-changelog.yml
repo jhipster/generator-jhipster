@@ -8,7 +8,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#      https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,6 +27,7 @@ on:
         branches:
             - '*'
         paths:
+            - 'jdl/**'
             - 'utils/**'
             - 'test-integration/incremental-changelog-samples/**'
             - 'generators/entity/**'
@@ -35,10 +36,10 @@ on:
 env:
     JHI_RUN_APP: 1
     JHI_JDK: 11
-    JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
+    JHI_LIB_REPO: https://github.com/jhipster/jhipster-bom.git
     JHI_LIB_BRANCH: spring-boot-2.4
     JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
-    JHI_GEN_BRANCH: master
+    JHI_GEN_BRANCH: main
     SPRING_OUTPUT_ANSI_ENABLED: ALWAYS
     SPRING_JPA_SHOW_SQL: false
     JHI_DISABLE_WEBPACK_LOGS: true
@@ -50,6 +51,11 @@ env:
     NG_CLI_ANALYTICS: 'false'
     JHI_GITHUB_CI: true
     FORCE_COLOR: 1
+    # https://github.com/actions/virtual-environments/issues/1499#issuecomment-689467080
+    MAVEN_OPTS: >-
+        -Dhttp.keepAlive=false
+        -Dmaven.wagon.http.pool=false
+        -Dmaven.wagon.httpconnectionManager.ttlSeconds=120
 jobs:
     applications:
         name: ${{ matrix.app-type }}
@@ -68,7 +74,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                node_version: [12.18.3]
+                node_version: [14.15.0]
                 os: [ubuntu-20.04]
                 app-type:
                     - liquibase-jdl-rename-field
@@ -99,18 +105,48 @@ jobs:
               run: |
                   mkdir app
               working-directory: ${{ github.workspace }}
-            - uses: actions/setup-node@v2.1.1
+            - uses: actions/setup-node@v2.1.3
               with:
                   node-version: ${{ matrix.node_version }}
             - uses: actions/setup-java@v1
               with:
                   java-version: '11.x'
-            - name: 'SETUP: Get chrome/chromedriver version'
-              id: chromedriver-version
+            - name: 'SETUP: Get date'
+              id: get-date
               run: |
-                  CHROME_VERSION=$(google-chrome --version | cut -f 3 -d ' ' | cut -d '.' -f 1) \
-                  && CHROMEDRIVER_VERSION=$(curl --location --fail --retry 3 http://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}) \
-                  && echo "::set-output name=version::$CHROMEDRIVER_VERSION"
+                  echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+            - name: 'SETUP: load npm cache'
+              uses: actions/cache@v2
+              with:
+                  path: ~/.npm
+                  key: ${{ runner.os }}-node-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json.ejs') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-
+            - name: 'SETUP: load maven cache'
+              uses: actions/cache@v2
+              with:
+                  path: ~/.m2/repository
+                  key: ${{ runner.os }}-maven-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
+                  restore-keys: |
+                      ${{ runner.os }}-maven-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-
+            - name: 'SETUP: load gradle cache'
+              if: contains(matrix.app-type, 'gradle')
+              uses: actions/cache@v2
+              with:
+                  path: |
+                      ~/.gradle/caches
+                      ~/.gradle/wrapper
+                  key: ${{ runner.os }}-gradle-${{ matrix.app-type }}-${{ hashFiles('generator-jhipster/**/build.gradle.ejs') }}
+                  restore-keys: |
+                      ${{ runner.os }}-gradle-${{ matrix.app-type }}-
+            - name: 'SETUP: load e2e cache'
+              if: matrix.e2e == 1
+              uses: actions/cache@v2
+              with:
+                  path: ~/.cache/Cypress/
+                  key: ${{ runner.os }}-e2e-${{ matrix.app-type }}-${{ hashFiles('generator-jhipster/**/package.json.ejs') }}
+                  restore-keys: |
+                      ${{ runner.os }}-e2e-${{ matrix.app-type }}-
             - name: 'ENV: display variables'
               run: $JHI_SCRIPTS/01-display-configuration.sh
             - name: 'TOOLS: configure tools installed by the system'
@@ -152,10 +188,6 @@ jobs:
               run: $JHI_SCRIPTS/22-tests-frontend.sh
             - name: 'TESTS: packaging'
               run: $JHI_SCRIPTS/23-package.sh
-            - name: 'E2E: Synchronize chromedriver version'
-              if: matrix.e2e == 1
-              run: npm run e2e:update-webdriver -- --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
-              working-directory: ${{ github.workspace }}/app
             - name: 'E2E: Run'
               id: e2e
               run: $JHI_SCRIPTS/24-tests-e2e.sh

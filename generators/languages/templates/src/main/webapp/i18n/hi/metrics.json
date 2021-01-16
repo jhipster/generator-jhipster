@@ -1,15 +1,15 @@
 {
     "metrics": {
         "title": "अनुप्रयोग मेट्रिक्स",
-        "refresh.button": "ताज़ा करें",
-        "updating": "अद्यतन कर रहा है...",
+        "refresh.button": "रिफ्रेश करें",
+        "updating": "अद्यतन हों रहा है...",
         "jvm": {
             "title": "JVM मेट्रिक्स",
             "memory": {
                 "title": "स्मृति",
                 "total": "कुल स्मृति",
                 "heap": "हीप स्मृति",
-                "nonheap": "Non-हीप स्मृति"
+                "nonheap": "गैर-हीप स्मृति"
             },
             "threads": {
                 "title": "Threads",
@@ -20,7 +20,7 @@
                 "blocked": "ब्लॉक किया गया",
                 "dump": {
                     "title": "Threads डंप",
-                    "id": "Id: ",
+                    "id": "क्रमांक: ",
                     "blockedtime": "ब्लॉक समय",
                     "blockedcount": "ब्लॉक गिनती",
                     "waitedtime": "प्रतीक्षा समय",
@@ -39,17 +39,18 @@
                 "scavengetime": "Scavenge time"
             },
             "http": {
-                "title": "HTTP अनुरोध (घटनाएँ प्रति सेकंड)",
+                "title": "HTTP अनुरोध (मिलीसेकंड में समय)",
                 "active": "सक्रिय अनुरोध:",
                 "total": "कुल अनुरोध:",
                 "table": {
                     "code": "Code",
                     "count": "गिनती",
                     "mean": "Mean",
-                    "average": "औसत"
+                    "average": "औसत",
+                    "max": "Max"
                 },
                 "code": {
-                    "ok": "ठीक है",
+                    "ok": "ठीक हैं",
                     "notfound": "नहीं मिला",
                     "servererror": "सर्वर त्रुटि"
                 }
@@ -77,7 +78,7 @@
             "evictions": "बेदखली गणना"
         },
         "datasource": {
-            "usage": "उपयोग",
+            "usage": "संपर्क जोड़नें पे पूल उपयोग",
             "title": "डेटास्रोत सांख्यिकी (मिलीसेकंड में समय)",
             "name": "पूल उपयोग",
             "count": "गिनती",

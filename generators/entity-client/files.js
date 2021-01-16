@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,8 +41,7 @@ const angularFiles = {
             templates: [
                 {
                     file: 'entities/entity.model.ts',
-                    // using entityModelFileName so that there is no conflict when generating microservice entities
-                    renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`,
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.model.ts`,
                 },
             ],
         },
@@ -51,40 +50,42 @@ const angularFiles = {
             path: ANGULAR_DIR,
             templates: [
                 {
-                    file: 'entities/entity-management.component.html',
+                    file: 'entities/list/entity-management.component.html',
                     method: 'processHtml',
                     template: true,
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.html`,
+                    renameTo: generator => `entities/${generator.entityFolderName}/list/${generator.entityFileName}.component.html`,
                 },
                 {
-                    file: 'entities/entity-management-detail.component.html',
+                    file: 'entities/detail/entity-management-detail.component.html',
                     method: 'processHtml',
                     template: true,
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.html`,
+                    renameTo: generator =>
+                        `entities/${generator.entityFolderName}/detail/${generator.entityFileName}-detail.component.html`,
                 },
                 {
                     file: 'entities/entity-management.module.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.module.ts`,
                 },
                 {
-                    file: 'entities/entity-management-routing.module.ts',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-routing.module.ts`,
+                    file: 'entities/route/entity-management-routing.module.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/route/${generator.entityFileName}-routing.module.ts`,
                 },
                 {
-                    file: 'entities/entity-management-routing-resolve.service.ts',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-routing-resolve.service.ts`,
+                    file: 'entities/route/entity-management-routing-resolve.service.ts',
+                    renameTo: generator =>
+                        `entities/${generator.entityFolderName}/route/${generator.entityFileName}-routing-resolve.service.ts`,
                 },
                 {
-                    file: 'entities/entity-management.component.ts',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.ts`,
+                    file: 'entities/list/entity-management.component.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/list/${generator.entityFileName}.component.ts`,
                 },
                 {
-                    file: 'entities/entity-management-detail.component.ts',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.ts`,
+                    file: 'entities/detail/entity-management-detail.component.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/detail/${generator.entityFileName}-detail.component.ts`,
                 },
                 {
-                    file: 'entities/entity.service.ts',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.service.ts`,
+                    file: 'entities/service/entity.service.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/service/${generator.entityFileName}.service.ts`,
                 },
             ],
         },
@@ -93,25 +94,27 @@ const angularFiles = {
             path: ANGULAR_DIR,
             templates: [
                 {
-                    file: 'entities/entity-management-update.component.html',
-                    method: 'processHtml',
-                    template: true,
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.html`,
-                },
-                {
-                    file: 'entities/entity-management-delete-dialog.component.html',
+                    file: 'entities/update/entity-management-update.component.html',
                     method: 'processHtml',
                     template: true,
                     renameTo: generator =>
-                        `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.component.html`,
+                        `entities/${generator.entityFolderName}/update/${generator.entityFileName}-update.component.html`,
                 },
                 {
-                    file: 'entities/entity-management-update.component.ts',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.ts`,
+                    file: 'entities/delete/entity-management-delete-dialog.component.html',
+                    method: 'processHtml',
+                    template: true,
+                    renameTo: generator =>
+                        `entities/${generator.entityFolderName}/delete/${generator.entityFileName}-delete-dialog.component.html`,
                 },
                 {
-                    file: 'entities/entity-management-delete-dialog.component.ts',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.component.ts`,
+                    file: 'entities/update/entity-management-update.component.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/update/${generator.entityFileName}-update.component.ts`,
+                },
+                {
+                    file: 'entities/delete/entity-management-delete-dialog.component.ts',
+                    renameTo: generator =>
+                        `entities/${generator.entityFolderName}/delete/${generator.entityFileName}-delete-dialog.component.ts`,
                 },
             ],
         },
@@ -119,36 +122,41 @@ const angularFiles = {
     test: [
         {
             condition: generator => !generator.embedded,
-            path: CLIENT_TEST_SRC_DIR,
+            path: ANGULAR_DIR,
             templates: [
                 {
-                    file: 'spec/app/entities/entity-management-detail.component.spec.ts',
+                    file: 'entities/detail/entity-management-detail.component.spec.ts',
                     renameTo: generator =>
-                        `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.spec.ts`,
+                        `entities/${generator.entityFolderName}/detail/${generator.entityFileName}-detail.component.spec.ts`,
                 },
                 {
-                    file: 'spec/app/entities/entity-management.component.spec.ts',
-                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.component.spec.ts`,
+                    file: 'entities/list/entity-management.component.spec.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/list/${generator.entityFileName}.component.spec.ts`,
                 },
                 {
-                    file: 'spec/app/entities/entity-management.service.spec.ts',
-                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.service.spec.ts`,
+                    file: 'entities/route/entity-management-routing-resolve.service.spec.ts',
+                    renameTo: generator =>
+                        `entities/${generator.entityFolderName}/route/${generator.entityFileName}-routing-resolve.service.spec.ts`,
+                },
+                {
+                    file: 'entities/service/entity.service.spec.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/service/${generator.entityFileName}.service.spec.ts`,
                 },
             ],
         },
         {
             condition: generator => !generator.readOnly && !generator.embedded,
-            path: CLIENT_TEST_SRC_DIR,
+            path: ANGULAR_DIR,
             templates: [
                 {
-                    file: 'spec/app/entities/entity-management-update.component.spec.ts',
+                    file: 'entities/update/entity-management-update.component.spec.ts',
                     renameTo: generator =>
-                        `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.spec.ts`,
+                        `entities/${generator.entityFolderName}/update/${generator.entityFileName}-update.component.spec.ts`,
                 },
                 {
-                    file: 'spec/app/entities/entity-management-delete-dialog.component.spec.ts',
+                    file: 'entities/delete/entity-management-delete-dialog.component.spec.ts',
                     renameTo: generator =>
-                        `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.component.spec.ts`,
+                        `entities/${generator.entityFolderName}/delete/${generator.entityFileName}-delete-dialog.component.spec.ts`,
                 },
             ],
         },
@@ -408,7 +416,8 @@ function addEnumerationFiles(generator, clientFolder) {
                 packageName: generator.packageName,
             };
             if (!generator.skipClient) {
-                const destinationFile = generator.destinationPath(`${clientFolder}shared/model/enumerations/${enumFileName}.model.ts`);
+                const modelPath = generator.clientFramework === ANGULAR ? 'entities' : 'shared/model';
+                const destinationFile = generator.destinationPath(`${clientFolder}${modelPath}/enumerations/${enumFileName}.model.ts`);
                 generator.template(
                     `${generator.fetchFromInstalledJHipster(
                         `entity-client/templates/${CLIENT_COMMON_TEMPLATES_DIR}`
@@ -451,13 +460,11 @@ function writeFiles() {
             let files;
             let clientMainSrcDir;
             let templatesDir;
-            let microserviceName = this.microserviceName;
 
             if (this.clientFramework === ANGULAR) {
                 files = angularFiles;
                 clientMainSrcDir = ANGULAR_DIR;
                 templatesDir = CLIENT_NG2_TEMPLATES_DIR;
-                microserviceName = this.microserviceName;
             } else if (this.clientFramework === REACT) {
                 files = reactFiles;
                 clientMainSrcDir = REACT_DIR;
@@ -479,28 +486,13 @@ function writeFiles() {
                 return;
             }
 
-            const entityTemplatesDir = `entity-client/templates/${templatesDir}`;
-            this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster(entityTemplatesDir));
-
-            if (this.cypressTests) {
-                const cypressTemplatesDir = 'entity-client/templates/common';
-                this.writeFilesToDisk(commonFiles, this, false, this.fetchFromInstalledJHipster(cypressTemplatesDir));
-            }
+            this.writeFilesToDisk(files, templatesDir);
+            this.writeFilesToDisk(commonFiles, 'common');
 
             addEnumerationFiles(this, clientMainSrcDir);
 
             if (!this.embedded) {
-                this.addEntityToModule(
-                    this.entityInstance,
-                    this.entityClass,
-                    this.entityAngularName,
-                    this.entityFolderName,
-                    this.entityFileName,
-                    this.entityUrl,
-                    this.clientFramework,
-                    microserviceName,
-                    this.readOnly
-                );
+                this.addEntityToModule();
                 this.addEntityToMenu(
                     this.entityStateName,
                     this.enableTranslation,

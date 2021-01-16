@@ -11,7 +11,7 @@ import {
   <%_ } _%>
 } from '../../support/entity';
 <%_
-const baseApi = (applicationType === 'gateway' && locals.microserviceName) ? microserviceName.toLowerCase() + '/api/' : 'api/';
+const baseApi = (applicationType === 'gateway' && locals.microserviceName) ? 'services/' + microserviceName.toLowerCase() + '/api/' : 'api/';
 let openBlockComment = ``;
 let closeBlockComment = ``;
 
@@ -39,11 +39,10 @@ describe('<%= entityClass %> e2e test', () => {
 
   <%_ if (authenticationType === 'oauth2') { _%>
   beforeEach(() => {
-    cy.clearCache();
-    cy.keycloackLogout();
-    cy.visit('/');
-    cy.keycloackLogin('user');
-    cy.clickOnLoginItem();
+    cy.getOauth2Data();
+    cy.get('@oauth2Data').then(oauth2Data => {
+      cy.keycloackLogin(oauth2Data, 'user');
+    });
     cy.server();
     cy.route('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
     cy.visit('');
@@ -52,6 +51,13 @@ describe('<%= entityClass %> e2e test', () => {
       startingEntitiesCount = array.length;
     });
     cy.visit('/');
+  });
+
+  afterEach(() => {
+    cy.get('@oauth2Data').then(oauth2Data => {
+      cy.keycloackLogout(oauth2Data);
+    });
+    cy.clearCache();
   });
   <%_ } else { _%>
   before(() => {
@@ -137,7 +143,7 @@ describe('<%= entityClass %> e2e test', () => {
     cy.wait('@entitiesRequest');
     cy.get(entityCreateButtonSelector).click({force: true});
     cy.getEntityCreateUpdateHeading('<%= entityClass %>');
-    <%_ fields.forEach((field) => {
+    <%_ fieldsNoId.forEach((field) => {
       const fieldName = field.fieldName;
       const fieldNameCapitalized = field.fieldNameCapitalized;
       const fieldType = field.fieldType;

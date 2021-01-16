@@ -1,20 +1,20 @@
 <%#
-Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
-This file is part of the JHipster project, see https://www.jhipster.tech/
-for more information.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
 
-http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
 -%>
 {
   "name": "<%= dasherizedBaseName %>",
@@ -28,27 +28,27 @@ limitations under the License.
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.30",
     "@fortawesome/free-solid-svg-icons": "5.14.0",
-    "@fortawesome/react-fontawesome": "0.1.11",
-    "availity-reactstrap-validation": "2.6.1",
+    "@fortawesome/react-fontawesome": "0.1.12",
+    "availity-reactstrap-validation": "2.7.0",
     "axios": "0.19.2",
     "bootstrap": "4.4.1",
     <%_ if (clientTheme !== 'none') { _%>
     "bootswatch": "4.3.1",
     <%_ } _%>
+    "dayjs": "VERSION_MANAGED_BY_CLIENT_COMMON",
     "loaders.css": "0.1.2",
     "lodash": "4.17.15",
-    "moment": "2.27.0",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "react-hot-loader": "4.12.20",
-    "react-jhipster": "0.11.0",
+    "react": "VERSION_MANAGED_BY_CLIENT_REACT",
+    "react-dom": "VERSION_MANAGED_BY_CLIENT_REACT",
+    "react-hot-loader": "4.13.0",
+    "react-jhipster": "0.12.0",
     "react-loadable": "5.5.0",
     "react-redux": "7.2.0",
     "react-redux-loading-bar": "4.6.0",
     "react-router-dom": "5.1.2",
     "react-toastify": "5.5.0",
     "react-transition-group": "4.3.0",
-    "reactstrap": "8.4.1",
+    "reactstrap": "8.6.0",
     "redux": "4.0.5",
     "redux-devtools": "3.5.0",
     "redux-devtools-dock-monitor": "1.1.3",
@@ -88,8 +88,8 @@ limitations under the License.
     "@types/selenium-webdriver": "4.0.9",
     <%_ } _%>
     "@types/webpack-env": "1.15.2",
-    "@typescript-eslint/eslint-plugin": "2.29.0",
-    "@typescript-eslint/parser": "2.29.0",
+    "@typescript-eslint/eslint-plugin": "4.8.0",
+    "@typescript-eslint/parser": "4.8.0",
     "autoprefixer": "9.7.6",
     "browser-sync": "2.26.7",
     "browser-sync-webpack-plugin": "2.2.2",
@@ -102,12 +102,10 @@ limitations under the License.
     "core-js": "3.6.5",
     "cross-env": "7.0.2",
     "css-loader": "3.5.3",
-    "eslint": "6.8.0",
-    "eslint-config-jhipster": "0.0.1",
-    "eslint-config-jhipster-react": "0.0.1",
-    "eslint-config-prettier": "6.11.0",
-    "eslint-loader": "4.0.2",
-    "eslint-plugin-react": "7.19.0",
+    "eslint": "7.13.0",
+    "eslint-config-prettier": "6.15.0",
+    "eslint-plugin-react": "7.21.5",
+    "eslint-webpack-plugin": "2.3.0",
     "file-loader": "6.0.0",
     "fork-ts-checker-webpack-plugin": "4.1.3",
     "friendly-errors-webpack-plugin": "1.7.0",
@@ -118,16 +116,14 @@ limitations under the License.
         <%_ });
     } _%>
     "html-webpack-plugin": "4.3.0",
-    <%_ if (!skipCommitHook) { _%>
-    "husky": "<%= HUSKY_VERSION %>",
-    <%_ } _%>
     "identity-obj-proxy": "3.0.0",
     "jest": "26.4.2",
     "jest-junit": "11.1.0",
     "jest-sonar-reporter": "2.0.0",
     "json-loader": "0.5.7",
     <%_ if (!skipCommitHook) { _%>
-    "lint-staged": "<%= LINT_STAGED_VERSION %>",
+    "husky": "VERSION_MANAGED_BY_CLIENT_COMMON",
+    "lint-staged": "VERSION_MANAGED_BY_CLIENT_COMMON",
     <%_ } _%>
     <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "1.0.21",
@@ -136,7 +132,6 @@ limitations under the License.
     <%_ if (protractorTests) { _%>
     "mocha": "7.1.2",
     <%_ } _%>
-    "moment-locales-webpack-plugin": "1.2.0",
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "postcss-loader": "3.0.0",
     "prettier": "<%= PRETTIER_VERSION %>",
@@ -161,7 +156,7 @@ limitations under the License.
     "terser-webpack-plugin": "2.3.6",
     "thread-loader": "2.1.3",
     "to-string-loader": "1.1.6",
-    "ts-jest": "26.2.0",
+    "ts-jest": "26.4.3",
     "ts-loader": "7.0.1",
     <%_ if (protractorTests) { _%>
     "ts-node": "8.9.1",
@@ -169,8 +164,8 @@ limitations under the License.
     <%_ if (cypressTests) { _%>
     "cypress": "VERSION_MANAGED_BY_CLIENT_COMMON",
     <%_ } _%>
-    "typescript": "VERSION_MANAGED_BY_CLIENT_COMMON",
-    <%_ if (protractorTests || cypressTests) { _%>
+    "typescript": "VERSION_MANAGED_BY_CLIENT_REACT",
+    <%_ if (protractorTests) { _%>
     "webdriver-manager": "12.1.7",
     <%_ } _%>
     "webpack": "VERSION_MANAGED_BY_CLIENT_REACT",
@@ -184,6 +179,9 @@ limitations under the License.
   "engines": {
     "node": ">=<%= NODE_VERSION %>"
   },
+  "config": {
+    "default_environment": "prod"
+  },
   "scripts": {
     "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
@@ -193,7 +191,7 @@ limitations under the License.
     "e2e": "<%= clientPackageManager %> run e2e:protractor",
     "e2e:headless": "<%= clientPackageManager %> run e2e:protractor:headless",
     <%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
-    "e2e": "<%= clientPackageManager %> run cypress",
+    "e2e": "<%= clientPackageManager %> run e2e:cypress",
     "e2e:headless": "<%= clientPackageManager %> run e2e:cypress:headless",
     <%_ } _%>
     <%_ if (protractorTests) { _%>
@@ -201,29 +199,31 @@ limitations under the License.
     "e2e:protractor": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
     <%_ } _%>
     <%_ if (cypressTests) { _%>
-    "e2e:cypress:headless": "cypress run --browser chrome --headless",
+    "e2e:cypress:headless": "<%= clientPackageManager %> run e2e:cypress -- --headless",
+    "e2e:cypress": "cypress run --browser chrome",
     "cypress": "cypress open",
     <%_ } _%>
-    <%_ if (protractorTests || cypressTests) { _%>
+    <%_ if (protractorTests) { _%>
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
     <%_ } _%>
+    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config <%= CLIENT_TEST_SRC_DIR %>jest.conf.js",
+    "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
+    "start": "<%= clientPackageManager %> run webpack:dev",
+    "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
     <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
     <%_ } _%>
-    "start": "<%= clientPackageManager %> run webpack:dev",
-    "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",
-    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config <%= CLIENT_TEST_SRC_DIR %>jest.conf.js",
-    "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
-    "test": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest",
+    "pretest": "<%= clientPackageManager %> run lint",
+    "test": "<%= clientPackageManager %> run jest",
     "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",
-    "test:watch": "<%= clientPackageManager %> test -- --watch",
+    "test:watch": "<%= clientPackageManager %> run jest -- --watch",
+    "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:dev",
+    "webpack:build:dev": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
+    "webpack:build:prod": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
     "webpack:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
-    "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
-    "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
-    "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
-    "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main",
+    "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:prod",
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"

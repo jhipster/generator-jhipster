@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -89,7 +89,7 @@
         <!-- Dependency versions -->
         <jhipster-dependencies.version><%= JHIPSTER_DEPENDENCIES_VERSION %></jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
-        https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
+        https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version><%= SPRING_BOOT_VERSION %></spring-boot.version>
 <%_ if (databaseType === 'sql') { _%>
         <!-- The hibernate version should match the one managed by
@@ -98,13 +98,13 @@
     <%_ if (!reactive) { _%>
         <!-- The javassist version should match the one managed by
         https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
-        <javassist.version>3.24.0-GA</javassist.version>
+        <javassist.version>3.27.0-GA</javassist.version>
     <%_ } _%>
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version><%= LIQUIBASE_VERSION %></liquibase.version>
     <%_ if (!reactive) { _%>
-        <liquibase-hibernate5.version>3.10.2</liquibase-hibernate5.version>
+        <liquibase-hibernate5.version>4.2.2</liquibase-hibernate5.version>
     <%_ } _%>
     <%_ if (devDatabaseType === 'h2Disk') { _%>
         <h2.version>1.4.200</h2.version>
@@ -115,7 +115,7 @@
         <blockhound-junit-platform.version>1.0.4.RELEASE</blockhound-junit-platform.version>
 <%_ } _%>
 <%_ if (reactive && databaseType === 'sql') { _%>
-        <r2dbc-mariadb.version>0.8.2-alpha2</r2dbc-mariadb.version>
+        <r2dbc-mariadb.version>1.0.0</r2dbc-mariadb.version>
 <%_ } _%>
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
         <jaxb-runtime.version>2.3.3</jaxb-runtime.version>
@@ -126,13 +126,13 @@
         <cassandra-driver.version>4.6.1</cassandra-driver.version>
 <%_ } _%>
         <archunit-junit5.version>0.14.1</archunit-junit5.version>
-        <mapstruct.version>1.4.0.Final</mapstruct.version>
+        <mapstruct.version>1.4.1.Final</mapstruct.version>
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
 <%_ } _%>
 <%_ if (cacheProvider === 'caffeine') { _%>
-        <caffeine.version>2.8.5</caffeine.version>
-        <typesafe.version>1.4.0</typesafe.version>
+        <caffeine.version>2.8.8</caffeine.version>
+        <typesafe.version>1.4.1</typesafe.version>
 <%_ } _%>
         <!-- Plugin versions -->
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
@@ -146,12 +146,12 @@
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
         <maven-checkstyle.version>3.1.1</maven-checkstyle.version>
-        <checkstyle.version>8.36</checkstyle.version>
+        <checkstyle.version>8.38</checkstyle.version>
         <spring-nohttp-checkstyle.version>0.0.5.RELEASE</spring-nohttp-checkstyle.version>
 <%_ if (!skipClient) { _%>
-        <frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.10.4</frontend-maven-plugin.version>
 <%_ } _%>
-        <git-commit-id-plugin.version>4.0.2</git-commit-id-plugin.version>
+        <git-commit-id-plugin.version>4.0.3</git-commit-id-plugin.version>
         <jacoco-maven-plugin.version><%= JACOCO_VERSION %></jacoco-maven-plugin.version>
         <jib-maven-plugin.version><%= JIB_VERSION %></jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
@@ -172,7 +172,7 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>io.github.jhipster</groupId>
+                <groupId>tech.jhipster</groupId>
                 <artifactId>jhipster-dependencies</artifactId>
                 <version>${jhipster-dependencies.version}</version>
                 <type>pom</type>
@@ -184,7 +184,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.github.jhipster</groupId>
+            <groupId>tech.jhipster</groupId>
             <artifactId>jhipster-framework</artifactId>
 <%_ // TODO : remove dependency from jhipster-framework
     if (reactive) { _%>
@@ -553,10 +553,6 @@
             <version>${liquibase.version}</version>
         </dependency>
 <%_ } _%>
-        <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
-        </dependency>
 <%_ if (databaseType === 'mongodb') { _%>
         <dependency>
             <groupId>com.github.cloudyrock.mongock</groupId>
@@ -588,10 +584,12 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -606,10 +604,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 <%_ if (databaseType === 'sql') { _%>
     <%_ if (!reactive) { _%>
@@ -700,14 +694,12 @@
             <scope>test</scope>
         </dependency>
 <%_ if (reactive) { _%>
-        <!-- # Temporarily disabled see https://github.com/jhipster/generator-jhipster/issues/11599
         <dependency>
             <groupId>io.projectreactor.tools</groupId>
             <artifactId>blockhound-junit-platform</artifactId>
             <version>${blockhound-junit-platform.version}</version>
             <scope>test</scope>
         </dependency>
-        -->
 <%_ } _%>
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
@@ -877,10 +869,6 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 <%_ } _%>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-spring-service-connector</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-data</artifactId>
@@ -1274,7 +1262,7 @@
                         <defaultSchemaName><% if (devDatabaseType === 'mysql') { %><%= baseName %><% } else if (devDatabaseType === 'postgresql') { %><% } %></defaultSchemaName>
                         <username><% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %></username>
                         <password><% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %></password>
-                        <referenceUrl>hibernate:spring:<%= packageName %>.domain?dialect=<% if (devDatabaseType === 'mysql') { %>org.hibernate.dialect.MySQL8Dialect<% } else if (devDatabaseType === 'mariadb') { %>org.hibernate.dialect.MariaDB103Dialect<% } else if (devDatabaseType === 'postgresql') { %>io.github.jhipster.domain.util.FixedPostgreSQL10Dialect<% } else if (devDatabaseType === 'h2Disk') { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseType === 'oracle') { %>org.hibernate.dialect.Oracle12cDialect<% } else if (devDatabaseType === 'mssql') { %>org.hibernate.dialect.SQLServer2012Dialect<% } %>&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+                        <referenceUrl>hibernate:spring:<%= packageName %>.domain?dialect=<% if (devDatabaseType === 'mysql') { %>org.hibernate.dialect.MySQL8Dialect<% } else if (devDatabaseType === 'mariadb') { %>org.hibernate.dialect.MariaDB103Dialect<% } else if (devDatabaseType === 'postgresql') { %>tech.jhipster.domain.util.FixedPostgreSQL10Dialect<% } else if (devDatabaseType === 'h2Disk') { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseType === 'oracle') { %>org.hibernate.dialect.Oracle12cDialect<% } else if (devDatabaseType === 'mssql') { %>org.hibernate.dialect.SQLServer2012Dialect<% } %>&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                         <verbose>true</verbose>
                         <logging>debug</logging>
                         <contexts>!test</contexts>
@@ -1310,7 +1298,7 @@
                         </dependency>
     <%_ if (devDatabaseType === 'postgresql') { _%>
                         <dependency>
-                            <groupId>io.github.jhipster</groupId>
+                            <groupId>tech.jhipster</groupId>
                             <artifactId>jhipster-framework</artifactId>
                             <version>${jhipster-dependencies.version}</version>
                         </dependency>
@@ -1789,6 +1777,7 @@
                 <dependency>
                     <groupId>org.mapstruct</groupId>
                     <artifactId>mapstruct-processor</artifactId>
+                    <version>${mapstruct.version}</version>
                 </dependency>
 <%_ if (databaseType === 'sql') { _%>
                 <dependency>
@@ -1884,6 +1873,30 @@
                 </pluginManagement>
             </build>
         </profile>
+<%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) { _%>
+        <profile>
+            <id>e2e</id>
+            <build>
+                <finalName>e2e</finalName>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-maven-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>repackage</id>
+                                    <goals>
+                                        <goal>repackage</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+<%_ } _%>
         <!-- jhipster-needle-maven-add-profile -->
     </profiles>
 </project>

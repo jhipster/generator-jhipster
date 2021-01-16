@@ -1,14 +1,14 @@
 /**
  * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -44,7 +44,6 @@ const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../../..
 const { JPA_DERIVED_IDENTIFIER } = require('../../../../jdl/jhipster/relationship-options');
 const logger = require('../../../../jdl/utils/objects/logger');
 const { convert } = require('../../../../jdl/converters/jdl-to-json/jdl-with-applications-to-json-converter');
-const { formatDateForLiquibase } = require('../../../../jdl/utils/format-utils');
 
 describe('JDLWithApplicationsToJSONConverter', () => {
     describe('convert', () => {
@@ -57,6 +56,31 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                 });
             });
         });
+        context('when passing a JDL object with two applications one with and one without entities', () => {
+            let result;
+
+            before(() => {
+                const jdlObject = new JDLObject();
+                const application1 = createJDLApplication({ applicationType: MONOLITH, baseName: 'app1' });
+                jdlObject.addApplication(application1);
+                const entity = new JDLEntity({
+                    name: 'EntityA',
+                });
+                const application2 = createJDLApplication({ applicationType: MONOLITH, baseName: 'app2' });
+                application2.addEntityName('EntityA');
+                jdlObject.addEntity(entity);
+                jdlObject.addApplication(application2);
+                result = convert({
+                    jdlObject,
+                });
+            });
+
+            it('should return a map with two applications', () => {
+                expect(result.size).to.equal(2);
+                expect(result.get('app1').length).to.equal(0);
+                expect(result.get('app2').length).to.equal(1);
+            });
+        });
         context('when passing a JDL object without entities', () => {
             let result;
 
@@ -66,7 +90,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                 jdlObject.addApplication(application);
                 result = convert({
                     jdlObject,
-                    creationTimestamp: Date.now(),
                 });
             });
 
@@ -104,7 +127,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     jdlObject.addApplication(application);
                     const returnedMap = convert({
                         jdlObject,
-                        creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
                     });
                     customEntitiesAreConverted = returnedMap.get('toto').every(entity => entity.name === 'A');
                     builtInEntitiesAreConverted = returnedMap
@@ -135,7 +157,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     jdlObject.addEntity(entityA);
                     const returnedMap = convert({
                         jdlObject,
-                        creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
                     });
                     convertedEntity = returnedMap.get('toto')[0];
                 });
@@ -143,7 +164,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                 it('should convert the entity', () => {
                     expect(convertedEntity).to.deep.equal({
                         applications: ['toto'],
-                        changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
                         dto: 'no',
                         embedded: false,
                         entityTableName: 'entity_a',
@@ -239,7 +259,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         jdlObject,
                         applicationName: 'toto',
                         applicationType: MONOLITH,
-                        creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
                         databaseType: SQL,
                     });
                     convertedEntity = returnedMap.get('toto')[0];
@@ -249,7 +268,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     expect(convertedEntity).to.deep.equal({
                         angularJSSuffix: 'suffix',
                         applications: ['toto'],
-                        changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
                         clientRootFolder: '../client_root_folder',
                         dto: 'mapstruct',
                         embedded: true,
@@ -295,7 +313,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     );
                     const returnedMap = convert({
                         jdlObject,
-                        creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
                     });
                     convertedEntity = returnedMap.get('toto')[0];
                 });
@@ -313,7 +330,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                 it('should set the service option to serviceClass', () => {
                     expect(convertedEntity).to.deep.equal({
                         applications: ['toto'],
-                        changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
                         dto: 'mapstruct',
                         embedded: false,
                         entityTableName: 'entity_a',
@@ -355,7 +371,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         jdlObject,
                         applicationName: 'toto',
                         applicationType: MONOLITH,
-                        creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
                         databaseType: SQL,
                     });
                     convertedEntity = returnedMap.get('toto')[0];
@@ -374,7 +389,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                 it('should set the service option to serviceClass', () => {
                     expect(convertedEntity).to.deep.equal({
                         applications: ['toto'],
-                        changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
                         dto: 'no',
                         embedded: false,
                         entityTableName: 'entity_a',
@@ -416,7 +430,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         jdlObject,
                         applicationName: 'toto',
                         applicationType: MONOLITH,
-                        creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
                         databaseType: SQL,
                     });
                     convertedEntity = returnedMap.get('toto')[0];
@@ -425,7 +438,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                 it('should prevent the entities from being searched', () => {
                     expect(convertedEntity).to.deep.equal({
                         applications: ['toto'],
-                        changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
                         dto: 'no',
                         embedded: false,
                         entityTableName: 'entity_a',
@@ -471,7 +483,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                             jdlObject,
                             applicationName: 'toto',
                             applicationType: MONOLITH,
-                            creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
                             databaseType: SQL,
                         });
                         convertedEntity = returnedMap.get('toto')[0];
@@ -480,7 +491,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     it('should convert them', () => {
                         expect(convertedEntity).to.deep.equal({
                             applications: ['toto'],
-                            changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_a',
@@ -543,7 +553,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                             jdlObject,
                             applicationName: 'toto',
                             applicationType: MONOLITH,
-                            creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
                             databaseType: SQL,
                         });
                         convertedEntity = returnedMap.get('toto')[0];
@@ -552,7 +561,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     it('should convert them', () => {
                         expect(convertedEntity).to.deep.equal({
                             applications: ['toto'],
-                            changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_a',
@@ -613,7 +621,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                             jdlObject,
                             applicationName: 'toto',
                             applicationType: MONOLITH,
-                            creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
                             databaseType: SQL,
                         });
                         convertedEntity = returnedMap.get('toto')[0];
@@ -622,7 +629,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     it('should convert them', () => {
                         expect(convertedEntity).to.deep.equal({
                             applications: ['toto'],
-                            changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'a',
@@ -668,7 +674,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                             jdlObject,
                             applicationName: 'toto',
                             applicationType: MONOLITH,
-                            creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
                             databaseType: SQL,
                         });
                         convertedEntity = returnedMap.get('toto')[0];
@@ -677,7 +682,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     it('should convert them', () => {
                         expect(convertedEntity).to.deep.equal({
                             applications: ['toto'],
-                            changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_a',
@@ -778,7 +782,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                             jdlObject,
                             applicationName: 'toto',
                             applicationType: MONOLITH,
-                            creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
                             databaseType: SQL,
                         });
                         convertedEntity = returnedMap.get('toto')[0];
@@ -787,7 +790,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     it('should convert them', () => {
                         expect(convertedEntity).to.deep.equal({
                             applications: ['toto'],
-                            changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_a',
@@ -854,7 +856,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                             jdlObject,
                             applicationName: 'toto',
                             applicationType: MONOLITH,
-                            creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
                             databaseType: SQL,
                         });
                         convertedEntity = returnedMap.get('toto')[0];
@@ -863,7 +864,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     it('should convert them', () => {
                         expect(convertedEntity).to.deep.equal({
                             applications: ['toto'],
-                            changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_a',
@@ -941,7 +941,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                             applicationName: 'toto',
                             applicationType: MONOLITH,
                             databaseType: SQL,
-                            creationTimestamp: Date.now(),
                         });
                         relationshipsForA = returned.get('toto').find(entity => entity.name === 'A').relationships;
                         relationshipsForB = returned.get('toto').find(entity => entity.name === 'B').relationships;
@@ -950,7 +949,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     it('should convert them', () => {
                         expect(relationshipsForA).to.deep.equal([
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 ownerSide: true,
@@ -958,21 +956,18 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 relationshipType: 'one-to-one',
                             },
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 relationshipName: 'b',
                                 relationshipType: 'one-to-many',
                             },
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 relationshipName: 'b',
                                 relationshipType: 'many-to-one',
                             },
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 ownerSide: true,
@@ -982,7 +977,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         ]);
                         expect(relationshipsForB).to.deep.equal([
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 ownerSide: false,
@@ -990,21 +984,18 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 relationshipType: 'one-to-one',
                             },
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 relationshipName: 'a',
                                 relationshipType: 'many-to-one',
                             },
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 relationshipName: 'a',
                                 relationshipType: 'one-to-many',
                             },
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 ownerSide: false,
@@ -1030,7 +1021,9 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 injectedFieldInTo: 'a',
                                 injectedFieldInFrom: 'b',
                                 options: {
-                                    custom: 42,
+                                    global: {
+                                        custom: 42,
+                                    },
                                 },
                             });
                             jdlObject.addEntity(entityA);
@@ -1044,7 +1037,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 applicationName: 'toto',
                                 applicationType: MONOLITH,
                                 databaseType: SQL,
-                                creationTimestamp: Date.now(),
                             });
                             convertedRelationship = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
                         });
@@ -1054,7 +1046,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 options: {
                                     custom: 42,
                                 },
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 ownerSide: true,
@@ -1078,7 +1069,9 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 injectedFieldInTo: 'a',
                                 injectedFieldInFrom: 'b',
                                 options: {
-                                    [JPA_DERIVED_IDENTIFIER]: true,
+                                    global: {
+                                        [JPA_DERIVED_IDENTIFIER]: true,
+                                    },
                                 },
                             });
                             jdlObject.addEntity(entityA);
@@ -1092,14 +1085,12 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 applicationName: 'toto',
                                 applicationType: MONOLITH,
                                 databaseType: SQL,
-                                creationTimestamp: Date.now(),
                             });
                             convertedRelationship = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
                         });
 
                         it('should convert them', () => {
                             expect(convertedRelationship).to.deep.equal({
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 ownerSide: true,
@@ -1139,7 +1130,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                             applicationName: 'toto',
                             applicationType: MONOLITH,
                             databaseType: SQL,
-                            creationTimestamp: Date.now(),
                         });
                         relationshipsForA = returned.get('toto').find(entity => entity.name === 'A').relationships;
                         relationshipsForB = returned.get('toto').find(entity => entity.name === 'B').relationships;
@@ -1148,7 +1138,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     it('should convert them', () => {
                         expect(relationshipsForA).to.deep.equal([
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 ownerSide: true,
@@ -1159,7 +1148,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         ]);
                         expect(relationshipsForB).to.deep.equal([
                             {
-                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 ownerSide: false,
@@ -1199,7 +1187,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                             applicationName: 'toto',
                             applicationType: MONOLITH,
                             databaseType: SQL,
-                            creationTimestamp: Date.now(),
                         });
                         relationshipsForA = returned.get('toto').find(entity => entity.name === 'A').relationships;
                         relationshipsForB = returned.get('toto').find(entity => entity.name === 'B').relationships;
@@ -1209,7 +1196,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         expect(relationshipsForA).to.deep.equal([
                             {
                                 javadoc: 'A to B',
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 ownerSide: true,
@@ -1219,7 +1205,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         ]);
                         expect(relationshipsForB).to.deep.equal([
                             {
-                                otherEntityField: 'id',
                                 javadoc: 'A to B but in the destination',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
@@ -1257,7 +1242,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 applicationName: 'toto',
                                 applicationType: MONOLITH,
                                 databaseType: SQL,
-                                creationTimestamp: Date.now(),
                             });
                             relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
                             relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
@@ -1265,7 +1249,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
 
                         it('should add the relationship for the source entity', () => {
                             expect(relationshipFromSourceToDestination).to.deep.equal({
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 ownerSide: true,
@@ -1303,7 +1286,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 applicationName: 'toto',
                                 applicationType: MONOLITH,
                                 databaseType: SQL,
-                                creationTimestamp: Date.now(),
                             });
                             relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
                             relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
@@ -1311,7 +1293,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
 
                         it('should add the relationship for the source entity', () => {
                             expect(relationshipFromSourceToDestination).to.deep.equal({
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 relationshipName: 'b',
@@ -1320,7 +1301,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         });
                         it('should add the relationship for the destination entity', () => {
                             expect(relationshipFromDestinationToSource).to.deep.equal({
-                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 relationshipName: 'a',
@@ -1354,7 +1334,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 applicationName: 'toto',
                                 applicationType: MONOLITH,
                                 databaseType: SQL,
-                                creationTimestamp: Date.now(),
                             });
                             relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
                             relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
@@ -1362,7 +1341,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
 
                         it('should add the relationship for the source entity', () => {
                             expect(relationshipFromSourceToDestination).to.deep.equal({
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 relationshipName: 'b',
@@ -1399,7 +1377,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 applicationName: 'toto',
                                 applicationType: MONOLITH,
                                 databaseType: SQL,
-                                creationTimestamp: Date.now(),
                             });
                             relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
                             relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
@@ -1407,7 +1384,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
 
                         it('should add the relationship for the source entity', () => {
                             expect(relationshipFromSourceToDestination).to.deep.equal({
-                                otherEntityField: 'id',
                                 otherEntityName: 'b',
                                 otherEntityRelationshipName: 'a',
                                 ownerSide: true,
@@ -1417,7 +1393,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         });
                         it('should add the relationship for the destination entity', () => {
                             expect(relationshipFromDestinationToSource).to.deep.equal({
-                                otherEntityField: 'id',
                                 otherEntityName: 'a',
                                 otherEntityRelationshipName: 'b',
                                 ownerSide: false,
@@ -1455,7 +1430,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 applicationName: 'toto',
                                 applicationType: MONOLITH,
                                 databaseType: SQL,
-                                creationTimestamp: Date.now(),
                             });
                             relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
                             relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
@@ -1509,7 +1483,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 applicationName: 'toto',
                                 applicationType: MONOLITH,
                                 databaseType: SQL,
-                                creationTimestamp: Date.now(),
                             });
                             relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
                             relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
@@ -1561,7 +1534,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 applicationName: 'toto',
                                 applicationType: MONOLITH,
                                 databaseType: SQL,
-                                creationTimestamp: Date.now(),
                             });
                             relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
                             relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
@@ -1613,7 +1585,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                                 applicationName: 'toto',
                                 applicationType: MONOLITH,
                                 databaseType: SQL,
-                                creationTimestamp: Date.now(),
                             });
                             relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
                             relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
@@ -1714,7 +1685,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     jdlObject.addApplication(tutuApplication);
                     const returnedMap = convert({
                         jdlObject,
-                        creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
                     });
                     convertedEntitiesForTataApplication = returnedMap.get('tata');
                     convertedEntitiesForTutuApplication = returnedMap.get('tutu');
@@ -1724,7 +1694,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     expect(convertedEntitiesForTataApplication).to.deep.equal([
                         {
                             applications: ['tata'],
-                            changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_a',
@@ -1740,7 +1709,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         },
                         {
                             applications: ['tata'],
-                            changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 2 }),
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_b',
@@ -1756,7 +1724,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         },
                         {
                             applications: ['tata', 'tutu'],
-                            changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 3 }),
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_c',
@@ -1774,7 +1741,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                     expect(convertedEntitiesForTutuApplication).to.deep.equal([
                         {
                             applications: ['tata', 'tutu'],
-                            changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 3 }),
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_c',
@@ -1790,7 +1756,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         },
                         {
                             applications: ['tutu'],
-                            changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 4 }),
                             dto: 'mapstruct',
                             embedded: false,
                             entityTableName: 'entity_d',
@@ -1806,7 +1771,6 @@ describe('JDLWithApplicationsToJSONConverter', () => {
                         },
                         {
                             applications: ['tutu'],
-                            changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 5 }),
                             dto: 'no',
                             embedded: false,
                             entityTableName: 'entity_e',

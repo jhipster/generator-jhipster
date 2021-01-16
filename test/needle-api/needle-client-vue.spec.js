@@ -15,9 +15,6 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         if (!jhContext) {
             this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
         }
-        this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupClientOptions(this, jhContext);
     }
 
     get initializing() {
@@ -51,7 +48,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                     'entityFileName',
                     'entityUrl',
                     VUE,
-                    'microServiceName'
+                    'microserviceName'
                 );
             },
         };

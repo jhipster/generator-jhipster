@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,12 +38,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false,
-        });
         // This adds support for a `--auth` flag
         this.option('auth', {
             desc: 'Provide authentication type for the application',
@@ -111,6 +105,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         return {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
+            askForAdminUi: prompts.askForAdminUi,
             askForClientTheme: prompts.askForClientTheme,
             askForClientThemeVariant: prompts.askForClientThemeVariant,
         };
@@ -177,6 +172,10 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
                 this.loadTranslationConfig();
             },
 
+            createUserManagementEntities() {
+                this.createUserManagementEntities();
+            },
+
             validateSkipServer() {
                 if (
                     this.jhipsterConfig.skipServer &&
@@ -226,7 +225,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
 
                 this.styleSheetExt = 'scss';
-                this.pkType = this.getPkType(this.databaseType);
                 this.apiUaaPath = `${this.authenticationType === 'uaa' ? `services/${this.uaaBaseName.toLowerCase()}/` : ''}`;
                 this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.buildTool) + constants.CLIENT_DIST_DIR;
 
@@ -254,6 +252,12 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
     _default() {
         return {
             ...super._missingPreDefault(),
+
+            loadUserManagementEntities() {
+                if (!this.configOptions.sharedEntities) return;
+                // Make user entity available to templates.
+                this.user = this.configOptions.sharedEntities.User;
+            },
 
             insight() {
                 statistics.sendSubGenEvent('generator', 'client', {
@@ -306,6 +310,41 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _postWriting() {
         return {
+            packageJsonScripts() {
+                if (this.skipClient) return;
+                const packageJsonStorage = this.createStorage('package.json');
+                const scriptsStorage = packageJsonStorage.createStorage('scripts');
+
+                const packageJsonConfigStorage = packageJsonStorage.createStorage('config').createProxy();
+                if (process.env.JHI_PROFILE) {
+                    packageJsonConfigStorage.default_environment = process.env.JHI_PROFILE.includes('dev') ? 'dev' : 'prod';
+                }
+
+                const devDependencies = packageJsonStorage.createStorage('devDependencies');
+                devDependencies.set('wait-on', 'VERSION_MANAGED_BY_CLIENT_COMMON');
+                devDependencies.set('concurrently', 'VERSION_MANAGED_BY_CLIENT_COMMON');
+
+                if (this.clientFramework === 'react') {
+                    scriptsStorage.set(
+                        'ci:frontend:test',
+                        'npm run webpack:build:$npm_package_config_default_environment && npm run test-ci'
+                    );
+                } else {
+                    scriptsStorage.set('ci:frontend:build', 'npm run webpack:build:$npm_package_config_default_environment');
+                    scriptsStorage.set('ci:frontend:test', 'npm run ci:frontend:build && npm test');
+                }
+
+                if (scriptsStorage.get('e2e')) {
+                    scriptsStorage.set({
+                        'ci:server:await':
+                            'echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"',
+                        'pree2e:headless': 'npm run ci:server:await',
+                        'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
+                        'e2e:dev': 'concurrently -k -s first "./mvnw" "e2e:run"',
+                    });
+                }
+            },
+
             packageJson() {
                 if (this.skipClient) return;
                 this.replacePackageJsonVersions(

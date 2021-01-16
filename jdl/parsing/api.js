@@ -1,13 +1,14 @@
-/** Copyright 2013-2020 the original author or authors from the JHipster project.
+/**
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,10 +19,10 @@
 
 const _ = require('lodash');
 const { EOF } = require('chevrotain');
+const JDLAstBuilderVisitor = require('./jdl-ast-builder-visitor');
 const { JDLLexer, tokens } = require('./lexer/lexer');
 const JDLParser = require('./jdl-parser');
 const { performAdditionalSyntaxChecks } = require('./validator');
-const { buildAst } = require('./ast-builder');
 const { checkTokens } = require('./self-checks/parsing-system-checker');
 
 module.exports = {
@@ -36,7 +37,9 @@ const rules = parserSingleton.getGAstProductions();
 checkTokens(Object.values(tokens), Object.values(rules));
 
 function parse(input, startRule = 'prog') {
-    return buildAst(getCst(input, startRule));
+    const cst = getCst(input, startRule);
+    const astBuilderVisitor = new JDLAstBuilderVisitor();
+    return astBuilderVisitor.visit(cst);
 }
 
 function getCst(input, startRule = 'prog') {
@@ -64,11 +67,22 @@ function getCst(input, startRule = 'prog') {
 }
 
 function throwParserError(errors) {
-    const parseError = errors[0];
-    const errorMessage = `${parseError.name}: ${parseError.message}`;
-    const token = parseError.token;
+    const parserError = errors[0];
+    if (parserError.name === 'MismatchedTokenException') {
+        throwErrorAboutInvalidToken(parserError);
+    }
+    const errorMessage = `${parserError.name}: ${parserError.message}`;
+    const { token } = parserError;
     const errorMessageLocation = token.tokenType !== EOF ? `\n\tat line: ${token.startLine}, column: ${token.startColumn}` : '';
     throw Error(`${errorMessage}${errorMessageLocation}`);
+}
+
+function throwErrorAboutInvalidToken(parserError) {
+    const { token } = parserError;
+    const errorMessageBeginning = `Found an invalid token '${token.image}'`;
+    const errorMessageLocation = token.tokenType !== EOF ? `, at line: ${token.startLine} and column: ${token.startColumn}` : '';
+    const errorMessageComplement = 'Please make sure your JDL content does not use invalid characters, keywords or options.';
+    throw Error(`${parserError.name}: ${errorMessageBeginning}${errorMessageLocation}.\n\t${errorMessageComplement}`);
 }
 
 function throwSyntaxError(errors) {
@@ -82,7 +96,7 @@ function throwSyntaxError(errors) {
 function getSyntacticAutoCompleteSuggestions(input, startRule = 'prog') {
     const lexResult = JDLLexer.tokenize(input);
 
-    // ".input" is a setter which will reset the parsers's internal state.
+    // ".input" is a setter which will reset the parsers' internal state.
     parserSingleton.input = lexResult.tokens;
 
     const syntacticSuggestions = parserSingleton.computeContentAssist(startRule, lexResult.tokens);

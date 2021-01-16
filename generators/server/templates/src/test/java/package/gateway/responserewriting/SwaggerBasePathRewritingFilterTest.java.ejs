@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -35,12 +35,12 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Tests {@link SwaggerBasePathRewritingFilter} class.
  */
-public class SwaggerBasePathRewritingFilterTest {
+class SwaggerBasePathRewritingFilterTest {
 
     private SwaggerBasePathRewritingFilter filter = new SwaggerBasePathRewritingFilter();
 
     @Test
-    public void shouldFilter_on_default_swagger_url() {
+    void shouldFilter_on_default_swagger_url() {
 
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/v3/api-docs");
         RequestContext.getCurrentContext().setRequest(request);
@@ -52,7 +52,7 @@ public class SwaggerBasePathRewritingFilterTest {
      * Zuul DebugFilter can be triggered by "deug" parameter.
      */
     @Test
-    public void shouldFilter_on_default_swagger_url_with_param() {
+    void shouldFilter_on_default_swagger_url_with_param() {
 
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/v3/api-docs");
         request.setParameter("debug", "true");
@@ -62,7 +62,7 @@ public class SwaggerBasePathRewritingFilterTest {
     }
 
     @Test
-    public void shouldNotFilter_on_wrong_url() {
+    void shouldNotFilter_on_wrong_url() {
 
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/management/info");
         RequestContext.getCurrentContext().setRequest(request);
@@ -71,7 +71,7 @@ public class SwaggerBasePathRewritingFilterTest {
     }
 
     @Test
-    public void run_on_valid_response() throws Exception {
+    void run_on_valid_response() throws Exception {
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/service1/v3/api-docs");
         RequestContext context = RequestContext.getCurrentContext();
         context.setRequest(request);
@@ -90,7 +90,7 @@ public class SwaggerBasePathRewritingFilterTest {
     }
 
     @Test
-    public void run_on_valid_response_gzip() throws Exception {
+    void run_on_valid_response_gzip() throws Exception {
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/service1/v3/api-docs");
         RequestContext context = RequestContext.getCurrentContext();
         context.setRequest(request);

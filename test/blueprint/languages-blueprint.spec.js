@@ -65,6 +65,7 @@ describe('JHipster languages generator with blueprint', () => {
 
             it('creates expected files from jhipster languages generator', () => {
                 assert.file(expectedFiles.i18nDeJson);
+                assert.file(expectedFiles.i18nAdminDeJson);
             });
         });
     });

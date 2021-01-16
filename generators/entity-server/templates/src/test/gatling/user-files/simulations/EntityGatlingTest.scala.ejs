@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,7 +38,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
     // Log failed HTTP requests
     //context.getLogger("io.gatling.http").setLevel(Level.valueOf("DEBUG"))
 
-    val baseURL = Option(System.getProperty("baseURL")) getOrElse """http://localhost:8080"""
+    val baseURL = Option(System.getProperty("baseURL")) getOrElse """http://localhost:<%= serverPort %>"""
 
     val httpConf = http
         .baseUrl(baseURL)
@@ -186,10 +186,9 @@ class <%= entityClass %>GatlingTest extends Simulation {
             .post("<% if (applicationType === 'microservice') { %>/services/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
-                "id":null
-                <%_ for (idx in fields) { _%>
-                , "<%= fields[idx].fieldName %>":<% if (fields[idx].fieldType === 'String') { %>"SAMPLE_TEXT"<% } else if (['Integer', 'BigDecimal'].includes(fields[idx].fieldType)) { %>"0"<% } else if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType)) { %>"2020-01-01T00:00:00.000Z"<% } else if (fields[idx].fieldIsEnum) { %>"<%= fields[idx].enumValues[0].name %>"<% } else { %>null<% } %>
-                <%_ } _%>
+                <%_ fields.forEach((field, idx) => { _%>
+                <%= idx === 0 ? '' : ', ' %>"<%= field.fieldName %>":<% if (field.fieldType === 'String') { %>"SAMPLE_TEXT"<% } else if (['Integer', 'BigDecimal'].includes(field.fieldType)) { %>"0"<% } else if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(field.fieldType)) { %>"2020-01-01T00:00:00.000Z"<% } else if (field.fieldIsEnum) { %>"<%= field.enumValues[0].name %>"<% } else { %>null<% } %>
+                <%_ }); _%>
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_<%= entityInstance %>_url"))).exitHereIfFailed

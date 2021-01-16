@@ -1,14 +1,14 @@
 /**
  * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,6 +28,9 @@ const CouchbaseReservedKeywords = require('./reserved-keywords/couchbase');
 const OracleReservedKeywords = require('./reserved-keywords/oracle');
 const MsSQLReservedKeywords = require('./reserved-keywords/mssql');
 const Neo4JReservedKeywords = require('./reserved-keywords/neo4j');
+const applicationOptions = require('./application-options');
+
+const clientFrameworks = applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK];
 
 const ReservedWords = {
     JHIPSTER: JHipsterReservedKeywords,
@@ -66,11 +69,11 @@ function isReservedTableName(keyword, databaseType) {
 
 function isReservedFieldName(keyword, clientFramework) {
     if (clientFramework) {
-        if (clientFramework === 'angularX') {
+        if (clientFramework === clientFrameworks.angularX) {
             // Angular client framework
             return isReserved(keyword, 'ANGULAR') || isReserved(keyword, 'TYPESCRIPT') || isReserved(keyword, 'JAVA');
         }
-        if (clientFramework === 'react') {
+        if (clientFramework === clientFrameworks.react) {
             // React client framework
             return isReserved(keyword, 'TYPESCRIPT') || isReserved(keyword, 'JAVA');
         }

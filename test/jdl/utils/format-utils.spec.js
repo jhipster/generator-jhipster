@@ -1,14 +1,14 @@
 /**
  * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const { formatDateForLiquibase, formatComment } = require('../../../jdl/utils/format-utils');
+const { formatComment } = require('../../../jdl/utils/format-utils');
 
 describe('FormatUtils', () => {
     describe('formatComment', () => {
@@ -81,35 +81,6 @@ describe('FormatUtils', () => {
                 it(`should return ${buildTestTitle(expectedResult3)}`, () => {
                     expect(formatComment(multiLineComment3)).to.equal(expectedResult3);
                 });
-            });
-        });
-    });
-    describe('formatDateForLiquibase', () => {
-        context('when passing both arguments', () => {
-            let result;
-
-            before(() => {
-                result = formatDateForLiquibase({ date: new Date(Date.UTC(0, 0, 0, 0, 0, 0)), increment: 1 });
-            });
-
-            it('should use the increment with the passed date', () => {
-                expect(result).to.equal('18991231000100');
-            });
-        });
-        context('when not passing the date', () => {
-            it('should not fail', () => {
-                expect(formatDateForLiquibase().length).to.equal(14);
-            });
-        });
-        context('when not passing the increment', () => {
-            let result;
-
-            before(() => {
-                result = formatDateForLiquibase({ date: new Date(Date.UTC(0, 0, 0, 0, 0, 0)) });
-            });
-
-            it('should format the current time for liquibase with no increment', () => {
-                expect(result).to.equal('18991231000000');
             });
         });
     });

@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -53,7 +53,7 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
     <Row>
       <Col md="8">
         <h2 data-cy="<%= entityInstance %>DetailsHeading">
-          <Translate contentKey="<%= i18nKeyPrefix %>.detail.title"><%= entityClass %></Translate> [<b>{<%= entityInstance %>Entity.id}</b>]
+          <Translate contentKey="<%= i18nKeyPrefix %>.detail.title"><%= entityClass %></Translate> [<strong>{<%= entityInstance %>Entity.id}</strong>]
         </h2>
           <dl className="jh-entity-details">
           <%_ for (idx in fields) {
@@ -143,11 +143,7 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
           )
       ) : null
     }                  <%_ } else { _%>
-                        <%_ if (dto === 'no') { _%>
                 {(<%= entityInstance + "Entity." + relationshipFieldName %>) ? <%= entityInstance + "Entity." + relationshipFieldName + "." + otherEntityField %> : ''}
-                            <%_ } else { _%>
-                {<%= entityInstance + "Entity." + relationshipFieldName + otherEntityFieldCapitalized %> ? <%= entityInstance + "Entity." + relationshipFieldName + otherEntityFieldCapitalized %> : ''}
-                        <%_ } _%>
                     <%_ } _%>
                 <%_ } else { _%>
                     <%_ if (relationshipType === 'many-to-many') { _%>
@@ -159,11 +155,7 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
         ) : null
     }
                     <%_ } else { _%>
-                        <%_ if (dto === 'no') { _%>
                 {(<%= entityInstance + "Entity." + relationshipFieldName %>) ? <%= entityInstance + "Entity." + relationshipFieldName + "." + otherEntityField %> : ''}
-                        <%_ } else { _%>
-                {<%= entityInstance + "Entity." + relationshipFieldName + otherEntityFieldCapitalized %> ? <%= entityInstance + "Entity." + relationshipFieldName + otherEntityFieldCapitalized %> : ''}
-                        <%_ } _%>
                     <%_ } _%>
                 <%_ } _%>
             </dd>

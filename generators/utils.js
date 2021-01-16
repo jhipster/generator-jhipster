@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -86,8 +86,7 @@ function rewriteFile(args, generator) {
  * @param {object} generator reference to the generator
  */
 function replaceContent(args, generator) {
-    args.path = args.path || process.cwd();
-    const fullPath = path.join(args.path, args.file);
+    const fullPath = generator.destinationPath(args.file);
 
     const re = args.regex ? new RegExp(args.pattern, 'g') : args.pattern;
 
@@ -142,6 +141,11 @@ function rewrite(args) {
             otherwiseLineIndex = i;
         }
     });
+
+    if (otherwiseLineIndex === -1) {
+        console.warn(`Needle ${args.needle} not found at file ${args.file}`);
+        return args.haystack;
+    }
 
     let spaces = 0;
     while (lines[otherwiseLineIndex].charAt(spaces) === ' ') {
@@ -239,7 +243,7 @@ function copyWebResource(source, dest, regex, type, generator, opt = {}, templat
  */
 function renderContent(source, generator, context, options, cb) {
     options = {
-        root: generator.templatePath(),
+        root: options.root || generator.jhipsterTemplatesFolders || generator.templatePath(),
         context: generator,
         ...options,
     };

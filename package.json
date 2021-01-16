@@ -1,13 +1,7 @@
 {
     "name": "generator-jhipster",
-    "version": "6.10.3",
+    "version": "6.10.5",
     "description": "Spring Boot + Angular/React in one handy generator",
-    "files": [
-        "cli",
-        "generators",
-        "jdl",
-        "utils"
-    ],
     "keywords": [
         "yeoman-generator",
         "Java",
@@ -25,6 +19,15 @@
     ],
     "homepage": "https://www.jhipster.tech/",
     "bugs": "https://github.com/jhipster/generator-jhipster/issues",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/jhipster/generator-jhipster.git"
+    },
+    "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/generator-jhipster"
+    },
+    "license": "Apache-2.0",
     "author": {
         "name": "Julien Dubois",
         "email": "",
@@ -32,100 +35,91 @@
     },
     "main": "cli/index.js",
     "bin": {
-        "jhipster": "./cli/jhipster.js"
+        "jhipster": "cli/jhipster.js"
     },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/jhipster/generator-jhipster.git"
-    },
+    "files": [
+        "cli",
+        "generators",
+        "jdl",
+        "utils"
+    ],
     "scripts": {
-        "prettier:format": "prettier --write \"{,**/}*.{js,json,md,yml,java}\"",
-        "prettier:check": "prettier --check \"{,**/}*.{js,json,md,yml,java}\"",
         "completion": "tabtab install --name jhipster --auto",
-        "lint": "npm run eslint && npm run ejs-lint",
-        "lint-fix": "npm run prettier:format && npm run eslint -- --fix",
-        "eslint": "eslint .",
         "ejs-lint": "mocha test/ejslint.js",
         "ejslint": "ejslint",
-        "pretest": "npm run lint",
-        "test": "mocha --no-insight --forbid-only --parallel",
-        "jsdoc": "jsdoc --configure jsdoc-conf.json",
+        "eslint": "eslint .",
         "jdl:test": "mocha test/jdl --no-insight --forbid-only -p",
-        "jdl:test-watch": "npm run jdl:test -- --watch"
+        "jdl:test-watch": "npm run jdl:test -- --watch",
+        "jsdoc": "jsdoc --configure jsdoc-conf.json",
+        "lint": "npm run eslint && npm run ejs-lint",
+        "lint-fix": "npm run prettier:format && npm run eslint -- --fix",
+        "prettier:check": "prettier --check \"{,**/}*.{js,json,md,yml,java}\"",
+        "prettier:format": "prettier --write \"{,**/}*.{js,json,md,yml,java}\"",
+        "pretest": "npm run lint",
+        "test": "mocha --no-insight --forbid-only --parallel"
     },
     "dependencies": {
-        "aws-sdk": "2.756.0",
-        "axios": "0.20.0",
+        "aws-sdk": "2.809.0",
+        "axios": "0.21.0",
         "chalk": "4.1.0",
-        "chevrotain": "7.0.2",
-        "commander": "6.1.0",
+        "chevrotain": "7.0.3",
+        "commander": "7.0.0-1",
         "conf": "7.1.2",
         "didyoumean": "1.2.1",
         "ejs": "3.1.5",
         "faker": "5.1.0",
+        "find-up": "5.0.0",
         "glob": "7.1.6",
         "gulp-filter": "6.0.0",
         "insight": "0.10.3",
-        "js-object-pretty-print": "0.3.0",
-        "js-yaml": "3.14.0",
+        "js-yaml": "3.14.1",
         "lodash": "4.17.20",
-        "meow": "7.1.1",
-        "mkdirp": "1.0.4",
+        "minimatch": "3.0.4",
         "normalize-path": "3.0.0",
         "ora": "5.1.0",
         "os-locale": "5.0.0",
         "parse-gitignore": "1.0.1",
         "pluralize": "8.0.0",
-        "prettier": "2.1.2",
-        "prettier-plugin-java": "0.8.2",
+        "prettier": "2.2.1",
+        "prettier-plugin-java": "1.0.1",
+        "prettier-plugin-packagejson": "2.2.8",
         "progress": "2.0.3",
         "randexp": "0.5.3",
-        "semver": "7.3.2",
+        "semver": "7.3.4",
         "shelljs": "0.8.4",
-        "tabtab": "2.2.2",
-        "test": "^0.6.0",
         "then-request": "6.0.2",
         "through2": "4.0.2",
-        "uuid": "8.3.0",
+        "uuid": "8.3.2",
         "winston": "3.3.3",
         "yeoman-environment": "2.10.3",
         "yeoman-generator": "4.12.0"
     },
     "devDependencies": {
-        "@openapitools/openapi-generator-cli": "1.0.18-4.3.1",
         "chai": "4.2.0",
         "ejs-lint": "1.1.0",
-        "eslint": "7.9.0",
-        "eslint-config-airbnb-base": "14.2.0",
-        "eslint-config-prettier": "6.11.0",
+        "eslint": "7.15.0",
+        "eslint-config-airbnb-base": "14.2.1",
+        "eslint-config-prettier": "7.0.0",
         "eslint-plugin-chai-friendly": "^0.6.0",
-        "eslint-plugin-import": "2.22.0",
+        "eslint-plugin-import": "2.22.1",
         "eslint-plugin-mocha": "8.0.0",
-        "eslint-plugin-prettier": "3.1.4",
+        "eslint-plugin-prettier": "3.3.0",
         "fs-extra": "9.0.1",
         "jsdoc": "3.6.6",
-        "mocha": "8.1.3",
+        "mocha": "8.2.1",
         "proxyquire": "2.1.3",
-        "sinon": "9.0.3",
+        "sinon": "9.2.2",
         "sinon-chai": "3.5.0",
         "yeoman-assert": "3.1.1",
         "yeoman-test": "3.0.0"
-    },
-    "resolutions": {
-        "inquirer": "6.3.1"
     },
     "engines": {
         "node": ">=12.12.0",
         "npm": ">=6.14.4"
     },
-    "license": "Apache-2.0",
     "collective": {
         "type": "opencollective",
         "url": "https://opencollective.com/generator-jhipster",
         "logo": "https://opencollective.com/opencollective/logo.txt"
-    },
-    "funding": {
-        "type": "opencollective",
-        "url": "https://opencollective.com/generator-jhipster"
     }
 }

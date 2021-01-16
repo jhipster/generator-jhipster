@@ -46,7 +46,8 @@
                     "code": "Codice",
                     "count": "Numero",
                     "mean": "Mediana",
-                    "average": "Media"
+                    "average": "Media",
+                    "max": "Massima"
                 },
                 "code": {
                     "ok": "Ok",

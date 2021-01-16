@@ -10,7 +10,6 @@ import <%=jhiPrefixCapitalized%>TrackerClass from '@/admin/tracker/tracker.compo
 import TrackerService from '@/admin/tracker/tracker.service';
 
 const localVue = createLocalVue();
-const mockedAxios: any = axios;
 let trackerServiceStub: any;
 let listenerObserver: Observer<any>;
 
@@ -21,16 +20,16 @@ const i18n = config.initI18N(localVue);
 const store = config.initVueXStore(localVue);
 localVue.component('font-awesome-icon', FontAwesomeIcon);
 
-jest.mock('axios', () => ({
-  get: jest.fn()
-}));
+const axiosStub = {
+  get: sinon.stub(axios, 'get'),
+};
 
 describe('<%=jhiPrefixCapitalized%>Tracker', () => {
   let wrapper: Wrapper<<%=jhiPrefixCapitalized%>TrackerClass>;
   let <%=jhiPrefix%>Tracker: <%=jhiPrefixCapitalized%>TrackerClass;
 
   beforeEach(() => {
-    mockedAxios.get.mockReturnValue(Promise.resolve({ data: {} }));
+    axiosStub.get.resolves({ data: {} });
     trackerServiceStub = sinon.createStubInstance<TrackerService>(TrackerService);
     trackerServiceStub.receive = sinon.stub().callsFake(() => new Observable(observer => listenerObserver = observer));
     wrapper = shallowMount<<%=jhiPrefixCapitalized%>TrackerClass>(<%=jhiPrefixCapitalized%>Tracker, {

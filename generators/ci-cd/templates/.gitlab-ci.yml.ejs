@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -55,6 +55,17 @@ nohttp:
     stage: check
     script:
         - ./gradlew checkstyleNohttp --no-daemon
+<%_ if (cicdIntegrations.includes('snyk')) { _%>
+
+dependency-scanning:
+    stage: check
+    script:
+        - curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
+        - chmod +x snyk
+        - ./snyk test --all-projects
+        - ./snyk monitor --all-projects
+    allow_failure: true
+<%_ } _%>
 
 gradle-compile:
     stage: build
@@ -182,6 +193,17 @@ nohttp:
     stage: check
     script:
         - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
+<%_ if (cicdIntegrations.includes('snyk')) { _%>
+
+dependency-scanning:
+    stage: check
+    script:
+        - curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
+        - chmod +x snyk
+        - ./snyk test --all-projects
+        - ./snyk monitor --all-projects
+    allow_failure: true
+<%_ } _%>
 
 maven-compile:
     stage: build
@@ -296,7 +318,7 @@ webpack-build:
     stage: build
     script:
         - <%= clientPackageManager %> install
-        - <%= clientPackageManager %> run webpack:build
+        - <%= clientPackageManager %> run ci:webpack:build
     artifacts:
         paths:
             - build/

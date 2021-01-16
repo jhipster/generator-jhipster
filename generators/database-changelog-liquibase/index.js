@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,16 +17,18 @@
  * limitations under the License.
  */
 const assert = require('assert');
+const _ = require('lodash');
 
 const BaseGenerator = require('../generator-base');
 const { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } = require('./files');
+const { stringify } = require('../../utils');
 
 const constants = require('../generator-constants');
 
 const { LIQUIBASE_DTD_VERSION } = constants;
-const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../../utils/entity');
 const { prepareFieldForTemplates } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
+const { prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase');
 
 module.exports = class extends BaseGenerator {
     constructor(args, options) {
@@ -35,6 +37,129 @@ module.exports = class extends BaseGenerator {
 
         assert(this.options.databaseChangelog, 'Changelog is required');
         this.databaseChangelog = this.options.databaseChangelog;
+
+        // Set number of rows to be generated
+        this.numberOfRows = 10;
+    }
+
+    _preparing() {
+        return {
+            prepareEntityForTemplates() {
+                const databaseChangelog = this.databaseChangelog;
+                this.entity = this.configOptions.sharedEntities[databaseChangelog.entityName];
+                if (!this.entity) {
+                    throw new Error(`Shared entity ${databaseChangelog.entityName} was not found`);
+                }
+
+                if (databaseChangelog.type === 'entity-new') {
+                    this.fields = this.entity.fields.map(field => prepareFieldForLiquibaseTemplates(this.entity, field));
+                } else {
+                    this.addedFields = this.databaseChangelog.addedFields
+                        .map(field => prepareFieldForTemplates(this.entity, field, this))
+                        .map(field => prepareFieldForLiquibaseTemplates(this.entity, field));
+                    this.removedFields = this.databaseChangelog.removedFields
+                        .map(field => prepareFieldForTemplates(this.entity, field, this))
+                        .map(field => prepareFieldForLiquibaseTemplates(this.entity, field));
+                }
+            },
+
+            setupReproducibility() {
+                if (this.jhipsterConfig.skipServer || this.entity.skipServer) {
+                    return;
+                }
+
+                // In order to have consistent results with Faker, restart seed with current entity name hash.
+                this.entity.resetFakerSeed();
+            },
+
+            prepareFakeData() {
+                const databaseChangelog = this.databaseChangelog;
+                this.entity.liquibaseFakeData = [];
+                for (let rowNumber = 0; rowNumber < this.numberOfRows; rowNumber++) {
+                    const rowData = {};
+                    const fields = databaseChangelog.type === 'entity-new' ? this.fields : this.addedFields;
+                    fields.forEach((field, idx) => {
+                        if (field.derived) {
+                            Object.defineProperty(rowData, field.fieldName, {
+                                get: () => {
+                                    if (
+                                        !field.derivedEntity.liquibaseFakeData ||
+                                        rowNumber >= field.derivedEntity.liquibaseFakeData.length
+                                    ) {
+                                        return undefined;
+                                    }
+                                    return field.derivedEntity.liquibaseFakeData[rowNumber][field.fieldName];
+                                },
+                            });
+                            return;
+                        }
+                        let data;
+                        if (field.id && field.fieldType === 'Long') {
+                            data = rowNumber + 1;
+                        } else {
+                            data = field.generateFakeData();
+                        }
+                        rowData[field.fieldName] = data;
+                    });
+
+                    this.entity.liquibaseFakeData.push(rowData);
+                }
+                this.configOptions.sharedLiquibaseFakeData = this.configOptions.sharedLiquibaseFakeData || {};
+                this.configOptions.sharedLiquibaseFakeData[_.upperFirst(this.entity.name)] = this.entity.liquibaseFakeData;
+            },
+        };
+    }
+
+    get preparing() {
+        return this._preparing();
+    }
+
+    _preparingRelationships() {
+        return {
+            prepareRelationshipsForTemplates() {
+                const databaseChangelog = this.databaseChangelog;
+                if (databaseChangelog.type === 'entity-new') {
+                    this.relationships = this.entity.relationships.map(relationship =>
+                        this._prepareRelationshipForTemplates(this.entity, relationship)
+                    );
+                } else {
+                    this.addedRelationships = this.databaseChangelog.addedRelationships
+                        .map(relationship => {
+                            const otherEntityName = this._.upperFirst(relationship.otherEntityName);
+                            relationship.otherEntity = this.configOptions.sharedEntities[otherEntityName];
+                            if (!relationship.otherEntity) {
+                                throw new Error(
+                                    `Error at entity ${this.entity.name}: could not find the entity of the relationship ${stringify(
+                                        relationship
+                                    )}`
+                                );
+                            }
+                            return relationship;
+                        })
+                        .map(relationship => prepareRelationshipForTemplates(this.entity, relationship, this))
+                        .map(relationship => this._prepareRelationshipForTemplates(this.entity, relationship));
+                    this.removedRelationships = this.databaseChangelog.removedRelationships
+                        .map(relationship => {
+                            const otherEntityName = this._.upperFirst(relationship.otherEntityName);
+                            relationship.otherEntity = this.configOptions.oldSharedEntities[otherEntityName];
+                            if (!relationship.otherEntity) {
+                                throw new Error(
+                                    `Error at entity ${this.entity.name}: could not find the entity of the relationship ${stringify(
+                                        relationship
+                                    )}`
+                                );
+                            }
+                            return relationship;
+                        })
+                        .map(relationship => prepareRelationshipForTemplates(this.entity, relationship, this, true))
+                        .map(relationship => this._prepareRelationshipForTemplates(this.entity, relationship));
+                }
+            },
+        };
+    }
+
+    get preparingRelationships() {
+        return this._preparingRelationships();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -43,36 +168,6 @@ module.exports = class extends BaseGenerator {
             setupConstants() {
                 // Make constants available in templates
                 this.LIQUIBASE_DTD_VERSION = LIQUIBASE_DTD_VERSION;
-            },
-            prepareEntityForTemplates() {
-                const databaseChangelog = this.databaseChangelog;
-                const entityConfig = this.getEntityConfig(databaseChangelog.entityName).getAll();
-                entityConfig.name = entityConfig.name || databaseChangelog.entityName;
-
-                loadRequiredConfigIntoEntity(entityConfig, this.jhipsterConfig);
-                this.entity = prepareEntityForTemplates(entityConfig, this);
-
-                if (databaseChangelog.type === 'entity-new') {
-                    this.fields = this.entity.fields
-                        .map(field => prepareFieldForTemplates(this.entity, field, this))
-                        .map(field => this._prepareFieldForTemplates(this.entity, field));
-                    this.relationships = this.entity.relationships
-                        .map(relationship => prepareRelationshipForTemplates(this.entity, relationship, this))
-                        .map(relationship => this._prepareRelationshipForTemplates(this.entity, relationship));
-                } else {
-                    this.addedFields = this.databaseChangelog.addedFields
-                        .map(field => prepareFieldForTemplates(this.entity, field, this))
-                        .map(field => this._prepareFieldForTemplates(this.entity, field));
-                    this.removedFields = this.databaseChangelog.removedFields
-                        .map(field => prepareFieldForTemplates(this.entity, field, this))
-                        .map(field => this._prepareFieldForTemplates(this.entity, field));
-                    this.addedRelationships = this.databaseChangelog.addedRelationships
-                        .map(relationship => prepareRelationshipForTemplates(this.entity, relationship, this))
-                        .map(relationship => this._prepareRelationshipForTemplates(this.entity, relationship));
-                    this.removedRelationships = this.databaseChangelog.removedRelationships
-                        .map(relationship => prepareRelationshipForTemplates(this.entity, relationship, this, true))
-                        .map(relationship => this._prepareRelationshipForTemplates(this.entity, relationship));
-                }
             },
         };
     }
@@ -84,18 +179,9 @@ module.exports = class extends BaseGenerator {
     // Public API method used by the getter and also by Blueprints
     _writing() {
         return {
-            setupReproducibility() {
-                if (this.jhipsterConfig.skipServer) {
-                    return;
-                }
-
-                // In order to have consistent results with Faker, restart seed with current entity name hash.
-                this.entity.resetFakerSeed();
-            },
-
             writeLiquibaseFiles() {
                 const config = this.jhipsterConfig;
-                if (config.skipServer || config.databaseType !== 'sql') {
+                if (config.skipServer || this.entity.skipServer || config.databaseType !== 'sql') {
                     return;
                 }
 
@@ -200,149 +286,21 @@ module.exports = class extends BaseGenerator {
         }
     }
 
-    _prepareFieldForTemplates(entity, field) {
-        field.columnType = this._columnType(entity, field);
-        field.loadColumnType = this._loadColumnType(entity, field);
-        field.shouldDropDefaultValue = field.fieldType === 'ZonedDateTime' || field.fieldType === 'Instant';
-        field.shouldCreateContentType = field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text';
-        field.nullable = !(field.fieldValidate === true && field.fieldValidateRules.includes('required'));
-        return field;
-    }
-
     _prepareRelationshipForTemplates(entity, relationship) {
-        relationship.shouldCreateJoinTable = this._shouldCreateJoinTable(relationship);
-        relationship.shouldWriteRelationship = this._shouldWriteRelationship(relationship);
-        relationship.shouldWriteJoinTable = this._shouldWriteJoinTable(relationship);
-        relationship.columnDataType = this._getRelationshipColumnType(relationship, entity);
-        return relationship;
-    }
-
-    _shouldCreateJoinTable(relationship) {
-        return relationship.relationshipType === 'many-to-many' && relationship.ownerSide;
-    }
-
-    _shouldWriteRelationship(relationship) {
-        return (
+        relationship.shouldWriteRelationship =
             relationship.relationshipType === 'many-to-one' ||
-            (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true)
-        );
-    }
+            (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true);
 
-    _shouldWriteJoinTable(relationship) {
-        return relationship.relationshipType === 'many-to-many' && relationship.ownerSide;
-    }
-
-    _loadColumnType(entity, field) {
-        const columnType = field.columnType;
-        // eslint-disable-next-line no-template-curly-in-string
-        if (['integer', 'bigint', 'double', 'decimal(21,2)', '${floatType}'].includes(columnType)) {
-            return 'numeric';
+        if (relationship.shouldWriteJoinTable) {
+            const joinTableName = relationship.joinTable.name;
+            const prodDatabaseType = entity.prodDatabaseType;
+            _.defaults(relationship.joinTable, {
+                constraintName: this.getFKConstraintName(joinTableName, entity.entityTableName, prodDatabaseType),
+                otherConstraintName: this.getFKConstraintName(joinTableName, relationship.columnName, prodDatabaseType),
+            });
         }
 
-        if (field.fieldIsEnum) {
-            return 'string';
-        }
-
-        // eslint-disable-next-line no-template-curly-in-string
-        if (['date', '${datetimeType}', 'boolean'].includes(columnType)) {
-            return columnType;
-        }
-
-        if (columnType === 'blob' || columnType === 'longblob') {
-            return 'blob';
-        }
-
-        // eslint-disable-next-line no-template-curly-in-string
-        if (columnType === '${clobType}') {
-            return 'clob';
-        }
-
-        const { prodDatabaseType } = entity;
-        if (
-            // eslint-disable-next-line no-template-curly-in-string
-            columnType === '${uuidType}' &&
-            prodDatabaseType !== 'mysql' &&
-            prodDatabaseType !== 'mariadb'
-        ) {
-            // eslint-disable-next-line no-template-curly-in-string
-            return '${uuidType}';
-        }
-
-        return 'string';
-    }
-
-    _getRelationshipColumnType(relationship, entity) {
-        return relationship.otherEntityName === 'user' && entity.authenticationType === 'oauth2' ? 'varchar(100)' : 'bigint';
-    }
-
-    _columnType(entity, field) {
-        const fieldType = field.fieldType;
-        if (fieldType === 'String' || field.fieldIsEnum) {
-            return `varchar(${field.fieldValidateRulesMaxlength || 255})`;
-        }
-
-        if (fieldType === 'Integer') {
-            return 'integer';
-        }
-
-        if (fieldType === 'Long') {
-            return 'bigint';
-        }
-
-        if (fieldType === 'Float') {
-            // eslint-disable-next-line no-template-curly-in-string
-            return '${floatType}';
-        }
-
-        if (fieldType === 'Double') {
-            return 'double';
-        }
-
-        if (fieldType === 'BigDecimal') {
-            return 'decimal(21,2)';
-        }
-
-        if (fieldType === 'LocalDate') {
-            return 'date';
-        }
-
-        if (fieldType === 'Instant') {
-            // eslint-disable-next-line no-template-curly-in-string
-            return '${datetimeType}';
-        }
-
-        if (fieldType === 'ZonedDateTime') {
-            // eslint-disable-next-line no-template-curly-in-string
-            return '${datetimeType}';
-        }
-
-        if (fieldType === 'Duration') {
-            return 'bigint';
-        }
-
-        if (fieldType === 'UUID') {
-            // eslint-disable-next-line no-template-curly-in-string
-            return '${uuidType}';
-        }
-
-        if (fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') {
-            const { prodDatabaseType } = entity;
-            if (prodDatabaseType === 'mysql' || prodDatabaseType === 'postgresql' || prodDatabaseType === 'mariadb') {
-                return 'longblob';
-            }
-
-            return 'blob';
-        }
-
-        if (field.fieldTypeBlobContent === 'text') {
-            // eslint-disable-next-line no-template-curly-in-string
-            return '${clobType}';
-        }
-
-        if (fieldType === 'Boolean') {
-            return 'boolean';
-        }
-
-        return undefined;
+        relationship.columnDataType = relationship.otherEntity.columnType;
+        return relationship;
     }
 };

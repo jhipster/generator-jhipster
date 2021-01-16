@@ -1,14 +1,14 @@
 /**
  * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -230,13 +230,17 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                     });
                 });
 
-                it('should not add it', () => {
+                it('should add it', () => {
                     expect(jdlObject.entities.A).to.deep.eq(
                         new JDLEntity({
                             name: 'A',
                             tableName: 'A',
                             fields: {
                                 email: new JDLField({ name: 'email', type: FieldTypes.STRING }),
+                                id: new JDLField({
+                                    name: 'id',
+                                    type: FieldTypes.LONG,
+                                }),
                             },
                         })
                     );
@@ -507,18 +511,17 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                         enableTranslation: false,
                         jhiPrefix: 'jhi',
                         messageBroker: false,
-                        nativeLanguage: 'en',
                         packageFolder: 'com/mathieu/sample',
                         packageName: 'com.mathieu.sample',
-                        prodDatabaseType: 'mysql',
+                        prodDatabaseType: 'postgresql',
                         searchEngine: false,
                         serverPort: '8080',
                         serviceDiscoveryType: false,
                         skipClient: false,
                         skipServer: false,
                         skipUserManagement: false,
-                        useSass: true,
                         websocket: false,
+                        withAdminUi: true,
                     });
                 });
 
@@ -699,48 +702,113 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                 });
             });
             context('when parsing entities with annotations', () => {
-                let dtoOption;
-                let filterOption;
-                let paginationOption;
-                let serviceOption;
-                let skipClientOption;
-                let customUnaryOption;
-                let customBinaryOption;
-                let customBinaryOption2;
-                let fieldAnnotation;
-                let relationshipAnnotation;
+                context('that are not capitalized', () => {
+                    let dtoOption;
+                    let filterOption;
+                    let paginationOption;
+                    let serviceOption;
+                    let skipClientOption;
+                    let customUnaryOption;
+                    let customBinaryOption;
+                    let customBinaryOption2;
+                    let fieldAnnotation;
+                    let relationshipAnnotationOnSource;
+                    let relationshipAnnotationOnDestination;
 
-                before(() => {
-                    const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', 'test-files', 'annotations.jdl')]);
-                    const jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
-                        parsedContent: input,
-                        applicationType: ApplicationTypes.MONOLITH,
+                    before(() => {
+                        const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', 'test-files', 'annotations.jdl')]);
+                        const jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
+                            parsedContent: input,
+                            applicationType: ApplicationTypes.MONOLITH,
+                        });
+                        dtoOption = jdlObject.getOptionsForName(BinaryOptions.DTO)[0];
+                        filterOption = jdlObject.getOptionsForName(UnaryOptions.FILTER)[0];
+                        paginationOption = jdlObject.getOptionsForName(BinaryOptions.PAGINATION)[0];
+                        serviceOption = jdlObject.getOptionsForName(BinaryOptions.SERVICE)[0];
+                        skipClientOption = jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT)[0];
+                        customUnaryOption = jdlObject.getOptionsForName('myCustomUnaryOption')[0];
+                        customBinaryOption = jdlObject.getOptionsForName('myCustomBinaryOption')[0];
+                        customBinaryOption2 = jdlObject.getOptionsForName('myCustomBinaryOption')[1];
+                        fieldAnnotation = jdlObject.entities.A.fields.name.options.id;
+                        relationshipAnnotationOnSource = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options.source;
+                        relationshipAnnotationOnDestination = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options
+                            .destination;
                     });
-                    dtoOption = jdlObject.getOptionsForName(BinaryOptions.DTO)[0];
-                    filterOption = jdlObject.getOptionsForName(UnaryOptions.FILTER)[0];
-                    paginationOption = jdlObject.getOptionsForName(BinaryOptions.PAGINATION)[0];
-                    serviceOption = jdlObject.getOptionsForName(BinaryOptions.SERVICE)[0];
-                    skipClientOption = jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT)[0];
-                    customUnaryOption = jdlObject.getOptionsForName('myCustomUnaryOption')[0];
-                    customBinaryOption = jdlObject.getOptionsForName('myCustomBinaryOption')[0];
-                    customBinaryOption2 = jdlObject.getOptionsForName('myCustomBinaryOption')[1];
-                    fieldAnnotation = jdlObject.entities.A.fields.name.options.id;
-                    relationshipAnnotation = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options.id;
-                });
 
-                it('should set the annotations as options', () => {
-                    expect(dtoOption.entityNames).to.deep.equal(new Set(['A', 'B']));
-                    expect(filterOption.entityNames).to.deep.equal(new Set(['C']));
-                    expect(paginationOption.entityNames).to.deep.equal(new Set(['B', 'C']));
-                    expect(serviceOption.entityNames).to.deep.equal(new Set(['A', 'B']));
-                    expect(skipClientOption.entityNames).to.deep.equal(new Set(['A', 'C']));
-                    expect(customUnaryOption.entityNames).to.deep.equal(new Set(['A', 'B']));
-                    expect(customBinaryOption.entityNames).to.deep.equal(new Set(['A']));
-                    expect(customBinaryOption2.entityNames).to.deep.equal(new Set(['C']));
-                    expect(customBinaryOption.value).to.deep.equal('customValue');
-                    expect(customBinaryOption2.value).to.deep.equal('customValue2');
-                    expect(fieldAnnotation).to.deep.equal(true);
-                    expect(relationshipAnnotation).to.deep.equal(true);
+                    it('should set the annotations as options', () => {
+                        expect(dtoOption.entityNames).to.deep.equal(new Set(['A', 'B']));
+                        expect(filterOption.entityNames).to.deep.equal(new Set(['C']));
+                        expect(paginationOption.entityNames).to.deep.equal(new Set(['B', 'C']));
+                        expect(serviceOption.entityNames).to.deep.equal(new Set(['A', 'B']));
+                        expect(skipClientOption.entityNames).to.deep.equal(new Set(['A', 'C']));
+                        expect(customUnaryOption.entityNames).to.deep.equal(new Set(['A', 'B']));
+                        expect(customBinaryOption.entityNames).to.deep.equal(new Set(['A']));
+                        expect(customBinaryOption2.entityNames).to.deep.equal(new Set(['C']));
+                        expect(customBinaryOption.value).to.deep.equal('customValue');
+                        expect(customBinaryOption2.value).to.deep.equal('customValue2');
+                        expect(fieldAnnotation).to.deep.equal(true);
+                        expect(relationshipAnnotationOnSource).to.deep.equal({
+                            annotationOnSource: 'toto',
+                        });
+                        expect(relationshipAnnotationOnDestination).to.deep.equal({
+                            annotationOnDestination: true,
+                        });
+                    });
+                });
+                context('that are capitalized', () => {
+                    let dtoOption;
+                    let filterOption;
+                    let paginationOption;
+                    let serviceOption;
+                    let skipClientOption;
+                    let customUnaryOption;
+                    let customBinaryOption;
+                    let customBinaryOption2;
+                    let fieldAnnotation;
+                    let relationshipAnnotationOnSource;
+                    let relationshipAnnotationOnDestination;
+
+                    before(() => {
+                        const input = JDLReader.parseFromFiles([
+                            path.join(__dirname, '..', '..', 'test-files', 'capitalized_annotations.jdl'),
+                        ]);
+                        const jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
+                            parsedContent: input,
+                            applicationType: ApplicationTypes.MONOLITH,
+                        });
+                        dtoOption = jdlObject.getOptionsForName(BinaryOptions.DTO)[0];
+                        filterOption = jdlObject.getOptionsForName(UnaryOptions.FILTER)[0];
+                        paginationOption = jdlObject.getOptionsForName(BinaryOptions.PAGINATION)[0];
+                        serviceOption = jdlObject.getOptionsForName(BinaryOptions.SERVICE)[0];
+                        skipClientOption = jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT)[0];
+                        customUnaryOption = jdlObject.getOptionsForName('myCustomUnaryOption')[0];
+                        customBinaryOption = jdlObject.getOptionsForName('myCustomBinaryOption')[0];
+                        customBinaryOption2 = jdlObject.getOptionsForName('myCustomBinaryOption')[1];
+                        fieldAnnotation = jdlObject.entities.A.fields.name.options.id;
+                        relationshipAnnotationOnSource = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options.source;
+                        relationshipAnnotationOnDestination = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options
+                            .destination;
+                    });
+
+                    it('should set the annotations as options with lower-case letters first', () => {
+                        expect(dtoOption.entityNames).to.deep.equal(new Set(['A', 'B']));
+                        expect(filterOption.entityNames).to.deep.equal(new Set(['C']));
+                        expect(paginationOption.entityNames).to.deep.equal(new Set(['B', 'C']));
+                        expect(serviceOption.entityNames).to.deep.equal(new Set(['A', 'B']));
+                        expect(skipClientOption.entityNames).to.deep.equal(new Set(['A', 'C']));
+                        expect(customUnaryOption.entityNames).to.deep.equal(new Set(['A', 'B']));
+                        expect(customBinaryOption.entityNames).to.deep.equal(new Set(['A']));
+                        expect(customBinaryOption2.entityNames).to.deep.equal(new Set(['C']));
+                        expect(customBinaryOption.value).to.deep.equal('customValue');
+                        expect(customBinaryOption2.value).to.deep.equal('customValue2');
+                        expect(fieldAnnotation).to.deep.equal(true);
+                        expect(relationshipAnnotationOnSource).to.deep.equal({
+                            annotationOnSource: true,
+                        });
+                        expect(relationshipAnnotationOnDestination).to.deep.equal({
+                            annotationOnDestination: true,
+                        });
+                    });
                 });
             });
             context('when parsing a mix between annotations and regular options', () => {
@@ -843,7 +911,9 @@ describe('ParsedJDLToJDLObjectConverter', () => {
                 });
 
                 it('should set it', () => {
-                    expect(jdlObject.relationships.getOneToOne('OneToOne_A{b}_B').options.jpaDerivedIdentifier).to.be.true;
+                    expect(jdlObject.relationships.getOneToOne('OneToOne_A{b}_B').options.global).to.deep.equal({
+                        jpaDerivedIdentifier: true,
+                    });
                 });
             });
             context('when parsing entity options in applications', () => {

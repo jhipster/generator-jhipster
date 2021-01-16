@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,7 +27,7 @@ import org.ehcache.jsr107.Eh107Configuration;
     <%_ if (enableHibernateCache) { _%>
 import org.hibernate.cache.jcache.ConfigSettings;
     <%_ } _%>
-import io.github.jhipster.config.JHipsterProperties;
+import tech.jhipster.config.JHipsterProperties;
 
 <%_ } _%>
 <%_ if (cacheProvider === 'caffeine') { _%>
@@ -38,12 +38,12 @@ import java.util.concurrent.TimeUnit;
 <%_ if (enableHibernateCache) { _%>
 import org.hibernate.cache.jcache.ConfigSettings;
 <%_ } _%>
-import io.github.jhipster.config.JHipsterProperties;
+import tech.jhipster.config.JHipsterProperties;
 
 <%_ } _%>
 <%_ if (cacheProvider === 'hazelcast') { _%>
-import io.github.jhipster.config.JHipsterConstants;
-import io.github.jhipster.config.JHipsterProperties;
+import tech.jhipster.config.JHipsterConstants;
+import tech.jhipster.config.JHipsterProperties;
 
 import com.hazelcast.config.*;
 import com.hazelcast.core.HazelcastInstance;
@@ -83,7 +83,7 @@ import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.info.GitProperties;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import io.github.jhipster.config.cache.PrefixedKeyGenerator;
+import tech.jhipster.config.cache.PrefixedKeyGenerator;
 <%_ } _%>
 import org.springframework.cache.annotation.EnableCaching;
 <%_ if (cacheProvider !== 'memcached') { _%>
@@ -110,7 +110,7 @@ import org.infinispan.configuration.global.GlobalConfigurationBuilder;
 import org.infinispan.jboss.marshalling.core.JBossUserMarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import io.github.jhipster.config.JHipsterProperties;
+import tech.jhipster.config.JHipsterProperties;
 import java.util.concurrent.TimeUnit;
 import org.hibernate.cfg.AvailableSettings;
 import org.infinispan.eviction.EvictionType;
@@ -151,7 +151,7 @@ import com.google.code.ssm.providers.xmemcached.MemcacheClientFactoryImpl;
 import com.google.code.ssm.spring.SSMCache;
 import com.google.code.ssm.spring.SSMCacheManager;
 
-import io.github.jhipster.config.JHipsterProperties;
+import tech.jhipster.config.JHipsterProperties;
 <%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
 import java.net.URI;
@@ -174,7 +174,7 @@ import javax.cache.configuration.MutableConfiguration;
 import javax.cache.expiry.CreatedExpiryPolicy;
 import javax.cache.expiry.Duration;
 
-import io.github.jhipster.config.JHipsterProperties;
+import tech.jhipster.config.JHipsterProperties;
 <%_ } _%>
 
 @Configuration

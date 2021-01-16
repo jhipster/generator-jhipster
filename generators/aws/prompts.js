@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,12 +22,10 @@ module.exports = {
     prompting,
 };
 
-function prompting() {
+async function prompting() {
     if (this.existingProject) {
         return;
     }
-
-    const done = this.async();
 
     const prompts = [
         {
@@ -175,17 +173,14 @@ function prompting() {
         },
     ];
 
-    this.prompt(prompts).then(props => {
-        this.applicationName = _.kebabCase(props.applicationName);
-        this.environmentName = _.kebabCase(props.environmentName);
-        this.bucketName = _.kebabCase(props.bucketName);
-        this.instanceType = props.instanceType === 'Custom Instance Type' ? props.customInstanceType : props.instanceType;
-        this.awsRegion = props.awsRegion;
-        this.dbName = props.dbName;
-        this.dbUsername = props.dbUsername;
-        this.dbPassword = props.dbPassword;
-        this.dbInstanceClass = props.dbInstanceClass === 'Custom RDS Type' ? props.customDBInstanceClass : props.dbInstanceClass;
-
-        done();
-    });
+    const props = await this.prompt(prompts);
+    this.applicationName = _.kebabCase(props.applicationName);
+    this.environmentName = _.kebabCase(props.environmentName);
+    this.bucketName = _.kebabCase(props.bucketName);
+    this.instanceType = props.instanceType === 'Custom Instance Type' ? props.customInstanceType : props.instanceType;
+    this.awsRegion = props.awsRegion;
+    this.dbName = props.dbName;
+    this.dbUsername = props.dbUsername;
+    this.dbPassword = props.dbPassword;
+    this.dbInstanceClass = props.dbInstanceClass === 'Custom RDS Type' ? props.customDBInstanceClass : props.dbInstanceClass;
 }

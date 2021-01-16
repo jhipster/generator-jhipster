@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -49,7 +49,7 @@ const getFieldNameUndercored = fields =>
 
 function askForMicroserviceJson() {
     const context = this.context;
-    if (this.jhipsterConfig.applicationType !== 'gateway' || context.entityExisted) {
+    if (this.jhipsterConfig.applicationType !== 'gateway' || context.configExisted) {
         return undefined;
     }
 
@@ -411,7 +411,7 @@ function askForPagination() {
         {
             type: 'list',
             name: 'pagination',
-            message: 'Do you want pagination on your entity?',
+            message: 'Do you want pagination and sorting on your entity?',
             choices: [
                 {
                     value: 'no',
@@ -419,11 +419,11 @@ function askForPagination() {
                 },
                 {
                     value: 'pagination',
-                    name: 'Yes, with pagination links',
+                    name: 'Yes, with pagination links and sorting headers',
                 },
                 {
                     value: 'infinite-scroll',
-                    name: 'Yes, with infinite scroll',
+                    name: 'Yes, with infinite scroll and sorting headers',
                 },
             ],
             default: 0,
@@ -1003,6 +1003,7 @@ function askForRelationship() {
         {
             when: response =>
                 response.relationshipAdd === true &&
+                response.otherEntityName.toLowerCase() !== 'user' &&
                 (response.relationshipType === 'many-to-one' ||
                     (response.relationshipType === 'many-to-many' && response.ownerSide === true) ||
                     (response.relationshipType === 'one-to-one' && response.ownerSide === true)),

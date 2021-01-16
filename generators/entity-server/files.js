@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -92,7 +92,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.searchEngine === 'elasticsearch',
+            condition: generator => generator.searchEngine === 'elasticsearch' && !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -116,7 +116,7 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/repository/EntityReactiveRepository.java',
+                    file: 'package/repository/EntityRepository_reactive.java',
                     renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`,
                 },
             ],
@@ -126,7 +126,7 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/repository/EntityReactiveRepositoryInternalImpl.java',
+                    file: 'package/repository/EntityRepositoryInternalImpl_reactive.java',
                     renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}RepositoryInternalImpl.java`,
                 },
                 {
@@ -198,7 +198,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.searchEngine === 'elasticsearch',
+            condition: generator => generator.searchEngine === 'elasticsearch' && !generator.embedded,
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
@@ -270,7 +270,7 @@ function writeFiles() {
             if (this.skipServer) return;
 
             // write server side files
-            this.writeFilesToDisk(serverFiles, this, false, this.fetchFromInstalledJHipster('entity-server/templates'));
+            this.writeFilesToDisk(serverFiles);
 
             if (this.databaseType === 'sql') {
                 if (['ehcache', 'caffeine', 'infinispan', 'redis'].includes(this.cacheProvider) && this.enableHibernateCache) {

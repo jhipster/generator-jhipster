@@ -2,39 +2,38 @@ package <%= packageName %>.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-import io.github.jhipster.service.Criteria;
+import tech.jhipster.service.Criteria;
 <%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>
 import <%= packageName %>.domain.enumeration.<%= fields[idx].fieldType %>;
 <%_ } } _%>
-import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
-import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
-import io.github.jhipster.service.filter.LongFilter;
-import io.github.jhipster.service.filter.StringFilter;
+import tech.jhipster.service.filter.BooleanFilter;
+import tech.jhipster.service.filter.DoubleFilter;
+import tech.jhipster.service.filter.Filter;
+import tech.jhipster.service.filter.FloatFilter;
+import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LongFilter;
+import tech.jhipster.service.filter.StringFilter;
 <%_ if (fieldsContainBigDecimal === true) { _%>
-import io.github.jhipster.service.filter.BigDecimalFilter;
+import tech.jhipster.service.filter.BigDecimalFilter;
 <%_ } _%>
 <%_ if (fieldsContainDuration === true) { _%>
-import io.github.jhipster.service.filter.DurationFilter;
+import tech.jhipster.service.filter.DurationFilter;
 <%_ } _%>
 <%_ if (fieldsContainInstant === true) { _%>
-import io.github.jhipster.service.filter.InstantFilter;
+import tech.jhipster.service.filter.InstantFilter;
 <%_ } _%>
 <%_ if (fieldsContainLocalDate === true) { _%>
-import io.github.jhipster.service.filter.LocalDateFilter;
+import tech.jhipster.service.filter.LocalDateFilter;
 <%_ } _%>
 <%_ if (fieldsContainUUID === true) { _%>
-import io.github.jhipster.service.filter.UUIDFilter;
+import tech.jhipster.service.filter.UUIDFilter;
 <%_ } _%>
 <%_ if (fieldsContainZonedDateTime === true) { _%>
-import io.github.jhipster.service.filter.ZonedDateTimeFilter;
+import tech.jhipster.service.filter.ZonedDateTimeFilter;
 <%_ } _%>
 
 <%_
-const referenceFilterType = '' + primaryKeyType + 'Filter';
-var filterVariables = [{name:'id', type: primaryKeyType, filterType:referenceFilterType,fieldInJavaBeanMethod:'Id' } ];
+var filterVariables = [];
 var extraFilters = {};
 fields.forEach((field) => {
 const fieldType = field.fieldType;
@@ -55,7 +54,8 @@ if (isFilterableType(fieldType)) {
 }
 });
 relationships.forEach((relationship) => {
-const relationshipType = relationship.relationshipType;
+const relationshipType = relationship.otherEntity.primaryKey.type;
+const referenceFilterType = '' + relationshipType + 'Filter';
 // user has a String PK when using OAuth, so change relationships accordingly
 let oauthAwareReferenceFilterType = referenceFilterType;
 if (relationship.otherEntityName === 'user' && authenticationType === 'oauth2') {

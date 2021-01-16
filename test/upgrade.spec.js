@@ -7,24 +7,20 @@ const expect = require('chai').expect;
 const expectedFiles = require('./utils/expected-files');
 const packageJson = require('../package.json');
 const constants = require('../generators/generator-constants');
+const { prepareTempDir } = require('./utils/utils');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
 describe('JHipster upgrade generator', function () {
     this.timeout(400000);
+
     describe('default application', () => {
-        const cwd = process.cwd();
-        before(done => {
-            let workingDirectory;
-            helpers
-                .run(path.join(__dirname, '../generators/app'))
+        let cleanup;
+        before(() => {
+            cleanup = prepareTempDir();
+            return helpers
+                .create(path.join(__dirname, '../generators/app'), { tmpdir: false })
                 .withOptions({ skipInstall: true, skipChecks: true, fromCli: true })
-                .inTmpDir(dir => {
-                    /* eslint-disable-next-line no-console */
-                    console.log(`Generating JHipster application in directory: ${dir}`);
-                    // Save directory, in order to run the upgrade generator in the same directory
-                    workingDirectory = dir;
-                })
                 .withPrompts({
                     baseName: 'jhipster',
                     clientFramework: ANGULAR,
@@ -36,7 +32,7 @@ describe('JHipster upgrade generator', function () {
                     enableHibernateCache: true,
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
-                    prodDatabaseType: 'mysql',
+                    prodDatabaseType: 'postgresql',
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
@@ -47,23 +43,21 @@ describe('JHipster upgrade generator', function () {
                     serverSideOptions: [],
                     upgradeConfig: false,
                 })
-                .on('end', () => {
-                    helpers
-                        .run(path.join(__dirname, '../generators/upgrade'))
+                .run()
+                .then(() => {
+                    return helpers
+                        .create(path.join(__dirname, '../generators/upgrade'), { tmpdir: false })
                         .withOptions({
                             fromCli: true,
                             force: true,
                             silent: false,
                             targetVersion: packageJson.version,
                         })
-                        .inTmpDir(() => {
-                            /* eslint-disable-next-line no-console */
-                            console.log('Upgrading the JHipster application');
-                            process.chdir(workingDirectory);
-                        })
-                        .on('end', done);
+                        .run();
                 });
         });
+
+        after(() => cleanup());
 
         it('creates expected files for default configuration', () => {
             assert.file(expectedFiles.common);
@@ -82,36 +76,29 @@ describe('JHipster upgrade generator', function () {
             //   - master: merge commit of jhipster_upgrade
             expect(commitsCount).to.equal('5');
         });
-
-        after(() => {
-            process.chdir(cwd);
-        });
     });
     describe('blueprint application', () => {
-        const cwd = process.cwd();
         const blueprintName = 'generator-jhipster-sample-blueprint';
         const blueprintVersion = '0.1.1';
-        before(done => {
-            let workingDirectory;
-            helpers
-                .run(path.join(__dirname, '../generators/app'))
+        let cleanup;
+        before(() => {
+            cleanup = prepareTempDir();
+            const dir = process.cwd();
+            /* eslint-disable-next-line no-console */
+            console.log(`Generating JHipster application in directory: ${dir}`);
+            // Fake the presence of the blueprint in node_modules: we don't install it, but we need its version
+            const packagejs = {
+                name: blueprintName,
+                version: blueprintVersion,
+            };
+            const fakeBlueprintModuleDir = path.join(dir, `node_modules/${blueprintName}`);
+            fse.ensureDirSync(path.join(fakeBlueprintModuleDir, 'generators', 'fake'));
+            fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
+            // Create an fake generator, otherwise env.lookup doesn't find it.
+            fse.writeFileSync(path.join(fakeBlueprintModuleDir, 'generators', 'fake', 'index.js'), '');
+            return helpers
+                .create(path.join(__dirname, '../generators/app'), { tmpdir: false })
                 .withOptions({ skipInstall: true, skipChecks: true, fromCli: true, blueprints: blueprintName })
-                .inTmpDir(dir => {
-                    /* eslint-disable-next-line no-console */
-                    console.log(`Generating JHipster application in directory: ${dir}`);
-                    // Save directory, in order to run the upgrade generator in the same directory
-                    workingDirectory = dir;
-                    // Fake the presence of the blueprint in node_modules: we don't install it, but we need its version
-                    const packagejs = {
-                        name: blueprintName,
-                        version: blueprintVersion,
-                    };
-                    const fakeBlueprintModuleDir = path.join(dir, `node_modules/${blueprintName}`);
-                    fse.ensureDirSync(path.join(fakeBlueprintModuleDir, 'generators', 'fake'));
-                    fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
-                    // Create an fake generator, otherwise env.lookup doesn't find it.
-                    fse.writeFileSync(path.join(fakeBlueprintModuleDir, 'generators', 'fake', 'index.js'), '');
-                })
                 .withPrompts({
                     baseName: 'jhipster',
                     clientFramework: ANGULAR,
@@ -123,7 +110,7 @@ describe('JHipster upgrade generator', function () {
                     enableHibernateCache: true,
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
-                    prodDatabaseType: 'mysql',
+                    prodDatabaseType: 'postgresql',
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
@@ -134,9 +121,10 @@ describe('JHipster upgrade generator', function () {
                     serverSideOptions: [],
                     upgradeConfig: false,
                 })
-                .on('end', () => {
-                    helpers
-                        .run(path.join(__dirname, '../generators/upgrade'))
+                .run()
+                .then(() => {
+                    return helpers
+                        .create(path.join(__dirname, '../generators/upgrade'), { tmpdir: false })
                         .withOptions({
                             fromCli: true,
                             force: true,
@@ -144,14 +132,11 @@ describe('JHipster upgrade generator', function () {
                             skipChecks: true,
                             targetVersion: packageJson.version,
                         })
-                        .inTmpDir(() => {
-                            /* eslint-disable-next-line no-console */
-                            console.log('Upgrading the JHipster application');
-                            process.chdir(workingDirectory);
-                        })
-                        .on('end', done);
+                        .run();
                 });
         });
+
+        after(() => cleanup());
 
         it('creates expected files for default configuration', () => {
             assert.file(expectedFiles.common);
@@ -176,10 +161,6 @@ describe('JHipster upgrade generator', function () {
                 'generator-jhipster': { blueprints: [{ name: blueprintName, version: blueprintVersion }] },
             });
             assert.fileContent('package.json', new RegExp(`"${blueprintName}": "${blueprintVersion}"`));
-        });
-
-        after(() => {
-            process.chdir(cwd);
         });
     });
 });

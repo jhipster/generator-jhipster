@@ -2,12 +2,44 @@
     "fluentMethods": true,
     "relationships": [
         {
-            "relationshipName": "testMapstruct",
+            "relationshipName": "backTestMapstructOwnerOneToOne",
+            "otherEntityName": "testMapstruct",
+            "relationshipType": "one-to-one",
+            "otherEntityRelationshipName": "testMapstructOwnerOneToOne",
+            "ownerSide": false
+        },
+        {
+            "relationshipName": "backTestMapstructOwnerManyToMany",
             "otherEntityName": "testMapstruct",
             "relationshipType": "many-to-many",
-            "otherEntityField": "id",
-            "ownerSide": true,
-            "otherEntityRelationshipName": "testManyRelPaginDTO"
+            "otherEntityRelationshipName": "testMapstructOwnerManyToMany",
+            "ownerSide": false
+        },
+        {
+            "relationshipName": "backTestMapstructOwnerManyToOne",
+            "otherEntityName": "testMapstruct",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "testMapstructOwnerManyToOne"
+        },
+        {
+            "relationshipName": "backTestMapstructBackOneToOne",
+            "otherEntityName": "testMapstruct",
+            "relationshipType": "one-to-one",
+            "otherEntityRelationshipName": "testMapstructBackOneToOne",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "backTestMapstructBackManyToMany",
+            "otherEntityName": "testMapstruct",
+            "relationshipType": "many-to-many",
+            "otherEntityRelationshipName": "testMapstructBackManyToMany",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "backTestMapstructBackManyToOne",
+            "otherEntityName": "testMapstruct",
+            "relationshipType": "many-to-one",
+            "otherEntityRelationshipName": "testMapstructBackManyToOne"
         }
     ],
     "fields": [],

@@ -46,7 +46,8 @@
                     "code": "状态码",
                     "count": "次数",
                     "mean": "平均数",
-                    "average": "平均值"
+                    "average": "平均值",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "2xx (成功)",

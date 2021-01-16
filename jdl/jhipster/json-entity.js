@@ -1,14 +1,14 @@
 /**
  * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,9 +18,11 @@
  */
 
 const { merge } = require('../utils/object-utils');
-const { formatDateForLiquibase, formatComment } = require('../utils/format-utils');
+const { formatComment } = require('../utils/format-utils');
 const { upperFirst } = require('../utils/string-utils');
 const { getTableNameFromEntityName } = require('./entity-table-name-creator');
+const binaryOptions = require('./binary-options');
+const unaryOptions = require('./unary-options');
 
 /**
  * The JSONEntity class represents a read-to-be exported to JSON entity.
@@ -32,7 +34,6 @@ class JSONEntity {
      *        - entityName, the entity name (mandatory)
      *        - fields, a field iterable
      *        - relationships, a relationship iterable
-     *        - changelogDate,
      *        - javadoc,
      *        - entityTableName, defaults to the snake-cased entity name,
      *        - dto, defaults to 'no',
@@ -48,11 +49,10 @@ class JSONEntity {
         if (!args || !args.entityName) {
             throw new Error('At least an entity name must be passed.');
         }
-        const merged = merge(defaults(args.entityName), args);
+        const merged = merge(getDefaults(args.entityName), args);
         this.name = merged.name;
         this.fields = merged.fields;
         this.relationships = merged.relationships;
-        this.changelogDate = merged.changelogDate;
         this.javadoc = merged.javadoc;
         this.entityTableName = merged.entityTableName;
         this.dto = merged.dto;
@@ -115,20 +115,19 @@ class JSONEntity {
 
 module.exports = JSONEntity;
 
-function defaults(entityName) {
+function getDefaults(entityName) {
     return {
         name: upperFirst(entityName),
         fields: [],
         relationships: [],
-        changelogDate: formatDateForLiquibase(),
         javadoc: formatComment(),
         entityTableName: getTableNameFromEntityName(entityName),
-        dto: 'no',
-        pagination: 'no',
-        service: 'no',
+        [binaryOptions.Options.DTO]: binaryOptions.DefaultValues[binaryOptions.Options.DTO],
+        [binaryOptions.Options.PAGINATION]: binaryOptions.DefaultValues[binaryOptions.Options.PAGINATION],
+        [binaryOptions.Options.SERVICE]: binaryOptions.DefaultValues[binaryOptions.Options.SERVICE],
         fluentMethods: true,
-        readOnly: false,
-        embedded: false,
+        [unaryOptions.READ_ONLY]: false,
+        [unaryOptions.EMBEDDED]: false,
         jpaMetamodelFiltering: false,
         applications: [],
     };

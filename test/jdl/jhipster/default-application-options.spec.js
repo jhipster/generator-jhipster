@@ -1,14 +1,14 @@
 /**
  * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -60,8 +60,8 @@ describe('DefaultApplicationOptions', () => {
             it('should set the client theme variant option to none', () => {
                 expect(options.clientThemeVariant).to.equal('');
             });
-            it('should set the SASS using option to true', () => {
-                expect(options.useSass).to.be.true;
+            it('should set withAdminUI option to true', () => {
+                expect(options.withAdminUi).to.be.true;
             });
         });
         context('when passing a custom client theme and no variant', () => {
@@ -88,19 +88,6 @@ describe('DefaultApplicationOptions', () => {
 
             it('should set the user management skipping option to true', () => {
                 expect(skipUserManagementOption).to.be.true;
-            });
-        });
-        context('when the useSass option is not a boolean', () => {
-            let useSassOption;
-
-            before(() => {
-                useSassOption = getConfigForMonolithApplication({
-                    useSass: 'true',
-                }).useSass;
-            });
-
-            it('should set it to true', () => {
-                expect(useSassOption).to.be.true;
             });
         });
         context('when passing custom options', () => {
@@ -149,8 +136,8 @@ describe('DefaultApplicationOptions', () => {
             it('should set the client theme variant option to none', () => {
                 expect(options.clientThemeVariant).to.equal('');
             });
-            it('should set the SASS using option to true', () => {
-                expect(options.useSass).to.be.true;
+            it('should set the withAdminUi option to true', () => {
+                expect(options.withAdminUi).to.be.true;
             });
             it('should set the service discovery type to eureka', () => {
                 expect(options.serviceDiscoveryType).to.equal('eureka');
@@ -180,19 +167,6 @@ describe('DefaultApplicationOptions', () => {
 
             it('should set it to false', () => {
                 expect(serviceDiscoveryTypeOption).to.be.false;
-            });
-        });
-        context('when the useSass option is not a boolean', () => {
-            let useSassOption;
-
-            before(() => {
-                useSassOption = getConfigForGatewayApplication({
-                    useSass: 'true',
-                }).useSass;
-            });
-
-            it('should set it to true', () => {
-                expect(useSassOption).to.be.true;
             });
         });
         context('when passing a custom client theme and no variant', () => {
@@ -273,8 +247,8 @@ describe('DefaultApplicationOptions', () => {
             it('should unset the client theme variant option', () => {
                 expect(options.clientThemeVariant).to.be.undefined;
             });
-            it('should unset the SASS using option', () => {
-                expect(options.useSass).to.be.undefined;
+            it('should unset the withAdminUi option', () => {
+                expect(options.withAdminUi).to.be.undefined;
             });
             it('should unset the server skipping option', () => {
                 expect(options.skipServer).to.be.undefined;
@@ -329,7 +303,6 @@ describe('DefaultApplicationOptions', () => {
                     clientFramework: 'react',
                     clientTheme: 'something',
                     clientThemeVariant: 'somethingElse',
-                    useSass: true,
                     skipServer: true,
                 });
             });
@@ -349,8 +322,8 @@ describe('DefaultApplicationOptions', () => {
             it('should remove the client theme variant option', () => {
                 expect(options.clientThemeVariant).to.be.undefined;
             });
-            it('should remove the SASS using option', () => {
-                expect(options.useSass).to.be.undefined;
+            it('should remove the withAdminUi option', () => {
+                expect(options.withAdminUi).to.be.undefined;
             });
             it('should remove the server skipping option', () => {
                 expect(options.skipServer).to.be.undefined;
@@ -392,8 +365,8 @@ describe('DefaultApplicationOptions', () => {
             it('should unset the client theme variant option', () => {
                 expect(options.clientThemeVariant).to.be.undefined;
             });
-            it('should unset the SASS using option', () => {
-                expect(options.useSass).to.be.undefined;
+            it('should unset the withAdminUi option', () => {
+                expect(options.withAdminUi).to.be.undefined;
             });
             it('should unset the server skipping option', () => {
                 expect(options.skipServer).to.be.undefined;
@@ -413,7 +386,6 @@ describe('DefaultApplicationOptions', () => {
                     clientFramework: 'react',
                     clientTheme: 'something',
                     clientThemeVariant: 'somethingElse',
-                    useSass: true,
                     skipServer: true,
                 });
             });
@@ -433,8 +405,8 @@ describe('DefaultApplicationOptions', () => {
             it('should remove the client theme variant option', () => {
                 expect(options.clientThemeVariant).to.be.undefined;
             });
-            it('should remove the SASS using option', () => {
-                expect(options.useSass).to.be.undefined;
+            it('should remove the withAdminUi option', () => {
+                expect(options.withAdminUi).to.be.undefined;
             });
             it('should remove the server skipping option', () => {
                 expect(options.skipServer).to.be.undefined;
@@ -479,16 +451,11 @@ describe('DefaultApplicationOptions', () => {
             it('should set the jhipster prefix option to jhi', () => {
                 expect(options.jhiPrefix).to.equal('jhi');
             });
-            it('should set the languages option to en and fr', () => {
-                expect(options.languages).to.have.lengthOf(2);
-                expect(options.languages).to.include('en');
-                expect(options.languages).to.include('fr');
+            it('should set the languages option to an empty array', () => {
+                expect(options.languages).to.be.eql([]);
             });
             it('should set the message broker option to false', () => {
                 expect(options.messageBroker).to.be.false;
-            });
-            it('should set the native language option to en', () => {
-                expect(options.nativeLanguage).to.equal('en');
             });
             it('should set the package folder to com/mycompany/myapp', () => {
                 expect(options.packageFolder).to.equal('com/mycompany/myapp');
@@ -496,8 +463,8 @@ describe('DefaultApplicationOptions', () => {
             it('should set the package name to com.mycompany.myapp', () => {
                 expect(options.packageName).to.equal('com.mycompany.myapp');
             });
-            it('should set the production database type option to mysql', () => {
-                expect(options.prodDatabaseType).to.equal('mysql');
+            it('should set the production database type option to postgresql', () => {
+                expect(options.prodDatabaseType).to.equal('postgresql');
             });
             it('should set the search engine option to false', () => {
                 expect(options.searchEngine).to.be.false;

@@ -5,9 +5,6 @@ const createGenerator = env => class extends env.requireGenerator('jhipster:serv
         if (!jhContext) {
             this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
         }
-        this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupServerOptions(this, jhContext);
     }
 
     get initializing() {

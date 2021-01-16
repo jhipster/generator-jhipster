@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,7 +29,10 @@ let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
-        utils.copyObjectProps(this, opts.context);
+
+        this.entity = opts.context;
+
+        utils.copyObjectProps(this, this.entity);
         this.jhipsterContext = opts.jhipsterContext || opts.context;
 
         this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.jhipsterContext.authenticationType);
@@ -80,9 +83,10 @@ module.exports = class extends BaseBlueprintGenerator {
              */
             processJsonIgnoreReferences() {
                 this.relationships
-                    .filter(relationship => relationship.relationshipOtherSideIgnore === undefined)
+                    .filter(relationship => relationship.ignoreOtherSideProperty === undefined)
                     .forEach(relationship => {
-                        relationship.ignoreOtherSideProperty = !relationship.embedded && !!relationship.otherEntity;
+                        relationship.ignoreOtherSideProperty =
+                            !relationship.embedded && !!relationship.otherEntity && relationship.otherEntity.relationships.length > 0;
                     });
                 this.relationshipsContainOtherSideIgnore = this.relationships.some(relationship => relationship.ignoreOtherSideProperty);
             },
@@ -119,8 +123,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             processUniqueEntityTypes() {
-                this.uniqueEntityTypes = new Set(this.eagerRelations.map(rel => rel.otherEntityNameCapitalized));
-                this.uniqueEntityTypes.add(this.entityClass);
+                this.reactiveUniqueEntityTypes = new Set(this.reactiveEagerRelations.map(rel => rel.otherEntityNameCapitalized));
+                this.reactiveUniqueEntityTypes.add(this.entityClass);
             },
         };
     }

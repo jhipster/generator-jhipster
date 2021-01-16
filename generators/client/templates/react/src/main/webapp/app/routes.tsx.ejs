@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,6 +22,9 @@ import Loadable from 'react-loadable';
 
 <%_ if (authenticationType !== 'oauth2') { _%>
 import Login from 'app/modules/login/login';
+<%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+import LoginRedirect from 'app/modules/login/login-redirect';
 <%_ } _%>
 <%_ if (!skipUserManagement) { _%>
 import Register from 'app/modules/account/register/register';
@@ -67,6 +70,9 @@ const Routes = () => (
       <PrivateRoute path="/account" component={Account} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}/>
     <%_ } _%>
       <ErrorBoundaryRoute path="/" exact component={Home}/>
+    <%_ if (authenticationType === 'oauth2') { _%>
+      <ErrorBoundaryRoute path="/oauth2/authorization/oidc" component={LoginRedirect} />
+    <%_ } _%>
       <PrivateRoute path="/" component={Entities} hasAnyAuthorities={[AUTHORITIES.USER]}/>
       <ErrorBoundaryRoute component={PageNotFound} />
     </Switch>

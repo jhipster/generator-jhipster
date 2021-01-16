@@ -1,14 +1,14 @@
 /**
  * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,13 +17,12 @@
  * limitations under the License.
  */
 const logger = require('../utils/objects/logger');
-const merge = require('../utils/object-utils').merge;
 const RelationshipTypes = require('../jhipster/relationship-types');
 const { lowerFirst } = require('../utils/string-utils');
 
 module.exports = class JDLRelationship {
     constructor(args) {
-        const merged = merge(defaults(), args);
+        const merged = mergeDefaultsWithOverrides(args);
         if (!merged.from || !merged.to) {
             throw new Error('Source and destination entities must be passed to create a relationship.');
         }
@@ -66,20 +65,29 @@ module.exports = class JDLRelationship {
         );
     }
 
-    hasOption(option) {
-        return option in this.options;
+    hasGlobalOption(option) {
+        return option in this.options.global;
     }
 
-    forEachOption(passedFunction) {
-        Object.entries(this.options).forEach(([key, value]) => {
+    forEachGlobalOption(passedFunction) {
+        Object.entries(this.options.global).forEach(([key, value]) => {
             passedFunction(key, value);
         });
     }
 
-    optionQuantity() {
-        return Object.keys(this.options).length;
+    forEachSourceOption(passedFunction) {
+        Object.entries(this.options.source).forEach(([key, value]) => {
+            passedFunction(key, value);
+        });
     }
 
+    forEachDestinationOption(passedFunction) {
+        Object.entries(this.options.destination).forEach(([key, value]) => {
+            passedFunction(key, value);
+        });
+    }
+
+    // TODO: refactor this function
     toString() {
         let string = `relationship ${this.type} {\n  `;
         if (this.commentInFrom) {
@@ -87,6 +95,14 @@ module.exports = class JDLRelationship {
                 .split('\n')
                 .map(line => `   * ${line}\n`)
                 .join('')}   */\n  `;
+        }
+        const sourceOptions = this.options.source;
+        if (Object.keys(sourceOptions).length !== 0) {
+            Object.keys(sourceOptions).forEach(name => {
+                const value = sourceOptions[name];
+                string += `  @${name}${value != null && sourceOptions[name] !== true ? `(${value})` : ''}\n`;
+            });
+            string += '  ';
         }
         string += `${this.from}`;
         if (this.injectedFieldInFrom) {
@@ -101,21 +117,46 @@ module.exports = class JDLRelationship {
         } else {
             string += ' ';
         }
+        const destinationOptions = this.options.destination;
+        if (Object.keys(destinationOptions).length !== 0) {
+            string += '\n';
+            Object.keys(destinationOptions).forEach(name => {
+                const value = destinationOptions[name];
+                string += `  @${name}${value != null && destinationOptions[name] !== true ? `(${value})` : ''}\n`;
+            });
+            string += '  ';
+        }
         string += `${this.to}`;
         if (this.injectedFieldInTo) {
             string += `{${this.injectedFieldInTo}${this.isInjectedFieldInToRequired ? ' required' : ''}}`;
         }
-        if (Object.keys(this.options).length !== 0) {
+        const globalOptions = this.options.global;
+        if (Object.keys(globalOptions).length !== 0) {
             string += ' with ';
-            Object.keys(this.options).forEach(name => {
+            Object.keys(globalOptions).forEach(name => {
                 string += `${name}, `;
             });
             string = string.substring(0, string.length - 2);
         }
         string += '\n}';
-        return string;
+        return string.replace(/ \n/g, '\n').replace(/[ ]{4}/g, '  ');
     }
 };
+
+function mergeDefaultsWithOverrides(overrides) {
+    const defaultOptions = defaults();
+    if (!overrides || Object.keys(overrides).length === 0) {
+        return defaultOptions;
+    }
+    const mergedOptions = {
+        ...defaultOptions,
+        ...overrides,
+    };
+    mergedOptions.options.global = mergedOptions.options.global || {};
+    mergedOptions.options.source = mergedOptions.options.source || {};
+    mergedOptions.options.destination = mergedOptions.options.destination || {};
+    return mergedOptions;
+}
 
 function defaults() {
     return {
@@ -124,7 +165,11 @@ function defaults() {
         injectedFieldInTo: null,
         isInjectedFieldInFromRequired: false,
         isInjectedFieldInToRequired: false,
-        options: {},
+        options: {
+            global: {},
+            destination: {},
+            source: {},
+        },
         commentInFrom: '',
         commentInTo: '',
         generateBidirectionalOneToMany: true,
