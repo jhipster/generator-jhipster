@@ -166,7 +166,7 @@ spring:
   <%_ } _%>
   application:
     name: <%= baseName %>
-  <%_ if (serviceDiscoveryType === 'consul' || (applicationType === 'gateway' && reactive)) { _%>
+  <%_ if (serviceDiscoveryType || (applicationType === 'gateway' && reactive)) { _%>
   cloud:
     <%_ if (serviceDiscoveryType === 'consul') { _%>
     consul:

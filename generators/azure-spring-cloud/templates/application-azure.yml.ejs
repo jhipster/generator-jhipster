@@ -42,6 +42,10 @@ eureka:
             defaultZone:
 
 spring:
+    cloud:
+        config:
+            fail-fast: true
+            uri:
     devtools:
         restart:
             enabled: false
@@ -69,3 +73,4 @@ jhipster:
                 token-validity-in-seconds: 86400
                 token-validity-in-seconds-for-remember-me: 2592000
     <%_ } _%>
+

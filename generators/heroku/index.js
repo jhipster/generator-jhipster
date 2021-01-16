@@ -589,7 +589,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 this.log(chalk.bold('\nCreating Heroku deployment files'));
 
-                this.template('bootstrap-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`);
                 this.template('application-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`);
                 this.template('Procfile.ejs', 'Procfile');
                 this.template('system.properties.ejs', 'system.properties');
