@@ -44,7 +44,7 @@
     "@typescript-eslint/eslint-plugin": "4.8.0",
     "@typescript-eslint/parser": "4.8.0",
     "autoprefixer": "9.7.6",
-    "browser-sync": "2.26.7",
+    "browser-sync": "2.26.13",
     "browser-sync-webpack-plugin": "2.2.2",
     "cache-loader": "4.1.0",
     "copy-webpack-plugin": "6.0.3",
