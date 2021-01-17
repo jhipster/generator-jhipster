@@ -102,6 +102,10 @@ spring:
       host: localhost
       port: 8500
   <%_ } _%>
+  <%_ if (serviceDiscoveryType === 'eureka') { _%>
+    config:
+      profile: dev
+  <%_ } _%>
   <%_ if (databaseType === 'sql' && !reactive) { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
