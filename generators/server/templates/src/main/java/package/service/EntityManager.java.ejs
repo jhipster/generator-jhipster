@@ -31,7 +31,6 @@ import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.data.r2dbc.core.DatabaseClient.GenericInsertSpec;
 import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
 import org.springframework.data.r2dbc.mapping.OutboundRow;
-import org.springframework.data.r2dbc.mapping.SettableValue;
 import org.springframework.data.r2dbc.query.UpdateMapper;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
@@ -44,6 +43,7 @@ import org.springframework.data.relational.core.sql.SelectBuilder.SelectOrdered;
 import org.springframework.data.relational.core.sql.SqlIdentifier;
 import org.springframework.data.relational.core.sql.Table;
 import org.springframework.data.relational.core.sql.render.SqlRenderer;
+import org.springframework.r2dbc.core.Parameter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -188,7 +188,7 @@ public class EntityManager {
 
         GenericInsertSpec<Map<String, Object>> insertSpec = db.insert().into(persistentEntity.getTableName());
         SqlIdentifier idColumn = persistentEntity.getIdColumn();
-        for (Entry<SqlIdentifier, SettableValue> column : row.entrySet()) {
+        for (Entry<SqlIdentifier, Parameter> column : row.entrySet()) {
             if (column.getValue().hasValue() || !column.getKey().equals(idColumn)) {
                 insertSpec = insertSpec.value(column.getKey(), column.getValue());
             }
