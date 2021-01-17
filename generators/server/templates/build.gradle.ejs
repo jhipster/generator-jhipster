@@ -267,6 +267,14 @@ repositories {
     <%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE') && !SPRING_BOOT_VERSION.startsWith('2.4')) { _%>
     maven { url 'https://repo.spring.io/milestone' }
     <%_ } _%>
+    <%_ if (JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT')) { _%>
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
+    <%_ } _%>
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
