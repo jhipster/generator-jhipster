@@ -22,8 +22,9 @@ import { Observable<% if (authenticationType !== 'oauth2' && databaseType !== 's
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/core/request/request-util';
+import { isPresent } from 'app/core/util/operators';
 import { Pagination } from 'app/core/request/request.model';
-import { IUser } from './user.model';
+import { IUser, getUserIdentifier } from './user.model';
 <%_ if (authenticationType !== 'oauth2' && databaseType !== 'sql' && databaseType !== 'mongodb' && databaseType !== 'couchbase') { _%>
 import { Authority } from 'app/config/authority.constants';
 <%_ } _%>
@@ -37,5 +38,22 @@ export class UserService {
   query(req?: Pagination): Observable<HttpResponse<IUser[]>> {
     const options = createRequestOption(req);
     return this.http.get<IUser[]>(this.resourceUrl, { params: options, observe: 'response' });
+  }
+
+  addUserToCollectionIfMissing(userCollection: IUser[], ...usersToCheck: (IUser | null | undefined)[]): IUser[] {
+    const users: IUser[] = usersToCheck.filter(isPresent);
+    if (users.length > 0) {
+      const userCollectionIdentifiers = userCollection.map(userItem => getUserIdentifier(userItem)!);
+      const usersToAdd = users.filter(userItem => {
+        const userIdentifier = getUserIdentifier(userItem);
+        if (userIdentifier == null || userCollectionIdentifiers.includes(userIdentifier)) {
+            return false;
+        }
+        userCollectionIdentifiers.push(userIdentifier);
+        return true;
+      });
+      return [...usersToAdd, ...userCollection];
+    }
+    return userCollection;
   }
 }

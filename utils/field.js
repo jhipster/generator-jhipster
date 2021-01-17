@@ -145,6 +145,14 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
       data = undefined;
     }
   }
+  if (
+    data !== undefined &&
+    type === 'ts' &&
+    // eslint-disable-next-line no-template-curly-in-string
+    !['Boolean', 'Integer', 'Long', 'Float', '${floatType}', 'Double', 'BigDecimal'].includes(field.fieldType)
+  ) {
+    data = `'${data}'`;
+  }
 
   return data;
 };

@@ -16,21 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-  const idType = getTypescriptKeyType(user.primaryKey.type);
-_%>
-export interface IUser {
-  id?: <%= idType %>;
-  login?: string;
-}
 
-export class User implements IUser {
-  constructor(
-    public id: <%= idType %>,
-    public login: string,
-  ) {}
-}
-
-export function getUserIdentifier(user: IUser): <%= idType %> | undefined {
-  return user.id;
+/*
+ * Function used to workaround https://github.com/microsoft/TypeScript/issues/16069
+ * es2019 alternative `const filteredArr = myArr.flatMap((x) => x ? x : []);`
+ */
+export function isPresent<T>(t: T | undefined | null | void): t is T {
+  return t !== undefined && t !== null;
 }

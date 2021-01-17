@@ -135,6 +135,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
   entityWithConfig.entityServiceFileName = entityWithConfig.entityFileName;
 
   entityWithConfig.entityAngularName = entityWithConfig.entityClass + generator.upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
+  entityWithConfig.entityAngularNamePlural = pluralize(entityWithConfig.entityAngularName);
   entityWithConfig.entityReactName = entityWithConfig.entityClass + generator.upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
 
   entityWithConfig.entityApiUrl = entityWithConfig.entityNamePluralizedAndSpinalCased;
@@ -222,6 +223,9 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
           get type() {
             return relationshipId.otherEntity.primaryKey.type;
           },
+          get tsType() {
+            return relationshipId.otherEntity.primaryKey.tsType;
+          },
           get references() {
             return [
               ...idFields.map(field => field.reference),
@@ -244,11 +248,14 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
       entityWithConfig.primaryKey = {
         derived: false,
         fields: entityWithConfig.idFields,
-        relationships: entityWithConfig.idRelationships,
+        relationships: [],
         name: idField.fieldName,
         nameCapitalized: _.upperFirst(idField.fieldName),
         type: idField.fieldType,
-        references: entityWithConfig.idFields.map(field => field.reference),
+        tsType: generator.getTypescriptKeyType(idField.fieldType),
+        get references() {
+          return entityWithConfig.idFields.map(field => field.reference);
+        },
         composite: entityWithConfig.idFields.length > 1,
       };
     }
