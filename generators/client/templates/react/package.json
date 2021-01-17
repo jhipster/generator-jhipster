@@ -74,7 +74,7 @@
     "redux-mock-store": "1.5.4",
     "rimraf": "3.0.2",
     "sass": "1.32.4",
-    "sass-loader": "8.0.2",
+    "sass-loader": "10.1.1",
     "simple-progress-webpack-plugin": "1.1.2",
     "sinon": "9.0.2",
     "source-map-loader": "0.2.4",
