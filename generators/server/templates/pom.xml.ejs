@@ -198,7 +198,7 @@
             <artifactId>javax.annotation-api</artifactId>
         </dependency>
 <%_ // This is useful for major Spring Boot migration
-    if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+    if (!SPRING_BOOT_VERSION.endsWith('RELEASE') || SPRING_BOOT_VERSION.startsWith("2.4")) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-properties-migrator</artifactId>
