@@ -227,27 +227,11 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     }
   }
 
-  // Load in-memory data for root
-  if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) {
-    entityWithConfig.fieldsContainOwnerManyToMany = true;
-  } else if (relationship.relationshipType === 'one-to-one' && !relationship.ownerSide) {
-    entityWithConfig.fieldsContainNoOwnerOneToOne = true;
-  } else if (relationship.relationshipType === 'one-to-one' && relationship.ownerSide) {
-    entityWithConfig.fieldsContainOwnerOneToOne = true;
-  } else if (relationship.relationshipType === 'one-to-many') {
-    entityWithConfig.fieldsContainOneToMany = true;
-  } else if (relationship.relationshipType === 'many-to-one') {
-    entityWithConfig.fieldsContainManyToOne = true;
-  }
-  if (relationship.otherEntityIsEmbedded) {
-    entityWithConfig.fieldsContainEmbedded = true;
-  }
-
   if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes('required')) {
     if (entityName.toLowerCase() === relationship.otherEntityName.toLowerCase()) {
       generator.warning(`Error at entity ${entityName}: required relationships to the same entity are not supported.`);
     } else {
-      relationship.relationshipValidate = relationship.relationshipRequired = entityWithConfig.validation = true;
+      relationship.relationshipValidate = relationship.relationshipRequired = true;
     }
   }
   relationship.nullable = !(relationship.relationshipValidate === true && relationship.relationshipRequired);
