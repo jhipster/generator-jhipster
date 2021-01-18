@@ -31,7 +31,7 @@
     "uuid": "7.0.3"
   },
   "devDependencies": {
-    "@testing-library/react": "10.4.8",
+    "@testing-library/react": "11.2.3",
     "@types/jest": "26.0.10",
     "@types/lodash": "4.14.167",
     "@types/node": "13.13.4",
