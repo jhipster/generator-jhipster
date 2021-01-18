@@ -34,7 +34,6 @@
     "@testing-library/react": "11.2.3",
     "@types/jest": "26.0.10",
     "@types/lodash": "4.14.167",
-    "@types/node": "13.13.4",
     "@types/react": "17.0.0",
     "@types/react-dom": "16.9.6",
     "@types/react-redux": "7.1.7",
