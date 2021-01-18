@@ -17,12 +17,6 @@
  limitations under the License.
 -%>
 <%_
-const query = generateEntityQueries(relationships, entityInstance, dto);
-const queries = query.queries;
-const variables = query.variables;
-const rxjsMapIsUsed = query.rxjsMapIsUsed;
-const selectableEntities = query.selectableEntities;
-const selectableManyToManyEntities = query.selectableManyToManyEntities;
 const hasValidationRule = fields.some(field =>
         field.fieldValidate && (
                 field.fieldValidateRules.includes('required') ||
@@ -41,7 +35,7 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder,<%_ if (isValidatorsRequired) { _%> Validators<%_ } _%> } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-<%_ if ( rxjsMapIsUsed ) { _%>
+<%_ if (relationships.some(rel => rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName !== 'user')) { _%>
 import { map } from 'rxjs/operators';
 <%_ } _%>
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
@@ -83,9 +77,17 @@ _%>
 })
 export class <%= entityAngularName %>UpdateComponent implements OnInit {
     isSaving = false;
-    <%_ for (const idx in variables) { _%>
-    <%- variables[idx] %>
+
+<%_ for (const relationshipsByEntityNeedingOptions of Object.values(differentRelationships).map(relationships => relationships.filter(rel => rel.ownerSide)).filter(relationships => relationships.length > 0)) { _%>
+    <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); _%>
+    <%_ if (relationshipsByEntityNeedingOptions.length > relationshipsWithCustomUniqueOptions.length) { _%>
+        <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity _%>
+    <%= otherEntity.entityInstancePlural %>SharedCollection: I<%= otherEntity.entityAngularName %>[] = [];
     <%_ } _%>
+    <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { _%>
+    <%= relationship.relationshipFieldNamePlural %>Collection: I<%= relationship.otherEntityAngularName %>[] = [];
+    <%_ } _%>
+<%_ } _%>
 
     editForm = this.fb.group({
     <%_ for (const field of fields) {
@@ -156,11 +158,43 @@ _%>
 
             this.updateForm(<%= entityInstance %>);
 
-            <%_ for (idx in queries) { _%>
-            <%- queries[idx] %>
-            <%_ } _%>
+<%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
+            this.loadRelationshipsOptions();
+<%_ } _%>
         });
     }
+<%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
+
+    loadRelationshipsOptions(): void {
+    <%_ for (const relationshipsByEntityNeedingOptions of Object.values(differentRelationships).map(relationships => relationships.filter(rel => rel.ownerSide)).filter(relationships => relationships.length > 0)) { _%>
+        <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); %>
+        <%_ if (relationshipsByEntityNeedingOptions.length > relationshipsWithCustomUniqueOptions.length) { _%>
+            <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity _%>
+        this.<%= otherEntity.entityInstance %>Service.query()
+            .subscribe((res: HttpResponse<I<%= otherEntity.entityAngularName %>[]>) => this.<%= otherEntity.entityInstancePlural %>SharedCollection = res.body ?? []);
+        <%_ } _%>
+        <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { %>
+            <%_ const relationshipIdGetter = `this.editForm.get(['${relationship.relationshipFieldName}', '${relationship.otherEntity.primaryKey.name}'])?.value`; _%>
+            <%_ const filter = relationship.jpaMetamodelFiltering ? `'${relationship.otherEntityRelationshipName}Id.specified': 'false'` : `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`; _%>
+
+        this.<%= relationship.otherEntityName %>Service
+            .query({<%- filter %>})
+            .pipe(map((res: HttpResponse<I<%= relationship.otherEntityAngularName %>[]>) => res.body ?? []))
+            .subscribe((resBody: I<%= relationship.otherEntityAngularName %>[]) => {
+                if (!<%- relationshipIdGetter %>) {
+                    this.<%= relationship.relationshipFieldNamePlural %>Collection = resBody;
+                } else {
+                    this.<%= relationship.otherEntityName %>Service
+                        .find(<%- relationshipIdGetter %>)
+                        .pipe(map((subRes: HttpResponse<I<%= relationship.otherEntityAngularName %>>) => subRes.body ? [subRes.body].concat(resBody) : resBody))
+                        .subscribe((concatRes: I<%= relationship.otherEntityAngularName %>[]) => this.<%= relationship.relationshipFieldNamePlural %>Collection = concatRes);
+                    }
+                }
+            );
+        <%_ } _%>
+    <%_ } _%>
+    }
+<%_ } _%>
 
     updateForm(<%= entityInstance %>: I<%= entityAngularName %>): void {
         this.editForm.patchValue({
