@@ -530,6 +530,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
             prepareRelationshipsForTemplates() {
                 this.context.relationships.forEach(relationship => {
                     prepareRelationshipForTemplates(this.context, relationship, this);
+
+                    const entityType = relationship.otherEntityNameCapitalized;
+                    if (!this.context.differentTypes.includes(entityType)) {
+                        this.context.differentTypes.push(entityType);
+                    }
+                    if (!this.context.differentRelationships[entityType]) {
+                        this.context.differentRelationships[entityType] = [];
+                    }
+                    this.context.differentRelationships[entityType].push(relationship);
                 });
             },
 

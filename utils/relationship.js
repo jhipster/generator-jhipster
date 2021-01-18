@@ -44,6 +44,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         // let ownerSide true when type is 'many-to-one' for convenience.
         // means that this side should control the reference.
         ownerSide: relationship.ownerSide || relationship.relationshipType === 'many-to-one',
+        collection: relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many',
     });
 
     relationship.otherSideReferenceExists = false;
@@ -264,20 +265,12 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         };
     }
 
-    const entityType = relationship.otherEntityNameCapitalized;
-    if (!entityWithConfig.differentTypes.includes(entityType)) {
-        entityWithConfig.differentTypes.push(entityType);
-    }
-    if (!entityWithConfig.differentRelationships[entityType]) {
-        entityWithConfig.differentRelationships[entityType] = [];
-    }
-    entityWithConfig.differentRelationships[entityType].push(relationship);
     relationship.reference = relationshipToReference(entityWithConfig, relationship);
     return relationship;
 }
 
 function relationshipToReference(entity, relationship, pathPrefix = []) {
-    const collection = relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many';
+    const collection = relationship.collection;
     const name = collection ? relationship.relationshipNamePlural : relationship.relationshipName;
     const reference = {
         id: relationship.id,
