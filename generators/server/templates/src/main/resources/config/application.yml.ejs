@@ -324,6 +324,7 @@ spring:
             client-id: web_app
             client-secret: web_app
           <%_ } _%>
+            scope: openid,profile,email
 <%_ } else if (authenticationType === 'uaa') { _%>
 security:
   oauth2:
