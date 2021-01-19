@@ -28,6 +28,9 @@ module.exports = webpackMerge(baseWebpackConfig, {
     filename: 'app/[name].bundle.js',
     chunkFilename: 'app/[id].chunk.js'
   },
+  optimization: {
+    moduleIds: 'named',
+  },
   devServer: {
     contentBase: './<%= DIST_DIR %>',
     port: 9060,
@@ -69,7 +72,6 @@ module.exports = webpackMerge(baseWebpackConfig, {
       'process.env': require('../config/dev.env')
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
     new webpack.NoEmitOnErrorsPlugin(),
     new BrowserSyncPlugin(
       {

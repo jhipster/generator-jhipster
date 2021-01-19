@@ -34,6 +34,7 @@ const webpackConfig = webpackMerge(baseWebpackConfig, {
     chunkFilename: 'app/[id].[hash].chunk.js'
   },
   optimization: {
+    moduleIds: 'deterministic',
     splitChunks: {
       cacheGroups: {
         commons: {
@@ -80,10 +81,8 @@ const webpackConfig = webpackMerge(baseWebpackConfig, {
           safari10: true
         }
       },
-      cache: true,
       parallel: true,
       extractComments: false,
-      sourceMap: config.build.productionSourceMap,
     }),
     // extract css into its own file
     new MiniCssExtractPlugin({
@@ -111,16 +110,19 @@ const webpackConfig = webpackMerge(baseWebpackConfig, {
       },
     }),
     // keep module.id stable when vendor modules does not change
-    new webpack.HashedModuleIdsPlugin(),
     new ForkTsCheckerWebpackPlugin(
       {
-        vue: {
-          enabled: true,
-          compiler: 'vue-template-compiler'
+        typescript: {
+          vue: {
+            enabled: true,
+            compiler: 'vue-template-compiler',
+          },
+          diagnosticOptions: {
+            semantic: true,
+            syntactic: true,
+          },
         },
-        tslint: false,
         formatter: 'codeframe',
-        checkSyntacticErrors: false
       }
     ),
     new WorkboxPlugin.GenerateSW({
