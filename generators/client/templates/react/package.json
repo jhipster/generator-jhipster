@@ -9,7 +9,7 @@
     "bootswatch": "4.3.1",
     "loaders.css": "0.1.2",
     "lodash": "4.17.20",
-    "path-browserify": "^1.0.1",
+    "path-browserify": "1.0.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-hot-loader": "4.13.0",
