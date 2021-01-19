@@ -19,7 +19,7 @@
 const chalk = require('chalk');
 const statistics = require('../statistics');
 const packagejs = require('../../package.json');
-const generatorDefaults = require('../generator-defaults').defaultConfig;
+const { appDefaultConfig } = require('../generator-defaults');
 
 module.exports = {
   askForInsightOptIn,
@@ -70,7 +70,7 @@ async function askForApplicationType() {
       name: 'applicationType',
       message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
       choices: applicationTypeChoices,
-      default: generatorDefaults.applicationType,
+      default: appDefaultConfig.applicationType,
     },
   ]);
   this.applicationType = this.jhipsterConfig.applicationType = answers.applicationType;
@@ -99,7 +99,7 @@ async function askForTestOpts() {
     name: 'testFrameworks',
     message: 'Besides JUnit and Jest, which testing frameworks would you like to use?',
     choices,
-    default: generatorDefaults.testFrameworks,
+    default: appDefaultConfig.testFrameworks,
   };
 
   const answers = await this.prompt(PROMPT);
