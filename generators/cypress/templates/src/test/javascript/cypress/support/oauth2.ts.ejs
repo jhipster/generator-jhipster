@@ -6,7 +6,7 @@
 /// <reference types="cypress" />
 
 Cypress.Commands.add('oauthLogin', (username, password) => {
-    cy.task('login', {baseUrl: Cypress.config().baseUrl, username: username, password: password}).then(cookies => {
+    cy.task('login', {baseUrl: Cypress.config().baseUrl, username: username, password: password}).then((cookies: Array<any>) => {
       cookies.forEach(c => {
         const name = c.name;
         const value = c.value;
@@ -19,7 +19,7 @@ Cypress.Commands.add('oauthLogin', (username, password) => {
     });
   });
 
-Cypress.Commands.add('oauthLogout', (username, password) => {
+Cypress.Commands.add('oauthLogout', () => {
     cy.task('logout', {baseUrl: Cypress.config().baseUrl}).then(() => {
       cy.clearCookies();
     });
