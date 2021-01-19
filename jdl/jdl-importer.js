@@ -31,8 +31,8 @@ const JDLWithApplicationValidator = require('./validators/jdl-with-application-v
 const JDLWithoutApplicationValidator = require('./validators/jdl-without-application-validator');
 
 module.exports = {
-    createImporterFromContent,
-    createImporterFromFiles,
+  createImporterFromContent,
+  createImporterFromFiles,
 };
 
 /**
@@ -54,11 +54,11 @@ module.exports = {
  * @throws {Error} if files aren't passed.
  */
 function createImporterFromFiles(files, configuration) {
-    if (!files) {
-        throw new Error('Files must be passed to create a new JDL importer.');
-    }
-    const content = parseFiles(files);
-    return makeJDLImporter(content, configuration || {});
+  if (!files) {
+    throw new Error('Files must be passed to create a new JDL importer.');
+  }
+  const content = parseFiles(files);
+  return makeJDLImporter(content, configuration || {});
 }
 
 /**
@@ -81,242 +81,242 @@ function createImporterFromFiles(files, configuration) {
  * @throws {Error} if the content isn't passed.
  */
 function createImporterFromContent(jdlString, configuration) {
-    if (!jdlString) {
-        throw new Error('A JDL content must be passed to create a new JDL importer.');
-    }
-    const content = JDLReader.parseFromContent(jdlString);
-    return makeJDLImporter(content, configuration || {});
+  if (!jdlString) {
+    throw new Error('A JDL content must be passed to create a new JDL importer.');
+  }
+  const content = JDLReader.parseFromContent(jdlString);
+  return makeJDLImporter(content, configuration || {});
 }
 
 function makeJDLImporter(content, configuration) {
-    let importState = {
-        exportedApplications: [],
-        exportedApplicationsWithEntities: {},
-        exportedEntities: [],
-        exportedDeployments: [],
-    };
+  let importState = {
+    exportedApplications: [],
+    exportedApplicationsWithEntities: {},
+    exportedEntities: [],
+    exportedDeployments: [],
+  };
 
-    return {
-        /**
-         * Processes JDL files and converts them to JSON.
-         * @param {Object} logger - the logger to use, default to the console.
-         * @returns {object} the state of the process:
-         *          - exportedDeployments: the exported deployments, or an empty list
-         *          - exportedApplications: the exported applications, or an empty list
-         *          - exportedEntities: the exported entities, or an empty list
-         */
-        import: (logger = console) => {
-            const jdlObject = getJDLObject(content, configuration);
-            checkForErrors(jdlObject, configuration, logger);
-            if (jdlObject.getApplicationQuantity() === 0 && jdlObject.getEntityQuantity() > 0) {
-                importState.exportedEntities = importOnlyEntities(jdlObject, configuration);
-            } else if (jdlObject.getApplicationQuantity() === 1) {
-                importState = importOneApplicationAndEntities(jdlObject, configuration);
-            } else {
-                importState = importApplicationsAndEntities(jdlObject, configuration);
-            }
-            if (jdlObject.getDeploymentQuantity()) {
-                importState.exportedDeployments = importDeployments(jdlObject.deployments);
-            }
-            return importState;
-        },
-    };
+  return {
+    /**
+     * Processes JDL files and converts them to JSON.
+     * @param {Object} logger - the logger to use, default to the console.
+     * @returns {object} the state of the process:
+     *          - exportedDeployments: the exported deployments, or an empty list
+     *          - exportedApplications: the exported applications, or an empty list
+     *          - exportedEntities: the exported entities, or an empty list
+     */
+    import: (logger = console) => {
+      const jdlObject = getJDLObject(content, configuration);
+      checkForErrors(jdlObject, configuration, logger);
+      if (jdlObject.getApplicationQuantity() === 0 && jdlObject.getEntityQuantity() > 0) {
+        importState.exportedEntities = importOnlyEntities(jdlObject, configuration);
+      } else if (jdlObject.getApplicationQuantity() === 1) {
+        importState = importOneApplicationAndEntities(jdlObject, configuration);
+      } else {
+        importState = importApplicationsAndEntities(jdlObject, configuration);
+      }
+      if (jdlObject.getDeploymentQuantity()) {
+        importState.exportedDeployments = importDeployments(jdlObject.deployments);
+      }
+      return importState;
+    },
+  };
 }
 
 function parseFiles(files) {
-    return JDLReader.parseFromFiles(files);
+  return JDLReader.parseFromFiles(files);
 }
 
 function getJDLObject(parsedJDLContent, configuration) {
-    let baseName = configuration.applicationName;
-    let applicationType = configuration.applicationType;
-    let generatorVersion = configuration.generatorVersion;
-    let databaseType = configuration.databaseType;
-    let skippedUserManagement = false;
+  let baseName = configuration.applicationName;
+  let applicationType = configuration.applicationType;
+  let generatorVersion = configuration.generatorVersion;
+  let databaseType = configuration.databaseType;
+  let skippedUserManagement = false;
 
-    if (configuration.application) {
-        baseName = configuration.application['generator-jhipster'].baseName;
-        applicationType = configuration.application['generator-jhipster'].applicationType;
-        generatorVersion = configuration.application['generator-jhipster'].jhipsterVersion;
-        skippedUserManagement = configuration.application['generator-jhipster'].skipUserManagement;
-        databaseType = configuration.application['generator-jhipster'].databaseType;
-    }
+  if (configuration.application) {
+    baseName = configuration.application['generator-jhipster'].baseName;
+    applicationType = configuration.application['generator-jhipster'].applicationType;
+    generatorVersion = configuration.application['generator-jhipster'].jhipsterVersion;
+    skippedUserManagement = configuration.application['generator-jhipster'].skipUserManagement;
+    databaseType = configuration.application['generator-jhipster'].databaseType;
+  }
 
-    return ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
-        parsedContent: parsedJDLContent,
-        applicationType,
-        applicationName: baseName,
-        generatorVersion,
-        skippedUserManagement,
-        databaseType,
-    });
+  return ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
+    parsedContent: parsedJDLContent,
+    applicationType,
+    applicationName: baseName,
+    generatorVersion,
+    skippedUserManagement,
+    databaseType,
+  });
 }
 
 function checkForErrors(jdlObject, configuration, logger = console) {
-    let validator;
-    if (jdlObject.getApplicationQuantity() === 0) {
-        let application = configuration.application;
-        if (!application && doesFileExist('.yo-rc.json')) {
-            application = readJSONFile('.yo-rc.json');
-        }
-        let applicationType = configuration.applicationType;
-        let databaseType = configuration.databaseType;
-        let skippedUserManagement = configuration.skipUserManagement;
-        let blueprints = configuration.blueprints;
-        if (application && application['generator-jhipster']) {
-            if (applicationType === undefined) {
-                applicationType = application['generator-jhipster'].applicationType;
-            }
-            if (databaseType === undefined) {
-                databaseType = application['generator-jhipster'].databaseType;
-            }
-            if (skippedUserManagement === undefined) {
-                skippedUserManagement = application['generator-jhipster'].skipUserManagement;
-            }
-            if (blueprints === undefined) {
-                blueprints = application['generator-jhipster'].blueprints;
-            }
-        }
-        validator = JDLWithoutApplicationValidator.createValidator(
-            jdlObject,
-            {
-                applicationType,
-                databaseType,
-                skippedUserManagement,
-                blueprints,
-            },
-            logger
-        );
-    } else {
-        validator = JDLWithApplicationValidator.createValidator(jdlObject, logger);
+  let validator;
+  if (jdlObject.getApplicationQuantity() === 0) {
+    let application = configuration.application;
+    if (!application && doesFileExist('.yo-rc.json')) {
+      application = readJSONFile('.yo-rc.json');
     }
-    validator.checkForErrors();
+    let applicationType = configuration.applicationType;
+    let databaseType = configuration.databaseType;
+    let skippedUserManagement = configuration.skipUserManagement;
+    let blueprints = configuration.blueprints;
+    if (application && application['generator-jhipster']) {
+      if (applicationType === undefined) {
+        applicationType = application['generator-jhipster'].applicationType;
+      }
+      if (databaseType === undefined) {
+        databaseType = application['generator-jhipster'].databaseType;
+      }
+      if (skippedUserManagement === undefined) {
+        skippedUserManagement = application['generator-jhipster'].skipUserManagement;
+      }
+      if (blueprints === undefined) {
+        blueprints = application['generator-jhipster'].blueprints;
+      }
+    }
+    validator = JDLWithoutApplicationValidator.createValidator(
+      jdlObject,
+      {
+        applicationType,
+        databaseType,
+        skippedUserManagement,
+        blueprints,
+      },
+      logger
+    );
+  } else {
+    validator = JDLWithApplicationValidator.createValidator(jdlObject, logger);
+  }
+  validator.checkForErrors();
 }
 
 function importOnlyEntities(jdlObject, configuration) {
-    let { applicationName, applicationType, databaseType } = configuration;
+  let { applicationName, applicationType, databaseType } = configuration;
 
-    let application = configuration.application;
-    if (!configuration.application && doesFileExist('.yo-rc.json')) {
-        application = readJSONFile('.yo-rc.json');
+  let application = configuration.application;
+  if (!configuration.application && doesFileExist('.yo-rc.json')) {
+    application = readJSONFile('.yo-rc.json');
+  }
+  if (application && application['generator-jhipster']) {
+    if (applicationType === undefined) {
+      applicationType = application['generator-jhipster'].applicationType;
     }
-    if (application && application['generator-jhipster']) {
-        if (applicationType === undefined) {
-            applicationType = application['generator-jhipster'].applicationType;
-        }
-        if (applicationName === undefined) {
-            applicationName = application['generator-jhipster'].baseName;
-        }
-        if (databaseType === undefined) {
-            databaseType = application['generator-jhipster'].databaseType;
-        }
+    if (applicationName === undefined) {
+      applicationName = application['generator-jhipster'].baseName;
     }
+    if (databaseType === undefined) {
+      databaseType = application['generator-jhipster'].databaseType;
+    }
+  }
 
-    const entitiesPerApplicationMap = JDLWithoutApplicationToJSONConverter.convert({
-        jdlObject,
-        applicationName,
-        applicationType,
-        databaseType,
-    });
-    const jsonEntities = entitiesPerApplicationMap.get(applicationName);
-    return exportJSONEntities(jsonEntities, configuration);
+  const entitiesPerApplicationMap = JDLWithoutApplicationToJSONConverter.convert({
+    jdlObject,
+    applicationName,
+    applicationType,
+    databaseType,
+  });
+  const jsonEntities = entitiesPerApplicationMap.get(applicationName);
+  return exportJSONEntities(jsonEntities, configuration);
 }
 
 function importOneApplicationAndEntities(jdlObject, configuration) {
-    const { skipFileGeneration } = configuration;
+  const { skipFileGeneration } = configuration;
 
-    const importState = {
-        exportedApplications: [],
-        exportedApplicationsWithEntities: {},
-        exportedEntities: [],
-        exportedDeployments: [],
-    };
-    const formattedApplication = JHipsterApplicationFormatter.formatApplicationToExport(jdlObject.getApplications()[0], configuration);
-    if (!skipFileGeneration) {
-        JHipsterApplicationExporter.exportApplication(formattedApplication);
-    }
-    importState.exportedApplications.push(formattedApplication);
-    const jdlApplication = jdlObject.getApplications()[0];
-    const applicationName = jdlApplication.getConfigurationOptionValue('baseName');
-    const entitiesPerApplicationMap = JDLWithApplicationsToJSONConverter.convert({
-        jdlObject,
+  const importState = {
+    exportedApplications: [],
+    exportedApplicationsWithEntities: {},
+    exportedEntities: [],
+    exportedDeployments: [],
+  };
+  const formattedApplication = JHipsterApplicationFormatter.formatApplicationToExport(jdlObject.getApplications()[0], configuration);
+  if (!skipFileGeneration) {
+    JHipsterApplicationExporter.exportApplication(formattedApplication);
+  }
+  importState.exportedApplications.push(formattedApplication);
+  const jdlApplication = jdlObject.getApplications()[0];
+  const applicationName = jdlApplication.getConfigurationOptionValue('baseName');
+  const entitiesPerApplicationMap = JDLWithApplicationsToJSONConverter.convert({
+    jdlObject,
+  });
+  const jsonEntities = entitiesPerApplicationMap.get(applicationName);
+  importState.exportedApplicationsWithEntities[applicationName] = {
+    config: formattedApplication['generator-jhipster'],
+    entities: [],
+  };
+  if (jsonEntities.length !== 0) {
+    const exportedJSONEntities = exportJSONEntities(jsonEntities, {
+      applicationName,
+      applicationType: jdlApplication.getConfigurationOptionValue('applicationType'),
+      forSeveralApplications: false,
+      skipFileGeneration,
     });
-    const jsonEntities = entitiesPerApplicationMap.get(applicationName);
-    importState.exportedApplicationsWithEntities[applicationName] = {
-        config: formattedApplication['generator-jhipster'],
-        entities: [],
-    };
-    if (jsonEntities.length !== 0) {
-        const exportedJSONEntities = exportJSONEntities(jsonEntities, {
-            applicationName,
-            applicationType: jdlApplication.getConfigurationOptionValue('applicationType'),
-            forSeveralApplications: false,
-            skipFileGeneration,
-        });
-        importState.exportedApplicationsWithEntities[applicationName].entities = exportedJSONEntities;
-        importState.exportedEntities = uniqBy([...importState.exportedEntities, ...exportedJSONEntities], 'name');
-    }
-    return importState;
+    importState.exportedApplicationsWithEntities[applicationName].entities = exportedJSONEntities;
+    importState.exportedEntities = uniqBy([...importState.exportedEntities, ...exportedJSONEntities], 'name');
+  }
+  return importState;
 }
 
 function importApplicationsAndEntities(jdlObject, configuration) {
-    const { skipFileGeneration } = configuration;
+  const { skipFileGeneration } = configuration;
 
-    const importState = {
-        exportedApplications: [],
-        exportedApplicationsWithEntities: {},
-        exportedEntities: [],
-        exportedDeployments: [],
+  const importState = {
+    exportedApplications: [],
+    exportedApplicationsWithEntities: {},
+    exportedEntities: [],
+    exportedDeployments: [],
+  };
+
+  const formattedApplications = JHipsterApplicationFormatter.formatApplicationsToExport(jdlObject.applications, configuration);
+  importState.exportedApplications = formattedApplications;
+  if (!skipFileGeneration) {
+    JHipsterApplicationExporter.exportApplications(formattedApplications);
+  }
+  const entitiesPerApplicationMap = JDLWithApplicationsToJSONConverter.convert({
+    jdlObject,
+  });
+  entitiesPerApplicationMap.forEach((jsonEntities, applicationName) => {
+    const jdlApplication = jdlObject.getApplication(applicationName);
+    const exportedJSONEntities = exportJSONEntities(jsonEntities, {
+      applicationName,
+      applicationType: jdlApplication.getConfigurationOptionValue('applicationType'),
+      forSeveralApplications: true,
+      skipFileGeneration,
+    });
+    const exportedConfig = importState.exportedApplications.find(config => applicationName === config['generator-jhipster'].baseName);
+    importState.exportedApplicationsWithEntities[applicationName] = {
+      config: exportedConfig['generator-jhipster'],
+      entities: exportedJSONEntities,
     };
-
-    const formattedApplications = JHipsterApplicationFormatter.formatApplicationsToExport(jdlObject.applications, configuration);
-    importState.exportedApplications = formattedApplications;
-    if (!skipFileGeneration) {
-        JHipsterApplicationExporter.exportApplications(formattedApplications);
-    }
-    const entitiesPerApplicationMap = JDLWithApplicationsToJSONConverter.convert({
-        jdlObject,
-    });
-    entitiesPerApplicationMap.forEach((jsonEntities, applicationName) => {
-        const jdlApplication = jdlObject.getApplication(applicationName);
-        const exportedJSONEntities = exportJSONEntities(jsonEntities, {
-            applicationName,
-            applicationType: jdlApplication.getConfigurationOptionValue('applicationType'),
-            forSeveralApplications: true,
-            skipFileGeneration,
-        });
-        const exportedConfig = importState.exportedApplications.find(config => applicationName === config['generator-jhipster'].baseName);
-        importState.exportedApplicationsWithEntities[applicationName] = {
-            config: exportedConfig['generator-jhipster'],
-            entities: exportedJSONEntities,
-        };
-        importState.exportedEntities = uniqBy([...importState.exportedEntities, ...exportedJSONEntities], 'name');
-    });
-    return importState;
+    importState.exportedEntities = uniqBy([...importState.exportedEntities, ...exportedJSONEntities], 'name');
+  });
+  return importState;
 }
 
 function importDeployments(deployments) {
-    return JHipsterDeploymentExporter.exportDeployments(deployments);
+  return JHipsterDeploymentExporter.exportDeployments(deployments);
 }
 
 function exportJSONEntities(entities, configuration) {
-    const { forceNoFiltering, skipFileGeneration } = configuration;
-    let baseName = configuration.applicationName;
-    let applicationType = configuration.applicationType;
+  const { forceNoFiltering, skipFileGeneration } = configuration;
+  let baseName = configuration.applicationName;
+  let applicationType = configuration.applicationType;
 
-    if (configuration.application) {
-        baseName = configuration.application['generator-jhipster'].baseName;
-        applicationType = configuration.application['generator-jhipster'].applicationType;
-    }
+  if (configuration.application) {
+    baseName = configuration.application['generator-jhipster'].baseName;
+    applicationType = configuration.application['generator-jhipster'].applicationType;
+  }
 
-    return JHipsterEntityExporter.exportEntities({
-        entities,
-        forceNoFiltering,
-        skipFileGeneration,
-        application: {
-            name: baseName,
-            type: applicationType,
-            forSeveralApplications: !!configuration.forSeveralApplications,
-        },
-    });
+  return JHipsterEntityExporter.exportEntities({
+    entities,
+    forceNoFiltering,
+    skipFileGeneration,
+    application: {
+      name: baseName,
+      type: applicationType,
+      forSeveralApplications: !!configuration.forSeveralApplications,
+    },
+  });
 }

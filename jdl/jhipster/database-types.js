@@ -18,17 +18,17 @@
  */
 
 const Types = {
-    SQL: 'sql',
-    MYSQL: 'mysql',
-    MARIADB: 'mariadb',
-    POSTGRESQL: 'postgresql',
-    MSSQL: 'mssql',
-    ORACLE: 'oracle',
-    MONGODB: 'mongodb',
-    CASSANDRA: 'cassandra',
-    COUCHBASE: 'couchbase',
-    NEO4J: 'neo4j',
-    NO: 'no',
+  SQL: 'sql',
+  MYSQL: 'mysql',
+  MARIADB: 'mariadb',
+  POSTGRESQL: 'postgresql',
+  MSSQL: 'mssql',
+  ORACLE: 'oracle',
+  MONGODB: 'mongodb',
+  CASSANDRA: 'cassandra',
+  COUCHBASE: 'couchbase',
+  NEO4J: 'neo4j',
+  NO: 'no',
 };
 
 Types.isSql = type => [Types.SQL, Types.MYSQL, Types.POSTGRESQL, Types.ORACLE, Types.MARIADB, Types.MSSQL].includes(type);

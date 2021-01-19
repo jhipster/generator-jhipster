@@ -22,50 +22,50 @@ const { createJDLApplication } = require('../../../jdl/models/jdl-application-fa
 const { MONOLITH, MICROSERVICE, GATEWAY, UAA } = require('../../../jdl/jhipster/application-types');
 
 describe('JDLApplicationFactory', () => {
-    describe('createJDLApplication', () => {
-        context(`when passing a ${MICROSERVICE} config`, () => {
-            let application;
+  describe('createJDLApplication', () => {
+    context(`when passing a ${MICROSERVICE} config`, () => {
+      let application;
 
-            before(() => {
-                application = createJDLApplication({ applicationType: MICROSERVICE });
-            });
+      before(() => {
+        application = createJDLApplication({ applicationType: MICROSERVICE });
+      });
 
-            it('should create the app', () => {
-                expect(application.getConfigurationOptionValue('applicationType')).to.equal(MICROSERVICE);
-            });
-        });
-        context(`when passing a ${GATEWAY} config`, () => {
-            let application;
-
-            before(() => {
-                application = createJDLApplication({ applicationType: GATEWAY });
-            });
-
-            it('should create the app', () => {
-                expect(application.getConfigurationOptionValue('applicationType')).to.equal(GATEWAY);
-            });
-        });
-        context(`when passing a ${MONOLITH} config`, () => {
-            let application;
-
-            before(() => {
-                application = createJDLApplication({ applicationType: MONOLITH });
-            });
-
-            it('should create the app', () => {
-                expect(application.getConfigurationOptionValue('applicationType')).to.equal(MONOLITH);
-            });
-        });
-        context(`when passing a ${UAA} config`, () => {
-            let application;
-
-            before(() => {
-                application = createJDLApplication({ applicationType: UAA });
-            });
-
-            it('should create the app', () => {
-                expect(application.getConfigurationOptionValue('applicationType')).to.equal(UAA);
-            });
-        });
+      it('should create the app', () => {
+        expect(application.getConfigurationOptionValue('applicationType')).to.equal(MICROSERVICE);
+      });
     });
+    context(`when passing a ${GATEWAY} config`, () => {
+      let application;
+
+      before(() => {
+        application = createJDLApplication({ applicationType: GATEWAY });
+      });
+
+      it('should create the app', () => {
+        expect(application.getConfigurationOptionValue('applicationType')).to.equal(GATEWAY);
+      });
+    });
+    context(`when passing a ${MONOLITH} config`, () => {
+      let application;
+
+      before(() => {
+        application = createJDLApplication({ applicationType: MONOLITH });
+      });
+
+      it('should create the app', () => {
+        expect(application.getConfigurationOptionValue('applicationType')).to.equal(MONOLITH);
+      });
+    });
+    context(`when passing a ${UAA} config`, () => {
+      let application;
+
+      before(() => {
+        application = createJDLApplication({ applicationType: UAA });
+      });
+
+      it('should create the app', () => {
+        expect(application.getConfigurationOptionValue('applicationType')).to.equal(UAA);
+      });
+    });
+  });
 });

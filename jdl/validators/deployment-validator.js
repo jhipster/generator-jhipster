@@ -20,13 +20,13 @@
 const Validator = require('./validator');
 
 class DeploymentValidator extends Validator {
-    constructor() {
-        super('deployment', ['deploymentType', 'appsFolders', 'dockerRepositoryName']);
-    }
+  constructor() {
+    super('deployment', ['deploymentType', 'appsFolders', 'dockerRepositoryName']);
+  }
 
-    validate(jdlDeployment) {
-        super.validate(jdlDeployment);
-    }
+  validate(jdlDeployment) {
+    super.validate(jdlDeployment);
+  }
 }
 
 module.exports = DeploymentValidator;

@@ -20,13 +20,13 @@
 const AbstractIssue = require('./abstract-issue');
 
 class EnumIssue extends AbstractIssue {
-    constructor(args) {
-        super(args);
-        if (!args.enumName) {
-            throw new Error('An enum name must be passed.');
-        }
-        this.enumName = args.enumName;
+  constructor(args) {
+    super(args);
+    if (!args.enumName) {
+      throw new Error('An enum name must be passed.');
     }
+    this.enumName = args.enumName;
+  }
 }
 
 module.exports = EnumIssue;

@@ -20,8 +20,8 @@
 const logger = require('./objects/logger');
 
 module.exports = {
-    displayObjectDeprecationMessage,
-    displayMethodDeprecationMessage,
+  displayObjectDeprecationMessage,
+  displayMethodDeprecationMessage,
 };
 
 /**
@@ -31,7 +31,7 @@ module.exports = {
  *        - preferredObject
  */
 function displayObjectDeprecationMessage({ deprecatedObject, preferredObject }) {
-    logger.warn(getDeprecationMessage(deprecatedObject, preferredObject, 'object'));
+  logger.warn(getDeprecationMessage(deprecatedObject, preferredObject, 'object'));
 }
 
 /**
@@ -41,13 +41,13 @@ function displayObjectDeprecationMessage({ deprecatedObject, preferredObject }) 
  *        - preferredMethod
  */
 function displayMethodDeprecationMessage({ deprecatedMethod, preferredMethod }) {
-    logger.warn(getDeprecationMessage(deprecatedMethod, preferredMethod, 'method'));
+  logger.warn(getDeprecationMessage(deprecatedMethod, preferredMethod, 'method'));
 }
 
 function getDeprecationMessage(deprecated, preferred, targetType) {
-    const firstPart = `The ${targetType} '${deprecated}' is deprecated and will be removed in the next major release.`;
-    if (!preferred) {
-        return firstPart;
-    }
-    return `${firstPart} Please use '${preferred}' instead.`;
+  const firstPart = `The ${targetType} '${deprecated}' is deprecated and will be removed in the next major release.`;
+  if (!preferred) {
+    return firstPart;
+  }
+  return `${firstPart} Please use '${preferred}' instead.`;
 }

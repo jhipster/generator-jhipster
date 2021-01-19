@@ -18,24 +18,24 @@
  */
 
 module.exports = {
-    addAll,
-    join,
+  addAll,
+  join,
 };
 
 function addAll(set, elements) {
-    if (!set) {
-        throw new Error('A Set must be passed so as to insert elements.');
-    }
-    if (!elements || elements.length === 0) {
-        return set;
-    }
-    elements.forEach(element => set.add(element));
+  if (!set) {
+    throw new Error('A Set must be passed so as to insert elements.');
+  }
+  if (!elements || elements.length === 0) {
     return set;
+  }
+  elements.forEach(element => set.add(element));
+  return set;
 }
 
 function join(set, separator = ',') {
-    if (!set) {
-        throw new Error('A Set must be passed so as to join elements.');
-    }
-    return Array.from(set).join(separator);
+  if (!set) {
+    throw new Error('A Set must be passed so as to join elements.');
+  }
+  return Array.from(set).join(separator);
 }

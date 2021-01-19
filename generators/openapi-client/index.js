@@ -24,93 +24,93 @@ const prompts = require('./prompts');
 const { writeFiles, customizeFiles } = require('./files');
 
 module.exports = class extends BaseGenerator {
-    constructor(args, opts) {
-        super(args, opts);
-        this.option('regen', {
-            desc: 'Regenerates all saved clients',
-            type: Boolean,
-            defaults: false,
-        });
-    }
+  constructor(args, opts) {
+    super(args, opts);
+    this.option('regen', {
+      desc: 'Regenerates all saved clients',
+      type: Boolean,
+      defaults: false,
+    });
+  }
 
-    get initializing() {
-        return {
-            validateFromCli() {
-                this.checkInvocationFromCLI();
-            },
-            sayHello() {
-                // Have Yeoman greet the user.
-                this.log(chalk.white('Welcome to the JHipster OpenApi client Sub-Generator'));
-            },
-            getConfig() {
-                this.openApiClients = this.config.get('openApiClients') || {};
-            },
-        };
-    }
+  get initializing() {
+    return {
+      validateFromCli() {
+        this.checkInvocationFromCLI();
+      },
+      sayHello() {
+        // Have Yeoman greet the user.
+        this.log(chalk.white('Welcome to the JHipster OpenApi client Sub-Generator'));
+      },
+      getConfig() {
+        this.openApiClients = this.config.get('openApiClients') || {};
+      },
+    };
+  }
 
-    get prompting() {
-        return {
-            askActionType: prompts.askActionType,
-            askExistingAvailableDocs: prompts.askExistingAvailableDocs,
-            askGenerationInfos: prompts.askGenerationInfos,
-        };
-    }
+  get prompting() {
+    return {
+      askActionType: prompts.askActionType,
+      askExistingAvailableDocs: prompts.askExistingAvailableDocs,
+      askGenerationInfos: prompts.askGenerationInfos,
+    };
+  }
 
-    get configuring() {
-        return {
-            determineApisToGenerate() {
-                this.clientsToGenerate = {};
-                if (this.options.regen || this.props.action === 'all') {
-                    this.clientsToGenerate = this.openApiClients;
-                } else if (this.props.action === 'new' || this.props.action === undefined) {
-                    this.clientsToGenerate[this.props.cliName] = {
-                        spec: this.props.inputSpec,
-                        useServiceDiscovery: this.props.useServiceDiscovery,
-                        generatorName: this.props.generatorName,
-                    };
-                } else if (this.props.action === 'select') {
-                    this.props.selected.forEach(selection => {
-                        this.clientsToGenerate[selection.cliName] = selection.spec;
-                    });
-                }
-            },
-
-            saveConfig() {
-                if (!this.options.regen && this.props.saveConfig) {
-                    this.openApiClients[this.props.cliName] = this.clientsToGenerate[this.props.cliName];
-                    this.config.set('openApiClients', this.openApiClients);
-                }
-            },
-        };
-    }
-
-    get writing() {
-        return writeFiles();
-    }
-
-    get postWriting() {
-        return customizeFiles();
-    }
-
-    install() {
-        this.clientPackageManager = this.config.get('clientPackageManager');
-        const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} install`, { silent: this.silent });
-        if (stderr) {
-            this.log(`Something went wrong while running npm install: ${stdout} ${stderr}`);
+  get configuring() {
+    return {
+      determineApisToGenerate() {
+        this.clientsToGenerate = {};
+        if (this.options.regen || this.props.action === 'all') {
+          this.clientsToGenerate = this.openApiClients;
+        } else if (this.props.action === 'new' || this.props.action === undefined) {
+          this.clientsToGenerate[this.props.cliName] = {
+            spec: this.props.inputSpec,
+            useServiceDiscovery: this.props.useServiceDiscovery,
+            generatorName: this.props.generatorName,
+          };
+        } else if (this.props.action === 'select') {
+          this.props.selected.forEach(selection => {
+            this.clientsToGenerate[selection.cliName] = selection.spec;
+          });
         }
-        Object.keys(this.clientsToGenerate).forEach(cliName => {
-            this.log(chalk.green(`\nGenerating client for ${cliName}`));
-            const generatorName = this.clientsToGenerate[cliName].generatorName;
-            const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} run openapi-client:${cliName}`, { silent: this.silent });
-            if (!stderr) {
-                this.success(`Succesfully generated ${cliName} ${generatorName} client`);
-            } else {
-                this.log(`Something went wrong while generating client ${cliName}: ${stdout} ${stderr}`);
-            }
-        });
-    }
+      },
 
-    end() {
-        this.log('End of openapi-client generator');
+      saveConfig() {
+        if (!this.options.regen && this.props.saveConfig) {
+          this.openApiClients[this.props.cliName] = this.clientsToGenerate[this.props.cliName];
+          this.config.set('openApiClients', this.openApiClients);
+        }
+      },
+    };
+  }
+
+  get writing() {
+    return writeFiles();
+  }
+
+  get postWriting() {
+    return customizeFiles();
+  }
+
+  install() {
+    this.clientPackageManager = this.config.get('clientPackageManager');
+    const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} install`, { silent: this.silent });
+    if (stderr) {
+      this.log(`Something went wrong while running npm install: ${stdout} ${stderr}`);
     }
+    Object.keys(this.clientsToGenerate).forEach(cliName => {
+      this.log(chalk.green(`\nGenerating client for ${cliName}`));
+      const generatorName = this.clientsToGenerate[cliName].generatorName;
+      const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} run openapi-client:${cliName}`, { silent: this.silent });
+      if (!stderr) {
+        this.success(`Succesfully generated ${cliName} ${generatorName} client`);
+      } else {
+        this.log(`Something went wrong while generating client ${cliName}: ${stdout} ${stderr}`);
+      }
+    });
+  }
+
+  end() {
+    this.log('End of openapi-client generator');
+  }
 };

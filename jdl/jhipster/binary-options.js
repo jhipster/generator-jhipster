@@ -18,76 +18,76 @@
  */
 
 const Options = {
-    DTO: 'dto',
-    SERVICE: 'service',
-    PAGINATION: 'pagination',
-    MICROSERVICE: 'microservice',
-    SEARCH: 'search',
-    ANGULAR_SUFFIX: 'angularSuffix',
-    CLIENT_ROOT_FOLDER: 'clientRootFolder',
+  DTO: 'dto',
+  SERVICE: 'service',
+  PAGINATION: 'pagination',
+  MICROSERVICE: 'microservice',
+  SEARCH: 'search',
+  ANGULAR_SUFFIX: 'angularSuffix',
+  CLIENT_ROOT_FOLDER: 'clientRootFolder',
 };
 
 const optionNames = Object.values(Options);
 
 const Values = {
-    [Options.DTO]: { MAPSTRUCT: 'mapstruct', NO: 'no' },
-    [Options.SERVICE]: { SERVICE_CLASS: 'serviceClass', SERVICE_IMPL: 'serviceImpl', NO: 'no' },
-    [Options.PAGINATION]: {
-        PAGINATION: 'pagination',
-        'INFINITE-SCROLL': 'infinite-scroll',
-        NO: 'no',
-    },
-    [Options.SEARCH]: { ELASTICSEARCH: 'elasticsearch', COUCHBASE: 'couchbase' },
+  [Options.DTO]: { MAPSTRUCT: 'mapstruct', NO: 'no' },
+  [Options.SERVICE]: { SERVICE_CLASS: 'serviceClass', SERVICE_IMPL: 'serviceImpl', NO: 'no' },
+  [Options.PAGINATION]: {
+    PAGINATION: 'pagination',
+    'INFINITE-SCROLL': 'infinite-scroll',
+    NO: 'no',
+  },
+  [Options.SEARCH]: { ELASTICSEARCH: 'elasticsearch', COUCHBASE: 'couchbase' },
 };
 
 const DefaultValues = {
-    [Options.DTO]: Values[Options.DTO].NO,
-    [Options.SERVICE]: Values[Options.SERVICE].NO,
-    [Options.PAGINATION]: Values[Options.PAGINATION].NO,
+  [Options.DTO]: Values[Options.DTO].NO,
+  [Options.SERVICE]: Values[Options.SERVICE].NO,
+  [Options.PAGINATION]: Values[Options.PAGINATION].NO,
 };
 
 function getOptionName(optionValue) {
-    return optionNames.find(optionName => Values[optionName] && Values[optionName][optionValue]);
+  return optionNames.find(optionName => Values[optionName] && Values[optionName][optionValue]);
 }
 
 const OptionValues = {
-    mapstruct: 'MAPSTRUCT',
-    serviceClass: 'SERVICE_CLASS',
-    serviceImpl: 'SERVICE_IMPL',
-    pagination: 'PAGINATION',
-    'infinite-scroll': 'INFINITE-SCROLL',
-    elasticsearch: 'ELASTICSEARCH',
-    couchbase: 'COUCHBASE',
+  mapstruct: 'MAPSTRUCT',
+  serviceClass: 'SERVICE_CLASS',
+  serviceImpl: 'SERVICE_IMPL',
+  pagination: 'PAGINATION',
+  'infinite-scroll': 'INFINITE-SCROLL',
+  elasticsearch: 'ELASTICSEARCH',
+  couchbase: 'COUCHBASE',
 };
 
 function forEach(passedFunction) {
-    if (!passedFunction) {
-        throw new Error('A function has to be passed to loop over the binary options.');
-    }
-    optionNames.forEach(passedFunction);
+  if (!passedFunction) {
+    throw new Error('A function has to be passed to loop over the binary options.');
+  }
+  optionNames.forEach(passedFunction);
 }
 
 function exists(passedOption, passedValue) {
-    return (
-        !Object.values(Options).includes(passedOption) ||
-        Object.values(Options).some(
-            option =>
-                passedOption === option &&
-                (passedOption === Options.MICROSERVICE ||
-                    passedOption === Options.ANGULAR_SUFFIX ||
-                    passedOption === Options.CLIENT_ROOT_FOLDER ||
-                    Object.values(Values[option]).includes(passedValue))
-        )
-    );
+  return (
+    !Object.values(Options).includes(passedOption) ||
+    Object.values(Options).some(
+      option =>
+        passedOption === option &&
+        (passedOption === Options.MICROSERVICE ||
+          passedOption === Options.ANGULAR_SUFFIX ||
+          passedOption === Options.CLIENT_ROOT_FOLDER ||
+          Object.values(Values[option]).includes(passedValue))
+    )
+  );
 }
 
 module.exports = {
-    Options,
-    // TODO change the names
-    DefaultValues,
-    OptionValues,
-    Values,
-    exists,
-    forEach,
-    getOptionName,
+  Options,
+  // TODO change the names
+  DefaultValues,
+  OptionValues,
+  Values,
+  exists,
+  forEach,
+  getOptionName,
 };

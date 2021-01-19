@@ -33,32 +33,32 @@ module.exports = { convertRelationships };
  * @return {Array<JDLRelationship>} the converted JDL relationships.
  */
 function convertRelationships(parsedRelationships, annotationToOptionConverter, conversionOptions = {}) {
-    if (!parsedRelationships) {
-        throw new Error('Relationships have to be passed so as to be converted.');
+  if (!parsedRelationships) {
+    throw new Error('Relationships have to be passed so as to be converted.');
+  }
+  const { generateBidirectionalOneToMany } = conversionOptions;
+  return parsedRelationships.map(parsedRelationship => {
+    const relationshipConfiguration = {
+      from: parsedRelationship.from.name,
+      to: parsedRelationship.to.name,
+      type: upperFirst(_.camelCase(parsedRelationship.cardinality)),
+      injectedFieldInFrom: parsedRelationship.from.injectedField,
+      injectedFieldInTo: parsedRelationship.to.injectedField,
+      isInjectedFieldInFromRequired: parsedRelationship.from.required,
+      isInjectedFieldInToRequired: parsedRelationship.to.required,
+      commentInFrom: formatComment(parsedRelationship.from.javadoc),
+      commentInTo: formatComment(parsedRelationship.to.javadoc),
+      options: {
+        global: annotationToOptionConverter.call(undefined, parsedRelationship.options.global),
+        source: annotationToOptionConverter.call(undefined, parsedRelationship.options.source),
+        destination: annotationToOptionConverter.call(undefined, parsedRelationship.options.destination),
+      },
+      generateBidirectionalOneToMany,
+    };
+    if (!relationshipConfiguration.injectedFieldInFrom && !relationshipConfiguration.injectedFieldInTo) {
+      relationshipConfiguration.injectedFieldInFrom = lowerFirst(relationshipConfiguration.to);
+      relationshipConfiguration.injectedFieldInTo = lowerFirst(relationshipConfiguration.from);
     }
-    const { generateBidirectionalOneToMany } = conversionOptions;
-    return parsedRelationships.map(parsedRelationship => {
-        const relationshipConfiguration = {
-            from: parsedRelationship.from.name,
-            to: parsedRelationship.to.name,
-            type: upperFirst(_.camelCase(parsedRelationship.cardinality)),
-            injectedFieldInFrom: parsedRelationship.from.injectedField,
-            injectedFieldInTo: parsedRelationship.to.injectedField,
-            isInjectedFieldInFromRequired: parsedRelationship.from.required,
-            isInjectedFieldInToRequired: parsedRelationship.to.required,
-            commentInFrom: formatComment(parsedRelationship.from.javadoc),
-            commentInTo: formatComment(parsedRelationship.to.javadoc),
-            options: {
-                global: annotationToOptionConverter.call(undefined, parsedRelationship.options.global),
-                source: annotationToOptionConverter.call(undefined, parsedRelationship.options.source),
-                destination: annotationToOptionConverter.call(undefined, parsedRelationship.options.destination),
-            },
-            generateBidirectionalOneToMany,
-        };
-        if (!relationshipConfiguration.injectedFieldInFrom && !relationshipConfiguration.injectedFieldInTo) {
-            relationshipConfiguration.injectedFieldInFrom = lowerFirst(relationshipConfiguration.to);
-            relationshipConfiguration.injectedFieldInTo = lowerFirst(relationshipConfiguration.from);
-        }
-        return new JDLRelationship(relationshipConfiguration);
-    });
+    return new JDLRelationship(relationshipConfiguration);
+  });
 }

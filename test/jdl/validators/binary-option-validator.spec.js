@@ -22,37 +22,37 @@ const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
 const BinaryOptionValidator = require('../../../jdl/validators/binary-option-validator');
 
 describe('BinaryOptionValidator', () => {
-    let validator;
+  let validator;
 
-    before(() => {
-        validator = new BinaryOptionValidator();
+  before(() => {
+    validator = new BinaryOptionValidator();
+  });
+
+  describe('validate', () => {
+    context('when not passing anything', () => {
+      it('should fail', () => {
+        expect(() => validator.validate()).to.throw(/^No binary option\.$/);
+      });
     });
-
-    describe('validate', () => {
-        context('when not passing anything', () => {
-            it('should fail', () => {
-                expect(() => validator.validate()).to.throw(/^No binary option\.$/);
-            });
+    it('should fail', () => {
+      expect(() => validator.validate({})).to.throw(
+        /^The binary option attributes name, entityNames, excludedNames, getType, value were not found\.$/
+      );
+    });
+    context('when passing a binary option', () => {
+      context('with all its required attributes', () => {
+        it('should not fail', () => {
+          expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'mapstruct' }))).not.to.throw();
         });
+      });
+      context('without any of its required attributes', () => {});
+      context('with an invalid value', () => {
         it('should fail', () => {
-            expect(() => validator.validate({})).to.throw(
-                /^The binary option attributes name, entityNames, excludedNames, getType, value were not found\.$/
-            );
+          expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'toto' }))).to.throw(
+            /^The 'dto' option is not valid for value 'toto'\.$/
+          );
         });
-        context('when passing a binary option', () => {
-            context('with all its required attributes', () => {
-                it('should not fail', () => {
-                    expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'mapstruct' }))).not.to.throw();
-                });
-            });
-            context('without any of its required attributes', () => {});
-            context('with an invalid value', () => {
-                it('should fail', () => {
-                    expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'toto' }))).to.throw(
-                        /^The 'dto' option is not valid for value 'toto'\.$/
-                    );
-                });
-            });
-        });
+      });
     });
+  });
 });
