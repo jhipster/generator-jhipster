@@ -1,0 +1,47 @@
+
+/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable @typescript-eslint/no-namespace */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress" />
+
+Cypress.Commands.add('oauthLogin', (username, password) => {
+    cy.task('login', {baseUrl: Cypress.config().baseUrl, username: username, password: password}).then(cookies => {
+      cookies.forEach(c => {
+        const name = c.name;
+        const value = c.value;
+        const options = {
+          ...c
+        }
+        cy.setCookie(name, value, options);
+      });
+      cy.visit('/');
+    });
+  });
+
+Cypress.Commands.add('oauthLogout', (username, password) => {
+    cy.task('logout', {baseUrl: Cypress.config().baseUrl}).then(() => {
+      cy.clearCookies();
+    });
+});
+
+Cypress.Commands.add('clearCache', () => {
+    cy.clearCookies();
+    cy.clearLocalStorage();
+    cy.window().then(win => {
+      win.sessionStorage.clear();
+    });
+});
+
+declare global {
+  namespace Cypress {
+    interface Chainable<Subject> {
+      oauthLogin(username: string, password: string): Cypress.Chainable;
+      oauthLogout(): Cypress.Chainable;
+      clearCache(): Cypress.Chainable;
+    }
+  }
+}
+
+// Convert this to a module instead of script (allows import/export)
+export {};
