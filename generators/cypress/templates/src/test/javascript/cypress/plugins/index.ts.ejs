@@ -10,7 +10,9 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-
+<%_ if (authenticationType === 'oauth2') { _%>
+const puppeteer = require('puppeteer');
+<%_ } _%>
 /**
  * @type {Cypress.PluginConfig}
  */
@@ -23,7 +25,7 @@ module.exports = (on, config) => {
       return launchOptions
     }
   });
-
+  <%_ if (authenticationType === 'oauth2') { _%>
   on('task', {
     login({ baseUrl, username, password }) {
       return (async () => {
@@ -62,4 +64,5 @@ module.exports = (on, config) => {
     })
     }
   });
+  <%_ } _%>
 }
