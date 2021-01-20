@@ -70,15 +70,12 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     runtimeChunk: false,
     minimizer: [
       new TerserPlugin({
-        cache: true,
         parallel: true,
         // sourceMap: true, // Enable source maps. Please note that this will slow down the build
         terserOptions: {
           ecma: 6,
           toplevel: true,
           module: true,
-          beautify: false,
-          comments: false,
           compress: {
             warnings: false,
             ecma: 6,
