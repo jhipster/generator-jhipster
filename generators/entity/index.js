@@ -131,13 +131,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
     this.entityConfig = this.entityStorage.createProxy();
 
     const configExisted = this.entityStorage.existed;
-    const filename = this.destinationPath(JHIPSTER_CONFIG_DIR, `${name}.json`);
-    const entityExisted = fs.existsSync(filename);
+    const filename = path.join(JHIPSTER_CONFIG_DIR, `${name}.json`);
+    const entityExisted = fs.existsSync(this.destinationPath(filename));
 
     this.context = {
       name,
+      filename,
       configExisted,
       entityExisted,
+      configurationFileExists: this.fs.exists(filename),
     };
 
     this._setupEntityOptions(this, this, this.context);
@@ -156,10 +158,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
         if (this.isBuiltInUser(this.context.name) || this.isBuiltInAuthority(this.context.name)) {
           throw new Error(`Is not possible to override built in ${this.context.name}`);
         }
-      },
-
-      setupRequiredConfigForMicroservicePrompt() {
-        this.context.filename = path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(this.context.name)}.json`);
       },
 
       /* Use need microservice path to load the entity file */
@@ -264,8 +262,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
             this.entityConfig.databaseType = context.databaseType;
           }
         }
-        context.filename = this.destinationPath(context.filename);
-        context.configurationFileExists = this.fs.exists(context.filename);
         context.useConfigurationFile = context.configurationFileExists || context.useConfigurationFile;
         if (context.configurationFileExists) {
           this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
