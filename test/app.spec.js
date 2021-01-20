@@ -1843,83 +1843,6 @@ describe('JHipster generator', () => {
         assert.noFile(expectedFiles.userManagementServer);
       });
     });
-
-    describe('UAA server with Eureka', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
-          .withPrompts({
-            applicationType: 'uaa',
-            baseName: 'jhipster-uaa',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            serverPort: '9999',
-            authenticationType: 'uaa',
-            cacheProvider: 'no',
-            enableHibernateCache: false,
-            databaseType: 'sql',
-            devDatabaseType: 'postgresql',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr', 'en'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-            serviceDiscoveryType: 'eureka',
-          })
-          .on('end', done);
-      });
-
-      it('creates expected files with the UAA application type', () => {
-        assert.file(expectedFiles.uaa);
-        assert.file(expectedFiles.dockerServices);
-        assert.file(expectedFiles.eureka);
-      });
-    });
-
-    describe('UAA gateway with eureka', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ fromCli: true, skipInstall: true, skipChecks: true })
-          .inTmpDir(dir => {
-            fse.copySync(path.join(__dirname, './templates/uaaserver/'), dir);
-          })
-          .withPrompts({
-            applicationType: 'gateway',
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            serverPort: '8080',
-            authenticationType: 'uaa',
-            uaaBaseName: 'uaaBaseName',
-            cacheProvider: 'hazelcast',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'postgresql',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr', 'en'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-            serviceDiscoveryType: 'eureka',
-          })
-          .on('end', done);
-      });
-
-      it('creates expected files for UAA auth with the Gateway application type', () => {
-        assert.file(expectedFiles.gateway);
-        assert.file(expectedFiles.rateLimitingFilesForGateways);
-        assert.file(expectedFiles.gatewayWithUaa);
-        assert.file(expectedFiles.dockerServices);
-        assert.file(expectedFiles.eureka);
-        assert.file(expectedFiles.hazelcast);
-      });
-    });
   });
 
   context('Consul', () => {
@@ -2065,43 +1988,6 @@ describe('JHipster generator', () => {
 
       it('creates expected files with the gateway application type', () => {
         assert.file(expectedFiles.jwtServer);
-        assert.noFile(expectedFiles.gateway);
-        assert.noFile(expectedFiles.rateLimitingFilesForGateways);
-        assert.noFile(expectedFiles.eureka);
-        assert.noFile(expectedFiles.consul);
-      });
-    });
-
-    describe('UAA gateway with no service discovery', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ fromCli: true, skipInstall: true, skipChecks: true, uaaBaseName: 'jhipsterApp' })
-          .withPrompts({
-            applicationType: 'gateway',
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'uaa',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr', 'en'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
-      });
-
-      it('creates expected files with the gateway application type', () => {
-        assert.file(expectedFiles.gatewayWithUaa);
         assert.noFile(expectedFiles.gateway);
         assert.noFile(expectedFiles.rateLimitingFilesForGateways);
         assert.noFile(expectedFiles.eureka);
