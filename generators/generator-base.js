@@ -2389,6 +2389,17 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.pkType) {
       this.jhipsterConfig.pkType = options.pkType;
     }
+
+    if (options.clientPackageManager) {
+      this.jhipsterConfig.clientPackageManager = options.clientPackageManager;
+    }
+    if (this.jhipsterConfig.clientPackageManager) {
+      const usingNpm = this.jhipsterConfig.clientPackageManager === 'npm';
+      if (!usingNpm) {
+        this.warning(`Using unsupported package manager: ${this.jhipsterConfig.clientPackageManager}. Install will not be executed.`);
+        options.skipInstall = true;
+      }
+    }
   }
 
   /**
