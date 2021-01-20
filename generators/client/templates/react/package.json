@@ -20,7 +20,7 @@
     "react-router-dom": "5.1.2",
     "react-toastify": "6.2.0",
     "react-transition-group": "4.4.1",
-    "reactstrap": "8.6.0",
+    "reactstrap": "8.9.0",
     "redux": "4.0.5",
     "redux-devtools": "3.7.0",
     "redux-devtools-dock-monitor": "1.1.3",
