@@ -89,8 +89,25 @@ const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand })
       .excessArgumentsCallback(function (receivedArgs) {
         rejectExtraArgs(program, this.name(), receivedArgs);
       })
-      .lazyBuildCommand(function () {
+      .lazyBuildCommand(function (operands) {
+        logger.debug(`cmd: lazyBuildCommand ${cmdName} ${operands}`);
         const command = this;
+        if (cmdName === 'run') {
+          command.usage(`${operands} [options]`);
+          operands = Array.isArray(operands) ? operands : [operands];
+          command.generatorNamespaces = operands.map(
+            namespace => `${namespace.startsWith(JHIPSTER_NS) ? '' : `${JHIPSTER_NS}-`}${namespace}`
+          );
+          envBuilder.lookupGenerators(command.generatorNamespaces.map(namespace => `generator-${namespace.split(':')[0]}`));
+          command.generatorNamespaces.forEach(namespace => {
+            if (!env.getPackagePath(namespace)) {
+              logger.fatal(chalk.red(`\nGenerator ${namespace} not found.\n`));
+            }
+            const generator = env.create(namespace, { options: { help: true } });
+            this.addGeneratorArguments(generator._arguments).addGeneratorOptions(generator._options);
+          });
+          return;
+        }
         if (!opts.cliOnly || cmdName === 'jdl') {
           if (opts.blueprint) {
             // Blueprint only command.
@@ -134,9 +151,9 @@ const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand })
         command.addHelpText('after', moreInfo);
       })
       .action((...everything) => {
+        logger.debug('cmd: action');
         // [args, opts, command]
-        // Unused command
-        everything.pop();
+        const command = everything.pop();
         const cmdOptions = everything.pop();
         const args = everything;
         const options = {
@@ -146,7 +163,13 @@ const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand })
 
         if (opts.cliOnly) {
           logger.debug('Executing CLI only script');
-          return loadCommand(cmdName)(args, options, env);
+          return loadCommand(cmdName)(args, options, env, envBuilder);
+        }
+        if (cmdName === 'run') {
+          return Promise.all(command.generatorNamespaces.map(generator => env.run(generator, options))).then(
+            results => done(results.find(result => result)),
+            errors => done(errors.find(error => error))
+          );
         }
         const namespace = opts.blueprint ? `${packageNameToNamespace(opts.blueprint)}:${cmdName}` : `${JHIPSTER_NS}:${cmdName}`;
         const generatorCommand = getCommand(namespace, args, opts);

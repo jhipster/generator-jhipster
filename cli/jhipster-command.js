@@ -76,7 +76,7 @@ class JHipsterCommand extends Command {
    */
   _parseCommand(operands, unknown) {
     if (this._lazyBuildCommandCallBack) {
-      this._lazyBuildCommandCallBack();
+      this._lazyBuildCommandCallBack(operands, unknown);
     }
     return super._parseCommand(operands, unknown);
   }

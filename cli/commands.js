@@ -152,6 +152,10 @@ const defaultCommands = {
   page: {
     desc: 'Create a new page. (Supports vue clients)',
   },
+  run: {
+    desc: 'Run a module or custom generator',
+    argument: ['[generator]'],
+  },
   'spring-service': {
     alias: 'service',
     desc: 'Create a new Spring service bean',
