@@ -98,14 +98,6 @@ elif [[ "$JHI_ENTITY" == "micro" ]]; then
     moveEntity FieldTestInfiniteScrollEntity
     moveEntity FieldTestPaginationEntity
 
-elif [[ "$JHI_ENTITY" == "uaa" ]]; then
-    moveEntity FieldTestEntity
-    moveEntity FieldTestMapstructAndServiceClassEntity
-    moveEntity FieldTestServiceClassAndJpaFilteringEntity
-    moveEntity FieldTestServiceImplEntity
-    moveEntity FieldTestInfiniteScrollEntity
-    moveEntity FieldTestPaginationEntity
-
 elif [[ "$JHI_ENTITY" == "sqllight" ]]; then
     moveEntity BankAccount
     moveEntity Label

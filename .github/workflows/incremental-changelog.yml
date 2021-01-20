@@ -47,7 +47,6 @@ env:
   JHI_HOME: ${{ github.workspace }}/generator-jhipster
   JHI_SCRIPTS: ${{ github.workspace }}/generator-jhipster/test-integration/scripts
   JHI_FOLDER_APP: ${{ github.workspace }}/app
-  JHI_FOLDER_UAA: ${{ github.workspace }}/uaa
   NG_CLI_ANALYTICS: 'false'
   JHI_GITHUB_CI: true
   FORCE_COLOR: 1
