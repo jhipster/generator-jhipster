@@ -60,9 +60,6 @@ jobs:
           JHI_ENTITY: sqllight
           JHI_PROFILE: prod
           JHI_E2E: 1
-        ms-ngx-gateway-eureka-uaa:
-          JHI_APP: ms-ngx-gateway-eureka-uaa
-          JHI_ENTITY: uaa
         ms-micro-eureka-jwt:
           JHI_APP: ms-micro-eureka-jwt
           JHI_ENTITY: micro
