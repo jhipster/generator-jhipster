@@ -32,7 +32,7 @@
     "@vue/cli-plugin-typescript": "4.5.10",
     "@vue/cli-service": "4.5.10",
     "@vue/test-utils": "1.1.2",
-    "autoprefixer": "10.2.1",
+    "autoprefixer": "10.2.3",
     "babel-core": "7.0.0-bridge.0",
     "browser-sync": "2.26.13",
     "browser-sync-webpack-plugin": "2.3.0",
