@@ -38,11 +38,7 @@ function askForServerSideOpts() {
   if (this.existingProject) return undefined;
 
   const applicationType = this.jhipsterConfig.applicationType;
-  const uaaBaseName = this.jhipsterConfig.uaaBaseName;
   let defaultPort = applicationType === 'gateway' ? '8080' : '8081';
-  if (applicationType === 'uaa') {
-    defaultPort = '9999';
-  }
   const prompts = [
     {
       when: () => ['gateway', 'monolith', 'microservice'].includes(applicationType),
@@ -52,7 +48,7 @@ function askForServerSideOpts() {
       default: serverDefaultConfig.reactive,
     },
     {
-      when: () => applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa',
+      when: () => applicationType === 'gateway' || applicationType === 'microservice',
       type: 'input',
       name: 'serverPort',
       validate: input => (/^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.'),
@@ -72,7 +68,7 @@ function askForServerSideOpts() {
       store: true,
     },
     {
-      when: () => applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa',
+      when: () => applicationType === 'gateway' || applicationType === 'microservice',
       type: 'list',
       name: 'serviceDiscoveryType',
       message: 'Which service discovery server do you want to use?',
@@ -116,42 +112,9 @@ function askForServerSideOpts() {
             name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)',
           });
         }
-        if (!answers.reactive) {
-          if (['gateway', 'microservice'].includes(applicationType)) {
-            opts.push({
-              value: 'uaa',
-              name: 'Authentication with JHipster UAA server (the server must be generated separately)',
-            });
-          }
-        }
         return opts;
       },
       default: serverDefaultConfig.authenticationType,
-    },
-    {
-      when: response =>
-        (applicationType === 'gateway' || applicationType === 'microservice') &&
-        response.authenticationType === 'uaa' &&
-        uaaBaseName === undefined,
-      type: 'input',
-      name: 'uaaBaseName',
-      message: 'What is the folder path of your UAA application?',
-      default: '../uaa',
-      validate: input => {
-        const uaaAppData = this.getUaaAppName(input);
-
-        if (uaaAppData && uaaAppData.baseName && uaaAppData.applicationType === 'uaa') {
-          return true;
-        }
-        return `Could not find a valid JHipster UAA server in path "${input}"`;
-      },
-      filter: input => {
-        const uaaAppData = this.getUaaAppName(input);
-        if (uaaAppData) {
-          return uaaAppData.baseName;
-        }
-        return uaaBaseName;
-      },
     },
     {
       type: 'list',
@@ -188,12 +151,10 @@ function askForServerSideOpts() {
           value: 'neo4j',
           name: '[BETA] Neo4j',
         });
-        if (applicationType !== 'uaa') {
-          opts.push({
-            value: 'no',
-            name: 'No database',
-          });
-        }
+        opts.push({
+          value: 'no',
+          name: 'No database',
+        });
         return opts;
       },
       default: serverDefaultConfig.databaseType,
@@ -259,7 +220,7 @@ function askForServerSideOpts() {
           name: 'No cache - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
         },
       ],
-      default: applicationType === 'microservice' || applicationType === 'uaa' ? 2 : serverDefaultConfig.cacheProvider,
+      default: applicationType === 'microservice' ? 2 : serverDefaultConfig.cacheProvider,
     },
     {
       when: answers =>
@@ -320,7 +281,6 @@ function askForServerSideOpts() {
     this.prodDatabaseType = this.jhipsterConfig.prodDatabaseType = answers.prodDatabaseType;
     this.searchEngine = this.jhipsterConfig.searchEngine = answers.searchEngine;
     this.buildTool = this.jhipsterConfig.buildTool = answers.buildTool;
-    this.uaaBaseName = this.jhipsterConfig.uaaBaseName = answers.uaaBaseName || uaaBaseName;
   });
 }
 

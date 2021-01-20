@@ -253,7 +253,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.cacheManagerIsAvailable = ['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached', 'redis'].includes(
           this.cacheProvider
         );
-        this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.authenticationType);
+        this.testsNeedCsrf = ['oauth2', 'session'].includes(this.authenticationType);
 
         this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
 
@@ -517,13 +517,9 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       config.packageFolder = config.packageName.replace(/\./g, '/');
     }
 
-    if (config.applicationType === 'uaa') {
-      config.authenticationType = 'uaa';
-    }
-
     // JWT authentication is mandatory with Eureka, so the JHipster Registry
     // can control the applications
-    if (config.serviceDiscoveryType === 'eureka' && config.authenticationType !== 'uaa' && config.authenticationType !== 'oauth2') {
+    if (config.serviceDiscoveryType === 'eureka' && config.authenticationType !== 'oauth2') {
       config.authenticationType = 'jwt';
     }
 
@@ -536,8 +532,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       config.rememberMeKey = getRandomHex();
     }
 
-    // user-management will be handled by UAA app, oauth expects users to be managed in IpP
-    if ((config.applicationType === 'gateway' && config.authenticationType === 'uaa') || config.authenticationType === 'oauth2') {
+    if (config.authenticationType === 'oauth2') {
       config.skipUserManagement = true;
     }
 
@@ -568,15 +563,8 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     }
 
     // force variables unused by microservice applications
-    if (config.applicationType === 'microservice' || config.applicationType === 'uaa') {
+    if (config.applicationType === 'microservice') {
       config.websocket = false;
-    }
-
-    if (config.authenticationType === 'uaa' && !config.uaaBaseName) {
-      if (config.applicationType !== 'uaa') {
-        this.error('when using uaa authentication type, a UAA basename must be provided');
-      }
-      config.uaaBaseName = config.baseName;
     }
 
     const databaseType = config.databaseType;
@@ -584,9 +572,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       config.devDatabaseType = 'no';
       config.prodDatabaseType = 'no';
       config.enableHibernateCache = false;
-      if (config.authenticationType !== 'uaa') {
-        config.skipUserManagement = true;
-      }
+      config.skipUserManagement = true;
     } else if (['mongodb', 'neo4j', 'couchbase', 'cassandra'].includes(databaseType)) {
       config.devDatabaseType = databaseType;
       config.prodDatabaseType = databaseType;
