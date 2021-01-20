@@ -76,11 +76,7 @@ services:
       <%_ } _%>
       <%_ if (prodDatabaseType === 'cassandra') { _%>
       - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
-        <%_ if (authenticationType === 'uaa') { _%>
-      - JHIPSTER_SLEEP=80 # gives time for uaa and the Cassandra cluster to start and execute the migration scripts
-        <%_ } else { _%>
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
-        <%_ } _%>
       <%_ } else if (prodDatabaseType === 'mariadb') { _%>
       - JHIPSTER_SLEEP=120 # gives time for mariadb server to start
       <%_ } else if (prodDatabaseType === 'mssql') { _%>
@@ -297,7 +293,7 @@ services:
     # See https://www.jhipster.tech/jhipster-registry/#spring-cloud-config
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev,api-docs<% if (authenticationType === 'oauth2') { %>,oauth2<% } %><% if (authenticationType === 'uaa') { %>,uaa<% } %>
+      - SPRING_PROFILES_ACTIVE=dev,api-docs<% if (authenticationType === 'oauth2') { %>,oauth2<% } %>
       - SPRING_SECURITY_USER_PASSWORD=admin
       - JHIPSTER_REGISTRY_PASSWORD=admin
       - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
