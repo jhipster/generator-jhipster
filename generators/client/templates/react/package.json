@@ -50,7 +50,7 @@
     "cache-loader": "4.1.0",
     "copy-webpack-plugin": "7.0.0",
     "core-js": "3.8.3",
-    "cross-env": "7.0.2",
+    "cross-env": "7.0.3",
     "css-loader": "5.0.1",
     "eslint": "7.13.0",
     "eslint-config-prettier": "7.2.0",
