@@ -42,6 +42,7 @@ import java.util.*;
 
 <%_ if (!skipClient) { _%>
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 <%_ } _%>
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -81,9 +82,9 @@ class WebConfigurerTest {
     @Test
     void shouldStartUpProdServletContext() throws ServletException {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
-        webConfigurer.onStartup(servletContext);
-        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 
+        assertThatCode(() -> webConfigurer.onStartup(servletContext)).doesNotThrowAnyException();
+        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
         verify(servletContext, never()).addServlet(eq("H2Console"), any(WebServlet.class));
         <%_ } _%>
     }
@@ -91,9 +92,9 @@ class WebConfigurerTest {
     @Test
     void shouldStartUpDevServletContext() throws ServletException {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT);
-        webConfigurer.onStartup(servletContext);
-        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 
+        assertThatCode(() -> webConfigurer.onStartup(servletContext)).doesNotThrowAnyException();
+        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
         verify(servletContext).addServlet(eq("H2Console"), any(WebServlet.class));
         <%_ } _%>
     }
