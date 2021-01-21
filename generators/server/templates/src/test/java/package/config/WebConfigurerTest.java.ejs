@@ -79,30 +79,28 @@ class WebConfigurerTest {
     }
 
     @Test
-    void testStartUpProdServletContext() throws ServletException {
+    void shouldStartUpProdServletContext() throws ServletException {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
         webConfigurer.onStartup(servletContext);
-
-
         <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+
         verify(servletContext, never()).addServlet(eq("H2Console"), any(WebServlet.class));
         <%_ } _%>
     }
 
     @Test
-    void testStartUpDevServletContext() throws ServletException {
+    void shouldStartUpDevServletContext() throws ServletException {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT);
         webConfigurer.onStartup(servletContext);
-
-
         <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+
         verify(servletContext).addServlet(eq("H2Console"), any(WebServlet.class));
         <%_ } _%>
     }
 
 <%_ if (!skipClient) { _%>
     @Test
-    void testCustomizeServletContainer() {
+    void shouldCustomizeServletContainer() {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
         UndertowServletWebServerFactory container = new UndertowServletWebServerFactory();
         webConfigurer.customize(container);
@@ -118,7 +116,7 @@ class WebConfigurerTest {
 
 <%_ } _%>
     @Test
-    void testCorsFilterOnApiPath() throws Exception {
+    void shouldCorsFilterOnApiPath() throws Exception {
         props.getCors().setAllowedOrigins(Collections.singletonList("*"));
         props.getCors().setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         props.getCors().setAllowedHeaders(Collections.singletonList("*"));
@@ -148,7 +146,7 @@ class WebConfigurerTest {
     }
 
     @Test
-    void testCorsFilterOnOtherPath() throws Exception {
+    void shouldCorsFilterOnOtherPath() throws Exception {
         props.getCors().setAllowedOrigins(Collections.singletonList("*"));
         props.getCors().setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         props.getCors().setAllowedHeaders(Collections.singletonList("*"));
@@ -167,7 +165,7 @@ class WebConfigurerTest {
     }
 
     @Test
-    void testCorsFilterDeactivated() throws Exception {
+    void shouldCorsFilterDeactivatedForNullAllowedOrigins() throws Exception {
         props.getCors().setAllowedOrigins(null);
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new WebConfigurerTestController())
@@ -182,7 +180,7 @@ class WebConfigurerTest {
     }
 
     @Test
-    void testCorsFilterDeactivated2() throws Exception {
+    void shouldCorsFilterDeactivatedForEmptyAllowedOrigins() throws Exception {
         props.getCors().setAllowedOrigins(new ArrayList<>());
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new WebConfigurerTestController())
