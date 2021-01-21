@@ -111,12 +111,14 @@ const defaultCommands = {
   By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.`,
     help: `
 Arguments:
-    jdlFiles # The JDL file names Type: String[] Required: true if --inline is not set
+    jdlFiles # The JDL file names or URL Type: String[] Required: true if --inline is not set
 
 Example:
     jhipster jdl myfile.jdl
-    jhipster jdl myfile.jdl --interactive
+    jhipster jdl myfile.jdl --fork
     jhipster jdl myfile1.jdl myfile2.jdl
+    jhipster jdl https://gist.githubusercontent.com/user/path/app.jdl
+    jhipster jdl jdl-name-from-jdl-samples-repo.jdl (just pass any file name from https://github.com/jhipster/jdl-samples)
     jhipster jdl --inline "application { config { baseName jhapp, testFrameworks [protractor] }}"
     jhipster jdl --inline \\
         "application {
