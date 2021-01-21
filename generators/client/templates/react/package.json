@@ -68,7 +68,7 @@
     "merge-jsons-webpack-plugin": "1.0.21",
     "mini-css-extract-plugin": "1.3.4",
     "optimize-css-assets-webpack-plugin": "5.0.4",
-    "postcss-loader": "4.1.0",
+    "postcss-loader": "4.2.0",
     "prettier": "2.2.1",
     "prettier-plugin-java": "1.0.1",
     "react-infinite-scroller": "1.2.4",
