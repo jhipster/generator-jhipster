@@ -13,11 +13,17 @@ import {
 describe('/admin', () => {
   <%_ if (authenticationType === 'oauth2') { _%>
   beforeEach(() => {
-    cy.oauthLogin(Cypress.env('E2E_USERNAME') || "admin", Cypress.env('E2E_PASSWORD') || "admin");
+    cy.getOauth2Data();
+    cy.get('@oauth2Data').then(oauth2Data => {
+      cy.oauthLogin(oauth2Data, Cypress.env('E2E_USERNAME') || "admin", Cypress.env('E2E_PASSWORD') || "admin");
+    });
   });
 
   afterEach(() => {
-    cy.oauthLogout();
+    cy.get('@oauth2Data').then(oauth2Data => {
+      cy.oauthLogout(oauth2Data);
+    });
+    cy.clearCache();
   });
   <%_ } else { _%>
   before(() => {

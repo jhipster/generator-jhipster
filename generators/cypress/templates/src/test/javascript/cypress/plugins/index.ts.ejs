@@ -31,7 +31,7 @@ module.exports = (on, config) => {
       return (async () => {
         const browser = await puppeteer.launch({ 
           args: ['--no-sandbox', '--disable-setuid-sandbox'],
-          devtools: true, 
+          devtools: false, 
           ignoreHTTPSErrors: true, 
           headless: true });
           
@@ -41,6 +41,9 @@ module.exports = (on, config) => {
           waitUntil: 'networkidle2' // Wait until login-page has been reached
         });
         
+        await page.waitFor('[name="username"]');
+        await page.waitFor('[name="password"]');
+        await page.waitFor('input[type="submit"]');
         await page.type('[name="username"]', username); 
         await page.type('[name="password"]', password); 
         await page.click('input[type="submit"]');
@@ -49,7 +52,7 @@ module.exports = (on, config) => {
         
         const authCookies = await page.cookies();
         
-        await browser.close(); 
+        browser.close(); 
         return authCookies;
       })();
     },

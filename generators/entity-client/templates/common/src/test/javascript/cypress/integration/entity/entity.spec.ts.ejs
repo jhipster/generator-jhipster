@@ -39,7 +39,10 @@ describe('<%= entityClass %> e2e test', () => {
 
   <%_ if (authenticationType === 'oauth2') { _%>
   beforeEach(() => {
-    cy.oauthLogin(Cypress.env('E2E_USERNAME') || "admin", Cypress.env('E2E_PASSWORD') || "admin");
+    cy.getOauth2Data();
+    cy.get('@oauth2Data').then(oauth2Data => {
+      cy.oauthLogin(oauth2Data, Cypress.env('E2E_USERNAME') || "admin", Cypress.env('E2E_PASSWORD') || "admin");
+    });
     cy.intercept('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
     cy.visit('');
     cy.clickOnEntityMenuItem('<%= entityStateName %>');
@@ -49,7 +52,10 @@ describe('<%= entityClass %> e2e test', () => {
   });
 
   afterEach(() => {
-    cy.oauthLogout();
+    cy.get('@oauth2Data').then(oauth2Data => {
+      cy.oauthLogout(oauth2Data);
+    });
+    cy.clearCache();
   });
   <%_ } else { _%>
   before(() => {
