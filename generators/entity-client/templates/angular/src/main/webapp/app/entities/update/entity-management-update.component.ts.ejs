@@ -163,38 +163,6 @@ _%>
 <%_ } _%>
         });
     }
-<%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
-
-    loadRelationshipsOptions(): void {
-    <%_ for (const relationshipsByEntityNeedingOptions of Object.values(differentRelationships).map(relationships => relationships.filter(rel => rel.ownerSide)).filter(relationships => relationships.length > 0)) { _%>
-        <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); %>
-        <%_ if (relationshipsByEntityNeedingOptions.length > relationshipsWithCustomUniqueOptions.length) { _%>
-            <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity _%>
-        this.<%= otherEntity.entityInstance %>Service.query()
-            .subscribe((res: HttpResponse<I<%= otherEntity.entityAngularName %>[]>) => this.<%= otherEntity.entityInstancePlural %>SharedCollection = res.body ?? []);
-        <%_ } _%>
-        <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { %>
-            <%_ const relationshipIdGetter = `this.editForm.get(['${relationship.relationshipFieldName}', '${relationship.otherEntity.primaryKey.name}'])?.value`; _%>
-            <%_ const filter = relationship.jpaMetamodelFiltering ? `'${relationship.otherEntityRelationshipName}Id.specified': 'false'` : `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`; _%>
-
-        this.<%= relationship.otherEntityName %>Service
-            .query({<%- filter %>})
-            .pipe(map((res: HttpResponse<I<%= relationship.otherEntityAngularName %>[]>) => res.body ?? []))
-            .subscribe((resBody: I<%= relationship.otherEntityAngularName %>[]) => {
-                if (!<%- relationshipIdGetter %>) {
-                    this.<%= relationship.relationshipFieldNamePlural %>Collection = resBody;
-                } else {
-                    this.<%= relationship.otherEntityName %>Service
-                        .find(<%- relationshipIdGetter %>)
-                        .pipe(map((subRes: HttpResponse<I<%= relationship.otherEntityAngularName %>>) => subRes.body ? [subRes.body].concat(resBody) : resBody))
-                        .subscribe((concatRes: I<%= relationship.otherEntityAngularName %>[]) => this.<%= relationship.relationshipFieldNamePlural %>Collection = concatRes);
-                    }
-                }
-            );
-        <%_ } _%>
-    <%_ } _%>
-    }
-<%_ } _%>
 
     updateForm(<%= entityInstance %>: I<%= entityAngularName %>): void {
         this.editForm.patchValue({
@@ -274,6 +242,70 @@ _%>
                 this.<%= entityInstance %>Service.create(<%= entityInstance %>));
         }
     }
+    <%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
+
+    track<%= reference.relationship.otherEntity.entityAngularName %>By<%= reference.relationship.otherEntity.primaryKey.nameCapitalized %>(index: number, item: I<%= reference.relationship.otherEntity.entityAngularName %>): <%= getTypescriptKeyType(reference.relationship.otherEntity.primaryKey.type) %> {
+        return item.<%= reference.relationship.otherEntity.primaryKey.name %><%= isBuiltInUser(reference.relationship.otherEntity.entityAngularName) ? '' : '!' %>;
+    }
+    <%_ } _%>
+    <%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipType === 'many-to-many' && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
+
+    getSelected<%= reference.relationship.otherEntity.entityAngularName %>(option: I<%= reference.relationship.otherEntity.entityAngularName %>, selectedVals?: I<%= reference.relationship.otherEntity.entityAngularName %>[]): I<%= reference.relationship.otherEntity.entityAngularName %> {
+        if (selectedVals) {
+          for (let i = 0; i < selectedVals.length; i++) {
+              if (option.<%= reference.relationship.otherEntity.primaryKey.name %> === selectedVals[i].<%= reference.relationship.otherEntity.primaryKey.name %>) {
+                  return selectedVals[i];
+              }
+          }
+        }
+        return option;
+    }
+    <%_ } _%>
+
+    protected subscribeToSaveResponse(result: Observable<HttpResponse<I<%= entityAngularName %>>>): void {
+        result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+    }
+
+    protected onSaveSuccess(): void {
+        this.isSaving = false;
+        this.previousState();
+    }
+
+    protected onSaveError(): void {
+        this.isSaving = false;
+    }
+<%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
+
+    private loadRelationshipsOptions(): void {
+    <%_ for (const relationshipsByEntityNeedingOptions of Object.values(differentRelationships).map(relationships => relationships.filter(rel => rel.ownerSide)).filter(relationships => relationships.length > 0)) { _%>
+        <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); %>
+        <%_ if (relationshipsByEntityNeedingOptions.length > relationshipsWithCustomUniqueOptions.length) { _%>
+            <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity _%>
+        this.<%= otherEntity.entityInstance %>Service.query()
+            .subscribe((res: HttpResponse<I<%= otherEntity.entityAngularName %>[]>) => this.<%= otherEntity.entityInstancePlural %>SharedCollection = res.body ?? []);
+        <%_ } _%>
+        <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { %>
+            <%_ const relationshipIdGetter = `this.editForm.get(['${relationship.relationshipFieldName}', '${relationship.otherEntity.primaryKey.name}'])?.value`; _%>
+            <%_ const filter = relationship.jpaMetamodelFiltering ? `'${relationship.otherEntityRelationshipName}Id.specified': 'false'` : `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`; _%>
+
+        this.<%= relationship.otherEntityName %>Service
+            .query({<%- filter %>})
+            .pipe(map((res: HttpResponse<I<%= relationship.otherEntityAngularName %>[]>) => res.body ?? []))
+            .subscribe((resBody: I<%= relationship.otherEntityAngularName %>[]) => {
+                if (!<%- relationshipIdGetter %>) {
+                    this.<%= relationship.relationshipFieldNamePlural %>Collection = resBody;
+                } else {
+                    this.<%= relationship.otherEntityName %>Service
+                        .find(<%- relationshipIdGetter %>)
+                        .pipe(map((subRes: HttpResponse<I<%= relationship.otherEntityAngularName %>>) => subRes.body ? [subRes.body].concat(resBody) : resBody))
+                        .subscribe((concatRes: I<%= relationship.otherEntityAngularName %>[]) => this.<%= relationship.relationshipFieldNamePlural %>Collection = concatRes);
+                    }
+                }
+            );
+        <%_ } _%>
+    <%_ } _%>
+    }
+<%_ } _%>
 
     private createFromForm(): I<%= entityAngularName %> {
         return {
@@ -306,36 +338,4 @@ _%>
     <%_ } _%>
         };
     }
-
-    protected subscribeToSaveResponse(result: Observable<HttpResponse<I<%= entityAngularName %>>>): void {
-        result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
-    }
-
-    protected onSaveSuccess(): void {
-        this.isSaving = false;
-        this.previousState();
-    }
-
-    protected onSaveError(): void {
-        this.isSaving = false;
-    }
-    <%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
-
-    track<%= reference.relationship.otherEntity.entityAngularName %>By<%= reference.relationship.otherEntity.primaryKey.nameCapitalized %>(index: number, item: I<%= reference.relationship.otherEntity.entityAngularName %>): <%= getTypescriptKeyType(reference.relationship.otherEntity.primaryKey.type) %> {
-        return item.<%= reference.relationship.otherEntity.primaryKey.name %><%= isBuiltInUser(reference.relationship.otherEntity.entityAngularName) ? '' : '!' %>;
-    }
-    <%_ } _%>
-    <%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipType === 'many-to-many' && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
-
-    getSelected<%= reference.relationship.otherEntity.entityAngularName %>(option: I<%= reference.relationship.otherEntity.entityAngularName %>, selectedVals?: I<%= reference.relationship.otherEntity.entityAngularName %>[]): I<%= reference.relationship.otherEntity.entityAngularName %> {
-        if (selectedVals) {
-          for (let i = 0; i < selectedVals.length; i++) {
-              if (option.<%= reference.relationship.otherEntity.primaryKey.name %> === selectedVals[i].<%= reference.relationship.otherEntity.primaryKey.name %>) {
-                  return selectedVals[i];
-              }
-          }
-        }
-        return option;
-    }
-    <%_ } _%>
 }
