@@ -26,115 +26,115 @@ const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
 let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
-    constructor(args, opts) {
-        super(args, opts);
+  constructor(args, opts) {
+    super(args, opts);
 
-        this.argument('name', { type: String, required: true });
-        this.name = this.options.name;
+    this.argument('name', { type: String, required: true });
+    this.name = this.options.name;
 
-        this.option('default', {
-            type: Boolean,
+    this.option('default', {
+      type: Boolean,
+      default: false,
+      description: 'default option',
+    });
+    this.defaultOption = this.options.default;
+
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('spring-service', { arguments: [this.name] });
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _initializing() {
+    return {
+      validateFromCli() {
+        this.checkInvocationFromCLI();
+      },
+
+      initializing() {
+        this.log(`The service ${this.name} is being created.`);
+        const configuration = this.config;
+        this.baseName = configuration.get('baseName');
+        this.packageName = configuration.get('packageName');
+        this.packageFolder = configuration.get('packageFolder');
+        this.databaseType = configuration.get('databaseType');
+      },
+    };
+  }
+
+  get initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _prompting() {
+    return {
+      prompting() {
+        const prompts = [
+          {
+            type: 'confirm',
+            name: 'useInterface',
+            message: '(1/1) Do you want to use an interface for your service?',
             default: false,
-            description: 'default option',
-        });
-        this.defaultOption = this.options.default;
+          },
+        ];
+        if (!this.defaultOption) {
+          const done = this.async();
+          this.prompt(prompts).then(props => {
+            this.useInterface = props.useInterface;
+            done();
+          });
+        } else {
+          this.useInterface = true;
+        }
+      },
+    };
+  }
 
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('spring-service', { arguments: [this.name] });
-    }
+  get prompting() {
+    if (useBlueprints) return;
+    return this._prompting();
+  }
 
-    // Public API method used by the getter and also by Blueprints
-    _initializing() {
-        return {
-            validateFromCli() {
-                this.checkInvocationFromCLI();
-            },
+  // Public API method used by the getter and also by Blueprints
+  _default() {
+    return {
+      insight() {
+        statistics.sendSubGenEvent('generator', 'service', { interface: this.useInterface });
+      },
+    };
+  }
 
-            initializing() {
-                this.log(`The service ${this.name} is being created.`);
-                const configuration = this.config;
-                this.baseName = configuration.get('baseName');
-                this.packageName = configuration.get('packageName');
-                this.packageFolder = configuration.get('packageFolder');
-                this.databaseType = configuration.get('databaseType');
-            },
-        };
-    }
+  get default() {
+    if (useBlueprints) return;
+    return this._default();
+  }
 
-    get initializing() {
-        if (useBlueprints) return;
-        return this._initializing();
-    }
+  // Public API method used by the getter and also by Blueprints
+  _writing() {
+    return {
+      write() {
+        this.serviceClass = _.upperFirst(this.name) + (this.name.endsWith('Service') ? '' : 'Service');
+        this.serviceInstance = _.lowerCase(this.serviceClass);
 
-    // Public API method used by the getter and also by Blueprints
-    _prompting() {
-        return {
-            prompting() {
-                const prompts = [
-                    {
-                        type: 'confirm',
-                        name: 'useInterface',
-                        message: '(1/1) Do you want to use an interface for your service?',
-                        default: false,
-                    },
-                ];
-                if (!this.defaultOption) {
-                    const done = this.async();
-                    this.prompt(prompts).then(props => {
-                        this.useInterface = props.useInterface;
-                        done();
-                    });
-                } else {
-                    this.useInterface = true;
-                }
-            },
-        };
-    }
+        this.template(
+          `${this.fetchFromInstalledJHipster('spring-service/templates')}/${SERVER_MAIN_SRC_DIR}package/service/Service.java.ejs`,
+          `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}.java`
+        );
 
-    get prompting() {
-        if (useBlueprints) return;
-        return this._prompting();
-    }
+        if (this.useInterface) {
+          this.template(
+            `${this.fetchFromInstalledJHipster(
+              'spring-service/templates'
+            )}/${SERVER_MAIN_SRC_DIR}package/service/impl/ServiceImpl.java.ejs`,
+            `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}Impl.java`
+          );
+        }
+      },
+    };
+  }
 
-    // Public API method used by the getter and also by Blueprints
-    _default() {
-        return {
-            insight() {
-                statistics.sendSubGenEvent('generator', 'service', { interface: this.useInterface });
-            },
-        };
-    }
-
-    get default() {
-        if (useBlueprints) return;
-        return this._default();
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _writing() {
-        return {
-            write() {
-                this.serviceClass = _.upperFirst(this.name) + (this.name.endsWith('Service') ? '' : 'Service');
-                this.serviceInstance = _.lowerCase(this.serviceClass);
-
-                this.template(
-                    `${this.fetchFromInstalledJHipster('spring-service/templates')}/${SERVER_MAIN_SRC_DIR}package/service/Service.java.ejs`,
-                    `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}.java`
-                );
-
-                if (this.useInterface) {
-                    this.template(
-                        `${this.fetchFromInstalledJHipster(
-                            'spring-service/templates'
-                        )}/${SERVER_MAIN_SRC_DIR}package/service/impl/ServiceImpl.java.ejs`,
-                        `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}Impl.java`
-                    );
-                }
-            },
-        };
-    }
-
-    get writing() {
-        if (useBlueprints) return;
-        return this._writing();
-    }
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
+  }
 };

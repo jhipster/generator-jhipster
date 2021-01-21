@@ -18,107 +18,98 @@
  */
 
 module.exports = {
-    writeFiles,
+  writeFiles,
 };
 
 function writeFiles() {
-    const suffix = 'helm';
-    return {
-        writeAppChart() {
-            const kubernetesSubgenPath = this.fetchFromInstalledJHipster('kubernetes/templates');
-            if (this.kubernetesNamespace !== 'default') {
-                this.template(`${kubernetesSubgenPath}/namespace.yml.ejs`, 'namespace.yml');
-            }
-            for (let i = 0; i < this.appConfigs.length; i++) {
-                const appName = this.appConfigs[i].baseName.toLowerCase();
-                const appOut = appName.concat('-', suffix);
-                this.app = this.appConfigs[i];
+  const suffix = 'helm';
+  return {
+    writeAppChart() {
+      const kubernetesSubgenPath = this.fetchFromInstalledJHipster('kubernetes/templates');
+      if (this.kubernetesNamespace !== 'default') {
+        this.template(`${kubernetesSubgenPath}/namespace.yml.ejs`, 'namespace.yml');
+      }
+      for (let i = 0; i < this.appConfigs.length; i++) {
+        const appName = this.appConfigs[i].baseName.toLowerCase();
+        const appOut = appName.concat('-', suffix);
+        this.app = this.appConfigs[i];
 
-                this.template(`${kubernetesSubgenPath}/deployment.yml.ejs`, `${appOut}/templates/${appName}-deployment.yml`);
-                this.template(`${kubernetesSubgenPath}/service.yml.ejs`, `${appOut}/templates/${appName}-service.yml`);
-                this.template('app/values.yml.ejs', `${appOut}/values.yaml`);
-                this.template('app/Chart.yml.ejs', `${appOut}/Chart.yaml`);
-                this.template('app/requirements.yml.ejs', `${appOut}/requirements.yaml`);
-                this.template('app/helpers.tpl.ejs', `${appOut}/templates/_helpers.tpl`);
+        this.template(`${kubernetesSubgenPath}/deployment.yml.ejs`, `${appOut}/templates/${appName}-deployment.yml`);
+        this.template(`${kubernetesSubgenPath}/service.yml.ejs`, `${appOut}/templates/${appName}-service.yml`);
+        this.template('app/values.yml.ejs', `${appOut}/values.yaml`);
+        this.template('app/Chart.yml.ejs', `${appOut}/Chart.yaml`);
+        this.template('app/requirements.yml.ejs', `${appOut}/requirements.yaml`);
+        this.template('app/helpers.tpl.ejs', `${appOut}/templates/_helpers.tpl`);
 
-                if (this.app.prodDatabaseType === 'couchbase') {
-                    this.template(
-                        `${kubernetesSubgenPath}/db/${this.app.prodDatabaseType}.yml.ejs`,
-                        `${appOut}/templates/${appName}-${this.app.prodDatabaseType}.yml`
-                    );
-                }
+        if (this.app.prodDatabaseType === 'couchbase') {
+          this.template(
+            `${kubernetesSubgenPath}/db/${this.app.prodDatabaseType}.yml.ejs`,
+            `${appOut}/templates/${appName}-${this.app.prodDatabaseType}.yml`
+          );
+        }
 
-                if (this.app.searchEngine === 'elasticsearch') {
-                    this.template(`${kubernetesSubgenPath}/db/elasticsearch.yml.ejs`, `${appOut}/templates/${appName}-elasticsearch.yml`);
-                }
-                if (this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') {
-                    if (this.istio) {
-                        this.template(`${kubernetesSubgenPath}/istio/gateway.yml.ejs`, `${appOut}/templates/${appName}-gateway.yml`);
-                    } else if (this.kubernetesServiceType === 'Ingress') {
-                        this.template(`${kubernetesSubgenPath}/ingress.yml.ejs`, `${appOut}/templates/${appName}-ingress.yml`);
-                    }
-                }
-                if (!this.app.serviceDiscoveryType && this.app.authenticationType === 'jwt') {
-                    this.template(`${kubernetesSubgenPath}/secret/jwt-secret.yml.ejs`, `${appOut}/templates/jwt-secret.yml`);
-                }
-                if (this.istio) {
-                    this.template(
-                        `${kubernetesSubgenPath}/istio/destination-rule.yml.ejs`,
-                        `${appOut}/templates/${appName}-destination-rule.yml`
-                    );
-                    this.template(
-                        `${kubernetesSubgenPath}/istio/virtual-service.yml.ejs`,
-                        `${appOut}/templates/${appName}-virtual-service.yml`
-                    );
-                }
-            }
-        },
+        if (this.app.searchEngine === 'elasticsearch') {
+          this.template(`${kubernetesSubgenPath}/db/elasticsearch.yml.ejs`, `${appOut}/templates/${appName}-elasticsearch.yml`);
+        }
+        if (this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') {
+          if (this.istio) {
+            this.template(`${kubernetesSubgenPath}/istio/gateway.yml.ejs`, `${appOut}/templates/${appName}-gateway.yml`);
+          } else if (this.kubernetesServiceType === 'Ingress') {
+            this.template(`${kubernetesSubgenPath}/ingress.yml.ejs`, `${appOut}/templates/${appName}-ingress.yml`);
+          }
+        }
+        if (!this.app.serviceDiscoveryType && this.app.authenticationType === 'jwt') {
+          this.template(`${kubernetesSubgenPath}/secret/jwt-secret.yml.ejs`, `${appOut}/templates/jwt-secret.yml`);
+        }
+        if (this.istio) {
+          this.template(`${kubernetesSubgenPath}/istio/destination-rule.yml.ejs`, `${appOut}/templates/${appName}-destination-rule.yml`);
+          this.template(`${kubernetesSubgenPath}/istio/virtual-service.yml.ejs`, `${appOut}/templates/${appName}-virtual-service.yml`);
+        }
+      }
+    },
 
-        writeCommonServiceChart() {
-            const k8s = this.fetchFromInstalledJHipster('kubernetes/templates');
-            const csOut = 'csvc'.concat('-', suffix);
-            if (
-                this.useKafka ||
-                this.monitoring === 'prometheus' ||
-                this.serviceDiscoveryType === 'eureka' ||
-                this.serviceDiscoveryType === 'consul'
-            ) {
-                this.template('csvc/values.yml.ejs', `${csOut}/values.yaml`);
-                this.template('csvc/Chart.yml.ejs', `${csOut}/Chart.yaml`);
-                this.template('csvc/requirements.yml.ejs', `${csOut}/requirements.yaml`);
-                this.template('csvc/helpers.tpl.ejs', `${csOut}/templates/_helpers.tpl`);
-            }
-            if (this.monitoring === 'prometheus') {
-                if (this.istio && this.kubernetesServiceType === 'Ingress') {
-                    this.template(
-                        `${k8s}/istio/gateway/jhipster-grafana-gateway.yml.ejs`,
-                        `${csOut}/templates/jhipster-grafana-gateway.yml`
-                    );
-                }
-            }
-            if (this.serviceDiscoveryType === 'eureka') {
-                this.template(`${k8s}/registry/jhipster-registry.yml.ejs`, `${csOut}/templates/jhipster-registry.yml`);
-                this.template(`${k8s}/registry/application-configmap.yml.ejs`, `${csOut}/templates/application-configmap.yml`);
-            }
-            if (this.serviceDiscoveryType === 'consul') {
-                this.template(`${k8s}/registry/consul.yml.ejs`, `${csOut}/templates/consul.yml`);
-                this.template(`${k8s}/registry/consul-config-loader.yml.ejs`, `${csOut}/templates/consul-config-loader.yml`);
-                this.template(`${k8s}/registry/application-configmap.yml.ejs`, `${csOut}/templates/application-configmap.yml`);
-            }
-            if (this.istio) {
-                this.template(`${k8s}/istio/gateway/grafana-gateway.yml.ejs`, `${csOut}/templates/grafana-gateway.yml`);
-                this.template(`${k8s}/istio/gateway/zipkin-gateway.yml.ejs`, `${csOut}/templates/zipkin-gateway.yml`);
-                this.template(`${k8s}/istio/gateway/kiali-gateway.yml.ejs`, `${csOut}/templates/kiali-gateway.yml`);
-            }
-        },
+    writeCommonServiceChart() {
+      const k8s = this.fetchFromInstalledJHipster('kubernetes/templates');
+      const csOut = 'csvc'.concat('-', suffix);
+      if (
+        this.useKafka ||
+        this.monitoring === 'prometheus' ||
+        this.serviceDiscoveryType === 'eureka' ||
+        this.serviceDiscoveryType === 'consul'
+      ) {
+        this.template('csvc/values.yml.ejs', `${csOut}/values.yaml`);
+        this.template('csvc/Chart.yml.ejs', `${csOut}/Chart.yaml`);
+        this.template('csvc/requirements.yml.ejs', `${csOut}/requirements.yaml`);
+        this.template('csvc/helpers.tpl.ejs', `${csOut}/templates/_helpers.tpl`);
+      }
+      if (this.monitoring === 'prometheus') {
+        if (this.istio && this.kubernetesServiceType === 'Ingress') {
+          this.template(`${k8s}/istio/gateway/jhipster-grafana-gateway.yml.ejs`, `${csOut}/templates/jhipster-grafana-gateway.yml`);
+        }
+      }
+      if (this.serviceDiscoveryType === 'eureka') {
+        this.template(`${k8s}/registry/jhipster-registry.yml.ejs`, `${csOut}/templates/jhipster-registry.yml`);
+        this.template(`${k8s}/registry/application-configmap.yml.ejs`, `${csOut}/templates/application-configmap.yml`);
+      }
+      if (this.serviceDiscoveryType === 'consul') {
+        this.template(`${k8s}/registry/consul.yml.ejs`, `${csOut}/templates/consul.yml`);
+        this.template(`${k8s}/registry/consul-config-loader.yml.ejs`, `${csOut}/templates/consul-config-loader.yml`);
+        this.template(`${k8s}/registry/application-configmap.yml.ejs`, `${csOut}/templates/application-configmap.yml`);
+      }
+      if (this.istio) {
+        this.template(`${k8s}/istio/gateway/grafana-gateway.yml.ejs`, `${csOut}/templates/grafana-gateway.yml`);
+        this.template(`${k8s}/istio/gateway/zipkin-gateway.yml.ejs`, `${csOut}/templates/zipkin-gateway.yml`);
+        this.template(`${k8s}/istio/gateway/kiali-gateway.yml.ejs`, `${csOut}/templates/kiali-gateway.yml`);
+      }
+    },
 
-        writeReadme() {
-            this.template('README-KUBERNETES-HELM.md.ejs', 'HELM-README.md');
-        },
+    writeReadme() {
+      this.template('README-KUBERNETES-HELM.md.ejs', 'HELM-README.md');
+    },
 
-        writeConfigRunFile() {
-            this.template('helm-apply.sh.ejs', 'helm-apply.sh');
-            this.template('helm-upgrade.sh.ejs', 'helm-upgrade.sh');
-        },
-    };
+    writeConfigRunFile() {
+      this.template('helm-apply.sh.ejs', 'helm-apply.sh');
+      this.template('helm-upgrade.sh.ejs', 'helm-upgrade.sh');
+    },
+  };
 }

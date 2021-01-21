@@ -26,225 +26,225 @@ const STACK_EVENT_STATUS_DISPLAY_LENGTH = 35;
 
 let stdOut = message => console.error(message.trim()); // eslint-disable-line
 module.exports = class CloudFormation {
-    constructor(region) {
-        this.cf = new AWS.CloudFormation({ region });
-    }
+  constructor(region) {
+    this.cf = new AWS.CloudFormation({ region });
+  }
 
-    setOutputs(stdout) {
-        stdOut = stdout;
-    }
+  setOutputs(stdout) {
+    stdOut = stdout;
+  }
 
-    /**
-     * Create an object which can be supplied to cloudformation for initialisation
-     * @param key
-     * @param value
-     * @returns {{ParameterKey: *, ParameterValue: *}}
-     */
-    cfParameter(key, value) {
-        return { ParameterKey: key, ParameterValue: value };
-    }
+  /**
+   * Create an object which can be supplied to cloudformation for initialisation
+   * @param key
+   * @param value
+   * @returns {{ParameterKey: *, ParameterValue: *}}
+   */
+  cfParameter(key, value) {
+    return { ParameterKey: key, ParameterValue: value };
+  }
 
-    /**
-     * Create a CloudFormation Stack in AWS
-     * @param stackName the stack to give to the name. It MUST to be unique in the WHOLE region the Stack is created in
-     * @param templateUrl url to the desired template.
-     * @param additionalParams additional parameter array to add to CF script
-     * @returns {Promise.<TResult>}
-     */
-    createCloudFormationStack(stackName, templateUrl, additionalParams = []) {
-        return this.cf
-            .createStack({
-                StackName: stackName,
-                Capabilities: ['CAPABILITY_IAM'],
-                OnFailure: 'DELETE',
-                Parameters: [this.cfParameter('shouldDeployService', 'false')].concat(additionalParams),
-                TemplateURL: templateUrl,
-            })
-            .promise()
-            .then(() => this._stackCreationEventListener(stackName));
-    }
+  /**
+   * Create a CloudFormation Stack in AWS
+   * @param stackName the stack to give to the name. It MUST to be unique in the WHOLE region the Stack is created in
+   * @param templateUrl url to the desired template.
+   * @param additionalParams additional parameter array to add to CF script
+   * @returns {Promise.<TResult>}
+   */
+  createCloudFormationStack(stackName, templateUrl, additionalParams = []) {
+    return this.cf
+      .createStack({
+        StackName: stackName,
+        Capabilities: ['CAPABILITY_IAM'],
+        OnFailure: 'DELETE',
+        Parameters: [this.cfParameter('shouldDeployService', 'false')].concat(additionalParams),
+        TemplateURL: templateUrl,
+      })
+      .promise()
+      .then(() => this._stackCreationEventListener(stackName));
+  }
 
-    /**
-     * Fetch the name of the ECR repository out of the CloudFormation Stack.
-     * @param stackId
-     * @returns {Promise.<TResult>}
-     */
-    getEcrId(stackId) {
-        return this.cf
-            .describeStackResource({
-                StackName: stackId,
-                LogicalResourceId: 'JHipsterContainerRegistry',
-            })
-            .promise()
-            .then(data => data.StackResourceDetail.PhysicalResourceId);
-    }
+  /**
+   * Fetch the name of the ECR repository out of the CloudFormation Stack.
+   * @param stackId
+   * @returns {Promise.<TResult>}
+   */
+  getEcrId(stackId) {
+    return this.cf
+      .describeStackResource({
+        StackName: stackId,
+        LogicalResourceId: 'JHipsterContainerRegistry',
+      })
+      .promise()
+      .then(data => data.StackResourceDetail.PhysicalResourceId);
+  }
 
-    /**
-     * Check that the AWS CloudFormation stack exists.
-     * @param stackName the name of the stack to look for.
-     * @returns {Promise<PromiseResult<D, E>>}
-     */
-    getStack(stackName) {
-        return this.cf.describeStacks({ StackName: stackName }).promise();
-    }
+  /**
+   * Check that the AWS CloudFormation stack exists.
+   * @param stackName the name of the stack to look for.
+   * @returns {Promise<PromiseResult<D, E>>}
+   */
+  getStack(stackName) {
+    return this.cf.describeStacks({ StackName: stackName }).promise();
+  }
 
-    /**
-     * Create a Listener for the Parent Stack we create. It will listen to all of the events and display them.
-     * @param stackName the name of the stack to listen to.
-     * @returns {Promise}
-     * @private
-     */
-    _stackCreationEventListener(stackName) {
-        return new Promise((resolve, reject) => {
-            const params = { StackName: stackName };
-            const parentEvents = {};
-            let listenerInterval;
-            let previousEventId;
-            const nestedStacks = {};
+  /**
+   * Create a Listener for the Parent Stack we create. It will listen to all of the events and display them.
+   * @param stackName the name of the stack to listen to.
+   * @returns {Promise}
+   * @private
+   */
+  _stackCreationEventListener(stackName) {
+    return new Promise((resolve, reject) => {
+      const params = { StackName: stackName };
+      const parentEvents = {};
+      let listenerInterval;
+      let previousEventId;
+      const nestedStacks = {};
 
-            const cancel = error => {
-                clearInterval(listenerInterval);
-                _.forEach(nestedStacks, o => clearInterval(o.listenerInterval));
-                reject(error);
-            };
-            const complete = result => {
-                clearInterval(listenerInterval);
-                _.forEach(nestedStacks, o => clearInterval(o.listenerInterval));
-                resolve({
-                    ...result.Stacks[0],
-                    nestedStacks: _.map(nestedStacks, (stack, key) => ({
-                        appName: stack.appName,
-                        stackId: key,
-                    })),
-                });
-            };
-
-            listenerInterval = setInterval(
-                () =>
-                    this.cf
-                        .describeStackEvents(params)
-                        .promise()
-                        .then(result => {
-                            const unproceedEvents = _.chain(result.StackEvents)
-                                .filter(event => !_.has(parentEvents, event.EventId))
-                                .reverse()
-                                .value();
-                            unproceedEvents.forEach(stack => {
-                                parentEvents[stack.EventId] = stack;
-                                if (stack.EventId !== previousEventId) {
-                                    stdOut(_getStackLogLine(stack));
-                                    previousEventId = stack.EventId;
-                                }
-                                if (_isStackEventError(stack)) {
-                                    cancel(new Error('Creation of stack failed.'));
-                                }
-
-                                if (_.has(nestedStacks, stack.PhysicalResourceId) || !_doesEventContainsNestedStackId(stack)) {
-                                    return;
-                                }
-
-                                const nestedStackId = stack.PhysicalResourceId;
-                                nestedStacks[nestedStackId] = {
-                                    appName: stack.LogicalResourceId,
-                                    listenerInterval: null,
-                                    events: {},
-                                    previousEventId: null,
-                                };
-                                nestedStacks[nestedStackId].listenerInterval = setInterval(
-                                    () =>
-                                        this.cf
-                                            .describeStackEvents({ StackName: nestedStackId })
-                                            .promise()
-                                            .then(result => {
-                                                const stackMeta = nestedStacks[nestedStackId];
-                                                const unproceedEvents = _.chain(result.StackEvents)
-                                                    .filter(event => !_.has(stackMeta.events, event.EventId))
-                                                    .reverse()
-                                                    .value();
-
-                                                unproceedEvents.forEach(stack => {
-                                                    stackMeta.events[stack.EventId] = stack;
-
-                                                    if (stack.EventId !== stackMeta.previousEventId) {
-                                                        stdOut(_getStackLogLine(stack, 1));
-                                                        stackMeta.previousEventId = stack.EventId;
-                                                    }
-                                                    if (_isStackEventError(stack)) {
-                                                        cancel(new Error('Creation of nested stack failed'));
-                                                    }
-                                                });
-                                            })
-                                            .catch(cancel),
-                                    STACK_LISTENER_INTERVAL
-                                );
-                            });
-                        })
-                        .catch(cancel),
-                STACK_LISTENER_INTERVAL
-            );
-
-            return this.cf.waitFor('stackCreateComplete', params).promise().then(complete).catch(cancel);
+      const cancel = error => {
+        clearInterval(listenerInterval);
+        _.forEach(nestedStacks, o => clearInterval(o.listenerInterval));
+        reject(error);
+      };
+      const complete = result => {
+        clearInterval(listenerInterval);
+        _.forEach(nestedStacks, o => clearInterval(o.listenerInterval));
+        resolve({
+          ...result.Stacks[0],
+          nestedStacks: _.map(nestedStacks, (stack, key) => ({
+            appName: stack.appName,
+            stackId: key,
+          })),
         });
-    }
+      };
 
-    /**
-     * TODO: Manage deletion/recreation of nested stack
-     * @param stackName
-     * @param nestedStackNames
-     */
-    updateCloudFormationStack(stackName, nestedStackNames = [], templateUrl, additionalParams, deployService = 'false') {
-        const stackToListen = _.concat(nestedStackNames, stackName);
-        const listeners = { 0: { previousEventId: null, listenerId: null } };
-        const clearIntervals = () => _.forEach(listeners, l => clearInterval(l.listenerId));
+      listenerInterval = setInterval(
+        () =>
+          this.cf
+            .describeStackEvents(params)
+            .promise()
+            .then(result => {
+              const unproceedEvents = _.chain(result.StackEvents)
+                .filter(event => !_.has(parentEvents, event.EventId))
+                .reverse()
+                .value();
+              unproceedEvents.forEach(stack => {
+                parentEvents[stack.EventId] = stack;
+                if (stack.EventId !== previousEventId) {
+                  stdOut(_getStackLogLine(stack));
+                  previousEventId = stack.EventId;
+                }
+                if (_isStackEventError(stack)) {
+                  cancel(new Error('Creation of stack failed.'));
+                }
 
-        return new Promise((resolve, reject) =>
-            this.cf
-                .updateStack({
-                    StackName: stackName,
-                    Capabilities: ['CAPABILITY_IAM'],
-                    Parameters: [this.cfParameter('shouldDeployService', deployService)].concat(additionalParams),
-                    TemplateURL: templateUrl,
-                })
-                .promise()
-                .catch(reject)
-                .then(() => {
-                    const success = result => {
-                        clearIntervals();
-                        resolve(result);
-                    };
-                    const failure = error => {
-                        clearIntervals();
-                        reject(error);
-                    };
-                    _.forEach(stackToListen, id => {
-                        listeners[id] = {};
-                        listeners[id].previousEventId = null;
-                        listeners[id].listenerId = setInterval(
-                            () =>
-                                this.cf
-                                    .describeStackEvents({ StackName: id })
-                                    .promise()
-                                    .then(result => {
-                                        const listener = listeners[id];
-                                        const stack = result.StackEvents[0];
-                                        if (stack.EventId !== listener.previousEventId) {
-                                            stdOut(_getStackLogLine(stack, 1));
-                                            listener.previousEventId = stack.EventId;
-                                            listeners[id] = listener;
-                                        }
-                                        if (_isStackEventError(stack)) {
-                                            failure(new Error('Creation of nested stack failed'));
-                                        }
-                                    })
-                                    .catch(failure),
-                            STACK_LISTENER_INTERVAL
-                        );
-                    });
+                if (_.has(nestedStacks, stack.PhysicalResourceId) || !_doesEventContainsNestedStackId(stack)) {
+                  return;
+                }
 
-                    return this.cf.waitFor('stackUpdateComplete', { StackName: stackName }).promise().then(success).catch(failure);
-                })
-        );
-    }
+                const nestedStackId = stack.PhysicalResourceId;
+                nestedStacks[nestedStackId] = {
+                  appName: stack.LogicalResourceId,
+                  listenerInterval: null,
+                  events: {},
+                  previousEventId: null,
+                };
+                nestedStacks[nestedStackId].listenerInterval = setInterval(
+                  () =>
+                    this.cf
+                      .describeStackEvents({ StackName: nestedStackId })
+                      .promise()
+                      .then(result => {
+                        const stackMeta = nestedStacks[nestedStackId];
+                        const unproceedEvents = _.chain(result.StackEvents)
+                          .filter(event => !_.has(stackMeta.events, event.EventId))
+                          .reverse()
+                          .value();
+
+                        unproceedEvents.forEach(stack => {
+                          stackMeta.events[stack.EventId] = stack;
+
+                          if (stack.EventId !== stackMeta.previousEventId) {
+                            stdOut(_getStackLogLine(stack, 1));
+                            stackMeta.previousEventId = stack.EventId;
+                          }
+                          if (_isStackEventError(stack)) {
+                            cancel(new Error('Creation of nested stack failed'));
+                          }
+                        });
+                      })
+                      .catch(cancel),
+                  STACK_LISTENER_INTERVAL
+                );
+              });
+            })
+            .catch(cancel),
+        STACK_LISTENER_INTERVAL
+      );
+
+      return this.cf.waitFor('stackCreateComplete', params).promise().then(complete).catch(cancel);
+    });
+  }
+
+  /**
+   * TODO: Manage deletion/recreation of nested stack
+   * @param stackName
+   * @param nestedStackNames
+   */
+  updateCloudFormationStack(stackName, nestedStackNames = [], templateUrl, additionalParams, deployService = 'false') {
+    const stackToListen = _.concat(nestedStackNames, stackName);
+    const listeners = { 0: { previousEventId: null, listenerId: null } };
+    const clearIntervals = () => _.forEach(listeners, l => clearInterval(l.listenerId));
+
+    return new Promise((resolve, reject) =>
+      this.cf
+        .updateStack({
+          StackName: stackName,
+          Capabilities: ['CAPABILITY_IAM'],
+          Parameters: [this.cfParameter('shouldDeployService', deployService)].concat(additionalParams),
+          TemplateURL: templateUrl,
+        })
+        .promise()
+        .catch(reject)
+        .then(() => {
+          const success = result => {
+            clearIntervals();
+            resolve(result);
+          };
+          const failure = error => {
+            clearIntervals();
+            reject(error);
+          };
+          _.forEach(stackToListen, id => {
+            listeners[id] = {};
+            listeners[id].previousEventId = null;
+            listeners[id].listenerId = setInterval(
+              () =>
+                this.cf
+                  .describeStackEvents({ StackName: id })
+                  .promise()
+                  .then(result => {
+                    const listener = listeners[id];
+                    const stack = result.StackEvents[0];
+                    if (stack.EventId !== listener.previousEventId) {
+                      stdOut(_getStackLogLine(stack, 1));
+                      listener.previousEventId = stack.EventId;
+                      listeners[id] = listener;
+                    }
+                    if (_isStackEventError(stack)) {
+                      failure(new Error('Creation of nested stack failed'));
+                    }
+                  })
+                  .catch(failure),
+              STACK_LISTENER_INTERVAL
+            );
+          });
+
+          return this.cf.waitFor('stackUpdateComplete', { StackName: stackName }).promise().then(success).catch(failure);
+        })
+    );
+  }
 };
 
 /**
@@ -254,20 +254,20 @@ module.exports = class CloudFormation {
  * @private
  */
 function _doesEventContainsNestedStackId(stack) {
-    if (stack.ResourceType !== 'AWS::CloudFormation::Stack') {
-        return false;
-    }
-    if (stack.ResourceStatusReason !== 'Resource creation Initiated') {
-        return false;
-    }
-    if (stack.ResourceStatus !== 'CREATE_IN_PROGRESS') {
-        return false;
-    }
-    if (_.isNil(stack.PhysicalResourceId)) {
-        return false;
-    }
+  if (stack.ResourceType !== 'AWS::CloudFormation::Stack') {
+    return false;
+  }
+  if (stack.ResourceStatusReason !== 'Resource creation Initiated') {
+    return false;
+  }
+  if (stack.ResourceStatus !== 'CREATE_IN_PROGRESS') {
+    return false;
+  }
+  if (_.isNil(stack.PhysicalResourceId)) {
+    return false;
+  }
 
-    return _hasLabelNestedStackName(stack.PhysicalResourceId);
+  return _hasLabelNestedStackName(stack.PhysicalResourceId);
 }
 
 /**
@@ -277,18 +277,18 @@ function _doesEventContainsNestedStackId(stack) {
  * @private
  */
 function _formatStatus(status) {
-    let statusColorFn = chalk.grey;
-    if (_.endsWith(status, 'IN_PROGRESS')) {
-        statusColorFn = chalk.yellow;
-    } else if (_.endsWith(status, 'FAILED') || _.startsWith(status, 'DELETE')) {
-        statusColorFn = chalk.red;
-    } else if (_.endsWith(status, 'COMPLETE')) {
-        statusColorFn = chalk.greenBright;
-    }
+  let statusColorFn = chalk.grey;
+  if (_.endsWith(status, 'IN_PROGRESS')) {
+    statusColorFn = chalk.yellow;
+  } else if (_.endsWith(status, 'FAILED') || _.startsWith(status, 'DELETE')) {
+    statusColorFn = chalk.red;
+  } else if (_.endsWith(status, 'COMPLETE')) {
+    statusColorFn = chalk.greenBright;
+  }
 
-    const sanitizedStatus = _.replace(status, '_', ' ');
-    const paddedStatus = _.padEnd(sanitizedStatus, STACK_EVENT_STATUS_DISPLAY_LENGTH);
-    return statusColorFn(paddedStatus);
+  const sanitizedStatus = _.replace(status, '_', ' ');
+  const paddedStatus = _.padEnd(sanitizedStatus, STACK_EVENT_STATUS_DISPLAY_LENGTH);
+  return statusColorFn(paddedStatus);
 }
 
 /**
@@ -299,13 +299,13 @@ function _formatStatus(status) {
  * @private
  */
 function _getStackLogLine(stack, indentation = 0) {
-    const time = chalk.blue(`${stack.Timestamp.toLocaleTimeString()}`);
-    const spacing = _.repeat('\t', indentation);
-    const status = _formatStatus(stack.ResourceStatus);
+  const time = chalk.blue(`${stack.Timestamp.toLocaleTimeString()}`);
+  const spacing = _.repeat('\t', indentation);
+  const status = _formatStatus(stack.ResourceStatus);
 
-    const stackName = chalk.grey(stack.StackName);
-    const resourceType = chalk.bold(stack.ResourceType);
-    return `${time} ${spacing}${status} ${resourceType}\t${stackName}`;
+  const stackName = chalk.grey(stack.StackName);
+  const resourceType = chalk.bold(stack.ResourceType);
+  return `${time} ${spacing}${status} ${resourceType}\t${stackName}`;
 }
 
 /**
@@ -315,9 +315,9 @@ function _getStackLogLine(stack, indentation = 0) {
  * @private
  */
 function _hasLabelNestedStackName(physicalResource) {
-    return _(physicalResource).split(PHYSICAL_RESOURCE_SEPARATOR).last().startsWith('stack/');
+  return _(physicalResource).split(PHYSICAL_RESOURCE_SEPARATOR).last().startsWith('stack/');
 }
 
 function _isStackEventError(stack) {
-    return _.includes(['CREATE_FAILED', 'DELETE_IN_PROGRESS'], stack.ResourceStatus);
+  return _.includes(['CREATE_FAILED', 'DELETE_IN_PROGRESS'], stack.ResourceStatus);
 }

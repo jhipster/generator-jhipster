@@ -21,20 +21,20 @@ const Validator = require('./validator');
 const { isReservedClassName } = require('../jhipster/reserved-keywords');
 
 class EntityValidator extends Validator {
-    constructor() {
-        super('entity', ['name', 'tableName']);
-    }
+  constructor() {
+    super('entity', ['name', 'tableName']);
+  }
 
-    validate(jdlEntity) {
-        super.validate(jdlEntity);
-        checkForReservedClassName(jdlEntity);
-    }
+  validate(jdlEntity) {
+    super.validate(jdlEntity);
+    checkForReservedClassName(jdlEntity);
+  }
 }
 
 module.exports = EntityValidator;
 
 function checkForReservedClassName(jdlEntity) {
-    if (isReservedClassName(jdlEntity.name)) {
-        throw new Error(`The name '${jdlEntity.name}' is a reserved keyword and can not be used as an entity class name.`);
-    }
+  if (isReservedClassName(jdlEntity.name)) {
+    throw new Error(`The name '${jdlEntity.name}' is a reserved keyword and can not be used as an entity class name.`);
+  }
 }

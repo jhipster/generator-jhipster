@@ -26,73 +26,73 @@ const JDLEntity = require('../../../jdl/models/jdl-entity');
 const JDLExporter = require('../../../jdl/exporters/jdl-exporter');
 
 describe('JDLExporter', () => {
-    describe('exportToJDL', () => {
-        context('when passing invalid parameters', () => {
-            context('such as undefined', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        JDLExporter.exportToJDL();
-                    }).to.throw(/^A JDLObject has to be passed to be exported\.$/);
-                });
-            });
+  describe('exportToJDL', () => {
+    context('when passing invalid parameters', () => {
+      context('such as undefined', () => {
+        it('should fail', () => {
+          expect(() => {
+            JDLExporter.exportToJDL();
+          }).to.throw(/^A JDLObject has to be passed to be exported\.$/);
         });
-        context('when passing valid parameters', () => {
-            context('with a path', () => {
-                const PATH = 'myPath.jdl';
-                let fileExistence;
-                let jdlContent = '';
-
-                before(() => {
-                    const jdlObject = new JDLObject();
-                    jdlObject.addEntity(
-                        new JDLEntity({
-                            name: 'Toto',
-                        })
-                    );
-                    JDLExporter.exportToJDL(jdlObject, PATH);
-                    fileExistence = fs.statSync(PATH).isFile();
-                    jdlContent = fs.readFileSync(PATH, 'utf-8').toString();
-                });
-
-                after(() => {
-                    fs.unlinkSync(PATH);
-                });
-
-                it('should export the JDL to the passed path', () => {
-                    expect(fileExistence).to.be.true;
-                });
-                it('should write the JDL inside the file', () => {
-                    expect(jdlContent).to.equal('entity Toto\n');
-                });
-            });
-            context('without a path', () => {
-                const DEFAULT_PATH = 'app.jdl';
-                let fileExistence;
-                let jdlContent = '';
-
-                before(() => {
-                    const jdlObject = new JDLObject();
-                    jdlObject.addEntity(
-                        new JDLEntity({
-                            name: 'Toto',
-                        })
-                    );
-                    JDLExporter.exportToJDL(jdlObject);
-                    fileExistence = fs.statSync(DEFAULT_PATH).isFile();
-                    jdlContent = fs.readFileSync(DEFAULT_PATH, 'utf-8').toString();
-                });
-
-                after(() => {
-                    fs.unlinkSync(DEFAULT_PATH);
-                });
-
-                it('should export the JDL to the default one', () => {
-                    expect(fileExistence).to.be.true;
-                });
-                it('should write the JDL inside the file', () => {
-                    expect(jdlContent).to.equal('entity Toto\n');
-                });
-            });
-        });
+      });
     });
+    context('when passing valid parameters', () => {
+      context('with a path', () => {
+        const PATH = 'myPath.jdl';
+        let fileExistence;
+        let jdlContent = '';
+
+        before(() => {
+          const jdlObject = new JDLObject();
+          jdlObject.addEntity(
+            new JDLEntity({
+              name: 'Toto',
+            })
+          );
+          JDLExporter.exportToJDL(jdlObject, PATH);
+          fileExistence = fs.statSync(PATH).isFile();
+          jdlContent = fs.readFileSync(PATH, 'utf-8').toString();
+        });
+
+        after(() => {
+          fs.unlinkSync(PATH);
+        });
+
+        it('should export the JDL to the passed path', () => {
+          expect(fileExistence).to.be.true;
+        });
+        it('should write the JDL inside the file', () => {
+          expect(jdlContent).to.equal('entity Toto\n');
+        });
+      });
+      context('without a path', () => {
+        const DEFAULT_PATH = 'app.jdl';
+        let fileExistence;
+        let jdlContent = '';
+
+        before(() => {
+          const jdlObject = new JDLObject();
+          jdlObject.addEntity(
+            new JDLEntity({
+              name: 'Toto',
+            })
+          );
+          JDLExporter.exportToJDL(jdlObject);
+          fileExistence = fs.statSync(DEFAULT_PATH).isFile();
+          jdlContent = fs.readFileSync(DEFAULT_PATH, 'utf-8').toString();
+        });
+
+        after(() => {
+          fs.unlinkSync(DEFAULT_PATH);
+        });
+
+        it('should export the JDL to the default one', () => {
+          expect(fileExistence).to.be.true;
+        });
+        it('should write the JDL inside the file', () => {
+          expect(jdlContent).to.equal('entity Toto\n');
+        });
+      });
+    });
+  });
 });

@@ -17,19 +17,19 @@
  * limitations under the License.
  */
 module.exports = {
-    askForPage,
+  askForPage,
 };
 
 function askForPage() {
-    if (this.pageName) return undefined;
+  if (this.pageName) return undefined;
 
-    return this.prompt({
-        type: 'input',
-        name: 'pageName',
-        message: 'What is the name of your page?',
-        default: 'MyPage',
-        validate: input => (/^([A-Z][a-zA-Z]*)$/.test(input) ? true : 'This is not a valid page name (ex: MyPage).'),
-    }).then(answers => {
-        this.pageName = answers.pageName;
-    });
+  return this.prompt({
+    type: 'input',
+    name: 'pageName',
+    message: 'What is the name of your page?',
+    default: 'MyPage',
+    validate: input => (/^([A-Z][a-zA-Z]*)$/.test(input) ? true : 'This is not a valid page name (ex: MyPage).'),
+  }).then(answers => {
+    this.pageName = answers.pageName;
+  });
 }

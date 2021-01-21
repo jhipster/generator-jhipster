@@ -18,9 +18,9 @@
  */
 
 module.exports = {
-    deduplicate,
+  deduplicate,
 };
 
 function deduplicate(array = []) {
-    return Array.from(new Set(array));
+  return Array.from(new Set(array));
 }
