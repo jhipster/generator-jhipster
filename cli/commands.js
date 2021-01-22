@@ -72,11 +72,13 @@ const defaultCommands = {
     options: [
       {
         option: '--fork',
-        desc: 'Run generators using fork',
+        desc:
+          'Generate multiple applications in parallel without any interaction. This is default when every application in the JDL is new. Files will be overwritten without prompt. The "--incremental-changelog" option might not work correctly when this option is used for existing applications',
       },
       {
         option: '--interactive',
-        desc: 'Run generation in series so that questions can be interacted with',
+        desc:
+          'Generate multiple applications in series so that questions can be interacted with. This is the default when there is an existing application configuration in any of the folders',
       },
       {
         option: '--json-only',
@@ -107,16 +109,18 @@ const defaultCommands = {
         desc: 'Skip the user management module during app generation',
       },
     ],
-    desc: `Create entities from the JDL file/content passed in argument.
-  By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.`,
+    desc: `Create entities from the JDL file/URL/content passed in argument.
+    Use the '--fork' or '--interactive' flag to change the process forking behavior when generating multiple applications.`,
     help: `
-Arguments:
-    jdlFiles # The JDL file names Type: String[] Required: true if --inline is not set
+    Arguments:
+    jdlFiles # The JDL file names or URL Type: String[] Required: true if --inline is not set
 
-Example:
+    Example:
     jhipster jdl myfile.jdl
-    jhipster jdl myfile.jdl --interactive
+    jhipster jdl myfile.jdl --fork
     jhipster jdl myfile1.jdl myfile2.jdl
+    jhipster jdl https://gist.githubusercontent.com/user/path/app.jdl
+    jhipster jdl jdl-name-from-jdl-samples-repo.jdl (just pass any file name from https://github.com/jhipster/jdl-samples)
     jhipster jdl --inline "application { config { baseName jhapp, testFrameworks [protractor] }}"
     jhipster jdl --inline \\
         "application {
@@ -125,7 +129,7 @@ Example:
                 testFrameworks [protractor]
             }
         }"
-        `,
+    `,
   },
   kubernetes: {
     alias: 'k8s',
