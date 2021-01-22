@@ -38,12 +38,12 @@ import org.springframework.context.annotation.Import;
     <%_ if (authenticationType === 'oauth2') { _%>
 import org.springframework.core.convert.converter.Converter;
     <%_ } _%>
-    <%_ if (authenticationType !== 'uaa' && !(applicationType === 'microservice' && authenticationType === 'oauth2')) { _%>
+    <%_ if (applicationType !== 'microservice' || authenticationType !== 'oauth2') { _%>
 import org.springframework.http.HttpMethod;
     <%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-    <%_ if (authenticationType !== 'uaa' && !(applicationType === 'microservice' && authenticationType === 'oauth2')) { _%>
+    <%_ if (applicationType !== 'microservice' || authenticationType !== 'oauth2') { _%>
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
     <%_ } else { _%>
         <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
@@ -174,7 +174,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
     <%_ } _%>
-    <%_ if (authenticationType !== 'uaa' && applicationType !== 'microservice') { _%>
+    <%_ if (applicationType !== 'microservice') { _%>
 
     @Override
     public void configure(WebSecurity web) {
