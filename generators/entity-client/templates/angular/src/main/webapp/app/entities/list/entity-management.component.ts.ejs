@@ -95,7 +95,7 @@ export class <%= entityAngularName %>Component implements OnInit {
     <%_ } _%>
 
 <%_ if (pagination !== 'no') { _%>
-    sort(): string[] {
+    protected sort(): string[] {
         const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
         if (this.predicate !== '<%- primaryKey.name %>') {
             result.push('<%- primaryKey.name %>');
