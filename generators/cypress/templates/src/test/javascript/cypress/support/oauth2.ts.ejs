@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -61,7 +60,6 @@ Cypress.Commands.add('keycloakLogin', (oauth2Data: any, username: string, passwo
   .then(response => {
     const html = document.createElement('html');
     html.innerHTML = response.body;
-
 
     const form = html.getElementsByTagName('form')[0];
     const url = form.action;
