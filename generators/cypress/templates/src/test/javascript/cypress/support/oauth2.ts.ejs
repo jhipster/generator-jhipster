@@ -21,7 +21,7 @@ Cypress.Commands.add('getOauth2Data', () => {
     const origin = url.origin;
     const authenticationUrl = `${origin}${url.pathname}`;
     const isOkta = origin.includes("okta")
-    
+
     let logoutUrl = "";
     if (isOkta) {
       logoutUrl = `${origin}${url.pathname.split('/',2).join('/')}/v1/logout`
@@ -51,6 +51,40 @@ Cypress.Commands.add('oauthLogin', (oauth2Data: any, username: string, password:
   } else {
     cy.keycloakLogin(oauth2Data, username, password);
   }
+});
+
+Cypress.Commands.add('keycloakLogin', (oauth2Data: any, username: string, password: string) => {
+  cy.request({
+    url: `${oauth2Data.url}`,
+    followRedirect: false,
+  })
+  .then(response => {
+    const html = document.createElement('html');
+    html.innerHTML = response.body;
+
+
+    const form = html.getElementsByTagName('form')[0];
+    const url = form.action;
+    return cy.request({
+      method: 'POST',
+      url,
+      followRedirect: false,
+      form: true,
+      body: {
+        username: username,
+        password: password,
+      },
+    });
+  })
+  .then(() => {
+    cy.request({
+      method: 'GET',
+      url: '/oauth2/authorization/oidc',
+      followRedirect: true,
+    }).then(() => {
+      cy.visit('/');
+    });
+  })
 });
 
 Cypress.Commands.add('oktaLogin', (username, password) => {
