@@ -29,16 +29,16 @@ module.exports = { convertField };
  * @return {JDLField} the converted JDLField.
  */
 function convertField(field) {
-    if (!field) {
-        throw new Error('A field has to be passed so as to be converted.');
-    }
-    const name = lowerFirst(field.name);
-    const jdlField = new JDLField({
-        name,
-        type: field.type,
-    });
-    if (field.javadoc) {
-        jdlField.comment = formatComment(field.javadoc);
-    }
-    return jdlField;
+  if (!field) {
+    throw new Error('A field has to be passed so as to be converted.');
+  }
+  const name = lowerFirst(field.name);
+  const jdlField = new JDLField({
+    name,
+    type: field.type,
+  });
+  if (field.javadoc) {
+    jdlField.comment = formatComment(field.javadoc);
+  }
+  return jdlField;
 }

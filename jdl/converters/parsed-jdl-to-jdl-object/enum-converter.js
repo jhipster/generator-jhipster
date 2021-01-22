@@ -28,10 +28,10 @@ module.exports = { convertEnums };
  * @return {Array<JDLEnum>} the converted JDLEnums.
  */
 function convertEnums(enumerations) {
-    if (!enumerations) {
-        throw new Error('Enumerations have to be passed so as to be converted.');
-    }
-    return enumerations.map(enumeration => convertEnum(enumeration));
+  if (!enumerations) {
+    throw new Error('Enumerations have to be passed so as to be converted.');
+  }
+  return enumerations.map(enumeration => convertEnum(enumeration));
 }
 
 /**
@@ -40,9 +40,9 @@ function convertEnums(enumerations) {
  * @return {JDLEnum} the converted JDLEnum.
  */
 function convertEnum(enumeration) {
-    return new JDLEnum({
-        name: enumeration.name,
-        values: enumeration.values,
-        comment: formatComment(enumeration.javadoc),
-    });
+  return new JDLEnum({
+    name: enumeration.name,
+    values: enumeration.values,
+    comment: formatComment(enumeration.javadoc),
+  });
 }

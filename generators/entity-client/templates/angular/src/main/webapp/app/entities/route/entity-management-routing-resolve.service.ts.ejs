@@ -27,7 +27,7 @@ import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %
 
 @Injectable({ providedIn: 'root' })
 export class <%= entityAngularName %>RoutingResolveService implements Resolve<I<%= entityAngularName %>> {
-    constructor(private service: <%= entityAngularName %>Service, private router: Router) {}
+    constructor(protected service: <%= entityAngularName %>Service, protected router: Router) {}
 
     resolve(route: ActivatedRouteSnapshot): Observable<I<%= entityAngularName %>> | Observable<never> {
         const id = route.params['id'];

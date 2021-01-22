@@ -22,42 +22,42 @@ const JDLEnum = require('../../../../jdl/models/jdl-enum');
 const { convertEnums } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/enum-converter');
 
 describe('EnumConverter', () => {
-    describe('convertEnums', () => {
-        context('when not passing enumerations', () => {
-            it('should fail', () => {
-                expect(() => convertEnums()).to.throw(/^Enumerations have to be passed so as to be converted.$/);
-            });
-        });
-        context('when passing enumerations', () => {
-            let expectedEnums;
-            let convertedEnums;
-
-            before(() => {
-                expectedEnums = [
-                    new JDLEnum({
-                        name: 'Country',
-                        values: [
-                            { key: 'FRANCE', value: 'FRANCE' },
-                            { key: 'ITALY', value: 'ITALY' },
-                        ],
-                        comment: 'A comment',
-                    }),
-                ];
-                convertedEnums = convertEnums([
-                    {
-                        name: 'Country',
-                        values: [
-                            { key: 'FRANCE', value: 'FRANCE' },
-                            { key: 'ITALY', value: 'ITALY' },
-                        ],
-                        javadoc: 'A comment',
-                    },
-                ]);
-            });
-
-            it('should convert them', () => {
-                expect(convertedEnums).to.deep.equal(expectedEnums);
-            });
-        });
+  describe('convertEnums', () => {
+    context('when not passing enumerations', () => {
+      it('should fail', () => {
+        expect(() => convertEnums()).to.throw(/^Enumerations have to be passed so as to be converted.$/);
+      });
     });
+    context('when passing enumerations', () => {
+      let expectedEnums;
+      let convertedEnums;
+
+      before(() => {
+        expectedEnums = [
+          new JDLEnum({
+            name: 'Country',
+            values: [
+              { key: 'FRANCE', value: 'FRANCE' },
+              { key: 'ITALY', value: 'ITALY' },
+            ],
+            comment: 'A comment',
+          }),
+        ];
+        convertedEnums = convertEnums([
+          {
+            name: 'Country',
+            values: [
+              { key: 'FRANCE', value: 'FRANCE' },
+              { key: 'ITALY', value: 'ITALY' },
+            ],
+            javadoc: 'A comment',
+          },
+        ]);
+      });
+
+      it('should convert them', () => {
+        expect(convertedEnums).to.deep.equal(expectedEnums);
+      });
+    });
+  });
 });

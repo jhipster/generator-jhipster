@@ -22,44 +22,44 @@ const JDLEnum = require('../../../jdl/models/jdl-enum');
 const EnumValidator = require('../../../jdl/validators/enum-validator');
 
 describe('EnumValidator', () => {
-    let validator;
+  let validator;
 
-    before(() => {
-        validator = new EnumValidator();
+  before(() => {
+    validator = new EnumValidator();
+  });
+
+  describe('validate', () => {
+    context('when not passing anything', () => {
+      it('should fail', () => {
+        expect(() => validator.validate()).to.throw(/^No enum\.$/);
+      });
     });
+    context('when passing an enum', () => {
+      context('with all its required attributes', () => {
+        let jdlEnum;
 
-    describe('validate', () => {
-        context('when not passing anything', () => {
-            it('should fail', () => {
-                expect(() => validator.validate()).to.throw(/^No enum\.$/);
-            });
+        before(() => {
+          jdlEnum = new JDLEnum({
+            name: 'a',
+          });
         });
-        context('when passing an enum', () => {
-            context('with all its required attributes', () => {
-                let jdlEnum;
 
-                before(() => {
-                    jdlEnum = new JDLEnum({
-                        name: 'a',
-                    });
-                });
-
-                it('should not fail', () => {
-                    expect(() => validator.validate(jdlEnum)).not.to.throw();
-                });
-            });
-            context('when not passing any attribute', () => {
-                it('should fail', () => {
-                    expect(() => validator.validate({})).to.throw(/^The enum attribute name was not found\.$/);
-                });
-            });
-            context('with a reserved class name as name', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        validator.validate(new JDLEnum({ name: 'Catch' }));
-                    }).to.throw(/^The enum name 'Catch' is reserved keyword and can not be used as enum class name\.$/);
-                });
-            });
+        it('should not fail', () => {
+          expect(() => validator.validate(jdlEnum)).not.to.throw();
         });
+      });
+      context('when not passing any attribute', () => {
+        it('should fail', () => {
+          expect(() => validator.validate({})).to.throw(/^The enum attribute name was not found\.$/);
+        });
+      });
+      context('with a reserved class name as name', () => {
+        it('should fail', () => {
+          expect(() => {
+            validator.validate(new JDLEnum({ name: 'Catch' }));
+          }).to.throw(/^The enum name 'Catch' is reserved keyword and can not be used as enum class name\.$/);
+        });
+      });
     });
+  });
 });

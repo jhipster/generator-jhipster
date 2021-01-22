@@ -20,87 +20,87 @@
 const { OptionNames } = require('../jhipster/application-options');
 
 module.exports = class JDLApplicationConfiguration {
-    constructor(config = {}) {
-        this.options = {};
-    }
+  constructor(config = {}) {
+    this.options = {};
+  }
 
-    hasOption(optionName) {
-        if (!optionName) {
-            return false;
-        }
-        return optionName in this.options;
+  hasOption(optionName) {
+    if (!optionName) {
+      return false;
     }
+    return optionName in this.options;
+  }
 
-    getOption(optionName) {
-        if (!optionName) {
-            throw new Error('An option name has to be passed to get the option.');
-        }
-        if (!(optionName in this.options)) {
-            return undefined;
-        }
-        return this.options[optionName];
+  getOption(optionName) {
+    if (!optionName) {
+      throw new Error('An option name has to be passed to get the option.');
     }
-
-    setOption(option) {
-        if (!option) {
-            throw new Error('An option has to be passed to set an option.');
-        }
-        this.options[option.name] = option;
+    if (!(optionName in this.options)) {
+      return undefined;
     }
+    return this.options[optionName];
+  }
 
-    forEachOption(passedFunction) {
-        if (!passedFunction) {
-            return;
-        }
-        Object.values(this.options).forEach(option => {
-            passedFunction(option);
-        });
+  setOption(option) {
+    if (!option) {
+      throw new Error('An option has to be passed to set an option.');
     }
+    this.options[option.name] = option;
+  }
 
-    toString(indent = 0) {
-        const spaceBeforeConfigKeyword = ' '.repeat(indent);
-        if (Object.keys(this.options).length === 0) {
-            return `${spaceBeforeConfigKeyword}config {}`;
-        }
-        const spaceBeforeOption = ' '.repeat(2 * indent);
-        const config = getFormattedConfigOptionsString(this.options, spaceBeforeOption);
-        return `${spaceBeforeConfigKeyword}config {
+  forEachOption(passedFunction) {
+    if (!passedFunction) {
+      return;
+    }
+    Object.values(this.options).forEach(option => {
+      passedFunction(option);
+    });
+  }
+
+  toString(indent = 0) {
+    const spaceBeforeConfigKeyword = ' '.repeat(indent);
+    if (Object.keys(this.options).length === 0) {
+      return `${spaceBeforeConfigKeyword}config {}`;
+    }
+    const spaceBeforeOption = ' '.repeat(2 * indent);
+    const config = getFormattedConfigOptionsString(this.options, spaceBeforeOption);
+    return `${spaceBeforeConfigKeyword}config {
 ${config}
 ${spaceBeforeConfigKeyword}}`;
-    }
+  }
 };
 
 function getFormattedConfigOptionsString(options, indent) {
-    const filteredOptions = filterOutUnwantedOptions(options);
-    return Object.keys(filteredOptions)
-        .sort()
-        .map(optionName => {
-            const option = options[optionName];
-            return `${indent}${option}`;
-        })
-        .join('\n');
+  const filteredOptions = filterOutUnwantedOptions(options);
+  return Object.keys(filteredOptions)
+    .sort()
+    .map(optionName => {
+      const option = options[optionName];
+      return `${indent}${option}`;
+    })
+    .join('\n');
 }
 
 function filterOutUnwantedOptions(options) {
-    return filterOutOptionsThatShouldNotBeExported(filterOutOptionsWithoutValues(options));
+  return filterOutOptionsThatShouldNotBeExported(filterOutOptionsWithoutValues(options));
 }
 
 function filterOutOptionsWithoutValues(options) {
-    const filteredOptions = { ...options };
-    if (!(OptionNames.ENTITY_SUFFIX in options) || !options[OptionNames.ENTITY_SUFFIX].getValue()) {
-        delete filteredOptions[OptionNames.ENTITY_SUFFIX];
-    }
-    if (!(OptionNames.DTO_SUFFIX in options) || !options[OptionNames.DTO_SUFFIX].getValue()) {
-        delete filteredOptions[OptionNames.DTO_SUFFIX];
-    }
-    if (!(OptionNames.CLIENT_THEME_VARIANT in options) || !options[OptionNames.CLIENT_THEME_VARIANT].getValue()) {
-        delete filteredOptions[OptionNames.CLIENT_THEME_VARIANT];
-    }
-    return filteredOptions;
+  const filteredOptions = { ...options };
+  if (!(OptionNames.ENTITY_SUFFIX in options) || !options[OptionNames.ENTITY_SUFFIX].getValue()) {
+    delete filteredOptions[OptionNames.ENTITY_SUFFIX];
+  }
+  if (!(OptionNames.DTO_SUFFIX in options) || !options[OptionNames.DTO_SUFFIX].getValue()) {
+    delete filteredOptions[OptionNames.DTO_SUFFIX];
+  }
+  if (!(OptionNames.CLIENT_THEME_VARIANT in options) || !options[OptionNames.CLIENT_THEME_VARIANT].getValue()) {
+    delete filteredOptions[OptionNames.CLIENT_THEME_VARIANT];
+  }
+  return filteredOptions;
 }
 
 function filterOutOptionsThatShouldNotBeExported(options) {
-    const filteredOptions = { ...options };
-    delete filteredOptions[OptionNames.PACKAGE_FOLDER];
-    return filteredOptions;
+  const filteredOptions = { ...options };
+  delete filteredOptions[OptionNames.PACKAGE_FOLDER];
+  return filteredOptions;
 }

@@ -25,103 +25,103 @@ const constants = require('../generator-constants');
 let useBlueprints;
 
 module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
-    constructor(args, opts) {
-        super(args, opts);
+  constructor(args, opts) {
+    super(args, opts);
 
-        if (this.options.help) {
-            return;
-        }
-
-        this.loadStoredAppOptions();
-        this.loadRuntimeOptions();
-
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('common');
+    if (this.options.help) {
+      return;
     }
 
-    // Public API method used by the getter and also by Blueprints
-    _initializing() {
-        return {
-            validateFromCli() {
-                this.checkInvocationFromCLI();
-            },
+    this.loadStoredAppOptions();
+    this.loadRuntimeOptions();
 
-            setupConstants() {
-                // Make constants available in templates
-                this.MAIN_DIR = constants.MAIN_DIR;
-                this.TEST_DIR = constants.TEST_DIR;
-                this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-                this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('common');
+  }
 
-                // Make documentation URL available in templates
-                this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
-                this.DOCUMENTATION_ARCHIVE_PATH = constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH;
-            },
-        };
-    }
+  // Public API method used by the getter and also by Blueprints
+  _initializing() {
+    return {
+      validateFromCli() {
+        this.checkInvocationFromCLI();
+      },
 
-    get initializing() {
-        if (useBlueprints) return;
-        return this._initializing();
-    }
+      setupConstants() {
+        // Make constants available in templates
+        this.MAIN_DIR = constants.MAIN_DIR;
+        this.TEST_DIR = constants.TEST_DIR;
+        this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+        this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
-    // Public API method used by the getter and also by Blueprints
-    _loading() {
-        return {
-            loadSharedConfig() {
-                this.loadAppConfig();
-                this.loadClientConfig();
-                this.loadServerConfig();
-                this.loadTranslationConfig();
-            },
-        };
-    }
+        // Make documentation URL available in templates
+        this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
+        this.DOCUMENTATION_ARCHIVE_PATH = constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH;
+      },
+    };
+  }
 
-    get loading() {
-        if (useBlueprints) return;
-        return this._loading();
-    }
+  get initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
+  }
 
-    // Public API method used by the getter and also by Blueprints
-    _preparing() {
-        return {
-            prepareForTemplates() {
-                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
-                this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.buildTool) + constants.CLIENT_DIST_DIR;
-            },
-        };
-    }
+  // Public API method used by the getter and also by Blueprints
+  _loading() {
+    return {
+      loadSharedConfig() {
+        this.loadAppConfig();
+        this.loadClientConfig();
+        this.loadServerConfig();
+        this.loadTranslationConfig();
+      },
+    };
+  }
 
-    get preparing() {
-        if (useBlueprints) return;
-        return this._preparing();
-    }
+  get loading() {
+    if (useBlueprints) return;
+    return this._loading();
+  }
 
-    // Public API method used by the getter and also by Blueprints
-    _default() {
-        return {
-            ...super._missingPreDefault(),
-        };
-    }
+  // Public API method used by the getter and also by Blueprints
+  _preparing() {
+    return {
+      prepareForTemplates() {
+        this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
+        this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.buildTool) + constants.CLIENT_DIST_DIR;
+      },
+    };
+  }
 
-    get default() {
-        if (useBlueprints) return;
-        return this._default();
-    }
+  get preparing() {
+    if (useBlueprints) return;
+    return this._preparing();
+  }
 
-    // Public API method used by the getter and also by Blueprints
-    _writing() {
-        return {
-            writePrettierConfig() {
-                // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work
-                this.writeFilesToDisk(prettierConfigFiles);
-            },
-            ...writeFiles(),
-            ...super._missingPostWriting(),
-        };
-    }
+  // Public API method used by the getter and also by Blueprints
+  _default() {
+    return {
+      ...super._missingPreDefault(),
+    };
+  }
 
-    get writing() {
-        if (useBlueprints) return;
-        return this._writing();
-    }
+  get default() {
+    if (useBlueprints) return;
+    return this._default();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _writing() {
+    return {
+      writePrettierConfig() {
+        // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work
+        this.writeFilesToDisk(prettierConfigFiles);
+      },
+      ...writeFiles(),
+      ...super._missingPostWriting(),
+    };
+  }
+
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
+  }
 };

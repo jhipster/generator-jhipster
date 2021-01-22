@@ -103,7 +103,7 @@
     -->
     <changeSet id="<%= changelogDate %>-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/<%= !entity.incrementalChangelog ? entity.entityTableName : databaseChangelog.changelogDate + '_entity_' + entity.entityClass %>.csv"
+                  file="config/liquibase/fake-data/<%= !entity.incrementalChangelog ? entity.entityTableName : databaseChangelog.changelogDate + '_entity_' + entity.entityTableName %>.csv"
                   separator=";"
                   tableName="<%= entity.entityTableName %>">
             <%_ for (field of fields) {

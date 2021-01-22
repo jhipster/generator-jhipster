@@ -24,82 +24,82 @@ const constants = require('../generator-constants');
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-    constructor(args, opts) {
-        super(args, opts);
+  constructor(args, opts) {
+    super(args, opts);
 
-        if (this.options.help) {
-            return;
-        }
-
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('cypress');
+    if (this.options.help) {
+      return;
     }
 
-    // Public API method used by the getter and also by Blueprints
-    _initializing() {
-        return {
-            validateFromCli() {
-                this.checkInvocationFromCLI();
-            },
-        };
-    }
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('cypress');
+  }
 
-    get initializing() {
-        if (useBlueprints) return;
-        return this._initializing();
-    }
+  // Public API method used by the getter and also by Blueprints
+  _initializing() {
+    return {
+      validateFromCli() {
+        this.checkInvocationFromCLI();
+      },
+    };
+  }
 
-    // Public API method used by the getter and also by Blueprints
-    _loading() {
-        return {
-            loadSharedConfig() {
-                this.loadAppConfig();
-                this.loadClientConfig();
-                this.loadServerConfig();
-                this.loadTranslationConfig();
-            },
-        };
-    }
+  get initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
+  }
 
-    get loading() {
-        if (useBlueprints) return;
-        return this._loading();
-    }
+  // Public API method used by the getter and also by Blueprints
+  _loading() {
+    return {
+      loadSharedConfig() {
+        this.loadAppConfig();
+        this.loadClientConfig();
+        this.loadServerConfig();
+        this.loadTranslationConfig();
+      },
+    };
+  }
 
-    // Public API method used by the getter and also by Blueprints
-    _preparing() {
-        return {
-            prepareForTemplates() {
-                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
-                this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.buildTool) + constants.CLIENT_DIST_DIR;
-            },
-        };
-    }
+  get loading() {
+    if (useBlueprints) return;
+    return this._loading();
+  }
 
-    get preparing() {
-        if (useBlueprints) return;
-        return this._preparing();
-    }
+  // Public API method used by the getter and also by Blueprints
+  _preparing() {
+    return {
+      prepareForTemplates() {
+        this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
+        this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.buildTool) + constants.CLIENT_DIST_DIR;
+      },
+    };
+  }
 
-    // Public API method used by the getter and also by Blueprints
-    _default() {
-        return super._missingPreDefault();
-    }
+  get preparing() {
+    if (useBlueprints) return;
+    return this._preparing();
+  }
 
-    get default() {
-        if (useBlueprints) return;
-        return this._default();
-    }
+  // Public API method used by the getter and also by Blueprints
+  _default() {
+    return super._missingPreDefault();
+  }
 
-    // Public API method used by the getter and also by Blueprints
-    _writing() {
-        return {
-            ...writeFiles(),
-            ...super._missingPostWriting(),
-        };
-    }
+  get default() {
+    if (useBlueprints) return;
+    return this._default();
+  }
 
-    get writing() {
-        if (useBlueprints) return;
-        return this._writing();
-    }
+  // Public API method used by the getter and also by Blueprints
+  _writing() {
+    return {
+      ...writeFiles(),
+      ...super._missingPostWriting(),
+    };
+  }
+
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
+  }
 };

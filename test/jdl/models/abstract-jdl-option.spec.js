@@ -23,32 +23,32 @@ const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
 const BinaryOptions = require('../../../jdl/jhipster/binary-options');
 
 describe('AbstractJDLOption', () => {
-    describe('resolveEntityNames', () => {
-        context('when not passing entity names', () => {
-            it('should fail', () => {
-                expect(() => {
-                    new JDLBinaryOption({
-                        name: BinaryOptions.Options.SERVICE,
-                        value: BinaryOptions.Values.service.SERVICE_CLASS,
-                    }).resolveEntityNames();
-                }).to.throw(/^Entity names have to be passed to resolve the option's entities\.$/);
-            });
-        });
-        context('when passing entity names', () => {
-            let result;
-
-            before(() => {
-                const option = new JDLBinaryOption({
-                    name: BinaryOptions.Options.SERVICE,
-                    value: BinaryOptions.Values.service.SERVICE_CLASS,
-                    excludedNames: ['C'],
-                });
-                result = option.resolveEntityNames(['A', 'B', 'C']);
-            });
-
-            it("should resolve the option's entity names", () => {
-                expect(result).to.deep.equal(new Set(['B', 'A']));
-            });
-        });
+  describe('resolveEntityNames', () => {
+    context('when not passing entity names', () => {
+      it('should fail', () => {
+        expect(() => {
+          new JDLBinaryOption({
+            name: BinaryOptions.Options.SERVICE,
+            value: BinaryOptions.Values.service.SERVICE_CLASS,
+          }).resolveEntityNames();
+        }).to.throw(/^Entity names have to be passed to resolve the option's entities\.$/);
+      });
     });
+    context('when passing entity names', () => {
+      let result;
+
+      before(() => {
+        const option = new JDLBinaryOption({
+          name: BinaryOptions.Options.SERVICE,
+          value: BinaryOptions.Values.service.SERVICE_CLASS,
+          excludedNames: ['C'],
+        });
+        result = option.resolveEntityNames(['A', 'B', 'C']);
+      });
+
+      it("should resolve the option's entity names", () => {
+        expect(result).to.deep.equal(new Set(['B', 'A']));
+      });
+    });
+  });
 });

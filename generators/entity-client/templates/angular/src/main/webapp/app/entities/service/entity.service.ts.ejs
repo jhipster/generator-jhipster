@@ -40,8 +40,8 @@ import { <%= searchType %> } from 'app/core/request/request.model';
 <%_ } _%>
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 
-type EntityResponseType = HttpResponse<I<%= entityAngularName %>>;
-type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
+export type EntityResponseType = HttpResponse<I<%= entityAngularName %>>;
+export type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
 
 @Injectable({ providedIn: 'root' })
 export class <%= entityAngularName %>Service {

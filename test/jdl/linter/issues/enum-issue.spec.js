@@ -21,21 +21,21 @@ const { expect } = require('chai');
 const EnumIssue = require('../../../../jdl/linters/issues/enum-issue');
 
 describe('EnumIssue', () => {
-    describe('new', () => {
-        context('when not passing any arg', () => {
-            it('should fail', () => {
-                expect(() => new EnumIssue()).to.throw(/^An issue must at least have a rule name\.$/);
-            });
-        });
-        context('when not passing a rule name', () => {
-            it('should fail', () => {
-                expect(() => new EnumIssue({})).to.throw(/^An issue must at least have a rule name\.$/);
-            });
-        });
-        context('when not passing an enum name', () => {
-            it('should fail', () => {
-                expect(() => new EnumIssue({ ruleName: 'Toto' })).to.throw(/^An enum name must be passed\.$/);
-            });
-        });
+  describe('new', () => {
+    context('when not passing any arg', () => {
+      it('should fail', () => {
+        expect(() => new EnumIssue()).to.throw(/^An issue must at least have a rule name\.$/);
+      });
     });
+    context('when not passing a rule name', () => {
+      it('should fail', () => {
+        expect(() => new EnumIssue({})).to.throw(/^An issue must at least have a rule name\.$/);
+      });
+    });
+    context('when not passing an enum name', () => {
+      it('should fail', () => {
+        expect(() => new EnumIssue({ ruleName: 'Toto' })).to.throw(/^An enum name must be passed\.$/);
+      });
+    });
+  });
 });

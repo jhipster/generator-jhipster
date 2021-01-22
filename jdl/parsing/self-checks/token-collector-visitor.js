@@ -20,22 +20,22 @@
 const GAstVisitor = require('chevrotain').GAstVisitor;
 
 class TokenCollectorVisitor extends GAstVisitor {
-    constructor() {
-        super();
-        this.actualTokens = [];
-    }
+  constructor() {
+    super();
+    this.actualTokens = [];
+  }
 
-    visitTerminal(node) {
-        this.actualTokens.push(node.terminalType);
-    }
+  visitTerminal(node) {
+    this.actualTokens.push(node.terminalType);
+  }
 
-    visitRepetitionMandatoryWithSeparator(node) {
-        this.actualTokens.push(node.separator);
-    }
+  visitRepetitionMandatoryWithSeparator(node) {
+    this.actualTokens.push(node.separator);
+  }
 
-    visitRepetitionWithSeparator(node) {
-        this.actualTokens.push(node.separator);
-    }
+  visitRepetitionWithSeparator(node) {
+    this.actualTokens.push(node.separator);
+  }
 }
 
 module.exports = TokenCollectorVisitor;

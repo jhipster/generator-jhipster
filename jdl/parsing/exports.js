@@ -26,9 +26,9 @@ const { parse, getSyntacticAutoCompleteSuggestions } = require('./api');
 const JDLParser = require('./jdl-parser');
 
 module.exports = {
-    tokens,
-    JDLLexer,
-    JDLParser,
-    parse,
-    getSyntacticAutoCompleteSuggestions,
+  tokens,
+  JDLLexer,
+  JDLParser,
+  parse,
+  getSyntacticAutoCompleteSuggestions,
 };

@@ -24,278 +24,278 @@ const JDLField = require('../../../jdl/models/jdl-field');
 const JDLValidation = require('../../../jdl/models/jdl-validation');
 
 describe('JDLEntity', () => {
-    describe('new', () => {
-        context('when not passing any argument', () => {
-            it('should fail', () => {
-                expect(() => {
-                    new JDLEntity();
-                }).to.throw('The entity name is mandatory to create an entity.');
-            });
-        });
-        context('when not passing the name', () => {
-            it('should fail', () => {
-                expect(() => {
-                    new JDLEntity({ name: null, comment: 'My entity' });
-                }).to.throw('The entity name is mandatory to create an entity.');
-            });
-        });
-        context('when not passing the table name', () => {
-            let entity;
-
-            before(() => {
-                entity = new JDLEntity({ name: 'Abc' });
-            });
-
-            it('should use the names as value', () => {
-                expect(entity.tableName).to.equal('Abc');
-            });
-        });
-        context('when passing arguments', () => {
-            let entity;
-            let args = {};
-
-            before(() => {
-                args = {
-                    name: 'Abc',
-                    tableName: 'String',
-                    comment: 'comment',
-                    fields: [
-                        new JDLField({
-                            name: 'abc',
-                            type: 'String',
-                            comment: 'comment',
-                            validations: [new JDLValidation()],
-                        }),
-                    ],
-                };
-                entity = new JDLEntity(args);
-            });
-
-            it('should create a new instance', () => {
-                expect(entity.name).to.equal(args.name);
-                expect(entity.tableName).to.equal(args.tableName);
-                expect(entity.comment).to.equal(args.comment);
-                expect(entity.fields).to.deep.eq(args.fields);
-            });
-        });
+  describe('new', () => {
+    context('when not passing any argument', () => {
+      it('should fail', () => {
+        expect(() => {
+          new JDLEntity();
+        }).to.throw('The entity name is mandatory to create an entity.');
+      });
     });
-    describe('addField', () => {
-        let entity;
-
-        before(() => {
-            entity = new JDLEntity({
-                name: 'Abc',
-                tableName: 'String',
-            });
-        });
-
-        context('when adding an invalid field', () => {
-            context('because it is nil', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        entity.addField(null);
-                    }).to.throw(/^Can't add nil field to the JDL entity\.$/);
-                });
-            });
-        });
-        context('when adding a valid field', () => {
-            let validField;
-
-            before(() => {
-                validField = new JDLField({ name: 'myField', type: 'String' });
-            });
-
-            it('should work', () => {
-                entity.addField(validField);
-                expect(entity.fields).to.deep.eq({ myField: validField });
-            });
-        });
+    context('when not passing the name', () => {
+      it('should fail', () => {
+        expect(() => {
+          new JDLEntity({ name: null, comment: 'My entity' });
+        }).to.throw('The entity name is mandatory to create an entity.');
+      });
     });
-    describe('addFields', () => {
-        context('when not passing fields', () => {
-            let entity;
+    context('when not passing the table name', () => {
+      let entity;
 
-            before(() => {
-                entity = new JDLEntity({
-                    name: 'Toto',
-                });
-                entity.addFields();
-            });
+      before(() => {
+        entity = new JDLEntity({ name: 'Abc' });
+      });
 
-            it('should not alter the entity', () => {
-                expect(entity.toString()).to.equal('entity Toto');
-            });
+      it('should use the names as value', () => {
+        expect(entity.tableName).to.equal('Abc');
+      });
+    });
+    context('when passing arguments', () => {
+      let entity;
+      let args = {};
+
+      before(() => {
+        args = {
+          name: 'Abc',
+          tableName: 'String',
+          comment: 'comment',
+          fields: [
+            new JDLField({
+              name: 'abc',
+              type: 'String',
+              comment: 'comment',
+              validations: [new JDLValidation()],
+            }),
+          ],
+        };
+        entity = new JDLEntity(args);
+      });
+
+      it('should create a new instance', () => {
+        expect(entity.name).to.equal(args.name);
+        expect(entity.tableName).to.equal(args.tableName);
+        expect(entity.comment).to.equal(args.comment);
+        expect(entity.fields).to.deep.eq(args.fields);
+      });
+    });
+  });
+  describe('addField', () => {
+    let entity;
+
+    before(() => {
+      entity = new JDLEntity({
+        name: 'Abc',
+        tableName: 'String',
+      });
+    });
+
+    context('when adding an invalid field', () => {
+      context('because it is nil', () => {
+        it('should fail', () => {
+          expect(() => {
+            entity.addField(null);
+          }).to.throw(/^Can't add nil field to the JDL entity\.$/);
         });
-        context('when passing fields', () => {
-            let entity;
+      });
+    });
+    context('when adding a valid field', () => {
+      let validField;
 
-            before(() => {
-                entity = new JDLEntity({
-                    name: 'Toto',
-                });
-                entity.addFields([
-                    new JDLField({
-                        name: 'tata',
-                        type: 'String',
-                    }),
-                    new JDLField({
-                        name: 'titi',
-                        type: 'Integer',
-                    }),
-                ]);
-            });
+      before(() => {
+        validField = new JDLField({ name: 'myField', type: 'String' });
+      });
 
-            it('should alter the entity', () => {
-                expect(entity.toString()).to.equal(`entity Toto {
+      it('should work', () => {
+        entity.addField(validField);
+        expect(entity.fields).to.deep.eq({ myField: validField });
+      });
+    });
+  });
+  describe('addFields', () => {
+    context('when not passing fields', () => {
+      let entity;
+
+      before(() => {
+        entity = new JDLEntity({
+          name: 'Toto',
+        });
+        entity.addFields();
+      });
+
+      it('should not alter the entity', () => {
+        expect(entity.toString()).to.equal('entity Toto');
+      });
+    });
+    context('when passing fields', () => {
+      let entity;
+
+      before(() => {
+        entity = new JDLEntity({
+          name: 'Toto',
+        });
+        entity.addFields([
+          new JDLField({
+            name: 'tata',
+            type: 'String',
+          }),
+          new JDLField({
+            name: 'titi',
+            type: 'Integer',
+          }),
+        ]);
+      });
+
+      it('should alter the entity', () => {
+        expect(entity.toString()).to.equal(`entity Toto {
   tata String
   titi Integer
 }`);
-            });
-        });
+      });
     });
-    describe('forEachField', () => {
-        context('when not passing a function', () => {
-            let entity;
+  });
+  describe('forEachField', () => {
+    context('when not passing a function', () => {
+      let entity;
 
-            before(() => {
-                entity = new JDLEntity({
-                    name: 'Toto',
-                });
-            });
-
-            it('should fail', () => {
-                expect(() => entity.forEachField()).to.throw();
-            });
+      before(() => {
+        entity = new JDLEntity({
+          name: 'Toto',
         });
-        context('when passing a function', () => {
-            let result;
+      });
 
-            before(() => {
-                const entity = new JDLEntity({
-                    name: 'Toto',
-                });
-                entity.addField(
-                    new JDLField({
-                        name: 'a',
-                        type: 'String',
-                    })
-                );
-                entity.addField(
-                    new JDLField({
-                        name: 'b',
-                        type: 'String',
-                    })
-                );
-                result = '';
-                entity.forEachField(field => {
-                    result += `${field.name}`;
-                });
-            });
-
-            it('should iterate over the fields', () => {
-                expect(result).to.equal('ab');
-            });
-        });
+      it('should fail', () => {
+        expect(() => entity.forEachField()).to.throw();
+      });
     });
-    describe('toString', () => {
-        context('without a comment', () => {
-            let entity;
-            let args;
+    context('when passing a function', () => {
+      let result;
 
-            before(() => {
-                args = {
-                    name: 'Abc',
-                    tableName: 'String',
-                };
-                entity = new JDLEntity(args);
-            });
-
-            it('should stringify its content', () => {
-                expect(entity.toString()).to.equal(`entity ${args.name} (${args.tableName})`);
-            });
+      before(() => {
+        const entity = new JDLEntity({
+          name: 'Toto',
         });
-        context('with a table equal to the name (snakecase)', () => {
-            let entity;
-            let args;
-
-            before(() => {
-                args = {
-                    name: 'MySuperEntity',
-                    tableName: 'my_super_entity',
-                };
-                entity = new JDLEntity(args);
-            });
-
-            it('should not export it', () => {
-                expect(entity.toString()).to.equal(`entity ${args.name}`);
-            });
+        entity.addField(
+          new JDLField({
+            name: 'a',
+            type: 'String',
+          })
+        );
+        entity.addField(
+          new JDLField({
+            name: 'b',
+            type: 'String',
+          })
+        );
+        result = '';
+        entity.forEachField(field => {
+          result += `${field.name}`;
         });
-        context('with a table name not equal to the name (snakecase)', () => {
-            let entity;
-            let args;
+      });
 
-            before(() => {
-                args = {
-                    name: 'MySuperEntity',
-                    tableName: 'MyTableName',
-                };
-                entity = new JDLEntity(args);
-            });
+      it('should iterate over the fields', () => {
+        expect(result).to.equal('ab');
+      });
+    });
+  });
+  describe('toString', () => {
+    context('without a comment', () => {
+      let entity;
+      let args;
 
-            it('should export it', () => {
-                expect(entity.toString()).to.equal(`entity ${args.name} (MyTableName)`);
-            });
-        });
-        context('without fields', () => {
-            let entity;
-            let args;
+      before(() => {
+        args = {
+          name: 'Abc',
+          tableName: 'String',
+        };
+        entity = new JDLEntity(args);
+      });
 
-            before(() => {
-                args = {
-                    name: 'Abc',
-                    tableName: 'String',
-                    comment: 'comment',
-                };
-                entity = new JDLEntity(args);
-            });
+      it('should stringify its content', () => {
+        expect(entity.toString()).to.equal(`entity ${args.name} (${args.tableName})`);
+      });
+    });
+    context('with a table equal to the name (snakecase)', () => {
+      let entity;
+      let args;
 
-            it('should stringify its content', () => {
-                expect(entity.toString()).to.equal(
-                    `/**
+      before(() => {
+        args = {
+          name: 'MySuperEntity',
+          tableName: 'my_super_entity',
+        };
+        entity = new JDLEntity(args);
+      });
+
+      it('should not export it', () => {
+        expect(entity.toString()).to.equal(`entity ${args.name}`);
+      });
+    });
+    context('with a table name not equal to the name (snakecase)', () => {
+      let entity;
+      let args;
+
+      before(() => {
+        args = {
+          name: 'MySuperEntity',
+          tableName: 'MyTableName',
+        };
+        entity = new JDLEntity(args);
+      });
+
+      it('should export it', () => {
+        expect(entity.toString()).to.equal(`entity ${args.name} (MyTableName)`);
+      });
+    });
+    context('without fields', () => {
+      let entity;
+      let args;
+
+      before(() => {
+        args = {
+          name: 'Abc',
+          tableName: 'String',
+          comment: 'comment',
+        };
+        entity = new JDLEntity(args);
+      });
+
+      it('should stringify its content', () => {
+        expect(entity.toString()).to.equal(
+          `/**
  * ${args.comment}
  */
 entity ${args.name} (${args.tableName})`
-                );
-            });
+        );
+      });
+    });
+    context('with fields', () => {
+      let entity;
+      let field1;
+      let field2;
+
+      before(() => {
+        entity = new JDLEntity({
+          name: 'Abc',
+          tableName: 'String',
+          comment: 'Entity comment',
         });
-        context('with fields', () => {
-            let entity;
-            let field1;
-            let field2;
+        field1 = new JDLField({
+          name: 'myField',
+          type: 'Integer',
+          comment: 'Field comment',
+          validations: [new JDLValidation()],
+        });
+        field2 = new JDLField({
+          name: 'myOtherField',
+          type: 'Long',
+        });
+      });
 
-            before(() => {
-                entity = new JDLEntity({
-                    name: 'Abc',
-                    tableName: 'String',
-                    comment: 'Entity comment',
-                });
-                field1 = new JDLField({
-                    name: 'myField',
-                    type: 'Integer',
-                    comment: 'Field comment',
-                    validations: [new JDLValidation()],
-                });
-                field2 = new JDLField({
-                    name: 'myOtherField',
-                    type: 'Long',
-                });
-            });
-
-            it('should stringify its content', () => {
-                entity.addField(field1);
-                entity.addField(field2);
-                expect(entity.toString()).to.equal(
-                    `/**
+      it('should stringify its content', () => {
+        entity.addField(field1);
+        entity.addField(field2);
+        expect(entity.toString()).to.equal(
+          `/**
  * ${entity.comment}
  */
 entity ${entity.name} (${entity.tableName}) {
@@ -305,8 +305,8 @@ entity ${entity.name} (${entity.tableName}) {
   ${field1.name} ${field1.type} ${field1.validations[0]}
   ${field2.name} ${field2.type}
 }`
-                );
-            });
-        });
+        );
+      });
     });
+  });
 });

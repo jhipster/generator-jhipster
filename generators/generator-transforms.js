@@ -21,69 +21,69 @@ const through = require('through2');
 const prettier = require('prettier');
 
 const prettierTransform = function (defaultOptions, generator, ignoreErrors = false) {
-    return through.obj((file, encoding, callback) => {
-        if (file.state === 'deleted') {
-            callback(null, file);
-            return;
-        }
-        /* resolve from the projects config */
-        let fileContent;
-        prettier
-            .resolveConfig(file.relative)
-            .then(function (resolvedDestinationFileOptions) {
-                const options = {
-                    ...defaultOptions,
-                    // Config from disk
-                    ...resolvedDestinationFileOptions,
-                    // for better errors
-                    filepath: file.relative,
-                };
-                fileContent = file.contents.toString('utf8');
-                const data = prettier.format(fileContent, options);
-                file.contents = Buffer.from(data);
-                callback(null, file);
-            })
-            .catch(error => {
-                const errorMessage = `Error parsing file ${file.relative}: ${error}
+  return through.obj((file, encoding, callback) => {
+    if (file.state === 'deleted') {
+      callback(null, file);
+      return;
+    }
+    /* resolve from the projects config */
+    let fileContent;
+    prettier
+      .resolveConfig(file.relative)
+      .then(function (resolvedDestinationFileOptions) {
+        const options = {
+          ...defaultOptions,
+          // Config from disk
+          ...resolvedDestinationFileOptions,
+          // for better errors
+          filepath: file.relative,
+        };
+        fileContent = file.contents.toString('utf8');
+        const data = prettier.format(fileContent, options);
+        file.contents = Buffer.from(data);
+        callback(null, file);
+      })
+      .catch(error => {
+        const errorMessage = `Error parsing file ${file.relative}: ${error}
 
 At: ${fileContent}`;
-                if (ignoreErrors) {
-                    generator.warning(errorMessage);
-                    callback(null, file);
-                } else {
-                    callback(new Error(errorMessage));
-                }
-            });
-    });
+        if (ignoreErrors) {
+          generator.warning(errorMessage);
+          callback(null, file);
+        } else {
+          callback(new Error(errorMessage));
+        }
+      });
+  });
 };
 
 const generatedAnnotationTransform = generator => {
-    return through.obj(function (file, encoding, callback) {
-        if (
-            !file.path.endsWith('package-info.java') &&
-            !file.path.endsWith('MavenWrapperDownloader.java') &&
-            path.extname(file.path) === '.java' &&
-            file.state !== 'deleted' &&
-            !file.path.endsWith('GeneratedByJHipster.java')
-        ) {
-            const packageName = generator.jhipsterConfig.packageName;
-            const content = file.contents.toString('utf8');
+  return through.obj(function (file, encoding, callback) {
+    if (
+      !file.path.endsWith('package-info.java') &&
+      !file.path.endsWith('MavenWrapperDownloader.java') &&
+      path.extname(file.path) === '.java' &&
+      file.state !== 'deleted' &&
+      !file.path.endsWith('GeneratedByJHipster.java')
+    ) {
+      const packageName = generator.jhipsterConfig.packageName;
+      const content = file.contents.toString('utf8');
 
-            if (!new RegExp(`import ${packageName.replace('.', '\\.')}.GeneratedByJHipster;`).test(content)) {
-                const newContent = content
-                    // add the import statement just after the package statement, prettier will arrange it correctly
-                    .replace(/(package [\w.]+;\n)/, `$1import ${packageName}.GeneratedByJHipster;\n`)
-                    // add the annotation before class or interface
-                    .replace(/\n([a-w ]*(class|interface) )/g, '\n@GeneratedByJHipster\n$1');
-                file.contents = Buffer.from(newContent);
-            }
-        }
-        this.push(file);
-        callback();
-    });
+      if (!new RegExp(`import ${packageName.replace('.', '\\.')}.GeneratedByJHipster;`).test(content)) {
+        const newContent = content
+          // add the import statement just after the package statement, prettier will arrange it correctly
+          .replace(/(package [\w.]+;\n)/, `$1import ${packageName}.GeneratedByJHipster;\n`)
+          // add the annotation before class or interface
+          .replace(/\n([a-w ]*(class|interface) )/g, '\n@GeneratedByJHipster\n$1');
+        file.contents = Buffer.from(newContent);
+      }
+    }
+    this.push(file);
+    callback();
+  });
 };
 
 module.exports = {
-    prettierTransform,
-    generatedAnnotationTransform,
+  prettierTransform,
+  generatedAnnotationTransform,
 };

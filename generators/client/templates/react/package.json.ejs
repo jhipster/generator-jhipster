@@ -38,6 +38,7 @@
     "dayjs": "VERSION_MANAGED_BY_CLIENT_COMMON",
     "loaders.css": "VERSION_MANAGED_BY_CLIENT_REACT",
     "lodash": "VERSION_MANAGED_BY_CLIENT_REACT",
+    "path-browserify": "VERSION_MANAGED_BY_CLIENT_REACT",
     "react": "VERSION_MANAGED_BY_CLIENT_REACT",
     "react-dom": "VERSION_MANAGED_BY_CLIENT_REACT",
     "react-hot-loader": "VERSION_MANAGED_BY_CLIENT_REACT",
@@ -172,8 +173,7 @@
     "webpack-dev-server": "VERSION_MANAGED_BY_CLIENT_REACT",
     "webpack-merge": "VERSION_MANAGED_BY_CLIENT_REACT",
     "webpack-notifier": "VERSION_MANAGED_BY_CLIENT_REACT",
-    "workbox-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_REACT",
-    "write-file-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_REACT"
+    "workbox-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_REACT"
   },
   "engines": {
     "node": ">=<%= NODE_VERSION %>"
@@ -218,13 +218,13 @@
     "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",
     "test:watch": "<%= clientPackageManager %> run jest -- --watch",
     "webapp:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webapp:build:dev",
-    "webapp:build:dev": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
-    "webapp:build:prod": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
-    "webapp:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
-    "webapp:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
+    "webapp:build:dev": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --env stats=minimal",
+    "webapp:build:prod": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --progress=profile",
+    "webapp:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --env stats=minimal",
+    "webapp:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --progress=profile --env stats=normal",
     "webapp:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webapp:build:prod",
     "webapp:test": "<%= clientPackageManager %> run test",
-    "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "webpack-dev-server": "npm run webpack -- serve",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
   },
   "jestSonar": {

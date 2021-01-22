@@ -23,16 +23,16 @@ const { createTokenFromConfig } = require('./token-creator');
 const relationshipTypeCategoryToken = createTokenFromConfig({ name: 'RELATIONSHIP_TYPE', pattern: Lexer.NA });
 
 const relationshipTypeTokens = [
-    { name: 'ONE_TO_ONE', pattern: 'OneToOne' },
-    { name: 'ONE_TO_MANY', pattern: 'OneToMany' },
-    { name: 'MANY_TO_ONE', pattern: 'ManyToOne' },
-    { name: 'MANY_TO_MANY', pattern: 'ManyToMany' },
+  { name: 'ONE_TO_ONE', pattern: 'OneToOne' },
+  { name: 'ONE_TO_MANY', pattern: 'OneToMany' },
+  { name: 'MANY_TO_ONE', pattern: 'ManyToOne' },
+  { name: 'MANY_TO_MANY', pattern: 'ManyToMany' },
 ].map(tokenConfig => {
-    tokenConfig.categories = [relationshipTypeCategoryToken];
-    return createTokenFromConfig(tokenConfig);
+  tokenConfig.categories = [relationshipTypeCategoryToken];
+  return createTokenFromConfig(tokenConfig);
 });
 
 module.exports = {
-    categoryToken: relationshipTypeCategoryToken,
-    tokens: [relationshipTypeCategoryToken, ...relationshipTypeTokens],
+  categoryToken: relationshipTypeCategoryToken,
+  tokens: [relationshipTypeCategoryToken, ...relationshipTypeTokens],
 };
