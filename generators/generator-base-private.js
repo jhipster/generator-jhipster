@@ -713,15 +713,6 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
   }
 
   /**
-   * Function to print a proper array with simple quoted strings
-   *
-   *  @param {array} array - the array to print
-   */
-  toArrayString(array) {
-    return `['${array.join("', '")}']`;
-  }
-
-  /**
    * Strip margin indicated by pipe `|` from a string literal
    *
    *  @param {string} content - the string to process

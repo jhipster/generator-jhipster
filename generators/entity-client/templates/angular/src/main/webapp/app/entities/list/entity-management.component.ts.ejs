@@ -49,11 +49,11 @@ import { ParseLinks } from 'app/core/util/parse-links.service';
 })
 export class <%= entityAngularName %>Component implements OnInit {
     <%_ if (pagination === 'pagination') { _%>
-<%- include('pagination-template', {toArrayString: toArrayString}); -%>
+<%- include('pagination-template'); -%>
     <%_ } else if (pagination === 'infinite-scroll') { _%>
-<%- include('infinite-scroll-template', {toArrayString: toArrayString}); -%>
+<%- include('infinite-scroll-template'); -%>
     <%_ } else if (pagination === 'no') { _%>
-<%- include('no-pagination-template', {toArrayString: toArrayString}); -%>
+<%- include('no-pagination-template'); -%>
     <%_ } _%>
 
     <%_ if (primaryKey) { _%>
