@@ -38,7 +38,7 @@ function askForServerSideOpts() {
   if (this.existingProject) return undefined;
 
   const applicationType = this.jhipsterConfig.applicationType;
-  let defaultPort = applicationType === 'gateway' ? '8080' : '8081';
+  const defaultPort = applicationType === 'gateway' ? '8080' : '8081';
   const prompts = [
     {
       when: () => ['gateway', 'monolith', 'microservice'].includes(applicationType),
