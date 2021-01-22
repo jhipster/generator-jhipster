@@ -137,7 +137,7 @@ _%>
         protected elementRef: ElementRef,
         <%_ } _%>
         protected activatedRoute: ActivatedRoute,
-        private fb: FormBuilder,
+        protected fb: FormBuilder,
     ) {}
 
     ngOnInit(): void {
@@ -276,7 +276,7 @@ _%>
     }
 <%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
 
-    private loadRelationshipsOptions(): void {
+    protected loadRelationshipsOptions(): void {
     <%_ for (const relationshipsByEntityNeedingOptions of Object.values(differentRelationships).map(relationships => relationships.filter(rel => rel.ownerSide)).filter(relationships => relationships.length > 0)) { _%>
         <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); %>
         <%_ if (relationshipsByEntityNeedingOptions.length > relationshipsWithCustomUniqueOptions.length) { _%>
@@ -307,7 +307,7 @@ _%>
     }
 <%_ } _%>
 
-    private createFromForm(): I<%= entityAngularName %> {
+    protected createFromForm(): I<%= entityAngularName %> {
         return {
             ...new <%= entityAngularName %>(),
     <%_ for (const field of fields) {
