@@ -19,9 +19,9 @@ Cypress.Commands.add('getOauth2Data', () => {
     const state = url.searchParams.get("state");
     const scope = url.searchParams.get("scope");
     const origin = url.origin;
-
     const authenticationUrl = `${origin}${url.pathname}`;
-
+    const isOkta = origin.includes("okta")
+    
     let logoutUrl = "";
     if (isOkta) {
       logoutUrl = `${origin}${url.pathname.split('/',2).join('/')}/v1/logout`
