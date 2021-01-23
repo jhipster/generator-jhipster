@@ -130,8 +130,8 @@ export default (state: UserManagementState = initialState, action): UserManageme
   }
 };
 
-const apiUrl = '<%= apiUaaPath %>api/users';
-const adminUrl = '<%= apiUaaPath %>api/admin/users';
+const apiUrl = 'api/users';
+const adminUrl = 'api/admin/users';
 // Actions
 export const getUsers: ICrudGetAllAction<IUser> = (page, size, sort) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
@@ -151,7 +151,7 @@ export const getUsersAsAdmin: ICrudGetAllAction<IUser> = (page, size, sort) => {
 
 export const getRoles = () => ({
   type: ACTION_TYPES.FETCH_ROLES,
-  payload: axios.get(`<%= apiUaaPath %>api/authorities`)
+  payload: axios.get(`api/authorities`)
 });
 
 export const getUser: ICrudGetAction<IUser> = id => {
