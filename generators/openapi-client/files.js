@@ -105,7 +105,7 @@ function customizeFiles() {
       }
 
       if (this.buildTool === 'maven') {
-        if (!['microservice', 'gateway', 'uaa'].includes(this.applicationType)) {
+        if (!['microservice', 'gateway'].includes(this.applicationType)) {
           let exclusions;
           if (this.authenticationType === 'session') {
             exclusions = `
@@ -120,7 +120,7 @@ function customizeFiles() {
         }
         this.addMavenDependency('org.springframework.cloud', 'spring-cloud-starter-oauth2');
       } else if (this.buildTool === 'gradle') {
-        if (!['microservice', 'gateway', 'uaa'].includes(this.applicationType)) {
+        if (!['microservice', 'gateway'].includes(this.applicationType)) {
           if (this.authenticationType === 'session') {
             const content =
               "compile 'org.springframework.cloud:spring-cloud-starter-openfeign', { exclude group: 'org.springframework.cloud', module: 'spring-cloud-starter-ribbon' }";
@@ -164,7 +164,7 @@ function customizeFiles() {
       this.javaDir = `${constants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
       const mainClassFile = `${this.javaDir + this.getMainClassName()}.java`;
 
-      if (this.applicationType !== 'microservice' || !['uaa', 'jwt'].includes(this.authenticationType)) {
+      if (this.applicationType !== 'microservice' || !['jwt'].includes(this.authenticationType)) {
         this.rewriteFile(
           mainClassFile,
           'import org.springframework.core.env.Environment;',
