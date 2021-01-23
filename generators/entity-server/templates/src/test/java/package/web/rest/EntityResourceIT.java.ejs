@@ -788,10 +788,10 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%= entityInstance %>Repository.save(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
         List<<%= entityClass %>> <%= entityInstance %>List = webTestClient.get().uri("/api/<%= entityApiUrl %>")
-            .accept(MediaType.APPLICATION_STREAM_JSON)
+            .accept(MediaType.APPLICATION_NDJSON)
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_STREAM_JSON)
+            .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_NDJSON)
             .returnResult(<%= dto !== 'no' ? asDto(entityClass) : asEntity(entityClass) %>.class)
             .getResponseBody()
             <%_ if (dto !== 'no') { _%>

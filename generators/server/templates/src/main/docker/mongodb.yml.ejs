@@ -19,11 +19,11 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
-    <%= baseName.toLowerCase() %>-mongodb:
-        image: <%= DOCKER_MONGODB %>
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:27017:27017
-        # volumes:
-        #     - ~/volumes/jhipster/<%= baseName %>/mongodb/:/data/db/
+  <%= baseName.toLowerCase() %>-mongodb:
+    image: <%= DOCKER_MONGODB %>
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:27017:27017
+    # volumes:
+    #   - ~/volumes/jhipster/<%= baseName %>/mongodb/:/data/db/

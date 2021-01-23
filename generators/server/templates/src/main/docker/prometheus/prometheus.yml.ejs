@@ -45,5 +45,5 @@ scrape_configs:
     metrics_path: <% if ((applicationType === 'microservice' || applicationType === 'uaa') && !serviceDiscoveryType) { %>/services/<%= baseName %><% } %>/management/prometheus
     static_configs:
       - targets:
-          # On MacOS, replace localhost by host.docker.internal
-          - localhost:<%= serverPort %>
+        # On MacOS, replace localhost by host.docker.internal
+        - localhost:<%= serverPort %>

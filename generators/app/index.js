@@ -234,6 +234,11 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
       type: String,
     });
 
+    this.option('client-package-manager', {
+      desc: 'Force an unsupported client package manager',
+      type: String,
+    });
+
     // Just constructing help, stop here
     if (this.options.help) {
       return;
