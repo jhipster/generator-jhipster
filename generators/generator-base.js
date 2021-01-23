@@ -1990,7 +1990,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
           return 'Your base name cannot contain special characters or a blank space';
         }
-        if ((generator.applicationType === 'microservice') && /_/.test(input)) {
+        if (generator.applicationType === 'microservice' && /_/.test(input)) {
           return 'Your base name cannot contain underscores as this does not meet the URI spec';
         }
         if (input === 'application') {
