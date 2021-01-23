@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const { MONOLITH, MICROSERVICE, GATEWAY, UAA } = require('./application-types');
+const { MONOLITH, MICROSERVICE, GATEWAY } = require('./application-types');
 const { COUCHBASE, CASSANDRA, MONGODB, NO } = require('./database-types');
 const { OptionNames, OptionValues } = require('./application-options');
 
@@ -61,7 +61,6 @@ module.exports = {
   getConfigForMonolithApplication,
   getConfigForGatewayApplication,
   getConfigForMicroserviceApplication,
-  getConfigForUAAApplication,
   getDefaultConfigForNewApplication,
   getConfigForApplicationType,
 };
@@ -75,9 +74,6 @@ function getConfigForApplicationType(applicationType = undefined, customOptions 
   }
   if (applicationType === MICROSERVICE) {
     return getConfigForMicroserviceApplication(customOptions);
-  }
-  if (applicationType === UAA) {
-    return getConfigForUAAApplication(customOptions);
   }
   return getDefaultConfigForNewApplication(customOptions);
 }
@@ -169,27 +165,6 @@ function getConfigForMicroserviceApplication(customOptions = {}) {
     ...options,
     [APPLICATION_TYPE]: MICROSERVICE,
     [SKIP_CLIENT]: true,
-  };
-}
-
-function getConfigForUAAApplication(customOptions = {}) {
-  const DEFAULT_SERVER_PORT = '9999';
-  const options = {
-    [CACHE_PROVIDER]: OptionValues[CACHE_PROVIDER].hazelcast,
-    [SERVER_PORT]: DEFAULT_SERVER_PORT,
-    [SERVICE_DISCOVERY_TYPE]: OptionValues[SERVICE_DISCOVERY_TYPE].eureka,
-    ...customOptions,
-  };
-  delete options[CLIENT_FRAMEWORK];
-  delete options[CLIENT_THEME];
-  delete options[CLIENT_THEME_VARIANT];
-  delete options[SKIP_SERVER];
-  return {
-    ...options,
-    [APPLICATION_TYPE]: UAA,
-    [AUTHENTICATION_TYPE]: OptionValues[AUTHENTICATION_TYPE].uaa,
-    [SKIP_CLIENT]: true,
-    [SKIP_USER_MANAGEMENT]: false,
   };
 }
 

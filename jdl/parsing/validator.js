@@ -200,7 +200,6 @@ const configPropsValidations = {
     pattern: ALPHANUMERIC,
     msg: 'testFrameworks property',
   },
-  UAA_BASE_NAME: { type: 'STRING' },
   WEBSOCKET: {
     type: 'NAME',
     pattern: ALPHANUMERIC_DASH,
