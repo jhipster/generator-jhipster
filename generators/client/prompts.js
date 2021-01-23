@@ -63,7 +63,7 @@ async function askForClient() {
   const answers = await this.prompt({
     type: 'list',
     name: 'clientFramework',
-    when: () => applicationType !== 'microservice' && applicationType !== 'uaa',
+    when: () => applicationType !== 'microservice',
     message: `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
     choices,
     default: clientDefaultConfig.clientFramework,
