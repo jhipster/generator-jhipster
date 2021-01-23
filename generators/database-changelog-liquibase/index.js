@@ -37,6 +37,9 @@ module.exports = class extends BaseGenerator {
 
     assert(this.options.databaseChangelog, 'Changelog is required');
     this.databaseChangelog = this.options.databaseChangelog;
+    if (!this.databaseChangelog.changelogDate) {
+      this.databaseChangelog.changelogDate = this.dateFormatForLiquibase();
+    }
 
     // Set number of rows to be generated
     this.numberOfRows = 10;
@@ -51,10 +54,12 @@ module.exports = class extends BaseGenerator {
           throw new Error(`Shared entity ${databaseChangelog.entityName} was not found`);
         }
 
+        this.allFields = this.entity.fields
+          .filter(field => !field.transient)
+          .map(field => prepareFieldForLiquibaseTemplates(this.entity, field));
+
         if (databaseChangelog.type === 'entity-new') {
-          this.fields = this.entity.fields
-            .filter(field => !field.transient)
-            .map(field => prepareFieldForLiquibaseTemplates(this.entity, field));
+          this.fields = this.allFields;
         } else {
           this.addedFields = this.databaseChangelog.addedFields
             .map(field => prepareFieldForTemplates(this.entity, field, this))
@@ -81,7 +86,11 @@ module.exports = class extends BaseGenerator {
         this.entity.liquibaseFakeData = [];
         for (let rowNumber = 0; rowNumber < this.numberOfRows; rowNumber++) {
           const rowData = {};
-          const fields = databaseChangelog.type === 'entity-new' ? this.fields : this.addedFields;
+          const fields =
+            databaseChangelog.type === 'entity-new'
+              ? // generate id fields first to improve reproducibility
+                [...this.fields.filter(f => f.id), ...this.fields.filter(f => !f.id)]
+              : [...this.allFields.filter(f => f.id), ...this.addedFields.filter(f => !f.id)];
           fields.forEach((field, idx) => {
             if (field.derived) {
               Object.defineProperty(rowData, field.fieldName, {
@@ -182,8 +191,7 @@ module.exports = class extends BaseGenerator {
           return;
         }
 
-        const databaseChangelog = this.options.databaseChangelog;
-        databaseChangelog.changelogDate = databaseChangelog.changelogDate || this.dateFormatForLiquibase();
+        const databaseChangelog = this.databaseChangelog;
 
         /* Required by the templates */
         Object.assign(this, {

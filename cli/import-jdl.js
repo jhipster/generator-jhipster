@@ -58,10 +58,11 @@ const shouldRunInFolder = processor => {
  * @param {JDLProcessor} processor
  * @return {boolean}
  */
-const allNewApplications = processor =>
-  !Object.values(processor.importState.exportedApplicationsWithEntities).find(application =>
-    baseNameConfigExists(application.config.baseName)
-  );
+const allNewApplications = processor => {
+  const applications = Object.values(processor.importState.exportedApplicationsWithEntities);
+  if (applications.length === 1) return !baseNameConfigExists();
+  return !applications.find(application => baseNameConfigExists(application.config.baseName));
+};
 
 /**
  * Check if the generation should be forced.
@@ -257,7 +258,7 @@ const generateDeploymentFiles = ({ processor, deployment }) => {
  */
 const generateApplicationFiles = ({ processor, applicationWithEntities }) => {
   logger.debug(`Generating application: ${JSON.stringify(applicationWithEntities.config, null, 2)}`);
-  const { inFolder, fork, force } = processor;
+  const { inFolder, fork, force, reproducible } = processor;
   const baseName = applicationWithEntities.config.baseName;
   const cwd = inFolder ? path.join(processor.pwd, baseName) : processor.pwd;
   if (processor.options.jsonOnly) {
@@ -269,7 +270,7 @@ const generateApplicationFiles = ({ processor, applicationWithEntities }) => {
   }
 
   const withEntities = applicationWithEntities.entities.length > 0 ? true : undefined;
-  const generatorOptions = { force, withEntities, ...processor.options };
+  const generatorOptions = { reproducible, force, withEntities, ...processor.options };
   if (!fork) {
     generatorOptions.applicationWithEntities = applicationWithEntities;
   }
@@ -359,6 +360,7 @@ class JDLProcessor {
   config() {
     this.interactive = shouldRunInteractively(this);
     this.fork = shouldFork(this);
+    this.reproducible = allNewApplications(this);
     this.inFolder = shouldRunInFolder(this);
     this.force = shouldForce(this);
     return this;

@@ -122,7 +122,14 @@ describe('JHipster generator import jdl', () => {
     it('calls generator in order', () => {
       expect(subGenCallParams.count).to.equal(5);
       expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'docker-compose', 'kubernetes']);
-      expect(subGenCallParams.options[0]).to.eql(['--force', '--with-entities', '--skip-install', '--no-insight', '--from-jdl']);
+      expect(subGenCallParams.options[0]).to.eql([
+        '--reproducible',
+        '--force',
+        '--with-entities',
+        '--skip-install',
+        '--no-insight',
+        '--from-jdl',
+      ]);
       expect(subGenCallParams.options[3]).to.eql(['--force', '--skip-install', '--no-insight', '--skip-prompts', '--from-jdl']);
     });
   });
@@ -302,6 +309,7 @@ describe('JHipster generator import jdl', () => {
       expect(subGenCallParams.count).to.equal(1);
       expect(subGenCallParams.commands).to.eql(['app']);
       expect(subGenCallParams.options[0]).to.eql([
+        '--reproducible',
         '--force',
         '--with-entities',
         '--skip-install',
@@ -340,6 +348,7 @@ describe('JHipster generator import jdl', () => {
       expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).to.eql({
         ...options,
         ...defaultAddedOptions,
+        reproducible: true,
         withEntities: true,
         force: true,
         applicationWithEntities: undefined,
@@ -373,6 +382,7 @@ describe('JHipster generator import jdl', () => {
       expect(subGenCallParams.count).to.equal(1);
       expect(subGenCallParams.commands).to.eql(['app']);
       expect(subGenCallParams.options[0]).to.eql([
+        '--reproducible',
         '--force',
         '--with-entities',
         '--skip-install',
@@ -410,6 +420,7 @@ describe('JHipster generator import jdl', () => {
       expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).to.eql({
         ...options,
         ...defaultAddedOptions,
+        reproducible: true,
         withEntities: true,
         force: true,
         fromJdl: true,
@@ -436,7 +447,14 @@ describe('JHipster generator import jdl', () => {
     it('calls application generator', () => {
       expect(subGenCallParams.count).to.equal(1);
       expect(subGenCallParams.commands).to.eql(['app']);
-      expect(subGenCallParams.options[0]).to.eql(['--force', '--skip-install', '--no-insight', '--no-skip-git', '--from-jdl']);
+      expect(subGenCallParams.options[0]).to.eql([
+        '--reproducible',
+        '--force',
+        '--skip-install',
+        '--no-insight',
+        '--no-skip-git',
+        '--from-jdl',
+      ]);
     });
   });
 
@@ -462,6 +480,7 @@ describe('JHipster generator import jdl', () => {
       expect({ ...subGenCallParams.options[0], applicationWithEntities: undefined }).to.eql({
         ...options,
         ...defaultAddedOptions,
+        reproducible: true,
         force: true,
         applicationWithEntities: undefined,
         fromJdl: true,
@@ -502,6 +521,7 @@ describe('JHipster generator import jdl', () => {
       expect(subGenCallParams.count).to.equal(3);
       expect(subGenCallParams.commands).to.eql(['app', 'app', 'app']);
       expect(subGenCallParams.options[0]).to.eql([
+        '--reproducible',
         '--force',
         '--with-entities',
         '--skip-install',
@@ -535,6 +555,7 @@ describe('JHipster generator import jdl', () => {
       expect(subGenCallParams.count).to.equal(2);
       expect(subGenCallParams.commands).to.eql(['app', 'app']);
       expect(subGenCallParams.options[0]).to.eql([
+        '--reproducible',
         '--force',
         '--with-entities',
         '--skip-install',
@@ -624,6 +645,7 @@ describe('JHipster generator import jdl', () => {
         expect(subGenCallParams.count).to.equal(5);
         expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'docker-compose', 'kubernetes']);
         expect(subGenCallParams.options[0]).to.eql([
+          '--reproducible',
           '--force',
           '--with-entities',
           '--skip-install',
@@ -692,6 +714,7 @@ describe('JHipster generator import jdl', () => {
       expect(subGenCallParams.count).to.equal(3);
       expect(subGenCallParams.commands).to.eql(['app', 'app', 'app']);
       expect(subGenCallParams.options[0]).to.eql([
+        '--reproducible',
         '--force',
         '--with-entities',
         '--skip-install',
