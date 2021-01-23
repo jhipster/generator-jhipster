@@ -98,7 +98,6 @@ function loadConfigs() {
   this.gatewayNb = 0;
   this.monolithicNb = 0;
   this.microserviceNb = 0;
-  this.uaaNb = 0;
 
   // Loading configs
   this.debug(`Apps folders: ${this.appsFolders}`);
@@ -113,8 +112,6 @@ function loadConfigs() {
         this.gatewayNb++;
       } else if (config.applicationType === 'microservice') {
         this.microserviceNb++;
-      } else if (config.applicationType === 'uaa') {
-        this.uaaNb++;
       }
 
       this.portsToBind = this.monolithicNb + this.gatewayNb;
@@ -161,7 +158,7 @@ function loadFromYoRc() {
   if (this.regenerate) {
     this.appsFolders = this.defaultAppsFolders;
     loadConfigs.call(this);
-    if (this.microserviceNb > 0 || this.gatewayNb > 0 || this.uaaNb > 0) {
+    if (this.microserviceNb > 0 || this.gatewayNb > 0) {
       this.deploymentApplicationType = 'microservice';
     } else {
       this.deploymentApplicationType = 'monolith';
