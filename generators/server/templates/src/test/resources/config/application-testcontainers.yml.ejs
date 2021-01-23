@@ -37,51 +37,51 @@
 # ===================================================================
 
 spring:
-    datasource:
-        type: com.zaxxer.hikari.HikariDataSource
-        driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-        <%_ if (prodDatabaseType === 'mysql') { _%>
-        url: jdbc:tc:mysql:<%= containerVersion %>:///<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=${user.timezone}&TC_TMPFS=/testtmpfs:rw
-        username: root
-        password:
-        <%_ } else if (prodDatabaseType === 'mariadb') { _%>
-        url: jdbc:tc:mariadb:<%= containerVersion %>:///<%= baseName %>?TC_MY_CNF=testcontainers/mariadb&useLegacyDatetimeCode=false&serverTimezone=${user.timezone}&TC_TMPFS=/testtmpfs:rw
-        username: root
-        password:
-        <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-        url: jdbc:tc:postgresql:<%= containerVersion %>:///<%= baseName %>?TC_TMPFS=/testtmpfs:rw
-        username: <%= baseName %>
-        password:
-        <%_ } else if (prodDatabaseType === 'mssql') { _%>
-        url: jdbc:tc:sqlserver:<%= containerVersion %>://;database=<%= baseName %>?TC_TMPFS=/testtmpfs:rw
-        username: SA
-        password: yourStrong(!)Password
-        <%_ } else if (prodDatabaseType === 'oracle') { _%>
-        url: jdbc:tc:oracle:thin:@///ORCL?TC_TMPFS=/testtmpfs:rw
-        username: system
-        password: oracle
-        <%_ } _%>
-        hikari:
-            poolName: Hikari
-            auto-commit: false
-        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb' || prodDatabaseType === 'mssql') { _%>
-            data-source-properties:
-                cachePrepStmts: true
-                prepStmtCacheSize: 250
-                prepStmtCacheSqlLimit: 2048
-                useServerPrepStmts: true
-        <%_ } _%>
-    jpa:
-        <%_ if (prodDatabaseType === 'mysql') { _%>
-        database-platform: org.hibernate.dialect.MySQL8Dialect
-        <%_ } else if (prodDatabaseType === 'mariadb') { _%>
-        database-platform: org.hibernate.dialect.MariaDB103Dialect
-        <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-        database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
-        <%_ } else if (prodDatabaseType === 'oracle') { _%>
-        database-platform: org.hibernate.dialect.Oracle12cDialect
-        <%_ } else if (prodDatabaseType === 'mssql') { _%>
-        database-platform: org.hibernate.dialect.SQLServer2012Dialect
-        <%_ } else { _%>
-        database-platform: tech.jhipster.domain.util.FixedH2Dialect
-        <%_ } _%>
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    <%_ if (prodDatabaseType === 'mysql') { _%>
+    url: jdbc:tc:mysql:<%= containerVersion %>:///<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=${user.timezone}&TC_TMPFS=/testtmpfs:rw
+    username: root
+    password:
+    <%_ } else if (prodDatabaseType === 'mariadb') { _%>
+    url: jdbc:tc:mariadb:<%= containerVersion %>:///<%= baseName %>?TC_MY_CNF=testcontainers/mariadb&useLegacyDatetimeCode=false&serverTimezone=${user.timezone}&TC_TMPFS=/testtmpfs:rw
+    username: root
+    password:
+    <%_ } else if (prodDatabaseType === 'postgresql') { _%>
+    url: jdbc:tc:postgresql:<%= containerVersion %>:///<%= baseName %>?TC_TMPFS=/testtmpfs:rw
+    username: <%= baseName %>
+    password:
+    <%_ } else if (prodDatabaseType === 'mssql') { _%>
+    url: jdbc:tc:sqlserver:<%= containerVersion %>://;database=<%= baseName %>?TC_TMPFS=/testtmpfs:rw
+    username: SA
+    password: yourStrong(!)Password
+    <%_ } else if (prodDatabaseType === 'oracle') { _%>
+    url: jdbc:tc:oracle:thin:@///ORCL?TC_TMPFS=/testtmpfs:rw
+    username: system
+    password: oracle
+    <%_ } _%>
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb' || prodDatabaseType === 'mssql') { _%>
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+    <%_ } _%>
+  jpa:
+    <%_ if (prodDatabaseType === 'mysql') { _%>
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    <%_ } else if (prodDatabaseType === 'mariadb') { _%>
+    database-platform: org.hibernate.dialect.MariaDB103Dialect
+    <%_ } else if (prodDatabaseType === 'postgresql') { _%>
+    database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
+    <%_ } else if (prodDatabaseType === 'oracle') { _%>
+    database-platform: org.hibernate.dialect.Oracle12cDialect
+    <%_ } else if (prodDatabaseType === 'mssql') { _%>
+    database-platform: org.hibernate.dialect.SQLServer2012Dialect
+    <%_ } else { _%>
+    database-platform: tech.jhipster.domain.util.FixedH2Dialect
+    <%_ } _%>
