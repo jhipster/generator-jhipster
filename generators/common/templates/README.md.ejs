@@ -435,7 +435,9 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 
 [JHipster Homepage and latest documentation]: <%= DOCUMENTATION_URL %>
 [JHipster <%= jhipsterVersion %> archive]: <%= DOCUMENTATION_ARCHIVE_URL %>
-<% if (applicationType === 'gateway' || applicationType === 'microservice') { %>[Doing microservices with JHipster]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/<% } %>
+<%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
+[Doing microservices with JHipster]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/
+<%_ } _%>
 [Using JHipster in development]: <%= DOCUMENTATION_ARCHIVE_URL %>/development/
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 [Service Discovery and Configuration with the JHipster-Registry]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/#jhipster-registry
