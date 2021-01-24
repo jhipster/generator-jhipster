@@ -223,7 +223,7 @@ spring:
   <%_ if (serviceDiscoveryType === 'eureka') { _%>
   config:
     import: 'configserver:'
-  <% } else if (serviceDiscoveryType === 'consul') { %>
+  <%_ } else if (serviceDiscoveryType === 'consul') { _%>
   config:
     import: 'consul:'
   <%_ } _%>
