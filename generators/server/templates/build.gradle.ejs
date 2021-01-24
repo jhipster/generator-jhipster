@@ -484,7 +484,9 @@ dependencies {
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
     <%_ } _%>
     implementation "org.springframework.security:spring-security-config"
+    <%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 %>
     implementation "org.springframework.security:spring-security-data"
+    <%_ } _%>
     implementation "org.springframework.security:spring-security-web"
     <%_ if (websocket === 'spring-websocket') { _%>
     implementation "org.springframework.security:spring-security-messaging"
@@ -575,11 +577,7 @@ dependencies {
     testImplementation "io.cucumber:cucumber-java"
     testImplementation "io.cucumber:cucumber-spring"
     <%_ } _%>
-    testImplementation ("org.springframework.boot:spring-boot-starter-test") {
-        <%_ if (cucumberTests === false) { _%>
-        exclude group: "org.junit.vintage", module: "junit-vintage-engine"
-        <%_ } _%>
-    }
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.springframework.security:spring-security-test"
     testImplementation "org.springframework.boot:spring-boot-test"
     <%_ if (reactive) { _%>
