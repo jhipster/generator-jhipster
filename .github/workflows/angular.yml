@@ -266,6 +266,7 @@ jobs:
           git checkout @~1
           git log
           npm uninstall -g generator-jhipster
+          npm install
           npm install -g .
       - name: 'MERGE: merge base project'
         continue-on-error: true
