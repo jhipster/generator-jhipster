@@ -31,8 +31,8 @@ on:
       - 'utils/**'
       - 'test-integration/incremental-changelog-samples/**'
       - 'generators/entity/**'
-      - 'generators/database-chagelog/**'
-      - 'generators/database-chagelog-liquibase/**'
+      - 'generators/database-changelog/**'
+      - 'generators/database-changelog-liquibase/**'
 env:
   JHI_RUN_APP: 1
   JHI_JDK: 11

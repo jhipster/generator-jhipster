@@ -1151,12 +1151,12 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    *                                 Set false to create a changelog date incrementing the last one.
    * @return {String} Changelog date.
    */
-  dateFormatForLiquibase(reproducible = true) {
+  dateFormatForLiquibase(reproducible = this.configOptions.reproducible) {
     let now = new Date();
     // Miliseconds is ignored for changelogDate.
     now.setMilliseconds(0);
     // Run reproducible timestamp when regenerating the project with with-entities option.
-    if (reproducible && (this.options.withEntities || this.configOptions.creationTimestamp)) {
+    if (reproducible || this.configOptions.creationTimestamp) {
       if (this.configOptions.reproducibleLiquibaseTimestamp) {
         // Counter already started.
         now = this.configOptions.reproducibleLiquibaseTimestamp;
@@ -2266,6 +2266,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       if (creationTimestamp) {
         dest.creationTimestamp = creationTimestamp;
       }
+    }
+    if (options.reproducible !== undefined) {
+      dest.reproducible = options.reproducible;
     }
   }
 
