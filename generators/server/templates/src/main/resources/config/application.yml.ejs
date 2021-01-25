@@ -166,8 +166,10 @@ spring:
   <%_ } _%>
   application:
     name: <%= baseName %>
-  <%_ if (serviceDiscoveryType === 'consul' || (applicationType === 'gateway' && reactive)) { _%>
+  <%_ if (serviceDiscoveryType) { _%>
   cloud:
+    config:
+      profile: #spring.profiles.active#
     <%_ if (serviceDiscoveryType === 'consul') { _%>
     consul:
       discovery:
@@ -199,13 +201,6 @@ spring:
         pool:
           max-connections: 1000
     <%_ } _%>
-  <%_ } _%>
-  <%_ if (serviceDiscoveryType === 'eureka') { _%>
-  config:
-    import: 'configserver:'
-  <%_ } else if (serviceDiscoveryType === 'consul') { _%>
-  config:
-    import: 'consul:'
   <%_ } _%>
   <%_ if (!serviceDiscoveryType) { _%>
   profiles:
