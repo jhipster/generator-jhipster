@@ -21,7 +21,7 @@ package <%= packageName %>.gateway;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import org.springframework.stereotype.Component;
-<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+<%_ if (authenticationType === 'jwt') { _%>
 
 import java.util.Set;
 <%_ } _%>
@@ -32,7 +32,7 @@ public class TokenRelayFilter extends ZuulFilter {
     @Override
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
-        <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+        <%_ if (authenticationType === 'jwt') { _%>
         @SuppressWarnings("unchecked")
         Set<String> headers = (Set<String>) ctx.get("ignoredHeaders");
         // JWT tokens should be relayed to the resource servers

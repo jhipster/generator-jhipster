@@ -58,10 +58,6 @@ async function askForApplicationType() {
       value: 'microservice',
       name: 'Microservice application',
     },
-    {
-      value: 'uaa',
-      name: 'JHipster UAA server',
-    },
   ];
 
   const answers = await this.prompt([

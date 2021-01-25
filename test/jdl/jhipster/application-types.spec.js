@@ -35,10 +35,5 @@ describe('ApplicationTypes', () => {
         expect(ApplicationTypes.exists('NotAType')).to.be.false;
       });
     });
-    context('when passing a valid type', () => {
-      it('should return true', () => {
-        expect(ApplicationTypes.exists(ApplicationTypes.UAA)).to.be.true;
-      });
-    });
   });
 });

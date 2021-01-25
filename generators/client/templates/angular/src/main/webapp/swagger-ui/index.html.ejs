@@ -50,7 +50,7 @@
             subtree: true
         });
 
-        <%_ if (authenticationType === 'session' || authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
+        <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
         function getCSRF() {
             var name = "XSRF-TOKEN=";
             var ca = document.cookie.split(';');
@@ -89,7 +89,7 @@
                 plugins: [
                     SwaggerUIBundle.plugins.DownloadUrl
                 ],
-                <%_ if (authenticationType === 'session' || authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
+                <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
                 requestInterceptor: function(req) {
                     req.headers['X-XSRF-TOKEN'] = getCSRF();
                     // Remove the sample Swagger UI request body if present

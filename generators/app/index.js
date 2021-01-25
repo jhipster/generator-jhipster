@@ -138,12 +138,6 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
       type: String,
     });
 
-    // This adds support for a `--uaa-base-name` flag
-    this.option('uaa-base-name', {
-      desc: 'Provide the name of UAA server, when using --auth uaa and skipping server side generation',
-      type: String,
-    });
-
     // This adds support for a `--build` flag
     this.option('build', {
       desc: 'Provide build tool for the application when skipping server side generation',
@@ -232,6 +226,11 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     this.option('pk-type', {
       desc: 'Default primary key type (beta)',
       type: String,
+    });
+
+    this.option('reproducible', {
+      desc: 'Try to reproduce changelog',
+      type: Boolean,
     });
 
     this.option('client-package-manager', {
@@ -352,11 +351,6 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         if (this.jhipsterConfig.applicationType === 'microservice') {
           this.jhipsterConfig.skipClient = true;
           this.jhipsterConfig.skipUserManagement = true;
-        }
-        if (this.jhipsterConfig.applicationType === 'uaa') {
-          this.jhipsterConfig.skipClient = true;
-          this.jhipsterConfig.skipUserManagement = false;
-          this.jhipsterConfig.authenticationType = 'uaa';
         }
 
         // Set app defaults

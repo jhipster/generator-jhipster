@@ -16,8 +16,6 @@ Those are described in `.yo-rc.json` files which is the descriptor file created 
 - ms-ngx-gateway-eureka
 - ms-ngx-gateway-eureka-jwt
 - ms-ngx-gateway-eureka-oauth2
-- ms-ngx-gateway-eureka-uaa
-- ms-ngx-gateway-uaa
 - ms-react-gateway-consul-jwt
 - ms-react-gateway-consul-oauth2
 - ngx-couchbase
@@ -45,7 +43,6 @@ Those are described in `.yo-rc.json` files which is the descriptor file created 
 - react-maven-h2mem-memcached
 - react-maven-psql-es-noi18n-mapsid
 - react-noi18n-es-ws-gradle-session
-- uaa
 - webflux-mongodb
 - webflux-mongodb-oauth2
 - webflux-mongodb-session

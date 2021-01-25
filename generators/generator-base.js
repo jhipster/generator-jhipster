@@ -1151,12 +1151,12 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    *                                 Set false to create a changelog date incrementing the last one.
    * @return {String} Changelog date.
    */
-  dateFormatForLiquibase(reproducible = true) {
+  dateFormatForLiquibase(reproducible = this.configOptions.reproducible) {
     let now = new Date();
     // Miliseconds is ignored for changelogDate.
     now.setMilliseconds(0);
     // Run reproducible timestamp when regenerating the project with with-entities option.
-    if (reproducible && (this.options.withEntities || this.configOptions.creationTimestamp)) {
+    if (reproducible || this.configOptions.creationTimestamp) {
       if (this.configOptions.reproducibleLiquibaseTimestamp) {
         // Counter already started.
         now = this.configOptions.reproducibleLiquibaseTimestamp;
@@ -1807,7 +1807,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * Generate a KeyStore for uaa authorization server.
+   * Generate a KeyStore.
    */
   generateKeyStore() {
     const done = this.async();
@@ -1990,11 +1990,8 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
           return 'Your base name cannot contain special characters or a blank space';
         }
-        if ((generator.applicationType === 'microservice' || generator.applicationType === 'uaa') && /_/.test(input)) {
+        if (generator.applicationType === 'microservice' && /_/.test(input)) {
           return 'Your base name cannot contain underscores as this does not meet the URI spec';
-        }
-        if (generator.applicationType === 'uaa' && input === 'auth') {
-          return "Your UAA base name cannot be named 'auth' as it conflicts with the gateway login routes";
         }
         if (input === 'application') {
           return "Your base name cannot be named 'application' as this is a reserved name for Spring Boot";
@@ -2267,6 +2264,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         dest.creationTimestamp = creationTimestamp;
       }
     }
+    if (options.reproducible !== undefined) {
+      dest.reproducible = options.reproducible;
+    }
   }
 
   /**
@@ -2329,9 +2329,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
     if (options.auth) {
       this.jhipsterConfig.authenticationType = options.auth;
-    }
-    if (options.uaaBaseName) {
-      this.jhipsterConfig.uaaBaseName = options.uaaBaseName;
     }
     if (options.searchEngine) {
       this.jhipsterConfig.searchEngine = options.searchEngine;
@@ -2493,7 +2490,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.packageName = config.packageName;
     dest.packageFolder = config.packageFolder;
     dest.serverPort = config.serverPort;
-    dest.uaaBaseName = config.uaaBaseName;
     dest.buildTool = config.buildTool;
 
     dest.authenticationType = config.authenticationType;

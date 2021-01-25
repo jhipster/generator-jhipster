@@ -1060,31 +1060,6 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
   }
 
   /**
-   * Get UAA app name from path provided.
-   * @param {string} input - path
-   */
-  getUaaAppName(input) {
-    if (!input) return false;
-
-    input = input.trim();
-    let fromPath = '';
-    if (path.isAbsolute(input)) {
-      fromPath = `${input}/.yo-rc.json`;
-    } else {
-      fromPath = this.destinationPath(`${input}/.yo-rc.json`);
-    }
-
-    if (shelljs.test('-f', fromPath)) {
-      const fileData = this.fs.readJSON(fromPath);
-      if (fileData && fileData['generator-jhipster']) {
-        return fileData['generator-jhipster'];
-      }
-      return false;
-    }
-    return false;
-  }
-
-  /**
    * Return the method name which converts the filter to specification
    * @param {string} fieldType
    */

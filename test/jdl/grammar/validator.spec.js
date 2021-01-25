@@ -1406,32 +1406,6 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for uaaBaseName', () => {
-      context('a valid value', () => {
-        it('should not report a syntax error', () => {
-          expect(() =>
-            parse(`
-            application {
-              config {
-                uaaBaseName "bamba"
-              }
-            }`)
-          ).not.to.throw();
-        });
-      });
-      context('an invalid value', () => {
-        it('should report a syntax error', () => {
-          expect(() =>
-            parse(`
-            application {
-              config {
-                uaaBaseName abc
-              }
-            }`)
-          ).to.throw(/^A string literal is expected, but found: "abc"/);
-        });
-      });
-    });
     context('and using for websocket', () => {
       context('a valid value', () => {
         context('with only letters', () => {

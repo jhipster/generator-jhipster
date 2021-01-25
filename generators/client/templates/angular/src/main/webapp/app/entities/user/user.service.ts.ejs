@@ -30,7 +30,7 @@ import { Authority } from 'app/config/authority.constants';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  public resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/users';
+  public resourceUrl = SERVER_API_URL + 'api/users';
 
   constructor(private http: HttpClient) {}
 
