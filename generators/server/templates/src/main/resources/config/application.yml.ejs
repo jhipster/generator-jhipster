@@ -166,37 +166,17 @@ spring:
   <%_ } _%>
   application:
     name: <%= baseName %>
-  <%_ if (serviceDiscoveryType || (applicationType === 'gateway' && reactive)) { _%>
+  <%_ if (serviceDiscoveryType === 'consul' || (applicationType === 'gateway' && reactive)) { _%>
   cloud:
     <%_ if (serviceDiscoveryType === 'consul') { _%>
     consul:
-      config:
-        fail-fast: false # if not in "prod" profile, do not force to use Spring Cloud Config
-        format: yaml
-        profile-separator: "-"
-        watch:
-          enabled: false
       discovery:
         healthCheckPath: /management/health
         instanceId: <%= baseName.toLowerCase() %>:${spring.application.instance-id:${random.value}}
         service-name: <%= baseName.toLowerCase() %>
-        tags:
-          - profile=${spring.profiles.active}
-          - version=#project.version#
-          - git-version=${git.commit.id.describe:}
-          - git-commit=${git.commit.id.abbrev:}
-          - git-branch=${git.branch:}
-      host: localhost
-      port: 8500
-    <%_ } _%>
-    <%_ if (serviceDiscoveryType === 'eureka') { _%>
-    config:
-      fail-fast: false # if not in "prod" profile, do not force to use Spring Cloud Config
-      uri: http://admin:${jhipster.registry.password}@localhost:8761/config
-      # name of the config server's property source (file.yml) that we want to use
-      name: <%= baseName %>
-      label: main # toggle to switch to a different version of the configuration as stored in git
-      # it can be set to any label, branch or commit of the configuration source Git repository
+      config:
+        watch:
+          enabled: false
     <%_ } _%>
     <%_ if (applicationType === 'gateway' && reactive) { _%>
     gateway:
