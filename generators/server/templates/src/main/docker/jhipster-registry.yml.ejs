@@ -29,7 +29,7 @@ services:
     # See https://www.jhipster.tech/jhipster-registry/#spring-cloud-config
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev,api-docs<% if (authenticationType === 'oauth2') { %>,oauth2<% } %><% if (authenticationType === 'uaa') { %>,uaa<% } %>
+      - SPRING_PROFILES_ACTIVE=dev,api-docs<% if (authenticationType === 'oauth2') { %>,oauth2<% } %>
       - SPRING_SECURITY_USER_PASSWORD=admin
       - JHIPSTER_REGISTRY_PASSWORD=admin
       - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native

@@ -35,7 +35,7 @@ module.exports = class extends BaseBlueprintGenerator {
     utils.copyObjectProps(this, this.entity);
     this.jhipsterContext = opts.jhipsterContext || opts.context;
 
-    this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.jhipsterContext.authenticationType);
+    this.testsNeedCsrf = ['oauth2', 'session'].includes(this.jhipsterContext.authenticationType);
     this.officialDatabaseType = constants.OFFICIAL_DATABASE_TYPE_NAMES[this.jhipsterContext.databaseType];
 
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-server', { context: opts.context });

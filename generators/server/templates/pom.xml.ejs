@@ -114,7 +114,7 @@
 <%_ if (reactive) { _%>
         <blockhound-junit-platform.version>1.0.4.RELEASE</blockhound-junit-platform.version>
 <%_ } _%>
-<%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
+<%_ if (databaseType === 'sql') { _%>
         <jaxb-runtime.version>2.3.3</jaxb-runtime.version>
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
@@ -244,12 +244,6 @@
             <scope>test</scope>
         </dependency>
     <%_ } _%>
-<%_ } _%>
-<%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-        </dependency>
 <%_ } _%>
 <%_ if (cacheProvider === 'hazelcast') { _%>
         <dependency>
@@ -767,26 +761,6 @@
             <scope><% if (reactive) { %>compile<% } else { %>runtime<% } %></scope>
         </dependency>
 <%_ } _%>
-<%_ if (authenticationType === 'uaa') { _%>
-        <dependency>
-            <groupId>org.springframework.security.oauth</groupId>
-            <artifactId>spring-security-oauth2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-jwt</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (authenticationType === 'uaa') { _%>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>
-            <version>${jaxb-runtime.version}</version>
-    <%_ if (databaseType !== 'sql') { _%>
-            <scope>runtime</scope>
-    <%_ } _%>
-        </dependency>
-<%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
         <!-- DataStax driver -->
         <dependency>
@@ -816,7 +790,7 @@
             <artifactId>bucket4j-jcache</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+<%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter</artifactId>
@@ -854,13 +828,13 @@
             <artifactId>spring-cloud-starter-consul-config</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (authenticationType === 'uaa' || (applicationType === 'gateway' && authenticationType === 'oauth2' && reactive)) { _%>
+<%_ if (applicationType === 'gateway' && authenticationType === 'oauth2' && reactive) { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-security</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+<%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
@@ -1751,7 +1725,7 @@
                 </plugins>
             </build>
         </profile>
-<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
+<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice') { _%>
         <profile>
             <!--
                 Profile for tracing requests with Zipkin.

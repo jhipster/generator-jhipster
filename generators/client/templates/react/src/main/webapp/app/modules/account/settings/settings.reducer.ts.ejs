@@ -70,7 +70,7 @@ export default (state: SettingsState = initialState, action): SettingsState => {
 };
 
 // Actions
-const apiUrl = '<%= apiUaaPath %>api/account';
+const apiUrl = 'api/account';
 
 export const saveAccountSettings: (account: any) => void = account => async dispatch => {
   await dispatch({

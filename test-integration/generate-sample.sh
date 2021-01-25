@@ -11,7 +11,7 @@ function ctrl_c() {
 function usage() {
     me=$(basename "$0")
     echo
-    echo "Usage: $me generate <destination> <sample_name> [sql|sqllight|sqlfull|micro|uaa|mongodb|cassandra|couchbase] | list"
+    echo "Usage: $me generate <destination> <sample_name> [sql|sqllight|sqlfull|micro|mongodb|cassandra|couchbase] | list"
     echo 
     echo "Examples:"
     echo "$me generate /tmp/ngx-default/ ngx-default sql"

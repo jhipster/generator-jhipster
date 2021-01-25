@@ -182,16 +182,10 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
             source.registerCorsConfiguration("/v2/api-docs", config);
             source.registerCorsConfiguration("/v3/api-docs", config);
             source.registerCorsConfiguration("/swagger-resources", config);
-            <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
-            source.registerCorsConfiguration("/auth/**", config);
-            <%_ } _%>
             <%_ if (applicationType === 'gateway') { _%>
             source.registerCorsConfiguration("/*/api/**", config);
             source.registerCorsConfiguration("/services/*/api/**", config);
             source.registerCorsConfiguration("/*/management/**", config);
-                <%_ if (authenticationType === 'uaa') { _%>
-            source.registerCorsConfiguration("/*/oauth/**", config);
-                <%_ } _%>
             <%_ } _%>
         }
         return new Cors<% if (reactive) { %>Web<% } %>Filter(source);

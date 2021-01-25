@@ -205,24 +205,15 @@ jhipster:
     from: test@localhost
     base-url: http://127.0.0.1:8080
 <%_ } _%>
-<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+<%_ if (authenticationType === 'jwt') { _%>
   security:
     authentication:
-  <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+  <%_ if (authenticationType === 'jwt') { _%>
       jwt:
         # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
         base64-secret: <%= jwtSecretKey %>
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
-  <%_ } _%>
-  <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
-    client-authorization:
-      <%_ if (applicationType !== 'uaa') { _%>
-      access-token-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token
-      token-service-id: <%= uaaBaseName.toLowerCase() %>
-      <%_ } _%>
-      client-id: internal
-      client-secret: internal
   <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType === 'session' && !reactive) { _%>
