@@ -2571,21 +2571,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * Get default config based on applicationType
    */
   getDefaultConfigForApplicationType(applicationType = this.jhipsterConfig.applicationType) {
-    let defaultAppTypeConfig = {};
-    switch (applicationType) {
-      case 'monolith':
-        defaultAppTypeConfig = defaultApplicationOptions.getConfigForMonolithApplication();
-        break;
-      case 'gateway':
-        defaultAppTypeConfig = defaultApplicationOptions.getConfigForGatewayApplication();
-        break;
-      case 'microservice':
-        defaultAppTypeConfig = defaultApplicationOptions.getConfigForMicroserviceApplication();
-        break;
-      default:
-        defaultAppTypeConfig = defaultApplicationOptions.getDefaultConfigForNewApplication();
-    }
-    return { ...defaultAppTypeConfig, ...defaultConfig };
+    return { ...defaultApplicationOptions.getConfigForApplicationType(applicationType), ...defaultConfig };
   }
 
   setConfigDefaults(defaults = this.jhipsterConfig.applicationType !== MICROSERVICE ? defaultConfig : defaultConfigMicroservice) {
