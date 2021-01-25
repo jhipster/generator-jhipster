@@ -77,8 +77,12 @@ processResources {
     filesMatching("**/application.yml") {
         filter {
             it.replace("#project.version#", version)
+        }
+        <%_ if (!serviceDiscoveryType) { _%>
+        filter {
             it.replace("#spring.profiles.active#", profiles)
         }
+        <%_ } _%>
     }
 }
 
