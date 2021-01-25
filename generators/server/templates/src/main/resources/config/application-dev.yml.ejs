@@ -93,6 +93,11 @@ spring:
   jackson:
     serialization:
       indent-output: true
+  <%_ if (serviceDiscoveryType === 'eureka') { _%>
+  cloud:
+    config:
+      profile: dev
+  <%_ } _%>
   <%_ if (serviceDiscoveryType === 'consul') { _%>
   cloud:
     consul:
@@ -100,10 +105,6 @@ spring:
         prefer-ip-address: true
       host: localhost
       port: 8500
-  <%_ } _%>
-  <%_ if (serviceDiscoveryType === 'eureka') { _%>
-    config:
-      profile: dev
   <%_ } _%>
   <%_ if (databaseType === 'sql' && !reactive) { _%>
   datasource:
