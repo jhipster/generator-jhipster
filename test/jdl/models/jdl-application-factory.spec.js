@@ -19,7 +19,7 @@
 
 const { expect } = require('chai');
 const { createJDLApplication } = require('../../../jdl/models/jdl-application-factory');
-const { MONOLITH, MICROSERVICE, GATEWAY, UAA } = require('../../../jdl/jhipster/application-types');
+const { MONOLITH, MICROSERVICE, GATEWAY } = require('../../../jdl/jhipster/application-types');
 
 describe('JDLApplicationFactory', () => {
   describe('createJDLApplication', () => {
@@ -54,17 +54,6 @@ describe('JDLApplicationFactory', () => {
 
       it('should create the app', () => {
         expect(application.getConfigurationOptionValue('applicationType')).to.equal(MONOLITH);
-      });
-    });
-    context(`when passing a ${UAA} config`, () => {
-      let application;
-
-      before(() => {
-        application = createJDLApplication({ applicationType: UAA });
-      });
-
-      it('should create the app', () => {
-        expect(application.getConfigurationOptionValue('applicationType')).to.equal(UAA);
       });
     });
   });

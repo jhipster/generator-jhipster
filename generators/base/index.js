@@ -16,13 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const BaseGenerator = require('../generator-base');
 
-const ApplicationTypes = {
-  MONOLITH: 'monolith',
-  MICROSERVICE: 'microservice',
-  GATEWAY: 'gateway',
-};
-
-ApplicationTypes.exists = applicationType => !!applicationType && !!ApplicationTypes[applicationType.toUpperCase()];
-
-module.exports = ApplicationTypes;
+/*
+ * Register generator-base at yeoman-environment
+ */
+module.exports = BaseGenerator;

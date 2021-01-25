@@ -117,6 +117,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
       type: Boolean,
     });
 
+    this.option('single-entity', {
+      desc: 'Regenerate only a single entity, relationships can be not correctly generated',
+      type: Boolean,
+    });
+
     if (this.options.help) {
       return;
     }
@@ -126,13 +131,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
     this.entityConfig = this.entityStorage.createProxy();
 
     const configExisted = this.entityStorage.existed;
-    const filename = this.destinationPath(JHIPSTER_CONFIG_DIR, `${name}.json`);
-    const entityExisted = fs.existsSync(filename);
+    const filename = path.join(JHIPSTER_CONFIG_DIR, `${name}.json`);
+    const entityExisted = fs.existsSync(this.destinationPath(filename));
 
     this.context = {
       name,
+      filename,
       configExisted,
       entityExisted,
+      configurationFileExists: this.fs.exists(filename),
     };
 
     this._setupEntityOptions(this, this, this.context);
@@ -153,19 +160,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
         }
       },
 
-      setupRequiredConfigForMicroservicePrompt() {
-        this.context.filename = path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(this.context.name)}.json`);
-      },
-
       /* Use need microservice path to load the entity file */
       askForMicroserviceJson: prompts.askForMicroserviceJson,
 
       setupMicroServiceEntity() {
         const context = this.context;
 
-        if (this.jhipsterConfig.applicationType === 'uaa') {
-          this.entityConfig.microserviceName = this.jhipsterConfig.baseName;
-        } else if (this.jhipsterConfig.applicationType === 'microservice') {
+        if (this.jhipsterConfig.applicationType === 'microservice') {
           context.skipClient = true;
           context.microserviceName = this.entityConfig.microserviceName = this.jhipsterConfig.baseName;
           if (!this.entityConfig.clientRootFolder) {
@@ -259,8 +260,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
             this.entityConfig.databaseType = context.databaseType;
           }
         }
-        context.filename = this.destinationPath(context.filename);
-        context.configurationFileExists = this.fs.exists(context.filename);
         context.useConfigurationFile = context.configurationFileExists || context.useConfigurationFile;
         if (context.configurationFileExists) {
           this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
@@ -430,6 +429,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
   _composing() {
     return {
       composeEntities() {
+        if (this.options.singleEntity) return;
         // We need to compose with others entities to update relationships.
         this.composeWithJHipster(
           'entities',

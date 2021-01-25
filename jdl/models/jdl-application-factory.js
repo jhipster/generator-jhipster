@@ -23,7 +23,6 @@ const {
   getConfigForMonolithApplication,
   getConfigForGatewayApplication,
   getConfigForMicroserviceApplication,
-  getConfigForUAAApplication,
 } = require('../jhipster/default-application-options');
 const JDLApplication = require('./jdl-application');
 
@@ -46,10 +45,6 @@ function createJDLApplication(config = {}) {
     case ApplicationTypes.GATEWAY:
       return new JDLApplication({
         config: getConfigForGatewayApplication(baseConfig),
-      });
-    case ApplicationTypes.UAA:
-      return new JDLApplication({
-        config: getConfigForUAAApplication(baseConfig),
       });
     case ApplicationTypes.MONOLITH:
     default:

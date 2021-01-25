@@ -61,7 +61,7 @@ export default (state: UserManagementState = initialState, action): UserManageme
   }
 };
 
-const apiUrl = '<%= apiUaaPath %>api/users';
+const apiUrl = 'api/users';
 // Actions
 export const getUsers: ICrudGetAllAction<IUser> = (page, size, sort) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;

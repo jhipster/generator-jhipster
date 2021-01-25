@@ -16,13 +16,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable no-unused-expressions */
+const expect = require('chai').expect;
 
-const ApplicationTypes = {
-  MONOLITH: 'monolith',
-  MICROSERVICE: 'microservice',
-  GATEWAY: 'gateway',
-};
+const EnvironmentBuilder = require('../../cli/environment-builder');
+const BaseGenerator = require('../../generators/generator-base');
 
-ApplicationTypes.exists = applicationType => !!applicationType && !!ApplicationTypes[applicationType.toUpperCase()];
+const { prepareTempDir } = require('../utils/utils');
 
-module.exports = ApplicationTypes;
+describe('jhipster:base generator', () => {
+  let cleanup;
+  before(() => {
+    cleanup = prepareTempDir();
+  });
+  after(() => cleanup());
+
+  describe('create', () => {
+    let envBuilder;
+    before(() => {
+      envBuilder = EnvironmentBuilder.createDefaultBuilder();
+    });
+    it('should be registered as jhipster:base at yeoman-environment', () => {
+      expect(envBuilder.getEnvironment().get('jhipster:base')).to.equal(BaseGenerator);
+    });
+  });
+});
