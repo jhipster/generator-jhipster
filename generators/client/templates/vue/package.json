@@ -34,7 +34,7 @@
     "@vue/test-utils": "1.1.2",
     "autoprefixer": "10.2.3",
     "babel-core": "7.0.0-bridge.0",
-    "browser-sync": "2.26.13",
+    "browser-sync": "2.26.14",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "7.0.0",
     "css-loader": "5.0.1",
