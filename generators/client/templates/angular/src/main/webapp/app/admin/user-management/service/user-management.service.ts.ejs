@@ -30,7 +30,7 @@ import { Authority } from 'app/config/authority.constants';
 
 @Injectable({ providedIn: 'root' })
 export class UserManagementService {
-  public resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/admin/users';
+  public resourceUrl = SERVER_API_URL + 'api/admin/users';
 
   constructor(private http: HttpClient) {}
 
@@ -60,7 +60,7 @@ export class UserManagementService {
 
   authorities(): Observable<string[]> {
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-    return this.http.get<string[]>(SERVER_API_URL + '<%- apiUaaPath %>api/authorities');
+    return this.http.get<string[]>(SERVER_API_URL + 'api/authorities');
     <%_ } else { _%>
     return of([Authority.ADMIN, Authority.USER]);
     <%_ } _%>

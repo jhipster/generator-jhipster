@@ -254,36 +254,6 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
   });
 
-  describe('gateway, uaa server and one microservice', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/docker-compose'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
-        })
-        .withOptions({ skipChecks: true })
-        .withOptions({ force: true })
-        .withPrompts({
-          deploymentApplicationType: 'microservice',
-          directoryPath: './',
-          chosenApps: ['01-gateway', '02-mysql', '06-uaa'],
-          clusteredDbApps: [],
-        })
-        .on('end', done);
-    });
-    it('creates expected default files', () => {
-      assert.file(expectedFiles.dockercompose);
-    });
-    it('creates jhipster-registry content', () => {
-      assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
-    });
-    it('creates compose file without container_name, external_links, links', () => {
-      assert.noFileContent('docker-compose.yml', /container_name:/);
-      assert.noFileContent('docker-compose.yml', /external_links:/);
-      assert.noFileContent('docker-compose.yml', /links:/);
-    });
-  });
-
   describe('gateway and multi microservices', () => {
     before(done => {
       helpers

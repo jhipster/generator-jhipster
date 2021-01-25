@@ -46,7 +46,6 @@ const applicationConfigTokens = [
   { name: 'ENABLE_TRANSLATION', pattern: 'enableTranslation' },
   { name: 'APPLICATION_TYPE', pattern: 'applicationType' },
   { name: 'TEST_FRAMEWORKS', pattern: 'testFrameworks' },
-  { name: 'UAA_BASE_NAME', pattern: 'uaaBaseName' },
   { name: 'LANGUAGES', pattern: 'languages' },
   { name: 'SERVER_PORT', pattern: 'serverPort' },
   { name: 'JHI_PREFIX', pattern: 'jhiPrefix' },

@@ -54,7 +54,7 @@ export class AccountService {
 
   <%_ if (!skipUserManagement) { _%>
   save(account: Account): Observable<{}> {
-    return this.http.post(SERVER_API_URL + '<%- apiUaaPath %>api/account', account);
+    return this.http.post(SERVER_API_URL + 'api/account', account);
   }
   <%_ } _%>
 
@@ -119,7 +119,7 @@ export class AccountService {
   }
 
   private fetch(): Observable<Account> {
-    return this.http.get<Account>(SERVER_API_URL + '<%- apiUaaPath %>api/account');
+    return this.http.get<Account>(SERVER_API_URL + 'api/account');
   }
 
   private navigateToStoredUrl(): void {

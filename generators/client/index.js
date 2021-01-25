@@ -192,13 +192,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
             )} and ${chalk.yellow('--auth')} flags`
           );
         }
-        if (this.jhipsterConfig.skipServer && this.jhipsterConfig.authenticationType === 'uaa' && !this.jhipsterConfig.uaaBaseName) {
-          this.error(
-            `When using skip-server flag and UAA as authentication method, you must pass a UAA base name using ${chalk.yellow(
-              '--uaa-base-name'
-            )} flag`
-          );
-        }
       },
     };
   }
@@ -221,7 +214,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
 
         this.styleSheetExt = 'scss';
-        this.apiUaaPath = `${this.authenticationType === 'uaa' ? `services/${this.uaaBaseName.toLowerCase()}/` : ''}`;
         this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.buildTool) + constants.CLIENT_DIST_DIR;
 
         // Application name modified, using each technology's conventions
@@ -233,7 +225,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.lowercaseBaseName = this.baseName.toLowerCase();
         this.humanizedBaseName = this.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(this.baseName);
 
-        if (this.authenticationType === 'oauth2' || (this.databaseType === 'no' && this.authenticationType !== 'uaa')) {
+        if (this.authenticationType === 'oauth2' || this.databaseType === 'no') {
           this.skipUserManagement = true;
         }
       },

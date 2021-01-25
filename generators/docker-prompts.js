@@ -373,8 +373,7 @@ function getAppFolders(input, deploymentApplicationType) {
             fileData['generator-jhipster'].baseName !== undefined &&
             (deploymentApplicationType === undefined ||
               deploymentApplicationType === fileData['generator-jhipster'].applicationType ||
-              (deploymentApplicationType === 'microservice' && fileData['generator-jhipster'].applicationType === 'gateway') ||
-              (deploymentApplicationType === 'microservice' && fileData['generator-jhipster'].applicationType === 'uaa'))
+              (deploymentApplicationType === 'microservice' && fileData['generator-jhipster'].applicationType === 'gateway'))
           ) {
             appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
           }

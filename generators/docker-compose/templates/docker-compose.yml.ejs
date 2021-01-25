@@ -52,7 +52,7 @@ services:
             <%_ if (authenticationType === 'oauth2') { _%>
             - JHIPSTER_SLEEP=20
             <%_ } _%>
-            - SPRING_PROFILES_ACTIVE=dev<% if (authenticationType === 'oauth2') { %>,oauth2<% } %><% if (authenticationType === 'uaa') { %>,uaa<% } %>
+            - SPRING_PROFILES_ACTIVE=dev<% if (authenticationType === 'oauth2') { %>,oauth2<% } %>
             - SPRING_SECURITY_USER_PASSWORD=<%= adminPassword %>
             - JHIPSTER_REGISTRY_PASSWORD=<%= adminPassword %>
             - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
@@ -72,10 +72,6 @@ services:
             - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
             - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-registry
             - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
-            <%_ } _%>
-            <%_ if (authenticationType === 'uaa') { _%>
-            # change the name of UAA server here, if needed
-            - JHIPSTER_SECURITY_CLIENT_AUTHORIZATION_TOKEN_SERVICE_ID=uaa
             <%_ } _%>
         ports:
             - 8761:8761

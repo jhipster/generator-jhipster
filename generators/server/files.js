@@ -435,7 +435,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => !generator.reactive && generator.applicationType !== 'uaa' && generator.authenticationType !== 'uaa',
+      condition: generator => !generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -445,44 +445,12 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => !generator.reactive && generator.applicationType !== 'uaa' && generator.authenticationType === 'uaa',
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/SecurityConfiguration_uaa.java',
-          renameTo: generator => `${generator.javaDir}config/SecurityConfiguration.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.reactive && generator.applicationType !== 'uaa',
+      condition: generator => generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
           file: 'package/config/SecurityConfiguration_reactive.java',
           renameTo: generator => `${generator.javaDir}config/SecurityConfiguration.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => !shouldSkipUserManagement(generator) && generator.applicationType === 'uaa',
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/UaaWebSecurityConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/UaaWebSecurityConfiguration.java`,
-        },
-        {
-          file: 'package/config/UaaConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/UaaConfiguration.java`,
-        },
-        {
-          file: 'package/config/UaaProperties.java',
-          renameTo: generator => `${generator.javaDir}config/UaaProperties.java`,
-        },
-        {
-          file: 'package/security/IatTokenEnhancer.java',
-          renameTo: generator => `${generator.javaDir}security/IatTokenEnhancer.java`,
         },
       ],
     },
@@ -688,61 +656,6 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.applicationType === 'gateway' && generator.authenticationType === 'uaa',
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        { file: 'package/web/rest/AuthResource.java', renameTo: generator => `${generator.javaDir}web/rest/AuthResource.java` },
-        {
-          file: 'package/web/filter/RefreshTokenFilter.java',
-          renameTo: generator => `${generator.javaDir}web/filter/RefreshTokenFilter.java`,
-        },
-        {
-          file: 'package/web/filter/RefreshTokenFilterConfigurer.java',
-          renameTo: generator => `${generator.javaDir}web/filter/RefreshTokenFilterConfigurer.java`,
-        },
-        {
-          file: 'package/config/oauth2/OAuth2AuthenticationConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/oauth2/OAuth2AuthenticationConfiguration.java`,
-        },
-        {
-          file: 'package/security/oauth2/CookieCollection.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/CookieCollection.java`,
-        },
-        {
-          file: 'package/security/oauth2/CookiesHttpServletRequestWrapper.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/CookiesHttpServletRequestWrapper.java`,
-        },
-        {
-          file: 'package/security/oauth2/CookieTokenExtractor.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/CookieTokenExtractor.java`,
-        },
-        {
-          file: 'package/security/oauth2/OAuth2AuthenticationService.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/OAuth2AuthenticationService.java`,
-        },
-        {
-          file: 'package/security/oauth2/OAuth2CookieHelper.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/OAuth2CookieHelper.java`,
-        },
-        {
-          file: 'package/security/oauth2/OAuth2Cookies.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/OAuth2Cookies.java`,
-        },
-        {
-          file: 'package/security/oauth2/OAuth2TokenEndpointClient.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/OAuth2TokenEndpointClient.java`,
-        },
-        {
-          file: 'package/security/oauth2/OAuth2TokenEndpointClientAdapter.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/OAuth2TokenEndpointClientAdapter.java`,
-        },
-        {
-          file: 'package/security/oauth2/UaaTokenEndpointClient.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/UaaTokenEndpointClient.java`,
-        },
-      ],
-    },
-    {
       condition: generator =>
         generator.authenticationType === 'oauth2' && (generator.applicationType === 'monolith' || generator.applicationType === 'gateway'),
       path: SERVER_MAIN_SRC_DIR,
@@ -759,59 +672,6 @@ const serverFiles = {
     },
   ],
   serverMicroservice: [
-    {
-      condition: generator =>
-        generator.authenticationType === 'uaa' && (generator.applicationType === 'microservice' || generator.applicationType === 'gateway'),
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/oauth2/OAuth2Properties.java',
-          renameTo: generator => `${generator.javaDir}config/oauth2/OAuth2Properties.java`,
-        },
-        {
-          file: 'package/config/oauth2/OAuth2JwtAccessTokenConverter.java',
-          renameTo: generator => `${generator.javaDir}config/oauth2/OAuth2JwtAccessTokenConverter.java`,
-        },
-        {
-          file: 'package/security/oauth2/OAuth2SignatureVerifierClient.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/OAuth2SignatureVerifierClient.java`,
-        },
-        {
-          file: 'package/security/oauth2/UaaSignatureVerifierClient.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/UaaSignatureVerifierClient.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => !generator.reactive && generator.applicationType === 'microservice' && generator.authenticationType === 'uaa',
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/FeignConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/FeignConfiguration.java`,
-        },
-        {
-          file: 'package/client/AuthorizedFeignClient.java',
-          renameTo: generator => `${generator.javaDir}client/AuthorizedFeignClient.java`,
-        },
-        {
-          file: 'package/client/OAuth2InterceptedFeignConfiguration.java',
-          renameTo: generator => `${generator.javaDir}client/OAuth2InterceptedFeignConfiguration.java`,
-        },
-        {
-          file: 'package/client/AuthorizedUserFeignClient.java',
-          renameTo: generator => `${generator.javaDir}client/AuthorizedUserFeignClient.java`,
-        },
-        {
-          file: 'package/client/OAuth2_UserFeignClientInterceptor.java',
-          renameTo: generator => `${generator.javaDir}client/UserFeignClientInterceptor.java`,
-        },
-        {
-          file: 'package/client/OAuth2UserClientFeignConfiguration.java',
-          renameTo: generator => `${generator.javaDir}client/OAuth2UserClientFeignConfiguration.java`,
-        },
-      ],
-    },
     {
       condition: generator =>
         !generator.reactive &&
@@ -869,9 +729,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator =>
-        (!generator.reactive && generator.applicationType === 'gateway' && !generator.serviceDiscoveryType) ||
-        generator.authenticationType === 'uaa',
+      condition: generator => !generator.reactive && generator.applicationType === 'gateway' && !generator.serviceDiscoveryType,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -881,14 +739,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator =>
-        !(
-          generator.applicationType !== 'microservice' &&
-          !(
-            generator.applicationType === 'gateway' &&
-            (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')
-          )
-        ) && generator.applicationType === 'microservice',
+      condition: generator => generator.applicationType === 'microservice',
       path: SERVER_MAIN_RES_DIR,
       templates: [{ file: 'static/microservices_index.html', renameTo: () => 'static/index.html' }],
     },
@@ -1497,46 +1348,6 @@ const serverFiles = {
       templates: ['config/bootstrap.yml'],
     },
     {
-      condition: generator => generator.authenticationType === 'uaa',
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/OAuth2TestConfiguration.java',
-          renameTo: generator => `${generator.testDir}config/OAuth2TestConfiguration.java`,
-        },
-        {
-          file: 'package/security/OAuth2TokenMockUtil.java',
-          renameTo: generator => `${generator.testDir}security/OAuth2TokenMockUtil.java`,
-        },
-        {
-          file: 'package/config/SecurityBeanOverrideConfiguration.java',
-          renameTo: generator => `${generator.testDir}config/SecurityBeanOverrideConfiguration.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.authenticationType === 'uaa' && generator.applicationType === 'gateway',
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/security/oauth2/OAuth2CookieHelperTest.java',
-          renameTo: generator => `${generator.testDir}security/oauth2/OAuth2CookieHelperTest.java`,
-        },
-        {
-          file: 'package/security/oauth2/OAuth2AuthenticationServiceTest.java',
-          renameTo: generator => `${generator.testDir}security/oauth2/OAuth2AuthenticationServiceTest.java`,
-        },
-        {
-          file: 'package/security/oauth2/CookieTokenExtractorTest.java',
-          renameTo: generator => `${generator.testDir}security/oauth2/CookieTokenExtractorTest.java`,
-        },
-        {
-          file: 'package/security/oauth2/CookieCollectionTest.java',
-          renameTo: generator => `${generator.testDir}security/oauth2/CookieCollectionTest.java`,
-        },
-      ],
-    },
-    {
       condition: generator =>
         generator.authenticationType === 'oauth2' && (generator.applicationType === 'monolith' || generator.applicationType === 'gateway'),
       path: SERVER_TEST_SRC_DIR,
@@ -1684,10 +1495,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator =>
-        generator.skipUserManagement &&
-        generator.authenticationType !== 'uaa' &&
-        ['monolith', 'gateway'].includes(generator.applicationType),
+      condition: generator => generator.skipUserManagement && ['monolith', 'gateway'].includes(generator.applicationType),
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1728,7 +1536,6 @@ const serverFiles = {
       condition: generator =>
         generator.skipUserManagement &&
         generator.authenticationType !== 'oauth2' &&
-        generator.authenticationType !== 'uaa' &&
         ['monolith', 'gateway'].includes(generator.applicationType),
       path: SERVER_TEST_SRC_DIR,
       templates: [
