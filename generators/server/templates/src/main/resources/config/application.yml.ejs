@@ -168,8 +168,6 @@ spring:
     name: <%= baseName %>
   <%_ if (serviceDiscoveryType) { _%>
   cloud:
-    config:
-      profile: #spring.profiles.active#
     <%_ if (serviceDiscoveryType === 'consul') { _%>
     consul:
       discovery:
