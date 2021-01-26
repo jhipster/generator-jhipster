@@ -78,5 +78,10 @@ function cleanUpOptions(application) {
       name: blueprintName,
     }));
   }
+  if (application[GENERATOR_NAME].otherModules) {
+    application[GENERATOR_NAME].otherModules = application[GENERATOR_NAME].otherModules.map(moduleName => ({
+      name: moduleName,
+    }));
+  }
   return application;
 }

@@ -167,7 +167,7 @@ const configPropsValidations = {
   },
   OTHER_MODULES: {
     type: 'list',
-    pattern: ALPHANUMERIC,
+    pattern: BASIC_NPM_PACKAGE_NAME_PATTERN,
     msg: 'otherModules property',
   },
   PACKAGE_NAME: {
