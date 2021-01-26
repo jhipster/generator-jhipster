@@ -112,6 +112,12 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       type: Boolean,
     });
 
+    this.option('skip-prettier', {
+      desc: 'Skip prettier',
+      type: Boolean,
+      hide: true,
+    });
+
     if (this.options.help) {
       return;
     }
@@ -155,8 +161,6 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     // Load common runtime options.
     this.parseCommonRuntimeOptions();
 
-    this.registerCommitPriorityFilesTask();
-
     if (this.jhipsterConfig.withGeneratedFlag) {
       this.registerGeneratedAnnotationTransform();
     }
@@ -167,7 +171,12 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     }
 
     this.registerForceEntitiesTransform();
-    this.registerPrettierTransform();
+
+    if (!this.options.skipPrettier) {
+      this.registerPrettierTransform();
+    }
+
+    this.registerCommitPriorityFilesTask();
   }
 
   /**
