@@ -112,6 +112,11 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       type: Boolean,
     });
 
+    this.option('skip-prettier', {
+      desc: 'Skip prettier',
+      type: Boolean,
+    });
+
     if (this.options.help) {
       return;
     }
@@ -165,7 +170,10 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     }
 
     this.registerForceEntitiesTransform();
-    this.registerPrettierTransform();
+
+    if (!this.options.skipPrettier) {
+      this.registerPrettierTransform();
+    }
 
     this.registerCommitPriorityFilesTask();
   }
