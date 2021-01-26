@@ -349,10 +349,10 @@ jhipster:
       # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
       # cluster: true
     <%_ } _%>
-    <%_ if (serviceDiscoveryType === 'eureka') { _%>
-    registry:
-      password: admin
-    <%_ } _%>
+  <%_ } _%>
+  <%_ if (serviceDiscoveryType === 'eureka') { _%>
+  registry:
+    password: admin
   <%_ } _%>
   <%_ if (applicationType !== 'microservice') { _%>
   # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
