@@ -155,8 +155,6 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     // Load common runtime options.
     this.parseCommonRuntimeOptions();
 
-    this.registerCommitPriorityFilesTask();
-
     if (this.jhipsterConfig.withGeneratedFlag) {
       this.registerGeneratedAnnotationTransform();
     }
@@ -168,6 +166,8 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
 
     this.registerForceEntitiesTransform();
     this.registerPrettierTransform();
+
+    this.registerCommitPriorityFilesTask();
   }
 
   /**
