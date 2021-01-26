@@ -131,7 +131,7 @@ jobs:
             testcontainers: 0
           - app-type: react-gradle-h2mem-memcached
             entity: sql
-            environment: dev
+            environment: prod
             war: 1
             e2e: 1
             testcontainers: 0
