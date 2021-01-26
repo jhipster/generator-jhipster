@@ -115,6 +115,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     this.option('skip-prettier', {
       desc: 'Skip prettier',
       type: Boolean,
+      hide: true,
     });
 
     if (this.options.help) {
