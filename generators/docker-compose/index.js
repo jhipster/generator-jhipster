@@ -203,7 +203,7 @@ module.exports = class extends BaseDockerGenerator {
           // Add extra indentation for each lines
           const yamlArray = yamlString.split('\n');
           for (let j = 0; j < yamlArray.length; j++) {
-            yamlArray[j] = `    ${yamlArray[j]}`;
+            yamlArray[j] = `  ${yamlArray[j]}`;
           }
           yamlString = yamlArray.join('\n');
           this.appsYaml.push(yamlString);
