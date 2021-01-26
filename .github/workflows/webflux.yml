@@ -122,7 +122,7 @@ jobs:
             environment: prod
             war: 0
             e2e: 1
-            testcontainers: 0
+            testcontainers: 1
           #                    - app-type: webflux-couchbase
           #                      entity: couchbase
           #                      profile: prod
