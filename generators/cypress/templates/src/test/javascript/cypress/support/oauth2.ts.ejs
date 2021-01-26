@@ -86,18 +86,23 @@ Cypress.Commands.add('keycloakLogin', (oauth2Data: any, username: string, passwo
 });
 
 Cypress.Commands.add('oktaLogin', (username, password) => {
-    cy.task('login', {baseUrl: Cypress.config().baseUrl, username: username, password: password}).then((cookies: Array<any>) => {
-      cookies.forEach(c => {
-        const name = c.name;
-        const value = c.value;
-        const options = {
-          ...c
-        }
-        cy.setCookie(name, value, options);
-      });
-      cy.visit('/');
+  cy.task('login', {
+    baseUrl: Cypress.config().baseUrl, 
+    username: username, 
+    password: password
+  })
+  .then((cookies: Array<any>) => {
+    cookies.forEach(c => {
+      const name = c.name;
+      const value = c.value;
+      const options = {
+        ...c
+      }
+      cy.setCookie(name, value, options);
     });
+    cy.visit('/');
   });
+});
 
 Cypress.Commands.add('oauthLogout', (oauth2Data: any) => {
   if (oauth2Data.isOkta) {
@@ -112,11 +117,11 @@ Cypress.Commands.add('oauthLogout', (oauth2Data: any) => {
 });
 
 Cypress.Commands.add('clearCache', () => {
-    cy.clearCookies();
-    cy.clearLocalStorage();
-    cy.window().then(win => {
-      win.sessionStorage.clear();
-    });
+  cy.clearCookies();
+  cy.clearLocalStorage();
+  cy.window().then(win => {
+    win.sessionStorage.clear();
+  });
 });
 
 declare global {
