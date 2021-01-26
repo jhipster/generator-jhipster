@@ -408,7 +408,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           }
         });
         scriptsStorage.set({
-          'docker:others:await': dockerPorts.map(port => `wait-on tcp:{port}`).join(' && '),
+          'docker:others:await': dockerPorts.map(port => `wait-on tcp:${port}`).join(' && '),
           'predocker:others:up': dockerBuild.join(' && '),
           'docker:others:up': dockerOthersUp.join(' && '),
           'docker:others:down': dockerOthersDown.join(' && '),
