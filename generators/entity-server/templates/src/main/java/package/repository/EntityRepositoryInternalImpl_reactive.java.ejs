@@ -42,18 +42,21 @@ import org.springframework.data.domain.Pageable;
 import io.r2dbc.spi.Row;
 import io.r2dbc.spi.RowMetadata;
 
-import org.springframework.data.r2dbc.core.DatabaseClient;
-import org.springframework.data.r2dbc.core.DatabaseClient.GenericInsertSpec;
-import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
-import org.springframework.data.r2dbc.core.RowsFetchSpec;
-import org.springframework.data.r2dbc.mapping.OutboundRow;
-import org.springframework.data.r2dbc.mapping.SettableValue;
+import static org.springframework.data.relational.core.query.Criteria.where;
+import static org.springframework.data.relational.core.query.Query.query;
+
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
+import org.springframework.data.relational.core.query.Criteria;
+import org.springframework.data.relational.core.query.Query;
+import org.springframework.data.relational.core.query.Update;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.sql.Column;
 import org.springframework.data.relational.core.sql.Expression;
 import org.springframework.data.relational.core.sql.Select;
 import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJoin<% if (reactiveEagerRelations.length > 0) { %>Condition<% } %>;
 import org.springframework.data.relational.core.sql.Table;
+import org.springframework.r2dbc.core.DatabaseClient;
+import org.springframework.r2dbc.core.RowsFetchSpec;
 <%_ } _%>
 
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
@@ -84,7 +87,7 @@ import reactor.core.publisher.Mono;
 @SuppressWarnings("unused")
 class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>RepositoryInternal {
     private final DatabaseClient db;
-    private final ReactiveDataAccessStrategy dataAccessStrategy;
+    private final R2dbcEntityTemplate r2dbcEntityTemplate;
     private final EntityManager entityManager;
 
 <%_ reactiveUniqueEntityTypes.forEach(function(element) { _%>
@@ -103,10 +106,10 @@ _%>
 <%_ }
 }); _%>
 
-    public <%= entityClass %>RepositoryInternalImpl(DatabaseClient db, ReactiveDataAccessStrategy dataAccessStrategy, EntityManager entityManager<%_
+    public <%= entityClass %>RepositoryInternalImpl(R2dbcEntityTemplate template, EntityManager entityManager<%_
             reactiveUniqueEntityTypes.forEach(function(element) { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>) {
-        this.db = db;
-        this.dataAccessStrategy = dataAccessStrategy;
+        this.db = template.getDatabaseClient();
+        this.r2dbcEntityTemplate = template;
         this.entityManager = entityManager;
 <%_ reactiveUniqueEntityTypes.forEach(function(element) { _%>
         this.<%= element.toLowerCase() %>Mapper = <%= element.toLowerCase() %>Mapper;
@@ -139,7 +142,7 @@ _%>
             Optional.ofNullable(criteria).map(crit ->
                 new StringBuilder(select).append(" ").append("WHERE").append(" ").append(alias).append(".").append(crit.toString()).toString()).orElse(select); // TODO remove once https://github.com/spring-projects/spring-data-jdbc/issues/907 will be fixed
 <%_ } _%>
-        return db.execute(select<% if (databaseType === 'sql') { %>Where<% } %>).map(this::process);
+        return db.sql(select<% if (databaseType === 'sql') { %>Where<% } %>).map(this::process);
     }
 
     @Override
@@ -149,7 +152,7 @@ _%>
 
     @Override
     public Mono<<%= asEntity(entityClass) %>> findById(<%= primaryKey.type %> id) {
-        return createQuery(null, Criteria.where("id").is(id)).one();
+        return createQuery(null, where("id").is(id)).one();
     }
 
 <%_ if (fieldsContainOwnerManyToMany) { _%>
@@ -203,7 +206,8 @@ _%>
     @Override
     public Mono<Integer> update(<%= asEntity(entityClass) %> entity) {
 <%_ if (fields.length + reactiveEagerRelations.length > 0) { _%>
-        return db.update().table(<%= asEntity(entityClass) %>.class).using(entity).fetch().rowsUpdated();
+        //fixme is this the proper way?
+        return r2dbcEntityTemplate.update(entity).thenReturn(1);
 <%_ } else { _%>
         // What can we update on this field?
         return Mono.just(1);
@@ -215,7 +219,7 @@ _%>
     @Override
     public Mono<Void> deleteById(Long entityId) {
         return deleteRelations(entityId).then(
-             db.delete().from(<%= asEntity(entityClass) %>.class).matching(Criteria.from(Criteria.where("id").is(entityId))).then()
+             r2dbcEntityTemplate.delete(<%= asEntity(entityClass) %>.class).matching(query(where("id").is(entityId))).all().then()
         );
     }
 
