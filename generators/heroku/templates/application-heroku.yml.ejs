@@ -30,15 +30,15 @@
 
 eureka:
 <%_ if (applicationType !== 'gateway') { _%>
-    instance:
-        hostname: <%= herokuAppName %>.herokuapp.com
-        non-secure-port: 80
-        prefer-ip-address: false
+  instance:
+    hostname: <%= herokuAppName %>.herokuapp.com
+    non-secure-port: 80
+    prefer-ip-address: false
 <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
-    client:
-        service-url:
-            defaultZone: ${JHIPSTER_REGISTRY_URL}/eureka/
+  client:
+    service-url:
+      defaultZone: ${JHIPSTER_REGISTRY_URL}/eureka/
 <%_ } _%>
 
 <%_ if (cacheProvider === 'memcached' || cacheProvider === 'redis') { _%>
@@ -46,50 +46,50 @@ jhipster:
   cache:
     <%_ if (cacheProvider === 'redis') { _%>
     redis:
-        server: ${REDIS_URL}
-        cluster: false
-        connectionPoolSize: 3
-        connectionMinimumIdleSize: 1
-        subscriptionConnectionPoolSize: 3
+      server: ${REDIS_URL}
+      cluster: false
+      connectionPoolSize: 3
+      connectionMinimumIdleSize: 1
+      subscriptionConnectionPoolSize: 3
     <%_ } _%>
     <%_ if (cacheProvider === 'memcached') { _%>
     memcached:
+      enabled: true
+      servers: ${MEMCACHIER_SERVERS}
+      expiration: 300
+      use-binary-protocol: true
+      authentication:
         enabled: true
-        servers: ${MEMCACHIER_SERVERS}
-        expiration: 300
-        use-binary-protocol: true
-        authentication:
-            enabled: true
-            username: ${MEMCACHIER_USERNAME}
-            password: ${MEMCACHIER_PASSWORD}
+        username: ${MEMCACHIER_USERNAME}
+        password: ${MEMCACHIER_PASSWORD}
     <%_ } _%>
 <%_ } _%>
 spring:
 <%_ if (prodDatabaseType === 'postgresql' || prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
-    datasource:
-        type: com.zaxxer.hikari.HikariDataSource
-        url: ${JDBC_DATABASE_URL}
-        username: ${JDBC_DATABASE_USERNAME}
-        password: ${JDBC_DATABASE_PASSWORD}
-        hikari:
-            maximumPoolSize: 8
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
+    hikari:
+      maximumPoolSize: 8
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
-    elasticsearch:
-        rest:
-            uris: ${BONSAI_URL}
+  elasticsearch:
+    rest:
+      uris: ${BONSAI_URL}
 <%_ } _%>
 <%_ if (useOkta) { _%>
-    security:
-        oauth2:
-            client:
-                provider:
-                    oidc:
-                        issuer-uri: ${OKTA_OAUTH2_ISSUER}
-                registration:
-                    oidc:
-                        client-id: ${OKTA_OAUTH2_CLIENT_ID_WEB}
-                        client-secret: ${OKTA_OAUTH2_CLIENT_SECRET_WEB}
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: ${OKTA_OAUTH2_ISSUER}
+        registration:
+          oidc:
+            client-id: ${OKTA_OAUTH2_CLIENT_ID_WEB}
+            client-secret: ${OKTA_OAUTH2_CLIENT_SECRET_WEB}
 <%_ } _%>
 server:
   port: ${PORT:8080}

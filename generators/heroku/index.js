@@ -105,7 +105,7 @@ module.exports = class extends BaseBlueprintGenerator {
         const done = this.async();
 
         if (this.herokuAppName) {
-          ChildProcess.exec('heroku apps:info --json', (err, stdout) => {
+          ChildProcess.exec(`heroku apps:info --json ${this.herokuAppName}`, (err, stdout) => {
             if (err) {
               this.abort = true;
               this.log.error(`Could not find application: ${chalk.cyan(this.herokuAppName)}`);
