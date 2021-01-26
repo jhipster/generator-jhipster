@@ -66,7 +66,7 @@ describe('administration', () => {
   it('should load metrics', async () => {
     await navBarPage.clickOnAdmin('metrics');
     const heading = element(by.id('metrics-page-heading'));
-    await browser.wait(ec.visibilityOf(heading), 2000);
+    await browser.wait(ec.visibilityOf(heading), 5000);
     <%_ if (enableTranslation) { _%>
     const expect1 = 'metrics.title';
     <%_ } else { _%>
@@ -79,7 +79,7 @@ describe('administration', () => {
   it('should load health', async () => {
     await navBarPage.clickOnAdmin('health');
     const heading = element(by.id('health-page-heading'));
-    await browser.wait(ec.visibilityOf(heading), 2000);
+    await browser.wait(ec.visibilityOf(heading), 5000);
     <%_ if (enableTranslation) { _%>
     const expect1 = 'health.title';
     <%_ } else { _%>
