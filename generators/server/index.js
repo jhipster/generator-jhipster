@@ -398,7 +398,9 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
               scriptsStorage.set(`docker:${dockerConfig}:build`, `docker-compose -f ${dockerFile} build`);
               dockerBuild.push(`npm run docker:${dockerConfig}:build`);
             } else if (dockerConfig === 'jhipster-registry') {
-              dockerAwaitScripts.push('wait-on tcp:8761 && sleep 20');
+              dockerAwaitScripts.push(
+                'echo "Waiting for jhipster-registry to start" && wait-on http-get://localhost:8761/management/health && echo "jhipster-registry started"'
+              );
             }
 
             scriptsStorage.set(`docker:${dockerConfig}:up`, `docker-compose -f ${dockerFile} up -d`);
