@@ -63,7 +63,7 @@ describe('JSONToJDLConverter', () => {
     languages []
     messageBroker false
     nativeLanguage en
-    otherModules []
+    otherModules [generator-jhipster-vuejs, generator-jhipster-dotnetcore]
     packageName com.mycompany.myapp
     prodDatabaseType mysql
     reactive false
