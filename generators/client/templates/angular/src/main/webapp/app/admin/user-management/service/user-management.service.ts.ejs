@@ -49,8 +49,8 @@ export class UserManagementService {
   <%_ } _%>
 
   query(req?: Pagination): Observable<HttpResponse<IUser[]>> {
-      const options = createRequestOption(req);
-      return this.http.get<IUser[]>(this.resourceUrl, { params: options, observe: 'response' });
+    const options = createRequestOption(req);
+    return this.http.get<IUser[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
   <%_ if (authenticationType !== 'oauth2') { _%>
