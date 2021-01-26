@@ -41,9 +41,9 @@ module.exports = (on, config) => {
           waitUntil: 'networkidle2' // Wait until login-page has been reached
         });
         
-        await page.waitFor('[name="username"]');
-        await page.waitFor('[name="password"]');
-        await page.waitFor('input[type="submit"]');
+        await page.waitForSelector('[name="username"]');
+        await page.waitForSelector('[name="password"]');
+        await page.waitForSelector('input[type="submit"]');
         await page.type('[name="username"]', username); 
         await page.type('[name="password"]', password); 
         await page.click('input[type="submit"]');
