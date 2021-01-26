@@ -167,7 +167,7 @@ const configPropsValidations = {
   },
   OTHER_MODULES: {
     type: 'list',
-    pattern: ALPHANUMERIC,
+    pattern: BASIC_NPM_PACKAGE_NAME_PATTERN,
     msg: 'otherModules property',
   },
   PACKAGE_NAME: {
@@ -200,7 +200,6 @@ const configPropsValidations = {
     pattern: ALPHANUMERIC,
     msg: 'testFrameworks property',
   },
-  UAA_BASE_NAME: { type: 'STRING' },
   WEBSOCKET: {
     type: 'NAME',
     pattern: ALPHANUMERIC_DASH,

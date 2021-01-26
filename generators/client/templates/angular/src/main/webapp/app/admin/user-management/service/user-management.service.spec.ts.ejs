@@ -54,7 +54,7 @@ describe('Service Tests', () => {
         service.find('user').subscribe();
 
         const req = httpMock.expectOne({ method: 'GET' });
-        const resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/admin/users';
+        const resourceUrl = SERVER_API_URL + 'api/admin/users';
         expect(req.request.url).toEqual(`${resourceUrl}/user`);
       });
 

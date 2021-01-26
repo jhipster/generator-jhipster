@@ -112,6 +112,12 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       type: Boolean,
     });
 
+    this.option('skip-prettier', {
+      desc: 'Skip prettier',
+      type: Boolean,
+      hide: true,
+    });
+
     if (this.options.help) {
       return;
     }
@@ -155,8 +161,6 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     // Load common runtime options.
     this.parseCommonRuntimeOptions();
 
-    this.registerCommitPriorityFilesTask();
-
     if (this.jhipsterConfig.withGeneratedFlag) {
       this.registerGeneratedAnnotationTransform();
     }
@@ -167,7 +171,12 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     }
 
     this.registerForceEntitiesTransform();
-    this.registerPrettierTransform();
+
+    if (!this.options.skipPrettier) {
+      this.registerPrettierTransform();
+    }
+
+    this.registerCommitPriorityFilesTask();
   }
 
   /**
@@ -1151,12 +1160,12 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    *                                 Set false to create a changelog date incrementing the last one.
    * @return {String} Changelog date.
    */
-  dateFormatForLiquibase(reproducible = true) {
+  dateFormatForLiquibase(reproducible = this.configOptions.reproducible) {
     let now = new Date();
     // Miliseconds is ignored for changelogDate.
     now.setMilliseconds(0);
     // Run reproducible timestamp when regenerating the project with with-entities option.
-    if (reproducible && (this.options.withEntities || this.configOptions.creationTimestamp)) {
+    if (reproducible || this.configOptions.creationTimestamp) {
       if (this.configOptions.reproducibleLiquibaseTimestamp) {
         // Counter already started.
         now = this.configOptions.reproducibleLiquibaseTimestamp;
@@ -1807,7 +1816,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * Generate a KeyStore for uaa authorization server.
+   * Generate a KeyStore.
    */
   generateKeyStore() {
     const done = this.async();
@@ -1990,11 +1999,8 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
           return 'Your base name cannot contain special characters or a blank space';
         }
-        if ((generator.applicationType === 'microservice' || generator.applicationType === 'uaa') && /_/.test(input)) {
+        if (generator.applicationType === 'microservice' && /_/.test(input)) {
           return 'Your base name cannot contain underscores as this does not meet the URI spec';
-        }
-        if (generator.applicationType === 'uaa' && input === 'auth') {
-          return "Your UAA base name cannot be named 'auth' as it conflicts with the gateway login routes";
         }
         if (input === 'application') {
           return "Your base name cannot be named 'application' as this is a reserved name for Spring Boot";
@@ -2267,6 +2273,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         dest.creationTimestamp = creationTimestamp;
       }
     }
+    if (options.reproducible !== undefined) {
+      dest.reproducible = options.reproducible;
+    }
   }
 
   /**
@@ -2330,9 +2339,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.auth) {
       this.jhipsterConfig.authenticationType = options.auth;
     }
-    if (options.uaaBaseName) {
-      this.jhipsterConfig.uaaBaseName = options.uaaBaseName;
-    }
     if (options.searchEngine) {
       this.jhipsterConfig.searchEngine = options.searchEngine;
     }
@@ -2388,6 +2394,17 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     if (options.pkType) {
       this.jhipsterConfig.pkType = options.pkType;
+    }
+
+    if (options.clientPackageManager) {
+      this.jhipsterConfig.clientPackageManager = options.clientPackageManager;
+    }
+    if (this.jhipsterConfig.clientPackageManager) {
+      const usingNpm = this.jhipsterConfig.clientPackageManager === 'npm';
+      if (!usingNpm) {
+        this.warning(`Using unsupported package manager: ${this.jhipsterConfig.clientPackageManager}. Install will not be executed.`);
+        options.skipInstall = true;
+      }
     }
   }
 
@@ -2482,7 +2499,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.packageName = config.packageName;
     dest.packageFolder = config.packageFolder;
     dest.serverPort = config.serverPort;
-    dest.uaaBaseName = config.uaaBaseName;
     dest.buildTool = config.buildTool;
 
     dest.authenticationType = config.authenticationType;
@@ -2564,24 +2580,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * Get default config based on applicationType
    */
   getDefaultConfigForApplicationType(applicationType = this.jhipsterConfig.applicationType) {
-    let defaultAppTypeConfig = {};
-    switch (applicationType) {
-      case 'monolith':
-        defaultAppTypeConfig = defaultApplicationOptions.getConfigForMonolithApplication();
-        break;
-      case 'gateway':
-        defaultAppTypeConfig = defaultApplicationOptions.getConfigForGatewayApplication();
-        break;
-      case 'microservice':
-        defaultAppTypeConfig = defaultApplicationOptions.getConfigForMicroserviceApplication();
-        break;
-      case 'uaa':
-        defaultAppTypeConfig = defaultApplicationOptions.getConfigForUAAApplication();
-        break;
-      default:
-        defaultAppTypeConfig = defaultApplicationOptions.getDefaultConfigForNewApplication();
-    }
-    return { ...defaultAppTypeConfig, ...defaultConfig };
+    return { ...defaultApplicationOptions.getConfigForApplicationType(applicationType), ...defaultConfig };
   }
 
   setConfigDefaults(defaults = this.jhipsterConfig.applicationType !== MICROSERVICE ? defaultConfig : defaultConfigMicroservice) {

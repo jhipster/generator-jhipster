@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const { GATEWAY, MONOLITH, MICROSERVICE, UAA } = require('./application-types');
+const { GATEWAY, MONOLITH, MICROSERVICE } = require('./application-types');
 const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NEO4J, NO, ORACLE, POSTGRESQL, SQL } = require('./database-types');
 
 const ApplicationOptionTypes = {
@@ -74,7 +74,6 @@ const optionNames = {
   SKIP_SERVER: 'skipServer',
   SKIP_USER_MANAGEMENT: 'skipUserManagement',
   TEST_FRAMEWORKS: 'testFrameworks',
-  UAA_BASE_NAME: 'uaaBaseName',
   WEBSOCKET: 'websocket',
   WITH_ENTITIES: 'withEntities',
 };
@@ -84,13 +83,11 @@ const optionValues = {
     [MONOLITH]: MONOLITH,
     [MICROSERVICE]: MICROSERVICE,
     [GATEWAY]: GATEWAY,
-    [UAA]: UAA,
   },
   [optionNames.AUTHENTICATION_TYPE]: {
     jwt: 'jwt',
     oauth2: 'oauth2',
     session: 'session',
-    uaa: 'uaa',
   },
   [optionNames.BASE_NAME]: 'jhipster',
   [optionNames.BLUEPRINT]: undefined,
@@ -186,7 +183,6 @@ const optionValues = {
     cucumber: 'cucumber',
     gatling: 'gatling',
   },
-  [optionNames.UAA_BASE_NAME]: '../uaa',
   [optionNames.USE_NPM]: true,
   [optionNames.WEBSOCKET]: {
     'spring-websocket': 'spring-websocket',
@@ -242,7 +238,6 @@ const optionTypes = {
   [optionNames.SKIP_SERVER]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.SKIP_USER_MANAGEMENT]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.TEST_FRAMEWORKS]: { type: ApplicationOptionTypes.LIST },
-  [optionNames.UAA_BASE_NAME]: { type: ApplicationOptionTypes.STRING },
   [optionNames.USE_NPM]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.WEBSOCKET]: { type: ApplicationOptionTypes.STRING },
   [optionNames.WITH_ENTITIES]: { type: ApplicationOptionTypes.BOOLEAN },

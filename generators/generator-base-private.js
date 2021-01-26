@@ -30,8 +30,6 @@ const through = require('through2');
 const fs = require('fs');
 const minimatch = require('minimatch');
 const findUp = require('find-up');
-const prettierPluginJava = require('prettier-plugin-java');
-const prettierPluginPackagejson = require('prettier-plugin-packagejson');
 
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
@@ -1060,31 +1058,6 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
   }
 
   /**
-   * Get UAA app name from path provided.
-   * @param {string} input - path
-   */
-  getUaaAppName(input) {
-    if (!input) return false;
-
-    input = input.trim();
-    let fromPath = '';
-    if (path.isAbsolute(input)) {
-      fromPath = `${input}/.yo-rc.json`;
-    } else {
-      fromPath = this.destinationPath(`${input}/.yo-rc.json`);
-    }
-
-    if (shelljs.test('-f', fromPath)) {
-      const fileData = this.fs.readJSON(fromPath);
-      if (fileData && fileData['generator-jhipster']) {
-        return fileData['generator-jhipster'];
-      }
-      return false;
-    }
-    return false;
-  }
-
-  /**
    * Return the method name which converts the filter to specification
    * @param {string} fieldType
    */
@@ -1344,10 +1317,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
           return;
         }
 
-        const prettierOptions = { plugins: [prettierPluginPackagejson] };
-        if (!this.skipServer && !this.jhipsterConfig.skipServer) {
-          prettierOptions.plugins.push(prettierPluginJava);
-        }
+        const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
         const filterPatternForPrettier = `{,.,**/,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
         const prettierFilter = filter(['.yo-rc.json', filterPatternForPrettier], { restore: true });

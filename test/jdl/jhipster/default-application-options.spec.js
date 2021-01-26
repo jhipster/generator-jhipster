@@ -23,7 +23,6 @@ const {
   getConfigForMonolithApplication,
   getConfigForGatewayApplication,
   getConfigForMicroserviceApplication,
-  getConfigForUAAApplication,
   getDefaultConfigForNewApplication,
 } = require('../../../jdl/jhipster/default-application-options');
 
@@ -327,92 +326,6 @@ describe('DefaultApplicationOptions', () => {
       });
       it('should remove the server skipping option', () => {
         expect(options.skipServer).to.be.undefined;
-      });
-    });
-  });
-  describe('getConfigForUAAApplication', () => {
-    context('without passing custom options', () => {
-      let options;
-
-      before(() => {
-        options = getConfigForUAAApplication();
-      });
-
-      it('should set the application type to uaa', () => {
-        expect(options.applicationType).to.equal('uaa');
-      });
-      it('should set the server port to 9999', () => {
-        expect(options.serverPort).to.equal('9999');
-      });
-      it('should set the authentication type to uaa', () => {
-        expect(options.authenticationType).to.equal('uaa');
-      });
-      it('should set the cache provider to hazelcast', () => {
-        expect(options.cacheProvider).to.equal('hazelcast');
-      });
-      it('should set the user management skipping option to false', () => {
-        expect(options.skipUserManagement).to.be.false;
-      });
-      it('should set the client skipping option to true', () => {
-        expect(options.skipClient).to.be.true;
-      });
-      it('should unset the client framework option', () => {
-        expect(options.clientFramework).to.be.undefined;
-      });
-      it('should unset the client theme option', () => {
-        expect(options.clientTheme).to.be.undefined;
-      });
-      it('should unset the client theme variant option', () => {
-        expect(options.clientThemeVariant).to.be.undefined;
-      });
-      it('should unset the withAdminUi option', () => {
-        expect(options.withAdminUi).to.be.undefined;
-      });
-      it('should unset the server skipping option', () => {
-        expect(options.skipServer).to.be.undefined;
-      });
-      it('should set the service discovery type to eureka', () => {
-        expect(options.serviceDiscoveryType).to.equal('eureka');
-      });
-    });
-    context('when passing custom options', () => {
-      let options;
-
-      before(() => {
-        options = getConfigForUAAApplication({
-          applicationType: 'ignored',
-          authenticationType: 'jwt',
-          skipClient: false,
-          clientFramework: 'react',
-          clientTheme: 'something',
-          clientThemeVariant: 'somethingElse',
-          skipServer: true,
-        });
-      });
-
-      it('should ignore the application type option', () => {
-        expect(options.applicationType).to.equal('uaa');
-      });
-      it('should ignore the client skipping option', () => {
-        expect(options.skipClient).to.be.true;
-      });
-      it('should remove the client framework option', () => {
-        expect(options.clientFramework).to.be.undefined;
-      });
-      it('should remove the client theme option', () => {
-        expect(options.clientTheme).to.be.undefined;
-      });
-      it('should remove the client theme variant option', () => {
-        expect(options.clientThemeVariant).to.be.undefined;
-      });
-      it('should remove the withAdminUi option', () => {
-        expect(options.withAdminUi).to.be.undefined;
-      });
-      it('should remove the server skipping option', () => {
-        expect(options.skipServer).to.be.undefined;
-      });
-      it('should always set the authentication type option to uaa', () => {
-        expect(options.authenticationType).to.equal('uaa');
       });
     });
   });

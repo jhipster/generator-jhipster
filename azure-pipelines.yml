@@ -32,7 +32,7 @@ jobs:
       JHI_JDK: 11
       # if JHI_LIB_BRANCH value is release, use the release from Maven
       JHI_LIB_REPO: https://github.com/jhipster/jhipster-bom.git
-      JHI_LIB_BRANCH: release
+      JHI_LIB_BRANCH: main
       # if JHI_GEN_BRANCH value is release, use the release from NPM
       JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
       JHI_GEN_BRANCH: main
@@ -60,9 +60,6 @@ jobs:
           JHI_ENTITY: sqllight
           JHI_PROFILE: prod
           JHI_E2E: 1
-        ms-ngx-gateway-eureka-uaa:
-          JHI_APP: ms-ngx-gateway-eureka-uaa
-          JHI_ENTITY: uaa
         ms-micro-eureka-jwt:
           JHI_APP: ms-micro-eureka-jwt
           JHI_ENTITY: micro

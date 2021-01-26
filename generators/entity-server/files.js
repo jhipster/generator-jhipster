@@ -223,7 +223,7 @@ const serverFiles = {
       templates: [
         {
           file: 'package/domain/EntityTest.java',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.entityClass}Test.java`,
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.asEntity(generator.entityClass)}Test.java`,
         },
       ],
     },

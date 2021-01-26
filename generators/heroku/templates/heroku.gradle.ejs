@@ -19,8 +19,8 @@
 apply plugin: "com.heroku.sdk.heroku-gradle"
 
 heroku {
-  appName = "<%= herokuAppName %>"
-  buildpacks = ["heroku/jvm"]
+    appName = "<%= herokuAppName %>"
+    buildpacks = ["heroku/jvm"]
 }
 <%_ if (herokuDeployType === 'git') { _%>
 

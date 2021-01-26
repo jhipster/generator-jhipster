@@ -27,8 +27,8 @@ import { mergeMap } from 'rxjs/operators';
 import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 <%_ } _%>
-<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-import { AuthServerProvider<% if (authenticationType === 'uaa') { %>, LOGOUT_URL<% } %> } from 'app/core/auth/auth-jwt.service';
+<%_ if (authenticationType === 'jwt') { _%>
+import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
 import { AuthServerProvider<% if (authenticationType === 'session') { %>, LOGOUT_URL<% } %> } from 'app/core/auth/auth-session.service';
 <%_ } _%>
@@ -61,7 +61,7 @@ export class LoginService {
   }
   <%_ } _%>
 
-  <%_ if (authenticationType === 'uaa' || authenticationType === 'session') { _%>
+  <%_ if (authenticationType === 'session') { _%>
   logoutUrl(): string {
     return LOGOUT_URL;
   }

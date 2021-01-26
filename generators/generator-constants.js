@@ -31,14 +31,14 @@ const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the varia
 const HUSKY_VERSION = '4.3.7';
 const LINT_STAGED_VERSION = '10.5.3';
 const NODE_VERSION = '14.15.0';
-const NPM_VERSION = '6.14.11';
+const NPM_VERSION = '7.4.3';
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
 
 const GRADLE_VERSION = '6.8';
 const JIB_VERSION = '2.7.1';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '7.0.0-beta.1';
+const JHIPSTER_DEPENDENCIES_VERSION = '7.0.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
 const SPRING_BOOT_VERSION = '2.3.8.RELEASE';
 const LIQUIBASE_VERSION = '4.2.2';

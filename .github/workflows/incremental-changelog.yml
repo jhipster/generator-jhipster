@@ -31,13 +31,13 @@ on:
       - 'utils/**'
       - 'test-integration/incremental-changelog-samples/**'
       - 'generators/entity/**'
-      - 'generators/database-chagelog/**'
-      - 'generators/database-chagelog-liquibase/**'
+      - 'generators/database-changelog/**'
+      - 'generators/database-changelog-liquibase/**'
 env:
   JHI_RUN_APP: 1
   JHI_JDK: 11
   JHI_LIB_REPO: https://github.com/jhipster/jhipster-bom.git
-  JHI_LIB_BRANCH: release
+  JHI_LIB_BRANCH: main
   JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
   JHI_GEN_BRANCH: main
   SPRING_OUTPUT_ANSI_ENABLED: ALWAYS
@@ -47,7 +47,6 @@ env:
   JHI_HOME: ${{ github.workspace }}/generator-jhipster
   JHI_SCRIPTS: ${{ github.workspace }}/generator-jhipster/test-integration/scripts
   JHI_FOLDER_APP: ${{ github.workspace }}/app
-  JHI_FOLDER_UAA: ${{ github.workspace }}/uaa
   NG_CLI_ANALYTICS: 'false'
   JHI_GITHUB_CI: true
   FORCE_COLOR: 1
@@ -75,6 +74,7 @@ jobs:
       fail-fast: false
       matrix:
         node_version: [14.15.0]
+        npm_version: [7.4.3]
         os: [ubuntu-20.04]
         app-type:
           - liquibase-jdl-rename-field
@@ -149,6 +149,8 @@ jobs:
             ${{ runner.os }}-e2e-${{ matrix.app-type }}-
       - name: 'ENV: display variables'
         run: $JHI_SCRIPTS/01-display-configuration.sh
+      - name: 'TOOLS: install npm@${{ matrix.npm_version }}'
+        run: npm install -g npm@${{ matrix.npm_version }}
       - name: 'TOOLS: configure tools installed by the system'
         run: $JHI_SCRIPTS/03-system.sh
       - name: 'TOOLS: configure git'

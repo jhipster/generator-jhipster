@@ -151,7 +151,7 @@ export const getSession: () => void = () => <%_ if (enableTranslation) { _%>asyn
     <%_ if (enableTranslation) { _%>
     await dispatch({
       type: ACTION_TYPES.GET_SESSION,
-      payload: axios.get('<%= apiUaaPath %>api/account')
+      payload: axios.get('api/account')
     });
 
     const { account } = getState().authentication;
@@ -162,7 +162,7 @@ export const getSession: () => void = () => <%_ if (enableTranslation) { _%>asyn
     <%_ } else { _%>
     dispatch({
       type: ACTION_TYPES.GET_SESSION,
-      payload: axios.get('<%= apiUaaPath %>api/account')
+      payload: axios.get('api/account')
     });
     <%_ } _%>
 }
@@ -193,14 +193,6 @@ export const login: (username: string, password: string, rememberMe?: boolean) =
   }
   await dispatch(getSession());
 };
-<%_ } else if (authenticationType === 'uaa') { _%>
-export const login: (username: string, password: string, rememberMe?: boolean) => void = (username, password, rememberMe = false) => async (dispatch, getState) => {
-  const result = await dispatch({
-    type: ACTION_TYPES.LOGIN,
-    payload: axios.post('auth/login', { username, password })
-  });
-  await dispatch(getSession());
-};
 <%_ } _%>
 
 <%_ if (authenticationType === 'jwt') { _%>
@@ -223,7 +215,7 @@ export const logout: () => void = () => dispatch => {
 export const logout: () => void = () => async dispatch => {
   await dispatch({
     type: ACTION_TYPES.LOGOUT,
-    payload: axios.post(<%_ if (authenticationType === 'uaa') { _%>'auth/logout'<%_ } else { _%>'api/logout'<%_ } _%>, {})
+    payload: axios.post('api/logout', {})
   });
 
   // fetch new csrf token

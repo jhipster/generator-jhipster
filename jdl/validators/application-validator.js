@@ -21,7 +21,7 @@ const Validator = require('./validator');
 const UnaryOptionValidator = require('./unary-option-validator');
 const BinaryOptionValidator = require('./binary-option-validator');
 const { OptionNames, OptionValues, getTypeForOption, doesOptionExist, doesOptionValueExist } = require('../jhipster/application-options');
-const { UAA, MICROSERVICE } = require('../jhipster/application-types');
+const { MICROSERVICE } = require('../jhipster/application-types');
 const { COUCHBASE, NEO4J, CASSANDRA, MONGODB, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL, SQL } = require('../jhipster/database-types');
 const { Options } = require('../jhipster/binary-options');
 
@@ -53,18 +53,13 @@ function checkRequiredOptionsAreSet(jdlApplication) {
   ) {
     throw new Error('The application applicationType, authenticationType, baseName and buildTool options are required.');
   }
-  if (jdlApplication.getConfigurationOptionValue('applicationType') === UAA && !jdlApplication.hasConfigurationOption('uaaBaseName')) {
-    throw new Error(
-      `The UAA base name option is required for the UAA application ${jdlApplication.getConfigurationOptionValue('baseName')}.`
-    );
-  }
 }
 
 function checkBaseNameAgainstApplicationType(jdlApplication) {
   const applicationBaseName = jdlApplication.getConfigurationOptionValue('baseName');
   const applicationType = jdlApplication.getConfigurationOptionValue('applicationType');
-  if (applicationBaseName.includes('_') && (applicationType === UAA || applicationType === MICROSERVICE)) {
-    throw new Error("An application name can't contain underscores if the application is a microservice or a UAA application.");
+  if (applicationBaseName.includes('_') && applicationType === MICROSERVICE) {
+    throw new Error("An application name can't contain underscores if the application is a microservice.");
   }
 }
 
@@ -74,7 +69,6 @@ function checkForValidValues(jdlApplication) {
     'packageName',
     'packageFolder',
     'serverPort',
-    'uaaBaseName',
     'blueprint',
     'jhiPrefix',
     'jwtSecretKey',

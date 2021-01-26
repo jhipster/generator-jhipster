@@ -28,7 +28,7 @@ const { expect } = chai;
 const ApplicationValidator = require('../../../jdl/validators/application-validator');
 
 const { OptionNames, OptionValues } = require('../../../jdl/jhipster/application-options');
-const { MONOLITH, UAA, MICROSERVICE, GATEWAY } = require('../../../jdl/jhipster/application-types');
+const { MONOLITH, MICROSERVICE, GATEWAY } = require('../../../jdl/jhipster/application-types');
 const { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE, NEO4J } = require('../../../jdl/jhipster/database-types');
 const { READ_ONLY } = require('../../../jdl/jhipster/unary-options');
 const BinaryOptions = require('../../../jdl/jhipster/binary-options');
@@ -69,23 +69,6 @@ describe('ApplicationValidator', () => {
           expect(() => {
             validator.validate(new JDLApplication({ config: {} }));
           }).to.throw(/^The application applicationType, authenticationType, baseName and buildTool options are required\.$/);
-        });
-      });
-      context('being an UAA application', () => {
-        context('without any uaaBaseName option', () => {
-          it('should fail', () => {
-            expect(() =>
-              validator.validate(
-                new JDLApplication({
-                  config: {
-                    ...basicValidApplicationConfig,
-                    baseName: 'test_app',
-                    applicationType: UAA,
-                  },
-                })
-              )
-            ).to.throw(/^The UAA base name option is required for the UAA application test_app\.$/);
-          });
         });
       });
       context('with invalid test framework values', () => {
@@ -387,22 +370,6 @@ describe('ApplicationValidator', () => {
         });
       });
       context('with a name containing an underscore', () => {
-        context('with a UAA application', () => {
-          it('should fail', () => {
-            expect(() =>
-              validator.validate(
-                new JDLApplication({
-                  config: {
-                    ...basicValidApplicationConfig,
-                    baseName: 'test_app',
-                    applicationType: UAA,
-                    uaaBaseName: 'test',
-                  },
-                })
-              )
-            ).to.throw(/^An application name can't contain underscores if the application is a microservice or a UAA application\.$/);
-          });
-        });
         context('with a microservice application', () => {
           it('should fail', () => {
             expect(() =>
@@ -411,7 +378,7 @@ describe('ApplicationValidator', () => {
                   config: { ...basicValidApplicationConfig, baseName: 'test_app', applicationType: MICROSERVICE },
                 })
               )
-            ).to.throw(/^An application name can't contain underscores if the application is a microservice or a UAA application\.$/);
+            ).to.throw(/^An application name can't contain underscores if the application is a microservice\.$/);
           });
         });
         context('with any other application type', () => {

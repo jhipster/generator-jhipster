@@ -12,5 +12,8 @@ insert_final_newline = true
 [*.md]
 trim_trailing_whitespace = false
 
-[{*.java.ejs,*.xml.ejs,*.sh}]
+[{*.{java,java.ejs,xml.ejs,gradle.ejs,sh,sh.ejs,n1ql.ejs,cql.ejs,scala.ejs},USAGE}]
+indent_size = 4
+
+[generators/entity-server/templates/**/*_template.ejs]
 indent_size = 4

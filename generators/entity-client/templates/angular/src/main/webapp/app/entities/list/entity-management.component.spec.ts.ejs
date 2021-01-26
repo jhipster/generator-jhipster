@@ -19,6 +19,7 @@
 <%_
 const tsKeyId = generateTestEntityId(primaryKey.type);
 const entityArrayOptionalChainSymbol = pagination === 'infinite-scroll' ? '' : '?.';
+const order = pagination === 'infinite-scroll' ? 'asc' : 'desc';
 _%>
 <%_ if (pagination === 'pagination' || searchEngine !== false) { _%>
 jest.mock('@angular/router');
@@ -86,16 +87,19 @@ describe('Component Tests', () => {
             fixture = TestBed.createComponent(<%= entityAngularName %>Component);
             comp = fixture.componentInstance;
             service = TestBed.inject(<%= entityAngularName %>Service);
+
+            const headers = new HttpHeaders().append('link', 'link;link');
+            spyOn(service, 'query').and.returnValue(
+                of(
+                    new HttpResponse({
+                        body: [new <%= entityAngularName %>(<%- tsKeyId %>)],
+                        headers,
+                    })
+                )
+            );
         });
 
         it('Should call load all on init', () => {
-            // GIVEN
-            const headers = new HttpHeaders().append('link', 'link;link');
-            spyOn(service, 'query').and.returnValue(of(new HttpResponse({
-                body: [new <%= entityAngularName %>(<%- tsKeyId %>)],
-                headers
-            })));
-
             // WHEN
             comp.ngOnInit();
 
@@ -106,17 +110,6 @@ describe('Component Tests', () => {
 
     <%_ if (pagination !== 'no') { _%>
         it('should load a page', () => {
-            // GIVEN
-            const headers = new HttpHeaders().append('link', 'link;link');
-            spyOn(service, 'query').and.returnValue(
-                of(
-                    new HttpResponse({
-                        body: [new <%= entityAngularName %>(<%- tsKeyId %>)],
-                        headers
-                    })
-                )
-            );
-
             // WHEN
             comp.loadPage(1);
 
@@ -125,20 +118,30 @@ describe('Component Tests', () => {
             expect(comp.<%= entityInstancePlural %><%= entityArrayOptionalChainSymbol %>[0]).toEqual(jasmine.objectContaining({ <%- primaryKey.name %>: <%- tsKeyId %> }));
         });
 
-        <%_ if (pagination === 'infinite-scroll') { _%>
+        it('should calculate the sort attribute for an id', () => {
+            // WHEN
+            comp.ngOnInit();
 
-        it('should re-initialize the page', () => {
+            // THEN
+            expect(service.query).toHaveBeenCalledWith(expect.objectContaining({ sort: ['<%- primaryKey.name %>,<%= order %>'] }));
+        });
+
+        it('should calculate the sort attribute for a non-id attribute', () => {
+            // INIT
+            comp.ngOnInit();
+
             // GIVEN
-            const headers = new HttpHeaders().append('link', 'link;link');
-            spyOn(service, 'query').and.returnValue(
-                of(
-                    new HttpResponse({
-                        body: [new <%= entityAngularName %>(<%- tsKeyId %>)],
-                        headers
-                    })
-                )
-            );
+            comp.predicate = 'name';
 
+            // WHEN
+            comp.loadPage(1);
+
+            // THEN
+            expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['name,<%= order %>', '<%- primaryKey.name %>'] }));
+        });
+
+        <%_ if (pagination === 'infinite-scroll') { _%>
+        it('should re-initialize the page', () => {
             // WHEN
             comp.loadPage(1);
             comp.reset();
@@ -148,55 +151,6 @@ describe('Component Tests', () => {
             expect(service.query).toHaveBeenCalledTimes(2);
             expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({ <%- primaryKey.name %>: <%- tsKeyId %> }));
         });
-
-        it('should calculate the sort attribute for an id', () => {
-            // WHEN
-            comp.ngOnInit();
-            const result = comp.sort();
-
-            // THEN
-            expect(result).toEqual(['<%- primaryKey.name %>,asc']);
-        });
-
-        it('should calculate the sort attribute for a non-id attribute', () => {
-            // INIT
-            comp.ngOnInit();
-
-            // GIVEN
-            comp.predicate = 'name';
-
-            // WHEN
-            const result = comp.sort();
-
-            // THEN
-                expect(result).toEqual(['name,asc', '<%- primaryKey.name %>']);
-        });
-
-        <%_ } else { _%>
-
-        it('should calculate the sort attribute for an id', () => {
-            // WHEN
-            comp.ngOnInit();
-            const result = comp.sort();
-
-            // THEN
-            expect(result).toEqual(['<%- primaryKey.name %>,desc']);
-        });
-
-        it('should calculate the sort attribute for a non-id attribute', () => {
-            // INIT
-            comp.ngOnInit();
-
-            // GIVEN
-            comp.predicate = 'name';
-
-            // WHEN
-            const result = comp.sort();
-
-            // THEN
-            expect(result).toEqual(['name,desc', '<%- primaryKey.name %>']);
-        });
-
         <%_ } _%>
     <%_ } _%>
     });

@@ -211,7 +211,9 @@ describe('JHipster Heroku Sub Generator', () => {
     describe('with existing app', () => {
       const existingHerokuAppName = 'jhipster-existing';
       beforeEach(done => {
-        stub.withArgs('heroku apps:info --json').yields(false, `{"app":{"name":"${existingHerokuAppName}"}, "dynos":[]}`);
+        stub
+          .withArgs(`heroku apps:info --json ${existingHerokuAppName}`)
+          .yields(false, `{"app":{"name":"${existingHerokuAppName}"}, "dynos":[]}`);
         stub.withArgs(`heroku addons:create jawsdb:kitefin --as DATABASE --app ${existingHerokuAppName}`).yields(false, '', '');
         helpers
           .run(require.resolve('../generators/heroku'))
