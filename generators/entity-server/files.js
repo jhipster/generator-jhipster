@@ -253,6 +253,7 @@ const serverFiles = {
 module.exports = {
   writeFiles,
   serverFiles,
+  customizeFiles,
 };
 
 function writeFiles() {
@@ -265,26 +266,13 @@ function writeFiles() {
     },
 
     writeServerFiles() {
-      if (this.skipServer) return;
+      if (this.skipServer) return undefined;
 
       // write server side files
       if (this.reactive) {
-        this.writeFilesToDisk(serverFiles, ['reactive', '']);
-      } else {
-        this.writeFilesToDisk(serverFiles);
+        return this.writeFilesToDisk(serverFiles, ['reactive', '']);
       }
-
-      if (this.databaseType === 'sql') {
-        if (['ehcache', 'caffeine', 'infinispan', 'redis'].includes(this.cacheProvider) && this.enableHibernateCache) {
-          this.addEntityToCache(
-            this.asEntity(this.entityClass),
-            this.relationships,
-            this.packageName,
-            this.packageFolder,
-            this.cacheProvider
-          );
-        }
-      }
+      return this.writeFilesToDisk(serverFiles);
     },
 
     writeEnumFiles() {
@@ -314,4 +302,12 @@ function writeFiles() {
       });
     },
   };
+}
+
+function customizeFiles() {
+  if (this.databaseType === 'sql') {
+    if (['ehcache', 'caffeine', 'infinispan', 'redis'].includes(this.cacheProvider) && this.enableHibernateCache) {
+      this.addEntityToCache(this.asEntity(this.entityClass), this.relationships, this.packageName, this.packageFolder, this.cacheProvider);
+    }
+  }
 }

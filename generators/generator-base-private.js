@@ -736,10 +736,11 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     const customDestination = _this.destinationPath(destination);
     if (!customDestination) {
       this.debug(`File ${destination} ignored`);
-      return;
+      return Promise.resolved();
     }
-    jhipsterUtils.renderContent(source, _this, _context, options, res => {
+    return jhipsterUtils.renderContent(source, _this, _context, options).then(res => {
       _this.fs.write(customDestination, res);
+      return customDestination;
     });
   }
 

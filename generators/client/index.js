@@ -23,7 +23,7 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
-const writeVueFiles = require('./files-vue').writeFiles;
+const { writeFiles: writeVueFiles, customizeFiles: customizeVueFiles } = require('./files-vue');
 const writeCommonFiles = require('./files-common').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
@@ -299,6 +299,14 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _postWriting() {
     return {
+      customizeFiles() {
+        if (this.skipClient) return;
+        if (this.clientFramework === VUE) {
+          return customizeVueFiles.call(this);
+        }
+        return undefined;
+      },
+
       packageJsonScripts() {
         if (this.skipClient) return;
         const packageJsonStorage = this.createStorage('package.json');

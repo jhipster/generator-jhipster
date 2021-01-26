@@ -358,5 +358,5 @@ module.exports = {
 
 function writeFiles() {
   // write React files
-  this.writeFilesToDisk(files, 'react');
+  return this.writeFilesToDisk(files, 'react');
 }

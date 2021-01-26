@@ -1787,7 +1787,7 @@ function writeFiles() {
     },
 
     writeFiles() {
-      this.writeFilesToDisk(serverFiles);
+      return this.writeFilesToDisk(serverFiles);
     },
   };
 }
