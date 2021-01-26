@@ -7,6 +7,6 @@
     "lint-staged": "10.5.3"
   },
   "dependencies": {
-    "dayjs": "1.10.3"
+    "dayjs": "1.10.4"
   }
 }
