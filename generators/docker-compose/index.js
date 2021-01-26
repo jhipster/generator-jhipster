@@ -198,12 +198,12 @@ module.exports = class extends BaseDockerGenerator {
           this.authenticationType = appConfig.authenticationType;
 
           // Dump the file
-          let yamlString = jsyaml.dump(parentConfiguration, { indent: 4, lineWidth: -1 });
+          let yamlString = jsyaml.dump(parentConfiguration, { indent: 2, lineWidth: -1 });
 
           // Add extra indentation for each lines
           const yamlArray = yamlString.split('\n');
           for (let j = 0; j < yamlArray.length; j++) {
-            yamlArray[j] = `    ${yamlArray[j]}`;
+            yamlArray[j] = `  ${yamlArray[j]}`;
           }
           yamlString = yamlArray.join('\n');
           this.appsYaml.push(yamlString);
