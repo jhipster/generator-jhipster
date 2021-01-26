@@ -26,6 +26,128 @@
 # ===================================================================
 
 # ===================================================================
+# JHipster specific properties
+#
+# Full reference is available at: https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+jhipster:
+  <%_ if (applicationType === 'gateway') { _%>
+  gateway:
+    rate-limiting:
+      enabled: false
+      limit: 100000
+      duration-in-seconds: 3600
+    <%_ if (!reactive) { _%>
+    authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
+      app1: /api,/v3/api-docs # recommended dev configuration
+    <%_ } _%>
+  <%_ } _%>
+  <%_ if (cacheProvider !== 'no') { _%>
+  cache: # Cache configuration
+    <%_ if (cacheProvider === 'hazelcast') { _%>
+    hazelcast: # Hazelcast distributed cache
+      time-to-live-seconds: 3600
+      backup-count: 1
+    <%_ } _%>
+    <%_ if (cacheProvider === 'ehcache') { _%>
+    ehcache: # Ehcache configuration
+      time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
+      max-entries: 100 # Number of objects in each cache entry
+    <%_ } _%>
+    <%_ if (cacheProvider === 'caffeine') { _%>
+    caffeine: # Caffeine configuration
+      time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache. This sets expireAfterWrite in Caffeine (https://github.com/ben-manes/caffeine/wiki/Eviction#time-based)
+      max-entries: 100 # Number of objects in each cache entry
+    <%_ } _%>
+    <%_ if (cacheProvider === 'infinispan') { _%>
+    infinispan:
+      config-file: default-configs/default-jgroups-tcp.xml
+      statsEnabled: true
+      # local app cache
+      local:
+        time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
+        max-entries: 100 # Number of objects in each cache entry
+      # distributed app cache
+      distributed:
+        time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
+        max-entries: 100 # Number of objects in each cache entry
+        instance-count: 1
+      # replicated app cache
+      replicated:
+        time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
+        max-entries: 100 # Number of objects in each cache entry
+    <%_ } _%>
+    <%_ if (cacheProvider === 'memcached') { _%>
+    memcached: # Memcached configuration
+      # Disabled by default in dev mode as Memcached does not work with Spring Boot Devtools
+      # If you want to use Memcached, you must also enable it in CacheConfiguration
+      enabled: false
+    <%_ } _%>
+    <%_ if (cacheProvider === 'redis') { _%>
+    redis: # Redis configuration
+      expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
+      server: redis://localhost:6379
+      cluster: false
+      # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
+      # cluster: true
+    <%_ } _%>
+  <%_ } _%>
+  <%_ if (serviceDiscoveryType === 'eureka') { _%>
+  registry:
+    password: admin
+  <%_ } _%>
+  <%_ if (applicationType !== 'microservice') { _%>
+  # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
+  cors:
+    allowed-origins: "*"
+    allowed-methods: "*"
+    allowed-headers: "*"
+    <%_ if (authenticationType === 'session') { _%>
+    exposed-headers: "Link,X-Total-Count"
+    <%_ } else { _%>
+    exposed-headers: "Authorization,Link,X-Total-Count"
+    <%_ } _%>
+    allow-credentials: true
+    max-age: 1800
+  <%_ } else { _%>
+  # CORS is disabled by default on microservices, as you should access them through a gateway.
+  # If you want to enable it, please uncomment the configuration below.
+  # cors:
+  #   allowed-origins: "*"
+  #   allowed-methods: "*"
+  #   allowed-headers: "*"
+  #   exposed-headers: "Authorization,Link,X-Total-Count"
+  #   allow-credentials: true
+  #   max-age: 1800
+  <%_ } _%>
+  <%_ if (authenticationType === 'jwt') { _%>
+  security:
+    authentication:
+      jwt:
+        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
+        base64-secret: <%= jwtSecretKey %>
+        # Token is valid 24 hours
+        token-validity-in-seconds: 86400
+        token-validity-in-seconds-for-remember-me: 2592000
+  <%_ } _%>
+<%_ if (authenticationType === 'session' && !reactive) { _%>
+  security:
+    remember-me:
+      # security key (this key should be unique for your application, and kept secret)
+      key: <%= rememberMeKey %>
+<%_ } _%>
+  mail: # specific JHipster mail property, for standard properties see MailProperties
+    base-url: http://127.0.0.1:<%= serverPort %>
+  logging:
+    use-json-format: false # By default, logs are not in Json format
+    logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+      enabled: false
+      host: localhost
+      port: 5000
+      queue-size: 512
+
+# ===================================================================
 # Standard Spring Boot properties.
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
@@ -281,128 +403,6 @@ spring:
 
 server:
   port: <%= serverPort %>
-
-# ===================================================================
-# JHipster specific properties
-#
-# Full reference is available at: https://www.jhipster.tech/common-application-properties/
-# ===================================================================
-
-jhipster:
-  <%_ if (applicationType === 'gateway') { _%>
-  gateway:
-    rate-limiting:
-      enabled: false
-      limit: 100000
-      duration-in-seconds: 3600
-    <%_ if (!reactive) { _%>
-    authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
-      app1: /api,/v3/api-docs # recommended dev configuration
-    <%_ } _%>
-  <%_ } _%>
-  <%_ if (cacheProvider !== 'no') { _%>
-  cache: # Cache configuration
-    <%_ if (cacheProvider === 'hazelcast') { _%>
-    hazelcast: # Hazelcast distributed cache
-      time-to-live-seconds: 3600
-      backup-count: 1
-    <%_ } _%>
-    <%_ if (cacheProvider === 'ehcache') { _%>
-    ehcache: # Ehcache configuration
-      time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
-      max-entries: 100 # Number of objects in each cache entry
-    <%_ } _%>
-    <%_ if (cacheProvider === 'caffeine') { _%>
-    caffeine: # Caffeine configuration
-      time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache. This sets expireAfterWrite in Caffeine (https://github.com/ben-manes/caffeine/wiki/Eviction#time-based)
-      max-entries: 100 # Number of objects in each cache entry
-    <%_ } _%>
-    <%_ if (cacheProvider === 'infinispan') { _%>
-    infinispan:
-      config-file: default-configs/default-jgroups-tcp.xml
-      statsEnabled: true
-      # local app cache
-      local:
-        time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
-        max-entries: 100 # Number of objects in each cache entry
-      # distributed app cache
-      distributed:
-        time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
-        max-entries: 100 # Number of objects in each cache entry
-        instance-count: 1
-      # replicated app cache
-      replicated:
-        time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
-        max-entries: 100 # Number of objects in each cache entry
-    <%_ } _%>
-    <%_ if (cacheProvider === 'memcached') { _%>
-    memcached: # Memcached configuration
-      # Disabled by default in dev mode as Memcached does not work with Spring Boot Devtools
-      # If you want to use Memcached, you must also enable it in CacheConfiguration
-      enabled: false
-    <%_ } _%>
-    <%_ if (cacheProvider === 'redis') { _%>
-    redis: # Redis configuration
-      expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
-      server: redis://localhost:6379
-      cluster: false
-      # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
-      # cluster: true
-    <%_ } _%>
-  <%_ } _%>
-  <%_ if (serviceDiscoveryType === 'eureka') { _%>
-  registry:
-    password: admin
-  <%_ } _%>
-  <%_ if (applicationType !== 'microservice') { _%>
-  # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
-  cors:
-    allowed-origins: "*"
-    allowed-methods: "*"
-    allowed-headers: "*"
-    <%_ if (authenticationType === 'session') { _%>
-    exposed-headers: "Link,X-Total-Count"
-    <%_ } else { _%>
-    exposed-headers: "Authorization,Link,X-Total-Count"
-    <%_ } _%>
-    allow-credentials: true
-    max-age: 1800
-  <%_ } else { _%>
-  # CORS is disabled by default on microservices, as you should access them through a gateway.
-  # If you want to enable it, please uncomment the configuration below.
-  # cors:
-  #   allowed-origins: "*"
-  #   allowed-methods: "*"
-  #   allowed-headers: "*"
-  #   exposed-headers: "Authorization,Link,X-Total-Count"
-  #   allow-credentials: true
-  #   max-age: 1800
-  <%_ } _%>
-  <%_ if (authenticationType === 'jwt') { _%>
-  security:
-    authentication:
-      jwt:
-        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
-        base64-secret: <%= jwtSecretKey %>
-        # Token is valid 24 hours
-        token-validity-in-seconds: 86400
-        token-validity-in-seconds-for-remember-me: 2592000
-  <%_ } _%>
-<%_ if (authenticationType === 'session' && !reactive) { _%>
-  security:
-    remember-me:
-      # security key (this key should be unique for your application, and kept secret)
-      key: <%= rememberMeKey %>
-<%_ } _%>
-  mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: http://127.0.0.1:<%= serverPort %>
-  logging:
-    use-json-format: false # By default, logs are not in Json format
-    logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
-      enabled: false
-      host: localhost
-      port: 5000
-      queue-size: 512
 
 # ===================================================================
 # Application specific properties
