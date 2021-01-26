@@ -354,7 +354,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         const packageJsonStorage = this.createStorage('package.json');
         const scriptsStorage = packageJsonStorage.createStorage('scripts');
         const databaseType = this.jhipsterConfig.databaseType;
-        const dockerPorts = [];
+        const dockerAwaitScripts = [];
         if (databaseType === 'sql') {
           const prodDatabaseType = this.jhipsterConfig.prodDatabaseType;
           if (prodDatabaseType === 'no' || prodDatabaseType === 'oracle') {
@@ -398,7 +398,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
               scriptsStorage.set(`docker:${dockerConfig}:build`, `docker-compose -f ${dockerFile} build`);
               dockerBuild.push(`npm run docker:${dockerConfig}:build`);
             } else if (dockerConfig === 'jhipster-registry') {
-              dockerPorts.push(8761);
+              dockerAwaitScripts.push('wait-on tcp:8761 && sleep 20');
             }
 
             scriptsStorage.set(`docker:${dockerConfig}:up`, `docker-compose -f ${dockerFile} up -d`);
@@ -408,7 +408,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           }
         });
         scriptsStorage.set({
-          'docker:others:await': dockerPorts.map(port => `wait-on tcp:${port}`).join(' && '),
+          'docker:others:await': dockerAwaitScripts.join(' && '),
           'predocker:others:up': dockerBuild.join(' && '),
           'docker:others:up': dockerOthersUp.join(' && '),
           'docker:others:down': dockerOthersDown.join(' && '),
