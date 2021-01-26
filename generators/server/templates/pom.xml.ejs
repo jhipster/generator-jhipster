@@ -775,6 +775,12 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
         </dependency>
+        <!-- Spring Cloud Netflix Zuul depends on Guava 19.0 -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
+        </dependency>
         <%_ } else { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
