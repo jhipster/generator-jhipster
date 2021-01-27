@@ -85,6 +85,7 @@ import org.springframework.data.relational.core.sql.Expression;
 import org.springframework.data.relational.core.sql.Table;
 
 import static org.springframework.data.relational.core.query.Criteria.where;
+import static org.springframework.data.relational.core.query.Query.query;
     <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
@@ -347,7 +348,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
             .bind("userId", user.getId())
             .then()
             .then(r2dbcEntityTemplate.delete(User.class)
-                .matching(org.springframework.data.relational.core.query.Query.query(where("id").is(user.getId()))).all()
+                .matching(query(where("id").is(user.getId()))).all()
                 .then());
     }
 
