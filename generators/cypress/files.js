@@ -49,6 +49,7 @@ const cypressFiles = {
         'cypress/support/navbar.ts',
         'cypress/support/index.ts',
         'cypress/support/entity.ts',
+        'cypress/support/management.ts',
         'cypress/tsconfig.json',
       ],
     },
