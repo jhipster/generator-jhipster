@@ -61,6 +61,12 @@ const commonFiles = {
       templates: ['content/scss/rtl.scss'],
     },
   ],
+  swagger: [
+    {
+      path: CLIENT_MAIN_SRC_DIR,
+      templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }],
+    },
+  ],
 };
 
 function writeFiles() {

@@ -63,12 +63,6 @@ const vueFiles = {
       templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss'],
     },
   ],
-  swagger: [
-    {
-      path: CLIENT_MAIN_SRC_DIR,
-      templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }],
-    },
-  ],
   commonWeb: [
     {
       path: CLIENT_MAIN_SRC_DIR,
