@@ -93,6 +93,12 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _writing() {
     return {
+      cleanup() {
+        if (this.isJhipsterVersionLessThan('7.0.0-beta.1') && this.jhipsterConfig.cypressTests) {
+          this.removeFile(`${this.TEST_SRC_DIR}/cypress/support/keycloak-oauth2.ts`);
+          this.removeFile(`${this.TEST_SRC_DIR}/cypress/fixtures/users/user.json`);
+        }
+      },
       ...writeFiles(),
       ...super._missingPostWriting(),
     };

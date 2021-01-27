@@ -30,8 +30,6 @@ const through = require('through2');
 const fs = require('fs');
 const minimatch = require('minimatch');
 const findUp = require('find-up');
-const prettierPluginJava = require('prettier-plugin-java');
-const prettierPluginPackagejson = require('prettier-plugin-packagejson');
 
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
@@ -736,10 +734,11 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     const customDestination = _this.destinationPath(destination);
     if (!customDestination) {
       this.debug(`File ${destination} ignored`);
-      return;
+      return Promise.resolved();
     }
-    jhipsterUtils.renderContent(source, _this, _context, options, res => {
+    return jhipsterUtils.renderContent(source, _this, _context, options).then(res => {
       _this.fs.write(customDestination, res);
+      return customDestination;
     });
   }
 
@@ -1319,10 +1318,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
           return;
         }
 
-        const prettierOptions = { plugins: [prettierPluginPackagejson] };
-        if (!this.skipServer && !this.jhipsterConfig.skipServer) {
-          prettierOptions.plugins.push(prettierPluginJava);
-        }
+        const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
         const filterPatternForPrettier = `{,.,**/,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
         const prettierFilter = filter(['.yo-rc.json', filterPatternForPrettier], { restore: true });

@@ -87,6 +87,9 @@
 <%_ } _%>
 <%_ if (cypressTests) { _%>
     "cypress": "VERSION_MANAGED_BY_CLIENT_COMMON",
+<%_ if (authenticationType === 'oauth2') { _%>
+    "puppeteer": "VERSION_MANAGED_BY_CLIENT_COMMON",
+<%_ } _%>
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
@@ -136,6 +139,7 @@
     "default_environment": "prod"
   },
   "scripts": {
+    "prettier:check": "prettier --check \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
     "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",

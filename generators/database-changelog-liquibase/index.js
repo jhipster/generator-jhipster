@@ -188,7 +188,7 @@ module.exports = class extends BaseGenerator {
       writeLiquibaseFiles() {
         const config = this.jhipsterConfig;
         if (config.skipServer || this.entity.skipServer || config.databaseType !== 'sql') {
-          return;
+          return undefined;
         }
 
         const databaseChangelog = this.databaseChangelog;
@@ -206,10 +206,17 @@ module.exports = class extends BaseGenerator {
         });
 
         if (databaseChangelog.type === 'entity-new') {
-          this._writeLiquibaseFiles();
-        } else {
-          this._writeUpdateFiles(this.entity);
+          return this._writeLiquibaseFiles();
         }
+        if (
+          this.addedFields.length > 0 ||
+          this.removedFields.length > 0 ||
+          this.addedRelationships.some(relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable) ||
+          this.removedRelationships.some(relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable)
+        ) {
+          return this._writeUpdateFiles();
+        }
+        return undefined;
       },
     };
   }
@@ -218,16 +225,53 @@ module.exports = class extends BaseGenerator {
     return this._writing();
   }
 
+  // Public API method used by the getter and also by Blueprints
+  _postWriting() {
+    return {
+      writeLiquibaseFiles() {
+        const config = this.jhipsterConfig;
+        if (config.skipServer || this.entity.skipServer || config.databaseType !== 'sql') {
+          return undefined;
+        }
+
+        if (this.databaseChangelog.type === 'entity-new') {
+          return this._addLiquibaseFilesReferences();
+        }
+        if (
+          this.addedFields.length > 0 ||
+          this.removedFields.length > 0 ||
+          this.addedRelationships.some(relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable) ||
+          this.removedRelationships.some(relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable)
+        ) {
+          return this._addUpdateFilesReferences();
+        }
+        return undefined;
+      },
+    };
+  }
+
+  get postWriting() {
+    return this._postWriting();
+  }
+
   /**
    * Write files for new entities.
    */
   _writeLiquibaseFiles() {
+    const promises = [];
     // Write initial liquibase files
-    this.writeFilesToDisk(addEntityFiles, this, false, this.sourceRoot());
+    promises.push(this.writeFilesToDisk(addEntityFiles, this, false, this.sourceRoot()));
     if (!this.skipFakeData) {
-      this.writeFilesToDisk(fakeFiles, this, false, this.sourceRoot());
+      promises.push(this.writeFilesToDisk(fakeFiles, this, false, this.sourceRoot()));
     }
 
+    return Promise.all(promises);
+  }
+
+  /**
+   * Write files for new entities.
+   */
+  _addLiquibaseFilesReferences() {
     const fileName = `${this.changelogDate}_added_entity_${this.entity.entityClass}`;
     if (this.incremental) {
       this.addIncrementalChangelogToLiquibase(fileName);
@@ -249,15 +293,6 @@ module.exports = class extends BaseGenerator {
    * Write files for updated entities.
    */
   _writeUpdateFiles() {
-    const shouldWriteChangelog =
-      this.addedFields.length > 0 ||
-      this.removedFields.length > 0 ||
-      this.addedRelationships.some(relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable) ||
-      this.removedRelationships.some(relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable);
-    if (!shouldWriteChangelog) {
-      return;
-    }
-
     this.hasFieldConstraint = this.addedFields.some(field => field.unique || !field.nullable);
     this.hasRelationshipConstraint = this.addedRelationships.some(
       relationship =>
@@ -267,21 +302,33 @@ module.exports = class extends BaseGenerator {
       relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable
     );
 
-    this.writeFilesToDisk(updateEntityFiles, this, false, this.sourceRoot());
-    this.addIncrementalChangelogToLiquibase(`${this.databaseChangelog.changelogDate}_updated_entity_${this.entity.entityClass}`);
+    const promises = [];
+    promises.push(this.writeFilesToDisk(updateEntityFiles, this, false, this.sourceRoot()));
 
     if (!this.skipFakeData && (this.addedFields.length > 0 || this.shouldWriteAnyRelationship)) {
       this.fields = this.addedFields;
       this.relationships = this.addedRelationships;
-      this.writeFilesToDisk(fakeFiles, this, false, this.sourceRoot());
-      this.writeFilesToDisk(updateMigrateFiles, this, false, this.sourceRoot());
+      promises.push(this.writeFilesToDisk(fakeFiles, this, false, this.sourceRoot()));
+      promises.push(this.writeFilesToDisk(updateMigrateFiles, this, false, this.sourceRoot()));
+    }
 
+    if (this.hasFieldConstraint || this.shouldWriteAnyRelationship) {
+      promises.push(this.writeFilesToDisk(updateConstraintsFiles, this, false, this.sourceRoot()));
+    }
+    return Promise.all(promises);
+  }
+
+  /**
+   * Write files for updated entities.
+   */
+  _addUpdateFilesReferences() {
+    this.addIncrementalChangelogToLiquibase(`${this.databaseChangelog.changelogDate}_updated_entity_${this.entity.entityClass}`);
+
+    if (!this.skipFakeData && (this.addedFields.length > 0 || this.shouldWriteAnyRelationship)) {
       this.addIncrementalChangelogToLiquibase(`${this.databaseChangelog.changelogDate}_updated_entity_migrate_${this.entity.entityClass}`);
     }
 
     if (this.hasFieldConstraint || this.shouldWriteAnyRelationship) {
-      this.writeFilesToDisk(updateConstraintsFiles, this, false, this.sourceRoot());
-
       this.addIncrementalChangelogToLiquibase(
         `${this.databaseChangelog.changelogDate}_updated_entity_constraints_${this.entity.entityClass}`
       );

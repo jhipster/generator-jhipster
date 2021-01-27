@@ -18,7 +18,7 @@
  */
 /* eslint-disable consistent-return */
 const constants = require('../generator-constants');
-const writeFiles = require('./files').writeFiles;
+const { writeFiles, customizeFiles } = require('./files');
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const { isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
@@ -54,26 +54,6 @@ module.exports = class extends BaseBlueprintGenerator {
   get initializing() {
     if (useBlueprints) return;
     return this._initializing();
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _default() {
-    return super._missingPreDefault();
-  }
-
-  get default() {
-    if (useBlueprints) return;
-    return this._default();
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _writing() {
-    return { ...writeFiles(), ...super._missingPostWriting() };
-  }
-
-  get writing() {
-    if (useBlueprints) return;
-    return this._writing();
   }
 
   _preparing() {
@@ -132,6 +112,40 @@ module.exports = class extends BaseBlueprintGenerator {
   get preparing() {
     if (useBlueprints) return;
     return this._preparing();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _default() {
+    return super._missingPreDefault();
+  }
+
+  get default() {
+    if (useBlueprints) return;
+    return this._default();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _writing() {
+    return { ...writeFiles(), ...super._missingPostWriting() };
+  }
+
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _postWriting() {
+    return {
+      customizeFiles() {
+        return customizeFiles.call(this);
+      },
+    };
+  }
+
+  get postWriting() {
+    if (useBlueprints) return;
+    return this._postWriting();
   }
 
   /* Private methods used in templates */

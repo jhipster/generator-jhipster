@@ -329,8 +329,9 @@ describe('Generator Base', () => {
       const files = { files: [{ templates: ['foo'] }] };
       const generator = fakeGenerator();
       let out;
-      before('should produce correct files', () => {
-        out = BaseGenerator.writeFilesToDisk(files, generator).sort();
+      before('should produce correct files', async () => {
+        const filenames = await BaseGenerator.writeFilesToDisk(files, generator, false);
+        out = filenames.sort();
       });
       it('should return template file names', () => {
         expect(out).to.eql(['foo']);
@@ -352,8 +353,9 @@ describe('Generator Base', () => {
         const templates = ['all'];
         const files = { files: [{ templates }] };
         let out;
-        beforeEach('should produce correct files', () => {
-          out = BaseGenerator.writeFilesToDisk(files, generator).sort();
+        beforeEach('should produce correct files', async () => {
+          const filenames = await BaseGenerator.writeFilesToDisk(files, generator, false);
+          out = filenames.sort();
         });
         it('should return template file names', () => {
           expect(out).to.eql(templates);
@@ -370,8 +372,9 @@ describe('Generator Base', () => {
         const templates = ['common'];
         const files = { files: [{ templates }] };
         let out;
-        beforeEach('should produce correct files', () => {
-          out = BaseGenerator.writeFilesToDisk(files, generator).sort();
+        beforeEach('should produce correct files', async () => {
+          const filenames = await BaseGenerator.writeFilesToDisk(files, generator, false);
+          out = filenames.sort();
         });
         it('should return template file names', () => {
           expect(out).to.eql(templates);
@@ -398,8 +401,9 @@ describe('Generator Base', () => {
         const templates = ['all'];
         const files = { files: [{ templates }] };
         let out;
-        beforeEach('should produce correct files', () => {
-          out = BaseGenerator.writeFilesToDisk(files, generator, rootTemplatesPath).sort();
+        beforeEach('should produce correct files', async () => {
+          const filenames = await BaseGenerator.writeFilesToDisk(files, generator, rootTemplatesPath);
+          out = filenames.sort();
         });
         it('should return template file names', () => {
           expect(out).to.eql(templates);
@@ -423,8 +427,9 @@ describe('Generator Base', () => {
         const templates = ['specific'];
         const files = { files: [{ templates }] };
         let out;
-        beforeEach('should produce correct files', () => {
-          out = BaseGenerator.writeFilesToDisk(files, generator, rootTemplatesPath).sort();
+        beforeEach('should produce correct files', async () => {
+          const filenames = await BaseGenerator.writeFilesToDisk(files, generator, rootTemplatesPath);
+          out = filenames.sort();
         });
         it('should return template file names', () => {
           expect(out).to.eql(templates);
@@ -446,8 +451,9 @@ describe('Generator Base', () => {
         const templates = ['common'];
         const files = { files: [{ templates }] };
         let out;
-        beforeEach('should produce correct files', () => {
-          out = BaseGenerator.writeFilesToDisk(files, generator, rootTemplatesPath).sort();
+        beforeEach('should produce correct files', async () => {
+          const filenames = await BaseGenerator.writeFilesToDisk(files, generator, rootTemplatesPath);
+          out = filenames.sort();
         });
         it('should return template file names', () => {
           expect(out).to.eql(['common']);

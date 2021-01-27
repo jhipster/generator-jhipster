@@ -390,6 +390,7 @@ const commonFiles = {
 
 module.exports = {
   writeFiles,
+  customizeFiles,
   angularFiles,
   reactFiles,
   vueFiles,
@@ -442,7 +443,7 @@ function writeFiles() {
     },
 
     writeClientFiles() {
-      if (this.skipClient) return;
+      if (this.skipClient) return undefined;
       if (this.protractorTests) {
         addSampleRegexTestingStrings(this);
       }
@@ -463,49 +464,42 @@ function writeFiles() {
         files = vueFiles;
         clientMainSrcDir = VUE_DIR;
         templatesDir = CLIENT_VUE_TEMPLATES_DIR;
-      } else {
-        if (!this.embedded) {
-          this.addEntityToMenu(
-            this.entityStateName,
-            this.enableTranslation,
-            this.clientFramework,
-            this.entityTranslationKeyMenu,
-            this.entityClassHumanized
-          );
-        }
-        return;
       }
-
-      this.writeFilesToDisk(files, templatesDir);
-      this.writeFilesToDisk(commonFiles, 'common');
 
       addEnumerationFiles(this, clientMainSrcDir);
+      if (!files) return undefined;
 
-      if (!this.embedded) {
-        this.addEntityToModule();
-        this.addEntityToMenu(
-          this.entityStateName,
-          this.enableTranslation,
-          this.clientFramework,
-          this.entityTranslationKeyMenu,
-          this.entityClassHumanized
-        );
-      }
-
-      if (this.clientFramework === VUE && !this.enableTranslation) {
-        if (!this.readOnly) {
-          utils.vueReplaceTranslation(this, [
-            `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
-            `app/entities/${this.entityFolderName}/${this.entityFileName}-update.vue`,
-            `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`,
-          ]);
-        } else {
-          utils.vueReplaceTranslation(this, [
-            `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
-            `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`,
-          ]);
-        }
-      }
+      return Promise.all([this.writeFilesToDisk(files, templatesDir), this.writeFilesToDisk(commonFiles, 'common')]);
     },
   };
+}
+
+function customizeFiles() {
+  if (this.skipClient) return;
+
+  if (!this.embedded) {
+    this.addEntityToModule();
+    this.addEntityToMenu(
+      this.entityStateName,
+      this.enableTranslation,
+      this.clientFramework,
+      this.entityTranslationKeyMenu,
+      this.entityClassHumanized
+    );
+  }
+
+  if (this.clientFramework === VUE && !this.enableTranslation) {
+    if (!this.readOnly) {
+      utils.vueReplaceTranslation(this, [
+        `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
+        `app/entities/${this.entityFolderName}/${this.entityFileName}-update.vue`,
+        `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`,
+      ]);
+    } else {
+      utils.vueReplaceTranslation(this, [
+        `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
+        `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`,
+      ]);
+    }
+  }
 }

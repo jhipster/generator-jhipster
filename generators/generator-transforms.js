@@ -19,8 +19,10 @@
 const path = require('path');
 const through = require('through2');
 const prettier = require('prettier');
+const prettierPluginJava = require('prettier-plugin-java');
+const prettierPluginPackagejson = require('prettier-plugin-packagejson');
 
-const prettierTransform = function (defaultOptions, generator, ignoreErrors = false) {
+const prettierTransform = function (options, generator, ignoreErrors = false) {
   return through.obj((file, encoding, callback) => {
     if (file.state === 'deleted') {
       callback(null, file);
@@ -31,15 +33,21 @@ const prettierTransform = function (defaultOptions, generator, ignoreErrors = fa
     prettier
       .resolveConfig(file.relative)
       .then(function (resolvedDestinationFileOptions) {
-        const options = {
-          ...defaultOptions,
+        const prettierOptions = {
+          plugins: [],
           // Config from disk
           ...resolvedDestinationFileOptions,
           // for better errors
           filepath: file.relative,
         };
+        if (options.packageJson) {
+          prettierOptions.plugins.push(prettierPluginPackagejson);
+        }
+        if (options.java) {
+          prettierOptions.plugins.push(prettierPluginJava);
+        }
         fileContent = file.contents.toString('utf8');
-        const data = prettier.format(fileContent, options);
+        const data = prettier.format(fileContent, prettierOptions);
         file.contents = Buffer.from(data);
         callback(null, file);
       })

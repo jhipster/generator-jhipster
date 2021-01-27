@@ -112,6 +112,12 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       type: Boolean,
     });
 
+    this.option('skip-prettier', {
+      desc: 'Skip prettier',
+      type: Boolean,
+      hide: true,
+    });
+
     if (this.options.help) {
       return;
     }
@@ -155,8 +161,6 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     // Load common runtime options.
     this.parseCommonRuntimeOptions();
 
-    this.registerCommitPriorityFilesTask();
-
     if (this.jhipsterConfig.withGeneratedFlag) {
       this.registerGeneratedAnnotationTransform();
     }
@@ -167,7 +171,12 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     }
 
     this.registerForceEntitiesTransform();
-    this.registerPrettierTransform();
+
+    if (!this.options.skipPrettier) {
+      this.registerPrettierTransform();
+    }
+
+    this.registerCommitPriorityFilesTask();
   }
 
   /**
@@ -2074,6 +2083,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * @param {boolean} [returnFiles = false] - weather to return the generated file list or to write them
    * @param {string|string[]} [rootTemplatesPath] - path(s) to look for templates.
    *        Single absolute path or relative path(s) between the templates folder and template path.
+   * @return {string[]|Promise<string>} Filenames, promise when returnFiles is false
    */
   writeFilesToDisk(files, generator = this, returnFiles = false, rootTemplatesPath) {
     if (typeof generator === 'string' || Array.isArray(generator)) {
@@ -2115,11 +2125,11 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         .flat();
     }
 
-    Object.values(files).forEach(blockTemplates => {
-      blockTemplates.forEach(blockTemplate => {
+    const writeTasks = Object.values(files).map(blockTemplates => {
+      return blockTemplates.map(blockTemplate => {
         if (!blockTemplate.condition || blockTemplate.condition(_this)) {
           const blockPath = blockTemplate.path || '';
-          blockTemplate.templates.forEach(templateObj => {
+          return blockTemplate.templates.map(templateObj => {
             let templatePath = blockPath;
             let method = 'template';
             let useTemplate = false;
@@ -2152,11 +2162,11 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
               if (typeof templateObj.override === 'function') {
                 if (!templateObj.override(_this)) {
                   this.debug(`skipping file ${templatePathTo}`);
-                  return;
+                  return Promise.resolve(templatePathTo);
                 }
               } else if (!templateObj.override) {
                 this.debug(`skipping file ${templatePathTo}`);
-                return;
+                return Promise.resolve(templatePathTo);
               }
             }
 
@@ -2203,14 +2213,25 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               options.root = rootTemplatesAbsolutePath;
 
               // if (method === 'template')
-              _this[method](templatePathFrom, templatePathTo, _this, options, useTemplate);
+              let maybePromise = _this[method](templatePathFrom, templatePathTo, _this, options, useTemplate);
+              maybePromise = maybePromise && maybePromise.then ? maybePromise : Promise.resolve(templatePathTo);
+              return maybePromise;
             }
+            return undefined;
           });
         }
+        return undefined;
       });
     });
     this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
-    return filesOut;
+    return returnFiles
+      ? filesOut
+      : Promise.all(
+          writeTasks
+            .flat()
+            .flat()
+            .filter(filename => filename)
+        );
   }
 
   /**

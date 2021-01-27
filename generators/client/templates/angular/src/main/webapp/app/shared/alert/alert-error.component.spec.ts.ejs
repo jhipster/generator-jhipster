@@ -61,7 +61,7 @@ describe('Component Tests', () => {
           alerts.push(alert);
         }
         return alert;
-      }
+      };
     });
 
     describe('Error Handling', () => {
@@ -166,7 +166,7 @@ describe('Component Tests', () => {
         expect(comp.alerts[0].<%= mainAlertField %>).toBe('Error Message');
       });
 
-       it('Should display an alert on status 500 with detail', () => {
+      it('Should display an alert on status 500 with detail', () => {
         // GIVEN
         const response = new HttpErrorResponse({
           url: 'http://localhost:8080/api/foos',
@@ -176,7 +176,7 @@ describe('Component Tests', () => {
           error: {
             status: 500,
             message: 'error.http.500',
-            detail: 'Detailed error message'
+            detail: 'Detailed error message',
           },
         });
         eventManager.broadcast({ name: '<%= frontendAppName %>.httpError', content: response });

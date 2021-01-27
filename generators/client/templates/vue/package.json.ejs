@@ -119,6 +119,9 @@
     <%_ } _%>
     <%_ if (cypressTests) { _%>
     "cypress": "VERSION_MANAGED_BY_CLIENT_COMMON",
+    <%_ if (authenticationType === 'oauth2') { _%>
+    "puppeteer": "VERSION_MANAGED_BY_CLIENT_COMMON",
+    <%_ } _%>
     <%_ } _%>
     "rimraf": "VERSION_MANAGED_BY_CLIENT_VUE",
     "sass": "VERSION_MANAGED_BY_CLIENT_VUE",
@@ -154,6 +157,7 @@
     "default_environment": "prod"
   },
   "scripts": {
+    "prettier:check": "prettier --check \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
     "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
     "lint": "vue-cli-service lint --no-fix",
     "lint:fix": "vue-cli-service lint",

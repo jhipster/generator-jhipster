@@ -85,6 +85,9 @@ function cleanYoRcFileContent(yoRcFileContent) {
   if (yoRcFileContent[generatorName].blueprints) {
     yoRcFileContent[generatorName].blueprints = yoRcFileContent[generatorName].blueprints.map(blueprint => blueprint.name);
   }
+  if (yoRcFileContent[generatorName].otherModules) {
+    yoRcFileContent[generatorName].otherModules = yoRcFileContent[generatorName].otherModules.map(module => module.name);
+  }
   return yoRcFileContent;
 }
 
