@@ -51,7 +51,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
     const phaseFromJHipster = super._writing();
     const customPhaseSteps = {
       writeTestFiles() {
-        this.writeFilesToDisk(serverFiles, this, false);
+        return this.writeFilesToDisk(serverFiles, this, false);
       },
       addChangelogStep() {
         this.addChangelogToLiquibase('aNewChangeLog');

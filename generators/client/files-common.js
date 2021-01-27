@@ -64,5 +64,5 @@ const commonFiles = {
 };
 
 function writeFiles() {
-  this.writeFilesToDisk(commonFiles, 'common');
+  return this.writeFilesToDisk(commonFiles, 'common');
 }

@@ -41,7 +41,7 @@ describe('<%= entityClass %> e2e test', () => {
   beforeEach(() => {
     cy.getOauth2Data();
     cy.get('@oauth2Data').then(oauth2Data => {
-      cy.keycloackLogin(oauth2Data, 'user');
+      cy.oauthLogin(oauth2Data, Cypress.env('E2E_USERNAME') || "admin", Cypress.env('E2E_PASSWORD') || "admin");
     });
     cy.intercept('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
     cy.visit('');
@@ -53,7 +53,7 @@ describe('<%= entityClass %> e2e test', () => {
 
   afterEach(() => {
     cy.get('@oauth2Data').then(oauth2Data => {
-      cy.keycloackLogout(oauth2Data);
+      cy.oauthLogout(oauth2Data);
     });
     cy.clearCache();
   });
