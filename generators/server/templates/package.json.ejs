@@ -43,6 +43,7 @@
     "node": ">=<%= NODE_VERSION %>"
   },
   "scripts": {
+    "prettier:check": "prettier --check \"{,src/**/}*.{<%= getPrettierExtensions() %>}\""
     "prettier:format": "prettier --write \"{,src/**/}*.{<%= getPrettierExtensions() %>}\""
   }
 }
