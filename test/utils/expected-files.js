@@ -475,8 +475,6 @@ const expectedFiles = {
     `${CLIENT_MAIN_SRC_DIR}favicon.ico`,
     `${CLIENT_MAIN_SRC_DIR}index.html`,
     `${CLIENT_MAIN_SRC_DIR}robots.txt`,
-    `${CLIENT_MAIN_SRC_DIR}swagger-ui/dist/images/throbber.gif`,
-    `${CLIENT_MAIN_SRC_DIR}swagger-ui/index.html`,
     'jest.conf.js',
     `${CLIENT_MAIN_SRC_DIR}app/core/auth/account.service.spec.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/core/util/event-manager.service.spec.ts`,
@@ -528,6 +526,8 @@ const expectedFiles = {
     `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_3_head-384.png`,
     `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_3_head-512.png`,
     `${CLIENT_MAIN_SRC_DIR}content/images/logo-jhipster.png`,
+    `${CLIENT_MAIN_SRC_DIR}swagger-ui/dist/images/throbber.gif`,
+    `${CLIENT_MAIN_SRC_DIR}swagger-ui/index.html`,
   ],
 
   clientAdminAngular: [
