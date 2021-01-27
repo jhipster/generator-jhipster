@@ -157,6 +157,7 @@
     "default_environment": "prod"
   },
   "scripts": {
+    "prettier:check": "prettier --check \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
     "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{<%= getPrettierExtensions() %>}\"",
     "lint": "vue-cli-service lint --no-fix",
     "lint:fix": "vue-cli-service lint",
