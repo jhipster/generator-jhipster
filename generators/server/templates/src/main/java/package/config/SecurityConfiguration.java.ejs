@@ -188,7 +188,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
             .antMatchers("/h2-console/**")
         <%_ } _%>
-            .antMatchers("/swagger-ui/index.html")
+            .antMatchers("/swagger-ui/**")
             .antMatchers("/test/**");
     }
     <%_ } else { _%>
@@ -279,6 +279,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/**").authenticated()
     <%_ if (websocket === 'spring-websocket') { _%>
             .antMatchers("/websocket/**").authenticated()
+    <%_ } _%>
+    <%_ if (applicationType === 'gateway') { _%>
+            .antMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
     <%_ } _%>
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/health/**").permitAll()

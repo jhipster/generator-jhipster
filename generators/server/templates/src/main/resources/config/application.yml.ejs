@@ -57,6 +57,8 @@ eureka:
       git-commit: ${git.commit.id.abbrev:}
       git-branch: ${git.branch:}
 ribbon:
+  ReadTimeout: 60000
+  connection-timeout: 3000
   eureka:
     enabled: true
 <%_ } _%>
