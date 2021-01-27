@@ -141,13 +141,13 @@ jobs:
             testcontainers: 1
           - app-type: webflux-mysql
             entity: sqllight
-            profile: prod
+            environment: prod
             war: 0
             e2e: 1
             testcontainers: 1
           - app-type: webflux-mariadb-gradle
             entity: sqllight
-            profile: prod
+            environment: prod
             war: 0
             e2e: 1
             testcontainers: 1
