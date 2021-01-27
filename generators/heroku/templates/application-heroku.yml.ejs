@@ -66,10 +66,10 @@ jhipster:
 <%_ } _%>
 spring:
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
-    cloud:
-        config:
-            fail-fast: true
-            uri: ${JHIPSTER_REGISTRY_URL}/config
+  cloud:
+    config:
+      fail-fast: true
+      uri: ${JHIPSTER_REGISTRY_URL}/config
 <%_ } _%>
 <%_ if (prodDatabaseType === 'postgresql' || prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
   datasource:
