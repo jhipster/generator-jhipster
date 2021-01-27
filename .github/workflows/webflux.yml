@@ -90,8 +90,8 @@ jobs:
           #                    - webflux-couchbase
           #                    - webflux-couchbase-es-oauth2
           - webflux-psql
-          #- webflux-mysql
-          #- webflux-mariadb-gradle
+          - webflux-mysql
+          - webflux-mariadb-gradle
         include:
           - app-type: webflux-mongodb
             entity: mongodb
