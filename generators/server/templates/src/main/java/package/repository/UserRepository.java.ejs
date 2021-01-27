@@ -356,10 +356,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
     <%_ if (authenticationType === 'oauth2') { _%>
     @Override
     public Mono<User> create(User user) {
-        return db.insert().into(User.class).using(user)
-            .map(dataAccessStrategy.getConverter().populateIdIfNecessary(user))
-            .first()
-            .defaultIfEmpty(user);
+        return r2dbcEntityTemplate.insert(User.class).using(user).defaultIfEmpty(user);
     }
 
     <%_ } _%>
