@@ -90,7 +90,7 @@ jobs:
           #                    - webflux-couchbase
           #                    - webflux-couchbase-es-oauth2
           - webflux-psql
-          - webflux-mysql
+          # - webflux-mysql
           - webflux-mariadb-gradle
         include:
           - app-type: webflux-mongodb
@@ -139,12 +139,12 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 1
-          - app-type: webflux-mysql
-            entity: sqllight
-            environment: prod
-            war: 0
-            e2e: 0
-            testcontainers: 1
+          # - app-type: webflux-mysql
+          #   entity: sqllight
+          #   environment: prod
+          #   war: 0
+          #   e2e: 1
+          #   testcontainers: 1
           - app-type: webflux-mariadb-gradle
             entity: sqllight
             environment: prod
