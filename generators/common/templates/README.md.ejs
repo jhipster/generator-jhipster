@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 # <%= baseName %>
+
 <%_
 let clientPackageMngrName = 'Npm';
 let clientPackageMngrAddGlobal = 'install -g';
@@ -233,14 +234,17 @@ To benefit from TypeScript type definitions from [DefinitelyTyped][] repository 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
 <%_ if (clientFramework === ANGULAR) { _%>
 Edit [<%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts](<%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts) file:
-~~~
+
+```
 import 'leaflet/dist/leaflet.js';
-~~~
+```
 
 Edit [<%= CLIENT_MAIN_SRC_DIR %>content/scss/vendor.scss](<%= CLIENT_MAIN_SRC_DIR %>content/scss/vendor.scss) file:
-~~~
+
+```
 @import '~leaflet/dist/leaflet.css';
-~~~
+```
+
 <%_ } _%>
 Note: There are still a few other things remaining to do for Leaflet that we won't detail here.
 <%_ } _%>
@@ -346,7 +350,7 @@ To launch your application's tests, run:
 <%_ } _%>
 ```
 
-<% if (!skipClient) { %>
+<%_ if (!skipClient) { _%>
 ### Client tests
 
 Unit tests are run by [Jest][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](<%= CLIENT_TEST_SRC_DIR %>) and can be run with:
@@ -355,14 +359,20 @@ Unit tests are run by [Jest][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](
 <%= clientPackageManager %> test
 ```
 
-<% if (protractorTests) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [<%= CLIENT_TEST_SRC_DIR %>e2e](<%= CLIENT_TEST_SRC_DIR %>e2e)
-and can be run by starting Spring Boot in one terminal (`<% if (buildTool === 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<%= clientPackageManager %> run e2e`) in a second one.<% } %>
-<% } %><% if (gatlingTests) { %>### Other tests
+<%_ if (protractorTests) { _%>
+UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [<%= CLIENT_TEST_SRC_DIR %>e2e](<%= CLIENT_TEST_SRC_DIR %>e2e)
+and can be run by starting Spring Boot in one terminal (`<% if (buildTool === 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<%= clientPackageManager %> run e2e`) in a second one.
+<%_ } _%>
+<%_ } _%>
+
+<%_ if (gatlingTests) { _%>
+### Other tests
 
 Performance tests are run by [Gatling][] and written in Scala. They're located in [src/test/gatling](src/test/gatling).
 
 To use those tests, you must install Gatling from [https://gatling.io/](https://gatling.io/).
-<% } %>
+<%_ } _%>
+
 For more information, refer to the [Running tests page][].
 
 ### Code quality
@@ -400,7 +410,8 @@ For more information, refer to the [Code quality page][].
 ## Using Docker to simplify development (optional)
 
 You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
-<% if (databaseType !== 'no') { %>
+
+<%_ if (databaseType !== 'no') { _%>
 For example, to start a <%= prodDatabaseType %> database in a docker container, run:
 
 ```
@@ -412,8 +423,8 @@ To stop it and remove the container, run:
 ```
 docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml down
 ```
+<%_ } _%>
 
-<% } %>
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
