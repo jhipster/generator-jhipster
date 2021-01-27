@@ -18,7 +18,7 @@
  */
 /* eslint-disable consistent-return */
 const _ = require('lodash');
-const writeFiles = require('./files').writeFiles;
+const { writeFiles, customizeFiles } = require('./files');
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const {
@@ -121,5 +121,19 @@ module.exports = class extends BaseBlueprintGenerator {
   get writing() {
     if (useBlueprints) return;
     return this._writing();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _postWriting() {
+    return {
+      customizeFiles() {
+        return customizeFiles.call(this);
+      },
+    };
+  }
+
+  get postWriting() {
+    if (useBlueprints) return;
+    return this._postWriting();
   }
 };

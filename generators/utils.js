@@ -239,7 +239,8 @@ function copyWebResource(source, dest, regex, type, generator, opt = {}, templat
  * @param {object} generator reference to the generator
  * @param {any} context context
  * @param {object} options options
- * @param {function} cb callback function
+ * @param {function} [cb] callback function
+ * @return {Promise<String>} Promise rendered content
  */
 function renderContent(source, generator, context, options, cb) {
   options = {
@@ -247,14 +248,16 @@ function renderContent(source, generator, context, options, cb) {
     context: generator,
     ...options,
   };
-  ejs.renderFile(generator.templatePath(source), context, options, (err, res) => {
-    if (!err) {
-      cb(res);
-    } else {
-      generator.warning(`Copying template ${source} failed. [${err}]`);
-      throw err;
-    }
-  });
+  const promise = ejs.renderFile(generator.templatePath(source), context, options);
+  if (cb) {
+    return promise
+      .then(res => cb(res))
+      .catch(err => {
+        generator.warning(`Copying template ${source} failed. [${err}]`);
+        throw err;
+      });
+  }
+  return promise;
 }
 
 /**

@@ -20,7 +20,7 @@
 const chalk = require('chalk');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
-const writeVueFiles = require('./files-vue').writeFiles;
+const { writeFiles: writeVueFiles, customizeFiles: customizeVueFiles } = require('./files-vue');
 const constants = require('../generator-constants');
 
 const { VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
@@ -147,6 +147,24 @@ module.exports = class extends BaseBlueprintGenerator {
   get writing() {
     if (useBlueprints) return;
     return this._writing();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _postWriting() {
+    return {
+      customizeFiles() {
+        if (this.skipClient) return;
+        if (this.clientFramework === VUE) {
+          return customizeVueFiles.call(this);
+        }
+        return undefined;
+      },
+    };
+  }
+
+  get postWriting() {
+    if (useBlueprints) return;
+    return this._postWriting();
   }
 
   _end() {

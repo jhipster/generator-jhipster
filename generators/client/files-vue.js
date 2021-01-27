@@ -23,6 +23,7 @@ const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, VUE_DIR } = constants;
 
 module.exports = {
   writeFiles,
+  customizeFiles,
 };
 
 const vueFiles = {
@@ -338,8 +339,10 @@ const vueFiles = {
 
 function writeFiles() {
   // write Vue files
-  this.writeFilesToDisk(vueFiles, 'vue');
+  return this.writeFilesToDisk(vueFiles, 'vue');
+}
 
+function customizeFiles() {
   if (!this.enableTranslation) {
     utils.vueReplaceTranslation(this, [
       'app/app.vue',

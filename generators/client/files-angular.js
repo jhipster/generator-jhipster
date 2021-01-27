@@ -502,5 +502,5 @@ module.exports = {
 
 function writeFiles() {
   // write angular 2.x and above files
-  this.writeFilesToDisk(files, 'angular');
+  return this.writeFilesToDisk(files, 'angular');
 }
