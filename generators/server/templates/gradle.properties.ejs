@@ -19,10 +19,6 @@
 rootProject.name=<%= dasherizedBaseName %>
 profile=dev
 
-# Build properties
-nodeVersion=<%= NODE_VERSION %>
-npmVersion=<%= NPM_VERSION %>
-
 # Dependency versions
 jhipsterDependenciesVersion=<%= JHIPSTER_DEPENDENCIES_VERSION %>
 # The spring-boot version should match the one managed by
@@ -64,9 +60,8 @@ cassandraDriverVersion=4.6.1
 jibPluginVersion=<%= JIB_VERSION %>
 gitPropertiesPluginVersion=2.2.4
 <%_ if (!skipClient) { _%>
-gradleNodePluginVersion=3.0.0-rc6
+gradleNodePluginVersion=3.0.0-rc7
 <%_ } _%>
-aptPluginVersion=0.21
 <%_ if (databaseType === 'sql' && !reactive) { _%>
 liquibasePluginVersion=2.0.4
 <%_ } _%>
@@ -83,7 +78,6 @@ checkstyleVersion=8.39
 
 ## The Gradle daemon aims to improve the startup and execution time of Gradle.
 ## The daemon is enabled by default in Gradle 3+ setting this to false will disable this.
-## TODO: disable daemon on CI, since builds should be clean and reliable on servers
 ## https://docs.gradle.org/current/userguide/gradle_daemon.html#sec:ways_to_disable_gradle_daemon
 ## uncomment the below line to disable the daemon
 
