@@ -110,6 +110,7 @@ const optionValues = {
     angular: 'angular',
     react: 'react',
     vue: 'vue',
+    svelte: 'svelte',
   },
   [optionNames.CLIENT_PACKAGE_MANAGER]: {
     npm: 'npm',
