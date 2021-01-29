@@ -602,7 +602,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
       },
 
       processPrimaryKeyTypesForRelations() {
-        this.context.otherEntityPrimaryKeyTypes = new Set(this.context.relationships.map(relationship => relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.type));
+        const types = this.context.relationships.map(relationship => relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.type);
+        this.context.otherEntityPrimaryKeyTypes = Array.from(new Set(types));
       },
 
       /**
