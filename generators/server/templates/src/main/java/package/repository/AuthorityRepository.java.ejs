@@ -31,7 +31,7 @@ import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
-import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
+import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
 <% if (reactive) { %>import reactor.core.publisher.Flux;<% } else { %>import java.util.List;<% } %>
 <%_ } _%>
 
@@ -47,7 +47,7 @@ import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<%
 <%_ } _%>
  <%_ if (databaseType === 'neo4j') { _%>
 /**
- * Spring Data Neo4j RX repository for the {@link Authority} entity.
+ * Spring Data Neo4j repository for the {@link Authority} entity.
  */
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>

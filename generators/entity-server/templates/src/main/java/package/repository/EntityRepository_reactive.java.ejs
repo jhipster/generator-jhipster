@@ -30,8 +30,8 @@ import org.springframework.data.couchbase.core.query.Query;
 import org.springframework.data.couchbase.repository.ReactiveCouchbaseSortingRepository;
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
-import org.neo4j.springframework.data.repository.ReactiveNeo4jRepository;
-import org.neo4j.springframework.data.repository.query.Query;
+import org.springframework.data.neo4j.repository.ReactiveNeo4jRepository;
+import org.springframework.data.neo4j.repository.query.Query;
 <%_ } _%>
 <%_ if (pagination !== 'no' || relationshipsContainEagerLoad || databaseType ==='sql') { _%>
 import org.springframework.data.domain.Pageable;
