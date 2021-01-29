@@ -28,7 +28,7 @@ const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { isReservedClassName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
 const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../../utils/entity');
-const { prepareFieldForTemplates } = require('../../utils/field');
+const { prepareFieldForTemplates, fieldIsEnum } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
 const { stringify } = require('../../utils');
 
@@ -497,9 +497,63 @@ class EntityGenerator extends BaseBlueprintGenerator {
       prepareEntityForTemplates() {
         const entity = this.context;
         prepareEntityForTemplates(entity, this);
+      },
+
+      prepareFieldsForTemplates() {
+        const entity = this.context;
 
         this.context.fields.forEach(field => {
           prepareFieldForTemplates(entity, field, this);
+        });
+      },
+
+      processEntityFields() {
+        const entity = this.context;
+        entity.fields.forEach(field => {
+          const fieldType = field.fieldType;
+          if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
+            entity.fieldsIsReactAvField = true;
+          }
+
+          if (field.javadoc) {
+            entity.haveFieldWithJavadoc = true;
+          }
+
+          if (fieldIsEnum(fieldType)) {
+            entity.i18nToLoad.push(field.enumInstance);
+          }
+
+          if (fieldType === 'ZonedDateTime') {
+            entity.fieldsContainZonedDateTime = true;
+            entity.fieldsContainDate = true;
+          } else if (fieldType === 'Instant') {
+            entity.fieldsContainInstant = true;
+            entity.fieldsContainDate = true;
+          } else if (fieldType === 'Duration') {
+            entity.fieldsContainDuration = true;
+          } else if (fieldType === 'LocalDate') {
+            entity.fieldsContainLocalDate = true;
+            entity.fieldsContainDate = true;
+          } else if (fieldType === 'BigDecimal') {
+            entity.fieldsContainBigDecimal = true;
+          } else if (fieldType === 'UUID') {
+            entity.fieldsContainUUID = true;
+          } else if (fieldType === 'byte[]' || fieldType === 'ByteBuffer') {
+            entity.blobFields.push(field);
+            entity.fieldsContainBlob = true;
+            if (field.fieldTypeBlobContent === 'image') {
+              entity.fieldsContainImageBlob = true;
+            }
+            if (field.fieldTypeBlobContent !== 'text') {
+              entity.fieldsContainBlobOrImage = true;
+            } else {
+              entity.fieldsContainTextBlob = true;
+            }
+          }
+
+          if (Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1) {
+            entity.validation = true;
+          }
         });
       },
 

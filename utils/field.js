@@ -158,6 +158,18 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
   });
   const fieldType = field.fieldType;
 
+  if (field.mapstructExpression) {
+    assert.equal(
+      entityWithConfig.dto,
+      'mapstruct',
+      `@MapstructExpression requires an Entity with mapstruct dto [${entityWithConfig.name}.${field.fieldName}].`
+    );
+    // Remove from Entity.java and liquibase.
+    field.transient = true;
+    // Disable update form.
+    field.readonly = true;
+  }
+
   if (field.id) {
     if (field.autoGenerate === false || !['Long', 'UUID'].includes(field.fieldType)) {
       field.liquibaseAutoIncrement = false;
@@ -274,18 +286,6 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     return data;
   };
   field.reference = fieldToReference(entityWithConfig, field);
-
-  if (field.mapstructExpression) {
-    assert.equal(
-      entityWithConfig.dto,
-      'mapstruct',
-      `@MapstructExpression requires an Entity with mapstruct dto [${entityWithConfig.name}.${field.fieldName}].`
-    );
-    // Remove from Entity.java and liquibase.
-    field.transient = true;
-    // Disable update form.
-    field.readonly = true;
-  }
 
   return field;
 }

@@ -19,7 +19,6 @@
 
 const _ = require('lodash');
 const pluralize = require('pluralize');
-const { fieldIsEnum } = require('./field');
 const { createFaker } = require('./faker');
 const { parseLiquibaseChangelogDate } = require('./liquibase');
 const { entityDefaultConfig } = require('../generators/generator-defaults');
@@ -251,53 +250,6 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
       };
     }
   }
-
-  entityWithConfig.fields.forEach(field => {
-    const fieldType = field.fieldType;
-    if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
-      entityWithConfig.fieldsIsReactAvField = true;
-    }
-
-    if (field.javadoc) {
-      entityWithConfig.haveFieldWithJavadoc = true;
-    }
-
-    if (fieldIsEnum(fieldType)) {
-      entityWithConfig.i18nToLoad.push(field.enumInstance);
-    }
-
-    if (fieldType === 'ZonedDateTime') {
-      entityWithConfig.fieldsContainZonedDateTime = true;
-      entityWithConfig.fieldsContainDate = true;
-    } else if (fieldType === 'Instant') {
-      entityWithConfig.fieldsContainInstant = true;
-      entityWithConfig.fieldsContainDate = true;
-    } else if (fieldType === 'Duration') {
-      entityWithConfig.fieldsContainDuration = true;
-    } else if (fieldType === 'LocalDate') {
-      entityWithConfig.fieldsContainLocalDate = true;
-      entityWithConfig.fieldsContainDate = true;
-    } else if (fieldType === 'BigDecimal') {
-      entityWithConfig.fieldsContainBigDecimal = true;
-    } else if (fieldType === 'UUID') {
-      entityWithConfig.fieldsContainUUID = true;
-    } else if (fieldType === 'byte[]' || fieldType === 'ByteBuffer') {
-      entityWithConfig.blobFields.push(field);
-      entityWithConfig.fieldsContainBlob = true;
-      if (field.fieldTypeBlobContent === 'image') {
-        entityWithConfig.fieldsContainImageBlob = true;
-      }
-      if (field.fieldTypeBlobContent !== 'text') {
-        entityWithConfig.fieldsContainBlobOrImage = true;
-      } else {
-        entityWithConfig.fieldsContainTextBlob = true;
-      }
-    }
-
-    if (Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1) {
-      entityWithConfig.validation = true;
-    }
-  });
 
   entityWithConfig.generateFakeData = type => {
     const fieldsToGenerate = type === 'cypress' ? entityWithConfig.fields.filter(field => !field.id) : entityWithConfig.fields;
