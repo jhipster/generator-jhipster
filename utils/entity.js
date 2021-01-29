@@ -301,6 +301,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     }
   });
 
+
   entityWithConfig.generateFakeData = type => {
     const fieldsToGenerate = type === 'cypress' ? entityWithConfig.fields.filter(field => !field.id) : entityWithConfig.fields;
     const fieldEntries = fieldsToGenerate.map(field => {
