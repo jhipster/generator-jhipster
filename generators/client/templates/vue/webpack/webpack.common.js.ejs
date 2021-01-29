@@ -91,10 +91,15 @@ module.exports = {
     new VueLoaderPlugin(),
     new CopyWebpackPlugin({
       patterns: [
-        { from: './node_modules/swagger-ui-dist/*.{js,css,html,png}', to: 'swagger-ui', toType: 'dir', globOptions: { ignore: ['**/index.html'] } },
-        { from: './node_modules/axios/dist/axios.min.js', to: 'swagger-ui' },
-        { from: './<%= CLIENT_MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui' },
-        { from: './<%= CLIENT_MAIN_SRC_DIR %>content/', to: 'content' },
+        {
+          context: './node_modules/swagger-ui-dist/',
+          from: '*.{js,css,html,png}',
+          to: 'swagger-ui/',
+          globOptions: { ignore: ['**/index.html'] },
+        },
+        { from: './node_modules/axios/dist/axios.min.js', to: 'swagger-ui/' },
+        { from: './<%= CLIENT_MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui/' },
+        { from: './<%= CLIENT_MAIN_SRC_DIR %>content/', to: 'content/' },
         { from: './<%= CLIENT_MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
         {
           from: './<%= CLIENT_MAIN_SRC_DIR %>manifest.webapp',

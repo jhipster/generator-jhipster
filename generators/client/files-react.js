@@ -51,12 +51,6 @@ const files = {
       templates: ['postcss.config.js'],
     },
   ],
-  swagger: [
-    {
-      path: CLIENT_MAIN_SRC_DIR,
-      templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }],
-    },
-  ],
   commonWeb: [
     {
       path: CLIENT_MAIN_SRC_DIR,
