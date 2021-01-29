@@ -1153,13 +1153,13 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
 
         <%_
         const initInvalidPrimaryKey = {
-            'String' : 'invalid-id',
-            'Long' : relationship.relationshipFieldName + 'Id + 1',
+            'String' : '"invalid-id"',
+            'Long' : '(' + relationship.relationshipFieldName + 'Id + 1)',
             'UUID' : 'UUID.randomUUID()'
         }[relationship.otherEntity.primaryKey.type];
         _%>
         // Get all the <%= entityInstance %>List where <%= relationship.relationshipFieldName %> equals to <%= initInvalidPrimaryKey %>
-        default<%= entityClass %>ShouldNotBeFound("<%= relationship.relationshipFieldName %>Id.equals=" + (<%= initInvalidPrimaryKey %>));
+        default<%= entityClass %>ShouldNotBeFound("<%= relationship.relationshipFieldName %>Id.equals=" + <%= initInvalidPrimaryKey %>);
     }
 
 <%_ }); _%>
