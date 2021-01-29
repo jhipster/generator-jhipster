@@ -34,22 +34,21 @@
     <script src="./axios.min.js"></script>
 
     <script type="text/javascript">
+      const AlwaysEnableTryItOutPlugin = function (system) {
+        const OperationContainer = system.getComponents('OperationContainer');
+        return {
+          components: {
+            TryItOutButton: () => null,
+            OperationContainer: class CustomOperationContainer extends OperationContainer {
+              constructor(...args) {
+                super(...args);
+                this.state.tryItOutEnabled = true;
+              }
+            },
+          },
+        };
+      };
       window.onload = function () {
-        // Automatically click all 'Try it out' buttons
-        var mutationObserver = new MutationObserver(function (mutations) {
-          mutations.forEach(function (mutation) {
-            document.querySelectorAll('.btn.try-out__btn:not(.cancel)').forEach(div => {
-              div.click();
-            });
-          });
-        });
-
-        mutationObserver.observe(document.documentElement, {
-          attributes: true,
-          childList: true,
-          subtree: true,
-        });
-
         <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
         function getCSRF() {
           var name = 'XSRF-TOKEN=';
@@ -88,7 +87,8 @@
               SwaggerUIStandalonePreset
             ],
             plugins: [
-              SwaggerUIBundle.plugins.DownloadUrl
+              SwaggerUIBundle.plugins.DownloadUrl,
+              AlwaysEnableTryItOutPlugin
             ],
             <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
             requestInterceptor: function(req) {
@@ -105,9 +105,8 @@
             <%_ } _%>
             <%_ if (authenticationType === 'jwt') { _%>
             requestInterceptor: function (req) {
-              var authToken = JSON.parse(
-                localStorage.getItem('<%= jhiPrefixDashed %>-authenticationtoken') || sessionStorage.getItem('<%= jhiPrefixDashed %>-authenticationtoken')
-              );
+              var authToken =
+                localStorage.getItem('<%= jhiPrefixDashed %>-authenticationtoken') || sessionStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken');
               if (authToken) {
                 req.headers['Authorization'] = 'Bearer ' + authToken;
               }

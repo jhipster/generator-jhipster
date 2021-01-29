@@ -18,10 +18,7 @@
 -%>
 buildscript {
     repositories {
-        mavenLocal()
-        mavenCentral()
         gradlePluginPortal()
-        maven { url "https://repo.spring.io/plugins-release" }
     }
     dependencies {
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
@@ -32,6 +29,7 @@ plugins {
     id "java"
     id "maven-publish"
     id "idea"
+    id "eclipse"
     id "jacoco"
     id "org.springframework.boot"
     id "com.google.cloud.tools.jib"
@@ -42,9 +40,6 @@ plugins {
     <%_ if (!skipClient) { _%>
     id "com.github.node-gradle.node"
     <%_ } _%>
-    id "net.ltgt.apt-eclipse"
-    id "net.ltgt.apt-idea"
-    id "net.ltgt.apt"
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     id "org.liquibase.gradle"
     <%_ } _%>
@@ -263,7 +258,6 @@ configurations {
 repositories {
     mavenLocal()
     mavenCentral()
-    jcenter()
     <%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
     maven { url 'https://repo.spring.io/milestone' }
     <%_ } _%>
