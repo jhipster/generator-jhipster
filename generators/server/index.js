@@ -354,6 +354,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         const packageJsonStorage = this.createStorage('package.json');
         const scriptsStorage = packageJsonStorage.createStorage('scripts');
         const databaseType = this.jhipsterConfig.databaseType;
+        const dockerAwaitScripts = [];
         if (databaseType === 'sql') {
           const prodDatabaseType = this.jhipsterConfig.prodDatabaseType;
           if (prodDatabaseType === 'no' || prodDatabaseType === 'oracle') {
@@ -396,7 +397,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             if (['cassandra', 'couchbase'].includes(dockerConfig)) {
               scriptsStorage.set(`docker:${dockerConfig}:build`, `docker-compose -f ${dockerFile} build`);
               dockerBuild.push(`npm run docker:${dockerConfig}:build`);
+            } else if (dockerConfig === 'jhipster-registry') {
+              dockerAwaitScripts.push(
+                'echo "Waiting for jhipster-registry to start" && wait-on http-get://localhost:8761/management/health && echo "jhipster-registry started"'
+              );
             }
+
             scriptsStorage.set(`docker:${dockerConfig}:up`, `docker-compose -f ${dockerFile} up -d`);
             dockerOthersUp.push(`npm run docker:${dockerConfig}:up`);
             scriptsStorage.set(`docker:${dockerConfig}:down`, `docker-compose -f ${dockerFile} down -v --remove-orphans`);
@@ -404,6 +410,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           }
         });
         scriptsStorage.set({
+          'docker:others:await': dockerAwaitScripts.join(' && '),
           'predocker:others:up': dockerBuild.join(' && '),
           'docker:others:up': dockerOthersUp.join(' && '),
           'docker:others:down': dockerOthersDown.join(' && '),

@@ -79,6 +79,20 @@ spring:
       enabled: false
     livereload:
       enabled: false
+  <%_ if (serviceDiscoveryType === 'eureka') { _%>
+  cloud:
+    config:
+      retry:
+        initial-interval: 1000
+        max-interval: 2000
+        max-attempts: 100
+      uri: http://admin:${jhipster.registry.password}@localhost:8761/config
+      # name of the config server's property source (file.yml) that we want to use
+      name: <%= baseName %>
+      profile: prod
+      label: main # toggle to switch to a different version of the configuration as stored in git
+      # it can be set to any label, branch or commit of the configuration source Git repository
+  <%_ } _%>
   <%_ if (serviceDiscoveryType === 'consul') { _%>
   cloud:
     consul:
@@ -86,6 +100,10 @@ spring:
         prefer-ip-address: true
       host: localhost
       port: 8500
+  <%_ } _%>
+  <%_ if (serviceDiscoveryType) { _%>
+  config:
+    import: <% if (serviceDiscoveryType === 'eureka') { %>'configserver:'<% } else if (serviceDiscoveryType === 'consul') { %>'consul:'<% } %>
   <%_ } _%>
   <%_ if (databaseType === 'sql' && !reactive) { _%>
   datasource:
@@ -307,6 +325,10 @@ jhipster:
       # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
       # cluster: true
     <%_ } _%>
+  <%_ } _%>
+  <%_ if (serviceDiscoveryType === 'eureka') { _%>
+  registry:
+    password: admin
   <%_ } _%>
   <%_ if (authenticationType === 'jwt') { _%>
   security:

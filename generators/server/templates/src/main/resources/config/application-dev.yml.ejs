@@ -80,7 +80,6 @@ org:
 <%_ } _%>
 spring:
   profiles:
-    active: dev
     include:
       - api-docs
       # Uncomment to activate TLS for the dev profile
@@ -97,10 +96,34 @@ spring:
   <%_ if (serviceDiscoveryType === 'consul') { _%>
   cloud:
     consul:
+      config:
+        fail-fast: false # if not in "prod" profile, do not force to use Spring Cloud Config
+        format: yaml
+        profile-separator: "-"
       discovery:
         prefer-ip-address: true
+        tags:
+          - profile=${spring.profiles.active}
+          - version=#project.version#
+          - git-version=${git.commit.id.describe:}
+          - git-commit=${git.commit.id.abbrev:}
+          - git-branch=${git.branch:}
       host: localhost
       port: 8500
+  <%_ } _%>
+  <%_ if (serviceDiscoveryType === 'eureka') { _%>
+  cloud:
+    config:
+      uri: http://admin:${jhipster.registry.password}@localhost:8761/config
+      # name of the config server's property source (file.yml) that we want to use
+      name: <%= baseName %>
+      profile: dev
+      label: main # toggle to switch to a different version of the configuration as stored in git
+      # it can be set to any label, branch or commit of the configuration source Git repository
+  <%_ } _%>
+  <%_ if (serviceDiscoveryType) { _%>
+  config:
+    import: <% if (serviceDiscoveryType === 'eureka') { %>'optional:configserver:'<% } else if (serviceDiscoveryType === 'consul') { %>'optional:consul:'<% } %>
   <%_ } _%>
   <%_ if (databaseType === 'sql' && !reactive) { _%>
   datasource:
@@ -326,6 +349,10 @@ jhipster:
       # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
       # cluster: true
     <%_ } _%>
+  <%_ } _%>
+  <%_ if (serviceDiscoveryType === 'eureka') { _%>
+  registry:
+    password: admin
   <%_ } _%>
   <%_ if (applicationType !== 'microservice') { _%>
   # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API

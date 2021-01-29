@@ -659,9 +659,6 @@ const expectedFiles = {
   swaggerCodegenGradle: ['gradle/swagger.gradle'],
 
   gateway: [
-    `${SERVER_MAIN_RES_DIR}config/bootstrap.yml`,
-    `${SERVER_MAIN_RES_DIR}config/bootstrap-prod.yml`,
-    `${SERVER_TEST_RES_DIR}config/bootstrap.yml`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/GatewayConfiguration.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/apidoc/GatewaySwaggerResourcesProvider.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/accesscontrol/AccessControlFilter.java`,

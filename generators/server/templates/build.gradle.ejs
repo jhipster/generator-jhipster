@@ -258,10 +258,10 @@ configurations {
 repositories {
     mavenLocal()
     mavenCentral()
-    <%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+    <%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
     maven { url 'https://repo.spring.io/milestone' }
     <%_ } _%>
-    <%_ if (reactive && databaseType === 'sql' || JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT')) { _%>
+    <%_ if (JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT')) { _%>
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots/"
         mavenContent {
@@ -284,7 +284,7 @@ dependencies {
         exclude group: "org.springframework", module: "spring-webmvc"
     }<% } %>
     <%_ // This is useful for major Spring Boot migration
-    if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+    if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
     runtime "org.springframework.boot:spring-boot-properties-migrator"
     <%_ } _%>
     implementation "javax.annotation:javax.annotation-api"
@@ -396,7 +396,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
     <%_ } _%>
     <%_ if (databaseType === 'neo4j') { _%>
-    implementation "org.neo4j.springframework.data:spring-data-neo4j-rx-spring-boot-starter"
+    implementation "org.springframework.boot:spring-boot-starter-data-neo4j"
     implementation "eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter"
     // This is done here explicitly as dependency resolution seems to have changed recently such that the validation starter
     // and therefore hibernate validators is not included anymore
@@ -448,6 +448,8 @@ dependencies {
     <%_ if (applicationType === 'gateway') { _%>
         <%_ if (!reactive) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-netflix-zuul"
+    <!-- Spring Cloud Netflix Zuul depends on Guava 19.0 -->
+    implementation "com.google.guava:guava:19.0"
         <%_ } else { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-gateway"
         <%_ } _%>
@@ -475,7 +477,9 @@ dependencies {
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
     <%_ } _%>
     implementation "org.springframework.security:spring-security-config"
+    <%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 %>
     implementation "org.springframework.security:spring-security-data"
+    <%_ } _%>
     implementation "org.springframework.security:spring-security-web"
     <%_ if (websocket === 'spring-websocket') { _%>
     implementation "org.springframework.security:spring-security-messaging"
@@ -561,11 +565,7 @@ dependencies {
     testImplementation "io.cucumber:cucumber-java"
     testImplementation "io.cucumber:cucumber-spring"
     <%_ } _%>
-    testImplementation ("org.springframework.boot:spring-boot-starter-test") {
-        <%_ if (cucumberTests === false) { _%>
-        exclude group: "org.junit.vintage", module: "junit-vintage-engine"
-        <%_ } _%>
-    }
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.springframework.security:spring-security-test"
     testImplementation "org.springframework.boot:spring-boot-test"
     <%_ if (reactive) { _%>
@@ -630,8 +630,8 @@ wrapper {
 
 if (project.hasProperty("nodeInstall")) {
     node {
-        version = "<%= NODE_VERSION %>"
-        npmVersion = "<%= NPM_VERSION %>"
+        version = "${nodeVersion}"
+        npmVersion = "${npmVersion}"
         download = true
     }
 }
