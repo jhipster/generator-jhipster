@@ -41,7 +41,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import <%= packageName %>.repository.search.SearchCouchbaseRepository;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase' && relationshipsContainEagerLoad === true) { _%>
-import org.springframework.data.couchbase.core.query.Query;
+import org.springframework.data.couchbase.repository.Query;
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
 import org.springframework.data.cassandra.repository.CassandraRepository;
