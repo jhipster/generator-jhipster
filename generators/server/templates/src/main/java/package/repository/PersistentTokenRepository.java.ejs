@@ -41,14 +41,13 @@ import java.time.LocalDate;
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.data.jpa.repository.JpaRepository;
-<%_ } _%>
-<%_ if (databaseType === 'mongodb') { _%>
+<%_ } else if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.MongoRepository;
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-import org.springframework.data.neo4j.repository.Neo4jRepository;
-<%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ } else if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.repository.Neo4jRepository;
+<%_ } else if (databaseType === 'couchbase') { _%>
+import org.springframework.data.couchbase.repository.CouchbaseRepository;
+<%_ } else if (databaseType === 'cassandra') { _%>
 import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
 import org.springframework.stereotype.Repository;
 
@@ -82,7 +81,7 @@ import static <%= packageName %>.config.Constants.ID_DELIMITER;
 <%_ } _%>
  */
 <%_ if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { _%>
-public interface PersistentTokenRepository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><PersistentToken, String> {
+public interface PersistentTokenRepository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<% } %><% if (databaseType === 'couchbase') { %>CouchbaseRepository<% } %><PersistentToken, String> {
     <%_ if (databaseType === 'couchbase') { _%>
 
     default Optional<PersistentToken> findBySeries(String series) {

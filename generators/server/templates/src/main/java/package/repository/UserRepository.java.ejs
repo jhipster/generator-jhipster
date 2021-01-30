@@ -88,9 +88,10 @@ import static org.springframework.data.relational.core.query.Query.query;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ } else if (databaseType === 'neo4j') { _%>
 import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
+<%_ } else if (databaseType === 'couchbase') { _%>
+import org.springframework.data.couchbase.repository.<% if (reactive) { %>Reactive<% } %>CouchbaseRepository;
 <%_ } _%>
 <%_ if (reactive && databaseType === 'cassandra') { _%>
 import org.springframework.data.cassandra.ReactiveResultSet;
@@ -160,7 +161,7 @@ import static <%= packageName %>.config.Constants.ID_DELIMITER;
 _%>
 <%_ if ((databaseType === 'sql' && !reactive) || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
 @Repository
-public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<<%= asEntity('User') %>, <%= user.primaryKey.type %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<<%= asEntity('User') %>, String><%if (searchEngine === 'couchbase') { %>, SearchCouchbaseRepository<<%= asEntity('User') %>, String><% } } %> {
+public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<<%= asEntity('User') %>, <%= user.primaryKey.type %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'couchbase') { %>CouchbaseRepository<<%= asEntity('User') %>, String><%if (searchEngine === 'couchbase') { %>, SearchCouchbaseRepository<<%= asEntity('User') %>, String><% } } %> {
     <%_ if (cacheManagerIsAvailable === true) { _%>
 
     String USERS_BY_LOGIN_CACHE = "usersByLogin";

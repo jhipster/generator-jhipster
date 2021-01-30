@@ -300,6 +300,11 @@ jhipster:
       app1: /api,/v3/api-docs # recommended dev configuration
     <%_ } _%>
   <%_ } _%>
+  <%_ if (databaseType === 'couchbase') { _%>
+  database:
+    couchbase:
+      bucket-name: <%= baseName %>
+  <%_ } _%>
   <%_ if (cacheProvider !== 'no') { _%>
   cache: # Cache configuration
     <%_ if (cacheProvider === 'hazelcast') { _%>
