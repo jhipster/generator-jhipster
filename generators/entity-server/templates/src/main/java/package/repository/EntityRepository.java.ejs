@@ -35,7 +35,12 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 <%_ } else if (databaseType === 'neo4j') { _%>
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 <%_ } else if (databaseType === 'couchbase') { _%>
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import com.couchbase.client.java.query.QueryScanConsistency;
 import org.springframework.data.couchbase.repository.CouchbaseRepository;
+import org.springframework.data.couchbase.repository.ScanConsistency;
 <%_ } _%>
 <%_ if (searchEngine === 'couchbase') { _%>
 import <%= packageName %>.repository.search.SearchCouchbaseRepository;
@@ -56,7 +61,7 @@ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'co
         }
     }
 _%>
-    <%_ if (importList) { _%>
+    <%_ if (importList || databaseType === 'couchbase') { _%>
 import java.util.List;
     <%_ } _%>
     <%_ if (relationshipsContainEagerLoad) { _%>
@@ -107,14 +112,32 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
         } else if (databaseType === 'mongodb' || databaseType === 'couchbase')  { _%>
 
     @Query("<%= (databaseType === 'mongodb') ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
+    <% if (databaseType === 'couchbase') { %>@ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)<% } %>
     Page<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable pageable);
 
     @Query("<%= (databaseType === 'mongodb') ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
+    <% if (databaseType === 'couchbase') { %>@ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)<% } %>
     List<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
 
     @Query("<%- (databaseType === 'mongodb') ? "{'id': ?0}" : "#{#n1ql.selectEntity} USE KEYS $1 WHERE #{#n1ql.filter}" %>")
+    <% if (databaseType === 'couchbase') { %>@ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)<% } %>
     Optional<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
     <%_
         }
     } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    @Override
+    // Add ScanConsistency to fix issue with Spring Data Couchbase
+    // https://github.com/spring-projects/spring-data-couchbase/issues/897
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    List<<%= asEntity(entityClass) %>> findAll();
+
+    @Override
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    List<<%= asEntity(entityClass) %>> findAll(Sort sort);
+
+    @Override
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    Page<<%= asEntity(entityClass) %>> findAll(Pageable pageable);
+    <%_ } _%>
 }
