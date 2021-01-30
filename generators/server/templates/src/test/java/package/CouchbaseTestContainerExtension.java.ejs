@@ -20,10 +20,9 @@ package <%= packageName %>;
 
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.couchbase.BucketDefinition;
 import org.testcontainers.couchbase.CouchbaseContainer;
+import org.testcontainers.utility.DockerImageName;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -40,7 +39,9 @@ public class CouchbaseTestContainerExtension implements BeforeAllCallback {
     @Override
     public void beforeAll(ExtensionContext extensionContext) throws Exception {
         if (!started.get()) {
-            couchbase = new CouchbaseContainer("<%= DOCKER_COUCHBASE %>")
+            DockerImageName dockerImage = DockerImageName.parse("<%= DOCKER_COUCHBASE %>")
+                .asCompatibleSubstituteFor("couchbase/server");
+            couchbase = new CouchbaseContainer(dockerImage)
                 .withBucket(new BucketDefinition(getBucketName()).withQuota(100))
                 .withCredentials("user", "secret");
             couchbase.start();
