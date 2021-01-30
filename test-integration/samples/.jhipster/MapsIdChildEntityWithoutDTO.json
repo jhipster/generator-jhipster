@@ -8,7 +8,7 @@
       "relationshipType": "one-to-one",
       "otherEntityField": "id",
       "ownerSide": true,
-      "useJPADerivedIdentifier": true,
+      "id": true,
       "otherEntityRelationshipName": "mapsIdChildEntityWithoutDTO"
     }
   ],

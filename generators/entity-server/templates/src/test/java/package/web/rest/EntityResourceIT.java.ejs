@@ -67,7 +67,7 @@ import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
     for (relationship of relationships) { // import entities in required relationships
         const relationshipValidate = relationship.relationshipValidate;
         const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
-        const isUsingMapsIdL1 = relationship.useJPADerivedIdentifier;
+        const isUsingMapsIdL1 = relationship.id;
         if (imported.indexOf(otherEntityNameCapitalized) === -1) {
             if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
 import <%= packageName %>.domain.<%= asEntity(otherEntityNameCapitalized) %>;
@@ -485,7 +485,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             const relationshipType = relationship.relationshipType;
             const relationshipNameCapitalizedPlural = relationship.relationshipNameCapitalizedPlural;
             const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
-            const mapsIdUse = relationship.useJPADerivedIdentifier;
+            const mapsIdUse = relationship.id;
             if ((relationshipValidate !== null && relationshipValidate === true) || mapsIdUse === true) { _%>
         // Add required entity
             <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
@@ -541,7 +541,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             // It can fail, if other entities are still referring this - it will be removed later.
         }
     <%_ relationships.forEach(function(rel) {
-            if ((rel.relationshipValidate === true || rel.useJPADerivedIdentifier === true) && !alreadyGeneratedDeletionCalls.includes(rel.otherEntityName)) { _%>
+            if ((rel.relationshipValidate === true || rel.id === true) && !alreadyGeneratedDeletionCalls.includes(rel.otherEntityName)) { _%>
         <%= rel.otherEntityNameCapitalized %>ResourceIT.deleteEntities(em);
             <%_ alreadyGeneratedDeletionCalls.push(rel.otherEntityName);
             }
@@ -681,7 +681,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             const relationshipValidate = relationship.relationshipValidate;
             const otherEntityName = relationship.otherEntityName;
             const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
-            const mapsIdUse = relationship.useJPADerivedIdentifier;
+            const mapsIdUse = relationship.id;
             if (mapsIdUse === true) { _%>
         // Add a new parent entity
                 <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
@@ -1125,7 +1125,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
 
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= relationship.relationshipNameCapitalized %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
-        <%_ if ((relationship.relationshipValidate === true && relationship.relationshipType === 'one-to-one') || relationship.useJPADerivedIdentifier === true) { _%>
+        <%_ if ((relationship.relationshipValidate === true && relationship.relationshipType === 'one-to-one') || relationship.id === true) { _%>
         // Get already existing entity
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= asEntity(entityInstance) %>.get<%= relationship.relationshipNameCapitalized %>();
         <%_ } else { _%>

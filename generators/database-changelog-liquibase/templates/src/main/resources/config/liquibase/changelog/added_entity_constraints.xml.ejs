@@ -34,7 +34,7 @@
                 const constraintName = getFKConstraintName(entity.entityTableName, relationshipName, prodDatabaseType);
                 let baseColumnNames;
                 let referencedColumnNames;
-                if (relationshipType === 'one-to-one' && ownerSide && relationship.useJPADerivedIdentifier === true) {
+                if (relationshipType === 'one-to-one' && ownerSide && relationship.id === true) {
                     baseColumnNames = relationship.otherEntity.idFields.map(field => getColumnName(field.columnName)).join(',');
                     referencedColumnNames = relationship.otherEntity.idFields.map(field => getColumnName(field.columnName)).join(',');
                 } else if (relationship.otherEntity) {
