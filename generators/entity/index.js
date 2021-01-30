@@ -601,6 +601,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.context.entityContainsCollectionField = this.context.relationships.some(relationship => relationship.relationshipCollection);
       },
 
+      processPrimaryKeyTypesForRelations() {
+        const types = this.context.relationships.filter(rel => rel.otherEntity.primaryKey).map(rel => rel.otherEntity.primaryKey.type);
+        this.context.otherEntityPrimaryKeyTypes = Array.from(new Set(types));
+      },
+
       /**
        * Process relationships that should be loaded eagerly.
        */
