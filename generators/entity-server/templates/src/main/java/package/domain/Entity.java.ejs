@@ -71,7 +71,7 @@ import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
     <%_ } _%>
-import com.couchbase.client.java.repository.annotation.Field;
+import org.springframework.data.couchbase.core.mapping.Field;
     <%_ if (hasRelationship) { _%>
 import org.springframework.data.couchbase.core.query.FetchType;
 import org.springframework.data.couchbase.core.query.N1qlJoin;
