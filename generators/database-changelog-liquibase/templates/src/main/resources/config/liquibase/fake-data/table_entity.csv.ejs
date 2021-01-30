@@ -33,7 +33,7 @@ for (relationship of relationships) {
   if (
     (relationshipType === "many-to-one"
       || (relationshipType === "one-to-one" && relationship.ownerSide === true
-         && (relationship.useJPADerivedIdentifier == null || relationship.useJPADerivedIdentifier === false))
+         && (relationship.id == null || relationship.id === false))
     ) && (relationship.relationshipValidate === true && relationship.relationshipRequired)
   ) {
     header.push(getColumnName(relationship.relationshipName) + "_id");
@@ -42,7 +42,7 @@ for (relationship of relationships) {
 table.push(header);
 
 for (idx in relationships) {
-  if ( relationship.useJPADerivedIdentifier === true ) {
+  if ( relationship.id === true ) {
     const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
     if (otherEntityNameCapitalized === 'User') {
       // Only few user records are generated
@@ -80,7 +80,7 @@ for (lineNb = 0; lineNb < entity.liquibaseFakeData.length; lineNb++) {
     if (
       (relationshipType === "many-to-one"
         || (relationshipType === "one-to-one" && relationship.ownerSide === true
-           && (relationship.useJPADerivedIdentifier == null || relationship.useJPADerivedIdentifier === false))
+           && (relationship.id == null || relationship.id === false))
       ) && (relationship.relationshipValidate === true && relationship.relationshipRequired)
     ) {
       const otherLiquibaseFakeData = relationship.otherEntity.liquibaseFakeData;

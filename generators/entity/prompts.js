@@ -982,7 +982,7 @@ function askForRelationship() {
         response.relationshipType === 'one-to-one' &&
         (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user'),
       type: 'confirm',
-      name: 'useJPADerivedIdentifier',
+      name: 'id',
       message: 'Do you want to use JPA Derived Identifier - @MapsId?',
       default: false,
     },
@@ -1047,7 +1047,7 @@ function askForRelationship() {
         relationshipValidateRules: props.relationshipValidateRules,
         otherEntityField: props.otherEntityField,
         ownerSide: props.ownerSide,
-        useJPADerivedIdentifier: props.useJPADerivedIdentifier,
+        id: props.id,
         otherEntityRelationshipName: props.otherEntityRelationshipName,
       };
 

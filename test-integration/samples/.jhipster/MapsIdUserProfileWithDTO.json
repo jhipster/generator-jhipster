@@ -8,7 +8,7 @@
       "relationshipType": "one-to-one",
       "otherEntityField": "login",
       "ownerSide": true,
-      "useJPADerivedIdentifier": true,
+      "id": true,
       "otherEntityRelationshipName": "mapsIdUserProfileWithDTO"
     }
   ],
