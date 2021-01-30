@@ -1158,8 +1158,8 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             'UUID' : 'UUID.randomUUID()'
         }[relationship.otherEntity.primaryKey.type];
         _%>
-        // Get all the <%= entityInstance %>List where <%= relationship.relationshipFieldName %> equals to <%= initInvalidPrimaryKey %>
-        default<%= entityClass %>ShouldNotBeFound("<%= relationship.relationshipFieldName %>Id.equals=" + <%= initInvalidPrimaryKey %>);
+        // Get all the <%= entityInstance %>List where <%= relationship.relationshipFieldName %> equals to <%- initInvalidPrimaryKey %>
+        default<%= entityClass %>ShouldNotBeFound("<%= relationship.relationshipFieldName %>Id.equals=" + <%- initInvalidPrimaryKey %>);
     }
 
 <%_ }); _%>
