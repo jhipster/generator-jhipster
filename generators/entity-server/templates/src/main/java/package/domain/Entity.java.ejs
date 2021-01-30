@@ -702,7 +702,7 @@ relationships.forEach((relationship, idx) => {
         <%_ } _%>
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
         <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationshipWithId) { _%>
-        this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
+        this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.get<%= otherEntity.primaryKey.nameCapitalized %>() : null;
         <%_ } _%>
     }
         <%_ if (reactiveRelationshipWithId) { _%>
