@@ -32,7 +32,7 @@ import path from 'path';
 let openBlockComment = '';
 let closeBlockComment = '';
 for (let relationship of relationships) {
-    if (relationship.relationshipRequired || relationship.useJPADerivedIdentifier) {
+    if (relationship.relationshipRequired || relationship.id) {
         openBlockComment = '/* ';
         closeBlockComment = ' */';
         break;
