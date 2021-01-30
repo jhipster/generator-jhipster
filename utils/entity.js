@@ -167,9 +167,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
 
   if (!entityWithConfig.embedded) {
     entityWithConfig.idFields = entityWithConfig.fields.filter(field => field.id);
-    entityWithConfig.idRelationships = entityWithConfig.relationships.filter(
-      relationship => relationship.id || relationship.useJPADerivedIdentifier === true
-    );
+    entityWithConfig.idRelationships = entityWithConfig.relationships.filter(relationship => relationship.id);
     let idCount = entityWithConfig.idFields.length + entityWithConfig.idRelationships.length;
 
     if (idCount === 0) {
@@ -194,7 +192,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     } else if (entityWithConfig.idRelationships.length > 0) {
       const relationshipId = entityWithConfig.idRelationships[0];
       if (relationshipId.relationshipType === 'one-to-one' && idCount === 1) {
-        relationshipId.useJPADerivedIdentifier = true;
+        relationshipId.id = true;
         entityWithConfig.derivedPrimaryKey = relationshipId;
         const idFields = entityWithConfig.idFields;
         entityWithConfig.primaryKey = {

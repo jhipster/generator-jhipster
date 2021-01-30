@@ -90,7 +90,7 @@ module.exports = class extends BaseBlueprintGenerator {
       },
 
       useMapsIdRelation() {
-        const jpaDerivedRelation = this.relationships.find(rel => rel.useJPADerivedIdentifier === true);
+        const jpaDerivedRelation = this.relationships.find(rel => rel.id === true);
         if (jpaDerivedRelation) {
           this.isUsingMapsId = true;
           this.mapsIdAssoc = jpaDerivedRelation;
@@ -150,7 +150,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
   /* Private methods used in templates */
   _getJoinColumnName(relationship) {
-    if (relationship.useJPADerivedIdentifier === true) {
+    if (relationship.id === true) {
       return 'id';
     }
     return `${this.getColumnName(relationship.relationshipName)}_id`;

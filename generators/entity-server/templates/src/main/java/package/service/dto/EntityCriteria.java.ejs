@@ -25,7 +25,7 @@ import tech.jhipster.service.filter.InstantFilter;
 <%_ if (fieldsContainLocalDate === true) { _%>
 import tech.jhipster.service.filter.LocalDateFilter;
 <%_ } _%>
-<%_ if (fieldsContainUUID === true) { _%>
+<%_ if (fieldsContainUUID === true || otherEntityPrimaryKeyTypes.includes('UUID')) { _%>
 import tech.jhipster.service.filter.UUIDFilter;
 <%_ } _%>
 <%_ if (fieldsContainZonedDateTime === true) { _%>

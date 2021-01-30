@@ -16,7 +16,7 @@ let openBlockComment = ``;
 let closeBlockComment = ``;
 
 for (let relationship of relationships) {
-  if (relationship.relationshipRequired || relationship.useJPADerivedIdentifier) {
+  if (relationship.relationshipRequired || relationship.id) {
     openBlockComment = `/* this test is commented because it contains required relationships`;
     closeBlockComment = `*/`;
     break;

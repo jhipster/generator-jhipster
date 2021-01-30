@@ -405,6 +405,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
               } as fallback`
             );
           }
+          if (relationship.useJPADerivedIdentifier) {
+            this.info('Option useJPADerivedIdentifier is deprecated, use id instead');
+            relationship.id = true;
+          }
         });
         this.entityConfig.relationships = relationships;
       },
@@ -601,6 +605,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.context.entityContainsCollectionField = this.context.relationships.some(relationship => relationship.relationshipCollection);
       },
 
+      processPrimaryKeyTypesForRelations() {
+        const types = this.context.relationships.filter(rel => rel.otherEntity.primaryKey).map(rel => rel.otherEntity.primaryKey.type);
+        this.context.otherEntityPrimaryKeyTypes = Array.from(new Set(types));
+      },
+
       /**
        * Process relationships that should be loaded eagerly.
        */
@@ -620,14 +629,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
           });
         this.context.relationshipsContainEagerLoad = this.context.relationships.some(relationship => relationship.relationshipEagerLoad);
         this.context.eagerRelations = this.context.relationships.filter(rel => rel.relationshipEagerLoad);
-        this.context.regularEagerRelations = this.context.eagerRelations.filter(rel => rel.useJPADerivedIdentifier !== true);
+        this.context.regularEagerRelations = this.context.eagerRelations.filter(rel => rel.id !== true);
 
         this.context.reactiveEagerRelations = this.context.relationships.filter(
           rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true)
         );
-        this.context.reactiveRegularEagerRelations = this.context.reactiveEagerRelations.filter(
-          rel => rel.useJPADerivedIdentifier !== true
-        );
+        this.context.reactiveRegularEagerRelations = this.context.reactiveEagerRelations.filter(rel => rel.id !== true);
       },
 
       /*
