@@ -138,34 +138,34 @@ dto EntityCustomIdDTO, EntityCustomIdDTOMapsId, EntityCustomIdDTORel with mapstr
  * UUID Custom named id with filtering
  */
 @ChangelogDate(20200804035500)
-entity EntityUuidIdFiltering {
+entity UuidIdFiltering {
   @Id customId UUID
 }
 
 @ChangelogDate(20200804035501)
-entity EntityUuidIdFilteringMapsId {
+entity UuidIdFilteringMapsId {
 }
 
 @ChangelogDate(20200804035502)
-entity EntityUuidIdFilteringRelationship {
+entity UuidIdFilteringRelationship {
   @Id relatedId UUID
 }
 
 relationship OneToOne {
-  EntityUuidIdFilteringMapsId to @Id EntityUuidIdFiltering
-  EntityUuidIdFilteringRelationship{oneToOne} to EntityUuidIdFiltering{oneToOneBack}
-  EntityUuidIdFilteringRelationship{oneToOneMapsId} to EntityUuidIdFilteringMapsId{oneToOneMapsIdBack}
+  UuidIdFilteringMapsId to @Id UuidIdFiltering
+  UuidIdFilteringRelationship{oneToOne} to UuidIdFiltering{oneToOneBack}
+  UuidIdFilteringRelationship{oneToOneMapsId} to UuidIdFilteringMapsId{oneToOneMapsIdBack}
 }
 
 relationship ManyToOne {
-  EntityUuidIdFilteringRelationship{manyToOne} to EntityUuidIdFiltering{manyToOneBack}
-  EntityUuidIdFilteringRelationship{manyToOneMapsId} to EntityUuidIdFilteringMapsId{manyToOneMapsIdBack}
+  UuidIdFilteringRelationship{manyToOne} to UuidIdFiltering{manyToOneBack}
+  UuidIdFilteringRelationship{manyToOneMapsId} to UuidIdFilteringMapsId{manyToOneMapsIdBack}
 }
 
 relationship ManyToMany {
-  EntityUuidIdFilteringRelationship{manyToMany} to EntityUuidIdFiltering{manyToManyBack}
-  EntityUuidIdFilteringRelationship{manyToManyMapsId} to EntityUuidIdFilteringMapsId{manyToManyMapsIdBack}
+  UuidIdFilteringRelationship{manyToMany} to UuidIdFiltering{manyToManyBack}
+  UuidIdFilteringRelationship{manyToManyMapsId} to UuidIdFilteringMapsId{manyToManyMapsIdBack}
 }
 
-filter EntityUuidIdFiltering, EntityUuidIdFilteringMapsId, EntityUuidIdFilteringRelationship
-service EntityUuidIdFiltering, EntityUuidIdFilteringMapsId, EntityUuidIdFilteringRelationship with serviceClass
+filter UuidIdFiltering, UuidIdFilteringMapsId, UuidIdFilteringRelationship
+service UuidIdFiltering, UuidIdFilteringMapsId, UuidIdFilteringRelationship with serviceClass
