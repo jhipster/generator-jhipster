@@ -931,9 +931,9 @@ const serverFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/config/database/CouchbaseDatabaseConfiguration.java',
+          file: 'package/config/DatabaseConfiguration_couchbase.java',
           renameTo: generator => `${generator.javaDir}config/DatabaseConfiguration.java`,
-        }
+        },
       ],
     },
     {

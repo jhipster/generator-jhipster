@@ -203,10 +203,9 @@ spring:
   <%_ } _%>
   <%_ if (databaseType === 'couchbase') { _%>
   couchbase:
-    bootstrap-hosts: localhost
-    bucket:
-      name: <%= baseName %>
-      password: password
+    connection-string: couchbase://localhost
+    username: Administrator
+    password: password
   <%_ } _%>
   <%_ if (databaseType === 'sql') { _%>
   liquibase:
