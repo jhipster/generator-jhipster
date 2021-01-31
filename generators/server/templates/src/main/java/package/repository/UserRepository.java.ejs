@@ -169,18 +169,32 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     String USERS_BY_LOGIN_CACHE = "usersByLogin";
 
     String USERS_BY_EMAIL_CACHE = "usersByEmail";
+
+    <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    // @ScanConsistency is to fix index issues with Spring Data Couchbase
+    // https://github.com/spring-projects/spring-data-couchbase/issues/897
     <%_ } _%>
     <%_ if (authenticationType !== 'oauth2') { _%>
 
+        <%_ if (databaseType === 'couchbase') { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+        <%_ } _%>
     <%= optionalOrMono %><<%= asEntity('User') %>> findOneByActivationKey(String activationKey);
     <%_ } _%>
     <%_ if (authenticationType !== 'oauth2') { _%>
 
+        <%_ if (databaseType === 'couchbase') { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+        <%_ } _%>
     <%= listOrFlux %><<%= asEntity('User') %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
     <%_ } _%>
 
     <%_ if (authenticationType !== 'oauth2') { _%>
 
+        <%_ if (databaseType === 'couchbase') { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+        <%_ } _%>
     <%= optionalOrMono %><<%= asEntity('User') %>> findOneByResetKey(String resetKey);
     <%_ } _%>
 
@@ -190,12 +204,18 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
         <%_ } _%>
     <%_ } _%>
+        <%_ if (databaseType === 'couchbase') { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+        <%_ } _%>
     <%= optionalOrMono %><<%= asEntity('User') %>> findOneByEmailIgnoreCase(String email);
 
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
+        <%_ } _%>
+        <%_ if (databaseType === 'couchbase') { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
         <%_ } _%>
     default <%= optionalOrMono %><<%= asEntity('User') %>> findOneByLogin(String login) {
         return findById(<%= asEntity('User') %>.PREFIX + ID_DELIMITER + login);
@@ -215,8 +235,6 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
-    // Add ScanConsistency to fix issue with Spring Data Couchbase
-    // https://github.com/spring-projects/spring-data-couchbase/issues/897
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <%= listOrFlux %><<%= asEntity('User') %>> findAll();
 
@@ -226,6 +244,9 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
         <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
         <%_ } _%>
+        <%_ if (databaseType === 'couchbase') { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+        <%_ } _%>
     Optional<<%= asEntity('User') %>> findOneWithAuthoritiesByLogin(String login);
 
         <%_ if (authenticationType !== 'oauth2') { _%>
@@ -233,18 +254,30 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
             <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
             <%_ } _%>
+        <%_ if (databaseType === 'couchbase') { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+        <%_ } _%>
     Optional<<%= asEntity('User') %>> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
         <%_ } _%>
     <%_ } _%>
 
     <% if (reactive) { %>
+        <%_ if (databaseType === 'couchbase') { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+        <%_ } _%>
     Flux<<%= asEntity('User') %>>findAllByIdNotNull(Pageable pageable);
 
+        <%_ if (databaseType === 'couchbase') { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+        <%_ } _%>
     Flux<<%= asEntity('User') %>>findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
 
     Mono<Long> count();
     <% } else { %>
+        <%_ if (databaseType === 'couchbase') { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+        <%_ } _%>
     Page<<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
     <% } %>
 }
