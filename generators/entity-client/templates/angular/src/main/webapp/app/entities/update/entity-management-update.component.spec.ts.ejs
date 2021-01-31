@@ -188,7 +188,7 @@ describe('Component Tests', () => {
     <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); _%>
     <%_ for (const relationship of relationshipsByEntityNeedingOptions) { _%>
         <%_ const otherEntity = relationship.otherEntity _%>
-                expect(comp.<%= otherEntity.entityInstancePlural %><% if (!relationshipsWithCustomUniqueOptions.includes(relationship)) { %>Shared<% } %>Collection).toContain(<%= relationship.reference.name %>);
+                expect(comp.<% if (!relationshipsWithCustomUniqueOptions.includes(relationship)) { %><%= otherEntity.entityInstancePlural %>Shared<% } else { %><%= relationship.relationshipFieldNamePlural %><% } %>Collection).toContain(<%= relationship.reference.name %>);
     <%_ } _%>
 <%_ } _%>
             });
