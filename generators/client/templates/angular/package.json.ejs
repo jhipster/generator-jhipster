@@ -175,7 +175,7 @@
     "serve": "<%= clientPackageManager %> run start",
     "build": "<%= clientPackageManager %> run webapp:prod",
     "pretest": "<%= clientPackageManager %> run lint",
-    "test": "ng test --coverage --logHeapUsage -w=2",
+    "test": "ng test --coverage --log-heap-usage -w=2",
     "test:watch": "<%= clientPackageManager %> run test -- --watch",
     "webapp:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webapp:build:dev",
     "webapp:build:dev": "ng build",
