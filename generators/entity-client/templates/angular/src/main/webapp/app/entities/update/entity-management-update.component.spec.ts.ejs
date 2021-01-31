@@ -30,10 +30,10 @@ import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
-import { <% if (allRelationshipsByEntityNeedingOptions.length > 0) { %>I<%= entityAngularName %>, <% } %><%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { I<%= entityAngularName %>, <%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions.filter(relationships => relationships[0].otherEntity.entityAngularName !== entityAngularName)) { _%>
     <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity; _%>
     <%_ if (isBuiltInUser(otherEntity.entityAngularName)) { _%>
@@ -50,6 +50,11 @@ import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>
 
 describe('Component Tests', () => {
     describe('<%= entityAngularName %> Management Update Component', () => {
+        const activatedRouteData = new Subject();
+        const activatedRouteStub: any = {
+            data: activatedRouteData.asObservable(),
+        };
+
         let comp: <%= entityAngularName %>UpdateComponent;
         let fixture: ComponentFixture<<%= entityAngularName %>UpdateComponent>;
         let <%= entityInstance %>Service: <%= entityAngularName %>Service;
@@ -62,18 +67,131 @@ describe('Component Tests', () => {
             TestBed.configureTestingModule({
                 imports: [HttpClientTestingModule],
                 declarations: [<%= entityAngularName %>UpdateComponent],
-                providers: [FormBuilder, ActivatedRoute]
+                providers: [
+                    FormBuilder,
+                    {
+                        provide: ActivatedRoute,
+                        useValue: activatedRouteStub,
+                    },
+                ],
             })
             .overrideTemplate(<%= entityAngularName %>UpdateComponent, '')
             .compileComponents();
 
             fixture = TestBed.createComponent(<%= entityAngularName %>UpdateComponent);
-            comp = fixture.componentInstance;
             <%= entityInstance %>Service = TestBed.inject(<%= entityAngularName %>Service);
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions.filter(relationships => relationships[0].otherEntity.entityAngularName !== entityAngularName)) { _%>
     <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity; _%>
             <%= otherEntity.entityInstance %>Service = TestBed.inject(<%= otherEntity.entityAngularName %>Service);
 <%_ } _%>
+
+            comp = fixture.componentInstance;
+            // Register ActivatedRoute subscription
+            comp.ngOnInit();
+        });
+
+        describe('On ActivatedRoute change', () => {
+            describe('Should call updateForm', () => {
+                it('Should call updateForm', () => {
+                    spyOn(comp, 'updateForm').and.callThrough();
+                    const <%= entityInstance %>: I<%= entityAngularName %> = <%- generateTestEntityPrimaryKey(primaryKey, 1) %>;
+
+                    // Trigger an ActivatedRoute change
+                    activatedRouteData.next({ <%= entityInstance %> });
+
+                    expect(comp.updateForm).toHaveBeenCalledTimes(1);
+                    expect(comp.updateForm).toHaveBeenCalledWith(<%= entityInstance %>);
+                });
+            });
+<%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
+
+            describe('Should call loadRelationshipsOptions', () => {
+    <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
+        <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); _%>
+        <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); _%>
+        <%_ if (relationshipsWithCustomSharedOptions.length > 0) { _%>
+            <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity _%>
+
+                it('Should call <%= otherEntity.entityAngularName %> query and add missing value', () => {
+                        const <%= entityInstance %> : I<%= entityAngularName %> = <%- generateTestEntityPrimaryKey(primaryKey, 1) %>;
+            <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
+                <%_ const reference = relationship.reference _%>
+                <%_ if (relationship.collection) { _%>
+                        const <%= reference.name %> : I<%= otherEntity.entityAngularName %>[] = [<%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>];
+                <%_ } else { _%>
+                        const <%= reference.name %> : I<%= otherEntity.entityAngularName %> = <%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>;
+                <%_ } _%>
+                        <%= entityInstance %>.<%= reference.name %> = <%= reference.name %>;
+            <%_ } _%>
+
+                        const <%= otherEntity.entityInstance %>Collection: I<%= otherEntity.entityAngularName %>[] = [<%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>];
+                        spyOn(<%= otherEntity.entityInstance %>Service, 'query').and.returnValue(of(new HttpResponse({ body: <%= otherEntity.entityInstance %>Collection })));
+                        const additional<%= otherEntity.entityAngularNamePlural %> = [
+            <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
+                <%_ const reference = relationship.reference _%>
+                            <% if (relationship.collection) { %>...<% } %><%= reference.name %>,
+            <%_ } _%>
+                        ];
+                        const expectedCollection: I<%= otherEntity.entityAngularName %>[] = [...additional<%= otherEntity.entityAngularNamePlural %>, ...<%= otherEntity.entityInstance %>Collection];
+                        spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').and.returnValue(expectedCollection);
+
+                        // Trigger an ActivatedRoute change
+                        activatedRouteData.next({ <%= entityInstance %> });;
+
+                        expect(<%= otherEntity.entityInstance %>Service.query).toHaveBeenCalled();
+                        expect(<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing).toHaveBeenCalledWith(<%= otherEntity.entityInstance %>Collection, ...additional<%= otherEntity.entityAngularNamePlural %>);
+                        expect(comp.<%= otherEntity.entityInstancePlural %>SharedCollection).toEqual(expectedCollection);
+                });
+        <%_ } _%>
+        <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { %>
+            <%_ const otherEntity = relationship.otherEntity _%>
+            <%_ const reference = relationship.reference _%>
+
+                it('Should call <%= reference.name %> query and add missing value', () => {
+                        const <%= entityInstance %> : I<%= entityAngularName %> = <%- generateTestEntityPrimaryKey(primaryKey, 1) %>;
+                        const <%= reference.name %> : I<%= otherEntity.entityAngularName %> = <%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>;
+                        <%= entityInstance %>.<%= reference.name %> = <%= reference.name %>;
+
+                        const <%= reference.name %>Collection: I<%= otherEntity.entityAngularName %>[] = [<%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>];
+                        spyOn(<%= otherEntity.entityInstance %>Service, 'query').and.returnValue(of(new HttpResponse({ body: <%= reference.name %>Collection })));
+                        const expectedCollection: I<%= otherEntity.entityAngularName %>[] = [<%= reference.name %>, ...<%= reference.name %>Collection];
+                        spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').and.returnValue(expectedCollection);
+
+                        // Trigger an ActivatedRoute change
+                        activatedRouteData.next({ <%= entityInstance %> });;
+
+                        expect(<%= otherEntity.entityInstance %>Service.query).toHaveBeenCalled();
+                        expect(<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing).toHaveBeenCalledWith(<%= reference.name %>Collection, <%= reference.name %>);
+                        expect(comp.<%= relationship.relationshipFieldNamePlural %>Collection).toEqual(expectedCollection);
+                });
+        <%_ } _%>
+    <%_ } _%>
+            });
+<%_ } _%>
+        });
+
+        describe('updateForm', () => {
+            it('Should update editForm', () => {
+                const <%= entityInstance %>: I<%= entityAngularName %> = <%- generateTestEntityPrimaryKey(primaryKey, 1) %>;
+<%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
+    <%_ for (const relationship of relationshipsByEntityNeedingOptions) { _%>
+        <%_ const otherEntity = relationship.otherEntity _%>
+                const <%= relationship.reference.name %>: I<%= otherEntity.entityAngularName %> = <%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>;
+                <%= entityInstance %>.<%= relationship.reference.name %> = <%= relationship.collection ? `[${relationship.reference.name}]` : relationship.reference.name %>;
+    <%_ } _%>
+<%_ } _%>
+
+                comp.updateForm(<%= entityInstance %>);
+
+                expect(comp.editForm.value).toEqual(expect.objectContaining(<%= entityInstance %>));
+<%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
+    <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); _%>
+    <%_ for (const relationship of relationshipsByEntityNeedingOptions) { _%>
+        <%_ const otherEntity = relationship.otherEntity _%>
+                expect(comp.<%= otherEntity.entityInstancePlural %><% if (!relationshipsWithCustomUniqueOptions.includes(relationship)) { %>Shared<% } %>Collection).toContain(<%= relationship.reference.name %>);
+    <%_ } _%>
+<%_ } _%>
+            });
         });
 
         describe('save', () => {
@@ -127,73 +245,6 @@ _%>
             });
 
     <%_ } _%>
-        });
-<%_ } _%>
-<%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
-
-        describe('Loading relationships', () => {
-            describe('loadRelationshipsOptions', () => {
-    <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
-        <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); %>
-        <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); %>
-        <%_ if (relationshipsWithCustomSharedOptions.length > 0) { _%>
-            <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity _%>
-
-                it('Should call <%= otherEntity.entityAngularName %> query and add missing value', () => {
-                        const <%= entityInstance %> : I<%= entityAngularName %> = <%- generateTestEntityPrimaryKey(primaryKey, 0) %>;
-            <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
-                <%_ const reference = relationship.reference _%>
-                <%_ if (relationship.collection) { _%>
-                        const <%= reference.name %> : I<%= otherEntity.entityAngularName %>[] = [<%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>];
-                <%_ } else { _%>
-                        const <%= reference.name %> : I<%= otherEntity.entityAngularName %> = <%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>;
-                <%_ } _%>
-                        <%= entityInstance %>.<%= reference.name %> = <%= reference.name %>;
-            <%_ } _%>
-                        comp.updateForm(<%= entityInstance %>);
-
-                        const <%= otherEntity.entityInstance %>Collection: I<%= otherEntity.entityAngularName %>[] = [<%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>];
-                        spyOn(<%= otherEntity.entityInstance %>Service, 'query').and.returnValue(of(new HttpResponse({ body: <%= otherEntity.entityInstance %>Collection })));
-                        const additional<%= otherEntity.entityAngularNamePlural %> = [
-            <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
-                <%_ const reference = relationship.reference _%>
-                            <% if (relationship.collection) { %>...<% } %><%= reference.name %>,
-            <%_ } _%>
-                        ];
-                        const expectedCollection: I<%= otherEntity.entityAngularName %>[] = [...additional<%= otherEntity.entityAngularNamePlural %>, ...<%= otherEntity.entityInstance %>Collection];
-                        spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').and.returnValues(expectedCollection);
-
-                        comp['loadRelationshipsOptions']();
-
-                        expect(<%= otherEntity.entityInstance %>Service.query).toHaveBeenCalled();
-                        expect(<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing).toHaveBeenCalledWith(<%= otherEntity.entityInstance %>Collection, ...additional<%= otherEntity.entityAngularNamePlural %>);
-                        expect(comp.<%= otherEntity.entityInstancePlural %>SharedCollection).toEqual(expectedCollection);
-                });
-        <%_ } _%>
-        <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { %>
-            <%_ const otherEntity = relationship.otherEntity _%>
-            <%_ const reference = relationship.reference _%>
-
-                it('Should call <%= reference.name %> query and add missing value', () => {
-                        const <%= entityInstance %> : I<%= entityAngularName %> = <%- generateTestEntityPrimaryKey(primaryKey, 0) %>;
-                        const <%= reference.name %> : I<%= otherEntity.entityAngularName %> = <%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>;
-                        <%= entityInstance %>.<%= reference.name %> = <%= reference.name %>;
-                        comp.updateForm(<%= entityInstance %>);
-
-                        const <%= reference.name %>Collection: I<%= otherEntity.entityAngularName %>[] = [<%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>];
-                        spyOn(<%= otherEntity.entityInstance %>Service, 'query').and.returnValue(of(new HttpResponse({ body: <%= reference.name %>Collection })));
-                        const expectedCollection: I<%= otherEntity.entityAngularName %>[] = [<%= reference.name %>, ...<%= reference.name %>Collection];
-                        spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').and.returnValue(expectedCollection);
-
-                        comp['loadRelationshipsOptions']();
-
-                        expect(<%= otherEntity.entityInstance %>Service.query).toHaveBeenCalled();
-                        expect(<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing).toHaveBeenCalledWith(<%= reference.name %>Collection, <%= reference.name %>);
-                        expect(comp.<%= relationship.relationshipFieldNamePlural %>Collection).toEqual(expectedCollection);
-                });
-        <%_ } _%>
-    <%_ } _%>
-            });
         });
 <%_ } _%>
 <%_ const selectableEntities = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipType === 'many-to-many' && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference);

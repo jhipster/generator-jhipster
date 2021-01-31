@@ -17,6 +17,11 @@
  limitations under the License.
 -%>
 <%_
+const allRelationshipsByEntityNeedingOptions = Object
+    .values(differentRelationships)
+    .map(relationships => relationships.filter(rel => rel.ownerSide))
+    .filter(relationships => relationships.length > 0);
+
 const hasValidationRule = fields.some(field =>
         field.fieldValidate && (
                 field.fieldValidateRules.includes('required') ||
@@ -194,6 +199,29 @@ _%>
         <%_ } _%>
     <%_ } _%>
         });
+<%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
+
+    <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
+        <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); _%>
+        <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); _%>
+        <%_ if (relationshipsWithCustomSharedOptions.length > 0) { _%>
+            <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity _%>
+        this.<%= otherEntity.entityInstancePlural %>SharedCollection = this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing(
+            this.<%= otherEntity.entityInstancePlural %>SharedCollection,
+            <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
+                <%_ const reference = relationship.reference _%>
+            <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= reference.name %><%= relationship.collection ? ' ?? [])' : '' %>,
+            <%_ } _%>
+        );
+        <%_ } _%>
+        <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { _%>
+            <%_ const otherEntity = relationship.otherEntity _%>
+            <%_ const reference = relationship.reference _%>
+        this.<%= otherEntity.entityInstancePlural %>SharedCollection = this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing(this.<%= otherEntity.entityInstancePlural %>SharedCollection, <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= reference.name %><%= relationship.collection ? ' ?? [])' : '' %>);
+        <%_ } _%>
+    <%_ } _%>
+<%_ } _%>
+
     }
 
 <%_ if (fieldsContainBlob) { _%>
@@ -289,7 +317,7 @@ _%>
                 <%= otherEntity.entityInstancePlural %>,
             <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
                 <%_ if (relationship.collection) { _%>
-                ...(this.editForm.get('<%= relationship.reference.name %>')!.value || []),
+                ...(this.editForm.get('<%= relationship.reference.name %>')!.value ?? []),
                 <%_ } else { _%>
                 this.editForm.get('<%= relationship.reference.name %>')!.value,
                 <%_ } _%>
