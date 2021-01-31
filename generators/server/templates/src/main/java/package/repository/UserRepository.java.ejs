@@ -235,6 +235,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
+    @Override
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <%= listOrFlux %><<%= asEntity('User') %>> findAll();
 

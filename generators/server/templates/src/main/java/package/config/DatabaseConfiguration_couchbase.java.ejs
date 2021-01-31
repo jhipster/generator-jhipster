@@ -67,13 +67,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+<%_ if (reactive) { _%>
+import java.util.Set;
+import java.lang.reflect.Field;
+import org.springframework.data.repository.util.QueryExecutionConverters;
+import reactor.core.publisher.Flux;
+<%_ } _%>
 
 @Configuration
 <%_ if (searchEngine === 'elasticsearch') { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
 <%_ } _%>
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
-@Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(<% if (searchEngine === 'couchbase') { %>repositoryBaseClass = Custom<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.class, <% } %>basePackages = "<%= packageName %>.repository"<%_ if (searchEngine === 'elasticsearch') { %>,
+@Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(<% if (searchEngine === 'couchbase') { %>repositoryBaseClass = Custom<% if (reactive) { %>Reactive<% } %>CouchbaseRepository.class, <% } %>basePackages = "<%= packageName %>.repository"<%_ if (searchEngine === 'elasticsearch') { %>,
     includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>CouchbaseRepository.class)<%_ } _%>)
 <%_ if (!reactive) { _%>
 @EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware", dateTimeProviderRef = "")
@@ -88,8 +94,24 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
     public DatabaseConfiguration(JHipsterProperties jHipsterProperties, CouchbaseProperties couchbaseProperties) {
         this.jHipsterProperties = jHipsterProperties;
         this.couchbaseProperties = couchbaseProperties;
+        <% if (reactive) { %>allowPageable();<% } %>
     }
 
+<%_ if (reactive) { _%>
+    // Temporary Hack to fix pageable
+    @SuppressWarnings("unchecked")
+    private void allowPageable() {
+        try {
+            Field allowed_pageable_types = QueryExecutionConverters.class.getDeclaredField("ALLOWED_PAGEABLE_TYPES");
+            allowed_pageable_types.setAccessible(true);
+            Set<Class<?>> ALLOWED_PAGEABLE_TYPES = (Set<Class<?>>) allowed_pageable_types.get(QueryExecutionConverters.class);
+            ALLOWED_PAGEABLE_TYPES.add(Flux.class);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+<%_ } _%>
     @Bean
     public ValidatingCouchbaseEventListener validatingCouchbaseEventListener() {
         return new ValidatingCouchbaseEventListener(validator());

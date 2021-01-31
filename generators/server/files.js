@@ -927,12 +927,22 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.databaseType === 'couchbase',
+      condition: generator => !generator.reactive && generator.databaseType === 'couchbase',
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/config/DatabaseConfiguration_couchbase.java',
-          renameTo: generator => `${generator.javaDir}config/DatabaseConfiguration.java`,
+          file: 'package/repository/CustomCouchbaseRepository.java',
+          renameTo: generator => `${generator.javaDir}repository/CustomCouchbaseRepository.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.reactive && generator.databaseType === 'couchbase',
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/repository/CustomReactiveCouchbaseRepository.java',
+          renameTo: generator => `${generator.javaDir}repository/CustomReactiveCouchbaseRepository.java`,
         },
       ],
     },
@@ -951,22 +961,8 @@ const serverFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/repository/CustomN1qlCouchbaseRepository.java',
-          renameTo: generator => `${generator.testDir}repository/CustomN1qlCouchbaseRepository.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.reactive && generator.databaseType === 'couchbase',
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/ReactiveN1qlCouchbaseRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/ReactiveN1qlCouchbaseRepository.java`,
-        },
-        {
-          file: 'package/repository/CustomReactiveN1qlCouchbaseRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/CustomReactiveN1qlCouchbaseRepository.java`,
+          file: 'package/repository/CustomCouchbaseRepositoryTest.java',
+          renameTo: generator => `${generator.testDir}repository/CustomCouchbaseRepositoryTest.java`,
         },
       ],
     },

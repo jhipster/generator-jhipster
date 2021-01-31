@@ -760,9 +760,9 @@ const expectedFiles = {
   ],
 
   couchbaseSearch: [
-    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/CustomN1qlCouchbaseRepository.java`,
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/CustomCouchbaseRepository.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/SearchCouchbaseRepository.java`,
-    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CustomN1qlCouchbaseRepositoryTest.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CustomCouchbaseRepositoryTest.java`,
   ],
 
   cassandra: [
