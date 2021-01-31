@@ -51,3 +51,9 @@ export class <%= entityAngularName %> implements I<%= entityAngularName %> {
         <%_ } _%>
     }
 }
+<%_ if (primaryKey) { _%>
+
+export function get<%= entityAngularName %>Identifier(<%= entityInstance %>: I<%= entityAngularName %>): <%= primaryKey.tsType %> | undefined {
+  return <%= entityInstance %>.<%= primaryKey.name %>;
+}
+<%_ } _%>

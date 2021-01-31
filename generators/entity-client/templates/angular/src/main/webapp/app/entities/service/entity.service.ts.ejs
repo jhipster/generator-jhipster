@@ -30,6 +30,7 @@ import { map } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 <%_ } _%>
 
+import { isPresent } from 'app/core/util/operators';
 <%_ if (fieldsContainLocalDate) { _%>
 import { DATE_FORMAT } from 'app/config/input.constants';
 <%_ } _%>
@@ -38,7 +39,7 @@ import { createRequestOption } from 'app/core/request/request-util';
 <%_ if (searchEngine !== false) { _%>
 import { <%= searchType %> } from 'app/core/request/request.model';
 <%_ } _%>
-import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { I<%= entityAngularName %>, get<%= entityAngularName %>Identifier } from '../<%= entityFileName %>.model';
 
 export type EntityResponseType = HttpResponse<I<%= entityAngularName %>>;
 export type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
@@ -98,6 +99,23 @@ export class <%= entityAngularName %>Service {
             <% if (fieldsContainDate) { %>.pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))<% } %>;
     }
     <%_ } _%>
+
+    add<%= entityAngularName %>ToCollectionIfMissing(<%= entityInstance %>Collection: I<%= entityAngularName %>[], ...<%= entityInstancePlural %>ToCheck: (I<%= entityAngularName %> | null | undefined)[]): I<%= entityAngularName %>[] {
+        const <%= entityInstancePlural %>: I<%= entityAngularName %>[] = <%= entityInstancePlural %>ToCheck.filter(isPresent);
+        if (<%= entityInstancePlural %>.length > 0) {
+            const <%= entityInstance %>CollectionIdentifiers = <%= entityInstance %>Collection.map(<%= entityInstance %>Item => get<%= entityAngularName %>Identifier(<%= entityInstance %>Item)!);
+            const <%= entityInstancePlural %>ToAdd = <%= entityInstancePlural %>.filter(<%= entityInstance %>Item => {
+                const <%= entityInstance %>Identifier = get<%= entityAngularName %>Identifier(<%= entityInstance %>Item);
+                if (<%= entityInstance %>Identifier == null || <%= entityInstance %>CollectionIdentifiers.includes(<%= entityInstance %>Identifier)) {
+                    return false;
+                }
+                <%= entityInstance %>CollectionIdentifiers.push(<%= entityInstance %>Identifier);
+                return true;
+            });
+            return [...<%= entityInstancePlural %>ToAdd, ...<%= entityInstance %>Collection];
+        }
+        return <%= entityInstance %>Collection;
+    }
 
 <%_ if (fieldsContainDate) { _%>
     protected convertDateFromClient(<%= entityInstance %>: I<%= entityAngularName %>): I<%= entityAngularName %> {

@@ -16,21 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-  const idType = getTypescriptKeyType(user.primaryKey.type);
-_%>
-export interface IUser {
-  id?: <%= idType %>;
-  login?: string;
-}
+import { isPresent } from './operators';
 
-export class User implements IUser {
-  constructor(
-    public id: <%= idType %>,
-    public login: string,
-  ) {}
-}
-
-export function getUserIdentifier(user: IUser): <%= idType %> | undefined {
-  return user.id;
-}
+describe('Operators Test', () => {
+  describe('isPresent', () => {
+    it('should remove null and undefined values', () => {
+      expect([1, null, undefined].filter(isPresent)).toEqual([1]);
+    });
+  });
+});

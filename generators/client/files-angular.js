@@ -307,6 +307,8 @@ const files = {
         'core/util/parse-links.service.ts',
         'core/util/alert.service.ts',
         'core/util/event-manager.service.ts',
+        'core/util/operators.spec.ts',
+        'core/util/operators.ts',
 
         // config
         'config/uib-pagination.config.ts',

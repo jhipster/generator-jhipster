@@ -1111,6 +1111,21 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
   }
 
   /**
+   * Generate a test entity, according to the type
+   *
+   * @param {any} primaryKey - primary key definition.
+   * @param {number} [index] - index of the primary key sample, pass undefined for a random key.
+   */
+  generateTestEntityPrimaryKey(primaryKey, index) {
+    const entries = primaryKey.references.map(reference => {
+      const value =
+        index === undefined && reference.field ? reference.field.generateFakeData('ts') : this.generateTestEntityId(reference.type, index);
+      return `${reference.name}: ${value}`;
+    });
+    return `{${entries.join(',')}}`;
+  }
+
+  /**
    * Return the primary key data type based on DB
    *
    * @param {any} databaseType - the database type

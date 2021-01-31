@@ -477,6 +477,8 @@ const expectedFiles = {
     `${CLIENT_MAIN_SRC_DIR}robots.txt`,
     'jest.conf.js',
     `${CLIENT_MAIN_SRC_DIR}app/core/auth/account.service.spec.ts`,
+    `${CLIENT_MAIN_SRC_DIR}app/core/util/operators.ts`,
+    `${CLIENT_MAIN_SRC_DIR}app/core/util/operators.spec.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/core/util/event-manager.service.spec.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/core/util/data-util.service.spec.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/core/util/parse-links.service.spec.ts`,
