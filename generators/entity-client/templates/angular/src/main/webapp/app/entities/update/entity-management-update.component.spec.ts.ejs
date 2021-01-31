@@ -30,7 +30,7 @@ import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from '../<%= entityFileName %>.model';
@@ -197,6 +197,24 @@ describe('Component Tests', () => {
 
                     // THEN
                     expect(<%= entityInstance %>Service.create).toHaveBeenCalledWith(<%= entityInstance %>);
+                    expect(comp.isSaving).toEqual(false);
+                })
+            );
+
+            it('Should set isSaving to false on error',
+                fakeAsync(() => {
+                    // GIVEN
+                    const <%= entityInstance %> = new <%= entityAngularName %>(<%- tsKeyId %>);
+                    spyOn(<%= entityInstance %>Service, 'update').and.returnValue(throwError('This is an error!'));
+                    activatedRoute.data = of({ <%= entityInstance %> });
+                    comp.ngOnInit();
+
+                    // WHEN
+                    comp.save();
+                    tick(); // simulate async
+
+                    // THEN
+                    expect(<%= entityInstance %>Service.update).toHaveBeenCalledWith(<%= entityInstance %>);
                     expect(comp.isSaving).toEqual(false);
                 })
             );
