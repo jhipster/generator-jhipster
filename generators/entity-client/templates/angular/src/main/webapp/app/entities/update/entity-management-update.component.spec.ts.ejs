@@ -30,7 +30,7 @@ import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Observable } from 'rxjs';
+import { of, Subject } from 'rxjs';
 
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from '../<%= entityFileName %>.model';
@@ -48,13 +48,9 @@ import { <%= otherEntity.entityAngularName %>Service } from 'app/entities/<%= ot
 
 import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
 
-interface IActivateRouteData {
-  <%= entityInstance %>: I<%= entityAngularName %>,
-}
-
 describe('Component Tests', () => {
     describe('<%= entityAngularName %> Management Update Component', () => {
-        let activatedRouteData: Observable<IActivateRouteData>;
+        let activatedRouteData: Observable<I<%= entityAngularName %>>;
         let comp: <%= entityAngularName %>UpdateComponent;
         let fixture: ComponentFixture<<%= entityAngularName %>UpdateComponent>;
         let <%= entityInstance %>Service: <%= entityAngularName %>Service;
@@ -79,17 +75,21 @@ describe('Component Tests', () => {
             .compileComponents();
 
             fixture = TestBed.createComponent(<%= entityAngularName %>UpdateComponent);
-            comp = fixture.componentInstance;
             <%= entityInstance %>Service = TestBed.inject(<%= entityAngularName %>Service);
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions.filter(relationships => relationships[0].otherEntity.entityAngularName !== entityAngularName)) { _%>
     <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity; _%>
             <%= otherEntity.entityInstance %>Service = TestBed.inject(<%= otherEntity.entityAngularName %>Service);
 <%_ } _%>
+
+            comp = fixture.componentInstance;
+            // Register ActivatedRoute subscription
+            comp.ngOnInit();
         });
-<%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
 
         describe('On ActivatedRoute change', () => {
-            describe('On init', () => {
+<%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
+
+            describe('Should call loadRelationshipsOptions', () => {
     <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
         <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); _%>
         <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); _%>
@@ -151,10 +151,10 @@ describe('Component Tests', () => {
         <%_ } _%>
     <%_ } _%>
             });
-        });
 <%_ } _%>
+        });
 
-        describe('ngOnInit', () => {
+        describe('updateForm', () => {
             it('Should update editForm', () => {
                 const <%= entityInstance %>: I<%= entityAngularName %> = <%- generateTestEntityPrimaryKey(primaryKey, 1) %>;
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
