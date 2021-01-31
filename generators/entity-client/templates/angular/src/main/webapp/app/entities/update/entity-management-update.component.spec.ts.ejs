@@ -50,11 +50,7 @@ import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>
 
 describe('Component Tests', () => {
     describe('<%= entityAngularName %> Management Update Component', () => {
-        const activatedRouteData = new Subject();
-        const activatedRouteStub: any = {
-            data: activatedRouteData.asObservable(),
-        };
-
+        let activatedRouteData: Observable<I<%= entityAngularName %>>;
         let comp: <%= entityAngularName %>UpdateComponent;
         let fixture: ComponentFixture<<%= entityAngularName %>UpdateComponent>;
         let <%= entityInstance %>Service: <%= entityAngularName %>Service;
@@ -71,7 +67,7 @@ describe('Component Tests', () => {
                     FormBuilder,
                     {
                         provide: ActivatedRoute,
-                        useValue: activatedRouteStub,
+                        useValue: { data: activatedRouteData },
                     },
                 ],
             })
@@ -91,18 +87,6 @@ describe('Component Tests', () => {
         });
 
         describe('On ActivatedRoute change', () => {
-            describe('Should call updateForm', () => {
-                it('Should call updateForm', () => {
-                    spyOn(comp, 'updateForm').and.callThrough();
-                    const <%= entityInstance %>: I<%= entityAngularName %> = <%- generateTestEntityPrimaryKey(primaryKey, 1) %>;
-
-                    // Trigger an ActivatedRoute change
-                    activatedRouteData.next({ <%= entityInstance %> });
-
-                    expect(comp.updateForm).toHaveBeenCalledTimes(1);
-                    expect(comp.updateForm).toHaveBeenCalledWith(<%= entityInstance %>);
-                });
-            });
 <%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
 
             describe('Should call loadRelationshipsOptions', () => {
@@ -135,8 +119,8 @@ describe('Component Tests', () => {
                         const expectedCollection: I<%= otherEntity.entityAngularName %>[] = [...additional<%= otherEntity.entityAngularNamePlural %>, ...<%= otherEntity.entityInstance %>Collection];
                         spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').and.returnValue(expectedCollection);
 
-                        // Trigger an ActivatedRoute change
-                        activatedRouteData.next({ <%= entityInstance %> });;
+                        activatedRouteData = of({ <%= entityInstance %> });
+                        comp.ngOnInit();
 
                         expect(<%= otherEntity.entityInstance %>Service.query).toHaveBeenCalled();
                         expect(<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing).toHaveBeenCalledWith(<%= otherEntity.entityInstance %>Collection, ...additional<%= otherEntity.entityAngularNamePlural %>);
@@ -157,8 +141,8 @@ describe('Component Tests', () => {
                         const expectedCollection: I<%= otherEntity.entityAngularName %>[] = [<%= reference.name %>, ...<%= reference.name %>Collection];
                         spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').and.returnValue(expectedCollection);
 
-                        // Trigger an ActivatedRoute change
-                        activatedRouteData.next({ <%= entityInstance %> });;
+                        activatedRouteData = of({ <%= entityInstance %> });
+                        comp.ngOnInit();
 
                         expect(<%= otherEntity.entityInstance %>Service.query).toHaveBeenCalled();
                         expect(<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing).toHaveBeenCalledWith(<%= reference.name %>Collection, <%= reference.name %>);
@@ -181,7 +165,8 @@ describe('Component Tests', () => {
     <%_ } _%>
 <%_ } _%>
 
-                comp.updateForm(<%= entityInstance %>);
+                activatedRouteData = of({ <%= entityInstance %> });
+                comp.ngOnInit();
 
                 expect(comp.editForm.value).toEqual(expect.objectContaining(<%= entityInstance %>));
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
