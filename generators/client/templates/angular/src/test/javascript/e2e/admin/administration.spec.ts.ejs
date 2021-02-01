@@ -63,7 +63,6 @@ describe('administration', () => {
   });
   <%_ } _%>
 
-  /* This test tends to fail with Protractor, so we've disabled it. Please enable if it passes for you!
   it('should load metrics', async () => {
     await navBarPage.clickOnAdmin('metrics');
     const heading = element(by.id('metrics-page-heading'));
@@ -75,7 +74,7 @@ describe('administration', () => {
     <%_ } _%>
     const value1 = await heading.<%- elementGetter %>;
     expect(value1).to.eq(expect1);
-  }); */
+  });
 
   it('should load health', async () => {
     await navBarPage.clickOnAdmin('health');

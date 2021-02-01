@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { element, by, ElementFinder<% if (authenticationType === 'oauth2') { _%>, browser, ExpectedConditions as ec<%_ } %> } from 'protractor';
+import { element, by, ElementFinder<% if (authenticationType === 'oauth2') { _%>, browser<%_ } %> } from 'protractor';
 
 <%_
 let elementGetter = `getText()`;
@@ -167,7 +167,7 @@ export class SignInPage {
   async loginWithOAuth(username: string, password: string): Promise<void> {
     // Entering non angular site, tell webdriver to switch to synchronous mode.
     await browser.waitForAngularEnabled(false);
-    await browser.wait(ec.presenceOf(this.username), 5000);
+    await browser.sleep(1000);
 
     if (await this.username.isPresent()) {
       await this.username.sendKeys(username);

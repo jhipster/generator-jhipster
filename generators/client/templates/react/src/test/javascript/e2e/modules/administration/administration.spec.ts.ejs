@@ -58,12 +58,11 @@ describe('Administration', () => {
   });
   <%_ } _%>
 
-  /* This test tends to fail with Protractor, so we've disabled it. Please enable if it passes for you!
   it('should load metrics', async () => {
     await navBarPage.clickOnAdminMenuItem('metrics');
     await waitUntilDisplayed(element(by.id('metrics-page-heading')));
     expect(await element(by.id('metrics-page-heading')).getText()).to.eq('Application Metrics');
-  }); */
+  });
 
   it('should load health', async () => {
     await navBarPage.clickOnAdminMenuItem('health');
