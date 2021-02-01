@@ -2360,13 +2360,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.websocket) {
       this.jhipsterConfig.websocket = options.websocket;
     }
-    if (options.jhiPrefix) {
+    if (options.jhiPrefix !== undefined) {
       this.jhipsterConfig.jhiPrefix = options.jhiPrefix;
     }
-    if (options.entitySuffix) {
+    if (options.entitySuffix !== undefined) {
       this.jhipsterConfig.entitySuffix = options.entitySuffix;
     }
-    if (options.dtoSuffix) {
+    if (options.dtoSuffix !== undefined) {
       this.jhipsterConfig.dtoSuffix = options.dtoSuffix;
     }
     if (options.clientFramework) {
