@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
+const crypto = require('crypto');
 const _ = require('lodash');
 const fs = require('fs');
 const ChildProcess = require('child_process');
@@ -53,6 +54,7 @@ module.exports = class extends BaseBlueprintGenerator {
       return;
     }
 
+    this.randomPassword = crypto.randomBytes(20).toString('hex');
     this.herokuSkipBuild = this.options.skipBuild;
     this.herokuSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
 
@@ -251,31 +253,17 @@ module.exports = class extends BaseBlueprintGenerator {
             },
           },
           {
-            type: 'password',
+            type: 'confirm',
             name: 'oktaAdminPassword',
-            message:
-              'Initial password for the JHipster Admin user. Password requirements: at least 8 characters, a lowercase letter, an uppercase letter, a number, no parts of your username.',
-            mask: true,
-            validate: input => {
-              if (!input) {
-                return 'You must enter an initial password for the JHipster admin';
-              }
-              // try to mimic the password requirements by the okta addon
-              const passwordRegex = new RegExp('^(?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,}$');
-
-              if (passwordRegex.test(input)) {
-                return true;
-              }
-
-              return 'Your password must be at least 8 characters long and contain a lowercase letter, an uppercase letter, a number, and no parts of your username!';
-            },
+            message: `Take note of this password! You will need it on your first login: ${this.randomPassword}`,
+            default: true
           },
         ];
 
         return this.prompt(prompts).then(props => {
           this.useOkta = props.useOkta;
           this.oktaAdminLogin = props.oktaAdminLogin;
-          this.oktaAdminPassword = props.oktaAdminPassword;
+          this.oktaAdminPassword = this.randomPassword;
         });
       },
     };
@@ -758,6 +746,12 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.log(chalk.green('Running ./provision-okta-addon.sh to create all required roles and users to use with jhipster.'));
                 try {
                   await execCmd('./provision-okta-addon.sh');
+                  this.log(chalk.bold('\nOkta configured successfully!'));
+                  this.log(
+                    chalk.green(
+                      `\nUse ${chalk.bold(this.oktaAdminLogin/this.oktaAdminPassword)} to login. You will need to change your password afterwards.\n`
+                    )
+                  );
                 } catch (err) {
                   this.log(
                     chalk.red(
@@ -827,10 +821,16 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.log(chalk.green('Running ./provision-okta-addon.sh to create all required roles and users to use with jhipster.'));
                 try {
                   await execCmd('./provision-okta-addon.sh');
+                  this.log(chalk.bold('\nOkta configured successfully!'));
+                  this.log(
+                    chalk.green(
+                      `\nUse ${chalk.bold(this.oktaAdminLogin/this.oktaAdminPassword)} to login. You will need to change your password afterwards.`
+                    )
+                  );
                 } catch (err) {
                   this.log(
                     chalk.red(
-                      'Failed to execute ./provision-okta-addon.sh. Make sure to setup okta according to https://www.jhipster.tech/heroku/.'
+                      'Failed to execute ./provision-okta-addon.sh. Make sure to setup Okta according to https://www.jhipster.tech/heroku/.'
                     )
                   );
                 }
