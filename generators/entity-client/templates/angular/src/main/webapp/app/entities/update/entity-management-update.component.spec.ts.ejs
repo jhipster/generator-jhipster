@@ -168,15 +168,17 @@ describe('Component Tests', () => {
             it('Should call update service on save for existing entity',
                 fakeAsync(() => {
                     // GIVEN
-                    const entity = new <%= entityAngularName %>(<%- tsKeyId %>);
-                    spyOn(<%= entityInstance %>Service, 'update').and.returnValue(of(new HttpResponse({ body: entity })));
-                    comp.updateForm(entity);
+                    const <%= entityInstance %> = new <%= entityAngularName %>(<%- tsKeyId %>);
+                    spyOn(<%= entityInstance %>Service, 'update').and.returnValue(of(new HttpResponse({ body: <%= entityInstance %> })));
+                    activatedRoute.data = of({ <%= entityInstance %> });
+                    comp.ngOnInit();
+
                     // WHEN
                     comp.save();
                     tick(); // simulate async
 
                     // THEN
-                    expect(<%= entityInstance %>Service.update).toHaveBeenCalledWith(entity);
+                    expect(<%= entityInstance %>Service.update).toHaveBeenCalledWith(<%= entityInstance %>);
                     expect(comp.isSaving).toEqual(false);
                 })
             );
@@ -184,15 +186,17 @@ describe('Component Tests', () => {
             it('Should call create service on save for new entity',
                 fakeAsync(() => {
                     // GIVEN
-                    const entity = new <%= entityAngularName %>();
-                    spyOn(<%= entityInstance %>Service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
-                    comp.updateForm(entity);
+                    const <%= entityInstance %> = new <%= entityAngularName %>();
+                    spyOn(<%= entityInstance %>Service, 'create').and.returnValue(of(new HttpResponse({ body: <%= entityInstance %> })));
+                    activatedRoute.data = of({ <%= entityInstance %> });
+                    comp.ngOnInit();
+
                     // WHEN
                     comp.save();
                     tick(); // simulate async
 
                     // THEN
-                    expect(<%= entityInstance %>Service.create).toHaveBeenCalledWith(entity);
+                    expect(<%= entityInstance %>Service.create).toHaveBeenCalledWith(<%= entityInstance %>);
                     expect(comp.isSaving).toEqual(false);
                 })
             );
