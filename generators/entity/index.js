@@ -584,6 +584,25 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.context.relationships.forEach(relationship => {
           prepareRelationshipForTemplates(this.context, relationship, this);
 
+          // Load in-memory data for root
+          if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) {
+            this.context.fieldsContainOwnerManyToMany = true;
+          } else if (relationship.relationshipType === 'one-to-one' && !relationship.ownerSide) {
+            this.context.fieldsContainNoOwnerOneToOne = true;
+          } else if (relationship.relationshipType === 'one-to-one' && relationship.ownerSide) {
+            this.context.fieldsContainOwnerOneToOne = true;
+          } else if (relationship.relationshipType === 'one-to-many') {
+            this.context.fieldsContainOneToMany = true;
+          } else if (relationship.relationshipType === 'many-to-one') {
+            this.context.fieldsContainManyToOne = true;
+          }
+          if (relationship.otherEntityIsEmbedded) {
+            this.context.fieldsContainEmbedded = true;
+          }
+          if (relationship.relationshipValidate) {
+            this.context.validation = true;
+          }
+
           const entityType = relationship.otherEntityNameCapitalized;
           if (!this.context.differentTypes.includes(entityType)) {
             this.context.differentTypes.push(entityType);
