@@ -84,6 +84,7 @@ jobs:
         cache: [angular]
         app-type:
           - ngx-default
+          - ngx-default-additional
           - ngx-mysql-es-noi18n-mapsid
           - ngx-mariadb-oauth2-infinispan
           - ngx-mongodb-kafka-cucumber
@@ -96,6 +97,13 @@ jobs:
         include:
           - app-type: ngx-default
             entity: sqlfull
+            environment: prod
+            war: 0
+            e2e: 1
+            testcontainers: 1
+          - app-type: ngx-default-additional
+            jhi-app-type: ngx-default
+            entity: none
             jdl-entity: '*'
             environment: prod
             war: 0
@@ -159,7 +167,7 @@ jobs:
       JHI_GENERATE_SKIP_CONFIG: 1
       JHI_ENTITY: ${{ matrix.entity }}
       JHI_JDL_ENTITY: ${{ matrix.jdl-entity }}
-      JHI_APP: ${{ matrix.app-type }}
+      JHI_APP: ${{ matrix.jhi-app-type || matrix.app-type }}
       JHI_PROFILE: ${{ matrix.environment }}
       JHI_WAR: ${{ matrix.war }}
       JHI_E2E: ${{ matrix.e2e }}
