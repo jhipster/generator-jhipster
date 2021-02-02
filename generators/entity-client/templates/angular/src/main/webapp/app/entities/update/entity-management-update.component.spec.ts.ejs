@@ -30,7 +30,7 @@ import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { of, Subject } from 'rxjs';
 
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from '../<%= entityFileName %>.model';
@@ -201,23 +201,23 @@ describe('Component Tests', () => {
                 })
             );
 
-            it('Should set isSaving to false on error',
-                fakeAsync(() => {
-                    // GIVEN
-                    const <%= entityInstance %> = new <%= entityAngularName %>(<%- tsKeyId %>);
-                    spyOn(<%= entityInstance %>Service, 'update').and.returnValue(throwError('This is an error!'));
-                    activatedRoute.data = of({ <%= entityInstance %> });
-                    comp.ngOnInit();
+            it('Should set isSaving to false on error', () => {
+                // GIVEN
+                const saveSubject = new Subject();
+                const <%= entityInstance %> = new <%= entityAngularName %>(<%- tsKeyId %>);
+                spyOn(<%= entityInstance %>Service, 'update').and.returnValue(saveSubject);
+                activatedRoute.data = of({ <%= entityInstance %> });
+                comp.ngOnInit();
 
-                    // WHEN
-                    comp.save();
-                    tick(); // simulate async
+                // WHEN
+                comp.save();
+                expect(comp.isSaving).toEqual(true);
+                saveSubject.error('This is an error!');
 
-                    // THEN
-                    expect(<%= entityInstance %>Service.update).toHaveBeenCalledWith(<%= entityInstance %>);
-                    expect(comp.isSaving).toEqual(false);
-                })
-            );
+                // THEN
+                expect(<%= entityInstance %>Service.update).toHaveBeenCalledWith(<%= entityInstance %>);
+                expect(comp.isSaving).toEqual(false);
+            });
         });
 <%_ const trackedEntities = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference);
     if (trackedEntities.length > 0) {
