@@ -65,12 +65,6 @@ jhipster:
     <%_ } _%>
 <%_ } _%>
 spring:
-<%_ if (serviceDiscoveryType === 'eureka') { _%>
-  cloud:
-    config:
-      fail-fast: true
-      uri: ${JHIPSTER_REGISTRY_URL}/config
-<%_ } _%>
 <%_ if (prodDatabaseType === 'postgresql' || prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
