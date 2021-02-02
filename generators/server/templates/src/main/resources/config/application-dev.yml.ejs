@@ -121,10 +121,6 @@ spring:
       label: main # toggle to switch to a different version of the configuration as stored in git
       # it can be set to any label, branch or commit of the configuration source Git repository
   <%_ } _%>
-  <%_ if (serviceDiscoveryType) { _%>
-  config:
-    import: <% if (serviceDiscoveryType === 'eureka') { %>'optional:configserver:'<% } else if (serviceDiscoveryType === 'consul') { %>'optional:consul:'<% } %>
-  <%_ } _%>
   <%_ if (databaseType === 'sql' && !reactive) { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
