@@ -228,7 +228,7 @@ module.exports = class extends BaseBlueprintGenerator {
             type: 'list',
             name: 'useOkta',
             message:
-              'You are using OAuth 2.0. Do you want to use Okta as your identity provider it yourself? When you choose Okta, the automated configuration of users and groups requires cURL and jq.',
+              'You are using OAuth 2.0. Do you want to use Okta? When you choose Okta, the automated configuration of users and groups requires cURL and jq.',
             choices: [
               {
                 value: true,
@@ -816,7 +816,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.log(chalk.yellow('After you have installed jq execute ./provision-okta-addon.sh manually.'));
               }
               if (curlAvailable && jqAvailable) {
-                this.log(chalk.green('Running ./provision-okta-addon.sh to create all required roles and users to use with jhipster.'));
+                this.log(chalk.green('Running ./provision-okta-addon.sh to create all required roles and users to use with JHipster.'));
                 try {
                   await execCmd('./provision-okta-addon.sh');
                   this.log(chalk.bold('\nOkta configured successfully!'));
@@ -824,7 +824,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 } catch (err) {
                   this.log(
                     chalk.red(
-                      'Failed to execute ./provision-okta-addon.sh. Make sure to setup Okta according to https://www.jhipster.tech/heroku/.'
+                      'Failed to execute ./provision-okta-addon.sh. Make sure to set up Okta according to https://www.jhipster.tech/heroku/.'
                     )
                   );
                 }
