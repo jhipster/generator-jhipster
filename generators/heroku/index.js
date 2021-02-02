@@ -255,8 +255,10 @@ module.exports = class extends BaseBlueprintGenerator {
           {
             type: 'confirm',
             name: 'oktaAdminPassword',
-            message: `Take note of this password! You will need it on your first login: ${this.randomPassword}`,
-            default: true
+            message: `${chalk.blue('Take note of this password!')} You will need it on your first login: ${chalk.blue(
+              this.randomPassword
+            )}`,
+            default: true,
           },
         ];
 
@@ -747,11 +749,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 try {
                   await execCmd('./provision-okta-addon.sh');
                   this.log(chalk.bold('\nOkta configured successfully!'));
-                  this.log(
-                    chalk.green(
-                      `\nUse ${chalk.bold(this.oktaAdminLogin/this.oktaAdminPassword)} to login. You will need to change your password afterwards.\n`
-                    )
-                  );
+                  this.log(chalk.green(`\nUse ${chalk.bold(`${this.oktaAdminLogin}/${this.oktaAdminPassword}`)} to login.\n`));
                 } catch (err) {
                   this.log(
                     chalk.red(
@@ -822,11 +820,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 try {
                   await execCmd('./provision-okta-addon.sh');
                   this.log(chalk.bold('\nOkta configured successfully!'));
-                  this.log(
-                    chalk.green(
-                      `\nUse ${chalk.bold(this.oktaAdminLogin/this.oktaAdminPassword)} to login. You will need to change your password afterwards.`
-                    )
-                  );
+                  this.log(chalk.green(`\nUse ${chalk.bold(`${this.oktaAdminLogin}/${this.oktaAdminPassword}`)} to login.`));
                 } catch (err) {
                   this.log(
                     chalk.red(
