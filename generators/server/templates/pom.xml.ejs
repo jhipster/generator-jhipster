@@ -1096,6 +1096,9 @@
                     <groupId>com.github.eirslett</groupId>
                     <artifactId>frontend-maven-plugin</artifactId>
                     <version>${frontend-maven-plugin.version}</version>
+                    <configuration>
+                        <installDirectory>target</installDirectory>
+                    </configuration>
                 </plugin>
 <%_ } _%>
                 <plugin>
@@ -1574,7 +1577,7 @@
                             <execution>
                                 <id>webapp build dev</id>
                                 <goals>
-                                    <goal><%= clientPackageManager %></goal>
+                                    <goal>npm</goal>
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
@@ -1690,7 +1693,7 @@
                             <execution>
                                 <id>webapp build test</id>
                                 <goals>
-                                    <goal><%= clientPackageManager %></goal>
+                                    <goal>npm</goal>
                                 </goals>
                                 <phase>test</phase>
                                 <configuration>
@@ -1701,7 +1704,7 @@
                             <execution>
                                 <id>webapp build prod</id>
                                 <goals>
-                                    <goal><%= clientPackageManager %></goal>
+                                    <goal>npm</goal>
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
