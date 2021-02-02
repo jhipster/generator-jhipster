@@ -62,7 +62,7 @@
     "chai-as-promised": "7.1.1",
     "chai-string": "1.5.0",
     "mocha": "7.1.2",
-    "protractor": "5.4.4",
+    "protractor": "7.0.0",
     "ts-node": "8.10.1",
     "webdriver-manager": "12.1.8",
     <%_ } _%>
@@ -193,7 +193,7 @@
     "test": "<%= clientPackageManager %> run jest",
     "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",
     "test:watch": "<%= clientPackageManager %> run jest -- --watch",
-    "webapp:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webapp:build:dev",    
+    "webapp:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webapp:build:dev",
     "webapp:build:dev": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --progress=profile --env stats=minimal",
     "webapp:build:prod": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --progress=profile --env stats=minimal",
     "webapp:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress=profile --inline --env stats=normal",
