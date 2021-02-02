@@ -59,9 +59,20 @@ processResources {
     filesMatching("**/application.yml") {
         filter {
             it.replace("#project.version#", version)
+        }
+        <%_ if (!serviceDiscoveryType) { _%>
+        filter {
+            it.replace("#spring.profiles.active#", profiles)
+        }
+        <%_ } _%>
+    }
+    <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+    filesMatching("**/bootstrap.yml") {
+        filter {
             it.replace("#spring.profiles.active#", profiles)
         }
     }
+    <%_ } _%>
 }
 
 <%_ if (!skipClient) { _%>

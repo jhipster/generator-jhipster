@@ -814,6 +814,12 @@
             <artifactId>spring-retry</artifactId>
         </dependency>
 <%_ } _%>
+<%_ if (serviceDiscoveryType) { _%>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
+<%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
