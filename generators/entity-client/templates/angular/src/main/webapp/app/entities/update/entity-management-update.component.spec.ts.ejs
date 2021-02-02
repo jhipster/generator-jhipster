@@ -165,47 +165,54 @@ describe('Component Tests', () => {
         });
 
         describe('save', () => {
-            it('Should call update service on save for existing entity',
-                fakeAsync(() => {
-                    // GIVEN
-                    const <%= entityInstance %> = new <%= entityAngularName %>(<%- tsKeyId %>);
-                    spyOn(<%= entityInstance %>Service, 'update').and.returnValue(of(new HttpResponse({ body: <%= entityInstance %> })));
-                    activatedRoute.data = of({ <%= entityInstance %> });
-                    comp.ngOnInit();
+            it('Should call update service on save for existing entity', () => {
+                // GIVEN
+                const saveSubject = new Subject();
+                const <%= entityInstance %> = new <%= entityAngularName %>(<%- tsKeyId %>);
+                spyOn(<%= entityInstance %>Service, 'update').and.returnValue(saveSubject);
+                spyOn(comp, 'previousState');
+                activatedRoute.data = of({ <%= entityInstance %> });
+                comp.ngOnInit();
 
-                    // WHEN
-                    comp.save();
-                    tick(); // simulate async
+                // WHEN
+                comp.save();
+                expect(comp.isSaving).toEqual(true);
+                saveSubject.next(new HttpResponse({ body: <%= entityInstance %> }));
+                saveSubject.complete();
 
-                    // THEN
-                    expect(<%= entityInstance %>Service.update).toHaveBeenCalledWith(<%= entityInstance %>);
-                    expect(comp.isSaving).toEqual(false);
-                })
-            );
+                // THEN
+                expect(comp.previousState).toHaveBeenCalled();
+                expect(<%= entityInstance %>Service.update).toHaveBeenCalledWith(<%= entityInstance %>);
+                expect(comp.isSaving).toEqual(false);
+            });
 
-            it('Should call create service on save for new entity',
-                fakeAsync(() => {
-                    // GIVEN
-                    const <%= entityInstance %> = new <%= entityAngularName %>();
-                    spyOn(<%= entityInstance %>Service, 'create').and.returnValue(of(new HttpResponse({ body: <%= entityInstance %> })));
-                    activatedRoute.data = of({ <%= entityInstance %> });
-                    comp.ngOnInit();
+            it('Should call create service on save for new entity', () => {
+                // GIVEN
+                const saveSubject = new Subject();
+                const <%= entityInstance %> = new <%= entityAngularName %>();
+                spyOn(<%= entityInstance %>Service, 'create').and.returnValue(saveSubject);
+                spyOn(comp, 'previousState');
+                activatedRoute.data = of({ <%= entityInstance %> });
+                comp.ngOnInit();
 
-                    // WHEN
-                    comp.save();
-                    tick(); // simulate async
+                // WHEN
+                comp.save();
+                expect(comp.isSaving).toEqual(true);
+                saveSubject.next(new HttpResponse({ body: <%= entityInstance %> }));
+                saveSubject.complete();
 
-                    // THEN
-                    expect(<%= entityInstance %>Service.create).toHaveBeenCalledWith(<%= entityInstance %>);
-                    expect(comp.isSaving).toEqual(false);
-                })
-            );
+                // THEN
+                expect(<%= entityInstance %>Service.create).toHaveBeenCalledWith(<%= entityInstance %>);
+                expect(comp.isSaving).toEqual(false);
+                expect(comp.previousState).toHaveBeenCalled();
+            });
 
             it('Should set isSaving to false on error', () => {
                 // GIVEN
                 const saveSubject = new Subject();
                 const <%= entityInstance %> = new <%= entityAngularName %>(<%- tsKeyId %>);
                 spyOn(<%= entityInstance %>Service, 'update').and.returnValue(saveSubject);
+                spyOn(comp, 'previousState');
                 activatedRoute.data = of({ <%= entityInstance %> });
                 comp.ngOnInit();
 
@@ -217,6 +224,7 @@ describe('Component Tests', () => {
                 // THEN
                 expect(<%= entityInstance %>Service.update).toHaveBeenCalledWith(<%= entityInstance %>);
                 expect(comp.isSaving).toEqual(false);
+                expect(comp.previousState).not.toHaveBeenCalled();
             });
         });
 <%_ const trackedEntities = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference);
