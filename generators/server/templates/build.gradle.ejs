@@ -462,6 +462,9 @@ dependencies {
     implementation "org.springframework.cloud:spring-cloud-starter-netflix-hystrix"
     implementation "org.springframework.retry:spring-retry"
     <%_ } _%>
+    <%_ if (serviceDiscoveryType) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-bootstrap"
+    <%_ } _%>
     <%_ if (serviceDiscoveryType === 'eureka') { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
     implementation "org.springframework.cloud:spring-cloud-starter-config"
