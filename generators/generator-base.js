@@ -2433,7 +2433,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.isDebugEnabled = config.isDebugEnabled;
     dest.experimental = config.experimental;
     dest.logo = config.logo;
-    dest.backendName = config.backendName || 'Java';
+    config.backendName = config.backendName || 'Java';
+    dest.backendName = config.backendName;
+    config.packageJson = config.packageJson || {};
+    dest.packageJson = config.packageJson;
   }
 
   /**
@@ -2559,10 +2562,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
   /**
    * Fetch files from the generator-jhipster instance installed
-   * @param {string} subpath : the path to fetch from
+   * @param {...string} subpath : the path to fetch from
    */
-  fetchFromInstalledJHipster(subpath) {
-    return path.join(__dirname, subpath);
+  fetchFromInstalledJHipster(...subpath) {
+    return path.join(__dirname, ...subpath);
   }
 
   /**

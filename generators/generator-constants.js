@@ -28,8 +28,6 @@ const clientFrameworks = applicationOptions.OptionValues[applicationOptions.Opti
 const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the variable as it might be useful in the future.
 
 // Version of Node, NPM
-const HUSKY_VERSION = '4.3.7';
-const LINT_STAGED_VERSION = '10.5.3';
 const NODE_VERSION = '14.15.0';
 const NPM_VERSION = '7.5.2';
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
@@ -399,8 +397,6 @@ const constants = {
   // NPM
   NODE_VERSION,
   NPM_VERSION,
-  HUSKY_VERSION,
-  LINT_STAGED_VERSION,
   PRETTIER_VERSION,
   PRETTIER_JAVA_VERSION,
   OPENAPI_GENERATOR_CLI_VERSION,

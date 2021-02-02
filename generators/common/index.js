@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
+const _ = require('lodash');
+
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const prettierConfigFiles = require('./files').prettierConfigFiles;
@@ -73,6 +75,11 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
         this.loadClientConfig();
         this.loadServerConfig();
         this.loadTranslationConfig();
+      },
+
+      loadPackageJson() {
+        // Load common package.json into packageJson
+        _.merge(this.packageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('common', 'templates', 'package.json')));
       },
     };
   }
