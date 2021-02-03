@@ -53,10 +53,10 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
     <Row>
       <Col md="8">
         <h2 data-cy="<%= entityInstance %>DetailsHeading">
-          <Translate contentKey="<%= i18nKeyPrefix %>.detail.title"><%= entityClass %></Translate> [<strong>{<%= entityInstance %>Entity.<%= primaryKey.name %>}</strong>]
+          <Translate contentKey="<%= i18nKeyPrefix %>.detail.title"><%= entityClass %></Translate>
         </h2>
           <dl className="jh-entity-details">
-          <%_ for (field of fields.filter(field => !field.id)) {
+          <%_ for (field of fields) {
               const fieldType = field.fieldType;
               const fieldName = field.fieldName;
               const fieldNameHumanized = field.fieldNameHumanized;
