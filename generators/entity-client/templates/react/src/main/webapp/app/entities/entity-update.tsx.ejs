@@ -231,19 +231,19 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               const fieldType = field.fieldType;
               const fieldName = field.fieldName;
               const fieldNameHumanized = field.fieldNameHumanized;
-              const readonlyIfGeneratedId = (field.id && field.fieldType === 'Long' ? 'readOnly' : '');
+              const readonlyIfGeneratedId = ((field.id && (field.jpaGeneratedValue || databaseType !== 'sql')) ? ' readOnly' : '');
           _%>
           <AvGroup <% if (fieldType === 'Boolean') { %> check <% } %>>
           <%_ if (fieldType === 'Boolean') { _%>
             <Label id="<%= fieldName %>Label">
               <AvInput id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" type="checkbox" className="form-check-input" name="<%= fieldName %>" />
-              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+              <Translate contentKey="<%= field.fieldTranslationKey %>">
                 <%= fieldNameHumanized %>
               </Translate>
             </Label>
           <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
             <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+              <Translate contentKey="<%= field.fieldTranslationKey %>">
                 <%= fieldNameHumanized %>
               </Translate>
             </Label>
@@ -259,7 +259,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             />
           <%_ } else if (fieldType === 'LocalDate') { _%>
             <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+              <Translate contentKey="<%= field.fieldTranslationKey %>">
                 <%= fieldNameHumanized %>
               </Translate>
             </Label>
@@ -276,7 +276,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               const enumValues = field.enumValues;
           _%>
             <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+              <Translate contentKey="<%= field.fieldTranslationKey %>">
                 <%= fieldNameHumanized %>
               </Translate>
             </Label>
@@ -303,11 +303,11 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             </AvInput>
           <%_ } else if (['Integer', 'Long', 'Float', 'Double'].includes(fieldType)) { _%>
             <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+              <Translate contentKey="<%= field.fieldTranslationKey %>">
                 <%= fieldNameHumanized %>
               </Translate>
             </Label>
-            <AvField id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" type="string" className="form-control" name="<%= fieldName %>" <%= readonlyIfGeneratedId %> <%- include('react_validators'); %> />
+            <AvField id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" type="string" className="form-control" name="<%= fieldName %>"<%= readonlyIfGeneratedId %> <%- include('react_validators'); %> />
           <%_
           } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
 
@@ -320,7 +320,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
 
           <AvGroup>
             <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
-              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+              <Translate contentKey="<%= field.fieldTranslationKey %>">
                 <%= fieldNameHumanized %>
               </Translate>
             </Label>
@@ -353,7 +353,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
 
           <%_ } else { _%>
             <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+              <Translate contentKey="<%= field.fieldTranslationKey %>">
                 <%= fieldNameHumanized %>
               </Translate>
             </Label>
@@ -361,7 +361,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             <%_ } _%>
           <%_ } else { _%>
           <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-            <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+            <Translate contentKey="<%= field.fieldTranslationKey %>">
               <%= fieldNameHumanized %>
             </Translate>
           </Label>
