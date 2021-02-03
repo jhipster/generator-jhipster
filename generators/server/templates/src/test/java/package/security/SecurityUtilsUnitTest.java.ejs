@@ -88,8 +88,8 @@ class SecurityUtilsUnitTest {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
         OidcUser user = new DefaultOidcUser(authorities, idToken);
-        OAuth2AuthenticationToken bla = new OAuth2AuthenticationToken(user, authorities, "oidc");
-        securityContext.setAuthentication(bla);
+        OAuth2AuthenticationToken auth2AuthenticationToken = new OAuth2AuthenticationToken(user, authorities, "oidc");
+        securityContext.setAuthentication(auth2AuthenticationToken);
         SecurityContextHolder.setContext(securityContext);
 
         Optional<String> login = SecurityUtils.getCurrentUserLogin();
