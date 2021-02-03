@@ -893,12 +893,8 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     const variablesWithTypes = [];
     if (!embedded && primaryKey) {
       const tsKeyType = this.getTypescriptKeyType(primaryKey);
-      if (this.jhipsterConfig.clientFramework !== ANGULAR) {
-        if (primaryKey.name) {
-          variablesWithTypes.push(`${primaryKey.name}?: ${tsKeyType}`);
-        } else {
-          variablesWithTypes.push(`id?: ${tsKeyType}`);
-        }
+      if (this.jhipsterConfig.clientFramework === VUE) {
+        variablesWithTypes.push(`id?: ${tsKeyType}`);
       }
     }
     fields.forEach(field => {
