@@ -230,7 +230,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
           { !isNew ?
             <AvGroup>
               <Label for="<%= entityFileName %>-id"><Translate contentKey="global.field.id">ID</Translate></Label>
-              <AvInput id="<%= entityFileName %>-id" type="text" className="form-control" name="id" required readOnly/>
+              <AvInput id="<%= entityFileName %>-id" type="text" className="form-control" name="<%= primaryKey.name %>" required readOnly/>
             </AvGroup>
             : null
           }
@@ -388,6 +388,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               const relationshipType = rel.relationshipType;
               const ownerSide = rel.ownerSide;
               const otherEntityName = rel.otherEntityName;
+              const otherEntityPkName = rel.otherEntity.primaryKey.name;
               const otherEntityNamePlural = rel.otherEntityNamePlural;
               const otherEntityNameCapitalized = rel.otherEntityNameCapitalized;
               const relationshipName = rel.relationshipName;
@@ -415,8 +416,8 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               {
                 <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                   <option
-                    value={otherEntity.id}
-                    key={otherEntity.id}>
+                    value={otherEntity.<%= otherEntityPkName %>}
+                    key={otherEntity.<%= otherEntityPkName %>}>
                     {otherEntity.<%= otherEntityField %>}
                   </option>
                 ) : null
@@ -435,8 +436,8 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                   {
                     <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                       <option
-                        value={otherEntity.id}
-                        key={otherEntity.id}>
+                        value={otherEntity.<%= otherEntityPkName %>}
+                        key={otherEntity.<%= otherEntityPkName %>}>
                         {otherEntity.<%= otherEntityField %>}
                       </option>
                     ) : null
@@ -454,8 +455,8 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                   {
                     <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                       <option
-                        value={otherEntity.id}
-                        key={otherEntity.id}>
+                        value={otherEntity.<%= otherEntityPkName %>}
+                        key={otherEntity.<%= otherEntityPkName %>}>
                         {otherEntity.<%= otherEntityField %>}
                       </option>
                     ) : null
@@ -481,8 +482,8 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                   {
                     <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                       <option
-                        value={otherEntity.id}
-                        key={otherEntity.id}>
+                        value={otherEntity.<%= otherEntityPkName %>}
+                        key={otherEntity.<%= otherEntityPkName %>}>
                         {otherEntity.<%= otherEntityField %>}
                       </option>
                     ) : null
@@ -499,14 +500,14 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               multiple
               className="form-control"
               name="<%= relationshipFieldNamePlural %>"
-              value={!isNew && <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map(e => e.id)}
+              value={!isNew && <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map(e => e.<%= otherEntityPkName %>)}
             >
               <option value="" key="0" />
               {
                 (<%= otherEntityNamePlural %>) ? <%= otherEntityNamePlural %>.map(otherEntity =>
                 <option
-                    value={otherEntity.id}
-                    key={otherEntity.id}>
+                    value={otherEntity.<%= otherEntityPkName %>}
+                    key={otherEntity.<%= otherEntityPkName %>}>
                     {otherEntity.<%= otherEntityField %>}
                 </option>
                 ) : null
