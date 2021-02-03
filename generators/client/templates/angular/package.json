@@ -40,6 +40,6 @@
     "typescript": "4.1.3",
     "webpack": "4.46.0",
     "webpack-bundle-analyzer": "4.4.0",
-    "webpack-notifier": "1.12.0"
+    "webpack-notifier": "1.13.0"
   }
 }
