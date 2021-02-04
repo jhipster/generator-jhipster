@@ -167,7 +167,7 @@ public class <%= entityClass %>Criteria implements Serializable, Criteria {
     public String toString() {
         return "<%= entityClass %>Criteria{" +
 <%_ filterVariables.forEach((field) => { _%>
-                (<%= field.name %> != null ? "<%= field.name %>=" + <%= field.name %> + ", " : "") +
+            (<%= field.name %> != null ? "<%= field.name %>=" + <%= field.name %> + ", " : "") +
 <%_ }); _%>
             "}";
     }
