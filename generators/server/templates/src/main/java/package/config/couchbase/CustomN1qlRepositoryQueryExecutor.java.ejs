@@ -53,8 +53,8 @@ public class CustomN1qlRepositoryQueryExecutor {
     /**
      * see also {@link ReactiveN1qlRepositoryQueryExecutor#execute(Object[] parameters) execute }
      *
-     * @param parameters
-     * @return
+     * @param parameters substitute values
+     * @return with data
      */
     public Object execute(final Object[] parameters) {
         final Class<?> domainClass = queryMethod.getResultProcessor().getReturnedType().getDomainType();
