@@ -418,7 +418,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
 
         this.log(chalk.green(logMsg));
         if (!this.options.skipInstall) {
-          this.spawnCommandSync(this.clientPackageManager, ['run', 'cleanup']);
+          this.spawnCommandSync(this.clientPackageManager, ['run', 'clean-www']);
         }
       },
     };
