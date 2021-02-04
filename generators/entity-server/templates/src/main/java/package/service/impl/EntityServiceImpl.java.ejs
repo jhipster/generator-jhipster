@@ -48,6 +48,9 @@ import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
 import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
 import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
+<%_ if (primaryKey.composite) { _%>
+import <%=packageName%>.domain.<%=primaryKey.type%>;
+<%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,7 +78,7 @@ import java.util.List;
 <%_ if (!reactive) { _%>
 import java.util.Optional;
 <%_ } _%>
-<%_ if (primaryKey.type === 'UUID') { _%>
+<%_ if (primaryKey.fields.some(f => f.fieldType === 'UUID')) { _%>
 import java.util.UUID;
 <%_ } _%>
 <%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && ((searchEngine !== false) || dto === 'mapstruct'))) { _%>

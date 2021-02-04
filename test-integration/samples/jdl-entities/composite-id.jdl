@@ -1,0 +1,23 @@
+@ChangelogDate(20200804035361)
+entity CompositeId {
+  @Id
+  idString Long
+  @Id
+  idUuid Long
+}
+
+@ChangelogDate(20200804035360)
+entity CompositeIdOtherSide {
+}
+
+@ChangelogDate(20200804035363)
+entity CompositeIdRelation {
+  @Id
+  idString Long
+}
+
+relationship ManyToOne {
+  CompositeIdRelation to @Id CompositeIdOtherSide
+}
+
+dto CompositeId, CompositeIdOtherSide, CompositeIdRelation with mapstruct

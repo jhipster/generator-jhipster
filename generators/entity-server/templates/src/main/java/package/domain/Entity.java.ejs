@@ -96,6 +96,10 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import javax.persistence.*;
     <%_ } _%>
+    <%_ if (!embedded && primaryKey.composite && primaryKey.relationships.length > 0) { _%>
+import org.springframework.data.domain.Persistable;
+    <%_ } _%>
+
 <%_ } if (validation) { _%>
 import javax.validation.constraints.*;
 <%_ } _%>
@@ -122,7 +126,7 @@ import java.util.Set;
 <%_ } if (databaseType === 'couchbase' && hasRelationship) { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
-<%_ if ((!embedded && primaryKey.type === 'UUID') || fieldsContainUUID === true) { _%>
+<%_ if (fieldsContainUUID === true) { _%>
 import java.util.UUID;
 <%_ }
 Object.keys(uniqueEnums).forEach(function(element) { _%>
@@ -170,7 +174,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ if (searchEngine === 'elasticsearch') { _%>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "<%= entityInstance.toLowerCase() %>")
 <%_ } _%>
-public class <%= asEntity(entityClass) %> implements Serializable {
+public class <%= asEntity(entityClass) %> implements <% if (!embedded && primaryKey.composite && primaryKey.relationships.length > 0) { %>Persistable<<%= primaryKey.type %>>, <% } %>Serializable {
 
     private static final long serialVersionUID = 1L;
     <%_ if (databaseType === 'couchbase' && !embedded) { _%>
@@ -181,24 +185,30 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     private String prefix = PREFIX;
     <%_ } _%>
 
-<%_ if (!embedded) { _%>
+<%_ if (!embedded) {
+        if (primaryKey.composite) { _%>
+    @EmbeddedId
+    private <%= primaryKey.type %> <%= primaryKey.name %>;
+    <%_ } else { _%>
+        <%_ const field = primaryKey.fields[0]; _%>
     @Id
-    <%_ if (databaseType === 'sql' && isUsingMapsId === false && !reactive && !primaryKey.composite) { _%>
-        <%_ if (primaryKey.fields[0].jpaGeneratedValue === 'identity') { _%>
+        <%_ if (databaseType === 'sql') { _%>
+            <%_ if (field.jpaGeneratedValue === 'identity') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-        <%_ } else if (primaryKey.fields[0].jpaGeneratedValue === 'sequence') { _%>
+            <%_ } else if (field.jpaGeneratedValue === 'sequence') { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
-        <%_ } else if (primaryKey.fields[0].jpaGeneratedValue) { _%>
+            <%_ } else if (field.jpaGeneratedValue) { _%>
     @GeneratedValue
-        <%_ } _%>
-    <%_ } else if (databaseType === 'couchbase' && !embedded) { _%>
+            <%_ } _%>
+        <%_ } else if (databaseType === 'couchbase' && !embedded) { _%>
     @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
-    <%_ } else if (databaseType === 'neo4j') { _%>
+        <%_ } else if (databaseType === 'neo4j') { _%>
     @GeneratedValue(UUIDStringGenerator.class)
-    <%_ } _%>
-    private <%= primaryKey.type %> <%= primaryKey.name %>;
+        <%_ } _%>
+    private <%= field.fieldType %> <%= field.fieldName %>;
 
+    <%_ } _%>
 <%_ } _%>
 <%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
     if (typeof field.javadoc !== 'undefined') { _%>
@@ -319,8 +329,8 @@ relationships.forEach((relationship, idx) => {
     <%_ if (!hasDto) { _%>
     @ApiModelProperty(value = "<%- formatAsApiDescription(relationship.javadoc) %>")
     <%_ } _%>
-<%_ }
-    if (relationshipType === 'one-to-many') {
+<%_ } _%>
+<%_ if (relationshipType === 'one-to-many') {
         if (databaseType === 'sql' && !reactive) {
     _%>
     @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
@@ -354,6 +364,22 @@ relationships.forEach((relationship, idx) => {
 <%_ } else if (relationshipType === 'many-to-one') {
         if (databaseType === 'sql' && !reactive) {
     _%>
+        <%_ if (relationship.id === true && relationship.derivedPrimaryKey.derivedFields.length === 1) { %>
+    @MapsId<%- primaryKey.composite ? `("${relationship.derivedPrimaryKey.derivedFields[0].fieldName}")` : '' %>
+        <%_ } %>
+        <%_ if (relationship.id === true) { %>
+            <%_ if (!relationship.otherEntity.primaryKey.composite) { %>
+    @JoinColumn(name = "<%= relationship.derivedPrimaryKey.derivedFields[0].columnName %>")
+            <%_ } else { %>
+    @JoinColumns(
+        value = {
+                <%_ for (const field of relationship.derivedPrimaryKey.derivedFields) { %>
+            @JoinColumn(name = "<%= field.columnName %>", referencedColumnName = "<%= field.originalField.columnName %>"),
+                <%_ } _%>
+        }
+    )
+            <%_ } _%>
+        <%_ } _%>
     @ManyToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
         <%_ if (relationshipValidate) { _%>
     <%- include('relationship_validators', { relationship }); -%>
@@ -454,9 +480,21 @@ relationships.forEach((relationship, idx) => {
             <%_ if (relationshipValidate) { _%>
     <%- include('relationship_validators', { relationship }); -%>
             <%_ } _%>
-            <%_ if (isUsingMapsId === true) { %>
-    @MapsId
-    @JoinColumn(name = "<%= relationship.otherEntity.primaryKey.fields[0].columnName %>")
+            <%_ if (relationship.id === true && relationship.derivedPrimaryKey.derivedFields.length === 1) { %>
+    @MapsId<%- primaryKey.composite ? `("${relationship.derivedPrimaryKey.derivedFields[0].fieldName}")` : '' %>
+            <%_ } %>
+            <%_ if (relationship.id === true) { %>
+                <%_ if (!relationship.otherEntity.primaryKey.composite) { %>
+    @JoinColumn(name = "<%= relationship.derivedPrimaryKey.derivedFields[0].columnName %>")
+                <%_ } else { %>
+    @JoinColumns(
+        value = {
+                    <%_ for (const field of relationship.derivedPrimaryKey.derivedFields) { %>
+            @JoinColumn(name = "<%= field.columnName %>", referencedColumnName = "<%= field.originalField.columnName %>"),
+                    <%_ } %>
+        }
+    )
+                <%_ } %>
             <%_ } else { _%>
     @JoinColumn(unique = true)
             <%_ } _%>
@@ -486,6 +524,12 @@ relationships.forEach((relationship, idx) => {
 
 <%_ }
 }); _%>
+
+<%_ if (!embedded && primaryKey.composite && primaryKey.relationships.length > 0) { _%>
+    @Transient
+    private Boolean newEntity;
+<%_ } _%>
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 <%_ if (!embedded) { _%>
     public <%= primaryKey.type %> get<%= primaryKey.nameCapitalized %>() {
@@ -717,6 +761,20 @@ relationships.forEach((relationship, idx) => {
         <%_ } _%>
     <%_ } _%>
 <%_ } _%>
+<%_ if (!embedded && primaryKey.composite && primaryKey.relationships.length > 0) { _%>
+    public void setNew(boolean newEntity) {
+        this.newEntity = newEntity;
+    }
+
+    /*
+     * Workaround https://github.com/spring-projects/spring-boot/issues/20181
+     */
+    @Override
+    public boolean isNew() {
+        return this.newEntity != null && this.newEntity;
+    }
+<%_ } _%>
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -743,9 +801,21 @@ relationships.forEach((relationship, idx) => {
     // prettier-ignore
     @Override
     public String toString() {
+<%_ if (!embedded && primaryKey.composite) { _%>
+    <%_ for (reference of primaryKey.references) { _%>
+        <%= reference.type %> <%= reference.name %> = null;
+    <%_ } _%>
+        if (<%= buildJavaGet([primaryKey.name]) %> != null) {
+    <%_ for (reference of primaryKey.references) { _%>
+            <%= reference.name %> = <%= buildJavaGet([primaryKey.name, ...reference.path]) _%>;
+    <%_ } _%>
+        }
+<%_ } _%>
         return "<%= asEntity(entityClass) %>{" +
         <%_ if (!embedded) { _%>
-            "<%= primaryKey.name %>=" + get<%= primaryKey.nameCapitalized %>() +
+            <%_ for (reference of primaryKey.references) { _%>
+            "<%= reference.name %>=" + <%= primaryKey.composite ? reference.name : buildJavaGet(reference.path) %> +
+            <%_ } _%>
         <%_ } _%>
             <%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
                 const fieldType = field.fieldType;

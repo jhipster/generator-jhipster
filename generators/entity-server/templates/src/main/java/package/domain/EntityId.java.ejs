@@ -23,6 +23,9 @@ import javax.persistence.Embeddable;
 import javax.validation.constraints.*;
 <%_ } _%>
 import java.util.Objects;
+<%_ if (primaryKey.fields.some(f => f.fieldType === 'UUID')) { _%>
+import java.util.UUID;
+<%_ } %>
 
 @Embeddable
 public class <%= primaryKey.type %> implements java.io.Serializable {

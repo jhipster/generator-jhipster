@@ -1243,6 +1243,25 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
   }
 
   /**
+   * Returns a Java generator that randomizes a value.
+   *
+   * @param {string} type - Java type
+   * @returns {string} java primary key value
+   */
+  getJavaValueGenerator(type) {
+    if (type === 'String') {
+      return 'UUID.randomUUID().toString()';
+    }
+    if (type === 'UUID') {
+      return 'UUID.randomUUID()';
+    }
+    if (type === 'Long') {
+      return 'count.incrementAndGet()';
+    }
+    throw new Error(`Java type ${type} does not have a random generator implemented`);
+  }
+
+  /**
    * Get a root folder name for entity
    * @param {string} clientRootFolder
    * @param {string} entityFileName

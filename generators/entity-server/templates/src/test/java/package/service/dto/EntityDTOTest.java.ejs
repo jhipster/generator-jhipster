@@ -21,32 +21,33 @@ package <%= packageName %>.service.dto;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import <%= packageName %>.web.rest.TestUtil;
-<%_
-let id1;
-let id2;
-if (!embedded) {
-    id1 = getPrimaryKeyValue(primaryKey.type, databaseType, '1');
-    id2 = getPrimaryKeyValue(primaryKey.type, databaseType, '2');
-    if (id1.includes('UUID')) { _%>
+<%_ if (fieldsContainUUID || (!embedded && ['String', 'UUID'].includes(primaryKey.type))) { _%>
 import java.util.UUID;
-    <%_ }
-} _%>
+<%_ } _%>
 
 class <%= asDto(entityClass) %>Test {
 
     @Test
     void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(<%= asDto(entityClass) %>.class);
-        <%_if (!embedded) { _%>
+        <%_ if (!embedded) { _%>
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %>1 = new <%= asDto(entityClass) %>();
-        <%= asDto(entityInstance) %>1.set<%= primaryKey.nameCapitalized %>(<%- id1 %>);
+        <%_ for (reference of primaryKey.references) { _%>
+        <%= asDto(entityInstance) %>1.set<%= reference.nameCapitalized %>(<%- getPrimaryKeyValue(reference.type, databaseType, 1) %>);
+        <%_ } _%>
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %>2 = new <%= asDto(entityClass) %>();
         assertThat(<%= asDto(entityInstance) %>1).isNotEqualTo(<%= asDto(entityInstance) %>2);
-        <%= asDto(entityInstance) %>2.set<%= primaryKey.nameCapitalized %>(<%= asDto(entityInstance) %>1.get<%= primaryKey.nameCapitalized %>());
+        <%_ for (reference of primaryKey.references) { _%>
+        <%= asDto(entityInstance) %>2.set<%= reference.nameCapitalized %>(<%= asDto(entityInstance) %>1.get<%= reference.nameCapitalized %>());
+        <%_ } _%>
         assertThat(<%= asDto(entityInstance) %>1).isEqualTo(<%= asDto(entityInstance) %>2);
-        <%= asDto(entityInstance) %>2.set<%= primaryKey.nameCapitalized %>(<%- id2 %>);
+        <%_ for (reference of primaryKey.references) { _%>
+        <%= asDto(entityInstance) %>2.set<%= reference.nameCapitalized %>(<%- getPrimaryKeyValue(reference.type, databaseType, 2) %>);
+        <%_ } _%>
         assertThat(<%= asDto(entityInstance) %>1).isNotEqualTo(<%= asDto(entityInstance) %>2);
-        <%= asDto(entityInstance) %>1.set<%= primaryKey.nameCapitalized %>(null);
+        <%_ for (reference of primaryKey.references) { _%>
+        <%= asDto(entityInstance) %>1.set<%= reference.nameCapitalized %>(null);
+        <%_ } _%>
         assertThat(<%= asDto(entityInstance) %>1).isNotEqualTo(<%= asDto(entityInstance) %>2);
         <%_} _%>
     }

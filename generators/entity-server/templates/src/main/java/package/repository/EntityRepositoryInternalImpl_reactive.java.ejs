@@ -29,7 +29,8 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 <%_ } if (fieldsContainDuration === true) { _%>
 import java.time.Duration;
-<%_ } if (fieldsContainUUID === true) { _%>
+<%_ } _%>
+<%_ if (fieldsContainUUID === true) { _%>
 import java.util.UUID;
 <%_ } _%>
 import java.util.ArrayList;

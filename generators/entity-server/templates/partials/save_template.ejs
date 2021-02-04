@@ -42,16 +42,29 @@ if (isUsingMapsId === true) {
         if (dto === 'mapstruct') {
             resultEntity = asEntity(entityInstance); _%>
         <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %> = <%= dtoToEntity %>(<%= instanceName %>);
-        <%_ if (isUsingMapsId === true) { _%>
-        <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
-        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= asEntity(entityInstance) %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= mapsIdAssoc.relationshipName %><%_ } _%>);
+        <%_ for (const relationships of primaryKey.relationships) { _%>
+        <%= relationships.otherEntity.primaryKey.type %> <%= relationships.relationshipName %><%= relationships.otherEntity.primaryKey.nameCapitalized %> = <%= asEntity(entityInstance) %>.get<%= relationships.relationshipNameCapitalized %>().get<%= relationships.otherEntity.primaryKey.nameCapitalized %>();
+            <%_ if (!embedded && primaryKey.composite && primaryKey.relationships.length > 0) { _%>
+
+        /*
+         * Workaround @MapsId bugs:
+         * https://github.com/spring-projects/spring-boot/issues/20181
+         */
+        boolean newEntity = <%= asDto(entityInstance) %>.get<%= primaryKey.trackByField.fieldNameCapitalized %>() == null;
+        <%= asEntity(entityInstance) %>.setNew(newEntity);
+                <%_ for (relationship of primaryKey.relationships) { _%>
+                    <%_ const field = relationship.derivedPrimaryKey.derivedFields[0] _%>
+        <%= asEntity(entityInstance) %>.get<%= primaryKey.nameCapitalized %>().set<%= field.fieldNameCapitalized %>(<%= field.fieldName %>);
+                <%_ } _%>
+            <%_ } _%>
+        <%= mapsIdRepoInstance %>.findById(<%= mapsIdAssoc.relationshipName %><%= mapsIdAssoc.otherEntity.primaryKey.nameCapitalized %>).ifPresent(<%= asEntity(entityInstance) %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= mapsIdAssoc.relationshipName %><%_ } _%>);
         <%_ } _%>
         <%= asEntity(entityInstance) %> = <%= entityInstance %>Repository.save(<%= asEntity(entityInstance) %>);
         <%= returnPrefix %> <%= entityToDto %>(<%= asEntity(entityInstance) %>);
     <%_ } else { resultEntity = 'result'; _%>
         <%_ if (isUsingMapsId === true) { _%>
-        <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
-        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= instanceName %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
+        <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= primaryKey.name %> = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
+        <%= mapsIdRepoInstance %>.findById(<%= primaryKey.name %>).ifPresent(<%= instanceName %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
         <%_ } _%>
         <%= returnPrefix %> <%= entityInstance %>Repository.save(<%= asEntity(entityInstance) %>);
     <%_ }
@@ -63,8 +76,8 @@ if (isUsingMapsId === true) {
         }
     } else { _%>
         <%_ if (isUsingMapsId === true && isController === false) { _%>
-        <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= entityInstance %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
-        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= entityInstance %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
+        <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= primaryKey.name %> = <%= entityInstance %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
+        <%= mapsIdRepoInstance %>.findById(<%= primaryKey.name %>).ifPresent(<%= entityInstance %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
         <%_ } _%>
         <%= returnPrefix %> <%= entityInstance %>Service.save(<%= instanceName %>);
 <%_ } _%>

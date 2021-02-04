@@ -271,7 +271,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         },
       };
     } else {
-      const composite = false;
+      const composite = idCount > 1;
       let primaryKeyName;
       let primaryKeyType;
       let trackByField;
@@ -314,7 +314,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         relationships: idRelationships,
         ownFields: idFields,
         get fields() {
-          return [...idFields, ...this.derivedFields];
+          return [...this.ownFields, ...this.derivedFields];
         },
         get autoGenerate() {
           return this.composite ? false : this.fields[0].autoGenerate;

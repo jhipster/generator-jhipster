@@ -24,8 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 <%_
 let id;
 if (!embedded) {
-    id = getPrimaryKeyValue(primaryKey.type, databaseType, '1');
-    if (id.includes('UUID')) { _%>
+    if (fields.some(f => f.fieldType === 'UUID')) { _%>
 import java.util.UUID;
     <%_ }
 } _%>

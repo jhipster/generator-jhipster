@@ -19,6 +19,9 @@
 package <%= packageName %>.repository;
 
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+<%_ if (primaryKey.composite) { _%>
+import <%= packageName %>.domain.<%= primaryKey.type %>;
+<%_ } _%>
 
 <%_ if (relationshipsContainEagerLoad) { _%>
 import org.springframework.data.domain.Page;

@@ -29,9 +29,13 @@ int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= call
 partialUpdated<%= asEntity(entityClass) %>.set<%= primaryKey.nameCapitalized %>(<%= asEntity(entityInstance) %>.get<%= primaryKey.nameCapitalized %>());
 <%_ fieldsToUpdate = fields.filter(field => field.includeField) %>
 <%_ if (fluentMethods && fieldsToUpdate.length > 0) { _%>
-    partialUpdated<%= asEntity(entityClass) %><% for (field of fieldsToUpdate) { %>
-        .<%= field.fieldName %>(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>)<% if (field.fieldWithContentType) { %>
-            .<%= field.fieldName %>ContentType(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<% } %><% } %>;
+    partialUpdated<%= asEntity(entityClass) %>
+    <%_ for (field of fieldsToUpdate) { _%>
+        .<%= field.fieldName %>(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>)
+        <% if (field.fieldWithContentType) { %>
+        .<%= field.fieldName %>ContentType(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)
+        <%_ } _%>
+    <%_ } _%>;
 <%_ } else { _%>
 <%_ for (field of fieldsToUpdate) { _%>
     <%_ if (field.includeField) { %>
@@ -42,18 +46,21 @@ partialUpdated<%= asEntity(entityClass) %>.set<%= primaryKey.nameCapitalized %>(
     <%_ } _%>
 <%_ } _%>
 <%_ } _%>
+<%_ if (dto === 'mapstruct') { _%>
+<%= asDto(entityClass) %> partialUpdated<%= asDto(entityClass) %> = <%= entityInstance %>Mapper.toDto(partialUpdated<%= asEntity(entityClass) %>);
+<%_ } _%>
 
 <%_ if (!reactive) { _%>
 rest<%= entityClass %>MockMvc.perform(patch("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
 .contentType("application/merge-patch+json")
-.content(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>)))
+.content(TestUtil.convertObjectToJsonBytes(partialUpdated<%= dto === 'mapstruct' ? asDto(entityClass) : asEntity(entityClass) %>)))
 .andExpect(status().isOk());
 <%_ } else { _%>
 webTestClient
 .patch()
 .uri("/api/<%= entityApiUrl %>")
 .contentType(MediaType.valueOf("application/merge-patch+json"))
-.bodyValue(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>))
+.bodyValue(TestUtil.convertObjectToJsonBytes(partialUpdated<%= dto === 'mapstruct' ? asDto(entityClass) : asEntity(entityClass) %>))
 .exchange()
 .expectStatus()
 .isOk();
