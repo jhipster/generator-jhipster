@@ -38,7 +38,7 @@ services:
       _%>
         <%_ if (reactive) { _%>
       - SPRING_R2DBC_URL=<%- getR2DBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
-        <%_ } else { %>
+        <%_ } else { _%>
       - SPRING_DATASOURCE_URL=<%- getJDBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
         <%_ } _%>
       - SPRING_LIQUIBASE_URL=<%- getJDBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
