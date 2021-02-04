@@ -752,17 +752,18 @@ public class UserService {
     @Transactional(readOnly = true)
     <%_ } _%>
     public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= asDto('User') %>> getAllPublicUsers(Pageable pageable) {
-        <%_ if (databaseType === 'couchbase') { _%>
+        <%_ if (databaseType === 'couchbase' && !reactive) { _%>
         // FIXME: 2/1/21 Current version of Spring Data doesnt seem to support Pagination parameters. Changed the
         //  method to return a list and added a count query to construct the page.
-        // return userRepository.findAllByIdNotNullAndActivatedIsTrue(pageable).map(UserDTO::new);
+        // return userRepository.findAllByIdNotNullAndActivatedIsTrue(pageable).map(<%= asDto('User') %>::new);
 
         final Long count = userRepository.countAllByIdNotNullAndActivatedIsTrue();
         if (count == 0) {
-            return Page.empty();
+            return <% if (reactive) { %>Flux<% } else { %>Page<% } %>.empty();
         }
-        final List<User> users = userRepository.findAllByIdNotNullAndActivatedIsTrue();
-        return new PageImpl<>(users.stream().map(UserDTO::new).collect(Collectors.toList()), pageable, count);
+
+        final List<<%= asDto('User') %>> users = userRepository.findAllByIdNotNullAndActivatedIsTrue();
+        return new PageImpl<>(users.stream().map(<%= asDto('User') %>::new).collect(Collectors.toList()), pageable, count);
         <%_ } else { _%>
         return userRepository.findAllByIdNotNullAndActivatedIsTrue(pageable).map(<%= asDto('User') %>::new);
         <%_ } _%>

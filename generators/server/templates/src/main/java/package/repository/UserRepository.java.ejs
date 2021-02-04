@@ -62,8 +62,13 @@ import <%= packageName %>.repository.search.SearchCouchbaseRepository;
 import org.springframework.cache.annotation.Cacheable;
 <%_ } _%>
 <%_ if (['sql', 'couchbase', 'mongodb', 'neo4j'].includes(databaseType)) { _%>
+    <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
+    <%_ } _%>
 import org.springframework.data.domain.Pageable;
+<%_ } _%>
+<% if (databaseType === 'couchbase') { _%>
+import org.springframework.data.domain.Sort;
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
     <%_ if (!reactive) { _%>
@@ -243,7 +248,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     <%_ if (databaseType === 'couchbase') { _%>
     @Override
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    Page<<%= asEntity('User') %>> findAll(Pageable pageable);
+    <%= listOrFlux %><<%= asEntity('User') %>> findAll(Sort sort);
 
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>

@@ -26,8 +26,8 @@ import org.springframework.data.cassandra.repository.ReactiveCassandraRepository
 import <%= packageName %>.repository.search.SearchCouchbaseRepository;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
-import org.springframework.data.domain.Sort;
 import com.couchbase.client.java.query.QueryScanConsistency;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.couchbase.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveSortingRepository;
 import org.springframework.data.couchbase.repository.ScanConsistency;
@@ -99,6 +99,17 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
     Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
         <%_ } _%>
     <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    // Add ScanConsistency to fix issue with Spring Data Couchbase
+    // https://github.com/spring-projects/spring-data-couchbase/issues/897
+    @Override
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    Flux<<%= asEntity(entityClass) %>> findAll();
+
+    @Override
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    Flux<<%= asEntity(entityClass) %>> findAll(Sort sort);
+    <%_ } _%>
     <%_ if (databaseType === 'sql') {
             if (fieldsContainOwnerManyToMany) { _%>
 
@@ -144,19 +155,8 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
 
     // just to avoid having unambiguous methods
     @Override
-    <%_ if (databaseType === 'couchbase') { _%>
-    // Add ScanConsistency to fix issue with Spring Data Couchbase
-    // https://github.com/spring-projects/spring-data-couchbase/issues/897
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    <%_ } _%>
     Flux<<%= asEntity(entityClass) %>> findAll();
-    <%_ if (databaseType === 'couchbase') { _%>
 
-    @Override
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    Flux<<%= asEntity(entityClass) %>> findAll(Sort sort);
-
-    <%_ } _%>
     @Override
     Mono<<%= asEntity(entityClass) %>> findById(Long id);
 
