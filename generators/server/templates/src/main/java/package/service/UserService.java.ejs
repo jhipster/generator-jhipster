@@ -762,8 +762,8 @@ public class UserService {
             return <% if (reactive) { %>Flux<% } else { %>Page<% } %>.empty();
         }
 
-        final List<<%= asDto('User') %>> users = userRepository.findAllByIdNotNullAndActivatedIsTrue();
-        return new PageImpl<>(users.stream().map(<%= asDto('User') %>::new).collect(Collectors.toList()), pageable, count);
+        final List<User> users = userRepository.findAllByIdNotNullAndActivatedIsTrue();
+        return new PageImpl<>(users.stream().map(UserDTO::new).collect(Collectors.toList()), pageable, count);
         <%_ } else { _%>
         return userRepository.findAllByIdNotNullAndActivatedIsTrue(pageable).map(<%= asDto('User') %>::new);
         <%_ } _%>
