@@ -28,7 +28,7 @@
             <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
 
             <dl class="row-md jh-entity-details">
-                <%_ for (const field of fields) {
+                <%_ for (const field of fields.filter(field => !field.hidden)) {
                     const fieldName = field.fieldName;
                     const fieldType = field.fieldType;
                     const fieldTypeBlobContent = field.fieldTypeBlobContent;
@@ -89,11 +89,11 @@
                     <%_ } else { _%>
                         <%_ if (relationshipType === 'many-to-many') { _%>
                     <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
-                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>?.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
+                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>?.<%= relationship.otherEntity.primaryKey.trackByField.fieldName %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
                     </span>
                         <%_ } else { _%>
                     <div *ngIf="<%= entityInstance + '.' + relationshipFieldName %>">
-                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + '.' + relationshipFieldName + '?.' + relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}</a>
+                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + '.' + relationshipFieldName + '?.' + relationship.otherEntity.primaryKey.trackByField.fieldName %>, 'view']">{{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}</a>
                     </div>
                         <%_ } _%>
                     <%_ } _%>
@@ -113,7 +113,7 @@
             <%_ if (!readOnly) { _%>
 
             <button type="button"
-                    [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.<%= primaryKey.name %>, 'edit']"
+                    [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.<%= primaryKey.trackByField.fieldName %>, 'edit']"
                     class="btn btn-primary">
                 <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.edit">Edit</span>
             </button>

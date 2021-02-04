@@ -31,13 +31,8 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     throw new Error(`Error at entity ${entityName}: could not find the entity of the relationship ${stringify(relationship)}`);
   }
   const otherEntityData = relationship.otherEntity;
-  if (otherEntityData.primaryKey) {
-    _.defaults(relationship, {
-      // otherEntityField should be id if not specified
-      otherEntityField: otherEntityData.primaryKey.name,
-    });
-    relationship.otherEntityPrimaryKeyType = otherEntityData.primaryKey.type;
-    relationship.otherEntityField = relationship.otherEntityField || otherEntityData.primaryKey.name;
+  if (!relationship.otherEntityField && otherEntityData.primaryKey && otherEntityData.primaryKey.trackByField) {
+    relationship.otherEntityField = otherEntityData.primaryKey.trackByField.fieldName;
   }
 
   _.defaults(relationship, {

@@ -494,6 +494,19 @@ class EntityGenerator extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _preparing() {
     return {
+      loadRelationships() {
+        this.context.relationships.forEach(relationship => {
+          const otherEntityName = this._.upperFirst(relationship.otherEntityName);
+          const otherEntity = this.configOptions.sharedEntities[otherEntityName];
+          if (!otherEntity) {
+            throw new Error(`Error looking for otherEntity ${otherEntityName}`);
+          }
+          relationship.otherEntity = otherEntity;
+          otherEntity.otherRelationships = otherEntity.otherRelationships || [];
+          otherEntity.otherRelationships.push(relationship);
+        });
+      },
+
       prepareEntityForTemplates() {
         const entity = this.context;
         prepareEntityForTemplates(entity, this);
@@ -556,19 +569,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
           }
         });
       },
-
-      loadRelationships() {
-        this.context.relationships.forEach(relationship => {
-          const otherEntityName = this._.upperFirst(relationship.otherEntityName);
-          const otherEntity = this.configOptions.sharedEntities[otherEntityName];
-          if (!otherEntity) {
-            throw new Error(`Error looking for otherEntity ${otherEntityName}`);
-          }
-          relationship.otherEntity = otherEntity;
-          otherEntity.otherRelationships = otherEntity.otherRelationships || [];
-          otherEntity.otherRelationships.push(relationship);
-        });
-      },
     };
   }
 
@@ -615,8 +615,17 @@ class EntityGenerator extends BaseBlueprintGenerator {
       },
 
       processDerivedPrimaryKey() {
-        if (!this.context.derivedPrimaryKey) {
+        if (!this.context.primaryKey) {
           return;
+        }
+        if (!this.context.primaryKey.derived) {
+          const derivedFields = this.context.primaryKey.derivedFields;
+          this.context.fields.unshift(...derivedFields);
+          return;
+        }
+        // If trackByField is a mapping field, add to fields.
+        if (this.context.primaryKey.trackByField.dynamic) {
+          this.context.fields.unshift(this.context.primaryKey.trackByField);
         }
         const idFields = this.context.primaryKey.derivedFields;
         this.context.idFields = idFields;

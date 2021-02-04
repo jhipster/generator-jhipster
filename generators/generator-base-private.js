@@ -1097,17 +1097,22 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * @param {any} primaryKey - primary key definition
    * @param {number} index - the index of the primary key, currently it's possible to generate 2 values, index = 0 - first key (default), otherwise second key
    */
-  generateTestEntityId(primaryKey, index = 0) {
+  generateTestEntityId(primaryKey, index = 0, type) {
     if (typeof primaryKey === 'object') {
       primaryKey = primaryKey.type;
     }
+    let value;
     if (primaryKey === 'String') {
-      return index === 0 ? "'123'" : "'456'";
+      value = index === 0 ? 'ABC' : 'CBA';
+    } else if (primaryKey === 'UUID') {
+      value = index === 0 ? '9fec3727-3421-4967-b213-ba36557ca194' : '1361f429-3817-4123-8ee3-fdf8943310b2';
+    } else {
+      value = index === 0 ? 123 : 456;
     }
-    if (primaryKey === 'UUID') {
-      return index === 0 ? "'9fec3727-3421-4967-b213-ba36557ca194'" : "'1361f429-3817-4123-8ee3-fdf8943310b2'";
+    if (type === 'raw' || !['UUID', 'String'].includes(primaryKey)) {
+      return value;
     }
-    return index === 0 ? 123 : 456;
+    return `'${value}'`;
   }
 
   /**
@@ -1116,13 +1121,20 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * @param {any} primaryKey - primary key definition.
    * @param {number} [index] - index of the primary key sample, pass undefined for a random key.
    */
-  generateTestEntityPrimaryKey(primaryKey, index) {
+  generateTestEntityPrimaryKey(primaryKey, index = 'random') {
+    const random = index === 'random';
     const entries = primaryKey.references.map(reference => {
       const value =
-        index === undefined && reference.field ? reference.field.generateFakeData('ts') : this.generateTestEntityId(reference.type, index);
-      return `${reference.name}: ${value}`;
+        random && reference.field ? reference.field.generateFakeData('raw') : this.generateTestEntityId(reference.type, index, 'raw');
+      return [reference.name, value];
     });
-    return `{${entries.join(',')}}`;
+    if (!primaryKey.fields.includes(primaryKey.trackByField)) {
+      const trackValue = random
+        ? primaryKey.trackByField.generateFakeData('raw')
+        : this.generateTestEntityId(primaryKey.trackByField.fieldType, index, 'raw');
+      entries.push([primaryKey.trackByField.fieldName, trackValue]);
+    }
+    return JSON.stringify(Object.fromEntries(entries));
   }
 
   /**
@@ -1210,23 +1222,23 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * @param {string} defaultValue - default value
    * @returns {string} java primary key value
    */
-  getPrimaryKeyValue(primaryKeyType, databaseType = this.jhipsterConfig.databasetype, defaultValue = 1) {
-    let value;
-    switch (primaryKeyType) {
-      case 'String':
-        value = `"id${defaultValue}"`;
-        // Special case with a OneToOne relationship with User and @MapsId when using OAuth
-        if (databaseType === 'sql') {
-          value = 'UUID.randomUUID().toString()';
-        }
-        break;
-      case 'UUID':
-        value = 'UUID.randomUUID()';
-        break;
-      default:
-        value = `${defaultValue}L`;
+  getPrimaryKeyValue(primaryKey, databaseType = this.jhipsterConfig.databaseType, defaultValue = 1) {
+    if (typeof primaryKey === 'object' && primaryKey.composite) {
+      return `new ${primaryKey.type}(${primaryKey.references
+        .map(ref => this.getPrimaryKeyValue(ref.type, databaseType, defaultValue))
+        .join(', ')})`;
     }
-    return value;
+    const primaryKeyType = typeof primaryKey === 'string' ? primaryKey : primaryKey.type;
+    if (primaryKeyType === 'String') {
+      if (databaseType === 'sql' && defaultValue === 0) {
+        return 'UUID.randomUUID().toString()';
+      }
+      return `"id${defaultValue}"`;
+    }
+    if (primaryKeyType === 'UUID') {
+      return 'UUID.randomUUID()';
+    }
+    return `${defaultValue}L`;
   }
 
   /**
@@ -1649,21 +1661,30 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
   /**
    * Create a java getter of reference.
    *
-   * @param {object} reference
+   * @param {object|string[]} reference
    * @return {string}
    */
   buildJavaGet(reference) {
-    return reference.path.map(partialPath => `get${this.javaBeanCase(partialPath)}()`).join('.');
+    let refPath;
+    if (typeof refPath === 'string') {
+      refPath = [reference];
+    } else if (Array.isArray(reference)) {
+      refPath = reference;
+    } else {
+      refPath = [reference.name];
+    }
+    return refPath.map(partialPath => `get${this.javaBeanCase(partialPath)}()`).join('.');
   }
 
   /**
    * Create a dotted path of reference.
    *
-   * @param {object} reference
+   * @param {object|string[]} reference
    * @return {string}
    */
   buildReferencePath(reference) {
-    return reference.path.join('.');
+    const refPath = Array.isArray(reference) ? reference : reference.path;
+    return refPath.join('.');
   }
 
   /**
@@ -1686,6 +1707,17 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    */
   buildJavaSetter(reference, valueDefinition = `${reference.type} ${reference.name}`) {
     return `set${this.javaBeanCase(reference.name)}(${valueDefinition})`;
+  }
+
+  /**
+   * Create a java getter method of reference.
+   *
+   * @param {object} reference
+   * @param {string} valueDefinition
+   * @return {string}
+   */
+  buildJavaFluentSetter(reference, valueDefinition = `${reference.type} ${reference.name}`) {
+    return `${reference.name}(${valueDefinition})`;
   }
 
   /**

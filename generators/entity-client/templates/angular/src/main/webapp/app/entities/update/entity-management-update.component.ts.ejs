@@ -147,7 +147,7 @@ _%>
     ngOnInit(): void {
         this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
         <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
-            if (<%= entityInstance %>.<%= primaryKey.name %> === undefined) {
+            if (<%= entityInstance %>.<%= primaryKey.trackByField.fieldName %> === undefined) {
                 const today = dayjs().startOf('day');
             <%_ for (const field of fields) {
                 const fieldName = field.fieldName;
@@ -206,7 +206,7 @@ _%>
     save(): void {
         this.isSaving = true;
         const <%= entityInstance %> = this.createFromForm();
-        if (<%= entityInstance %>.<%= primaryKey.name %> !== undefined) {
+        if (<%= entityInstance %>.<%= primaryKey.trackByField.fieldName %> !== undefined) {
             this.subscribeToSaveResponse(
                 this.<%= entityInstance %>Service.update(<%= entityInstance %>));
         } else {
@@ -216,8 +216,8 @@ _%>
     }
     <%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
 
-    track<%= reference.relationship.otherEntity.entityAngularName %>By<%= reference.relationship.otherEntity.primaryKey.nameCapitalized %>(index: number, item: I<%= reference.relationship.otherEntity.entityAngularName %>): <%= getTypescriptKeyType(reference.relationship.otherEntity.primaryKey.type) %> {
-        return item.<%= reference.relationship.otherEntity.primaryKey.name %>!;
+    track<%= reference.relationship.otherEntity.entityAngularName %>By<%= reference.relationship.otherEntity.primaryKey.nameCapitalized %>(index: number, item: I<%= reference.relationship.otherEntity.entityAngularName %>): <%= getTypescriptKeyType(reference.relationship.otherEntity.primaryKey.trackByField.fieldType) %> {
+        return item.<%= reference.relationship.otherEntity.primaryKey.trackByField.fieldName %>!;
     }
     <%_ } _%>
     <%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipType === 'many-to-many' && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
@@ -225,7 +225,7 @@ _%>
     getSelected<%= reference.relationship.otherEntity.entityAngularName %>(option: I<%= reference.relationship.otherEntity.entityAngularName %>, selectedVals?: I<%= reference.relationship.otherEntity.entityAngularName %>[]): I<%= reference.relationship.otherEntity.entityAngularName %> {
         if (selectedVals) {
           for (let i = 0; i < selectedVals.length; i++) {
-              if (option.<%= reference.relationship.otherEntity.primaryKey.name %> === selectedVals[i].<%= reference.relationship.otherEntity.primaryKey.name %>) {
+              if (option.<%= reference.relationship.otherEntity.primaryKey.trackByField.fieldName %> === selectedVals[i].<%= reference.relationship.otherEntity.primaryKey.trackByField.fieldName %>) {
                   return selectedVals[i];
               }
           }
@@ -330,7 +330,7 @@ _%>
             .subscribe((<%= otherEntity.entityInstancePlural %>: I<%= otherEntity.entityAngularName %>[]) => (this.<%= otherEntity.entityInstancePlural %>SharedCollection = <%= otherEntity.entityInstancePlural %>));
         <%_ } _%>
         <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { %>
-            <%_ const relationshipIdGetter = `this.editForm.get(['${relationship.relationshipFieldName}', '${relationship.otherEntity.primaryKey.name}'])?.value`; _%>
+            <%_ const relationshipIdGetter = `this.editForm.get(['${relationship.relationshipFieldName}', '${relationship.otherEntity.primaryKey.trackByField.fieldName}'])?.value`; _%>
             <%_ const filter = relationship.jpaMetamodelFiltering ? `'${relationship.otherEntityRelationshipName}Id.specified': 'false'` : `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`; _%>
 
         this.<%= relationship.otherEntityName %>Service

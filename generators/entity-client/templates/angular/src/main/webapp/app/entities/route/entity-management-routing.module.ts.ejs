@@ -39,7 +39,7 @@ const <%= entityInstance %>Route: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: ':id/view',
+        path: ':<%= primaryKey.trackByField.fieldName %>/view',
         component: <%= entityAngularName %>DetailComponent,
         resolve: {
             <%= entityInstance %>: <%= entityAngularName %>RoutingResolveService
@@ -56,7 +56,7 @@ const <%= entityInstance %>Route: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: ':id/edit',
+        path: ':<%= primaryKey.trackByField.fieldName %>/edit',
         component: <%= entityAngularName %>UpdateComponent,
         resolve: {
             <%= entityInstance %>: <%= entityAngularName %>RoutingResolveService

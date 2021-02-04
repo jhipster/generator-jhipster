@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<form *ngIf="<%= entityInstance %>" name="deleteForm" (ngSubmit)="confirmDelete(<%= entityInstance %>.<%= primaryKey.name %>!)">
+<form *ngIf="<%= entityInstance %>" name="deleteForm" (ngSubmit)="confirmDelete(<%= entityInstance %>.<%= primaryKey.trackByField.fieldName %>!)">
     <div class="modal-header">
         <h4 class="modal-title" data-cy="<%= entityInstance %>DeleteDialogHeading" <%= jhiPrefix %>Translate="entity.delete.title">Confirm delete operation</h4>
 
@@ -27,7 +27,7 @@
     <div class="modal-body">
         <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 
-        <p id="<%= jhiPrefixDashed %>-delete-<%= entityInstance %>-heading" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.delete.question" [translateValues]="{ id: <%= entityInstance %>.<%= primaryKey.name %> }">Are you sure you want to delete this <%= entityClassHumanized %>?</p>
+        <p id="<%= jhiPrefixDashed %>-delete-<%= entityInstance %>-heading" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.delete.question" [translateValues]="{ id: <%= entityInstance %>.<%= primaryKey.trackByField.fieldName %> }">Are you sure you want to delete this <%= entityClassHumanized %>?</p>
     </div>
 
     <div class="modal-footer">

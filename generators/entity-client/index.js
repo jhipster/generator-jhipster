@@ -43,7 +43,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return {
       setup() {
         if (!this.embedded) {
-          this.tsKeyType = this.getTypescriptKeyType(this.primaryKey.type);
+          this.tsKeyType = this.getTypescriptKeyType(this.primaryKey.trackByField.fieldType);
         }
       },
     };
