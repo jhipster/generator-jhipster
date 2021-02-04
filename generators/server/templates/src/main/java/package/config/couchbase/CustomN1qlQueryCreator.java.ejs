@@ -83,10 +83,6 @@ public class CustomN1qlQueryCreator extends AbstractQueryCreator<Query, QueryCri
         final PersistentPropertyPath<CouchbasePersistentProperty> path,
         final CouchbasePersistentProperty property
     ) {
-        // To support findById on ReactiveFindByQueryOperationSupport.all()
-        // if (property.isIdProperty()) {
-        //   return path(meta(i(couchbaseOperations.getBucketName())), path.toDotPath(cvtr)).toString();
-        // }
         return path.toDotPath(cvtr);
     }
 
@@ -107,9 +103,7 @@ public class CustomN1qlQueryCreator extends AbstractQueryCreator<Query, QueryCri
         final Iterator<Object> parameters
     ) {
         final Part.Type type = part.getType();
-        /*
-		    NEAR(new String[]{"IsNear", "Near"}),
-		 */
+
         switch (type) {
             case GREATER_THAN:
             case AFTER:
@@ -140,15 +134,15 @@ public class CustomN1qlQueryCreator extends AbstractQueryCreator<Query, QueryCri
             case WITHIN:
                 return criteria.within(parameters.next());
             case IS_NULL:
-                return criteria.isNull(/*parameters.next()*/);
+                return criteria.isNull();
             case IS_NOT_NULL:
-                return criteria.isNotNull(/*parameters.next()*/);
+                return criteria.isNotNull();
             case IS_EMPTY:
-                return criteria.isNotValued(/*parameters.next()*/);
+                return criteria.isNotValued();
             case IS_NOT_EMPTY:
-                return criteria.isValued(/*parameters.next()*/);
+                return criteria.isValued();
             case EXISTS:
-                return criteria.isNotMissing(/*parameters.next()*/);
+                return criteria.isNotMissing();
             case REGEX:
                 return criteria.regex(parameters.next());
             case BETWEEN:
