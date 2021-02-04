@@ -750,6 +750,12 @@ const expectedFiles = {
     `${DOCKER_DIR}couchbase-cluster.yml`,
     `${DOCKER_DIR}couchbase/Couchbase.Dockerfile`,
     `${DOCKER_DIR}couchbase/scripts/configure-node.sh`,
+    `${SERVER_MAIN_SRC_DIR}config/couchbase/CustomCouchbaseRepositoryFactory.java`,
+    `${SERVER_MAIN_SRC_DIR}config/couchbase/CustomCouchbaseRepositoryFactoryBean.java`,
+    `${SERVER_MAIN_SRC_DIR}config/couchbase/CustomCouchbaseRepositoryQuery.java`,
+    `${SERVER_MAIN_SRC_DIR}config/couchbase/CustomN1qlQueryCreator.java`,
+    `${SERVER_MAIN_SRC_DIR}config/couchbase/CustomN1qlRepositoryQueryExecutor.java`,
+    `${SERVER_MAIN_SRC_DIR}config/couchbase/package-info.java`,
   ],
 
   neo4j: [

@@ -92,6 +92,7 @@ import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive
 import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
 <%_ } else if (databaseType === 'couchbase') { _%>
 import com.couchbase.client.java.query.QueryScanConsistency;
+import org.springframework.data.couchbase.repository.Query;
 import org.springframework.data.couchbase.repository.ScanConsistency;
 import org.springframework.data.couchbase.repository.<% if (reactive) { %>Reactive<% } %>CouchbaseRepository;
 <%_ } _%>
@@ -206,6 +207,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     <%_ } _%>
         <%_ if (databaseType === 'couchbase') { _%>
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    @Query("#{#n1ql.selectEntity} WHERE LOWER(email) = LOWER($1) AND #{#n1ql.filter}")
         <%_ } _%>
     <%= optionalOrMono %><<%= asEntity('User') %>> findOneByEmailIgnoreCase(String email);
 
@@ -240,6 +242,12 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     <%= listOrFlux %><<%= asEntity('User') %>> findAll();
 
     <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    @Override
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    Page<<%= asEntity('User') %>> findAll(Pageable pageable);
+
+    <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     @EntityGraph(attributePaths = "authorities")
         <%_ if (cacheManagerIsAvailable === true) { _%>
@@ -271,6 +279,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 
         <%_ if (databaseType === 'couchbase') { _%>
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND meta(#{#n1ql.bucket}).id is not null AND activated = true")
         <%_ } _%>
     Flux<<%= asEntity('User') %>>findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
 
@@ -278,9 +287,20 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     <% } else { %>
         <%_ if (databaseType === 'couchbase') { _%>
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND meta(#{#n1ql.bucket}).id is not null AND activated = true")
         <%_ } _%>
     Page<<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
     <% } %>
+
+    <%_ if (databaseType === 'couchbase') { _%>
+    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND meta(#{#n1ql.bucket}).id is not null AND activated = true")
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    <%= listOrFlux %><<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue();
+
+    @Query("SELECT COUNT(*) as count FROM #{#n1ql.bucket} WHERE #{#n1ql.filter} AND meta(#{#n1ql.bucket}).id is not null AND activated = true")
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    Long countAllByIdNotNullAndActivatedIsTrue();
+    <%_ } _%>
 }
 <%_ } else if (databaseType === 'sql' && reactive) { _%>
 @Repository
