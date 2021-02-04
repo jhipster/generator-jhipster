@@ -62,9 +62,7 @@ import <%= packageName %>.repository.search.SearchCouchbaseRepository;
 import org.springframework.cache.annotation.Cacheable;
 <%_ } _%>
 <%_ if (['sql', 'couchbase', 'mongodb', 'neo4j'].includes(databaseType)) { _%>
-    <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
-    <%_ } _%>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
