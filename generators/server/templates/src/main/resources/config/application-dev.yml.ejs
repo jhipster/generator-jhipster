@@ -351,9 +351,10 @@ jhipster:
     password: admin
   <%_ } _%>
   <%_ if (applicationType !== 'microservice') { _%>
-  # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
+  # CORS is only enabled by default with the "dev" profile
   cors:
-    allowed-origins: "*"
+    # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
+    allowed-origins: "http://localhost:8100"
     allowed-methods: "*"
     allowed-headers: "*"
     <%_ if (authenticationType === 'session') { _%>
