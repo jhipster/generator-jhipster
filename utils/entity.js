@@ -271,7 +271,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         },
       };
     } else {
-      const composite = idCount > 1;
+      const composite = false;
       let primaryKeyName;
       let primaryKeyType;
       let trackByField;
