@@ -741,6 +741,12 @@ const expectedFiles = {
   ],
 
   couchbase: [
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/couchbase/CustomCouchbaseRepositoryFactory.java`,
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/couchbase/CustomCouchbaseRepositoryFactoryBean.java`,
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/couchbase/CustomCouchbaseRepositoryQuery.java`,
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/couchbase/CustomN1qlQueryCreator.java`,
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/couchbase/CustomN1qlRepositoryQueryExecutor.java`,
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/couchbase/package-info.java`,
     `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0__create_indexes.n1ql`,
     `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json`,
     `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json`,
@@ -750,12 +756,6 @@ const expectedFiles = {
     `${DOCKER_DIR}couchbase-cluster.yml`,
     `${DOCKER_DIR}couchbase/Couchbase.Dockerfile`,
     `${DOCKER_DIR}couchbase/scripts/configure-node.sh`,
-    `${SERVER_MAIN_SRC_DIR}config/couchbase/CustomCouchbaseRepositoryFactory.java`,
-    `${SERVER_MAIN_SRC_DIR}config/couchbase/CustomCouchbaseRepositoryFactoryBean.java`,
-    `${SERVER_MAIN_SRC_DIR}config/couchbase/CustomCouchbaseRepositoryQuery.java`,
-    `${SERVER_MAIN_SRC_DIR}config/couchbase/CustomN1qlQueryCreator.java`,
-    `${SERVER_MAIN_SRC_DIR}config/couchbase/CustomN1qlRepositoryQueryExecutor.java`,
-    `${SERVER_MAIN_SRC_DIR}config/couchbase/package-info.java`,
   ],
 
   neo4j: [
