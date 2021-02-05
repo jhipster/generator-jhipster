@@ -167,9 +167,9 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     entityWithConfig.dto === 'no';
 
   if (!entityWithConfig.embedded) {
-    entityWithConfig.idFields = entityWithConfig.fields.filter(field => field.id);
-    entityWithConfig.idRelationships = entityWithConfig.relationships.filter(relationship => relationship.id);
-    let idCount = entityWithConfig.idFields.length + entityWithConfig.idRelationships.length;
+    const idFields = entityWithConfig.fields.filter(field => field.id);
+    const idRelationships = entityWithConfig.relationships.filter(relationship => relationship.id);
+    let idCount = idFields.length + idRelationships.length;
 
     if (idCount === 0) {
       let idField = entityWithConfig.fields.find(field => field.fieldName === 'id');
@@ -185,12 +185,13 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         };
         entityWithConfig.fields.unshift(idField);
       }
-      entityWithConfig.idFields.push(idField);
+      idFields.push(idField);
       idCount++;
-    } else if (entityWithConfig.idRelationships.length > 0) {
-      entityWithConfig.idRelationships.forEach(relationship => {
+    } else if (idRelationships.length > 0) {
+      idRelationships.forEach(relationship => {
         // deprecated property
         relationship.useJPADerivedIdentifier = true;
+        // relationships id data are not available at this point, so calculate it when needed.
         relationship.derivedPrimaryKey = {
           get derivedFields() {
             return relationship.otherEntity.primaryKey.fields.map(field => ({
@@ -227,8 +228,11 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
       });
     }
 
-    if (idCount === 1 && entityWithConfig.idRelationships.length === 1) {
-      const relationshipId = entityWithConfig.idRelationships[0];
+    if (idCount === 1 && idRelationships.length === 1) {
+      const relationshipId = idRelationships[0];
+      // One-To-One relationships with id uses @MapsId.
+      // Almost every info is taken from the parent, except some info like autoGenerate and derived.
+      // calling fieldName as id is for backward compatibility, in the future we may want to prefix it with relationship name.
       entityWithConfig.primaryKey = {
         fieldName: 'id',
         derived: true,
@@ -243,7 +247,10 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         get derivedFields() {
           return relationshipId.derivedPrimaryKey.derivedFields;
         },
-        relationships: entityWithConfig.idRelationships,
+        get ownFields() {
+          return relationshipId.otherEntity.primaryKey.ownFields;
+        },
+        relationships: idRelationships,
         get name() {
           return relationshipId.otherEntity.primaryKey.name;
         },
@@ -285,7 +292,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         };
         entityWithConfig.fields.push(trackByField);
       } else {
-        const idField = entityWithConfig.idFields[0];
+        const idField = idFields[0];
         idField.dynamic = false;
         // Allow ids type to be empty and fallback to default type for the database.
         if (!idField.fieldType) {
@@ -304,9 +311,10 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         type: primaryKeyType,
         tsType: generator.getTypescriptKeyType(primaryKeyType),
         composite,
-        relationships: entityWithConfig.idRelationships,
+        relationships: idRelationships,
+        ownFields: idFields,
         get fields() {
-          return [...entityWithConfig.idFields, ...this.derivedFields];
+          return [...idFields, ...this.derivedFields];
         },
         get autoGenerate() {
           return this.composite ? false : this.fields[0].autoGenerate;

@@ -108,9 +108,9 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityC
 <%_ if (!embedded) {
         // DTO -> entity mapping
         var renMapAnotDto = false;  //Render Mapping Annotation during DTO to Entity conversion?
-        if(idFields.length > 1) {
+        if(primaryKey.ownFields.length > 1) {
             renMapAnotDto = true;
-            idFields.map(field => field.reference).forEach(reference => { _%>
+            primaryKey.ownFields.map(field => field.reference).forEach(reference => { _%>
 
     @Mapping(target = "id.<%= reference.name %>", source = "<%= buildReferencePath(reference) %>")
         <%_ })

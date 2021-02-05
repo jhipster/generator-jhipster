@@ -628,7 +628,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
           this.context.fields.unshift(this.context.primaryKey.trackByField);
         }
         const idFields = this.context.primaryKey.derivedFields;
-        this.context.idFields = idFields;
         this.context.fields.unshift(...idFields);
       },
 
