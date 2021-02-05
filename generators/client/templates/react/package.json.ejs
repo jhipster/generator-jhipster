@@ -190,6 +190,7 @@
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= DIST_DIR %>",
+    "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
     <%_ if (protractorTests && !cypressTests) { _%>
     "e2e": "<%= clientPackageManager %> run e2e:protractor",
     "e2e:headless": "<%= clientPackageManager %> run e2e:protractor:headless",
@@ -221,12 +222,12 @@
     "test": "<%= clientPackageManager %> run jest",
     "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",
     "test:watch": "<%= clientPackageManager %> run jest -- --watch",
-    "webapp:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webapp:build:dev",
+    "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev",
     "webapp:build:dev": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --env stats=minimal",
     "webapp:build:prod": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --progress=profile",
     "webapp:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --env stats=minimal",
     "webapp:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --progress=profile --env stats=normal",
-    "webapp:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webapp:build:prod",
+    "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod",
     "webapp:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "npm run webpack -- serve",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
