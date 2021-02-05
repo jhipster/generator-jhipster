@@ -1096,8 +1096,9 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    *
    * @param {any} primaryKey - primary key definition
    * @param {number} index - the index of the primary key, currently it's possible to generate 2 values, index = 0 - first key (default), otherwise second key
+   * @param {boolean} [wrapped=true] - wrapped values for required types.
    */
-  generateTestEntityId(primaryKey, index = 0, type) {
+  generateTestEntityId(primaryKey, index = 0, wrapped = true) {
     if (typeof primaryKey === 'object') {
       primaryKey = primaryKey.type;
     }
@@ -1109,10 +1110,10 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     } else {
       value = index === 0 ? 123 : 456;
     }
-    if (type === 'raw' || !['UUID', 'String'].includes(primaryKey)) {
-      return value;
+    if (wrapped && ['UUID', 'String'].includes(primaryKey)) {
+      return `'${value}'`;
     }
-    return `'${value}'`;
+    return value;
   }
 
   /**
@@ -1125,13 +1126,13 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     const random = index === 'random';
     const entries = primaryKey.references.map(reference => {
       const value =
-        random && reference.field ? reference.field.generateFakeData('raw') : this.generateTestEntityId(reference.type, index, 'raw');
+        random && reference.field ? reference.field.generateFakeData('raw') : this.generateTestEntityId(reference.type, index, false);
       return [reference.name, value];
     });
     if (!primaryKey.fields.includes(primaryKey.trackByField)) {
       const trackValue = random
         ? primaryKey.trackByField.generateFakeData('raw')
-        : this.generateTestEntityId(primaryKey.trackByField.fieldType, index, 'raw');
+        : this.generateTestEntityId(primaryKey.trackByField.fieldType, index, false);
       entries.push([primaryKey.trackByField.fieldName, trackValue]);
     }
     return JSON.stringify(Object.fromEntries(entries));

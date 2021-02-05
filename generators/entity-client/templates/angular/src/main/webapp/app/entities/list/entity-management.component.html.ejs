@@ -97,7 +97,7 @@ _%>
             <tbody<% if (pagination === 'infinite-scroll') { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0"<% } %>>
                 <tr *ngFor="let <%= entityInstance %> of <%= entityInstancePlural %>; trackBy: track<%= primaryKey.nameCapitalized %>" data-cy="entityTable">
                 <%_
-                const keys = idFields.map(idField => `${entityInstance}.${idField.fieldName}`);
+                const routerLink = ` [routerLink]="['/${ entityUrl }', ${entityInstance}.${primaryKey.trackByField.fieldName}, 'view']"`;
                 for (field of fields.filter(field => !field.hidden)) {
                     const fieldName = field.fieldName;
                     const fieldNameCapitalized = field.fieldNameCapitalized;
@@ -117,9 +117,7 @@ _%>
                         <span *ngIf="<%= entityInstance %>.<%= fieldName %>">{{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}</span>
                     </td>
                     <%_ } else if (field.fieldIsEnum) { _%>
-                    <td<% if (field.id) { %>><a
-                        [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.<%= primaryKey.trackByField.fieldName %>, 'view']"
-                    <% } %> <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
+                    <td<% if (field.id) { %>><a<%- routerLink %><% } %> <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
                     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                     <td>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}</td>
                     <%_ } else if (fieldType === 'LocalDate') { _%>
@@ -127,9 +125,7 @@ _%>
                     <%_ } else if (fieldType === 'Duration') { _%>
                     <td title="{{ <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> | duration }}</td>
                     <%_ } else { _%>
-                    <td<% if (field.id) { %>><a
-                        [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.<%= primaryKey.trackByField.fieldName %>, 'view']"
-                    <% } %>>{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
+                    <td<% if (field.id) { %>><a<%- routerLink %><% } %>>{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
                     <%_ } _%>
                 <%_ } _%>
                 <%_ for (const relationship of relationships) {
