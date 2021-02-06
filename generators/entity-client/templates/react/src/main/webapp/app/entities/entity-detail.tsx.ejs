@@ -122,7 +122,7 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
                 const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
                 const relationshipNameHumanized = relationship.relationshipNameHumanized;
                 const otherEntityName = relationship.otherEntityName;
-                const otherEntityPkName = relationship.otherEntity.primaryKey.name;
+                const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
                 const otherEntityStateName = relationship.otherEntityStateName;
                 const otherEntityField = relationship.otherEntityField;
                 const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
