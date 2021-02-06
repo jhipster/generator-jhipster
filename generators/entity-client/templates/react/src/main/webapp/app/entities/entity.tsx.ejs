@@ -377,7 +377,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                       const relationshipFieldName = relationship.relationshipFieldName;
                       const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
                       const otherEntityName = relationship.otherEntityName;
-                      const otherEntityPkName = relationship.otherEntity.primaryKey.name;
+                      const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
                       const otherEntityStateName = relationship.otherEntityStateName;
                       const otherEntityField = relationship.otherEntityField;
                       const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized; _%>
