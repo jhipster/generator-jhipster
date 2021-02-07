@@ -18,7 +18,7 @@
  */
 const constants = require('../generator-constants');
 
-const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, REACT_DIR } = constants;
+const { CLIENT_TEST_SRC_DIR, REACT_DIR } = constants;
 
 /**
  * The default is to use a file path string. It implies use of the template method.
@@ -49,19 +49,6 @@ const files = {
   sass: [
     {
       templates: ['postcss.config.js'],
-    },
-  ],
-  commonWeb: [
-    {
-      path: CLIENT_MAIN_SRC_DIR,
-      templates: [
-        'WEB-INF/web.xml',
-        { file: 'favicon.ico', method: 'copy' },
-        'robots.txt',
-        '404.html',
-        'index.html',
-        'content/css/loading.css',
-      ],
     },
   ],
   reactApp: [

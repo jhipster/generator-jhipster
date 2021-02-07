@@ -50,19 +50,6 @@ const files = {
       templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss'],
     },
   ],
-  commonWeb: [
-    {
-      path: CLIENT_MAIN_SRC_DIR,
-      templates: [
-        'WEB-INF/web.xml',
-        { file: 'favicon.ico', method: 'copy' },
-        'robots.txt',
-        '404.html',
-        'index.html',
-        'content/css/loading.css',
-      ],
-    },
-  ],
   angularApp: [
     {
       path: CLIENT_MAIN_SRC_DIR,
