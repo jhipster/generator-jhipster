@@ -444,6 +444,8 @@ const expectedFiles = {
     `${CLIENT_MAIN_SRC_DIR}app/shared/auth/has-any-authority.directive.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/core/auth/state-storage.service.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/core/auth/user-route-access.service.ts`,
+    `${CLIENT_MAIN_SRC_DIR}app/core/config/config.service.spec.ts`,
+    `${CLIENT_MAIN_SRC_DIR}app/core/config/config.service.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/config/authority.constants.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/config/error.constants.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/config/input.constants.ts`,

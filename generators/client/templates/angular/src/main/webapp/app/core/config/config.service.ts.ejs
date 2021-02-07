@@ -17,16 +17,21 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
-import { ConfigService } from 'app/core/config/config.service';
+@Injectable({
+  providedIn: 'root',
+})
+export class ConfigService {
+  private endpointPrefix = '';
 
-@Injectable({ providedIn: 'root' })
-export class PasswordResetInitService {
-  constructor(private http: HttpClient, private configService: ConfigService) {}
+  setEndpointPrefix(endpointPrefix: string): void {
+    this.endpointPrefix = endpointPrefix;
+  }
 
-  save(mail: string): Observable<{}> {
-    return this.http.post(this.configService.getEndpointFor('api/account/reset-password/init'), mail);
+  getEndpointFor(api: string, microservice?: string): string {
+    if (microservice) {
+      return `${this.endpointPrefix}services/${microservice}/${api}`;
+    }
+    return `${this.endpointPrefix}${api}`;
   }
 }
