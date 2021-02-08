@@ -79,9 +79,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
         this.SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 
-        this.PRETTIER_VERSION = constants.PRETTIER_VERSION;
-        this.PRETTIER_JAVA_VERSION = constants.PRETTIER_JAVA_VERSION;
-
         this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
         this.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
         this.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;

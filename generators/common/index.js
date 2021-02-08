@@ -23,6 +23,7 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const prettierConfigFiles = require('./files').prettierConfigFiles;
 const constants = require('../generator-constants');
+const packageJson = require('../../package.json');
 
 let useBlueprints;
 
@@ -78,6 +79,14 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
       },
 
       loadPackageJson() {
+        // The installed prettier version should be the same that the one used during JHipster generation to avoid formatting differences
+        _.merge(this.packageJson, {
+          devDependencies: {
+            prettier: packageJson.devDependencies.prettier,
+            'prettier-plugin-java': packageJson.devDependencies['prettier-plugin-java'],
+          },
+        });
+
         // Load common package.json into packageJson
         _.merge(this.packageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('common', 'templates', 'package.json')));
       },

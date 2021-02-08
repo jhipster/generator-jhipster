@@ -87,8 +87,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.ANGULAR = ANGULAR;
         this.REACT = REACT;
         this.VUE = VUE;
-        this.PRETTIER_VERSION = constants.PRETTIER_VERSION;
-        this.PRETTIER_JAVA_VERSION = constants.PRETTIER_JAVA_VERSION;
         this.NODE_VERSION = constants.NODE_VERSION;
       },
     };

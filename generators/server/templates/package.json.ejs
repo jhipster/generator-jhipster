@@ -36,8 +36,8 @@
     "husky": "<%= packageJson.devDependencies['husky'] %>",
     "lint-staged": "<%= packageJson.devDependencies['lint-staged'] %>",
     <%_ } _%>
-    "prettier": "<%= PRETTIER_VERSION %>",
-    "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>"
+    "prettier": "<%= packageJson.devDependencies['prettier'] %>",
+    "prettier-plugin-java": "<%= packageJson.devDependencies['prettier-plugin-java'] %>"
   },
   "engines": {
     "node": ">=<%= NODE_VERSION %>"

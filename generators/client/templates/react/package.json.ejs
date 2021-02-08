@@ -134,9 +134,9 @@
     <%_ } _%>
     "optimize-css-assets-webpack-plugin": "<%= packageJson.devDependencies['optimize-css-assets-webpack-plugin'] %>",
     "postcss-loader": "<%= packageJson.devDependencies['postcss-loader'] %>",
-    "prettier": "<%= PRETTIER_VERSION %>",
+    "prettier": "<%= packageJson.devDependencies['prettier'] %>",
     <%_ if (!skipServer) { _%>
-    "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
+    "prettier-plugin-java": "<%= packageJson.devDependencies['prettier-plugin-java'] %>",
     <%_ } _%>
     <%_ if (protractorTests) { _%>
     "protractor": "7.0.0",

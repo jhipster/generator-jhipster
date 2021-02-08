@@ -113,9 +113,9 @@
     "postcss-import": "<%= packageJson.devDependencies['postcss-import'] %>",
     "postcss-loader": "<%= packageJson.devDependencies['postcss-loader'] %>",
     "postcss-url": "<%= packageJson.devDependencies['postcss-url'] %>",
-    "prettier": "<%= PRETTIER_VERSION %>",
+    "prettier": "<%= packageJson.devDependencies['prettier'] %>",
     <%_ if (!skipServer) { _%>
-    "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
+    "prettier-plugin-java": "<%= packageJson.devDependencies['prettier-plugin-java'] %>",
     <%_ } _%>
     <%_ if (cypressTests) { _%>
     "cypress": "<%= packageJson.devDependencies['cypress'] %>",

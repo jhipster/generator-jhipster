@@ -95,7 +95,7 @@
     "merge-jsons-webpack-plugin": "<%= packageJson.devDependencies['merge-jsons-webpack-plugin'] %>",
 <%_ } _%>
 <%_ if (!skipServer) { _%>
-    "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
+    "prettier-plugin-java": "<%= packageJson.devDependencies['prettier-plugin-java'] %>",
 <%_ } _%>
     "@angular/cli": "<%= packageJson.devDependencies['@angular/cli'] %>",
     "@angular/compiler-cli": "<%= packageJson.dependencies['@angular/common'] %>",
@@ -124,7 +124,7 @@
     "jest-date-mock": "<%= packageJson.devDependencies['jest-date-mock'] %>",
     "jest-junit": "<%= packageJson.devDependencies['jest-junit'] %>",
     "jest-sonar-reporter": "<%= packageJson.devDependencies['jest-sonar-reporter'] %>",
-    "prettier": "<%= PRETTIER_VERSION %>",
+    "prettier": "<%= packageJson.devDependencies['prettier'] %>",
     "rimraf": "<%= packageJson.devDependencies['rimraf'] %>",
     "simple-progress-webpack-plugin": "<%= packageJson.devDependencies['simple-progress-webpack-plugin'] %>",
     "typescript": "<%= packageJson.devDependencies['typescript'] %>",
