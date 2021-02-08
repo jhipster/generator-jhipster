@@ -141,6 +141,9 @@ describe('DefaultApplicationOptions', () => {
       it('should set the service discovery type to eureka', () => {
         expect(options.serviceDiscoveryType).to.equal('eureka');
       });
+      it('should set the reactive to true', () => {
+        expect(options.reactive).to.be.true;
+      });
     });
     context('when the service discovery type option is false', () => {
       let serviceDiscoveryTypeOption;

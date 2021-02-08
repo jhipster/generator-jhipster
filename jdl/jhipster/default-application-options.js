@@ -133,6 +133,7 @@ function getConfigForGatewayApplication(customOptions = {}) {
   }
   return {
     ...options,
+    [REACTIVE]: true,
     [APPLICATION_TYPE]: GATEWAY,
   };
 }
