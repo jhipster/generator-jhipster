@@ -53,6 +53,12 @@ const commonFiles = {
         { file: 'content/images/jhipster_family_member_3_head-384.png', method: 'copy' },
         { file: 'content/images/jhipster_family_member_3_head-512.png', method: 'copy' },
         { file: 'content/images/logo-jhipster.png', method: 'copy' },
+        { file: 'favicon.ico', method: 'copy' },
+        'content/css/loading.css',
+        'WEB-INF/web.xml',
+        'robots.txt',
+        '404.html',
+        'index.html',
       ],
     },
     {
