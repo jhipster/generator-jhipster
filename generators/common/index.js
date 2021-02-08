@@ -51,6 +51,7 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
         this.TEST_DIR = constants.TEST_DIR;
         this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
         this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+        this.REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
         // Make documentation URL available in templates
         this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
