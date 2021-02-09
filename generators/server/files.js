@@ -587,28 +587,28 @@ const serverFiles = {
     },
   ],
   serverJavaGateway: [
-    {
-      condition: generator => !generator.reactive && generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/GatewayConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/GatewayConfiguration.java`,
-        },
-        {
-          file: 'package/config/apidoc/GatewaySwaggerResourcesProvider.java',
-          renameTo: generator => `${generator.javaDir}config/apidoc/GatewaySwaggerResourcesProvider.java`,
-        },
-        {
-          file: 'package/gateway/accesscontrol/AccessControlFilter.java',
-          renameTo: generator => `${generator.javaDir}gateway/accesscontrol/AccessControlFilter.java`,
-        },
-        {
-          file: 'package/gateway/responserewriting/SwaggerBasePathRewritingFilter.java',
-          renameTo: generator => `${generator.javaDir}gateway/responserewriting/SwaggerBasePathRewritingFilter.java`,
-        },
-      ],
-    },
+    // {
+    //   condition: generator => !generator.reactive && generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
+    //   path: SERVER_MAIN_SRC_DIR,
+    //   templates: [
+    //     {
+    //       file: 'package/config/GatewayConfiguration.java',
+    //       renameTo: generator => `${generator.javaDir}config/GatewayConfiguration.java`,
+    //     },
+    //     {
+    //       file: 'package/config/apidoc/GatewaySwaggerResourcesProvider.java',
+    //       renameTo: generator => `${generator.javaDir}config/apidoc/GatewaySwaggerResourcesProvider.java`,
+    //     },
+    //     {
+    //       file: 'package/gateway/accesscontrol/AccessControlFilter.java',
+    //       renameTo: generator => `${generator.javaDir}gateway/accesscontrol/AccessControlFilter.java`,
+    //     },
+    //     {
+    //       file: 'package/gateway/responserewriting/SwaggerBasePathRewritingFilter.java',
+    //       renameTo: generator => `${generator.javaDir}gateway/responserewriting/SwaggerBasePathRewritingFilter.java`,
+    //     },
+    //   ],
+    // },
     {
       condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
       path: SERVER_MAIN_SRC_DIR,
