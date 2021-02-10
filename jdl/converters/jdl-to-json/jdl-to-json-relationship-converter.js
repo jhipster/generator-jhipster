@@ -147,7 +147,7 @@ function setRelationshipsToEntity(relatedRelationships, entityName) {
       convertedRelationship.ownerSide = false;
     } else if (relationshipToConvert.type === ONE_TO_MANY) {
       relationshipToConvert.injectedFieldInTo = relationshipToConvert.injectedFieldInTo || lowerFirst(relationshipToConvert.from);
-    } else if (relationshipToConvert.type === MANY_TO_ONE && relationshipToConvert.injectedFieldInTo) {
+    } else if (relationshipToConvert.type === MANY_TO_ONE) {
       convertedRelationship.relationshipType = 'one-to-many';
     }
     setOptionsForRelationshipDestinationSide(relationshipToConvert, convertedRelationship);
