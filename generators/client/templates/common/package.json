@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "cypress": "6.4.0",
-    "puppeteer": "7.0.1"
+    "puppeteer": "7.0.4"
   },
   "dependencies": {
     "dayjs": "1.10.4"
