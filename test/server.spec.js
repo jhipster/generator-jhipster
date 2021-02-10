@@ -33,7 +33,7 @@ describe('JHipster server generator', () => {
     });
 
     it('creates expected files for default configuration for server generator', () => {
-      assert.noFile(expectedFiles.common);
+      assert.file(expectedFiles.common);
       assert.file(expectedFiles.server);
       assert.file(expectedFiles.jwtServer);
       assert.file(expectedFiles.userManagementServer);
@@ -83,7 +83,7 @@ describe('JHipster server generator', () => {
     });
 
     it('creates expected files for caffeine cache configuration for server generator', () => {
-      assert.noFile(expectedFiles.common);
+      assert.file(expectedFiles.common);
       assert.file(expectedFiles.server);
       assert.file(expectedFiles.jwtServer);
       assert.file(expectedFiles.userManagementServer);

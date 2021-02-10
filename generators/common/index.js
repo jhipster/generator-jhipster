@@ -17,10 +17,13 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
+const _ = require('lodash');
+
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const prettierConfigFiles = require('./files').prettierConfigFiles;
 const constants = require('../generator-constants');
+const packageJson = require('../../package.json');
 
 let useBlueprints;
 
@@ -73,6 +76,19 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
         this.loadClientConfig();
         this.loadServerConfig();
         this.loadTranslationConfig();
+      },
+
+      loadPackageJson() {
+        // The installed prettier version should be the same that the one used during JHipster generation to avoid formatting differences
+        _.merge(this.packageJson, {
+          devDependencies: {
+            prettier: packageJson.dependencies.prettier,
+            'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
+          },
+        });
+
+        // Load common package.json into packageJson
+        _.merge(this.packageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('common', 'templates', 'package.json')));
       },
     };
   }

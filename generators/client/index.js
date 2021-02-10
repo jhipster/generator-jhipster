@@ -87,10 +87,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.ANGULAR = ANGULAR;
         this.REACT = REACT;
         this.VUE = VUE;
-        this.HUSKY_VERSION = constants.HUSKY_VERSION;
-        this.LINT_STAGED_VERSION = constants.LINT_STAGED_VERSION;
-        this.PRETTIER_VERSION = constants.PRETTIER_VERSION;
-        this.PRETTIER_JAVA_VERSION = constants.PRETTIER_JAVA_VERSION;
         this.NODE_VERSION = constants.NODE_VERSION;
       },
     };
@@ -193,6 +189,14 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
             )} and ${chalk.yellow('--auth')} flags`
           );
         }
+      },
+
+      loadPackageJson() {
+        // Load common client package.json into packageJson
+        _.merge(this.packageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'common', 'package.json')));
+        // Load client package.json into packageJson
+        const clientFramewok = this.jhipsterConfig.clientFramework === ANGULAR ? 'angular' : this.jhipsterConfig.clientFramework;
+        _.merge(this.packageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', clientFramewok, 'package.json')));
       },
     };
   }
@@ -319,8 +323,8 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         }
 
         const devDependencies = packageJsonStorage.createStorage('devDependencies');
-        devDependencies.set('wait-on', 'VERSION_MANAGED_BY_CLIENT_COMMON');
-        devDependencies.set('concurrently', 'VERSION_MANAGED_BY_CLIENT_COMMON');
+        devDependencies.set('wait-on', this.packageJson.devDependencies['wait-on']);
+        devDependencies.set('concurrently', this.packageJson.devDependencies.concurrently);
 
         if (this.clientFramework === REACT) {
           scriptsStorage.set('ci:frontend:test', 'npm run webapp:build:$npm_package_config_default_environment && npm run test-ci');
@@ -337,36 +341,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
             'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
             'e2e:dev': 'concurrently -k -s first "./mvnw" "e2e:run"',
           });
-        }
-      },
-
-      packageJson() {
-        if (this.skipClient) return;
-        this.replacePackageJsonVersions(
-          'VERSION_MANAGED_BY_CLIENT_COMMON',
-          this.fetchFromInstalledJHipster('client/templates/common/package.json')
-        );
-        switch (this.clientFramework) {
-          case ANGULAR:
-            this.replacePackageJsonVersions(
-              'VERSION_MANAGED_BY_CLIENT_ANGULAR',
-              this.fetchFromInstalledJHipster('client/templates/angular/package.json')
-            );
-            break;
-          case REACT:
-            this.replacePackageJsonVersions(
-              'VERSION_MANAGED_BY_CLIENT_REACT',
-              this.fetchFromInstalledJHipster('client/templates/react/package.json')
-            );
-            break;
-          case VUE:
-            this.replacePackageJsonVersions(
-              'VERSION_MANAGED_BY_CLIENT_VUE',
-              this.fetchFromInstalledJHipster('client/templates/vue/package.json')
-            );
-            break;
-          default:
-          // do nothing by default
         }
       },
     };

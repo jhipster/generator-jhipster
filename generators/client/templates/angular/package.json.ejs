@@ -26,34 +26,34 @@
     "node_modules"
   ],
   "dependencies": {
-    "@angular/common": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "@angular/compiler": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
-    "@angular/core": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
-    "@angular/forms": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
-    "@angular/localize": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
-    "@angular/platform-browser": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
-    "@angular/platform-browser-dynamic": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
-    "@angular/router": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
-    "@fortawesome/angular-fontawesome": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "@fortawesome/fontawesome-svg-core": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "@fortawesome/free-solid-svg-icons": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "@ng-bootstrap/ng-bootstrap": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    "@angular/common": "<%= packageJson.dependencies['@angular/common'] %>",
+    "@angular/compiler": "<%= packageJson.dependencies['@angular/common'] %>",
+    "@angular/core": "<%= packageJson.dependencies['@angular/common'] %>",
+    "@angular/forms": "<%= packageJson.dependencies['@angular/common'] %>",
+    "@angular/localize": "<%= packageJson.dependencies['@angular/common'] %>",
+    "@angular/platform-browser": "<%= packageJson.dependencies['@angular/common'] %>",
+    "@angular/platform-browser-dynamic": "<%= packageJson.dependencies['@angular/common'] %>",
+    "@angular/router": "<%= packageJson.dependencies['@angular/common'] %>",
+    "@fortawesome/angular-fontawesome": "<%= packageJson.dependencies['@fortawesome/angular-fontawesome'] %>",
+    "@fortawesome/fontawesome-svg-core": "<%= packageJson.dependencies['@fortawesome/fontawesome-svg-core'] %>",
+    "@fortawesome/free-solid-svg-icons": "<%= packageJson.dependencies['@fortawesome/free-solid-svg-icons'] %>",
+    "@ng-bootstrap/ng-bootstrap": "<%= packageJson.dependencies['@ng-bootstrap/ng-bootstrap'] %>",
 <%_ if (enableTranslation) { _%>
-    "@ngx-translate/core": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "@ngx-translate/http-loader": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    "@ngx-translate/core": "<%= packageJson.dependencies['@ngx-translate/core'] %>",
+    "@ngx-translate/http-loader": "<%= packageJson.dependencies['@ngx-translate/http-loader'] %>",
 <%_ } _%>
-    "bootstrap": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    "bootstrap": "<%= packageJson.dependencies.bootstrap %>",
     <%_ if (clientTheme !== 'none') { _%>
-    "bootswatch": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#bootstrap",
+    "bootswatch": "<%= packageJson.dependencies.bootstrap %>",
     <%_ } _%>
-    "dayjs": "VERSION_MANAGED_BY_CLIENT_COMMON",
+    "dayjs": "<%= packageJson.dependencies['dayjs'] %>",
     <%_ if (authenticationType === 'session' && websocket === 'spring-websocket') { _%>
-    "ngx-cookie-service": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    "ngx-cookie-service": "<%= packageJson.dependencies['ngx-cookie-service'] %>",
     <%_ } _%>
-    "ngx-infinite-scroll": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "ngx-webstorage": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "rxjs": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "swagger-ui-dist": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    "ngx-infinite-scroll": "<%= packageJson.dependencies['ngx-infinite-scroll'] %>",
+    "ngx-webstorage": "<%= packageJson.dependencies['ngx-webstorage'] %>",
+    "rxjs": "<%= packageJson.dependencies['rxjs'] %>",
+    "swagger-ui-dist": "<%= packageJson.dependencies['swagger-ui-dist'] %>",
     <%_ if (websocket === 'spring-websocket') { _%>
     "sockjs-client": "1.5.0",
     "webstomp-client": "1.2.6",
@@ -61,8 +61,8 @@
     <%_ if (skipServer) { _%>
     "sonar-scanner": "3.1.0",
     <%_ } _%>
-    "tslib": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "zone.js": "VERSION_MANAGED_BY_CLIENT_ANGULAR"
+    "tslib": "<%= packageJson.dependencies['tslib'] %>",
+    "zone.js": "<%= packageJson.dependencies['zone.js'] %>"
   },
   "devDependencies": {
 <%_ if (protractorTests) { _%>
@@ -82,55 +82,55 @@
     "@types/sockjs-client": "1.5.0",
 <%_ } _%>
 <%_ if (!skipCommitHook) { _%>
-    "husky": "VERSION_MANAGED_BY_CLIENT_COMMON",
-    "lint-staged": "VERSION_MANAGED_BY_CLIENT_COMMON",
+    "husky": "<%= packageJson.devDependencies['husky'] %>",
+    "lint-staged": "<%= packageJson.devDependencies['lint-staged'] %>",
 <%_ } _%>
 <%_ if (cypressTests) { _%>
-    "cypress": "VERSION_MANAGED_BY_CLIENT_COMMON",
+    "cypress": "<%= packageJson.devDependencies['cypress'] %>",
 <%_ if (authenticationType === 'oauth2') { _%>
-    "puppeteer": "VERSION_MANAGED_BY_CLIENT_COMMON",
+    "puppeteer": "<%= packageJson.devDependencies['puppeteer'] %>",
 <%_ } _%>
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
-    "merge-jsons-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    "merge-jsons-webpack-plugin": "<%= packageJson.devDependencies['merge-jsons-webpack-plugin'] %>",
 <%_ } _%>
 <%_ if (!skipServer) { _%>
-    "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
+    "prettier-plugin-java": "<%= packageJson.devDependencies['prettier-plugin-java'] %>",
 <%_ } _%>
-    "@angular/cli": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "@angular/compiler-cli": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
-    "@angular-builders/custom-webpack": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "@angular-builders/jest": "VERSION_MANAGED_BY_CLIENT_ANGULAR#devDependencies#@angular-builders/custom-webpack",
-    "@angular/service-worker": "VERSION_MANAGED_BY_CLIENT_ANGULAR#dependencies#@angular/common",
-    "@angular-eslint/eslint-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "@types/jest": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "@types/node": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "@typescript-eslint/eslint-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "@typescript-eslint/parser": "VERSION_MANAGED_BY_CLIENT_ANGULAR#devDependencies#@typescript-eslint/eslint-plugin",
-    "browser-sync": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "browser-sync-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "copy-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "eslint": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "eslint-config-prettier": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "eslint-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "friendly-errors-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
+    "@angular/cli": "<%= packageJson.devDependencies['@angular/cli'] %>",
+    "@angular/compiler-cli": "<%= packageJson.dependencies['@angular/common'] %>",
+    "@angular-builders/custom-webpack": "<%= packageJson.devDependencies['@angular-builders/custom-webpack'] %>",
+    "@angular-builders/jest": "<%= packageJson.devDependencies['@angular-builders/custom-webpack'] %>",
+    "@angular/service-worker": "<%= packageJson.dependencies['@angular/common'] %>",
+    "@angular-eslint/eslint-plugin": "<%= packageJson.devDependencies['@angular-eslint/eslint-plugin'] %>",
+    "@types/jest": "<%= packageJson.devDependencies['@types/jest'] %>",
+    "@types/node": "<%= packageJson.devDependencies['@types/node'] %>",
+    "@typescript-eslint/eslint-plugin": "<%= packageJson.devDependencies['@typescript-eslint/eslint-plugin'] %>",
+    "@typescript-eslint/parser": "<%= packageJson.devDependencies['@typescript-eslint/eslint-plugin'] %>",
+    "browser-sync": "<%= packageJson.devDependencies['browser-sync'] %>",
+    "browser-sync-webpack-plugin": "<%= packageJson.devDependencies['browser-sync-webpack-plugin'] %>",
+    "copy-webpack-plugin": "<%= packageJson.devDependencies['copy-webpack-plugin'] %>",
+    "eslint": "<%= packageJson.devDependencies['eslint'] %>",
+    "eslint-config-prettier": "<%= packageJson.devDependencies['eslint-config-prettier'] %>",
+    "eslint-webpack-plugin": "<%= packageJson.devDependencies['eslint-webpack-plugin'] %>",
+    "friendly-errors-webpack-plugin": "<%= packageJson.devDependencies['friendly-errors-webpack-plugin'] %>",
 <%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= packagejs.version %>",
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ });
 } _%>
-    "jest": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "jest-date-mock": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "jest-junit": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "jest-sonar-reporter": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "prettier": "<%= PRETTIER_VERSION %>",
-    "rimraf": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "simple-progress-webpack-plugin": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "typescript": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "webpack": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "webpack-bundle-analyzer": "VERSION_MANAGED_BY_CLIENT_ANGULAR",
-    "webpack-notifier": "VERSION_MANAGED_BY_CLIENT_ANGULAR"
+    "jest": "<%= packageJson.devDependencies['jest'] %>",
+    "jest-date-mock": "<%= packageJson.devDependencies['jest-date-mock'] %>",
+    "jest-junit": "<%= packageJson.devDependencies['jest-junit'] %>",
+    "jest-sonar-reporter": "<%= packageJson.devDependencies['jest-sonar-reporter'] %>",
+    "prettier": "<%= packageJson.devDependencies['prettier'] %>",
+    "rimraf": "<%= packageJson.devDependencies['rimraf'] %>",
+    "simple-progress-webpack-plugin": "<%= packageJson.devDependencies['simple-progress-webpack-plugin'] %>",
+    "typescript": "<%= packageJson.devDependencies['typescript'] %>",
+    "webpack": "<%= packageJson.devDependencies['webpack'] %>",
+    "webpack-bundle-analyzer": "<%= packageJson.devDependencies['webpack-bundle-analyzer'] %>",
+    "webpack-notifier": "<%= packageJson.devDependencies['webpack-notifier'] %>"
   },
   "engines": {
     "node": ">=<%= NODE_VERSION %>"
