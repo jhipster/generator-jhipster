@@ -24,6 +24,7 @@ const CLI_NAME = 'jhipster';
 const GENERATOR_NAME = 'generator-jhipster';
 
 const SUCCESS_MESSAGE = 'Congratulations, JHipster execution is complete!';
+const SPONSOR_MESSAGE = 'Sponsored with ❤️  by @oktadev.';
 
 const debug = function (msg) {
   if (this.debugEnabled) {
@@ -48,7 +49,7 @@ const error = function (msg, trace) {
 };
 
 /**
- *  Use with carefull.
+ *  Use with caution.
  *  process.exit is not recommended by Node.js.
  *  Refer to https://nodejs.org/api/process.html#process_process_exit_code.
  */
@@ -127,21 +128,23 @@ const getCommand = (cmd, args = []) => {
   return `${cmd}${cmdArgs ? ` ${cmdArgs}` : ''}`;
 };
 
-const doneFactory = successMsg => {
+const doneFactory = (successMsg, sponsorMsg) => {
   return errorOrMsg => {
     if (errorOrMsg instanceof Error) {
       logger.error(`ERROR! ${errorOrMsg.message}`, errorOrMsg);
     } else if (errorOrMsg) {
       logger.error(`ERROR! ${errorOrMsg}`);
     } else if (successMsg) {
-      logger.info(chalk.green.bold(successMsg));
+      logger.log(chalk.green.bold(successMsg));
+      logger.log(chalk.cyan.bold(sponsorMsg));
     }
   };
 };
 
 const printSuccess = () => {
   if (process.exitCode === undefined || process.exitCode === 0) {
-    logger.info(chalk.green.bold(SUCCESS_MESSAGE));
+    logger.log(chalk.green.bold(SUCCESS_MESSAGE));
+    logger.log(chalk.cyan.bold(SUCCESS_MESSAGE));
   } else {
     logger.error(`ERROR! JHipster finished with code ${process.exitCode}`);
   }
@@ -154,7 +157,7 @@ module.exports = {
   logger,
   getCommand,
   doneFactory,
-  done: doneFactory(SUCCESS_MESSAGE),
+  done: doneFactory(SUCCESS_MESSAGE, SPONSOR_MESSAGE),
   printSuccess,
   getOptionAsArgs,
 };
