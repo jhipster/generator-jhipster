@@ -27,7 +27,7 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
     <tr>
       <td align="center" valign="middle">
         <a href="https://developer.okta.com/signup?utm_source=JHipster&utm_medium=logo&utm_campaign=Platinum-Sponsor" target="_blank">
-          <img width="400em" src="https://www.jhipster.tech/images/open-collective/okta.png">
+          <img width="425em" src="https://www.jhipster.tech/images/open-collective/okta.png">
         </a>
       </td>
     </tr>
