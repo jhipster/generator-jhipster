@@ -600,17 +600,6 @@ const serverFiles = {
     },
     {
       condition: generator =>
-        generator.applicationType === 'gateway' && generator.serviceDiscoveryType && generator.cacheProvider === 'hazelcast',
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/gateway/ratelimiting/RateLimitingFilter.java',
-          renameTo: generator => `${generator.javaDir}gateway/ratelimiting/RateLimitingFilter.java`,
-        },
-      ],
-    },
-    {
-      condition: generator =>
         !generator.reactive &&
         generator.applicationType === 'gateway' &&
         generator.authenticationType === 'jwt' &&
