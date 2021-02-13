@@ -131,6 +131,7 @@ function getConfigForGatewayApplication(customOptions = {}) {
     options[SERVICE_DISCOVERY_TYPE] = false;
   }
   options[CACHE_PROVIDER] = OptionValues[CACHE_PROVIDER].no;
+  options[ENABLE_HIBERNATE_CACHE] = false;
   return {
     ...options,
     [REACTIVE]: true,
