@@ -21,7 +21,7 @@ package <%= packageName %>.config;
 <%_ if (reactive) { _%>
 import com.fasterxml.jackson.databind.ObjectMapper;
 <%_ } _%>
-<%_ if (!skipClient || ['h2Disk', 'h2Memory'].includes(devDatabaseType) && !reactive) { _%>
+<%_ if (!skipClient || ['h2Disk', 'h2Memory'].includes(devDatabaseType)) { _%>
 import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
 import tech.jhipster.config.JHipsterProperties;
