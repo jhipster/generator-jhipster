@@ -1331,17 +1331,17 @@ const serverFiles = {
         },
       ],
     },
-    {
-      condition: generator => !generator.reactive && generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        // Create Gateway tests files
-        {
-          file: 'package/gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java',
-          renameTo: generator => `${generator.testDir}gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java`,
-        },
-      ],
-    },
+    // {
+    //   condition: generator => !generator.reactive && generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
+    //   path: SERVER_TEST_SRC_DIR,
+    //   templates: [
+    //     // Create Gateway tests files
+    //     {
+    //       file: 'package/gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java',
+    //       renameTo: generator => `${generator.testDir}gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java`,
+    //     },
+    //   ],
+    // },
     {
       condition: generator => generator.serviceDiscoveryType,
       path: SERVER_TEST_RES_DIR,
