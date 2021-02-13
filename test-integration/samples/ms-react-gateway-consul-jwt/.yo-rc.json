@@ -30,6 +30,7 @@
     "dtoSuffix": "DTO",
     "otherModules": [],
     "blueprints": [],
-    "creationTimestamp": 1596513172471
+    "creationTimestamp": 1596513172471,
+    "reactive": true
   }
 }
