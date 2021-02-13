@@ -158,7 +158,7 @@
     <%_ } _%>
     <%_ if (cypressTests) { _%>
     "e2e:cypress:headless": "<%= clientPackageManager %> run e2e:cypress -- --headless",
-    "e2e:cypress": "cypress run --browser chrome",
+    "e2e:cypress": "cypress run --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false}",
     "cypress": "cypress open",
     <%_ } _%>
     <%_ if (protractorTests) { _%>

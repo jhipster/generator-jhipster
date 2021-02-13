@@ -344,6 +344,10 @@ describe('JHipster CI-CD Sub Generator', () => {
         assert.noFileContent('.travis.yml', /sonar/);
         assert.noFileContent('.travis.yml', /heroku/);
       });
+      it('contains Cypress', () => {
+        assert.fileContent('.travis.yml', /run ci:e2e:package/);
+        assert.fileContent('.travis.yml', /CYPRESS_ENABLE_RECORD: false/);
+      });
     });
     describe('Travis CI: Maven Angular NPM with full options', () => {
       before(done => {
@@ -355,7 +359,7 @@ describe('JHipster CI-CD Sub Generator', () => {
           .withOptions({ skipChecks: true })
           .withPrompts({
             pipeline: 'travis',
-            cicdIntegrations: ['deploy', 'sonar', 'heroku', 'snyk'],
+            cicdIntegrations: ['deploy', 'sonar', 'heroku', 'snyk', 'cypressDashboard'],
             artifactorySnapshotsId: 'snapshots',
             artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
             artifactoryReleasesId: 'releases',
@@ -375,6 +379,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       it('contains distributionManagement in pom.xml', () => {
         assert.fileContent('pom.xml', /distributionManagement/);
       });
+      it('contains Cypress', () => {
+        assert.fileContent('.travis.yml', /run ci:e2e:package/);
+        assert.fileContent('.travis.yml', /CYPRESS_ENABLE_RECORD: true/);
+      });
     });
   });
 
@@ -392,12 +400,18 @@ describe('JHipster CI-CD Sub Generator', () => {
           .withOptions({ skipChecks: true })
           .withPrompts({
             pipeline: 'azure',
-            cicdIntegrations: [],
+            cicdIntegrations: ['cypressDashboard'],
           })
           .on('end', done);
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.azure);
+      });
+      it('contains Cypress', () => {
+        assert.fileContent('azure-pipelines.yml', /run ci:e2e:package/);
+        assert.fileContent('azure-pipelines.yml', /CYPRESS_ENABLE_RECORD: true/);
+        assert.fileContent('azure-pipelines.yml', /CYPRESS_PROJECT_ID/);
+        assert.fileContent('azure-pipelines.yml', /CYPRESS_RECORD_KEY/);
       });
     });
     describe('Azure Pipelines: Gradle Angular NPM', () => {
@@ -416,6 +430,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.azure);
+      });
+      it('contains Cypress', () => {
+        assert.fileContent('azure-pipelines.yml', /run ci:e2e:package/);
+        assert.fileContent('azure-pipelines.yml', /CYPRESS_ENABLE_RECORD: false/);
       });
     });
     describe('Azure Pipelines: Maven Angular NPM with Snyk', () => {
@@ -498,7 +516,6 @@ describe('JHipster CI-CD Sub Generator', () => {
         assert.file(expectedFiles.github);
       });
     });
-
     describe('GitHub Actions: Gradle Angular NPM', () => {
       before(done => {
         helpers
@@ -527,7 +544,7 @@ describe('JHipster CI-CD Sub Generator', () => {
           .withOptions({ skipChecks: true })
           .withPrompts({
             pipeline: 'github',
-            cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku', 'snyk'],
+            cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku', 'snyk', 'cypressDashboard'],
             dockerImage: 'jhipster-publish-docker',
             artifactorySnapshotsId: 'snapshots',
             artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
@@ -548,6 +565,12 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
       it('contains distributionManagement in pom.xml', () => {
         assert.fileContent('pom.xml', /distributionManagement/);
+      });
+      it('contains Cypress', () => {
+        assert.fileContent('.github/workflows/github-actions.yml', /run ci:e2e:package/);
+        assert.fileContent('.github/workflows/github-actions.yml', /CYPRESS_ENABLE_RECORD: true/);
+        assert.fileContent('.github/workflows/github-actions.yml', /CYPRESS_PROJECT_ID/);
+        assert.fileContent('.github/workflows/github-actions.yml', /CYPRESS_RECORD_KEY/);
       });
     });
     describe('GitHub Actions: Gradle Angular NPM with full options', () => {
@@ -574,6 +597,12 @@ describe('JHipster CI-CD Sub Generator', () => {
         assert.fileContent('.github/workflows/github-actions.yml', /gradlew.*sonar.com/);
         assert.fileContent('.github/workflows/github-actions.yml', /gradlew.*deployHeroku/);
         assert.fileContent('.github/workflows/github-actions.yml', /snyk/);
+      });
+      it('contains Cypress', () => {
+        assert.fileContent('.github/workflows/github-actions.yml', /run ci:e2e:package/);
+        assert.fileContent('.github/workflows/github-actions.yml', /CYPRESS_ENABLE_RECORD: false/);
+        assert.fileContent('.github/workflows/github-actions.yml', /CYPRESS_PROJECT_ID/);
+        assert.fileContent('.github/workflows/github-actions.yml', /CYPRESS_RECORD_KEY/);
       });
     });
     describe('GitHub Actions: autoconfigure', () => {
@@ -606,7 +635,7 @@ describe('JHipster CI-CD Sub Generator', () => {
           .withOptions({ skipChecks: true })
           .withPrompts({
             pipeline: 'circle',
-            cicdIntegrations: [],
+            cicdIntegrations: ['cypressDashboard'],
           })
           .on('end', done);
       });
@@ -615,6 +644,10 @@ describe('JHipster CI-CD Sub Generator', () => {
         assert.noFile(expectedFiles.jenkins);
         assert.noFile(expectedFiles.travis);
         assert.noFile(expectedFiles.gitlab);
+      });
+      it('contains Cypress', () => {
+        assert.fileContent('.circleci/config.yml', /run ci:e2e:package/);
+        assert.fileContent('.circleci/config.yml', /CYPRESS_ENABLE_RECORD: true/);
       });
     });
     describe('Circle CI: Gradle Angular NPM', () => {
@@ -636,6 +669,10 @@ describe('JHipster CI-CD Sub Generator', () => {
         assert.noFile(expectedFiles.jenkins);
         assert.noFile(expectedFiles.travis);
         assert.noFile(expectedFiles.gitlab);
+      });
+      it('contains Cypress', () => {
+        assert.fileContent('.circleci/config.yml', /run ci:e2e:package/);
+        assert.fileContent('.circleci/config.yml', /CYPRESS_ENABLE_RECORD: false/);
       });
     });
     describe('Circle CI: Maven with Snyk', () => {
