@@ -31,7 +31,7 @@ const NODE_VERSION = '14.15.0';
 const NPM_VERSION = '7.5.2';
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
 
-const GRADLE_VERSION = '6.8.1';
+const GRADLE_VERSION = '6.8.2';
 const JIB_VERSION = '2.7.1';
 
 // Libraries version
