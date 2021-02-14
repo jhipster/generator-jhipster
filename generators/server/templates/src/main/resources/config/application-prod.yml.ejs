@@ -57,11 +57,6 @@ org:
     driver:
       pool:
         metrics-enabled: true
-      uri: bolt://localhost:7687
-      # Uncomment to use an authenticated connection
-      # authentication:
-      #   username: neo4j
-      #   password: secret
     migrations:
       locations-to-scan:
       packages-to-scan: <%= packageName %>.config.neo4j
@@ -79,6 +74,16 @@ spring:
       enabled: false
     livereload:
       enabled: false
+  <%_ if (databaseType === 'neo4j') { _%>
+  neo4j:
+    pool:
+      metrics-enabled: true
+    uri: bolt://localhost:7687
+    # Uncomment to use an authenticated connection
+    # authentication:
+    #   username: neo4j
+    #   password: secret
+  <%_ } _%>
   <%_ if (serviceDiscoveryType === 'eureka') { _%>
   cloud:
     config:
