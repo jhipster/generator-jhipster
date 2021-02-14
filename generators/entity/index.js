@@ -803,6 +803,37 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.context.reactiveRegularEagerRelations = this.context.reactiveEagerRelations.filter(rel => rel.id !== true);
       },
 
+      /*
+       * Composed generators uses context ready for the templates.
+       */
+      composing() {
+        const context = this.context;
+        if (!context.skipServer) {
+          this.composeWithJHipster('entity-server', {
+            context,
+          });
+        }
+
+        if (!context.skipClient) {
+          this.composeWithJHipster('entity-client', {
+            context,
+            skipInstall: this.options.skipInstall,
+          });
+          if (this.jhipsterConfig.enableTranslation) {
+            this.composeWithJHipster('entity-i18n', {
+              context,
+              skipInstall: this.options.skipInstall,
+            });
+          }
+        }
+        
+        if (this.jhipsterConfig.gatlingTests && (this.jhipsterConfig.applicationType === 'gateway' || this.jhipsterConfig.applicationType === 'monolith')) {
+          this.composeWithJHipster('entity-gatling', {
+            context,
+          });
+        }
+      },
+
       insight() {
         // track insights
         const context = this.context;

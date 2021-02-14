@@ -71,21 +71,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         "Upgrade-Insecure-Requests" -> "1"
     )
 <%_ } _%>
-<%_ if (authenticationType === 'uaa') { _%>
 
-    val authorization_header = "Basic " + Base64.getEncoder.encodeToString("<%= baseName %>app:bXktc2VjcmV0LXRva2VuLXRvLWNoYW5nZS1pbi1wcm9kdWN0aW9uLWFuZC10by1rZWVwLWluLWEtc2VjdXJlLXBsYWNl".getBytes(StandardCharsets.UTF_8))
-
-    val headers_http_authentication = Map(
-        "Content-Type" -> """application/x-www-form-urlencoded""",
-        "Accept" -> """application/json""",
-        "Authorization"-> authorization_header
-    )
-
-    val headers_http_authenticated = Map(
-        "Accept" -> """application/json""",
-        "Authorization" -> "Bearer ${access_token}"
-    )
-<%_ } _%>
 <%_ if (authenticationType === 'jwt') { _%>
 
     val headers_http_authentication = Map(
@@ -153,17 +139,6 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .get("${finalRedirectUrl}")
         .silent
         .check(status.is(200))).exitHereIfFailed
-<%_ } else if (authenticationType === 'uaa') { _%>
-        .post("/oauth/token")
-        .headers(headers_http_authentication)
-        .formParam("username", "admin")
-        .formParam("password", "admin")
-        .formParam("grant_type", "password")
-        .formParam("scope", "read write")
-        .formParam("client_secret", "bXktc2VjcmV0LXRva2VuLXRvLWNoYW5nZS1pbi1wcm9kdWN0aW9uLWFuZC10by1rZWVwLWluLWEtc2VjdXJlLXBsYWNl")
-        .formParam("client_id", "<%= baseName %>app")
-        .formParam("submit", "Login")
-        .check(jsonPath("$.access_token").saveAs("access_token"))).exitHereIfFailed
 <%_ } else if (authenticationType === 'jwt') { _%>
         .post("/api/authenticate")
         .headers(headers_http_authentication)
