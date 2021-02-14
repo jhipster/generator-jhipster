@@ -826,8 +826,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
             });
           }
         }
-        
-        if (this.jhipsterConfig.gatlingTests && (this.jhipsterConfig.applicationType === 'gateway' || this.jhipsterConfig.applicationType === 'monolith')) {
+
+        if (
+          this.jhipsterConfig.gatlingTests &&
+          (this.jhipsterConfig.applicationType === 'gateway' || this.jhipsterConfig.applicationType === 'monolith')
+        ) {
           this.composeWithJHipster('entity-gatling', {
             context,
           });

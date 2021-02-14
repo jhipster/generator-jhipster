@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
 const constants = require('../generator-constants');
 
 /* Constants use throughout */
@@ -24,32 +23,31 @@ const INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX;
 const TEST_DIR = constants.TEST_DIR;
 
 const gatlingFiles = {
-    gatlingSimlations: [
+  gatlingSimlations: [
+    {
+      condition: generator => generator.gatlingTests,
+      path: TEST_DIR,
+      templates: [
         {
-            condition: generator => generator.gatlingTests,
-            path: TEST_DIR,
-            templates: [
-                {
-                    file: 'gatling/user-files/simulations/EntityGatlingTest.scala',
-                    options: { interpolate: INTERPOLATE_REGEX },
-                    renameTo: generator => `gatling/user-files/simulations/${generator.entityClass}GatlingTest.scala`,
-                },
-            ],
+          file: 'gatling/user-files/simulations/EntityGatlingTest.scala',
+          options: { interpolate: INTERPOLATE_REGEX },
+          renameTo: generator => `gatling/user-files/simulations/${generator.entityClass}GatlingTest.scala`,
         },
-    ],
+      ],
+    },
+  ],
 };
 
 module.exports = {
-    writeFiles,
-    gatlingFiles,
+  writeFiles,
+  gatlingFiles,
 };
 
 function writeFiles() {
-    return {
-        writeGatlingSimulationFiles() {
-            // write gatling simulation side files
-            this.writeFilesToDisk(gatlingFiles);
-        },
-
-    };
+  return {
+    writeGatlingSimulationFiles() {
+      // write gatling simulation side files
+      this.writeFilesToDisk(gatlingFiles);
+    },
+  };
 }
