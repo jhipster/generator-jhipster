@@ -222,6 +222,9 @@ module.exports = class extends BaseGenerator {
   }
 
   get writing() {
+    if (this.options.skipWriting) {
+      return {};
+    }
     return this._writing();
   }
 
@@ -251,6 +254,9 @@ module.exports = class extends BaseGenerator {
   }
 
   get postWriting() {
+    if (this.options.skipWriting) {
+      return {};
+    }
     return this._postWriting();
   }
 
