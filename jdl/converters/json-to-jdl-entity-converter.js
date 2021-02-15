@@ -26,7 +26,6 @@ const JDLRelationship = require('../models/jdl-relationship');
 const JDLUnaryOption = require('../models/jdl-unary-option');
 const JDLBinaryOption = require('../models/jdl-binary-option');
 const { CommonDBTypes } = require('../jhipster/field-types');
-const { OptionNames } = require('../jhipster/application-options');
 const { ONE_TO_ONE, ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY } = require('../jhipster/relationship-types');
 const { JPA_DERIVED_IDENTIFIER } = require('../jhipster/relationship-options');
 const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED } = require('../jhipster/unary-options');
@@ -82,9 +81,6 @@ function addEntities() {
 }
 
 function addEntity(entity, entityName) {
-  if (entityName === USER_ENTITY_NAME && !skippedUserManagement) {
-    throw new Error(`User entity name is reserved if ${OptionNames.SKIP_USER_MANAGEMENT} is not set.`);
-  }
   jdlObject.addEntity(convertJSONToJDLEntity(entity, entityName));
   addEnumsToJDL(entity);
   addEntityOptionsToJDL(entity, entityName);

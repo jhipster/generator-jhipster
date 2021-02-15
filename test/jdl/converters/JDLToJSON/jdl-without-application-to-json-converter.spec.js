@@ -113,12 +113,12 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
             applicationType: MONOLITH,
             databaseType: SQL,
           });
-          customEntitiesAreConverted = returnedMap.get('toto').every(entity => entity.name === 'A');
+          customEntitiesAreConverted = returnedMap.get('toto').some(entity => entity.name === 'A');
           builtInEntitiesAreConverted = returnedMap.get('toto').some(entity => entity.name === 'User' || entity.name === 'Authority');
         });
 
-        it('should not convert built-in entities', () => {
-          expect(builtInEntitiesAreConverted).to.be.false;
+        it('should convert built-in entities', () => {
+          expect(builtInEntitiesAreConverted).to.be.true;
         });
         it('should convert custom entities', () => {
           expect(customEntitiesAreConverted).to.be.true;

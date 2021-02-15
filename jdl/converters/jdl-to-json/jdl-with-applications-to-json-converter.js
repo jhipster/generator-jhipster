@@ -96,9 +96,6 @@ function setBasicEntityInformation() {
 function setFields() {
   const convertedFields = FieldConverter.convert(jdlObject);
   convertedFields.forEach((entityFields, entityName) => {
-    if (builtInEntities.has(entityName.toLowerCase())) {
-      return;
-    }
     entities[entityName].addFields(entityFields);
   });
 }

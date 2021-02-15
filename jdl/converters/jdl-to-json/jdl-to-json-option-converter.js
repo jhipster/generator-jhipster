@@ -26,8 +26,6 @@ const {
 } = BinaryOptions;
 const serviceClassOptionValue = BinaryOptions.Values.service.SERVICE_CLASS;
 
-const USER = 'user';
-
 let convertedOptionContent;
 
 module.exports = {
@@ -56,9 +54,7 @@ function convert(jdlOptionHolder) {
 function resolveEntityNamesForEachOption(jdlOptionHolder) {
   jdlOptionHolder.forEachOption(jdlOption => {
     if (jdlOption.entityNames.has('*')) {
-      jdlOption.setEntityNames(
-        jdlOptionHolder.getEntityNames().filter(entityName => !jdlOption.excludedNames.has(entityName) && entityName.toLowerCase() !== USER)
-      );
+      jdlOption.setEntityNames(jdlOptionHolder.getEntityNames().filter(entityName => !jdlOption.excludedNames.has(entityName)));
     }
   });
 }
