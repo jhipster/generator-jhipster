@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "cypress": "6.4.0",
+    "cypress": "6.5.0",
     "puppeteer": "7.1.0"
   },
   "dependencies": {
