@@ -49,6 +49,11 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="200em" src="https://www.jhipster.tech/images/open-collective/entandoe.png">
         </a>
       </td>
+      <td align="center" valign="middle">
+        <a href="https://www.datastax.com/" target="_blank">
+          <img width="200em" src="https://www.jhipster.tech/images/open-collective/datastax.png">
+        </a>
+      </td>
     </tr>
   </tbody>
 </table>
