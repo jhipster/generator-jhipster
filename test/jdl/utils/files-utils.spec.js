@@ -25,97 +25,97 @@ const path = require('path');
 const { createFolderIfItDoesNotExist, doesFileExist, doesDirectoryExist } = require('../../../jdl/utils/file-utils');
 
 describe('FileUtils', () => {
-    describe('doesFileExist', () => {
-        context('when checking a file path', () => {
-            context('with a nil file path', () => {
-                it('should return false', () => {
-                    expect(doesFileExist()).to.be.false;
-                });
-            });
-            context('with an invalid file path', () => {
-                it('should return false', () => {
-                    expect(doesFileExist('someInvalidPath')).to.be.false;
-                });
-            });
-            context('with a valid file path', () => {
-                it('should return true', () => {
-                    expect(doesFileExist(path.join(__dirname, '..', 'test-files', 'MyEntity.json'))).to.be.true;
-                });
-            });
+  describe('doesFileExist', () => {
+    context('when checking a file path', () => {
+      context('with a nil file path', () => {
+        it('should return false', () => {
+          expect(doesFileExist()).to.be.false;
         });
+      });
+      context('with an invalid file path', () => {
+        it('should return false', () => {
+          expect(doesFileExist('someInvalidPath')).to.be.false;
+        });
+      });
+      context('with a valid file path', () => {
+        it('should return true', () => {
+          expect(doesFileExist(path.join(__dirname, '..', 'test-files', 'MyEntity.json'))).to.be.true;
+        });
+      });
     });
-    describe('doesDirectoryExist', () => {
-        context('when checking a directory path', () => {
-            context('with a nil directory path', () => {
-                it('return false', () => {
-                    expect(doesDirectoryExist()).to.be.false;
-                });
-            });
-            context('with an invalid directory path', () => {
-                it('should return false', () => {
-                    expect(doesDirectoryExist(path.join(__dirname, 'invalid-folder'))).to.be.false;
-                });
-            });
-            context('with a valid directory path', () => {
-                it('should return true', () => {
-                    expect(doesDirectoryExist(__dirname)).to.be.true;
-                });
-            });
+  });
+  describe('doesDirectoryExist', () => {
+    context('when checking a directory path', () => {
+      context('with a nil directory path', () => {
+        it('return false', () => {
+          expect(doesDirectoryExist()).to.be.false;
         });
+      });
+      context('with an invalid directory path', () => {
+        it('should return false', () => {
+          expect(doesDirectoryExist(path.join(__dirname, 'invalid-folder'))).to.be.false;
+        });
+      });
+      context('with a valid directory path', () => {
+        it('should return true', () => {
+          expect(doesDirectoryExist(__dirname)).to.be.true;
+        });
+      });
     });
-    describe('createFolderIfItDoesNotExist', () => {
-        context('when not passing a directory', () => {
-            it('should fail', () => {
-                expect(() => {
-                    createFolderIfItDoesNotExist();
-                }).to.throw(/^A directory must be passed to be created\.$/);
-            });
-        });
-        context('when passing a directory that does not yet exist', () => {
-            before(() => {
-                createFolderIfItDoesNotExist('./here');
-            });
-
-            after(() => {
-                fs.rmdirSync('./here');
-            });
-
-            it('should create it', () => {
-                expect(fs.statSync('./here').isDirectory()).to.be.true;
-            });
-        });
-        context('when passing a file that exists', () => {
-            it('should fail', () => {
-                expect(() => {
-                    createFolderIfItDoesNotExist(path.join(__dirname, '..', '..', '..', 'package.json'));
-                }).to.throw(/^The directory to create '.*?package\.json' is a file\.$/);
-            });
-        });
-        context('when passing a directory that exists', () => {
-            before(() => {
-                createFolderIfItDoesNotExist('./test');
-            });
-
-            it('should do nothing', () => {
-                expect(fs.statSync('./test').isDirectory()).to.be.true;
-            });
-        });
-        context('when passing a path that does not contain more than one directory', () => {
-            before(() => {
-                createFolderIfItDoesNotExist(path.join('toto', 'titi', 'tutu'));
-            });
-
-            after(() => {
-                fs.rmdirSync(path.join('toto', 'titi', 'tutu'));
-                fs.rmdirSync(path.join('toto', 'titi'));
-                fs.rmdirSync('toto');
-            });
-
-            it('should create the folder structure recursively', () => {
-                expect(fs.statSync('toto').isDirectory()).to.be.true;
-                expect(fs.statSync(path.join('toto', 'titi')).isDirectory()).to.be.true;
-                expect(fs.statSync(path.join('toto', 'titi', 'tutu')).isDirectory()).to.be.true;
-            });
-        });
+  });
+  describe('createFolderIfItDoesNotExist', () => {
+    context('when not passing a directory', () => {
+      it('should fail', () => {
+        expect(() => {
+          createFolderIfItDoesNotExist();
+        }).to.throw(/^A directory must be passed to be created\.$/);
+      });
     });
+    context('when passing a directory that does not yet exist', () => {
+      before(() => {
+        createFolderIfItDoesNotExist('./here');
+      });
+
+      after(() => {
+        fs.rmdirSync('./here');
+      });
+
+      it('should create it', () => {
+        expect(fs.statSync('./here').isDirectory()).to.be.true;
+      });
+    });
+    context('when passing a file that exists', () => {
+      it('should fail', () => {
+        expect(() => {
+          createFolderIfItDoesNotExist(path.join(__dirname, '..', '..', '..', 'package.json'));
+        }).to.throw(/^The directory to create '.*?package\.json' is a file\.$/);
+      });
+    });
+    context('when passing a directory that exists', () => {
+      before(() => {
+        createFolderIfItDoesNotExist('./test');
+      });
+
+      it('should do nothing', () => {
+        expect(fs.statSync('./test').isDirectory()).to.be.true;
+      });
+    });
+    context('when passing a path that does not contain more than one directory', () => {
+      before(() => {
+        createFolderIfItDoesNotExist(path.join('toto', 'titi', 'tutu'));
+      });
+
+      after(() => {
+        fs.rmdirSync(path.join('toto', 'titi', 'tutu'));
+        fs.rmdirSync(path.join('toto', 'titi'));
+        fs.rmdirSync('toto');
+      });
+
+      it('should create the folder structure recursively', () => {
+        expect(fs.statSync('toto').isDirectory()).to.be.true;
+        expect(fs.statSync(path.join('toto', 'titi')).isDirectory()).to.be.true;
+        expect(fs.statSync(path.join('toto', 'titi', 'tutu')).isDirectory()).to.be.true;
+      });
+    });
+  });
 });

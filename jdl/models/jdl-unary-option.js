@@ -24,21 +24,21 @@ const { join } = require('../utils/set-utils');
  * For flags such as skipServer, skipClient, etc.
  */
 class JDLUnaryOption extends AbstractJDLOption {
-    getType() {
-        return 'UNARY';
-    }
+  getType() {
+    return 'UNARY';
+  }
 
-    toString() {
-        const entityNames = join(this.entityNames, ', ');
-        entityNames.slice(1, entityNames.length - 1);
-        const firstPart = `${this.name} ${entityNames}`;
-        if (this.excludedNames.size === 0) {
-            return firstPart;
-        }
-        const excludedNames = join(this.excludedNames, ', ');
-        excludedNames.slice(1, this.excludedNames.length - 1);
-        return `${firstPart} except ${excludedNames}`;
+  toString() {
+    const entityNames = join(this.entityNames, ', ');
+    entityNames.slice(1, entityNames.length - 1);
+    const firstPart = `${this.name} ${entityNames}`;
+    if (this.excludedNames.size === 0) {
+      return firstPart;
     }
+    const excludedNames = join(this.excludedNames, ', ');
+    excludedNames.slice(1, this.excludedNames.length - 1);
+    return `${firstPart} except ${excludedNames}`;
+  }
 }
 
 module.exports = JDLUnaryOption;

@@ -20,66 +20,66 @@
 const { merge } = require('../utils/object-utils');
 
 module.exports = class JDLField {
-    constructor(args) {
-        const merged = merge(defaults(), args);
-        if (!merged.name || !merged.type) {
-            throw new Error('The field name and type are mandatory to create a field.');
-        }
-        this.name = merged.name;
-        this.type = merged.type;
-        this.comment = merged.comment;
-        this.validations = merged.validations;
-        this.options = merged.options;
+  constructor(args) {
+    const merged = merge(defaults(), args);
+    if (!merged.name || !merged.type) {
+      throw new Error('The field name and type are mandatory to create a field.');
     }
+    this.name = merged.name;
+    this.type = merged.type;
+    this.comment = merged.comment;
+    this.validations = merged.validations;
+    this.options = merged.options;
+  }
 
-    addValidation(validation) {
-        if (!validation) {
-            throw new Error("Can't add a nil JDL validation to the JDL field.");
-        }
-        this.validations[validation.name] = validation;
+  addValidation(validation) {
+    if (!validation) {
+      throw new Error("Can't add a nil JDL validation to the JDL field.");
     }
+    this.validations[validation.name] = validation;
+  }
 
-    forEachValidation(functionToApply) {
-        if (!functionToApply) {
-            throw new Error('A function must be passed to iterate over validations');
-        }
-        Object.values(this.validations).forEach(functionToApply);
+  forEachValidation(functionToApply) {
+    if (!functionToApply) {
+      throw new Error('A function must be passed to iterate over validations');
     }
+    Object.values(this.validations).forEach(functionToApply);
+  }
 
-    validationQuantity() {
-        return Object.keys(this.validations).length;
-    }
+  validationQuantity() {
+    return Object.keys(this.validations).length;
+  }
 
-    forEachOption(functionToApply) {
-        if (!functionToApply) {
-            throw new Error('A function must be passed to iterate over options');
-        }
-        Object.entries(this.options).forEach(functionToApply);
+  forEachOption(functionToApply) {
+    if (!functionToApply) {
+      throw new Error('A function must be passed to iterate over options');
     }
+    Object.entries(this.options).forEach(functionToApply);
+  }
 
-    optionQuantity() {
-        return Object.keys(this.options).length;
-    }
+  optionQuantity() {
+    return Object.keys(this.options).length;
+  }
 
-    toString() {
-        let string = '';
-        if (this.comment) {
-            string += `/**\n${this.comment
-                .split('\n')
-                .map(line => ` * ${line}\n`)
-                .join('')} */\n`;
-        }
-        string += `${this.name} ${this.type}`;
-        Object.keys(this.validations).forEach(validationName => {
-            string += ` ${this.validations[validationName].toString()}`;
-        });
-        return string;
+  toString() {
+    let string = '';
+    if (this.comment) {
+      string += `/**\n${this.comment
+        .split('\n')
+        .map(line => ` * ${line}\n`)
+        .join('')} */\n`;
     }
+    string += `${this.name} ${this.type}`;
+    Object.keys(this.validations).forEach(validationName => {
+      string += ` ${this.validations[validationName].toString()}`;
+    });
+    return string;
+  }
 };
 
 function defaults() {
-    return {
-        validations: {},
-        options: {},
-    };
+  return {
+    validations: {},
+    options: {},
+  };
 }

@@ -53,17 +53,17 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
     <Row>
       <Col md="8">
         <h2 data-cy="<%= entityInstance %>DetailsHeading">
-          <Translate contentKey="<%= i18nKeyPrefix %>.detail.title"><%= entityClass %></Translate> [<strong>{<%= entityInstance %>Entity.id}</strong>]
+          <Translate contentKey="<%= i18nKeyPrefix %>.detail.title"><%= entityClass %></Translate>
         </h2>
           <dl className="jh-entity-details">
-          <%_ for (field of fields.filter(field => !field.id)) {
+          <%_ for (field of fields) {
               const fieldType = field.fieldType;
               const fieldName = field.fieldName;
               const fieldNameHumanized = field.fieldNameHumanized;
           _%>
             <dt>
               <span id="<%= fieldName %>">
-                <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                <Translate contentKey="<%= field.fieldTranslationKey %>">
                   <%= fieldNameHumanized %>
                 </Translate>
               </span>
@@ -122,6 +122,7 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
                 const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
                 const relationshipNameHumanized = relationship.relationshipNameHumanized;
                 const otherEntityName = relationship.otherEntityName;
+                const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
                 const otherEntityStateName = relationship.otherEntityStateName;
                 const otherEntityField = relationship.otherEntityField;
                 const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
@@ -139,7 +140,7 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
     {
       (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>) ?
           (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map((val, i) =>
-              <span key={val.id}><a>{val.<%= otherEntityField %>}</a>{(<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && i === <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+              <span key={val.<%= otherEntityPkName %>}><a>{val.<%= otherEntityField %>}</a>{(<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && i === <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
           )
       ) : null
     }                  <%_ } else { _%>
@@ -150,7 +151,7 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
     {
         (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>) ?
             (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map((val, i) =>
-                <span key={val.id}><a>{val.<%= otherEntityField %>}</a>{(<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && i === <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+                <span key={val.<%= otherEntityPkName %>}><a>{val.<%= otherEntityField %>}</a>{(<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && i === <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
             )
         ) : null
     }
@@ -165,7 +166,7 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
         <Button tag={Link} to="/<%= entityFileName %>" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
         </Button>&nbsp;
-        <Button tag={Link} to={`/<%= entityFileName %>/${<%= entityInstance %>Entity.id}/edit`} replace color="primary">
+        <Button tag={Link} to={`/<%= entityFileName %>/${<%= entityInstance %>Entity.<%= primaryKey.name %>}/edit`} replace color="primary">
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
         </Button>
       </Col>

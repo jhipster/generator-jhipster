@@ -27,170 +27,170 @@ const constants = require('../generator-constants');
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 module.exports = class extends BaseGenerator {
-    constructor(args, opts) {
-        super(args, opts);
+  constructor(args, opts) {
+    super(args, opts);
 
-        // Automatically configure Travis
-        this.option('autoconfigure-travis', {
-            type: Boolean,
-            defaults: false,
-            description: 'Automatically configure Travis',
-        });
+    // Automatically configure Travis
+    this.option('autoconfigure-travis', {
+      type: Boolean,
+      defaults: false,
+      description: 'Automatically configure Travis',
+    });
 
-        // Automatically configure Jenkins
-        this.option('autoconfigure-jenkins', {
-            type: Boolean,
-            defaults: false,
-            description: 'Automatically configure Jenkins',
-        });
+    // Automatically configure Jenkins
+    this.option('autoconfigure-jenkins', {
+      type: Boolean,
+      defaults: false,
+      description: 'Automatically configure Jenkins',
+    });
 
-        // Automatically configure Gitlab
-        this.option('autoconfigure-gitlab', {
-            type: Boolean,
-            defaults: false,
-            description: 'Automatically configure Gitlab',
-        });
+    // Automatically configure Gitlab
+    this.option('autoconfigure-gitlab', {
+      type: Boolean,
+      defaults: false,
+      description: 'Automatically configure Gitlab',
+    });
 
-        // Automatically configure Azure
-        this.option('autoconfigure-azure', {
-            type: Boolean,
-            defaults: false,
-            description: 'Automatically configure Azure',
-        });
+    // Automatically configure Azure
+    this.option('autoconfigure-azure', {
+      type: Boolean,
+      defaults: false,
+      description: 'Automatically configure Azure',
+    });
 
-        // Automatically configure GitHub Actions
-        this.option('autoconfigure-github', {
-            type: Boolean,
-            defaults: false,
-            description: 'Automatically configure GitHub Actions',
-        });
+    // Automatically configure GitHub Actions
+    this.option('autoconfigure-github', {
+      type: Boolean,
+      defaults: false,
+      description: 'Automatically configure GitHub Actions',
+    });
 
-        // Automatically configure CircleCI
-        this.option('autoconfigure-circle', {
-            type: Boolean,
-            defaults: false,
-            description: 'Automatically configure CircleCI',
-        });
+    // Automatically configure CircleCI
+    this.option('autoconfigure-circle', {
+      type: Boolean,
+      defaults: false,
+      description: 'Automatically configure CircleCI',
+    });
+  }
+
+  get initializing() {
+    return {
+      validateFromCli() {
+        this.checkInvocationFromCLI();
+      },
+      sayHello() {
+        this.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
+      },
+      getConfig() {
+        this.jhipsterVersion = packagejs.version;
+        const configuration = this.config;
+        this.baseName = configuration.get('baseName');
+        this.dasherizedBaseName = _.kebabCase(this.baseName);
+        this.applicationType = configuration.get('applicationType');
+        this.databaseType = configuration.get('databaseType');
+        this.prodDatabaseType = configuration.get('prodDatabaseType');
+        this.skipClient = configuration.get('skipClient');
+        this.skipServer = configuration.get('skipServer');
+        this.clientPackageManager = configuration.get('clientPackageManager');
+        this.buildTool = configuration.get('buildTool');
+        this.reactive = configuration.get('reactive');
+        this.herokuAppName = configuration.get('herokuAppName');
+        if (this.herokuAppName === undefined) {
+          this.herokuAppName = _.kebabCase(this.baseName);
+        }
+        this.clientFramework = configuration.get('clientFramework');
+        this.testFrameworks = configuration.get('testFrameworks');
+        this.cacheProvider = configuration.get('cacheProvider');
+        this.autoconfigureTravis = this.options.autoconfigureTravis;
+        this.autoconfigureJenkins = this.options.autoconfigureJenkins;
+        this.autoconfigureGitlab = this.options.autoconfigureGitlab;
+        this.autoconfigureAzure = this.options.autoconfigureAzure;
+        this.autoconfigureGithub = this.options.autoconfigureGithub;
+        this.autoconfigureCircleCI = this.options.autoconfigureCircle;
+        this.abort = false;
+      },
+      initConstants() {
+        this.NODE_VERSION = constants.NODE_VERSION;
+        this.NPM_VERSION = constants.NPM_VERSION;
+      },
+      getConstants() {
+        this.DOCKER_DIR = constants.DOCKER_DIR;
+        this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+        this.DOCKER_JENKINS = constants.DOCKER_JENKINS;
+        this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+      },
+    };
+  }
+
+  get prompting() {
+    return {
+      askPipeline: prompts.askPipeline,
+      askIntegrations: prompts.askIntegrations,
+    };
+  }
+
+  get configuring() {
+    return {
+      insight() {
+        if (this.abort) return;
+        statistics.sendSubGenEvent('generator', 'ci-cd');
+      },
+      setTemplateConstants() {
+        if (this.abort) return;
+        if (this.cicdIntegrations === undefined) {
+          this.cicdIntegrations = [];
+        }
+        this.gitLabIndent = this.sendBuildToGitlab ? '    ' : '';
+        this.indent = this.insideDocker ? '    ' : '';
+        this.indent += this.gitLabIndent;
+        if (this.clientFramework === REACT) {
+          this.frontTestCommand = 'test-ci';
+        } else {
+          this.frontTestCommand = 'test';
+        }
+      },
+    };
+  }
+
+  writing() {
+    if (this.pipeline === 'jenkins') {
+      this.template('jenkins/Jenkinsfile.ejs', 'Jenkinsfile');
+      this.template('jenkins/jenkins.yml.ejs', `${this.DOCKER_DIR}jenkins.yml`);
+      this.template('jenkins/idea.gdsl', `${this.SERVER_MAIN_RES_DIR}idea.gdsl`);
+    }
+    if (this.pipeline === 'gitlab') {
+      this.template('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
+    }
+    if (this.pipeline === 'circle') {
+      this.template('circle.yml.ejs', '.circleci/config.yml');
+    }
+    if (this.pipeline === 'travis') {
+      this.template('travis.yml.ejs', '.travis.yml');
+    }
+    if (this.pipeline === 'azure') {
+      this.template('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
+    }
+    if (this.pipeline === 'github') {
+      this.template('github-actions.yml.ejs', '.github/workflows/github-actions.yml');
     }
 
-    get initializing() {
-        return {
-            validateFromCli() {
-                this.checkInvocationFromCLI();
-            },
-            sayHello() {
-                this.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
-            },
-            getConfig() {
-                this.jhipsterVersion = packagejs.version;
-                const configuration = this.config;
-                this.baseName = configuration.get('baseName');
-                this.dasherizedBaseName = _.kebabCase(this.baseName);
-                this.applicationType = configuration.get('applicationType');
-                this.databaseType = configuration.get('databaseType');
-                this.prodDatabaseType = configuration.get('prodDatabaseType');
-                this.skipClient = configuration.get('skipClient');
-                this.skipServer = configuration.get('skipServer');
-                this.clientPackageManager = configuration.get('clientPackageManager');
-                this.buildTool = configuration.get('buildTool');
-                this.reactive = configuration.get('reactive');
-                this.herokuAppName = configuration.get('herokuAppName');
-                if (this.herokuAppName === undefined) {
-                    this.herokuAppName = _.kebabCase(this.baseName);
-                }
-                this.clientFramework = configuration.get('clientFramework');
-                this.testFrameworks = configuration.get('testFrameworks');
-                this.cacheProvider = configuration.get('cacheProvider');
-                this.autoconfigureTravis = this.options.autoconfigureTravis;
-                this.autoconfigureJenkins = this.options.autoconfigureJenkins;
-                this.autoconfigureGitlab = this.options.autoconfigureGitlab;
-                this.autoconfigureAzure = this.options.autoconfigureAzure;
-                this.autoconfigureGithub = this.options.autoconfigureGithub;
-                this.autoconfigureCircleCI = this.options.autoconfigureCircle;
-                this.abort = false;
-            },
-            initConstants() {
-                this.NODE_VERSION = constants.NODE_VERSION;
-                this.NPM_VERSION = constants.NPM_VERSION;
-            },
-            getConstants() {
-                this.DOCKER_DIR = constants.DOCKER_DIR;
-                this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-                this.DOCKER_JENKINS = constants.DOCKER_JENKINS;
-                this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-            },
-        };
+    if (this.cicdIntegrations.includes('deploy')) {
+      if (this.buildTool === 'maven') {
+        this.addMavenDistributionManagement(
+          this.artifactorySnapshotsId,
+          this.artifactorySnapshotsUrl,
+          this.artifactoryReleasesId,
+          this.artifactoryReleasesUrl
+        );
+      } else if (this.buildTool === 'gradle') {
+        // TODO: add support here
+        // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
+        this.warning('No support for Artifactory yet, when using Gradle.\n');
+      }
     }
 
-    get prompting() {
-        return {
-            askPipeline: prompts.askPipeline,
-            askIntegrations: prompts.askIntegrations,
-        };
+    if (this.cicdIntegrations.includes('publishDocker')) {
+      this.template('docker-registry.yml.ejs', `${this.DOCKER_DIR}docker-registry.yml`);
     }
-
-    get configuring() {
-        return {
-            insight() {
-                if (this.abort) return;
-                statistics.sendSubGenEvent('generator', 'ci-cd');
-            },
-            setTemplateConstants() {
-                if (this.abort) return;
-                if (this.cicdIntegrations === undefined) {
-                    this.cicdIntegrations = [];
-                }
-                this.gitLabIndent = this.sendBuildToGitlab ? '    ' : '';
-                this.indent = this.insideDocker ? '    ' : '';
-                this.indent += this.gitLabIndent;
-                if (this.clientFramework === REACT) {
-                    this.frontTestCommand = 'test-ci';
-                } else {
-                    this.frontTestCommand = 'test';
-                }
-            },
-        };
-    }
-
-    writing() {
-        if (this.pipeline === 'jenkins') {
-            this.template('jenkins/Jenkinsfile.ejs', 'Jenkinsfile');
-            this.template('jenkins/jenkins.yml.ejs', `${this.DOCKER_DIR}jenkins.yml`);
-            this.template('jenkins/idea.gdsl', `${this.SERVER_MAIN_RES_DIR}idea.gdsl`);
-        }
-        if (this.pipeline === 'gitlab') {
-            this.template('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
-        }
-        if (this.pipeline === 'circle') {
-            this.template('circle.yml.ejs', '.circleci/config.yml');
-        }
-        if (this.pipeline === 'travis') {
-            this.template('travis.yml.ejs', '.travis.yml');
-        }
-        if (this.pipeline === 'azure') {
-            this.template('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
-        }
-        if (this.pipeline === 'github') {
-            this.template('github-actions.yml.ejs', '.github/workflows/github-actions.yml');
-        }
-
-        if (this.cicdIntegrations.includes('deploy')) {
-            if (this.buildTool === 'maven') {
-                this.addMavenDistributionManagement(
-                    this.artifactorySnapshotsId,
-                    this.artifactorySnapshotsUrl,
-                    this.artifactoryReleasesId,
-                    this.artifactoryReleasesUrl
-                );
-            } else if (this.buildTool === 'gradle') {
-                // TODO: add support here
-                // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
-                this.warning('No support for Artifactory yet, when using Gradle.\n');
-            }
-        }
-
-        if (this.cicdIntegrations.includes('publishDocker')) {
-            this.template('docker-registry.yml.ejs', `${this.DOCKER_DIR}docker-registry.yml`);
-        }
-    }
+  }
 };

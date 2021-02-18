@@ -23,16 +23,16 @@ const { expect } = require('chai');
 const { JPA_DERIVED_IDENTIFIER, exists } = require('../../../jdl/jhipster/relationship-options');
 
 describe('RelationshipOptions', () => {
-    describe('exists', () => {
-        describe('when the option does not exist', () => {
-            it('should return false', () => {
-                expect(exists('toto')).to.be.false;
-            });
-        });
-        describe('when the option exists', () => {
-            it('should return true', () => {
-                expect(exists(JPA_DERIVED_IDENTIFIER)).to.be.true;
-            });
-        });
+  describe('exists', () => {
+    describe('when the option does not exist', () => {
+      it('should return false', () => {
+        expect(exists('toto')).to.be.false;
+      });
     });
+    describe('when the option exists', () => {
+      it('should return true', () => {
+        expect(exists(JPA_DERIVED_IDENTIFIER)).to.be.true;
+      });
+    });
+  });
 });

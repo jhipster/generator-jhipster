@@ -29,15 +29,15 @@ module.exports = { convertValidations };
  * @return {Array<JDLValidation>} the converted JDLValidations.
  */
 function convertValidations(validations, constantValueGetter) {
-    if (!validations) {
-        throw new Error('Validations have to be passed so as to be converted.');
+  if (!validations) {
+    throw new Error('Validations have to be passed so as to be converted.');
+  }
+  return validations.reduce((jdlValidations, parsedValidation) => {
+    if (parsedValidation) {
+      jdlValidations.push(convertValidation(parsedValidation, constantValueGetter));
     }
-    return validations.reduce((jdlValidations, parsedValidation) => {
-        if (parsedValidation) {
-            jdlValidations.push(convertValidation(parsedValidation, constantValueGetter));
-        }
-        return jdlValidations;
-    }, []);
+    return jdlValidations;
+  }, []);
 }
 
 /**
@@ -47,28 +47,28 @@ function convertValidations(validations, constantValueGetter) {
  * @return {JDLValidation} the converted JDLValidation.
  */
 function convertValidation(validation, constantValueGetter) {
-    let { value } = validation;
-    if (validation.constant) {
-        value = constantValueGetter.call(undefined, value);
-    }
-    if (validation.key === PATTERN) {
-        value = formatThePatternValidationValue(value);
-    }
-    return new JDLValidation({
-        name: validation.key,
-        value,
-    });
+  let { value } = validation;
+  if (validation.constant) {
+    value = constantValueGetter.call(undefined, value);
+  }
+  if (validation.key === PATTERN) {
+    value = formatThePatternValidationValue(value);
+  }
+  return new JDLValidation({
+    name: validation.key,
+    value,
+  });
 }
 
 function formatThePatternValidationValue(value) {
-    if (!value.includes("'")) {
-        return value;
+  if (!value.includes("'")) {
+    return value;
+  }
+  const chunks = value.split("'").map(chunk => {
+    if (!chunk.endsWith('\\')) {
+      return `${chunk}\\`;
     }
-    const chunks = value.split("'").map(chunk => {
-        if (!chunk.endsWith('\\')) {
-            return `${chunk}\\`;
-        }
-        return chunk;
-    });
-    return chunks.join("\\'");
+    return chunk;
+  });
+  return chunks.join("\\'");
 }

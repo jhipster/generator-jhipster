@@ -18,45 +18,45 @@
  */
 
 module.exports = {
-    performJDLPostParsingTasks,
+  performJDLPostParsingTasks,
 };
 
 function performJDLPostParsingTasks(parsedContent) {
-    return resolveEntityNames(parsedContent);
+  return resolveEntityNames(parsedContent);
 }
 
 function resolveEntityNames(parsedContent) {
-    parsedContent.applications = resolveEntityNamesForApplications(parsedContent);
-    return parsedContent;
+  parsedContent.applications = resolveEntityNamesForApplications(parsedContent);
+  return parsedContent;
 }
 
 function resolveEntityNamesForApplications(parsedContent) {
-    const entityNames = parsedContent.entities.map(entity => entity.name);
-    return parsedContent.applications.map(application => {
-        application.entities = resolveApplicationEntityNames(application, entityNames);
-        return application;
-    });
+  const entityNames = parsedContent.entities.map(entity => entity.name);
+  return parsedContent.applications.map(application => {
+    application.entities = resolveApplicationEntityNames(application, entityNames);
+    return application;
+  });
 }
 
 function resolveApplicationEntityNames(application, entityNames) {
-    const { entityList, excluded } = application.entities;
-    let applicationEntityNames = new Set(entityList);
-    if (entityList.includes('*')) {
-        applicationEntityNames = new Set(entityNames);
-    } else {
-        checkEntityNamesInApplication(application.config.baseName, applicationEntityNames, entityNames);
-    }
-    excluded.forEach(excludedEntityName => {
-        applicationEntityNames.delete(excludedEntityName);
-    });
-    return [...applicationEntityNames];
+  const { entityList, excluded } = application.entities;
+  let applicationEntityNames = new Set(entityList);
+  if (entityList.includes('*')) {
+    applicationEntityNames = new Set(entityNames);
+  } else {
+    checkEntityNamesInApplication(application.config.baseName, applicationEntityNames, entityNames);
+  }
+  excluded.forEach(excludedEntityName => {
+    applicationEntityNames.delete(excludedEntityName);
+  });
+  return [...applicationEntityNames];
 }
 
 function checkEntityNamesInApplication(applicationName, entityNamesInApplication, entityNames) {
-    const entityNameSet = new Set(entityNames);
-    entityNamesInApplication.forEach(entityNameInApplication => {
-        if (!entityNameSet.has(entityNameInApplication)) {
-            throw new Error(`The entity ${entityNameInApplication} which is declared in ${applicationName}'s entity list doesn't exist.`);
-        }
-    });
+  const entityNameSet = new Set(entityNames);
+  entityNamesInApplication.forEach(entityNameInApplication => {
+    if (!entityNameSet.has(entityNameInApplication)) {
+      throw new Error(`The entity ${entityNameInApplication} which is declared in ${applicationName}'s entity list doesn't exist.`);
+    }
+  });
 }

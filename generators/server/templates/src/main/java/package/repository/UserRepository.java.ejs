@@ -73,22 +73,24 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
     <%_ } else { _%>
 
-import org.springframework.data.r2dbc.core.DatabaseClient;
-import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
+import org.springframework.r2dbc.core.DatabaseClient;
+import org.springframework.data.r2dbc.convert.R2dbcConverter;
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
-import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.sql.Column;
 import org.springframework.data.relational.core.sql.Expression;
 import org.springframework.data.relational.core.sql.Table;
 
+import static org.springframework.data.relational.core.query.Criteria.where;
+import static org.springframework.data.relational.core.query.Query.query;
     <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
-import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
+import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
 <%_ } _%>
 <%_ if (reactive && databaseType === 'cassandra') { _%>
 import org.springframework.data.cassandra.ReactiveResultSet;
@@ -150,7 +152,7 @@ import java.time.Instant;
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
 <% } %>
 /**
- * Spring Data <% if (databaseType === 'sql' && !reactive) { %>JPA<% } else if (databaseType === 'sql' && reactive) { %>R2DBC<% } else if (databaseType === 'mongodb') { %>MongoDB<% } else if (databaseType === 'couchbase') { %>Couchbase<% } else if (databaseType === 'cassandra') { %>Cassandra<% } else if (databaseType === 'neo4j') { %>Neo4j RX<% } %> repository for the {@link <%= asEntity('User') %>} entity.
+ * Spring Data <% if (databaseType === 'sql' && !reactive) { %>JPA<% } else if (databaseType === 'sql' && reactive) { %>R2DBC<% } else if (databaseType === 'mongodb') { %>MongoDB<% } else if (databaseType === 'couchbase') { %>Couchbase<% } else if (databaseType === 'cassandra') { %>Cassandra<% } else if (databaseType === 'neo4j') { %>Neo4j<% } %> repository for the {@link <%= asEntity('User') %>} entity.
  */
 <%_
     let optionalOrMono = reactive ? 'Mono' : 'Optional';
@@ -286,12 +288,15 @@ interface UserRepositoryInternal<% if (authenticationType !== 'oauth2') { %> ext
 }
 
 class UserRepositoryInternalImpl implements UserRepositoryInternal {
-    private final DatabaseClient db;
-    private final ReactiveDataAccessStrategy dataAccessStrategy;
 
-    public UserRepositoryInternalImpl(DatabaseClient db, ReactiveDataAccessStrategy dataAccessStrategy) {
+    private final DatabaseClient db;
+    private final R2dbcEntityTemplate r2dbcEntityTemplate;
+    private final R2dbcConverter r2dbcConverter;
+
+    public UserRepositoryInternalImpl(DatabaseClient db, R2dbcEntityTemplate r2dbcEntityTemplate, R2dbcConverter r2dbcConverter) {
         this.db = db;
-        this.dataAccessStrategy = dataAccessStrategy;
+        this.r2dbcEntityTemplate = r2dbcEntityTemplate;
+        this.r2dbcConverter = r2dbcConverter;
     }
 
     @Override
@@ -307,11 +312,11 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
 
     <%_ } _%>
     private Mono<User> findOneWithAuthoritiesBy(String fieldName, Object fieldValue) {
-        return db.execute("SELECT * FROM <%= jhiTablePrefix %>_user u LEFT JOIN <%= jhiTablePrefix %>_user_authority ua ON u.id=ua.user_id WHERE u." + fieldName + " = :" + fieldName)
+        return db.sql("SELECT * FROM <%= jhiTablePrefix %>_user u LEFT JOIN <%= jhiTablePrefix %>_user_authority ua ON u.id=ua.user_id WHERE u." + fieldName + " = :" + fieldName)
             .bind(fieldName, fieldValue)
             .map((row, metadata) ->
                 Tuples.of(
-                    dataAccessStrategy.getRowMapper(User.class).apply(row, metadata),
+                    r2dbcConverter.read(User.class, row, metadata),
                     Optional.ofNullable(row.get("authority_name", String.class))
                 )
             )
@@ -337,24 +342,19 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
     <%_ if (authenticationType !== 'oauth2') { _%>
     @Override
     public Mono<Void> delete(User user) {
-        return db.execute("DELETE FROM <%= jhiTablePrefix %>_user_authority WHERE user_id = :userId")
+        return db.sql("DELETE FROM <%= jhiTablePrefix %>_user_authority WHERE user_id = :userId")
             .bind("userId", user.getId())
             .then()
-            .then(db.delete()
-                .from(User.class)
-                .matching(Criteria.where("id").is(user.getId()))
-                .then()
-            );
+            .then(r2dbcEntityTemplate.delete(User.class)
+                .matching(query(where("id").is(user.getId()))).all()
+                .then());
     }
 
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
     @Override
     public Mono<User> create(User user) {
-        return db.insert().into(User.class).using(user)
-            .map(dataAccessStrategy.getConverter().populateIdIfNecessary(user))
-            .first()
-            .defaultIfEmpty(user);
+        return r2dbcEntityTemplate.insert(User.class).using(user).defaultIfEmpty(user);
     }
 
     <%_ } _%>

@@ -22,29 +22,29 @@ const { createToken } = require('chevrotain');
 const { NAME, KEYWORD, namePattern } = require('./shared-tokens');
 
 module.exports = {
-    createTokenFromConfig,
+  createTokenFromConfig,
 };
 
 function createTokenFromConfig(config) {
-    if (!config) {
-        throw new Error("Can't create a token without the proper config.");
+  if (!config) {
+    throw new Error("Can't create a token without the proper config.");
+  }
+  // JDL has a great many keywords. Keywords can conflict with identifiers in a parsing
+  // library with a separate lexing phase.
+  // See: https://github.com/SAP/chevrotain/blob/master/examples/lexer/keywords_vs_identifiers/keywords_vs_identifiers.js
+  // a Concise way to resolve the problem without manually adding the "longer_alt" property dozens of times.
+  if (isString(config.pattern) && namePattern.test(config.pattern)) {
+    config.longer_alt = NAME;
+    if (!config.categories) {
+      config.categories = [];
     }
-    // JDL has a great many keywords. Keywords can conflict with identifiers in a parsing
-    // library with a separate lexing phase.
-    // See: https://github.com/SAP/chevrotain/blob/master/examples/lexer/keywords_vs_identifiers/keywords_vs_identifiers.js
-    // a Concise way to resolve the problem without manually adding the "longer_alt" property dozens of times.
-    if (isString(config.pattern) && namePattern.test(config.pattern)) {
-        config.longer_alt = NAME;
-        if (!config.categories) {
-            config.categories = [];
-        }
-        config.categories.push(KEYWORD);
-    }
+    config.categories.push(KEYWORD);
+  }
 
-    // readable labels for diagrams
-    if (isString(config.pattern) && !config.label) {
-        config.label = `'${config.pattern}'`;
-    }
+  // readable labels for diagrams
+  if (isString(config.pattern) && !config.label) {
+    config.label = `'${config.pattern}'`;
+  }
 
-    return createToken(config);
+  return createToken(config);
 }

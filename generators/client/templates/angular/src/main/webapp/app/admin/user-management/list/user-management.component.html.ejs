@@ -17,105 +17,142 @@
  limitations under the License.
 -%>
 <div>
-    <h2>
-        <span id="user-management-page-heading" <%= jhiPrefix %>Translate="userManagement.home.title" data-cy="userManagementPageHeading">Users</span>
+  <h2>
+    <span id="user-management-page-heading" <%= jhiPrefix %>Translate="userManagement.home.title" data-cy="userManagementPageHeading">Users</span>
 
-        <div class="d-flex justify-content-end">
-            <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
-                <fa-icon icon="sync" [spin]="isLoading"></fa-icon> <span <%= jhiPrefix %>Translate="userManagement.home.refreshListLabel">Refresh List</span>
-            </button>
-            <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
-                <fa-icon icon="plus"></fa-icon> <span <%= jhiPrefix %>Translate="userManagement.home.createLabel">Create a new User</span>
-            </button>
-        </div>
-    </h2>
-
-    <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
-
-    <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
-
-    <div class="table-responsive" *ngIf="users">
-        <table class="table table-striped" aria-describedby="user-management-page-heading">
-            <thead>
-                <tr<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)"<% } %>>
-                    <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="id"<% } %>><span <%= jhiPrefix %>Translate="global.field.id">ID</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
-                    <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="login"<% } %>><span <%= jhiPrefix %>Translate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
-                    <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="email"<% } %>><span <%= jhiPrefix %>Translate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
-                    <th scope="col"></th>
-                    <%_ if (enableTranslation) { _%>
-                    <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="langKey"<% } %>> <span <%= jhiPrefix %>Translate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
-                    <%_ } _%>
-                    <th scope="col"><span <%= jhiPrefix %>Translate="userManagement.profiles">Profiles</span></th>
-                    <%_ if (databaseType !== 'cassandra') { _%>
-                    <th scope="col" <%= jhiPrefix %>SortBy="createdDate"><span <%= jhiPrefix %>Translate="userManagement.createdDate">Created Date</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedBy"><span <%= jhiPrefix %>Translate="userManagement.lastModifiedBy">Last Modified By</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedDate"><span <%= jhiPrefix %>Translate="userManagement.lastModifiedDate">Last Modified Date</span> <fa-icon icon="sort"></fa-icon></th>
-                    <%_ } _%>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody *ngIf="users">
-                <tr *ngFor="let user of users; trackBy: trackIdentity">
-                    <td><a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a></td>
-                    <td>{{ user.login }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm" (click)="setActive(user, true)" *ngIf="!user.activated"
-                                <%= jhiPrefix %>Translate="userManagement.deactivated">Deactivated</button>
-                        <button class="btn btn-success btn-sm" (click)="setActive(user, false)" *ngIf="user.activated"
-                                [disabled]="!currentAccount || currentAccount.login === user.login" <%= jhiPrefix %>Translate="userManagement.activated">Activated</button>
-                    </td>
-                    <%_ if (enableTranslation) { _%>
-                    <td>{{ user.langKey }}</td>
-                    <%_ } _%>
-                    <td>
-                        <div *ngFor="let authority of user.authorities">
-                            <span class="badge badge-info">{{ authority }}</span>
-                        </div>
-                    </td>
-                    <%_ if (databaseType !== 'cassandra') { _%>
-                    <td>{{ user.createdDate | date:'dd/MM/yy HH:mm' }}</td>
-                    <td>{{ user.lastModifiedBy }}</td>
-                    <td>{{ user.lastModifiedDate | date:'dd/MM/yy HH:mm' }}</td>
-                    <%_ } _%>
-                    <td class="text-right">
-                        <div class="btn-group">
-                            <button type="submit"
-                                    [routerLink]="['./', user.login, 'view']"
-                                    class="btn btn-info btn-sm">
-                                <fa-icon icon="eye"></fa-icon>
-                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.view">View</span>
-                            </button>
-
-                            <button type="submit"
-                                    [routerLink]="['./', user.login, 'edit']"
-                                    queryParamsHandling="merge"
-                                    class="btn btn-primary btn-sm">
-                                <fa-icon icon="pencil-alt"></fa-icon>
-                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.edit">Edit</span>
-                            </button>
-
-                            <button type="button" (click)="deleteUser(user)"
-                                    class="btn btn-danger btn-sm" [disabled]="!currentAccount || currentAccount.login === user.login">
-                                <fa-icon icon="times"></fa-icon>
-                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.delete">Delete</span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span <%= jhiPrefix %>Translate="userManagement.home.refreshListLabel">Refresh List</span>
+      </button>
+      <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
+        <fa-icon icon="plus"></fa-icon> <span <%= jhiPrefix %>Translate="userManagement.home.createLabel">Create a new User</span>
+      </button>
     </div>
-    <%_ if (databaseType !== 'cassandra') { _%>
+  </h2>
 
-    <div *ngIf="users">
-        <div class="row justify-content-center">
-            <<%= jhiPrefixDashed %>-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></<%= jhiPrefixDashed %>-item-count>
-        </div>
+  <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 
-        <div class="row justify-content-center">
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="transition()"></ngb-pagination>
-        </div>
+  <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
+
+  <div class="table-responsive" *ngIf="users">
+    <table class="table table-striped" aria-describedby="user-management-page-heading">
+      <thead>
+        <tr<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)"<% } %>>
+          <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="id"<% } %>>
+            <span <%= jhiPrefix %>Translate="global.field.id">ID</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
+          </th>
+          <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="login"<% } %>>
+            <span <%= jhiPrefix %>Translate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
+          </th>
+          <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="email"<% } %>>
+            <span <%= jhiPrefix %>Translate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
+          </th>
+          <th scope="col"></th>
+          <%_ if (enableTranslation) { _%>
+          <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="langKey"<% } %>>
+            <span <%= jhiPrefix %>Translate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
+          </th>
+          <%_ } _%>
+          <th scope="col"><span <%= jhiPrefix %>Translate="userManagement.profiles">Profiles</span></th>
+          <%_ if (databaseType !== 'cassandra') { _%>
+          <th scope="col" <%= jhiPrefix %>SortBy="createdDate">
+            <span <%= jhiPrefix %>Translate="userManagement.createdDate">Created Date</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedBy">
+            <span <%= jhiPrefix %>Translate="userManagement.lastModifiedBy">Last Modified By</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedDate">
+            <span <%= jhiPrefix %>Translate="userManagement.lastModifiedDate">Last Modified Date</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <%_ } _%>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody *ngIf="users">
+        <tr *ngFor="let user of users; trackBy: trackIdentity">
+          <td>
+            <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>
+          </td>
+          <td>{{ user.login }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="setActive(user, true)"
+              *ngIf="!user.activated"
+              <%= jhiPrefix %>Translate="userManagement.deactivated"
+            >
+              Deactivated
+            </button>
+            <button
+              class="btn btn-success btn-sm"
+              (click)="setActive(user, false)"
+              *ngIf="user.activated"
+              [disabled]="!currentAccount || currentAccount.login === user.login"
+              <%= jhiPrefix %>Translate="userManagement.activated"
+            >
+              Activated
+            </button>
+          </td>
+          <%_ if (enableTranslation) { _%>
+          <td>{{ user.langKey }}</td>
+          <%_ } _%>
+          <td>
+            <div *ngFor="let authority of user.authorities">
+              <span class="badge badge-info">{{ authority }}</span>
+            </div>
+          </td>
+          <%_ if (databaseType !== 'cassandra') { _%>
+          <td>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
+          <td>{{ user.lastModifiedBy }}</td>
+          <td>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</td>
+          <%_ } _%>
+          <td class="text-right">
+            <div class="btn-group">
+              <button type="submit" [routerLink]="['./', user.login, 'view']" class="btn btn-info btn-sm">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.view">View</span>
+              </button>
+
+              <button type="submit" [routerLink]="['./', user.login, 'edit']" queryParamsHandling="merge" class="btn btn-primary btn-sm">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.edit">Edit</span>
+              </button>
+
+              <button
+                type="button"
+                (click)="deleteUser(user)"
+                class="btn btn-danger btn-sm"
+                [disabled]="!currentAccount || currentAccount.login === user.login"
+              >
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <%_ if (databaseType !== 'cassandra') { _%>
+
+  <div *ngIf="users">
+    <div class="row justify-content-center">
+      <<%= jhiPrefixDashed %>-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></<%= jhiPrefixDashed %>-item-count>
     </div>
-    <%_ } _%>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="page"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="transition()"
+      ></ngb-pagination>
+    </div>
+  </div>
+  <%_ } _%>
 </div>

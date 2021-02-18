@@ -52,6 +52,9 @@ public class LogoutResource {
      * @param request the {@link HttpServletRequest}.
     <%_ } _%>
      * @param idToken the ID token.
+    <%_ if (reactive) { _%>
+     * @param session the current {@link WebSession}.
+    <%_ } _%>
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and a body with a global logout URL and ID token.
      */
     @PostMapping("/api/logout")

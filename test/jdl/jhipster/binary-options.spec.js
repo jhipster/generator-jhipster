@@ -22,44 +22,36 @@ const { expect } = require('chai');
 const BinaryOptions = require('../../../jdl/jhipster/binary-options');
 
 describe('BinaryOptions', () => {
-    describe('exists', () => {
-        context('when checking for a valid binary option', () => {
-            it('should return true', () => {
-                expect(BinaryOptions.exists(BinaryOptions.Options.DTO, BinaryOptions.Values.dto.MAPSTRUCT)).to.be.true;
-            });
-        });
-        context('when checking for a custom binary option', () => {
-            it('should return true', () => {
-                expect(BinaryOptions.exists('customOption')).to.be.true;
-                expect(BinaryOptions.exists('customOption', 'customValue')).to.be.true;
-            });
-        });
+  describe('exists', () => {
+    context('when checking for a valid binary option', () => {
+      it('should return true', () => {
+        expect(BinaryOptions.exists(BinaryOptions.Options.DTO, BinaryOptions.Values.dto.MAPSTRUCT)).to.be.true;
+      });
     });
-    describe('forEach', () => {
-        context('when not passing a function', () => {
-            it('should fail', () => {
-                expect(() => BinaryOptions.forEach()).to.throw(/^A function has to be passed to loop over the binary options\.$/);
-            });
-        });
-        context('when passing a function', () => {
-            let result;
-
-            before(() => {
-                result = [];
-                BinaryOptions.forEach(optionName => result.push(optionName));
-            });
-
-            it('should iterate over them', () => {
-                expect(result).to.deep.equal([
-                    'dto',
-                    'service',
-                    'pagination',
-                    'microservice',
-                    'search',
-                    'angularSuffix',
-                    'clientRootFolder',
-                ]);
-            });
-        });
+    context('when checking for a custom binary option', () => {
+      it('should return true', () => {
+        expect(BinaryOptions.exists('customOption')).to.be.true;
+        expect(BinaryOptions.exists('customOption', 'customValue')).to.be.true;
+      });
     });
+  });
+  describe('forEach', () => {
+    context('when not passing a function', () => {
+      it('should fail', () => {
+        expect(() => BinaryOptions.forEach()).to.throw(/^A function has to be passed to loop over the binary options\.$/);
+      });
+    });
+    context('when passing a function', () => {
+      let result;
+
+      before(() => {
+        result = [];
+        BinaryOptions.forEach(optionName => result.push(optionName));
+      });
+
+      it('should iterate over them', () => {
+        expect(result).to.deep.equal(['dto', 'service', 'pagination', 'microservice', 'search', 'angularSuffix', 'clientRootFolder']);
+      });
+    });
+  });
 });

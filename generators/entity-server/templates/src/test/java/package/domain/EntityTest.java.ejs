@@ -32,7 +32,7 @@ _%>
 import java.util.UUID;
 <%_ } _%>
 
-class <%= entityClass %>Test {
+class <%= asEntity(entityClass) %>Test {
 
     @Test
     void equalsVerifier() throws Exception {

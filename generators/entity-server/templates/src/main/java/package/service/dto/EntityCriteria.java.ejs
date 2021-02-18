@@ -25,7 +25,7 @@ import tech.jhipster.service.filter.InstantFilter;
 <%_ if (fieldsContainLocalDate === true) { _%>
 import tech.jhipster.service.filter.LocalDateFilter;
 <%_ } _%>
-<%_ if (fieldsContainUUID === true) { _%>
+<%_ if (fieldsContainUUID === true || otherEntityPrimaryKeyTypes.includes('UUID')) { _%>
 import tech.jhipster.service.filter.UUIDFilter;
 <%_ } _%>
 <%_ if (fieldsContainZonedDateTime === true) { _%>
@@ -167,7 +167,7 @@ public class <%= entityClass %>Criteria implements Serializable, Criteria {
     public String toString() {
         return "<%= entityClass %>Criteria{" +
 <%_ filterVariables.forEach((field) => { _%>
-                (<%= field.name %> != null ? "<%= field.name %>=" + <%= field.name %> + ", " : "") +
+            (<%= field.name %> != null ? "<%= field.name %>=" + <%= field.name %> + ", " : "") +
 <%_ }); _%>
             "}";
     }

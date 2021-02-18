@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 # <%= baseName %>
+
 <%_
 let clientPackageMngrName = 'Npm';
 let clientPackageMngrAddGlobal = 'install -g';
@@ -25,13 +26,11 @@ let clientPackageMngrAddDev = 'install --save-dev --save-exact';
 let DOCUMENTATION_ARCHIVE_URL = `${DOCUMENTATION_URL + DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`;
 _%>
 This application was generated using JHipster <%= jhipsterVersion %>, you can find documentation and help at [<%= DOCUMENTATION_ARCHIVE_URL %>](<%= DOCUMENTATION_ARCHIVE_URL %>).
-<%_ if (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
+<%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
 
 This is a "<%= applicationType %>" application intended to be part of a microservice architecture, please refer to the [Doing microservices with JHipster][] page of the documentation for more information.
-<% if (applicationType === 'uaa') { %>
-This is also a JHipster User Account and Authentication (UAA) Server, refer to [Using UAA for Microservice Security][] for details on how to secure JHipster microservices with OAuth2.<% } %>
 <%_ } _%>
-<%_ if (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
+<%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
 This application is configured for Service Discovery and Configuration with <% if (serviceDiscoveryType === 'eureka') { %>the JHipster-Registry<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul<% } %>. On launch, it will refuse to start if it is not able to connect to <% if (serviceDiscoveryType === 'eureka') { %>the JHipster-Registry at [http://localhost:8761](http://localhost:8761)<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul at [http://localhost:8500](http://localhost:8500)<% } %>.<% if (serviceDiscoveryType === 'eureka') { %> For more information, read our documentation on [Service Discovery and Configuration with the JHipster-Registry][].<% } %><% if (serviceDiscoveryType === 'consul') { %> For more information, read our documentation on [Service Discovery and Configuration with Consul][].<% } %>
 <%_ } _%>
 
@@ -235,14 +234,17 @@ To benefit from TypeScript type definitions from [DefinitelyTyped][] repository 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
 <%_ if (clientFramework === ANGULAR) { _%>
 Edit [<%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts](<%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts) file:
-~~~
+
+```
 import 'leaflet/dist/leaflet.js';
-~~~
+```
 
 Edit [<%= CLIENT_MAIN_SRC_DIR %>content/scss/vendor.scss](<%= CLIENT_MAIN_SRC_DIR %>content/scss/vendor.scss) file:
-~~~
+
+```
 @import '~leaflet/dist/leaflet.css';
-~~~
+```
+
 <%_ } _%>
 Note: There are still a few other things remaining to do for Leaflet that we won't detail here.
 <%_ } _%>
@@ -348,7 +350,7 @@ To launch your application's tests, run:
 <%_ } _%>
 ```
 
-<% if (!skipClient) { %>
+<%_ if (!skipClient) { _%>
 ### Client tests
 
 Unit tests are run by [Jest][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](<%= CLIENT_TEST_SRC_DIR %>) and can be run with:
@@ -357,14 +359,20 @@ Unit tests are run by [Jest][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](
 <%= clientPackageManager %> test
 ```
 
-<% if (protractorTests) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [<%= CLIENT_TEST_SRC_DIR %>e2e](<%= CLIENT_TEST_SRC_DIR %>e2e)
-and can be run by starting Spring Boot in one terminal (`<% if (buildTool === 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<%= clientPackageManager %> run e2e`) in a second one.<% } %>
-<% } %><% if (gatlingTests) { %>### Other tests
+<%_ if (protractorTests) { _%>
+UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [<%= CLIENT_TEST_SRC_DIR %>e2e](<%= CLIENT_TEST_SRC_DIR %>e2e)
+and can be run by starting Spring Boot in one terminal (`<% if (buildTool === 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<%= clientPackageManager %> run e2e`) in a second one.
+<%_ } _%>
+<%_ } _%>
+
+<%_ if (gatlingTests) { _%>
+### Other tests
 
 Performance tests are run by [Gatling][] and written in Scala. They're located in [src/test/gatling](src/test/gatling).
 
 To use those tests, you must install Gatling from [https://gatling.io/](https://gatling.io/).
-<% } %>
+<%_ } _%>
+
 For more information, refer to the [Running tests page][].
 
 ### Code quality
@@ -402,7 +410,8 @@ For more information, refer to the [Code quality page][].
 ## Using Docker to simplify development (optional)
 
 You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
-<% if (databaseType !== 'no') { %>
+
+<%_ if (databaseType !== 'no') { _%>
 For example, to start a <%= prodDatabaseType %> database in a docker container, run:
 
 ```
@@ -414,8 +423,8 @@ To stop it and remove the container, run:
 ```
 docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml down
 ```
+<%_ } _%>
 
-<% } %>
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
@@ -437,8 +446,9 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 
 [JHipster Homepage and latest documentation]: <%= DOCUMENTATION_URL %>
 [JHipster <%= jhipsterVersion %> archive]: <%= DOCUMENTATION_ARCHIVE_URL %>
-<% if (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { %>[Doing microservices with JHipster]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/<% } %>
-<%_ if (applicationType === 'uaa') { _%>[Using UAA for Microservice Security]: <%= DOCUMENTATION_ARCHIVE_URL %>/using-uaa/<%_ } _%>
+<%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
+[Doing microservices with JHipster]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/
+<%_ } _%>
 [Using JHipster in development]: <%= DOCUMENTATION_ARCHIVE_URL %>/development/
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 [Service Discovery and Configuration with the JHipster-Registry]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/#jhipster-registry
@@ -456,7 +466,9 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 <%_ if (!skipClient) { _%>
 [Node.js]: https://nodejs.org/
 [Webpack]: https://webpack.github.io/
+<%_ if (clientFramework === ANGULAR) { _%>
 [Angular CLI]: https://cli.angular.io/
+<%_ } _%>
 [BrowserSync]: https://www.browsersync.io/
 [Jest]: https://facebook.github.io/jest/
 [Jasmine]: https://jasmine.github.io/2.0/introduction.html

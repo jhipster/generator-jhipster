@@ -30,7 +30,7 @@
     <name><%= humanizedBaseName %></name>
 
     <repositories>
-        <%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+        <%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
         <repository>
             <id>spring-milestone</id>
             <url>https://repo.spring.io/milestone</url>
@@ -49,7 +49,7 @@
     </repositories>
 
     <pluginRepositories>
-        <%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+        <%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
         <pluginRepository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
@@ -114,10 +114,7 @@
 <%_ if (reactive) { _%>
         <blockhound-junit-platform.version>1.0.4.RELEASE</blockhound-junit-platform.version>
 <%_ } _%>
-<%_ if (reactive && databaseType === 'sql') { _%>
-        <r2dbc-mariadb.version>1.0.0</r2dbc-mariadb.version>
-<%_ } _%>
-<%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
+<%_ if (databaseType === 'sql') { _%>
         <jaxb-runtime.version>2.3.3</jaxb-runtime.version>
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
@@ -126,7 +123,7 @@
         <cassandra-driver.version>4.6.1</cassandra-driver.version>
 <%_ } _%>
         <archunit-junit5.version>0.15.0</archunit-junit5.version>
-        <mapstruct.version>1.4.1.Final</mapstruct.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
 <%_ } _%>
@@ -201,7 +198,7 @@
             <artifactId>javax.annotation-api</artifactId>
         </dependency>
 <%_ // This is useful for major Spring Boot migration
-    if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+    if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-properties-migrator</artifactId>
@@ -247,12 +244,6 @@
             <scope>test</scope>
         </dependency>
     <%_ } _%>
-<%_ } _%>
-<%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-        </dependency>
 <%_ } _%>
 <%_ if (cacheProvider === 'hazelcast') { _%>
         <dependency>
@@ -380,8 +371,8 @@
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
         <dependency>
-            <groupId>org.neo4j.springframework.data</groupId>
-            <artifactId>spring-data-neo4j-rx-spring-boot-starter</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-neo4j</artifactId>
         </dependency>
         <dependency>
             <groupId>eu.michael-simons.neo4j</groupId>
@@ -770,26 +761,6 @@
             <scope><% if (reactive) { %>compile<% } else { %>runtime<% } %></scope>
         </dependency>
 <%_ } _%>
-<%_ if (authenticationType === 'uaa') { _%>
-        <dependency>
-            <groupId>org.springframework.security.oauth</groupId>
-            <artifactId>spring-security-oauth2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-jwt</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (authenticationType === 'uaa') { _%>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>
-            <version>${jaxb-runtime.version}</version>
-    <%_ if (databaseType !== 'sql') { _%>
-            <scope>runtime</scope>
-    <%_ } _%>
-        </dependency>
-<%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
         <!-- DataStax driver -->
         <dependency>
@@ -803,6 +774,12 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+        </dependency>
+        <!-- Spring Cloud Netflix Zuul depends on Guava 19.0 -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
         </dependency>
         <%_ } else { _%>
         <dependency>
@@ -819,7 +796,7 @@
             <artifactId>bucket4j-jcache</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+<%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter</artifactId>
@@ -835,6 +812,12 @@
         <dependency>
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
+        </dependency>
+<%_ } _%>
+<%_ if (serviceDiscoveryType) { _%>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
 <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
@@ -857,22 +840,24 @@
             <artifactId>spring-cloud-starter-consul-config</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (authenticationType === 'uaa' || (applicationType === 'gateway' && authenticationType === 'oauth2' && reactive)) { _%>
+<%_ if (applicationType === 'gateway' && authenticationType === 'oauth2' && reactive) { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-security</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+<%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 <%_ } _%>
+<%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 %>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-data</artifactId>
         </dependency>
+<%_ } _%>
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
@@ -1111,6 +1096,9 @@
                     <groupId>com.github.eirslett</groupId>
                     <artifactId>frontend-maven-plugin</artifactId>
                     <version>${frontend-maven-plugin.version}</version>
+                    <configuration>
+                        <installDirectory>target</installDirectory>
+                    </configuration>
                 </plugin>
 <%_ } _%>
                 <plugin>
@@ -1589,7 +1577,7 @@
                             <execution>
                                 <id>webapp build dev</id>
                                 <goals>
-                                    <goal><%= clientPackageManager %></goal>
+                                    <goal>npm</goal>
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
@@ -1705,7 +1693,7 @@
                             <execution>
                                 <id>webapp build test</id>
                                 <goals>
-                                    <goal><%= clientPackageManager %></goal>
+                                    <goal>npm</goal>
                                 </goals>
                                 <phase>test</phase>
                                 <configuration>
@@ -1716,7 +1704,7 @@
                             <execution>
                                 <id>webapp build prod</id>
                                 <goals>
-                                    <goal><%= clientPackageManager %></goal>
+                                    <goal>npm</goal>
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
@@ -1752,7 +1740,7 @@
                 </plugins>
             </build>
         </profile>
-<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
+<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice') { _%>
         <profile>
             <!--
                 Profile for tracing requests with Zipkin.

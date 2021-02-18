@@ -23,7 +23,7 @@ const DeploymentValidator = require('../validators/deployment-validator');
 const { GENERATOR_NAME, writeConfigFile } = require('./export-utils');
 
 module.exports = {
-    exportDeployments,
+  exportDeployments,
 };
 
 /**
@@ -32,35 +32,35 @@ module.exports = {
  * @return object[] exported deployments in their final form.
  */
 function exportDeployments(deployments) {
-    if (!deployments) {
-        throw new Error('Deployments have to be passed to be exported.');
-    }
-    return Object.values(deployments).map(deployment => {
-        checkForErrors(deployment);
-        deployment = setUpDeploymentStructure(deployment);
-        writeDeploymentConfigs(deployment);
-        return deployment;
-    });
+  if (!deployments) {
+    throw new Error('Deployments have to be passed to be exported.');
+  }
+  return Object.values(deployments).map(deployment => {
+    checkForErrors(deployment);
+    deployment = setUpDeploymentStructure(deployment);
+    writeDeploymentConfigs(deployment);
+    return deployment;
+  });
 }
 
 function checkForErrors(deployment) {
-    const validator = new DeploymentValidator();
-    validator.validate(deployment);
+  const validator = new DeploymentValidator();
+  validator.validate(deployment);
 }
 
 function setUpDeploymentStructure(deployment) {
-    let deploymentToExport = {};
-    deploymentToExport[GENERATOR_NAME] = JSON.parse(JSON.stringify(deployment, null, 2).concat('\n'));
-    deploymentToExport[GENERATOR_NAME].appsFolders = deployment.appsFolders;
-    deploymentToExport[GENERATOR_NAME].clusteredDbApps = deployment.clusteredDbApps;
-    deploymentToExport = setUpArrayOptions(deploymentToExport);
-    return deploymentToExport;
+  let deploymentToExport = {};
+  deploymentToExport[GENERATOR_NAME] = JSON.parse(JSON.stringify(deployment, null, 2).concat('\n'));
+  deploymentToExport[GENERATOR_NAME].appsFolders = deployment.appsFolders;
+  deploymentToExport[GENERATOR_NAME].clusteredDbApps = deployment.clusteredDbApps;
+  deploymentToExport = setUpArrayOptions(deploymentToExport);
+  return deploymentToExport;
 }
 
 function setUpArrayOptions(deployment) {
-    deployment[GENERATOR_NAME].appsFolders = Array.from(deployment[GENERATOR_NAME].appsFolders);
-    deployment[GENERATOR_NAME].clusteredDbApps = Array.from(deployment[GENERATOR_NAME].clusteredDbApps);
-    return deployment;
+  deployment[GENERATOR_NAME].appsFolders = Array.from(deployment[GENERATOR_NAME].appsFolders);
+  deployment[GENERATOR_NAME].clusteredDbApps = Array.from(deployment[GENERATOR_NAME].clusteredDbApps);
+  return deployment;
 }
 
 /**
@@ -68,10 +68,10 @@ function setUpArrayOptions(deployment) {
  * @param deployment the deployment.
  */
 function writeDeploymentConfigs(deployment) {
-    const folderName = deployment[GENERATOR_NAME].deploymentType;
-    if (doesFileExist(folderName)) {
-        throw new Error(`A file named '${folderName}' already exists, so a folder of the same name can't be created for the application.`);
-    }
-    createFolderIfItDoesNotExist(folderName);
-    writeConfigFile(deployment, path.join(folderName, '.yo-rc.json'));
+  const folderName = deployment[GENERATOR_NAME].deploymentType;
+  if (doesFileExist(folderName)) {
+    throw new Error(`A file named '${folderName}' already exists, so a folder of the same name can't be created for the application.`);
+  }
+  createFolderIfItDoesNotExist(folderName);
+  writeConfigFile(deployment, path.join(folderName, '.yo-rc.json'));
 }

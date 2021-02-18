@@ -52,7 +52,7 @@ export class HasAnyAuthorityDirective implements OnDestroy {
       .getAuthenticationState()
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        this.updateView()
+        this.updateView();
       });
   }
 

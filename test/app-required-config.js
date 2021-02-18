@@ -4,21 +4,21 @@ const { requiredDefaultConfig, defaultConfig } = require('../generators/generato
 const EnvironmentBuilder = require('../cli/environment-builder');
 
 describe('JHipster generator with required configuration', () => {
-    before(() => {
-        return helpers
-            .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
-            .withOptions({
-                defaultLocalConfig: requiredDefaultConfig,
-                baseName: 'jhipster',
-                fromCli: true,
-                skipInstall: true,
-            })
-            .run();
-    });
+  before(() => {
+    return helpers
+      .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
+      .withOptions({
+        defaultLocalConfig: requiredDefaultConfig,
+        baseName: 'jhipster',
+        fromCli: true,
+        skipInstall: true,
+      })
+      .run();
+  });
 
-    it('writes additional default config to .yo-rc.json', () => {
-        assert.JSONFileContent('.yo-rc.json', {
-            'generator-jhipster': { ...defaultConfig, languages: [defaultConfig.nativeLanguage] },
-        });
+  it('writes additional default config to .yo-rc.json', () => {
+    assert.JSONFileContent('.yo-rc.json', {
+      'generator-jhipster': { ...defaultConfig, languages: [defaultConfig.nativeLanguage] },
     });
+  });
 });

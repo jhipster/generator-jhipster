@@ -20,8 +20,8 @@
 const { GENERATOR_NAME } = require('../export-utils');
 
 module.exports = {
-    formatApplicationsToExport,
-    formatApplicationToExport,
+  formatApplicationsToExport,
+  formatApplicationToExport,
 };
 
 /**
@@ -30,12 +30,12 @@ module.exports = {
  * @return object[] exported applications in their final form.
  */
 function formatApplicationsToExport(applications, configuration) {
-    if (!applications) {
-        throw new Error('Applications have to be passed to be exported.');
-    }
-    return Object.values(applications).map(application => {
-        return setUpApplicationStructure(application, configuration);
-    });
+  if (!applications) {
+    throw new Error('Applications have to be passed to be exported.');
+  }
+  return Object.values(applications).map(application => {
+    return setUpApplicationStructure(application, configuration);
+  });
 }
 
 /**
@@ -44,39 +44,44 @@ function formatApplicationsToExport(applications, configuration) {
  * @return {Object} the exported application in its final form.
  */
 function formatApplicationToExport(application, configuration = {}) {
-    return setUpApplicationStructure(application, configuration);
+  return setUpApplicationStructure(application, configuration);
 }
 
 function setUpApplicationStructure(application) {
-    let applicationToExport = {
-        [GENERATOR_NAME]: {},
-    };
-    applicationToExport[GENERATOR_NAME] = getApplicationConfig(application);
-    applicationToExport.entities = application.getEntityNames();
-    if (application.hasConfigurationOption('creationTimestamp')) {
-        applicationToExport[GENERATOR_NAME].creationTimestamp = parseInt(application.getConfigurationOptionValue('creationTimestamp'), 10);
-    }
-    applicationToExport = cleanUpOptions(applicationToExport);
-    return applicationToExport;
+  let applicationToExport = {
+    [GENERATOR_NAME]: {},
+  };
+  applicationToExport[GENERATOR_NAME] = getApplicationConfig(application);
+  applicationToExport.entities = application.getEntityNames();
+  if (application.hasConfigurationOption('creationTimestamp')) {
+    applicationToExport[GENERATOR_NAME].creationTimestamp = parseInt(application.getConfigurationOptionValue('creationTimestamp'), 10);
+  }
+  applicationToExport = cleanUpOptions(applicationToExport);
+  return applicationToExport;
 }
 
 function getApplicationConfig(application) {
-    const result = {};
-    application.forEachConfigurationOption(option => {
-        result[option.name] = option.getValue();
-    });
-    return result;
+  const result = {};
+  application.forEachConfigurationOption(option => {
+    result[option.name] = option.getValue();
+  });
+  return result;
 }
 
 function cleanUpOptions(application) {
-    if (!application[GENERATOR_NAME].frontEndBuilder) {
-        delete application[GENERATOR_NAME].frontEndBuilder;
-    }
-    delete application.entityNames;
-    if (application[GENERATOR_NAME].blueprints) {
-        application[GENERATOR_NAME].blueprints = application[GENERATOR_NAME].blueprints.map(blueprintName => ({
-            name: blueprintName,
-        }));
-    }
-    return application;
+  if (!application[GENERATOR_NAME].frontEndBuilder) {
+    delete application[GENERATOR_NAME].frontEndBuilder;
+  }
+  delete application.entityNames;
+  if (application[GENERATOR_NAME].blueprints) {
+    application[GENERATOR_NAME].blueprints = application[GENERATOR_NAME].blueprints.map(blueprintName => ({
+      name: blueprintName,
+    }));
+  }
+  if (application[GENERATOR_NAME].otherModules) {
+    application[GENERATOR_NAME].otherModules = application[GENERATOR_NAME].otherModules.map(moduleName => ({
+      name: moduleName,
+    }));
+  }
+  return application;
 }

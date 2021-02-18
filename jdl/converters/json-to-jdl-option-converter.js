@@ -22,7 +22,7 @@ const JDLUnaryOption = require('../models/jdl-unary-option');
 const { SKIP_CLIENT, SKIP_SERVER } = require('../jhipster/unary-options');
 
 module.exports = {
-    convertServerOptionsToJDL,
+  convertServerOptionsToJDL,
 };
 
 /**
@@ -32,17 +32,17 @@ module.exports = {
  * @returns {JDLObject} the JDLObject
  */
 function convertServerOptionsToJDL(config, jdl) {
-    const jdlObject = jdl || new JDLObject();
-    const jhipsterConfig = config || {};
-    [SKIP_CLIENT, SKIP_SERVER].forEach(option => {
-        if (jhipsterConfig[option] === true) {
-            jdlObject.addOption(
-                new JDLUnaryOption({
-                    name: option,
-                    value: jhipsterConfig[option],
-                })
-            );
-        }
-    });
-    return jdlObject;
+  const jdlObject = jdl || new JDLObject();
+  const jhipsterConfig = config || {};
+  [SKIP_CLIENT, SKIP_SERVER].forEach(option => {
+    if (jhipsterConfig[option] === true) {
+      jdlObject.addOption(
+        new JDLUnaryOption({
+          name: option,
+          value: jhipsterConfig[option],
+        })
+      );
+    }
+  });
+  return jdlObject;
 }

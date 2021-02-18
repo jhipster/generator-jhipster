@@ -601,6 +601,9 @@ public class UserService {
      <%_ if (['sql', 'mongodb', 'couchbase', 'neo4j'].includes(databaseType)) { _%>
      * @param imageUrl  image URL of user.
      <%_ } _%>
+     <%_ if (reactive) { _%>
+     * @return a completed {@link Mono}.
+     <%_ } _%>
      */
     <%_ if (databaseType === 'sql' && reactive) { _%>
     @Transactional

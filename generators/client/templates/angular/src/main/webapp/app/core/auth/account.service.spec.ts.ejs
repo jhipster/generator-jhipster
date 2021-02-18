@@ -33,7 +33,6 @@ import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import { NgxWebstorageModule } from 'ngx-webstorage';
 
-import { SERVER_API_URL } from 'app/app.constants';
 import { Account } from 'app/core/auth/account.model';
 import { Authority } from 'app/config/authority.constants';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
@@ -132,14 +131,6 @@ describe('Service Tests', () => {
     });
 
     describe('identity', () => {
-      it('should call /account if user is undefined', () => {
-        service.identity().subscribe();
-        const req = httpMock.expectOne({ method: 'GET' });
-        const resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/account';
-
-        expect(req.request.url).toEqual(`${resourceUrl}`);
-      });
-
       it('should call /account only once if not logged out after first authentication and should call /account again if user has logged out', () => {
         // Given the user is authenticated
         service.identity().subscribe();

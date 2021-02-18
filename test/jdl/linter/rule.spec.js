@@ -22,67 +22,67 @@ const Rule = require('../../../jdl/linters/rule');
 const { INFO, ERROR } = require('../../../jdl/linters/rule-levels');
 
 describe('Rule', () => {
-    describe('new', () => {
-        context('when not passing any arg', () => {
-            it('should fail', () => {
-                expect(() => new Rule()).to.throw(/^A rule must at least have a name\.$/);
-            });
-        });
-        context('when not passing any name', () => {
-            it('should fail', () => {
-                expect(() => new Rule({})).to.throw(/^A rule must at least have a name\.$/);
-            });
-        });
-        context('when not passing a level', () => {
-            let rule;
-
-            before(() => {
-                rule = new Rule({ name: 'Toto' });
-            });
-
-            it("sets the rule's level to the info one", () => {
-                expect(rule.level).to.equal(INFO);
-            });
-        });
+  describe('new', () => {
+    context('when not passing any arg', () => {
+      it('should fail', () => {
+        expect(() => new Rule()).to.throw(/^A rule must at least have a name\.$/);
+      });
     });
-    describe('compareTo', () => {
-        let rule;
-        let otherRule;
-
-        beforeEach(() => {
-            rule = new Rule({ name: 'Toto' });
-            otherRule = new Rule({ name: 'Tata' });
-        });
-
-        context('when comparing to no rule', () => {
-            it('should fail', () => {
-                expect(() => {
-                    rule.compareTo();
-                }).to.throw(/^A rule has to be passed so as to be compared\.$/);
-            });
-        });
-        context('when comparing two equal rules', () => {
-            it('should return 0', () => {
-                expect(rule.compareTo(otherRule)).to.equal(0);
-            });
-        });
-        context('when the first rule is more important than the other', () => {
-            beforeEach(() => {
-                rule.level = ERROR;
-            });
-
-            it('should return 1', () => {
-                expect(rule.compareTo(otherRule)).to.equal(1);
-            });
-        });
-        context('when the first rule is less important than the other', () => {
-            beforeEach(() => {
-                otherRule.level = ERROR;
-            });
-
-            it('should return 1', () => {
-                expect(rule.compareTo(otherRule)).to.equal(-1);
-            });
-        });
+    context('when not passing any name', () => {
+      it('should fail', () => {
+        expect(() => new Rule({})).to.throw(/^A rule must at least have a name\.$/);
+      });
     });
+    context('when not passing a level', () => {
+      let rule;
+
+      before(() => {
+        rule = new Rule({ name: 'Toto' });
+      });
+
+      it("sets the rule's level to the info one", () => {
+        expect(rule.level).to.equal(INFO);
+      });
+    });
+  });
+  describe('compareTo', () => {
+    let rule;
+    let otherRule;
+
+    beforeEach(() => {
+      rule = new Rule({ name: 'Toto' });
+      otherRule = new Rule({ name: 'Tata' });
+    });
+
+    context('when comparing to no rule', () => {
+      it('should fail', () => {
+        expect(() => {
+          rule.compareTo();
+        }).to.throw(/^A rule has to be passed so as to be compared\.$/);
+      });
+    });
+    context('when comparing two equal rules', () => {
+      it('should return 0', () => {
+        expect(rule.compareTo(otherRule)).to.equal(0);
+      });
+    });
+    context('when the first rule is more important than the other', () => {
+      beforeEach(() => {
+        rule.level = ERROR;
+      });
+
+      it('should return 1', () => {
+        expect(rule.compareTo(otherRule)).to.equal(1);
+      });
+    });
+    context('when the first rule is less important than the other', () => {
+      beforeEach(() => {
+        otherRule.level = ERROR;
+      });
+
+      it('should return 1', () => {
+        expect(rule.compareTo(otherRule)).to.equal(-1);
+      });
+    });
+  });
 });

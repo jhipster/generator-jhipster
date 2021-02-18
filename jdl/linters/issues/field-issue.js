@@ -20,14 +20,14 @@
 const AbstractIssue = require('./abstract-issue');
 
 class FieldIssue extends AbstractIssue {
-    constructor(args) {
-        super(args);
-        if (!args.fieldName || !args.entityName) {
-            throw new Error("A field name and its entity's name must be passed.");
-        }
-        this.entityName = args.entityName;
-        this.fieldName = args.fieldName;
+  constructor(args) {
+    super(args);
+    if (!args.fieldName || !args.entityName) {
+      throw new Error("A field name and its entity's name must be passed.");
     }
+    this.entityName = args.entityName;
+    this.fieldName = args.fieldName;
+  }
 }
 
 module.exports = FieldIssue;

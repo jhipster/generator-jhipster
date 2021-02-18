@@ -18,128 +18,122 @@
  */
 /* eslint-disable consistent-return */
 const _ = require('lodash');
-const writeFiles = require('./files').writeFiles;
+const { writeFiles, customizeFiles } = require('./files');
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const {
-    SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT },
+  SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT },
 } = require('../generator-constants');
 
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-    constructor(args, opts) {
-        super(args, opts);
-        this.entity = opts.context;
+  constructor(args, opts) {
+    super(args, opts);
+    this.entity = opts.context;
 
-        utils.copyObjectProps(this, this.entity);
-        this.jhipsterContext = opts.jhipsterContext || opts.context;
+    utils.copyObjectProps(this, this.entity);
+    this.jhipsterContext = opts.jhipsterContext || opts.context;
 
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-client', { context: opts.context });
-    }
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-client', { context: opts.context });
+  }
 
-    // Public API method used by the getter and also by Blueprints
-    _preparing() {
-        return {
-            setup() {
-                if (!this.embedded) {
-                    this.tsKeyType = this.getTypescriptKeyType(this.primaryKey.type);
-                }
-            },
-        };
-    }
+  // Public API method used by the getter and also by Blueprints
+  _preparing() {
+    return {
+      setup() {
+        if (!this.embedded) {
+          this.tsKeyType = this.getTypescriptKeyType(this.primaryKey.type);
+        }
+      },
+    };
+  }
 
-    get preparing() {
-        if (useBlueprints) return;
-        return this._preparing();
-    }
+  get preparing() {
+    if (useBlueprints) return;
+    return this._preparing();
+  }
 
-    // Public API method used by the getter and also by Blueprints
-    _default() {
-        return super._missingPreDefault();
-    }
+  // Public API method used by the getter and also by Blueprints
+  _default() {
+    return super._missingPreDefault();
+  }
 
-    get default() {
-        if (useBlueprints) return;
-        return this._default();
-    }
+  get default() {
+    if (useBlueprints) return;
+    return this._default();
+  }
 
-    // Public API method used by the getter and also by Blueprints
-    _writing() {
-        return {
-            cleanup() {
-                if (this.isJhipsterVersionLessThan('7.0.0-beta.0') && this.jhipsterConfig.clientFramework === ANGULAR) {
-                    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.route.ts`);
-                    this.removeFile(
-                        `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.component.ts`
-                    );
-                    this.removeFile(
-                        `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.component.html`
-                    );
-                    this.removeFile(
-                        `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-detail.component.ts`
-                    );
-                    this.removeFile(
-                        `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-detail.component.html`
-                    );
-                    this.removeFile(
-                        `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-delete-dialog.component.ts`
-                    );
-                    this.removeFile(
-                        `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-delete-dialog.component.html`
-                    );
-                    this.removeFile(
-                        `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-update.component.ts`
-                    );
-                    this.removeFile(
-                        `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-update.component.html`
-                    );
-                    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/shared/model/${this.entityModelFileName}.model.ts`);
-                    this.fields.forEach(field => {
-                        if (field.fieldIsEnum === true) {
-                            const enumFileName = _.kebabCase(field.fieldType);
-                            this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/shared/model/enumerations/${enumFileName}.model.ts`);
-                        }
-                    });
-                    this.removeFile(
-                        `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-routing-resolve.service.ts`
-                    );
-                    this.removeFile(
-                        `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-routing.module.ts`
-                    );
-                    this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.service.ts`);
-                    this.removeFile(
-                        `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.service.spec.ts`
-                    );
-                    this.removeFile(
-                        `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}.component.spec.ts`
-                    );
-                    this.removeFile(
-                        `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}-detail.component.spec.ts`
-                    );
-                    this.removeFile(
-                        `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}-delete-dialog.component.spec.ts`
-                    );
-                    this.removeFile(
-                        `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}-update.component.spec.ts`
-                    );
-                    this.removeFile(
-                        `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}.service.spec.ts`
-                    );
-                }
-                if (this.isJhipsterVersionLessThan('7.0.0-beta.1') && this.jhipsterConfig.clientFramework === REACT) {
-                    this.removeFile(
-                        `${this.CLIENT_TEST_SRC_DIR}spec/app/entities/${this.entityFolderName}/${this.entityFileName}-reducer.spec.ts`
-                    );
-                }
-            },
-            ...writeFiles(),
-            ...super._missingPostWriting(),
-        };
-    }
+  // Public API method used by the getter and also by Blueprints
+  _writing() {
+    return {
+      cleanup() {
+        if (this.isJhipsterVersionLessThan('7.0.0-beta.0') && this.jhipsterConfig.clientFramework === ANGULAR) {
+          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.route.ts`);
+          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.component.ts`);
+          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.component.html`);
+          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-detail.component.ts`);
+          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-detail.component.html`);
+          this.removeFile(
+            `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-delete-dialog.component.ts`
+          );
+          this.removeFile(
+            `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-delete-dialog.component.html`
+          );
+          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-update.component.ts`);
+          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-update.component.html`);
+          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/shared/model/${this.entityModelFileName}.model.ts`);
+          this.fields.forEach(field => {
+            if (field.fieldIsEnum === true) {
+              const enumFileName = _.kebabCase(field.fieldType);
+              this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/shared/model/enumerations/${enumFileName}.model.ts`);
+            }
+          });
+          this.removeFile(
+            `${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-routing-resolve.service.ts`
+          );
+          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}-routing.module.ts`);
+          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.service.ts`);
+          this.removeFile(`${this.CLIENT_MAIN_SRC_DIR}/app/entities/${this.entityFolderName}/${this.entityFileName}.service.spec.ts`);
+          this.removeFile(
+            `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}.component.spec.ts`
+          );
+          this.removeFile(
+            `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}-detail.component.spec.ts`
+          );
+          this.removeFile(
+            `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}-delete-dialog.component.spec.ts`
+          );
+          this.removeFile(
+            `${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}-update.component.spec.ts`
+          );
+          this.removeFile(`${this.CLIENT_TEST_SRC_DIR}/spec/app/entities/${this.entityFolderName}/${this.entityFileName}.service.spec.ts`);
+        }
+        if (this.isJhipsterVersionLessThan('7.0.0-beta.1') && this.jhipsterConfig.clientFramework === REACT) {
+          this.removeFile(`${this.CLIENT_TEST_SRC_DIR}spec/app/entities/${this.entityFolderName}/${this.entityFileName}-reducer.spec.ts`);
+        }
+      },
+      ...writeFiles(),
+      ...super._missingPostWriting(),
+    };
+  }
 
-    get writing() {
-        if (useBlueprints) return;
-        return this._writing();
-    }
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _postWriting() {
+    return {
+      customizeFiles() {
+        return customizeFiles.call(this);
+      },
+    };
+  }
+
+  get postWriting() {
+    if (useBlueprints) return;
+    return this._postWriting();
+  }
 };

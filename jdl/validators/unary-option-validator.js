@@ -20,9 +20,9 @@
 const OptionValidator = require('./option-validator');
 
 class UnaryOptionValidator extends OptionValidator {
-    constructor() {
-        super('unary');
-    }
+  constructor() {
+    super('unary');
+  }
 }
 
 module.exports = UnaryOptionValidator;

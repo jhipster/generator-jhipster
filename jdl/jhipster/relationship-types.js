@@ -20,10 +20,10 @@
 const _ = require('lodash');
 
 const RelationshipTypes = {
-    ONE_TO_ONE: 'OneToOne',
-    ONE_TO_MANY: 'OneToMany',
-    MANY_TO_ONE: 'ManyToOne',
-    MANY_TO_MANY: 'ManyToMany',
+  ONE_TO_ONE: 'OneToOne',
+  ONE_TO_MANY: 'OneToMany',
+  MANY_TO_ONE: 'ManyToOne',
+  MANY_TO_MANY: 'ManyToMany',
 };
 
 RelationshipTypes.exists = relationship => Object.values(RelationshipTypes).includes(_.upperFirst(_.camelCase(relationship)));

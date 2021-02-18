@@ -20,7 +20,7 @@
 package <%= packageName %>.config;
 
 import tech.jhipster.config.JHipsterConstants;
-import com.github.cloudyrock.mongock.driver.mongodb.springdata.v3.SpringDataMongo3Driver;
+import com.github.cloudyrock.mongock.driver.mongodb.springdata.v3.SpringDataMongoV3Driver;
 import com.github.cloudyrock.spring.v5.MongockSpring5;
 import com.github.cloudyrock.spring.v5.MongockSpring5.MongockInitializingBeanRunner;
 import tech.jhipster.domain.util.JSR310DateConverters.DateToZonedDateTimeConverter;
@@ -103,7 +103,7 @@ public class DatabaseConfiguration {
               @Value("${mongock.lockAcquiredForMinutes:5}") long lockAcquiredForMinutes,
               @Value("${mongock.maxWaitingForLockMinutes:3}") long maxWaitingForLockMinutes,
               @Value("${mongock.maxTries:3}") int maxTries) {
-        SpringDataMongo3Driver driver = SpringDataMongo3Driver.withLockSetting(mongoTemplate, lockAcquiredForMinutes, maxWaitingForLockMinutes, maxTries);
+        SpringDataMongoV3Driver driver = SpringDataMongoV3Driver.withLockSetting(mongoTemplate, lockAcquiredForMinutes, maxWaitingForLockMinutes, maxTries);
         return MongockSpring5.builder()
             .setDriver(driver)
             .addChangeLogsScanPackage("<%= packageName %>.config.dbmigrations")

@@ -67,7 +67,7 @@ import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
     for (relationship of relationships) { // import entities in required relationships
         const relationshipValidate = relationship.relationshipValidate;
         const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
-        const isUsingMapsIdL1 = relationship.useJPADerivedIdentifier;
+        const isUsingMapsIdL1 = relationship.id;
         if (imported.indexOf(otherEntityNameCapitalized) === -1) {
             if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
 import <%= packageName %>.domain.<%= asEntity(otherEntityNameCapitalized) %>;
@@ -175,7 +175,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 <%_ } _%>
 import java.util.List;
-<%_ if (primaryKey.type === 'UUID' || fieldsContainUUID === true || (databaseType === 'sql' && hasOauthUser === true)) { _%>
+<%_ if (primaryKey.type === 'UUID' || fieldsContainUUID === true || (databaseType === 'sql' && hasOauthUser === true) || otherEntityPrimaryKeyTypes.includes('UUID')) { _%>
 import java.util.UUID;
 <%_ } _%>
 
@@ -485,7 +485,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             const relationshipType = relationship.relationshipType;
             const relationshipNameCapitalizedPlural = relationship.relationshipNameCapitalizedPlural;
             const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
-            const mapsIdUse = relationship.useJPADerivedIdentifier;
+            const mapsIdUse = relationship.id;
             if ((relationshipValidate !== null && relationshipValidate === true) || mapsIdUse === true) { _%>
         // Add required entity
             <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
@@ -541,7 +541,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             // It can fail, if other entities are still referring this - it will be removed later.
         }
     <%_ relationships.forEach(function(rel) {
-            if ((rel.relationshipValidate === true || rel.useJPADerivedIdentifier === true) && !alreadyGeneratedDeletionCalls.includes(rel.otherEntityName)) { _%>
+            if ((rel.relationshipValidate === true || rel.id === true) && !alreadyGeneratedDeletionCalls.includes(rel.otherEntityName)) { _%>
         <%= rel.otherEntityNameCapitalized %>ResourceIT.deleteEntities(em);
             <%_ alreadyGeneratedDeletionCalls.push(rel.otherEntityName);
             }
@@ -681,7 +681,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             const relationshipValidate = relationship.relationshipValidate;
             const otherEntityName = relationship.otherEntityName;
             const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
-            const mapsIdUse = relationship.useJPADerivedIdentifier;
+            const mapsIdUse = relationship.id;
             if (mapsIdUse === true) { _%>
         // Add a new parent entity
                 <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
@@ -788,10 +788,10 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%= entityInstance %>Repository.save(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
         List<<%= entityClass %>> <%= entityInstance %>List = webTestClient.get().uri("/api/<%= entityApiUrl %>")
-            .accept(MediaType.APPLICATION_STREAM_JSON)
+            .accept(MediaType.APPLICATION_NDJSON)
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_STREAM_JSON)
+            .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_NDJSON)
             .returnResult(<%= dto !== 'no' ? asDto(entityClass) : asEntity(entityClass) %>.class)
             .getResponseBody()
             <%_ if (dto !== 'no') { _%>
@@ -829,11 +829,11 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
 
         // Get all the <%= entityInstance %>List
         <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %><% if (databaseType !== 'cassandra') { %>?sort=id,desc<% } %>"))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %><% if (databaseType !== 'cassandra') { %>?sort=<%= primaryKey.name %>,desc<% } %>"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
         <%_ } else { _%>
-        webTestClient.get().uri("/api/<%= entityApiUrl %>?sort=id,desc")
+        webTestClient.get().uri("/api/<%= entityApiUrl %>?sort=<%= primaryKey.name %>,desc")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -960,14 +960,16 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
 
         <%= primaryKey.type %> id = <%= asEntity(entityInstance) %>.get<%= primaryKey.nameCapitalized %>();
 
-        default<%= entityClass %>ShouldBeFound("id.equals=" + id);
-        default<%= entityClass %>ShouldNotBeFound("id.notEquals=" + id);
+        default<%= entityClass %>ShouldBeFound("<%= primaryKey.name %>.equals=" + id);
+        default<%= entityClass %>ShouldNotBeFound("<%= primaryKey.name %>.notEquals=" + id);
 
-        default<%= entityClass %>ShouldBeFound("id.greaterThanOrEqual=" + id);
-        default<%= entityClass %>ShouldNotBeFound("id.greaterThan=" + id);
+        <%_ if (primaryKey.type === 'Long') { _%>
+        default<%= entityClass %>ShouldBeFound("<%= primaryKey.name %>.greaterThanOrEqual=" + id);
+        default<%= entityClass %>ShouldNotBeFound("<%= primaryKey.name %>.greaterThan=" + id);
 
-        default<%= entityClass %>ShouldBeFound("id.lessThanOrEqual=" + id);
-        default<%= entityClass %>ShouldNotBeFound("id.lessThan=" + id);
+        default<%= entityClass %>ShouldBeFound("<%= primaryKey.name %>.lessThanOrEqual=" + id);
+        default<%= entityClass %>ShouldNotBeFound("<%= primaryKey.name %>.lessThan=" + id);
+        <%_ } _%>
     }
 
 <%_
@@ -1125,7 +1127,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
 
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= relationship.relationshipNameCapitalized %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
-        <%_ if ((relationship.relationshipValidate === true && relationship.relationshipType === 'one-to-one') || relationship.useJPADerivedIdentifier === true) { _%>
+        <%_ if ((relationship.relationshipValidate === true && relationship.relationshipType === 'one-to-one') || relationship.id === true) { _%>
         // Get already existing entity
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= asEntity(entityInstance) %>.get<%= relationship.relationshipNameCapitalized %>();
         <%_ } else { _%>
@@ -1144,13 +1146,20 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             <%_ } _%>
         <%_ } _%>
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
-        <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.get<%= primaryKey.nameCapitalized %>();
+        <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>();
 
         // Get all the <%= entityInstance %>List where <%= relationship.relationshipFieldName %> equals to <%= relationship.relationshipFieldName %>Id
         default<%= entityClass %>ShouldBeFound("<%= relationship.relationshipFieldName %>Id.equals=" + <%= relationship.relationshipFieldName %>Id);
 
-        // Get all the <%= entityInstance %>List where <%= relationship.relationshipFieldName %> equals to <%= relationship.relationshipFieldName %>Id + 1
-        default<%= entityClass %>ShouldNotBeFound("<%= relationship.relationshipFieldName %>Id.equals=" + (<%= relationship.relationshipFieldName %>Id + 1));
+        <%_
+        const initInvalidPrimaryKey = {
+            'String' : '"invalid-id"',
+            'Long' : '(' + relationship.relationshipFieldName + 'Id + 1)',
+            'UUID' : 'UUID.randomUUID()'
+        }[relationship.otherEntity.primaryKey.type];
+        _%>
+        // Get all the <%= entityInstance %>List where <%= relationship.relationshipFieldName %> equals to <%- initInvalidPrimaryKey %>
+        default<%= entityClass %>ShouldNotBeFound("<%= relationship.relationshipFieldName %>Id.equals=" + <%- initInvalidPrimaryKey %>);
     }
 
 <%_ }); _%>
@@ -1159,7 +1168,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
      */
 <%_ if (reactive) { _%>
     private void default<%= entityClass %>ShouldBeFound(String filter) {
-        webTestClient.get().uri("/api/<%= entityApiUrl %>?sort=id,desc&" + filter)
+        webTestClient.get().uri("/api/<%= entityApiUrl %>?sort=<%= primaryKey.name %>,desc&" + filter)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -1183,7 +1192,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
                                                     if (field.fieldType !== 'String') { %>.toString()<% } %>))<%_ } _%>;
 
         // Check, that the count call also returns 1
-        webTestClient.get().uri("/api/<%= entityApiUrl %>/count?sort=id,desc&" + filter)
+        webTestClient.get().uri("/api/<%= entityApiUrl %>/count?sort=<%= primaryKey.name %>,desc&" + filter)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -1192,10 +1201,16 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     }
 <%_ } else { _%>
     private void default<%= entityClass %>ShouldBeFound(String filter) throws Exception {
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?sort=id,desc&" + filter))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?sort=<%= primaryKey.name %>,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].<%= primaryKey.name %>").value(hasItem(<%= asEntity(entityInstance) %><% if (primaryKey.type !== 'Long') { %>.get<%= primaryKey.nameCapitalized %>()<% } else { %>.get<%= primaryKey.nameCapitalized %>().intValue()<% } %>)))<% fields.filter(field => !field.id && !field.transient).forEach((field) => { %>
+            <%_
+            const primaryKeyConversion = {
+                'Long' : '.intValue()',
+                'UUID' : '.toString()'
+            }[primaryKey.type] || '';
+            _%>
+            .andExpect(jsonPath("$.[*].<%= primaryKey.name %>").value(hasItem(<%= asEntity(entityInstance) %>.get<%= primaryKey.nameCapitalized %>()<%= primaryKeyConversion %>)))<% fields.filter(field => !field.id && !field.transient).forEach((field) => { %>
             <%_ if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { _%>
             .andExpect(jsonPath("$.[*].<%= field.fieldName %>ContentType").value(hasItem(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)))
             <%_ } _%>
@@ -1214,7 +1229,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
                                                         if (field.fieldType !== 'String') { %>.toString()<% } %>)))<% }); %>;
 
         // Check, that the count call also returns 1
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/count?sort=id,desc&" + filter))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/count?sort=<%= primaryKey.name %>,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("1"));
@@ -1226,7 +1241,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
      */
 <%_ if (reactive) { _%>
     private void default<%= entityClass %>ShouldNotBeFound(String filter) {
-        webTestClient.get().uri("/api/<%= entityApiUrl %>?sort=id,desc&" + filter)
+        webTestClient.get().uri("/api/<%= entityApiUrl %>?sort=<%= primaryKey.name %>,desc&" + filter)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -1236,7 +1251,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             .jsonPath("$").isEmpty();
 
         // Check, that the count call also returns 0
-        webTestClient.get().uri("/api/<%= entityApiUrl %>/count?sort=id,desc&" + filter)
+        webTestClient.get().uri("/api/<%= entityApiUrl %>/count?sort=<%= primaryKey.name %>,desc&" + filter)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -1245,14 +1260,14 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     }
 <%_ } else { _%>
     private void default<%= entityClass %>ShouldNotBeFound(String filter) throws Exception {
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?sort=id,desc&" + filter))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?sort=<%= primaryKey.name %>,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
 
         // Check, that the count call also returns 0
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/count?sort=id,desc&" + filter))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/count?sort=<%= primaryKey.name %>,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("0"));

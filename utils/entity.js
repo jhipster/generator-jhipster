@@ -19,305 +19,261 @@
 
 const _ = require('lodash');
 const pluralize = require('pluralize');
-const { fieldIsEnum } = require('./field');
 const { createFaker } = require('./faker');
 const { parseLiquibaseChangelogDate } = require('./liquibase');
 const { entityDefaultConfig } = require('../generators/generator-defaults');
 const { stringHashCode } = require('../generators/utils');
 
 const BASE_TEMPLATE_DATA = {
-    primaryKey: undefined,
-    skipUiGrouping: false,
-    haveFieldWithJavadoc: false,
-    existingEnum: false,
-    searchEngine: false,
+  primaryKey: undefined,
+  skipUiGrouping: false,
+  haveFieldWithJavadoc: false,
+  existingEnum: false,
+  searchEngine: false,
 
-    fieldsContainDate: false,
-    fieldsContainInstant: false,
-    fieldsContainUUID: false,
-    fieldsContainZonedDateTime: false,
-    fieldsContainDuration: false,
-    fieldsContainLocalDate: false,
-    fieldsContainBigDecimal: false,
-    fieldsContainBlob: false,
-    fieldsContainImageBlob: false,
-    fieldsContainTextBlob: false,
-    fieldsContainBlobOrImage: false,
-    validation: false,
-    fieldsContainOwnerManyToMany: false,
-    fieldsContainNoOwnerOneToOne: false,
-    fieldsContainOwnerOneToOne: false,
-    fieldsContainOneToMany: false,
-    fieldsContainManyToOne: false,
-    fieldsContainEmbedded: false,
-    fieldsIsReactAvField: false,
+  fieldsContainDate: false,
+  fieldsContainInstant: false,
+  fieldsContainUUID: false,
+  fieldsContainZonedDateTime: false,
+  fieldsContainDuration: false,
+  fieldsContainLocalDate: false,
+  fieldsContainBigDecimal: false,
+  fieldsContainBlob: false,
+  fieldsContainImageBlob: false,
+  fieldsContainTextBlob: false,
+  fieldsContainBlobOrImage: false,
+  validation: false,
+  fieldsContainOwnerManyToMany: false,
+  fieldsContainNoOwnerOneToOne: false,
+  fieldsContainOwnerOneToOne: false,
+  fieldsContainOneToMany: false,
+  fieldsContainManyToOne: false,
+  fieldsContainEmbedded: false,
+  fieldsIsReactAvField: false,
 
-    get otherRelationships() {
-        return [];
-    },
+  get otherRelationships() {
+    return [];
+  },
 
-    get idFields() {
-        return [];
-    },
+  get idFields() {
+    return [];
+  },
 
-    get enums() {
-        return [];
-    },
-    // these variable hold field and relationship names for question options during update
-    get fieldNameChoices() {
-        return [];
-    },
-    get blobFields() {
-        return [];
-    },
-    get differentTypes() {
-        return [];
-    },
-    get differentRelationships() {
-        return [];
-    },
-    get i18nToLoad() {
-        return [];
-    },
+  get enums() {
+    return [];
+  },
+  // these variable hold field and relationship names for question options during update
+  get fieldNameChoices() {
+    return [];
+  },
+  get blobFields() {
+    return [];
+  },
+  get differentTypes() {
+    return [];
+  },
+  get differentRelationships() {
+    return [];
+  },
+  get i18nToLoad() {
+    return [];
+  },
 };
 
 function prepareEntityForTemplates(entityWithConfig, generator) {
-    const entityName = entityWithConfig.name;
-    _.defaults(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
+  const entityName = entityWithConfig.name;
+  _.defaults(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
 
-    entityWithConfig.changelogDateForRecent = parseLiquibaseChangelogDate(entityWithConfig.changelogDate);
-    entityWithConfig.faker = entityWithConfig.faker || createFaker(generator.jhipsterConfig.nativeLanguage);
-    entityWithConfig.resetFakerSeed = (suffix = '') =>
-        entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
+  entityWithConfig.changelogDateForRecent = parseLiquibaseChangelogDate(entityWithConfig.changelogDate);
+  entityWithConfig.faker = entityWithConfig.faker || createFaker(generator.jhipsterConfig.nativeLanguage);
+  entityWithConfig.resetFakerSeed = (suffix = '') =>
+    entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
 
-    entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix;
-    if (entityWithConfig.entityAngularJSSuffix && !entityWithConfig.entityAngularJSSuffix.startsWith('-')) {
-        entityWithConfig.entityAngularJSSuffix = `-${entityWithConfig.entityAngularJSSuffix}`;
+  entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix;
+  if (entityWithConfig.entityAngularJSSuffix && !entityWithConfig.entityAngularJSSuffix.startsWith('-')) {
+    entityWithConfig.entityAngularJSSuffix = `-${entityWithConfig.entityAngularJSSuffix}`;
+  }
+
+  entityWithConfig.useMicroserviceJson = entityWithConfig.useMicroserviceJson || entityWithConfig.microserviceName !== undefined;
+  if (generator.jhipsterConfig.applicationType === 'gateway' && entityWithConfig.useMicroserviceJson) {
+    if (!entityWithConfig.microserviceName) {
+      throw new Error('Microservice name for the entity is not found. Entity cannot be generated!');
+    }
+    entityWithConfig.microserviceAppName = generator.getMicroserviceAppName(entityWithConfig.microserviceName);
+    entityWithConfig.skipServer = true;
+  }
+
+  _.defaults(entityWithConfig, {
+    entityNameCapitalized: _.upperFirst(entityName),
+    entityClass: _.upperFirst(entityName),
+    entityInstance: _.lowerFirst(entityName),
+    entityTableName: generator.getTableName(entityName),
+    entityNamePlural: pluralize(entityName),
+  });
+
+  _.defaults(entityWithConfig, {
+    entityNamePluralizedAndSpinalCased: _.kebabCase(entityWithConfig.entityNamePlural),
+    entityClassPlural: _.upperFirst(entityWithConfig.entityNamePlural),
+    entityInstancePlural: _.lowerFirst(entityWithConfig.entityNamePlural),
+  });
+
+  _.defaults(entityWithConfig, {
+    // Implement i18n variant ex: 'male', 'female' when applied
+    entityI18nVariant: 'default',
+    entityClassHumanized: _.startCase(entityWithConfig.entityNameCapitalized),
+    entityClassPluralHumanized: _.startCase(entityWithConfig.entityClassPlural),
+  });
+
+  entityWithConfig.entityFileName = _.kebabCase(
+    entityWithConfig.entityNameCapitalized + _.upperFirst(entityWithConfig.entityAngularJSSuffix)
+  );
+  entityWithConfig.entityFolderName = generator.getEntityFolderName(entityWithConfig.clientRootFolder, entityWithConfig.entityFileName);
+  entityWithConfig.entityModelFileName = entityWithConfig.entityFolderName;
+  entityWithConfig.entityParentPathAddition = generator.getEntityParentPathAddition(entityWithConfig.clientRootFolder);
+  entityWithConfig.entityPluralFileName = entityWithConfig.entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix;
+  entityWithConfig.entityServiceFileName = entityWithConfig.entityFileName;
+
+  entityWithConfig.entityAngularName = entityWithConfig.entityClass + generator.upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
+  entityWithConfig.entityAngularNamePlural = pluralize(entityWithConfig.entityAngularName);
+  entityWithConfig.entityReactName = entityWithConfig.entityClass + generator.upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
+
+  entityWithConfig.entityApiUrl = entityWithConfig.entityNamePluralizedAndSpinalCased;
+  entityWithConfig.entityStateName = _.kebabCase(entityWithConfig.entityAngularName);
+  entityWithConfig.entityUrl = entityWithConfig.entityStateName;
+
+  entityWithConfig.entityTranslationKey = entityWithConfig.clientRootFolder
+    ? _.camelCase(`${entityWithConfig.clientRootFolder}-${entityWithConfig.entityInstance}`)
+    : entityWithConfig.entityInstance;
+  entityWithConfig.entityTranslationKeyMenu = _.camelCase(
+    entityWithConfig.clientRootFolder
+      ? `${entityWithConfig.clientRootFolder}-${entityWithConfig.entityStateName}`
+      : entityWithConfig.entityStateName
+  );
+
+  entityWithConfig.differentTypes.push(entityWithConfig.entityClass);
+  entityWithConfig.i18nToLoad.push(entityWithConfig.entityInstance);
+  entityWithConfig.i18nKeyPrefix = `${entityWithConfig.frontendAppName}.${entityWithConfig.entityTranslationKey}`;
+  entityWithConfig.i18nAlertHeaderPrefix = entityWithConfig.i18nKeyPrefix;
+  if (entityWithConfig.microserviceAppName) {
+    entityWithConfig.i18nAlertHeaderPrefix = `${entityWithConfig.microserviceAppName}.${entityWithConfig.entityTranslationKey}`;
+  }
+
+  const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => generator.isBuiltInUser(relationship.otherEntityName));
+  entityWithConfig.saveUserSnapshot =
+    entityWithConfig.applicationType === 'microservice' &&
+    entityWithConfig.authenticationType === 'oauth2' &&
+    hasBuiltInUserField &&
+    entityWithConfig.dto === 'no';
+
+  if (!entityWithConfig.embedded) {
+    entityWithConfig.idFields = entityWithConfig.fields.filter(field => field.id);
+    entityWithConfig.idRelationships = entityWithConfig.relationships.filter(relationship => relationship.id);
+    let idCount = entityWithConfig.idFields.length + entityWithConfig.idRelationships.length;
+
+    if (idCount === 0) {
+      let idField = entityWithConfig.fields.find(field => field.fieldName === 'id');
+      if (idField) {
+        idField.id = true;
+      } else {
+        idField = {
+          fieldName: 'id',
+          id: true,
+          fieldNameHumanized: 'ID',
+          fieldTranslationKey: 'global.field.id',
+        };
+        entityWithConfig.fields.unshift(idField);
+      }
+      entityWithConfig.idFields.push(idField);
+      idCount++;
     }
 
-    entityWithConfig.useMicroserviceJson = entityWithConfig.useMicroserviceJson || entityWithConfig.microserviceName !== undefined;
-    if (generator.jhipsterConfig.applicationType === 'gateway' && entityWithConfig.useMicroserviceJson) {
-        if (!entityWithConfig.microserviceName) {
-            throw new Error('Microservice name for the entity is not found. Entity cannot be generated!');
-        }
-        entityWithConfig.microserviceAppName = generator.getMicroserviceAppName(entityWithConfig.microserviceName);
-        entityWithConfig.skipServer = true;
+    if (idCount > 1) {
+      throw new Error('Composite id not implemented');
+    } else if (entityWithConfig.idRelationships.length > 0) {
+      const relationshipId = entityWithConfig.idRelationships[0];
+      if (relationshipId.relationshipType === 'one-to-one' && idCount === 1) {
+        relationshipId.id = true;
+        entityWithConfig.derivedPrimaryKey = relationshipId;
+        const idFields = entityWithConfig.idFields;
+        entityWithConfig.primaryKey = {
+          fieldName: 'id',
+          derived: true,
+          get fields() {
+            return [...idFields, ...this.derivedFields];
+          },
+          get derivedFields() {
+            return relationshipId.otherEntity.primaryKey.fields.map(field => ({
+              ...field,
+              derived: true,
+              derivedEntity: relationshipId.otherEntity,
+              jpaGeneratedValue: false,
+              liquibaseAutoIncrement: false,
+            }));
+          },
+          relationships: entityWithConfig.idRelationships,
+          get name() {
+            return relationshipId.otherEntity.primaryKey.name;
+          },
+          get nameCapitalized() {
+            return relationshipId.otherEntity.primaryKey.nameCapitalized;
+          },
+          get type() {
+            return relationshipId.otherEntity.primaryKey.type;
+          },
+          get tsType() {
+            return relationshipId.otherEntity.primaryKey.tsType;
+          },
+          get references() {
+            return [
+              ...idFields.map(field => field.reference),
+              ...relationshipId.otherEntity.primaryKey.references.map(ref => ({ ...ref })),
+            ];
+          },
+          get composite() {
+            return this.references.length > 1;
+          },
+        };
+      } else {
+        throw new Error('Composite id not implemented');
+      }
+    } else {
+      const idField = entityWithConfig.idFields[0];
+      // Allow ids type to be empty and fallback to default type for the database.
+      if (!idField.fieldType) {
+        idField.fieldType = generator.getPkType(entityWithConfig.databaseType);
+      }
+      entityWithConfig.primaryKey = {
+        derived: false,
+        fields: entityWithConfig.idFields,
+        relationships: [],
+        name: idField.fieldName,
+        nameCapitalized: _.upperFirst(idField.fieldName),
+        type: idField.fieldType,
+        tsType: generator.getTypescriptKeyType(idField.fieldType),
+        get references() {
+          return entityWithConfig.idFields.map(field => field.reference);
+        },
+        composite: entityWithConfig.idFields.length > 1,
+      };
     }
+  }
 
-    _.defaults(entityWithConfig, {
-        entityNameCapitalized: _.upperFirst(entityName),
-        entityClass: _.upperFirst(entityName),
-        entityInstance: _.lowerFirst(entityName),
-        entityTableName: generator.getTableName(entityName),
-        entityNamePlural: pluralize(entityName),
+  entityWithConfig.generateFakeData = type => {
+    const fieldsToGenerate = type === 'cypress' ? entityWithConfig.fields.filter(field => !field.id) : entityWithConfig.fields;
+    const fieldEntries = fieldsToGenerate.map(field => {
+      const fieldData = field.generateFakeData(type);
+      if (!field.nullable && fieldData === null) return undefined;
+      return [field.fieldName, fieldData];
     });
-
-    _.defaults(entityWithConfig, {
-        entityNamePluralizedAndSpinalCased: _.kebabCase(entityWithConfig.entityNamePlural),
-        entityClassPlural: _.upperFirst(entityWithConfig.entityNamePlural),
-        entityInstancePlural: _.lowerFirst(entityWithConfig.entityNamePlural),
-    });
-
-    _.defaults(entityWithConfig, {
-        // Implement i18n variant ex: 'male', 'female' when applied
-        entityI18nVariant: 'default',
-        entityClassHumanized: _.startCase(entityWithConfig.entityNameCapitalized),
-        entityClassPluralHumanized: _.startCase(entityWithConfig.entityClassPlural),
-    });
-
-    entityWithConfig.entityFileName = _.kebabCase(
-        entityWithConfig.entityNameCapitalized + _.upperFirst(entityWithConfig.entityAngularJSSuffix)
-    );
-    entityWithConfig.entityFolderName = generator.getEntityFolderName(entityWithConfig.clientRootFolder, entityWithConfig.entityFileName);
-    entityWithConfig.entityModelFileName = entityWithConfig.entityFolderName;
-    entityWithConfig.entityParentPathAddition = generator.getEntityParentPathAddition(entityWithConfig.clientRootFolder);
-    entityWithConfig.entityPluralFileName = entityWithConfig.entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix;
-    entityWithConfig.entityServiceFileName = entityWithConfig.entityFileName;
-
-    entityWithConfig.entityAngularName =
-        entityWithConfig.entityClass + generator.upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
-    entityWithConfig.entityReactName = entityWithConfig.entityClass + generator.upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
-
-    entityWithConfig.entityApiUrl = entityWithConfig.entityNamePluralizedAndSpinalCased;
-    entityWithConfig.entityStateName = _.kebabCase(entityWithConfig.entityAngularName);
-    entityWithConfig.entityUrl = entityWithConfig.entityStateName;
-
-    entityWithConfig.entityTranslationKey = entityWithConfig.clientRootFolder
-        ? _.camelCase(`${entityWithConfig.clientRootFolder}-${entityWithConfig.entityInstance}`)
-        : entityWithConfig.entityInstance;
-    entityWithConfig.entityTranslationKeyMenu = _.camelCase(
-        entityWithConfig.clientRootFolder
-            ? `${entityWithConfig.clientRootFolder}-${entityWithConfig.entityStateName}`
-            : entityWithConfig.entityStateName
-    );
-
-    entityWithConfig.differentTypes.push(entityWithConfig.entityClass);
-    entityWithConfig.i18nToLoad.push(entityWithConfig.entityInstance);
-    entityWithConfig.i18nKeyPrefix = `${entityWithConfig.frontendAppName}.${entityWithConfig.entityTranslationKey}`;
-    entityWithConfig.i18nAlertHeaderPrefix = entityWithConfig.i18nKeyPrefix;
-    if (entityWithConfig.microserviceAppName) {
-        entityWithConfig.i18nAlertHeaderPrefix = `${entityWithConfig.microserviceAppName}.${entityWithConfig.entityTranslationKey}`;
+    const withError = fieldEntries.find(entry => !entry);
+    if (withError) {
+      generator.warning(`Error generating a full sample for entity ${entityName}`);
+      return undefined;
     }
+    return Object.fromEntries(fieldEntries);
+  };
 
-    const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => generator.isBuiltInUser(relationship.otherEntityName));
-    entityWithConfig.saveUserSnapshot =
-        entityWithConfig.applicationType === 'microservice' &&
-        entityWithConfig.authenticationType === 'oauth2' &&
-        hasBuiltInUserField &&
-        entityWithConfig.dto === 'no';
-
-    if (!entityWithConfig.embedded) {
-        entityWithConfig.idFields = entityWithConfig.fields.filter(field => field.id);
-        entityWithConfig.idRelationships = entityWithConfig.relationships.filter(
-            relationship => relationship.id || relationship.useJPADerivedIdentifier === true
-        );
-        let idCount = entityWithConfig.idFields.length + entityWithConfig.idRelationships.length;
-
-        if (idCount === 0) {
-            let idField = entityWithConfig.fields.find(field => field.fieldName === 'id');
-            if (idField) {
-                idField.id = true;
-            } else {
-                idField = {
-                    fieldName: 'id',
-                    id: true,
-                    fieldNameHumanized: 'ID',
-                    fieldTranslationKey: 'global.field.id',
-                };
-                entityWithConfig.fields.unshift(idField);
-            }
-            entityWithConfig.idFields.push(idField);
-            idCount++;
-        }
-
-        if (idCount > 1) {
-            throw new Error('Composite id not implemented');
-        } else if (entityWithConfig.idRelationships.length > 0) {
-            const relationshipId = entityWithConfig.idRelationships[0];
-            if (relationshipId.relationshipType === 'one-to-one' && idCount === 1) {
-                relationshipId.useJPADerivedIdentifier = true;
-                entityWithConfig.derivedPrimaryKey = relationshipId;
-                const idFields = entityWithConfig.idFields;
-                entityWithConfig.primaryKey = {
-                    fieldName: 'id',
-                    derived: true,
-                    get fields() {
-                        return [...idFields, ...this.derivedFields];
-                    },
-                    get derivedFields() {
-                        return relationshipId.otherEntity.primaryKey.fields.map(field => ({
-                            ...field,
-                            derived: true,
-                            derivedEntity: relationshipId.otherEntity,
-                            jpaGeneratedValue: false,
-                            liquibaseAutoIncrement: false,
-                        }));
-                    },
-                    relationships: entityWithConfig.idRelationships,
-                    get name() {
-                        return relationshipId.otherEntity.primaryKey.name;
-                    },
-                    get nameCapitalized() {
-                        return relationshipId.otherEntity.primaryKey.nameCapitalized;
-                    },
-                    get type() {
-                        return relationshipId.otherEntity.primaryKey.type;
-                    },
-                    get references() {
-                        return [
-                            ...idFields.map(field => field.reference),
-                            ...relationshipId.otherEntity.primaryKey.references.map(ref => ({ ...ref })),
-                        ];
-                    },
-                    get composite() {
-                        return this.references.length > 1;
-                    },
-                };
-            } else {
-                throw new Error('Composite id not implemented');
-            }
-        } else {
-            const idField = entityWithConfig.idFields[0];
-            // Allow ids type to be empty and fallback to default type for the database.
-            if (!idField.fieldType) {
-                idField.fieldType = generator.getPkType(entityWithConfig.databaseType);
-            }
-            entityWithConfig.primaryKey = {
-                derived: false,
-                fields: entityWithConfig.idFields,
-                relationships: entityWithConfig.idRelationships,
-                name: idField.fieldName,
-                nameCapitalized: _.upperFirst(idField.fieldName),
-                type: idField.fieldType,
-                references: entityWithConfig.idFields.map(field => field.reference),
-                composite: entityWithConfig.idFields.length > 1,
-            };
-        }
-    }
-
-    entityWithConfig.fields.forEach(field => {
-        const fieldType = field.fieldType;
-        if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
-            entityWithConfig.fieldsIsReactAvField = true;
-        }
-
-        if (field.javadoc) {
-            entityWithConfig.haveFieldWithJavadoc = true;
-        }
-
-        if (fieldIsEnum(fieldType)) {
-            entityWithConfig.i18nToLoad.push(field.enumInstance);
-        }
-
-        if (fieldType === 'ZonedDateTime') {
-            entityWithConfig.fieldsContainZonedDateTime = true;
-            entityWithConfig.fieldsContainDate = true;
-        } else if (fieldType === 'Instant') {
-            entityWithConfig.fieldsContainInstant = true;
-            entityWithConfig.fieldsContainDate = true;
-        } else if (fieldType === 'Duration') {
-            entityWithConfig.fieldsContainDuration = true;
-        } else if (fieldType === 'LocalDate') {
-            entityWithConfig.fieldsContainLocalDate = true;
-            entityWithConfig.fieldsContainDate = true;
-        } else if (fieldType === 'BigDecimal') {
-            entityWithConfig.fieldsContainBigDecimal = true;
-        } else if (fieldType === 'UUID') {
-            entityWithConfig.fieldsContainUUID = true;
-        } else if (fieldType === 'byte[]' || fieldType === 'ByteBuffer') {
-            entityWithConfig.blobFields.push(field);
-            entityWithConfig.fieldsContainBlob = true;
-            if (field.fieldTypeBlobContent === 'image') {
-                entityWithConfig.fieldsContainImageBlob = true;
-            }
-            if (field.fieldTypeBlobContent !== 'text') {
-                entityWithConfig.fieldsContainBlobOrImage = true;
-            } else {
-                entityWithConfig.fieldsContainTextBlob = true;
-            }
-        }
-
-        if (Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1) {
-            entityWithConfig.validation = true;
-        }
-    });
-
-    entityWithConfig.generateFakeData = type => {
-        const fieldsToGenerate = type === 'cypress' ? entityWithConfig.fields.filter(field => !field.id) : entityWithConfig.fields;
-        const fieldEntries = fieldsToGenerate.map(field => {
-            const fieldData = field.generateFakeData(type);
-            if (!field.nullable && fieldData === null) return undefined;
-            return [field.fieldName, fieldData];
-        });
-        const withError = fieldEntries.find(entry => !entry);
-        if (withError) {
-            generator.warning(`Error generating a full sample for entity ${entityName}`);
-            return undefined;
-        }
-        return Object.fromEntries(fieldEntries);
-    };
-
-    return entityWithConfig;
+  return entityWithConfig;
 }
 
 /**
@@ -330,16 +286,16 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
  * @returns {Object} the entity parameter for chaining.
  */
 function loadRequiredConfigIntoEntity(entity, config) {
-    _.defaults(entity, {
-        databaseType: config.databaseType,
-        prodDatabaseType: config.prodDatabaseType,
-        skipUiGrouping: config.skipUiGrouping,
-        searchEngine: config.searchEngine,
-        jhiPrefix: config.jhiPrefix,
-        authenticationType: config.authenticationType,
-        reactive: config.reactive,
-    });
-    return entity;
+  _.defaults(entity, {
+    databaseType: config.databaseType,
+    prodDatabaseType: config.prodDatabaseType,
+    skipUiGrouping: config.skipUiGrouping,
+    searchEngine: config.searchEngine,
+    jhiPrefix: config.jhiPrefix,
+    authenticationType: config.authenticationType,
+    reactive: config.reactive,
+  });
+  return entity;
 }
 
 module.exports = { prepareEntityForTemplates, loadRequiredConfigIntoEntity };

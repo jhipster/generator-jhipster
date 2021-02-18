@@ -77,13 +77,13 @@ import org.springframework.data.couchbase.core.query.FetchType;
 import org.springframework.data.couchbase.core.query.N1qlJoin;
     <%_ } _%>
 <%_ } else if (databaseType === 'neo4j') { _%>
-import org.neo4j.springframework.data.core.schema.GeneratedValue;
-import org.neo4j.springframework.data.core.schema.Id;
-import org.neo4j.springframework.data.core.schema.Node;
-import org.neo4j.springframework.data.core.schema.Property;
-import org.neo4j.springframework.data.core.support.UUIDStringGenerator;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Property;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 <%_ if (hasRelationship) { _%>
-import org.neo4j.springframework.data.core.schema.Relationship;
+import org.springframework.data.neo4j.core.schema.Relationship;
 <%_ } _%>
 <%_ } if (databaseType === 'sql') { _%>
     <%_ if (reactive) { _%>
@@ -304,7 +304,7 @@ relationships.forEach((relationship, idx) => {
     const relationshipRequired = relationship.relationshipRequired;
     const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
     const ownerSide = relationship.ownerSide || false;
-    const isUsingMapsId = relationship.useJPADerivedIdentifier;
+    const isUsingMapsId = relationship.id;
     if (otherEntityRelationshipName) {
         mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
     }
@@ -581,9 +581,9 @@ relationships.forEach((relationship, idx) => {
             continue;
         }
 
-        const useJPADerivedIdentifier = relationship.useJPADerivedIdentifier;
+        const id = relationship.id;
         const reactiveRelationshipWithId = (databaseType === 'sql' && reactive && !(relationshipType === 'one-to-one' &&
-                (ownerSide === false || (ownerSide === true && useJPADerivedIdentifier === true))));
+                (ownerSide === false || (ownerSide === true && id === true))));
     _%>
     <%_ if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') { _%>
 

@@ -22,69 +22,69 @@ const { expect } = require('chai');
 const { JDLLexer } = require('../../../jdl/parsing/lexer/lexer');
 
 describe('JDLLexer', () => {
-    context('when passing a valid JDL input', () => {
-        let lexingResult;
+  context('when passing a valid JDL input', () => {
+    let lexingResult;
 
-        before(() => {
-            const input = `
+    before(() => {
+      const input = `
    entity JobHistory {
      startDate ZonedDateTime,
      endDate ZonedDateTime,
      language Language,
      positionDuration Duration
    }`;
-            lexingResult = JDLLexer.tokenize(input);
-        });
-
-        it('should not fail', () => {
-            expect(lexingResult.errors).to.be.empty;
-        });
-
-        it('should lex a simple valid JDL text', () => {
-            const tokens = lexingResult.tokens;
-            expect(tokens.length).to.equal(15);
-            expect(tokens[0].image).to.equal('entity');
-            expect(tokens[1].image).to.equal('JobHistory');
-            expect(tokens[2].image).to.equal('{');
-            expect(tokens[3].image).to.equal('startDate');
-            expect(tokens[4].image).to.equal('ZonedDateTime');
-            expect(tokens[5].image).to.equal(',');
-            expect(tokens[6].image).to.equal('endDate');
-            expect(tokens[7].image).to.equal('ZonedDateTime');
-            expect(tokens[8].image).to.equal(',');
-            expect(tokens[9].image).to.equal('language');
-            expect(tokens[10].image).to.equal('Language');
-            expect(tokens[11].image).to.equal(',');
-            expect(tokens[12].image).to.equal('positionDuration');
-            expect(tokens[13].image).to.equal('Duration');
-            expect(tokens[14].image).to.equal('}');
-        });
+      lexingResult = JDLLexer.tokenize(input);
     });
 
-    context('when passing an invalid JDL input', () => {
-        let lexingResult;
+    it('should not fail', () => {
+      expect(lexingResult.errors).to.be.empty;
+    });
 
-        before(() => {
-            const input = `
+    it('should lex a simple valid JDL text', () => {
+      const tokens = lexingResult.tokens;
+      expect(tokens.length).to.equal(15);
+      expect(tokens[0].image).to.equal('entity');
+      expect(tokens[1].image).to.equal('JobHistory');
+      expect(tokens[2].image).to.equal('{');
+      expect(tokens[3].image).to.equal('startDate');
+      expect(tokens[4].image).to.equal('ZonedDateTime');
+      expect(tokens[5].image).to.equal(',');
+      expect(tokens[6].image).to.equal('endDate');
+      expect(tokens[7].image).to.equal('ZonedDateTime');
+      expect(tokens[8].image).to.equal(',');
+      expect(tokens[9].image).to.equal('language');
+      expect(tokens[10].image).to.equal('Language');
+      expect(tokens[11].image).to.equal(',');
+      expect(tokens[12].image).to.equal('positionDuration');
+      expect(tokens[13].image).to.equal('Duration');
+      expect(tokens[14].image).to.equal('}');
+    });
+  });
+
+  context('when passing an invalid JDL input', () => {
+    let lexingResult;
+
+    before(() => {
+      const input = `
    entity JobHistory {
      startDate ZonedDateTime,
      ###
      endDate ZonedDateTime
    }`;
-            lexingResult = JDLLexer.tokenize(input);
-        });
-
-        it('should report the errors', () => {
-            const errors = lexingResult.errors;
-            expect(errors).to.have.lengthOf(1);
-            expect(errors[0].line).to.equal(4);
-            expect(errors[0].column).to.equal(6);
-            expect(errors[0].message).to.include('#');
-            expect(errors[0].message).to.include('skipped 3 characters');
-        });
-
-        it('should lex a simple invalid JDL text', () => {
-            expect(lexingResult.tokens).to.have.lengthOf(9, 'All 9 tokens should have been lexed even though "@@@" caused a syntax error');
-        });
+      lexingResult = JDLLexer.tokenize(input);
     });
+
+    it('should report the errors', () => {
+      const errors = lexingResult.errors;
+      expect(errors).to.have.lengthOf(1);
+      expect(errors[0].line).to.equal(4);
+      expect(errors[0].column).to.equal(6);
+      expect(errors[0].message).to.include('#');
+      expect(errors[0].message).to.include('skipped 3 characters');
+    });
+
+    it('should lex a simple invalid JDL text', () => {
+      expect(lexingResult.tokens).to.have.lengthOf(9, 'All 9 tokens should have been lexed even though "@@@" caused a syntax error');
+    });
+  });
 });

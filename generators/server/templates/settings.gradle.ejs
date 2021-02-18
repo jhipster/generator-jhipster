@@ -18,31 +18,28 @@
 -%>
 
 pluginManagement {
-     <%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
-     repositories {
-          maven { url 'https://repo.spring.io/milestone' }
-          gradlePluginPortal()
-     }
-     <%_ } _%>
-     plugins {
-          id 'org.springframework.boot' version "${springBootVersion}"
-          id 'com.google.cloud.tools.jib' version "${jibPluginVersion}"
-          id 'com.gorylenko.gradle-git-properties' version "${gitPropertiesPluginVersion}"
-          <%_ if (enableSwaggerCodegen) { _%>
-          id "org.openapi.generator" version "${openapiPluginVersion}"
-          <%_ } _%>
-          <%_ if (!skipClient) { _%>
-          id 'com.github.node-gradle.node' version "${gradleNodePluginVersion}"
-          <%_ } _%>
-          <%_ if (databaseType === 'sql' && !reactive) { _%>
-          id 'org.liquibase.gradle' version "${liquibasePluginVersion}"
-          <%_ } _%>
-          id 'org.sonarqube' version "${sonarqubePluginVersion}"
-          id 'net.ltgt.apt-eclipse' version "${aptPluginVersion}"
-          id 'net.ltgt.apt-idea' version "${aptPluginVersion}"
-          id 'net.ltgt.apt' version "${aptPluginVersion}"
-          id "io.spring.nohttp" version "${springNoHttpPluginVersion}"
-     }
+    <%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+    repositories {
+        maven { url 'https://repo.spring.io/milestone' }
+        gradlePluginPortal()
+    }
+    <%_ } _%>
+    plugins {
+        id 'org.springframework.boot' version "${springBootVersion}"
+        id 'com.google.cloud.tools.jib' version "${jibPluginVersion}"
+        id 'com.gorylenko.gradle-git-properties' version "${gitPropertiesPluginVersion}"
+        <%_ if (enableSwaggerCodegen) { _%>
+        id "org.openapi.generator" version "${openapiPluginVersion}"
+        <%_ } _%>
+        <%_ if (!skipClient) { _%>
+        id 'com.github.node-gradle.node' version "${gradleNodePluginVersion}"
+        <%_ } _%>
+        <%_ if (databaseType === 'sql' && !reactive) { _%>
+        id 'org.liquibase.gradle' version "${liquibasePluginVersion}"
+        <%_ } _%>
+        id 'org.sonarqube' version "${sonarqubePluginVersion}"
+        id "io.spring.nohttp" version "${springNoHttpPluginVersion}"
+    }
 }
 
 rootProject.name = "<%= dasherizedBaseName %>"

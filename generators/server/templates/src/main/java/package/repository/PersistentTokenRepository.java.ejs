@@ -46,7 +46,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
-import org.neo4j.springframework.data.repository.Neo4jRepository;
+import org.springframework.data.neo4j.repository.Neo4jRepository;
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
 import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;

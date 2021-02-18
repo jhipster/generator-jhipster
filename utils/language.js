@@ -21,15 +21,15 @@ const osLocale = require('os-locale');
 const { LANGUAGES } = require('../generators/generator-constants');
 
 function detectLanguage() {
-    const locale = osLocale.sync();
-    if (locale) {
-        const language =
-            LANGUAGES.find(lang => lang.value === locale.toLowerCase()) || LANGUAGES.find(lang => lang.value === locale.split('-')[0]);
-        if (language) {
-            return language.value;
-        }
+  const locale = osLocale.sync();
+  if (locale) {
+    const language =
+      LANGUAGES.find(lang => lang.value === locale.toLowerCase()) || LANGUAGES.find(lang => lang.value === locale.split('-')[0]);
+    if (language) {
+      return language.value;
     }
-    return 'en';
+  }
+  return 'en';
 }
 
 module.exports = { detectLanguage };

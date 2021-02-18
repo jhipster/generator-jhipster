@@ -21,83 +21,83 @@ const { merge } = require('../utils/object-utils');
 const { addAll } = require('../utils/set-utils');
 
 class AbstractJDLOption {
-    constructor(args) {
-        const merged = merge(defaults(), args);
-        if (!merged.name) {
-            throw new Error("The option's name must be passed to create an option.");
-        }
-        this.name = merged.name;
-        this.entityNames = new Set(merged.entityNames);
-        if (this.entityNames.size === 0) {
-            this.entityNames.add('*');
-        }
-        this.excludedNames = new Set(merged.excludedNames);
+  constructor(args) {
+    const merged = merge(defaults(), args);
+    if (!merged.name) {
+      throw new Error("The option's name must be passed to create an option.");
     }
-
-    addEntityName(entityName) {
-        if (!entityName) {
-            throw new Error('An entity name has to be passed so as to be added to the option.');
-        }
-        if (this.excludedNames.has(entityName)) {
-            return false;
-        }
-        if (this.entityNames.has('*')) {
-            this.entityNames.delete('*');
-        }
-        return this.entityNames.add(entityName);
+    this.name = merged.name;
+    this.entityNames = new Set(merged.entityNames);
+    if (this.entityNames.size === 0) {
+      this.entityNames.add('*');
     }
+    this.excludedNames = new Set(merged.excludedNames);
+  }
 
-    addEntitiesFromAnotherOption(option) {
-        if (!option) {
-            return false;
-        }
-        addAll(this.entityNames, option.entityNames);
-        addAll(this.excludedNames, option.excludedNames);
-        return true;
+  addEntityName(entityName) {
+    if (!entityName) {
+      throw new Error('An entity name has to be passed so as to be added to the option.');
     }
-
-    excludeEntityName(entityName) {
-        if (!entityName) {
-            throw new Error('An entity name has to be passed so as to be excluded from the option.');
-        }
-        if (this.entityNames.has(entityName)) {
-            return;
-        }
-        this.excludedNames.add(entityName);
+    if (this.excludedNames.has(entityName)) {
+      return false;
     }
-
-    getType() {
-        throw new Error('Unsupported operation');
+    if (this.entityNames.has('*')) {
+      this.entityNames.delete('*');
     }
+    return this.entityNames.add(entityName);
+  }
 
-    setEntityNames(newEntityNames) {
-        this.entityNames = new Set(newEntityNames);
+  addEntitiesFromAnotherOption(option) {
+    if (!option) {
+      return false;
     }
+    addAll(this.entityNames, option.entityNames);
+    addAll(this.excludedNames, option.excludedNames);
+    return true;
+  }
 
-    /**
-     * Resolves the option's list of entity names (without '*' and taking into account the excluded names).
-     * @param entityNames all the entity names declared in a JDL Object.
-     * @returns the resolved list.
-     */
-    resolveEntityNames(entityNames) {
-        if (!entityNames) {
-            throw new Error("Entity names have to be passed to resolve the option's entities.");
-        }
-        const resolvedEntityNames = this.entityNames.has('*') ? new Set(entityNames) : this.entityNames;
-
-        this.excludedNames.forEach(excludedEntityName => {
-            resolvedEntityNames.delete(excludedEntityName);
-        });
-
-        return resolvedEntityNames;
+  excludeEntityName(entityName) {
+    if (!entityName) {
+      throw new Error('An entity name has to be passed so as to be excluded from the option.');
     }
+    if (this.entityNames.has(entityName)) {
+      return;
+    }
+    this.excludedNames.add(entityName);
+  }
+
+  getType() {
+    throw new Error('Unsupported operation');
+  }
+
+  setEntityNames(newEntityNames) {
+    this.entityNames = new Set(newEntityNames);
+  }
+
+  /**
+   * Resolves the option's list of entity names (without '*' and taking into account the excluded names).
+   * @param entityNames all the entity names declared in a JDL Object.
+   * @returns the resolved list.
+   */
+  resolveEntityNames(entityNames) {
+    if (!entityNames) {
+      throw new Error("Entity names have to be passed to resolve the option's entities.");
+    }
+    const resolvedEntityNames = this.entityNames.has('*') ? new Set(entityNames) : this.entityNames;
+
+    this.excludedNames.forEach(excludedEntityName => {
+      resolvedEntityNames.delete(excludedEntityName);
+    });
+
+    return resolvedEntityNames;
+  }
 }
 
 module.exports = AbstractJDLOption;
 
 function defaults() {
-    return {
-        entityNames: new Set(['*']),
-        excludedNames: new Set(),
-    };
+  return {
+    entityNames: new Set(['*']),
+    excludedNames: new Set(),
+  };
 }

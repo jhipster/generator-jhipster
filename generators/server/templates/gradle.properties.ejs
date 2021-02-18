@@ -19,10 +19,6 @@
 rootProject.name=<%= dasherizedBaseName %>
 profile=dev
 
-# Build properties
-nodeVersion=<%= NODE_VERSION %>
-npmVersion=<%= NPM_VERSION %>
-
 # Dependency versions
 jhipsterDependenciesVersion=<%= JHIPSTER_DEPENDENCIES_VERSION %>
 # The spring-boot version should match the one managed by
@@ -31,7 +27,7 @@ springBootVersion=<%= SPRING_BOOT_VERSION %>
 # The hibernate version should match the one managed by
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %> -->
 hibernateVersion=<%= HIBERNATE_VERSION %>
-mapstructVersion=1.4.1.Final
+mapstructVersion=1.4.2.Final
 archunitJunit5Version=0.15.0
 <%_ if (enableSwaggerCodegen) { _%>
 jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
@@ -51,7 +47,7 @@ junitPlatformLauncherVersion=1.7.0
 r2dbcMariadbVersion=1.0.0
 <%_ } _%>
 
-<%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
+<%_ if (databaseType === 'sql') { _%>
 jaxbRuntimeVersion=2.3.3
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
@@ -64,9 +60,8 @@ cassandraDriverVersion=4.6.1
 jibPluginVersion=<%= JIB_VERSION %>
 gitPropertiesPluginVersion=2.2.4
 <%_ if (!skipClient) { _%>
-gradleNodePluginVersion=3.0.0-rc6
+gradleNodePluginVersion=3.0.1
 <%_ } _%>
-aptPluginVersion=0.21
 <%_ if (databaseType === 'sql' && !reactive) { _%>
 liquibasePluginVersion=2.0.4
 <%_ } _%>
@@ -83,7 +78,6 @@ checkstyleVersion=8.39
 
 ## The Gradle daemon aims to improve the startup and execution time of Gradle.
 ## The daemon is enabled by default in Gradle 3+ setting this to false will disable this.
-## TODO: disable daemon on CI, since builds should be clean and reliable on servers
 ## https://docs.gradle.org/current/userguide/gradle_daemon.html#sec:ways_to_disable_gradle_daemon
 ## uncomment the below line to disable the daemon
 
