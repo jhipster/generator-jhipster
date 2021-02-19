@@ -58,7 +58,7 @@
     "postcss-loader": "5.0.0",
     "postcss-url": "10.1.1",
     "rimraf": "3.0.2",
-    "sass": "1.32.7",
+    "sass": "1.32.8",
     "sass-loader": "11.0.1",
     "sinon": "9.2.4",
     "terser-webpack-plugin": "5.1.1",
