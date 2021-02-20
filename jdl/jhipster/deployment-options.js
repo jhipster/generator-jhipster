@@ -33,7 +33,7 @@ const Options = {
     openshift: DeploymentTypes.OPENSHIFT,
   },
   gatewayType: {
-    zuul: 'zuul',
+    springCloudGateway: 'SpringCloudGateway',
     traefik: 'traefik',
   },
   monitoring: {
@@ -75,7 +75,7 @@ Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) =>
   _.omitBy(
     {
       deploymentType,
-      gatewayType: Options.gatewayType.zuul,
+      gatewayType: Options.gatewayType.springCloudGateway,
       monitoring: Options.monitoring.no,
       directoryPath: Options.directoryPath,
       appsFolders: new Set(),
