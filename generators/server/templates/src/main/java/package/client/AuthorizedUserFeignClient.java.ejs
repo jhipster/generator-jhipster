@@ -61,7 +61,7 @@ public @interface AuthorizedUserFeignClient {
     Class<?> fallback() default void.class;
 
     /**
-     * Path prefix to be used by all method-level mappings. Can be used with or without {@code @RibbonClient}.
+     * Path prefix to be used by all method-level mappings.
      */
     String path() default "";
 }

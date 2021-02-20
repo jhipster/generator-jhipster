@@ -600,30 +600,6 @@ const serverFiles = {
     },
     {
       condition: generator =>
-        !generator.reactive &&
-        generator.applicationType === 'gateway' &&
-        generator.authenticationType === 'jwt' &&
-        generator.serviceDiscoveryType,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/gateway/TokenRelayFilter.java',
-          renameTo: generator => `${generator.javaDir}gateway/TokenRelayFilter.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => !generator.reactive && generator.applicationType === 'gateway' && !generator.serviceDiscoveryType,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/filter/RouteDetectorFilter.java',
-          renameTo: generator => `${generator.javaDir}web/filter/RouteDetectorFilter.java`,
-        },
-      ],
-    },
-    {
-      condition: generator =>
         generator.authenticationType === 'oauth2' && (generator.applicationType === 'monolith' || generator.applicationType === 'gateway'),
       path: SERVER_MAIN_SRC_DIR,
       templates: [
@@ -653,16 +629,6 @@ const serverFiles = {
         {
           file: 'package/client/JWT_UserFeignClientInterceptor.java',
           renameTo: generator => `${generator.javaDir}client/UserFeignClientInterceptor.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => !generator.reactive && generator.authenticationType === 'oauth2' && generator.applicationType === 'gateway',
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/security/oauth2/AuthorizationHeaderFilter.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/AuthorizationHeaderFilter.java`,
         },
       ],
     },
