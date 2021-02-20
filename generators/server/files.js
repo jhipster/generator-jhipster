@@ -588,28 +588,6 @@ const serverFiles = {
   ],
   serverJavaGateway: [
     {
-      condition: generator => !generator.reactive && generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/GatewayConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/GatewayConfiguration.java`,
-        },
-        {
-          file: 'package/config/apidoc/GatewaySwaggerResourcesProvider.java',
-          renameTo: generator => `${generator.javaDir}config/apidoc/GatewaySwaggerResourcesProvider.java`,
-        },
-        {
-          file: 'package/gateway/accesscontrol/AccessControlFilter.java',
-          renameTo: generator => `${generator.javaDir}gateway/accesscontrol/AccessControlFilter.java`,
-        },
-        {
-          file: 'package/gateway/responserewriting/SwaggerBasePathRewritingFilter.java',
-          renameTo: generator => `${generator.javaDir}gateway/responserewriting/SwaggerBasePathRewritingFilter.java`,
-        },
-      ],
-    },
-    {
       condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
@@ -617,17 +595,6 @@ const serverFiles = {
         {
           file: 'package/web/rest/GatewayResource.java',
           renameTo: generator => `${generator.javaDir}web/rest/GatewayResource.java`,
-        },
-      ],
-    },
-    {
-      condition: generator =>
-        generator.applicationType === 'gateway' && generator.serviceDiscoveryType && generator.cacheProvider === 'hazelcast',
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/gateway/ratelimiting/RateLimitingFilter.java',
-          renameTo: generator => `${generator.javaDir}gateway/ratelimiting/RateLimitingFilter.java`,
         },
       ],
     },
@@ -1328,17 +1295,6 @@ const serverFiles = {
         {
           file: 'package/config/StaticResourcesWebConfigurerTest.java',
           renameTo: generator => `${generator.testDir}config/StaticResourcesWebConfigurerTest.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => !generator.reactive && generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        // Create Gateway tests files
-        {
-          file: 'package/gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java',
-          renameTo: generator => `${generator.testDir}gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java`,
         },
       ],
     },

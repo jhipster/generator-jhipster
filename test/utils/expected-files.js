@@ -637,6 +637,13 @@ const expectedFiles = {
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProviderTest.java`,
   ],
 
+  jwtServerGateway: [
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/JWTFilter.java`,
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProvider.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/JWTFilterTest.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProviderTest.java`,
+  ],
+
   jwtClient: [`${CLIENT_MAIN_SRC_DIR}app/core/interceptor/auth.interceptor.ts`, `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-jwt.service.ts`],
 
   oauth2: [
@@ -666,11 +673,6 @@ const expectedFiles = {
     `${SERVER_MAIN_RES_DIR}config/bootstrap.yml`,
     `${SERVER_MAIN_RES_DIR}config/bootstrap-prod.yml`,
     `${SERVER_TEST_RES_DIR}config/bootstrap.yml`,
-    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/GatewayConfiguration.java`,
-    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/apidoc/GatewaySwaggerResourcesProvider.java`,
-    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/accesscontrol/AccessControlFilter.java`,
-    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/responserewriting/SwaggerBasePathRewritingFilter.java`,
-    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/RouteVM.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/GatewayResource.java`,
     `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.component.ts`,
@@ -679,8 +681,6 @@ const expectedFiles = {
     `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.component.html`,
     `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway-routes.service.ts`,
   ],
-
-  rateLimitingFilesForGateways: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/ratelimiting/RateLimitingFilter.java`],
 
   feignConfig: [
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/FeignConfiguration.java`,

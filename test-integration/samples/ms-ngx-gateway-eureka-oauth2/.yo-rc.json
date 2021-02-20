@@ -5,8 +5,8 @@
     "packageName": "tech.jhipster.sample",
     "packageFolder": "tech/jhipster/sample",
     "authenticationType": "oauth2",
-    "cacheProvider": "hazelcast",
-    "enableHibernateCache": true,
+    "cacheProvider": "no",
+    "enableHibernateCache": false,
     "websocket": false,
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
@@ -30,6 +30,7 @@
     "dtoSuffix": "DTO",
     "otherModules": [],
     "blueprints": [],
-    "creationTimestamp": 1596513172471
+    "creationTimestamp": 1596513172471,
+    "reactive": true
   }
 }

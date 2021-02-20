@@ -120,8 +120,11 @@ describe('DefaultApplicationOptions', () => {
       it('should set the authentication type to jwt', () => {
         expect(options.authenticationType).to.equal('jwt');
       });
-      it('should set the cache provider to ehcache', () => {
-        expect(options.cacheProvider).to.equal('ehcache');
+      it('should set the cache provider to no', () => {
+        expect(options.cacheProvider).to.equal('no');
+      });
+      it('should disable hibernate cache', () => {
+        expect(options.enableHibernateCache).to.be.false;
       });
       it('should set the user management skipping option to false', () => {
         expect(options.skipUserManagement).to.be.false;
@@ -140,6 +143,9 @@ describe('DefaultApplicationOptions', () => {
       });
       it('should set the service discovery type to eureka', () => {
         expect(options.serviceDiscoveryType).to.equal('eureka');
+      });
+      it('should set the reactive to true', () => {
+        expect(options.reactive).to.be.true;
       });
     });
     context('when the service discovery type option is false', () => {
