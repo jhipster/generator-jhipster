@@ -155,6 +155,17 @@
       "fieldValidateRules": ["required"]
     },
     {
+      "fieldName": "enumTom",
+      "fieldType": "EnumFieldClass",
+      "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3"
+    },
+    {
+      "fieldName": "enumRequiredTom",
+      "fieldType": "EnumRequiredFieldClass",
+      "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
+      "fieldValidateRules": ["required"]
+    },
+    {
       "fieldName": "picture",
       "fieldType": "ByteBuffer",
       "fieldTypeBlobContent": "image",

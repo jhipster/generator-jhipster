@@ -75,8 +75,8 @@ describe('FieldTypes', () => {
       });
     });
     context('when passing an enum', () => {
-      it('should return false', () => {
-        expect(FieldTypes.isCassandraType(new JDLEnum({ name: 'MyEnum' }))).to.be.false;
+      it('should return true', () => {
+        expect(FieldTypes.isCassandraType(new JDLEnum({ name: 'MyEnum' }))).to.be.true;
       });
     });
   });
