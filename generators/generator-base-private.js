@@ -1577,18 +1577,19 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
       return;
     }
 
-    const definition = this.readEntityJson('User');
-    if (definition) {
-      if (definition.relationships && definition.relationships.length > 0) {
+    const changelogDateDate = this.jhipsterConfig.creationTimestamp ? new Date(this.jhipsterConfig.creationTimestamp) : new Date();
+    const changelogDate = formatDateForChangelog(changelogDateDate);
+
+    const userEntityDefinition = this.readEntityJson('User');
+    if (userEntityDefinition) {
+      if (userEntityDefinition.relationships && userEntityDefinition.relationships.length > 0) {
         this.warning('Relationships on the User entity side will be disregarded');
       }
-      if (definition.fields && (definition.fields.length > 1 || definition.fields[0].fieldName !== 'id')) {
+      if (userEntityDefinition.fields && (userEntityDefinition.fields.length > 1 || userEntityDefinition.fields[0].fieldName !== 'id')) {
         this.warning('Fields on the User entity side will be disregarded');
       }
     }
 
-    const changelogDateDate = this.jhipsterConfig.creationTimestamp ? new Date(this.jhipsterConfig.creationTimestamp) : new Date();
-    const changelogDate = formatDateForChangelog(changelogDateDate);
     // Create entity definition for built-in entity to make easier to deal with relationships.
     const user = {
       name: 'User',
@@ -1596,7 +1597,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
       entityTableName: `${this.getTableName(this.jhipsterConfig.jhiPrefix)}_user`,
       relationships: [],
       changelogDate,
-      fields: definition ? definition.fields || [] : [],
+      fields: userEntityDefinition ? userEntityDefinition.fields || [] : [],
     };
 
     loadRequiredConfigIntoEntity(user, this.jhipsterConfig);
