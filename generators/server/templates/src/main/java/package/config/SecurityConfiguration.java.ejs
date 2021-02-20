@@ -67,10 +67,6 @@ import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-        <%_ if (applicationType === 'gateway') { _%>
-import <%= packageName %>.security.oauth2.AuthorizationHeaderFilter;
-import <%= packageName %>.security.oauth2.AuthorizationHeaderUtil;
-        <%_ } _%>
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
         <%_ if (applicationType !== 'microservice') { _%>
@@ -363,12 +359,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         return jwtDecoder;
     }
-        <%_ if (applicationType === 'gateway') { _%>
-
-    @Bean
-    public AuthorizationHeaderFilter authHeaderFilter(AuthorizationHeaderUtil headerUtil) {
-        return new AuthorizationHeaderFilter(headerUtil);
-    }
-        <%_ } _%>
     <%_ } _%>
 }
