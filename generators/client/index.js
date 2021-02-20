@@ -169,10 +169,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.loadTranslationConfig();
       },
 
-      createUserManagementEntities() {
-        this.createUserManagementEntities();
-      },
-
       validateSkipServer() {
         if (
           this.jhipsterConfig.skipServer &&
@@ -355,37 +351,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   get postWriting() {
     if (useBlueprints) return;
     return this._postWriting();
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _install() {
-    return {
-      installing() {
-        if (this.skipClient) return;
-        const logMsg = `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
-
-        const installConfig = {
-          bower: false,
-          npm: true,
-        };
-
-        if (this.options.skipInstall) {
-          this.log(logMsg);
-        } else {
-          try {
-            this.installDependencies(installConfig);
-          } catch (e) {
-            this.warning('Install of dependencies failed!');
-            this.log(logMsg);
-          }
-        }
-      },
-    };
-  }
-
-  get install() {
-    if (useBlueprints) return;
-    return this._install();
   }
 
   // Public API method used by the getter and also by Blueprints

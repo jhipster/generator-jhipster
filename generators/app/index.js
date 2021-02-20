@@ -420,7 +420,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
       },
 
       composeEntities() {
-        if (!this.withEntities) return;
+        if (!this.options.withEntities) return;
         this.composeWithJHipster('entities', { skipInstall: true }, true);
       },
 
@@ -428,9 +428,8 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0 || this.configOptions.skipComposePage) return;
         this.configOptions.skipComposePage = true;
         this.jhipsterConfig.pages.forEach(page => {
-          this.composeWithJHipster(page.generator || 'page', {
+          this.composeWithJHipster(page.generator || 'page', [page.name], {
             skipInstall: true,
-            arguments: [page.name],
             page,
           });
         });
@@ -441,19 +440,6 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
   get composing() {
     if (useBlueprints) return;
     return this._composing();
-  }
-
-  _loading() {
-    return {
-      createUserManagementEntities() {
-        this.createUserManagementEntities();
-      },
-    };
-  }
-
-  get loading() {
-    if (useBlueprints) return;
-    return this._loading();
   }
 
   _default() {

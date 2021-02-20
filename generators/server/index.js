@@ -226,10 +226,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.loadServerConfig();
         this.loadTranslationConfig();
       },
-
-      createUserManagementEntities() {
-        this.createUserManagementEntities();
-      },
     };
   }
 
@@ -474,24 +470,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   get postWriting() {
     if (useBlueprints) return;
     return this._postWriting();
-  }
-
-  _install() {
-    return {
-      installing() {
-        if (this.skipClient) {
-          if (!this.options.skipInstall) {
-            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
-            this.npmInstall();
-          }
-        }
-      },
-    };
-  }
-
-  get install() {
-    if (useBlueprints) return;
-    return this._install();
   }
 
   // Public API method used by the getter and also by Blueprints

@@ -93,7 +93,7 @@ describe('jhipster:entities with entitiesToImport option', () => {
       it('should compose with database-changelog generator', () => {
         const EntityGenerator = runResult.mockedGenerators['jhipster:database-changelog'];
         assert.equal(EntityGenerator.callCount, 1);
-        assert.deepStrictEqual(EntityGenerator.getCall(0).args[1].entities, ['Foo', 'Bar']);
+        assert.deepStrictEqual(EntityGenerator.getCall(0).args[0], ['Foo', 'Bar']);
       });
     });
 
@@ -134,7 +134,7 @@ describe('jhipster:entities with entitiesToImport option', () => {
       it('should compose with database-changelog generator', () => {
         const EntityGenerator = runResult.mockedGenerators['jhipster:database-changelog'];
         assert.equal(EntityGenerator.callCount, 1);
-        assert.deepStrictEqual(EntityGenerator.getCall(0).args[1].entities, ['Foo', 'Bar']);
+        assert.deepStrictEqual(EntityGenerator.getCall(0).args[0], ['Foo', 'Bar']);
       });
     });
 
@@ -180,7 +180,7 @@ describe('jhipster:entities with entitiesToImport option', () => {
       it('should compose with database-changelog generator', () => {
         const EntityGenerator = runResult.mockedGenerators['jhipster:database-changelog'];
         assert.equal(EntityGenerator.callCount, 1);
-        assert.deepStrictEqual(EntityGenerator.getCall(0).args[1].entities, ['Four', 'Three', 'Two', 'One']);
+        assert.deepStrictEqual(EntityGenerator.getCall(0).args[0], ['Four', 'Three', 'Two', 'One']);
       });
     });
   });

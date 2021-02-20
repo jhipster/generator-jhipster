@@ -12,7 +12,7 @@ const mockedComposedGenerators = [
   'jhipster:database-changelog',
 ];
 
-const allMockedComposedGenerators = [...mockedComposedGenerators, 'jhipster:server', 'jhipster:client'];
+const allMockedComposedGenerators = [...mockedComposedGenerators, 'jhipster:bootstrap', 'jhipster:server', 'jhipster:client'];
 
 describe('jhipster:app composing', () => {
   describe('when mocking all generators', () => {
@@ -36,6 +36,9 @@ describe('jhipster:app composing', () => {
 
       after(() => runResult.cleanup());
 
+      it('should compose with bootstrap generator', () => {
+        assert(runResult.mockedGenerators['jhipster:bootstrap'].calledOnce);
+      });
       it('should compose with common generator', () => {
         const CommonGenerator = runResult.mockedGenerators['jhipster:common'];
         assert(CommonGenerator.calledOnce);
@@ -87,6 +90,9 @@ describe('jhipster:app composing', () => {
 
       after(() => runResult.cleanup());
 
+      it('should compose with bootstrap generator', () => {
+        assert(runResult.mockedGenerators['jhipster:bootstrap'].calledOnce);
+      });
       it('should compose with common generator', () => {
         const CommonGenerator = runResult.mockedGenerators['jhipster:common'];
         assert(CommonGenerator.calledOnce);
@@ -138,6 +144,9 @@ describe('jhipster:app composing', () => {
 
       after(() => runResult.cleanup());
 
+      it('should compose with bootstrap generator', () => {
+        assert(runResult.mockedGenerators['jhipster:bootstrap'].calledOnce);
+      });
       it('should compose with common generator', () => {
         const CommonGenerator = runResult.mockedGenerators['jhipster:common'];
         assert(CommonGenerator.calledOnce);
@@ -192,6 +201,9 @@ describe('jhipster:app composing', () => {
 
         after(() => runResult.cleanup());
 
+        it('should compose with bootstrap generator', () => {
+          assert(runResult.mockedGenerators['jhipster:bootstrap'].calledOnce);
+        });
         it('should compose with common generator', () => {
           const CommonGenerator = runResult.mockedGenerators['jhipster:common'];
           assert(CommonGenerator.calledOnce);
@@ -209,8 +221,7 @@ describe('jhipster:app composing', () => {
           assert(LanguagesGenerator.calledOnce);
         });
         it('should compose with entities generator once', () => {
-          const MockedGenerator = runResult.mockedGenerators['jhipster:entities'];
-          assert(MockedGenerator.calledOnce);
+          assert.equal(runResult.mockedGenerators['jhipster:entities'].callCount, 1);
         });
         it('should not compose with entity generator', () => {
           const MockedGenerator = runResult.mockedGenerators['jhipster:entity'];
@@ -250,6 +261,9 @@ describe('jhipster:app composing', () => {
 
         after(() => runResult.cleanup());
 
+        it('should compose with bootstrap generator', () => {
+          assert(runResult.mockedGenerators['jhipster:bootstrap'].calledOnce);
+        });
         it('should compose with common generator', () => {
           const CommonGenerator = runResult.mockedGenerators['jhipster:common'];
           assert(CommonGenerator.calledOnce);

@@ -23,10 +23,18 @@ const mockCli = (opts = {}) => {
 
 describe('jhipster cli', () => {
   let cleanup;
+  let sandbox;
   beforeEach(() => {
     cleanup = prepareTempDir();
+    sandbox = sinon.createSandbox();
+
+    sandbox.stub(logger, 'fatal').callsFake(message => {
+      throw new Error(message);
+    });
+    sandbox.stub(logger, 'info');
   });
   afterEach(() => cleanup());
+  afterEach(() => sandbox.restore());
 
   const cmd = getJHipsterCli();
 
@@ -60,17 +68,6 @@ describe('jhipster cli', () => {
   });
 
   describe('with an unknown command', () => {
-    let sandbox;
-    before(() => {
-      sandbox = sinon.createSandbox();
-      sandbox.stub(logger, 'fatal').callsFake(message => {
-        throw new Error(message);
-      });
-      sandbox.stub(logger, 'info');
-    });
-    after(() => {
-      sandbox.restore();
-    });
     it('should print did you mean message', async () => {
       try {
         await mockCli({ argv: ['jhipster', 'jhipster', 'entitt'] });
@@ -115,15 +112,12 @@ describe('jhipster cli', () => {
         },
         sourceRoot: () => '',
       };
-      sinon.stub(Environment.prototype, 'run').callsFake((...args) => {
+      sandbox.stub(Environment.prototype, 'run').callsFake((...args) => {
         callback(...args);
         return Promise.resolve();
       });
-      sinon.stub(Environment.prototype, 'create').returns(generator.mocked);
-    });
-    afterEach(() => {
-      Environment.prototype.run.restore();
-      Environment.prototype.create.restore();
+      sandbox.stub(Environment.prototype, 'composeWith');
+      sandbox.stub(Environment.prototype, 'create').returns(generator.mocked);
     });
 
     const commonTests = () => {
