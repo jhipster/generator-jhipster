@@ -1585,8 +1585,8 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
       if (userEntityDefinition.relationships && userEntityDefinition.relationships.length > 0) {
         this.warning('Relationships on the User entity side will be disregarded');
       }
-      if (userEntityDefinition.fields && (userEntityDefinition.fields.length > 1 || userEntityDefinition.fields[0].fieldName !== 'id')) {
-        this.warning('Fields on the User entity side will be disregarded');
+      if (userEntityDefinition.fields && userEntityDefinition.fields.some(field => field.fieldName !== 'id')) {
+        this.warning('Fields on the User entity side (other than id) will be disregarded');
       }
     }
 
