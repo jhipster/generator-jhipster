@@ -22,8 +22,8 @@ describe('Metrics Component', () => {
   });
   
   describe('init', () => {
-    it('should count the numbers of each thread type', () => {
-      wrapper.setProps({
+    it('should count the numbers of each thread type', async () => {
+      await wrapper.setProps({
         threadDump: [
           { name: 'test1', threadState: 'RUNNABLE' },
           { name: 'test2', threadState: 'WAITING' },
