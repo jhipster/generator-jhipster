@@ -1540,12 +1540,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     const configDir = this.destinationPath(JHIPSTER_CONFIG_DIR);
     const file = this.destinationPath(configDir, `${entityName}.json`);
     try {
-      const definition = this.fs.readJSON(file);
-      if (this.options.namespace !== 'jhipster:info') {
-        // Execute a write operation to set the file as modified on mem-fs to trigger prettier.
-        this.fs.append(file, '', { trimEnd: false, separator: '' });
-      }
-      return definition;
+      return this.fs.readJSON(file);
     } catch (error) {
       // not an entity file / malformed?
       this.warning(`Unable to parse entity file ${file}`);
