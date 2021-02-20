@@ -1542,8 +1542,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     try {
       return this.fs.readJSON(file);
     } catch (error) {
-      // not an entity file / malformed?
-      this.warning(`Unable to parse entity file ${file}`);
+      this.warning(`Unable to parse ${file}, is the entity file malformed or invalid?`);
       this.debug('Error:', error);
       return undefined;
     }
