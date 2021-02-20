@@ -439,6 +439,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
           {
             entities: this.options.singleEntity ? [this.context.name] : undefined,
             regenerate: true,
+            writeEveryEntity: false,
             composedEntities: [this.context.name],
             skipDbChangelog: this.options.skipDbChangelog,
             skipInstall: this.options.skipInstall,

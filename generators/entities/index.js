@@ -65,7 +65,13 @@ module.exports = class extends BaseBlueprintGenerator {
     this.option('regenerate', {
       desc: 'Regenerate entities without prompts',
       type: Boolean,
+    });
+
+    this.option('write-every-entity', {
+      desc: 'Private option to write every entity file',
+      type: Boolean,
       defaults: true,
+      hide: true,
     });
 
     if (this.options.help) return;
@@ -98,6 +104,10 @@ module.exports = class extends BaseBlueprintGenerator {
 
     if (!this.options.entities || this.options.entities.length === 0) {
       this.options.entities = this.getExistingEntityNames();
+      if (this.options.regenerate === undefined) {
+        // Execute a non interactive regeneration.
+        this.options.regenerate = true;
+      }
     }
   }
 
@@ -120,10 +130,11 @@ module.exports = class extends BaseBlueprintGenerator {
       composeEachEntity() {
         this.getExistingEntityNames().forEach(entityName => {
           if (this.options.composedEntities && this.options.composedEntities.includes(entityName)) return;
-          const skipWriting = !this.options.entities.includes(entityName);
+          const selectedEntity = this.options.entities.includes(entityName);
+          const { regenerate = !selectedEntity } = this.options;
           this.composeWithJHipster('entity', {
-            skipWriting,
-            regenerate: this.options.regenerate,
+            skipWriting: !this.options.writeEveryEntity && !selectedEntity,
+            regenerate,
             skipDbChangelog: this.jhipsterConfig.databaseType === 'sql' || this.options.skipDbChangelog,
             skipInstall: true,
             arguments: [entityName],
@@ -141,7 +152,7 @@ module.exports = class extends BaseBlueprintGenerator {
         }
 
         this.composeWithJHipster('database-changelog', {
-          entities: this.options.entities,
+          entities: this.options.writeEveryEntity ? this.getExistingEntityNames() : this.options.entities,
         });
       },
     };
