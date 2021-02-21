@@ -1,0 +1,115 @@
+package <%= packageName %>.config;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cloud.gateway.route.Route;
+import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+import reactor.util.function.Tuple2;
+import springfox.documentation.oas.annotations.EnableOpenApi;
+import springfox.documentation.swagger.web.SwaggerResource;
+import springfox.documentation.swagger.web.SwaggerResourcesProvider;
+import tech.jhipster.config.JHipsterConstants;
+
+/**
+ * Retrieves all registered microservices Swagger resources.
+ */
+@Component
+@Primary
+@Profile(JHipsterConstants.SPRING_PROFILE_API_DOCS)
+@Configuration
+@EnableOpenApi
+public class GatewaySwaggerResourcesProvider implements SwaggerResourcesProvider {
+
+    private final RouteLocator routeLocator;
+
+    @Qualifier("swaggerResources")
+    private final SwaggerResourcesProvider gatewaySwaggerResources;
+
+    public GatewaySwaggerResourcesProvider(RouteLocator routeLocator, SwaggerResourcesProvider gatewaySwaggerResources) {
+        this.routeLocator = routeLocator;
+        this.gatewaySwaggerResources = gatewaySwaggerResources;
+    }
+
+    @Override
+    public List<SwaggerResource> get() {
+        // Get gateway swagger resources and make their names more explicit
+        List<SwaggerResource> allSwaggerResources = gatewaySwaggerResources.get();
+        for (SwaggerResource swaggerResource : allSwaggerResources) {
+            swaggerResource.setName(String.format("gateway (%s)", swaggerResource.getName()));
+        }
+
+        List<Tuple2<Route, List<SwaggerResource>>> servicesRouteSwaggerResources = routeLocator
+            .getRoutes()
+            <%_ if (serviceDiscoveryType === 'consul') { _%>
+            .filterWhen(
+                route -> {
+                    String routePredicate = route.getPredicate().toString();
+                    // Ignore the Consul server from the list as it doesn't expose a /swagger-resources endpoint
+                    return Mono.just(!routePredicate.contains("services/consul"));
+                }
+            )
+            <%_ } _%>
+            .flatMap(
+                route -> {
+                    // Retrieve the list of available OpenAPI resources for each service from their /swagger-resources endpoint
+                    WebClient serviceClient = WebClient.builder().baseUrl(route.getUri().toString()).build();
+                    Mono<List<SwaggerResource>> swaggerResources = serviceClient
+                        .get()
+                        .uri("/swagger-resources")
+                        .retrieve()
+                        .bodyToFlux(SwaggerResource.class)
+                        .onErrorResume(exception -> {
+                           exception.printStackTrace();
+                           return Mono.empty();
+                        })
+                        .collectList()
+                        .defaultIfEmpty(Collections.emptyList());
+                    return Mono.just(route).zipWith(swaggerResources);
+                }
+            )
+            .collectList()
+            .defaultIfEmpty(Collections.emptyList())
+            .subscribeOn(Schedulers.boundedElastic())
+            .toFuture()
+            .orTimeout(10, TimeUnit.SECONDS)
+            .join();
+
+        //Add the registered microservices swagger docs as additional swagger resources
+        List<SwaggerResource> servicesSwaggerResources = servicesRouteSwaggerResources
+            .stream()
+            .filter(tuple -> !tuple.getT2().isEmpty())
+            .map(
+                tuple -> {
+                    Route route = tuple.getT1();
+                    String routePredicate = route.getPredicate().toString();
+                    List<SwaggerResource> swaggerResources = new ArrayList<>();
+                    for (SwaggerResource swaggerResource : tuple.getT2()) {
+                        String patchedSwaggerPath = routePredicate
+                            .substring(routePredicate.indexOf("[") + 1, routePredicate.indexOf("]"))
+                            .replace("/**", swaggerResource.getUrl());
+                        swaggerResource.setName(String.format("%s (%s)", route.getId(), swaggerResource.getName()));
+                        swaggerResource.setUrl(patchedSwaggerPath);
+                        swaggerResources.add(swaggerResource);
+                    }
+                    return swaggerResources;
+                }
+            )
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
+
+        allSwaggerResources.addAll(servicesSwaggerResources);
+        return allSwaggerResources;
+    }
+}
