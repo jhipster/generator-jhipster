@@ -128,12 +128,21 @@
       "fieldValidateRulesMax": 100
     },
     {
-      "fieldName": "dateField",
-      "fieldType": "Date"
+      "fieldName": "localDateField",
+      "fieldType": "LocalDate"
     },
     {
-      "fieldName": "dateRequiredField",
-      "fieldType": "Date",
+      "fieldName": "localDateRequiredField",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "instantDateField",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "instantRequiredField",
+      "fieldType": "Instant",
       "fieldValidateRules": ["required"]
     },
     {
@@ -143,6 +152,15 @@
     {
       "fieldName": "zonedDateTimeRequiredField",
       "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "durationDateField",
+      "fieldType": "Duration"
+    },
+    {
+      "fieldName": "durationRequiredField",
+      "fieldType": "Duration",
       "fieldValidateRules": ["required"]
     },
     {
