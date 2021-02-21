@@ -456,6 +456,22 @@ describe('JDLImporter', () => {
           microserviceName: 'mymicroservice',
           javadoc: '',
         },
+        User: {
+          applications: '*',
+          dto: 'no',
+          embedded: false,
+          entityTableName: 'jhi_user',
+          fields: [],
+          fluentMethods: true,
+          javadoc: '',
+          jpaMetamodelFiltering: false,
+          microserviceName: 'mymicroservice',
+          name: 'User',
+          pagination: 'no',
+          readOnly: false,
+          relationships: [],
+          service: 'no',
+        },
       };
 
       before(() => {
@@ -491,6 +507,7 @@ describe('JDLImporter', () => {
             expectedContent.Country,
             expectedContent.Department,
             expectedContent.Employee,
+            expectedContent.User,
             expectedContent.Job,
             expectedContent.JobHistory,
             expectedContent.Location,

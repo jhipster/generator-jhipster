@@ -54,9 +54,8 @@ function createJSONEntities(jdlEntities) {
     if (builtInEntities.has(entityName.toLowerCase())) {
       logger.warn(
         `An Entity name '${entityName}' was used: '${entityName}' is an entity created by default by JHipster.` +
-          ' All relationships toward it will be kept but any attributes and relationships from it will be disregarded.'
+          ' All relationships toward it will be kept but any attributes and relationships from it may be disregarded.'
       );
-      return;
     }
     convertedEntities.set(
       entityName,

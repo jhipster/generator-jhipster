@@ -197,20 +197,21 @@ describe('JSONToJDLEntityConverter', () => {
           });
           context('when there is a User.json entity', () => {
             let entities;
+            let jdlObject;
 
             before(() => {
               entities = new Map([
                 ['Country', readJsonEntity('Country')],
                 ['User', readJsonEntity('Region')],
               ]);
+              jdlObject = convertEntitiesToJDL({
+                entities,
+              });
             });
 
-            it('should fail', () => {
-              expect(() => {
-                convertEntitiesToJDL({
-                  entities,
-                });
-              }).to.throw('User entity name is reserved if skipUserManagement is not set.');
+            it('should parse the User entity', () => {
+              expect(jdlObject.entities.Country).not.to.be.undefined;
+              expect(jdlObject.entities.User).not.to.be.undefined;
             });
           });
         });
