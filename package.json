@@ -92,7 +92,7 @@
     "through2": "4.0.2",
     "uuid": "8.3.2",
     "winston": "3.3.3",
-    "yeoman-environment": "2.10.3",
+    "yeoman-environment": "3.0.0",
     "yeoman-generator": "4.13.0"
   },
   "devDependencies": {
