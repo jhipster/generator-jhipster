@@ -101,6 +101,7 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 1
+            enableCypressDashboard: 1
           - app-type: ngx-default-additional
             jhi-app-type: ngx-default
             entity: none
@@ -330,6 +331,10 @@ jobs:
         id: e2e
         if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
         run: npm run ci:e2e:run --if-present
+        env:
+          CYPRESS_ENABLE_RECORD: ${{ matrix.enableCypressDashboard }}
+          CYPRESS_PROJECT_ID: ${{ matrix.app-type }}_CYPRESS_PROJECT_ID
+          CYPRESS_RECORD_KEY: ${{ matrix.app-type }}_CYPRESS_RECORD_KEY
       - name: 'E2E: Teardown'
         if: always() && matrix.e2e == 1 && steps.tests-should-be-skipped.outputs.skip-tests != 'true'
         run: npm run ci:e2e:teardown
