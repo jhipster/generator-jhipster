@@ -60,38 +60,17 @@ eureka:
 <%_ } _%>
 <%_ if (applicationTypeGateway) { _%>
 
-# See https://github.com/Netflix/Hystrix/wiki/Configuration
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 10000
 
 <%_ } _%>
 <%_ if (applicationTypeMicroservice) { _%>
 feign:
-  hystrix:
+  circuitbreaker:
     enabled: true
   # client:
   #   config:
   #     default:
   #       connectTimeout: 5000
   #       readTimeout: 5000
-
-# See https://github.com/Netflix/Hystrix/wiki/Configuration
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          strategy: SEMAPHORE
-          # See https://github.com/spring-cloud/spring-cloud-netflix/issues/1330
-          # thread:
-          #   timeoutInMilliseconds: 10000
-  shareSecurityContext: true
-
 <%_ } _%>
 management:
   endpoints:

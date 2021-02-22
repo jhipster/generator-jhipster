@@ -458,7 +458,11 @@ dependencies {
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
     implementation "org.springframework.cloud:spring-cloud-starter"
-    implementation "org.springframework.cloud:spring-cloud-starter-netflix-hystrix"
+    <%_ if (reactive) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j"
+    <%_ } else { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j"
+    <%_ } _%>
     implementation "org.springframework.retry:spring-retry"
     <%_ } _%>
     <%_ if (serviceDiscoveryType) { _%>
