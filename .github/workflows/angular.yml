@@ -101,6 +101,7 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 1
+            sonar-analyse: 1
           - app-type: ngx-default-additional
             jhi-app-type: ngx-default
             entity: none
@@ -346,7 +347,7 @@ jobs:
           name: screenshots-${{ matrix.app-type }}
           path: ${{ github.workspace }}/app/*/cypress/screenshots
       - name: 'ANALYSIS: Sonar analysis'
-        if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
+        if: steps.tests-should-be-skipped.outputs.skip-tests != 'true' && matrix.sonar-analyse == 1
         run: $JHI_SCRIPTS/25-sonar-analyze.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
