@@ -1579,6 +1579,17 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
 
     const changelogDateDate = this.jhipsterConfig.creationTimestamp ? new Date(this.jhipsterConfig.creationTimestamp) : new Date();
     const changelogDate = formatDateForChangelog(changelogDateDate);
+
+    const userEntityDefinition = this.readEntityJson('User');
+    if (userEntityDefinition) {
+      if (userEntityDefinition.relationships && userEntityDefinition.relationships.length > 0) {
+        this.warning('Relationships on the User entity side will be disregarded');
+      }
+      if (userEntityDefinition.fields && userEntityDefinition.fields.some(field => field.fieldName !== 'id')) {
+        this.warning('Fields on the User entity side (other than id) will be disregarded');
+      }
+    }
+
     // Create entity definition for built-in entity to make easier to deal with relationships.
     const user = {
       name: 'User',
@@ -1586,6 +1597,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
       entityTableName: `${this.getTableName(this.jhipsterConfig.jhiPrefix)}_user`,
       relationships: [],
       changelogDate,
+      fields: userEntityDefinition ? userEntityDefinition.fields || [] : [],
     };
 
     loadRequiredConfigIntoEntity(user, this.jhipsterConfig);
@@ -1596,20 +1608,26 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     const userIdType = oauth2 || user.databaseType !== 'sql' ? 'String' : this.getPkType(user.databaseType);
     const fieldValidateRulesMaxlength = userIdType === 'String' ? 100 : undefined;
 
-    user.fields = [
-      {
-        fieldName: 'id',
-        fieldType: userIdType,
-        fieldValidateRulesMaxlength,
-        fieldTranslationKey: 'global.field.id',
-        fieldNameHumanized: 'ID',
-        id: true,
-      },
-      {
+    let idField = user.fields.find(field => field.fieldName === 'id');
+    if (!idField) {
+      idField = {};
+      user.fields.unshift(idField);
+    }
+    _.defaults(idField, {
+      fieldName: 'id',
+      fieldType: userIdType,
+      fieldValidateRulesMaxlength,
+      fieldTranslationKey: 'global.field.id',
+      fieldNameHumanized: 'ID',
+      id: true,
+    });
+
+    if (!user.fields.some(field => field.fieldName === 'login')) {
+      user.fields.push({
         fieldName: 'login',
         fieldType: 'String',
-      },
-    ];
+      });
+    }
 
     prepareEntityForTemplates(user, this);
     user.fields.forEach(field => {
