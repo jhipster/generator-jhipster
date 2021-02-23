@@ -644,7 +644,11 @@ const expectedFiles = {
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProviderTest.java`,
   ],
 
-  jwtClient: [`${CLIENT_MAIN_SRC_DIR}app/core/interceptor/auth.interceptor.ts`, `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-jwt.service.ts`],
+  jwtClient: [
+    `${CLIENT_MAIN_SRC_DIR}app/core/interceptor/auth.interceptor.ts`,
+    `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-jwt.service.ts`,
+    `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-jwt.service.spec.ts`,
+  ],
 
   oauth2: [
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`,
