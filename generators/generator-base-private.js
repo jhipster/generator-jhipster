@@ -140,10 +140,12 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
       `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
       `${resourceDir}i18n/messages_${langJavaProp}.properties`
     );
-    generator.template(
-      `${prefix}/${testResourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
-      `${testResourceDir}i18n/messages_${langJavaProp}.properties`
-    );
+    if (!this.skipUserManagement) {
+      generator.template(
+        `${prefix}/${testResourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
+        `${testResourceDir}i18n/messages_${langJavaProp}.properties`
+      );
+    }
   }
 
   /**

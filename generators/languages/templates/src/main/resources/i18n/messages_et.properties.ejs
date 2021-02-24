@@ -22,6 +22,7 @@ error.subtitle=Vabandame, tekkis viga.
 error.status=Staatus:
 error.message=Teade:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> konto aktiveerimine
 email.activation.greeting=Austatud {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> uus salasõna
 email.reset.greeting=Austatud {0}
 email.reset.text1=Teie <%= baseName %> kontole telliti uus salasõna, palun klikkige alloleval lingil salasõna muutmiseks:
 email.reset.text2=Parimate soovidega,
+<%_ } _%>

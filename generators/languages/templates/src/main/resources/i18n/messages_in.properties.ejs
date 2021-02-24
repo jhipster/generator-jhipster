@@ -22,6 +22,7 @@ error.subtitle=Maaf, terjadi error.
 error.status=Status:
 error.message=Pesan:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> Aktivasi Akun
 email.activation.greeting=Hai {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> password reset
 email.reset.greeting=Hai {0}
 email.reset.text1=Pengajuan reset password atas nama <%= baseName %> sudah dilakukan, silakan klik URL dibawah untuk mereset password anda:
 email.reset.text2=Salam,
+<%_ } _%>

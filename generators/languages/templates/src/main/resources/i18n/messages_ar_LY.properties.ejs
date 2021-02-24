@@ -22,6 +22,7 @@ error.subtitle=عذرا، حدث خطأ.
 error.status=الحالة:
 error.message=الرسالة:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation e-mail
 email.activation.title=<%= baseName %> تفعيل حساب
 email.activation.greeting=عزيزي {0}
@@ -37,3 +38,4 @@ email.reset.title=إعادة تعيين كلمة المرور <%= baseName %>
 email.reset.greeting=عزيزي {0}
 email.reset.text1=<%= baseName %>  الحساب تم إنشاؤه، يرجى النقر على الرابط أدناه للوصول إليه:
 email.reset.text2=تحياتنا,
+<%_ } _%>

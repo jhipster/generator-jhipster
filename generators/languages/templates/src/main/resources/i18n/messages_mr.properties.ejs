@@ -22,6 +22,7 @@ error.subtitle=क्षमस्व, एक त्रुटी आली.
 error.status=स्थिती:
 error.message=संदेश:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> खाते सक्रिय
 email.activation.greeting=प्रिय  {0}
@@ -34,3 +35,4 @@ email.reset.title=<%= baseName %> संकेतशब्द रिसेट
 email.reset.greeting=प्रिय  {0}
 email.reset.text1=तुमच्या  <%= baseName %> खाते संकेतशब्द रीसेट करण्याची विनंती केली आहे, तो रीसेट करण्यासाठी खालील URL वर क्लिक करा:
 email.reset.text2=विनम्र,
+<%_ } _%>
