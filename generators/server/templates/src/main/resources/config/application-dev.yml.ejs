@@ -207,7 +207,7 @@ spring:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     <%_ } _%>
     contexts: dev<% if (!skipFakeData) { %>, faker<% } %>
-    <%_ } _%>
+  <%_ } _%>
     <%_ if (reactive) { _%>
       <%_ if (['mysql', 'mariadb', 'postgresql', 'mssql'].includes(devDatabaseType)) { _%>
     url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
@@ -219,11 +219,13 @@ spring:
     url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
       <%_ } _%>
     <%_ } _%>
+  <%_ if (!skipUserManagement) { _%>
   mail:
     host: localhost
     port: 25
     username:
     password:
+  <%_ } _%>
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   <%_ if (databaseType === 'sql' && reactive) { _%>
@@ -388,8 +390,10 @@ jhipster:
       # security key (this key should be unique for your application, and kept secret)
       key: <%= rememberMeKey %>
 <%_ } _%>
+<%_ if (!skipUserManagement) { _%>
   mail: # specific JHipster mail property, for standard properties see MailProperties
     base-url: http://127.0.0.1:<%= serverPort %>
+<%_ } _%>
   logging:
     use-json-format: false # By default, logs are not in Json format
     logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
