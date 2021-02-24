@@ -69,12 +69,14 @@ const CassandraTypes = {
   BIG_DECIMAL: 'BigDecimal',
   FLOAT: 'Float',
   DOUBLE: 'Double',
+  ENUM: 'Enum',
   BOOLEAN: 'Boolean',
-  DATE: 'Date',
-  UUID: 'UUID',
+  LOCAL_DATE: 'LocalDate',
   INSTANT: 'Instant',
-  BYTE_BUFFER: 'ByteBuffer',
+  DURATION: 'Duration',
   ZONED_DATE_TIME: 'ZonedDateTime',
+  UUID: 'UUID',
+  BYTE_BUFFER: 'ByteBuffer',
 };
 
 const CassandraValidations = {
@@ -84,12 +86,14 @@ const CassandraValidations = {
   BigDecimal: new Set([REQUIRED, UNIQUE, MIN, MAX]),
   Float: new Set([REQUIRED, UNIQUE, MIN, MAX]),
   Double: new Set([REQUIRED, UNIQUE, MIN, MAX]),
+  Enum: new Set([REQUIRED, UNIQUE]),
   Boolean: new Set([REQUIRED, UNIQUE]),
-  Date: new Set([REQUIRED, UNIQUE]),
   UUID: new Set([REQUIRED, UNIQUE]),
+  LocalDate: new Set([REQUIRED, UNIQUE]),
   Instant: new Set([REQUIRED, UNIQUE]),
-  ByteBuffer: new Set([REQUIRED, UNIQUE, MINBYTES, MAXBYTES]),
+  Duration: new Set([REQUIRED, UNIQUE]),
   ZonedDateTime: new Set([REQUIRED, UNIQUE]),
+  ByteBuffer: new Set([REQUIRED, UNIQUE, MINBYTES, MAXBYTES]),
 };
 
 module.exports = {
@@ -113,7 +117,7 @@ function isCassandraType(type) {
   if (!type) {
     throw new Error('The passed type must not be nil.');
   }
-  return _.snakeCase(type).toUpperCase() in CassandraTypes && !(type instanceof JDLEnum);
+  return _.snakeCase(type).toUpperCase() in CassandraTypes || type instanceof JDLEnum;
 }
 
 function isBlobType(type) {

@@ -128,12 +128,32 @@
       "fieldValidateRulesMax": 100
     },
     {
-      "fieldName": "dateField",
-      "fieldType": "Date"
+      "fieldName": "enumTom",
+      "fieldType": "EnumFieldClass",
+      "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3"
     },
     {
-      "fieldName": "dateRequiredField",
-      "fieldType": "Date",
+      "fieldName": "enumRequiredTom",
+      "fieldType": "EnumRequiredFieldClass",
+      "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "localDateField",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "localDateRequiredField",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "instantDateField",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "instantRequiredField",
+      "fieldType": "Instant",
       "fieldValidateRules": ["required"]
     },
     {
@@ -143,6 +163,15 @@
     {
       "fieldName": "zonedDateTimeRequiredField",
       "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "durationDateField",
+      "fieldType": "Duration"
+    },
+    {
+      "fieldName": "durationRequiredField",
+      "fieldType": "Duration",
       "fieldValidateRules": ["required"]
     },
     {

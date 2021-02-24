@@ -652,7 +652,7 @@ function askForField() {
         },
         {
           value: 'LocalDate',
-          name: 'LocalDate (Warning: only compatible with Cassandra v3)',
+          name: 'LocalDate',
         },
         {
           value: 'Instant',
@@ -661,6 +661,14 @@ function askForField() {
         {
           value: 'ZonedDateTime',
           name: 'ZonedDateTime',
+        },
+        {
+          value: 'Duration',
+          name: 'Duration',
+        },
+        {
+          value: 'enum',
+          name: 'Enumeration (Java enum type)',
         },
         {
           value: 'Boolean',

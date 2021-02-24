@@ -39,7 +39,7 @@ describe('FieldTypes', () => {
     });
     context('when passing a false type', () => {
       it('should return false', () => {
-        expect(FieldTypes.isCommonDBType(FieldTypes.CassandraTypes.DATE)).to.be.false;
+        expect(FieldTypes.isCommonDBType(FieldTypes.CassandraTypes.BYTE_BUFFER)).to.be.false;
       });
     });
     context('when passing a valid type', () => {
@@ -66,7 +66,7 @@ describe('FieldTypes', () => {
     });
     context('when passing a false type', () => {
       it('should return false', () => {
-        expect(FieldTypes.isCassandraType(FieldTypes.CommonDBTypes.LOCAL_DATE)).to.be.false;
+        expect(FieldTypes.isCassandraType(FieldTypes.CommonDBTypes.ANY_BLOB)).to.be.false;
       });
     });
     context('when passing a valid type', () => {
@@ -75,8 +75,8 @@ describe('FieldTypes', () => {
       });
     });
     context('when passing an enum', () => {
-      it('should return false', () => {
-        expect(FieldTypes.isCassandraType(new JDLEnum({ name: 'MyEnum' }))).to.be.false;
+      it('should return true', () => {
+        expect(FieldTypes.isCassandraType(new JDLEnum({ name: 'MyEnum' }))).to.be.true;
       });
     });
   });
