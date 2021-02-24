@@ -34,7 +34,7 @@ module.exports = class EnvironmentBuilder {
    */
   static create(args, options = {}, adapter) {
     // Remove after migration to environment 3.
-    const sharedOptions = { fromCli: true, localConfigOnly: true, ...options.sharedOptions };
+    const sharedOptions = { fromCli: true, localConfigOnly: true, ...options.sharedOptions, configOptions: { sharedEntities: {} } };
     const env = Environment.createEnv(args, { newErrorHandler: true, ...options, sharedOptions }, adapter);
     return new EnvironmentBuilder(env);
   }
