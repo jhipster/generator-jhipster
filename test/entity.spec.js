@@ -1,21 +1,20 @@
 const path = require('path');
 const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
 const fse = require('fs-extra');
+
+const { skipPrettierHelpers: helpers } = require('./utils/utils');
+
 const constants = require('../generators/generator-constants');
 const expectedFiles = require('./utils/expected-files').entity;
 
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
-const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
+const { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR } = constants;
 
 describe('JHipster generator for entity', () => {
   context('creation from CLI', () => {
     context('monolith with elasticsearch', () => {
       describe('search, no dto, no service, no pagination', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-elasticsearch'), dir);
@@ -27,8 +26,7 @@ describe('JHipster generator for entity', () => {
               dto: 'no',
               service: 'no',
               pagination: 'no',
-            })
-            .on('end', done);
+            });
         });
 
         it('does creates search files', () => {
@@ -41,8 +39,8 @@ describe('JHipster generator for entity', () => {
 
     context('monolith with couchbase FTS', () => {
       describe('Couchbase search, no dto, no service, no pagination', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-couchbase-search'), dir);
@@ -55,8 +53,7 @@ describe('JHipster generator for entity', () => {
               dto: 'no',
               service: 'no',
               pagination: 'no',
-            })
-            .on('end', done);
+            });
         });
 
         it('does creates search files', () => {
@@ -114,8 +111,8 @@ describe('JHipster generator for entity', () => {
       });
 
       describe('with entity suffix and no dto', () => {
-        beforeEach(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/entity-dto-suffixes'), dir);
@@ -126,8 +123,7 @@ describe('JHipster generator for entity', () => {
               relationshipAdd: false,
               dto: 'no',
               service: 'serviceImpl',
-            })
-            .on('end', done);
+            });
         });
 
         it('creates expected files with suffix', () => {
@@ -153,8 +149,8 @@ describe('JHipster generator for entity', () => {
 
     context('monolith with angularX', () => {
       describe('no dto, no service, no pagination', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
@@ -166,8 +162,7 @@ describe('JHipster generator for entity', () => {
               dto: 'no',
               service: 'no',
               pagination: 'no',
-            })
-            .on('end', done);
+            });
         });
 
         it('creates expected default files', () => {
@@ -179,8 +174,8 @@ describe('JHipster generator for entity', () => {
       });
 
       describe('no dto, no service, with pagination', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
@@ -192,8 +187,7 @@ describe('JHipster generator for entity', () => {
               dto: 'no',
               service: 'no',
               pagination: 'pagination',
-            })
-            .on('end', done);
+            });
         });
 
         it('creates expected default files', () => {
@@ -204,8 +198,8 @@ describe('JHipster generator for entity', () => {
       });
 
       describe('no dto, no service, with infinite-scroll', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
@@ -217,8 +211,7 @@ describe('JHipster generator for entity', () => {
               dto: 'no',
               service: 'no',
               pagination: 'infinite-scroll',
-            })
-            .on('end', done);
+            });
         });
 
         it('creates expected default files', () => {
@@ -229,8 +222,8 @@ describe('JHipster generator for entity', () => {
       });
 
       describe('no dto, with serviceImpl, no pagination', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
@@ -242,8 +235,7 @@ describe('JHipster generator for entity', () => {
               dto: 'no',
               service: 'serviceImpl',
               pagination: 'no',
-            })
-            .on('end', done);
+            });
         });
 
         it('creates expected default files', () => {
@@ -258,8 +250,8 @@ describe('JHipster generator for entity', () => {
       });
 
       describe('with dto, service, no pagination', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
@@ -271,8 +263,7 @@ describe('JHipster generator for entity', () => {
               dto: 'mapstruct',
               service: 'serviceClass',
               pagination: 'no',
-            })
-            .on('end', done);
+            });
         });
 
         it('creates expected default files', () => {
@@ -288,8 +279,8 @@ describe('JHipster generator for entity', () => {
       });
 
       describe('with angular suffix', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
@@ -302,8 +293,7 @@ describe('JHipster generator for entity', () => {
               dto: 'yes',
               service: 'serviceImpl',
               pagination: 'infinite-scroll',
-            })
-            .on('end', done);
+            });
         });
 
         it('creates expected default files', () => {
@@ -315,8 +305,8 @@ describe('JHipster generator for entity', () => {
       });
 
       describe('with client-root-folder', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
@@ -329,8 +319,7 @@ describe('JHipster generator for entity', () => {
               dto: 'yes',
               service: 'serviceImpl',
               pagination: 'infinite-scroll',
-            })
-            .on('end', done);
+            });
         });
 
         it('creates expected default files', () => {
@@ -342,8 +331,8 @@ describe('JHipster generator for entity', () => {
       });
 
       describe('with client-root-folder and angular-suffix', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
@@ -356,8 +345,7 @@ describe('JHipster generator for entity', () => {
               dto: 'yes',
               service: 'serviceImpl',
               pagination: 'infinite-scroll',
-            })
-            .on('end', done);
+            });
         });
 
         it('creates expected default files', () => {
@@ -371,8 +359,8 @@ describe('JHipster generator for entity', () => {
 
     context('fake data', () => {
       describe('sql database with fake data disabled', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/psql-with-no-fake-data'), dir);
@@ -384,8 +372,7 @@ describe('JHipster generator for entity', () => {
               dto: 'no',
               service: 'no',
               pagination: 'no',
-            })
-            .on('end', done);
+            });
         });
 
         it('creates expected default files', () => {
@@ -396,8 +383,8 @@ describe('JHipster generator for entity', () => {
 
     context('no i18n', () => {
       describe('with dto, serviceImpl, with hazelcast, elasticsearch', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/noi18n'), dir);
@@ -409,8 +396,7 @@ describe('JHipster generator for entity', () => {
               dto: 'yes',
               service: 'serviceImpl',
               pagination: 'infinite-scroll',
-            })
-            .on('end', done);
+            });
         });
 
         it('creates expected default files', () => {
@@ -424,8 +410,8 @@ describe('JHipster generator for entity', () => {
 
     context('all languages', () => {
       describe('no dto, no service, no pagination', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/all-languages'), dir);
@@ -437,8 +423,7 @@ describe('JHipster generator for entity', () => {
               dto: 'no',
               service: 'no',
               pagination: 'no',
-            })
-            .on('end', done);
+            });
         });
 
         it('creates expected languages files', () => {
@@ -449,8 +434,8 @@ describe('JHipster generator for entity', () => {
       });
 
       describe('no dto, no service, no pagination with client-root-folder', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/all-languages'), dir);
@@ -463,8 +448,7 @@ describe('JHipster generator for entity', () => {
               dto: 'no',
               service: 'no',
               pagination: 'no',
-            })
-            .on('end', done);
+            });
         });
 
         it('creates expected languages files', () => {
@@ -478,8 +462,8 @@ describe('JHipster generator for entity', () => {
 
     context('microservice', () => {
       describe('with client-root-folder microservice', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-microservice'), dir);
@@ -492,8 +476,7 @@ describe('JHipster generator for entity', () => {
               dto: 'yes',
               service: 'serviceImpl',
               pagination: 'infinite-scroll',
-            })
-            .on('end', done);
+            });
         });
 
         it('sets expected custom clientRootFolder', () => {
@@ -504,8 +487,8 @@ describe('JHipster generator for entity', () => {
       });
 
       describe('with default microservice', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-microservice'), dir);
@@ -517,8 +500,7 @@ describe('JHipster generator for entity', () => {
               dto: 'yes',
               service: 'serviceImpl',
               pagination: 'pagination',
-            })
-            .on('end', done);
+            });
         });
 
         it('sets expected default clientRootFolder', () => {
@@ -532,8 +514,8 @@ describe('JHipster generator for entity', () => {
       });
 
       describe('with mongodb microservice', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/mongodb-with-relations'), dir);
@@ -545,8 +527,7 @@ describe('JHipster generator for entity', () => {
               dto: 'yes',
               service: 'serviceImpl',
               pagination: 'pagination',
-            })
-            .on('end', done);
+            });
         });
 
         it('sets expected custom databaseType', () => {
@@ -557,8 +538,8 @@ describe('JHipster generator for entity', () => {
 
     context('gateway', () => {
       describe('with entity from microservice', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-gateway'), dir);
@@ -567,8 +548,7 @@ describe('JHipster generator for entity', () => {
               useMicroserviceJson: true,
               microservicePath: 'microservice1',
             })
-            .withArguments(['bar'])
-            .on('end', done);
+            .withArguments(['bar']);
         });
 
         it('sets expected default clientRootFolder', () => {
@@ -585,8 +565,8 @@ describe('JHipster generator for entity', () => {
       });
 
       describe('with entity from microservice and custom client-root-folder', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-gateway'), dir);
@@ -595,8 +575,7 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               useMicroserviceJson: true,
               microservicePath: 'microservice1',
-            })
-            .on('end', done);
+            });
         });
 
         it('sets expected custom clientRootFolder', () => {
@@ -611,8 +590,8 @@ describe('JHipster generator for entity', () => {
       });
 
       describe('with entity from mongodb microservice', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-gateway'), dir);
@@ -621,8 +600,7 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               useMicroserviceJson: true,
               microservicePath: 'microservice1',
-            })
-            .on('end', done);
+            });
         });
 
         it('sets expected custom databaseType from the microservice', () => {
@@ -638,8 +616,8 @@ describe('JHipster generator for entity', () => {
     });
 
     describe('with creation timestamp', () => {
-      before(done => {
-        helpers
+      before(async () => {
+        await helpers
           .run(require.resolve('../generators/entity'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
@@ -652,8 +630,7 @@ describe('JHipster generator for entity', () => {
             dto: 'no',
             service: 'no',
             pagination: 'pagination',
-          })
-          .on('end', done);
+          });
       });
 
       it('creates expected default files', () => {
@@ -665,8 +642,8 @@ describe('JHipster generator for entity', () => {
     });
 
     describe('with formated creation timestamp', () => {
-      before(done => {
-        helpers
+      before(async () => {
+        await helpers
           .run(require.resolve('../generators/entity'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
@@ -679,8 +656,7 @@ describe('JHipster generator for entity', () => {
             dto: 'no',
             service: 'no',
             pagination: 'pagination',
-          })
-          .on('end', done);
+          });
       });
 
       it('creates expected default files', () => {
@@ -692,8 +668,8 @@ describe('JHipster generator for entity', () => {
     });
 
     describe('with wrong base changelog date', () => {
-      before(done => {
-        helpers
+      before(async () => {
+        await helpers
           .run(require.resolve('../generators/entity'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
@@ -706,8 +682,7 @@ describe('JHipster generator for entity', () => {
             dto: 'no',
             service: 'no',
             pagination: 'pagination',
-          })
-          .on('end', done);
+          });
       });
 
       it('creates expected default files', () => {
@@ -722,16 +697,15 @@ describe('JHipster generator for entity', () => {
   context('regeneration from json file', () => {
     context('monolith with angularX', () => {
       describe('no dto, no service, no pagination', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, './templates/default-ng2'), dir);
               fse.copySync(path.join(__dirname, 'templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
             })
             .withArguments(['Foo'])
-            .withOptions({ regenerate: true, force: true })
-            .on('end', done);
+            .withOptions({ regenerate: true, force: true });
         });
 
         it('creates expected default files', () => {
@@ -747,16 +721,15 @@ describe('JHipster generator for entity', () => {
 
     describe('with --skip-db-changelog', () => {
       describe('SQL database', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
               fse.copySync(path.join(__dirname, 'templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
             })
             .withArguments(['Foo'])
-            .withOptions({ regenerate: true, force: true, skipDbChangelog: true })
-            .on('end', done);
+            .withOptions({ regenerate: true, force: true, skipDbChangelog: true });
         });
 
         it('creates expected default files', () => {
@@ -773,16 +746,15 @@ describe('JHipster generator for entity', () => {
       });
 
       describe('Cassandra database', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/compose/05-cassandra'), dir);
               fse.copySync(path.join(__dirname, 'templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
             })
             .withArguments(['Foo'])
-            .withOptions({ regenerate: true, force: true, skipDbChangelog: true })
-            .on('end', done);
+            .withOptions({ regenerate: true, force: true, skipDbChangelog: true });
         });
 
         it('creates expected default files', () => {
@@ -797,16 +769,15 @@ describe('JHipster generator for entity', () => {
 
     context('microservice', () => {
       describe('with dto, service, pagination', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-microservice'), dir);
               fse.copySync(path.join(__dirname, 'templates/.jhipster/DtoServicePagination.json'), path.join(dir, '.jhipster/Foo.json'));
             })
             .withArguments(['Foo'])
-            .withOptions({ regenerate: true, force: true })
-            .on('end', done);
+            .withOptions({ regenerate: true, force: true });
         });
 
         it('creates expected default files', () => {
@@ -827,14 +798,13 @@ describe('JHipster generator for entity', () => {
 
     context('reproducible build', () => {
       describe('no dto, no service, no pagination', () => {
-        before(done => {
-          helpers
+        before(async () => {
+          await helpers
             .run(require.resolve('../generators/entity'))
             .inTmpDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/reproducible'), dir);
             })
-            .withArguments(['foo'])
-            .on('end', done);
+            .withArguments(['foo']);
         });
 
         it('creates expected default files', () => {
@@ -866,17 +836,16 @@ describe('JHipster generator for entity', () => {
       let enumWithSomeCustomValuesPath;
       let enumWithOnlyCustomValuesPath;
 
-      before(done => {
+      before(async () => {
         enumWithoutCustomValuesPath = `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/enumeration/MyEnumA.java`;
         enumWithSomeCustomValuesPath = `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/enumeration/MyEnumB.java`;
         enumWithOnlyCustomValuesPath = `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/enumeration/MyEnumC.java`;
-        helpers
+        await helpers
           .run(require.resolve('../generators/entity'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, '../test/templates/enums'), dir);
           })
-          .withArguments(['A'])
-          .on('end', done);
+          .withArguments(['A']);
       });
 
       context('for enum content without custom values', () => {
@@ -934,8 +903,8 @@ describe('JHipster generator for entity', () => {
   });
   describe('regeneration from app generator', () => {
     describe('with creation timestamp', () => {
-      before(() => {
-        return helpers
+      before(async () => {
+        await helpers
           .create(require.resolve('../generators/app'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);

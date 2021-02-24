@@ -4,6 +4,7 @@ const os = require('os');
 const assert = require('yeoman-assert');
 const fse = require('fs-extra');
 const fs = require('fs');
+const { createHelpers } = require('yeoman-test');
 
 const Generator = require('../../generators/generator-base');
 const constants = require('../../generators/generator-constants');
@@ -11,7 +12,16 @@ const constants = require('../../generators/generator-constants');
 const DOCKER_DIR = constants.DOCKER_DIR;
 const FAKE_BLUEPRINT_DIR = path.join(__dirname, '../templates/fake-blueprint');
 
+const DEFAULT_TEST_SETTINGS = { forwardCwd: true };
+const DEFAULT_TEST_OPTIONS = { fromCli: true, skipInstall: true };
+const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
+
 module.exports = {
+  DEFAULT_TEST_OPTIONS,
+  basicHelpers: createTestHelpers(),
+  skipPrettierHelpers: createTestHelpers({ generatorOptions: { skipPrettier: true } }),
+  dryRunHelpers: createTestHelpers({ generatorOptions: { skipPrettier: true }, environmentOptions: { dryRun: true } }),
+  createTestHelpers,
   getFilesForOptions,
   shouldBeV3DockerfileCompatible,
   getJHipsterCli,
@@ -23,6 +33,17 @@ module.exports = {
   copyFakeBlueprint,
   lnYeoman,
 };
+
+function createTestHelpers(options = {}) {
+  const { environmentOptions = {} } = options;
+  const sharedOptions = { ...DEFAULT_TEST_OPTIONS, configOptions: {}, ...environmentOptions.sharedOptions };
+  const newOptions = {
+    settings: { ...DEFAULT_TEST_SETTINGS, ...options.settings },
+    environmentOptions: { ...DEFAULT_TEST_ENV_OPTIONS, ...environmentOptions, sharedOptions },
+    generatorOptions: { ...DEFAULT_TEST_OPTIONS, ...options.generatorOptions },
+  };
+  return createHelpers(newOptions);
+}
 
 function getFilesForOptions(files, options, prefix, excludeFiles) {
   const generator = options;

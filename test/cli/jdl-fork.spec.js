@@ -26,6 +26,7 @@ describe('jhipster program', () => {
           '--skip-install',
           '--fork',
           '--skip-sample-repository',
+          '--skip-prettier',
           '--dry-run',
         ]);
     });
@@ -53,6 +54,7 @@ describe('jhipster program', () => {
           '--db',
           'postgresql',
           '--skip-install',
+          '--skip-prettier',
           '--fork',
           '--skip-sample-repository',
           '--dry-run',
@@ -80,6 +82,7 @@ describe('jhipster program', () => {
           path.join(__dirname, '..', 'templates', 'import-jdl', 'apps-and-entities-and-deployments.jdl'),
           '--skip-install',
           '--fork',
+          '--skip-prettier',
           '--skip-sample-repository',
         ]);
     });

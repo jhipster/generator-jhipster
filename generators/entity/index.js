@@ -485,7 +485,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
         }
       },
       shareEntity() {
-        this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
         this.configOptions.sharedEntities[this.context.name] = this.context;
       },
     };

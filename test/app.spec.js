@@ -1,29 +1,22 @@
 const path = require('path');
 const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const getFilesForOptions = require('./utils/utils').getFilesForOptions;
+
+const { skipPrettierHelpers: helpers, getFilesForOptions, shouldBeV3DockerfileCompatible } = require('./utils/utils');
 const expectedFiles = require('./utils/expected-files');
-const shouldBeV3DockerfileCompatible = require('./utils/utils').shouldBeV3DockerfileCompatible;
 const constants = require('../generators/generator-constants');
 const angularFiles = require('../generators/client/files-angular').files;
 const reactFiles = require('../generators/client/files-react').files;
 
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
-const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-const TEST_DIR = constants.TEST_DIR;
-
-const DEFAULT_TEST_OPTIONS = { fromCli: true, skipInstall: true, skipChecks: true, skipPrettier: true };
+const { ANGULAR, REACT } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
+const { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, TEST_DIR } = constants;
 
 describe('JHipster generator', () => {
   context('Default configuration with', () => {
     describe('AngularX', () => {
-      before(() => {
-        return helpers
+      before(async () => {
+        await helpers
           .create(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS, jhiPrefix: 'test', withGeneratedFlag: true })
+          .withOptions({ jhiPrefix: 'test', withGeneratedFlag: true })
           .withPrompts({
             baseName: 'jhipster',
             clientFramework: ANGULAR,
@@ -90,15 +83,11 @@ describe('JHipster generator', () => {
     });
 
     describe('React', () => {
-      before(done => {
-        helpers
+      before(async () => {
+        await helpers
           .run(path.join(__dirname, '../generators/app'))
           .withOptions({
-            fromCli: true,
-            skipInstall: true,
-            skipChecks: true,
             jhiPrefix: 'test',
-            experimental: true,
           })
           .withPrompts({
             baseName: 'jhipster',
@@ -120,8 +109,7 @@ describe('JHipster generator', () => {
             skipClient: false,
             skipUserManagement: false,
             serverSideOptions: [],
-          })
-          .on('end', done);
+          });
       });
 
       it('creates expected default files for react', () => {
@@ -153,32 +141,28 @@ describe('JHipster generator', () => {
     });
 
     describe('using npm flag', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS, npm: true })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            skipClient: false,
-            skipUserManagement: false,
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          skipClient: false,
+          skipUserManagement: false,
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected default files', () => {
@@ -208,30 +192,26 @@ describe('JHipster generator', () => {
     });
 
     describe('Gradle', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'gradle',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'gradle',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected default files for gradle', () => {
@@ -257,32 +237,28 @@ describe('JHipster generator', () => {
 
   context('Application with DB option', () => {
     describe('mariadb', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Disk',
-            prodDatabaseType: 'mariadb',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            skipClient: false,
-            skipUserManagement: false,
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Disk',
+          prodDatabaseType: 'mariadb',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          skipClient: false,
+          skipUserManagement: false,
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected default files', () => {
@@ -307,32 +283,28 @@ describe('JHipster generator', () => {
     });
 
     describe('mongodb', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'no',
-            enableHibernateCache: false,
-            databaseType: 'mongodb',
-            devDatabaseType: 'mongodb',
-            prodDatabaseType: 'mongodb',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            skipClient: false,
-            skipUserManagement: false,
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'no',
+          enableHibernateCache: false,
+          databaseType: 'mongodb',
+          devDatabaseType: 'mongodb',
+          prodDatabaseType: 'mongodb',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          skipClient: false,
+          skipUserManagement: false,
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with "MongoDB"', () => {
@@ -346,32 +318,28 @@ describe('JHipster generator', () => {
     });
 
     describe('couchbase', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'no',
-            enableHibernateCache: false,
-            databaseType: 'couchbase',
-            devDatabaseType: 'couchbase',
-            prodDatabaseType: 'couchbase',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            skipClient: false,
-            skipUserManagement: false,
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'no',
+          enableHibernateCache: false,
+          databaseType: 'couchbase',
+          devDatabaseType: 'couchbase',
+          prodDatabaseType: 'couchbase',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          skipClient: false,
+          skipUserManagement: false,
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with "Couchbase"', () => {
@@ -385,32 +353,28 @@ describe('JHipster generator', () => {
     });
 
     describe('neo4j', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'no',
-            enableHibernateCache: false,
-            databaseType: 'neo4j',
-            devDatabaseType: 'neo4j',
-            prodDatabaseType: 'neo4j',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            skipClient: false,
-            skipUserManagement: false,
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'no',
+          enableHibernateCache: false,
+          databaseType: 'neo4j',
+          devDatabaseType: 'neo4j',
+          prodDatabaseType: 'neo4j',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          skipClient: false,
+          skipUserManagement: false,
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with "Neo4j"', () => {
@@ -424,32 +388,28 @@ describe('JHipster generator', () => {
     });
 
     describe('mssql', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'no',
-            enableHibernateCache: false,
-            databaseType: 'sql',
-            devDatabaseType: 'mssql',
-            prodDatabaseType: 'mssql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            skipClient: false,
-            skipUserManagement: false,
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'no',
+          enableHibernateCache: false,
+          databaseType: 'sql',
+          devDatabaseType: 'mssql',
+          prodDatabaseType: 'mssql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          skipClient: false,
+          skipUserManagement: false,
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with "Microsoft SQL Server"', () => {
@@ -462,32 +422,28 @@ describe('JHipster generator', () => {
     });
 
     describe('cassandra', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'no',
-            enableHibernateCache: false,
-            databaseType: 'cassandra',
-            devDatabaseType: 'cassandra',
-            prodDatabaseType: 'cassandra',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            skipClient: false,
-            skipUserManagement: false,
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'no',
+          enableHibernateCache: false,
+          databaseType: 'cassandra',
+          devDatabaseType: 'cassandra',
+          prodDatabaseType: 'cassandra',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          skipClient: false,
+          skipUserManagement: false,
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with "Cassandra"', () => {
@@ -501,30 +457,26 @@ describe('JHipster generator', () => {
     });
 
     describe('cassandra no i18n', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'no',
-            enableHibernateCache: false,
-            databaseType: 'cassandra',
-            devDatabaseType: 'cassandra',
-            prodDatabaseType: 'cassandra',
-            enableTranslation: false,
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            skipClient: false,
-            skipUserManagement: false,
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'no',
+          enableHibernateCache: false,
+          databaseType: 'cassandra',
+          devDatabaseType: 'cassandra',
+          prodDatabaseType: 'cassandra',
+          enableTranslation: false,
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          skipClient: false,
+          skipUserManagement: false,
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with "Cassandra"', () => {
@@ -535,32 +487,28 @@ describe('JHipster generator', () => {
     });
 
     describe('MySQL and Elasticsearch', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'no',
-            enableHibernateCache: false,
-            databaseType: 'sql',
-            devDatabaseType: 'mysql',
-            prodDatabaseType: 'mysql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            skipClient: false,
-            skipUserManagement: false,
-            serverSideOptions: ['searchEngine:elasticsearch'],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'no',
+          enableHibernateCache: false,
+          databaseType: 'sql',
+          devDatabaseType: 'mysql',
+          prodDatabaseType: 'mysql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          skipClient: false,
+          skipUserManagement: false,
+          serverSideOptions: ['searchEngine:elasticsearch'],
+        });
       });
 
       it('creates expected files with "MySQL" and "Elasticsearch"', () => {
@@ -572,32 +520,28 @@ describe('JHipster generator', () => {
     });
 
     describe('couchbase FTS', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: 'angularX',
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'no',
-            enableHibernateCache: false,
-            databaseType: 'couchbase',
-            devDatabaseType: 'couchbase',
-            prodDatabaseType: 'couchbase',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            skipClient: false,
-            skipUserManagement: false,
-            serverSideOptions: ['searchEngine:couchbase'],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: 'angularX',
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'no',
+          enableHibernateCache: false,
+          databaseType: 'couchbase',
+          devDatabaseType: 'couchbase',
+          prodDatabaseType: 'couchbase',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          skipClient: false,
+          skipUserManagement: false,
+          serverSideOptions: ['searchEngine:couchbase'],
+        });
       });
 
       it('creates expected files with "Couchbbase FTS"', () => {
@@ -608,30 +552,26 @@ describe('JHipster generator', () => {
     });
 
     describe('no database', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            applicationType: 'microservice',
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'hazelcast',
-            enableHibernateCache: true,
-            databaseType: 'no',
-            devDatabaseType: 'no',
-            prodDatabaseType: 'no',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          applicationType: 'microservice',
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'hazelcast',
+          enableHibernateCache: true,
+          databaseType: 'no',
+          devDatabaseType: 'no',
+          prodDatabaseType: 'no',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with the microservice application type', () => {
@@ -650,30 +590,26 @@ describe('JHipster generator', () => {
 
   context('Application with other options', () => {
     describe('oauth2', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'oauth2',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'oauth2',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with authenticationType "oauth2"', () => {
@@ -688,30 +624,26 @@ describe('JHipster generator', () => {
     });
 
     describe('oauth2 + elasticsearch', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'oauth2',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: ['searchEngine:elasticsearch'],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'oauth2',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: ['searchEngine:elasticsearch'],
+        });
       });
 
       it('creates expected files with authenticationType "oauth2" and elasticsearch', () => {
@@ -724,30 +656,26 @@ describe('JHipster generator', () => {
     });
 
     describe('oauth2 + mongodb', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'oauth2',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'mongodb',
-            devDatabaseType: 'mongodb',
-            prodDatabaseType: 'mongodb',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'oauth2',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'mongodb',
+          devDatabaseType: 'mongodb',
+          prodDatabaseType: 'mongodb',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with authenticationType "oauth2" and mongodb', () => {
@@ -758,30 +686,26 @@ describe('JHipster generator', () => {
     });
 
     describe('hazelcast', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'hazelcast',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'hazelcast',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
       it('creates expected files with "Hazelcast"', () => {
         assert.file(expectedFiles.common);
@@ -794,30 +718,26 @@ describe('JHipster generator', () => {
     });
 
     describe('Infinispan', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'infinispan',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'infinispan',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
       it('creates expected files with "Infinispan"', () => {
         assert.file(expectedFiles.common);
@@ -831,30 +751,26 @@ describe('JHipster generator', () => {
     });
 
     describe('Infinispan and Eureka', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            serviceDiscoveryType: 'eureka',
-            clientFramework: ANGULAR,
-            authenticationType: 'jwt',
-            cacheProvider: 'infinispan',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          serviceDiscoveryType: 'eureka',
+          clientFramework: ANGULAR,
+          authenticationType: 'jwt',
+          cacheProvider: 'infinispan',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
       it('creates expected files with "Infinispan and Eureka"', () => {
         assert.file(expectedFiles.common);
@@ -869,30 +785,26 @@ describe('JHipster generator', () => {
     });
 
     describe('Memcached', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'memcached',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'memcached',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
       it('creates expected files with "Memcached"', () => {
         assert.file(expectedFiles.common);
@@ -906,30 +818,26 @@ describe('JHipster generator', () => {
     });
 
     describe('Redis', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'redis',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'redis',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
       it('creates expected files with "Redis"', () => {
         assert.file(expectedFiles.common);
@@ -943,36 +851,32 @@ describe('JHipster generator', () => {
     });
 
     describe('Messaging with Kafka configuration', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serverPort: '8080',
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            websocket: false,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Disk',
-            prodDatabaseType: 'postgresql',
-            searchEngine: false,
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            applicationType: 'monolith',
-            testFrameworks: ['gatling'],
-            jhiPrefix: 'jhi',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['en'],
-            serverSideOptions: ['messageBroker:kafka'],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serverPort: '8080',
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          websocket: false,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Disk',
+          prodDatabaseType: 'postgresql',
+          searchEngine: false,
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          applicationType: 'monolith',
+          testFrameworks: ['gatling'],
+          jhiPrefix: 'jhi',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['en'],
+          serverSideOptions: ['messageBroker:kafka'],
+        });
       });
 
       it('creates expected files with Kafka message broker enabled', () => {
@@ -988,36 +892,32 @@ describe('JHipster generator', () => {
     });
 
     describe('API first using OpenAPI-generator (maven)', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serverPort: '8080',
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            websocket: false,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Disk',
-            prodDatabaseType: 'postgresql',
-            searchEngine: false,
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            applicationType: 'monolith',
-            testFrameworks: ['gatling'],
-            jhiPrefix: 'jhi',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['en'],
-            serverSideOptions: ['enableSwaggerCodegen:true'],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serverPort: '8080',
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          websocket: false,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Disk',
+          prodDatabaseType: 'postgresql',
+          searchEngine: false,
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          applicationType: 'monolith',
+          testFrameworks: ['gatling'],
+          jhiPrefix: 'jhi',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['en'],
+          serverSideOptions: ['enableSwaggerCodegen:true'],
+        });
       });
 
       it('creates expected files with OpenAPI API first enabled', () => {
@@ -1036,36 +936,32 @@ describe('JHipster generator', () => {
     });
 
     describe('API first using OpenAPI-generator (gradle)', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serverPort: '8080',
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            websocket: false,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Disk',
-            prodDatabaseType: 'postgresql',
-            searchEngine: false,
-            buildTool: 'gradle',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            applicationType: 'monolith',
-            testFrameworks: ['gatling'],
-            jhiPrefix: 'jhi',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['en'],
-            serverSideOptions: ['enableSwaggerCodegen:true'],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serverPort: '8080',
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          websocket: false,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Disk',
+          prodDatabaseType: 'postgresql',
+          searchEngine: false,
+          buildTool: 'gradle',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          applicationType: 'monolith',
+          testFrameworks: ['gatling'],
+          jhiPrefix: 'jhi',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['en'],
+          serverSideOptions: ['enableSwaggerCodegen:true'],
+        });
       });
 
       it('creates expected files with OpenAPI API first enabled', () => {
@@ -1085,30 +981,26 @@ describe('JHipster generator', () => {
 
   context('Application names', () => {
     describe('package names', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.otherpackage',
-            packageFolder: 'com/otherpackage',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.otherpackage',
+          packageFolder: 'com/otherpackage',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with correct package names', () => {
@@ -1119,30 +1011,26 @@ describe('JHipster generator', () => {
     });
 
     describe('bad application name for java', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: '21Points',
-            packageName: 'com.otherpackage',
-            packageFolder: 'com/otherpackage',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: '21Points',
+          packageName: 'com.otherpackage',
+          packageFolder: 'com/otherpackage',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with default application name', () => {
@@ -1155,30 +1043,26 @@ describe('JHipster generator', () => {
     });
 
     describe('application names', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'myapplication',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'myapplication',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with correct application name', () => {
@@ -1190,28 +1074,24 @@ describe('JHipster generator', () => {
 
   context('i18n', () => {
     describe('no i18n', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'hazelcast',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: false,
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'hazelcast',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: false,
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('does not create i18n files if i18n is disabled', () => {
@@ -1221,32 +1101,28 @@ describe('JHipster generator', () => {
     });
 
     describe('with RTL support', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            clientFramework: ANGULAR,
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['ar-ly', 'en'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            skipClient: false,
-            skipUserManagement: false,
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          clientFramework: ANGULAR,
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['ar-ly', 'en'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          skipClient: false,
+          skipUserManagement: false,
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected default files for i18n with RTL support', () => {
@@ -1268,30 +1144,26 @@ describe('JHipster generator', () => {
 
   context('Auth options', () => {
     describe('JWT authentication', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr', 'en'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr', 'en'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with JWT authentication', () => {
@@ -1308,30 +1180,26 @@ describe('JHipster generator', () => {
     });
 
     describe('HTTP session authentication', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'session',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr', 'en'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'session',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr', 'en'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with HTTP session authentication', () => {
@@ -1350,35 +1218,31 @@ describe('JHipster generator', () => {
 
   context('Testing options', () => {
     describe('Protractor tests', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serverPort: '8080',
-            authenticationType: 'jwt',
-            serviceDiscoveryType: false,
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            websocket: false,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Disk',
-            prodDatabaseType: 'postgresql',
-            searchEngine: false,
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            applicationType: 'monolith',
-            testFrameworks: ['protractor'],
-            jhiPrefix: 'jhi',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['en'],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serverPort: '8080',
+          authenticationType: 'jwt',
+          serviceDiscoveryType: false,
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          websocket: false,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Disk',
+          prodDatabaseType: 'postgresql',
+          searchEngine: false,
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          applicationType: 'monolith',
+          testFrameworks: ['protractor'],
+          jhiPrefix: 'jhi',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['en'],
+        });
       });
 
       it('creates expected files with Protractor enabled', () => {
@@ -1400,35 +1264,31 @@ describe('JHipster generator', () => {
     });
 
     describe('Cucumber tests', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serverPort: '8080',
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            websocket: false,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Disk',
-            prodDatabaseType: 'postgresql',
-            searchEngine: false,
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            applicationType: 'monolith',
-            testFrameworks: ['cucumber'],
-            jhiPrefix: 'jhi',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['en'],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serverPort: '8080',
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          websocket: false,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Disk',
+          prodDatabaseType: 'postgresql',
+          searchEngine: false,
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          applicationType: 'monolith',
+          testFrameworks: ['cucumber'],
+          jhiPrefix: 'jhi',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['en'],
+        });
       });
 
       it('creates expected files with Cucumber enabled', () => {
@@ -1444,10 +1304,10 @@ describe('JHipster generator', () => {
   });
 
   context('App with skip server', () => {
-    before(done => {
-      helpers
+    before(async () => {
+      await helpers
         .run(path.join(__dirname, '../generators/app'))
-        .withOptions({ ...DEFAULT_TEST_OPTIONS, skipServer: true, db: 'postgresql', auth: 'jwt' })
+        .withOptions({ skipServer: true, db: 'postgresql', auth: 'jwt' })
         .withPrompts({
           baseName: 'jhipster',
           clientFramework: ANGULAR,
@@ -1459,8 +1319,7 @@ describe('JHipster generator', () => {
           nativeLanguage: 'en',
           languages: ['fr', 'en'],
           rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-        })
-        .on('end', done);
+        });
     });
 
     it('creates expected files for default configuration with skip server option enabled', () => {
@@ -1489,10 +1348,10 @@ describe('JHipster generator', () => {
 
   context('App with skip client', () => {
     describe('Maven', () => {
-      before(done => {
-        helpers
+      before(async () => {
+        await helpers
           .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS, skipClient: true })
+          .withOptions({ skipClient: true })
           .withPrompts({
             baseName: 'jhipster',
             packageName: 'com.mycompany.myapp',
@@ -1510,8 +1369,7 @@ describe('JHipster generator', () => {
             languages: ['fr', 'en'],
             rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
             serverSideOptions: [],
-          })
-          .on('end', done);
+          });
       });
 
       it('creates expected files for default configuration with skip client option enabled', () => {
@@ -1556,10 +1414,10 @@ describe('JHipster generator', () => {
     });
 
     describe('Gradle', () => {
-      before(done => {
-        helpers
+      before(async () => {
+        await helpers
           .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS, skipClient: true })
+          .withOptions({ skipClient: true })
           .withPrompts({
             baseName: 'jhipster',
             packageName: 'com.mycompany.myapp',
@@ -1577,8 +1435,7 @@ describe('JHipster generator', () => {
             languages: ['fr', 'en'],
             rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
             serverSideOptions: [],
-          })
-          .on('end', done);
+          });
       });
 
       it('creates expected files for default configuration with skip client option enabled', () => {
@@ -1610,11 +1467,10 @@ describe('JHipster generator', () => {
 
   context('App with skip client and skip user management', () => {
     describe('Maven', () => {
-      before(done => {
-        helpers
+      before(async () => {
+        await helpers
           .run(path.join(__dirname, '../generators/app'))
           .withOptions({
-            ...DEFAULT_TEST_OPTIONS,
             skipClient: true,
             skipUserManagement: true,
           })
@@ -1636,8 +1492,7 @@ describe('JHipster generator', () => {
             languages: ['fr', 'en'],
             rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
             serverSideOptions: [],
-          })
-          .on('end', done);
+          });
       });
 
       it('creates expected server files', () => {
@@ -1652,31 +1507,27 @@ describe('JHipster generator', () => {
 
   context('Eureka', () => {
     describe('gateway with eureka', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            applicationType: 'gateway',
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: 'eureka',
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr', 'en'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          applicationType: 'gateway',
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: 'eureka',
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr', 'en'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with the gateway application type', () => {
@@ -1688,31 +1539,27 @@ describe('JHipster generator', () => {
     });
 
     describe('gateway with eureka and rate limiting', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            applicationType: 'gateway',
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: 'eureka',
-            authenticationType: 'jwt',
-            cacheProvider: 'hazelcast',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr', 'en'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          applicationType: 'gateway',
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: 'eureka',
+          authenticationType: 'jwt',
+          cacheProvider: 'hazelcast',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr', 'en'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with the gateway application type', () => {
@@ -1724,30 +1571,26 @@ describe('JHipster generator', () => {
     });
 
     describe('microservice with eureka', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            applicationType: 'microservice',
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            serviceDiscoveryType: 'eureka',
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'postgresql',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr', 'en'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          applicationType: 'microservice',
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          serviceDiscoveryType: 'eureka',
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'postgresql',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr', 'en'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with the microservice application type', () => {
@@ -1761,30 +1604,26 @@ describe('JHipster generator', () => {
     });
 
     describe('monolith with eureka', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            applicationType: 'monolith',
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr', 'en'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: ['serviceDiscoveryType:eureka'],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          applicationType: 'monolith',
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr', 'en'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: ['serviceDiscoveryType:eureka'],
+        });
       });
 
       it('creates expected files with the monolith application type', () => {
@@ -1800,32 +1639,28 @@ describe('JHipster generator', () => {
     });
 
     describe('microservice with gradle and eureka', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            applicationType: 'microservice',
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            serviceDiscoveryType: 'eureka',
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr', 'en'],
-            buildTool: 'gradle',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-            skipClient: true,
-            skipUserManagement: true,
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          applicationType: 'microservice',
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          serviceDiscoveryType: 'eureka',
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr', 'en'],
+          buildTool: 'gradle',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+          skipClient: true,
+          skipUserManagement: true,
+        });
       });
 
       it('creates expected files with the microservice application type', () => {
@@ -1842,31 +1677,27 @@ describe('JHipster generator', () => {
 
   context('Consul', () => {
     describe('gateway with consul', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            applicationType: 'gateway',
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: 'consul',
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr', 'en'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          applicationType: 'gateway',
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: 'consul',
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr', 'en'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with the gateway application type', () => {
@@ -1878,31 +1709,27 @@ describe('JHipster generator', () => {
     });
 
     describe('gateway with consul and rate limiting', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            applicationType: 'gateway',
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: 'consul',
-            authenticationType: 'jwt',
-            cacheProvider: 'hazelcast',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr', 'en'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          applicationType: 'gateway',
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: 'consul',
+          authenticationType: 'jwt',
+          cacheProvider: 'hazelcast',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr', 'en'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with the gateway application type', () => {
@@ -1914,30 +1741,26 @@ describe('JHipster generator', () => {
     });
 
     describe('microservice with consul', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            applicationType: 'microservice',
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            serviceDiscoveryType: 'consul',
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'postgresql',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr', 'en'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          applicationType: 'microservice',
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          serviceDiscoveryType: 'consul',
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'postgresql',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr', 'en'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with the microservice application type', () => {
@@ -1952,31 +1775,27 @@ describe('JHipster generator', () => {
 
   context('No Service Discovery', () => {
     describe('gateway with no service discovery', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            applicationType: 'gateway',
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            clientFramework: ANGULAR,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr', 'en'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          applicationType: 'gateway',
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          clientFramework: ANGULAR,
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr', 'en'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with the gateway application type', () => {
@@ -1988,30 +1807,26 @@ describe('JHipster generator', () => {
     });
 
     describe('microservice with no service discovery', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS })
-          .withPrompts({
-            applicationType: 'microservice',
-            baseName: 'jhipster',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'postgresql',
-            prodDatabaseType: 'postgresql',
-            enableTranslation: true,
-            nativeLanguage: 'en',
-            languages: ['fr', 'en'],
-            buildTool: 'maven',
-            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-            serverSideOptions: [],
-          })
-          .on('end', done);
+      before(async () => {
+        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+          applicationType: 'microservice',
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          serviceDiscoveryType: false,
+          authenticationType: 'jwt',
+          cacheProvider: 'ehcache',
+          enableHibernateCache: true,
+          databaseType: 'sql',
+          devDatabaseType: 'postgresql',
+          prodDatabaseType: 'postgresql',
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr', 'en'],
+          buildTool: 'maven',
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        });
       });
 
       it('creates expected files with the microservice application type', () => {
@@ -2024,10 +1839,10 @@ describe('JHipster generator', () => {
     });
 
     describe('microservice with skip generated flag', () => {
-      before(done => {
-        helpers
+      before(async () => {
+        await helpers
           .run(path.join(__dirname, '../generators/app'))
-          .withOptions({ ...DEFAULT_TEST_OPTIONS, withGeneratedFlag: false })
+          .withOptions({ withGeneratedFlag: false })
           .withPrompts({
             applicationType: 'microservice',
             baseName: 'jhipster',
@@ -2046,8 +1861,7 @@ describe('JHipster generator', () => {
             buildTool: 'maven',
             rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
             serverSideOptions: [],
-          })
-          .on('end', done);
+          });
       });
 
       it('does have @GeneratedByJHipster annotation', () => {
