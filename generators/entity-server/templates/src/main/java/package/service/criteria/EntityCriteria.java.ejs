@@ -124,6 +124,13 @@ public class <%= entityClass %>Criteria implements Serializable, Criteria {
         return <%= filterVariable.name %>;
     }
 
+    public <%- filterVariable.filterType %> <%= filterVariable.name %>() {
+        if (<%= filterVariable.name %> == null) {
+            <%= filterVariable.name %> = new <%- filterVariable.filterType %>();
+        }
+        return <%= filterVariable.name %>;
+    }
+
     public void set<%= filterVariable.fieldInJavaBeanMethod %>(<%- filterVariable.filterType %> <%= filterVariable.name %>) {
         this.<%= filterVariable.name %> = <%= filterVariable.name %>;
     }
