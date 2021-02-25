@@ -433,11 +433,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
   _composing() {
     return {
       composeEntities() {
-        if (this.options.singleEntity) return;
         // We need to compose with others entities to update relationships.
         this.composeWithJHipster(
           'entities',
           {
+            entities: this.options.singleEntity ? [this.context.name] : undefined,
+            regenerate: true,
+            writeEveryEntity: false,
             composedEntities: [this.context.name],
             skipDbChangelog: this.options.skipDbChangelog,
             skipInstall: this.options.skipInstall,
@@ -714,6 +716,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
        * Composed generators uses context ready for the templates.
        */
       composing() {
+        if (this.options.skipWriting) return;
         const context = this.context;
         if (!context.skipServer) {
           this.composeWithJHipster('entity-server', {
@@ -758,6 +761,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
   // Public API method used by the getter and also by Blueprints
   _writing() {
+    if (this.options.skipWriting) {
+      return {};
+    }
     return {
       cleanup() {
         const context = this.context;

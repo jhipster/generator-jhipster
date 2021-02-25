@@ -25,6 +25,13 @@ module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts);
 
+    // This makes `name` a required argument.
+    this.argument('entities', {
+      type: Array,
+      required: false,
+      description: 'Entities to regenerate.',
+    });
+
     this.option('skip-db-changelog', {
       desc: 'Skip the generation of database changelog (liquibase for sql databases)',
       type: Boolean,
@@ -55,6 +62,18 @@ module.exports = class extends BaseBlueprintGenerator {
       hide: true,
     });
 
+    this.option('regenerate', {
+      desc: 'Regenerate entities without prompts',
+      type: Boolean,
+    });
+
+    this.option('write-every-entity', {
+      desc: 'Private option to write every entity file',
+      type: Boolean,
+      defaults: true,
+      hide: true,
+    });
+
     if (this.options.help) return;
 
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entities');
@@ -68,15 +87,27 @@ module.exports = class extends BaseBlueprintGenerator {
         this.fs.writeJSON(this.destinationPath(JHIPSTER_CONFIG_DIR, `${entity.name}.json`), entity);
       });
       this.jhipsterConfig.entities = entities;
+    } else {
+      this.jhipsterConfig.entities = this.jhipsterConfig.entities || [];
     }
+
     if (this.options.baseName !== undefined) {
       this.jhipsterConfig.baseName = this.options.baseName;
     }
+
     if (this.options.defaults) {
       if (!this.jhipsterConfig.baseName) {
         this.jhipsterConfig.baseName = this.getDefaultAppName();
       }
       this.setConfigDefaults(this.getDefaultConfigForApplicationType());
+    }
+
+    if (!this.options.entities || this.options.entities.length === 0) {
+      this.options.entities = this.getExistingEntityNames();
+      if (this.options.regenerate === undefined) {
+        // Execute a non interactive regeneration.
+        this.options.regenerate = true;
+      }
     }
   }
 
@@ -99,8 +130,11 @@ module.exports = class extends BaseBlueprintGenerator {
       composeEachEntity() {
         this.getExistingEntityNames().forEach(entityName => {
           if (this.options.composedEntities && this.options.composedEntities.includes(entityName)) return;
+          const selectedEntity = this.options.entities.includes(entityName);
+          const { regenerate = !selectedEntity } = this.options;
           this.composeWithJHipster('entity', {
-            regenerate: true,
+            skipWriting: !this.options.writeEveryEntity && !selectedEntity,
+            regenerate,
             skipDbChangelog: this.jhipsterConfig.databaseType === 'sql' || this.options.skipDbChangelog,
             skipInstall: true,
             arguments: [entityName],
@@ -112,13 +146,13 @@ module.exports = class extends BaseBlueprintGenerator {
         if (this.jhipsterConfig.skipServer || this.jhipsterConfig.databaseType !== 'sql' || this.options.skipDbChangelog) {
           return;
         }
-        const existingEntities = this.getExistingEntities();
+        const existingEntities = this.getExistingEntityNames();
         if (existingEntities.length === 0) {
           return;
         }
 
         this.composeWithJHipster('database-changelog', {
-          arguments: existingEntities.map(entity => entity.name),
+          entities: this.options.writeEveryEntity ? this.getExistingEntityNames() : this.options.entities,
         });
       },
     };
@@ -144,7 +178,7 @@ module.exports = class extends BaseBlueprintGenerator {
   _default() {
     return {
       composeEntitiesClient() {
-        if (this.jhipsterConfig.skipClient) return;
+        if (this.options.entities.length !== this.jhipsterConfig.entities.length) return;
         const clientEntities = this.getExistingEntityNames()
           .map(entityName => {
             const entity = this.configOptions.sharedEntities[entityName];
