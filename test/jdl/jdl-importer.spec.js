@@ -1357,7 +1357,7 @@ relationship OneToOne {
           'generator-jhipster': {
             appsFolders: ['tata', 'titi'],
             directoryPath: '../',
-            gatewayType: 'zuul',
+            gatewayType: 'SpringCloudGateway',
             clusteredDbApps: [],
             deploymentType: 'docker-compose',
             serviceDiscoveryType: 'eureka',
@@ -1406,7 +1406,7 @@ relationship OneToOne {
           'generator-jhipster': {
             appsFolders: ['tata', 'titi'],
             directoryPath: '../',
-            gatewayType: 'zuul',
+            gatewayType: 'SpringCloudGateway',
             clusteredDbApps: [],
             deploymentType: 'docker-compose',
             serviceDiscoveryType: 'eureka',
@@ -1423,7 +1423,7 @@ relationship OneToOne {
             deploymentType: 'kubernetes',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: 'test',
-            gatewayType: 'zuul',
+            gatewayType: 'SpringCloudGateway',
             ingressDomain: '',
             istio: false,
             kubernetesNamespace: 'default',
@@ -1440,7 +1440,7 @@ relationship OneToOne {
             deploymentType: 'openshift',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: 'test',
-            gatewayType: 'zuul',
+            gatewayType: 'SpringCloudGateway',
             monitoring: 'no',
             openshiftNamespace: 'default',
             serviceDiscoveryType: 'eureka',
@@ -1613,7 +1613,7 @@ relationship OneToOne {
         {
           'generator-jhipster': {
             deploymentType: 'docker-compose',
-            gatewayType: 'zuul',
+            gatewayType: 'SpringCloudGateway',
             monitoring: 'no',
             directoryPath: '../',
             appsFolders: ['store', 'invoice', 'notification', 'product'],
@@ -1626,7 +1626,7 @@ relationship OneToOne {
         {
           'generator-jhipster': {
             deploymentType: 'kubernetes',
-            gatewayType: 'zuul',
+            gatewayType: 'SpringCloudGateway',
             monitoring: 'no',
             directoryPath: '../',
             appsFolders: ['store', 'invoice', 'notification', 'product'],

@@ -78,15 +78,15 @@ async function askForGatewayType() {
       message: 'Which *type* of gateway would you like to use?',
       choices: [
         {
-          value: 'zuul',
-          name: 'JHipster gateway based on Netflix Zuul',
+          value: 'SpringCloudGateway',
+          name: 'JHipster gateway based on Spring Cloud Gateway',
         },
         {
           value: 'traefik',
           name: 'Traefik gateway (only works with Consul)',
         },
       ],
-      default: 'zuul',
+      default: 'SpringCloudGateway',
     },
   ];
 
