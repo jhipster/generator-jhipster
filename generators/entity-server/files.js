@@ -81,8 +81,8 @@ const serverFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/service/dto/EntityCriteria.java',
-          renameTo: generator => `${generator.packageFolder}/service/dto/${generator.entityClass}Criteria.java`,
+          file: 'package/service/criteria/EntityCriteria.java',
+          renameTo: generator => `${generator.packageFolder}/service/criteria/${generator.entityClass}Criteria.java`,
         },
         {
           file: 'package/service/EntityQueryService.java',
