@@ -215,7 +215,7 @@ const deploymentConfigPropsValidations = {
   },
   GATEWAY_TYPE: {
     type: 'NAME',
-    pattern: ALPHABETIC_LOWER,
+    pattern: ALPHABETIC,
     msg: 'gatewayType property',
   },
   MONITORING: {
@@ -266,7 +266,7 @@ const deploymentConfigPropsValidations = {
   },
   KUBERNETES_SERVICE_TYPE: {
     type: 'NAME',
-    pattern: ALPHANUMERIC,
+    pattern: ALPHABETIC,
     msg: 'kubernetesServiceType property',
   },
   INGRESS_DOMAIN: {
