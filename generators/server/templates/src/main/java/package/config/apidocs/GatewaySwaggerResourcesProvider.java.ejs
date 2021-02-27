@@ -41,8 +41,8 @@ public class GatewaySwaggerResourcesProvider implements SwaggerResourcesProvider
     public List<SwaggerResource> get() {
         List<SwaggerResource> swaggerResources = new ArrayList<>();
 
-            swaggerResources.add(swaggerResource(gatewayName.concat(" (default)"), "/v3/api-docs"));
-            swaggerResources.add(swaggerResource(gatewayName.concat(" (management)"), "/v3/api-docs?group=management"));
+        swaggerResources.add(swaggerResource(gatewayName.concat(" (default)"), "/v3/api-docs"));
+        swaggerResources.add(swaggerResource(gatewayName.concat(" (management)"), "/v3/api-docs?group=management"));
 
         List<String> microservices = routeLocator
             .getRoutes()

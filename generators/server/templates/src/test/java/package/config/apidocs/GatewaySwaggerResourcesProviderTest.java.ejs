@@ -52,7 +52,11 @@ class GatewaySwaggerResourcesProviderTest {
                         .predicate(exchange -> true)
                         .build(),
                     Route
-                        .async().id("ReactiveCompositeDiscoveryClient_BEER").uri(URI.create("lb://BEER")).predicate(exchange -> true).build()
+                        .async()
+                        .id("ReactiveCompositeDiscoveryClient_BEER")
+                        .uri(URI.create("lb://BEER"))
+                        .predicate(exchange -> true)
+                        .build()
                 )
             );
 
