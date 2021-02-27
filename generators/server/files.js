@@ -618,8 +618,8 @@ const serverFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/config/GatewaySwaggerResourcesProvider.java',
-          renameTo: generator => `${generator.javaDir}config/GatewaySwaggerResourcesProvider.java`,
+          file: 'package/config/apidocs/GatewaySwaggerResourcesProvider.java',
+          renameTo: generator => `${generator.javaDir}config/apidocs/GatewaySwaggerResourcesProvider.java`,
         },
         {
           file: 'package/web/filter/ModifyServersOpenApiFilter.java',
@@ -634,6 +634,10 @@ const serverFiles = {
         {
           file: 'package/web/filter/ModifyServersOpenApiFilterTest.java',
           renameTo: generator => `${generator.testDir}web/filter/ModifyServersOpenApiFilterTest.java`,
+        },
+        {
+          file: 'package/config/apidocs/GatewaySwaggerResourcesProviderTest.java',
+          renameTo: generator => `${generator.testDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`,
         },
       ],
     },
