@@ -256,7 +256,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%_ if (databaseType === 'neo4j') { _%>
     @Property("<%=fieldNameUnderscored %>")
     <%_ } _%>
-    <%_ if (fieldTypeBlobContent !== 'text' || databaseType === 'cassandra') { _%>
+    <%_ if (fieldTypeBlobContent !== 'text') { _%>
     private <%= fieldType %> <%= fieldName %>;
     <%_ } else { _%>
     private String <%= fieldName %>;
@@ -509,7 +509,7 @@ relationships.forEach((relationship, idx) => {
         const fieldName = field.fieldName;
         const fieldInJavaBeanMethod = field.fieldInJavaBeanMethod; _%>
 
-    <%_ if (fieldTypeBlobContent !== 'text' || databaseType === 'cassandra') { _%>
+    <%_ if (fieldTypeBlobContent !== 'text') { _%>
     public <%= fieldType %> get<%= fieldInJavaBeanMethod %>() {
     <%_ } else { _%>
     public String get<%= fieldInJavaBeanMethod %>() {
@@ -518,7 +518,7 @@ relationships.forEach((relationship, idx) => {
     }
     <%_ if (fluentMethods) { _%>
 
-        <%_ if (fieldTypeBlobContent !== 'text' || databaseType === 'cassandra') { _%>
+        <%_ if (fieldTypeBlobContent !== 'text') { _%>
     public <%= asEntity(entityClass) %> <%= fieldName %>(<%= fieldType %> <%= fieldName %>) {
         <%_ } else { _%>
     public <%= asEntity(entityClass) %> <%= fieldName %>(String <%= fieldName %>) {
@@ -532,7 +532,7 @@ relationships.forEach((relationship, idx) => {
     }
     <%_ } _%>
 
-    <%_ if (fieldTypeBlobContent !== 'text'|| databaseType === 'cassandra') { _%>
+    <%_ if (fieldTypeBlobContent !== 'text') { _%>
     public void set<%= fieldInJavaBeanMethod %>(<%= fieldType %> <%= fieldName %>) {
     <%_ } else { _%>
     public void set<%= fieldInJavaBeanMethod %>(String <%= fieldName %>) {
