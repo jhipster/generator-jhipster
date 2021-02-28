@@ -613,6 +613,34 @@ const serverFiles = {
         },
       ],
     },
+    {
+      condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType && generator.reactive,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/apidocs/GatewaySwaggerResourcesProvider.java',
+          renameTo: generator => `${generator.javaDir}config/apidocs/GatewaySwaggerResourcesProvider.java`,
+        },
+        {
+          file: 'package/web/filter/ModifyServersOpenApiFilter.java',
+          renameTo: generator => `${generator.javaDir}web/filter/ModifyServersOpenApiFilter.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType && generator.reactive,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/web/filter/ModifyServersOpenApiFilterTest.java',
+          renameTo: generator => `${generator.testDir}web/filter/ModifyServersOpenApiFilterTest.java`,
+        },
+        {
+          file: 'package/config/apidocs/GatewaySwaggerResourcesProviderTest.java',
+          renameTo: generator => `${generator.testDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`,
+        },
+      ],
+    },
   ],
   serverMicroservice: [
     {
