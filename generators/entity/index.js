@@ -372,6 +372,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
           if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
             field.fieldType = 'Instant';
           }
+          if (field.fieldType === 'byte[]' && context.databaseType === 'cassandra') {
+            field.fieldType = 'ByteBuffer';
+          }
 
           this._validateField(field);
 
