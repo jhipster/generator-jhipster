@@ -265,8 +265,6 @@ function cleanupOldFiles(generator) {
       generator.removeFile(`${ANGULAR_DIR}core/user/user.model.ts`);
       generator.removeFile(`${ANGULAR_DIR}core/user/user.service.ts`);
       generator.removeFile(`${ANGULAR_DIR}core/user/user.service.spec.ts`);
-      generator.removeFile(`${ANGULAR_DIR}core/config/application-config.service.ts`);
-      generator.removeFile(`${ANGULAR_DIR}core/config/application-config.service.spec.ts`);
     } else if (generator.jhipsterConfig.clientFramework === REACT) {
       generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest.conf.js`);
       generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/icons-mock.ts`);
@@ -290,6 +288,13 @@ function cleanupOldFiles(generator) {
       generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/administration/user-management/user-management.reducer.spec.ts`);
       generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/reducers/locale.spec.ts`);
       generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/reducers/user-management.spec.ts`);
+    }
+  }
+
+  if (generator.isJhipsterVersionLessThan('7.0.0-beta.2') && generator.jhipsterConfig) {
+    if (generator.jhipsterConfig.clientFramework === ANGULAR) {
+      generator.removeFile(`${ANGULAR_DIR}core/config/config.service.ts`);
+      generator.removeFile(`${ANGULAR_DIR}core/config/config.service.spec.ts`);
     }
   }
 }
