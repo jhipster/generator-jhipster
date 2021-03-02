@@ -22,6 +22,7 @@ error.subtitle = Извините, произошла ошибка.
 error.status = Статус:
 error.message = Сообщение:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> активация
 email.activation.greeting=Дорогой {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> cброс пароля
 email.reset.greeting=Дорогой {0}
 email.reset.text1=Для вашего <%= baseName %> аккаунта был запрошен cброс пароля, пожалуйста, нажмите на ссылку ниже для его cброса:
 email.reset.text2=С уважением,
+<%_ } _%>

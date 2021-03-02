@@ -12,6 +12,8 @@ const incrementalFiles = [
   `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/00000000000000_initial_schema.xml`,
 ];
 
+const DEFAULT_TEST_OPTIONS = { fromCli: true, skipInstall: true, skipChecks: true, skipPrettier: true };
+
 const baseName = 'JhipsterApp';
 
 const jdlApplication = `
@@ -39,7 +41,7 @@ relationship ManyToOne {
 describe('jhipster:app --incremental-changelog', function () {
   this.timeout(45000);
   const options = {
-    skipInstall: true,
+    ...DEFAULT_TEST_OPTIONS,
     noInsight: true,
     creationTimestamp: '2020-01-01',
     incrementalChangelog: true,

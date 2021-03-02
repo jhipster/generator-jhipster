@@ -60,10 +60,10 @@
     "test": "mocha --no-insight --forbid-only --parallel"
   },
   "dependencies": {
-    "aws-sdk": "2.848.0",
+    "aws-sdk": "2.853.0",
     "axios": "0.21.1",
     "chalk": "4.1.0",
-    "chevrotain": "7.1.1",
+    "chevrotain": "8.0.1",
     "commander": "7.1.0",
     "conf": "9.0.2",
     "didyoumean": "1.2.1",
@@ -92,15 +92,15 @@
     "through2": "4.0.2",
     "uuid": "8.3.2",
     "winston": "3.3.3",
-    "yeoman-environment": "2.10.3",
+    "yeoman-environment": "3.0.1",
     "yeoman-generator": "4.13.0"
   },
   "devDependencies": {
     "chai": "4.3.0",
     "ejs-lint": "1.1.0",
-    "eslint": "7.20.0",
+    "eslint": "7.21.0",
     "eslint-config-airbnb-base": "14.2.1",
-    "eslint-config-prettier": "7.2.0",
+    "eslint-config-prettier": "8.1.0",
     "eslint-plugin-chai-friendly": "^0.6.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-mocha": "8.0.0",
@@ -112,7 +112,7 @@
     "sinon": "9.2.4",
     "sinon-chai": "3.5.0",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "4.0.2"
+    "yeoman-test": "5.0.1"
   },
   "engines": {
     "node": ">=12.12.0",

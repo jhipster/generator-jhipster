@@ -685,6 +685,11 @@ public class CacheConfiguration {
         cacheManager.setCaches(ssmCaches);
         return cacheManager;
     }
+
+    @Bean
+    CacheFactory defaultCacheFactory(JHipsterProperties jHipsterProperties) {
+        return createCache("default", jHipsterProperties);
+    }
     <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
 
     @Bean

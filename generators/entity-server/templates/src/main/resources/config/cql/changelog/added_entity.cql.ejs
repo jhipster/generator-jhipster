@@ -41,14 +41,18 @@ CREATE TABLE IF NOT EXISTS <%= entityInstance %> (
     <%= fieldName %> date,
     <%_ } else if (fieldType === 'Instant') { _%>
     <%= fieldName %> timestamp,
+    <%_ } else if (fieldType === 'Duration') { _%>
+    <%= fieldName %> text,
     <%_ } else if (fieldType === 'ZonedDateTime') { _%>
     <%= fieldName %> tuple<timestamp,varchar>,
     <%_ } else if (fieldType === 'Boolean') { _%>
     <%= fieldName %> boolean,
     <%_ } else if (fieldType === 'ByteBuffer') { _%>
-    <%= fieldName %> blob,
         <%_ if (fieldTypeBlobContent !== 'text') { _%>
+    <%= fieldName %> blob,
     <%= fieldNameUnderscored %>_content_type text,
+        <%_ } else { _%>
+    <%= fieldName %> text,
         <%_ } _%>
     <%_ } _%>
 <%_ } _%>

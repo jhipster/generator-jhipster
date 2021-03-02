@@ -1,4 +1,4 @@
-package <%= packageName %>.service.dto;
+package <%= packageName %>.service.criteria;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -121,6 +121,13 @@ public class <%= entityClass %>Criteria implements Serializable, Criteria {
 
 <%_ filterVariables.forEach((filterVariable) => { _%>
     public <%- filterVariable.filterType %> get<%= filterVariable.fieldInJavaBeanMethod %>() {
+        return <%= filterVariable.name %>;
+    }
+
+    public <%- filterVariable.filterType %> <%= filterVariable.name %>() {
+        if (<%= filterVariable.name %> == null) {
+            <%= filterVariable.name %> = new <%- filterVariable.filterType %>();
+        }
         return <%= filterVariable.name %>;
     }
 

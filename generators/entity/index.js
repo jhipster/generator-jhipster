@@ -372,6 +372,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
           if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
             field.fieldType = 'Instant';
           }
+          if (field.fieldType === 'byte[]' && context.databaseType === 'cassandra') {
+            field.fieldType = 'ByteBuffer';
+          }
 
           this._validateField(field);
 
@@ -433,11 +436,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
   _composing() {
     return {
       composeEntities() {
-        if (this.options.singleEntity) return;
         // We need to compose with others entities to update relationships.
         this.composeWithJHipster(
           'entities',
           {
+            entities: this.options.singleEntity ? [this.context.name] : undefined,
+            regenerate: true,
+            writeEveryEntity: false,
             composedEntities: [this.context.name],
             skipDbChangelog: this.options.skipDbChangelog,
             skipInstall: this.options.skipInstall,
@@ -494,6 +499,19 @@ class EntityGenerator extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _preparing() {
     return {
+      loadRelationships() {
+        this.context.relationships.forEach(relationship => {
+          const otherEntityName = this._.upperFirst(relationship.otherEntityName);
+          const otherEntity = this.configOptions.sharedEntities[otherEntityName];
+          if (!otherEntity) {
+            throw new Error(`Error looking for otherEntity ${otherEntityName}`);
+          }
+          relationship.otherEntity = otherEntity;
+          otherEntity.otherRelationships = otherEntity.otherRelationships || [];
+          otherEntity.otherRelationships.push(relationship);
+        });
+      },
+
       prepareEntityForTemplates() {
         const entity = this.context;
         prepareEntityForTemplates(entity, this);
@@ -556,19 +574,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
           }
         });
       },
-
-      loadRelationships() {
-        this.context.relationships.forEach(relationship => {
-          const otherEntityName = this._.upperFirst(relationship.otherEntityName);
-          const otherEntity = this.configOptions.sharedEntities[otherEntityName];
-          if (!otherEntity) {
-            throw new Error(`Error looking for otherEntity ${otherEntityName}`);
-          }
-          relationship.otherEntity = otherEntity;
-          otherEntity.otherRelationships = otherEntity.otherRelationships || [];
-          otherEntity.otherRelationships.push(relationship);
-        });
-      },
     };
   }
 
@@ -615,11 +620,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
       },
 
       processDerivedPrimaryKey() {
-        if (!this.context.derivedPrimaryKey) {
+        if (!this.context.primaryKey) {
+          return;
+        }
+        if (!this.context.primaryKey.derived) {
+          const derivedFields = this.context.primaryKey.derivedFields;
+          this.context.fields.unshift(...derivedFields);
           return;
         }
         const idFields = this.context.primaryKey.derivedFields;
-        this.context.idFields = idFields;
         this.context.fields.unshift(...idFields);
       },
 
@@ -714,6 +723,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
        * Composed generators uses context ready for the templates.
        */
       composing() {
+        if (this.options.skipWriting) return;
         const context = this.context;
         if (!context.skipServer) {
           this.composeWithJHipster('entity-server', {
@@ -758,6 +768,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
   // Public API method used by the getter and also by Blueprints
   _writing() {
+    if (this.options.skipWriting) {
+      return {};
+    }
     return {
       cleanup() {
         const context = this.context;

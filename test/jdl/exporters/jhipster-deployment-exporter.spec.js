@@ -90,7 +90,7 @@ describe('JHipsterDeploymentExporter', () => {
               directoryPath: '../',
               dockerPushCommand: 'docker push',
               dockerRepositoryName: 'test',
-              gatewayType: 'zuul',
+              gatewayType: 'SpringCloudGateway',
               monitoring: 'no',
               serviceDiscoveryType: 'eureka',
             });
@@ -128,7 +128,7 @@ describe('JHipsterDeploymentExporter', () => {
               directoryPath: '../',
               dockerPushCommand: 'docker push',
               dockerRepositoryName: 'test',
-              gatewayType: 'zuul',
+              gatewayType: 'SpringCloudGateway',
               ingressDomain: '',
               istio: false,
               kubernetesNamespace: 'default',

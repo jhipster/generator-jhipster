@@ -170,7 +170,7 @@ jobs:
           mkdir -p base/generator-jhipster
           mkdir -p base/app
         working-directory: ${{ github.workspace }}
-      - uses: actions/setup-node@v2.1.4
+      - uses: actions/setup-node@v2.1.5
         with:
           node-version: ${{ matrix.node_version }}
       - uses: actions/setup-java@v1

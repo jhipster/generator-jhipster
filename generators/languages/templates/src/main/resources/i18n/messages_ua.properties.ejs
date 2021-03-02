@@ -22,6 +22,7 @@ error.subtitle = На жаль, сталася помилка.
 error.status = Статус:
 error.message = Повідомлення:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> активація
 email.activation.greeting=Шановний {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> Скидання паролю
 email.reset.greeting=Шановний {0}
 email.reset.text1=Для вашого <%= baseName %> облікового запису був створений запит на скидання пароля. Будь ласка, натисніть на посилання нижче для його активації:
 email.reset.text2=З повагою,
+<%_ } _%>

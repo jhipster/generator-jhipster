@@ -138,7 +138,7 @@ jobs:
             environment: prod
             war: 0
             e2e: 1
-            testcontainers: 1
+            testcontainers: 0
           # - app-type: webflux-mysql
           #   entity: sqllight
           #   environment: prod
@@ -174,7 +174,7 @@ jobs:
           mkdir -p base/generator-jhipster
           mkdir -p base/app
         working-directory: ${{ github.workspace }}
-      - uses: actions/setup-node@v2.1.4
+      - uses: actions/setup-node@v2.1.5
         with:
           node-version: ${{ matrix.node_version }}
       - uses: actions/setup-java@v1

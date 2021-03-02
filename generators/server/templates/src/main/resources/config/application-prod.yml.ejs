@@ -187,11 +187,13 @@ spring:
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
+  <%_ if (!skipUserManagement) { _%>
   mail:
     host: localhost
     port: 25
     username:
     password:
+  <%_ } _%>
   <%_ if (databaseType === 'sql' && reactive) { _%>
   r2dbc:
     <%_ if (prodDatabaseType === 'mysql') { _%>
@@ -351,8 +353,10 @@ jhipster:
       # security key (this key should be unique for your application, and kept secret)
       key: <%= rememberMeKey %>
 <%_ } _%>
+<%_ if (!skipUserManagement) { _%>
   mail: # specific JHipster mail property, for standard properties see MailProperties
     base-url: http://my-server-url-to-change # Modify according to your server's URL
+<%_ } _%>
   logging:
     use-json-format: false # By default, logs are not in Json format
     logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration

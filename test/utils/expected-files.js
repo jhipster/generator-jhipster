@@ -644,7 +644,11 @@ const expectedFiles = {
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProviderTest.java`,
   ],
 
-  jwtClient: [`${CLIENT_MAIN_SRC_DIR}app/core/interceptor/auth.interceptor.ts`, `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-jwt.service.ts`],
+  jwtClient: [
+    `${CLIENT_MAIN_SRC_DIR}app/core/interceptor/auth.interceptor.ts`,
+    `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-jwt.service.ts`,
+    `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-jwt.service.spec.ts`,
+  ],
 
   oauth2: [
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`,
@@ -673,6 +677,10 @@ const expectedFiles = {
     `${SERVER_MAIN_RES_DIR}config/bootstrap.yml`,
     `${SERVER_MAIN_RES_DIR}config/bootstrap-prod.yml`,
     `${SERVER_TEST_RES_DIR}config/bootstrap.yml`,
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/apidocs/GatewaySwaggerResourcesProvider.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/apidocs/GatewaySwaggerResourcesProviderTest.java`,
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/filter/ModifyServersOpenApiFilter.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/filter/ModifyServersOpenApiFilterTest.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/RouteVM.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/GatewayResource.java`,
     `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.component.ts`,
