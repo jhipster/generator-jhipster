@@ -122,7 +122,7 @@ import java.util.Set;
 <%_ } if (databaseType === 'couchbase' && hasRelationship) { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
-<%_ if ((!embedded && primaryKey.type === 'UUID') || fieldsContainUUID === true) { _%>
+<%_ if (fieldsContainUUID) { _%>
 import java.util.UUID;
 <%_ }
 Object.keys(uniqueEnums).forEach(function(element) { _%>

@@ -175,7 +175,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 <%_ } _%>
 import java.util.List;
-<%_ if (primaryKey.type === 'UUID' || fieldsContainUUID === true || (databaseType === 'sql' && hasOauthUser === true) || otherEntityPrimaryKeyTypes.includes('UUID')) { _%>
+<%_ if (fieldsContainUUID || otherEntityPrimaryKeyTypes.includes('UUID')) { _%>
 import java.util.UUID;
 <%_ } _%>
 

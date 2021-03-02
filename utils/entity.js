@@ -289,7 +289,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         relationships: idRelationships,
         ownFields: idFields,
         get fields() {
-          return [...idFields, ...this.derivedFields];
+          return [...this.ownFields, ...this.derivedFields];
         },
         get autoGenerate() {
           return this.composite ? false : this.fields[0].autoGenerate;

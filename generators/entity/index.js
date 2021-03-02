@@ -524,56 +524,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
           prepareFieldForTemplates(entity, field, this);
         });
       },
-
-      processEntityFields() {
-        const entity = this.context;
-        entity.fields.forEach(field => {
-          const fieldType = field.fieldType;
-          if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
-            entity.fieldsIsReactAvField = true;
-          }
-
-          if (field.javadoc) {
-            entity.haveFieldWithJavadoc = true;
-          }
-
-          if (fieldIsEnum(fieldType)) {
-            entity.i18nToLoad.push(field.enumInstance);
-          }
-
-          if (fieldType === 'ZonedDateTime') {
-            entity.fieldsContainZonedDateTime = true;
-            entity.fieldsContainDate = true;
-          } else if (fieldType === 'Instant') {
-            entity.fieldsContainInstant = true;
-            entity.fieldsContainDate = true;
-          } else if (fieldType === 'Duration') {
-            entity.fieldsContainDuration = true;
-          } else if (fieldType === 'LocalDate') {
-            entity.fieldsContainLocalDate = true;
-            entity.fieldsContainDate = true;
-          } else if (fieldType === 'BigDecimal') {
-            entity.fieldsContainBigDecimal = true;
-          } else if (fieldType === 'UUID') {
-            entity.fieldsContainUUID = true;
-          } else if (fieldType === 'byte[]' || fieldType === 'ByteBuffer') {
-            entity.blobFields.push(field);
-            entity.fieldsContainBlob = true;
-            if (field.fieldTypeBlobContent === 'image') {
-              entity.fieldsContainImageBlob = true;
-            }
-            if (field.fieldTypeBlobContent !== 'text') {
-              entity.fieldsContainBlobOrImage = true;
-            } else {
-              entity.fieldsContainTextBlob = true;
-            }
-          }
-
-          if (Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1) {
-            entity.validation = true;
-          }
-        });
-      },
     };
   }
 
@@ -623,13 +573,58 @@ class EntityGenerator extends BaseBlueprintGenerator {
         if (!this.context.primaryKey) {
           return;
         }
-        if (!this.context.primaryKey.derived) {
-          const derivedFields = this.context.primaryKey.derivedFields;
-          this.context.fields.unshift(...derivedFields);
-          return;
-        }
-        const idFields = this.context.primaryKey.derivedFields;
-        this.context.fields.unshift(...idFields);
+        const derivedFields = this.context.primaryKey.derivedFields;
+        this.context.fields.unshift(...derivedFields);
+      },
+
+      processEntityFields() {
+        const entity = this.context;
+        entity.fields.forEach(field => {
+          const fieldType = field.fieldType;
+          if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
+            entity.fieldsIsReactAvField = true;
+          }
+
+          if (field.javadoc) {
+            entity.haveFieldWithJavadoc = true;
+          }
+
+          if (fieldIsEnum(fieldType)) {
+            entity.i18nToLoad.push(field.enumInstance);
+          }
+
+          if (fieldType === 'ZonedDateTime') {
+            entity.fieldsContainZonedDateTime = true;
+            entity.fieldsContainDate = true;
+          } else if (fieldType === 'Instant') {
+            entity.fieldsContainInstant = true;
+            entity.fieldsContainDate = true;
+          } else if (fieldType === 'Duration') {
+            entity.fieldsContainDuration = true;
+          } else if (fieldType === 'LocalDate') {
+            entity.fieldsContainLocalDate = true;
+            entity.fieldsContainDate = true;
+          } else if (fieldType === 'BigDecimal') {
+            entity.fieldsContainBigDecimal = true;
+          } else if (fieldType === 'UUID') {
+            entity.fieldsContainUUID = true;
+          } else if (fieldType === 'byte[]' || fieldType === 'ByteBuffer') {
+            entity.blobFields.push(field);
+            entity.fieldsContainBlob = true;
+            if (field.fieldTypeBlobContent === 'image') {
+              entity.fieldsContainImageBlob = true;
+            }
+            if (field.fieldTypeBlobContent !== 'text') {
+              entity.fieldsContainBlobOrImage = true;
+            } else {
+              entity.fieldsContainTextBlob = true;
+            }
+          }
+
+          if (Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1) {
+            entity.validation = true;
+          }
+        });
       },
 
       prepareReferences() {
@@ -688,7 +683,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
       },
 
       processPrimaryKeyTypesForRelations() {
-        const types = this.context.relationships.filter(rel => rel.otherEntity.primaryKey).map(rel => rel.otherEntity.primaryKey.type);
+        const types = this.context.relationships
+          .filter(rel => rel.otherEntity.primaryKey)
+          .map(rel => rel.otherEntity.primaryKey.fields.map(f => f.fieldType))
+          .flat();
         this.context.otherEntityPrimaryKeyTypes = Array.from(new Set(types));
       },
 

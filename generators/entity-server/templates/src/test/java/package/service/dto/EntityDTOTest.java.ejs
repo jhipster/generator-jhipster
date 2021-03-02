@@ -27,10 +27,10 @@ let id2;
 if (!embedded) {
     id1 = getPrimaryKeyValue(primaryKey.type, databaseType, '1');
     id2 = getPrimaryKeyValue(primaryKey.type, databaseType, '2');
-    if (id1.includes('UUID')) { _%>
+} %>
+<%_ if (primaryKey && primaryKey.fields.some(field => field.fieldType === 'UUID')) { _%>
 import java.util.UUID;
-    <%_ }
-} _%>
+<%_ } _%>
 
 class <%= asDto(entityClass) %>Test {
 
