@@ -138,7 +138,7 @@ jobs:
             environment: prod
             war: 0
             e2e: 1
-            testcontainers: 1
+            testcontainers: 0
           # - app-type: webflux-mysql
           #   entity: sqllight
           #   environment: prod
