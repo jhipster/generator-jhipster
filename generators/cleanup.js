@@ -265,6 +265,8 @@ function cleanupOldFiles(generator) {
       generator.removeFile(`${ANGULAR_DIR}core/user/user.model.ts`);
       generator.removeFile(`${ANGULAR_DIR}core/user/user.service.ts`);
       generator.removeFile(`${ANGULAR_DIR}core/user/user.service.spec.ts`);
+      generator.removeFile(`${ANGULAR_DIR}core/config/application-config.service.ts`);
+      generator.removeFile(`${ANGULAR_DIR}core/config/application-config.service.spec.ts`);
     } else if (generator.jhipsterConfig.clientFramework === REACT) {
       generator.removeFile(`${CLIENT_TEST_SRC_DIR}jest.conf.js`);
       generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/icons-mock.ts`);
