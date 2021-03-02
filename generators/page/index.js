@@ -18,7 +18,7 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const BaseGenerator = require('../generator-base');
 const prompts = require('./prompts');
 const { writeFiles: writeVueFiles, customizeFiles: customizeVueFiles } = require('./files-vue');
 const constants = require('../generator-constants');
@@ -27,7 +27,7 @@ const { VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 let useBlueprints;
 
-module.exports = class extends BaseBlueprintGenerator {
+module.exports = class extends BaseGenerator {
   constructor(args, opts) {
     super(args, opts);
 
