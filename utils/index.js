@@ -37,6 +37,15 @@ module.exports = {
         if (key === 'otherRelationship') {
           return `[${value.relationshipName} relationship]`;
         }
+        if (key === 'otherRelationships') {
+          return '[otherRelationships]';
+        }
+        if (key === 'derivedPrimaryKey') {
+          return `[${value.type} derivedPrimaryKey]`;
+        }
+        if (key === 'derivedFields') {
+          return '[derivedFields]';
+        }
         return value;
       },
       4
