@@ -353,6 +353,11 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
           this.jhipsterConfig.skipUserManagement = true;
         }
 
+        // force reactive if gateway
+        if (this.jhipsterConfig.applicationType === 'gateway') {
+          this.reactive = true;
+        }
+
         // Set app defaults
         this.setConfigDefaults(appDefaultConfig);
       },

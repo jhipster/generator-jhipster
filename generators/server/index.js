@@ -542,12 +542,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       config.skipUserManagement = true;
     }
 
-    // force reactive if Gateway
-    // https://github.com/jhipster/generator-jhipster/issues/14102
-    if (config.applicationType === 'gateway') {
-      config.reactive = true;
-    }
-
     if (config.enableHibernateCache && ['no', 'memcached'].includes(config.cacheProvider)) {
       this.info(`Disabling hibernate cache for cache provider ${config.cacheProvider}`);
       config.enableHibernateCache = false;
