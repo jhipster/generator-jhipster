@@ -34,9 +34,11 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 <%_ if (fieldsContainDate || fieldsContainInstant || fieldsContainZonedDateTime) { _%>
 import { map } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
+<%_ } _%>
+<%_ if (fields.some(field =>['Instant', 'ZonedDateTime'].includes(field.fieldType))) { _%>
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 <%_ } _%>
-import { ConfigService } from 'app/core/config/config.service';
+
 import { createRequestOption } from 'app/core/request/request-util';
 <%_ if (searchEngine !== false) { _%>
 import { <%= searchType %> } from 'app/core/request/request.model';
@@ -68,13 +70,13 @@ export type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
 
 @Injectable({ providedIn: 'root' })
 export class <%= entityAngularName %>Service {
-    public resourceUrl = this.applicationConfigService.getEndpointFor('api/<%= entityApiUrl %>'<% if (applicationType === 'gateway' && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
   private static fb: FormBuilder;
+    public resourceUrl = this.applicationConfigService.getEndpointFor('api/<%= entityApiUrl %>'<% if (applicationType === 'gateway' && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
     <%_ if (searchEngine !== false) { _%>
     public resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/<%= entityApiUrl %>'<% if (applicationType === 'gateway' && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
     <%_ } _%>
 
-    constructor(protected http: HttpClient, private applicationConfigService: ApplicationConfigService protected fb: FormBuilder) {}
+    constructor(protected http: HttpClient, private applicationConfigService: ApplicationConfigService, protected fb: FormBuilder) {}
 
     static createEditForm(): FormGroup {
       return this.fb.group({
