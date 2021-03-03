@@ -31,13 +31,8 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     throw new Error(`Error at entity ${entityName}: could not find the entity of the relationship ${stringify(relationship)}`);
   }
   const otherEntityData = relationship.otherEntity;
-  if (otherEntityData.primaryKey) {
-    _.defaults(relationship, {
-      // otherEntityField should be id if not specified
-      otherEntityField: otherEntityData.primaryKey.name,
-    });
-    relationship.otherEntityPrimaryKeyType = otherEntityData.primaryKey.type;
-    relationship.otherEntityField = relationship.otherEntityField || otherEntityData.primaryKey.name;
+  if (!relationship.otherEntityField && otherEntityData.primaryKey) {
+    relationship.otherEntityField = otherEntityData.primaryKey.name;
   }
 
   _.defaults(relationship, {
@@ -263,7 +258,6 @@ function relationshipToReference(entity, relationship, pathPrefix = []) {
       return relationship.otherEntity.primaryKey ? relationship.otherEntity.primaryKey.type : undefined;
     },
     path: [...pathPrefix, name],
-    idReferences: relationship.otherEntity.idFields ? relationship.otherEntity.idFields.map(field => field.reference) : [],
     valueReference: relationship.relatedField && relationship.relatedField.reference,
   };
   return reference;

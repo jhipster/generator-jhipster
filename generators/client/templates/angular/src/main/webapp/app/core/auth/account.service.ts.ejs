@@ -27,7 +27,7 @@ import { Observable, ReplaySubject, of } from 'rxjs';
 import { shareReplay, tap, catchError } from 'rxjs/operators';
 
 import { StateStorageService } from 'app/core/auth/state-storage.service';
-import { ConfigService } from '../config/config.service';
+import { ApplicationConfigService } from '../config/application-config.service';
 import { Account } from 'app/core/auth/account.model';
 <%_ if (websocket === 'spring-websocket') { _%>
 import { TrackerService } from '../tracker/tracker.service';
@@ -50,12 +50,12 @@ export class AccountService {
     <%_ } _%>
     private stateStorageService: StateStorageService,
     private router: Router,
-    private configService: ConfigService
+    private applicationConfigService: ApplicationConfigService
   ) {}
 
   <%_ if (!skipUserManagement) { _%>
   save(account: Account): Observable<{}> {
-    return this.http.post(this.configService.getEndpointFor('api/account'), account);
+    return this.http.post(this.applicationConfigService.getEndpointFor('api/account'), account);
   }
   <%_ } _%>
 
@@ -120,7 +120,7 @@ export class AccountService {
   }
 
   private fetch(): Observable<Account> {
-    return this.http.get<Account>(this.configService.getEndpointFor('api/account'));
+    return this.http.get<Account>(this.applicationConfigService.getEndpointFor('api/account'));
   }
 
   private navigateToStoredUrl(): void {

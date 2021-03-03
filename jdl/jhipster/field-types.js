@@ -62,45 +62,9 @@ const CommonDBValidations = {
   Duration: new Set([REQUIRED, UNIQUE]),
 };
 
-const CassandraTypes = {
-  STRING: 'String',
-  INTEGER: 'Integer',
-  LONG: 'Long',
-  BIG_DECIMAL: 'BigDecimal',
-  FLOAT: 'Float',
-  DOUBLE: 'Double',
-  ENUM: 'Enum',
-  BOOLEAN: 'Boolean',
-  LOCAL_DATE: 'LocalDate',
-  INSTANT: 'Instant',
-  DURATION: 'Duration',
-  ZONED_DATE_TIME: 'ZonedDateTime',
-  UUID: 'UUID',
-  BYTE_BUFFER: 'ByteBuffer',
-};
-
-const CassandraValidations = {
-  String: new Set([REQUIRED, UNIQUE, MINLENGTH, MAXLENGTH, PATTERN]),
-  Integer: new Set([REQUIRED, UNIQUE, MIN, MAX]),
-  Long: new Set([REQUIRED, UNIQUE, MIN, MAX]),
-  BigDecimal: new Set([REQUIRED, UNIQUE, MIN, MAX]),
-  Float: new Set([REQUIRED, UNIQUE, MIN, MAX]),
-  Double: new Set([REQUIRED, UNIQUE, MIN, MAX]),
-  Enum: new Set([REQUIRED, UNIQUE]),
-  Boolean: new Set([REQUIRED, UNIQUE]),
-  UUID: new Set([REQUIRED, UNIQUE]),
-  LocalDate: new Set([REQUIRED, UNIQUE]),
-  Instant: new Set([REQUIRED, UNIQUE]),
-  Duration: new Set([REQUIRED, UNIQUE]),
-  ZonedDateTime: new Set([REQUIRED, UNIQUE]),
-  ByteBuffer: new Set([REQUIRED, UNIQUE, MINBYTES, MAXBYTES]),
-};
-
 module.exports = {
   CommonDBTypes,
-  CassandraTypes,
   isCommonDBType,
-  isCassandraType,
   hasValidation,
   getIsType,
   isBlobType,
@@ -111,13 +75,6 @@ function isCommonDBType(type) {
     throw new Error('The passed type must not be nil.');
   }
   return _.snakeCase(type).toUpperCase() in CommonDBTypes || type instanceof JDLEnum;
-}
-
-function isCassandraType(type) {
-  if (!type) {
-    throw new Error('The passed type must not be nil.');
-  }
-  return _.snakeCase(type).toUpperCase() in CassandraTypes || type instanceof JDLEnum;
 }
 
 function isBlobType(type) {
@@ -136,10 +93,7 @@ function hasValidation(type, validation, isAnEnum) {
   if (isAnEnum) {
     type = 'Enum';
   }
-  return (
-    (isCommonDBType(type) && CommonDBValidations[type].has(validation)) ||
-    (isCassandraType(type) && CassandraValidations[type].has(validation))
-  );
+  return isCommonDBType(type) && CommonDBValidations[type].has(validation);
 }
 
 function getIsType(databaseType, callback) {
@@ -156,11 +110,9 @@ function getIsType(databaseType, callback) {
     case MSSQL:
     case MONGODB:
     case COUCHBASE:
+    case CASSANDRA:
     case NEO4J:
       isType = isCommonDBType;
-      break;
-    case CASSANDRA:
-      isType = isCassandraType;
       break;
     case NO:
       isType = () => true;

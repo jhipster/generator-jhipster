@@ -302,8 +302,8 @@ const files = {
     {
       path: ANGULAR_DIR,
       templates: [
-        'core/config/config.service.ts',
-        'core/config/config.service.spec.ts',
+        'core/config/application-config.service.ts',
+        'core/config/application-config.service.spec.ts',
 
         'core/util/data-util.service.ts',
         'core/util/parse-links.service.ts',

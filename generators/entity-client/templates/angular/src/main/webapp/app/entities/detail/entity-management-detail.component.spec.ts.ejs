@@ -18,12 +18,12 @@
 -%>
 <%_
 const tsKeyId = generateTestEntityId(primaryKey.type);
+const testEntity = generateTestEntityPrimaryKey(primaryKey, 0);
 _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
-import { <%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ if (fieldsContainBlob) { _%>
 import { DataUtils } from 'app/core/util/data-util.service';
 <%_ } _%>
@@ -44,7 +44,7 @@ describe('Component Tests', () => {
                 providers: [
                     {
                         provide: ActivatedRoute,
-                        useValue: { data: of({ <%= entityInstance %>: new <%= entityAngularName %>(<%- tsKeyId %>) }) }
+                        useValue: { data: of({ <%= entityInstance %>: <%- testEntity %> }) }
                     }
                 ]
             })
@@ -63,7 +63,7 @@ describe('Component Tests', () => {
                 comp.ngOnInit();
 
                 // THEN
-                expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({ <%- primaryKey.name %>: <%- tsKeyId %> }));
+                expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining(<%- testEntity %>));
             });
         });
 
