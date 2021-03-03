@@ -53,10 +53,10 @@ describe('Service Tests', () => {
     });
 
     describe('resolve', () => {
-      it('should return existing I<%= entityAngularName %> for existing id', () => {
+      it('should return I<%= entityAngularName %> returned by find', () => {
         // GIVEN
-        service.find = jest.fn(id => of(new HttpResponse({ body: new <%= entityAngularName %>(id) })));
-        mockActivatedRouteSnapshot.params = { id: <%- tsKeyId %> };
+        service.find = jest.fn(<%= primaryKey.name %> => of(new HttpResponse({ body: { <%= primaryKey.name %> } })));
+        mockActivatedRouteSnapshot.params = { <%= primaryKey.name %>: <%- tsKeyId %> };
 
         // WHEN
         routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
@@ -65,7 +65,7 @@ describe('Service Tests', () => {
 
         // THEN
         expect(service.find).toBeCalledWith(<%- tsKeyId %>);
-        expect(result<%= entityAngularName %>).toEqual(new <%= entityAngularName %>(<%- tsKeyId %>));
+        expect(result<%= entityAngularName %>).toEqual({ <%= primaryKey.name %>: <%- tsKeyId %> });
       });
 
       it('should return new I<%= entityAngularName %> if id is not provided', () => {
@@ -86,7 +86,7 @@ describe('Service Tests', () => {
       it('should route to 404 page if data not found in server', () => {
         // GIVEN
         spyOn(service, 'find').and.returnValue(of(new HttpResponse({ body: null })));
-        mockActivatedRouteSnapshot.params = { id: <%- tsKeyId %> };
+        mockActivatedRouteSnapshot.params = { <%= primaryKey.name %>: <%- tsKeyId %> };
 
         // WHEN
         routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {

@@ -57,7 +57,7 @@ export class <%= entityAngularName %>Component implements OnInit {
     <%_ } _%>
 
     <%_ if (primaryKey) { _%>
-    track<%= primaryKey.nameCapitalized %>(index: number, item: I<%= entityAngularName %>): <%= tsKeyType %> {
+    track<%= primaryKey.nameCapitalized %>(index: number, item: I<%= entityAngularName %>): <%= primaryKey.tsType %> {
         return item.<%= primaryKey.name %>!;
     }
 

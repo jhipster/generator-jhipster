@@ -33,7 +33,7 @@ import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 import { AuthServerProvider } from 'app/core/auth/auth-session.service';
 <%_ } _%>
 <%_ if (authenticationType === 'session') { _%>
-import { ConfigService } from 'app/core/config/config.service';
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import { Logout } from './logout.model';
@@ -45,7 +45,7 @@ import { Login } from './login.model';
 export class LoginService {
   constructor(
 <%_ if (authenticationType === 'session') { _%>
-    private configService: ConfigService,
+    private applicationConfigService: ApplicationConfigService,
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
     private location: Location,
@@ -69,7 +69,7 @@ export class LoginService {
 
   <%_ if (authenticationType === 'session') { _%>
   logoutUrl(): string {
-    return this.configService.getEndpointFor('api/logout');
+    return this.applicationConfigService.getEndpointFor('api/logout');
   }
 
   logoutInClient(): void {

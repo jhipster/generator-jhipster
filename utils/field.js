@@ -163,9 +163,9 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     fieldNameUnderscored: _.snakeCase(field.fieldName),
     fieldNameHumanized: _.startCase(field.fieldName),
     fieldTranslationKey: `${entityWithConfig.i18nKeyPrefix}.${field.fieldName}`,
+    tsType: generator.getTypescriptKeyType(field.fieldType),
   });
   const fieldType = field.fieldType;
-
   if (field.mapstructExpression) {
     assert.equal(
       entityWithConfig.dto,
@@ -179,15 +179,20 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
   }
 
   if (field.id) {
-    if (field.autoGenerate === false || !['Long', 'UUID'].includes(field.fieldType)) {
+    if (field.autoGenerate === undefined) {
+      field.autoGenerate = !entityWithConfig.primaryKey.composite && ['Long', 'UUID'].includes(field.fieldType);
+    }
+    if (!field.autoGenerate) {
       field.liquibaseAutoIncrement = false;
       field.jpaGeneratedValue = false;
     } else if (entityWithConfig.reactive) {
       field.liquibaseAutoIncrement = true;
       field.jpaGeneratedValue = false;
+      field.readonly = true;
     } else {
       const defaultGenerationType = entityWithConfig.prodDatabaseType === 'mysql' ? 'identity' : 'sequence';
       field.jpaGeneratedValue = field.jpaGeneratedValue || field.fieldType === 'Long' ? defaultGenerationType : true;
+      field.readonly = true;
       if (field.jpaGeneratedValue === 'identity') {
         field.liquibaseAutoIncrement = true;
       }
@@ -354,4 +359,4 @@ function fieldToReference(entity, field, pathPrefix = []) {
   };
 }
 
-module.exports = { prepareFieldForTemplates, fieldIsEnum, getEnumValuesWithCustomValues };
+module.exports = { prepareFieldForTemplates, fieldIsEnum, getEnumValuesWithCustomValues, fieldToReference };
