@@ -1,52 +1,52 @@
 {
-    "fluentMethods": true,
-    "relationships": [
-        {
-            "relationshipName": "backTestMapstructOwnerOneToOne",
-            "otherEntityName": "testMapstruct",
-            "relationshipType": "one-to-one",
-            "otherEntityRelationshipName": "testMapstructOwnerOneToOne",
-            "ownerSide": false
-        },
-        {
-            "relationshipName": "backTestMapstructOwnerManyToMany",
-            "otherEntityName": "testMapstruct",
-            "relationshipType": "many-to-many",
-            "otherEntityRelationshipName": "testMapstructOwnerManyToMany",
-            "ownerSide": false
-        },
-        {
-            "relationshipName": "backTestMapstructOwnerManyToOne",
-            "otherEntityName": "testMapstruct",
-            "relationshipType": "one-to-many",
-            "otherEntityRelationshipName": "testMapstructOwnerManyToOne"
-        },
-        {
-            "relationshipName": "backTestMapstructBackOneToOne",
-            "otherEntityName": "testMapstruct",
-            "relationshipType": "one-to-one",
-            "otherEntityRelationshipName": "testMapstructBackOneToOne",
-            "ownerSide": true
-        },
-        {
-            "relationshipName": "backTestMapstructBackManyToMany",
-            "otherEntityName": "testMapstruct",
-            "relationshipType": "many-to-many",
-            "otherEntityRelationshipName": "testMapstructBackManyToMany",
-            "ownerSide": true
-        },
-        {
-            "relationshipName": "backTestMapstructBackManyToOne",
-            "otherEntityName": "testMapstruct",
-            "relationshipType": "many-to-one",
-            "otherEntityRelationshipName": "testMapstructBackManyToOne"
-        }
-    ],
-    "fields": [],
-    "changelogDate": "20160208210534",
-    "dto": "mapstruct",
-    "service": "serviceImpl",
-    "angularJSSuffix": "mySuffix",
-    "entityTableName": "test_many_many_pagination_dto",
-    "pagination": "pagination"
+  "fluentMethods": true,
+  "relationships": [
+    {
+      "relationshipName": "backTestMapstructOwnerOneToOne",
+      "otherEntityName": "testMapstruct",
+      "relationshipType": "one-to-one",
+      "otherEntityRelationshipName": "testMapstructOwnerOneToOne",
+      "ownerSide": false
+    },
+    {
+      "relationshipName": "backTestMapstructOwnerManyToMany",
+      "otherEntityName": "testMapstruct",
+      "relationshipType": "many-to-many",
+      "otherEntityRelationshipName": "testMapstructOwnerManyToMany",
+      "ownerSide": false
+    },
+    {
+      "relationshipName": "backTestMapstructOwnerManyToOne",
+      "otherEntityName": "testMapstruct",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "testMapstructOwnerManyToOne"
+    },
+    {
+      "relationshipName": "backTestMapstructBackOneToOne",
+      "otherEntityName": "testMapstruct",
+      "relationshipType": "one-to-one",
+      "otherEntityRelationshipName": "testMapstructBackOneToOne",
+      "ownerSide": true
+    },
+    {
+      "relationshipName": "backTestMapstructBackManyToMany",
+      "otherEntityName": "testMapstruct",
+      "relationshipType": "many-to-many",
+      "otherEntityRelationshipName": "testMapstructBackManyToMany",
+      "ownerSide": true
+    },
+    {
+      "relationshipName": "backTestMapstructBackManyToOne",
+      "otherEntityName": "testMapstruct",
+      "relationshipType": "many-to-one",
+      "otherEntityRelationshipName": "testMapstructBackManyToOne"
+    }
+  ],
+  "fields": [],
+  "changelogDate": "20160208210534",
+  "dto": "mapstruct",
+  "service": "serviceImpl",
+  "angularJSSuffix": "mySuffix",
+  "entityTableName": "test_many_many_pagination_dto",
+  "pagination": "pagination"
 }

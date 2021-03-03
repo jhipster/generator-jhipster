@@ -1,0 +1,100 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<div class="modal-header">
+  <h4 class="modal-title" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.title">Threads dump</h4>
+
+  <button type="button" class="close" (click)="activeModal.dismiss()">&times;</button>
+</div>
+
+<div class="modal-body">
+  <div class="mb-3">
+    <span class="badge badge-primary hand" (click)="threadStateFilter = undefined">
+      <fa-icon *ngIf="threadStateFilter === undefined" icon="check"></fa-icon>
+      All&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpAll }}</span>
+    </span>
+
+    <span class="badge badge-success hand" (click)="threadStateFilter = ThreadState.Runnable">
+      <fa-icon *ngIf="threadStateFilter === ThreadState.Runnable" icon="check"></fa-icon>
+      Runnable&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpRunnable }}</span>
+    </span>
+
+    <span class="badge badge-info hand" (click)="threadStateFilter = ThreadState.Waiting">
+      <fa-icon *ngIf="threadStateFilter === ThreadState.Waiting" icon="check"></fa-icon>
+      Waiting&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpWaiting }}</span>
+    </span>
+
+    <span class="badge badge-warning hand" (click)="threadStateFilter = ThreadState.TimedWaiting">
+      <fa-icon *ngIf="threadStateFilter === ThreadState.TimedWaiting" icon="check"></fa-icon>
+      Timed Waiting&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpTimedWaiting }}</span>
+    </span>
+
+    <span class="badge badge-danger hand" (click)="threadStateFilter = ThreadState.Blocked">
+      <fa-icon *ngIf="threadStateFilter === ThreadState.Blocked" icon="check"></fa-icon>
+      Blocked&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpBlocked }}</span>
+    </span>
+  </div>
+
+  <div class="pad" *ngFor="let thread of getThreads()">
+    <h6>
+      <span class="badge" [ngClass]="getBadgeClass(thread.threadState)">{{ thread.threadState }}</span>
+
+      &nbsp;{{ thread.threadName }} (ID {{ thread.threadId }})
+
+      <a (click)="thread.showThreadDump = !thread.showThreadDump" href="javascript:void(0);">
+        <span [hidden]="thread.showThreadDump" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.show">Show StackTrace</span>
+        <span [hidden]="!thread.showThreadDump" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.hide">Hide StackTrace</span>
+      </a>
+    </h6>
+
+    <div class="card" [hidden]="!thread.showThreadDump">
+      <div class="card-body">
+        <div *ngFor="let st of thread.stackTrace" class="break">
+          <samp>{{ st.className }}.{{ st.methodName }}(<code>{{ st.fileName }}:{{ st.lineNumber }}</code>)</samp>
+          <span class="mt-1"></span>
+        </div>
+      </div>
+    </div>
+    <table class="table table-sm table-responsive">
+      <caption>Threads dump: {{ thread.threadName }}</caption>
+      <thead>
+        <tr>
+          <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>
+          <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.blockedcount">Blocked Count</th>
+          <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.waitedtime">Waited Time</th>
+          <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.waitedcount">Waited Count</th>
+          <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.lockname">Lock Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ thread.blockedTime }}</td>
+          <td>{{ thread.blockedCount }}</td>
+          <td>{{ thread.waitedTime }}</td>
+          <td>{{ thread.waitedCount }}</td>
+          <td class="thread-dump-modal-lock" title="{{ thread.lockName }}">
+            <code>{{ thread.lockName }}</code>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary float-left" data-dismiss="modal" (click)="activeModal.dismiss()">Done</button>
+</div>

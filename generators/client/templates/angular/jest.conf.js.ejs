@@ -1,0 +1,59 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+const tsconfig = require('./tsconfig.json');
+
+module.exports = {
+  setupFiles: ['jest-date-mock'],
+  cacheDirectory: '<rootDir>/<%= BUILD_DIR %>jest-cache',
+  coverageDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/',
+  moduleNameMapper: mapTypescriptAliasToJestAlias(),
+  reporters: ['default', ['jest-junit', { outputDirectory: './<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' }]],
+  testResultsProcessor: 'jest-sonar-reporter',
+  testMatch: ['<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/**/@(*.)@(spec.ts)'],
+  testURL: 'http://localhost/',
+};
+
+function mapTypescriptAliasToJestAlias(alias = {}) {
+  const jestAliases = { ...alias };
+  if (!tsconfig.compilerOptions.paths) {
+    return jestAliases;
+  }
+  Object.entries(tsconfig.compilerOptions.paths)
+    .filter(([key, value]) => {
+      // use Typescript alias in Jest only if this has value
+      if (value.length) {
+        return true;
+      }
+      return false;
+    })
+    .map(([key, value]) => {
+      // if Typescript alias ends with /* then in Jest:
+      // - alias key must end with /(.*)
+      // - alias value must end with /$1
+      const regexToReplace = /(.*)\/\*$/;
+      const aliasKey = key.replace(regexToReplace, '$1/(.*)');
+      const aliasValue = value[0].replace(regexToReplace, '$1/$$1');
+      return [aliasKey, `<rootDir>/${aliasValue}`];
+    })
+    .reduce((aliases, [key, value]) => {
+      aliases[key] = value;
+      return aliases;
+    }, jestAliases);
+  return jestAliases;
+}

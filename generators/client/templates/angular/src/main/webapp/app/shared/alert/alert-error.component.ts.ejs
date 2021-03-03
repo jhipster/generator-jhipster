@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,13 +29,7 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-alert-error',
-  template: ` <div class="alerts" role="alert">
-    <div *ngFor="let alert of alerts" [ngClass]="setClasses(alert)">
-      <ngb-alert *ngIf="alert.message" [type]="alert.type" (closed)="close(alert)">
-        <pre [innerHTML]="alert.message"></pre>
-      </ngb-alert>
-    </div>
-  </div>`,
+  templateUrl: './alert-error.component.html',
 })
 export class AlertErrorComponent implements OnDestroy {
   alerts: Alert[] = [];
@@ -93,7 +87,7 @@ export class AlertErrorComponent implements OnDestroy {
               this.addErrorAlert(`Error on field "${fieldName}"`<% if (enableTranslation) { %>, `error.${fieldError.message as string}`, { fieldName }<% } %>);
             }
           } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-            this.addErrorAlert(httpErrorResponse.error.message<% if (enableTranslation) { %>, httpErrorResponse.error.message, httpErrorResponse.error.params<% } %>);
+            this.addErrorAlert(httpErrorResponse.error.detail ?? httpErrorResponse.error.message<% if (enableTranslation) { %>, httpErrorResponse.error.message, httpErrorResponse.error.params<% } %>);
           } else {
             this.addErrorAlert(httpErrorResponse.error<% if (enableTranslation) { %>, httpErrorResponse.error<% } %>);
           }
@@ -106,7 +100,7 @@ export class AlertErrorComponent implements OnDestroy {
 
         default:
           if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-            this.addErrorAlert(httpErrorResponse.error.message<% if (enableTranslation) { %>, httpErrorResponse.error.message<% } %>);
+            this.addErrorAlert(httpErrorResponse.error.detail ?? httpErrorResponse.error.message<% if (enableTranslation) { %>, httpErrorResponse.error.message, httpErrorResponse.error.params<% } %>);
           } else {
             this.addErrorAlert(httpErrorResponse.error<% if (enableTranslation) { %>, httpErrorResponse.error<% } %>);
           }

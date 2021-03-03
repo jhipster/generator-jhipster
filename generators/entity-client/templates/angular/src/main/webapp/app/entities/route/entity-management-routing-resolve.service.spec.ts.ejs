@@ -1,0 +1,103 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+const tsKeyId = generateTestEntityId(primaryKey.type);
+_%>
+jest.mock('@angular/router');
+
+import { TestBed } from '@angular/core/testing';
+import { HttpResponse } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { of } from 'rxjs';
+
+import { I<%= entityAngularName %>, <%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+
+import { <%= entityAngularName %>RoutingResolveService } from './<%= entityFileName %>-routing-resolve.service';
+
+describe('Service Tests', () => {
+  describe('<%= entityAngularName %> routing resolve service', () => {
+    let mockRouter: Router;
+    let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
+    let routingResolveService: <%= entityAngularName %>RoutingResolveService;
+    let service: <%= entityAngularName %>Service;
+    let result<%= entityAngularName %>: I<%= entityAngularName %> | undefined;
+
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule],
+        providers: [Router, ActivatedRouteSnapshot],
+      });
+      mockRouter = TestBed.inject(Router);
+      mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);
+      routingResolveService = TestBed.inject(<%= entityAngularName %>RoutingResolveService);
+      service = TestBed.inject(<%= entityAngularName %>Service);
+      result<%= entityAngularName %> = undefined;
+    });
+
+    describe('resolve', () => {
+      it('should return I<%= entityAngularName %> returned by find', () => {
+        // GIVEN
+        service.find = jest.fn(<%= primaryKey.name %> => of(new HttpResponse({ body: { <%= primaryKey.name %> } })));
+        mockActivatedRouteSnapshot.params = { <%= primaryKey.name %>: <%- tsKeyId %> };
+
+        // WHEN
+        routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
+          result<%= entityAngularName %> = result;
+        });
+
+        // THEN
+        expect(service.find).toBeCalledWith(<%- tsKeyId %>);
+        expect(result<%= entityAngularName %>).toEqual({ <%= primaryKey.name %>: <%- tsKeyId %> });
+      });
+
+      it('should return new I<%= entityAngularName %> if id is not provided', () => {
+        // GIVEN
+        service.find = jest.fn();
+        mockActivatedRouteSnapshot.params = {};
+
+        // WHEN
+        routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
+          result<%= entityAngularName %> = result;
+        });
+
+        // THEN
+        expect(service.find).not.toBeCalled();
+        expect(result<%= entityAngularName %>).toEqual(new <%= entityAngularName %>());
+      });
+
+      it('should route to 404 page if data not found in server', () => {
+        // GIVEN
+        spyOn(service, 'find').and.returnValue(of(new HttpResponse({ body: null })));
+        mockActivatedRouteSnapshot.params = { <%= primaryKey.name %>: <%- tsKeyId %> };
+
+        // WHEN
+        routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
+          result<%= entityAngularName %> = result;
+        });
+
+        // THEN
+        expect(service.find).toBeCalledWith(<%- tsKeyId %>);
+        expect(result<%= entityAngularName %>).toEqual(undefined);
+        expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
+      });
+    });
+  });
+});

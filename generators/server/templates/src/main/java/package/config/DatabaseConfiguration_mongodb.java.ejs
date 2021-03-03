@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,16 +20,12 @@
 package <%= packageName %>.config;
 
 import tech.jhipster.config.JHipsterConstants;
-import com.github.cloudyrock.mongock.driver.mongodb.springdata.v3.SpringDataMongo3Driver;
-import com.github.cloudyrock.spring.v5.MongockSpring5;
-import com.github.cloudyrock.spring.v5.MongockSpring5.MongockInitializingBeanRunner;
+import com.github.cloudyrock.spring.v5.EnableMongock;
 import tech.jhipster.domain.util.JSR310DateConverters.DateToZonedDateTimeConverter;
 import tech.jhipster.domain.util.JSR310DateConverters.ZonedDateTimeToDateConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
-import org.springframework.context.ApplicationContext;
 <%_ if (reactive) { _%>
 import org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfiguration;
 <%_ } _%>
@@ -48,7 +44,6 @@ import org.springframework.data.elasticsearch.repository.config.Enable<% if (rea
 <%_ if (!reactive) { _%>
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 <%_ } _%>
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -60,6 +55,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
+@EnableMongock
 <%_ if (searchEngine === 'elasticsearch') { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
 <%_ } _%>
@@ -76,8 +72,6 @@ import java.util.List;
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
 <%_ } _%>
 public class DatabaseConfiguration {
-
-    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
 
     @Bean
     public ValidatingMongoEventListener validatingMongoEventListener() {
@@ -97,17 +91,4 @@ public class DatabaseConfiguration {
         return new MongoCustomConversions(converters);
     }
 
-    @Bean
-    public MongockInitializingBeanRunner mongockInitializingBeanRunner(ApplicationContext springContext,
-              MongoTemplate mongoTemplate,
-              @Value("${mongock.lockAcquiredForMinutes:5}") long lockAcquiredForMinutes,
-              @Value("${mongock.maxWaitingForLockMinutes:3}") long maxWaitingForLockMinutes,
-              @Value("${mongock.maxTries:3}") int maxTries) {
-        SpringDataMongo3Driver driver = SpringDataMongo3Driver.withLockSetting(mongoTemplate, lockAcquiredForMinutes, maxWaitingForLockMinutes, maxTries);
-        return MongockSpring5.builder()
-            .setDriver(driver)
-            .addChangeLogsScanPackage("<%= packageName %>.config.dbmigrations")
-            .setSpringContext(springContext)
-            .buildInitializingBeanRunner();
-    }
 }

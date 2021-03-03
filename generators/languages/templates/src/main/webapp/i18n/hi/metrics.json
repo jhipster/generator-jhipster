@@ -46,7 +46,8 @@
                     "code": "Code",
                     "count": "गिनती",
                     "mean": "Mean",
-                    "average": "औसत"
+                    "average": "औसत",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "ठीक हैं",

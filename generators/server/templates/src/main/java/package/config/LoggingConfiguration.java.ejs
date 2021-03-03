@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,11 +23,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import tech.jhipster.config.JHipsterProperties;
 import org.slf4j.LoggerFactory;
-<%_ if (serviceDiscoveryType === 'consul' || (serviceDiscoveryType && ['microservice', 'gateway', 'uaa'].includes(applicationType))) { _%>
+<%_ if (serviceDiscoveryType === 'consul' || (serviceDiscoveryType && ['microservice', 'gateway'].includes(applicationType))) { _%>
 import org.springframework.beans.factory.ObjectProvider;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Value;
-<%_ if (serviceDiscoveryType && ['microservice', 'gateway', 'uaa'].includes(applicationType)) { _%>
+<%_ if (serviceDiscoveryType && ['microservice', 'gateway'].includes(applicationType)) { _%>
 import org.springframework.boot.info.BuildProperties;
 <%_ } _%>
 <%_ if (serviceDiscoveryType === "consul") { _%>
@@ -58,7 +58,7 @@ public class LoggingConfiguration {
                                 <%_ if (serviceDiscoveryType === "consul") { _%>
                                 ObjectProvider<ConsulRegistration> consulRegistration,
                                 <%_ } _%>
-                                <%_ if (serviceDiscoveryType && ['microservice', 'gateway', 'uaa'].includes(applicationType)) { _%>
+                                <%_ if (serviceDiscoveryType && ['microservice', 'gateway'].includes(applicationType)) { _%>
                                 ObjectProvider<BuildProperties> buildProperties,
                                 <%_ } _%>
                                 ObjectMapper mapper) throws JsonProcessingException {
@@ -68,7 +68,7 @@ public class LoggingConfiguration {
         Map<String, String> map = new HashMap<>();
         map.put("app_name", appName);
         map.put("app_port", serverPort);
-        <%_ if (serviceDiscoveryType && ['microservice', 'gateway', 'uaa'].includes(applicationType)) { _%>
+        <%_ if (serviceDiscoveryType && ['microservice', 'gateway'].includes(applicationType)) { _%>
         buildProperties.ifAvailable(it -> map.put("version", it.getVersion()));
         <%_ } _%>
         <%_ if (serviceDiscoveryType === 'consul') { _%>

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -47,7 +47,7 @@ export default class <%= entityClass %>UpdatePage {
     pageTitle: ElementFinder = element(by.id('<%= i18nKeyPrefix %>.home.createOrEditLabel'));
     saveButton: ElementFinder = element(by.id('save-entity'));
     cancelButton: ElementFinder = element(by.id('cancel-save'));
-    <%_ fields.forEach((field) => {
+    <%_ fields.filter(field => !field.id).forEach((field) => {
             const fieldName = field.fieldName;
             const fieldType = field.fieldType;
             const fieldIsEnum = field.fieldIsEnum;
@@ -77,7 +77,7 @@ export default class <%= entityClass %>UpdatePage {
         return this.pageTitle;
     }
 
-    <%_ fields.forEach((field) => {
+    <%_ fields.filter(field => !field.id).forEach((field) => {
             const fieldName = field.fieldName;
             const fieldNameCapitalized = field.fieldNameCapitalized;
             const fieldNameHumanized = field.fieldNameHumanized;
@@ -160,7 +160,7 @@ export default class <%= entityClass %>UpdatePage {
     }
 
     async enterData() {
-        <%_ fields.forEach((field) => {
+        <%_ fields.filter(field => !field.id).forEach((field) => {
             const fieldName = field.fieldName;
             const fieldNameCapitalized = field.fieldNameCapitalized;
             const fieldType = field.fieldType;

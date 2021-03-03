@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,8 +27,8 @@ import { Observable, ReplaySubject, of } from 'rxjs';
 import { shareReplay, tap, catchError } from 'rxjs/operators';
 
 import { StateStorageService } from 'app/core/auth/state-storage.service';
-import { SERVER_API_URL } from 'app/app.constants';
-import { Account } from 'app/core/user/account.model';
+import { ApplicationConfigService } from '../config/application-config.service';
+import { Account } from 'app/core/auth/account.model';
 <%_ if (websocket === 'spring-websocket') { _%>
 import { TrackerService } from '../tracker/tracker.service';
 <%_ } _%>
@@ -49,12 +49,13 @@ export class AccountService {
     private trackerService: TrackerService,
     <%_ } _%>
     private stateStorageService: StateStorageService,
-    private router: Router
+    private router: Router,
+    private applicationConfigService: ApplicationConfigService
   ) {}
 
   <%_ if (!skipUserManagement) { _%>
   save(account: Account): Observable<{}> {
-    return this.http.post(SERVER_API_URL + '<%- apiUaaPath %>api/account', account);
+    return this.http.post(this.applicationConfigService.getEndpointFor('api/account'), account);
   }
   <%_ } _%>
 
@@ -115,11 +116,11 @@ export class AccountService {
   }
 
   getImageUrl(): string {
-    return this.userIdentity ? this.userIdentity.imageUrl : '';
+    return this.userIdentity?.imageUrl ?? '';
   }
 
   private fetch(): Observable<Account> {
-    return this.http.get<Account>(SERVER_API_URL + '<%- apiUaaPath %>api/account');
+    return this.http.get<Account>(this.applicationConfigService.getEndpointFor('api/account'));
   }
 
   private navigateToStoredUrl(): void {

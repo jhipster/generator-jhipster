@@ -1,0 +1,107 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ if (kubernetesUseDynamicStorage) { _%>
+apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+kind: PersistentVolumeClaim
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-neo4j-pvc
+  namespace: <%= kubernetesNamespace %>
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  <%_ if (kubernetesStorageClassName) { _%>
+  storageClassName: <%= kubernetesStorageClassName %>
+  <%_ } _%>
+---
+<%_ } _%>
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+kind: Secret
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-neo4j
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    app: <%= app.baseName.toLowerCase() %>-neo4j
+type: Opaque
+data:
+  neo4j-password: <%= Buffer.from(dbRandomPassword).toString('base64') %>
+---
+apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
+kind: StatefulSet
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-neo4j
+  namespace: <%= kubernetesNamespace %>
+spec:
+  serviceName: <%= app.baseName.toLowerCase() %>-neo4j
+  replicas: 1
+  selector:
+    matchLabels:
+      app: <%= app.baseName.toLowerCase() %>-neo4j
+  template:
+    metadata:
+      labels:
+        app: <%= app.baseName.toLowerCase() %>-neo4j
+     <%_ if (istio) { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
+    spec:
+      volumes:
+      - name: data
+        <%_ if (kubernetesUseDynamicStorage) { _%>
+        persistentVolumeClaim:
+          claimName: <%= app.baseName.toLowerCase() %>-neo4j-pvc
+        <%_ } else { _%>
+        emptyDir: {}
+        <%_ } _%>
+      containers:
+      - name: neo4j
+        image: <%= DOCKER_NEO4J %>
+        env:
+        - name: NEO4J_AUTH
+          value: 'none'
+        ports:
+        - containerPort: 7474
+        - containerPort: 7687
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/neo4j/data
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+---
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+kind: Service
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-neo4j
+  namespace: <%= kubernetesNamespace %>
+spec:
+  selector:
+    app: <%= app.baseName.toLowerCase() %>-neo4j
+  ports:
+    - name: web
+      port: 7474
+    - name: bolt
+      port: 7687

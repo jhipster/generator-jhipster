@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,15 +22,15 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from 'app/shared/shared.module';
 import { MetricsComponent } from './metrics.component';
 import { metricsRoute } from './metrics.route';
-import { JvmMemoryComponent } from './jvm-memory/jvm-memory.component';
-import { JvmThreadsComponent } from './jvm-threads/jvm-threads.component';
-import { MetricsCacheComponent } from './metrics-cache/metrics-cache.component';
-import { MetricsDatasourceComponent } from './metrics-datasource/metrics-datasource.component';
-import { MetricsEndpointsRequestsComponent } from './metrics-endpoints-requests/metrics-endpoints-requests.component';
-import { MetricsGarbageCollectorComponent } from './metrics-garbagecollector/metrics-garbagecollector.component';
-import { MetricsModalThreadsComponent } from './metrics-modal-threads/metrics-modal-threads.component';
-import { MetricsRequestComponent } from './metrics-request/metrics-request.component';
-import { MetricsSystemComponent } from './metrics-system/metrics-system.component';
+import { JvmMemoryComponent } from './blocks/jvm-memory/jvm-memory.component';
+import { JvmThreadsComponent } from './blocks/jvm-threads/jvm-threads.component';
+import { MetricsCacheComponent } from './blocks/metrics-cache/metrics-cache.component';
+import { MetricsDatasourceComponent } from './blocks/metrics-datasource/metrics-datasource.component';
+import { MetricsEndpointsRequestsComponent } from './blocks/metrics-endpoints-requests/metrics-endpoints-requests.component';
+import { MetricsGarbageCollectorComponent } from './blocks/metrics-garbagecollector/metrics-garbagecollector.component';
+import { MetricsModalThreadsComponent } from './blocks/metrics-modal-threads/metrics-modal-threads.component';
+import { MetricsRequestComponent } from './blocks/metrics-request/metrics-request.component';
+import { MetricsSystemComponent } from './blocks/metrics-system/metrics-system.component';
 
 @NgModule({
   imports: [SharedModule, RouterModule.forChild([metricsRoute])],

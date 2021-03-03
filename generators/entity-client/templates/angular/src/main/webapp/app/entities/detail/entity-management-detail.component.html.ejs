@@ -1,0 +1,123 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="<%= entityInstance %>">
+            <h2 data-cy="<%= entityInstance %>DetailsHeading"><span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.detail.title"><%= entityClassHumanized %></span></h2>
+
+            <hr>
+
+            <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
+
+            <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
+
+            <dl class="row-md jh-entity-details">
+                <%_ for (const field of fields.filter(field => !field.hidden)) {
+                    const fieldName = field.fieldName;
+                    const fieldType = field.fieldType;
+                    const fieldTypeBlobContent = field.fieldTypeBlobContent;
+                _%>
+                <dt><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"<% if (field.javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.javadoc %>"<% } } %>><%= field.fieldNameHumanized %></span></dt>
+                <dd>
+                    <%_ if (field.fieldIsEnum) { _%>
+                    <span <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}</span>
+                    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
+                    <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
+                        <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)">
+                            <img [src]="'data:' + <%= entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-width: 100%;" alt="<%= entityInstance %> image"/>
+                        </a>
+                        {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
+                    </div>
+                    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'any') { _%>
+                    <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
+                        <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open">open</a>
+                        {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
+                    </div>
+                    <%_ } else if (['Duration'].includes(fieldType)) { _%>
+                    <span>{{ <%= entityInstance %>.<%= fieldName %> | duration }} ({{<%= entityInstance %>.<%= fieldName %> }})</span>
+                    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+                    <span>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}</span>
+                    <%_ } else if (fieldType === 'LocalDate') { _%>
+                    <span>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDate }}</span>
+                    <%_ } else { _%>
+                    <span>{{ <%= entityInstance %>.<%= fieldName %> }}</span>
+                    <%_ } _%>
+                </dd>
+                <%_ } _%>
+                <%_
+                for (const relationship of relationships) {
+                    const relationshipType = relationship.relationshipType;
+                    const ownerSide = relationship.ownerSide;
+                    const relationshipName = relationship.relationshipName;
+                    const relationshipFieldName = relationship.relationshipFieldName;
+                    const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+                    const relationshipNameHumanized = relationship.relationshipNameHumanized;
+                    const otherEntityName = relationship.otherEntityName;
+                    const otherEntityStateName = relationship.otherEntityStateName;
+                    const otherEntityField = relationship.otherEntityField;
+                    const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
+                    if (relationshipType === 'many-to-one'
+                        || (relationshipType === 'one-to-one' && ownerSide === true)
+                        || (relationshipType === 'many-to-many' && ownerSide === true)) {
+                _%>
+                <dt><span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.<%= relationshipName %>"><%= relationshipNameHumanized %></span></dt>
+                <dd>
+                    <%_ if (otherEntityName === 'user') { _%>
+                        <%_ if (relationshipType === 'many-to-many') { _%>
+                    <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
+                        {{ <%= relationshipFieldName %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}
+                    </span>
+                        <%_ } else { _%>
+                    <span>{{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}</span>
+                        <%_ } _%>
+                    <%_ } else { _%>
+                        <%_ if (relationshipType === 'many-to-many') { _%>
+                    <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
+                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>?.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
+                    </span>
+                        <%_ } else { _%>
+                    <div *ngIf="<%= entityInstance + '.' + relationshipFieldName %>">
+                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + '.' + relationshipFieldName + '?.' + relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}</a>
+                    </div>
+                        <%_ } _%>
+                    <%_ } _%>
+                </dd>
+                <%_
+                    }
+                }
+                _%>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info"
+                    data-cy="entityDetailsBackButton">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.back">Back</span>
+            </button>
+            <%_ if (!readOnly) { _%>
+
+            <button type="button"
+                    [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.<%= primaryKey.name %>, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.edit">Edit</span>
+            </button>
+            <%_ } _%>
+        </div>
+    </div>
+</div>

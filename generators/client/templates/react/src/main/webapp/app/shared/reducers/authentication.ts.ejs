@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -151,7 +151,7 @@ export const getSession: () => void = () => <%_ if (enableTranslation) { _%>asyn
     <%_ if (enableTranslation) { _%>
     await dispatch({
       type: ACTION_TYPES.GET_SESSION,
-      payload: axios.get('<%= apiUaaPath %>api/account')
+      payload: axios.get('api/account')
     });
 
     const { account } = getState().authentication;
@@ -162,7 +162,7 @@ export const getSession: () => void = () => <%_ if (enableTranslation) { _%>asyn
     <%_ } else { _%>
     dispatch({
       type: ACTION_TYPES.GET_SESSION,
-      payload: axios.get('<%= apiUaaPath %>api/account')
+      payload: axios.get('api/account')
     });
     <%_ } _%>
 }
@@ -193,14 +193,6 @@ export const login: (username: string, password: string, rememberMe?: boolean) =
   }
   await dispatch(getSession());
 };
-<%_ } else if (authenticationType === 'uaa') { _%>
-export const login: (username: string, password: string, rememberMe?: boolean) => void = (username, password, rememberMe = false) => async (dispatch, getState) => {
-  const result = await dispatch({
-    type: ACTION_TYPES.LOGIN,
-    payload: axios.post('auth/login', { username, password })
-  });
-  await dispatch(getSession());
-};
 <%_ } _%>
 
 <%_ if (authenticationType === 'jwt') { _%>
@@ -223,7 +215,7 @@ export const logout: () => void = () => dispatch => {
 export const logout: () => void = () => async dispatch => {
   await dispatch({
     type: ACTION_TYPES.LOGOUT,
-    payload: axios.post(<%_ if (authenticationType === 'uaa') { _%>'auth/logout'<%_ } else { _%>'api/logout'<%_ } _%>, {})
+    payload: axios.post('api/logout', {})
   });
 
   // fetch new csrf token

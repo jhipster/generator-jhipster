@@ -1,0 +1,95 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+    <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
+    <%_ if (searchEngine !== false) { _%>
+    currentSearch: string;
+    <%_ } _%>
+    isLoading = false;
+    totalItems = 0;
+    itemsPerPage = ITEMS_PER_PAGE;
+    page?: number;
+    predicate!: string;
+    ascending!: boolean;
+    ngbPaginationPage = 1;
+
+    constructor(
+        protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
+        protected activatedRoute: ActivatedRoute,
+        <%_ if (fieldsContainBlob) { _%>
+        protected dataUtils: DataUtils,
+        <%_ } _%>
+        protected router: Router,
+        <%_ if (!readOnly) { _%>
+        protected modalService: NgbModal
+        <%_ } _%>
+    ) {
+        <%_ if (searchEngine !== false) { _%>
+        this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
+        <%_ } _%>
+    }
+
+    loadPage(page?: number, dontNavigate?: boolean): void {
+        this.isLoading = true;
+        const pageToLoad: number = page ?? this.page ?? 1;
+
+        <%_ if (searchEngine !== false) { _%>
+        if (this.currentSearch) {
+            this.<%= entityInstance %>Service.search({
+                page: pageToLoad - 1,
+                query: this.currentSearch,
+                size: this.itemsPerPage,
+                sort: this.sort()}).subscribe(
+                    (res: HttpResponse<I<%= entityAngularName %>[]>) => {
+                        this.isLoading = false;
+                        this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+                    },
+                    () => {
+                        this.isLoading = false;
+                        this.onError();
+                    }
+                );
+            return;
+        }
+        <%_ } _%>
+
+        this.<%= entityInstance %>Service.query({
+            page: pageToLoad - 1,
+            size: this.itemsPerPage,
+            sort: this.sort()}).subscribe(
+                (res: HttpResponse<I<%= entityAngularName %>[]>) => {
+                    this.isLoading = false;
+                    this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+                },
+                () => {
+                    this.isLoading = false;
+                    this.onError();
+                }
+            );
+    }
+
+    <%_ if (searchEngine !== false) { _%>
+    search(query: string): void {
+        this.currentSearch = query;
+        this.loadPage(1);
+    }
+    <%_ } _%>
+
+    ngOnInit(): void {
+        this.handleNavigation();
+    }

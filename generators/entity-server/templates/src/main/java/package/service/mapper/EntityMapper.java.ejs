@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -67,16 +67,20 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityC
             qualifiedByName = qualifiedByName + (reference.collection ? 'Set' : ''); _%>
     @Mapping(target = "<%= reference.name %>", source = "<%= reference.name %>", qualifiedByName="<%= qualifiedByName %>")
     <%_ } _%>
+    <%_ for (reference of dtoReferences.filter(reference => reference.field && reference.field.mapstructExpression)) {
+            renMapAnotEnt = true; _%>
+    @Mapping( target = "<%= reference.name %>", expression = "<%- reference.field.mapstructExpression %>")
+    <%_ } _%>
     <%_ if (renMapAnotEnt === true) { _%>
-    <%= asDto(entityClass) %> toDto(<%= asEntity(entityClass) %> <%= asEntity(entityInstance) %>);
+    <%= asDto(entityClass) %> toDto(<%= asEntity(entityClass) %> s);
     <%_ } %>
 <%_ } %>
 <%_ /***** Id mapping *****/
     const otherIdReferences = otherDtoReferences.filter(r => !r.relatedReference || r.relatedReference.id);
     if (!embedded && otherIdReferences.length > 0) {
-        if (otherIdReferences.some(r => !r.collection)) { %>
+        if (otherIdReferences.some(r => !r.collection)) { _%>
 
-    @Named("id")
+    @Named("<%= primaryKey.name %>")
     @BeanMapping(ignoreByDefault = true)
         <%_ let renMapAnotEnt = false; //Render Mapping Annotation during Entity to DTO conversion?
             for (reference of dtoReferences.filter(reference => reference.id)) {
@@ -85,11 +89,11 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityC
         <%_ } _%>
         <%_ if (renMapAnotEnt === true) { _%>
     <%= asDto(entityClass) %> toDtoId(<%= asEntity(entityClass) %> <%= asEntity(entityInstance) %>);
-        <%_ } %>
-    <%_ } %>
-    <%_ if (otherIdReferences.some(r => r.collection)) { %>
+        <%_ } _%>
+    <%_ } _%>
+    <%_ if (otherIdReferences.some(r => r.collection)) { _%>
 
-    @Named("idSet")
+    @Named("<%= primaryKey.name %>Set")
     @BeanMapping(ignoreByDefault = true)
         <%_ let renMapAnotEnt = false; //Render Mapping Annotation during Entity to DTO conversion?
             for (reference of dtoReferences.filter(reference => reference.id)) {
@@ -98,16 +102,16 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityC
         <%_ } _%>
         <%_ if (renMapAnotEnt === true) { _%>
     Set<<%= asDto(entityClass) %>> toDtoIdSet(Set<<%= asEntity(entityClass) %>> <%= asEntity(entityInstance) %>);
-        <%_ } %>
-    <%_ } %>
-<%_ } %>
+        <%_ } _%>
+    <%_ } _%>
+<%_ } _%>
 <%_ if (!embedded) {
-
         // DTO -> entity mapping
         var renMapAnotDto = false;  //Render Mapping Annotation during DTO to Entity conversion?
-        if(idFields.length > 1) {
+        if(primaryKey.ownFields.length > 1) {
             renMapAnotDto = true;
-            idFields.map(field => field.reference).forEach(reference => { _%>
+            primaryKey.ownFields.map(field => field.reference).forEach(reference => { _%>
+
     @Mapping(target = "id.<%= reference.name %>", source = "<%= buildReferencePath(reference) %>")
         <%_ })
         }

@@ -7,6 +7,7 @@ const baseWebpackConfig = require('./webpack.common');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const jhiUtils = require('./utils.js');
@@ -33,6 +34,7 @@ const webpackConfig = webpackMerge(baseWebpackConfig, {
     chunkFilename: 'app/[id].[hash].chunk.js'
   },
   optimization: {
+    moduleIds: 'deterministic',
     splitChunks: {
       cacheGroups: {
         commons: {
@@ -79,10 +81,8 @@ const webpackConfig = webpackMerge(baseWebpackConfig, {
           safari10: true
         }
       },
-      cache: true,
       parallel: true,
       extractComments: false,
-      sourceMap: config.build.productionSourceMap,
     }),
     // extract css into its own file
     new MiniCssExtractPlugin({
@@ -110,18 +110,26 @@ const webpackConfig = webpackMerge(baseWebpackConfig, {
       },
     }),
     // keep module.id stable when vendor modules does not change
-    new webpack.HashedModuleIdsPlugin(),
     new ForkTsCheckerWebpackPlugin(
       {
-        vue: {
-          enabled: true,
-          compiler: 'vue-template-compiler'
+        typescript: {
+          vue: {
+            enabled: true,
+            compiler: 'vue-template-compiler',
+          },
+          diagnosticOptions: {
+            semantic: true,
+            syntactic: true,
+          },
         },
-        tslint: false,
         formatter: 'codeframe',
-        checkSyntacticErrors: false
       }
-    )
+    ),
+    new WorkboxPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true,
+      exclude: [/swagger-ui/]
+    })
   ]
 });
 

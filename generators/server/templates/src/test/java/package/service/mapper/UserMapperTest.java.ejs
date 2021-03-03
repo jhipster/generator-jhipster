@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,6 +19,7 @@
 package <%= packageName %>.service.mapper;
 
 import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import org.apache.commons.lang3.RandomStringUtils;
@@ -30,6 +31,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+<%_ if (user.primaryKey.type === 'UUID') { _%>
+import java.util.UUID;
+<%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,17 +43,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserMapperTest {
 
     private static final String DEFAULT_LOGIN = "johndoe";
-    <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
-    private static final Long DEFAULT_ID = 1L;
-    <%_ } else if (databaseType === 'couchbase') { _%>
+    <%_ if (databaseType === 'couchbase') { _%>
     private static final String DEFAULT_ID = <%= asEntity('User') %>.PREFIX + DEFAULT_LOGIN;
     <%_ } else { _%>
-    private static final String DEFAULT_ID = "id1";
+    private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- getPrimaryKeyValue(user.primaryKey.type) %>;
     <%_ } _%>
 
     private UserMapper userMapper;
     private <%= asEntity('User') %> user;
-    private <%= asDto('User') %> userDto;
+    private <%= asDto('AdminUser') %> userDto;
 
     @BeforeEach
     public void init() {
@@ -68,7 +70,7 @@ class UserMapperTest {
         <%_ } _%>
         user.setLangKey("en");
 
-        userDto = new <%= asDto('User') %>(user);
+        userDto = new <%= asDto('AdminUser') %>(user);
     }
 
     @Test
@@ -86,7 +88,7 @@ class UserMapperTest {
 
     @Test
     void userDTOsToUsersShouldMapOnlyNonNullUsers() {
-        List<<%= asDto('User') %>> usersDto = new ArrayList<>();
+        List<<%= asDto('AdminUser') %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
         usersDto.add(null);
 
@@ -103,7 +105,7 @@ class UserMapperTest {
         authoritiesAsString.add("ADMIN");
         userDto.setAuthorities(authoritiesAsString);
 
-        List<<%= asDto('User') %>> usersDto = new ArrayList<>();
+        List<<%= asDto('AdminUser') %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
 
         List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
@@ -125,7 +127,7 @@ class UserMapperTest {
     void userDTOsToUsersMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
         userDto.setAuthorities(null);
 
-        List<<%= asDto('User') %>> usersDto = new ArrayList<>();
+        List<<%= asDto('AdminUser') %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
 
         List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);

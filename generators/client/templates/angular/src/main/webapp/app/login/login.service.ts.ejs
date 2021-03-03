@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,13 +24,16 @@ import { Location } from '@angular/common';
 import { Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { Account } from 'app/core/user/account.model';
+import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 <%_ } _%>
-<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-import { AuthServerProvider<% if (authenticationType === 'uaa') { %>, LOGOUT_URL<% } %> } from 'app/core/auth/auth-jwt.service';
+<%_ if (authenticationType === 'jwt') { _%>
+import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
-import { AuthServerProvider<% if (authenticationType === 'session') { %>, LOGOUT_URL<% } %> } from 'app/core/auth/auth-session.service';
+import { AuthServerProvider } from 'app/core/auth/auth-session.service';
+<%_ } _%>
+<%_ if (authenticationType === 'session') { _%>
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import { Logout } from './logout.model';
@@ -41,11 +44,14 @@ import { Login } from './login.model';
 @Injectable({ providedIn: 'root' })
 export class LoginService {
   constructor(
-    <%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationType === 'session') { _%>
+    private applicationConfigService: ApplicationConfigService,
+<%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
     private location: Location,
-    <%_ } else { _%>
+<%_ } else { _%>
     private accountService: AccountService,
-    <%_ } _%>
+<%_ } _%>
     private authServerProvider: AuthServerProvider
   ) {}
 
@@ -61,9 +67,9 @@ export class LoginService {
   }
   <%_ } _%>
 
-  <%_ if (authenticationType === 'uaa' || authenticationType === 'session') { _%>
+  <%_ if (authenticationType === 'session') { _%>
   logoutUrl(): string {
-    return LOGOUT_URL;
+    return this.applicationConfigService.getEndpointFor('api/logout');
   }
 
   logoutInClient(): void {

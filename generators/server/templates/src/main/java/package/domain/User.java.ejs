@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -50,12 +50,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
 <%_ } _%> <%_ if (databaseType === 'neo4j') { _%>
-import org.neo4j.springframework.data.core.schema.GeneratedValue;
-import org.neo4j.springframework.data.core.schema.Id;
-import org.neo4j.springframework.data.core.schema.Node;
-import org.neo4j.springframework.data.core.schema.Property;
-import org.neo4j.springframework.data.core.schema.Relationship;
-import org.neo4j.springframework.data.core.support.UUIDStringGenerator;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Property;
+import org.springframework.data.neo4j.core.schema.Relationship;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 <%_ } _%> <%_ if (reactive && databaseType === 'cassandra') { _%>
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
@@ -86,6 +86,9 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+<%_ if (user.primaryKey.type === 'UUID') { _%>
+import java.util.UUID;
+<%_ } _%>
 
 <%_ if (databaseType === 'couchbase') { _%>
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
@@ -131,11 +134,13 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
 <%_ if (databaseType === 'sql') { _%>
     @Id
     <%_ if (!reactive) { _%>
-        <%_ if (authenticationType !== 'oauth2' && prodDatabaseType === 'mysql') { _%>
+        <%_ if (user.primaryKey.fields[0].jpaGeneratedValue === 'identity') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-        <%_ } else if (authenticationType !== 'oauth2') { _%>
+        <%_ } else if (user.primaryKey.fields[0].jpaGeneratedValue === 'sequence') { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
+        <%_ } else if (user.primaryKey.fields[0].jpaGeneratedValue) { _%>
+    @GeneratedValue
         <%_ } _%>
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch' && authenticationType === 'oauth2') { _%>
@@ -171,7 +176,7 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     <%_ } _%>
 <%_ } _%>
-    private <%= user.primaryKeyType %> id;
+    private <%= user.primaryKey.type %> id;
 
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
@@ -372,11 +377,11 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     <%_ } _%>
     private Set<PersistentToken> persistentTokens = new HashSet<>();<% } %>
 
-    public <% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>Long<% } else { %>String<% } %> getId() {
+    public <%= user.primaryKey.type %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>Long<% } else { %>String<% } %> id) {
+    public void setId(<%= user.primaryKey.type %> id) {
         this.id = id;
     }
 

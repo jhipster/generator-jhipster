@@ -46,7 +46,8 @@
                     "code": "Cod",
                     "count": "Număr",
                     "mean": "Medie aritmetică",
-                    "average": "Medie"
+                    "average": "Medie",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "Ok",

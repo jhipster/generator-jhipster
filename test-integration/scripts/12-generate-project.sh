@@ -22,21 +22,16 @@ if [[ "$JHI_ENTITY" == "jdl" ]]; then
 
 else
     #-------------------------------------------------------------------------------
-    # Generate UAA project with jhipster
-    #-------------------------------------------------------------------------------
-    if [[ "$JHI_APP" == *"uaa"* ]]; then
-        mkdir -p "$JHI_FOLDER_UAA"
-        cp -f "$JHI_SAMPLES"/uaa/.yo-rc.json "$JHI_FOLDER_UAA"/
-        cd "$JHI_FOLDER_UAA"
-        jhipster --force --no-insight --with-entities --skip-checks $@
-        ls -al "$JHI_FOLDER_UAA"
-    fi
-
-    #-------------------------------------------------------------------------------
     # Generate project with jhipster
     #-------------------------------------------------------------------------------
     mkdir -p "$JHI_FOLDER_APP"
-    cp -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json "$JHI_FOLDER_APP"/
+
+    if [[ "$JHI_GENERATE_SKIP_CONFIG" != "1" ]]; then
+        cp -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json "$JHI_FOLDER_APP"/
+    else
+        echo "skipping config file"
+    fi
+
     cd "$JHI_FOLDER_APP"
     jhipster --force --no-insight --skip-checks --with-entities $@
 

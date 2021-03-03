@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,7 +31,7 @@ import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
-import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
+import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
 <% if (reactive) { %>import reactor.core.publisher.Flux;<% } else { %>import java.util.List;<% } %>
 <%_ } _%>
 
@@ -47,7 +47,7 @@ import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<%
 <%_ } _%>
  <%_ if (databaseType === 'neo4j') { _%>
 /**
- * Spring Data Neo4j RX repository for the {@link Authority} entity.
+ * Spring Data Neo4j repository for the {@link Authority} entity.
  */
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>

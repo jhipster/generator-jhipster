@@ -1,0 +1,150 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+jest.mock('app/core/auth/account.service');
+
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { TestBed, waitForAsync } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { Subject } from 'rxjs';
+
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/auth/account.model';
+
+import { HasAnyAuthorityDirective } from './has-any-authority.directive';
+
+@Component({
+  template: ` <div *<%= jhiPrefix %>HasAnyAuthority="'ROLE_ADMIN'" #content></div> `,
+})
+class TestHasAnyAuthorityDirectiveComponent {
+  @ViewChild('content', { static: false })
+  content?: ElementRef;
+}
+
+describe('HasAnyAuthorityDirective tests', () => {
+  let mockAccountService: AccountService;
+  const authenticationState = new Subject<Account | null>();
+
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [HasAnyAuthorityDirective, TestHasAnyAuthorityDirectiveComponent],
+        providers: [AccountService],
+      });
+    })
+  );
+
+  beforeEach(() => {
+    mockAccountService = TestBed.inject(AccountService);
+    mockAccountService.getAuthenticationState = jest.fn(() => authenticationState.asObservable());
+  });
+
+  describe('set <%= jhiPrefix %>HasAnyAuthority', () => {
+    it('should show restricted content to user if user has required role', () => {
+      // GIVEN
+      mockAccountService.hasAnyAuthority = jest.fn(() => true);
+      const fixture = TestBed.createComponent(TestHasAnyAuthorityDirectiveComponent);
+      const comp = fixture.componentInstance;
+
+      // WHEN
+      fixture.detectChanges();
+
+      // THEN
+      expect(comp.content).toBeDefined();
+    });
+
+    it('should not show restricted content to user if user has not required role', () => {
+      // GIVEN
+      mockAccountService.hasAnyAuthority = jest.fn(() => false);
+      const fixture = TestBed.createComponent(TestHasAnyAuthorityDirectiveComponent);
+      const comp = fixture.componentInstance;
+
+      // WHEN
+      fixture.detectChanges();
+
+      // THEN
+      expect(comp.content).toBeUndefined();
+    });
+  });
+
+  describe('change authorities', () => {
+    it('should show or not show restricted content correctly if user authorities are changing', () => {
+      // GIVEN
+      mockAccountService.hasAnyAuthority = jest.fn(() => true);
+      const fixture = TestBed.createComponent(TestHasAnyAuthorityDirectiveComponent);
+      const comp = fixture.componentInstance;
+
+      // WHEN
+      fixture.detectChanges();
+
+      // THEN
+      expect(comp.content).toBeDefined();
+
+      // GIVEN
+      mockAccountService.hasAnyAuthority = jest.fn(() => false);
+
+      // WHEN
+      authenticationState.next();
+      fixture.detectChanges();
+
+      // THEN
+      expect(comp.content).toBeUndefined();
+
+      // GIVEN
+      mockAccountService.hasAnyAuthority = jest.fn(() => true);
+
+      // WHEN
+      authenticationState.next();
+      fixture.detectChanges();
+
+      // THEN
+      expect(comp.content).toBeDefined();
+    });
+  });
+
+  describe('ngOnDestroy', () => {
+    it('should destroy authentication state subscription on component destroy', () => {
+      // GIVEN
+      mockAccountService.hasAnyAuthority = jest.fn(() => true);
+      const fixture = TestBed.createComponent(TestHasAnyAuthorityDirectiveComponent);
+      const div = fixture.debugElement.queryAllNodes(By.directive(HasAnyAuthorityDirective))[0];
+      const hasAnyAuthorityDirective = div.injector.get(HasAnyAuthorityDirective);
+
+      // WHEN
+      fixture.detectChanges();
+
+      // THEN
+      expect(mockAccountService.hasAnyAuthority).toHaveBeenCalled();
+
+      // WHEN
+      jest.clearAllMocks();
+      authenticationState.next();
+
+      // THEN
+      expect(mockAccountService.hasAnyAuthority).toHaveBeenCalled();
+
+      // WHEN
+      jest.clearAllMocks();
+      hasAnyAuthorityDirective.ngOnDestroy();
+      authenticationState.next();
+
+      // THEN
+      expect(mockAccountService.hasAnyAuthority).not.toHaveBeenCalled();
+    });
+  });
+});

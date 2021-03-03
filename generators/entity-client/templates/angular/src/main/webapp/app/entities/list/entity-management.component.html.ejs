@@ -1,0 +1,212 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+  let refreshMethod;
+  if (pagination === 'pagination') {
+    refreshMethod = 'loadPage()';
+  } else if (pagination === 'infinite-scroll') {
+    refreshMethod = 'reset()';
+  } else if (pagination === 'no') {
+    refreshMethod = 'loadAll()';
+  }
+_%>
+<div>
+    <h2 id="page-heading" data-cy="<%= entityClass %>Heading">
+        <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></span>
+
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-info mr-2" (click)="<%= refreshMethod %>" [disabled]="isLoading">
+                <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+                <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</span>
+            </button>
+            <%_ if (!readOnly) { _%>
+
+            <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityUrl %>/new']">
+                <fa-icon icon="plus"></fa-icon>
+                <span <% if (searchEngine !== false) { %>class="hidden-sm-down" <% } %> <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.createLabel">
+                Create a new <%= entityClassHumanized %>
+                </span>
+            </button>
+            <%_ } _%>
+        </div>
+    </h2>
+
+    <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
+
+    <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
+    <%_ if (searchEngine !== false) { _%>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <form name="searchForm" class="form-inline">
+                <div class="input-group w-100 mt-3">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="<% if (enableTranslation) { %>{{ '<%= i18nKeyPrefix %>.home.search' | translate }}<% } else { %>Query<% } %>">
+
+                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                        <fa-icon icon="search"></fa-icon>
+                    </button>
+
+                    <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+                        <fa-icon icon="trash-alt"></fa-icon>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <%_ } _%>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="<%= entityInstancePlural %>?.length === 0">
+        <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.notFound">No <%= entityInstancePlural %> found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr<% if (pagination !== 'no') { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="<%= pagination !== 'infinite-scroll' ? 'loadPage.bind(this)' : 'reset.bind(this)'%>"<% } %>>
+                    <%_ for (const field of fields.filter(field => !field.hidden)) { _%>
+                    <th scope="col"<% if (pagination !== 'no') { %> <%= jhiPrefix %>SortBy="<%= field.fieldName %>"<% } %>><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%= field.fieldNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                    <%_ } _%>
+                    <%_ for (const relationship of relationships) { _%>
+                        <%_ if (relationship.relationshipType === 'many-to-one'
+                                || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true)
+                                || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === true && pagination === 'no')) {
+                            const fieldName = "." + relationship.otherEntityField;
+                        _%>
+                    <th scope="col" <% if (pagination !== 'no') { %> <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>"<% } %>><span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%= relationship.relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                        <%_ } _%>
+                    <%_ } _%>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody<% if (pagination === 'infinite-scroll') { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0"<% } %>>
+                <tr *ngFor="let <%= entityInstance %> of <%= entityInstancePlural %>; trackBy: track<%= primaryKey.nameCapitalized %>" data-cy="entityTable">
+                <%_
+                const routerLink = ` [routerLink]="['/${ entityUrl }', ${entityInstance}.${primaryKey.name}, 'view']"`;
+                for (field of fields.filter(field => !field.hidden)) {
+                    const fieldName = field.fieldName;
+                    const fieldNameCapitalized = field.fieldNameCapitalized;
+                    const fieldType = field.fieldType;
+                    const fieldTypeBlobContent = field.fieldTypeBlobContent;
+                _%>
+                    <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
+                    <td>
+                        <a *ngIf="<%= entityInstance %>.<%= fieldName %>" (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)">
+                            <img [src]="'data:' + <%= entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-height: 30px;" alt="<%= entityInstance %> image"/>
+                        </a>
+                        <span *ngIf="<%= entityInstance %>.<%= fieldName %>">{{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}</span>
+                    </td>
+                    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'any') { _%>
+                    <td>
+                        <a *ngIf="<%= entityInstance %>.<%= fieldName %>" (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open">open</a>
+                        <span *ngIf="<%= entityInstance %>.<%= fieldName %>">{{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}</span>
+                    </td>
+                    <%_ } else if (field.fieldIsEnum) { _%>
+                    <td<% if (field.id) { %>><a<%- routerLink %><% } %> <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
+                    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+                    <td>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}</td>
+                    <%_ } else if (fieldType === 'LocalDate') { _%>
+                    <td>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDate }}</td>
+                    <%_ } else if (fieldType === 'Duration') { _%>
+                    <td title="{{ <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> | duration }}</td>
+                    <%_ } else { _%>
+                    <td<% if (field.id) { %>><a<%- routerLink %><% } %>>{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
+                    <%_ } _%>
+                <%_ } _%>
+                <%_ for (const relationship of relationships) {
+                    const relationshipType = relationship.relationshipType;
+                    const ownerSide = relationship.ownerSide;
+                    const relationshipFieldName = relationship.relationshipFieldName;
+                    const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+                    const otherEntityName = relationship.otherEntityName;
+                    const otherEntityStateName = relationship.otherEntityStateName;
+                    const otherEntityField = relationship.otherEntityField;
+                    const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
+                _%>
+                    <%_ if (relationshipType === 'many-to-one'
+                            || (relationshipType === 'one-to-one' && ownerSide === true)
+                            || (relationshipType === 'many-to-many' && ownerSide === true && pagination === 'no')) {
+                    _%>
+                    <td>
+                        <%_ if (otherEntityName === 'user') { _%>
+                            <%_ if (relationshipType === 'many-to-many') { _%>
+                        <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
+                            {{ <%= relationshipFieldName %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}
+                        </span>
+                            <%_ } else { _%>
+                        {{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}
+                            <%_ } _%>
+                        <%_ } else { _%>
+                            <%_ if (relationshipType === 'many-to-many') { _%>
+                        <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
+                            <a class="form-control-static" [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
+                        </span>
+                            <%_ } else { _%>
+                        <div *ngIf="<%= entityInstance + "." + relationshipFieldName %>">
+                            <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance %>.<%= relationshipFieldName %>?.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}</a>
+                        </div>
+                            <%_ } _%>
+                        <%_ } _%>
+                    </td>
+                    <%_ } _%>
+                <%_ } _%>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.<%= primaryKey.name %>, 'view']"
+                                    class="btn btn-info btn-sm"
+                                    data-cy="entityDetailsButton">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.view">View</span>
+                            </button>
+                            <%_ if (!readOnly) { _%>
+
+                            <button type="submit"
+                                    [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.<%= primaryKey.name %>, 'edit']"
+                                    class="btn btn-primary btn-sm"
+                                    data-cy="entityEditButton">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.edit">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(<%= entityInstance %>)"
+                                    class="btn btn-danger btn-sm"
+                                    data-cy="entityDeleteButton">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.delete">Delete</span>
+                            </button>
+                            <%_ } _%>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <%_ if (pagination === 'pagination') { _%>
+
+    <div *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
+        <div class="row justify-content-center">
+            <<%= jhiPrefixDashed %>-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></<%= jhiPrefixDashed %>-item-count>
+        </div>
+
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+        </div>
+    </div>
+    <%_ } _%>
+</div>

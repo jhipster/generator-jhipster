@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,11 +21,12 @@ import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRouteSnapshot, NavigationEnd, NavigationError } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import * as dayjs from 'dayjs';
 <%_ } _%>
 
 import { AccountService } from 'app/core/auth/account.service';
 <%_ if (enableI18nRTL) { _%>
-import { FindLanguageFromKeyPipe } from 'app/shared/find-language-from-key.pipe';
+import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-key.pipe';
 <%_ } _%>
 
 @Component({
@@ -70,7 +71,7 @@ export class MainComponent implements OnInit {
     <%_ if (enableTranslation) { _%>
     this.translateService.onLangChange.subscribe((langChangeEvent: LangChangeEvent) => {
       this.updateTitle();
-
+      dayjs.locale(langChangeEvent.lang);
       this.renderer.setAttribute(document.querySelector('html'), 'lang', langChangeEvent.lang);
 
       <%_ if (enableI18nRTL) { _%>
@@ -91,7 +92,7 @@ export class MainComponent implements OnInit {
   private updateTitle(): void {
     let pageTitle = this.getPageTitle(this.router.routerState.snapshot.root);
     if (!pageTitle) {
-      pageTitle = '<% if (enableTranslation) { %>global.title<% } else { %><%= capitalizedBaseName %><% } %>';
+      pageTitle = '<% if (enableTranslation) { %>global.title<% } else { %><%= humanizedBaseName %><% } %>';
     }
     <%_ if (enableTranslation) { _%>
     this.translateService.get(pageTitle).subscribe(title => this.titleService.setTitle(title));
