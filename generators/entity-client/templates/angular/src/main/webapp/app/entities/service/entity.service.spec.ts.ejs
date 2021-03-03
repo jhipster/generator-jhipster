@@ -37,6 +37,7 @@ import { <%- importedType %> } from '<%- importedPath %>';
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from '../<%= entityFileName %>.model';
 
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
+import {FormBuilder} from "@angular/forms";
 
 describe('Service Tests', () => {
     describe('<%= entityAngularName %> Service', () => {
@@ -52,7 +53,8 @@ describe('Service Tests', () => {
             TestBed.configureTestingModule({
                 imports: [
                     HttpClientTestingModule
-                ]
+                ],
+                providers: [FormBuilder],
             });
             expectedResult = null;
             service = TestBed.inject(<%= entityAngularName %>Service);
