@@ -346,17 +346,16 @@ public class CacheConfiguration {
             config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
         }
         <%_ } _%>
-        config.getMapConfigs().put("default", initializeDefaultMapConfig(jHipsterProperties));
-
         config.setManagementCenterConfig(new ManagementCenterConfig());
+        config.addMapConfig(initializeDefaultMapConfig(jHipsterProperties));
         <%_ if (enableHibernateCache) { _%>
-        config.getMapConfigs().put("<%= packageName %>.domain.*", initializeDomainMapConfig(jHipsterProperties));
+        config.addMapConfig(initializeDomainMapConfig(jHipsterProperties));
         <%_ } _%>
         return Hazelcast.newHazelcastInstance(config);
     }
 
     private MapConfig initializeDefaultMapConfig(JHipsterProperties jHipsterProperties) {
-        MapConfig mapConfig = new MapConfig();
+        MapConfig mapConfig = new MapConfig("default");
 
         /*
         Number of backups. If 1 is set as the backup-count for example,
@@ -387,7 +386,7 @@ public class CacheConfiguration {
     <%_ if (cacheProvider === 'hazelcast') { _%>
 
     private MapConfig initializeDomainMapConfig(JHipsterProperties jHipsterProperties) {
-        MapConfig mapConfig = new MapConfig();
+        MapConfig mapConfig = new MapConfig("<%= packageName %>.domain.*");
         mapConfig.setTimeToLiveSeconds(jHipsterProperties.getCache().getHazelcast().getTimeToLiveSeconds());
         return mapConfig;
     }
