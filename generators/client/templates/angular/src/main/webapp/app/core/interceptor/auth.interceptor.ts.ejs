@@ -21,18 +21,18 @@ import { Observable } from 'rxjs';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 
-import { ConfigService } from '../config/config.service';
+import { ApplicationConfigService } from '../config/application-config.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(
     private localStorage: LocalStorageService,
     private sessionStorage: SessionStorageService,
-    private configService: ConfigService
+    private applicationConfigService: ApplicationConfigService
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const serverApiUrl = this.configService.getEndpointFor('');
+    const serverApiUrl = this.applicationConfigService.getEndpointFor('');
     if (!request.url || (request.url.startsWith('http') && !(serverApiUrl && request.url.startsWith(serverApiUrl)))) {
       return next.handle(request);
     }

@@ -23,7 +23,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 <%_ } _%>
 
-import { ConfigService } from '../config/config.service';
+import { ApplicationConfigService } from '../config/application-config.service';
 <%_ if (authenticationType === 'oauth2') { _%>
 import { Logout } from 'app/login/logout.model';
 <%_ } else { _%>
@@ -32,7 +32,7 @@ import { Login } from 'app/login/login.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthServerProvider {
-  constructor(private http: HttpClient, private configService: ConfigService) {}
+  constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
   <%_ if (authenticationType !== 'oauth2') { _%>
 
@@ -45,15 +45,15 @@ export class AuthServerProvider {
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post(this.configService.getEndpointFor('api/authentication'), data, { headers });
+    return this.http.post(this.applicationConfigService.getEndpointFor('api/authentication'), data, { headers });
   }
 
   logout(): Observable<void> {
     // logout from the server
-    return this.http.post(this.configService.getEndpointFor('api/logout'), {}).pipe(
+    return this.http.post(this.applicationConfigService.getEndpointFor('api/logout'), {}).pipe(
       map(() => {
         // to get a new csrf token call the api
-        this.http.get(this.configService.getEndpointFor('api/account')).subscribe();
+        this.http.get(this.applicationConfigService.getEndpointFor('api/account')).subscribe();
       })
     );
   }
@@ -61,7 +61,7 @@ export class AuthServerProvider {
   <%_ } else { _%>
 
   logout(): Observable<Logout> {
-    return this.http.post<Logout>(this.configService.getEndpointFor('api/logout'), {});
+    return this.http.post<Logout>(this.applicationConfigService.getEndpointFor('api/logout'), {});
   }
 
   <%_ } _%>
