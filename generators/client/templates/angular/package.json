@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "11.2.3",
+    "@angular/common": "11.2.4",
     "bootstrap": "4.6.0",
     "@fortawesome/angular-fontawesome": "0.8.2",
     "@fortawesome/fontawesome-svg-core": "1.2.34",
