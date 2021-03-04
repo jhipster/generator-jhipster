@@ -29,6 +29,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 
 import { <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
+import {FormBuilder} from "@angular/forms";
 
 describe('Component Tests', () => {
     describe('<%= entityAngularName %> Management Delete Component', () => {
@@ -41,7 +42,7 @@ describe('Component Tests', () => {
             TestBed.configureTestingModule({
                 imports: [HttpClientTestingModule],
                 declarations: [<%= entityAngularName %>DeleteDialogComponent],
-                providers: [NgbActiveModal]
+                providers: [NgbActiveModal, FormBuilder]
             })
             .overrideTemplate(<%= entityAngularName %>DeleteDialogComponent, '')
             .compileComponents();

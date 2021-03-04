@@ -31,6 +31,7 @@ import { I<%= entityAngularName %>, <%= entityAngularName %> } from '../<%= enti
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 
 import { <%= entityAngularName %>RoutingResolveService } from './<%= entityFileName %>-routing-resolve.service';
+import {FormBuilder} from "@angular/forms";
 
 describe('Service Tests', () => {
   describe('<%= entityAngularName %> routing resolve service', () => {
@@ -43,7 +44,7 @@ describe('Service Tests', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
-        providers: [Router, ActivatedRouteSnapshot],
+        providers: [Router, ActivatedRouteSnapshot, FormBuilder],
       });
       mockRouter = TestBed.inject(Router);
       mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);
