@@ -189,6 +189,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
   _.defaults(relationship, {
     otherEntityStateName: _.kebabCase(relationship.otherEntityAngularName),
     jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering && !entityWithConfig.reactive,
+    unique: relationship.id || (relationship.ownerSide && relationship.relationshipType === 'one-to-one'),
   });
 
   if (!generator.isBuiltInUser(otherEntityName)) {
