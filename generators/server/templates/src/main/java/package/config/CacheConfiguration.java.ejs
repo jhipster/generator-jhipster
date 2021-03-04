@@ -113,7 +113,6 @@ import org.slf4j.LoggerFactory;
 import tech.jhipster.config.JHipsterProperties;
 import java.util.concurrent.TimeUnit;
 import org.hibernate.cfg.AvailableSettings;
-import org.infinispan.eviction.EvictionType;
 import org.infinispan.manager.EmbeddedCacheManager;
 import org.infinispan.spring.starter.embedded.InfinispanCacheConfigurer;
 import org.infinispan.spring.starter.embedded.InfinispanGlobalConfigurer;
@@ -521,17 +520,17 @@ public class CacheConfiguration {
             manager.defineConfiguration("local-app-data", new ConfigurationBuilder()
                 .clustering().cacheMode(CacheMode.LOCAL)
                 .statistics().enabled(cacheInfo.isStatsEnabled())
-                .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getLocal().getMaxEntries()).expiration()
+                .memory().maxCount(cacheInfo.getLocal().getMaxEntries()).expiration()
                 .lifespan(cacheInfo.getLocal().getTimeToLiveSeconds(), TimeUnit.SECONDS).build());
             manager.defineConfiguration("dist-app-data", new ConfigurationBuilder()
                 .clustering().cacheMode(CacheMode.DIST_SYNC).hash().numOwners(cacheInfo.getDistributed().getInstanceCount())
                 .statistics().enabled(cacheInfo.isStatsEnabled())
-                .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getDistributed().getMaxEntries()).expiration()
+                .memory().maxCount(cacheInfo.getDistributed().getMaxEntries()).expiration()
                 .lifespan(cacheInfo.getDistributed().getTimeToLiveSeconds(), TimeUnit.SECONDS).build());
             manager.defineConfiguration("repl-app-data", new ConfigurationBuilder()
                 .clustering().cacheMode(CacheMode.REPL_SYNC)
                 .statistics().enabled(cacheInfo.isStatsEnabled())
-                .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getReplicated().getMaxEntries()).expiration()
+                .memory().maxCount(cacheInfo.getReplicated().getMaxEntries()).expiration()
                 .lifespan(cacheInfo.getReplicated().getTimeToLiveSeconds(), TimeUnit.SECONDS).build());
 
             // initialize Hibernate L2 cache configuration templates
@@ -569,7 +568,7 @@ public class CacheConfiguration {
             manager.defineConfiguration("oAuth2Authentication", new ConfigurationBuilder()
                 .clustering().cacheMode(CacheMode.LOCAL)
                 .statistics().enabled(cacheInfo.isStatsEnabled())
-                .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getLocal().getMaxEntries()).expiration()
+                .memory().maxCount(cacheInfo.getLocal().getMaxEntries()).expiration()
                 .lifespan(cacheInfo.getLocal().getTimeToLiveSeconds(), TimeUnit.SECONDS).build());
             <%_ } _%>
 
