@@ -147,6 +147,16 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
   const handleClose = () => {
     props.history.push('/<%= entityFileName %>'<%_ if (pagination === 'pagination') { _%> + props.location.search<%_ } _%>);
   }
+    
+  <%_ relFieldNames.forEach(val => { _%>
+    <%_ if (val.relationshipType === 'many-to-one')  { _%>
+  useEffect(() => {
+    if (<%= val.relationshipFieldName %>Id === '0' && !isNew) {
+      set<%= upperFirstCamelCase(val.relationshipName) %>Id(<%= entityInstance %>Entity?.<%= val.relationshipName %>?.id.toString());
+    }
+  }, [<%= entityInstance %>Entity]);
+    <%_ } _%>
+  <%_ }) _%>
 
   useEffect(() => {
     <%_ if (pagination === 'infinite-scroll') { _%>
@@ -198,6 +208,11 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
         ...values
         <%_ manyToManyOwners.forEach(rel => { _%>
         , <%= rel.relationshipFieldNamePlural %>: mapIdList(values.<%= rel.relationshipFieldNamePlural %>)
+        <%_ }) _%>
+        <%_ relFieldNames.forEach(rel => { _%>
+          <%_ if (rel.relationshipType === 'many-to-one' && rel.otherEntityName !== 'user')  { _%>
+          , <%= rel.relationshipFieldName %>: <%= rel.otherEntityNamePlural %>.find(<%= rel.relationshipFieldName %> => <%= rel.relationshipFieldName %>.id.toString() === values.<%= rel.relationshipFieldName %>Id.toString())
+          <%_ } _%>
         <%_ }) _%>
       }
       <%_ if (uniqueRelationFields.has('users') && authenticationType === 'oauth2' && applicationType === 'gateway') { _%>
@@ -450,6 +465,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                   type="select"
                   className="form-control"
                   name="<%= relationshipFieldName %>Id"
+                  value={<%= relationshipFieldName %>Id}
                   required
                 >
                   {
