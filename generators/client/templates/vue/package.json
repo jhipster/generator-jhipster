@@ -53,7 +53,7 @@
     "numeral": "2.0.6",
     "optimize-css-assets-webpack-plugin": "5.0.4",
     "portfinder": "1.0.28",
-    "postcss": "8.2.6",
+    "postcss": "8.2.7",
     "postcss-import": "14.0.0",
     "postcss-loader": "5.0.0",
     "postcss-url": "10.1.1",
