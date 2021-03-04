@@ -31,8 +31,8 @@ jobs:
       JHI_E2E: 0
       JHI_JDK: 11
       # if JHI_LIB_BRANCH value is release, use the release from Maven
-      JHI_LIB_REPO: https://github.com/ecostanzi/jhipster-bom.git
-      JHI_LIB_BRANCH: infinispan-12
+      JHI_LIB_REPO: https://github.com/jhipster/jhipster-bom.git
+      JHI_LIB_BRANCH: main
       # if JHI_GEN_BRANCH value is release, use the release from NPM
       JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
       JHI_GEN_BRANCH: main
