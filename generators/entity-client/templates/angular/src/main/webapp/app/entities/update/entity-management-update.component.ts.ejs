@@ -91,7 +91,7 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
     <%_ } _%>
 <%_ } _%>
 
-    editForm = <%= entityAngularName %>Service.createEditForm();
+    editForm = this.<%= entityInstance %>Service.createEditForm();
 
     constructor(
         <%_ if (fieldsContainBlob) { _%>
@@ -133,7 +133,7 @@ _%>
             }
         <%_ } _%>
 
-            <%= entityAngularName %>Service.updateForm(<%= entityInstance %>, this.editForm);
+            this.<%= entityInstance %>Service.updateForm(<%= entityInstance %>, this.editForm);
 
 <%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
             this.loadRelationshipsOptions();
@@ -181,7 +181,7 @@ _%>
         <%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
         const <%= entityInstance %> = this.updateFormAndRelatedCollections();
         <%_ } else {_%>
-        const <%= entityInstance %> = <%= entityAngularName %>Service.createFromForm(this.editForm);
+        const <%= entityInstance %> = this.<%= entityInstance %>Service.createFromForm(this.editForm);
         <%_ } _%>
         if (<%= entityInstance %>.<%= primaryKey.name %> !== undefined) {
             this.subscribeToSaveResponse(
@@ -268,7 +268,7 @@ _%>
 
     <%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
     protected updateFormAndRelatedCollections(): I<%= entityAngularName %> {
-      const <%= entityInstance %> = <%= entityAngularName %>Service.createFromForm(this.editForm);
+      const <%= entityInstance %> = this.<%= entityInstance %>Service.createFromForm(this.editForm);
           <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
               <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); _%>
               <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); _%>
