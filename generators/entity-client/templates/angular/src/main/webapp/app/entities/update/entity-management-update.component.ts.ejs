@@ -121,20 +121,17 @@ _%>
         this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
         <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
             if (<%= entityInstance %>.<%= primaryKey.name %> === undefined) {
-                const today = dayjs().startOf('day');
             <%_ for (const field of fields) {
                 const fieldName = field.fieldName;
                 const fieldType = field.fieldType;
             _%>
                 <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-                <%= entityInstance %>.<%= fieldName %> = today;
+                <%= entityInstance %>.<%= fieldName %> = dayjs().startOf('day');
                 <%_ } _%>
             <%_ } _%>
             }
         <%_ } _%>
-
-            this.<%= entityInstance %>Service.updateForm(<%= entityInstance %>, this.editForm);
-
+            this.updateFormAndUpdateCollectionsIfMissed(<%= entityInstance %>);
 <%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
             this.loadRelationshipsOptions();
 <%_ } _%>
@@ -178,11 +175,7 @@ _%>
 
     save(): void {
         this.isSaving = true;
-        <%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
-        const <%= entityInstance %> = this.updateFormAndRelatedCollections();
-        <%_ } else {_%>
-        const <%= entityInstance %> = this.<%= entityInstance %>Service.createFromForm(this.editForm);
-        <%_ } _%>
+        const <%= entityInstance %> =  this.<%= entityInstance %>Service.createFromForm(this.editForm);
         if (<%= entityInstance %>.<%= primaryKey.name %> !== undefined) {
             this.subscribeToSaveResponse(
                 this.<%= entityInstance %>Service.update(<%= entityInstance %>));
@@ -266,9 +259,9 @@ _%>
     }
 <%_ } _%>
 
+    protected updateFormAndUpdateCollectionsIfMissed(<%= entityInstance %>: I<%= entityAngularName %>): void {
+    this.editForm = this.<%= entityInstance %>Service.updateForm(<%= entityInstance %>, this.editForm);
     <%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
-    protected updateFormAndRelatedCollections(): I<%= entityAngularName %> {
-      const <%= entityInstance %> = this.<%= entityInstance %>Service.createFromForm(this.editForm);
           <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
               <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); _%>
               <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); _%>
@@ -288,7 +281,6 @@ _%>
               this.<%= relationship.relationshipFieldNamePlural %>Collection = this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing(this.<%= relationship.relationshipFieldNamePlural %>Collection, <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= reference.name %><%= relationship.collection ? ' ?? [])' : '' %>);
               <%_ } _%>
           <%_ } _%>
-          return <%= entityInstance %>;
-  }
     <%_ } _%>
+  }
 }

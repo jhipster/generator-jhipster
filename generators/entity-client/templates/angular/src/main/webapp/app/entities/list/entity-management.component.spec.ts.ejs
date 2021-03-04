@@ -36,8 +36,8 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
-
 import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
+import {FormBuilder} from "@angular/forms";
 
 describe('Component Tests', () => {
     describe('<%= entityAngularName %> Management Component', () => {
@@ -69,7 +69,8 @@ describe('Component Tests', () => {
                             snapshot: { queryParams: {} },
                             <%_ } _%>
                         }
-                    }
+                    },
+                    FormBuilder,
                 ]
                 <%_ } else if (searchEngine !== false) { _%>
                 providers: [
