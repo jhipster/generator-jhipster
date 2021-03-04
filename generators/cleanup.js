@@ -295,6 +295,7 @@ function cleanupOldFiles(generator) {
     if (generator.jhipsterConfig.clientFramework === ANGULAR) {
       generator.removeFile(`${ANGULAR_DIR}core/config/config.service.ts`);
       generator.removeFile(`${ANGULAR_DIR}core/config/config.service.spec.ts`);
+      generator.removeFile('.npmrc');
     }
   }
 }
