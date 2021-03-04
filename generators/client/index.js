@@ -193,10 +193,16 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
 
       loadPackageJson() {
         // Load common client package.json into packageJson
-        _.merge(this.packageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'common', 'package.json')));
+        _.merge(
+          this.dependabotPackageJson,
+          this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'common', 'package.json'))
+        );
         // Load client package.json into packageJson
         const clientFramewok = this.jhipsterConfig.clientFramework === ANGULAR ? 'angular' : this.jhipsterConfig.clientFramework;
-        _.merge(this.packageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', clientFramewok, 'package.json')));
+        _.merge(
+          this.dependabotPackageJson,
+          this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', clientFramewok, 'package.json'))
+        );
       },
     };
   }
@@ -323,8 +329,8 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         }
 
         const devDependencies = packageJsonStorage.createStorage('devDependencies');
-        devDependencies.set('wait-on', this.packageJson.devDependencies['wait-on']);
-        devDependencies.set('concurrently', this.packageJson.devDependencies.concurrently);
+        devDependencies.set('wait-on', this.dependabotPackageJson.devDependencies['wait-on']);
+        devDependencies.set('concurrently', this.dependabotPackageJson.devDependencies.concurrently);
 
         if (this.clientFramework === REACT) {
           scriptsStorage.set('ci:frontend:test', 'npm run webapp:build:$npm_package_config_default_environment && npm run test-ci');

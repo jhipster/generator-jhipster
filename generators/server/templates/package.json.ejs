@@ -33,11 +33,11 @@
         <%_ });
     } _%>
     <%_ if (!skipCommitHook) { _%>
-    "husky": "<%= packageJson.devDependencies['husky'] %>",
-    "lint-staged": "<%= packageJson.devDependencies['lint-staged'] %>",
+    "husky": "<%= dependabotPackageJson.devDependencies['husky'] %>",
+    "lint-staged": "<%= dependabotPackageJson.devDependencies['lint-staged'] %>",
     <%_ } _%>
-    "prettier": "<%= packageJson.devDependencies['prettier'] %>",
-    "prettier-plugin-java": "<%= packageJson.devDependencies['prettier-plugin-java'] %>"
+    "prettier": "<%= dependabotPackageJson.devDependencies['prettier'] %>",
+    "prettier-plugin-java": "<%= dependabotPackageJson.devDependencies['prettier-plugin-java'] %>"
   },
   "engines": {
     "node": ">=<%= NODE_VERSION %>"

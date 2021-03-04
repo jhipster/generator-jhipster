@@ -80,7 +80,7 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
 
       loadPackageJson() {
         // The installed prettier version should be the same that the one used during JHipster generation to avoid formatting differences
-        _.merge(this.packageJson, {
+        _.merge(this.dependabotPackageJson, {
           devDependencies: {
             prettier: packageJson.dependencies.prettier,
             'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
@@ -88,7 +88,7 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
         });
 
         // Load common package.json into packageJson
-        _.merge(this.packageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('common', 'templates', 'package.json')));
+        _.merge(this.dependabotPackageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('common', 'templates', 'package.json')));
       },
     };
   }

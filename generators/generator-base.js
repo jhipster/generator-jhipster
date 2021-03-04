@@ -2437,8 +2437,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.logo = config.logo;
     config.backendName = config.backendName || 'Java';
     dest.backendName = config.backendName;
-    config.packageJson = config.packageJson || {};
-    dest.packageJson = config.packageJson;
+    config.dependabotPackageJson = config.dependabotPackageJson || {};
+    dest.dependabotPackageJson = config.dependabotPackageJson;
   }
 
   /**
