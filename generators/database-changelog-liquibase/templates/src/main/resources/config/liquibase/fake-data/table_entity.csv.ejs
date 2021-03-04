@@ -41,20 +41,9 @@ for (relationship of relationships) {
 }
 table.push(header);
 
-for (idx in relationships) {
-  if ( relationship.id === true ) {
-    const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
-    if (otherEntityNameCapitalized === 'User') {
-      // Only few user records are generated
-      numberOfRows = (authenticationType === 'oauth2') ? 0 : 2;
-    }
-    break;
-  }
-}
-
 // Generate CSV rows
 
-for (lineNb = 0; lineNb < entity.liquibaseFakeData.length; lineNb++) {
+for (lineNb = 0; lineNb < entity.fakeDataCount; lineNb++) {
   const rowData = entity.liquibaseFakeData[lineNb];
   let line = [];
   for (field of fieldsToGenerate) {
@@ -85,10 +74,10 @@ for (lineNb = 0; lineNb < entity.liquibaseFakeData.length; lineNb++) {
     ) {
       const otherLiquibaseFakeData = relationship.otherEntity.liquibaseFakeData;
       let relationshipRow = lineNb;
-      if (relationship.otherEntity.builtIn) {
-        relationshipRow = entity.faker.random.number({min: 1, max: otherLiquibaseFakeData.length}) - 1;
+      if (relationshipRow >= relationship.otherEntity.fakeDataCount && !relationship.unique) {
+        relationshipRow = entity.faker.random.number({min: 1, max: relationship.otherEntity.fakeDataCount}) - 1;
       }
-      if (relationshipRow < otherLiquibaseFakeData.length) {
+      if (relationshipRow < relationship.otherEntity.fakeDataCount) {
         line.push(otherLiquibaseFakeData[relationshipRow][relationship.otherEntity.primaryKey.name]);
       }
     }

@@ -1653,6 +1653,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
           { id: userIdType === 'Long' ? 2 : user.primaryKey.fields[0].generateFakeData() },
         ];
     user.liquibaseFakeData = liquibaseFakeData;
+    user.fakeDataCount = liquibaseFakeData.length;
     this.configOptions.sharedLiquibaseFakeData.User = liquibaseFakeData;
   }
 

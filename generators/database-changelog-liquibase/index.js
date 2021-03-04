@@ -84,6 +84,15 @@ module.exports = class extends BaseGenerator {
       prepareFakeData() {
         const databaseChangelog = this.databaseChangelog;
         this.entity.liquibaseFakeData = [];
+
+        // fakeDataCount must be limited to the size of required unique relationships.
+        Object.defineProperty(this.entity, 'fakeDataCount', {
+          get: () => {
+            const uniqueRelationships = this.entity.relationships.filter(rel => rel.unique && (rel.relationshipRequired || rel.id));
+            return _.min([this.entity.liquibaseFakeData.length, ...uniqueRelationships.map(rel => rel.otherEntity.fakeDataCount)]);
+          },
+        });
+
         for (let rowNumber = 0; rowNumber < this.numberOfRows; rowNumber++) {
           const rowData = {};
           const fields =
