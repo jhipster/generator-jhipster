@@ -130,15 +130,15 @@ class SecurityUtilsUnitTest {
     }
 
     @Test
-    void testIsCurrentUserInRole() {
+    void testHasCurrentUserThisAuthority() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("user", "user", authorities));
         SecurityContextHolder.setContext(securityContext);
 
-        assertThat(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.USER)).isTrue();
-        assertThat(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)).isFalse();
+        assertThat(SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER)).isTrue();
+        assertThat(SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)).isFalse();
     }
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -195,21 +195,21 @@ class SecurityUtilsUnitTest {
     }
 
     @Test
-    void testIsCurrentUserInRole() {
+    void testHasCurrentUserThisAuthority() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
         Context context = ReactiveSecurityContextHolder.withAuthentication(
             new UsernamePasswordAuthenticationToken("admin", "admin", authorities)
         );
-        Boolean isCurrentUserInRole = SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.USER)
+        Boolean hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER)
             .subscriberContext(context)
             .block();
-        assertThat(isCurrentUserInRole).isTrue();
+        assertThat(hasCurrentUserThisAuthority).isTrue();
 
-        isCurrentUserInRole = SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)
+        hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)
             .subscriberContext(context)
             .block();
-        assertThat(isCurrentUserInRole).isFalse();
+        assertThat(hasCurrentUserThisAuthority).isFalse();
     }
 <%_ } _%>
 
