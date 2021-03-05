@@ -95,7 +95,6 @@ import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering) { _%>
 import <%= packageName %>.service.criteria.<%= entityClass %>Criteria;
-import <%= packageName %>.service.<%= entityClass %>QueryService;
 <%_ } _%>
 
 <%_ if (databaseType === 'sql' && reactive) { _%>
@@ -432,11 +431,6 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
      */
     @Autowired
     private <%= entityClass %>SearchRepository mock<%= entityClass %>SearchRepository;
-    <%_ } _%>
-    <%_ if (jpaMetamodelFiltering) { _%>
-
-    @Autowired
-    private <%= entityClass %>QueryService <%= entityInstance %>QueryService;
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
 
