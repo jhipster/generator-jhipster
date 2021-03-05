@@ -117,9 +117,6 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
   <%_ manyToManyOwners.forEach(val => { _%>
   const [ids<%= val.relationshipName %>, setIds<%= val.relationshipName %>] = useState([]);
   <%_ }) _%>
-  <%_ relFieldNames.forEach(val => { _%>
-  const [<%= val.relationshipFieldName %>Id, set<%= upperFirstCamelCase(val.relationshipFieldName) %>Id] = useState('0');
-  <%_ }) _%>
   const [isNew] = useState(!props.match.params || !props.match.params.id);
 
   const { <%= entityInstance %>Entity,<%
@@ -147,16 +144,6 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
   const handleClose = () => {
     props.history.push('/<%= entityFileName %>'<%_ if (pagination === 'pagination') { _%> + props.location.search<%_ } _%>);
   }
-
-  <%_ relFieldNames.forEach(val => { _%>
-    <%_ if (val.relationshipType === 'many-to-one')  { _%>
-  useEffect(() => {
-    if (<%= val.relationshipFieldName %>Id === '0' && !isNew) {
-      set<%= upperFirstCamelCase(val.relationshipName) %>Id(<%= entityInstance %>Entity?.<%= val.relationshipName %>?.id.toString());
-    }
-  }, [<%= entityInstance %>Entity]);
-    <%_ } _%>
-  <%_ }) _%>
 
   useEffect(() => {
     <%_ if (pagination === 'infinite-scroll') { _%>
@@ -205,21 +192,21 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
     if (errors.length === 0) {
       const entity = {
         ...<%= entityInstance %>Entity,
-        ...values
+        ...values,
         <%_ manyToManyOwners.forEach(rel => { _%>
-        , <%= rel.relationshipFieldNamePlural %>: mapIdList(values.<%= rel.relationshipFieldNamePlural %>)
+        <%= rel.relationshipFieldNamePlural %>: mapIdList(values.<%= rel.relationshipFieldNamePlural %>),
         <%_ }) _%>
         <%_ relFieldNames.forEach(rel => { _%>
           <%_ if (rel.relationshipType === 'many-to-one' && rel.otherEntityName !== 'user')  { _%>
-          , <%= rel.relationshipFieldName %>: <%= rel.otherEntityNamePlural %>.find(it => it.id.toString() === values.<%= rel.relationshipFieldName %>Id.toString())
+          <%= rel.relationshipFieldName %>: <%= rel.otherEntityNamePlural %>.find(it => it.id.toString() === values.<%= rel.relationshipFieldName %>Id.toString()),
           <%_ } _%>
         <%_ }) _%>
+        <%_ if (uniqueRelationFields.has('users')) { _%>
+          <%_ relationships.filter(rel => rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName === 'user').forEach(rel => { _%>
+        <%= rel.relationshipFieldName %>: users.find(user => user.id.toString() === values.<%= rel.relationshipFieldName %>Id.toString()),
+          <%_ }) _%>
+        <%_ } _%>
       }
-      <%_ if (uniqueRelationFields.has('users') && authenticationType === 'oauth2' && applicationType === 'gateway') { _%>
-        <%_ relationships.filter(rel => rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName === 'user').forEach(rel => { _%>
-      entity.<%= rel.relationshipFieldName %> = users.find(user => user.id.toString() === values.<%= rel.relationshipFieldName %>.id.toString());
-        <%_ }) _%>
-      <%_ } _%>
 
       if (isNew) {
         props.createEntity(entity);
@@ -414,18 +401,20 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               const otherEntityFieldCapitalized = rel.otherEntityFieldCapitalized;
               const relationshipRequired = rel.relationshipRequired;
               const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
-              <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
+              <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
           <AvGroup>
             <Label for="<%= entityFileName %>-<%= relationshipName %>">
               <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
             </Label>
-                <%_ if (!relationshipRequired) { _%>
             <AvInput
               id="<%= entityFileName %>-<%= relationshipName %>"
               data-cy="<%= relationshipFieldName %>"
               type="select"
               className="form-control"
-              name="<%= relationshipFieldName %>.id"
+              name="<%= relationshipFieldName %>Id"
+              <%_ if (relationshipRequired) { _%>
+              required
+              <%_ } _%>
             >
               <option value="" key="0" />
               {
@@ -438,73 +427,9 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                 ) : null
               }
             </AvInput>
-            <%_ } else { _%>
-              <%_ if (!relationshipRequired) { _%>
-                <AvInput
-                  id="<%= entityFileName %>-<%= relationshipName %>"
-                  data-cy="<%= relationshipFieldName %>"
-                  type="select"
-                  className="form-control"
-                  name="<%= relationshipFieldName %>Id"
-                >
-                  <option value="" key="0" />
-                  {
-                    <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                      <option
-                        value={otherEntity.<%= otherEntityPkName %>}
-                        key={otherEntity.<%= otherEntityPkName %>}>
-                        {otherEntity.<%= otherEntityField %>}
-                      </option>
-                    ) : null
-                  }
-                </AvInput>
-              <%_ } else { _%>
-                <AvInput
-                  id="<%= entityFileName %>-<%= relationshipName %>"
-                  data-cy="<%= relationshipFieldName %>"
-                  type="select"
-                  className="form-control"
-                  name="<%= relationshipFieldName %>Id"
-                  value={<%= relationshipFieldName %>Id}
-                  required
-                >
-                  {
-                    <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                      <option
-                        value={otherEntity.<%= otherEntityPkName %>}
-                        key={otherEntity.<%= otherEntityPkName %>}>
-                        {otherEntity.<%= otherEntityField %>}
-                      </option>
-                    ) : null
-                  }
-                </AvInput>
-                <AvFeedback><Translate contentKey="entity.validation.required">This field is required.</Translate></AvFeedback>
-              <%_ } _%>
+            <%_ if (relationshipRequired) { _%>
+            <AvFeedback><Translate contentKey="entity.validation.required">This field is required.</Translate></AvFeedback>
             <%_ } _%>
-          </AvGroup>
-              <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
-          <AvGroup>
-            <Label for="<%= entityFileName %>-<%= relationshipName %>">
-              <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
-            </Label>
-                <AvInput
-                  id="<%= entityFileName %>-<%= relationshipName %>"
-                  data-cy="<%= relationshipFieldName %>"
-                  type="select"
-                  className="form-control"
-                  name="<%= relationshipFieldName %>.id"
-                >
-                  <option value="" key="0" />
-                  {
-                    <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                      <option
-                        value={otherEntity.<%= otherEntityPkName %>}
-                        key={otherEntity.<%= otherEntityPkName %>}>
-                        {otherEntity.<%= otherEntityField %>}
-                      </option>
-                    ) : null
-                  }
-                </AvInput>
           </AvGroup>
               <%_ } else if (relationshipType === 'many-to-many' && rel.ownerSide === true) { _%>
           <AvGroup>
