@@ -1492,7 +1492,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
 
     try {
       // Add i18n config snippets for all languages
-      let i18nConfig = 'const dateTimeFormats = {\n';
+      let i18nConfig = 'const dateTimeFormats: DateTimeFormats = {\n';
       if (this.enableTranslation) {
         languages.forEach((ln, i) => {
           i18nConfig += this.generateDateTimeFormat(ln, i, languages.length);
