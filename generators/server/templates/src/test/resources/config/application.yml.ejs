@@ -53,6 +53,10 @@ eureka:
 mongock:
   change-logs-scan-package:
     - <%= packageName %>.config.dbmigrations
+  mongo-db:
+    read-concern: local
+    write-concern:
+      journal: false
 
 <%_ } _%>
 spring:
