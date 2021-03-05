@@ -94,7 +94,7 @@ import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
 import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering) { _%>
-import <%= packageName %>.service.dto.<%= entityClass %>Criteria;
+import <%= packageName %>.service.criteria.<%= entityClass %>Criteria;
 import <%= packageName %>.service.<%= entityClass %>QueryService;
 <%_ } _%>
 
@@ -175,7 +175,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 <%_ } _%>
 import java.util.List;
-<%_ if (primaryKey.type === 'UUID' || fieldsContainUUID === true || (databaseType === 'sql' && hasOauthUser === true) || otherEntityPrimaryKeyTypes.includes('UUID')) { _%>
+<%_ if (fieldsContainUUID || otherEntityPrimaryKeyTypes.includes('UUID')) { _%>
 import java.util.UUID;
 <%_ } _%>
 

@@ -23,14 +23,14 @@
 
             <div>
                 <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
-<%_ for (const field of fields) {
+<%_ for (const field of fields.filter(field => !field.hidden)) {
     const fieldName = field.fieldName;
     const fieldNameCapitalized = field.fieldNameCapitalized;
     const fieldNameHumanized = field.fieldNameHumanized;
     const fieldType = field.fieldType;
     const fieldTypeBlobContent = field.fieldTypeBlobContent;
     const id = !!field.id;
-    const readonly = !!field.id || !!field.readonly;
+    const readonly = field.readonly;
     let fieldInputType = 'text';
     let ngModelOption = '';
     const translationKey = field.fieldTranslationKey;
@@ -47,7 +47,7 @@
     }
 _%>
 
-                <div class="form-group"<% if (id) { %> [hidden]="editForm.get('<%= fieldName %>')!.value == null"<% } %>>
+                <div class="form-group"<% if (field.autoGenerate) { %> [hidden]="editForm.get('<%= primaryKey.name %>')!.value == null"<% } %>>
                     <label class="form-control-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= fieldName %>"<% if (field.javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.javadoc %>"<% } } %>><%= fieldNameHumanized %></label>
     <%_ if (field.fieldIsEnum) { _%>
                     <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>">
@@ -103,7 +103,7 @@ _%>
                            data-cy="<%= fieldName %>" formControlName="<%= fieldName %>" <% if (readonly) { %> [readonly]="true"<% } %>/>
         <%_ } else { _%>
                     <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>"
-                           formControlName="<%= fieldName %>"<% if (readonly) { %> [readonly]="true"<% } %>/>
+                           formControlName="<%= fieldName %>"<% if (field.id && !field.autoGenerate) { %> [readonly]="editForm.get('<%= primaryKey.name %>')!.value != null"<% } else if (readonly) { %> [readonly]="true"<% } %>/>
             <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
                     <input type="hidden" class="form-control" name="<%= fieldName %>ContentType" id="field_<%= fieldName %>ContentType"
                            formControlName="<%= fieldName %>ContentType" />

@@ -28,7 +28,6 @@ const files = {
   common: [
     {
       templates: [
-        '.npmrc',
         'package.json',
         'tsconfig.json',
         'tsconfig.app.json',
@@ -48,19 +47,6 @@ const files = {
     {
       path: CLIENT_MAIN_SRC_DIR,
       templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss'],
-    },
-  ],
-  commonWeb: [
-    {
-      path: CLIENT_MAIN_SRC_DIR,
-      templates: [
-        'WEB-INF/web.xml',
-        { file: 'favicon.ico', method: 'copy' },
-        'robots.txt',
-        '404.html',
-        'index.html',
-        'content/css/loading.css',
-      ],
     },
   ],
   angularApp: [
@@ -225,7 +211,11 @@ const files = {
         'admin/metrics/blocks/jvm-threads/jvm-threads.component.ts',
         { file: 'admin/metrics/blocks/jvm-threads/jvm-threads.component.html', method: 'processHtml', template: true },
         'admin/metrics/blocks/metrics-cache/metrics-cache.component.ts',
-        { file: 'admin/metrics/blocks/metrics-cache/metrics-cache.component.html', method: 'processHtml', template: true },
+        {
+          file: 'admin/metrics/blocks/metrics-cache/metrics-cache.component.html',
+          method: 'processHtml',
+          template: true,
+        },
         'admin/metrics/blocks/metrics-datasource/metrics-datasource.component.ts',
         {
           file: 'admin/metrics/blocks/metrics-datasource/metrics-datasource.component.html',
@@ -251,9 +241,17 @@ const files = {
           template: true,
         },
         'admin/metrics/blocks/metrics-request/metrics-request.component.ts',
-        { file: 'admin/metrics/blocks/metrics-request/metrics-request.component.html', method: 'processHtml', template: true },
+        {
+          file: 'admin/metrics/blocks/metrics-request/metrics-request.component.html',
+          method: 'processHtml',
+          template: true,
+        },
         'admin/metrics/blocks/metrics-system/metrics-system.component.ts',
-        { file: 'admin/metrics/blocks/metrics-system/metrics-system.component.html', method: 'processHtml', template: true },
+        {
+          file: 'admin/metrics/blocks/metrics-system/metrics-system.component.html',
+          method: 'processHtml',
+          template: true,
+        },
       ],
     },
     {
@@ -303,10 +301,15 @@ const files = {
     {
       path: ANGULAR_DIR,
       templates: [
+        'core/config/application-config.service.ts',
+        'core/config/application-config.service.spec.ts',
+
         'core/util/data-util.service.ts',
         'core/util/parse-links.service.ts',
         'core/util/alert.service.ts',
         'core/util/event-manager.service.ts',
+        'core/util/operators.spec.ts',
+        'core/util/operators.ts',
 
         // config
         'config/uib-pagination.config.ts',
@@ -379,13 +382,14 @@ const files = {
         'shared/auth/has-any-authority.directive.ts',
         'core/auth/account.model.ts',
         'core/auth/account.service.ts',
+        'core/auth/account.service.spec.ts',
         'core/auth/user-route-access.service.ts',
       ],
     },
     {
       condition: generator => generator.authenticationType === 'jwt',
       path: ANGULAR_DIR,
-      templates: ['core/auth/auth-jwt.service.ts'],
+      templates: ['core/auth/auth-jwt.service.ts', 'core/auth/auth-jwt.service.spec.ts'],
     },
     {
       condition: generator => generator.authenticationType === 'session' || generator.authenticationType === 'oauth2',
@@ -415,7 +419,6 @@ const files = {
     {
       path: ANGULAR_DIR,
       templates: [
-        'core/auth/account.service.spec.ts',
         'shared/auth/has-any-authority.directive.spec.ts',
         'core/util/event-manager.service.spec.ts',
         'core/util/data-util.service.spec.ts',

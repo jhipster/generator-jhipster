@@ -76,6 +76,7 @@
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+        <start-class><%= packageName %>.<%= mainClass %></start-class>
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <run.addResources>false</run.addResources>
@@ -120,15 +121,15 @@
 <%_ if (databaseType === 'cassandra') { _%>
         <!-- The cassandra driver version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <cassandra-driver.version>4.6.1</cassandra-driver.version>
+        <cassandra-driver.version>4.9.0</cassandra-driver.version>
 <%_ } _%>
-        <archunit-junit5.version>0.15.0</archunit-junit5.version>
-        <mapstruct.version>1.4.1.Final</mapstruct.version>
+        <archunit-junit5.version>0.17.0</archunit-junit5.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
 <%_ } _%>
 <%_ if (cacheProvider === 'caffeine') { _%>
-        <caffeine.version>2.8.8</caffeine.version>
+        <caffeine.version>3.0.0</caffeine.version>
         <typesafe.version>1.4.1</typesafe.version>
 <%_ } _%>
         <!-- Plugin versions -->
@@ -142,11 +143,11 @@
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
-        <maven-checkstyle.version>3.1.1</maven-checkstyle.version>
-        <checkstyle.version>8.39</checkstyle.version>
+        <maven-checkstyle.version>3.1.2</maven-checkstyle.version>
+        <checkstyle.version>8.40</checkstyle.version>
         <spring-nohttp-checkstyle.version>0.0.5.RELEASE</spring-nohttp-checkstyle.version>
 <%_ if (!skipClient) { _%>
-        <frontend-maven-plugin.version>1.11.0</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.11.2</frontend-maven-plugin.version>
 <%_ } _%>
         <git-commit-id-plugin.version>4.0.3</git-commit-id-plugin.version>
         <jacoco-maven-plugin.version><%= JACOCO_VERSION %></jacoco-maven-plugin.version>
@@ -440,7 +441,6 @@
         <dependency>
             <groupId>org.mariadb</groupId>
             <artifactId>r2dbc-mariadb</artifactId>
-            <version>${r2dbc-mariadb.version}</version>
         </dependency>
         <%_ } _%>
 <%_ } _%>
@@ -766,23 +766,10 @@
 <%_ } _%>
         <!-- Spring Cloud -->
 <%_ if (applicationType === 'gateway') { _%>
-        <%_ if (!reactive) { _%>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
-        </dependency>
-        <!-- Spring Cloud Netflix Zuul depends on Guava 19.0 -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>19.0</version>
-        </dependency>
-        <%_ } else { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
-        <%_ } _%>
         <dependency>
             <groupId>com.github.vladimir-bukhtoyarov</groupId>
             <artifactId>bucket4j-core</artifactId>
@@ -799,15 +786,17 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
+        </dependency>
+<%_ } _%>
+<%_ if (serviceDiscoveryType) { _%>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
 <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
@@ -1086,6 +1075,9 @@
                     <groupId>com.github.eirslett</groupId>
                     <artifactId>frontend-maven-plugin</artifactId>
                     <version>${frontend-maven-plugin.version}</version>
+                    <configuration>
+                        <installDirectory>target</installDirectory>
+                    </configuration>
                 </plugin>
 <%_ } _%>
                 <plugin>
@@ -1564,7 +1556,7 @@
                             <execution>
                                 <id>webapp build dev</id>
                                 <goals>
-                                    <goal><%= clientPackageManager %></goal>
+                                    <goal>npm</goal>
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
@@ -1680,7 +1672,7 @@
                             <execution>
                                 <id>webapp build test</id>
                                 <goals>
-                                    <goal><%= clientPackageManager %></goal>
+                                    <goal>npm</goal>
                                 </goals>
                                 <phase>test</phase>
                                 <configuration>
@@ -1691,7 +1683,7 @@
                             <execution>
                                 <id>webapp build prod</id>
                                 <goals>
-                                    <goal><%= clientPackageManager %></goal>
+                                    <goal>npm</goal>
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>

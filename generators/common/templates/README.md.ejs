@@ -466,7 +466,9 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 <%_ if (!skipClient) { _%>
 [Node.js]: https://nodejs.org/
 [Webpack]: https://webpack.github.io/
+<%_ if (clientFramework === ANGULAR) { _%>
 [Angular CLI]: https://cli.angular.io/
+<%_ } _%>
 [BrowserSync]: https://www.browsersync.io/
 [Jest]: https://facebook.github.io/jest/
 [Jasmine]: https://jasmine.github.io/2.0/introduction.html

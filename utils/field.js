@@ -145,6 +145,14 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
       data = undefined;
     }
   }
+  if (
+    data !== undefined &&
+    type === 'ts' &&
+    // eslint-disable-next-line no-template-curly-in-string
+    !['Boolean', 'Integer', 'Long', 'Float', '${floatType}', 'Double', 'BigDecimal'].includes(field.fieldType)
+  ) {
+    data = `'${data}'`;
+  }
 
   return data;
 };
@@ -155,19 +163,36 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     fieldNameUnderscored: _.snakeCase(field.fieldName),
     fieldNameHumanized: _.startCase(field.fieldName),
     fieldTranslationKey: `${entityWithConfig.i18nKeyPrefix}.${field.fieldName}`,
+    tsType: generator.getTypescriptKeyType(field.fieldType),
   });
   const fieldType = field.fieldType;
+  if (field.mapstructExpression) {
+    assert.equal(
+      entityWithConfig.dto,
+      'mapstruct',
+      `@MapstructExpression requires an Entity with mapstruct dto [${entityWithConfig.name}.${field.fieldName}].`
+    );
+    // Remove from Entity.java and liquibase.
+    field.transient = true;
+    // Disable update form.
+    field.readonly = true;
+  }
 
   if (field.id) {
-    if (field.autoGenerate === false || !['Long', 'UUID'].includes(field.fieldType)) {
+    if (field.autoGenerate === undefined) {
+      field.autoGenerate = !entityWithConfig.primaryKey.composite && ['Long', 'UUID'].includes(field.fieldType);
+    }
+    if (!field.autoGenerate) {
       field.liquibaseAutoIncrement = false;
       field.jpaGeneratedValue = false;
     } else if (entityWithConfig.reactive) {
       field.liquibaseAutoIncrement = true;
       field.jpaGeneratedValue = false;
+      field.readonly = true;
     } else {
       const defaultGenerationType = entityWithConfig.prodDatabaseType === 'mysql' ? 'identity' : 'sequence';
       field.jpaGeneratedValue = field.jpaGeneratedValue || field.fieldType === 'Long' ? defaultGenerationType : true;
+      field.readonly = true;
       if (field.jpaGeneratedValue === 'identity') {
         field.liquibaseAutoIncrement = true;
       }
@@ -275,18 +300,6 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
   };
   field.reference = fieldToReference(entityWithConfig, field);
 
-  if (field.mapstructExpression) {
-    assert.equal(
-      entityWithConfig.dto,
-      'mapstruct',
-      `@MapstructExpression requires an Entity with mapstruct dto [${entityWithConfig.name}.${field.fieldName}].`
-    );
-    // Remove from Entity.java and liquibase.
-    field.transient = true;
-    // Disable update form.
-    field.readonly = true;
-  }
-
   return field;
 }
 
@@ -346,4 +359,4 @@ function fieldToReference(entity, field, pathPrefix = []) {
   };
 }
 
-module.exports = { prepareFieldForTemplates, fieldIsEnum, getEnumValuesWithCustomValues };
+module.exports = { prepareFieldForTemplates, fieldIsEnum, getEnumValuesWithCustomValues, fieldToReference };

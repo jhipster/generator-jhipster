@@ -460,4 +460,104 @@ describe('jhipster cli', () => {
       });
     });
   });
+
+  describe('jhipster run', () => {
+    describe('running jhipster built-in generators', () => {
+      describe('jhipster:app', () => {
+        let stdout;
+        let exitCode;
+        before(done => {
+          const forked = fork(jhipsterCli, ['run', 'jhipster:app', '--help'], { stdio: 'pipe' });
+          forked.on('exit', code => {
+            exitCode = code;
+            stdout = forked.stdout.read().toString();
+            done();
+          });
+        });
+
+        it('should print usage', () => {
+          expect(stdout.includes('Usage: cli run jhipster:app [options]')).to.be.true;
+        });
+        it('should print options', () => {
+          expect(stdout.includes('--application-type <value>')).to.be.true;
+        });
+        it('should exit with code 0', () => {
+          expect(exitCode).to.equal(0);
+        });
+      });
+    });
+    describe('custom generator', () => {
+      describe('--help', () => {
+        let stdout;
+        let exitCode;
+        beforeEach(done => {
+          const tmpdir = process.cwd();
+          copyBlueprint(path.join(__dirname, '../templates/blueprint-cli'), tmpdir, 'cli');
+          lnYeoman(tmpdir);
+          const forked = fork(jhipsterCli, ['run', 'cli:foo', '--help'], { stdio: 'pipe', cwd: tmpdir });
+          forked.on('exit', code => {
+            exitCode = code;
+            stdout = forked.stdout.read().toString();
+            done();
+          });
+        });
+
+        it('should print usage', () => {
+          expect(stdout.includes('Usage: cli run cli:foo [options]')).to.be.true;
+        });
+        it('should print options', () => {
+          expect(stdout.includes('--foo-bar')).to.be.true;
+          expect(stdout.includes('Sample option')).to.be.true;
+        });
+        it('should exit with code 0', () => {
+          expect(exitCode).to.equal(0);
+        });
+      });
+      describe('running it', () => {
+        let stdout;
+        let exitCode;
+        beforeEach(done => {
+          const tmpdir = process.cwd();
+          copyBlueprint(path.join(__dirname, '../templates/blueprint-cli'), tmpdir, 'cli');
+          lnYeoman(tmpdir);
+          const forked = fork(jhipsterCli, ['run', 'cli:foo', '--foo-bar'], { stdio: 'pipe', cwd: tmpdir });
+          forked.on('exit', code => {
+            exitCode = code;
+            stdout = forked.stdout.read().toString();
+            done();
+          });
+        });
+
+        it('should print runtime log', () => {
+          expect(stdout.includes('Running foo')).to.be.true;
+          expect(stdout.includes('Running bar')).to.be.true;
+        });
+        it('should exit with code 0', () => {
+          expect(exitCode).to.equal(0);
+        });
+      });
+    });
+    describe('non existing generator', () => {
+      describe('--help', () => {
+        let stderr;
+        let exitCode;
+        before(done => {
+          const tmpdir = process.cwd();
+          const forked = fork(jhipsterCli, ['run', 'non-existing', '--help'], { stdio: 'pipe', cwd: tmpdir });
+          forked.on('exit', code => {
+            exitCode = code;
+            stderr = forked.stderr.read().toString();
+            done();
+          });
+        });
+
+        it('should print error', () => {
+          expect(stderr.includes('Generator jhipster-non-existing not found.')).to.be.true;
+        });
+        it('should exit with code 1', () => {
+          expect(exitCode).to.equal(1);
+        });
+      });
+    });
+  });
 });

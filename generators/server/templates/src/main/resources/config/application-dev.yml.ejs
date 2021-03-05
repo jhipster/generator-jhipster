@@ -65,25 +65,12 @@ management:
 <%_ if (databaseType === 'neo4j') { _%>
 org:
   neo4j:
-    driver:
-      pool:
-        metrics-enabled: true
-      uri: bolt://localhost:7687
-      # Uncomment to use an authenticated connection
-      # authentication:
-      #   username: neo4j
-      #   password: secret
     migrations:
       locations-to-scan:
       packages-to-scan: <%= packageName %>.config.neo4j
       installed-by: <%= baseName %>
 <%_ } _%>
 spring:
-  profiles:
-    include:
-      - api-docs
-      # Uncomment to activate TLS for the dev profile
-      #- tls
   devtools:
     restart:
       enabled: true
@@ -93,6 +80,16 @@ spring:
   jackson:
     serialization:
       indent-output: true
+  <%_ if (databaseType === 'neo4j') { _%>
+  neo4j:
+    pool:
+      metrics-enabled: true
+    uri: bolt://localhost:7687
+    # Uncomment to use an authenticated connection
+    # authentication:
+    #   username: neo4j
+    #   password: secret
+  <%_ } _%>
   <%_ if (serviceDiscoveryType === 'consul') { _%>
   cloud:
     consul:
@@ -120,10 +117,6 @@ spring:
       profile: dev
       label: main # toggle to switch to a different version of the configuration as stored in git
       # it can be set to any label, branch or commit of the configuration source Git repository
-  <%_ } _%>
-  <%_ if (serviceDiscoveryType) { _%>
-  config:
-    import: <% if (serviceDiscoveryType === 'eureka') { %>'optional:configserver:'<% } else if (serviceDiscoveryType === 'consul') { %>'optional:consul:'<% } %>
   <%_ } _%>
   <%_ if (databaseType === 'sql' && !reactive) { _%>
   datasource:
@@ -213,7 +206,7 @@ spring:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     <%_ } _%>
     contexts: dev<% if (!skipFakeData) { %>, faker<% } %>
-    <%_ } _%>
+  <%_ } _%>
     <%_ if (reactive) { _%>
       <%_ if (['mysql', 'mariadb', 'postgresql', 'mssql'].includes(devDatabaseType)) { _%>
     url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
@@ -225,11 +218,13 @@ spring:
     url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
       <%_ } _%>
     <%_ } _%>
+  <%_ if (!skipUserManagement) { _%>
   mail:
     host: localhost
     port: 25
     username:
     password:
+  <%_ } _%>
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   <%_ if (databaseType === 'sql' && reactive) { _%>
@@ -359,9 +354,10 @@ jhipster:
     password: admin
   <%_ } _%>
   <%_ if (applicationType !== 'microservice') { _%>
-  # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
+  # CORS is only enabled by default with the "dev" profile
   cors:
-    allowed-origins: "*"
+    # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
+    allowed-origins: "http://localhost:8100"
     allowed-methods: "*"
     allowed-headers: "*"
     <%_ if (authenticationType === 'session') { _%>
@@ -398,8 +394,10 @@ jhipster:
       # security key (this key should be unique for your application, and kept secret)
       key: <%= rememberMeKey %>
 <%_ } _%>
+<%_ if (!skipUserManagement) { _%>
   mail: # specific JHipster mail property, for standard properties see MailProperties
     base-url: http://127.0.0.1:<%= serverPort %>
+<%_ } _%>
   logging:
     use-json-format: false # By default, logs are not in Json format
     logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration

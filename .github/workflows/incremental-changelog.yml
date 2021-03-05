@@ -74,7 +74,7 @@ jobs:
       fail-fast: false
       matrix:
         node_version: [14.15.0]
-        npm_version: [7.4.3]
+        npm_version: [7.6.0]
         os: [ubuntu-20.04]
         app-type:
           - liquibase-jdl-rename-field
@@ -105,7 +105,7 @@ jobs:
         run: |
           mkdir app
         working-directory: ${{ github.workspace }}
-      - uses: actions/setup-node@v2.1.4
+      - uses: actions/setup-node@v2.1.5
         with:
           node-version: ${{ matrix.node_version }}
       - uses: actions/setup-java@v1
@@ -116,14 +116,14 @@ jobs:
         run: |
           echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
       - name: 'SETUP: load npm cache'
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json.ejs') }}
           restore-keys: |
             ${{ runner.os }}-node-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-
       - name: 'SETUP: load maven cache'
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
@@ -131,7 +131,7 @@ jobs:
             ${{ runner.os }}-maven-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-
       - name: 'SETUP: load gradle cache'
         if: contains(matrix.app-type, 'gradle')
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: |
             ~/.gradle/caches
@@ -141,7 +141,7 @@ jobs:
             ${{ runner.os }}-gradle-${{ matrix.app-type }}-
       - name: 'SETUP: load e2e cache'
         if: matrix.e2e == 1
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: ~/.cache/Cypress/
           key: ${{ runner.os }}-e2e-${{ matrix.app-type }}-${{ hashFiles('generator-jhipster/**/package.json.ejs') }}

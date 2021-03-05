@@ -131,8 +131,8 @@ export * from './entityFolderName/entityFileName.state';`;
       });
     });
     describe('when called with String', () => {
-      it("return '123'", () => {
-        expect(BaseGenerator.generateTestEntityId('String')).to.equal("'123'");
+      it("return 'ABC'", () => {
+        expect(BaseGenerator.generateTestEntityId('String')).to.equal("'ABC'");
       });
     });
     describe('when called with UUID', () => {

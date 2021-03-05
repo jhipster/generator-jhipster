@@ -51,22 +51,10 @@ const vueFiles = {
       templates: ['tsconfig.e2e.json'],
     },
   ],
-  css: [
-    {
-      path: CLIENT_MAIN_SRC_DIR,
-      templates: ['content/css/loading.css'],
-    },
-  ],
   sass: [
     {
       path: CLIENT_MAIN_SRC_DIR,
       templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss'],
-    },
-  ],
-  commonWeb: [
-    {
-      path: CLIENT_MAIN_SRC_DIR,
-      templates: ['WEB-INF/web.xml', { file: 'favicon.ico', method: 'copy' }, 'robots.txt', '404.html', 'index.html'],
     },
   ],
   vueApp: [

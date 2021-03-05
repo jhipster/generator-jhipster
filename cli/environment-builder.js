@@ -115,6 +115,7 @@ module.exports = class EnvironmentBuilder {
    * @private
    * Lookup current loaded blueprints.
    *
+   * @param {Object} [options] - forwarded to Environment lookup.
    * @return {EnvironmentBuilder} this for chaining.
    */
   _lookupBlueprints(options) {
@@ -123,6 +124,18 @@ module.exports = class EnvironmentBuilder {
       // Lookup for blueprints.
       this.env.lookup({ ...options, filterPaths: true, packagePatterns: allBlueprints });
     }
+    return this;
+  }
+
+  /**
+   * Lookup for generators.
+   *
+   * @param {string[]} [generators] - generators to lookup.
+   * @param {Object} [options] - forwarded to Environment lookup.
+   * @return {EnvironmentBuilder} this for chaining.
+   */
+  lookupGenerators(generators, options = {}) {
+    this.env.lookup({ filterPaths: true, ...options, packagePatterns: generators });
     return this;
   }
 

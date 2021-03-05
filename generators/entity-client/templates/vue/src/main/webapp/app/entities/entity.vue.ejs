@@ -7,11 +7,13 @@
                     <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span v-text="$t('<%= i18nKeyPrefix %>.home.refreshListLabel')">Refresh List</span>
                 </button>
                 <%_ if (!readOnly) { _%>
-                <router-link :to="{name: '<%= entityAngularName %>Create'}" tag="button" id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%= entityUrl %>">
-                    <font-awesome-icon icon="plus"></font-awesome-icon>
-                    <span  v-text="$t('<%= i18nKeyPrefix %>.home.createLabel')">
-                        Create a new <%= entityClassHumanized %>
-                    </span>
+                <router-link :to="{name: '<%= entityAngularName %>Create'}" custom v-slot="{ navigate }">
+                    <button @click="navigate" id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%= entityUrl %>">
+                        <font-awesome-icon icon="plus"></font-awesome-icon>
+                        <span  v-text="$t('<%= i18nKeyPrefix %>.home.createLabel')">
+                            Create a new <%= entityClassHumanized %>
+                        </span>
+                    </button>
                 </router-link>
                 <%_ } _%>
             </div>
@@ -135,14 +137,18 @@
                     <%_ } _%>
                     <td class="text-right">
                         <div class="btn-group">
-                            <router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" tag="button" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
-                                <font-awesome-icon icon="eye"></font-awesome-icon>
-                                <span class="d-none d-md-inline" v-text="$t('entity.action.view')">View</span>
+                            <router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" custom v-slot="{ navigate }">
+                                <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
+                                    <font-awesome-icon icon="eye"></font-awesome-icon>
+                                    <span class="d-none d-md-inline" v-text="$t('entity.action.view')">View</span>
+                                </button>
                             </router-link>
                             <%_ if (!readOnly) { _%>
-                            <router-link :to="{name: '<%= entityAngularName %>Edit', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" tag="button" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
-                                <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
-                                <span class="d-none d-md-inline" v-text="$t('entity.action.edit')">Edit</span>
+                            <router-link :to="{name: '<%= entityAngularName %>Edit', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" custom v-slot="{ navigate }">
+                                <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
+                                    <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
+                                    <span class="d-none d-md-inline" v-text="$t('entity.action.edit')">Edit</span>
+                                </button>
                             </router-link>
                             <b-button v-on:click="prepareRemove(<%= entityInstance %>)"
                                    variant="danger"

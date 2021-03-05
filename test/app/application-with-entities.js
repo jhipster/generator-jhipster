@@ -75,5 +75,60 @@ describe('jhipster:app with applicationWithEntities option', () => {
         assert(MockedGenerator.calledOnce);
       });
     });
+
+    describe('and User', () => {
+      let runResult;
+      before(() => {
+        return helpers
+          .create(require.resolve('../../generators/app'))
+          .withOptions({
+            applicationWithEntities: {
+              config: {
+                baseName: 'jhipster',
+              },
+              entities: [
+                {
+                  name: 'User',
+                  fields: [
+                    {
+                      fieldName: 'id',
+                      fieldType: 'UUID',
+                    },
+                  ],
+                },
+              ],
+            },
+            fromCli: true,
+            skipInstall: true,
+            defaults: true,
+            withEntities: true,
+          })
+          .withMockedGenerators(['jhipster:entity'])
+          .run()
+          .then(result => {
+            runResult = result;
+          });
+      });
+
+      after(() => runResult.cleanup());
+
+      it('should write .yo-rc.json', () => {
+        runResult.assertFile('.yo-rc.json');
+        runResult.assertFileContent('.yo-rc.json', /"baseName": "jhipster"/);
+      });
+      it('should write entity config file', () => {
+        runResult.assertFile('.jhipster/User.json');
+        runResult.assertFileContent('.jhipster/User.json', /"name": "User"/);
+        runResult.assertFileContent('.jhipster/User.json', /"fieldType": "UUID"/);
+      });
+      it('should adopt the config file id type', () => {
+        runResult.assertFile('src/main/java/com/mycompany/myapp/domain/User.java');
+        runResult.assertFileContent('src/main/java/com/mycompany/myapp/domain/User.java', /private UUID id;/);
+      });
+      it('should not compose with entities generator', () => {
+        const MockedGenerator = runResult.mockedGenerators['jhipster:entity'];
+        assert(MockedGenerator.notCalled);
+      });
+    });
   });
 });

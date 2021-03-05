@@ -22,6 +22,7 @@ error.subtitle = Xatolik yz berdi.
 error.status = Holat:
 error.message = Xabar:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %>
 email.activation.greeting=Hurmatli {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> parol tiklash
 email.reset.greeting=Hurmatli {0}
 email.reset.text1=SIzning <%= baseName %> loginiz uchun parol tiklash so'raldi, iltimos, quyidagini tanlab tiklashni tugating:
 email.reset.text2=Ehtirom bilan,
+<%_ } _%>

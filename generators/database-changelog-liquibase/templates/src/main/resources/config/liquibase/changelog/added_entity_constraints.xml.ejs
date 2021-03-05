@@ -35,11 +35,11 @@
                 let baseColumnNames;
                 let referencedColumnNames;
                 if (relationshipType === 'one-to-one' && ownerSide && relationship.id === true) {
-                    baseColumnNames = relationship.otherEntity.idFields.map(field => getColumnName(field.columnName)).join(',');
-                    referencedColumnNames = relationship.otherEntity.idFields.map(field => getColumnName(field.columnName)).join(',');
+                    baseColumnNames = relationship.otherEntity.primaryKey.ownFields.map(field => getColumnName(field.columnName)).join(',');
+                    referencedColumnNames = relationship.otherEntity.primaryKey.ownFields.map(field => getColumnName(field.columnName)).join(',');
                 } else if (relationship.otherEntity) {
-                    baseColumnNames = relationship.otherEntity.idFields.map(field => getColumnName(relationshipName + '_' + field.columnName)).join(',');
-                    referencedColumnNames = relationship.otherEntity.idFields.map(field => getColumnName(field.columnName)).join(',');
+                    baseColumnNames = relationship.otherEntity.primaryKey.ownFields.map(field => getColumnName(relationshipName + '_' + field.columnName)).join(',');
+                    referencedColumnNames = relationship.otherEntity.primaryKey.ownFields.map(field => getColumnName(field.columnName)).join(',');
                 } %>
         <addForeignKeyConstraint baseColumnNames="<%= baseColumnNames %>"
                                  baseTableName="<%= entity.entityTableName %>"

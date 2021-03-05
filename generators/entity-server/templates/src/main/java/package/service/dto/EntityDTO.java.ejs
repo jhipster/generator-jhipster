@@ -50,7 +50,7 @@ import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.Set;
 <%_ } _%>
-<%_ if ((!embedded && primaryKey.type === 'UUID') || fieldsContainUUID === true) { _%>
+<%_ if (fieldsContainUUID === true) { _%>
 import java.util.UUID;
 <%_ } _%>
 <%_ if (fieldsContainBlob && databaseType === 'sql') { _%>
@@ -140,7 +140,7 @@ _%>
     <%_ } _%>
 <%_ } _%>
 
-<%_ const idNames = [...idFields.map(f => f.fieldName)] _%>
+<%_ const idNames = primaryKey ? [...primaryKey.ownFields.map(f => f.fieldName)] : [] _%>
     @Override
     public boolean equals(Object o) {
         if (this == o) {

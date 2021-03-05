@@ -67,7 +67,7 @@ describe('JDLDeployment', () => {
           deploymentType: 'docker-compose',
           appsFolders: ['foo', 'bar'],
           directoryPath: '../',
-          gatewayType: 'zuul',
+          gatewayType: 'SpringCloudGateway',
           dockerRepositoryName: 'test',
         };
         deployment = new JDLDeployment(args);
@@ -90,7 +90,7 @@ describe('JDLDeployment', () => {
           deploymentType: 'docker-compose',
           appsFolders: ['foo', 'bar'],
           directoryPath: '../parent',
-          gatewayType: 'zuul',
+          gatewayType: 'SpringCloudGateway',
           dockerRepositoryName: 'test',
         };
         deployment = new JDLDeployment(args);

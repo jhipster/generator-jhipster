@@ -20,8 +20,8 @@
   const idType = getTypescriptKeyType(user.primaryKey.type);
 _%>
 export interface IUser {
-  id: <%= idType %>;
-  login: string;
+  id?: <%= idType %>;
+  login?: string;
 }
 
 export class User implements IUser {
@@ -29,4 +29,8 @@ export class User implements IUser {
     public id: <%= idType %>,
     public login: string,
   ) {}
+}
+
+export function getUserIdentifier(user: IUser): <%= idType %> | undefined {
+  return user.id;
 }

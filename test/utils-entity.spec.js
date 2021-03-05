@@ -41,6 +41,7 @@ describe('entity utilities', () => {
         });
         it('should adopt id field as @Id', () => {
           expect(entity.fields[0]).to.eql({
+            dynamic: false,
             fieldName: 'id',
             fieldType: 'CustomType',
             id: true,

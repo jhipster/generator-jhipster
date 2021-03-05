@@ -30,7 +30,7 @@ export class <%= entityAngularName %>RoutingResolveService implements Resolve<I<
     constructor(protected service: <%= entityAngularName %>Service, protected router: Router) {}
 
     resolve(route: ActivatedRouteSnapshot): Observable<I<%= entityAngularName %>> | Observable<never> {
-        const id = route.params['id'];
+        const id = route.params['<%= primaryKey.name %>'];
         if (id) {
             return this.service.find(id).pipe(
                 mergeMap((<%= entityInstance %>: HttpResponse<<%= entityAngularName %>>) => {

@@ -32,9 +32,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 <%_ } _%>
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-<%_ if (applicationType === 'gateway' && !reactive) { _%>
-import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
-<%_ } _%>
 import org.springframework.core.env.Environment;
 
 import javax.annotation.PostConstruct;
@@ -46,9 +43,6 @@ import java.util.Optional;
 
 @SpringBootApplication
 @EnableConfigurationProperties({<% if (databaseType === 'sql') { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
-<%_ if (applicationType === 'gateway' && !reactive) { _%>
-@EnableZuulProxy
-<%_ } _%>
 public class <%= mainClass %> {
 
     private static final Logger log = LoggerFactory.getLogger(<%= mainClass %>.class);

@@ -49,6 +49,16 @@ eureka:
     instanceId: <%= baseName %>:${spring.application.instance-id:${random.value}}
 <%_ } _%>
 
+<%_ if (databaseType === 'mongodb') { _%>
+mongock:
+  change-logs-scan-package:
+    - <%= packageName %>.config.dbmigrations
+  mongo-db:
+    read-concern: local
+    write-concern:
+      journal: false
+
+<%_ } _%>
 spring:
 <%_ if (databaseType === 'sql') { _%>
   profiles:

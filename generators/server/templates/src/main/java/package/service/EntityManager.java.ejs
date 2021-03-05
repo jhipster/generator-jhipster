@@ -133,15 +133,14 @@ public class EntityManager {
     }
 
     private String createSelectImpl(SelectOrdered selectFrom, Class<?> entityType, Sort sortParameter) {
-        final Select select;
         if (sortParameter != null && sortParameter.isSorted()) {
             RelationalPersistentEntity<?> entity = getPersistentEntity(entityType);
-            Sort sort = updateMapper.getMappedObject(sortParameter, entity);
-            select = selectFrom.orderBy(createOrderByFields(Table.create(entity.getTableName()).as(EntityManager.ENTITY_ALIAS), sort)).build();
-        } else {
-            select = selectFrom.build();
+            if (entity != null) {
+                Sort sort = updateMapper.getMappedObject(sortParameter, entity);
+                selectFrom = selectFrom.orderBy(createOrderByFields(Table.create(entity.getTableName()).as(EntityManager.ENTITY_ALIAS), sort));
+            }
         }
-        return createSelect(select);
+        return createSelect(selectFrom.build());
     }
 
     private RelationalPersistentEntity<?> getPersistentEntity(Class<?> entityType) {
@@ -232,11 +231,7 @@ public class EntityManager {
             String propertyName = order.getProperty();
             OrderByField orderByField = OrderByField.from(table.column(propertyName).as(EntityManager.ALIAS_PREFIX + propertyName));
 
-            if (order.getDirection() != null) {
-                fields.add(order.isAscending() ? orderByField.asc() : orderByField.desc());
-            } else {
-                fields.add(orderByField);
-            }
+            fields.add(order.isAscending() ? orderByField.asc() : orderByField.desc());
         }
 
         return fields;

@@ -546,7 +546,7 @@ describe('ParsedJDLToJDLObjectConverter', () => {
             directoryPath: '../',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: 'test',
-            gatewayType: 'zuul',
+            gatewayType: 'SpringCloudGateway',
             monitoring: 'no',
             serviceDiscoveryType: 'eureka',
           });

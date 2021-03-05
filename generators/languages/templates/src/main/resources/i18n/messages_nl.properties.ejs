@@ -22,6 +22,7 @@ error.subtitle=Onze excuses, er is een fout opgetreden.
 error.status=Status:
 error.message=Boodschap:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> account activeren
 email.activation.greeting=Beste {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> wachtwoord reset
 email.reset.greeting=Beste {0}
 email.reset.text1=Voor uw <%= baseName %> account werd een wachtwoord reset gevraagd, gelieve op de onderstaande URL te klikken om te resetten:
 email.reset.text2=Met vriendelijke groeten,
+<%_ } _%>

@@ -303,8 +303,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
             <Table responsive>
               <thead>
                 <tr>
-                  <th <% if (pagination !== 'no') { %> className="hand" onClick={sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
-                  <%_ for (field of fields.filter(field => !field.id)) { _%>
+                  <%_ for (field of fields) { _%>
                   <th<% if (pagination !== 'no') { %> className="hand" onClick={sort('<%= field.fieldName %>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${field.fieldName}` %>"><%= field.fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
                   <%_ } _%>
                   <%_ for (relationship of relationships) { _%>
@@ -323,11 +322,11 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                   <%= entityInstance %>List.map((<%= entityInstance %>, i) => (
                   <tr key={`entity-${i}`} data-cy="entityTable">
                     <td>
-                      <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}`} color="link" size="sm">
-                        {<%= entityInstance %>.id}
+                      <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.<%= primaryKey.name %>}`} color="link" size="sm">
+                        {<%= entityInstance %>.<%= primaryKey.name %>}
                       </Button>
                     </td>
-                    <%_ for (field of fields.filter(field => !field.id)) {
+                    <%_ for (field of fields) {
                       const fieldType = field.fieldType;
                       const fieldName = field.fieldName;
                       const fieldIsEnum = field.fieldIsEnum;
@@ -378,6 +377,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                       const relationshipFieldName = relationship.relationshipFieldName;
                       const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
                       const otherEntityName = relationship.otherEntityName;
+                      const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
                       const otherEntityStateName = relationship.otherEntityStateName;
                       const otherEntityField = relationship.otherEntityField;
                       const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized; _%>
@@ -408,7 +408,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                         }
                           <%_ } else { _%>
                         {<%= entityInstance + "." + relationshipFieldName %> ?
-                        <Link to={`<%= otherEntityStateName %>/${<%= entityInstance + "." + relationshipFieldName + ".id}" %>`}>
+                        <Link to={`<%= otherEntityStateName %>/${<%= entityInstance + "." + relationshipFieldName + "." + otherEntityPkName + "}" %>`}>
                           {<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}
                         </Link> : ''}
                           <%_ } _%>
@@ -418,14 +418,14 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                       <%_ } _%>
                       <td className="text-right">
                         <div className="btn-group flex-btn-group-container">
-                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.<%= primaryKey.name %>}`} color="info" size="sm" data-cy="entityDetailsButton">
                             <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                           </Button>
                           <%_ if (!readOnly) { _%>
-                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/edit<%_ if (pagination === 'pagination') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="primary" size="sm" data-cy="entityEditButton">
+                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.<%= primaryKey.name %>}/edit<%_ if (pagination === 'pagination') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="primary" size="sm" data-cy="entityEditButton">
                             <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                           </Button>
-                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/delete<%_ if (pagination === 'pagination') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="danger" size="sm" data-cy="entityDeleteButton">
+                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.<%= primaryKey.name %>}/delete<%_ if (pagination === 'pagination') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="danger" size="sm" data-cy="entityDeleteButton">
                             <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                           </Button>
                           <%_ } _%>

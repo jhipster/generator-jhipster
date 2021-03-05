@@ -137,7 +137,7 @@ describe('JDLWithoutApplicationValidator', () => {
           validEntity.addField(
             new JDLField({
               name: 'validField',
-              type: FieldTypes.CassandraTypes.UUID,
+              type: 'UNKNOWN-TYPE',
             })
           );
           const jdlObject = new JDLObject();

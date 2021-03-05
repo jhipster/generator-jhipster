@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 const semver = require('semver');
-const packagejs = require('../package.json');
 const validationOptions = require('../jdl/jhipster/validations');
 const applicationOptions = require('../jdl/jhipster/application-options');
 const databaseTypes = require('../jdl/jhipster/database-types');
@@ -28,31 +27,25 @@ const clientFrameworks = applicationOptions.OptionValues[applicationOptions.Opti
 const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the variable as it might be useful in the future.
 
 // Version of Node, NPM
-const HUSKY_VERSION = '4.3.7';
-const LINT_STAGED_VERSION = '10.5.3';
 const NODE_VERSION = '14.15.0';
-const NPM_VERSION = '7.4.3';
+const NPM_VERSION = '7.6.0';
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
 
-const GRADLE_VERSION = '6.8.1';
+const GRADLE_VERSION = '6.8.2';
 const JIB_VERSION = '2.7.1';
 
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '7.0.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.4.2';
+const SPRING_BOOT_VERSION = '2.4.3';
 const LIQUIBASE_VERSION = '4.2.2';
 const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
 const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;
-const HIBERNATE_VERSION = '5.4.27.Final';
+const HIBERNATE_VERSION = '5.4.28.Final';
 
 const JACOCO_VERSION = '0.8.6';
 const KAFKA_VERSION = '5.5.3';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
-
-// The installed prettier version should be the same that the one used during JHipster generation to avoid formatting differences
-const PRETTIER_VERSION = packagejs.dependencies.prettier;
-const PRETTIER_JAVA_VERSION = packagejs.dependencies['prettier-plugin-java'];
 
 // Version of docker images
 const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
@@ -399,10 +392,6 @@ const constants = {
   // NPM
   NODE_VERSION,
   NPM_VERSION,
-  HUSKY_VERSION,
-  LINT_STAGED_VERSION,
-  PRETTIER_VERSION,
-  PRETTIER_JAVA_VERSION,
   OPENAPI_GENERATOR_CLI_VERSION,
 
   DOCKER_JENKINS,

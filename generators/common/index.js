@@ -17,10 +17,13 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
+const _ = require('lodash');
+
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const prettierConfigFiles = require('./files').prettierConfigFiles;
 const constants = require('../generator-constants');
+const packageJson = require('../../package.json');
 
 let useBlueprints;
 
@@ -51,6 +54,7 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
         this.TEST_DIR = constants.TEST_DIR;
         this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
         this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+        this.REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
         // Make documentation URL available in templates
         this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
@@ -72,6 +76,19 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
         this.loadClientConfig();
         this.loadServerConfig();
         this.loadTranslationConfig();
+      },
+
+      loadPackageJson() {
+        // The installed prettier version should be the same that the one used during JHipster generation to avoid formatting differences
+        _.merge(this.dependabotPackageJson, {
+          devDependencies: {
+            prettier: packageJson.dependencies.prettier,
+            'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
+          },
+        });
+
+        // Load common package.json into packageJson
+        _.merge(this.dependabotPackageJson, this.fs.readJSON(this.fetchFromInstalledJHipster('common', 'templates', 'package.json')));
       },
     };
   }

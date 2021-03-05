@@ -22,6 +22,7 @@ error.subtitle=Sentímolo, ocorreu un erro.
 error.status=Estado:
 error.message=Mensaxe:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=Activación de <%= baseName %>
 email.activation.greeting=Estimado {0}
@@ -37,3 +38,4 @@ email.reset.title=Reinicio de contrasinal de <%= baseName %>
 email.reset.greeting=Estimado {0}
 email.reset.text1=Solicitouse o reinicio de contrasinal para a súa conta de <%= baseName %>, por favor faga clic na ligazón de abaixo para reiniciala:
 email.reset.text2=Saúdos,
+<%_ } _%>

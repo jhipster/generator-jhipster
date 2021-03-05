@@ -35,10 +35,10 @@ jobs:
       matrix:
         node_version: [14.15.0]
         os: [ubuntu-20.04]
-        npm_version: [7.4.3]
+        npm_version: [7.6.0]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2.1.4
+      - uses: actions/setup-node@v2.1.5
         with:
           node-version: ${{ matrix.node_version }}
       - name: 'install npm@${{ matrix.npm_version }}'

@@ -79,11 +79,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
         this.SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 
-        this.HUSKY_VERSION = constants.HUSKY_VERSION;
-        this.LINT_STAGED_VERSION = constants.LINT_STAGED_VERSION;
-        this.PRETTIER_VERSION = constants.PRETTIER_VERSION;
-        this.PRETTIER_JAVA_VERSION = constants.PRETTIER_JAVA_VERSION;
-
         this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
         this.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
         this.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;
@@ -205,6 +200,10 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _composing() {
     return {
+      composeCommon() {
+        this.composeWithJHipster('common', true);
+      },
+
       composeLanguages() {
         // We don't expose client/server to cli, composing with languages is used for test purposes.
         if (this.jhipsterConfig.enableTranslation === false) return;

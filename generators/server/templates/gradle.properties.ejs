@@ -27,13 +27,13 @@ springBootVersion=<%= SPRING_BOOT_VERSION %>
 # The hibernate version should match the one managed by
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %> -->
 hibernateVersion=<%= HIBERNATE_VERSION %>
-mapstructVersion=1.4.1.Final
-archunitJunit5Version=0.15.0
+mapstructVersion=1.4.2.Final
+archunitJunit5Version=0.17.0
 <%_ if (enableSwaggerCodegen) { _%>
 jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 <%_ } _%>
 <%_ if (cacheProvider === 'caffeine') { _%>
-caffeineVersion=2.8.8
+caffeineVersion=3.0.0
 typesafeConfigVersion=1.4.1
 <%_ } _%>
 <%_ if (databaseType === 'sql' && !reactive) { _%>
@@ -43,8 +43,7 @@ liquibaseTaskPrefix=liquibase
 
 <%_ if (reactive) { _%>
 blockhoundJunitPlatformVersion=1.0.4.RELEASE
-junitPlatformLauncherVersion=1.7.0
-r2dbcMariadbVersion=1.0.0
+junitPlatformLauncherVersion=1.7.1
 <%_ } _%>
 
 <%_ if (databaseType === 'sql') { _%>
@@ -53,24 +52,24 @@ jaxbRuntimeVersion=2.3.3
 <%_ if (databaseType === 'cassandra') { _%>
 # The cassandra driver version should match the one managed by
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %>
-cassandraDriverVersion=4.6.1
+cassandraDriverVersion=4.9.0
 <%_ } _%>
 
 # gradle plugin version
 jibPluginVersion=<%= JIB_VERSION %>
 gitPropertiesPluginVersion=2.2.4
 <%_ if (!skipClient) { _%>
-gradleNodePluginVersion=3.0.0-rc7
+gradleNodePluginVersion=3.0.1
 <%_ } _%>
 <%_ if (databaseType === 'sql' && !reactive) { _%>
 liquibasePluginVersion=2.0.4
 <%_ } _%>
-sonarqubePluginVersion=3.1
+sonarqubePluginVersion=3.1.1
 <%_ if (enableSwaggerCodegen) { _%>
 openapiPluginVersion=4.3.1
 <%_ } _%>
 springNoHttpPluginVersion=0.0.5.RELEASE
-checkstyleVersion=8.39
+checkstyleVersion=8.40
 
 # jhipster-needle-gradle-property - JHipster will add additional properties here
 

@@ -22,6 +22,7 @@ error.subtitle=Demanem disculpes, s'ha produït un error
 error.status=Estat:
 error.message=Missatge:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=Activació <%= baseName %>
 email.activation.greeting=Benvolgut {0}
@@ -35,3 +36,4 @@ email.reset.title=Reinicialitzar la contrasenya de <%= baseName %>
 email.reset.greeting=Estimat {0}
 email.reset.text1= S'ha solicitat la reinicialització de la seva contrasenya pel seu compte de <%= baseName %>, si us plau, cliqueu l'enllaç de sota per reinicialitzar-la:
 email.reset.text2=Salutacions,
+<%_ } _%>

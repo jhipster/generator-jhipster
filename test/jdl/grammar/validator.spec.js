@@ -1517,7 +1517,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    const ALPHABETIC_LOWER = ['gatewayType', 'monitoring', 'serviceDiscoveryType', 'storageType'];
+    const ALPHABETIC_LOWER = ['monitoring', 'serviceDiscoveryType', 'storageType'];
     ALPHABETIC_LOWER.forEach(type => {
       context(`and using for ${type}`, () => {
         context('a valid value', () => {
@@ -1669,22 +1669,43 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    const ALPHANUMERIC_NAME = ['kubernetesServiceType'];
+    const ALPHANUMERIC_NAME = ['gatewayType', 'kubernetesServiceType'];
 
     ALPHANUMERIC_NAME.forEach(type => {
       context(`and using for ${type}`, () => {
         context('a valid value', () => {
-          it('should not report a syntax error', () => {
-            expect(() =>
-              parse(`
-            deployment {
-              ${type} test23
-            }`)
-            ).not.to.throw();
+          context('a valid value for gatewayType', () => {
+            it('should not report a syntax error', () => {
+              expect(() =>
+                parse(`
+              deployment {
+                ${type} SpringCloudGateway
+              }`)
+              ).not.to.throw();
+            });
+          });
+          context('a valid value for kubernetesServiceType', () => {
+            it('should not report a syntax error', () => {
+              expect(() =>
+                parse(`
+              deployment {
+                ${type} NodePort
+              }`)
+              ).not.to.throw();
+            });
           });
         });
-
         context('an invalid value', () => {
+          context('an invalid value', () => {
+            it('should not report a syntax error', () => {
+              expect(() =>
+                parse(`
+              deployment {
+                ${type} test23
+              }`)
+              ).to.throw(new RegExp(`^The ${type} property name must match: `));
+            });
+          });
           context('such as having special character', () => {
             it('should report a syntax error', () => {
               expect(() =>

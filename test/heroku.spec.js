@@ -7,7 +7,11 @@ const ChildProcess = require('child_process');
 const constants = require('../generators/generator-constants');
 
 const expectedFiles = {
-  monolith: ['Procfile', `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`],
+  monolith: [
+    'Procfile',
+    `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`,
+    `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`,
+  ],
 };
 
 describe('JHipster Heroku Sub Generator', () => {

@@ -131,10 +131,11 @@ describe('<%= entityClass %> e2e test', () => {
     cy.intercept('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
     cy.visit('/');
     cy.clickOnEntityMenuItem('<%= entityStateName %>');
-    cy.wait('@entitiesRequest');
+    cy.wait('@entitiesRequest')
+      .then(({ request, response }) => startingEntitiesCount = response.body.length);
     cy.get(entityCreateButtonSelector).click({force: true});
     cy.getEntityCreateUpdateHeading('<%= entityClass %>');
-    <%_ fields.filter(field => !field.id).forEach((field) => {
+    <%_ fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden).forEach((field) => {
       const fieldName = field.fieldName;
       const fieldNameCapitalized = field.fieldNameCapitalized;
       const fieldType = field.fieldType;

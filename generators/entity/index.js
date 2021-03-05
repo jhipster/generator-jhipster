@@ -28,7 +28,7 @@ const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { isReservedClassName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
 const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../../utils/entity');
-const { prepareFieldForTemplates } = require('../../utils/field');
+const { prepareFieldForTemplates, fieldIsEnum } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
 const { stringify } = require('../../utils');
 
@@ -372,6 +372,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
           if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
             field.fieldType = 'Instant';
           }
+          if (field.fieldType === 'byte[]' && context.databaseType === 'cassandra') {
+            field.fieldType = 'ByteBuffer';
+          }
 
           this._validateField(field);
 
@@ -433,11 +436,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
   _composing() {
     return {
       composeEntities() {
-        if (this.options.singleEntity) return;
         // We need to compose with others entities to update relationships.
         this.composeWithJHipster(
           'entities',
           {
+            entities: this.options.singleEntity ? [this.context.name] : undefined,
+            regenerate: true,
+            writeEveryEntity: false,
             composedEntities: [this.context.name],
             skipDbChangelog: this.options.skipDbChangelog,
             skipInstall: this.options.skipInstall,
@@ -494,15 +499,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _preparing() {
     return {
-      prepareEntityForTemplates() {
-        const entity = this.context;
-        prepareEntityForTemplates(entity, this);
-
-        this.context.fields.forEach(field => {
-          prepareFieldForTemplates(entity, field, this);
-        });
-      },
-
       loadRelationships() {
         this.context.relationships.forEach(relationship => {
           const otherEntityName = this._.upperFirst(relationship.otherEntityName);
@@ -513,6 +509,19 @@ class EntityGenerator extends BaseBlueprintGenerator {
           relationship.otherEntity = otherEntity;
           otherEntity.otherRelationships = otherEntity.otherRelationships || [];
           otherEntity.otherRelationships.push(relationship);
+        });
+      },
+
+      prepareEntityForTemplates() {
+        const entity = this.context;
+        prepareEntityForTemplates(entity, this);
+      },
+
+      prepareFieldsForTemplates() {
+        const entity = this.context;
+
+        this.context.fields.forEach(field => {
+          prepareFieldForTemplates(entity, field, this);
         });
       },
     };
@@ -530,6 +539,25 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.context.relationships.forEach(relationship => {
           prepareRelationshipForTemplates(this.context, relationship, this);
 
+          // Load in-memory data for root
+          if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) {
+            this.context.fieldsContainOwnerManyToMany = true;
+          } else if (relationship.relationshipType === 'one-to-one' && !relationship.ownerSide) {
+            this.context.fieldsContainNoOwnerOneToOne = true;
+          } else if (relationship.relationshipType === 'one-to-one' && relationship.ownerSide) {
+            this.context.fieldsContainOwnerOneToOne = true;
+          } else if (relationship.relationshipType === 'one-to-many') {
+            this.context.fieldsContainOneToMany = true;
+          } else if (relationship.relationshipType === 'many-to-one') {
+            this.context.fieldsContainManyToOne = true;
+          }
+          if (relationship.otherEntityIsEmbedded) {
+            this.context.fieldsContainEmbedded = true;
+          }
+          if (relationship.relationshipValidate) {
+            this.context.validation = true;
+          }
+
           const entityType = relationship.otherEntityNameCapitalized;
           if (!this.context.differentTypes.includes(entityType)) {
             this.context.differentTypes.push(entityType);
@@ -542,12 +570,61 @@ class EntityGenerator extends BaseBlueprintGenerator {
       },
 
       processDerivedPrimaryKey() {
-        if (!this.context.derivedPrimaryKey) {
+        if (!this.context.primaryKey) {
           return;
         }
-        const idFields = this.context.primaryKey.derivedFields;
-        this.context.idFields = idFields;
-        this.context.fields.unshift(...idFields);
+        const derivedFields = this.context.primaryKey.derivedFields;
+        this.context.fields.unshift(...derivedFields);
+      },
+
+      processEntityFields() {
+        const entity = this.context;
+        entity.fields.forEach(field => {
+          const fieldType = field.fieldType;
+          if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
+            entity.fieldsIsReactAvField = true;
+          }
+
+          if (field.javadoc) {
+            entity.haveFieldWithJavadoc = true;
+          }
+
+          if (fieldIsEnum(fieldType)) {
+            entity.i18nToLoad.push(field.enumInstance);
+          }
+
+          if (fieldType === 'ZonedDateTime') {
+            entity.fieldsContainZonedDateTime = true;
+            entity.fieldsContainDate = true;
+          } else if (fieldType === 'Instant') {
+            entity.fieldsContainInstant = true;
+            entity.fieldsContainDate = true;
+          } else if (fieldType === 'Duration') {
+            entity.fieldsContainDuration = true;
+          } else if (fieldType === 'LocalDate') {
+            entity.fieldsContainLocalDate = true;
+            entity.fieldsContainDate = true;
+          } else if (fieldType === 'BigDecimal') {
+            entity.fieldsContainBigDecimal = true;
+          } else if (fieldType === 'UUID') {
+            entity.fieldsContainUUID = true;
+          } else if (fieldType === 'byte[]' || fieldType === 'ByteBuffer') {
+            entity.blobFields.push(field);
+            entity.fieldsContainBlob = true;
+            if (field.fieldTypeBlobContent === 'image') {
+              entity.fieldsContainImageBlob = true;
+            }
+            if (field.fieldTypeBlobContent !== 'text') {
+              entity.fieldsContainBlobOrImage = true;
+            } else {
+              entity.fieldsContainTextBlob = true;
+            }
+          }
+
+          if (Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1) {
+            entity.validation = true;
+          }
+        });
       },
 
       prepareReferences() {
@@ -606,7 +683,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
       },
 
       processPrimaryKeyTypesForRelations() {
-        const types = this.context.relationships.filter(rel => rel.otherEntity.primaryKey).map(rel => rel.otherEntity.primaryKey.type);
+        const types = this.context.relationships
+          .filter(rel => rel.otherEntity.primaryKey)
+          .map(rel => rel.otherEntity.primaryKey.fields.map(f => f.fieldType))
+          .flat();
         this.context.otherEntityPrimaryKeyTypes = Array.from(new Set(types));
       },
 
@@ -641,6 +721,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
        * Composed generators uses context ready for the templates.
        */
       composing() {
+        if (this.options.skipWriting) return;
         const context = this.context;
         if (!context.skipServer) {
           this.composeWithJHipster('entity-server', {
@@ -685,6 +766,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
   // Public API method used by the getter and also by Blueprints
   _writing() {
+    if (this.options.skipWriting) {
+      return {};
+    }
     return {
       cleanup() {
         const context = this.context;

@@ -1,8 +1,8 @@
 {
   "dependencies": {
-    "@angular/common": "11.1.1",
+    "@angular/common": "11.2.4",
     "bootstrap": "4.6.0",
-    "@fortawesome/angular-fontawesome": "0.8.1",
+    "@fortawesome/angular-fontawesome": "0.8.2",
     "@fortawesome/fontawesome-svg-core": "1.2.34",
     "@fortawesome/free-solid-svg-icons": "5.15.2",
     "@ng-bootstrap/ng-bootstrap": "9.0.2",
@@ -11,24 +11,24 @@
     "ngx-cookie-service": "11.0.2",
     "ngx-infinite-scroll": "10.0.1",
     "ngx-webstorage": "7.0.1",
-    "rxjs": "6.6.3",
-    "swagger-ui-dist": "3.41.1",
+    "rxjs": "6.6.6",
+    "swagger-ui-dist": "3.44.0",
     "tslib": "2.1.0",
     "zone.js": "0.11.3"
   },
   "devDependencies": {
-    "@angular/cli": "11.1.2",
-    "@angular-builders/custom-webpack": "11.0.0",
-    "@angular-eslint/eslint-plugin": "1.1.0",
-    "@types/node": "14.14.22",
+    "@angular/cli": "11.2.3",
+    "@angular-builders/custom-webpack": "11.1.0",
+    "@angular-eslint/eslint-plugin": "1.2.0",
+    "@types/node": "14.14.31",
     "@types/jest": "26.0.20",
-    "@typescript-eslint/eslint-plugin": "4.14.1",
+    "@typescript-eslint/eslint-plugin": "4.16.1",
     "browser-sync": "2.26.14",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "6.4.1",
-    "eslint": "7.18.0",
-    "eslint-config-prettier": "7.2.0",
-    "eslint-webpack-plugin": "2.4.3",
+    "eslint": "7.21.0",
+    "eslint-config-prettier": "8.1.0",
+    "eslint-webpack-plugin": "2.5.2",
     "friendly-errors-webpack-plugin": "1.7.0",
     "jest": "26.6.3",
     "jest-date-mock": "1.0.8",
@@ -37,9 +37,9 @@
     "merge-jsons-webpack-plugin": "1.0.21",
     "rimraf": "3.0.2",
     "simple-progress-webpack-plugin": "1.1.2",
-    "typescript": "4.1.3",
+    "typescript": "4.1.5",
     "webpack": "4.46.0",
     "webpack-bundle-analyzer": "4.4.0",
-    "webpack-notifier": "1.12.0"
+    "webpack-notifier": "1.13.0"
   }
 }

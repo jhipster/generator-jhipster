@@ -1,12 +1,11 @@
 'use strict';
 const path = require('path');
-const vueLoaderConfig = require('./loader.conf');
 const { VueLoaderPlugin } = require('vue-loader');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 <%_ } _%>
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const vueLoaderConfig = require('./loader.conf');
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir);
@@ -108,14 +107,6 @@ module.exports = {
         // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
         { from: './<%= CLIENT_MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' },
       ]
-    }),
-    // https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      base: '/',
-      template: './<%= MAIN_SRC_DIR %>index.html',
-      chunks: ['vendors', 'main', 'global'],
-      chunksSortMode: 'manual',
-      inject: true
     })<% if (enableTranslation) { %>,
     new MergeJsonWebpackPlugin({
       output: {

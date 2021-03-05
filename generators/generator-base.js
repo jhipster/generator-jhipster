@@ -1532,6 +1532,23 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * Read entity json from config folder.
+   * @param {string} entityName - Entity name
+   * @return {object} entity definition
+   */
+  readEntityJson(entityName) {
+    const configDir = this.destinationPath(JHIPSTER_CONFIG_DIR);
+    const file = this.destinationPath(configDir, `${entityName}.json`);
+    try {
+      return this.fs.readJSON(file);
+    } catch (error) {
+      this.warning(`Unable to parse ${file}, is the entity file malformed or invalid?`);
+      this.debug('Error:', error);
+      return undefined;
+    }
+  }
+
+  /**
    * get sorted list of entities according to changelog date (i.e. the order in which they were added)
    */
   getExistingEntities() {
@@ -1556,23 +1573,8 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     dir.closeSync();
 
     return [...new Set((this.jhipsterConfig.entities || []).concat(entityNames))]
-      .map(entityName => {
-        const file = this.destinationPath(configDir, `${entityName}.json`);
-        try {
-          const definition = this.fs.readJSON(file);
-          if (this.options.namespace !== 'jhipster:info') {
-            // Execute a write operation to set the file as modified on mem-fs to trigger prettier.
-            this.fs.append(file, '', { trimEnd: false, separator: '' });
-          }
-          return { name: path.basename(file, '.json'), definition };
-        } catch (error) {
-          // not an entity file / malformed?
-          this.warning(`Unable to parse entity file ${file}`);
-          this.debug('Error:', error);
-          return undefined;
-        }
-      })
-      .filter(entity => entity)
+      .map(entityName => ({ name: entityName, definition: this.readEntityJson(entityName) }))
+      .filter(entity => entity && !this.isBuiltInUser(entity.name) && !this.isBuiltInAuthority(entity.name))
       .sort(isBefore);
   }
 
@@ -2360,13 +2362,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.websocket) {
       this.jhipsterConfig.websocket = options.websocket;
     }
-    if (options.jhiPrefix) {
+    if (options.jhiPrefix !== undefined) {
       this.jhipsterConfig.jhiPrefix = options.jhiPrefix;
     }
-    if (options.entitySuffix) {
+    if (options.entitySuffix !== undefined) {
       this.jhipsterConfig.entitySuffix = options.entitySuffix;
     }
-    if (options.dtoSuffix) {
+    if (options.dtoSuffix !== undefined) {
       this.jhipsterConfig.dtoSuffix = options.dtoSuffix;
     }
     if (options.clientFramework) {
@@ -2433,7 +2435,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.isDebugEnabled = config.isDebugEnabled;
     dest.experimental = config.experimental;
     dest.logo = config.logo;
-    dest.backendName = config.backendName || 'Java';
+    config.backendName = config.backendName || 'Java';
+    dest.backendName = config.backendName;
+    config.dependabotPackageJson = config.dependabotPackageJson || {};
+    dest.dependabotPackageJson = config.dependabotPackageJson;
   }
 
   /**
@@ -2559,10 +2564,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
   /**
    * Fetch files from the generator-jhipster instance installed
-   * @param {string} subpath : the path to fetch from
+   * @param {...string} subpath : the path to fetch from
    */
-  fetchFromInstalledJHipster(subpath) {
-    return path.join(__dirname, subpath);
+  fetchFromInstalledJHipster(...subpath) {
+    return path.join(__dirname, ...subpath);
   }
 
   /**

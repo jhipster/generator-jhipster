@@ -41,7 +41,7 @@ function askForServerSideOpts() {
   const defaultPort = applicationType === 'gateway' ? '8080' : '8081';
   const prompts = [
     {
-      when: () => ['gateway', 'monolith', 'microservice'].includes(applicationType),
+      when: () => ['monolith', 'microservice'].includes(applicationType),
       type: 'confirm',
       name: 'reactive',
       message: '[Beta] Do you want to make it reactive with Spring WebFlux?',
@@ -269,7 +269,11 @@ function askForServerSideOpts() {
 
   return this.prompt(prompts).then(answers => {
     this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = answers.serviceDiscoveryType;
-    this.reactive = this.jhipsterConfig.reactive = answers.reactive;
+    if (this.jhipsterConfig.applicationType === 'gateway') {
+      this.reactive = this.jhipsterConfig.reactive = answers.reactive = true;
+    } else {
+      this.reactive = this.jhipsterConfig.reactive = answers.reactive;
+    }
     this.authenticationType = this.jhipsterConfig.authenticationType = answers.authenticationType;
 
     this.packageName = this.jhipsterConfig.packageName = answers.packageName;

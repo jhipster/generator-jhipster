@@ -1680,10 +1680,8 @@ describe('JHipster generator', () => {
       });
 
       it('creates expected files with the gateway application type', () => {
-        assert.file(expectedFiles.jwtServer);
+        assert.file(expectedFiles.jwtServerGateway);
         assert.file(expectedFiles.gateway);
-        assert.noFile(expectedFiles.rateLimitingFilesForGateways);
-        assert.file(expectedFiles.feignConfig);
         assert.file(expectedFiles.eureka);
         assert.noFile(expectedFiles.consul);
       });
@@ -1718,10 +1716,8 @@ describe('JHipster generator', () => {
       });
 
       it('creates expected files with the gateway application type', () => {
-        assert.file(expectedFiles.jwtServer);
+        assert.file(expectedFiles.jwtServerGateway);
         assert.file(expectedFiles.gateway);
-        assert.file(expectedFiles.rateLimitingFilesForGateways);
-        assert.file(expectedFiles.feignConfig);
         assert.file(expectedFiles.eureka);
         assert.noFile(expectedFiles.consul);
       });
@@ -1874,9 +1870,8 @@ describe('JHipster generator', () => {
       });
 
       it('creates expected files with the gateway application type', () => {
-        assert.file(expectedFiles.jwtServer);
+        assert.file(expectedFiles.jwtServerGateway);
         assert.file(expectedFiles.gateway);
-        assert.noFile(expectedFiles.rateLimitingFilesForGateways);
         assert.noFile(expectedFiles.eureka);
         assert.file(expectedFiles.consul);
       });
@@ -1911,9 +1906,8 @@ describe('JHipster generator', () => {
       });
 
       it('creates expected files with the gateway application type', () => {
-        assert.file(expectedFiles.jwtServer);
+        assert.file(expectedFiles.jwtServerGateway);
         assert.file(expectedFiles.gateway);
-        assert.file(expectedFiles.rateLimitingFilesForGateways);
         assert.noFile(expectedFiles.eureka);
         assert.file(expectedFiles.consul);
       });
@@ -1986,9 +1980,8 @@ describe('JHipster generator', () => {
       });
 
       it('creates expected files with the gateway application type', () => {
-        assert.file(expectedFiles.jwtServer);
+        assert.file(expectedFiles.jwtServerGateway);
         assert.noFile(expectedFiles.gateway);
-        assert.noFile(expectedFiles.rateLimitingFilesForGateways);
         assert.noFile(expectedFiles.eureka);
         assert.noFile(expectedFiles.consul);
       });

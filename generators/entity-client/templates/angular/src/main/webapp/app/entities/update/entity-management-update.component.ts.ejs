@@ -17,6 +17,11 @@
  limitations under the License.
 -%>
 <%_
+const allRelationshipsByEntityNeedingOptions = Object
+    .values(differentRelationships)
+    .map(relationships => relationships.filter(rel => rel.ownerSide))
+    .filter(relationships => relationships.length > 0);
+
 const hasValidationRule = fields.some(field =>
         field.fieldValidate && (
                 field.fieldValidateRules.includes('required') ||
@@ -35,9 +40,8 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder,<%_ if (isValidatorsRequired) { _%> Validators<%_ } _%> } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-<%_ if (relationships.some(rel => rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName !== 'user')) { _%>
-import { map } from 'rxjs/operators';
-<%_ } _%>
+import { finalize<% if (relationships.some(rel => rel.ownerSide === true)) { %>, map<% } %> } from 'rxjs/operators';
+
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
 import * as dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
@@ -164,38 +168,6 @@ _%>
         });
     }
 
-    updateForm(<%= entityInstance %>: I<%= entityAngularName %>): void {
-        this.editForm.patchValue({
-    <%_ for (const field of fields) {
-        const fieldName = field.fieldName;
-        const fieldType = field.fieldType;
-        const fieldTypeBlobContent = field.fieldTypeBlobContent;
-    _%>
-        <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-            <%= fieldName %>: <%= entityInstance %>.<%= fieldName %> ? <%= entityInstance %>.<%= fieldName %>.format(DATE_TIME_FORMAT) : null,
-        <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
-            <%= fieldName %>: <%= entityInstance %>.<%= fieldName %>,
-            <%= fieldName %>ContentType: <%= entityInstance %>.<%= fieldName %>ContentType,
-        <%_ } else { _%>
-            <%= fieldName %>: <%= entityInstance %>.<%= fieldName %>,
-        <%_ } _%>
-    <%_ } _%>
-    <%_ for (const relationship of relationships) {
-        const relationshipType = relationship.relationshipType;
-        const ownerSide = relationship.ownerSide;
-        const relationshipName = relationship.relationshipName;
-        const relationshipFieldName = relationship.relationshipFieldName;
-        const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
-    _%>
-        <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-            <%= relationshipName %>: <%= entityInstance %>.<%= relationshipFieldName %>,
-        <%_ } else if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
-            <%= relationshipFieldNamePlural %>: <%= entityInstance %>.<%= relationshipFieldNamePlural %>,
-        <%_ } _%>
-    <%_ } _%>
-        });
-    }
-
 <%_ if (fieldsContainBlob) { _%>
     byteSize(base64String: string): string {
         return this.dataUtils.byteSize(base64String);
@@ -245,7 +217,7 @@ _%>
     <%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
 
     track<%= reference.relationship.otherEntity.entityAngularName %>By<%= reference.relationship.otherEntity.primaryKey.nameCapitalized %>(index: number, item: I<%= reference.relationship.otherEntity.entityAngularName %>): <%= getTypescriptKeyType(reference.relationship.otherEntity.primaryKey.type) %> {
-        return item.<%= reference.relationship.otherEntity.primaryKey.name %><%= isBuiltInUser(reference.relationship.otherEntity.entityAngularName) ? '' : '!' %>;
+        return item.<%= reference.relationship.otherEntity.primaryKey.name %>!;
     }
     <%_ } _%>
     <%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipType === 'many-to-many' && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
@@ -263,26 +235,99 @@ _%>
     <%_ } _%>
 
     protected subscribeToSaveResponse(result: Observable<HttpResponse<I<%= entityAngularName %>>>): void {
-        result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+        result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
+            () => this.onSaveSuccess(),
+            () => this.onSaveError()
+        );
     }
 
     protected onSaveSuccess(): void {
-        this.isSaving = false;
         this.previousState();
     }
 
     protected onSaveError(): void {
+        // Api for inheritance.
+    }
+
+    protected onSaveFinalize(): void {
         this.isSaving = false;
     }
+
+    protected updateForm(<%= entityInstance %>: I<%= entityAngularName %>): void {
+        this.editForm.patchValue({
+    <%_ for (const field of fields) {
+        const fieldName = field.fieldName;
+        const fieldType = field.fieldType;
+        const fieldTypeBlobContent = field.fieldTypeBlobContent;
+    _%>
+        <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+            <%= fieldName %>: <%= entityInstance %>.<%= fieldName %> ? <%= entityInstance %>.<%= fieldName %>.format(DATE_TIME_FORMAT) : null,
+        <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
+            <%= fieldName %>: <%= entityInstance %>.<%= fieldName %>,
+            <%= fieldName %>ContentType: <%= entityInstance %>.<%= fieldName %>ContentType,
+        <%_ } else { _%>
+            <%= fieldName %>: <%= entityInstance %>.<%= fieldName %>,
+        <%_ } _%>
+    <%_ } _%>
+    <%_ for (const relationship of relationships) {
+        const relationshipType = relationship.relationshipType;
+        const ownerSide = relationship.ownerSide;
+        const relationshipName = relationship.relationshipName;
+        const relationshipFieldName = relationship.relationshipFieldName;
+        const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+    _%>
+        <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+            <%= relationshipName %>: <%= entityInstance %>.<%= relationshipFieldName %>,
+        <%_ } else if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
+            <%= relationshipFieldNamePlural %>: <%= entityInstance %>.<%= relationshipFieldNamePlural %>,
+        <%_ } _%>
+    <%_ } _%>
+        });
 <%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
 
+    <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
+        <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); _%>
+        <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); _%>
+        <%_ if (relationshipsWithCustomSharedOptions.length > 0) { _%>
+            <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity _%>
+        this.<%= otherEntity.entityInstancePlural %>SharedCollection = this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing(
+            this.<%= otherEntity.entityInstancePlural %>SharedCollection,
+            <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
+                <%_ const reference = relationship.reference _%>
+            <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= reference.name %><%= relationship.collection ? ' ?? [])' : '' %>,
+            <%_ } _%>
+        );
+        <%_ } _%>
+        <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { _%>
+            <%_ const otherEntity = relationship.otherEntity _%>
+            <%_ const reference = relationship.reference _%>
+        this.<%= relationship.relationshipFieldNamePlural %>Collection = this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing(this.<%= relationship.relationshipFieldNamePlural %>Collection, <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= reference.name %><%= relationship.collection ? ' ?? [])' : '' %>);
+        <%_ } _%>
+    <%_ } _%>
+<%_ } _%>
+    }
+
+<%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
     protected loadRelationshipsOptions(): void {
     <%_ for (const relationshipsByEntityNeedingOptions of Object.values(differentRelationships).map(relationships => relationships.filter(rel => rel.ownerSide)).filter(relationships => relationships.length > 0)) { _%>
         <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); %>
-        <%_ if (relationshipsByEntityNeedingOptions.length > relationshipsWithCustomUniqueOptions.length) { _%>
-            <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity _%>
-        this.<%= otherEntity.entityInstance %>Service.query()
-            .subscribe((res: HttpResponse<I<%= otherEntity.entityAngularName %>[]>) => this.<%= otherEntity.entityInstancePlural %>SharedCollection = res.body ?? []);
+        <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); %>
+        <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity _%>
+        <%_ if (relationshipsWithCustomSharedOptions.length > 0) { _%>
+        this.<%= otherEntity.entityInstance %>Service
+            .query()
+            .pipe(map((res: HttpResponse<I<%= otherEntity.entityAngularName %>[]>) => res.body ?? []))
+            .pipe(map((<%= otherEntity.entityInstancePlural %>: I<%= otherEntity.entityAngularName %>[]) => this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing(
+                <%= otherEntity.entityInstancePlural %>,
+            <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
+                <%_ if (relationship.collection) { _%>
+                ...(this.editForm.get('<%= relationship.reference.name %>')!.value ?? []),
+                <%_ } else { _%>
+                this.editForm.get('<%= relationship.reference.name %>')!.value,
+                <%_ } _%>
+            <%_ } _%>
+            )))
+            .subscribe((<%= otherEntity.entityInstancePlural %>: I<%= otherEntity.entityAngularName %>[]) => (this.<%= otherEntity.entityInstancePlural %>SharedCollection = <%= otherEntity.entityInstancePlural %>));
         <%_ } _%>
         <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { %>
             <%_ const relationshipIdGetter = `this.editForm.get(['${relationship.relationshipFieldName}', '${relationship.otherEntity.primaryKey.name}'])?.value`; _%>
@@ -291,17 +336,8 @@ _%>
         this.<%= relationship.otherEntityName %>Service
             .query({<%- filter %>})
             .pipe(map((res: HttpResponse<I<%= relationship.otherEntityAngularName %>[]>) => res.body ?? []))
-            .subscribe((resBody: I<%= relationship.otherEntityAngularName %>[]) => {
-                if (!<%- relationshipIdGetter %>) {
-                    this.<%= relationship.relationshipFieldNamePlural %>Collection = resBody;
-                } else {
-                    this.<%= relationship.otherEntityName %>Service
-                        .find(<%- relationshipIdGetter %>)
-                        .pipe(map((subRes: HttpResponse<I<%= relationship.otherEntityAngularName %>>) => subRes.body ? [subRes.body].concat(resBody) : resBody))
-                        .subscribe((concatRes: I<%= relationship.otherEntityAngularName %>[]) => this.<%= relationship.relationshipFieldNamePlural %>Collection = concatRes);
-                    }
-                }
-            );
+            .pipe(map((<%= otherEntity.entityInstancePlural %>: I<%= otherEntity.entityAngularName %>[]) => this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing(<%= otherEntity.entityInstancePlural %>, this.editForm.get('<%= relationship.reference.name %>')!.value)))
+            .subscribe((<%= otherEntity.entityInstancePlural %>: I<%= otherEntity.entityAngularName %>[]) => (this.<%= relationship.relationshipFieldNamePlural %>Collection = <%= otherEntity.entityInstancePlural %>));
         <%_ } _%>
     <%_ } _%>
     }

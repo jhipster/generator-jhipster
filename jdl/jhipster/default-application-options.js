@@ -108,7 +108,6 @@ function getConfigForMonolithApplication(customOptions = {}) {
 function getConfigForGatewayApplication(customOptions = {}) {
   const options = {
     [AUTHENTICATION_TYPE]: OptionValues[AUTHENTICATION_TYPE].jwt,
-    [CACHE_PROVIDER]: OptionValues[CACHE_PROVIDER].ehcache,
     [CLIENT_FRAMEWORK]: OptionValues[CLIENT_FRAMEWORK].angularX,
     [SERVER_PORT]: OptionValues[SERVER_PORT],
     [SERVICE_DISCOVERY_TYPE]: OptionValues[SERVICE_DISCOVERY_TYPE].eureka,
@@ -131,8 +130,11 @@ function getConfigForGatewayApplication(customOptions = {}) {
   if (options[SERVICE_DISCOVERY_TYPE] === OptionValues[SERVICE_DISCOVERY_TYPE].no) {
     options[SERVICE_DISCOVERY_TYPE] = false;
   }
+  options[CACHE_PROVIDER] = OptionValues[CACHE_PROVIDER].no;
+  options[ENABLE_HIBERNATE_CACHE] = false;
   return {
     ...options,
+    [REACTIVE]: true,
     [APPLICATION_TYPE]: GATEWAY,
   };
 }

@@ -39,7 +39,7 @@ describe('FieldTypes', () => {
     });
     context('when passing a false type', () => {
       it('should return false', () => {
-        expect(FieldTypes.isCommonDBType(FieldTypes.CassandraTypes.DATE)).to.be.false;
+        expect(FieldTypes.isCommonDBType('UNKNOWN-TYPE')).to.be.false;
       });
     });
     context('when passing a valid type', () => {
@@ -50,33 +50,6 @@ describe('FieldTypes', () => {
     context('when passing an enum', () => {
       it('should return true', () => {
         expect(FieldTypes.isCommonDBType(new JDLEnum({ name: 'MyEnum' }))).to.be.true;
-      });
-    });
-  });
-  describe('isCassandraType', () => {
-    context('when passing an invalid argument', () => {
-      it('should fail', () => {
-        expect(() => {
-          FieldTypes.isCassandraType();
-        }).to.throw(/^The passed type must not be nil\.$/);
-        expect(() => {
-          FieldTypes.isCassandraType('');
-        }).to.throw(/^The passed type must not be nil\.$/);
-      });
-    });
-    context('when passing a false type', () => {
-      it('should return false', () => {
-        expect(FieldTypes.isCassandraType(FieldTypes.CommonDBTypes.LOCAL_DATE)).to.be.false;
-      });
-    });
-    context('when passing a valid type', () => {
-      it('should return true', () => {
-        expect(FieldTypes.isCassandraType(FieldTypes.CassandraTypes.BIG_DECIMAL)).to.be.true;
-      });
-    });
-    context('when passing an enum', () => {
-      it('should return false', () => {
-        expect(FieldTypes.isCassandraType(new JDLEnum({ name: 'MyEnum' }))).to.be.false;
       });
     });
   });
@@ -135,18 +108,18 @@ describe('FieldTypes', () => {
           FieldTypes.hasValidation(null, Validations.MAXLENGTH);
         }).to.throw(/^The passed type and value must not be nil\.$/);
         expect(() => {
-          FieldTypes.hasValidation(FieldTypes.CassandraTypes.BIG_DECIMAL);
+          FieldTypes.hasValidation('UNKNOWN-TYPE');
         }).to.throw(/^The passed type and value must not be nil\.$/);
       });
     });
     context('when passing a false argument', () => {
       it('should return false', () => {
-        expect(FieldTypes.hasValidation(FieldTypes.CassandraTypes.BIG_DECIMAL, Validations.PATTERN)).to.be.false;
+        expect(FieldTypes.hasValidation(FieldTypes.CommonDBTypes.BIG_DECIMAL, Validations.PATTERN)).to.be.false;
       });
     });
     context('when passing a valid argument', () => {
       it('should return true', () => {
-        expect(FieldTypes.hasValidation(FieldTypes.CassandraTypes.BIG_DECIMAL, Validations.MIN)).to.be.true;
+        expect(FieldTypes.hasValidation(FieldTypes.CommonDBTypes.BIG_DECIMAL, Validations.MIN)).to.be.true;
       });
     });
   });

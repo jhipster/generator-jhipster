@@ -34,7 +34,7 @@ public class AbstractNeo4jIT implements BeforeAllCallback {
         if (!started.get()) {
             neo4jContainer.start();
             System.setProperty(
-                "org.neo4j.driver.uri",
+                "spring.neo4j.uri",
                 neo4jContainer.getBoltUrl()
             );
             started.set(true);

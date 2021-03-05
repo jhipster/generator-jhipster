@@ -71,6 +71,10 @@
           urls.sort(function (a, b) {
             var x = a.name.toLowerCase(),
               y = b.name.toLowerCase();
+            if (x.includes('(default)')) return -1;
+            if (y.includes('(default)')) return 1;
+            if (x.includes('(management)')) return -1;
+            if (y.includes('(management)')) return 1;
             return x < y ? -1 : x > y ? 1 : 0;
           });
 

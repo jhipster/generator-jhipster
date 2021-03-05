@@ -26,6 +26,7 @@ jobs:
     SPRING_JPA_SHOW_SQL: false
     JHI_DISABLE_WEBPACK_LOGS: true
     NG_CLI_ANALYTICS: "false"
+    JHI_E2E_HEADLESS: true
 
   steps:
 <%_ if (!skipClient) { _%>
@@ -36,6 +37,16 @@ jobs:
     inputs:
       versionSpec: $(NODE_VERSION)
     displayName: 'TOOLS: install Node.js'
+<%_ } _%>
+<%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) {
+  const commented = applicationType === 'gateway' ? '# ' : ''; _%>
+  <%= commented %>- task: Bash@3
+  <%= commented %>  inputs:
+  <%= commented %>    targetType: 'inline'
+  <%= commented %>    script: |
+  <%= commented %>      wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  <%= commented %>      sudo apt install ./google-chrome-stable_current_amd64.deb
+  <%= commented %>  displayName: 'TOOLS: install Chrome'
 <%_ } _%>
   #----------------------------------------------------------------------
   # Tests
@@ -103,6 +114,12 @@ jobs:
   <%= commented %>    command: 'custom'
   <%= commented %>    customCommand: ' run ci:e2e:run'
   <%= commented %>  displayName: 'E2E: Run'
+  <%_ if(testFrameworks.includes('cypress')) { _%>
+  <%= commented %>  env:
+  <%= commented %>    CYPRESS_ENABLE_RECORD: <%= cicdIntegrations.includes('cypressDashboard') %>
+  <%= commented %>    CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
+  <%= commented %>    CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+  <%_ } _%>
   <%= commented %>- task: Npm@1
   <%= commented %>  inputs:
   <%= commented %>    command: 'custom'

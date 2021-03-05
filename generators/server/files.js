@@ -588,28 +588,6 @@ const serverFiles = {
   ],
   serverJavaGateway: [
     {
-      condition: generator => !generator.reactive && generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/GatewayConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/GatewayConfiguration.java`,
-        },
-        {
-          file: 'package/config/apidoc/GatewaySwaggerResourcesProvider.java',
-          renameTo: generator => `${generator.javaDir}config/apidoc/GatewaySwaggerResourcesProvider.java`,
-        },
-        {
-          file: 'package/gateway/accesscontrol/AccessControlFilter.java',
-          renameTo: generator => `${generator.javaDir}gateway/accesscontrol/AccessControlFilter.java`,
-        },
-        {
-          file: 'package/gateway/responserewriting/SwaggerBasePathRewritingFilter.java',
-          renameTo: generator => `${generator.javaDir}gateway/responserewriting/SwaggerBasePathRewritingFilter.java`,
-        },
-      ],
-    },
-    {
       condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
@@ -617,41 +595,6 @@ const serverFiles = {
         {
           file: 'package/web/rest/GatewayResource.java',
           renameTo: generator => `${generator.javaDir}web/rest/GatewayResource.java`,
-        },
-      ],
-    },
-    {
-      condition: generator =>
-        generator.applicationType === 'gateway' && generator.serviceDiscoveryType && generator.cacheProvider === 'hazelcast',
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/gateway/ratelimiting/RateLimitingFilter.java',
-          renameTo: generator => `${generator.javaDir}gateway/ratelimiting/RateLimitingFilter.java`,
-        },
-      ],
-    },
-    {
-      condition: generator =>
-        !generator.reactive &&
-        generator.applicationType === 'gateway' &&
-        generator.authenticationType === 'jwt' &&
-        generator.serviceDiscoveryType,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/gateway/TokenRelayFilter.java',
-          renameTo: generator => `${generator.javaDir}gateway/TokenRelayFilter.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => !generator.reactive && generator.applicationType === 'gateway' && !generator.serviceDiscoveryType,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/web/filter/RouteDetectorFilter.java',
-          renameTo: generator => `${generator.javaDir}web/filter/RouteDetectorFilter.java`,
         },
       ],
     },
@@ -667,6 +610,34 @@ const serverFiles = {
         {
           file: 'package/web/rest/LogoutResource.java',
           renameTo: generator => `${generator.javaDir}web/rest/LogoutResource.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType && generator.reactive,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/apidocs/GatewaySwaggerResourcesProvider.java',
+          renameTo: generator => `${generator.javaDir}config/apidocs/GatewaySwaggerResourcesProvider.java`,
+        },
+        {
+          file: 'package/web/filter/ModifyServersOpenApiFilter.java',
+          renameTo: generator => `${generator.javaDir}web/filter/ModifyServersOpenApiFilter.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType && generator.reactive,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/web/filter/ModifyServersOpenApiFilterTest.java',
+          renameTo: generator => `${generator.testDir}web/filter/ModifyServersOpenApiFilterTest.java`,
+        },
+        {
+          file: 'package/config/apidocs/GatewaySwaggerResourcesProviderTest.java',
+          renameTo: generator => `${generator.testDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`,
         },
       ],
     },
@@ -686,16 +657,6 @@ const serverFiles = {
         {
           file: 'package/client/JWT_UserFeignClientInterceptor.java',
           renameTo: generator => `${generator.javaDir}client/UserFeignClientInterceptor.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => !generator.reactive && generator.authenticationType === 'oauth2' && generator.applicationType === 'gateway',
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/security/oauth2/AuthorizationHeaderFilter.java',
-          renameTo: generator => `${generator.javaDir}security/oauth2/AuthorizationHeaderFilter.java`,
         },
       ],
     },
@@ -742,6 +703,13 @@ const serverFiles = {
       condition: generator => generator.applicationType === 'microservice',
       path: SERVER_MAIN_RES_DIR,
       templates: [{ file: 'static/microservices_index.html', renameTo: () => 'static/index.html' }],
+    },
+  ],
+  serverMicroserviceAndGateway: [
+    {
+      condition: generator => generator.serviceDiscoveryType,
+      path: SERVER_MAIN_RES_DIR,
+      templates: ['config/bootstrap.yml', 'config/bootstrap-prod.yml'],
     },
   ],
   serverJavaApp: [
@@ -1347,15 +1315,9 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => !generator.reactive && generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        // Create Gateway tests files
-        {
-          file: 'package/gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java',
-          renameTo: generator => `${generator.testDir}gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java`,
-        },
-      ],
+      condition: generator => generator.serviceDiscoveryType,
+      path: SERVER_TEST_RES_DIR,
+      templates: ['config/bootstrap.yml'],
     },
     {
       condition: generator =>

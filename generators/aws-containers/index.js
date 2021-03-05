@@ -43,14 +43,14 @@ const APP_TEMPLATE_PATH = baseName => `${baseName}.template.yml`;
 const AWSSSM_CONFIG_PATH = (directory, packageFolder) =>
   `${directory}/${constants.SERVER_MAIN_SRC_DIR}/${packageFolder}/bootstrap/AwsSSMConfiguration.java`;
 const SPRING_FACTORIES_PATH = directory => `${directory}/${constants.SERVER_MAIN_RES_DIR}/META-INF/spring.factories`;
-const BOOTSTRAP_PATH = directory => `${directory}/${constants.SERVER_MAIN_RES_DIR}/config/application-aws.yml`;
+const BOOTSTRAP_PATH = directory => `${directory}/${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-aws.yml`;
 
 const BASE_TEMPLATE_FILENAME = `${BASE_TEMPLATE_PATH}.ejs`;
 const APP_TEMPLATE_FILENAME = 'application.template.yml.ejs';
 
 const AWSSSM_CONFIG_FILENAME = 'AwsSSMConfiguration.java.ejs';
 const SPRING_FACTORIES_FILENAME = 'spring.factories.ejs';
-const BOOTSTRAP_FILENAME = 'application-aws.yml.ejs';
+const BOOTSTRAP_FILENAME = 'bootstrap-aws.yml.ejs';
 
 /**
  * Returns the password property to be stored within Amazon SSM

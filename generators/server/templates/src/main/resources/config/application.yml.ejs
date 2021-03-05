@@ -56,25 +56,6 @@ eureka:
       git-version: ${git.commit.id.describe:}
       git-commit: ${git.commit.id.abbrev:}
       git-branch: ${git.branch:}
-ribbon:
-  ReadTimeout: 60000
-  connection-timeout: 3000
-  eureka:
-    enabled: true
-<%_ } _%>
-<%_ if (applicationType === 'gateway' && !reactive) { _%>
-# See http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
-zuul: # those values must be configured depending on the application specific needs
-  sensitive-headers: Cookie,Set-Cookie #see https://github.com/spring-cloud/spring-cloud-netflix/issues/3126
-  host:
-    max-total-connections: 1000
-    max-per-route-connections: 100
-  prefix: /services
-  semaphore:
-    max-semaphores: 500
-  <%_ if (serviceDiscoveryType === 'consul') { _%>
-  ignoredServices: 'consul,<%= baseName %>' # Prevent Consul and the "<%= baseName %>" app itself from having a Zuul route automatically created for them
-  <%_ } _%>
 <%_ } _%>
 <%_ if (applicationType === 'gateway') { _%>
 
@@ -161,6 +142,12 @@ management:
           autotime:
             enabled: true
 
+<%_ if (databaseType === 'mongodb') { _%>
+mongock:
+  change-logs-scan-package:
+    - <%= packageName %>.config.dbmigrations
+
+<%_ } _%>
 spring:
   <%_ if (databaseType === 'sql' && messageBroker === 'kafka') { _%>
   autoconfigure:
@@ -207,6 +194,12 @@ spring:
     # Otherwise, it will be filled in by <%= buildTool %> when building the JAR file
     # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
     active: #spring.profiles.active#
+    group:
+      dev:
+        - dev
+        - api-docs
+        # Uncomment to activate TLS for the dev profile
+        #- tls
   jmx:
     enabled: false
   <%_ if (databaseType === 'sql' && !reactive) { _%>

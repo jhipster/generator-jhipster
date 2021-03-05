@@ -123,6 +123,10 @@ jobs:
             <%= commented %>- run:
             <%= commented %>    name: 'E2E: Run'
             <%= commented %>    command: <%= clientPackageManager %> run ci:e2e:run
+            <%_ if(testFrameworks.includes('cypress')) { _%>
+            <%= commented %>    environment:
+            <%= commented %>      CYPRESS_ENABLE_RECORD: <%= cicdIntegrations.includes('cypressDashboard') %>
+            <%_ } _%>
             <%= commented %>- run:
             <%= commented %>    name: 'E2E: Teardown'
             <%= commented %>    command: <%= clientPackageManager %> run ci:e2e:teardown

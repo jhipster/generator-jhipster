@@ -96,8 +96,8 @@ import java.util.UUID;
 <%_ } _%>
 public class DatabaseConfiguration {
 
-    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
 
     private final Environment env;
 

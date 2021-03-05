@@ -7,6 +7,8 @@ sonar.host.url=http://localhost:9001
 
 <%_ if (!skipClient && clientFramework === ANGULAR) { _%>
 sonar.test.inclusions=<%= TEST_DIR %>**/*.*, <%= CLIENT_MAIN_SRC_DIR %>app/**/*.spec.ts
+<%_ } else if (!skipClient && clientFramework === REACT) { _%>
+sonar.test.inclusions=<%= TEST_DIR %>**/*.*, <%= CLIENT_MAIN_SRC_DIR %>app/**/*.spec.ts, <%= CLIENT_MAIN_SRC_DIR %>app/**/*.spec.tsx
 <%_ } else { _%>
 sonar.tests=<%= TEST_DIR %>
 <%_ } _%>

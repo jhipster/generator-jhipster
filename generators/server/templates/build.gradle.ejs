@@ -446,21 +446,17 @@ dependencies {
     implementation "com.datastax.oss:java-driver-mapper-runtime"
     <%_ } _%>
     <%_ if (applicationType === 'gateway') { _%>
-        <%_ if (!reactive) { _%>
-    implementation "org.springframework.cloud:spring-cloud-starter-netflix-zuul"
-    // Spring Cloud Netflix Zuul depends on Guava 19.0
-    implementation "com.google.guava:guava:19.0"
-        <%_ } else { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-gateway"
-        <%_ } _%>
     implementation "com.github.vladimir-bukhtoyarov:bucket4j-core"
     implementation "com.github.vladimir-bukhtoyarov:bucket4j-jcache"
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
     implementation "org.springframework.cloud:spring-cloud-starter"
-    implementation "org.springframework.cloud:spring-cloud-starter-netflix-ribbon"
     implementation "org.springframework.cloud:spring-cloud-starter-netflix-hystrix"
     implementation "org.springframework.retry:spring-retry"
+    <%_ } _%>
+    <%_ if (serviceDiscoveryType) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-bootstrap"
     <%_ } _%>
     <%_ if (serviceDiscoveryType === 'eureka') { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
@@ -530,7 +526,7 @@ dependencies {
         <%_ if (!reactive) { _%>
     liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
         <%_ } else { _%>
-        implementation "org.mariadb:r2dbc-mariadb:${r2dbcMariadbVersion}"
+        implementation "org.mariadb:r2dbc-mariadb"
         <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mssql') { _%>

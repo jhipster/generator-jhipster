@@ -22,6 +22,7 @@ error.subtitle=Rất tiếc, có lỗi xảy ra.
 error.status=Trạng thái:
 error.message=Tin nhắn:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> kích hoạt tài khoản
 email.activation.greeting=Gửi {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> đặt lại mật khẩu
 email.reset.greeting=Gửi {0}
 email.reset.text1=Để đặt lại mật khẩu cho tài khoản cho tài khoản của bạn <%= baseName %>, vui lòng bấm vào đường dẫn bên dưới:
 email.reset.text2=Trân trọng,
+<%_ } _%>

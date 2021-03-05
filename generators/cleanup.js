@@ -290,6 +290,14 @@ function cleanupOldFiles(generator) {
       generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/reducers/user-management.spec.ts`);
     }
   }
+
+  if (generator.isJhipsterVersionLessThan('7.0.0-beta.2') && generator.jhipsterConfig) {
+    if (generator.jhipsterConfig.clientFramework === ANGULAR) {
+      generator.removeFile(`${ANGULAR_DIR}core/config/config.service.ts`);
+      generator.removeFile(`${ANGULAR_DIR}core/config/config.service.spec.ts`);
+      generator.removeFile('.npmrc');
+    }
+  }
 }
 
 /**

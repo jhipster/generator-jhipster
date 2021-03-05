@@ -287,6 +287,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
         if (this.abort) return;
         this.log(chalk.bold('\nCreating Azure Spring Cloud deployment files'));
         this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
+        this.template('bootstrap-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-azure.yml`);
         if (this.azureSpringCloudDeploymentType === 'github-action') {
           this.template('github/workflows/azure-spring-cloud.yml.ejs', '.github/workflows/azure-spring-cloud.yml');
         }

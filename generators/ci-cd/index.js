@@ -16,19 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
 const prompts = require('./prompts');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const statistics = require('../statistics');
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
-module.exports = class extends BaseGenerator {
+let useBlueprints;
+
+module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts);
+
+    this.configOptions = this.options.configOptions || {};
 
     // Automatically configure Travis
     this.option('autoconfigure-travis', {
@@ -71,9 +76,12 @@ module.exports = class extends BaseGenerator {
       defaults: false,
       description: 'Automatically configure CircleCI',
     });
+
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('ci-cd');
   }
 
-  get initializing() {
+  // Public API method used by the getter and also by Blueprints
+  _initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -122,14 +130,26 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get prompting() {
+  get initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _prompting() {
     return {
       askPipeline: prompts.askPipeline,
       askIntegrations: prompts.askIntegrations,
     };
   }
 
-  get configuring() {
+  get prompting() {
+    if (useBlueprints) return;
+    return this._prompting();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _configuring() {
     return {
       insight() {
         if (this.abort) return;
@@ -152,45 +172,60 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  writing() {
-    if (this.pipeline === 'jenkins') {
-      this.template('jenkins/Jenkinsfile.ejs', 'Jenkinsfile');
-      this.template('jenkins/jenkins.yml.ejs', `${this.DOCKER_DIR}jenkins.yml`);
-      this.template('jenkins/idea.gdsl', `${this.SERVER_MAIN_RES_DIR}idea.gdsl`);
-    }
-    if (this.pipeline === 'gitlab') {
-      this.template('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
-    }
-    if (this.pipeline === 'circle') {
-      this.template('circle.yml.ejs', '.circleci/config.yml');
-    }
-    if (this.pipeline === 'travis') {
-      this.template('travis.yml.ejs', '.travis.yml');
-    }
-    if (this.pipeline === 'azure') {
-      this.template('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
-    }
-    if (this.pipeline === 'github') {
-      this.template('github-actions.yml.ejs', '.github/workflows/github-actions.yml');
-    }
+  get configuring() {
+    if (useBlueprints) return;
+    return this._configuring();
+  }
 
-    if (this.cicdIntegrations.includes('deploy')) {
-      if (this.buildTool === 'maven') {
-        this.addMavenDistributionManagement(
-          this.artifactorySnapshotsId,
-          this.artifactorySnapshotsUrl,
-          this.artifactoryReleasesId,
-          this.artifactoryReleasesUrl
-        );
-      } else if (this.buildTool === 'gradle') {
-        // TODO: add support here
-        // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
-        this.warning('No support for Artifactory yet, when using Gradle.\n');
-      }
-    }
+  // Public API method used by the getter and also by Blueprints
+  _writing() {
+    return {
+      writeFiles() {
+        if (this.pipeline === 'jenkins') {
+          this.template('jenkins/Jenkinsfile.ejs', 'Jenkinsfile');
+          this.template('jenkins/jenkins.yml.ejs', `${this.DOCKER_DIR}jenkins.yml`);
+          this.template('jenkins/idea.gdsl', `${this.SERVER_MAIN_RES_DIR}idea.gdsl`);
+        }
+        if (this.pipeline === 'gitlab') {
+          this.template('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
+        }
+        if (this.pipeline === 'circle') {
+          this.template('circle.yml.ejs', '.circleci/config.yml');
+        }
+        if (this.pipeline === 'travis') {
+          this.template('travis.yml.ejs', '.travis.yml');
+        }
+        if (this.pipeline === 'azure') {
+          this.template('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
+        }
+        if (this.pipeline === 'github') {
+          this.template('github-actions.yml.ejs', '.github/workflows/github-actions.yml');
+        }
 
-    if (this.cicdIntegrations.includes('publishDocker')) {
-      this.template('docker-registry.yml.ejs', `${this.DOCKER_DIR}docker-registry.yml`);
-    }
+        if (this.cicdIntegrations.includes('deploy')) {
+          if (this.buildTool === 'maven') {
+            this.addMavenDistributionManagement(
+              this.artifactorySnapshotsId,
+              this.artifactorySnapshotsUrl,
+              this.artifactoryReleasesId,
+              this.artifactoryReleasesUrl
+            );
+          } else if (this.buildTool === 'gradle') {
+            // TODO: add support here
+            // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
+            this.warning('No support for Artifactory yet, when using Gradle.\n');
+          }
+        }
+
+        if (this.cicdIntegrations.includes('publishDocker')) {
+          this.template('docker-registry.yml.ejs', `${this.DOCKER_DIR}docker-registry.yml`);
+        }
+      },
+    };
+  }
+
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
   }
 };

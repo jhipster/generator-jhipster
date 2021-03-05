@@ -384,10 +384,8 @@ const expectedFiles = {
     'angular.json',
     'ngsw-config.json',
     '.eslintrc.json',
-    '.npmrc',
     'package.json',
     '.browserslistrc',
-    `${CLIENT_MAIN_SRC_DIR}404.html`,
     `${CLIENT_MAIN_SRC_DIR}main.ts`,
     `${CLIENT_MAIN_SRC_DIR}polyfills.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
@@ -444,6 +442,8 @@ const expectedFiles = {
     `${CLIENT_MAIN_SRC_DIR}app/shared/auth/has-any-authority.directive.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/core/auth/state-storage.service.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/core/auth/user-route-access.service.ts`,
+    `${CLIENT_MAIN_SRC_DIR}app/core/config/application-config.service.spec.ts`,
+    `${CLIENT_MAIN_SRC_DIR}app/core/config/application-config.service.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/config/authority.constants.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/config/error.constants.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/config/input.constants.ts`,
@@ -468,15 +468,12 @@ const expectedFiles = {
     `${CLIENT_MAIN_SRC_DIR}app/shared/shared.module.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/core/auth/account.model.ts`,
     `${CLIENT_MAIN_SRC_DIR}content/scss/global.scss`,
-    `${CLIENT_MAIN_SRC_DIR}content/css/loading.css`,
     `${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`,
     `${CLIENT_MAIN_SRC_DIR}content/scss/_bootstrap-variables.scss`,
-    `${CLIENT_MAIN_SRC_DIR}WEB-INF/web.xml`,
-    `${CLIENT_MAIN_SRC_DIR}favicon.ico`,
-    `${CLIENT_MAIN_SRC_DIR}index.html`,
-    `${CLIENT_MAIN_SRC_DIR}robots.txt`,
     'jest.conf.js',
     `${CLIENT_MAIN_SRC_DIR}app/core/auth/account.service.spec.ts`,
+    `${CLIENT_MAIN_SRC_DIR}app/core/util/operators.ts`,
+    `${CLIENT_MAIN_SRC_DIR}app/core/util/operators.spec.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/core/util/event-manager.service.spec.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/core/util/data-util.service.spec.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/core/util/parse-links.service.spec.ts`,
@@ -505,6 +502,10 @@ const expectedFiles = {
   clientCommon: [
     '.eslintignore',
     `${CLIENT_MAIN_SRC_DIR}manifest.webapp`,
+    `${CLIENT_MAIN_SRC_DIR}404.html`,
+    `${CLIENT_MAIN_SRC_DIR}favicon.ico`,
+    `${CLIENT_MAIN_SRC_DIR}index.html`,
+    `${CLIENT_MAIN_SRC_DIR}robots.txt`,
     `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0.svg`,
     `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0_head-192.png`,
     `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0_head-256.png`,
@@ -526,8 +527,10 @@ const expectedFiles = {
     `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_3_head-384.png`,
     `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_3_head-512.png`,
     `${CLIENT_MAIN_SRC_DIR}content/images/logo-jhipster.png`,
+    `${CLIENT_MAIN_SRC_DIR}content/css/loading.css`,
     `${CLIENT_MAIN_SRC_DIR}swagger-ui/dist/images/throbber.gif`,
     `${CLIENT_MAIN_SRC_DIR}swagger-ui/index.html`,
+    `${CLIENT_MAIN_SRC_DIR}WEB-INF/web.xml`,
   ],
 
   clientAdminAngular: [
@@ -633,7 +636,18 @@ const expectedFiles = {
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProviderTest.java`,
   ],
 
-  jwtClient: [`${CLIENT_MAIN_SRC_DIR}app/core/interceptor/auth.interceptor.ts`, `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-jwt.service.ts`],
+  jwtServerGateway: [
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/JWTFilter.java`,
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProvider.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/JWTFilterTest.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProviderTest.java`,
+  ],
+
+  jwtClient: [
+    `${CLIENT_MAIN_SRC_DIR}app/core/interceptor/auth.interceptor.ts`,
+    `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-jwt.service.ts`,
+    `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-jwt.service.spec.ts`,
+  ],
 
   oauth2: [
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`,
@@ -659,11 +673,13 @@ const expectedFiles = {
   swaggerCodegenGradle: ['gradle/swagger.gradle'],
 
   gateway: [
-    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/GatewayConfiguration.java`,
-    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/apidoc/GatewaySwaggerResourcesProvider.java`,
-    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/accesscontrol/AccessControlFilter.java`,
-    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/responserewriting/SwaggerBasePathRewritingFilter.java`,
-    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java`,
+    `${SERVER_MAIN_RES_DIR}config/bootstrap.yml`,
+    `${SERVER_MAIN_RES_DIR}config/bootstrap-prod.yml`,
+    `${SERVER_TEST_RES_DIR}config/bootstrap.yml`,
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/apidocs/GatewaySwaggerResourcesProvider.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/apidocs/GatewaySwaggerResourcesProviderTest.java`,
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/filter/ModifyServersOpenApiFilter.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/filter/ModifyServersOpenApiFilterTest.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/RouteVM.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/GatewayResource.java`,
     `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.component.ts`,
@@ -672,8 +688,6 @@ const expectedFiles = {
     `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.component.html`,
     `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway-routes.service.ts`,
   ],
-
-  rateLimitingFilesForGateways: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/ratelimiting/RateLimitingFilter.java`],
 
   feignConfig: [
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/FeignConfiguration.java`,

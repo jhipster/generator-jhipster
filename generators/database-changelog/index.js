@@ -34,7 +34,7 @@ module.exports = class extends BaseGenerator {
     this.argument('entities', {
       desc: 'Which entities to generate a new changelog',
       type: Array,
-      required: true,
+      required: false,
     });
 
     if (this.options.help) {
@@ -79,8 +79,10 @@ module.exports = class extends BaseGenerator {
   /* ======================================================================== */
 
   _composeWithIncrementalChangelogProvider(databaseChangelog) {
+    const skipWriting = !this.options.entities.includes(databaseChangelog.entityName);
     this.composeWithJHipster('database-changelog-liquibase', {
       databaseChangelog,
+      skipWriting,
       configOptions: this.configOptions,
     });
   }
@@ -90,7 +92,7 @@ module.exports = class extends BaseGenerator {
    */
   _generateChangelogFromFiles() {
     // Compare entity changes and create changelogs
-    return this.options.entities.map(entityName => {
+    return this.getExistingEntityNames().map(entityName => {
       const filename = this.destinationPath(JHIPSTER_CONFIG_DIR, `${entityName}.json`);
 
       const newConfig = this.fs.readJSON(filename);

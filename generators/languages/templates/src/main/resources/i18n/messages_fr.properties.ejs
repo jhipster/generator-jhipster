@@ -22,6 +22,7 @@ error.subtitle=Désolé, une erreur s'est produite.
 error.status=Statut :
 error.message=Message :
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=Activation de votre compte <%= baseName %>
 email.activation.greeting=Cher {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> Réinitialisation de mot de passe
 email.reset.greeting=Cher {0}
 email.reset.text1=Un nouveau mot de passe pour votre compte <%= baseName %> a été demandé, veuillez cliquer sur le lien ci-dessous pour le réinitialiser :
 email.reset.text2=Cordialement,
+<%_ } _%>

@@ -22,6 +22,7 @@ error.subtitle=Przepraszamy, wystąpił błąd.
 error.status=Status:
 error.message=Wiadomość:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=Aktywacja konta <%= baseName %>
 email.activation.greeting=Drogi {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> reset hasła
 email.reset.greeting=Drogi {0}
 email.reset.text1=Dla Twojego <%= baseName %> konta wysłano prośbę o zresetowanie hasła, kliknij w poniższy link aby kontynuować:
 email.reset.text2=Z uszanowaniem,
+<%_ } _%>
