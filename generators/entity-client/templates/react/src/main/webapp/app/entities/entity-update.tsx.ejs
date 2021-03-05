@@ -197,7 +197,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
         <%= rel.relationshipFieldNamePlural %>: mapIdList(values.<%= rel.relationshipFieldNamePlural %>),
         <%_ }) _%>
         <%_ relFieldNames.forEach(rel => { _%>
-          <%_ if (rel.relationshipType === 'many-to-one' && rel.otherEntityName !== 'user')  { _%>
+          <%_ if (rel.relationshipType === 'many-to-one' || (rel.ownerSide && rel.relationshipType === 'one-to-one'))  { _%>
           <%= rel.relationshipFieldName %>: <%= rel.otherEntityNamePlural %>.find(it => it.<%= rel.otherEntity.primaryKey.name %>.toString() === values.<%= rel.relationshipFieldName %>Id.toString()),
           <%_ } _%>
         <%_ }) _%>
