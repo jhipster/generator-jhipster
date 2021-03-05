@@ -31,6 +31,7 @@ const BASE_TEMPLATE_DATA = {
   haveFieldWithJavadoc: false,
   existingEnum: false,
   searchEngine: false,
+  criteria: false,
 
   fieldsContainDate: false,
   fieldsContainInstant: false,
@@ -232,6 +233,9 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         derived: true,
         // MapsId copy the id from the relationship.
         autoGenerate: true,
+        get ids() {
+          return relationshipToIds(relationshipId, generator);
+        },
         get fields() {
           return this.derivedFields;
         },
@@ -262,7 +266,8 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         },
       };
     } else {
-      const composite = false;
+      // one field or a mix of MANY fields and relationships
+      const composite = idCount > 1;
       let primaryKeyName;
       let primaryKeyType;
       if (composite) {
@@ -293,6 +298,12 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
         },
         get autoGenerate() {
           return this.composite ? false : this.fields[0].autoGenerate;
+        },
+        get ids() {
+          return [
+            ...idFields.map(field => fieldToId(field, generator, entityWithConfig)),
+            ...idRelationships.flatMap(relationship => relationshipToIds(relationship, generator)),
+          ];
         },
         get references() {
           return this.fields.map(field => field.reference);
@@ -345,4 +356,45 @@ function loadRequiredConfigIntoEntity(entity, config) {
   return entity;
 }
 
-module.exports = { prepareEntityForTemplates, loadRequiredConfigIntoEntity };
+function fieldToId(field, generator, entity) {
+  const pk = {
+    field,
+    name: field.fieldName,
+    nameDotted: field.fieldName,
+    entity,
+    usedRelationships: [],
+    autoGenerate: field.autoGenerate,
+  };
+  preparePk(pk, generator);
+  return pk;
+}
+
+function relationshipToIds(relationship, generator) {
+  const pks = relationship.otherEntity.primaryKey.ids.map(pk => ({
+    field: pk.field,
+    name: relationship.relationshipType === 'one-to-one' ? pk.name : `${relationship.relationshipName}${pk.nameCapitalized}`,
+    nameDotted: relationship.relationshipType === 'one-to-one' ? pk.nameDotted : `${relationship.relationshipName}.${pk.nameDotted}`,
+    entity: pk.entity,
+    usedRelationships: [relationship, ...pk.usedRelationships],
+  }));
+  pks.forEach(pk => preparePk(pk, generator));
+  return pks;
+}
+
+function preparePk(pk, generator) {
+  pk.nameUnderscored = _.snakeCase(pk.name);
+  pk.nameCapitalized = _.upperFirst(pk.name);
+  pk.nameDottedAsserted = `${pk.nameDotted.replace(/\./g, '!.')}!`;
+  pk.columnName = generator.getColumnName(pk.nameDotted.replace(/\./g, '_'));
+  pk.setter = `set${pk.nameCapitalized}`;
+  pk.getter = (pk.field.fieldType === 'Boolean' ? 'is' : 'get') + pk.nameCapitalized;
+}
+
+function setAndPropagateCriteria(entity) {
+  if (!entity.criteria) {
+    entity.criteria = true;
+    entity.relationships.forEach(r => setAndPropagateCriteria(r.otherEntity));
+  }
+}
+
+module.exports = { prepareEntityForTemplates, loadRequiredConfigIntoEntity, setAndPropagateCriteria };

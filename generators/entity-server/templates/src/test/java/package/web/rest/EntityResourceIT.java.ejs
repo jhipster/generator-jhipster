@@ -1146,20 +1146,29 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             <%_ } _%>
         <%_ } _%>
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
-        <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>();
+    <%_ const filterId = relationship.otherEntity.primaryKey.ids[0];
+        const filterName = `${relationship.relationshipName}.${filterId.nameDotted}`;
+        let filterValue = relationship.relationshipName;
+        if (relationship.otherEntity.primaryKey.composite) {
+            filterValue += `.getId()`;
+        }
+        filterValue += `.${filterId.getter}()`;
+        const filterType = filterId.field.fieldType;
+    _%>
 
-        // Get all the <%= entityInstance %>List where <%= relationship.relationshipFieldName %> equals to <%= relationship.relationshipFieldName %>Id
-        default<%= entityClass %>ShouldBeFound("<%= relationship.relationshipFieldName %>Id.equals=" + <%= relationship.relationshipFieldName %>Id);
+        // Get all the <%= entityInstance %>List where <%= filterName %> equals to <%= filterValue %>
+        default<%= entityClass %>ShouldBeFound("<%= filterName %>.equals=" + <%= filterValue %>);
 
         <%_
         const initInvalidPrimaryKey = {
             'String' : '"invalid-id"',
-            'Long' : '(' + relationship.relationshipFieldName + 'Id + 1)',
+            'Long' : '(' + filterValue + ' + 1)',
+            'Integer' : '(' + filterValue + ' + 1)',
             'UUID' : 'UUID.randomUUID()'
-        }[relationship.otherEntity.primaryKey.type];
+        }[filterType];
         _%>
-        // Get all the <%= entityInstance %>List where <%= relationship.relationshipFieldName %> equals to <%- initInvalidPrimaryKey %>
-        default<%= entityClass %>ShouldNotBeFound("<%= relationship.relationshipFieldName %>Id.equals=" + <%- initInvalidPrimaryKey %>);
+        // Get all the <%= entityInstance %>List where <%= filterName %> equals to <%- initInvalidPrimaryKey %>
+        default<%= entityClass %>ShouldNotBeFound("<%= filterName %>.equals=" + <%- initInvalidPrimaryKey %>);
     }
 
 <%_ }); _%>

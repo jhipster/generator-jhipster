@@ -43,6 +43,9 @@
             beans.push({class: `${mapsIdEntity}Repository`, instance: mapsIdRepoInstance});
         }
     }
+    if (typeof criteriaService !== "undefined" && criteriaService) {
+        beans.push({class: `${entityClass}CriteriaService`, instance: `${entityInstance}CriteriaService`});
+    }
     if (saveUserSnapshot && (viaService || constructorName.endsWith('Resource'))) {
         beans.push({class: 'UserRepository', instance: 'userRepository'});
     }

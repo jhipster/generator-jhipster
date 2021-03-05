@@ -27,7 +27,7 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { isReservedClassName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
-const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../../utils/entity');
+const { prepareEntityForTemplates, loadRequiredConfigIntoEntity, setAndPropagateCriteria } = require('../../utils/entity');
 const { prepareFieldForTemplates, fieldIsEnum } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
 const { stringify } = require('../../utils');
@@ -638,6 +638,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
             .map(relationship => relationship.reference)
             .filter(reference => reference.owned || reference.relationship.otherEntity.embedded),
         ];
+      },
+
+      prepareCriteria() {
+        if (!this.context.criteria && this.context.jpaMetamodelFiltering) {
+          setAndPropagateCriteria(this.context);
+        }
       },
     };
   }

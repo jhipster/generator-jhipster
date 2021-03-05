@@ -2129,7 +2129,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
 
     const writeTasks = Object.values(files).map(blockTemplates => {
       return blockTemplates.map(blockTemplate => {
-        if (!blockTemplate.condition || blockTemplate.condition(_this)) {
+        if (!blockTemplate.condition || blockTemplate.condition(_this) || blockTemplate.deleteOnNotCondition) {
           const blockPath = blockTemplate.path || '';
           return blockTemplate.templates.map(templateObj => {
             let templatePath = blockPath;
@@ -2160,6 +2160,12 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
               templatePathTo = _this.destinationPath(templatePathTo);
             }
 
+            if (blockTemplate.condition && !blockTemplate.condition(_this) && blockTemplate.deleteOnNotCondition) {
+              if (_this.fs && _this.fs.exists(templatePathTo)) {
+                return _this.fs.delete(templatePathTo);
+              }
+              return undefined;
+            }
             if (templateObj.override !== undefined && _this.fs && _this.fs.exists(templatePathTo)) {
               if (typeof templateObj.override === 'function') {
                 if (!templateObj.override(_this)) {
