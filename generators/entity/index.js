@@ -139,7 +139,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
       filename,
       configExisted,
       entityExisted,
-      configurationFileExists: this.fs.exists(filename),
+      configurationFileExists: this.fs.exists(this.destinationPath(filename)),
     };
 
     this._setupEntityOptions(this, this, this.context);
