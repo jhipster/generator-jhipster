@@ -677,7 +677,7 @@ relationships.forEach((relationship, idx) => {
     public <%= asEntity(entityClass) %> <%= relationshipFieldName %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
         this.set<%= relationshipNameCapitalized %>(<%= otherEntityName %>);
             <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationshipWithId) { _%>
-        this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.get<%= primaryKey.nameCapitalized %>() : null;
+        this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>() : null;
             <%_ } _%>
         return this;
     }
@@ -702,7 +702,7 @@ relationships.forEach((relationship, idx) => {
         <%_ } _%>
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
         <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationshipWithId) { _%>
-        this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.get<%= primaryKey.nameCapitalized %>() : null;
+        this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>() : null;
         <%_ } _%>
     }
         <%_ if (reactiveRelationshipWithId) { _%>
