@@ -37,7 +37,7 @@
     "merge-jsons-webpack-plugin": "1.0.21",
     "rimraf": "3.0.2",
     "simple-progress-webpack-plugin": "1.1.2",
-    "typescript": "4.1.5",
+    "typescript": "4.2.3",
     "webpack": "4.46.0",
     "webpack-bundle-analyzer": "4.4.0",
     "webpack-notifier": "1.13.0"
