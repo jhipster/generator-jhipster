@@ -37,11 +37,11 @@ const JIB_VERSION = '2.7.1';
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '7.0.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.4.2';
+const SPRING_BOOT_VERSION = '2.4.3';
 const LIQUIBASE_VERSION = '4.2.2';
 const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
 const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;
-const HIBERNATE_VERSION = '5.4.27.Final';
+const HIBERNATE_VERSION = '5.4.28.Final';
 
 const JACOCO_VERSION = '0.8.6';
 const KAFKA_VERSION = '5.5.3';

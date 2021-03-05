@@ -527,7 +527,7 @@ dependencies {
         <%_ if (!reactive) { _%>
     liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
         <%_ } else { _%>
-        implementation "org.mariadb:r2dbc-mariadb:${r2dbcMariadbVersion}"
+        implementation "org.mariadb:r2dbc-mariadb"
         <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mssql') { _%>
