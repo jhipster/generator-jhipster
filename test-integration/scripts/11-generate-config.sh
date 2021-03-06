@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #-------------------------------------------------------------------------------
 # Eg: 11-generate-config.sh ./ ngx-default sqlfull
