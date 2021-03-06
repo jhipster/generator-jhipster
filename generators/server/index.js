@@ -33,7 +33,7 @@ let useBlueprints;
 
 module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   constructor(args, opts) {
-    super(args, opts);
+    super(args, opts, { unique: 'namespace' });
 
     // This adds support for a `--experimental` flag which can be used to enable experimental features
     this.option('experimental', {
@@ -225,10 +225,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.loadClientConfig();
         this.loadServerConfig();
         this.loadTranslationConfig();
-      },
-
-      createUserManagementEntities() {
-        this.createUserManagementEntities();
       },
     };
   }
@@ -474,24 +470,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   get postWriting() {
     if (useBlueprints) return;
     return this._postWriting();
-  }
-
-  _install() {
-    return {
-      installing() {
-        if (this.skipClient) {
-          if (!this.options.skipInstall) {
-            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
-            this.npmInstall();
-          }
-        }
-      },
-    };
-  }
-
-  get install() {
-    if (useBlueprints) return;
-    return this._install();
   }
 
   // Public API method used by the getter and also by Blueprints

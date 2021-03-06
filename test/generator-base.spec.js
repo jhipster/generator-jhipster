@@ -4,6 +4,7 @@ const sinon = require('sinon');
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
+const Environment = require('yeoman-environment');
 
 const expectedFiles = require('./utils/expected-files');
 const Base = require('../generators/generator-base');
@@ -479,7 +480,7 @@ describe('Generator Base', () => {
     let options;
     beforeEach(() => {
       oldCwd = testInTempDir(() => {}, true);
-      base = new Base({ ...options });
+      base = new Base({ ...options, env: Environment.createEnv() });
     });
     afterEach(() => {
       revertTempDir(oldCwd);
@@ -591,7 +592,9 @@ describe('Generator Base', () => {
       describe('with a future creationTimestamp option', () => {
         it('should throw', () => {
           options.creationTimestamp = '2030-01-01';
-          expect(() => new Base({ ...options })).to.throw(/^Creation timestamp should not be in the future: 2030-01-01\.$/);
+          expect(() => new Base({ ...options, env: Environment.createEnv() })).to.throw(
+            /^Creation timestamp should not be in the future: 2030-01-01\.$/
+          );
         });
       });
     });

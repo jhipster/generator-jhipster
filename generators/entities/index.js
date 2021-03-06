@@ -23,7 +23,7 @@ let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
-    super(args, opts);
+    super(args, opts, { unique: 'namespace' });
 
     // This makes `name` a required argument.
     this.argument('entities', {
@@ -132,12 +132,12 @@ module.exports = class extends BaseBlueprintGenerator {
           if (this.options.composedEntities && this.options.composedEntities.includes(entityName)) return;
           const selectedEntity = this.options.entities.includes(entityName);
           const { regenerate = !selectedEntity } = this.options;
-          this.composeWithJHipster('entity', {
+          this.composeWithJHipster('entity', [entityName], {
             skipWriting: !this.options.writeEveryEntity && !selectedEntity,
             regenerate,
             skipDbChangelog: this.jhipsterConfig.databaseType === 'sql' || this.options.skipDbChangelog,
             skipInstall: true,
-            arguments: [entityName],
+            skipPrompts: this.options.skipPrompts,
           });
         });
       },
@@ -151,27 +151,13 @@ module.exports = class extends BaseBlueprintGenerator {
           return;
         }
 
-        this.composeWithJHipster('database-changelog', {
-          entities: this.options.writeEveryEntity ? this.getExistingEntityNames() : this.options.entities,
-        });
+        this.composeWithJHipster('database-changelog', this.options.writeEveryEntity ? existingEntities : this.options.entities);
       },
     };
   }
 
   get composing() {
     return useBlueprints ? undefined : this._composing();
-  }
-
-  _loading() {
-    return {
-      createUserManagementEntities() {
-        this.createUserManagementEntities();
-      },
-    };
-  }
-
-  get loading() {
-    return this._loading();
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -189,8 +175,7 @@ module.exports = class extends BaseBlueprintGenerator {
           })
           .filter(entity => !entity.skipClient);
         if (clientEntities.length === 0) return;
-        this.composeWithJHipster('entities-client', {
-          clientEntities,
+        this.composeWithJHipster('entities-client', clientEntities, {
           skipInstall: this.options.skipInstall,
         });
       },

@@ -29,7 +29,7 @@ let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
-    super(args, opts);
+    super(args, opts, { unique: 'argument' });
 
     // This makes it possible to pass `pageName` by argument
     this.argument('pageName', {
