@@ -76,9 +76,8 @@ const H2_MEM = databaseTypes.H2_MEMORY;
 
 const { OptionNames, OptionValues } = require('../jdl/jhipster/application-options');
 
-const { AUTHENTICATION_TYPE, BUILD_TOOL } = OptionNames;
-const OAUTH2 = OptionValues[AUTHENTICATION_TYPE].oauth2;
-const MAVEN = OptionValues[BUILD_TOOL].maven
+const { BUILD_TOOL } = OptionNames;
+const MAVEN = OptionValues[BUILD_TOOL].maven;
 
 /**
  * This is the Generator base private class.
