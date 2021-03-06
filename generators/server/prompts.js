@@ -150,7 +150,7 @@ function askForServerSideOpts() {
         }); */
         opts.push({
           value: 'neo4j',
-          name: 'Neo4j',
+          name: '[BETA] Neo4j',
         });
         opts.push({
           value: 'no',
