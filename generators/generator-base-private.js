@@ -50,18 +50,20 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 const dbTypes = require('../jdl/jhipster/field-types');
 
-const TYPE_STRING = dbTypes.CommonDBTypes.STRING;
-const TYPE_INTEGER = dbTypes.CommonDBTypes.INTEGER;
-const TYPE_LONG = dbTypes.CommonDBTypes.LONG;
-const TYPE_BIG_DECIMAL = dbTypes.CommonDBTypes.BIG_DECIMAL;
-const TYPE_FLOAT = dbTypes.CommonDBTypes.FLOAT;
-const TYPE_DOUBLE = dbTypes.CommonDBTypes.DOUBLE;
-const TYPE_UUID = dbTypes.CommonDBTypes.UUID;
-const TYPE_BOOLEAN = dbTypes.CommonDBTypes.BOOLEAN;
-const TYPE_LOCAL_DATE = dbTypes.CommonDBTypes.LOCAL_DATE;
-const TYPE_ZONED_DATE_TIME = dbTypes.CommonDBTypes.ZONED_DATE_TIME;
-const TYPE_INSTANT = dbTypes.CommonDBTypes.INSTANT;
-const TYPE_DURATION = dbTypes.CommonDBTypes.DURATION;
+const {
+  STRING: TYPE_STRING,
+  INTEGER: TYPE_INTEGER,
+  LONG: TYPE_LONG,
+  BIG_DECIMAL: TYPE_BIG_DECIMAL,
+  FLOAT: TYPE_FLOAT,
+  DOUBLE: TYPE_DOUBLE,
+  UUID: TYPE_UUID,
+  BOOLEAN: TYPE_BOOLEAN,
+  LOCAL_DATE: TYPE_LOCAL_DATE,
+  ZONED_DATE_TIME: TYPE_ZONED_DATE_TIME,
+  INSTANT: TYPE_INSTANT,
+  DURATION: TYPE_DURATION,
+} = dbTypes.CommonDBTypes;
 
 const TYPE_BYTES = dbTypes.RelationalOnlyDBTypes.BYTES;
 const TYPE_BYTE_BUFFER = dbTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
