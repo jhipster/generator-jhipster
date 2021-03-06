@@ -28,9 +28,12 @@ const Types = {
   CASSANDRA: 'cassandra',
   COUCHBASE: 'couchbase',
   NEO4J: 'neo4j',
+  H2_DISK: 'h2Disk',
+  H2_MEMORY: 'h2Memory',
   NO: 'no',
 };
 
-Types.isSql = type => [Types.SQL, Types.MYSQL, Types.POSTGRESQL, Types.ORACLE, Types.MARIADB, Types.MSSQL].includes(type);
+Types.isSql = type =>
+  [Types.SQL, Types.MYSQL, Types.POSTGRESQL, Types.ORACLE, Types.MARIADB, Types.MSSQL, Types.H2_DISK, Types.H2_MEMORY].includes(type);
 
 module.exports = Types;

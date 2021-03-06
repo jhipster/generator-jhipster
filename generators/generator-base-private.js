@@ -38,6 +38,46 @@ const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
+const dbTypes = require('../jdl/jhipster/field-types');
+
+const {
+  STRING: TYPE_STRING,
+  INTEGER: TYPE_INTEGER,
+  LONG: TYPE_LONG,
+  BIG_DECIMAL: TYPE_BIG_DECIMAL,
+  FLOAT: TYPE_FLOAT,
+  DOUBLE: TYPE_DOUBLE,
+  UUID: TYPE_UUID,
+  BOOLEAN: TYPE_BOOLEAN,
+  LOCAL_DATE: TYPE_LOCAL_DATE,
+  ZONED_DATE_TIME: TYPE_ZONED_DATE_TIME,
+  INSTANT: TYPE_INSTANT,
+  DURATION: TYPE_DURATION,
+} = dbTypes.CommonDBTypes;
+
+const TYPE_BYTES = dbTypes.RelationalOnlyDBTypes.BYTES;
+const TYPE_BYTE_BUFFER = dbTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
+
+const databaseTypes = require('../jdl/jhipster/database-types');
+
+const MONGODB = databaseTypes.MONGODB;
+const NEO4J = databaseTypes.NEO4J;
+const COUCHBASE = databaseTypes.COUCHBASE;
+const CASSANDRA = databaseTypes.CASSANDRA;
+
+const SQL = databaseTypes.SQL;
+const ORACLE = databaseTypes.ORACLE;
+const MYSQL = databaseTypes.MYSQL;
+const POSTGRESQL = databaseTypes.POSTGRESQL;
+const MARIADB = databaseTypes.MARIADB;
+const MSSQL = databaseTypes.MSSQL;
+const H2_DISK = databaseTypes.H2_DISK;
+const H2_MEM = databaseTypes.H2_MEMORY;
+
+const { OptionNames, OptionValues } = require('../jdl/jhipster/application-options');
+
+const { BUILD_TOOL } = OptionNames;
+const MAVEN = OptionValues[BUILD_TOOL].maven;
 
 /**
  * This is the Generator base private class.
@@ -844,7 +884,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     fields.forEach(field => {
       const fieldType = field.fieldType;
       const fieldName = field.fieldName;
-      if (fieldType === 'Boolean') {
+      if (fieldType === TYPE_BOOLEAN) {
         if (clientFramework === REACT) {
           defaultVariablesValues[fieldName] = `${fieldName}: false,`;
         } else {
@@ -865,7 +905,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     if (typeof primaryKey === 'object') {
       primaryKey = primaryKey.type;
     }
-    if (primaryKey === 'String' || primaryKey === 'UUID') {
+    if (primaryKey === TYPE_STRING || primaryKey === TYPE_UUID) {
       return 'string';
     }
     return 'number';
@@ -896,16 +936,16 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
       let tsType = 'any';
       if (field.fieldIsEnum) {
         tsType = fieldType;
-      } else if (fieldType === 'Boolean') {
+      } else if (fieldType === TYPE_BOOLEAN) {
         tsType = 'boolean';
-      } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
+      } else if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(fieldType)) {
         tsType = 'number';
-      } else if (['String', 'UUID', 'Duration', 'byte[]', 'ByteBuffer'].includes(fieldType)) {
+      } else if ([TYPE_STRING, TYPE_UUID, TYPE_DURATION, TYPE_BYTES, TYPE_BYTE_BUFFER].includes(fieldType)) {
         tsType = 'string';
-        if (['byte[]', 'ByteBuffer'].includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
+        if ([TYPE_BYTES, TYPE_BYTE_BUFFER].includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
           variablesWithTypes.push(`${fieldName}ContentType?: ${nullable ? 'string | null' : 'string'}`);
         }
-      } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
+      } else if ([TYPE_LOCAL_DATE, TYPE_INSTANT, TYPE_ZONED_DATE_TIME].includes(fieldType)) {
         tsType = customDateType;
       }
       if (nullable) {
@@ -997,7 +1037,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * @param {string} buildTool - buildTool
    */
   getBuildDirectoryForBuildTool(buildTool) {
-    return buildTool === 'maven' ? 'target/' : 'build/';
+    return buildTool === MAVEN ? 'target/' : 'build/';
   }
 
   /**
@@ -1005,7 +1045,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * @param {string} buildTool - buildTool
    */
   getResourceBuildDirectoryForBuildTool(buildTool) {
-    return buildTool === 'maven' ? 'target/classes/' : 'build/resources/main/';
+    return buildTool === MAVEN ? 'target/classes/' : 'build/resources/main/';
   }
 
   /**
@@ -1055,10 +1095,22 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * @param {string} fieldType
    */
   getSpecificationBuilder(fieldType) {
-    if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'LocalDate', 'ZonedDateTime', 'Instant', 'Duration'].includes(fieldType)) {
+    if (
+      [
+        TYPE_INTEGER,
+        TYPE_LONG,
+        TYPE_FLOAT,
+        TYPE_DOUBLE,
+        TYPE_BIG_DECIMAL,
+        TYPE_LOCAL_DATE,
+        TYPE_ZONED_DATE_TIME,
+        TYPE_INSTANT,
+        TYPE_DURATION,
+      ].includes(fieldType)
+    ) {
       return 'buildRangeSpecification';
     }
-    if (fieldType === 'String') {
+    if (fieldType === TYPE_STRING) {
       return 'buildStringSpecification';
     }
     return 'buildSpecification';
@@ -1069,7 +1121,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * @returns {boolean} true if type is filterable; false otherwise.
    */
   isFilterableType(fieldType) {
-    return !['byte[]', 'ByteBuffer'].includes(fieldType);
+    return ![TYPE_BYTES, TYPE_BYTE_BUFFER].includes(fieldType);
   }
 
   /**
@@ -1095,14 +1147,14 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
       primaryKey = primaryKey.type;
     }
     let value;
-    if (primaryKey === 'String') {
+    if (primaryKey === TYPE_STRING) {
       value = index === 0 ? 'ABC' : 'CBA';
-    } else if (primaryKey === 'UUID') {
+    } else if (primaryKey === TYPE_UUID) {
       value = index === 0 ? '9fec3727-3421-4967-b213-ba36557ca194' : '1361f429-3817-4123-8ee3-fdf8943310b2';
     } else {
       value = index === 0 ? 123 : 456;
     }
-    if (wrapped && ['UUID', 'String'].includes(primaryKey)) {
+    if (wrapped && [TYPE_UUID, TYPE_STRING].includes(primaryKey)) {
       return `'${value}'`;
     }
     return value;
@@ -1133,13 +1185,13 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     if (this.jhipsterConfig.pkType) {
       return this.jhipsterConfig.pkType;
     }
-    if (['mongodb', 'neo4j', 'couchbase'].includes(databaseType)) {
-      return 'String';
+    if ([MONGODB, NEO4J, COUCHBASE].includes(databaseType)) {
+      return TYPE_STRING;
     }
-    if (databaseType === 'cassandra') {
-      return 'UUID';
+    if (databaseType === CASSANDRA) {
+      return TYPE_UUID;
     }
-    return 'Long';
+    return TYPE_LONG;
   }
 
   /**
@@ -1156,25 +1208,25 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     if (!options.databaseName) {
       throw new Error("option 'databaseName' is required");
     }
-    if (['mysql', 'mariadb', 'postgresql', 'oracle', 'mssql'].includes(databaseType) && !options.hostname) {
+    if ([MYSQL, MARIADB, POSTGRESQL, ORACLE, MSSQL].includes(databaseType) && !options.hostname) {
       throw new Error(`option 'hostname' is required for ${databaseType} databaseType`);
     }
     let dbcUrl;
     let extraOptions;
-    if (databaseType === 'mysql') {
+    if (databaseType === MYSQL) {
       dbcUrl = `${protocol}:mysql://${options.hostname}:3306/${options.databaseName}`;
       extraOptions =
         '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true';
-    } else if (databaseType === 'mariadb') {
+    } else if (databaseType === MARIADB) {
       dbcUrl = `${protocol}:mariadb://${options.hostname}:3306/${options.databaseName}`;
       extraOptions = '?useLegacyDatetimeCode=false&serverTimezone=UTC';
-    } else if (databaseType === 'postgresql') {
+    } else if (databaseType === POSTGRESQL) {
       dbcUrl = `${protocol}:postgresql://${options.hostname}:5432/${options.databaseName}`;
-    } else if (databaseType === 'oracle') {
+    } else if (databaseType === ORACLE) {
       dbcUrl = `${protocol}:oracle:thin:@${options.hostname}:1521:${options.databaseName}`;
-    } else if (databaseType === 'mssql') {
+    } else if (databaseType === MSSQL) {
       dbcUrl = `${protocol}:sqlserver://${options.hostname}:1433;database=${options.databaseName}`;
-    } else if (databaseType === 'h2Disk') {
+    } else if (databaseType === H2_DISK) {
       if (!options.localDirectory) {
         throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
       }
@@ -1184,7 +1236,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         dbcUrl = `${protocol}:h2:file:${options.localDirectory}/${options.databaseName}`;
       }
       extraOptions = ';DB_CLOSE_DELAY=-1';
-    } else if (databaseType === 'h2Memory') {
+    } else if (databaseType === H2_MEM) {
       if (protocol === 'r2dbc') {
         dbcUrl = `${protocol}:h2:mem:///${options.databaseName}`;
       } else {
@@ -1216,13 +1268,13 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         .join(', ')})`;
     }
     const primaryKeyType = typeof primaryKey === 'string' ? primaryKey : primaryKey.type;
-    if (primaryKeyType === 'String') {
-      if (databaseType === 'sql' && defaultValue === 0) {
+    if (primaryKeyType === TYPE_STRING) {
+      if (databaseType === SQL && defaultValue === 0) {
         return 'UUID.randomUUID().toString()';
       }
       return `"id${defaultValue}"`;
     }
-    if (primaryKeyType === 'UUID') {
+    if (primaryKeyType === TYPE_UUID) {
       return 'UUID.randomUUID()';
     }
     return `${defaultValue}L`;

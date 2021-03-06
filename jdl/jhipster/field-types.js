@@ -42,6 +42,11 @@ const CommonDBTypes = {
   DURATION: 'Duration',
 };
 
+const RelationalOnlyDBTypes = {
+  BYTES: 'byte[]',
+  BYTE_BUFFER: 'ByteBuffer',
+};
+
 const CommonDBValidations = {
   String: new Set([REQUIRED, UNIQUE, MINLENGTH, MAXLENGTH, PATTERN]),
   Integer: new Set([REQUIRED, UNIQUE, MIN, MAX]),
@@ -64,6 +69,7 @@ const CommonDBValidations = {
 
 module.exports = {
   CommonDBTypes,
+  RelationalOnlyDBTypes,
   isCommonDBType,
   hasValidation,
   getIsType,
