@@ -1668,7 +1668,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    */
   javaBeanCase(beanName) {
     const secondLetter = beanName.charAt(1);
-    if (secondLetter === secondLetter.toUpperCase()) {
+    if (secondLetter && secondLetter === secondLetter.toUpperCase()) {
       return beanName;
     }
     return _.upperFirst(beanName);
