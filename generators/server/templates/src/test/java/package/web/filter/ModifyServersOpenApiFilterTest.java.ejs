@@ -10,11 +10,17 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpHeaders;
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
 import org.springframework.mock.web.server.MockServerWebExchange;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.zip.GZIPOutputStream;
 
 class ModifyServersOpenApiFilterTest {
 
@@ -75,7 +81,7 @@ class ModifyServersOpenApiFilterTest {
         private final ModifyServersOpenApiFilter modifyServersOpenApiFilter = new ModifyServersOpenApiFilter();
 
         @Test
-        void shouldRewriteBodyWhenBodyIsFlux() {
+        void shouldRewriteBodyWhenBodyIsFluxAndResponseIsNotZipped() {
             ModifyServersOpenApiFilter.ModifyServersOpenApiInterceptor interceptor = spy(
                 modifyServersOpenApiFilter.createModifyServersOpenApiInterceptor(
                     path,
@@ -91,8 +97,28 @@ class ModifyServersOpenApiFilterTest {
                 interceptor
                     .getRewritedBody()
                     .contains("\"servers\":[{\"url\":\"/services/service-test/instance-test\",\"description\":\"added by global filter\"}]")
-            )
-                .isTrue();
+            ).isTrue();
+        }
+
+        @Test
+        void shouldRewriteBodyWhenBodyIsFluxAndResponseIsZipped() {
+            exchange.getResponse().getHeaders().set(HttpHeaders.CONTENT_ENCODING, "gzip");
+            ModifyServersOpenApiFilter.ModifyServersOpenApiInterceptor interceptor = spy(
+                modifyServersOpenApiFilter.createModifyServersOpenApiInterceptor(
+                    path,
+                    exchange.getResponse(),
+                    exchange.getResponse().bufferFactory()
+                )
+            );
+
+            byte[] bytes = zipContent();
+            DataBuffer body = exchange.getResponse().bufferFactory().wrap(bytes);
+            interceptor.writeWith(Flux.just(body)).subscribe();
+            assertThat(
+                interceptor
+                    .getRewritedBody()
+                    .contains("\"servers\":[{\"url\":\"/services/service-test/instance-test\",\"description\":\"added by global filter\"}]")
+            ).isTrue();
         }
 
         @Test
@@ -108,7 +134,21 @@ class ModifyServersOpenApiFilterTest {
             byte[] bytes = "{}".getBytes();
             DataBuffer body = exchange.getResponse().bufferFactory().wrap(bytes);
             interceptor.writeWith(Mono.just(body)).subscribe();
-            assertThat(interceptor.getRewritedBody().contains("")).isTrue();
+            assertThat(interceptor.getRewritedBody()).isEmpty();
+        }
+
+        private byte[] zipContent() {
+            try {
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream("{}".length());
+                GZIPOutputStream gzipOutputStream = new GZIPOutputStream(byteArrayOutputStream);
+                gzipOutputStream.write("{}".getBytes(StandardCharsets.UTF_8));
+                gzipOutputStream.flush();
+                gzipOutputStream.close();
+                return byteArrayOutputStream.toByteArray();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return "{}".getBytes();
         }
     }
 }
