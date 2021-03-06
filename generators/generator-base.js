@@ -50,6 +50,29 @@ const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
+const ORACLE = databaseTypes.ORACLE;
+const MYSQL = databaseTypes.MYSQL;
+const POSTGRESQL = databaseTypes.POSTGRESQL;
+const MARIADB = databaseTypes.MARIADB;
+const MSSQL = databaseTypes.MSSQL;
+
+const SQL = databaseTypes.SQL;
+const MONGODB = databaseTypes.MONGODB;
+const COUCHBASE = databaseTypes.COUCHBASE;
+const NEO4J = databaseTypes.NEO4J;
+const NO_DATABASE = databaseTypes.NO;
+
+const { OptionNames, OptionValues } = require('../jdl/jhipster/application-options');
+
+const { AUTHENTICATION_TYPE, TEST_FRAMEWORKS, CACHE_PROVIDER } = OptionNames;
+
+const GATLING = OptionValues[TEST_FRAMEWORKS].gatling;
+const CUCUMBER = OptionValues[TEST_FRAMEWORKS].cucumber;
+const PROTRACTOR = OptionValues[TEST_FRAMEWORKS].protractor;
+const CYPRESS = OptionValues[TEST_FRAMEWORKS].cypress;
+const EHCACHE = OptionValues[CACHE_PROVIDER].ehcache;
+
+const OAUTH2 = OptionValues[AUTHENTICATION_TYPE].oauth2;
 // Reverse order.
 const CUSTOM_PRIORITIES = [
   {
@@ -214,7 +237,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     return (
       !this.jhipsterConfig ||
       !this.jhipsterConfig.skipUserManagement ||
-      (this.jhipsterConfig.authenticationType === 'oauth2' && this.jhipsterConfig.databaseType !== 'no')
+      (this.jhipsterConfig.authenticationType === OAUTH2 && this.jhipsterConfig.databaseType !== NO_DATABASE)
     );
   }
 
@@ -243,8 +266,8 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   isUsingBuiltInAuthority() {
     return (
       !this.jhipsterConfig ||
-      (!this.jhipsterConfig.skipUserManagement && ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(this.jhipsterConfig.databaseType)) ||
-      (this.jhipsterConfig.authenticationType === 'oauth2' && this.jhipsterConfig.databaseType !== 'no')
+      (!this.jhipsterConfig.skipUserManagement && [SQL, MONGODB, COUCHBASE, NEO4J].includes(this.jhipsterConfig.databaseType)) ||
+      (this.jhipsterConfig.authenticationType === OAUTH2 && this.jhipsterConfig.databaseType !== NO_DATABASE)
     );
   }
 
@@ -756,7 +779,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} packageFolder - the Java package folder
    */
   addEntityToEhcache(entityClass, relationships, packageName, packageFolder) {
-    this.addEntityToCache(entityClass, relationships, packageName, packageFolder, 'ehcache');
+    this.addEntityToCache(entityClass, relationships, packageName, packageFolder, EHCACHE);
   }
 
   /**
@@ -766,7 +789,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} packageFolder - the Java package folder
    */
   addEntryToEhcache(entry, packageFolder) {
-    this.addEntryToCache(entry, packageFolder, 'ehcache');
+    this.addEntryToCache(entry, packageFolder, EHCACHE);
   }
 
   /**
@@ -1650,25 +1673,25 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     const prefix = legacyDbNames ? '' : 'rel_';
     const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
     let limit = 0;
-    if (prodDatabaseType === 'oracle' && joinTableName.length > 30 && !this.skipCheckLengthOfIdentifier) {
+    if (prodDatabaseType === ORACLE && joinTableName.length > 30 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated join table "${joinTableName}" is too long for Oracle (which has a 30 character limit). It will be truncated!`
       );
 
       limit = 30;
-    } else if (prodDatabaseType === 'mysql' && joinTableName.length > 64 && !this.skipCheckLengthOfIdentifier) {
+    } else if (prodDatabaseType === MYSQL && joinTableName.length > 64 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated join table "${joinTableName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
       );
 
       limit = 64;
-    } else if (prodDatabaseType === 'postgresql' && joinTableName.length >= 63 && !this.skipCheckLengthOfIdentifier) {
+    } else if (prodDatabaseType === POSTGRESQL && joinTableName.length >= 63 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated join table "${joinTableName}" is too long for PostgreSQL (which has a 63 character limit). It will be truncated!`
       );
 
       limit = 63;
-    } else if (prodDatabaseType === 'mariadb' && joinTableName.length > 64 && !this.skipCheckLengthOfIdentifier) {
+    } else if (prodDatabaseType === MARIADB && joinTableName.length > 64 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated join table "${joinTableName}" is too long for MariaDB (which has a 64 character limit). It will be truncated!`
       );
@@ -1699,25 +1722,25 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}`;
     }
     let limit = 0;
-    if (prodDatabaseType === databaseTypes.ORACLE && constraintName.length >= 27 && !this.skipCheckLengthOfIdentifier) {
+    if (prodDatabaseType === ORACLE && constraintName.length >= 27 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 character limit). It will be truncated!`
       );
 
       limit = 28;
-    } else if (prodDatabaseType === databaseTypes.MYSQL && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+    } else if (prodDatabaseType === MYSQL && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
       );
 
       limit = 62;
-    } else if (prodDatabaseType === databaseTypes.POSTGRESQL && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
+    } else if (prodDatabaseType === POSTGRESQL && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 character limit). It will be truncated!`
       );
 
       limit = 61;
-    } else if (prodDatabaseType === databaseTypes.MARIADB && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+    } else if (prodDatabaseType === MARIADB && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated constraint name "${constraintName}" is too long for MariaDB (which has a 64 character limit). It will be truncated!`
       );
@@ -2469,10 +2492,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.withAdminUi = config.withAdminUi;
 
     dest.testFrameworks = config.testFrameworks || [];
-    dest.gatlingTests = dest.testFrameworks.includes('gatling');
-    dest.cucumberTests = dest.testFrameworks.includes('cucumber');
-    dest.protractorTests = dest.testFrameworks.includes('protractor');
-    dest.cypressTests = dest.testFrameworks.includes('cypress');
+
+    dest.gatlingTests = dest.testFrameworks.includes(GATLING);
+    dest.cucumberTests = dest.testFrameworks.includes(CUCUMBER);
+    dest.protractorTests = dest.testFrameworks.includes(PROTRACTOR);
+    dest.cypressTests = dest.testFrameworks.includes(CYPRESS);
 
     dest.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
     dest.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);
@@ -2528,7 +2552,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.searchEngine = config.searchEngine;
     dest.cacheProvider = config.cacheProvider;
     dest.enableHibernateCache = config.enableHibernateCache;
-    dest.reactiveSqlTestContainers = config.reactive && ['mysql', 'postgresql', 'mssql', 'mariadb'].includes(config.prodDatabaseType);
+    dest.reactiveSqlTestContainers = config.reactive && [MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(config.prodDatabaseType);
 
     dest.enableSwaggerCodegen = config.enableSwaggerCodegen;
     dest.messageBroker = config.messageBroker;
