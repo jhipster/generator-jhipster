@@ -47,7 +47,7 @@ if [[ "$JHI_REPO" == *"/generator-jhipster" ]]; then
 
     cd "$JHI_HOME"
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-
+    npm install -g npm@$(node -e "console.log(require('./generators/generator-constants').NPM_VERSION);")
     npm ci
     npm install -g "$JHI_HOME"
 elif [[ "$JHI_GEN_BRANCH" == "release" ]]; then

@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const semver = require('semver');
 const validationOptions = require('../jdl/jhipster/validations');
 const applicationOptions = require('../jdl/jhipster/application-options');
 const databaseTypes = require('../jdl/jhipster/database-types');
@@ -28,7 +27,7 @@ const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the varia
 
 // Version of Node, NPM
 const NODE_VERSION = '14.15.0';
-const NPM_VERSION = '7.6.0';
+const NPM_VERSION = '7.6.1';
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
 
 const GRADLE_VERSION = '6.8.2';
@@ -39,8 +38,7 @@ const JHIPSTER_DEPENDENCIES_VERSION = '7.0.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
 const SPRING_BOOT_VERSION = '2.4.3';
 const LIQUIBASE_VERSION = '4.2.2';
-const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
-const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;
+const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('.');
 const HIBERNATE_VERSION = '5.4.28.Final';
 
 const JACOCO_VERSION = '0.8.6';
