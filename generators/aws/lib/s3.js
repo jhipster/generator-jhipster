@@ -17,6 +17,10 @@
  * limitations under the License.
  */
 const fs = require('fs');
+const { OptionNames, OptionValues } = require('../../../jdl/jhipster/application-options');
+
+const { BUILD_TOOL } = OptionNames;
+const GRADLE = OptionValues[BUILD_TOOL].gradle;
 
 const FILE_EXTENSION = '.war';
 const S3_STANDARD_REGION = 'us-east-1';
@@ -74,7 +78,7 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
   const buildTool = params.buildTool;
   let buildFolder;
 
-  if (buildTool === 'gradle') {
+  if (buildTool === GRADLE) {
     buildFolder = 'build/libs/';
   } else {
     buildFolder = 'target/';

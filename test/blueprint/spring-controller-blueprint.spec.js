@@ -64,6 +64,7 @@ describe('JHipster spring controller generator with blueprint', () => {
             fromCli: true,
             skipInstall: true,
             blueprint: blueprintName,
+            baseName: 'jhipster',
             skipChecks: true,
           })
           .inTmpDir(dir => {

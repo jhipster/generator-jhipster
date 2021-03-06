@@ -65,6 +65,10 @@ module.exports = {
   languageToJavaLanguage,
 };
 
+const databaseTypes = require('../jdl/jhipster/database-types');
+
+const SQL = databaseTypes.SQL;
+
 /**
  * Rewrite file with passed arguments
  * @param {object} args argument object (containing path, file, haystack, etc properties)
@@ -596,7 +600,7 @@ function loadYoRc(filePath = '.yo-rc.json') {
  */
 function getDBTypeFromDBValue(db) {
   if (constants.SQL_DB_OPTIONS.map(db => db.value).includes(db)) {
-    return 'sql';
+    return SQL;
   }
   return db;
 }
