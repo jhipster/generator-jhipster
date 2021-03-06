@@ -76,8 +76,9 @@ const H2_MEM = databaseTypes.H2_MEMORY;
 
 const { OptionNames, OptionValues } = require('../jdl/jhipster/application-options');
 
-const { AUTHENTICATION_TYPE } = OptionNames;
+const { AUTHENTICATION_TYPE, BUILD_TOOL } = OptionNames;
 const OAUTH2 = OptionValues[AUTHENTICATION_TYPE].oauth2;
+const MAVEN = OptionValues[BUILD_TOOL].maven
 
 /**
  * This is the Generator base private class.
@@ -1037,7 +1038,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * @param {string} buildTool - buildTool
    */
   getBuildDirectoryForBuildTool(buildTool) {
-    return buildTool === 'maven' ? 'target/' : 'build/';
+    return buildTool === MAVEN ? 'target/' : 'build/';
   }
 
   /**
@@ -1045,7 +1046,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * @param {string} buildTool - buildTool
    */
   getResourceBuildDirectoryForBuildTool(buildTool) {
-    return buildTool === 'maven' ? 'target/classes/' : 'build/resources/main/';
+    return buildTool === MAVEN ? 'target/classes/' : 'build/resources/main/';
   }
 
   /**
@@ -1269,7 +1270,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
     const primaryKeyType = typeof primaryKey === 'string' ? primaryKey : primaryKey.type;
     if (primaryKeyType === TYPE_STRING) {
-      if (databaseType === 'sql' && defaultValue === 0) {
+      if (databaseType === SQL && defaultValue === 0) {
         return 'UUID.randomUUID().toString()';
       }
       return `"id${defaultValue}"`;
