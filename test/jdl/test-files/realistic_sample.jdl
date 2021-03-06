@@ -92,7 +92,7 @@ entity Product {
     name String required
     description String
     price BigDecimal required min(0)
-    size Size required
+    productSize Size required
     image ImageBlob
 }
 

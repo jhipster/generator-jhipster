@@ -100,7 +100,9 @@ function createValidator(jdlObject, applicationSettings = {}, logger = console) 
         logger.warn(`The name '${jdlField.name}' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.`);
       }
       if (filtering && isReservedPaginationWords(jdlField.name)) {
-        throw new Error(`Field name '${fieldName}' is reserved keyword, as it is used by Spring for pagination in the URL.`);
+        throw new Error(
+          `Field name '${fieldName}'found in ${entityName} is a reserved keyword, as it is used by Spring for pagination in the URL.`
+        );
       }
       const typeCheckingFunction = getTypeCheckingFunction(entityName, applicationSettings);
       if (!jdlObject.hasEnum(jdlField.type) && !typeCheckingFunction(jdlField.type)) {
