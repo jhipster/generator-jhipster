@@ -44,6 +44,7 @@ RUN \
   # clean jhipster folder
   rm -Rf /home/jhipster/generator-jhipster/node_modules && \
   # install jhipster
+  cd /home/jhipster/generator-jhipster && npm install && \
   npm install -g /home/jhipster/generator-jhipster && \
   # fix jhipster user permissions
   chown -R jhipster:jhipster \
