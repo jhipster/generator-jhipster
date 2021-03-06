@@ -23,7 +23,7 @@ let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
-    super(args, opts);
+    super(args, opts, { unique: 'namespace' });
 
     // This makes `name` a required argument.
     this.argument('entities', {

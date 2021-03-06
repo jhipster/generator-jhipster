@@ -29,7 +29,7 @@ const BASE_CHANGELOG = {
 
 module.exports = class extends BaseGenerator {
   constructor(args, options) {
-    super(args, options);
+    super(args, options, { unique: 'namespace' });
 
     this.argument('entities', {
       desc: 'Which entities to generate a new changelog',

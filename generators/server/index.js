@@ -33,7 +33,7 @@ let useBlueprints;
 
 module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   constructor(args, opts) {
-    super(args, opts);
+    super(args, opts, { unique: 'namespace' });
 
     // This adds support for a `--experimental` flag which can be used to enable experimental features
     this.option('experimental', {

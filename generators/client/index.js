@@ -36,7 +36,7 @@ let useBlueprints;
 
 module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   constructor(args, opts) {
-    super(args, opts);
+    super(args, opts, { unique: 'namespace' });
 
     // This adds support for a `--auth` flag
     this.option('auth', {

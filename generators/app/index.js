@@ -31,7 +31,7 @@ let useBlueprints;
 
 module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
   constructor(args, opts) {
-    super(args, opts);
+    super(args, opts, { unique: 'namespace' });
 
     this.option('defaults', {
       desc: 'Execute jhipster with default config',

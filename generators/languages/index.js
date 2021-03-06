@@ -33,7 +33,7 @@ let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
-    super(args, opts);
+    super(args, opts, { unique: 'namespace' });
 
     this.option('skip-prompts', {
       desc: 'Skip prompts',
