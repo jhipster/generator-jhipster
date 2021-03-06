@@ -165,6 +165,8 @@ const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand })
           logger.debug('Executing CLI only script');
           return loadCommand(cmdName)(args, options, env, envBuilder);
         }
+        env.composeWith('jhipster:bootstrap', options);
+
         if (cmdName === 'run') {
           return Promise.all(command.generatorNamespaces.map(generator => env.run(generator, options))).then(
             results => done(results.find(result => result)),

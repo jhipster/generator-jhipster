@@ -29,7 +29,7 @@ let useBlueprints;
 
 module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
   constructor(args, opts) {
-    super(args, opts);
+    super(args, opts, { unique: 'namespace' });
 
     if (this.options.help) {
       return;

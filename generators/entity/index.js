@@ -41,7 +41,7 @@ let useBlueprints;
 
 class EntityGenerator extends BaseBlueprintGenerator {
   constructor(args, opts) {
-    super(args, opts);
+    super(args, opts, { unique: 'argument' });
 
     // This makes `name` a required argument.
     this.argument('name', {
@@ -139,7 +139,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
       filename,
       configExisted,
       entityExisted,
-      configurationFileExists: this.fs.exists(filename),
+      configurationFileExists: this.fs.exists(this.destinationPath(filename)),
     };
 
     this._setupEntityOptions(this, this, this.context);
@@ -724,18 +724,18 @@ class EntityGenerator extends BaseBlueprintGenerator {
         if (this.options.skipWriting) return;
         const context = this.context;
         if (!context.skipServer) {
-          this.composeWithJHipster('entity-server', {
+          this.composeWithJHipster('entity-server', this.arguments, {
             context,
           });
         }
 
         if (!context.skipClient) {
-          this.composeWithJHipster('entity-client', {
+          this.composeWithJHipster('entity-client', this.arguments, {
             context,
             skipInstall: this.options.skipInstall,
           });
           if (this.jhipsterConfig.enableTranslation) {
-            this.composeWithJHipster('entity-i18n', {
+            this.composeWithJHipster('entity-i18n', this.arguments, {
               context,
               skipInstall: this.options.skipInstall,
             });

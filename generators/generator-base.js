@@ -148,58 +148,28 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     this.registerPriorities(CUSTOM_PRIORITIES);
 
     // JHipster runtime config that should not be stored to .yo-rc.json.
-    this.configOptions = this.options.configOptions || {};
+    this.configOptions = this.options.configOptions || { sharedEntities: {} };
 
     /* Force config to use 'generator-jhipster' namespace. */
-    this.config = this._getStorage('generator-jhipster');
+    this._config = this._getStorage('generator-jhipster');
     /* JHipster config using proxy mode used as a plain object instead of using get/set. */
     this.jhipsterConfig = this.config.createProxy();
 
     /* Register generator for compose once */
     this.registerComposedGenerator(this.options.namespace);
 
-    /*
-     * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the
-     * generator and then executes generator.config.defaults(localConfig).
-     * JHipster workflow does a lot of configuration at the constructor, sometimes this is required due to current
-     * blueprints support implementation, making it incompatible with yeoman-test's withLocalConfig.
-     * 'defaultLocalConfig' option is a replacement for yeoman-test's withLocalConfig method.
-     * 'defaults' function sets every key that has undefined value at current config.
-     */
-    if (this.options.defaultLocalConfig) {
-      this.config.defaults(this.options.defaultLocalConfig);
+    if (this.options.namespace !== 'jhipster:bootstrap') {
+      /*
+      // eslint-disable-next-line global-require
+      const boostrapGen = require('./bootstrap');
+      boostrapGen.namespace = 'jhipster:bootstrap';
+      const generator = this.env.instantiate(boostrapGen, { ...this.options, configOptions: this.configOptions });
+      if (this.env.queueGenerator) {
+        this.env.queueGenerator(generator, true);
+      }
+      */
+      this.composeWithJHipster('bootstrap', { ...this.options, configOptions: this.configOptions }, true);
     }
-    /*
-     * Option 'localConfig' uses set instead of defaults of 'defaultLocalConfig'.
-     * 'set' function sets every key from 'localConfig'.
-     */
-    if (this.options.localConfig) {
-      this.config.set(this.options.localConfig);
-    }
-
-    if (this.options.withGeneratedFlag !== undefined) {
-      this.jhipsterConfig.withGeneratedFlag = this.options.withGeneratedFlag;
-    }
-
-    // Load common runtime options.
-    this.parseCommonRuntimeOptions();
-
-    if (this.jhipsterConfig.withGeneratedFlag) {
-      this.registerGeneratedAnnotationTransform();
-    }
-
-    // Register .yo-resolve file
-    if (!this.options.skipYoResolve) {
-      this.registerConflicterAttributesTransform();
-    }
-
-    this.registerForceEntitiesTransform();
-
-    if (!this.options.skipPrettier) {
-      this.registerPrettierTransform();
-    }
-
-    this.registerCommitPriorityFilesTask();
   }
 
   /**
@@ -1489,9 +1459,21 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * @param {boolean} [once] - compose once with the generator
    * @return {object} the composed generator
    */
-  composeWithJHipster(generator, options = {}, once = false) {
+  composeWithJHipster(generator, args, options, once = false) {
     const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
-    if (options === true || once) {
+    if (typeof args === 'boolean') {
+      once = args;
+      args = [];
+      options = {};
+    } else if (!Array.isArray(args)) {
+      once = options;
+      options = args;
+      args = [];
+    } else if (typeof options === 'boolean') {
+      once = options;
+      options = {};
+    }
+    if (once) {
       if (!this.registerComposedGenerator(namespace)) {
         return undefined;
       }
@@ -1508,15 +1490,11 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       }
     }
 
-    return this.composeWith(
-      generator,
-      {
-        ...this.options,
-        configOptions: this.configOptions,
-        ...options,
-      },
-      true
-    );
+    return this.env.composeWith(generator, args, {
+      ...this.options,
+      configOptions: this.configOptions,
+      ...options,
+    });
   }
 
   /**
