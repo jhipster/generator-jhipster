@@ -20,7 +20,7 @@ const chalk = require('chalk');
 const fs = require('fs');
 const _ = require('lodash');
 const constants = require('../generator-constants');
-const { isReservedFieldName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
+const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
@@ -446,6 +446,7 @@ function askForField() {
   const databaseType = context.databaseType;
   const clientFramework = context.clientFramework;
   const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
+  const possibleFiltering = databaseType === 'sql' && !context.reactive;
   const prompts = [
     {
       type: 'confirm',
@@ -478,6 +479,10 @@ function askForField() {
         }
         if (prodDatabaseType === 'oracle' && input.length > 30 && !skipCheckLengthOfIdentifier) {
           return 'The field name cannot be of more than 30 characters';
+        }
+        // we don't know, if filtering will be used
+        if (possibleFiltering && isReservedPaginationWords(input)) {
+          return 'Your field name cannot be a field name, which used as a parameter by Spring for pagination';
         }
         return true;
       },

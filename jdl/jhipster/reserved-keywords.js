@@ -18,6 +18,7 @@
  */
 
 const JHipsterReservedKeywords = require('./reserved-keywords/jhipster');
+const PagingReservedKeywords = require('./reserved-keywords/paging');
 const AngularReservedKeywords = require('./reserved-keywords/angular');
 const MySQLReservedKeywords = require('./reserved-keywords/mysql');
 const JavaReservedKeywords = require('./reserved-keywords/java');
@@ -40,6 +41,7 @@ const ReservedWords = {
   MYSQL: MySQLReservedKeywords,
   MARIADB: MySQLReservedKeywords,
   POSTGRESQL: PostgresqlReservedKeywords,
+  PAGING: PagingReservedKeywords,
   CASSANDRA: CassandraReservedKeywords,
   COUCHBASE: CouchbaseReservedKeywords,
   ORACLE: OracleReservedKeywords,
@@ -64,6 +66,10 @@ function isReservedTableName(keyword, databaseType) {
     : isReserved(keyword, databaseType);
 }
 
+function isReservedPaginationWords(keyword) {
+  return isReserved(keyword, 'PAGING');
+}
+
 function isReservedFieldName(keyword, clientFramework) {
   if (clientFramework) {
     if (clientFramework === clientFrameworks.angularX) {
@@ -85,6 +91,7 @@ module.exports = {
   isReservedClassName,
   isReservedTableName,
   isReservedFieldName,
+  isReservedPaginationWords,
   JHIPSTER: ReservedWords.JHIPSTER,
   ANGULAR: ReservedWords.ANGULAR,
   REACT: ReservedWords.REACT,
