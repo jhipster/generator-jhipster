@@ -105,7 +105,9 @@ function createValidator(jdlObject, logger = console) {
 
   function checkForFieldErrors(entityName, jdlFields, jdlApplication) {
     const validator = new FieldValidator();
-    const filtering = (jdlApplication.getConfigurationOptionValue('databaseType') === 'sql' && jdlApplication.getConfigurationOptionValue('reactive') === false);
+    const filtering =
+      jdlApplication.getConfigurationOptionValue('databaseType') === 'sql' &&
+      jdlApplication.getConfigurationOptionValue('reactive') === false;
     Object.keys(jdlFields).forEach(fieldName => {
       const jdlField = jdlFields[fieldName];
       validator.validate(jdlField);

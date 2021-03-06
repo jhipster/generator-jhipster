@@ -17,8 +17,4 @@
  * limitations under the License.
  */
 
-module.exports = [
-  'SIZE',
-  'SORT',
-  'PAGE',
-];
+module.exports = ['SIZE', 'SORT', 'PAGE'];
