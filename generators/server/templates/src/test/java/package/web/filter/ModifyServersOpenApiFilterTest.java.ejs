@@ -4,10 +4,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.zip.GZIPOutputStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
@@ -17,13 +23,9 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.zip.GZIPOutputStream;
-
 class ModifyServersOpenApiFilterTest {
 
+    private static final Logger log = LoggerFactory.getLogger(ModifyServersOpenApiFilterTest.class);
     private final GatewayFilterChain filterChain = mock(GatewayFilterChain.class);
     private final ArgumentCaptor<ServerWebExchange> captor = ArgumentCaptor.forClass(ServerWebExchange.class);
 
@@ -82,13 +84,11 @@ class ModifyServersOpenApiFilterTest {
 
         @Test
         void shouldRewriteBodyWhenBodyIsFluxAndResponseIsNotZipped() {
-            ModifyServersOpenApiFilter.ModifyServersOpenApiInterceptor interceptor = spy(
-                modifyServersOpenApiFilter.createModifyServersOpenApiInterceptor(
+            ModifyServersOpenApiFilter.ModifyServersOpenApiInterceptor interceptor = modifyServersOpenApiFilter.createModifyServersOpenApiInterceptor(
                     path,
                     exchange.getResponse(),
                     exchange.getResponse().bufferFactory()
-                )
-            );
+                );
 
             byte[] bytes = "{}".getBytes();
             DataBuffer body = exchange.getResponse().bufferFactory().wrap(bytes);
@@ -103,13 +103,11 @@ class ModifyServersOpenApiFilterTest {
         @Test
         void shouldRewriteBodyWhenBodyIsFluxAndResponseIsZipped() {
             exchange.getResponse().getHeaders().set(HttpHeaders.CONTENT_ENCODING, "gzip");
-            ModifyServersOpenApiFilter.ModifyServersOpenApiInterceptor interceptor = spy(
-                modifyServersOpenApiFilter.createModifyServersOpenApiInterceptor(
+            ModifyServersOpenApiFilter.ModifyServersOpenApiInterceptor interceptor = modifyServersOpenApiFilter.createModifyServersOpenApiInterceptor(
                     path,
                     exchange.getResponse(),
                     exchange.getResponse().bufferFactory()
-                )
-            );
+                );
 
             byte[] bytes = zipContent();
             DataBuffer body = exchange.getResponse().bufferFactory().wrap(bytes);
@@ -123,13 +121,11 @@ class ModifyServersOpenApiFilterTest {
 
         @Test
         void shouldNotRewriteBodyWhenBodyIsNotFlux() {
-            ModifyServersOpenApiFilter.ModifyServersOpenApiInterceptor interceptor = spy(
-                modifyServersOpenApiFilter.createModifyServersOpenApiInterceptor(
+            ModifyServersOpenApiFilter.ModifyServersOpenApiInterceptor interceptor = modifyServersOpenApiFilter.createModifyServersOpenApiInterceptor(
                     path,
                     exchange.getResponse(),
                     exchange.getResponse().bufferFactory()
-                )
-            );
+                );
 
             byte[] bytes = "{}".getBytes();
             DataBuffer body = exchange.getResponse().bufferFactory().wrap(bytes);
@@ -146,7 +142,7 @@ class ModifyServersOpenApiFilterTest {
                 gzipOutputStream.close();
                 return byteArrayOutputStream.toByteArray();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("Error in test when zip content during modify servers from api-doc of {}: {}", path, e.getMessage());
             }
             return "{}".getBytes();
         }
