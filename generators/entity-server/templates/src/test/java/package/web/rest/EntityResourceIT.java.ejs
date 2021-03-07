@@ -829,7 +829,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
 
         // Get all the <%= entityInstance %>List
         <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL<% if (databaseType !== 'cassandra') { %> + "?sort=<%= primaryKey.name %>,desc<% } %>"))
+        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL<% if (databaseType !== 'cassandra') { %> + "?sort=<%= primaryKey.name %>,desc"<% } %>))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
         <%_ } else { _%>

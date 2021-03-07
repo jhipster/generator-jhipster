@@ -44,14 +44,14 @@ partialUpdated<%= asEntity(entityClass) %>.set<%= primaryKey.nameCapitalized %>(
 <%_ } _%>
 
 <%_ if (!reactive) { _%>
-rest<%= entityClass %>MockMvc.perform(patch("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
 .contentType("application/merge-patch+json")
 .content(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>)))
 .andExpect(status().isOk());
 <%_ } else { _%>
 webTestClient
 .patch()
-.uri("/api/<%= entityApiUrl %>")
+.uri(ENTITY_API_URL)
 .contentType(MediaType.valueOf("application/merge-patch+json"))
 .bodyValue(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>))
 .exchange()
