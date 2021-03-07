@@ -21,6 +21,14 @@ const BaseGenerator = require('../generator-base');
 const prompts = require('./prompts');
 const AwsFactory = require('./lib/aws.js');
 const statistics = require('../statistics');
+const { OptionNames } = require('../../jdl/jhipster/application-options');
+
+const { BUILD_TOOL, BASE_NAME, PROD_DATABASE_TYPE } = OptionNames;
+const databaseTypes = require('../../jdl/jhipster/database-types');
+
+const MYSQL = databaseTypes.MYSQL;
+const POSTGRESQL = databaseTypes.POSTGRESQL;
+const MARIADB = databaseTypes.MARIADB;
 
 module.exports = class extends BaseGenerator {
   get initializing() {
@@ -31,8 +39,8 @@ module.exports = class extends BaseGenerator {
       },
       getGlobalConfig() {
         this.existingProject = false;
-        this.baseName = this.config.get('baseName');
-        this.buildTool = this.config.get('buildTool');
+        this.baseName = this.config.get(BASE_NAME);
+        this.buildTool = this.config.get(BUILD_TOOL);
       },
       getAwsConfig() {
         const awsConfig = this.config.get('aws');
@@ -57,17 +65,17 @@ module.exports = class extends BaseGenerator {
         }
       },
       checkDatabase() {
-        const prodDatabaseType = this.config.get('prodDatabaseType');
+        const prodDatabaseType = this.config.get(PROD_DATABASE_TYPE);
 
         switch (prodDatabaseType.toLowerCase()) {
-          case 'mariadb':
-            this.dbEngine = 'mariadb';
+          case MARIADB:
+            this.dbEngine = MARIADB;
             break;
-          case 'mysql':
-            this.dbEngine = 'mysql';
+          case MYSQL:
+            this.dbEngine = MYSQL;
             break;
-          case 'postgresql':
-            this.dbEngine = 'postgres';
+          case POSTGRESQL:
+            this.dbEngine = POSTGRESQL;
             break;
           default:
             this.error('Sorry deployment for this database is not possible');

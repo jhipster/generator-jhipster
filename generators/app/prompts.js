@@ -20,6 +20,15 @@ const chalk = require('chalk');
 const statistics = require('../statistics');
 const packagejs = require('../../package.json');
 const { appDefaultConfig } = require('../generator-defaults');
+const { GATEWAY, MONOLITH, MICROSERVICE } = require('../../jdl/jhipster/application-types');
+const { OptionNames, OptionValues } = require('../../jdl/jhipster/application-options');
+
+const { TEST_FRAMEWORKS } = OptionNames;
+
+const GATLING = OptionValues[TEST_FRAMEWORKS].gatling;
+const CUCUMBER = OptionValues[TEST_FRAMEWORKS].cucumber;
+const PROTRACTOR = OptionValues[TEST_FRAMEWORKS].protractor;
+const CYPRESS = OptionValues[TEST_FRAMEWORKS].cypress;
 
 module.exports = {
   askForInsightOptIn,
@@ -47,15 +56,15 @@ async function askForApplicationType() {
 
   const applicationTypeChoices = [
     {
-      value: 'monolith',
+      value: MONOLITH,
       name: 'Monolithic application (recommended for simple projects)',
     },
     {
-      value: 'gateway',
+      value: GATEWAY,
       name: 'Gateway application',
     },
     {
-      value: 'microservice',
+      value: MICROSERVICE,
       name: 'Microservice application',
     },
   ];
@@ -83,12 +92,12 @@ async function askForTestOpts() {
   const choices = [];
   if (!this.skipClient) {
     // all client side test frameworks should be added here
-    choices.push({ name: 'Cypress', value: 'cypress' });
-    choices.push({ name: '[DEPRECATED] Protractor', value: 'protractor' });
+    choices.push({ name: 'Cypress', value: CYPRESS });
+    choices.push({ name: '[DEPRECATED] Protractor', value: PROTRACTOR });
   }
   if (!this.skipServer) {
     // all server side test frameworks should be added here
-    choices.push({ name: 'Gatling', value: 'gatling' }, { name: 'Cucumber', value: 'cucumber' });
+    choices.push({ name: 'Gatling', value: GATLING }, { name: 'Cucumber', value: CUCUMBER });
   }
   const PROMPT = {
     type: 'checkbox',

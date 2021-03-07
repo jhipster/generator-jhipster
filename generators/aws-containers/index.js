@@ -29,6 +29,14 @@ const dockerPrompts = require('../docker-prompts');
 const constants = require('../generator-constants');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const fileUtils = require('../../jdl/utils/file-utils');
+const { MONOLITH } = require('../../jdl/jhipster/application-types');
+const { OptionNames, OptionValues } = require('../../jdl/jhipster/application-options');
+
+const { CACHE_PROVIDER, BUILD_TOOL } = OptionNames;
+
+const NO_CACHE_PROVIDER = OptionValues[CACHE_PROVIDER].no;
+const MAVEN = OptionValues[BUILD_TOOL].maven;
+const GRADLE = OptionValues[BUILD_TOOL].gradle;
 
 const prompts = require('./prompts');
 const awsClient = require('./aws-client');
@@ -170,7 +178,7 @@ module.exports = class extends BaseGenerator {
       getAppConfig: dockerPrompts.loadConfigs,
       promptEKSClusterCreation: prompts.promptEKSClusterCreation,
       createEKSCluster() {
-        if (this.deploymentApplicationType === 'monolith') return;
+        if (this.deploymentApplicationType === MONOLITH) return;
         const done = this.async();
         this.log.ok('Initialising Elastic Kubernetes Service (EKS)️. This can take up to 15 minutes depending on load....');
         shelljs.exec(
@@ -186,7 +194,7 @@ module.exports = class extends BaseGenerator {
         );
       },
       createECR() {
-        if (this.deploymentApplicationType === 'monolith') return;
+        if (this.deploymentApplicationType === MONOLITH) return;
         const done = this.async();
         this.log.ok('Initialising Elastic Repository Service (ERS) ...');
         this.appConfigs.forEach(app => {
@@ -203,7 +211,7 @@ module.exports = class extends BaseGenerator {
         });
       },
       finishMicroServiceFlow() {
-        if (this.deploymentApplicationType === 'monolith') return;
+        if (this.deploymentApplicationType === MONOLITH) return;
         const done = this.async();
         this.log.ok(chalk.green('EKS and ECRs created. Please use the Kubernetes Sub-generator (jhipster kubernetes) to deploy.`'));
         this.abort = true;
@@ -321,7 +329,7 @@ module.exports = class extends BaseGenerator {
       showAwsCacheWarning() {
         if (this.abort) return;
         this.appConfigs.forEach(config => {
-          if (config.cacheProvider !== 'no') {
+          if (config.cacheProvider !== NO_CACHE_PROVIDER) {
             this.log(
               chalk.yellow(
                 `Warning ${config.baseName} is using a cache provider, scaling will not be available. Refer to an AWS native scaling service.`
@@ -334,10 +342,10 @@ module.exports = class extends BaseGenerator {
         if (this.abort) return;
         this.appConfigs.forEach(config => {
           const directory = `${this.directoryPath}${config.appFolder}`;
-          if (config.buildTool === 'maven') {
+          if (config.buildTool === MAVEN) {
             this.addMavenDependencyInDirectory(directory, AWS_SSM_GROUP, AWS_SSM_ARTIFACT);
             this.addMavenDependencyInDirectory(directory, SPRING_CLOUD_GROUP, SPRING_CLOUD_ARTIFACT);
-          } else if (config.buildTool === 'gradle') {
+          } else if (config.buildTool === GRADLE) {
             this.addGradleDependencyInDirectory(directory, 'compile', AWS_SSM_GROUP, AWS_SSM_ARTIFACT);
             this.addGradleDependencyInDirectory(directory, 'compile', SPRING_CLOUD_GROUP, SPRING_CLOUD_ARTIFACT);
           }

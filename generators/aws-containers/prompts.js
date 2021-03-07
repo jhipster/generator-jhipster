@@ -22,6 +22,7 @@ const databaseTypes = require('../../jdl/jhipster/database-types');
 
 const AURORA_DB_PASSWORD_REGEX = /^[^@"/]{8,42}$/;
 const CLOUDFORMATION_STACK_NAME = /[a-zA-Z][-a-zA-Z0-9]*/;
+const { MICROSERVICE, MONOLITH } = require('../../jdl/jhipster/application-types');
 
 const SCALING_TO_CONFIG = {
   low: {
@@ -124,15 +125,15 @@ function askTypeOfApplication() {
       message: 'Which *type* of application would you like to deploy?',
       choices: [
         {
-          value: 'monolith',
+          value: MONOLITH,
           name: 'Monolithic application',
         },
         {
-          value: 'microservice',
+          value: MICROSERVICE,
           name: 'Microservice application',
         },
       ],
-      default: 'monolith',
+      default: MONOLITH,
     },
   ];
 
@@ -278,7 +279,7 @@ function promptPerformance(config, awsConfig = { performance: 'low' }) {
  * Ask about scaling
  */
 function askScaling() {
-  if (this.abort || this.deploymentApplicationType === 'microservice') return null;
+  if (this.abort || this.deploymentApplicationType === MICROSERVICE) return null;
   const chainPromises = index => {
     if (index === this.appConfigs.length) {
       return null;

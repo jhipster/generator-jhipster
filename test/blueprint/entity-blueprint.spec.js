@@ -89,6 +89,7 @@ describe('JHipster entity generator with blueprint', () => {
           .withPrompts({
             fieldAdd: false,
             relationshipAdd: false,
+            baseName: 'jhipster',
             dto: 'no',
             service: 'no',
             pagination: 'no',

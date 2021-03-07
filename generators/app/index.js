@@ -26,6 +26,10 @@ const packagejs = require('../../package.json');
 const statistics = require('../statistics');
 const { appDefaultConfig } = require('../generator-defaults');
 const { JHIPSTER_CONFIG_DIR } = require('../generator-constants');
+const { MICROSERVICE } = require('../../jdl/jhipster/application-types');
+const { OptionNames } = require('../../jdl/jhipster/application-options');
+
+const { JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY } = OptionNames;
 
 let useBlueprints;
 
@@ -348,7 +352,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         this.jhipsterConfig.jhipsterVersion = packagejs.version;
 
         this.configOptions.logo = false;
-        if (this.jhipsterConfig.applicationType === 'microservice') {
+        if (this.jhipsterConfig.applicationType === MICROSERVICE) {
           this.jhipsterConfig.skipClient = true;
           this.jhipsterConfig.skipUserManagement = true;
         }
@@ -448,7 +452,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
 
       insight() {
         const yorc = {
-          ..._.omit(this.jhipsterConfig, ['jhiPrefix', 'baseName', 'jwtSecretKey', 'packageName', 'packagefolder', 'rememberMeKey']),
+          ..._.omit(this.jhipsterConfig, [JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY]),
         };
         yorc.applicationType = this.jhipsterConfig.applicationType;
         statistics.sendYoRc(yorc, this.existingProject, this.jhipsterConfig.jhipsterVersion);
