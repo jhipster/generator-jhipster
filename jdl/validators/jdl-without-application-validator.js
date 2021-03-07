@@ -33,6 +33,7 @@ const BinaryOptions = require('../jhipster/binary-options');
 
 const { isReservedFieldName } = require('../jhipster/reserved-keywords');
 const { isReservedTableName } = require('../jhipster/reserved-keywords');
+const { isReservedPaginationWords } = require('../jhipster/reserved-keywords');
 
 module.exports = {
   createValidator,
@@ -91,11 +92,17 @@ function createValidator(jdlObject, applicationSettings = {}, logger = console) 
 
   function checkForFieldErrors(entityName, jdlFields) {
     const validator = new FieldValidator();
+    const filtering = applicationSettings.databaseType === 'sql';
     Object.keys(jdlFields).forEach(fieldName => {
       const jdlField = jdlFields[fieldName];
       validator.validate(jdlField);
       if (isReservedFieldName(jdlField.name)) {
         logger.warn(`The name '${jdlField.name}' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.`);
+      }
+      if (filtering && isReservedPaginationWords(jdlField.name)) {
+        throw new Error(
+          `Field name '${fieldName}' found in ${entityName} is a reserved keyword, as it is used by Spring for pagination in the URL.`
+        );
       }
       const typeCheckingFunction = getTypeCheckingFunction(entityName, applicationSettings);
       if (!jdlObject.hasEnum(jdlField.type) && !typeCheckingFunction(jdlField.type)) {
