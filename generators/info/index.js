@@ -32,6 +32,8 @@ module.exports = class extends BaseGenerator {
       type: Boolean,
       defaults: true,
     });
+
+    this.env.options.skipInstall = true;
   }
 
   get initializing() {
@@ -112,16 +114,6 @@ module.exports = class extends BaseGenerator {
         shelljs.exec('npm -v', { silent: true }, (err, stdout, stderr) => {
           if (!err) {
             console.log(`npm: ${stdout}`);
-          }
-          done();
-        });
-      },
-
-      checkYeoman() {
-        const done = this.async();
-        shelljs.exec('yo --version', { silent: true }, (err, stdout, stderr) => {
-          if (!err) {
-            console.log(`yeoman: ${stdout}`);
           }
           done();
         });
