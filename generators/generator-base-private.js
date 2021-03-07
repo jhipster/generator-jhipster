@@ -88,8 +88,8 @@ const MAVEN = OptionValues[BUILD_TOOL].maven;
  * The method signatures in private API can be changed without a major version change.
  */
 module.exports = class JHipsterBasePrivateGenerator extends Generator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, opts, features) {
+    super(args, opts, features);
     // expose lodash to templates
     this._ = _;
   }

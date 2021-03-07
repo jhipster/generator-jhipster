@@ -24,6 +24,19 @@ const BaseGenerator = require('../generator-base');
 // stderr unlike yeoman's log() so that user can easily redirect output to a file.
 /* eslint-disable no-console */
 module.exports = class extends BaseGenerator {
+  constructor(args, options) {
+    super(args, options, { unique: 'namespace' });
+
+    this.option('skipCommit', {
+      desc: 'Skip commit',
+      type: Boolean,
+      hide: true,
+      defaults: true,
+    });
+
+    this.env.options.skipInstall = true;
+  }
+
   get initializing() {
     return {
       sayHello() {
@@ -102,16 +115,6 @@ module.exports = class extends BaseGenerator {
         shelljs.exec('npm -v', { silent: true }, (err, stdout, stderr) => {
           if (!err) {
             console.log(`npm: ${stdout}`);
-          }
-          done();
-        });
-      },
-
-      checkYeoman() {
-        const done = this.async();
-        shelljs.exec('yo --version', { silent: true }, (err, stdout, stderr) => {
-          if (!err) {
-            console.log(`yeoman: ${stdout}`);
           }
           done();
         });

@@ -79,10 +79,18 @@ module.exports = class extends BaseGenerator {
   // Public API method used by the getter and also by Blueprints
   _preConflicts() {
     return {
-      commitPrettierConfig() {
-        return this._commitSharedFs(this.env.sharedFs.stream().pipe(filter(['.prettierrc', '.prettierignore'])));
+      async commitPrettierConfig() {
+        if (this.options.skipCommit) {
+          this.debug('Skipping commit prettier');
+          return;
+        }
+        await this._commitSharedFs(this.env.sharedFs.stream().pipe(filter(['.prettierrc', '.prettierignore'])));
       },
       async commitFiles() {
+        if (this.options.skipCommit) {
+          this.debug('Skipping commit files');
+          return;
+        }
         await this._commitSharedFs();
         this.env.sharedFs.once('change', () => this._queueCommit());
       },
@@ -119,6 +127,15 @@ module.exports = class extends BaseGenerator {
    */
   _commitSharedFs(stream = this.env.sharedFs.stream()) {
     return new Promise((resolve, reject) => {
+      this.env.sharedFs.each(file => {
+        if (
+          file.contents &&
+          (path.basename(file.path) === '.yo-rc.json' ||
+            (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster'))
+        ) {
+          file.state = file.state || 'modified';
+        }
+      });
       const transformStreams = [
         createYoResolveTransform(this.env.conflicter),
         createYoRcTransform(),
@@ -138,7 +155,8 @@ module.exports = class extends BaseGenerator {
         const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
         const filterPatternForPrettier = `{,.,**/,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
-        const prettierFilter = filter(['.yo-rc.json', filterPatternForPrettier], { restore: true });
+        // docker-compose modifies .yo-rc.json from others folder, match them all.
+        const prettierFilter = filter(['**/.yo-rc.json', filterPatternForPrettier], { restore: true });
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter
         transformStreams.push(prettierFilter, prettierTransform(prettierOptions, this, this.options.ignoreErrors), prettierFilter.restore);
       }

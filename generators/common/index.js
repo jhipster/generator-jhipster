@@ -84,6 +84,7 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
           devDependencies: {
             prettier: packageJson.dependencies.prettier,
             'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
+            'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
           },
         });
 
