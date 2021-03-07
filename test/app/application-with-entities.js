@@ -1,14 +1,15 @@
 const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
+const { dryRunHelpers: helpers } = require('../utils/utils');
 
 const mockedComposedGenerators = ['jhipster:common', 'jhipster:server', 'jhipster:client', 'jhipster:languages', 'jhipster:entities'];
 
 describe('jhipster:app with applicationWithEntities option', () => {
   describe('with default options', () => {
+    let runContext;
     let runResult;
-    before(() => {
-      return helpers
-        .create(require.resolve('../../generators/app'))
+    before(async () => {
+      runContext = helpers.create(require.resolve('../../generators/app'));
+      runResult = await runContext
         .withOptions({
           applicationWithEntities: {
             config: {
@@ -16,18 +17,13 @@ describe('jhipster:app with applicationWithEntities option', () => {
             },
             entities: [],
           },
-          fromCli: true,
-          skipInstall: true,
           defaults: true,
         })
         .withMockedGenerators(mockedComposedGenerators)
-        .run()
-        .then(result => {
-          runResult = result;
-        });
+        .run();
     });
 
-    after(() => runResult.cleanup());
+    after(() => runContext.cleanup());
 
     it('writes .yo-rc.json with config', () => {
       assert.fileContent('.yo-rc.json', /"baseName": "jhipster"/);
@@ -37,10 +33,11 @@ describe('jhipster:app with applicationWithEntities option', () => {
 
   describe('with --with-entities', () => {
     describe('and a single entity', () => {
+      let runContext;
       let runResult;
-      before(() => {
-        return helpers
-          .create(require.resolve('../../generators/app'))
+      before(async () => {
+        runContext = helpers.create(require.resolve('../../generators/app'));
+        runResult = await runContext
           .withOptions({
             applicationWithEntities: {
               config: {
@@ -48,19 +45,14 @@ describe('jhipster:app with applicationWithEntities option', () => {
               },
               entities: [{ name: 'Foo' }],
             },
-            fromCli: true,
-            skipInstall: true,
             defaults: true,
             withEntities: true,
           })
           .withMockedGenerators(mockedComposedGenerators)
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .run();
       });
 
-      after(() => runResult.cleanup());
+      after(() => runContext.cleanup());
 
       it('writes .yo-rc.json', () => {
         runResult.assertFile('.yo-rc.json');
@@ -77,10 +69,11 @@ describe('jhipster:app with applicationWithEntities option', () => {
     });
 
     describe('and User', () => {
+      let runContext;
       let runResult;
-      before(() => {
-        return helpers
-          .create(require.resolve('../../generators/app'))
+      before(async () => {
+        runContext = helpers.create(require.resolve('../../generators/app'));
+        runResult = await runContext
           .withOptions({
             applicationWithEntities: {
               config: {
@@ -98,19 +91,14 @@ describe('jhipster:app with applicationWithEntities option', () => {
                 },
               ],
             },
-            fromCli: true,
-            skipInstall: true,
             defaults: true,
             withEntities: true,
           })
           .withMockedGenerators(['jhipster:entity'])
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .run();
       });
 
-      after(() => runResult.cleanup());
+      after(() => runContext.cleanup());
 
       it('should write .yo-rc.json', () => {
         runResult.assertFile('.yo-rc.json');

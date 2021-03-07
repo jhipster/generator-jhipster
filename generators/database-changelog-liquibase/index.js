@@ -33,7 +33,6 @@ const { prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase');
 module.exports = class extends BaseGenerator {
   constructor(args, options) {
     super(args, options);
-    this.configOptions = options.configOptions || {};
 
     assert(this.options.databaseChangelog, 'Changelog is required');
     this.databaseChangelog = this.options.databaseChangelog;

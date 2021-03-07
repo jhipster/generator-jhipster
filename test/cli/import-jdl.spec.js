@@ -30,6 +30,7 @@ const pushCall = (command, options) => {
 };
 
 const env = {
+  composeWith() {},
   run(command, options) {
     pushCall(command, options);
     return Promise.resolve();
@@ -63,6 +64,7 @@ const loadImportJdl = options => {
         return {
           getEnvironment: () => {
             return {
+              composeWith() {},
               run: (generatorArgs, generatorOptions) => {
                 pushCall(generatorArgs, generatorOptions);
                 return Promise.resolve();

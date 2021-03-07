@@ -33,8 +33,6 @@ module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts);
 
-    this.configOptions = this.options.configOptions || {};
-
     // Automatically configure Travis
     this.option('autoconfigure-travis', {
       type: Boolean,

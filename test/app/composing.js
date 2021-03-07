@@ -1,7 +1,7 @@
 const fse = require('fs-extra');
 const path = require('path');
 const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
+const { dryRunHelpers: helpers } = require('../utils/utils');
 const { JHIPSTER_CONFIG_DIR } = require('../../generators/generator-constants');
 
 const mockedComposedGenerators = [
@@ -17,24 +17,20 @@ const allMockedComposedGenerators = [...mockedComposedGenerators, 'jhipster:boot
 describe('jhipster:app composing', () => {
   describe('when mocking all generators', () => {
     describe('with default options', () => {
+      let runContext;
       let runResult;
-      before(() => {
-        return helpers
-          .create(require.resolve('../../generators/app'))
+      before(async () => {
+        runContext = helpers.create(require.resolve('../../generators/app'));
+        runResult = await runContext
           .withOptions({
             baseName: 'jhipster',
-            fromCli: true,
-            skipInstall: true,
             defaults: true,
           })
           .withMockedGenerators(allMockedComposedGenerators)
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .run();
       });
 
-      after(() => runResult.cleanup());
+      after(() => runContext.cleanup());
 
       it('should compose with bootstrap generator', () => {
         assert(runResult.mockedGenerators['jhipster:bootstrap'].calledOnce);
@@ -70,25 +66,21 @@ describe('jhipster:app composing', () => {
     });
 
     describe('with --skip-client', () => {
+      let runContext;
       let runResult;
-      before(() => {
-        return helpers
-          .create(require.resolve('../../generators/app'))
+      before(async () => {
+        runContext = helpers.create(require.resolve('../../generators/app'));
+        runResult = await runContext
           .withOptions({
             baseName: 'jhipster',
-            fromCli: true,
-            skipInstall: true,
             defaults: true,
             skipClient: true,
           })
           .withMockedGenerators(allMockedComposedGenerators)
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .run();
       });
 
-      after(() => runResult.cleanup());
+      after(() => runContext.cleanup());
 
       it('should compose with bootstrap generator', () => {
         assert(runResult.mockedGenerators['jhipster:bootstrap'].calledOnce);
@@ -124,25 +116,21 @@ describe('jhipster:app composing', () => {
     });
 
     describe('with --skip-server', () => {
+      let runContext;
       let runResult;
-      before(() => {
-        return helpers
-          .create(require.resolve('../../generators/app'))
+      before(async () => {
+        runContext = helpers.create(require.resolve('../../generators/app'));
+        runResult = await runContext
           .withOptions({
             baseName: 'jhipster',
-            fromCli: true,
-            skipInstall: true,
             defaults: true,
             skipServer: true,
           })
           .withMockedGenerators(allMockedComposedGenerators)
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .run();
       });
 
-      after(() => runResult.cleanup());
+      after(() => runContext.cleanup());
 
       it('should compose with bootstrap generator', () => {
         assert(runResult.mockedGenerators['jhipster:bootstrap'].calledOnce);
@@ -175,14 +163,13 @@ describe('jhipster:app composing', () => {
 
     describe('with --with-entities', () => {
       describe('and 1 entity file', () => {
+        let runContext;
         let runResult;
-        before(() => {
-          return helpers
-            .create(require.resolve('../../generators/app'))
+        before(async () => {
+          runContext = helpers.create(require.resolve('../../generators/app'));
+          runResult = await runContext
             .withOptions({
               baseName: 'jhipster',
-              fromCli: true,
-              skipInstall: true,
               defaults: true,
               withEntities: true,
             })
@@ -193,13 +180,10 @@ describe('jhipster:app composing', () => {
               fse.writeFileSync(entityPath, '{}');
             })
             .withMockedGenerators(allMockedComposedGenerators)
-            .run()
-            .then(result => {
-              runResult = result;
-            });
+            .run();
         });
 
-        after(() => runResult.cleanup());
+        after(() => runContext.cleanup());
 
         it('should compose with bootstrap generator', () => {
           assert(runResult.mockedGenerators['jhipster:bootstrap'].calledOnce);
@@ -234,14 +218,13 @@ describe('jhipster:app composing', () => {
       });
 
       describe('and more than 1 entity file', () => {
+        let runContext;
         let runResult;
-        before(() => {
-          return helpers
-            .create(require.resolve('../../generators/app'))
+        before(async () => {
+          runContext = helpers.create(require.resolve('../../generators/app'));
+          runResult = await runContext
             .withOptions({
               baseName: 'jhipster',
-              fromCli: true,
-              skipInstall: true,
               defaults: true,
               withEntities: true,
             })
@@ -253,13 +236,10 @@ describe('jhipster:app composing', () => {
               fse.writeFileSync(path.join(entitiesPath, 'Three.json'), '{"changelogDate": 1}');
             })
             .withMockedGenerators(allMockedComposedGenerators)
-            .run()
-            .then(result => {
-              runResult = result;
-            });
+            .run();
         });
 
-        after(() => runResult.cleanup());
+        after(() => runContext.cleanup());
 
         it('should compose with bootstrap generator', () => {
           assert(runResult.mockedGenerators['jhipster:bootstrap'].calledOnce);
@@ -293,24 +273,20 @@ describe('jhipster:app composing', () => {
   });
   describe(`when mocking ${mockedComposedGenerators}`, () => {
     describe('with default options', () => {
+      let runContext;
       let runResult;
-      before(() => {
-        return helpers
-          .create(require.resolve('../../generators/app'))
+      before(async () => {
+        runContext = helpers.create(require.resolve('../../generators/app'));
+        runResult = await runContext
           .withOptions({
             baseName: 'jhipster',
-            fromCli: true,
-            skipInstall: true,
             defaults: true,
           })
           .withMockedGenerators(mockedComposedGenerators)
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .run();
       });
 
-      after(() => runResult.cleanup());
+      after(() => runContext.cleanup());
 
       it('should compose with common generator once', () => {
         const CommonGenerator = runResult.mockedGenerators['jhipster:common'];

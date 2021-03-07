@@ -1,7 +1,6 @@
 const path = require('path');
 const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
-const getFilesForOptions = require('./utils/utils').getFilesForOptions;
+const { skipPrettierHelpers: helpers, getFilesForOptions } = require('./utils/utils');
 const expectedFiles = require('./utils/expected-files');
 const angularFiles = require('../generators/client/files-angular').files;
 const reactFiles = require('../generators/client/files-react').files;
@@ -15,8 +14,8 @@ const { CLIENT_TEST_SRC_DIR, CLIENT_MAIN_SRC_DIR } = constants;
 
 describe('JHipster client generator', () => {
   describe('generate client with React', () => {
-    before(done => {
-      helpers
+    before(async () => {
+      await helpers
         .run(path.join(__dirname, '../generators/client'))
         .withOptions({ skipInstall: true, auth: 'jwt', experimental: true })
         .withPrompts({
@@ -26,8 +25,7 @@ describe('JHipster client generator', () => {
           nativeLanguage: 'en',
           languages: ['fr', 'en'],
           clientFramework: REACT,
-        })
-        .on('end', done);
+        });
     });
     it('creates expected files for react configuration for client generator', () => {
       assert.noFile(expectedFiles.maven);
@@ -53,8 +51,8 @@ describe('JHipster client generator', () => {
   });
 
   describe('generate client with Angular', () => {
-    before(done => {
-      helpers
+    before(async () => {
+      await helpers
         .run(path.join(__dirname, '../generators/client'))
         .withOptions({ skipInstall: true, auth: 'jwt' })
         .withPrompts({
@@ -64,8 +62,7 @@ describe('JHipster client generator', () => {
           nativeLanguage: 'en',
           languages: ['fr', 'en'],
           clientFramework: ANGULAR,
-        })
-        .on('end', done);
+        });
     });
 
     it('creates expected files for default configuration for client generator', () => {
@@ -102,19 +99,14 @@ describe('JHipster client generator', () => {
     [ANGULAR, REACT, VUE].forEach(clientFramework => {
       describe(`and ${clientFramework}`, () => {
         let runResult;
-        before(() => {
-          return helpers
+        before(async () => {
+          runResult = await helpers
             .create(require.resolve('../generators/app'))
             .withOptions({
-              fromCli: true,
-              skipInstall: true,
               defaultLocalConfig: { ...appDefaultConfig, clientFramework, skipServer: true },
               skipJhipsterDependencies: true,
             })
-            .run()
-            .then(result => {
-              runResult = result;
-            });
+            .run();
         });
 
         after(() => runResult.cleanup());
@@ -132,18 +124,13 @@ describe('JHipster client generator', () => {
   describe('Admin UI', () => {
     describe('selected and Angular', () => {
       let runResult;
-      before(() => {
-        return helpers
+      before(async () => {
+        runResult = await helpers
           .create(require.resolve('../generators/client'))
           .withOptions({
-            fromCli: true,
-            skipInstall: true,
             defaultLocalConfig: { ...appDefaultConfig, clientFramework: ANGULAR, testFrameworks: ['cypress'] },
           })
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .run();
       });
 
       after(() => runResult.cleanup());
@@ -228,12 +215,10 @@ describe('JHipster client generator', () => {
 
     describe('not selected and Angular', () => {
       let runResult;
-      before(() => {
-        return helpers
+      before(async () => {
+        runResult = await helpers
           .create(require.resolve('../generators/client'))
           .withOptions({
-            fromCli: true,
-            skipInstall: true,
             defaultLocalConfig: {
               ...appDefaultConfig,
               clientFramework: ANGULAR,
@@ -241,10 +226,7 @@ describe('JHipster client generator', () => {
               withAdminUi: false,
             },
           })
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .run();
       });
 
       after(() => runResult.cleanup());
@@ -332,18 +314,14 @@ describe('JHipster client generator', () => {
 
     describe('selected and React', () => {
       let runResult;
-      before(() => {
-        return helpers
+      before(async () => {
+        runResult = await helpers
           .create(require.resolve('../generators/client'))
           .withOptions({
-            fromCli: true,
-            skipInstall: true,
+            skipPrettier: false,
             defaultLocalConfig: { ...appDefaultConfig, clientFramework: REACT, testFrameworks: ['cypress'] },
           })
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .run();
       });
 
       after(() => runResult.cleanup());
@@ -426,12 +404,10 @@ describe('JHipster client generator', () => {
 
     describe('not selected and React', () => {
       let runResult;
-      before(() => {
-        return helpers
+      before(async () => {
+        runResult = await helpers
           .create(require.resolve('../generators/client'))
           .withOptions({
-            fromCli: true,
-            skipInstall: true,
             defaultLocalConfig: {
               ...appDefaultConfig,
               clientFramework: REACT,
@@ -439,10 +415,7 @@ describe('JHipster client generator', () => {
               withAdminUi: false,
             },
           })
-          .run()
-          .then(result => {
-            runResult = result;
-          });
+          .run();
       });
 
       after(() => runResult.cleanup());
