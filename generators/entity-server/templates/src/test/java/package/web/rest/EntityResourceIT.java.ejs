@@ -401,7 +401,6 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/<%= entityApiUrl %>";
     <%_ } _%>
 
-
     @Autowired
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
     <%_ if (isUsingMapsId === true && ( dto !== 'mapstruct' && service === 'no')) { _%>
