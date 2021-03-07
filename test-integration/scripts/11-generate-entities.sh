@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 if [[ -a $(dirname $0)/00-init-env.sh ]]; then
