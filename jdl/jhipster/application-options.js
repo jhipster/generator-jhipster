@@ -56,6 +56,11 @@ const serviceDiscovery = require('./service-discovery-types');
 const FALSE_SERVICE_DISCOVERY = serviceDiscovery.FALSE;
 const NO_SERVICE_DISCOVERY = serviceDiscovery.NO;
 
+const { SPRING_WEBSOCKET } = require('./websocket-types');
+const websocketTypes = require('./websocket-types');
+
+const NO_WEBSOCKET = websocketTypes.FALSE;
+
 const ApplicationOptionTypes = {
   STRING: 'string',
   INTEGER: 'integer',
@@ -222,8 +227,8 @@ const optionValues = {
   },
   [optionNames.USE_NPM]: true,
   [optionNames.WEBSOCKET]: {
-    'spring-websocket': 'spring-websocket',
-    false: false,
+    [SPRING_WEBSOCKET]: SPRING_WEBSOCKET,
+    false: NO_WEBSOCKET,
   },
   [optionNames.WITH_ENTITIES]: false,
   [optionNames.WITH_ADMIN_UI]: true,

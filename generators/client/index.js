@@ -29,8 +29,11 @@ const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { clientDefaultConfig } = require('../generator-defaults');
+const { TestGenerators } = require('../generator-list');
 
+const { GENERATOR_CYPRESS } = TestGenerators;
 const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
+const { CYPRESS } = require('../../jdl/jhipster/test-framework-types');
 
 let useBlueprints;
 
@@ -142,8 +145,8 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
       },
       composeCypress() {
         const testFrameworks = this.jhipsterConfig.testFrameworks;
-        if (!Array.isArray(testFrameworks) || !testFrameworks.includes('cypress')) return;
-        this.composeWithJHipster('cypress', true);
+        if (!Array.isArray(testFrameworks) || !testFrameworks.includes(CYPRESS)) return;
+        this.composeWithJHipster(GENERATOR_CYPRESS, true);
       },
       composeLanguages() {
         // We don't expose client/server to cli, composing with languages is used for test purposes.

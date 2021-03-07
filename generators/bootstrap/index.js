@@ -30,11 +30,9 @@ const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../
 const { prepareFieldForTemplates } = require('../../utils/field');
 const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
 const { SQL } = require('../../jdl/jhipster/database-types');
-const {
-  STRING: TYPE_STRING,
-  LONG: TYPE_LONG,
-} = dbTypes.CommonDBTypes;
+const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
 
+const { STRING: TYPE_STRING, LONG: TYPE_LONG } = CommonDBTypes;
 
 module.exports = class extends BaseGenerator {
   constructor(args, options) {

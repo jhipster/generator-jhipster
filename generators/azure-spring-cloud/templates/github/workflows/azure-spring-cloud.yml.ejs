@@ -1,8 +1,3 @@
-
-<%_
-const { MAVEN, GRADLE } = require('../../../../../jdl/jhipster/build-tool-types');
-_%>
-
 name: Build and deploy on Azure Spring Cloud
 
 on:
@@ -37,4 +32,4 @@ jobs:
     - name: Install Azure Spring Cloud extension
       run: az extension add --name spring-cloud
     - name: Deploy to Azure Spring Cloud
-      run: az spring-cloud app deploy --resource-group <%= azureSpringCloudResourceGroupName %> --service <%= azureSpringCloudServiceName %> --name <%= azureSpringCloudAppName %> --jar-path <% if (buildTool === MAVEN) { %>target<% } %><% if (buildTool === GRADLE) { %>build/libs<% } %>/*.jar
+      run: az spring-cloud app deploy --resource-group <%= azureSpringCloudResourceGroupName %> --service <%= azureSpringCloudServiceName %> --name <%= azureSpringCloudAppName %> --jar-path <% if (buildTool === 'maven') { %>target<% } %><% if (buildTool === 'gradle') { %>build/libs<% } %>/*.jar

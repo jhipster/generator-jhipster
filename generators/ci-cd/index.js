@@ -38,7 +38,7 @@ const {
   REACTIVE,
   CLIENT_FRAMEWORK,
   TEST_FRAMEWORKS,
-  CACHE_PROVIDER
+  CACHE_PROVIDER,
 } = OptionNames;
 
 const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
