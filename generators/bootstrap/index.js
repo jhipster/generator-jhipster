@@ -28,6 +28,13 @@ const { prettierTransform, generatedAnnotationTransform } = require('../generato
 const { formatDateForChangelog, prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase');
 const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../../utils/entity');
 const { prepareFieldForTemplates } = require('../../utils/field');
+const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
+const { SQL } = require('../../jdl/jhipster/database-types');
+const {
+  STRING: TYPE_STRING,
+  LONG: TYPE_LONG,
+} = dbTypes.CommonDBTypes;
+
 
 module.exports = class extends BaseGenerator {
   constructor(args, options) {
@@ -166,7 +173,7 @@ module.exports = class extends BaseGenerator {
 
     if (
       this.configOptions.sharedEntities.User ||
-      (this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.authenticationType !== 'oauth2')
+      (this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.authenticationType !== OAUTH2)
     ) {
       return;
     }
@@ -198,9 +205,9 @@ module.exports = class extends BaseGenerator {
     // Fallback to defaults for test cases.
     loadRequiredConfigIntoEntity(user, defaultConfig);
 
-    const oauth2 = user.authenticationType === 'oauth2';
-    const userIdType = oauth2 || user.databaseType !== 'sql' ? 'String' : this.getPkType(user.databaseType);
-    const fieldValidateRulesMaxlength = userIdType === 'String' ? 100 : undefined;
+    const oauth2 = user.authenticationType === OAUTH2;
+    const userIdType = oauth2 || user.databaseType !== SQL ? TYPE_STRING : this.getPkType(user.databaseType);
+    const fieldValidateRulesMaxlength = userIdType === TYPE_STRING ? 100 : undefined;
 
     let idField = user.fields.find(field => field.fieldName === 'id');
     if (!idField) {
@@ -219,7 +226,7 @@ module.exports = class extends BaseGenerator {
     if (!user.fields.some(field => field.fieldName === 'login')) {
       user.fields.push({
         fieldName: 'login',
-        fieldType: 'String',
+        fieldType: TYPE_STRING,
       });
     }
 
@@ -234,8 +241,8 @@ module.exports = class extends BaseGenerator {
     const liquibaseFakeData = oauth2
       ? []
       : [
-          { id: userIdType === 'Long' ? 1 : user.primaryKey.fields[0].generateFakeData() },
-          { id: userIdType === 'Long' ? 2 : user.primaryKey.fields[0].generateFakeData() },
+          { id: userIdType === TYPE_LONG ? 1 : user.primaryKey.fields[0].generateFakeData() },
+          { id: userIdType === TYPE_LONG ? 2 : user.primaryKey.fields[0].generateFakeData() },
         ];
     user.liquibaseFakeData = liquibaseFakeData;
     user.fakeDataCount = liquibaseFakeData.length;

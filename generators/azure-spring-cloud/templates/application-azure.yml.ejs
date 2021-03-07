@@ -27,7 +27,9 @@
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
-
+<%_
+const { JWT } = require('../../../jdl/jhipster/authentication-types');
+_%>
 logging:
   level:
     ROOT: INFO
@@ -55,7 +57,7 @@ spring:
 # ===================================================================
 
 jhipster:
-  <%_ if (authenticationType === 'jwt') { _%>
+  <%_ if (authenticationType === JWT) { _%>
   security:
     authentication:
       jwt:

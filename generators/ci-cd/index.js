@@ -24,6 +24,24 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const statistics = require('../statistics');
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
+const { OptionNames } = require('../../jdl/jhipster/application-options');
+
+const {
+  BASE_NAME,
+  APPLICATION_TYPE,
+  DATABASE_TYPE,
+  PROD_DATABASE_TYPE,
+  SKIP_CLIENT,
+  SKIP_SERVER,
+  CLIENT_PACKAGE_MANAGER,
+  BUILD_TOOL,
+  REACTIVE,
+  CLIENT_FRAMEWORK,
+  TEST_FRAMEWORKS,
+  CACHE_PROVIDER
+} = OptionNames;
+
+const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
 
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
@@ -92,23 +110,23 @@ module.exports = class extends BaseBlueprintGenerator {
       getConfig() {
         this.jhipsterVersion = packagejs.version;
         const configuration = this.config;
-        this.baseName = configuration.get('baseName');
+        this.baseName = configuration.get(BASE_NAME);
         this.dasherizedBaseName = _.kebabCase(this.baseName);
-        this.applicationType = configuration.get('applicationType');
-        this.databaseType = configuration.get('databaseType');
-        this.prodDatabaseType = configuration.get('prodDatabaseType');
-        this.skipClient = configuration.get('skipClient');
-        this.skipServer = configuration.get('skipServer');
-        this.clientPackageManager = configuration.get('clientPackageManager');
-        this.buildTool = configuration.get('buildTool');
-        this.reactive = configuration.get('reactive');
+        this.applicationType = configuration.get(APPLICATION_TYPE);
+        this.databaseType = configuration.get(DATABASE_TYPE);
+        this.prodDatabaseType = configuration.get(PROD_DATABASE_TYPE);
+        this.skipClient = configuration.get(SKIP_CLIENT);
+        this.skipServer = configuration.get(SKIP_SERVER);
+        this.clientPackageManager = configuration.get(CLIENT_PACKAGE_MANAGER);
+        this.buildTool = configuration.get(BUILD_TOOL);
+        this.reactive = configuration.get(REACTIVE);
         this.herokuAppName = configuration.get('herokuAppName');
         if (this.herokuAppName === undefined) {
           this.herokuAppName = _.kebabCase(this.baseName);
         }
-        this.clientFramework = configuration.get('clientFramework');
-        this.testFrameworks = configuration.get('testFrameworks');
-        this.cacheProvider = configuration.get('cacheProvider');
+        this.clientFramework = configuration.get(CLIENT_FRAMEWORK);
+        this.testFrameworks = configuration.get(TEST_FRAMEWORKS);
+        this.cacheProvider = configuration.get(CACHE_PROVIDER);
         this.autoconfigureTravis = this.options.autoconfigureTravis;
         this.autoconfigureJenkins = this.options.autoconfigureJenkins;
         this.autoconfigureGitlab = this.options.autoconfigureGitlab;
@@ -203,14 +221,14 @@ module.exports = class extends BaseBlueprintGenerator {
         }
 
         if (this.cicdIntegrations.includes('deploy')) {
-          if (this.buildTool === 'maven') {
+          if (this.buildTool === MAVEN) {
             this.addMavenDistributionManagement(
               this.artifactorySnapshotsId,
               this.artifactorySnapshotsUrl,
               this.artifactoryReleasesId,
               this.artifactoryReleasesUrl
             );
-          } else if (this.buildTool === 'gradle') {
+          } else if (this.buildTool === GRADLE) {
             // TODO: add support here
             // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
             this.warning('No support for Artifactory yet, when using Gradle.\n');

@@ -18,7 +18,43 @@
  */
 
 const { GATEWAY, MONOLITH, MICROSERVICE } = require('./application-types');
-const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NEO4J, NO, ORACLE, POSTGRESQL, SQL } = require('./database-types');
+const {
+  CASSANDRA,
+  COUCHBASE,
+  MARIADB,
+  MONGODB,
+  MSSQL,
+  MYSQL,
+  NEO4J,
+  ORACLE,
+  POSTGRESQL,
+  SQL,
+  H2_DISK,
+  H2_MEMORY,
+} = require('./database-types');
+const databaseTypes = require('./database-types');
+
+const NO_DATABASE = databaseTypes.NO;
+const { JWT, OAUTH2, SESSION } = require('./authentication-types');
+const { MAVEN, GRADLE } = require('./build-tool-types');
+const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('./cache-types');
+const cacheTypes = require('./cache-types');
+
+const NO_CACHE_PROVIDER = cacheTypes.NO;
+
+const { PROTRACTOR, CYPRESS, CUCUMBER, GATLING } = require('./test-framework-types');
+const { ANGULAR_X, ANGULAR, REACT, VUE, SVELTE } = require('./client-framework-types');
+const { ELASTICSEARCH } = require('./search-engine-types');
+const searchEngines = require('./search-engine-types');
+
+const NO_SEARCH_ENGINE = searchEngines.FALSE;
+const COUCHBASE_SEARCH_ENGINE = searchEngines.COUCHBASE;
+
+const { EUREKA, CONSUL } = require('./service-discovery-types');
+const serviceDiscovery = require('./service-discovery-types');
+
+const FALSE_SERVICE_DISCOVERY = serviceDiscovery.FALSE;
+const NO_SERVICE_DISCOVERY = serviceDiscovery.NO;
 
 const ApplicationOptionTypes = {
   STRING: 'string',
@@ -85,32 +121,32 @@ const optionValues = {
     [GATEWAY]: GATEWAY,
   },
   [optionNames.AUTHENTICATION_TYPE]: {
-    jwt: 'jwt',
-    oauth2: 'oauth2',
-    session: 'session',
+    [JWT]: JWT,
+    [OAUTH2]: OAUTH2,
+    [SESSION]: SESSION,
   },
   [optionNames.BASE_NAME]: 'jhipster',
   [optionNames.BLUEPRINT]: undefined,
   [optionNames.BLUEPRINTS]: [],
   [optionNames.BUILD_TOOL]: {
-    maven: 'maven',
-    gradle: 'gradle',
+    [MAVEN]: MAVEN,
+    [GRADLE]: GRADLE,
   },
   [optionNames.CACHE_PROVIDER]: {
-    caffeine: 'caffeine',
-    ehcache: 'ehcache',
-    hazelcast: 'hazelcast',
-    infinispan: 'infinispan',
-    memcached: 'memcached',
-    redis: 'redis',
-    no: 'no',
+    [CAFFEINE]: CAFFEINE,
+    [EHCACHE]: EHCACHE,
+    [HAZELCAST]: HAZELCAST,
+    [INFINISPAN]: INFINISPAN,
+    [MEMCACHED]: MEMCACHED,
+    [REDIS]: REDIS,
+    [NO_CACHE_PROVIDER]: NO_CACHE_PROVIDER,
   },
   [optionNames.CLIENT_FRAMEWORK]: {
-    angularX: 'angularX',
-    angular: 'angular',
-    react: 'react',
-    vue: 'vue',
-    svelte: 'svelte',
+    [ANGULAR_X]: ANGULAR_X,
+    [ANGULAR]: ANGULAR,
+    [REACT]: REACT,
+    [VUE]: VUE,
+    [SVELTE]: SVELTE,
   },
   [optionNames.CLIENT_PACKAGE_MANAGER]: {
     npm: 'npm',
@@ -123,12 +159,12 @@ const optionValues = {
     [CASSANDRA]: CASSANDRA,
     [COUCHBASE]: COUCHBASE,
     [NEO4J]: NEO4J,
-    [NO]: NO,
+    [NO_DATABASE]: NO_DATABASE,
   },
   [optionNames.DEV_DATABASE_TYPE]: {
     // these options + the prod database type
-    h2Disk: 'h2Disk',
-    h2Memory: 'h2Memory',
+    [H2_DISK]: H2_DISK,
+    [H2_MEMORY]: H2_MEMORY,
   },
   [optionNames.DTO_SUFFIX]: 'DTO',
   [optionNames.EMBEDDABLE_LAUNCH_SCRIPT]: true,
@@ -157,21 +193,21 @@ const optionValues = {
     [POSTGRESQL]: POSTGRESQL,
     [ORACLE]: ORACLE,
     [MSSQL]: MSSQL,
-    [NO]: NO,
+    [NO_DATABASE]: NO_DATABASE,
   },
   [optionNames.REACTIVE]: false,
   [optionNames.REMEMBER_ME_KEY]: '',
   [optionNames.SEARCH_ENGINE]: {
-    elasticsearch: 'elasticsearch',
-    couchbase: 'couchbase',
-    false: false,
+    [ELASTICSEARCH]: ELASTICSEARCH,
+    [COUCHBASE_SEARCH_ENGINE]: COUCHBASE_SEARCH_ENGINE,
+    [NO_SEARCH_ENGINE]: NO_SEARCH_ENGINE,
   },
   [optionNames.SERVER_PORT]: '8080',
   [optionNames.SERVICE_DISCOVERY_TYPE]: {
-    eureka: 'eureka',
-    consul: 'consul',
-    no: 'no',
-    false: false,
+    [EUREKA]: EUREKA,
+    [CONSUL]: CONSUL,
+    [NO_SERVICE_DISCOVERY]: NO_SERVICE_DISCOVERY,
+    [FALSE_SERVICE_DISCOVERY]: FALSE_SERVICE_DISCOVERY,
   },
   [optionNames.SKIP_CLIENT]: false,
   [optionNames.SKIP_GIT]: false,
@@ -179,10 +215,10 @@ const optionValues = {
   [optionNames.SKIP_SERVER]: false,
   [optionNames.SKIP_USER_MANAGEMENT]: false,
   [optionNames.TEST_FRAMEWORKS]: {
-    protractor: 'protractor',
-    cypress: 'cypress',
-    cucumber: 'cucumber',
-    gatling: 'gatling',
+    [PROTRACTOR]: PROTRACTOR,
+    [CYPRESS]: CYPRESS,
+    [CUCUMBER]: CUCUMBER,
+    [GATLING]: GATLING,
   },
   [optionNames.USE_NPM]: true,
   [optionNames.WEBSOCKET]: {

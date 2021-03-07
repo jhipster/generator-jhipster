@@ -16,17 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+const { GRADLE, MAVEN } = require('../../../jdl/jhipster/build-tool-types')
+const { REDIS } = require('../../../jdl/jhipster/cache-types');
+const { SQL, CASSANDRA, COUCHBASE, NEO4J } = require('../../../jdl/jhipster/database-types');
+_%>
 <%_ if (insideDocker) { _%>
 image: jhipster/jhipster:v<%= jhipsterVersion %>
 <%_ } _%>
 
-<%_ if (buildTool === 'gradle') { _%>
+<%_ if (buildTool === GRADLE) { _%>
 cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
         - .gradle/
 <%_ } _%>
-<%_ if (buildTool === 'maven') { _%>
+<%_ if (buildTool === MAVEN) { _%>
 cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
@@ -42,7 +47,7 @@ stages:
     - release
     - deploy
 <%_ } _%>
-<%_ if (buildTool === 'gradle') { _%>
+<%_ if (buildTool === GRADLE) { _%>
 before_script:
     <%_ if (clientFramework === ANGULAR) { _%>
     - export NG_CLI_ANALYTICS="false"
@@ -91,7 +96,7 @@ gradle-test:
 
 gradle-integration-test:
 <%_ if (insideDocker) { _%>
-    <%_ if (cacheProvider === 'redis' || ['sql', 'cassandra', 'couchbase', 'neo4j'].includes(databaseType)) { _%>
+    <%_ if (cacheProvider === REDIS || [SQL, CASSANDRA, COUCHBASE, NEO4J].includes(databaseType)) { _%>
     # DinD service is required for Testcontainers
     services:
         - docker:dind
@@ -106,7 +111,7 @@ gradle-integration-test:
 
     stage: test
     script:
-        - ./gradlew integrationTest -PnodeInstall --no-daemon <% if (insideDocker && databaseType === 'sql' && !reactive) { %>-Ptestcontainers<% } %>
+        - ./gradlew integrationTest -PnodeInstall --no-daemon <% if (insideDocker && databaseType === SQL && !reactive) { %>-Ptestcontainers<% } %>
     artifacts:
         reports:
             junit: build/test-results/integrationTest/TEST-*.xml
@@ -176,7 +181,7 @@ deploy-to-production:
     when: manual
 <%_ } _%>
 <%_ } _%>
-<%_ if (buildTool === 'maven') { _%>
+<%_ if (buildTool === MAVEN) { _%>
 before_script:
     <%_ if (clientFramework === ANGULAR) { _%>
     - export NG_CLI_ANALYTICS="false"
@@ -217,7 +222,7 @@ maven-compile:
 
 maven-test:
 <%_ if (insideDocker) { _%>
-    <%_ if (cacheProvider === 'redis' || ['sql', 'cassandra', 'couchbase', 'neo4j'].includes(databaseType)) { _%>
+    <%_ if (cacheProvider === REDIS || [SQL, CASSANDRA, COUCHBASE, NEO4J].includes(databaseType)) { _%>
     # DinD service is required for Testcontainers
     services:
         - docker:dind
@@ -232,7 +237,7 @@ maven-test:
 
     stage: test
     script:
-        - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME <% if (insideDocker && databaseType === 'sql') { %>-Dspring.profiles.active=testcontainers<% } %>
+        - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME <% if (insideDocker && databaseType === SQL) { %>-Dspring.profiles.active=testcontainers<% } %>
     artifacts:
         reports:
             junit: target/test-results/**/TEST-*.xml
