@@ -30,6 +30,7 @@ module.exports = class extends BaseGenerator {
     this.option('skipCommit', {
       desc: 'Skip commit',
       type: Boolean,
+      hide: true,
       defaults: true,
     });
 
