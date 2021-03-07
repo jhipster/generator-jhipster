@@ -68,7 +68,7 @@ export class <%= entityAngularName %>Service {
         <%_ if (fieldsContainDate) { _%>
         const copy = this.convertDateFromClient(<%= entityInstance %>);
         <%_ } _%>
-        return this.http.put<I<%= entityAngularName %>>(this.resourceUrl,
+        return this.http.put<I<%= entityAngularName %>>(`${this.resourceUrl}/${get<%= entityAngularName %>Identifier(<%= entityInstance %>) as <%= primaryKey.tsType %>}`,
                 <% if (fieldsContainDate) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
                 { observe: 'response' })
         <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
