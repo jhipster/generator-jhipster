@@ -79,7 +79,6 @@ jobs:
       fail-fast: false
       matrix:
         node_version: [14.15.0]
-        npm_version: [7.6.0]
         os: [ubuntu-20.04]
         cache: [angular]
         app-type:
@@ -241,8 +240,8 @@ jobs:
             ${{ runner.os }}-cypress-
       - name: 'ENV: display variables'
         run: $JHI_SCRIPTS/01-display-configuration.sh
-      - name: 'TOOLS: install npm@${{ matrix.npm_version }}'
-        run: npm install -g npm@${{ matrix.npm_version }}
+      - name: 'TOOLS: install required npm'
+        run: npm install -g npm@$(node -e "console.log(require('./generators/generator-constants').NPM_VERSION);")
       - name: 'TOOLS: configure tools installed by the system'
         run: $JHI_SCRIPTS/03-system.sh
       - name: 'TOOLS: configure git'
