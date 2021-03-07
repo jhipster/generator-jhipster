@@ -42,7 +42,7 @@ COPY . /home/jhipster/generator-jhipster
 
 RUN \
   # install jhipster
-  cd /home/jhipster/generator-jhipster && npm ci && \
+  cd /home/jhipster/generator-jhipster && npm ci --production && \
   npm install -g /home/jhipster/generator-jhipster && \
   # fix jhipster user permissions
   chown -R jhipster:jhipster \
