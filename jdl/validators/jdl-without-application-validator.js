@@ -101,7 +101,7 @@ function createValidator(jdlObject, applicationSettings = {}, logger = console) 
       }
       if (filtering && isReservedPaginationWords(jdlField.name)) {
         throw new Error(
-          `Field name '${fieldName}'found in ${entityName} is a reserved keyword, as it is used by Spring for pagination in the URL.`
+          `Field name '${fieldName}' found in ${entityName} is a reserved keyword, as it is used by Spring for pagination in the URL.`
         );
       }
       const typeCheckingFunction = getTypeCheckingFunction(entityName, applicationSettings);
