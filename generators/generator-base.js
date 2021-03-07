@@ -115,8 +115,8 @@ const CUSTOM_PRIORITIES = [
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class JHipsterBaseGenerator extends PrivateBase {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, opts, features) {
+    super(args, opts, features);
 
     // This adds support for a `--from-cli` flag
     this.option('from-cli', {

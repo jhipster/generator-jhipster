@@ -32,8 +32,8 @@ const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, norma
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, opts, features) {
+    super(args, opts, features);
 
     // Add base template folder.
     this.jhipsterTemplatesFolders = [this.templatePath()];

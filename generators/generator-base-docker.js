@@ -24,8 +24,8 @@ const statistics = require('./statistics');
 const constants = require('./generator-constants');
 
 module.exports = class extends BaseGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, opts, features) {
+    super(args, opts, features);
 
     // This adds support for a `--skip-checks` flag
     this.option('skip-checks', {
