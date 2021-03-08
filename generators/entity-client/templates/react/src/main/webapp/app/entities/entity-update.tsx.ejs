@@ -197,15 +197,10 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
         <%= rel.relationshipFieldNamePlural %>: mapIdList(values.<%= rel.relationshipFieldNamePlural %>),
         <%_ }) _%>
         <%_ relFieldNames.forEach(rel => { _%>
-          <%_ if (rel.relationshipType === 'many-to-one' && rel.otherEntityName !== 'user')  { _%>
-          <%= rel.relationshipFieldName %>: <%= rel.otherEntityNamePlural %>.find(it => it.id.toString() === values.<%= rel.relationshipFieldName %>Id.toString()),
+          <%_ if (rel.relationshipType === 'many-to-one' || (rel.ownerSide && rel.relationshipType === 'one-to-one'))  { _%>
+          <%= rel.relationshipFieldName %>: <%= rel.otherEntityNamePlural %>.find(it => it.<%= rel.otherEntity.primaryKey.name %>.toString() === values.<%= rel.relationshipFieldName %>Id.toString()),
           <%_ } _%>
         <%_ }) _%>
-        <%_ if (uniqueRelationFields.has('users')) { _%>
-          <%_ relationships.filter(rel => rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName === 'user').forEach(rel => { _%>
-        <%= rel.relationshipFieldName %>: users.find(user => user.id.toString() === values.<%= rel.relationshipFieldName %>Id.toString()),
-          <%_ }) _%>
-        <%_ } _%>
       }
 
       if (isNew) {
