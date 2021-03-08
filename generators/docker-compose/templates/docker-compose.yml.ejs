@@ -93,16 +93,6 @@ services:
       - CONSUL_URL=consul
       - CONSUL_PORT=8500
 <%_ } _%>
-<%_ if (gatewayType === 'traefik') { _%>
-  traefik:
-    image: <%= DOCKER_TRAEFIK %>
-    command: --web
-    ports:
-      - 80:80
-      - 28080:8080
-    volumes:
-      - ./traefik/traefik.toml:/etc/traefik/traefik.toml
-<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
   keycloak:
     image: <%= DOCKER_KEYCLOAK %>
