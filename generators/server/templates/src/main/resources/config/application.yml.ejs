@@ -97,7 +97,7 @@ management:
     web:
       base-path: /management
       exposure:
-        include: ["configprops", "env", <% if (applicationType === 'gateway' && reactive) { %>"gateway", <% } %>"health", "info", "jhimetrics", "logfile", "loggers", "prometheus", "threaddump", "caches", "liquibase"]
+        include: ["configprops", "env", <% if (applicationType === 'gateway' && reactive) { %>"gateway", <% } %>"health", "info", "jhimetrics", "logfile", "loggers", "prometheus", "threaddump"<% if (cacheManagerIsAvailable === true) { %>, "caches"<% } %><% if (databaseType === 'sql') { %>, "liquibase"<% } %>]
   endpoint:
     health:
       show-details: when_authorized
