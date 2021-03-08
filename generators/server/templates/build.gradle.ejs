@@ -398,6 +398,14 @@ dependencies {
     <%_ if (databaseType === 'neo4j') { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-neo4j"
     implementation "eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter"
+    <%_ if (reactive) { _%>
+    // See https://github.com/jhipster/generator-jhipster/issues/14196
+    implementation('org.springframework.data:spring-data-neo4j') {
+        version {
+            strictly '6.0.3'
+        }
+    }
+    <%_ } _%>
     // This is done here explicitly as dependency resolution seems to have changed recently such that the validation starter
     // and therefore hibernate validators is not included anymore
     implementation "org.springframework.boot:spring-boot-starter-validation"

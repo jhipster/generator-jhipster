@@ -176,6 +176,14 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+<%_ if (reactive) { _%>
+            <!-- See https://github.com/jhipster/generator-jhipster/issues/14196 -->
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-neo4j</artifactId>
+                <version>6.0.3</version>
+            </dependency>
+<%_ } _%>
             <!-- jhipster-needle-maven-add-dependency-management -->
         </dependencies>
     </dependencyManagement>
