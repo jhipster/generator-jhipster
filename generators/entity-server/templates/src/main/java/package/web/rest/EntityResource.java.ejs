@@ -220,7 +220,7 @@ public class <%= entityClass %>Resource {
      * or with status {@code 500 (Internal Server Error)} if the <%= instanceName %> couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping({"/<%= entityApiUrl %>", "/<%= entityApiUrl %>/{<%= primaryKey.name %>}"})
+    @PutMapping("/<%= entityApiUrl %>/{<%= primaryKey.name %>}")
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> update<%= entityClass %>(
         @PathVariable(value = "<%= primaryKey.name %>", required = false) final <%= primaryKey.type %> <%= primaryKey.name %>,
         <% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>

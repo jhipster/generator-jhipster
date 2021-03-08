@@ -1429,6 +1429,43 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%_ } _%>
     }
 
+    @Test<%= transactionalAnnotation %>
+    void putWithMissingIdPathParam<%= entityClass %>() throws Exception {
+        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%= getJavaValueGeneratorForType(primaryKey.type) %>);
+
+        <%_ if (dto === 'mapstruct') { _%>
+        // Create the <%= entityClass %>
+        <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);
+
+        <%_ } _%>
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        <%_ if (!reactive) { _%>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
+            .andExpect(status().isMethodNotAllowed());
+        <%_ } else { _%>
+        webTestClient.put().uri(ENTITY_API_URL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>))
+            .exchange()
+            .expectStatus().isEqualTo(405);
+        <%_ } _%>
+
+        // Validate the <%= entityClass %> in the database
+        <%_ if (databaseType === 'couchbase') { _%>
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+        <%_ } _%>
+        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
+        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+
+        // Validate the <%= entityClass %> in Elasticsearch
+        verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
+        <%_ } _%>
+    }
+
     <%
         const prepareFieldForPatchTest = (field, includeCb) => {
             const includeField = includeCb();
