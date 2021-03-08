@@ -81,10 +81,6 @@ async function askForGatewayType() {
           value: 'SpringCloudGateway',
           name: 'JHipster gateway based on Spring Cloud Gateway',
         },
-        {
-          value: 'traefik',
-          name: 'Traefik gateway (only works with Consul)',
-        },
       ],
       default: 'SpringCloudGateway',
     },
