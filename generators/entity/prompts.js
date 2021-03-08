@@ -482,7 +482,7 @@ function askForField() {
         }
         // we don't know, if filtering will be used
         if (possibleFiltering && isReservedPaginationWords(input)) {
-          return 'Your field name cannot be a field name, which used as a parameter by Spring for pagination';
+          return 'Your field name cannot be a value, which is used as a parameter by Spring for pagination';
         }
         return true;
       },
