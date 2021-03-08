@@ -27,7 +27,7 @@ services:
       - 127.0.0.1:8300:8300
       - 127.0.0.1:8500:8500
       - 127.0.0.1:8600:8600
-    command: consul agent -dev -ui -client 0.0.0.0
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
 
   consul-config-loader:
     image: <%= DOCKER_CONSUL_CONFIG_LOADER %>
