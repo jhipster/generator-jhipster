@@ -22,16 +22,18 @@ _%>
 export interface IUser {
   id?: <%= idType %>;
   login?: string;
-  firstName?: string;
-  lastName?: string;
+  <%_ for (field of _.sortedUniqBy(user.otherRelationships.map(relationship => relationship.relatedField), field => field.fieldName)) { _%>
+    <%= field.fieldName %>?: string; 
+  <%_ } _%> 
 }
 
 export class User implements IUser {
   constructor(
     public id: <%= idType %>,
     public login: string,
-    public firstName?: string,
-    public lastName?: string,
+    <%_ for (field of _.sortedUniqBy(user.otherRelationships.map(relationship => relationship.relatedField), field => field.fieldName)) { _%>
+      public <%= field.fieldName %>?: string,
+    <%_ } _%> 
   ) {}
 }
 
