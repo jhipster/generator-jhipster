@@ -47,14 +47,14 @@ Cypress.Commands.add('setFieldImageAsBytesOfEntity', (fieldName: string, fileNam
       const list = new DataTransfer();
       list.items.add(file);
       const myFileList = list.files;
-      el[0].files = myFileList;
+      (el[0] as HTMLInputElement).files = myFileList;
       el[0].dispatchEvent(new Event('change', {bubbles: true}));
     });
 });
 
 Cypress.Commands.add('setFieldSelectToLastOfEntity', (fieldName: string) => {
   return cy.get(`[data-cy="${fieldName}"]`).then(select => {
-    const selectSize = Number(select.attr("size"));
+    const selectSize = (select[0] as HTMLSelectElement)?.options?.length || Number(select.attr('size')) || 0;
     if (selectSize > 0) {
       return cy.get(`[data-cy="${fieldName}"] option`).then((options: any) => {
         const elements = [...options].map(o => o.label);
