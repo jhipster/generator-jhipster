@@ -80,6 +80,7 @@ services:
       <%_ } else { _%>
       - SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_<%= baseName.toUpperCase() %>_0_URI=http://host.docker.internal:<%= serverPort %>
       <%_ } _%>
+      - LOGGING_FILE_NAME=/tmp/jhipster-control-center.log
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
