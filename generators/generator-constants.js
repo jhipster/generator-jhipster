@@ -66,7 +66,6 @@ const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:7.9.
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
 const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;
 const DOCKER_SONAR = 'sonarqube:8.7.0-community';
-const DOCKER_TRAEFIK = 'traefik:1.7.28'; // waiting for https://github.com/jhipster/generator-jhipster/issues/11198
 const DOCKER_CONSUL = 'consul:1.9.4';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.4.1';
 const DOCKER_PROMETHEUS = 'prom/prometheus:v2.25.0';
@@ -367,7 +366,6 @@ const constants = {
   DOCKER_KAFKA,
   DOCKER_ZOOKEEPER,
   DOCKER_SONAR,
-  DOCKER_TRAEFIK,
   DOCKER_CONSUL,
   DOCKER_CONSUL_CONFIG_LOADER,
   DOCKER_PROMETHEUS,
