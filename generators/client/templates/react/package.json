@@ -44,7 +44,7 @@
     "@types/webpack-env": "1.16.0",
     "@typescript-eslint/eslint-plugin": "4.16.1",
     "@typescript-eslint/parser": "4.16.1",
-    "autoprefixer": "10.2.4",
+    "autoprefixer": "10.2.5",
     "browser-sync": "2.26.14",
     "browser-sync-webpack-plugin": "2.3.0",
     "cache-loader": "4.1.0",
