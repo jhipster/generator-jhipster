@@ -34,7 +34,6 @@ const Options = {
   },
   gatewayType: {
     springCloudGateway: 'SpringCloudGateway',
-    traefik: 'traefik',
   },
   monitoring: {
     no: 'no',
