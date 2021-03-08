@@ -341,7 +341,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
               'echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"',
             'pree2e:headless': 'npm run ci:server:await',
             'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
-            'e2e:dev': 'concurrently -k -s first "./mvnw" "e2e:run"',
+            'e2e:dev': 'concurrently -k -s first "./mvnw" "e2e"',
           });
         }
       },
