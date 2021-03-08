@@ -113,6 +113,10 @@ class PublicUserResourceIT <% if (databaseType === 'cassandra') { %>extends Abst
 
     private static final String DEFAULT_LOGIN = "johndoe";
 
+    private static final String DEFAULT_FIRSTNAME = "john";
+
+    private static final String DEFAULT_LASTNAME = "doe";
+
     @Autowired
     private UserRepository userRepository;
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -180,6 +184,8 @@ class PublicUserResourceIT <% if (databaseType === 'cassandra') { %>extends Abst
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))
+            .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRSTNAME)))
+            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LASTNAME)))            
             .andExpect(jsonPath("$.[*].email").doesNotExist())
             <%_ if (databaseType !== 'cassandra') { _%>
             .andExpect(jsonPath("$.[*].imageUrl").doesNotExist())
@@ -194,6 +200,8 @@ class PublicUserResourceIT <% if (databaseType === 'cassandra') { %>extends Abst
             .returnResult(<%= asDto('User') %>.class).getResponseBody().blockFirst();
 
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(foundUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
+        assertThat(foundUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);       
         <% } _%>
     }
 

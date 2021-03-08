@@ -241,6 +241,20 @@ module.exports = class extends BaseGenerator {
       });
     }
 
+    if (!user.fields.some(field => field.fieldName === 'firstName')) {
+      user.fields.push({
+        fieldName: 'firstName',
+        fieldType: 'String',
+      });
+    }
+
+    if (!user.fields.some(field => field.fieldName === 'lastName')) {
+      user.fields.push({
+        fieldName: 'lastName',
+        fieldType: 'String',
+      });
+    }
+
     prepareEntityForTemplates(user, this);
     user.fields.forEach(field => {
       prepareFieldForTemplates(user, field, this);

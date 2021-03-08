@@ -22,12 +22,16 @@ _%>
 export interface IUser {
   id?: <%= idType %>;
   login?: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export class User implements IUser {
   constructor(
     public id: <%= idType %>,
     public login: string,
+    public firstName?: string,
+    public lastName?: string,
   ) {}
 }
 
