@@ -17,10 +17,8 @@
  * limitations under the License.
  */
 const validationOptions = require('../jdl/jhipster/validations');
-const applicationOptions = require('../jdl/jhipster/application-options');
 const databaseTypes = require('../jdl/jhipster/database-types');
-
-const clientFrameworks = applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK];
+const { ANGULAR_X, REACT, VUE } = require('../jdl/jhipster/client-framework-types');
 
 // Version of Java
 const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the variable as it might be useful in the future.
@@ -112,9 +110,9 @@ const SUPPORTED_VALIDATION_RULES = Object.keys(validationOptions)
   .filter(e => typeof e === 'string');
 
 const SUPPORTED_CLIENT_FRAMEWORKS = {
-  ANGULAR: clientFrameworks.angularX,
-  REACT: clientFrameworks.react,
-  VUE: clientFrameworks.vue,
+  ANGULAR: ANGULAR_X,
+  REACT,
+  VUE,
 };
 
 // documentation constants

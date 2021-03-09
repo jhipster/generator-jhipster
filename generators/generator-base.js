@@ -50,29 +50,14 @@ const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
-const ORACLE = databaseTypes.ORACLE;
-const MYSQL = databaseTypes.MYSQL;
-const POSTGRESQL = databaseTypes.POSTGRESQL;
-const MARIADB = databaseTypes.MARIADB;
-const MSSQL = databaseTypes.MSSQL;
-
-const SQL = databaseTypes.SQL;
-const MONGODB = databaseTypes.MONGODB;
-const COUCHBASE = databaseTypes.COUCHBASE;
-const NEO4J = databaseTypes.NEO4J;
+const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
 
-const { OptionNames, OptionValues } = require('../jdl/jhipster/application-options');
+const { OAUTH2 } = require('../jdl/jhipster/authentication-types');
+const { EHCACHE } = require('../jdl/jhipster/cache-types');
 
-const { AUTHENTICATION_TYPE, TEST_FRAMEWORKS, CACHE_PROVIDER } = OptionNames;
+const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test-framework-types');
 
-const GATLING = OptionValues[TEST_FRAMEWORKS].gatling;
-const CUCUMBER = OptionValues[TEST_FRAMEWORKS].cucumber;
-const PROTRACTOR = OptionValues[TEST_FRAMEWORKS].protractor;
-const CYPRESS = OptionValues[TEST_FRAMEWORKS].cypress;
-const EHCACHE = OptionValues[CACHE_PROVIDER].ehcache;
-
-const OAUTH2 = OptionValues[AUTHENTICATION_TYPE].oauth2;
 // Reverse order.
 const CUSTOM_PRIORITIES = [
   {

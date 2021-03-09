@@ -17,10 +17,8 @@
  * limitations under the License.
  */
 const fs = require('fs');
-const { OptionNames, OptionValues } = require('../../../jdl/jhipster/application-options');
 
-const { BUILD_TOOL } = OptionNames;
-const GRADLE = OptionValues[BUILD_TOOL].gradle;
+const { GRADLE } = require('../../../jdl/jhipster/build-tool-types');
 
 const FILE_EXTENSION = '.war';
 const S3_STANDARD_REGION = 'us-east-1';

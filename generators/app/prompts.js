@@ -21,14 +21,7 @@ const statistics = require('../statistics');
 const packagejs = require('../../package.json');
 const { appDefaultConfig } = require('../generator-defaults');
 const { GATEWAY, MONOLITH, MICROSERVICE } = require('../../jdl/jhipster/application-types');
-const { OptionNames, OptionValues } = require('../../jdl/jhipster/application-options');
-
-const { TEST_FRAMEWORKS } = OptionNames;
-
-const GATLING = OptionValues[TEST_FRAMEWORKS].gatling;
-const CUCUMBER = OptionValues[TEST_FRAMEWORKS].cucumber;
-const PROTRACTOR = OptionValues[TEST_FRAMEWORKS].protractor;
-const CYPRESS = OptionValues[TEST_FRAMEWORKS].cypress;
+const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../../jdl/jhipster/test-framework-types');
 
 module.exports = {
   askForInsightOptIn,

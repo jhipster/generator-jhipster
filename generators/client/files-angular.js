@@ -19,7 +19,9 @@
 const constants = require('../generator-constants');
 
 const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, ANGULAR_DIR } = constants;
-
+const { OAUTH2, SESSION, JWT } = require('../../jdl/jhipster/authentication-types');
+const { GATEWAY } = require('../../jdl/jhipster/application-types');
+const { SPRING_WEBSOCKET } = require('../../jdl/jhipster/websocket-types');
 /**
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
@@ -100,7 +102,7 @@ const files = {
     // login
     {
       path: ANGULAR_DIR,
-      condition: generator => generator.authenticationType !== 'oauth2',
+      condition: generator => generator.authenticationType !== OAUTH2,
       templates: [
         'login/login.module.ts',
         { file: 'login/login.route.ts', method: 'processJs' },
@@ -111,7 +113,7 @@ const files = {
     },
     {
       path: ANGULAR_DIR,
-      condition: generator => generator.authenticationType === 'oauth2',
+      condition: generator => generator.authenticationType === OAUTH2,
       templates: ['login/logout.model.ts'],
     },
   ],
@@ -152,7 +154,7 @@ const files = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
+      condition: generator => generator.authenticationType === SESSION && !generator.skipUserManagement,
       path: ANGULAR_DIR,
       templates: [
         { file: 'account/sessions/sessions.route.ts', method: 'processJs' },
@@ -255,7 +257,7 @@ const files = {
       ],
     },
     {
-      condition: generator => generator.websocket === 'spring-websocket',
+      condition: generator => generator.websocket === SPRING_WEBSOCKET,
       path: ANGULAR_DIR,
       templates: [
         { file: 'admin/tracker/tracker.route.ts', method: 'processJs' },
@@ -285,7 +287,7 @@ const files = {
       ],
     },
     {
-      condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
+      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryType,
       path: ANGULAR_DIR,
       templates: [
         { file: 'admin/gateway/gateway.route.ts', method: 'processJs' },
@@ -333,12 +335,12 @@ const files = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === 'jwt',
+      condition: generator => generator.authenticationType === JWT,
       path: ANGULAR_DIR,
       templates: ['core/interceptor/auth.interceptor.ts'],
     },
     {
-      condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
+      condition: generator => !generator.skipUserManagement || generator.authenticationType === OAUTH2,
       path: ANGULAR_DIR,
       templates: ['entities/user/user.service.ts', 'entities/user/user.service.spec.ts', 'entities/user/user.model.ts'],
     },
@@ -387,17 +389,17 @@ const files = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === 'jwt',
+      condition: generator => generator.authenticationType === JWT,
       path: ANGULAR_DIR,
       templates: ['core/auth/auth-jwt.service.ts', 'core/auth/auth-jwt.service.spec.ts'],
     },
     {
-      condition: generator => generator.authenticationType === 'session' || generator.authenticationType === 'oauth2',
+      condition: generator => generator.authenticationType === SESSION || generator.authenticationType === OAUTH2,
       path: ANGULAR_DIR,
       templates: ['core/auth/auth-session.service.ts'],
     },
     {
-      condition: generator => generator.authenticationType === 'session' && generator.websocket === 'spring-websocket',
+      condition: generator => generator.authenticationType === SESSION && generator.websocket === SPRING_WEBSOCKET,
       path: ANGULAR_DIR,
       templates: ['core/auth/csrf.service.ts'],
     },
@@ -455,7 +457,7 @@ const files = {
       ],
     },
     {
-      condition: generator => generator.authenticationType !== 'oauth2',
+      condition: generator => generator.authenticationType !== OAUTH2,
       path: ANGULAR_DIR,
       templates: ['login/login.component.spec.ts'],
     },
@@ -471,7 +473,7 @@ const files = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
+      condition: generator => generator.authenticationType === SESSION && !generator.skipUserManagement,
       path: ANGULAR_DIR,
       templates: ['account/sessions/sessions.component.spec.ts'],
     },

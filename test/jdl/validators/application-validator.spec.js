@@ -28,8 +28,10 @@ const { expect } = chai;
 const ApplicationValidator = require('../../../jdl/validators/application-validator');
 
 const { OptionNames, OptionValues } = require('../../../jdl/jhipster/application-options');
+const { MAVEN } = require('../../../jdl/jhipster/build-tool-types');
 const { MONOLITH, MICROSERVICE, GATEWAY } = require('../../../jdl/jhipster/application-types');
 const { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE, NEO4J } = require('../../../jdl/jhipster/database-types');
+const { JWT } = require('../../../jdl/jhipster/authentication-types');
 const { READ_ONLY } = require('../../../jdl/jhipster/unary-options');
 const BinaryOptions = require('../../../jdl/jhipster/binary-options');
 const JDLApplication = require('../../../jdl/models/jdl-application');
@@ -58,9 +60,9 @@ describe('ApplicationValidator', () => {
       beforeEach(() => {
         basicValidApplicationConfig = {
           applicationType: MONOLITH,
-          authenticationType: OptionValues[OptionNames.AUTHENTICATION_TYPE].jwt,
+          authenticationType: JWT,
           baseName: 'toto',
-          buildTool: OptionValues[OptionNames.BUILD_TOOL].maven,
+          buildTool: MAVEN,
         };
       });
 
