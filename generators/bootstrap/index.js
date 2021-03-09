@@ -232,12 +232,14 @@ module.exports = class extends BaseGenerator {
       fieldTranslationKey: 'global.field.id',
       fieldNameHumanized: 'ID',
       id: true,
+      builtIn: true,
     });
 
     if (!user.fields.some(field => field.fieldName === 'login')) {
       user.fields.push({
         fieldName: 'login',
         fieldType: 'String',
+        builtIn: true,
       });
     }
 
