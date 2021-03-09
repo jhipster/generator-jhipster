@@ -29,8 +29,11 @@ const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { clientDefaultConfig } = require('../generator-defaults');
+const { TestGenerators } = require('../generator-list');
 
+const { GENERATOR_CYPRESS } = TestGenerators;
 const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
+const { CYPRESS } = require('../../jdl/jhipster/test-framework-types');
 
 let useBlueprints;
 
@@ -142,8 +145,8 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
       },
       composeCypress() {
         const testFrameworks = this.jhipsterConfig.testFrameworks;
-        if (!Array.isArray(testFrameworks) || !testFrameworks.includes('cypress')) return;
-        this.composeWithJHipster('cypress', true);
+        if (!Array.isArray(testFrameworks) || !testFrameworks.includes(CYPRESS)) return;
+        this.composeWithJHipster(GENERATOR_CYPRESS, true);
       },
       composeLanguages() {
         // We don't expose client/server to cli, composing with languages is used for test purposes.
@@ -341,7 +344,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
               'echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"',
             'pree2e:headless': 'npm run ci:server:await',
             'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
-            'e2e:dev': 'concurrently -k -s first "./mvnw" "e2e:run"',
+            'e2e:dev': 'concurrently -k -s first "./mvnw" "e2e"',
           });
         }
       },

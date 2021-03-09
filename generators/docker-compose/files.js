@@ -33,11 +33,6 @@ function writeFiles() {
       }
     },
 
-    writeTraefikFiles() {
-      if (this.gatewayType !== 'traefik') return;
-      this.template('traefik/traefik.toml.ejs', 'traefik/traefik.toml');
-    },
-
     writeKeycloakFiles() {
       if (this.authenticationType === 'oauth2' && this.applicationType !== 'microservice') {
         this.template('realm-config/jhipster-realm.json.ejs', 'realm-config/jhipster-realm.json');

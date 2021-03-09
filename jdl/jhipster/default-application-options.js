@@ -18,8 +18,26 @@
  */
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = require('./application-types');
-const { COUCHBASE, CASSANDRA, MONGODB, NO } = require('./database-types');
+const { COUCHBASE, CASSANDRA, MONGODB, SQL, H2_DISK, POSTGRESQL } = require('./database-types');
+const databaseTypes = require('./database-types');
+
+const NO_DATABASE_TYPE = databaseTypes.NO;
 const { OptionNames, OptionValues } = require('./application-options');
+
+const { JWT, OAUTH2 } = require('./authentication-types');
+const { EHCACHE, HAZELCAST } = require('./cache-types');
+const cacheProviderType = require('./cache-types');
+
+const NO_CACHE_PROVIDER = cacheProviderType.NO;
+
+const { EUREKA } = require('./service-discovery-types');
+const serviceDiscoveryTypes = require('./service-discovery-types');
+
+const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
+
+const { ANGULAR, ANGULAR_X } = require('./client-framework-types');
+
+const { MAVEN } = require('./build-tool-types');
 
 const {
   APPLICATION_TYPE,
@@ -80,9 +98,9 @@ function getConfigForApplicationType(applicationType = undefined, customOptions 
 
 function getConfigForMonolithApplication(customOptions = {}) {
   const options = {
-    [AUTHENTICATION_TYPE]: OptionValues[AUTHENTICATION_TYPE].jwt,
-    [CACHE_PROVIDER]: OptionValues[CACHE_PROVIDER].ehcache,
-    [CLIENT_FRAMEWORK]: OptionValues[CLIENT_FRAMEWORK].angularX,
+    [AUTHENTICATION_TYPE]: JWT,
+    [CACHE_PROVIDER]: EHCACHE,
+    [CLIENT_FRAMEWORK]: ANGULAR_X,
     [SERVER_PORT]: OptionValues[SERVER_PORT],
     [SERVICE_DISCOVERY_TYPE]: false,
     [SKIP_USER_MANAGEMENT]: OptionValues[SKIP_USER_MANAGEMENT],
@@ -95,7 +113,7 @@ function getConfigForMonolithApplication(customOptions = {}) {
   } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
     options[CLIENT_THEME_VARIANT] = OptionValues[CLIENT_THEME_VARIANT].default;
   }
-  if (options[AUTHENTICATION_TYPE] === OptionValues[AUTHENTICATION_TYPE].oauth2) {
+  if (options[AUTHENTICATION_TYPE] === OAUTH2) {
     options[SKIP_USER_MANAGEMENT] = true;
   }
 
@@ -107,10 +125,10 @@ function getConfigForMonolithApplication(customOptions = {}) {
 
 function getConfigForGatewayApplication(customOptions = {}) {
   const options = {
-    [AUTHENTICATION_TYPE]: OptionValues[AUTHENTICATION_TYPE].jwt,
-    [CLIENT_FRAMEWORK]: OptionValues[CLIENT_FRAMEWORK].angularX,
+    [AUTHENTICATION_TYPE]: JWT,
+    [CLIENT_FRAMEWORK]: ANGULAR_X,
     [SERVER_PORT]: OptionValues[SERVER_PORT],
-    [SERVICE_DISCOVERY_TYPE]: OptionValues[SERVICE_DISCOVERY_TYPE].eureka,
+    [SERVICE_DISCOVERY_TYPE]: EUREKA,
     [SKIP_USER_MANAGEMENT]: OptionValues[SKIP_USER_MANAGEMENT],
     [WITH_ADMIN_UI]: true,
     ...customOptions,
@@ -121,16 +139,16 @@ function getConfigForGatewayApplication(customOptions = {}) {
   } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
     options[CLIENT_THEME_VARIANT] = OptionValues[CLIENT_THEME_VARIANT].default;
   }
-  if (options[AUTHENTICATION_TYPE] === OptionValues[AUTHENTICATION_TYPE].oauth2) {
+  if (options[AUTHENTICATION_TYPE] === OAUTH2) {
     options[SKIP_USER_MANAGEMENT] = true;
   }
   if (options[SERVICE_DISCOVERY_TYPE] === false) {
-    options[SERVICE_DISCOVERY_TYPE] = OptionValues[SERVICE_DISCOVERY_TYPE].eureka;
+    options[SERVICE_DISCOVERY_TYPE] = EUREKA;
   }
-  if (options[SERVICE_DISCOVERY_TYPE] === OptionValues[SERVICE_DISCOVERY_TYPE].no) {
+  if (options[SERVICE_DISCOVERY_TYPE] === NO_SERVICE_DISCOVERY) {
     options[SERVICE_DISCOVERY_TYPE] = false;
   }
-  options[CACHE_PROVIDER] = OptionValues[CACHE_PROVIDER].no;
+  options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
   options[ENABLE_HIBERNATE_CACHE] = false;
   return {
     ...options,
@@ -142,10 +160,10 @@ function getConfigForGatewayApplication(customOptions = {}) {
 function getConfigForMicroserviceApplication(customOptions = {}) {
   const DEFAULT_SERVER_PORT = '8081';
   const options = {
-    [AUTHENTICATION_TYPE]: OptionValues[AUTHENTICATION_TYPE].jwt,
-    [CACHE_PROVIDER]: OptionValues[CACHE_PROVIDER].hazelcast,
+    [AUTHENTICATION_TYPE]: JWT,
+    [CACHE_PROVIDER]: HAZELCAST,
     [SERVER_PORT]: DEFAULT_SERVER_PORT,
-    [SERVICE_DISCOVERY_TYPE]: OptionValues[SERVICE_DISCOVERY_TYPE].eureka,
+    [SERVICE_DISCOVERY_TYPE]: EUREKA,
     [SKIP_USER_MANAGEMENT]: true,
     ...customOptions,
   };
@@ -158,9 +176,9 @@ function getConfigForMicroserviceApplication(customOptions = {}) {
     options[SKIP_USER_MANAGEMENT] = true;
   }
   if (options[SERVICE_DISCOVERY_TYPE] === false) {
-    options[SERVICE_DISCOVERY_TYPE] = OptionValues[SERVICE_DISCOVERY_TYPE].eureka;
+    options[SERVICE_DISCOVERY_TYPE] = EUREKA;
   }
-  if (options[SERVICE_DISCOVERY_TYPE] === OptionValues[SERVICE_DISCOVERY_TYPE].no) {
+  if (options[SERVICE_DISCOVERY_TYPE] === NO_SERVICE_DISCOVERY) {
     options[SERVICE_DISCOVERY_TYPE] = false;
   }
   return {
@@ -173,17 +191,17 @@ function getConfigForMicroserviceApplication(customOptions = {}) {
 function getDefaultConfigForNewApplication(customOptions = {}) {
   const options = {
     [BASE_NAME]: OptionValues[BASE_NAME],
-    [BUILD_TOOL]: OptionValues[BUILD_TOOL].maven,
-    [DATABASE_TYPE]: OptionValues[DATABASE_TYPE].sql,
-    [DEV_DATABASE_TYPE]: OptionValues[DEV_DATABASE_TYPE].h2Disk,
-    [CACHE_PROVIDER]: OptionValues[CACHE_PROVIDER].ehcache,
+    [BUILD_TOOL]: MAVEN,
+    [DATABASE_TYPE]: SQL,
+    [DEV_DATABASE_TYPE]: H2_DISK,
+    [CACHE_PROVIDER]: EHCACHE,
     [ENABLE_HIBERNATE_CACHE]: OptionValues[ENABLE_HIBERNATE_CACHE],
     [ENABLE_SWAGGER_CODEGEN]: OptionValues[ENABLE_SWAGGER_CODEGEN],
     [ENABLE_TRANSLATION]: OptionValues[ENABLE_TRANSLATION],
     [JHI_PREFIX]: OptionValues[JHI_PREFIX],
     [LANGUAGES]: OptionValues[LANGUAGES],
     [MESSAGE_BROKER]: OptionValues[MESSAGE_BROKER].false,
-    [PROD_DATABASE_TYPE]: OptionValues[PROD_DATABASE_TYPE].postgresql,
+    [PROD_DATABASE_TYPE]: POSTGRESQL,
     [SEARCH_ENGINE]: OptionValues[SEARCH_ENGINE].false,
     [SKIP_CLIENT]: OptionValues[SKIP_CLIENT],
     [TEST_FRAMEWORKS]: [],
@@ -203,8 +221,8 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
   if (!options[PACKAGE_FOLDER] && options[PACKAGE_NAME]) {
     options[PACKAGE_FOLDER] = options[PACKAGE_NAME].replace(/\./g, '/');
   }
-  if (options[CLIENT_FRAMEWORK] === OptionValues[CLIENT_FRAMEWORK].angular) {
-    options[CLIENT_FRAMEWORK] = OptionValues[CLIENT_FRAMEWORK].angularX;
+  if (options[CLIENT_FRAMEWORK] === ANGULAR) {
+    options[CLIENT_FRAMEWORK] = ANGULAR_X;
   }
   if (!options[CLIENT_PACKAGE_MANAGER] && OptionValues[USE_NPM]) {
     options[CLIENT_PACKAGE_MANAGER] = OptionValues[CLIENT_PACKAGE_MANAGER].npm;
@@ -215,15 +233,15 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
   if (typeof options[ENTITY_SUFFIX] === 'boolean' || typeof options[ENTITY_SUFFIX] !== 'string') {
     options[ENTITY_SUFFIX] = OptionValues[ENTITY_SUFFIX];
   }
-  if ([MONGODB, COUCHBASE, CASSANDRA, NO].includes(options[DATABASE_TYPE])) {
+  if ([MONGODB, COUCHBASE, CASSANDRA, NO_DATABASE_TYPE].includes(options[DATABASE_TYPE])) {
     options[DEV_DATABASE_TYPE] = options[DATABASE_TYPE];
     options[PROD_DATABASE_TYPE] = options[DATABASE_TYPE];
-    if (NO !== options[DATABASE_TYPE]) {
+    if (NO_DATABASE_TYPE !== options[DATABASE_TYPE]) {
       options[ENABLE_HIBERNATE_CACHE] = false;
     }
   }
   if (options[REACTIVE]) {
-    options[CACHE_PROVIDER] = OptionValues[CACHE_PROVIDER].no;
+    options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
   } else {
     options[REACTIVE] = OptionValues[REACTIVE];
   }

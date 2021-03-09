@@ -25,6 +25,15 @@ const statistics = require('../statistics');
 // Global constants
 const constants = require('../generator-constants');
 
+const cacheTypes = require('../../jdl/jhipster/cache-types');
+const { MEMCACHED } = require('../../jdl/jhipster/cache-types');
+
+const NO_CACHE_PROVIDER = cacheTypes.NO;
+
+const { OptionNames } = require('../../jdl/jhipster/application-options');
+
+const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
+
 // Local constants
 const AZURE_WEBAPP_MAVEN_PLUGIN_VERSION = '1.8.0';
 const AZURE_WEBAPP_RUNTIME = 'JAVA|11-java11';
@@ -67,20 +76,21 @@ module.exports = class extends BaseGenerator {
     }
     this.log(chalk.bold('Azure App Service configuration is starting'));
     this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-    this.baseName = this.config.get('baseName');
-    this.packageName = this.config.get('packageName');
-    this.packageFolder = this.config.get('packageFolder');
-    this.authenticationType = this.config.get('authenticationType');
-    this.jwtSecretKey = this.config.get('jwtSecretKey');
-    this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
-    this.enableHibernateCache = this.config.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
-    this.databaseType = this.config.get('databaseType');
-    this.prodDatabaseType = this.config.get('prodDatabaseType');
-    this.searchEngine = this.config.get('searchEngine');
+    this.baseName = this.config.get(OptionNames.BASE_NAME);
+    this.packageName = this.config.get(OptionNames.PACKAGE_NAME);
+    this.packageFolder = this.config.get(OptionNames.PACKAGE_FOLDER);
+    this.authenticationType = this.config.get(OptionNames.AUTHENTICATION_TYPE);
+    this.jwtSecretKey = this.config.get(OptionNames.JWT_SECRET_KEY);
+    this.cacheProvider = this.config.get(OptionNames.CACHE_PROVIDER) || this.config.get('hibernateCache') || NO_CACHE_PROVIDER; // TODO is hibernate cache an option?
+    this.enableHibernateCache =
+      this.config.get(OptionNames.ENABLE_HIBERNATE_CACHE) && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
+    this.databaseType = this.config.get(OptionNames.DATABASE_TYPE);
+    this.prodDatabaseType = this.config.get(OptionNames.PROD_DATABASE_TYPE);
+    this.searchEngine = this.config.get(OptionNames.SEARCH_ENGINE);
     this.frontendAppName = this.getFrontendAppName();
-    this.buildTool = this.config.get('buildTool');
-    this.applicationType = this.config.get('applicationType');
-    this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
+    this.buildTool = this.config.get(OptionNames.BUILD_TOOL);
+    this.applicationType = this.config.get(OptionNames.APPLICATION_TYPE);
+    this.serviceDiscoveryType = this.config.get(OptionNames.SERVICE_DISCOVERY_TYPE);
     this.azureAppServiceResourceGroupName = ''; // This is not saved, as it is better to get the Azure default variable
     this.azureAppServicePlan = this.config.get('azureAppServicePlan');
     this.azureAppServiceName = this.config.get('azureAppServiceName');
@@ -95,7 +105,7 @@ module.exports = class extends BaseGenerator {
       checkBuildTool() {
         if (this.abort) return;
         const done = this.async();
-        if (this.buildTool !== 'maven') {
+        if (this.buildTool !== MAVEN) {
           this.error('Sorry, this sub-generator only works with Maven projects for the moment.');
           this.abort = true;
         }

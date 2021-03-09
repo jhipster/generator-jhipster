@@ -83,7 +83,7 @@ services:
       - 8300:8300
       - 8500:8500
       - 8600:8600
-    command: consul agent -dev -ui -client 0.0.0.0
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
   consul-config-loader:
     image: <%= DOCKER_CONSUL_CONFIG_LOADER %>
     volumes:
@@ -92,16 +92,6 @@ services:
       - INIT_SLEEP_SECONDS=5
       - CONSUL_URL=consul
       - CONSUL_PORT=8500
-<%_ } _%>
-<%_ if (gatewayType === 'traefik') { _%>
-  traefik:
-    image: <%= DOCKER_TRAEFIK %>
-    command: --web
-    ports:
-      - 80:80
-      - 28080:8080
-    volumes:
-      - ./traefik/traefik.toml:/etc/traefik/traefik.toml
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
   keycloak:

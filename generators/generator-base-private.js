@@ -60,24 +60,9 @@ const TYPE_BYTE_BUFFER = dbTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
 
 const databaseTypes = require('../jdl/jhipster/database-types');
 
-const MONGODB = databaseTypes.MONGODB;
-const NEO4J = databaseTypes.NEO4J;
-const COUCHBASE = databaseTypes.COUCHBASE;
-const CASSANDRA = databaseTypes.CASSANDRA;
+const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL, ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, H2_DISK, H2_MEMORY } = databaseTypes;
 
-const SQL = databaseTypes.SQL;
-const ORACLE = databaseTypes.ORACLE;
-const MYSQL = databaseTypes.MYSQL;
-const POSTGRESQL = databaseTypes.POSTGRESQL;
-const MARIADB = databaseTypes.MARIADB;
-const MSSQL = databaseTypes.MSSQL;
-const H2_DISK = databaseTypes.H2_DISK;
-const H2_MEM = databaseTypes.H2_MEMORY;
-
-const { OptionNames, OptionValues } = require('../jdl/jhipster/application-options');
-
-const { BUILD_TOOL } = OptionNames;
-const MAVEN = OptionValues[BUILD_TOOL].maven;
+const { MAVEN } = require('../jdl/jhipster/build-tool-types');
 
 /**
  * This is the Generator base private class.
@@ -1236,7 +1221,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         dbcUrl = `${protocol}:h2:file:${options.localDirectory}/${options.databaseName}`;
       }
       extraOptions = ';DB_CLOSE_DELAY=-1';
-    } else if (databaseType === H2_MEM) {
+    } else if (databaseType === H2_MEMORY) {
       if (protocol === 'r2dbc') {
         dbcUrl = `${protocol}:h2:mem:///${options.databaseName}`;
       } else {

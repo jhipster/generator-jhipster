@@ -30,13 +30,11 @@ const constants = require('../generator-constants');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const fileUtils = require('../../jdl/utils/file-utils');
 const { MONOLITH } = require('../../jdl/jhipster/application-types');
-const { OptionNames, OptionValues } = require('../../jdl/jhipster/application-options');
 
-const { CACHE_PROVIDER, BUILD_TOOL } = OptionNames;
+const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
+const cacheTypes = require('../../jdl/jhipster/cache-types');
 
-const NO_CACHE_PROVIDER = OptionValues[CACHE_PROVIDER].no;
-const MAVEN = OptionValues[BUILD_TOOL].maven;
-const GRADLE = OptionValues[BUILD_TOOL].gradle;
+const NO_CACHE_PROVIDER = cacheTypes.NO;
 
 const prompts = require('./prompts');
 const awsClient = require('./aws-client');

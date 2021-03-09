@@ -33,20 +33,6 @@ management:
       prometheus:
         enabled: true
 <%_ } _%>
-<%_ if (!skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
-spring:
-  <%_ if (!skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
-  cloud:
-    consul:
-      discovery:
-        tags:
-          - traefik.enable=true
-          - traefik.frontend.login.rule=PathPrefix:/login
-          - traefik.frontend.login.priority=1001
-          - traefik.frontend.oauth.rule=PathPrefix:/oauth2
-          - traefik.frontend.oauth.priority=1001
-  <%_ } _%>
-<%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 eureka:
   client:

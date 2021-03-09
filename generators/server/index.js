@@ -98,7 +98,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
         this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
         this.DOCKER_SONAR = constants.DOCKER_SONAR;
-        this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
         this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
         this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
         this.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
