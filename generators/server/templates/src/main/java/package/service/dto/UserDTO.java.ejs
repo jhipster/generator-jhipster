@@ -35,9 +35,9 @@ public class <%= asDto('User') %> {
 
     private String login;
 
-    <%_ for (field of _.sortedUniqBy(user.otherRelationships.map(relationship => relationship.relatedField), field => field.fieldName)) { _%>
-        private String <%= field.fieldName %>;
-    <%_ } _%>
+<%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+    private String <%= field.fieldName %>;
+<%_ } _%>
 
     <%_ if (databaseType !== 'no') { _%>
     public <%= asDto('User') %>() {
@@ -48,9 +48,9 @@ public class <%= asDto('User') %> {
         this.id = user.getId();
         // Customize it here if you need, or not, firstName/lastName/etc 
         this.login = user.getLogin();
-        <%_ for (field of _.sortedUniqBy(user.otherRelationships.map(relationship => relationship.relatedField), field => field.fieldName)) { _%>
+<%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
         this.<%= field.fieldName %> = user.get<%= javaBeanCase(field.fieldName) %>();
-        <%_ } _%>
+<%_ } _%>
     }
 
     <%_ } _%>
@@ -70,14 +70,14 @@ public class <%= asDto('User') %> {
         this.login = login;
     }
 
-    <%_ for (field of _.sortedUniqBy(user.otherRelationships.map(relationship => relationship.relatedField), field => field.fieldName)) { _%>
+<%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
         public String get<%= javaBeanCase(field.fieldName) %>() {
             return <%= field.fieldName %>;
         }
         public void set<%= javaBeanCase(field.fieldName) %>(String <%= field.fieldName %>) {
             this.<%= field.fieldName %> = <%= field.fieldName %>;
         }
-    <%_ } _%>
+<%_ } _%>
 
     // prettier-ignore
     @Override
@@ -85,9 +85,9 @@ public class <%= asDto('User') %> {
         return "<%= asDto('User') %>{" +
             "id='" + id + '\'' +
             ", login='" + login + '\'' +
-            <%_ for (field of _.sortedUniqBy(user.otherRelationships.map(relationship => relationship.relatedField), field => field.fieldName)) { _%>
+<%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
             ", <%= field.fieldName %>='" + <%= field.fieldName %> + '\'' +
-            <%_ } _%>
+<%_ } _%>
             "}";
     }
 

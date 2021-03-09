@@ -126,7 +126,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
   }
   if (relationship.relatedField) {
     relationship.otherEntityFieldCapitalized = relationship.relatedField.fieldNameCapitalized;
-    relationship.relatedField.relatedByRelationship = true;
+    relationship.relatedField.relatedByOtherEntity = true;
   } else {
     relationship.otherEntityFieldCapitalized = _.upperFirst(relationship.otherEntityField);
   }
