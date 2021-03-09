@@ -19,6 +19,7 @@
 <%_ const beans = [];
     if (viaService) {
         beans.push({class: `${entityClass}Service`, instance: `${entityInstance}Service`});
+        beans.push({class: `${entityClass}Repository`, instance: `${entityInstance}Repository`});
         if (queryService) {
             beans.push({class: `${entityClass}QueryService`, instance: `${entityInstance}QueryService`});
         }

@@ -249,7 +249,7 @@ export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
 export const updateEntity: ICrudPutAction<I<%= entityReactName %>> = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
-    payload: axios.put(apiUrl, cleanEntity(entity))
+    payload: axios.put(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity))
   });
   return result;
 };

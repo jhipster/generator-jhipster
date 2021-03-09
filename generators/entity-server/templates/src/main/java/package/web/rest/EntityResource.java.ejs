@@ -32,10 +32,10 @@ _%>
 <%_ if (dto !== 'mapstruct' || service === 'no') { _%>
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 <%_ } _%>
+import <%= packageName %>.repository.<%= entityClass %>Repository;
 <%_ if (service !== 'no') { _%>
 import <%= packageName %>.service.<%= entityClass %>Service;
 <%_ } else { _%>
-import <%= packageName %>.repository.<%= entityClass %>Repository;
     <%_ if (isUsingMapsId === true) { _%>
 import <%= packageName %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
     <%_ } _%>
@@ -115,9 +115,7 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 <%_ } _%>
 import java.util.List;
-<%_ if (isUsingMapsId === true) { _%>
 import java.util.Objects;
-<%_ } _%>
 import java.util.Optional;
 <%_ if (primaryKey.fields.some(f => f.fieldType === 'UUID')) { _%>
 import java.util.UUID;
@@ -213,20 +211,39 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * {@code PUT  /<%= entityApiUrl %>} : Updates an existing <%= entityInstance %>.
+     * {@code PUT  /<%= entityApiUrl %>/:<%= primaryKey.name %>} : Updates an existing <%= entityInstance %>.
      *
+     * @param <%= primaryKey.name %> the id of the <%= instanceName %> to save.
      * @param <%= instanceName %> the <%= instanceName %> to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated <%= instanceName %>,
      * or with status {@code 400 (Bad Request)} if the <%= instanceName %> is not valid,
      * or with status {@code 500 (Internal Server Error)} if the <%= instanceName %> couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/<%= entityApiUrl %>")
-    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> update<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
-        log.debug("REST request to update <%= entityClass %> : {}", <%= instanceName %>);
+    @PutMapping("/<%= entityApiUrl %>/{<%= primaryKey.name %>}")
+    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> update<%= entityClass %>(
+        @PathVariable(value = "<%= primaryKey.name %>", required = false) final <%= primaryKey.type %> <%= primaryKey.name %>,
+        <% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>
+    ) throws URISyntaxException {
+        log.debug("REST request to update <%= entityClass %> : {}, {}", <%= primaryKey.name %>, <%= instanceName %>);
         if (<%= instanceName %>.get<%= primaryKey.nameCapitalized %>() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        if (!Objects.equals(<%= primaryKey.name %>, <%= instanceName %>.get<%= primaryKey.nameCapitalized %>())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+        
+<%_ if (!reactive) { _%>
+        if (!<%= entityInstance %>Repository.existsById(<%= primaryKey.name %>)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+<%_ } else { _%>
+        return <%= entityInstance %>Repository.existsById(<%= primaryKey.name %>).flatMap(exists -> {
+            if (!exists) {
+                return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
+            }
+<%_ } _%>
+
         <%_ if (saveUserSnapshot) { _%>
             <%_ if (manyToManyWithUser) { _%>
         if (<%= instanceName %>.getUsers() != null) {
@@ -251,6 +268,7 @@ public class <%= entityClass %>Resource {
                 .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.get<%= primaryKey.nameCapitalized %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>))
                 .body(result)
             );
+        });
     <%_ } _%>
     }
 
