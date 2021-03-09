@@ -56,6 +56,7 @@ eureka:
       git-version: ${git.commit.id.describe:}
       git-commit: ${git.commit.id.abbrev:}
       git-branch: ${git.branch:}
+      context-path: ${server.servlet.context-path:}
 <%_ } _%>
 <%_ if (applicationType === 'gateway') { _%>
 
@@ -330,7 +331,8 @@ jhipster:
   mail:
     from: <%= baseName %>@localhost
   api-docs:
-    default-include-pattern: /api/.*
+    default-include-pattern: ${server.servlet.context-path:}/api/.*
+    management-include-pattern: ${server.servlet.context-path:}/management/.*
     title: <%= baseName %> API
     description: <%= baseName %> API documentation
     version: 0.0.1
