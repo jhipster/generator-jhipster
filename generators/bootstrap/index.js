@@ -242,7 +242,7 @@ module.exports = class extends BaseGenerator {
 
     if (!user.fields.some(field => field.fieldName === 'login')) {
       user.fields.push({
-        fieldName: 'login',        
+        fieldName: 'login',
         fieldType: TYPE_STRING,
         builtIn: true,
       });
