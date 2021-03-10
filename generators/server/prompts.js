@@ -44,7 +44,7 @@ function askForServerSideOpts() {
       when: () => ['monolith', 'microservice'].includes(applicationType),
       type: 'confirm',
       name: 'reactive',
-      message: '[Beta] Do you want to make it reactive with Spring WebFlux?',
+      message: 'Do you want to make it reactive with Spring WebFlux?',
       default: serverDefaultConfig.reactive,
     },
     {
@@ -143,10 +143,11 @@ function askForServerSideOpts() {
             name: 'Cassandra',
           });
         }
-        opts.push({
+        // Couchbase is broken, see https://github.com/jhipster/generator-jhipster/pull/14184 for more information.
+        /* opts.push({
           value: 'couchbase',
-          name: '[BROKEN] Couchbase',
-        });
+          name: 'Couchbase',
+        }); */
         opts.push({
           value: 'neo4j',
           name: '[BETA] Neo4j',
@@ -205,7 +206,7 @@ function askForServerSideOpts() {
         },
         {
           value: 'infinispan',
-          name: '[BETA] Infinispan (hybrid cache, for multiple nodes)',
+          name: 'Infinispan (hybrid cache, for multiple nodes)',
         },
         {
           value: 'memcached',
