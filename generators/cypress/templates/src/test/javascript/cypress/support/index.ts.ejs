@@ -43,7 +43,7 @@ import './oauth2';
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
 Cypress.Cookies.defaults({
-preserve: ['XSRF-TOKEN','SESSION', 'JSESSIONID']
+  preserve: ['XSRF-TOKEN','SESSION', 'JSESSIONID']
 })
 <%_ } _%>
 <%_ if (clientFrameworkReact || clientFrameworkVue) { _%>
