@@ -626,8 +626,8 @@ wrapper {
 
 if (project.hasProperty("nodeInstall")) {
     node {
-        version = "${nodeVersion}"
-        npmVersion = "${npmVersion}"
+        version = "<%= NODE_VERSION %>"
+        npmVersion = "<%= NPM_VERSION %>"
         download = true
     }
 }
