@@ -1,3 +1,4 @@
+import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -5,6 +6,7 @@ import {
   <%_ if (!readOnly) { _%>
   entityCreateButtonSelector,
   entityCreateSaveButtonSelector,
+  entityCreateCancelButtonSelector,
   entityEditButtonSelector,
   entityDeleteButtonSelector,
   entityConfirmDeleteButtonSelector,
@@ -12,43 +14,24 @@ import {
 } from '../../support/entity';
 <%_
 const baseApi = (applicationType === 'gateway' && locals.microserviceName) ? 'services/' + microserviceName.toLowerCase() + '/api/' : 'api/';
-let openBlockComment = ``;
-let closeBlockComment = ``;
 
-for (let relationship of relationships) {
-  if (relationship.relationshipRequired || relationship.id) {
-    openBlockComment = `/* this test is commented because it contains required relationships`;
-    closeBlockComment = `*/`;
-    break;
-  }
-}
-
-let entityFakeData;
-if (!openBlockComment) {
-  resetFakerSeed('entity-cypress');
-  entityFakeData = generateFakeData('cypress');
-  if (!entityFakeData) {
-    openBlockComment = `/* this test is commented because it failed to generate a correct full sample`;
-    closeBlockComment = `*/`;
-  }
-}
+resetFakerSeed('entity-cypress');
+const entityFakeData = generateFakeData('cypress');
+const requiredRelationships = relationships.filter(rel => rel.relationshipRequired || rel.id);
+// We cannot generate a required entity with required relationship.
+const skipCreateTest = (requiredRelationships.length > 0 || !entityFakeData) ? '.skip' : '';
 _%>
 
 describe('<%= entityClass %> e2e test', () => {
-  let startingEntitiesCount = 0;
-
   <%_ if (authenticationType === 'oauth2') { _%>
   beforeEach(() => {
     cy.getOauth2Data();
     cy.get('@oauth2Data').then(oauth2Data => {
       cy.oauthLogin(oauth2Data, Cypress.env('E2E_USERNAME') || "admin", Cypress.env('E2E_PASSWORD') || "admin");
     });
-    cy.intercept('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
+    cy.intercept('GET', '/<%= baseApi + entityApiUrl %>').as('entitiesRequest');
     cy.visit('');
-    cy.clickOnEntityMenuItem('<%= entityStateName %>');
-    cy.wait('@entitiesRequest')
-      .then(({ request, response }) => startingEntitiesCount = response.body.length);
-    cy.visit('/');
+    cy.get(entityItemSelector).should('exist');
   });
 
   afterEach(() => {
@@ -62,77 +45,81 @@ describe('<%= entityClass %> e2e test', () => {
     cy.window().then((win) => {
       win.sessionStorage.clear()
     });
-    <%_ if (authenticationType === 'session') { _%>cy.clearCookie('SESSION')<% } %>
-    cy.clearCookies();
-    cy.intercept('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
     cy.visit('');
     cy.login('admin', 'admin');
-    cy.clickOnEntityMenuItem('<%= entityStateName %>');
-    cy.wait('@entitiesRequest')
-      .then(({ request, response }) => startingEntitiesCount = response.body.length);
-    cy.visit('/');
+    cy.get(entityItemSelector).should('exist');
   });
   <%_ } _%>
 
-  it('should load <%= entityClassPlural %>', () => {
-    cy.intercept('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
-    cy.visit('/');
-    cy.clickOnEntityMenuItem('<%= entityStateName %>');
-    cy.wait('@entitiesRequest');
-    cy.getEntityHeading('<%= entityClass %>').should('exist');
-    if (startingEntitiesCount === 0) {
-      cy.get(entityTableSelector).should('not.exist');
-    } else {
-      cy.get(entityTableSelector).should('have.lengthOf', startingEntitiesCount);
-    }
-    cy.visit('/');
+  beforeEach(() => {
+    cy.intercept('GET', '/<%= baseApi + entityApiUrl %>').as('entitiesRequest');
+    cy.intercept('POST', '/<%= baseApi + entityApiUrl %>').as('postEntityRequest');
+    cy.intercept('DELETE', '/<%= baseApi + entityApiUrl %>/*').as('deleteEntityRequest');
   });
 
-  it('should load details <%= entityClass %> page', () => {
-    cy.intercept('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
+  it('should load <%= entityClassPlural %>', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('<%= entityStateName %>');
-    cy.wait('@entitiesRequest');
-    if (startingEntitiesCount > 0) {
-      cy.get(entityDetailsButtonSelector).first().click({force: true});
-      cy.getEntityDetailsHeading('<%= entityInstance %>');
-      cy.get(entityDetailsBackButtonSelector).should('exist');
-    }
-    cy.visit('/');
+    cy.wait('@entitiesRequest').then(({ response }) => {
+      if (response.body.length === 0) {
+        cy.get(entityTableSelector).should('not.exist');
+      } else {
+        cy.get(entityTableSelector).should('exist');
+      }
+    });;
+    cy.getEntityHeading('<%= entityClass %>').should('exist');
+    cy.url().should('match', /\/<%= entityUrl %>(\?.*)?$/);
+  });
+
+  it('should load details <%= entityClass %> page', function() {
+    cy.visit('/<%= entityUrl %>');
+    cy.wait('@entitiesRequest').then(({ response }) => {
+      if (response.body.length === 0) {
+        this.skip();
+      }
+    });;
+    cy.get(entityDetailsButtonSelector).first().click({force: true});
+    cy.getEntityDetailsHeading('<%= entityInstance %>');
+    cy.get(entityDetailsBackButtonSelector).click({force: true});
+    cy.wait('@entitiesRequest').then(({ response }) => {
+      expect(response.statusCode).to.equal(200);
+    });
+    cy.url().should('match', /\/<%= entityUrl %>(\?.*)?$/);
   });
 
   <%_ if (!readOnly) { _%>
   it('should load create <%= entityClass %> page', () => {
-    cy.intercept('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
-    cy.visit('/');
-    cy.clickOnEntityMenuItem('<%= entityStateName %>');
+    cy.visit('/<%= entityUrl %>');
     cy.wait('@entitiesRequest');
     cy.get(entityCreateButtonSelector).click({force: true});
     cy.getEntityCreateUpdateHeading('<%= entityClass %>');
     cy.get(entityCreateSaveButtonSelector).should('exist');
-    cy.visit('/');
+    cy.get(entityCreateCancelButtonSelector).click({force: true});
+    cy.wait('@entitiesRequest').then(({ response }) => {
+      expect(response.statusCode).to.equal(200);
+    });
+    cy.url().should('match', /\/<%= entityUrl %>$/);
   });
 
-  it('should load edit <%= entityClass %> page', () => {
-    cy.intercept('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
-    cy.visit('/');
-    cy.clickOnEntityMenuItem('<%= entityStateName %>');
-    cy.wait('@entitiesRequest');
-    if (startingEntitiesCount > 0) {
-      cy.get(entityEditButtonSelector).first().click({force: true});
-      cy.getEntityCreateUpdateHeading('<%= entityClass %>');
-      cy.get(entityCreateSaveButtonSelector).should('exist');
-    }
-    cy.visit('/');
+  it('should load edit <%= entityClass %> page', function() {
+    cy.visit('/<%= entityUrl %>');
+    cy.wait('@entitiesRequest').then(({ response }) => {
+      if (response.body.length === 0) {
+        this.skip();
+      }
+    });;
+    cy.get(entityEditButtonSelector).first().click({force: true});
+    cy.getEntityCreateUpdateHeading('<%= entityClass %>');
+    cy.get(entityCreateSaveButtonSelector).should('exist');
+    cy.get(entityCreateCancelButtonSelector).click({force: true});
+    cy.wait('@entitiesRequest').then(({ response }) => {
+      expect(response.statusCode).to.equal(200);
+    });
+    cy.url().should('match', /\/<%= entityUrl %>(\?.*)?$/);
   });
 
-  <%= openBlockComment %>
-  it('should create an instance of <%= entityClass %>', () => {
-    cy.intercept('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
-    cy.visit('/');
-    cy.clickOnEntityMenuItem('<%= entityStateName %>');
-    cy.wait('@entitiesRequest')
-      .then(({ request, response }) => startingEntitiesCount = response.body.length);
+  it<%= skipCreateTest %>('should create an instance of <%= entityClass %>', () => {
+    cy.visit('/<%= entityUrl %>');
     cy.get(entityCreateButtonSelector).click({force: true});
     cy.getEntityCreateUpdateHeading('<%= entityClass %>');
     <%_ fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden).forEach((field) => {
@@ -196,44 +183,40 @@ describe('<%= entityClass %> e2e test', () => {
     cy.get(entityCreateSaveButtonSelector).click({force: true});
     cy.scrollTo('top', {ensureScrollable: false});
     cy.get(entityCreateSaveButtonSelector).should('not.exist');
-    cy.intercept('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequestAfterCreate');
-    cy.visit('/');
-    cy.clickOnEntityMenuItem('<%= entityStateName %>');
-    cy.wait('@entitiesRequestAfterCreate');
-    cy.get(entityTableSelector).should('have.lengthOf', startingEntitiesCount + 1);
-    cy.visit('/');
+    cy.wait('@postEntityRequest').then(({ response }) => {
+      expect(response.statusCode).to.equal(201);
+    });
+    cy.wait('@entitiesRequest').then(({ response }) => {
+      expect(response.statusCode).to.equal(200);
+    });
+    cy.url().should('match', /\/<%= entityUrl %>(\?.*)?$/);
   });
-  <%= closeBlockComment %>
 
-  <%= openBlockComment %>
-  it('should delete last instance of <%= entityClass %>', () => {
-    cy.intercept('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
+  it<%= skipCreateTest %>('should delete last instance of <%= entityClass %>', function() {
     <%_ if (clientFramework === 'react') { _%>
     cy.intercept('GET', '/<%= baseApi + entityApiUrl %>/*').as('dialogDeleteRequest');
     <%_ } _%>
-    cy.intercept('DELETE', '/<%= baseApi + entityApiUrl %>/*').as('deleteEntityRequest');
-    cy.visit('/');
-    cy.clickOnEntityMenuItem('<%= entityStateName %>');
-    cy.wait('@entitiesRequest').then(({ request, response }) => {
-      startingEntitiesCount = response.body.length;
-      if (startingEntitiesCount > 0) {
-        cy.get(entityTableSelector).should('have.lengthOf', startingEntitiesCount);
+    cy.visit('/<%= entityUrl %>');
+    cy.wait('@entitiesRequest').then(({ response }) => {
+      if (response.body.length > 0) {
+        cy.get(entityTableSelector).should('have.lengthOf', response.body.length);
         cy.get(entityDeleteButtonSelector).last().click({force: true});
         <%_ if (clientFramework === 'react') { _%>
         cy.wait('@dialogDeleteRequest');
         <%_ } _%>
         cy.getEntityDeleteDialogHeading('<%= entityInstance %>').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click({force: true});
-        cy.wait('@deleteEntityRequest');
-        cy.intercept('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequestAfterDelete');
-        cy.visit('/');
-        cy.clickOnEntityMenuItem('<%= entityStateName %>');
-        cy.wait('@entitiesRequestAfterDelete');
-        cy.get(entityTableSelector).should('have.lengthOf', startingEntitiesCount - 1);
+        cy.wait('@deleteEntityRequest').then(({ response }) => {
+          expect(response.statusCode).to.equal(204);
+        });
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          expect(response.statusCode).to.equal(200);
+        });
+        cy.url().should('match', /\/<%= entityUrl %>(\?.*)?$/);
+      } else {
+        this.skip();
       }
-      cy.visit('/');
     });
   });
-  <%= closeBlockComment %>
   <%_ } _%>
 });
