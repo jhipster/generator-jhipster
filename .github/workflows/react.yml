@@ -222,8 +222,6 @@ jobs:
             ${{ runner.os }}-cypress-
       - name: 'ENV: display variables'
         run: $JHI_SCRIPTS/01-display-configuration.sh
-      - name: 'TOOLS: install required npm'
-        run: npm install -g npm@$(node -e "console.log(require('./generators/generator-constants').NPM_VERSION);")
       - name: 'TOOLS: configure tools installed by the system'
         run: $JHI_SCRIPTS/03-system.sh
       - name: 'TOOLS: configure git'
