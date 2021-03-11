@@ -25,7 +25,7 @@
     "@typescript-eslint/eslint-plugin": "4.17.0",
     "browser-sync": "2.26.14",
     "browser-sync-webpack-plugin": "2.3.0",
-    "copy-webpack-plugin": "6.4.1",
+    "copy-webpack-plugin": "8.0.0",
     "eslint": "7.21.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-webpack-plugin": "2.5.2",
