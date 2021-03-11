@@ -22,12 +22,18 @@ _%>
 export interface IUser {
   id?: <%= idType %>;
   login?: string;
+  <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+    <%= field.fieldName %>?: string; 
+  <%_ } _%> 
 }
 
 export class User implements IUser {
   constructor(
     public id: <%= idType %>,
     public login: string,
+<%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+    public <%= field.fieldName %>?: string,
+<%_ } _%> 
   ) {}
 }
 

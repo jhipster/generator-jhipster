@@ -237,11 +237,27 @@ module.exports = class extends BaseGenerator {
       fieldTranslationKey: 'global.field.id',
       fieldNameHumanized: 'ID',
       id: true,
+      builtIn: true,
     });
 
     if (!user.fields.some(field => field.fieldName === 'login')) {
       user.fields.push({
         fieldName: 'login',
+        fieldType: TYPE_STRING,
+        builtIn: true,
+      });
+    }
+
+    if (!user.fields.some(field => field.fieldName === 'firstName')) {
+      user.fields.push({
+        fieldName: 'firstName',
+        fieldType: TYPE_STRING,
+      });
+    }
+
+    if (!user.fields.some(field => field.fieldName === 'lastName')) {
+      user.fields.push({
+        fieldName: 'lastName',
         fieldType: TYPE_STRING,
       });
     }
