@@ -82,7 +82,7 @@ public interface <%= entityClass %>Service {
     <% if (pagination !== 'no') { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> findAll(<% if (pagination !== 'no') { %>Pageable pageable<% } %>);
 <% for (const relationship of relationships) { if (relationship.relationshipType === 'one-to-one' && relationship.ownerSide !== true) { -%>
     /**
-     * Get all the <%= dtoClass %> where <%= relationship.relationshipNameCapitalized %> is {@code null}.
+     * Get all the <%= restClass %> where <%= relationship.relationshipNameCapitalized %> is {@code null}.
      *
      * @return the {@link <%= listOrFlux %>} of entities.
      */
