@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%
-const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
+const instanceType = restClass;
 const mapper = entityInstance  + 'Mapper';
 const entityToDtoReference = mapper + '::' + 'toDto';
 const reactiveSql = (databaseType === 'sql' && reactive);

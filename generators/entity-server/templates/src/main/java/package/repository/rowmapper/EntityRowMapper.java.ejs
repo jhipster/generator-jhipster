@@ -35,7 +35,7 @@ import java.util.function.BiFunction;
 
 import org.springframework.stereotype.Service;
 
-import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+import <%= packageName %>.domain.<%= persistClass %>;
 <%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
 import <%= packageName %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
@@ -44,10 +44,10 @@ import <%= packageName %>.service.ColumnConverter;
 import io.r2dbc.spi.Row;
 
 /**
- * Converter between {@link Row} to {@link <%= asEntity(entityClass) %>}, with proper type conversions.
+ * Converter between {@link Row} to {@link <%= persistClass %>}, with proper type conversions.
  */
 @Service
-public class <%= entityClass %>RowMapper implements BiFunction<Row, String, <%= asEntity(entityClass) %>> {
+public class <%= entityClass %>RowMapper implements BiFunction<Row, String, <%= persistClass %>> {
     private final ColumnConverter converter;
     public <%= entityClass %>RowMapper(ColumnConverter converter) {
         this.converter = converter;
@@ -55,11 +55,11 @@ public class <%= entityClass %>RowMapper implements BiFunction<Row, String, <%= 
 
     /**
      * Take a {@link Row} and a column prefix, and extract all the fields.
-     * @return the {@link <%= asEntity(entityClass) %>} stored in the database.
+     * @return the {@link <%= persistClass %>} stored in the database.
      */
     @Override
-    public <%= asEntity(entityClass) %> apply(Row row, String prefix) {
-        <%= asEntity(entityClass) %> entity = new <%= asEntity(entityClass) %>();
+    public <%= persistClass %> apply(Row row, String prefix) {
+        <%= persistClass %> entity = new <%= persistClass %>();
         <%_ fields.forEach(function(field) {
             let fieldType = field.fieldType;
             if (field.fieldTypeBlobContent === 'text') {

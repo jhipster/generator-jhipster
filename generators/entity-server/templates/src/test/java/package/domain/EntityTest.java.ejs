@@ -25,21 +25,21 @@ import <%= packageName %>.web.rest.TestUtil;
 import java.util.UUID;
 <%_ } _%>
 
-class <%= asEntity(entityClass) %>Test {
+class <%= persistClass %>Test {
 
     @Test
     void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(<%= asEntity(entityClass) %>.class);
+        TestUtil.equalsVerifier(<%= persistClass %>.class);
     <%_if (!embedded) { _%>
-        <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %>1 = new <%= asEntity(entityClass) %>();
-        <%= asEntity(entityInstance) %>1.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.type === 'Long') { %>1L<% } else if (primaryKey.type === 'String') { %>"id1"<% } else if (primaryKey.type === 'UUID') { %>UUID.randomUUID()<% } %>);
-        <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %>2 = new <%= asEntity(entityClass) %>();
-        <%= asEntity(entityInstance) %>2.set<%= primaryKey.nameCapitalized %>(<%= asEntity(entityInstance) %>1.get<%= primaryKey.nameCapitalized %>());
-        assertThat(<%= asEntity(entityInstance) %>1).isEqualTo(<%= asEntity(entityInstance) %>2);
-        <%= asEntity(entityInstance) %>2.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.type === 'Long') { %>2L<% } else if (primaryKey.type === 'String') { %>"id2"<% } else if (primaryKey.type === 'UUID') { %>UUID.randomUUID()<% } %>);
-        assertThat(<%= asEntity(entityInstance) %>1).isNotEqualTo(<%= asEntity(entityInstance) %>2);
-        <%= asEntity(entityInstance) %>1.set<%= primaryKey.nameCapitalized %>(null);
-        assertThat(<%= asEntity(entityInstance) %>1).isNotEqualTo(<%= asEntity(entityInstance) %>2);
+        <%= persistClass %> <%= persistInstance %>1 = new <%= persistClass %>();
+        <%= persistInstance %>1.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.type === 'Long') { %>1L<% } else if (primaryKey.type === 'String') { %>"id1"<% } else if (primaryKey.type === 'UUID') { %>UUID.randomUUID()<% } %>);
+        <%= persistClass %> <%= persistInstance %>2 = new <%= persistClass %>();
+        <%= persistInstance %>2.set<%= primaryKey.nameCapitalized %>(<%= persistInstance %>1.get<%= primaryKey.nameCapitalized %>());
+        assertThat(<%= persistInstance %>1).isEqualTo(<%= persistInstance %>2);
+        <%= persistInstance %>2.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.type === 'Long') { %>2L<% } else if (primaryKey.type === 'String') { %>"id2"<% } else if (primaryKey.type === 'UUID') { %>UUID.randomUUID()<% } %>);
+        assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);
+        <%= persistInstance %>1.set<%= primaryKey.nameCapitalized %>(null);
+        assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);
     <%_} _%>
     }
 }

@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.repository.search;
 
-import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+import <%= packageName %>.domain.<%= persistClass %>;
 <%_ if (reactive) { _%>
     <%_ if (pagination !== 'no') { _%>
 import org.springframework.data.domain.Pageable;
@@ -41,9 +41,9 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 <%_ } _%>
 
 /**
- * Spring Data Elasticsearch repository for the {@link <%= asEntity(entityClass) %>} entity.
+ * Spring Data Elasticsearch repository for the {@link <%= persistClass %>} entity.
  */
-public interface <%= entityClass %>SearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= asEntity(entityClass) %>, <%= primaryKey.type %>><% if (reactive) {%>, <%= entityClass %>SearchRepositoryInternal<% } %> {
+public interface <%= entityClass %>SearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= persistClass %>, <%= primaryKey.type %>><% if (reactive) {%>, <%= entityClass %>SearchRepositoryInternal<% } %> {
 }
 <%_ if (reactive) { _%>
 

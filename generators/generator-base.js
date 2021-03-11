@@ -2563,7 +2563,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {String} name entity name
    */
   asEntity(name) {
-    return name + this.entitySuffix;
+    return name + (this.entitySuffix || this.jhipsterConfig.entitySuffix || '');
   }
 
   /**
@@ -2571,7 +2571,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {String} name entity name
    */
   asDto(name) {
-    return name + this.dtoSuffix;
+    return name + (this.dtoSuffix || this.jhipsterConfig.dtoSuffix || '');
   }
 
   get needleApi() {

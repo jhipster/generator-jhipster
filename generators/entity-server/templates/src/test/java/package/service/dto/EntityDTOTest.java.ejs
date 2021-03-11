@@ -32,22 +32,22 @@ if (!embedded) {
 import java.util.UUID;
 <%_ } _%>
 
-class <%= asDto(entityClass) %>Test {
+class <%= dtoClass %>Test {
 
     @Test
     void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(<%= asDto(entityClass) %>.class);
+        TestUtil.equalsVerifier(<%= dtoClass %>.class);
         <%_if (!embedded) { _%>
-        <%= asDto(entityClass) %> <%= asDto(entityInstance) %>1 = new <%= asDto(entityClass) %>();
-        <%= asDto(entityInstance) %>1.set<%= primaryKey.nameCapitalized %>(<%- id1 %>);
-        <%= asDto(entityClass) %> <%= asDto(entityInstance) %>2 = new <%= asDto(entityClass) %>();
-        assertThat(<%= asDto(entityInstance) %>1).isNotEqualTo(<%= asDto(entityInstance) %>2);
-        <%= asDto(entityInstance) %>2.set<%= primaryKey.nameCapitalized %>(<%= asDto(entityInstance) %>1.get<%= primaryKey.nameCapitalized %>());
-        assertThat(<%= asDto(entityInstance) %>1).isEqualTo(<%= asDto(entityInstance) %>2);
-        <%= asDto(entityInstance) %>2.set<%= primaryKey.nameCapitalized %>(<%- id2 %>);
-        assertThat(<%= asDto(entityInstance) %>1).isNotEqualTo(<%= asDto(entityInstance) %>2);
-        <%= asDto(entityInstance) %>1.set<%= primaryKey.nameCapitalized %>(null);
-        assertThat(<%= asDto(entityInstance) %>1).isNotEqualTo(<%= asDto(entityInstance) %>2);
+        <%= dtoClass %> <%= dtoInstance %>1 = new <%= dtoClass %>();
+        <%= dtoInstance %>1.set<%= primaryKey.nameCapitalized %>(<%- id1 %>);
+        <%= dtoClass %> <%= dtoInstance %>2 = new <%= dtoClass %>();
+        assertThat(<%= dtoInstance %>1).isNotEqualTo(<%= dtoInstance %>2);
+        <%= dtoInstance %>2.set<%= primaryKey.nameCapitalized %>(<%= dtoInstance %>1.get<%= primaryKey.nameCapitalized %>());
+        assertThat(<%= dtoInstance %>1).isEqualTo(<%= dtoInstance %>2);
+        <%= dtoInstance %>2.set<%= primaryKey.nameCapitalized %>(<%- id2 %>);
+        assertThat(<%= dtoInstance %>1).isNotEqualTo(<%= dtoInstance %>2);
+        <%= dtoInstance %>1.set<%= primaryKey.nameCapitalized %>(null);
+        assertThat(<%= dtoInstance %>1).isNotEqualTo(<%= dtoInstance %>2);
         <%_} _%>
     }
 }
