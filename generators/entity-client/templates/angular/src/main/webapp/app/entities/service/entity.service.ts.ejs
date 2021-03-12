@@ -72,6 +72,16 @@ export class <%= entityAngularName %>Service {
                 { observe: 'response' })
         <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
     }
+
+    partialUpdate(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
+        <%_ if (fieldsContainDate) { _%>
+        const copy = this.convertDateFromClient(<%= entityInstance %>);
+        <%_ } _%>
+        return this.http.patch<I<%= entityAngularName %>>(this.resourceUrl,
+                <% if (fieldsContainDate) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
+                { observe: 'response' })
+        <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
+    }
     <%_ } _%>
 
     find(id: <%= tsKeyType %>): Observable<EntityResponseType> {
