@@ -80,7 +80,7 @@
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "stripcomment-loader": "0.1.0",
     "style-loader": "2.0.0",
-    "swagger-ui-dist": "3.44.1",
+    "swagger-ui-dist": "3.45.0",
     "terser-webpack-plugin": "5.1.1",
     "thread-loader": "3.0.1",
     "to-string-loader": "1.1.6",
