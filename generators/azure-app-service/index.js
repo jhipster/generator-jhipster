@@ -25,11 +25,6 @@ const statistics = require('../statistics');
 // Global constants
 const constants = require('../generator-constants');
 
-const cacheTypes = require('../../jdl/jhipster/cache-types');
-const { MEMCACHED } = require('../../jdl/jhipster/cache-types');
-
-const NO_CACHE_PROVIDER = cacheTypes.NO;
-
 const { OptionNames } = require('../../jdl/jhipster/application-options');
 
 const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
@@ -75,22 +70,8 @@ module.exports = class extends BaseGenerator {
       );
     }
     this.log(chalk.bold('Azure App Service configuration is starting'));
-    this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
     this.baseName = this.config.get(OptionNames.BASE_NAME);
-    this.packageName = this.config.get(OptionNames.PACKAGE_NAME);
-    this.packageFolder = this.config.get(OptionNames.PACKAGE_FOLDER);
-    this.authenticationType = this.config.get(OptionNames.AUTHENTICATION_TYPE);
-    this.jwtSecretKey = this.config.get(OptionNames.JWT_SECRET_KEY);
-    this.cacheProvider = this.config.get(OptionNames.CACHE_PROVIDER) || this.config.get('hibernateCache') || NO_CACHE_PROVIDER; // TODO is hibernate cache an option?
-    this.enableHibernateCache =
-      this.config.get(OptionNames.ENABLE_HIBERNATE_CACHE) && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
-    this.databaseType = this.config.get(OptionNames.DATABASE_TYPE);
-    this.prodDatabaseType = this.config.get(OptionNames.PROD_DATABASE_TYPE);
-    this.searchEngine = this.config.get(OptionNames.SEARCH_ENGINE);
-    this.frontendAppName = this.getFrontendAppName();
     this.buildTool = this.config.get(OptionNames.BUILD_TOOL);
-    this.applicationType = this.config.get(OptionNames.APPLICATION_TYPE);
-    this.serviceDiscoveryType = this.config.get(OptionNames.SERVICE_DISCOVERY_TYPE);
     this.azureAppServiceResourceGroupName = ''; // This is not saved, as it is better to get the Azure default variable
     this.azureAppServicePlan = this.config.get('azureAppServicePlan');
     this.azureAppServiceName = this.config.get('azureAppServiceName');
@@ -376,7 +357,7 @@ which is free for the first 30 days`);
         if (this.abort) return;
         const done = this.async();
         this.log(chalk.bold('\nAdding Azure Web App Maven plugin'));
-        if (this.buildTool === 'maven') {
+        if (this.buildTool === MAVEN) {
           this.render('pom-plugin.xml.ejs', rendered => {
             this.addMavenPlugin('com.microsoft.azure', 'azure-webapp-maven-plugin', AZURE_WEBAPP_MAVEN_PLUGIN_VERSION, rendered);
           });
@@ -455,7 +436,11 @@ which is free for the first 30 days`);
         done();
       },
 
-      copyAzureAppServiceFiles() {
+      derivedProperties() {
+        this.isAzureAppInsightsInstrumentationKeyEmpty = this.azureAppInsightsInstrumentationKey === '';
+      },
+
+      writing() {
         if (this.abort) return;
         this.log(chalk.bold('\nCreating Azure App Service deployment files'));
         this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);

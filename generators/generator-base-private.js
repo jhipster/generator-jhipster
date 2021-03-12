@@ -63,6 +63,8 @@ const databaseTypes = require('../jdl/jhipster/database-types');
 const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL, ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, H2_DISK, H2_MEMORY } = databaseTypes;
 
 const { MAVEN } = require('../jdl/jhipster/build-tool-types');
+const { GATEWAY } = require('../jdl/jhipster/application-types');
+const { SPRING_WEBSOCKET } = require('../jdl/jhipster/websocket-types');
 
 /**
  * This is the Generator base private class.
@@ -109,7 +111,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
   installI18nClientFilesByLanguage(_this, webappDir, lang) {
     const generator = _this || this;
     const prefix = this.fetchFromInstalledJHipster('languages/templates');
-    if (generator.applicationType === 'gateway' && generator.serviceDiscoveryType) {
+    if (generator.applicationType === GATEWAY && generator.serviceDiscoveryType) {
       generator.copyI18nFilesByName(generator, webappDir, 'gateway.json', lang);
     }
     if (generator.withAdminUi) {
@@ -127,7 +129,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     generator.copyI18nFilesByName(generator, webappDir, 'user-management.json', lang);
 
     // tracker.json for Websocket
-    if (this.websocket === 'spring-websocket') {
+    if (this.websocket === SPRING_WEBSOCKET) {
       generator.copyI18nFilesByName(generator, webappDir, 'tracker.json', lang);
     }
 

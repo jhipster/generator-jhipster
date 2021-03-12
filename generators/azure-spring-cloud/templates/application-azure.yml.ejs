@@ -32,7 +32,7 @@ logging:
   level:
     ROOT: INFO
     tech.jhipster: INFO
-    <%_ if (packageName !== 'tech.jhipster') { _%>
+    <%_ if (!isPackageNameJhipsterTech) { _%>
     <%= packageName %>: INFO
     <%_ } _%>
 
@@ -55,7 +55,7 @@ spring:
 # ===================================================================
 
 jhipster:
-  <%_ if (authenticationType === 'jwt') { _%>
+  <%_ if (isAuthenticationTypeJwt) { _%>
   security:
     authentication:
       jwt:

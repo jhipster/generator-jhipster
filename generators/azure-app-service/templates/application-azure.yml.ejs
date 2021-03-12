@@ -28,7 +28,7 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-<%_ if (azureAppInsightsInstrumentationKey !== '') { _%>
+<%_ if (!isAzureAppInsightsInstrumentationKeyEmpty) { _%>
 azure:
   application-insights:
     instrumentation-key: <%= azureAppInsightsInstrumentationKey %>

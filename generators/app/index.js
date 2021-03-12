@@ -30,6 +30,7 @@ const { MICROSERVICE } = require('../../jdl/jhipster/application-types');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
 
 const { JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY } = OptionNames;
+const { GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_CLIENT, GENERATOR_SERVER } = require('../generator-list');
 
 let useBlueprints;
 
@@ -385,16 +386,16 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
        * - composeCommon (app) -> initializing (common) -> prompting (common) -> ... -> composeServer (app) -> initializing (server) -> ...
        */
       compose() {
-        this.composeWithJHipster('common', true);
+        this.composeWithJHipster(GENERATOR_COMMON, true);
         if (!this.jhipsterConfig.skipServer) {
-          this.composeWithJHipster('server', true);
+          this.composeWithJHipster(GENERATOR_SERVER, true);
         }
         if (!this.jhipsterConfig.skipClient) {
-          this.composeWithJHipster('client', true);
+          this.composeWithJHipster(GENERATOR_CLIENT, true);
         }
         if (!this.configOptions.skipI18n) {
           this.composeWithJHipster(
-            'languages',
+            GENERATOR_LANGUAGES,
             {
               regenerate: true,
               skipPrompts: this.options.withEntities || this.existingProject || this.options.defaults,

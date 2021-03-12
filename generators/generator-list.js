@@ -17,10 +17,13 @@
  * limitations under the License.
  */
 
-const TestGenerators = {
+const Generators = {
+  GENERATOR_COMMON: 'common',
+  GENERATOR_CLIENT: 'client',
+  GENERATOR_SERVER: 'server',
+  GENERATOR_LANGUAGES: 'languages',
   GENERATOR_CYPRESS: 'cypress',
+  GENERATOR_DOCKER_COMPOSE: 'docker-compose',
 };
 
-module.exports = {
-  TestGenerators,
-};
+module.exports = Generators;
