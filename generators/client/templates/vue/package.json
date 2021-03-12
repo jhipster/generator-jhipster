@@ -49,7 +49,7 @@
     "jest-vue-preprocessor": "1.7.1",
     "merge-jsons-webpack-plugin": "1.0.21",
     "mini-css-extract-plugin": "1.3.9",
-    "node-notifier": "9.0.0",
+    "node-notifier": "9.0.1",
     "numeral": "2.0.6",
     "optimize-css-assets-webpack-plugin": "5.0.4",
     "portfinder": "1.0.28",
