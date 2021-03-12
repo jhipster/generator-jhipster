@@ -33,6 +33,7 @@ _%>
 <%_ } else { %>
 <%- returnPrefix %> <%= entityInstance %>Repository.findById(<%= instanceName %>.get<%= primaryKey.nameCapitalized %>())
    .map(existing<%= entityClass %> -> {
+<%_ if(dto === 'mapstruct') { %><%= mapper %>.partialUpdate(existing<%= entityClass %>, <%= instanceName %>);<%_ } else { %>
 <%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
    if (<%= instanceName %>.get<%= field.fieldNameCapitalized %>() != null) {
       existing<%= entityClass %>.set<%= field.fieldNameCapitalized %>(<%= instanceName %>.get<%= field.fieldNameCapitalized %>());
@@ -42,7 +43,7 @@ _%>
       existing<%= entityClass %>.set<%= field.fieldNameCapitalized %>ContentType(<%= instanceName %>.get<%= field.fieldNameCapitalized %>ContentType());
    }
    <%_ } _%>
-
+<%_ } %>
 <% } %>
    return existing<%= entityClass %>;
    })
