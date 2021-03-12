@@ -28,7 +28,7 @@ if (!embedded) {
     id1 = getPrimaryKeyValue(primaryKey.type, databaseType, '1');
     id2 = getPrimaryKeyValue(primaryKey.type, databaseType, '2');
 } %>
-<%_ if (primaryKey && primaryKey.fields.some(field => field.fieldType === 'UUID')) { _%>
+<%_ if (primaryKey && primaryKey.originalFields.some(field => field.fieldType === 'UUID')) { _%>
 import java.util.UUID;
 <%_ } _%>
 

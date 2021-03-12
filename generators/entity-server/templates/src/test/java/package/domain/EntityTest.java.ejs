@@ -21,7 +21,7 @@ package <%= packageName %>.domain;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import <%= packageName %>.web.rest.TestUtil;
-<%_ if (primaryKey && primaryKey.fields.some(f => f.fieldType === 'UUID')) { _%>
+<%_ if (primaryKey && primaryKey.originalFields.some(f => f.fieldType === 'UUID')) { _%>
 import java.util.UUID;
 <%_ } _%>
 
