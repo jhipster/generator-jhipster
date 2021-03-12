@@ -81,12 +81,23 @@ const serverFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
+          file: 'package/service/EntityQueryService.java',
+          renameTo: generator => `${generator.packageFolder}/service/${generator.entityClass}QueryService.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.criteria,
+      deleteOnNotCondition: true, // used if the relationship is not present anymore to delete the files since not needed anymore
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
           file: 'package/service/criteria/EntityCriteria.java',
           renameTo: generator => `${generator.packageFolder}/service/criteria/${generator.entityClass}Criteria.java`,
         },
         {
-          file: 'package/service/EntityQueryService.java',
-          renameTo: generator => `${generator.packageFolder}/service/${generator.entityClass}QueryService.java`,
+          file: 'package/service/EntityCriteriaService.java',
+          renameTo: generator => `${generator.packageFolder}/service/${generator.entityClass}CriteriaService.java`,
         },
       ],
     },

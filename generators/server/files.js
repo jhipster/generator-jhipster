@@ -1373,6 +1373,17 @@ const serverFiles = {
       ],
     },
     {
+      condition: generator => generator.user && generator.user.criteria,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/service/criteria/UserCriteria.java',
+          renameTo: generator => `${generator.javaDir}service/criteria/UserCriteria.java`,
+        },
+        { file: 'package/service/UserCriteriaService.java', renameTo: generator => `${generator.javaDir}service/UserCriteriaService.java` },
+      ],
+    },
+    {
       condition: generator => generator.isUsingBuiltInAuthority(),
       path: SERVER_MAIN_SRC_DIR,
       templates: [

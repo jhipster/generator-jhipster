@@ -1,0 +1,107 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.service;
+
+<%_
+const serviceClassName = entityClass + 'CriteriaService';
+const criteria = entityClass + 'Criteria';
+_%>
+
+<%_ if (relationships.length) { _%>
+import javax.persistence.criteria.Root;
+<%_ } _%>
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+<%_ if (relationships.length) { _%>
+import org.springframework.context.annotation.Lazy;
+<%_ } _%>
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
+import tech.jhipster.service.QueryService;
+
+import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+import <%= packageName %>.domain.*; // for static metamodels
+import <%= packageName %>.service.criteria.<%= entityClass %>Criteria;
+
+/**
+ * Service for converting criteria to specification
+ */
+@Service
+public class <%= serviceClassName %> extends QueryService<<%= asEntity(entityClass) %>> {
+
+    private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
+
+<%_ criteriaServices = Array.from(new Set(relationships.map(r => r.otherEntityName + 'CriteriaService'))) _%>
+<%_ criteriaServices.forEach(cs => { _%>
+    private final <%= _.upperFirst(cs) %> <%= cs %>;
+<%_ }) _%>
+
+    public <%= serviceClassName %>(<%= criteriaServices.map(cs => `@Lazy ${_.upperFirst(cs)} ${cs}`).join(', ') %>) {
+<%_ criteriaServices.forEach(cs => { _%>
+        this.<%= cs %> = <%= cs %>;
+<%_ }) _%>
+    }
+
+    /**
+     * Function to convert {@link <%= criteria %>} to a {@link Specification}
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the matching {@link Specification} of the entity.
+     */
+    public Specification<<%= asEntity(entityClass) %>> createSpecification(<%= criteria %> criteria) {
+        log.debug("create specification from criteria : {}", criteria);
+        Specification<<%= asEntity(entityClass) %>> specification = Specification.where(null);
+        if (criteria != null) {
+            <%_ fields.forEach((field) => {
+                if (isFilterableType(field.fieldType)) { _%>
+            if (criteria.get<%= field.fieldInJavaBeanMethod %>() != null) {
+                specification = specification.and(<%= getSpecificationBuilder(field.fieldType) %>(criteria.get<%= field.fieldInJavaBeanMethod %>(), <%= asEntity(entityClass) %>_.<%= field.fieldName %>));
+            }
+            <%_ }
+            }); _%>
+
+            <%_ relationships.forEach((relationship) => { _%>
+            if (criteria.get<%= relationship.relationshipNameCapitalized %>() != null) {
+                Specification<<%= asEntity(relationship.otherEntityNameCapitalized) %>> <%= relationship.otherEntityName %>Specification = this.<%= relationship.otherEntityName %>CriteriaService.createSpecification(criteria.get<%= relationship.relationshipNameCapitalized %>());
+                specification = specification.and((root, query, criteriaBuilder) -> {
+                    Root<<%= asEntity(relationship.otherEntityNameCapitalized) %>> <%= relationship.otherEntityName %>Root = query.from(<%= asEntity(relationship.otherEntityNameCapitalized) %>.class);
+                    return criteriaBuilder.and(
+                <%_ if (['one-to-one'].includes(relationship.relationshipType)) { _%>
+                    <%_ // this should work, without looking through pk and use pkGetter, the same way it does for manyToMany just by comparing entities, for some reason it doesn't _%>
+                    <%_ // issue: https://hibernate.atlassian.net/browse/HHH-14341 _%>
+                    <%_ relationship.otherEntity.primaryKey.ids.forEach(pk => {
+                        const pkGetter = `get(${asEntity(relationship.otherEntity.entityClass)}_.${pk.name})` _%>
+                            criteriaBuilder.equal(<%= relationship.otherEntityName %>Root.<%= pkGetter %>, root.get(<%= asEntity(entityClass) %>_.<%= relationship.relationshipName %>).<%= pkGetter %>),
+                    <%_ }) _%>
+                <%_ } else if (['many-to-one'].includes(relationship.relationshipType)) { _%>
+                            criteriaBuilder.equal(<%= relationship.otherEntityName %>Root, root.get(<%= asEntity(entityClass) %>_.<%= relationship.relationshipName %>)),
+                <%_ } else { _%>
+                            criteriaBuilder.isMember(<%= relationship.otherEntityName %>Root, root.get(<%= asEntity(entityClass) %>_.<%= relationship.relationshipNamePlural %>)),
+                <%_ } _%>
+                            <%= relationship.otherEntityName %>Specification.toPredicate(<%= relationship.otherEntityName %>Root, query, criteriaBuilder)
+                    );
+                });
+            }
+            <%_ }); // forEach
+        _%>
+        }
+        return specification;
+    }
+}

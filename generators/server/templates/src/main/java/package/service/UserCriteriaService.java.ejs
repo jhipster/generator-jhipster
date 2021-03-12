@@ -1,0 +1,63 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.service;
+
+import <%= packageName %>.domain.*; // for static metamodels
+import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.service.criteria.UserCriteria;
+import <%= packageName %>.service.dto.<%= asDto('User') %>;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import tech.jhipster.service.QueryService;
+
+/**
+ * Service for executing complex queries for {@link <%= asEntity('User') %>} entities in the database.
+ * The main input is a {@link UserCriteria} which gets converted to {@link Specification},
+ * in a way that all the filters must apply.
+ * It returns a {@link List} of {@link <%= asDto('User') %>} or a {@link Page} of {@link <%= asDto('User') %>} which fulfills the criteria.
+ */
+@Service
+@Transactional(readOnly = true)
+public class UserCriteriaService extends QueryService<<%= asEntity('User') %>> {
+
+    private final Logger log = LoggerFactory.getLogger(UserCriteriaService.class);
+
+    /**
+     * Function to convert {@link UserCriteria} to a {@link Specification}
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the matching {@link Specification} of the entity.
+     */
+    public Specification<<%= asEntity('User') %>> createSpecification(UserCriteria criteria) {
+        Specification<<%= asEntity('User') %>> specification = Specification.where(null);
+        if (criteria != null) {
+            if (criteria.getId() != null) {
+                specification = specification.and(build<%= (user.primaryKey.type === 'String' || user.primaryKey.type === 'UUID') ? 'String' : 'Range' %>Specification(criteria.getId(), <%= asEntity('User') %>_.id));
+            }
+            if (criteria.getLogin() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getLogin(), <%= asEntity('User') %>_.login));
+            }
+        }
+        return specification;
+    }
+}
