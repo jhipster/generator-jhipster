@@ -18,6 +18,9 @@
  */
 const constants = require('../generator-constants');
 const utils = require('../utils');
+const { OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
+const { SPRING_WEBSOCKET } = require('../../jdl/jhipster/websocket-types');
+const { GATEWAY } = require('../../jdl/jhipster/application-types');
 
 const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, VUE_DIR } = constants;
 
@@ -117,7 +120,7 @@ const vueFiles = {
       templates: ['account/account.service.ts'],
     },
     {
-      condition: generator => generator.authenticationType !== 'oauth2',
+      condition: generator => generator.authenticationType !== OAUTH2,
       path: VUE_DIR,
       templates: [
         'account/login-form/login-form.vue',
@@ -147,12 +150,12 @@ const vueFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === 'session' && !this.skipUserManagement,
+      condition: generator => generator.authenticationType === SESSION && !this.skipUserManagement,
       path: VUE_DIR,
       templates: ['account/sessions/sessions.vue', 'account/sessions/sessions.component.ts'],
     },
     {
-      condition: generator => generator.authenticationType === 'oauth2',
+      condition: generator => generator.authenticationType === OAUTH2,
       path: VUE_DIR,
       templates: ['account/login.service.ts'],
     },
@@ -185,7 +188,7 @@ const vueFiles = {
       ],
     },
     {
-      condition: generator => generator.websocket === 'spring-websocket',
+      condition: generator => generator.websocket === SPRING_WEBSOCKET,
       path: VUE_DIR,
       templates: ['admin/tracker/tracker.vue', 'admin/tracker/tracker.component.ts', 'admin/tracker/tracker.service.ts'],
     },
@@ -203,12 +206,12 @@ const vueFiles = {
       ],
     },
     {
-      condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
+      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryType,
       path: VUE_DIR,
       templates: ['admin/gateway/gateway.vue', 'admin/gateway/gateway.component.ts', 'admin/gateway/gateway.service.ts'],
     },
     {
-      condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
+      condition: generator => !generator.skipUserManagement || generator.authenticationType === OAUTH2,
       path: VUE_DIR,
       templates: ['entities/user/user.oauth2.service.ts'],
     },
@@ -252,17 +255,17 @@ const vueFiles = {
       templates: ['spec/app/shared/config/formatter.spec.ts'],
     },
     {
-      condition: generator => generator.authenticationType === 'oauth2',
+      condition: generator => generator.authenticationType === OAUTH2,
       path: CLIENT_TEST_SRC_DIR,
       templates: ['spec/app/account/login.service.spec.ts'],
     },
     {
-      condition: generator => generator.authenticationType !== 'oauth2',
+      condition: generator => generator.authenticationType !== OAUTH2,
       path: CLIENT_TEST_SRC_DIR,
       templates: ['spec/app/account/login-form/login-form.component.spec.ts'],
     },
     {
-      condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
+      condition: generator => generator.authenticationType === SESSION && !generator.skipUserManagement,
       path: CLIENT_TEST_SRC_DIR,
       templates: ['spec/app/account/sessions/sessions.component.spec.ts', 'spec/app/account/login.service.spec.ts'],
     },
@@ -279,7 +282,7 @@ const vueFiles = {
       ],
     },
     {
-      condition: generator => generator.websocket === 'spring-websocket',
+      condition: generator => generator.websocket === SPRING_WEBSOCKET,
       path: CLIENT_TEST_SRC_DIR,
       templates: ['spec/app/admin/tracker/tracker.component.spec.ts', 'spec/app/admin/tracker/tracker.service.spec.ts'],
     },
@@ -293,7 +296,7 @@ const vueFiles = {
       ],
     },
     {
-      condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
+      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryType,
       path: CLIENT_TEST_SRC_DIR,
       templates: ['spec/app/admin/gateway/gateway.component.spec.ts'],
     },
@@ -345,7 +348,7 @@ function customizeFiles() {
         'app/admin/metrics/metrics-modal.vue',
       ]);
     }
-    if (this.authenticationType !== 'oauth2') {
+    if (this.authenticationType !== OAUTH2) {
       utils.vueReplaceTranslation(this, ['app/account/login-form/login-form.vue']);
     }
     if (!this.skipUserManagement) {
@@ -361,13 +364,13 @@ function customizeFiles() {
         'app/admin/user-management/user-management-edit.vue',
       ]);
     }
-    if (this.authenticationType === 'session' && !this.skipUserManagement) {
+    if (this.authenticationType === SESSION && !this.skipUserManagement) {
       utils.vueReplaceTranslation(this, ['app/account/sessions/sessions.vue']);
     }
-    if (this.applicationType === 'gateway' && this.serviceDiscoveryType) {
+    if (this.applicationType === GATEWAY && this.serviceDiscoveryType) {
       utils.vueReplaceTranslation(this, ['app/admin/gateway/gateway.vue']);
     }
-    if (this.websocket === 'spring-websocket') {
+    if (this.websocket === SPRING_WEBSOCKET) {
       utils.vueReplaceTranslation(this, ['app/admin/tracker/tracker.vue']);
     }
   }

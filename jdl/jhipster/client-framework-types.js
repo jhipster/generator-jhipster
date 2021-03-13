@@ -23,6 +23,7 @@ const Types = {
   REACT: 'react',
   VUE: 'vue',
   SVELTE: 'svelte',
+  NO: 'no',
 };
 
 module.exports = Types;

@@ -16,6 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { SPRING_WEBSOCKET } = require('../../jdl/jhipster/websocket-types');
+const { OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
+const { GATEWAY } = require('../../jdl/jhipster/application-types');
 const constants = require('../generator-constants');
 
 const { CLIENT_TEST_SRC_DIR, REACT_DIR } = constants;
@@ -77,7 +80,7 @@ const files = {
       templates: ['config/translation.ts'],
     },
     {
-      condition: generator => generator.websocket === 'spring-websocket',
+      condition: generator => generator.websocket === SPRING_WEBSOCKET,
       path: REACT_DIR,
       templates: ['config/websocket-middleware.ts'],
     },
@@ -101,7 +104,7 @@ const files = {
       ],
     },
     {
-      condition: generator => generator.authenticationType !== 'oauth2',
+      condition: generator => generator.authenticationType !== OAUTH2,
       path: REACT_DIR,
       templates: [
         { file: 'modules/login/login.tsx', method: 'processJsx' },
@@ -109,7 +112,7 @@ const files = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === 'oauth2',
+      condition: generator => generator.authenticationType === OAUTH2,
       path: REACT_DIR,
       templates: [{ file: 'modules/login/login-redirect.tsx', method: 'processJsx' }],
     },
@@ -134,7 +137,7 @@ const files = {
       templates: ['shared/reducers/locale.ts'],
     },
     {
-      condition: generator => generator.authenticationType === 'oauth2',
+      condition: generator => generator.authenticationType === OAUTH2,
       path: REACT_DIR,
       templates: ['shared/reducers/user-management.ts'],
     },
@@ -159,7 +162,7 @@ const files = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
+      condition: generator => generator.authenticationType === SESSION && !generator.skipUserManagement,
       path: REACT_DIR,
       templates: [{ file: 'modules/account/sessions/sessions.tsx', method: 'processJsx' }, 'modules/account/sessions/sessions.reducer.ts'],
     },
@@ -186,7 +189,7 @@ const files = {
       ],
     },
     {
-      condition: generator => generator.websocket === 'spring-websocket',
+      condition: generator => generator.websocket === SPRING_WEBSOCKET,
       path: REACT_DIR,
       templates: [{ file: 'modules/administration/tracker/tracker.tsx', method: 'processJsx' }],
     },
@@ -203,7 +206,7 @@ const files = {
       ],
     },
     {
-      condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
+      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryType,
       path: REACT_DIR,
       templates: [{ file: 'modules/administration/gateway/gateway.tsx', method: 'processJsx' }],
     },
@@ -243,12 +246,12 @@ const files = {
       templates: [{ file: 'shared/layout/menus/locale.tsx', method: 'processJsx' }],
     },
     {
-      condition: generator => generator.authenticationType === 'oauth2',
+      condition: generator => generator.authenticationType === OAUTH2,
       path: REACT_DIR,
       templates: ['shared/util/url-utils.ts'],
     },
     {
-      condition: generator => generator.authenticationType === 'session' && generator.websocket === 'spring-websocket',
+      condition: generator => generator.authenticationType === SESSION && generator.websocket === SPRING_WEBSOCKET,
       path: REACT_DIR,
       templates: ['shared/util/cookie-utils.ts'],
     },
@@ -300,7 +303,7 @@ const files = {
       templates: ['shared/reducers/locale.spec.ts'],
     },
     {
-      condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2',
+      condition: generator => generator.skipUserManagement && generator.authenticationType === OAUTH2,
       path: REACT_DIR,
       templates: ['shared/reducers/user-management.spec.ts'],
     },

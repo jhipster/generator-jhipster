@@ -24,6 +24,7 @@ const Generators = {
   GENERATOR_LANGUAGES: 'languages',
   GENERATOR_CYPRESS: 'cypress',
   GENERATOR_DOCKER_COMPOSE: 'docker-compose',
+  GENERATOR_AZURE_APP_SERVICE: 'azure-app-service',
 };
 
 module.exports = Generators;

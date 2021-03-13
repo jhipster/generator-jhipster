@@ -16,10 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable consistent-return */
 const fs = require('fs');
 const exec = require('child_process').exec;
 const chalk = require('chalk');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const statistics = require('../statistics');
 
 // Global constants
@@ -28,13 +29,16 @@ const constants = require('../generator-constants');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
 
 const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
+const { GENERATOR_AZURE_APP_SERVICE } = require('../generator-list');
 
 // Local constants
 const AZURE_WEBAPP_MAVEN_PLUGIN_VERSION = '1.8.0';
 const AZURE_WEBAPP_RUNTIME = 'JAVA|11-java11';
 const AZURE_APP_INSIGHTS_STARTER_VERSION = '2.5.1';
 
-module.exports = class extends BaseGenerator {
+let useBlueprints;
+
+module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts);
 
@@ -59,26 +63,36 @@ module.exports = class extends BaseGenerator {
     this.azureSpringCloudSkipBuild = this.options.skipBuild;
     this.azureSpringCloudSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
     this.azureSpringCloudSkipInsights = this.options.skipInsights;
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_AZURE_APP_SERVICE);
   }
 
-  initializing() {
-    if (!this.options.fromCli) {
-      this.warning(
-        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-          'jhipster <command>'
-        )} instead of ${chalk.red('yo jhipster:<command>')}`
-      );
-    }
-    this.log(chalk.bold('Azure App Service configuration is starting'));
-    this.baseName = this.config.get(OptionNames.BASE_NAME);
-    this.buildTool = this.config.get(OptionNames.BUILD_TOOL);
-    this.azureAppServiceResourceGroupName = ''; // This is not saved, as it is better to get the Azure default variable
-    this.azureAppServicePlan = this.config.get('azureAppServicePlan');
-    this.azureAppServiceName = this.config.get('azureAppServiceName');
-    this.azureApplicationInsightsName = this.config.get('azureApplicationInsightsName');
-    this.azureAppServiceDeploymentType = this.config.get('azureAppServiceDeploymentType');
-    this.azureAppInsightsInstrumentationKey = '';
-    this.azureGroupId = '';
+  _initializing() {
+    return {
+      getConfig() {
+        if (!this.options.fromCli) {
+          this.warning(
+            `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+              'jhipster <command>'
+            )} instead of ${chalk.red('yo jhipster:<command>')}`
+          );
+        }
+        this.log(chalk.bold('Azure App Service configuration is starting'));
+        this.baseName = this.config.get(OptionNames.BASE_NAME);
+        this.buildTool = this.config.get(OptionNames.BUILD_TOOL);
+        this.azureAppServiceResourceGroupName = ''; // This is not saved, as it is better to get the Azure default variable
+        this.azureAppServicePlan = this.config.get('azureAppServicePlan');
+        this.azureAppServiceName = this.config.get('azureAppServiceName');
+        this.azureApplicationInsightsName = this.config.get('azureApplicationInsightsName');
+        this.azureAppServiceDeploymentType = this.config.get('azureAppServiceDeploymentType');
+        this.azureAppInsightsInstrumentationKey = '';
+        this.azureGroupId = '';
+      },
+    };
+  }
+
+  get initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
   }
 
   get prompting() {
@@ -439,8 +453,12 @@ which is free for the first 30 days`);
       derivedProperties() {
         this.isAzureAppInsightsInstrumentationKeyEmpty = this.azureAppInsightsInstrumentationKey === '';
       },
+    };
+  }
 
-      writing() {
+  _writing() {
+    return {
+      writeFiles() {
         if (this.abort) return;
         this.log(chalk.bold('\nCreating Azure App Service deployment files'));
         this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
@@ -449,6 +467,11 @@ which is free for the first 30 days`);
         }
       },
     };
+  }
+
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
   }
 
   get end() {

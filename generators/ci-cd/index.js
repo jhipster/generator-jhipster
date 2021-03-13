@@ -25,6 +25,12 @@ const statistics = require('../statistics');
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
+const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
+const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
+const { REDIS } = require('../../jdl/jhipster/cache-types');
+const { NO, SQL, CASSANDRA, COUCHBASE, NEO4J } = require('../../jdl/jhipster/database-types');
+const { GATEWAY } = require('../../jdl/jhipster/application-types');
+const { CYPRESS, PROTRACTOR } = require('../../jdl/jhipster/test-framework-types');
 
 const {
   BASE_NAME,
@@ -40,8 +46,6 @@ const {
   TEST_FRAMEWORKS,
   CACHE_PROVIDER,
 } = OptionNames;
-
-const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
 
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
@@ -184,6 +188,26 @@ module.exports = class extends BaseBlueprintGenerator {
         } else {
           this.frontTestCommand = 'test';
         }
+      },
+      derivedProperties() {
+        this.isBuildToolGradle = this.buildTool === GRADLE;
+        this.isBuildToolMaven = this.buildTool === MAVEN;
+        this.isClientFrameworkAngular = this.clientFramework === ANGULAR;
+        this.hasCicdIntegrationsSnyk = this.cicdIntegrations.includes('snyk');
+        this.isCacheProviderRedis = this.cacheProvider === REDIS;
+        this.isDatabaseTypeNo = this.databaseType === NO;
+        this.isDatabaseTypeSql = this.databaseType === SQL;
+        this.isDatabaseTypeCassandra = this.databaseType === CASSANDRA;
+        this.isDatabaseTypeCouchbase = this.databaseType === COUCHBASE;
+        this.isDatabaseTypeNeo4j = this.databaseType === NEO4J;
+        this.hasCicdIntegrationsSonar = this.cicdIntegrations.includes('sonar');
+        this.hasCicdIntegrationsHeroku = this.cicdIntegrations.includes('heroku');
+        this.hasCicdIntegrationsDeploy = this.cicdIntegrations.includes('deploy');
+        this.hasCicdIntegrationsPublishDocker = this.cicdIntegrations.includes('publishDocker');
+        this.hasTestFrameworksCypress = this.testFrameworks.includes(CYPRESS);
+        this.hasTestFrameworksProtractor = this.testFrameworks.includes(PROTRACTOR);
+        this.isApplicationTypeGateway = this.applicationType === GATEWAY;
+        this.hasCicdIntegrationsCypressDashboard = this.cicdIntegrations.includes('cypressDashboard');
       },
     };
   }
